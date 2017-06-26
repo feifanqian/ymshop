@@ -1,0 +1,195 @@
+<style type="text/css">
+    .weui-icon_msg{
+        font-size:25px;
+        margin-right:10px;
+        margin-left:20px;
+    }
+    .income{
+        font-weight: 900;
+        font-size:20px;
+        color:green;
+    }
+    .expend{
+        font-weight: 900;
+        font-size:20px;
+        color:red;
+    }
+    .record-time{
+        width:15%;
+        padding-top: 10px;
+        padding-left:10px;
+        color:gray;
+        font-size:10px;
+     }
+    .record-status-icon{
+        text-align: center;
+        width:20%;
+        line-height: 50px;
+    }
+    .record-info{
+        padding-left: 10px;
+        width:35%;
+    }
+    .record-info .note{
+        font-size:12px;
+        color:rgba(26, 26, 26, 0.86);
+    }
+    .record-status{
+        width: 20%;
+        line-height: 50px;
+    }
+    .record-status p{
+        font-size:15px;
+        color:rgba(26, 26, 26, 0.27);
+    }
+    
+    
+   .spinner {
+    margin: 10px auto;
+    width: 100%;
+    text-align: center;
+   }
+ 
+.spinner > div {
+  width: 20px;
+  height: 20px;
+  background-color: #67CF22;
+ 
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+  animation: bouncedelay 1.4s infinite ease-in-out;
+  /* Prevent first frame from flickering when animation starts */
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+ 
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+ 
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+ 
+@-webkit-keyframes bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0.0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+ 
+@keyframes bouncedelay {
+  0%, 80%, 100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 40% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
+</style>
+<div id="record-container">
+  {if:!isset($data['data'])||count($data['data'])==0}
+    {else:}
+   {list:items=$data['data']}
+    <div class="weui-cell" onclick="viewDetail({$item['id']});">
+        <div class="weui-row" style="width:100%;height:50px;">
+            <div class="record-time">
+                <p>{$item['weekday']}</p>
+                <p>{$item['month']}</p>
+            </div>
+            <div class="record-status-icon">
+              <i class="weui-icon-{$item['status_icon']}-circle weui-icon_msg"></i>
+            </div>
+            <div class="record-info">
+                <p><span  class="{$item['type']}">{$item['amount']}</span></p>
+                <p class="note">{$item['origin']}</p>
+            </div>
+            <div class="record-status">
+                <p>{$item['status_tips']}</p>
+            </div>
+          </div> 
+     </div>
+   {/list}
+   {/if}
+</div>
+{if:!isset($data['data'])||count($data['data'])==0}
+<div class="weui-loadmore weui-loadmore_line page_end">
+            <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">暂无数据</span> 
+</div>
+{elseif:count($data['data'])<10}
+<div class="weui-loadmore weui-loadmore_line">
+            <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">end</span>
+</div>
+{else:}
+<div class="weui-loadmore weui-loadmore_line page_end" style="display:none;">
+            <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">暂无更多数据</span>
+</div>
+<div class="spinner" style="display: none;">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+</div>
+<script>
+    var current = 1;
+    var lock=false;
+    var page_count = {$data['page']['totalPage']};
+    function doLoadPage(page){
+       lock = true;
+       setTimeout(function(){
+       $.post('{url:/district/record_income}',{p:page},function(result){
+           if(result.status=='success'){
+                $(".spinner").hide();
+                for(var i in result.data){
+                    var o = result.data[i];
+                     $("#record-container").append('<div class="weui-cell" onclick="viewDetail('+o.id+');">'+
+                        '<div class="weui-row" style="width:100%;height:50px;">'+
+                           '<div class="record-time">'+
+                        '<p>'+o.weekday+'</p>'+
+                        '<p>'+o.month+'</p>'+
+                          '</div>'+
+                             '<div class="record-status-icon">'+
+                                 '<i class="weui-icon-'+o.status_icon+'-circle weui-icon_msg"></i>'+
+                             '</div>'+
+                    ' <div class="record-info">'+
+                        '<p><span  class="'+o.type+'">'+o.amount+'</span></p>'+
+                        '<p class="note">'+o.origin+'</p>'+
+                     '</div>'+
+                     '<div class="record-status">'+
+                        '<p>'+o.status_tips+'</p>'+
+                     '</div>'+
+                     '</div> '+
+                     '</div>');
+             }
+            lock = false;
+           }else if(result.status=='fail'){
+               $(".page_end").show();
+           }
+       },'json');
+    },1500);
+    }
+    $(function(){
+       $(document).scroll(function(){
+           if(lock){
+               return false;
+           }
+           var h1 = $(this).scrollTop();//滚动条高度
+           var h2 = $(this).height();//页面高度
+           var h3 = document.documentElement.clientHeight;//可视高度
+           if(((h1+h3)/h2)>0.95){
+              if(current<page_count){
+                  $(".spinner").show();
+                  doLoadPage(++current);
+              }else{
+                  $(".page_end").show();
+              }
+           }
+     });
+ });
+</script>
+{/if}
+<script>
+      function viewDetail(){
+    }
+</script>

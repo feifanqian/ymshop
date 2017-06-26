@@ -1,0 +1,13 @@
+data/database/*
+data/uploads/*
+themes-sass/
+runtime/*
+cache/*
+
+*.map
+.tags
+.tags_sorted_by_file
+install.lock
+update.txt
+*.zip
+*.tar

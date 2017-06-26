@@ -1,0 +1,72 @@
+<!--S 产品展示-->
+{echo:JS::import('form')}
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<link type="text/css" rel="stylesheet" href="{url:@static/css/fontawesome-stars.css}" />
+<script type='text/javascript' src="{url:@static/js/jquery.barrating.js}"></script>
+<div class="ma20 p20 bg-white">
+    <div class="layout-2 mt10 line-b " >
+        <div ><a href="{url:/index/product/id/}{gid}"><img src="{echo:Common::thumb($review['img'],100,100);}" ></a></div>
+        <div style="height:6em"><a href="{url:/index/product/id/$review[gid]}">{$review['name']}</a>
+            <p>销售价：<b class="red">{$currency_symbol}{$review['sell_price']}</b></p>
+        </div>
+    </div>
+    <form action="" method="post">
+        <div class="clearfix">
+            <input type="hidden" name="id" value="{$review['id']}">
+            <input type="hidden" name="gid" value="{$review['gid']}">
+            评分：
+            <select id="rate" name="point">
+                <option value="1">非常不满意</option>
+                <option value="2">不满意</option>
+                <option value="3">一般</option>
+                <option value="4">满意</option>
+                <option value="5">非常满意</option>
+            </select>      
+        </div>
+        <div style="margin-top:2em;">
+            <textarea class="textarea" name="content" style="height: 140px; width:100%"></textarea>
+        </div>
+         <div class="page__bd">
+        <div class="weui-gallery" id="gallery">
+            <span class="weui-gallery__img" id="galleryImg"></span>
+            <div class="weui-gallery__opr">
+                <a href="javascript:" class="weui-gallery__del" id="gallery_delete">
+                    <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="weui-cells weui-cells_form" style="margin-top:0px;">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <p class="weui-uploader__title"><b style="font-size:14px;">图片上传</b></p>
+                            <div class="weui-uploader__info"><span id="imgnum">0</span>/4</div>
+                        </div>
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files" id="uploaderFiles">
+                               
+                            </ul>
+                            <div class="weui-uploader__input-box">
+                                <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="mt20">
+            <input type="submit" value="提交评价" class="btn">
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+   $(function() {
+      $('#rate').barrating({
+        theme: 'fontawesome-stars',
+      });
+   });
+</script>   

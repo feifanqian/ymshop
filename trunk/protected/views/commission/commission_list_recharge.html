@@ -1,0 +1,58 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{set:$status=array("时间锁定中","可用","已提取","已撤销")}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+<!--    <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>-->
+    <a class="icon-delicious" href="{url:/commission/commission_list_recharge}"> 查看全部</a>
+
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:50px">选择</th>
+        <th style="width:65px">操作</th>
+        <th style="width:180px">充值订单号</th>
+        <th style="width:60px">充值金额</th>
+        <th style="width:140px">充值用户</th>
+        <th style="width:140px">佣金受益人</th>
+        <th style="width:60px">佣金等级</th>
+        <th style="width:60px">单笔佣金金额</th>
+        <th style="width:90px">订单佣金总和</th>
+        <th style="width:140px;">时间</th>
+        <th style="width:120px">佣金状态</th>
+    </tr>
+    {query:name=commission_log as c fields=c.*,r.recharge_no,r.account,u1.name as buyer,u2.name as promoter join=left join recharge as r on c.order_id eq r.id left join user as u1 on c.buyer_id eq u1.id left join user as u2 on c.user_id eq u2.id where=$where id=$obj page=1 order= id desc}
+        <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:65px" class="btn_min">
+                <div class="operat hidden">
+                    <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                        <ul>
+                        </ul>
+                    </div>
+                </div> 
+            </td>
+            <td style="width:180px"><a href="?condition=and--r.id--eq--{$item['order_id']}">{$item['recharge_no']}</a></td>
+            <td style="width:60px">{$item['account']}</td>
+            <td style="width:140px"><a href="?condition=and--c.buyer_id--eq--{$item['buyer_id']}">{$item['buyer']}</a></td>
+            <td style="width:140px"><a href="?condition=and--c.user_id--eq--{$item['user_id']}">{$item['promoter']}</a></td>
+            <td style="width:60px"><a href="?condition=and--c.commission_level--eq--{$item['commission_level']}">{$item['commission_level']}</a></td>
+            <td style="width:60px">{$item['commission_get']}</td>
+            <td style="width:90px">{$item['commission_amount']}</td>
+            <td style="width:140px">{$item['time']}</td>
+            <td style="width:120px"><a href="?condition=and--c.status--eq--{$item['status']}">{$status[$item['status']]}</a></td>
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<script type="text/javascript">
+
+$("#condition").on("click",function(){
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/commission/commission_list_recharge}',method:'get'});},data:{'r.recharge_no':{name:'充值订单编号'},'r.account':{'name':'充值金额'},'c.status':{name:'佣金状态',values:{0:'时间锁定中',1:'已可用', 2:'已提现', 3:'已撤销'}},'u1.name':{name:'充值用户名'},'u2.name':{name:'佣金收益者用户名'},'c.commission_get':{'name':'单笔佣金金额'},'c.commission_amount':{'name':'订单佣金总额'},'c.commission_level':{name:'佣金等级',values:{1:'1',2:'2',3:'3'}}}});
+})
+</script>

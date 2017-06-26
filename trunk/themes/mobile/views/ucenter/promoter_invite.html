@@ -1,0 +1,215 @@
+<script src="{url:@static/js/echarts.common.min.js}"></script>
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<style type="text/css">
+    .promoter-head{
+        margin-left: 20px;
+        width:20%;
+    }
+    .promoter-info{
+        width:40%;
+    }
+    .promoter-options{
+        text-align: center;
+        width:30%;
+        max-width: 65px;
+    }
+    .promoter-options{
+       
+    }
+    .promoter-options .fire{
+        height:18px;
+        margin-top:0px;
+        line-height: 18px;
+    }
+    .promoter-options .reward{
+        height:18px;
+        margin-top: 0px;
+        line-height: 18px;
+    }
+    .promoter-options .count{
+        height:18px;
+        line-height: 18px;
+    }
+    .promoter-options i{
+        padding-top: 20px;
+        color:gray;
+    }
+    .head-img{
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+    }
+    .promoter-name{
+        line-height: 60px;
+        font-size:17px;
+        color:rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+    .weui_panel_hd:after{
+        height:0px;
+        border: none;
+    }
+   .spinner {
+    margin: 10px auto;
+    width: 100%;
+    text-align: center;
+   }
+  
+.spinner > div {
+  width: 20px;
+  height: 20px;
+  background-color: #67CF22;
+ 
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+  animation: bouncedelay 1.4s infinite ease-in-out;
+  /* Prevent first frame from flickering when animation starts */
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+ 
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+ 
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+ .layui-m-layercont{
+        padding-top: 10px;
+ }
+@-webkit-keyframes bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0.0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+ 
+@keyframes bouncedelay {
+  0%, 80%, 100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 40% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
+</style>
+<div id="record-container">
+    <div class="weui_panel">
+        <div class="weui_panel_hd">邀请列表{if:$has_district_shop==0}<a href="javascript:;" id="free" class="weui-btn weui-btn_mini {if:$invite_count>=$invite_promoter_num}weui-btn_plain-primary{else:}weui-btn_plain-disabled{/if}"  style="float:right;margin-top:-7px;margin-left:5px;"><i class="fa fa-gift" ></i> 晋级经营商</a>{/if}&nbsp;<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-primary " id="setCode" style="float:right;margin-top:-7px;"><i class="fa fa-flag" ></i> 我要邀请</a></div>
+        {if:!isset($data['data'])||count($data['data'])==0}
+
+        {else:}
+        {list:items=$data['data']}     
+        <div class="weui-cell" id="{$item['id']}">
+            <div class="weui-row" style="width:100%;height:65px;">
+                <div class="promoter-head" ">
+                     <img class='head-img' src="{url:@$item[avatar]}" alt="">
+                </div>
+                <div class="promoter-info" ">
+                    <p class="promoter-name" >{$item['nickname']}</p>
+                </div>
+                <div class="promoter-options">
+                </div>
+            </div> 
+            </div>
+       {/list}
+       {/if}
+</div>
+</div>
+{if:!isset($data['data'])||count($data['data'])==0}
+<div class="weui-loadmore weui-loadmore_line page_end">
+            <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">暂无数据</span> 
+</div>
+{elseif:count($data['data'])<10}
+<div class="weui-loadmore weui-loadmore_line">
+            <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">end</span>
+</div>
+{else:}
+<div class="weui-loadmore weui-loadmore_line page_end" style="display:none;">
+            <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">暂无更多数据</span>
+</div>
+<div class="spinner" style="display: none;">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+</div>
+<script>
+    var current = 1;
+    var lock=false;
+    var page_count = {$data['page']['totalPage']};
+    function doLoadPage(page){
+       lock = true;
+       setTimeout(function(){
+       $.post('{url:/ucenter/promoter_invite}',{p:page},function(result){
+           if(result.status=='success'){
+                $(".spinner").hide();
+                for(var i in result.data){
+                    var o = result.data[i];
+                    $("#record-container .weui_panel").append('<div class="weui-cell" id="'+o.id+'">'+
+                        '<div class="weui-row" style="width:100%;height:65px;">'+
+                            '<div class="promoter-head" onclick="viewDetail('+o.id+');">'+
+                                 '<img class="head-img" src="'+o.avatar+'" alt="">'+
+                            '</div>'+
+                            '<div class="promoter-info" onclick="viewDetail('+o.id+');">'+
+                                '<p class="promoter-name" >'+o.name+'</p>'+
+                            '</div>'+
+                        '</div>'+ 
+                        '</div>');
+             }
+            lock = false;
+           }else if(result.status=='fail'){
+               $(".page_end").show();
+           }
+       },'json');
+   },1500);
+   
+    $(function(){
+       $(document).scroll(function(){
+           if(lock){
+               return false;
+           }
+           var h1 = $(this).scrollTop();//滚动条高度
+           var h2 = $(this).height();//页面高度
+           var h3 = document.documentElement.clientHeight;//可视高度
+           if(((h1+h3)/h2)>0.95){
+              if(current<page_count){
+                  $(".spinner").show();
+                  doLoadPage(++current);
+              }else{
+                  $(".page_end").show();
+              }
+           }
+      });
+    });
+</script>
+{/if}
+<script>
+    
+  $("#setCode").click(function(){
+    layer.open({
+             title:"<p style='color:white;'>请用微信扫一扫</p>"
+            , style: 'background: -webkit-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Safari 5.1 - 6.0 */background: -o-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Opera 11.1 - 12.0 */background: -moz-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Firefox 3.6 - 15 */background: linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* 标准的语法 */' //自定风格
+            ,content: '<img src="{url:/ucenter/getPromoterInviteQR}" style="width:200px;height:200px;"><p style="color:rgba(27, 27, 27, 0.64);">'
+            ,btn: '完 成'
+          }); 
+ });
+ $("#free").click(function(){
+     {if:$invite_count>=$invite_promoter_num}
+            window.location.href="{url:/ucenter/apply_for_district?free=1}";
+     {else:}
+        layer.open({
+                 title:"<p style='color:white;'>免费晋级经营商</p>"
+                , style: 'background: -webkit-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Safari 5.1 - 6.0 */background: -o-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Opera 11.1 - 12.0 */background: -moz-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Firefox 3.6 - 15 */background: linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* 标准的语法 */' //自定风格
+                ,content: '<p style="color:white;font-size: 13px;">成功推荐<span class="red">{$invite_promoter_num}</span>个推广员，即可免费申请经营商。<br>当前您一共推荐了<span class="red">{$invite_count}</span>个，还需要继续努力哦</p>'
+                ,btn: '我知道了'
+              }); 
+    {/if}
+});
+</script>

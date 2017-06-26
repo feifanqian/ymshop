@@ -1,0 +1,373 @@
+{echo:JS::import('form');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<h1 class="page_title">分类编辑</h1>
+<form action="{url:/goods/goods_category_save}" method="post" callback="check_tab_location" >
+  <div id="obj_form" class="form2 tab">
+    {if:isset($id)}<input type="hidden" name="id" value="{$id}">{/if}
+    <!-- tab 头 start -->
+    <ul class="tab-head">
+      <li>基本信息</li>
+      <li>SEO信息</li>
+    </ul>
+    <!-- tab 头 end -->
+    <!-- tab body start -->
+    <div class="tab-body">
+      <!-- S 基本信息-->
+      <div>
+        <dl class="lineD">
+          <dt>名称：</dt>
+          <dd>
+            <input name="name" type="text" pattern="required" value="{$name}" alt="名称不能为空">
+            <label>分类名称</label>
+          </dd>
+        </dl><dl class="lineD">
+        <dt>别名：</dt>
+        <dd>
+          <input name="alias" type="text" pattern="[a-zA-Z]\w*" value="{$alias}" alt="必需为字母与数字组合，且以字母开头">
+          <label>方便url识别美化</label>
+        </dd>
+      </dl><dl class="lineD">
+      <dt>上级分类：</dt>
+      <dd>
+        <select id="parent_id"  name="parent_id"   pattern="int">
+          <option value="0">==无上级分类==</option>
+          {set:$id=isset($id)?$id:0;}
+          {query:name=goods_category order=path/}
+          {set:$goods_category=Common::treeArray($items)}
+          {list:items=$goods_category}
+          {if:!isset($path) || strpos($item['path'],$path)===false}
+          {set:$num = count(explode(',',$item['path']))-3;}
+          <option value="{$item['id']}">{if:$num>0}├{/if}{echo:str_repeat('──',$num)}{$item['name']}</option>{/if}
+          {/list}
+        </select>
+
+        <label></label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt>产品类型：</dt>
+      <dd>
+        <select id="type_id"  name="type_id"   pattern="int">
+          <option value="0">请选择...</option>
+          {set:$id=isset($id)?$id:0;}
+          {query:name=goods_type}
+          <option value="{$item['id']}">{$item['name']}</option>
+          {/query}
+        </select>
+        <label></label>
+      </dd>
+    </dl><dl class="lineD">
+    <dt>排序：</dt>
+    <dd>
+      <input name="sort" type="text" pattern="int" value="{$sort}" style="width:40px;" alt="必需为数字">
+      <label>数字越大越靠前</label>
+    </dd>
+  </dl>
+  <dl class="lineD">
+    <dt>导航展示是否显示：</dt>
+    <dd>
+      <input name="nav_show" id="nav_show1" type="radio" value="1" ><label for="nav_show1">显示</label>
+      <input name="nav_show" id="nav_show0" type="radio" value="0" ><label for="nav_show0">隐藏</label>
+    </dd>
+  </dl>
+  <dl class="lineD">
+    <dt>列表展示是否显示：</dt>
+    <dd>
+      <input name="list_show" id="list_show1" type="radio" value="1" ><label for="list_show1">显示</label>
+      <input name="list_show" id="list_show0" type="radio" value="0" ><label for="list_show0">隐藏</label>
+    </dd>
+  </dl>
+  {if:isset($id) and $id!=1}
+  <dl class="lineD">
+     
+    <dt>是否在APP分类推荐：</dt>
+    <dd>
+      <input name="recommend" id="recommend1" type="radio" value="1" ><label for="recommend1">推荐</label>
+      <input name="recommend" id="recommend0" type="radio" value="0" ><label for="recommend0">不推荐</label>
+    </dd>
+  </dl>
+ {/if}
+  <dl class="lineD clearfix">
+    <dt>分类图片：</dt>
+    <dd class="min_inputs ">
+      <button class="button  select_button select_button1" type="button" >
+        <b class="icon-plus green"></b>
+        添加图片
+      </button> <b class="red">双击图片编辑图片连接</b>
+    </dd>
+  </dl>
+ <dl>
+    <dt></dt>
+    <dd>
+      <ul class="piclist" id="pic_list">
+        {if:isset($imgs) && $imgs =  unserialize($imgs)}
+        {list:items=$imgs}
+        <li {if:$item['img'] == $img} class="current" {/if}>
+          <div class="bord">
+            <input type="hidden" name="imgs[]" value="{$item['img']}">
+            <input type="hidden" name="links[]" value="{$item['link']}">
+            <img src="{echo:Common::thumb($item['img'],100,100);}" data-src={$item['img']} onclick="selectImg(this)" ondblclick="editImgInfo(this)" width="80" height="80" alt=""></div>
+            <div class="opera">
+              <a class="icon-arrow-left-2" href="javascript:;"></a>&nbsp;&nbsp;<a class="icon-arrow-right-2" href="javascript:;"></a>&nbsp;&nbsp;<a class="icon-link" href="javascript:;" onclick="linkImg(this)"></a>&nbsp;&nbsp;<a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
+            </div>
+          </li>
+          {/list}
+          {/if}
+        </ul>
+        <input name="img" type="text" style="visibility: hidden;width:0;" value="{$img}" id="img_index" alt="添加商品图片"/>
+        <label></label>
+      </dd>
+    </dl>
+ 
+ <dl class="lineD clearfix">
+    <dt>APP分类广告位图片：</dt>
+    <dd class="min_inputs ">
+      <button class="button  select_button select_button2" type="button" >
+        <b class="icon-plus green"></b>
+        更换图片
+      </button> <b class="red">双击图片编辑APP跳转连接</b>
+    </dd>
+  </dl>
+ 
+  <dl>
+    <dt></dt>
+    <dd>
+      <ul class="piclist" id="pic_list_adimg">
+        {if:isset($adimg)&&$adimg!=''}
+       <li class="current">
+          <div class="bord">
+            <input type="hidden" name="adimg" value="<?php echo isset($adimg)?$adimg:"";?>">
+            <input type="hidden" name="adurl" value="<?php echo isset($adurl) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $adurl)):""; ?>">
+            <img name="adimg" src="<?php echo Common::thumb($adimg,100,100);?>" data-src=<?php echo isset($adimg)?$adimg:"";?> ondblclick="editAdurl(this)" width="80" height="80" alt="">
+          </div>
+            <div class="opera">
+             <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
+            </div>
+          </li>
+          {/if}
+        </ul>
+       
+      </dd>
+    </dl>
+  </div>
+  <!-- E 基本信息-->
+  <!-- S SEO信息-->
+  <div>
+    <dl class="lineD">
+      <dt>页面标题：</dt>
+      <dd>
+        <input name="seo_title" type="text" value="{$seo_title}">
+        <label>页面标题(TITLE)</label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt>页面关键词：</dt>
+      <dd>
+        <input name="seo_keywords" type="text" value="{$seo_keywords}">
+        <label>页面关键词(META_KEYWORDS)</label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt>页面描述：</dt>
+      <dd>
+        <input name="seo_description" type="text" value="{$seo_description}">
+        <label>页面描述(META_DESCRIPTION)</label>
+      </dd>
+    </dl>
+  </div>
+  <!-- E SEO信息-->
+</div>
+<div style="text-align:center"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
+</form>
+</div>
+    <div id="ad_dialog" style="display: none; position: relative;" class="">
+   
+    类型：<select id="type">
+        <option>请选择类型</option>
+        <option value="category">分类</option>
+        <option value="search">搜索</option>
+        <option value="flash">抢购</option>
+        <option value="goods">商品</option>
+        </select>
+        <select class="__category"  style="display: none;">
+              <option value="0">请选择分类</option>
+              {set:$id=isset($id)?$id:0;}
+              {query:name=goods_category order=path/}
+              {set:$goods_category = Common::treeArray($items)}
+              {list:items=$goods_category}
+              {if:!isset($path) || strpos($item['path'],$path)===false}
+              {set:$num = count(explode(',',$item['path']))-3;}
+                    <option value="{$item['id']}">{if:$num>0}├{/if}{echo:str_repeat('──',$num)}{$item['name']}</option>
+                    {/if}
+              {/list}
+        </select>
+        <input class="__search" type="text" style="display: none;" placeholder="请填写关键字">
+        <select class="__flash"  style="display: none;">
+              <option value="0">请选择抢购商品</option>
+              {query:name=flash_sale order=id }
+              <option value="{$item['id']}" title="{$item['title']}">
+                  <?php
+                  if(strlen($item['title'])>30){
+                   echo mb_substr($item['title'],0,12,'UTF-8')."...";
+                  }else{
+                  echo $item['title'];
+                  }
+                  ?>
+              </option>
+              {/query}
+        </select>
+        <select class="__goods"  style="display: none;">
+              <option value="0">请选择商品</option>
+              {query:name=goods field=id,name where=is_online eq 0 order=id }
+              <option value="{$item['id']}" title="{$item['name']}">
+                  <?php
+                  if(strlen($item['name'])>30){
+                   echo mb_substr($item['name'],0,12,'UTF-8')."...";
+                  }else{
+                  echo $item['name'];
+                  }
+                  ?>
+              </option>
+              {/query}
+        </select>
+    
+    <br/><br/>
+    <div class="tc"><button class="focus_button" onclick="finish()">完成</button></div>
+</div>
+
+<script type="text/javascript">
+  var form =  new Form();
+  form.setValue('parent_id','{$parent_id}');
+  form.setValue('type_id','{$type_id}');
+  form.setValue('nav_show','{$nav_show|1}');
+  form.setValue('list_show','{$list_show|1}');
+  form.setValue('recommend','{$recommend|1}');
+
+  
+  $(".select_button1").on("click",function(){
+    uploadFile("");
+    return false;
+  });
+  $(".select_button2").on("click",function(){
+    uploadFile("setAdimg");
+    return false;
+  });
+  function uploadFile(value){
+    art.dialog.open('<?php echo urldecode(Url::urlFormat("/admin/photoshop?type=category"));?>'+"&flag="+value,{id:'upimg_dialog',lock:true,opacity:0.1,title:'选择图片',width:613,height:380});
+  }
+  
+  function selectImg(id){
+    var img = $(id).attr('data-src');
+    $("#pic_list li").removeClass("current");
+    $(id).parent().parent().addClass("current");
+    $("#img_index").val(img);
+  }
+  function finish(){
+      //1.得到值
+      var type_ = $("#type").children('option:selected').val();
+      var typeValue = $(".__"+type_).val();
+      //2.清空值
+      
+      //3.json化
+      
+      $("input[name='adurl']").val('{"type":"'+type_+'","type_value":"'+typeValue+'"}');
+      art.dialog({id:'ad_dialog'}).close();
+      art.dialog({id:'adurlDialog'}).close();
+  }
+  function hideAll(){
+      $(".__category").hide();
+      $(".__search").hide();
+      $(".__flash").hide();
+      $(".__goods").hide();
+  }
+  $("#type").change(function(){
+      var name = $(this).children('option:selected').val(); 
+      hideAll();
+      $(".__"+name).show();
+  });
+  
+function setAdimg(value, needclose){
+    var show_src = value.substr(0,4)!="http" ? ADMIN.upyuncfg.upyun_cdnurl + value : value;
+    if($("img[name='adimg']").length>0){
+        $("img[name='adimg']").prop('src',show_src);
+        $("input[name='adimg']").prop('value',value);
+    }else{
+        $("#pic_list_adimg").append('<li> <div class="bord"><input type="hidden" name="adimg" value="'+value+'" /> <input type="hidden" name="adurl" value="" /> <img src="'+show_src+'" data-src="'+value+'"   ondblclick="editAdurl(this)" width="80" height="80" alt=""></div> <div class="opera"><a class="icon-close" href="javascript:;" onclick="delImg(this)"></a> </div> </li>');
+    }
+    needclose = needclose==undefined ? 1 : needclose;
+    if(needclose){
+        art.dialog({id:'upimg_dialog'}).close();
+      }
+  }
+
+
+function openSetWindow(){
+     art.dialog({id:'ad_dialog',title:"请您完成以下信息",resize:false,width:400,height:150,padding:'0 5px',content:document.getElementById('ad_dialog')});
+}
+
+//回写选择图片
+function setImg(value, needclose){
+  var show_src = value.substr(0,4)!="http" ? ADMIN.upyuncfg.upyun_cdnurl + value : value;
+  if($("#pic_list img[src='"+show_src+"']").get(0)){
+    art.dialog.alert("图片已经添加，请不要重复添加！");
+  }else{
+    $("#pic_list").append('<li> <div class="bord"><input type="hidden" name="imgs[]" value="'+value+'" /> <input type="hidden" name="links[]" value="" /> <img src="'+show_src+'" data-src="'+value+'" onclick="selectImg(this)"  ondblclick="editImgInfo(this)" width="80" height="80" alt=""></div> <div class="opera"><a class="icon-arrow-left-2" href="javascript:;" ></a>&nbsp;&nbsp;<a class="icon-arrow-right-2" href="javascript:;"></a>&nbsp;&nbsp;<a class="icon-link" href="javascript:;" onclick="linkImg(this)"></a>&nbsp;&nbsp;<a class="icon-close" href="javascript:;" onclick="delImg(this)"></a> </div> </li>');
+    bindEvent();
+    if($("#pic_list li.current").length <=0 ){
+      $("#pic_list li:eq(0)").addClass("current");
+      $("#img_index").val(value);
+    }
+    FireEvent(document.getElementById('img_index'),'change');
+    needclose = needclose==undefined ? 1 : needclose;
+    if(needclose){
+        art.dialog({id:'upimg_dialog'}).close();
+      }
+  }
+
+}
+//删除添加的图片
+function delImg(id){
+  $(id).parent().parent().remove();
+  if($("#pic_list li:eq(0)").length <= 0)$("#img_index").val('');
+}
+function linkImg(id){
+  var src = $(id).parent().parent().find('img').attr('src');
+  art.dialog({id:'linkDialog',title:'图片地址',content:'<div>图片地址：<input type="text" value='+src+' style="width:300px;"/></div>',width:420});
+}
+
+function editImgInfo(id){
+  var link = $(id).parent().parent().find("input[name='links[]']").val();
+  art.dialog.data('currentLink', $(id).parent().parent().find("input[name='links[]']"));
+  art.dialog({id:'linkDialog',title:'连接地址',content:'<div>连接地址：<input type="text" value="'+link+'" style="width:400px;" onchange="setImgLink(this.value)" /></div>',width:520});
+}
+
+function editAdurl(id){
+  var url = $(id).parent().parent().find("input[name='adurl']").val();
+  url = url.replace(/"/g, '&#34;',url.replace(/'/g, '&#39;', url));
+  console.log("url="+url);
+  art.dialog.data('currentAdurl', $(id).parent().parent().find("input[name='adurl']"));
+  art.dialog({id:'adurlDialog',title:'连接地址',content:'<div>连接地址：<input type="text"  value="'+url+'" style="width:400px;"  onfocus="openSetWindow()" /></div>',width:520});
+}
+
+
+function setImgLink(val){
+  var currentLink = art.dialog.data('currentLink');
+  currentLink.val(val);
+}
+//操作左右按钮事件绑定
+function bindEvent(){
+  $(".icon-arrow-right-2").off();
+  $(".icon-arrow-left-2").off();
+  $(".icon-arrow-right-2").on("click",function(){
+    var current_tr = $(this).parent().parent();
+    current_tr.insertAfter(current_tr.next());
+  });
+  $(".icon-arrow-left-2").on("click",function(){
+    var current_tr = $(this).parent().parent();
+    if(current_tr.prev().html()!=null)current_tr.insertBefore(current_tr.prev());
+  });
+
+}
+bindEvent();
+</script>

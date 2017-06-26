@@ -1,0 +1,242 @@
+{echo:JS::import("form")}
+{echo:JS::import('dialog?skin=tinysimple');}
+{echo:JS::import('dialogtools');}
+<link type="text/css" rel="stylesheet" href="{url:#css/simple.css}" />
+
+{set:$items=array("购物车","确认订单信息","选择支付","订购完成");}
+{widget:name=sub_navs action=crumbs items=$items step=4 current=2}
+<div class="container">
+    <div class="order-info">
+        <form action="{url:/simple/order_act}" method="post">
+            <input type="hidden" name="type" value="{$order_type}">
+            <input type="hidden" name="id" value="{$id}">
+            <div class="clearfix address">
+                <h2><b class="fl">选择收货地址：</b><a class="btn btn-main btn-mini fr" href="{url:/ucenter/address}" target="_blank">管理地址</a></h2>
+                <ul class="address-list clearfix">
+                    {set:$address_default=0;}
+                    {list:items=$address}
+                    <li>
+                        <a href="javascript:;" data-value="{$item['id']}" class="modify"> 修改地址 </a>
+                        <div class="address-info " >
+                            <input type="radio" name="address_id" value="{$item['id']}" {if:$item['is_default']==1}{set:$address_default=$item['id']}checked="checked"{/if}>
+                                   <label>{$parse_area[$item['province']]} <strong>{$parse_area[$item['city']]}</strong>（{$item['accept_name']} 收）</label>
+                            <p>
+                                {$parse_area[$item['county']]} {$item['addr']} {$item['mobile']}
+                            </p>
+                        </div>
+                        <i class="icon-selected-32 ie6png"></i>
+                    </li>
+                    {/list}
+                </ul>
+                <div><a id="address_other" class="btn btn-main btn-mini" href="{url:/ucenter/address_other}" target="_blank">使用新地址</a></div>
+            </div>
+            <h2 class="f14 mt20">支付方式：</h2>
+            <div class="clearfix">
+                <ul class="payment-list">
+                    {set:$payment_default = 1;}
+                    {list:items=$paytypelist}
+                    <li ><input type="radio" name="payment_id" {if:$key==0} {set:$payment_default = $item['id'];} checked="checked"{/if} value="{$item['id']}" {if:$item['plugin_id']=='19'}id="huabi_pay_radio"{/if}>
+                                <label><b>{$item['pay_name']}</b> {$item['pay_desc']}</label>
+                        <div><img style="height:80px;width:193px;" src="{url:@protected/classes$item[logo]}"></div>
+                    </li>
+                    {/list}
+                </ul>
+            </div>
+            <h2>商品清单：</h2>
+            <div class="clearfix" id='goods-list'>
+                <table width="100%" class="simple" style="margin-top:0;">
+                    <tr>
+                        <th style="width:60px;">商品</th>
+                        <th>名称</th>
+                        <th style="width:120px;">规格</th>
+                        <th style="width:100px;">单价</th>
+                        <th style="width:120px;">数量</th>
+                        <th style="width:100px;">优惠</th>
+                        <th style="width:100px;">小计</th>
+                    </tr>
+                    {list:items=$cart}
+                    <tr data-id="{$item['id']}" data-nums="{$item['num']}">
+                        <td>
+                            <a href="{url:/index/product/id/$item[goods_id]}" target="_blank">
+                                <img src="{echo:Common::thumb($item['img'],100,100);}" width="50" height="50"></a>
+                        </td>
+                        <td><a href="{url:/index/product/id/$item[goods_id]}" target="_blank">{$item['name']}</a></td> 
+                        <td>
+                            {if:$item['spec']}
+                            {list:items=$item['spec'] item=$spec}
+                            <p title="{$spec['name']}:{$spec['value'][2]}">{$spec['name']}：{$spec['value'][2]}</p>
+                            {/list}
+                            {else:}
+                            无
+                            {/if}
+                        </td> 
+                        <td>{$item['price']}</td> 
+                        <td>{$item['num']}</td> 
+                        <td class="prom">{echo:$item['prom']?$item['prom']:'无';}</td> 
+                        <td class="amount red">{$item['amount']}</td> 
+                    </tr>
+                    {/list}
+                </table>
+                {set:$prom = new Prom($totalamount);$proms = $prom->meetProms();}
+                <table class="mt10 simple noborder form">
+                    <tr><td> <p>订单备注信息：<input type="text" name="user_remark" style="width:346px;"></p> </td> 
+                        <td width="260" class="tr">购物车商品合计：</td> 
+                        <td width="140"><div class="" style=" background: #f0f0f0;"><div class="fr"><span style=""><span class="currency-symbol f18">{$currency_symbol}</span><b class="cart-total red f18" id="total-amount" total="{$totalamount}">{echo:sprintf("%01.2f",$totalamount);} </b></span</div></div>
+                        </td></tr>
+                    <tr>
+                        <td >
+                            <p >订单促销活动：{if:!empty($proms)}<select name="prom_id" id="prom_order">
+                                    {list:items=$proms}
+                                    {set:$parse_prom = $prom->parsePorm($item);}
+                                    <option value="{$item['id']}" data-type="{$item['type']}" data-value="{$parse_prom['value']}">&nbsp;&nbsp;{$parse_prom['note']}&nbsp;&nbsp;</option>
+                                    {/list}
+                                </select>{/if}</p>
+                        </td>
+                        <td class="tr">
+                            订单优惠：
+                        </td>
+                        <td><div class="tr">- <b id="prom_order_text">0.00</b></div></td>
+
+                    </tr>
+                    {if:$open_invoice}
+                    <tr >
+                        <td>
+                            <p style="height:32px;line-height:32px;">索要发票({$tax}%)：<input type="checkbox" name="is_invoice" id="is_invoice" value="1" data-value="{$tax}">&nbsp;&nbsp;<span id="invoice" {if:isset($is_invoice) && $is_invoice==1} {else:}style="display:none;"{/if}>发票抬头：<select name="invoice_type"><option value="0">个人</option><option value="1">单位</option></select>&nbsp;&nbsp;<input type="text" name="invoice_title" ></span></p>
+                        </td>
+                        <td class="tr">税：</td>
+                        <td>
+                            <p class="fr">+ <b id="taxes" data-value="{$tax}">0.00</b></p>
+                        </td>
+                    </tr>
+                    {/if}
+                    <tr>
+                        <td >
+                        </td>
+                        <td class="tr">运费：</td>
+                        <td>
+                            <p class="fr">+ <b id="fare" data-weight="{$totalweight}">{$totalfare}</b></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                        </td>
+                        <td class="tr orange">送积分：</td>
+                        <td>
+                            <p class="fr orange"><b id="point" data-point="{$totalpoint}">{$totalpoint}</b></p>
+                        </td>
+                    </tr>
+                    <tr><td>
+                            <a href="javascript:;" id="voucher-btn" style="line-height: 25px;height:25px;"><i class="icon-plus "></i>使用代金券抵消部分总额：</a>
+                        </td><td class="tr">代金券：</td>
+                        <td class="tr"><div class="tr">- <b id="voucher">0.00</b></div></td></tr>
+                </table>
+            </div>
+            <div class="box p15 mt5" id="voucher-n" style="display: none">
+                <p class="clearfix">提示：一个订单最多能使用一张代金券（<b class="red">注：代金券仅能抵扣商品金额,多出商品的部分忽略不计</b>）。<a id="voucher-cancel" class="fr btn btn-mini ">取消优惠券</a></p>
+                <table class="voucher-list mt10" >
+                    <tr style="background: #fff5cc;color: #000;height:20px;"><td>名称</td>
+                        <td>编号</td>
+                        <td>面值</td>
+                        <td>需满足金额</td>
+                        <td>有效期</td></tr>
+                    <tbody class="page-content">
+                        <tr>
+                            <td><input name="voucher" type="radio" value="{id}" data-value="{value}"> <label>{name}</label></td>
+                            <td>{account}</td>
+                            <td>{value}</td>
+                            <td>{money}</td>
+                            <td>{end_time}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="page-nav">ww</div>
+            </div>
+            <div class="mb10 mt10 clearfix" style="padding:10px; background: #f0f0f0;">
+                <span class="fr f14">应付总额：<span style="font-size: 24px;font-family: tahoma"><span class="currency-symbol">{$currency_symbol}</span><b class="cart-total red" id="real-total">{echo:sprintf("%01.2f",$totalamount);}</b></span></span>
+            </div>
+            {if:isset($huadian)}
+            <div class="huabi_info" style="display: none;">
+            <div class="mb10 mt10 clearfix" style="padding:10px; background: #f0f0f0;">
+                <span class="fr f14">需支付华点：<span style="font-size: 24px;font-family: tahoma"><span class="currency-symbol"></span><b class="cart-total red" id="can-huabipay-amount">{echo:sprintf("%01.0f",$huadian);}华点</b></span></span>
+            </div>
+            <div class="mb10 mt10 clearfix" style="padding:10px; background: #f0f0f0;">
+                <span class="fr f14">请输入支付华点账号：<input type="text" name="huabi_account" id="huabi_account" value=""></span>
+            </div>
+            <div class="mb10 mt10 clearfix" style="padding:10px; background: #f0f0f0;">
+                <span class="fr f14">还应在线支付：<span style="font-size: 24px;font-family: tahoma"><span class="currency-symbol">{$currency_symbol}</span><b class="cart-total red" id="still-pay-amount">{echo:sprintf("%01.2f",$rmb);}</b></span></span>
+            </div>
+            </div>
+            {/if}
+            <div class=" clearfix mt10">
+                <input name="cart_type" type="hidden" value="{$cart_type|''}">
+                {if:isset($huadian)}
+                <input name="pay_type" type="hidden" value="">
+                {/if}
+                <p class=""><input type="button" class="btn btn-main fr" id="_submit" value="提交订单"></p>
+            </div>
+            {token:key=order}
+        </form>
+    </div>
+</div>
+<script type="text/javascript" charset="UTF-8" src="{url:#js/order.js}"></script>
+<script type="text/javascript">
+    var Order = {
+            otheraddressurl:"{url:/simple/address_other}",
+            getvoucherurl:"{url:/simple/get_voucher}",
+            calculatefareurl:"{url:/ajax/calculate_fare}",
+            total:"{$totalamount}",
+            tax:"{$tax}",
+    };
+</script>
+
+<script type="text/javascript">
+    $(function(){
+    var form = new Form();
+    form.setValue('address_id', "{$order_status['address_id']|$address_default}");
+    form.setValue('payment_id', "{$order_status['payment_id']|$payment_default}");
+    form.setValue('user_remark', "{$order_status['user_remark']}");
+    form.setValue('prom_id', "{$order_status['prom_id']}");
+    {if: isset($is_invoice) && $is_invoice == 1}
+    form.setValue('is_invoice', "{$is_invoice}");
+    form.setValue('invoice_type', "{$invoice_type}");
+    form.setValue('invoice_title', "{$invoice_title}");
+    {/if} 
+    {if:isset($huadian)}
+    function huabi_verify(){
+        if($("#huabi_pay_radio").is(":checked")&& $("#huabi_account").val()==""){
+            art.dialog.tips("<p class='fail'>请填写华点支付账号</p>",2);
+            $("#huabi_account").focus();
+            return false;
+        }else if( $("#huabi_pay_radio").is(":checked") && $("input[name='voucher']:checked").length>0){
+            art.dialog.tips("<p class='fail'>抱歉，华点订单不支持优惠券。</p>",2);
+            return false;
+        }else{
+            return true;
+        }
+    }
+    $("#huabi_pay_radio").change(function(){
+            var flag =  $(this).is(":checked");
+            if(flag){
+                $(".huabi_info").css('display','block');
+                $("input[name='pay_type']").val("huabipay");
+            }else{
+                $(".huabi_info").css('display','none');
+                $("input[name='pay_type']").val("");
+            }
+         });
+    {/if}
+        
+     $("#_submit").click(function(){
+         if($("input[name='address_id']:checked").length !='1'){
+              art.dialog.tips("<p class='fail'>请选择收货地址</p>",2);
+              return false;
+         }
+         {if:isset($huadian)}
+         if(!huabi_verify()){
+             return false;
+         }
+         {/if}
+         $("form").submit();
+     });
+    });
+</script>

@@ -1,0 +1,260 @@
+<!-- banner轮播Start -->
+<style>
+    #swiper-point{
+            padding: 8px 10px;
+            margin-bottom: 10px;
+            background: #fff;
+            border: 1px solid #efefef;
+            border-left: none;
+            border-right: none;
+    }
+    #swiper-point .logo {
+            left: 0;
+            width: 60px;
+            font-size: 17px;
+            height: 30px;
+            line-height: 30px;
+            font-weight: 700;
+    }
+    #swiper-point .swiper-title {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: row;
+            flex-direction: row;
+            height: 30px;
+            margin-bottom: 10px;
+    }
+    #swiper-point .more {
+            text-align: right;
+            position: absolute;
+            right: .4em;
+            line-height: 30px;
+            color: #888;
+    }
+    #swiper-point .more span {
+            background: #e73626;
+            border-radius: 1.2em;
+            padding: 2px 8px;
+            color: #fff;
+    }
+    #swiper-point .thumbs {
+        display: block;
+        width: 100%;
+        height: 90px;
+        text-align: center;
+    }
+    #swiper-point .thumbs img {
+        max-width: 90px;
+        max-height: 90px;
+    }
+    #swiper-point .swiper-slide {
+        margin-right: 10px;
+        width: 110px;
+        height: 160px;
+    }
+    #swiper-point .prices .gb-price {
+        display: block;
+        height: 20px;
+        line-height: 22px;
+        margin-left: 5px;
+        font-size: 14px;
+        color: #d00;
+        text-align: center;
+    }
+    #swiper-point .title p{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        text-align: center;
+    }
+    #swiper-point .prices .tag-price {
+        display: block;
+        height: 20px;
+        line-height: 20px;
+        margin-left: 5px;
+        font-size: 11px;
+        color: #999;
+        text-align: center;
+    }
+    #swiper-qiang .title {
+        margin: 5px 0;
+        color: #666;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center;
+    }
+</style>
+<script src="{url:#js/swiper.min.js}"></script>
+<div class="swiper-container swiper-init" id="swiper-banner" data-swiper="{'autoplay': '10000', 'pagination': '.swiper-pagination', 'loop': 'true'}">
+    <div class="swiper-wrapper">
+        {query:name=ad where=number eq 'r7dmgqkc-vom5-xby2-uzgq-s5p0hsa8'}
+        {set:$ads = unserialize($item['content'])}
+        {list:items=$ads item=$ad}
+        <div class="swiper-slide"><a href="{$ad['url']}" target=""><img src="{url:@$ad[path]}" alt=""></a></div>
+        {/list}
+        {/query}
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+<!-- banner轮播End -->
+<!--<div class="header-search">
+    <form class="form" action="{url:/}" id="searchForm" method="get" name="searchForm">
+        <div class="search-word">
+            <input type="hidden" name="con" value="index">
+            <input type="hidden" name="act" value="search">
+            {token:}
+            <input type="text" class="search-input" autocomplete="off" name="keyword" value="{$keyword}" id="search_word" placeholder="请输入关键词">
+        </div>
+        <button type="submit" class="submit"  style="border:none;border-radius: 0 0.3em 0.5em 0;"><span class="ico-search"></span></button>
+    </form>
+</div>-->
+<div class=" nav-index card bg-white">
+    <ul>
+        <li><a href="{url:/index/category_index}"> <span class="t" style="background:#ffc30a;"><i class="iconfont icon-item"> </i></span><em> 全部商品 </em>  </a></li>
+        <li> <a href="{url:/index/flash}"> <span class="t" style="background:#fd8b62;"> <i class="iconfont icon-flash"> </i></span> <em> 抢购 </em>  </a> </li>
+        <li> <a href="{url:/index/group}"> <span class="t" style="background:#ef6392;"> <i class="iconfont icon-tuan"> </i></span> <em> 团购 </em> </a> </li>
+        <li> <a href="{url:/index/point}"> <span class="t" style="background:#ce94d9;"> <i class="iconfont icon-qiandai"> </i> </span><em> 积分购 </em>  </a> </li>
+        <li> <a href="{url:/index/package_area}"> <span class="t" style="background:#91a8ff;"> <i class="iconfont icon-gift1"> </i> </span><em> 套餐专区 </em>  </a> </li>
+    </ul>
+</div>
+{query:name=ad where=number eq 'c2n7x14r-ymw0-3aps-wlmw-kl4zqbem'}
+{set:$ads = unserialize($item['content'])}
+{list:items=$ads item=$ad}
+<div class="nctouch-home-block">
+    <a href="{url:@$ad[url]}"><img src="{url:@$ad[path]}" alt=""></a>
+</div>
+{/list}
+{/query}
+<!--slidesPerView: 'auto',
+        paginationClickable: false,
+        spaceBetween: 10,
+        freeMode: true,
+        pagination: '', -->
+{set:$point_sale_limit_1 = ($index["point_sale"]-1)*20;}
+{set:$point_sale_limit_2 = $point_sale_limit_1+10;}
+<div id="swiper-point" >
+<div class="swiper-container swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 0,'freeMode': true,'pagination': '','slidesPerColumn':'2'}">
+    <div class="swiper-title"> <div class="logo">积分购</div> 
+        <a class="more" href="{url:/index/point}"><span>积分购专场</span><i class="iconfont icon-next"></i></a> 
+    </div>
+    <div class="swiper-wrapper">
+        {query:name=point_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id where=ps.status eq 1 and go.store_nums gt 0 order=ps.listorder asc limit=$point_sale_limit_1,10}
+        <div class="swiper-slide">
+            <a href="{url:/index/pointbuy/id/$item[id]}">
+                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                <div class="title"><p>{$item['name']}</p></div>
+                <div class="prices">
+                     <del class="tag-price">{$currency_symbol}{$item['sell_price']}</del>
+                    {set:$set = current(unserialize($item['price_set']));}
+                    <span class="gb-price">{$currency_symbol}{$set['cash']}+{$set['point']}积分</span>
+                </div>
+            </a>
+        </div>
+        {/query}
+       {query:name=point_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id where=ps.status eq 1 and go.store_nums gt 0 order=ps.listorder asc limit=$point_sale_limit_2,10}
+        <div class="swiper-slide">
+            <a href="{url:/index/pointbuy/id/$item[id]}">
+                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                <div class="title"><p>{$item['name']}</p></div>
+                <div class="prices">
+                     <del class="tag-price">{$currency_symbol}{$item['sell_price']}</del>
+                    {set:$set = current(unserialize($item['price_set']));}
+                    <span class="gb-price">{$currency_symbol}{$set['cash']}+{$set['point']}积分</span>
+                </div>
+            </a>
+        </div>
+        {/query}
+    </div>
+</div>
+<!--<div class="swiper-container swiper-init" style="margin-top:20px;" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 10,'freeMode': true,'pagination': ''}">
+         <div class="swiper-wrapper">
+        
+        </div>
+        </div>-->
+</div>
+<div class="swiper-container swiper-init" id="swiper-qiang" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 0,'freeMode': true,'pagination': '','slidesPerColumn':'2'}">
+    <div class="swiper-title"> <div class="logo">今日特价</div> 
+        <div class="tag">还剩</div> 
+        <div class="count" id="qiangtimer" data-remainseconds="{echo:(strtotime('tomorrow')-time())*1000}"><span class="hour-node">00</span>:<span class="minute-node">00</span>:<span class="second-node">00</span></div>
+        <a class="more" href="{url:/index/flash}"><span>抢购专场</span><i class="iconfont icon-next"></i></a> 
+    </div>
+    <div class="swiper-wrapper">
+        {query:name=pointflash_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id order=ps.is_end asc,ps.id desc limit=12}
+        <div class="swiper-slide">
+            <a href="{url:/index/pointflash/id/$item[id]}">
+                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                <div class="title"><p>{$item['name']}</p></div>
+                <div class="prices">
+                     <del class="tag-price">{$currency_symbol}{$item['sell_price']}</del>
+                    {set:$set = current(unserialize($item['price_set']));}
+                    <span class="gb-price">{$currency_symbol}{$set['cash']}+{$set['point']}积分</span>
+                </div>
+            </a>
+        </div>
+        {/query}
+        {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end asc,gb.id desc limit=12}
+        <div class="swiper-slide">
+            <a href="{url:/index/flashbuy/id/$item[id]}">
+                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                <div class="title">{echo:TString::msubstr($item['name'],0,10,'utf-8','');}</div>
+                <div class="prices">
+                    <span class="gb-price">{$currency_symbol}{$item['price']}</span>
+                    <del class="tag-price">{$currency_symbol}{$item['sell_price']}</del>
+                    <span class="sale">{echo:sprintf("%0.1f",$item['price']*10/$item['sell_price'])}<i class="f4">折</i></span>
+                </div>
+            </a>
+        </div>
+        {/query}
+        
+    </div>
+</div>
+{set:$colorarr=array('yellow', 'violetred', 'slateblue', 'orange');}
+<!-- Start 商品展示-->
+{set:$i=0;}
+{list:items=$category item=$categ}
+{if:$categ['nav_show']==1}
+{set:$idx=$i%4;}
+{set:$i++;}
+<div class="nctouch-home-block item-goods item-category swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 10,'freeMode': true,'pagination': ''}">
+    <div class="swiper-title">
+        <a class="title" href="{url:/index/category/cid/$categ[id]}"><span class="color-{echo:$colorarr[$idx]}"> {$categ['title']}</span></a>
+        <a class="more" href="{url:/index/category/cid/$categ[id]}"><span class="bg-{echo:$colorarr[$idx]}">查看更多</span><i class="iconfont icon-next"></i></a> 
+    </div>
+    {query:name=ad where=name like '%category-$categ[id]-weixin%' and is_open eq 1}
+    {set:$ads = unserialize($item['content'])}
+    <ul class="item-pic-l1-r2">
+        {list:items=$ads item=$ad}
+        <li>
+            <a href="{url:@$ad[url]}"><img src="{url:@$ad[path]}" alt=""></a>
+        </li>
+        {/list}
+    </ul>
+    {/query}
+    <div class="swiper-wrapper">
+        {set:$path_like = "like '$categ[path]%'";$num=0;}
+        {set:$limit = ($index["category_".$categ['id']]-1)*10;}
+        {query:name=goods where= is_online eq 0 and category_id in (select id from tiny_goods_category where path $path_like) order=sort desc limit=$limit,10}
+        <div class="swiper-slide">
+            <a href="{url:/index/product/id/$item[id]}" target="">
+
+                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                <div class="name">{$item['name']}</div>
+                <div class="prices">
+                    <em>{$currency_symbol}{$item['sell_price']}</em>
+                    <span class="icon-stack icon-lg">
+                        <i class="iconfont icon-square icon-stack-2x icon-color-{echo:$colorarr[$idx]}"></i>
+                        <i class="iconfont icon-cart icon-stack-1x icon-inverse"></i>
+                    </span>
+                </div>
+            </a>
+        </div>
+        {/query}
+    </div>
+</div>
+{/if}
+{/list}
+<!-- End 商品展示-->

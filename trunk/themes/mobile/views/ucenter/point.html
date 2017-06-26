@@ -1,0 +1,62 @@
+
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<div class="p20 fz36 bg-title-0 ">
+    当前积分：<b class="red">{$customer['point']|'0'}</b>
+</div>
+<div class="tab">
+    <ul class="tab-head">
+        <li>积分记录</li>
+        <li>兑换代金券</li>
+    </ul>
+    <div class="tab-body">
+        <div class="ma20">
+            {query:name=point_log where=user_id eq $user[id] order=id desc page=1 pagesize=4 id=$obj}
+            <div class=" mt20  bg-white">
+                <ul class="list-nav">
+                    <li class="item nav-index cell-2" style="padding:0;">
+                        <ul>
+                            <li>{$item['create_time']}</li>
+                            <li>当前积分：{$item['point']}</li>
+                        </ul>
+                        <div class="p20">交易积分：<span class="red">{$item['value']}</span>，{$item['note']}</div>
+                    </li>
+                </ul>
+            </div>
+            {/query}
+            <div class="page-nav tc mt20"> {echo:$obj->pagebar(5)} </div>
+        </div>
+
+
+        <div class="ma20">
+
+            {query:name=voucher_template where= point gt 0}
+            <div class=" mt20  bg-white">
+                <ul class="list-nav">
+                    <li class="item nav-index cell-2" style="padding:0;">
+                        <ul>
+                            <li><b>{$item['name']}</b></li>
+                            <li>所需积分：{$item['point']}</li>
+                        </ul>
+                        <div class="p20">订单需满足{$currency_symbol}{$item['money']} 才可使用，自兑换之日起{$item['valid_days']}天内有效</div>
+                    </li>
+                </ul>
+                <div class='p20 tc'><a href="javascript:point_exchange({$item['id']});" id="point_exchange" class="btn ">兑换代金券</a></div>
+            </div>
+            {/query}
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function point_exchange(id) {
+        $.post("{url:/ucenter/point_exchange}", {id: id}, function (data) {
+            if (data['status'] == 'success') {
+                alert('代金券兑换成功！');
+                location.reload();
+            } else {
+                alert(data['msg']);
+            }
+        }, 'json');
+    }
+</script>

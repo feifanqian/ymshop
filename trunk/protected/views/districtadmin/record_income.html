@@ -1,0 +1,88 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{set:$status=array('-1'=>"已撤销",'0'=>"<span class='icon icon-lock'>时间锁定中</span>","1"=>'已可用')}
+{set:$role=array("1"=>'推广员','2'=>'小区商户');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+   <!-- <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>!-->
+    <a class="icon-delicious" href="{url:/districtadmin/record_income}"> 查看全部</a>
+<!--    <a class="icon-eye-blocked" href="{url:/order/order_list/status/2}"> 未审核</a>
+    <a class="icon-cogs" href="{url:/order/order_list/status/3}"> 执行中</a>-->
+
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:50px">选择</th>
+        <th style="width:65px">操作</th>
+        <th style="width:100px">收益类型</th>
+        <th style="width:160px">收益金额</th>
+        <th style="width:140px">所属角色</th>
+        <th style="width:140px">时间</th>
+        <th style="width:160px">收益状态</th>
+    </tr>
+    {query:name=district_incomelog as di fields=di.* where=$where id=$obj page=1 order= id desc}
+    <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:65px" class="btn_min">
+                <div class="operat hidden">
+                    <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                     <ul>
+                       {if:in_array($item['type'],array('1','2'))}
+                       <li><a class="icon-eye" href="{url:/districtadmin/record_sale}?condition=and--ds.id--eq--{$item['origin']}"> 查看来源</a></li>
+                       {elseif:$item['type']==3}
+                       <li><a class="icon-eye" href="{url:/districtadmin/apply_join}?condition=and--da.id--eq--{$item['origin']}"> 查看来源</a></li>
+                       {elseif:$item['type']==6}
+                       <li><a class="icon-eye" href="{url:/districtadmin/apply_withdraw}?condition=and--dw.id--eq--{$item['origin']}"> 查看来源</a></li>
+                       {elseif:$item['type']==7}
+                       <li><a class="icon-eye" href="javascript:;"> 暂无可选操作</a></li>
+                       {/if}
+                     </ul>
+                   </div>
+                </div>
+            </td>
+            <td style="width:100px">{$item['type_info']}</td>
+            <td style="width:140px">{$item['amount']}</td>
+            <td style="width:140px">
+            {set:$role_id = $item['role_id'];}
+            {if:$item['role_type']==1}
+                    {query:name=district_promoter as dp join=left join user as u on dp.user_id eq u.id where=dp.id eq $role_id fields=dp.user_id,u.nickname,u.avatar items=$promoters item=$promoter}
+                    推广员：{$promoter['nickname']|"unknow"}
+                    {/query}
+                {else:}
+                    {query:name=district_shop where=id eq $role_id fields=name items=$shops item=$shop}
+                    商&nbsp;&nbsp;&nbsp;户：{echo:$shop['name']}
+                    {/query}
+            {/if}
+            </td>
+            <td style="width:160px">{$item['record_time']}</td>
+            <td style="width:160px">{$status[$item['status']]}</td>
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<script type="text/javascript">
+$("table img").mouseenter(function (){
+    var content = $(this).parent().parent().next().text();
+     layer.tips(content, $(this), {
+     tips: 1,
+     time: 20000
+    });
+});
+$("table img").mouseout(function(){
+   layer.closeAll('tips'); //关闭所有的tips层   
+});
+
+function view(id){
+        art.dialog.open("{url:/order/order_view/id/}"+id,{id:'view_dialog',title:'查看订单',resize:false,width:900,height:450});
+}
+$("#condition").on("click",function(){
+   layer.msg("暂未完成，请等待");
+   return false;
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/commission/commission_list_order}',method:'get'});},data:{'o.order_no':{name:'订单编号'},'o.order_amount':{'name':'订单金额'},'c.status':{name:'佣金状态',values:{0:'时间锁定中',1:'已可用', 2:'已提现', 3:'已撤销'}},'u1.name':{name:'购买者用户名'},'u2.name':{name:'佣金收益者用户名'},'c.commission_get':{'name':'单笔佣金金额'},'c.commission_amount':{'name':'订单佣金总额'},'c.commission_level':{name:'佣金等级',values:{1:'1',2:'2',3:'3'}}}});
+})
+</script>

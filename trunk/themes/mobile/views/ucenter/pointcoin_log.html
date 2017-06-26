@@ -1,0 +1,27 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style>
+    .weui_media_box .weui_media_desc {
+        line-height:25px;
+        color:#666;
+    }
+    .weui_media_box .weui_media_desc b {
+        margin-right:5px;
+        font-weight:normal;
+        color:#888;
+    }
+</style>
+{query:name=pointcoin_log where=user_id eq $user_id order=id desc page=1 id=$obj}
+<div class="weui_panel weui_panel_access">
+    <div class="weui_panel_hd">{$item['log_date']}</div>
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_text">
+            <p class="weui_media_desc"><b>{echo:in_array($item['type'],array('0'))?'消耗':'增加'}积分:</b><span class="{echo:in_array($item['type'],array('0'))?'red':'green'}">{echo:abs($item['amount'])}</span></p>
+            <p class="weui_media_desc"><b>剩余积分:</b>{$item['current_amount']}</p>
+            <p class="weui_media_desc"><b>备注与说明:</b>{$item['note']}</p>
+        </div>
+    </div>
+</div>
+{/query}
+<div class="page-nav tc">{echo:$obj->pagebar(4)}</div>
+
+{set:$curtab='asset';}

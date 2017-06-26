@@ -1,0 +1,79 @@
+
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<div class="ma20 p20 bg-white">
+	<div>
+	<form class="login-form" action="{url:/ucenter/voucher_activated}" method="post">
+		<h2 class="tc fz30">实体优惠券激活</h2>
+			<dl>
+				<dd><input class="input" placeholder="账号" name="account" type="text"></dd>
+				<dd><input class="input" placeholder="密码"  name="password" type="text"></dd>
+				<dd><input  type="submit" class="btn" value="激活"></dd>
+			</dl>
+		 {token:}
+	</form>
+	</div>
+</div>
+
+<div class="ma20 bg-white  tab">
+	<ul class="tab-head">
+		<li>未使用的优惠券</li>
+		<li>已使用的优惠券</li>
+		<li>已过期的优惠券</li>
+	</ul>
+	<div class="tab-body   p20" >
+		<div id="voucher-n">
+			<ul class="list-nav page-content">
+				<li class=" bg-title-2  nav-index cell-3 mt20" style="padding:0;">
+					<ul class="">
+					    <li><b>{account}</b></li>
+						<li>{name}</li>
+						<li>{$currency_symbol}{value}</li>
+					</ul>
+					<div class="p20">所需消费金额{$currency_symbol}{money}，{start_time} ~ {end_time}</div>
+				</li>
+			</ul>
+			<div class="page-nav tc"></div>
+		</div>
+		<div id="voucher-u">
+			<ul class="list-nav page-content">
+				<li class=" bg-title-0  nav-index cell-3 mt20" style="padding:0;">
+					<ul class="">
+					    <li><b>{account}</b></li>
+						<li>{name}</li>
+						<li>{$currency_symbol}{value}</li>
+					</ul>
+					<div class="p20">所需消费金额{$currency_symbol}{money}，{start_time} ~ {end_time}</div>
+				</li>
+			</ul>
+			<div class="page-nav tc"></div>
+		</div>
+		<div id="voucher-p">
+			<ul class="list-nav page-content">
+				<li class=" bg-title-3  nav-index cell-3 mt20" style="padding:0;">
+					<ul class="">
+					    <li><b>{account}</b></li>
+						<li>{name}</li>
+						<li>{$currency_symbol}{value}</li>
+					</ul>
+					<div class="p20">所需消费金额{$currency_symbol}{money}，{start_time} ~ {end_time}</div>
+				</li>
+			</ul>
+			<div class="page-nav tc"></div>
+		</div>
+	</div>
+	</div>
+
+<script type="text/javascript">
+	$("#voucher-n").Paging({
+                url:'{url:/ucenter/get_voucher}',
+                params:{status:'n',pagetype:5}
+    });
+    $("#voucher-u").Paging({
+                url:'{url:/ucenter/get_voucher}',
+                params:{status:'u',pagetype:5}
+    });
+    $("#voucher-p").Paging({
+                url:'{url:/ucenter/get_voucher}',
+                params:{status:'p',pagetype:5}
+    });
+</script>

@@ -1,0 +1,237 @@
+{echo:JS::import('dialog?skin=simple');}
+{if:$order['type']==0}
+{set:$items=array("购物车","确认订单信息","选择支付","订购完成");}
+{widget:name=sub_navs action=crumbs items=$items step=4 current=3}
+{else:}
+{set:$items=array("确认订单信息","选择支付","订购完成");}
+{widget:name=sub_navs action=crumbs items=$items step=3 current=2}
+{/if}
+<div class="container">
+    <form action="{url:/payment/dopay}" method="post" id='__payform'>
+        <input type="hidden" name="order_id" value="{$order['id']}">
+<!--        <div class="status-bar">
+            <span><i class="icon-success-48"></i>订单已成功提交！</span>
+        </div>-->
+        <div class="mt20">
+            <div class="ordersucceed">
+                <h1><span class="fl"><span class="iconfont icon-gou" style="padding: 0 10px;color: #7BBC54;"></span>
+                        订单提交成功，请您尽快付款！</span><span class="fr">
+                        应付金额：
+                        <span class="ordertwoii">{$order['order_amount']}元</span></h1>
+                <table class="default mt10 p10 simplelist">
+                    <tr><td style="width:200px;">订单编号：</td><td><i class="icon-order-{$order['type']} ie6png"></i>{$order['order_no']} &nbsp;&nbsp;&nbsp;&nbsp;<a href="{url:/ucenter/order_detail/id/$order[id]}" target="_blank" class="red"> 查看订单>> </a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:tools_reload()" class=" btn btn-mini">刷新</a></td> </tr>
+                    <tr><td style="width:200px;">订单金额：</td><td class="red">{$currency_symbol}{$order['order_amount']}{if:$order['type']==4}&nbsp;<span style="font-size: 10px;">({echo:sprintf("%01.0f",$order['huabipay_amount'])}华点 + ￥{$order['otherpay_amount']})</span>{/if}</td> </tr>
+                    <tr><td style="width:200px;">支付方式：</td><td class="bold">{if:$order['type']==4}华点+{/if}<span id="pay_name">{$order['payment']}<span></td> </tr>
+                    {if:$order['type']==4}
+                        {if:$order['is_new']==1}
+                        <tr><td style="width:200px;">支付提醒：</td><td>为了尽快给您出货，新的华点订单需要您先支付全部货款。在收到您向商城账号<span style="color:red;">wlucky2101</span>的<span class='red'>{echo:sprintf("%.0f",$order['huabipay_amount'])}华点</span>转账后，客服人员将退款华点对应金点。</td> </tr>
+                        {else:}
+                        <tr><td style="width:200px;">支付提醒：</td><td>请您使用您的华点账号：<span class="red">{$order['huabi_account']}</span> 向 <span style="color:red;">wlucky2101</span> 支付<span class="red">{echo:sprintf("%01.0f",$order['huabipay_amount'])}华点</span>,并在此在线支付<span class="red">￥{$order['otherpay_amount']}</span>。支付完成后，后台人工审核通过后将马上为您发货。</td> </tr>
+                        {/if}
+                    {/if}
+                </table>
+                <p style='margin-top:10px;color:red;'>重要提醒：请您在提交订单后24小时内完成支付，逾期订单将会自动取消。</p>
+            </div>
+
+            <div class="mt10">
+                <a href="javascript:;" id="voucher-btn" style="line-height: 32px;height:32px;font-weight:800"><i class="icon-plus-1-16"></i> 其它支付方式：</a>
+            </div>
+            <div class="clearfix" id="payment-list">
+                <ul class="payment-list">
+                    {list:items=$paytypelist}
+                    <li {if:$item['plugin_id']==19}id="huadianpay"{/if}><input type="radio" id="{$item['class_name']}" name="payment_id" value="{$item['id']}" {if:$item['id']==$order['payment']}checked="checked"{/if} data-name="{$item['pay_name']}"><label><b>{$item['pay_name']}</b> {$item['pay_desc']}</label>
+                        <div><img src="{url:@protected/classes$item[logo]}"></div>
+                    </li>
+                    {/list}
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt10 mb20 clearfix">
+            <p class="tc"><input class="btn btn-main" type="button" id='_submitForm' value="立即支付"></p>
+        </div>
+    </form>
+    <div class="youalsocan">
+        <p>您可以：<a href="{url:/ucenter/order_detail/id/$order[id]}" target="_blank"> 查看订单详情 </a></p>
+    </div>
+
+    <div class="payhelp">
+        <h1><span>付款帮助：</span></h1>  
+        <div class="payhelpbody">
+            <h2>1、支付过程中遇到问题，不知道怎么办？</h2>
+            <p>支持绝大多数的支付方式,请您务必在订单生成后24小时内完成付款，以便商城安排发货，逾时订单将被取消，建议您重新购买。</p>
+            <h2>2、支付过程中遇到问题，不知道怎么办</h2>
+            <p>请于9：00-22：00间致电商城客服咨询。客服中心电话：4006-338-517</p>
+            <h2>3、我已经关闭的快捷支付银行卡如何开通？</h2>
+            <p>如您已经对某银行卡进行了关闭快捷支付服务，请下次进行订单支付是选择该银行进行重新开通并支付即可。</p>
+        </div>
+
+    </div>
+</div>
+<div id="huabi-dialog" style="display: none;">
+     <div style="width:100%;">
+         <h3 style="color:rgba(51, 51, 51, 0.48);">订单信息</h3>
+         <div style="margin-left:auto;margin-right: auto;width:350px;">
+         <table style="webkit-box-shadow: 5px 5px 0 #e3e3e3;-moz-box-shadow: 5px 5px 0 #e3e3e3; box-shadow: 5px 5px 0 #e3e3e3;background-color: #f8f8f8;color:black;">
+             <tr><th style="width:150px;"> &nbsp;&nbsp;&nbsp;<i class="fa fa-barcode"></i>订单编号</th><td style="width:200px;"><span id='__order_no'></span></td></tr>
+             <tr><th style="width:150px;"> &nbsp;&nbsp;&nbsp;<i class="fa fa-credit-card"></i>订单金额</th><td style="width:200px;"><span class="red" id='__order_amount'></span>（<span class='__huadian_amount'></span>华点+<span class='__otherpay_amount'></span>RMB）</td></tr>
+             <tr><th style="width:150px;"> &nbsp;&nbsp;&nbsp;<i class="fa fa-won"></i>需付华点</th><td style="width:200px;"><span class='__huadian_amount'></span></td></tr>
+             <tr><th style="width:150px;"> &nbsp;&nbsp;&nbsp;<i class="fa fa-money"></i>需人民币</th><td style="width:200px;"><span class='__otherpay_amount'></span></td></tr>
+         </table>
+         </div>
+     </div>
+    <h3 style="color:rgba(51, 51, 51, 0.48);">支付选择</h3>
+    <div style="margin-left: 30px;float: left;width:140px;height:80px;">
+        <div class="" style="width:140px;height:90px;-webkit-box-shadow: 5px 5px 0 #e3e3e3;-moz-box-shadow: 5px 5px 0 #e3e3e3; box-shadow: 5px 5px 0 #e3e3e3; border: 1px solid #ffe580;">
+                            <label style="padding: 8px; margin-bottom: 4px; border-bottom: 1px solid #e4e4e4; display: block;background-color: #fff5cc;"><b>华点支付</b></label>
+                            <div><img src="{url:@protected/classes/payments/logos/pay_huadian.png}"  style='width: 100px;height:43px;'></div>
+         </div>
+    </div>
+    <div class="" style="margin:0 5px;padding:0 auto;height:80px;float: left;">
+             <i class="fa fa-plus fa-2x" style="color:red;margin-top:26px;margin-right:3px;"></i>
+     </div>
+     <div>
+                <ul class="payment-list" id="otherpay">
+                    {list:items=$paytypelist}
+                    {if:$item['plugin_id']!=19}
+                    <li style="width: 140px;height:80px;"><input type="radio" id="{$item['class_name']}" name="otherpay" value="{$item['id']}"><label><b>{$item['pay_name']}</b></label>
+                        <div><img src="{url:@protected/classes$item[logo]}" style='width: 100px;height:43px;'></div>
+                    </li>
+                    {/if}
+                    {/list}
+                </ul>
+     </div>
+    <div style="float:left;">
+        <p style="color:#999999;font-size:14px;line-height:19px;display: block; "><i class="fa fa-hand-o-right" style="font-size:15px;"></i>支付小贴士：</br>新的华点订单需要您先支付全额货款，在您用华点账号<span class='red' id='user_huadian_account'></span>向商城账号<span class="red" id='shop_huadian_account'>wlucky2101</span>支付华点，收到华点转账后，客服会退相应金点。</br>华点到帐情况需人工审核，切勿重复付款哦，祝您购物愉快！</p>
+     </div>
+</div>
+
+<style type='text/css'>
+    body .dialog-skin-class .layui-layer-title{background:#dd0000; color:#fff; border: none;}
+    body .dialog-skin-class .layui-layer-btn1{background:gray;color:white;border: none;}
+    body .dialog-skin-class .layui-layer-btn0{background:#dd0000;color:white;border: none;}
+    body .dialog-skin-class .layui-layer-input{border:none;border-bottom: 1px solid red;}
+</style>
+<script type="text/javascript">
+    $("#voucher-btn").on("click", function () {
+        $("#payment-list").toggle();
+        if ($("i", this).hasClass("icon-plus-1-16")) {
+            $("i", this).removeClass("icon-plus-1-16");
+            $("i", this).addClass("icon-minus-1-16");
+        } else {
+            $("i", this).removeClass("icon-minus-1-16");
+            $("i", this).addClass("icon-plus-1-16");
+        }
+    });
+    $("#payment-list input[type='radio']").each(function () {
+        if (!!$(this).attr("checked"))
+            $("#pay_name").text($(this).attr("data-name"));
+        $(this).on("click", function () {
+            $("#pay_name").text($(this).attr("data-name"));
+        })
+    });
+
+    $(".payment-list li").each(function () {
+        $(this).has("input[name='payment_id']:checked").addClass("selected");
+        $(this).on("click", function () {
+            $(".payment-list li").removeClass("selected");
+            $("input[name='payment_id']").removeProp("checked");
+            var current_input = $("input[name='payment_id']", this);
+            current_input.prop("checked", "checked");
+            current_input.trigger('change');
+            $("#pay_name").text(current_input.attr("data-name"));
+            $(this).addClass("selected");
+        });
+    });
+    $("#huadianpay").click(function(){
+        huadianpay();
+    });
+    
+    $('#_submitForm').click(function(){
+        if($('#huadianpay').hasClass("selected")){
+            huadianpay();
+        }else{
+           $("#__payform").submit();
+        }
+    });
+    
+    $(".payment-note").on("mouseenter", function () {
+        if ($(this).attr('note') != '')
+            art.dialog({id: 'payment-note', cancel: false, follow: this, content: $(this).attr('note')});
+    })
+    $(".payment-note").on("mouseleave ", function () {
+        art.dialog({id: 'payment-note'}).close();
+    })
+    
+    
+    function huadianpay(){
+        var status_loding = layer.load();
+        $.post('{url:/simple/huabipay_info}',{order_id:{$order['id']}},function(returns){
+                         layer.closeAll();
+                         if(returns.status=='success'){
+                             $("#__order_no").text(returns.data.order_no)
+                             $("#__order_amount").text(returns.data.order_amount);
+                             $(".__huadian_amount").text(returns.data.huabi);
+                             $(".__otherpay_amount").text(returns.data.cash);
+                             $("#shop_huadian_account").text(returns.data.shop_huabi_account);
+                             //弹出询问层
+                            var promt = layer.prompt({
+                                    title: '请输入您的华点账号', 
+                                    formType: 0,
+                                    skin:'dialog-skin-class',
+                                    btn:['下一步','放弃'],
+                                    },
+                                    function(value, index, elem){
+                                       layer.closeAll();
+                                      if(value!=''&&value!=undefined){
+                                           $("#user_huadian_account").text(value);
+                                           layer.open({
+                                           type: 1,
+                                           title: '填写支付信息',
+                                           skin: 'dialog-skin-class',
+                                           area: ['1150px','380px'],
+                                           content: $('#huabi-dialog'), 
+                                           btn:['立即支付','放弃'],
+                                           btn1: function(){
+                                                var otherpay = $("#otherpay .selected input").val();
+                                                if(otherpay==""||otherpay==undefined){
+                                                    layer.tips('请在右侧选择一种在线支付方式', '.fa-plus',{ tips: 3,time:3000});
+                                                    return false;
+                                                }else{
+                                                       var submit_loding = layer.load();
+                                                       var huadian_account = $("#user_huadian_account").text();
+                                                       $("input[name='payment_id']").each(function(){
+                                                             if($(this).val()==otherpay){
+                                                                 $(this).prop("checked", "checked");
+                                                             }
+                                                       });
+                                                       $.post('{url:/simple/changeOrder}',{order_id:{$order['id']},huabi_account:huadian_account},function(returns){
+                                                                        layer.closeAll();
+                                                                        if(returns.status=='success'){
+                                                                            if($("__otherpay_amount").val()==0){
+                                                                                window.location.href="{url:/simple/order_completed/order_id/}{$order['id']}";
+                                                                            }else{
+                                                                                 $("#__payform").submit();
+                                                                            }
+                                                                        }else if(returns.status=='fail'){
+                                                                            layer.msg(returns.msg, {icon: 5}); 
+                                                                            setTimeout("window.location.reload(true)",2000);
+                                                                        }
+                                                                   },'json');
+                                                   }
+                                           },
+                                           btn2: function(){
+                                               $("#huadianpay").addClass('selected');
+                                               $("#huadianpay input[name='payment_id']").prop("checked", "checked");;
+                                               layer.closeAll();
+                                           }
+                                        });
+                                      }                 
+                         });
+                     }else if(returns.status=='fail'){
+                            layer.msg(returns.msg, {icon: 5}); 
+                            setTimeout("window.location.reload(true)",2000);
+                    }
+         },'json');
+    }
+</script>

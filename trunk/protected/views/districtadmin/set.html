@@ -1,0 +1,220 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('validator');}
+<h2 class="page_title">{$node_index['name']}</h2>
+<div class="form2">
+    <form name="config_form" method="post" action="{url:/districtadmin/set}">
+<!--         <dl class="lineD">
+         <dt>小区功能</dt>
+                <dd>
+                <label><input type="radio" name="status" value="1" >开启</label>
+                <label><input type="radio" name="status" value="0">关闭</label>
+            	<label>（关闭后，系统将冻结小区功能）</label>
+             </dd>
+        </dl>
+-->        
+        <dl class="lineD">
+            <dt>①金额设置：</dt>
+            <dd>&nbsp;</dd>
+        </dl>
+        <dl class="lineD">
+            <dt>小区入驻加盟费:</dt>
+            <dd>
+                <input name="join_fee" type="text" value="" class="small"/>
+                <span>元</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>推广员入驻费:</dt>
+            <dd>
+                <input name="promoter_fee" type="text" value="" class="small" />
+                <span>元</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>最小提现金额：</dt>
+            <dd>
+                <input name="min_withdraw_amount" type="text" value="" class="small"/>
+                <span>元</span>
+            </dd>
+        </dl>
+<!--        <dl class="lineD">
+            <dt>小区推广员门槛：</dt>
+            <dd>
+                <input name="promoter_join_line" type="text" value="" class="small" pattern="int"/>
+                <span>元（需在商城消费多少元才能获得推广员资格）</span>
+            </dd>
+        </dl>-->
+        <dl class="lineD">
+            <dt>②推广员入驻奖励：</dt>
+            <dd>&nbsp;</dd>
+        </dl>
+        <dl class="lineD">
+            <dt>推广员入驻赠送：</dt>
+            <dd>
+                <input name="join_send_gift" readonly type="text" value="" class="small" onclick='add()'/>
+                <span><a href="javascript:;" onclick="add()" class="button">选择礼品</a></span>+
+                <input name="join_send_point" type="text" value="" class="small" />
+                <span>积分</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>推广员推荐推广员：</dt>
+            <dd>
+                <input name="promoter_invite_promoter_money" type="text" value="" class="small" />
+                <span>元</span>+
+                <input name="promoter_invite_promoter_point" type="text" value="" class="small" />
+                <span>积分</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>经销商直推推广员：</dt>
+            <dd>
+                <input name="shop_invite_promoter_money" type="text" value="" class="small"/>
+                <span>元</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>经销商间推推广员：</dt>
+            <dd>
+                <input name="shop_invite_indirect_money" type="text" value="" class="small" />
+                <span>元</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>③比例设置：</dt>
+            <dd>&nbsp;</dd>
+        </dl>
+        <dl class="lineD">
+            <dt>提现手续费：</dt>
+            <dd>
+                <input name="withdraw_fee_rate" type="text" value="" class="small"/>
+                <span>%</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>扩展小区分成:</dt>
+            <dd>
+                <input name="percentage2join_fee" type="text" value="" class="small" pattern="int"/>
+                <span>%（拓展一个小区给推荐者的分成比例）</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>推广员提成:</dt>
+            <dd>
+                <!--<input name="percentage2promoter" type="text" value="" class="small" pattern="int"/>-->
+                <div style="height:100px;">
+                    level 1：总业绩在0到<input name="level_line_1" class="small">以内（包含），享受<input name="percentage_lv1" class="small">%业绩提成<br>
+                    level 2：总业绩大于level 1，不大于<input name="level_line_2" class="small">，享受<input name="percentage_lv2" class="small">%业绩提成<br>
+                    level 3：总业绩在大于level 2，享受<input name="percentage_lv3" class="small">%业绩提成<br>
+                </div>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>小区商户提成：</dt>
+            <dd>
+                
+                <input name="percentage2hirer" type="text" value="" class="small" pattern="int"/>
+                <span>%</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>上级小区分成：</dt>
+            <dd>
+                <input name="percentage2inviter" type="text" value="" class="small" pattern="int"/>
+                <span>%</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>④其他设置：</dt>
+            <dd>&nbsp;</dd>
+        </dl>
+        <dl class="lineD">
+            <dt>赠送经营代理：</dt>
+            <dd>
+                <input name="invite_promoter_num" type="text" value="" class="small" pattern="int"/>
+                <span>个（成功邀请多少个推广员，免费送经营商代理权）</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>小区自动审核:</dt>
+            <dd>
+                <label><input type="radio" name="auto_pass" value="1" >开启</label>
+                <label><input type="radio" name="auto_pass" value="0">关闭</label>
+                <span>（开启后，若支付了加盟费，则自动创建小区）</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>收益锁定时间：</dt>
+            <dd>
+                <input name="income_lockdays" type="text" value="" class="small" pattern="int"/>
+                <span>天（linux定时任务中解锁）</span>
+            </dd>
+        </dl>
+         
+        <div class="center">
+            <input type="submit" name="submit" class="button action fn" value="确 定">
+        </div>
+    </form>
+     <div id='add' style="display:none;width:400px;height:60px;padding-top: 20px;padding-left: 20px;">
+          <input type="text"  id="product_ids" readonly value="" alt="必需选择商品才能添加！" > 
+          <a href="javascript:;" onclick="reset()" class="button">重置</a>
+          <a href="javascript:;" onclick="select()" class="button">选择商品 ...</a>
+          <p>可有多个可选项，用户选择一个</p>
+     </div>
+</div>
+
+<script>
+    {if:isset($message)}
+    art.dialog.tips('<p class="success">{$message}</p>');
+    {/if}
+    {if:isset($error)}
+    art.dialog.tips('<p class="error">{$error}</p>');
+    {/if}
+    var form = new Form('config_form');
+    {set:$config = Config::getInstance();}
+    var data = {echo:JSON::encode($config->get('district_set'))};
+    form.init(data);
+    $("#product_ids").val($("input[name=join_send_gift]").val());
+    function add(){
+        layer.open({
+        type: 1,
+        area: ['420px', '200px'],
+        title: "选择赠送礼品（多选一）", //不显示标题
+        btn:['确定','取消'],
+        zindex:1,
+        yes:function(){
+            $("input[name=join_send_gift]").val($("#product_ids").val());
+            layer.closeAll();
+        },
+        content: $('#add'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+      });
+    }
+    function select(){
+//        art.dialog.open('{url:/marketing/radio_goods_select}',{id:'goods_select',title:'选择商品：',width:900,height:500,padding: '10px'});
+       index =  layer.open({
+            id:"select",
+            type: 2,
+            title:"选择商品",
+            area: ['880px', '520px'],
+            fixed: false, //不固定
+            maxmin: false,
+            zindex:2,
+            content: '{url:/marketing/multi_product_select}',
+          });
+    }
+    function reset(){
+        $("#product_ids").val("");
+    }
+    function callback(checked){
+        var v = $("#product_ids").val();
+        if(v==""){
+            $("#product_ids").val(checked.join("|"));
+        }else{
+            var arr = v.split("|");
+            var arr = $.unique($.merge(arr,checked));
+            $("#product_ids").val(arr.join("|"));
+        }
+    }
+</script>

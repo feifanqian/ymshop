@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1 maximum-scale=2, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Add to Home">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="x-rim-auto-match" content="none">
+<title>深圳问鼎世纪抽奖活动页</title>
+<link href="{url:#Lottery/css/publi.css}" rel="stylesheet" type="text/css">
+<link href="{url:#Lottery/css/chuyouwuyi01.css}" rel="stylesheet" type="text/css">
+<script src="{url:#Lottery/js/jquery1.8.3.min.js}"></script>
+<script type="text/javascript" src="{url:#js/layer_mobile/layer.js}"></script>
+<script type="text/javascript">
+	var phoneWidth = parseInt(window.screen.width);
+	var phoneScale = phoneWidth / 640;
+	var ua = navigator.userAgent;
+	if (/Android (\d+\.\d+)/.test(ua)) {
+		var version = parseFloat(RegExp.$1);
+		// andriod 2.3
+		if (version > 2.3) {
+			document.write('<meta name="viewport" content="width=640, minimum-scale = ' + phoneScale + ', maximum-scale = ' + phoneScale + ', target-densitydpi=device-dpi">');
+			// andriod 2.3以上
+		} else {
+			document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">');
+		}
+		// 其他系统
+	} else {
+		document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">');
+	}
+</script>
+<style type="text/css">
+    .layui-m-layerbtn span{
+        font-size: 25px;
+    }
+    .layui-m-layercont{
+        font-size: 24px;
+    }
+    
+</style>
+<!--[if lt IE 9]>
+<script src="js/html5.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+<section id="loading"></section>
+<section class="zadan">
+	<div class="zd_middle">
+		<div class="zd_zadan">
+		    <div><img src="{url:#Lottery/img/logo.png}" style="position:absolute;top: 405px;left: 114px;"></div>
+			<div class="zd_txt" style="width: 464px;margin: 0 auto;padding-top: 556px;">
+			        <input type="text" id="name" placeholder="请输入您的姓名" />
+				<input type="text" id="iphone1" placeholder="请输入手机号" />
+				<a href="javascript:;" id="submit" class="mom_btn tc">
+					<img src="{url:#Lottery/img/zd_cion07.png}">
+				</a>
+			</div>
+		</div>
+	</div>
+
+</section>
+<script type="text/javascript">
+	var checkPhone = function(a) {
+		var patrn = /^((?:13|15|18|14|17)\d{9}|0(?:10|2\d|[3-9]\d{2})[1-9]\d{6,7})$/;
+		if (!patrn.exec(a)) return false;
+		return true;
+	};
+	$(function() {
+		$(window).on("load", function() {
+		     $("#loading").fadeOut();
+		})
+		
+		$("#submit").on("click", function() {
+			$('html,body').animate({scrollTop:0}); 
+			var mobile = $("#iphone1").val();
+                        var name = $("#name").val();
+                        if(name==""){
+                             layer.open({
+                                content: '请填写您的姓名'
+                                ,skin: 'msg'
+                                ,time: 4 //2秒后自动关闭
+                              });
+                              return false;
+                        }
+			if (mobile.length == 11 && checkPhone(mobile)) {
+		              var load = layer.open({
+                                type: 2
+                                ,content: '加载中'
+                              });
+                              $.post("joinLottery",{name:name,mobile:mobile},function(data){
+                                  layer.closeAll();
+                                  if(data.status=="success"){
+                                        layer.open({
+                                            content: '恭喜您，已经成功参与抽奖活动，请等待现场开奖。'
+                                            ,btn: '我知道了'
+                                          });
+                                  }else{
+                                        layer.open({
+                                            content: data.msg
+                                            ,btn: '我知道了'
+                                          });
+                                  }
+                              },'json');
+			} else {
+				layer.open({
+                                content: '请正确填写您的手机号码'
+                                ,skin: 'msg'
+                                ,time: 4 //2秒后自动关闭
+                              });
+			}
+			return false;
+		})
+	})
+</script>
+
+</body>
+</html>

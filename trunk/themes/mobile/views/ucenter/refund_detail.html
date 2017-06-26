@@ -1,0 +1,55 @@
+
+{echo:JS::import('form')}
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<div class="">
+    <div class="ma20 p20 bg-white" >
+        <ul class="list-nav font">
+            <li class="list-item layout-2 ">
+                <div>订单编号：</div><div><a href="{url:/ucenter/order_detail/id/$refund[order_id]}">{$refund['order_no']}</a></div>
+            </li>
+            <li class="list-item layout-2 ">
+                <div>创建时间：</div><div>{$refund['create_time']}</div>
+            </li>
+
+            {if:$refund['refund_type']==0}
+            <li class="list-item layout-2 "><div>退款方式：</div><div>账户余额</div></li>
+            {elseif:$refund['refund_type']==1}
+            <li class="list-item layout-2 "><div>退款方式：</div><div>银行卡</div></li>
+            <li class="list-item layout-2 "><div>开户银行：</div><div>{$refund['account_bank']}</div></li>
+            <li class="list-item layout-2 "><div>开户名称：</div><div>{$refund['account_name']}</div></li>
+            <li class="list-item layout-2 "><div>银行账号：</div><div>{$refund['refund_account']}</div></li>
+            {else:}
+            <li class="list-item layout-2 "><div>退款方式：</div><div>其它</div></li>
+            <li class="list-item layout-2 "><div>对应方式：</div><div>{$refund['account_bank']}</div></li>
+            <li class="list-item layout-2 "><div>对应账号：</div><div>{$refund['refund_account']}</div></li>
+            {/if}
+
+            <li class="list-item layout-2">
+                <div>退款原因：</div><div>{$refund['content']}</div>
+            </li>
+        </ul>
+    </div>
+    <div class="ma20 bg-white" >
+        <div class="p20">
+
+            <ul class="list-nav font">
+
+                {if:$refund['pay_status']==0}
+                <li class="list-item layout-2 "><div>处理结果：</div><div>正在处理中……</div></li>
+                {elseif:$refund['pay_status']==2}
+                <li class="list-item layout-2 "><div>处理结果：</div><div>退款成功</div></li>
+                <li class="list-item layout-2 "><div>处理时间：</div><div>{$refund['handling_time']}</div></li>
+                <li class="list-item layout-2 "><div>退到渠道：</div><div>{$refund['channel']}</div></li>
+                <li class="list-item layout-2 "><div>退款账号：</div><div>{$refund['bank_account']}</div></li>
+                <li class="list-item layout-2 "><div>退款金额：</div><div>{$refund['amount']}</div></li>
+                {else:}
+                <li class="list-item layout-2 "><div>处理结果：</div><div>不予退款</div></li>
+                <li class="list-item layout-2 "><div>处理时间：</div><div></li>{$refund['handling_time']}</div></li>
+        <li class="list-item layout-2 "><div>处理意见：</div><div>{$refund['handling_idea']}</div></li>
+        {/if}
+
+        </ul>
+    </div>
+</div>
+<div class="tc plr20 m20"><a href="{url:/ucenter/refund}" class="btn ">返回</a></div>
+</div>

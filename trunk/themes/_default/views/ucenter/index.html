@@ -1,0 +1,252 @@
+{echo:JS::import("form")}
+{echo:JS::import('dialog?skin=tinysimple');}
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style>
+    .ucenter-index .ucfr .simple td{
+        background:#f5f5f5;
+    }
+</style>
+<script type="text/javascript" charset="UTF-8" src="{url:#js/jquery.iframe-post-form.js}"></script>
+<div class="container clearfix">
+    {widget:name=sub_navs action=ucsidebar sidebar=$sidebar act=$actionId}
+    <div class=" clearfix uc-content" >
+
+        <dl class="ucenter-index clearfix">
+            <dt class="ucfl clearfix">
+                <div class="avatar-img">
+                    {if:!isset($user['avatar']) || $user['avatar']==''}
+                    <a href="javascript:;" onclick="clickFile();"><img id="avatar" class="ie6png" src="{url:#images/no-img.png}" width="100" height="100" title="点击修改头像" style="border-radius:50%;"></a>
+                    {else:}
+                    <a href="javascript:;"  onclick="clickFile();"><img id="avatar" class="ie6png" src="{url:@$user[avatar]}" width="100" height="100" title="点击修改头像" style="border-radius:50%;"></a>
+                    {/if}
+                    <!--<span style="padding: 10px ;"><a href="javascript:;" id="upload-link">修改头像</a></span>-->
+                    <form enctype="multipart/form-data" method="post" id='avatarForm'>   
+                        <input type="file" id='avatarFile' name="file" accept="image/jpeg,.jpg,image/gif,.gif,image/png,.png,.jpeg" style="display:none;" />
+                    </form>
+                </div>
+
+                <ul class="ucuser_information">
+                    <li class="ucuser_name">{$user["nickname"]}</li>
+                    <li class="ucuser_members" ><p style="background-color: #DD2727;color: #fff;height: 16px;line-height: 16px;width: 70px;padding: 2px;border-radius: 20px;text-align: center;">{$customer['gname']|'普通会员'}</p></li>
+
+                </ul>
+            </dt>
+            <dd class="ucfr">
+
+                <!--                <table width="100%" class="simple">
+                                   
+                                    <tr>
+                                        <td colspan=2><b>{$user['nickname']}</b>，欢迎你！<span class="fr">最后一次登录：{$user['login_time']}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="50%">账户余额：{$currency_symbol}{$customer['balance']}</td>
+                                        <td width="50%">订单交易总金额：{$currency_symbol}{echo:sprintf("%01.2f",$order['amount'])}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>我的积分：{$customer['point']}</td>
+                                        <td>会员级别：{$customer['gname']|'普通会员'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>进行中的订单：{$order['pending']} </td>
+                                        <td>待评价的商品：{$comment['num']}</td>
+                                    </tr>
+                                </table>
+                -->
+            </dd>
+        </dl>
+
+        <div class="sub1eft">
+            <!--            <div class="myorderform" >
+                            <table width="100%" class="simple">
+                                <tr>
+                                    <th width="50%">我的订单</th>
+                                    <th width="50%"  style="background: #f1f1f1" colspan="3"><a href="{url:/ucenter/order}">查看全部订单</a></th>
+                                </tr>
+                                <tr>
+                                    <td width="50%">                     
+                                        <a class="fl" href="">
+                                            {query:name=tiny_goods as gb fields=gb.img,go.user_id,gb.id as id join=left join tiny_order as go on gb.id eq go.id  where= pay_status eq 0 limit=2 id=$myorder }
+                                            <img src="{echo:Common::thumb($item['img'],100,100);}" style="float:left;"> 
+                                            {/query}
+                                        </a>
+            
+                                        <span class="fr">{$item['send_time']}</span></td>  
+            
+                                    <td >&yen;118.0</td>
+                                    <td><a href="{url:/ucenter/order/ucenter/order/status/unpay}" class="red">待付款</a><br><a href="ucenter/order_detail/id/{$item['id']}">订单详情</a><br><a href="http://www.kuaidi100.com/chaxun?com={$invoice['ec_code']}&nu={$invoice['express_no']}">包裹跟踪</a></td>
+                                    <td><a class="nowpaybtn" href="">立即付款</a></td>  
+            
+                                </tr>
+            
+                            </table>
+                        </div>-->
+
+            <div class="mycollection fl" >
+                <table width="100%" class="simple">
+                    <tr>
+                        <th width="50%" >我的收藏</th>
+                        <th width="50%" style="text-align: right;"><a href="{url:/ucenter/attention}"></a>更多</th>
+                    </tr>
+
+                    <tr>   
+
+                        <td colspan="2">
+                            {query:name=attention as gb join=left join goods as go on gb.goods_id eq go.id limit=4 where=user_id eq $user[id] }
+                            <a href="{url:/index/product/id/$item[goods_id]}"><img src="{echo:Common::thumb($item['img'],100,100);}" style='width:60px;height:60px;float:left;'></a>
+                            {/query}
+                        </td>  
+
+                    </tr>
+
+                </table>
+            </div>
+            <div class="mycollection fr" style="float:right;">
+                <table width="100%" class="simple">
+                    <tr>
+                        <th width="50%" >我的优惠券</th>
+                        <th width="50%"  style="text-align: right;"><a href="{url:/ucenter/voucher}">更多</a></th>
+                    </tr>
+                    <tr>                   
+                        <td  colspan="2" >
+                            {list:items=$voucherlist}
+                            {set:$item['value']=intval($item['value']);}
+                            <span class="brand">
+                                <h1>
+                                    <span>&yen;</span>{$item['value']}
+                                </h1>
+                                <p>
+                                    {if:$item['money']==0}
+                                    立减{$item['value']}
+                                    {else:}
+                                    满{$item['money']}减{$item['value']}
+                                    {/if}
+                                </p>
+                            </span>
+                            {/list}
+                        </td>                   
+                    </tr>
+                </table>
+            </div>
+            <div class="guessyoulike">
+                <div class="ucbtngroup clearfix">
+                    <p style="margin-left:5px;">猜你喜欢</p>
+                    <!--<a href="" class="ucbtn active" style=""></a>-->
+                    <!--<a href="" class="ucbtn"></a></a><a href="" class="ucbtn" ></a></a><a href="" class="ucbtn" ></a></a><a href="" class="ucbtn" ></a>-->
+                </div>
+
+                <ul class="simindex-products">
+
+                    {query:name=tiny_goods as gb  fields=gb.name,gb.img,gb.sell_price,gb.id as id  join=left join tiny_user as go on gb.id eq go.id limit=5 order=rand() id=$guess }
+                    <!--                   SELECT * FROM  `tiny_user` LEFT JOIN tiny_goods ON tiny_user.id = tiny_order_goods.id LIMIT 0 , 30-->
+                    <!--                    SELECT * FROM  `tiny_goods` LEFT JOIN tiny_user ON tiny_user.id = tiny_goods.id LIMIT 0 , 30-->
+
+                    <li class='siproli'>
+                        <dl class="simproproduct" >
+
+                            <dt class="img">
+                                <a href="{url:/index/product/id/$item[id]}">
+                                    <img src="{echo:Common::thumb($item['img'],200,200);}"></a>
+                            </dt>
+                            <dd class="uctitle"><p><a href="{url:/index/product/id/$item[id]}">{echo:TString::msubstr($item['name'],0,15)}</a></p></dd>
+                            <dd class="price"><p>{$item['sell_price']}{$currency_unit}</p></dd>
+                        </dl>
+                    </li>
+                    {/query}
+                </ul>
+            </div>   
+        </div>
+        <div class="subright" >
+            <div class="pointsfor" >
+                <table width="100%" class="simple">
+                    <tr>
+                        <th width="50%" >积分兑换</th>
+                        <th width="50%"  style="background: #f1f1f1">查看更多</th>
+                    </tr>
+                    <tr>                   
+                        <td  colspan="2" >
+                            <table border="1">
+                                <tr>
+                                    <th rowspan="3" style="background:#fff;"><img src="{url:#images/pointfor.jpg}"></th>
+                                    <td>近江蔓莎 防晒乳液 SPF30+ 30ml//瓶</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pointsforspan clearfix">&yen;13.0</span>+<span class="pointsforspan clearfix">2900</span>积分</td>
+                                </tr>
+                                <tr>
+                                    <td><a style="color: red;float: right;" href="">立即兑换&GT;&GT;</a></td>
+                                </tr>
+                            </table>
+                        </td>                   
+                    </tr>
+                </table>
+            </div>
+            <div class="myfootprint">
+                <table width="100%" class="simple">
+                    <tr>
+                        <th width="50%">我的足迹</th>
+                        <th width="50%"  style="background: #f1f1f1">查看更多</th>
+                    </tr>
+                    <tr>                   
+                        <td  colspan="2" ><img src="{url:#images/foot1.jpg}"><img src="{url:#images/foot2.jpg}"></td>                   
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="head-dialog" style="display: none">
+    <div class="box" style="width:400px;">
+        <h2>上传头像：</h2>
+        <div class="content mt20 p10">
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function clickFile() {
+        return $("#avatarFile").click();
+    }
+
+    var posturl = "{echo:$option['action']}";
+    var policy = "{echo:$option['policy']}";
+    var signature = "{echo:$option['signature']}";
+    var img_host = "{echo:$option['img_host']}";
+
+    $("#avatarFile").on('change', function () {
+        var index = layer.msg("头像上传中...", {time: 0});
+        setTimeout(function () {
+            var data = new FormData($("#avatarForm")[0]);
+            data.append('policy', policy);
+            data.append('signature', signature);
+            data.append('file', $('#avatarFile')[0]);
+
+            $.ajax({
+                url: posturl,
+                type: 'POST',
+                data: data,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (returndata) {
+                    var obj = JSON.parse(returndata);
+                    layer.close(index);
+                    if (obj.message == 'ok') {
+                        layer.msg('上传头像成功！头像生效可能稍有延迟！请不要重复上传!', {time: 5000, icon: 6});
+                        $('#avatar').prop('src', img_host + obj.url + "!/fwfh/200x200?i=" + Math.random());
+                        setTimeout(function () {
+                            $.get("{url:/ucenter/refreshinfo}", {r: Math.random()});
+                        }, 2000);
+                    } else {
+                        layer.msg("上传头像失败");
+                    }
+                },
+                error: function (e) {
+                    layer.close(index);
+                    layer.msg("上传头像失败");
+                }
+            });
+        }, 100);
+        return false;
+    });
+</script>

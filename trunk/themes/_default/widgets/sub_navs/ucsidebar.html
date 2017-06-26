@@ -1,0 +1,31 @@
+<div class="sidebar fl" style="margin-top:20px;">
+
+    <div class="box"> 
+
+        <h2>交易中心</h2>        
+        <ul class="menu-list">         
+            <li><a {if:$act=="order"}class="current"{/if} href="{url:/ucenter/order}">我的订单<span class="l-triangle"></span></a></li>
+            <li><a {if:$act=="review"}class="current"{/if} href="{url:/ucenter/review}">我的评价<span class="l-triangle"></span></a></li>
+            <li><a {if:$act=="consult"}class="current"{/if} href="{url:/ucenter/consult}">商品咨询<span class="l-triangle"></span></a></li>     
+            <li><a {if:$act=="attention"}class="current"{/if} href="{url:/ucenter/attention}">我的收藏<span class="l-triangle"></span></a></li>     
+        </ul>
+        <h2>资产中心</h2>
+        <ul class="menu-list">         
+            <li><a {if:$act=="voucher"}class="current"{/if} href="{url:/ucenter/voucher}">我的优惠券<span class="l-triangle"></span></a>
+
+            <li><a {if:$act=="account"}class="current"{/if} href="{url:/ucenter/account}">账户余额<span class="l-triangle"></span></a></li>     
+        </ul>
+        <h2>个人中心</h2>
+        <ul class="menu-list">                 
+            <li><a {if:$act=="info"}class="current"{/if} href="{url:/ucenter/info}">个人信息<span class="l-triangle"></span></a></li>     
+            <li><a {if:$act=="address_other"}class="current"{/if} href="{url:/ucenter/address}">地址管理<span class="l-triangle"></span></a></li>     
+            <li><a {if:$act=="safety"}class="current"{/if} href="{url:/ucenter/safety}">安全设置<span class="l-triangle"></span></a></li>     
+        </ul>
+        <h2>服务中心</h2>
+        <ul class="menu-list">                 
+            <li><a {if:$act=="message"}class="current"{/if} href="{url:/ucenter/message}">我的消息<span class="l-triangle"></span></a></li>     
+            <li><a {if:$act=="refund"}class="current"{/if} href="{url:/ucenter/refund}">退货管理<span class="l-triangle"></span></a></li>     
+        </ul>
+
+    </div>
+</div>

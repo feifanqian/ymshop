@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>图片管理</title>
+        <link rel="stylesheet" href="{url:@static/css/base.css}" />
+        <link rel="stylesheet" href="{url:@static/css/admin.css}" />
+        <link rel="stylesheet" href="{url:@static/css/uploadifive.css}" />
+        <style>
+            #queue {
+                border: 1px solid #E5E5E5;
+                height: 120px;
+                overflow: auto;
+                margin: 10px;
+                padding: 0 3px 3px;
+                width: auto;
+            }
+            .uploadifive-button {
+                margin:0 10px;
+            }
+            #filelist {
+                margin: 10px;
+                line-height:30px;
+                height:180px;
+                overflow-y:auto;
+            }
+            #filelist .item {
+                position:relative;
+            }
+            #filelist .item b{
+                position:absolute;
+                right:5px;
+                top:0px;
+            }
+            .plupload-btn {
+                margin:10px;
+                text-align: center;
+            }
+        </style>
+        {echo:JS::import('jquery')}
+        {echo:JS::import('form')}
+        {echo:JS::import('dialog?skin=brief');}
+        {echo:JS::import('dialogtools');}
+        <script src="{url:@static/js/common.js}" charset="UTF-8" type="text/javascript"></script>
+        <script src="{url:@static/js/jquery.uploadifive.min.js}" charset="UTF-8" type="text/javascript"></script>
+        <script src="{url:@static/js/plupload.min.js}" charset="UTF-8" type="text/javascript"></script>
+    </head>
+    <body style="background:#fff;">
+        <div style="width:100%;" class="tab">
+            <ul class="tab-head"><li>本地图片</li><li>图库图片</li><li>网络图片</li></ul>
+            {set:$type=Req::args('type')==null?'unknown':Req::args('type');}
+            {set:$flag=Req::args('flag')==null?'':Req::args('flag');}
+            <div class="tab-body form2">
+                <div>
+<!--                    <h3>单张上传</h3>
+                    <form id="image_form" action="{url:/admin/photoshop_upload}" method="post" enctype="multipart/form-data" >
+                        <dl class="lineD">
+                            <dt>本地图片：</dt>
+                            <dd>
+                                <input name="type" type="hidden" value="{$type}">
+                                <input name="upfile" type="file" pattern="required" >
+                                <label></label>
+                            </dd>
+                        </dl>
+                    </form>-->
+
+                    <h3>批量上传</h3>
+                    <div>
+                        <div id="filelist">
+                        </div>
+                        <div class="plupload-btn">
+                        <span><button type="button" id="plupload-sel1" class="btn btn-danger plupload" ><i class="fa fa-upload"></i> 批量上传</button></span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <ul class="gallery clearfix">
+                        {query:name=gallery id=$obj page=1 where=type eq '$type'}
+                        <li><img height="100" width="100" src="{url:@$item[url]}" data-src="{$item['url']}"></li>
+                        {/query}
+                    </ul>
+                    <div class="page_nav">
+                        {echo:$obj->pageBar()}
+                    </div>
+                </div>
+                <div>
+                    <form id="form_netimg" callback="setNetImg">
+                        <dl class="lineD">
+                            <dt>网络图片：</dt>
+                            <dd>
+                                <input id="netimg" name="netimg" type="text" pattern="(http|https):\/\/(\w+(-\w+)*)(\.(\w+(-\w+)*))+(\/\S*)+\.(jpg|png|bmp|gif)" value="{$name}">
+                                <label>图片地址必须以http开头,以jpg,png,bmp,gif结束</label>
+                            </dd>
+                        </dl>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="alone_footer tc"><button class="btn" onclick="saveImage()">保存</button></div>
+	<script type="text/javascript">
+            $(function () {
+                {set:$timestamp=time();}
+                var uploaderlist = {};
+                $(".plupload").each(function () {
+                    var id = $(this).prop("id");
+                    uploaderlist[id] = new plupload.Uploader({
+                        runtimes: 'html5,flash,silverlight,html4',
+                        multi_selection: true, //是否允许多选批量上传
+                        browse_button: id, // you can pass an id...
+                        container: $(this).parent().get(0), //取按钮的上级元素
+                        flash_swf_url: '/assets/mixins/plupload.swf',
+                        silverlight_xap_url: '/assets/mixins/plupload.xap',
+                        filters: {$filters},
+                        url: "{$options['uploadurl']}",
+                        multipart_params: {
+                            'Filename': '${filename}', // adding this to keep consistency across the runtimes
+                            'Content-Type': '',
+                            'policy': "{$options['policy']}",
+                            'signature': "{$options['signature']}",
+                        },
+                        init: {
+                            PostInit: function () {
+                                
+                            },
+                            FilesAdded: function (up, files) {
+                                plupload.each(files, function (file) {
+                                    //这里可以改成其它的表现形式
+                                    //document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+                                    $('#filelist').append('<div class="item" id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>');
+                                });
+                                //添加后立即上传
+                                setTimeout(function () {
+                                    uploaderlist[id].start();
+                                }, 1);
+                            },
+                            UploadProgress: function (up, file) {
+                                $("#"+file.id+" b").html('<span>' + file.percent + "%</span>");
+                                $("#" + id).prop("disabled", true);
+                            },
+                            FileUploaded: function (up, file, info) {
+                                $("#" + id).prop("disabled", false);
+                                var response = JSON.parse(info.response);
+                                uploaded(response.url);
+                            },
+                            UploadComplete:function(uploader,files){
+                                completed(uploader,files);
+                            },
+                            Error: function (up, err) {
+                                art.dialog.tips("<p class='fail'>Error #" + err.code + ": " + err.message+"</p>");
+                            }
+                        }
+                    });
+
+                    uploaderlist[id].init();
+                });
+            });
+            function uploaded(img){
+                var from = "{echo:Req::args('from')}";
+                var index = parseInt("{echo:Req::args('index')}");
+                var id = "{echo:Req::args('id')}";
+                if(img.substr(0,4)=="data"){
+                    img = "/"+img;
+                }
+                if(from == "kindeditor"){
+                    if(img.substr(0,4)!="http"){
+                        img = "{$options['cdnurl']}"+img;
+                    }
+                    console.log(art.dialog.opener.KindEditor.instances[index].insertHtml('<img src="'+img+'" alt="">'));
+                }else{
+                    if("{$flag}"=="setAdimg"){
+                         art.dialog.opener.setAdimg(img, 0);
+                    }else{
+                        art.dialog.opener.setImg(img, 0);
+                    }
+                }
+            }
+            function completed(uploader,files){
+                if("{$type}"=="upload"){
+                    art.dialog.opener.location.reload();
+                }else{
+                    art.dialog.opener.art.dialog({id:'upimg_dialog'}).close();
+                }
+            }
+	function saveImage (){
+		var status = $(".tab > .tab-head > li[class='current']").index();
+		switch(status){
+			case 0:
+				$("form:first").submit();
+				break;
+			case 1:
+				var img = $(".gallery > .current >img").attr('data-src');
+				if(img)uploaded(img);
+				else art.dialog.tips("<p class='fail'>未选择任何图片，无法添加！</p>");
+				break;
+			case 2:
+				$("#form_netimg").submit();
+				break;
+			}
+		}
+		{if:isset($msg)}
+			art.dialog.tips("<p class='{$msg[0]}'>{$msg[1]}</p>");
+		{elseif:Req::args('msg')}
+			{set:$msg = Req::args('msg')}
+			art.dialog.tips("<p class='{$msg[0]}'>{$msg[1]}</p>");
+		{/if}
+		function setNetImg(e){
+			if(e==null)uploaded($('#netimg').val());
+			return false;
+		}
+		$(".gallery >li").each(function(){
+			$(this).on("click",function(){
+				$(".gallery >li").removeClass('current');
+				$(this).addClass("current");
+			})
+		})
+　　			{if:Req::args('p')!=null}
+				$(document).ready(function(){ 
+				　　tabs_select(0,1);
+				});
+			{/if}
+	</script>
+</body>
+</html>

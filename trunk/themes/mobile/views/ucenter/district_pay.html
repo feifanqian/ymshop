@@ -1,0 +1,62 @@
+{echo:JS::import('dialog?skin=simple');}
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<form action="{url:/payment/pay_district}" method="post" id="payform">
+    <div class="mt10">
+        <div class="weui_cells weui_cells_access">
+            <a href="#" class="weui_cell">
+                {set:$paydict = array();}
+                {list:items=$paytypelist}
+                {set:$paydict[]=array('title'=>$item['pay_name'], 'value'=>$item['id']);}
+                {/list}
+                {set:$paydict[]=array('title'=>"秒到支付",'value'=>"999");}
+                <input type="hidden" name="district_id" value="{$district['id']}">
+                <input type="hidden" name="payment_id" value="{$paydict[0]['value']}">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>小区名称</p>
+                </div>
+                <div class="weui_cell_ft">
+                    {$district['name']}
+                </div>
+            </a>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>入驻金额</p>
+                </div>
+                <div class="weui_cell_hd">
+                    {$join_fee}元
+                </div>
+            </div>
+           
+            <div class="weui_cell ">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>支付方式</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <input class="weui_input" id="paytype" name='paytype' type="text" value="{$paydict[0]['title']}" data-values="{$paydict[0]['value']}" style='text-align: right;display:inline-block;width:auto;' />
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+    </div>
+
+    <div class="ma20 clearfix">
+        <p class="tc"><input class="weui_btn weui_btn_primary" type="submit" value="立即支付"></p>
+    </div>
+</form>
+<script type="text/javascript" charset="UTF-8" src="/themes/_default/js/jquery.iframe-post-form.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+{widget:name=tabbar action=item cart=$cart current=ucenter}
+<script type="text/javascript">
+    $(function () {
+        $("#paytype").select({
+            title: "选择支付方式",
+            items: {echo: json_encode($paydict); },
+            onChange: function () {
+                    $("input[name='payment_id']").val($("#paytype").attr("data-values"));
+                }
+            }
+        );
+    });
+</script>

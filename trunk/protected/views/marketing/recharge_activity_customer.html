@@ -1,0 +1,80 @@
+<script type="text/javascript" src="{url:@static/js/layer/layer.js}"></script>
+<form action="" method="post" id="form">
+    <div class="tools_bar clearfix">
+       <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+      <a  class="icon-pencil" href="javascript:;" onclick="send_select();" title="标记为已发送"> 已发送赠品</a>
+    </div>
+        <table class="default" >
+            <tr>
+                <th style="width:30px">选择</th>
+                <th style="width:50px">操作</th>
+                <th style="width:50px">用户名</th>
+                <th style="width:50px">充值金额</th>
+                <th style="width:50px">充值对象</th>
+                <th style="width:100px">充值时间</th>
+                <th style="width:100px">获得赠品</th>
+                <th style="width:150px">寄送信息</th>
+                <th style="width:50px">状态</th>
+            </tr>
+                {set:$type=array("0"=>"金点","1"=>"银点");}
+                {set:$status=array("-1"=>"超时未领取","0"=>"暂未填写地址","1"=>"未发送赠品","2"=>"已发送赠品");}
+                {query:name=recharge_presentlog as r  join=left join user as u on r.user_id eq u.id fields=r.*,u.name as uname  id=$obj page=1 order=r.id desc}
+                <tr>
+                 <td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}">
+                    </td>
+                  <td style="width:50px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                    {if:$item['status']==1||$item['status']==0}
+                    <li><a class="icon-pencil" href="javascript:send_one({$item['id']});"> 已发送赠品</a></li>
+                    {/if}
+                </ul></div></div> </td>
+                <td style="width:50px">{$item['uname']}</td>
+                <td style="width:100px">{$item['recharge_amount']}</td>
+                <td style="width:100px">{$type[$item['recharge_type']]}</td>
+                <td style="width:100px">{$item['recharge_time']}</td>
+                <td style="width:100px">{$item['present']}</td>
+                <td style="width:150px">收件人：{$item['contact_man']|"----"}<br>联系电话：{$item['contact_mobile']|"----"}<br>地址：{$item['addr']|"----"}</td>
+                <td style="width:100px">{$status[$item['status']]}</td>
+                </tr>
+                {/query}
+            </table>
+    </form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<script>
+    function send_select(){
+        if($("input[name='id[]']:checked").length==0){
+            layer.msg("请至少选择一项");
+            return false;
+        }
+        var id=new Array();
+        $("input[name='id[]']:checked").each(function(i){
+            id[i]=$(this).val();
+        });
+        layer.confirm('您确定要标记为已发送赠品吗？', {
+            btn: ['确定','取消'] //按钮
+          }, function(){
+              $.post("{url:/marketing/recharge_activity_send}",{id:id},function(result){
+                if(result.status =='success'){
+                    layer.msg("状态已更改",{icon:6},function(){
+                        window.location.reload();
+                    })
+                }else{
+                    layer.msg(result.msg,{icon:5});
+                }
+            },'json');
+          }, function(){
+          });
+    }
+    function send_one(id){
+        $.post("{url:/marketing/recharge_activity_send}",{id:id},function(result){
+            if(result.status =='success'){
+                layer.msg("状态已更改",{icon:6},function(){
+                    window.location.reload();
+                })
+            }else{
+                layer.msg(result.msg,{icon:5});
+            }
+        },'json');
+    }
+</script>

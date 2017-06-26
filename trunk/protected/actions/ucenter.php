@@ -1,0 +1,2259 @@
+<?php
+
+class UcenterAction extends Controller {
+
+    public $model = null;
+    public $user = null;
+    public $code = 1000;
+    public $content = NULL;
+
+    public function __construct() {
+        $this->model = new Model();
+    }
+
+    private function postRequest($api, array $params = array(), $timeout = 30) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $api);
+        // 以返回的形式接收信息
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // 设置为POST方式
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        // 不验证https证书
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/x-www-form-urlencoded;charset=UTF-8',
+            'Accept: application/json',
+        ));
+        // 发送数据
+        $response = curl_exec($ch);
+        // 不要忘记释放资源
+        curl_close($ch);
+        return $response;
+    }
+
+    //验证短信
+    private function sms_verify($code, $mobile, $zone) {
+        $url = "https://webapi.sms.mob.com/sms/verify";
+        $appkey = "15b0ce2de2896";
+        $return = $this->postRequest($url, array('appkey' => $appkey,
+            'phone' => $mobile,
+            'zone' => $zone,
+            'code' => $code,
+        ));
+        $flag = json_decode($return, true);
+        if ($flag['status'] == 200) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //app端注册
+    public function app_signup() {
+        $code = Filter::sql(Req::args('code'));
+        $mobile = Filter::sql(Req::args('mobile'));
+        $zone = Filter::int(Req::args('zone'));
+        $password = Filter::str(Req::args('password'));
+
+
+        if (!Validator::mobi($mobile)) {
+            $this->code = 1024;
+            return;
+        }
+        $verify_flag = $this->sms_verify($code, $mobile, $zone);
+        if ($verify_flag) {
+            $user = $this->model->query("select user_id from tiny_customer where mobile = $mobile");
+            //如果手机号已经注册过了
+            if ($user) {
+                $this->code = 1021;
+                return;
+            } else {
+                if (strlen($password) < 6) {
+                    $this->code = 1023;
+                    return;
+                }
+                $validcode = CHash::random(8);
+                $token = CHash::random(32, 'char');
+                $result = $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode),
+                            'validcode' => $validcode,
+                            'token' => $token))->insert();
+                if ($result) {
+                    $this->model->table('customer')->data(array('user_id' => $result, 'mobile' => $mobile, 'reg_time' => date('Y-m-d H:i:s'), 'mobile_verified' => 1))->insert();
+                    $this->code = 0;
+                    $this->content['user_id'] = $result;
+                    $this->content['token'] = $token;
+                } else {
+                    
+                }
+            }
+        } else {
+            $this->code = 1025;
+        }
+    }
+
+    //注册
+    public function signup() {
+        $email = Filter::sql(Req::post('email'));
+        $mobile = Filter::int(Req::args('mobile'));
+        $passWord = Req::post('password');
+        $rePassWord = Req::post('repassword');
+
+        $config = Config::getInstance();
+        $other = $config->get('other');
+        $reg_way = isset($other['other_reg_way']) ? $other['other_reg_way'] : 0;
+        $reg_way = explode(',', $reg_way);
+        $reg_way = array_flip($reg_way);
+        $reg_way = array(1 => 'mobile');
+
+        $smsCheck = false;
+        if (isset($reg_way[1]) && class_exists('SMS')) {
+            $sms = SMS::getInstance();
+            if ($sms->getStatus())
+                $smsCheck = true;
+        }
+        $mobile = '';
+        $checkFlag = false;
+        $mobile = Filter::int(Req::args('mobile'));
+        if ($smsCheck) {
+            $code = Req::args('code');
+            $checkret = SMS::getInstance()->checkCode($mobile, $code);
+            if (!$checkret || $checkret['status'] != 'success') {
+                $this->code = 1026;
+                return;
+            }
+        }
+        if (isset($reg_way[0])) {
+            if (!Validator::email($email)) {
+                $this->code = 1022;
+                return;
+            }
+        }
+        if (isset($reg_way[1])) {
+            if (!Validator::mobi($mobile)) {
+                $this->code = 1024;
+                JS::import($obj);
+                return;
+            }
+        }
+        if (strlen($passWord) < 6) {
+            $this->code = 1023;
+            return;
+        }
+        $this->safebox = Safebox::getInstance();
+        $model = $this->model->table("user");
+        if ($passWord != $rePassWord) {
+            $this->code = 1020;
+            return;
+        }
+        if (isset($reg_way[0]) && isset($reg_way[1])) {
+            $userObj = $model->where("email='$email'")->find();
+            $customerModel = new Model("customer");
+            $customerObj = $customerModel->where("mobile='$mobile'")->find();
+            if ($userObj) {
+                $this->code = 1027;
+                return;
+            }
+            if ($customerObj) {
+                $this->code = 1021;
+                return;
+            }
+            $name = $mobile;
+        } elseif (isset($reg_way[0])) {
+            $obj = $model->where("email='$email'")->find();
+            if ($obj) {
+                $this->code = 1027;
+                return;
+            }
+            $name = $email;
+        } elseif (isset($reg_way[1])) {
+            $customerModel = new Model("customer");
+            $customerObj = $customerModel->where("mobile='$mobile'")->find();
+            $obj = $customerObj;
+            if ($customerObj == null) {
+                $name = $mobile;
+                $email = $mobile . '@no.com';
+            } else {
+                $this->code = 1021;
+                return;
+            }
+        }
+        //判断是否验证会员邮箱
+        $user_status = 1;
+        if (isset($other['other_verification_eamil']) && $other['other_verification_eamil'] == 1) {
+            $user_status = 0;
+        }
+        $user_status = 1;
+
+        $validcode = CHash::random(8);
+        $token = CHash::random(32, 'char');
+        $last_id = $model->data(array('email' => $email, 'name' => $name, 'password' => CHash::md5($passWord, $validcode), 'validcode' => $validcode, 'token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day')), 'status' => $user_status))->insert();
+
+        $time = date('Y-m-d H:i:s');
+        $obj = $model->table("customer")->data(array('user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile))->insert();
+        if ($mobile) {
+            SMS::getInstance()->flushCode($mobile);
+        }
+        if ($user_status == 1) {
+            //记录登录信息
+            $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time")->where("us.email='$email'")->find();
+            $this->safebox->set('user', $obj, 1800);
+        } else {
+            $email_code = Crypt::encode($email);
+            $valid_code = md5($validcode);
+            $str_code = urlencode($valid_code . $email_code);
+            $activation_url = Url::fullUrlFormat("/simple/activation_user/code/$str_code");
+            $msg_content = '';
+            $site_url = Url::fullUrlFormat('/');
+            $msg_title = '账户激活--' . $this->site_name;
+
+            $msg_template_model = new Model("msg_template");
+            $msg_template = $msg_template_model->where('id=4')->find();
+            if ($msg_template) {
+                $msg_content = str_replace(array('{$site_name}', '{$activation_url}', '{$site_url}', '{$current_time}'), array($this->site_name, $activation_url, $site_url, date('Y-m-d H:i:s')), $msg_template['content']);
+                $msg_title = $msg_template['title'];
+                try {
+                    $mail = new Mail();
+                    $flag = $mail->send_email($email, $msg_title, $msg_content);
+                    if (!$flag) {
+                        //$this->redirect("/index/msg", true, array('type' => "fail", "msg" => '邮件发送失败', "content" => "后台还没有成功配制邮件信息!"));
+                        //$this->code = 1005;
+                    }
+                } catch (Exception $ex) {
+                    
+                }
+            }
+        }
+        $obj = $model->table("user")->fields("id,token")->where("id='{$last_id}'")->find();
+        $this->code = 0;
+        $this->content = array(
+            'user_id' => $obj['id'],
+            'token' => $obj['token']
+        );
+    }
+
+    //用户登录
+    public function login() {
+        $account = Filter::sql(Req::post('account'));
+        $passWord = Req::post('password');
+        $model = $this->model->table("user as us");
+        $obj = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.email='$account' or us.name='$account' or cu.mobile='$account'")->find();
+        if ($obj) {
+            if ($obj['status'] == 1) {
+                if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
+                    $token = CHash::random(32, 'char');
+                    $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
+                    $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $obj['id'])->update();
+                    $this->code = 0;
+                    $this->content = array(
+                        'user_id' => $obj['id'],
+                        'token' => $token
+                    );
+                } else {
+                    $this->code = 1016;
+                }
+            } else if ($obj['status'] == 2) {
+                $this->code = 1017;
+            } else {
+                $this->code = 1018;
+            }
+        } else {
+            $this->code = 1019;
+        }
+    }
+
+    //读取个人信息
+    public function info() {
+        $this->code = 0;
+        $this->content = array(
+            'userinfo' => $this->user
+        );
+    }
+
+    public function set_nickname() {
+        $new_name = Filter::str(Req::args('new'));
+        if (strlen($new_name) > 20) {
+            return;
+        }
+        $result = $this->model->query("update tiny_user set nickname = '$new_name' where id = " . $this->user['id']);
+        if ($result) {
+            $this->code = 0;
+        }
+    }
+
+    public function set_avatar() {
+        $upfile_path = Tiny::getPath("uploads") . "/head/";
+        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
+        //$upfile_url = strtr(Tiny::getPath("uploads_url")."head/",APP_URL,'');
+        $upfile = new UploadFile('imgfile', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile->save();
+        $info = $upfile->getInfo();
+        $result = array();
+
+        if ($info[0]['status'] == 1) {
+            $result = array('error' => 0, 'url' => $upfile_url . $info[0]['path']);
+            $image_url = $upfile_url . $info[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url, 100, 100);
+            $model = new Model('user');
+            $model->data(array('avatar' => $image_url))->where("id=" . $this->user['id'])->update();
+
+            $safebox = Safebox::getInstance();
+            $user = $this->user;
+            $user['avatar'] = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
+            $safebox->set('user', $user);
+            $this->code = 0;
+        } else {
+            $this->code = 1099;
+        }
+    }
+
+    //保存个人资料
+    public function save_info() {
+        $rules = array('name:required:昵称不能为空!', 'real_name:required:真实姓名不能为空!',
+            'sex:int:性别必需选择！', 'birthday:date:生日日期格式不正确！',
+            'province:[1-9]\d*:选择地区必需完成', 'city:[1-9]\d*:选择地区必需完成',
+            'county:[1-9]\d*:选择地区必需完成');
+        $info = Validator::check($rules);
+        if (is_array($info)) {
+            $this->code = 1000;
+        } else {
+            $data = array(
+                'name' => Filter::txt(Req::args('name')),
+                'real_name' => Filter::text(Req::args('real_name')),
+                'sex' => Filter::int(Req::args('sex')),
+                'birthday' => Filter::sql(Req::args('birthday')),
+                'phone' => Filter::sql(Req::args('phone')),
+                'province' => Filter::int(Req::args('province')),
+                'city' => Filter::int(Req::args('city')),
+                'county' => Filter::int(Req::args('county')),
+                'addr' => Filter::text(Req::args('addr'))
+            );
+
+            //如果用户之前没有绑定过手机号码，则执行这一步
+            if ($this->user['mobile'] == '') {
+                $mobile = Filter::int(Req::args('mobile'));
+                $obj = $this->model->table("customer")->where("mobile='$mobile'")->find();
+                $data['mobile'] = $mobile;
+                if ($obj) {
+                    $this->code = 1044;
+                    return;
+                }
+            }
+            if ($this->user['email'] == $this->user['mobile'] . '@no.com') {
+                $email = Req::args('email');
+                if (Validator::email($email)) {
+                    $userData['email'] = $email;
+                    $obj = $this->model->table("user")->where("email='$email'")->find();
+                    if ($obj) {
+                        $this->code = 1045;
+                        return;
+                    }
+                }
+            }
+
+            $userData['name'] = Filter::sql(Req::args("name"));
+            $id = $this->user['id'];
+            $this->model->table("user")->data($userData)->where("id=$id")->update();
+
+            $this->model->table("customer")->data($data)->where("user_id=$id")->update();
+            $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id=$id")->find();
+            //$this->safebox->set('user', $obj, $this->cookie_time);
+            $this->code = 0;
+        }
+    }
+
+    public function andorid_logout() {
+        Session::clearAll();
+        $result = $this->model->table("user")->data(array('token' => '', 'expire_time' => ''))->where('id=' . $this->user['id'])->update();
+        if ($result) {
+            $this->code = 0;
+        } else {
+            $this->code = 1005;
+        }
+    }
+
+    public function reset_loginpwd() {
+
+        $oldpassword = Filter::str(Req::args('oldpassword'));
+        $newpassword1 = Filter::str(Req::args('newpassword1'));
+        $newpassword2 = Filter::str(Req::args('newpassword2'));
+        $user = $this->model->where("id = ".$this->user['id'])->fields("password,validcode")->find();
+        $validcode = $user['validcode'];
+        if ($user['password'] != CHash::md5($oldpassword, $validcode)) {
+            $this->code = 1016;
+            return;
+        } else if ($newpassword1 != $newpassword2) {
+            $this->code = 1020;
+            return;
+        }
+        if (strlen($newpassword1) < 6) {
+            $this->code = 1023;
+            return;
+        }
+        if ($oldpassword == $newpassword1) {
+            $this->code = 1081;
+            return;
+        }
+        $validcode = CHash::random(8);
+        $this->model->table('user')->data(array('password' => CHash::md5($newpassword1, $validcode), 'validcode' => $validcode))->where('id=' . $this->user['id'])->update();
+        $this->code = 0;
+    }
+
+    public function resetpwd1() {
+        $account = Filter::sql(Req::args('account'));
+        $this->safebox = Safebox::getInstance();
+        if (Validator::email($account)) {
+            $email = $account;
+            $model = $this->model->table('user');
+            $obj = $model->where("email = '" . $email . "'")->find();
+            if (!empty($obj)) {
+                $model = $this->model->table('reset_password');
+                $obj = $model->where("email = '" . $email . "'")->find();
+                $safecode = md5(md5($email) . md5(CHash::random(32)));
+                if (!empty($obj)) {
+                    $obj['safecode'] = $safecode;
+                    $model->data($obj)->update();
+                } else {
+                    $model->data(array('email' => $email, 'safecode' => $safecode))->add();
+                }
+                $reset_url = Url::fullUrlFormat("/simple/reset_password/safecode/$safecode");
+                $msg_content = '';
+                $site_url = Url::fullUrlFormat('/');
+                $msg_title = '找回密码--' . $this->site_name;
+
+                $msg_template_model = new Model("msg_template");
+                $msg_template = $msg_template_model->where('id=3')->find();
+                if ($msg_template) {
+                    $msg_content = str_replace(array('{$site_name}', '{$reset_url}', '{$site_url}', '{$safecode}', '{$current_time}'), array($this->site_name, $reset_url, $site_url, $safecode, date('Y-m-d H:i:s')), $msg_template['content']);
+                    $msg_title = $msg_template['title'];
+                } else {
+                    $msg_content .='<p>亲爱的用户:</p>';
+                    $msg_content .='<p>您正在使用找回密码的功能,你的验证码是:' . $safecode . '<br/>';
+                }
+                $mail = new Mail();
+                $flag = $mail->send_email($email, $msg_title, $msg_content);
+                if ($flag) {
+                    $this->code = 0;
+                } else {
+                    $this->code = 1033;
+                }
+            } else {
+                $this->code = 1030;
+            }
+        } elseif (Validator::mobi($account)) {
+            $mobile = $account;
+            $model = $this->model->table('customer');
+            $obj = $model->where("mobile = '" . $mobile . "'")->find();
+            $this->assign('accountType', 'mobile');
+            if (!empty($obj)) {
+                $sms = SMS::getInstance();
+                if ($sms->getStatus()) {
+                    $code = CHash::random('6', 'int');
+                    $result = $sms->sendCode($mobile, $code);
+                    if ($result['status'] == 'success') {
+                        $model = $this->model->table('reset_password');
+                        $model->data(array('email' => $mobile, 'safecode' => $code))->insert();
+                        $sms->flushCode($mobile);
+                        $this->code = 0;
+                    } else {
+                        $this->code = 1032;
+                    }
+                } else {
+                    $this->code = 1031;
+                }
+            } else {
+                $this->code = 1030;
+            }
+        } else {
+            $this->code = 1030;
+        }
+    }
+
+    public function resetpwd2() {
+        $safecode = Filter::sql(Req::args('safecode'));
+        $password = Req::args('password');
+        $repassword = Req::args('repassword');
+        if ($password == $repassword) {
+            $model = new Model('reset_password');
+            $obj = $model->where("safecode='" . $safecode . "'")->find();
+            if (!empty($obj)) {
+                $validcode = CHash::random(8);
+                if (strlen($safecode) == 32) {
+                    $umodel = $this->model->table('user');
+                    $umodel->where("email='" . Filter::sql($obj['email']) . "'")->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->update();
+                } else {
+                    $cumodel = $this->model->table('customer');
+                    $mobile = $obj['email'];
+                    $cuobj = $cumodel->where("mobile='$mobile'")->find();
+                    $umodel = $this->model->table('user');
+                    $umodel->where("id=" . $cuobj['user_id'] . "")->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->update();
+                }
+                $model->where('id=' . $obj['id'])->delete();
+                $this->code = 0;
+            } else {
+                $this->code = 1025;
+            }
+        } else {
+            $this->code = 1020;
+        }
+    }
+
+    //第三方登录    
+    public function thirdlogin() {
+        $platform = Filter::sql(Req::args('platform'));
+        $openid = Filter::sql(Req::args('openid'));
+        $token = Filter::sql(Req::args('token'));
+
+        if ($platform && $openid && $token) {
+            $obj = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and open_id='{$openid}'")->find();
+            if ($obj) {
+                $token = CHash::random(32, 'char');
+                $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['user_id'])->update();
+                $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $obj['user_id'])->update();
+                $this->code = 0;
+                $this->content = array(
+                    'user_id' => $obj['user_id'],
+                    'token' => $token
+                );
+            } else {
+                $this->code = 0;
+            }
+        } else {
+            $this->code = 1000;
+        }
+    }
+
+    //第三方登录绑定
+    public function thirdbind() {
+        $platform = Filter::sql(Req::args('platform'));
+        $openid = Filter::sql(Req::args('openid'));
+        $token = Filter::sql(Req::args('token'));
+        $mobile = Filter::str(Req::args('mobile'));
+        $code = Filter::int(Req::args('code'));
+        $zone = Filter::int(Req::args('zone'));
+        $passWord = Filter::sql(Req::args('password'));
+
+        $nickname = Filter::sql(Req::args('nickname'));
+        $head = Filter::str(Req::args('head'));
+
+        $oauthuser = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and open_id='{$openid}'")->find();
+//        $verify_flag = $this->sms_verify($code,$mobile,$zone);
+//        if(!$verify_flag){
+//            $this->code = 1025;
+//            return;
+//        }
+        if ($oauthuser && $oauthuser['user_id']) {
+            $this->code = 1059;
+            return;
+        } else {
+            //如果已经绑定其它的账号
+            $ext = $this->model->table("customer")->where("mobile='{$mobile}'")->find();
+            if ($ext) {
+                $last_id = $ext['user_id'];
+                $cus = $this->model->table("oauth_user")->where("oauth_type='{$platform}' and user_id ='{$last_id}'")->find();
+                if ($cus) {
+                    $this->code = 1059;
+                    return;
+                }
+            }
+            //如果没有账号则需要新创建一个
+            if (!$ext) {
+                $openname = $mobile;
+                $email = $mobile . "@no.com";
+                $time = date('Y-m-d H:i:s');
+                $validcode = CHash::random(8);
+                $model = $this->model->table("user");
+                $last_id = $model->data(array('email' => $email, 'nickname' => $nickname, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $head, 'validcode' => $validcode))->insert();
+                $name = "u" . sprintf("%09d", $last_id);
+                //更新用户名和邮箱
+                $model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
+                $model->table("customer")->data(array('mobile' => $mobile, 'mobile_verified' => 1, 'balance' => 0, 'score' => 0, 'user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time))->insert();
+            } else {
+                
+            }
+            $token = CHash::random(32, 'char');
+            $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $last_id)->update();
+            $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $last_id)->update();
+            $openname = $mobile;
+            if (!$oauthuser) {
+                $this->model->table("oauth_user")->data(array(
+                    'open_name' => $openname,
+                    'oauth_type' => $platform,
+                    'user_id' => $last_id,
+                    'posttime' => time(),
+                    'token' => $token,
+                    'expires' => 7200,
+                    'open_id' => $openid
+                ))->insert();
+            } else {
+                $this->model->table("oauth_user")->data(array('user_id' => $last_id, 'token' => $token, 'posttime' => time()))->where("id='{$oauthuser['id']}'")->update();
+            }
+            $this->code = 0;
+            $this->content = array(
+                'user_id' => $last_id,
+                'token' => $token
+            );
+        }
+    }
+
+    //发送短信
+    public function send_sms() {
+        $mobile = Filter::sql(Req::args('mobile'));
+        if (!Validator::mobi($mobile)) {
+            $this->code = 1000;
+            return;
+        }
+        $model = new Model('mobile_code');
+        $time = time() - 120;
+        $obj = $model->where("send_time < $time")->delete();
+        $obj = $model->where("mobile='" . $mobile . "'")->find();
+        if ($obj) {
+            $this->code = 1036;
+            return;
+        }
+        $sms = SMS::getInstance();
+        if (!$sms->getStatus()) {
+            $this->code = 1035;
+            return;
+        }
+        $code = CHash::random('6', 'int');
+        $result = $sms->sendCode($mobile, $code);
+        if ($result['status'] != 'success') {
+            $this->code = 1032;
+            return;
+        }
+        $model->data(array('mobile' => $mobile, 'code' => $code, 'send_time' => time()))->insert();
+        $this->code = 0;
+    }
+
+    //发送验证码
+    public function send_code() {
+        $type = Req::args('type');
+        $code = CHash::random(6, 'int');
+        $verifiedInfo = Session::get('verifiedInfo');
+        $sendAble = true;
+        $haveTime = 120;
+
+        if (isset($verifiedInfo['time']) && $type == $verifiedInfo['type']) {
+            $time = $verifiedInfo['time'];
+            $haveTime = time() - $time;
+            if ($haveTime <= 120) {
+                $sendAble = false;
+            }
+        }
+        $sendAble = true;
+        if ($sendAble) {
+            $random = CHash::random(20, 'char');
+            $verifiedInfo = array('code' => $code, 'time' => time(), 'type' => $type, 'random' => $random);
+            if ($type == 'email') {
+                $mail = new Mail();
+                $flag = $mail->send_email($this->user['email'], '您的验证身份验证码', "身份验证码：" . $code);
+                if (!$flag) {
+                    $this->code = 1034;
+                } else {
+                    Session::set('verifiedInfo', $verifiedInfo);
+                    $this->code = 0;
+                }
+            } else if ($type == 'mobile') {
+                $sms = SMS::getInstance();
+                if ($sms->getStatus()) {
+                    $result = $sms->sendCode($this->user['mobile'], $code);
+                    if ($result['status'] == 'success') {
+                        Session::set('verifiedInfo', $verifiedInfo);
+                        $this->code = 0;
+                    } else {
+                        $this->code = 1032;
+                    }
+                } else {
+                    $this->code = 1035;
+                }
+            } else {
+                $this->code = 1000;
+            }
+        } else {
+            $this->code = 1036;
+        }
+    }
+
+    //发送复核验证码
+    public function send_objcode() {
+        $type = Req::args('type');
+        $code = CHash::random(6, 'int');
+        $activateObj = Session::get('activateObj');
+        $sendAble = true;
+        $haveTime = 120;
+        if (isset($activateObj['time'])) {
+            $time = $activateObj['time'];
+            $haveTime = time() - $time;
+            if ($haveTime <= 120) {
+                $sendAble = false;
+            }
+        }
+        if ($sendAble) {
+            $code = CHash::random(6, 'int');
+            $activateObj = array('time' => time(), 'code' => $code, 'obj' => $type);
+            if ($type == 'email') {
+                $mail = new Mail();
+                $flag = $mail->send_email($this->user['email'], '您的验证身份验证码', "身份验证码：" . $code);
+                if (!$flag) {
+                    $this->code = 1034;
+                } else {
+                    Session::set('activateObj', $activateObj);
+                    $this->code = 0;
+                }
+            } else if ($type == 'mobile') {
+                $sms = SMS::getInstance();
+                if ($sms->getStatus()) {
+                    $result = $sms->sendCode($this->user['mobile'], $code);
+                    if ($result['status'] == 'success') {
+                        Session::set('activateObj', $activateObj);
+                        $this->code = 0;
+                    } else {
+                        $this->code = 1032;
+                    }
+                } else {
+                    $this->code = 1035;
+                }
+            } else {
+                $this->code = 1000;
+            }
+        } else {
+            $this->code = 1036;
+        }
+    }
+
+    //订单查询   
+    //POST参数  
+    //status:1.all 查询所有订单 2.unpay 查询未支付订单 3.undelivery 查询未发货订单 4. unreceived 查询未收货订单
+    //page： 分页页码（默认一页十条）
+    public function order() {
+        $status = Filter::str(Req::args("status"));
+        $page = Filter::int(Req::args("page"));
+        $page = (int) $page;
+        $config = Config::getInstance();
+        $config_other = $config->get('other');
+        $valid_time = array();
+        $valid_time[0] = isset($config_other['other_order_delay']) ? intval($config_other['other_order_delay']) : 0;
+        $valid_time[1] = isset($config_other['other_order_delay_group']) ? intval($config_other['other_order_delay_group']) : 120;
+        $valid_time[2] = isset($config_other['other_order_delay_flash']) ? intval($config_other['other_order_delay_flash']) : 120;
+        $valid_time[3] = isset($config_other['other_order_delay_bund']) ? intval($config_other['other_order_delay_bund']) : 0;
+        $valid_time[5] = isset($config_other['other_order_delay_point']) ? intval($config_other['other_order_delay_point']) : 0;
+        $valid_time[6] = isset($config_other['other_order_delay_pointflash']) ? intval($config_other['other_order_delay_pointflash']) : 0;
+
+        $where = array("user_id = " . $this->user['id'], 'is_del = 0');
+        switch ($status) {
+            case "all":
+                break;
+            case "unpay":
+                $where[] = "status <= '2'";
+                break;
+            case "undelivery":
+                $where[] = "status = '3'";
+                $where[] = "delivery_status = '0'";
+                break;
+            case "unreceived":
+                $where[] = "status = '3'";
+                $where[] = "delivery_status = '1'";
+                break;
+            default:
+                return;
+                break;
+        }
+        if ($where) {
+            $where = implode(' AND ', $where);
+        }
+        //计算记录数
+        $count = $this->model->query("select count(id) as count from tiny_order where $where ");
+        //计算分页数
+        if ($count[0]['count'] == 0) {
+            $this->code = 0;
+            $this->content['order'] = null;
+            $this->content['page_info'] = array('page_count' => 0, 'page_current' => 0);
+            return;
+        }
+        $page_count = ceil($count[0]['count'] / 10);
+        //分页数溢出时
+        if ($page_count < $page) {
+            $this->code = 0;
+            $this->content = null;
+            return;
+        }
+        //计算偏移量
+        $offset = ($page - 1) * 10;
+        $orders = $this->model->query("select * from tiny_order where $where order by id desc limit $offset,10");
+        //$orders['page_count'] = $page_count;
+        $order_id = array();
+        $now = time();
+        $ids = array();
+        foreach ($orders as $k => $order) {
+            if ($order['pay_status'] == 0 && $order['status'] <= 3) {
+                if (isset($valid_time[$order['type']])) {
+                    $time = $valid_time[$order['type']] * 60;
+                    if ($time && $now - strtotime($order['create_time']) >= $time) {
+                        $order_id[] = $order['id'];
+                    }
+                }
+            }
+            $orders[$k]['shop_huabi_account'] = "wlucky2101";
+            $ids[] = $order['id'];
+        }
+        $imglist = array();
+        if ($ids) {
+            $goodslist = $this->model->table("order_goods AS og")->fields("og.id,og.product_id,og.order_id,og.goods_id,og.goods_nums,og.goods_price,og.spec,og.support_status,go.img,go.imgs,go.name")->join("goods AS go ON og.goods_id=go.id")->where("order_id IN (" . implode(',', $ids) . ")")->findAll();
+            foreach ($goodslist as $k => $v) {
+                $v['spec'] = unserialize($v['spec']);
+                $imglist[$v['order_id']][] = $v;
+            }
+        }
+        foreach ($orders as $k => &$v) {
+            $v['imglist'] = isset($imglist[$v['id']]) ? $imglist[$v['id']] : array();
+        }
+        unset($v);
+        //处理过期订单状态  
+        if (count($order_id) > 0) {
+            $ids = implode(',', $order_id);
+            $order_model = new Model('order');
+            $data = array("status" => 6);
+            $order_model->where("id in (" . $ids . ")")->data($data)->update();
+            $point_order = $order_model->where("id in (" . $ids . ") and type in (5,6)")->findAll();
+            if($point_order){
+                foreach ($point_order as $v){
+                    if($v['pay_point']>0){
+                        $this->model->table("customer")->where("user_id=" . $v['user_id'])->data(array("point_coin" => "`point_coin`+" . $v['pay_point']))->update();
+                        Log::pointcoin_log($v['pay_point'], $v['user_id'], $v['order_no'], "取消订单，退回积分", 2);
+                    }
+                }
+            }
+        }
+        $this->code = 0;
+        $this->content['order'] = $orders;
+        $this->content['page_info'] = array('page_count' => $page_count, 'page_current' => $page);
+    }
+
+    //查询单个订单的详细
+    public function order_detail() {
+        $id = Filter::int(Req::args("id"));
+        $order = $this->model->table("order as od")->fields("od.*,pa.pay_name")->join("left join payment as pa on od.payment = pa.id")->where("od.id = $id and od.user_id=" . $this->user['id'])->find();
+        if ($order) {
+            //发票
+            $invoice = $this->model->table("doc_invoice as di")->fields("di.*,ec.code as ec_code,ec.name as ec_name,ec.alias as ec_alias")->join("left join express_company as ec on di.express_company_id = ec.id")->where("di.order_id=" . $id)->find();
+            $order_goods = $this->model->table("order_goods as og ")->join("left join goods as go on og.goods_id = go.id left join products as pr on og.product_id = pr.id")->where("og.order_id=" . $id)->findAll();
+            foreach ($order_goods as $k => $v) {
+                unset($order_goods[$k]['content']);
+            }
+            $area_ids = $order['province'] . ',' . $order['city'] . ',' . $order['county'];
+            if ($area_ids != '')
+                $areas = $this->model->table("area")->where("id in ($area_ids)")->findAll();
+            $parse_area = array();
+            foreach ($areas as $area) {
+                $parse_area[$area['id']] = $area['name'];
+            }
+            $content['parse_area'] = $parse_area;
+            $content['order_goods'] = $order_goods;
+            $content['invoice'] = $invoice;
+            $content['order'] = $order;
+
+            $this->code = 0;
+            $this->content = $content;
+        } else {
+            $this->code = 1000;
+        }
+    }
+
+    //查询单个订单的详细
+    public function order_express_detail() {
+        $id = Filter::int(Req::args("id"));
+        $order_info = $this->model->table('order')->where("id =$id")->fields('order_amount,pay_time,real_freight,status')->find();
+        $goods_info = $this->model->table('order_goods as og')->join('left join goods as g on og.goods_id = g.id left join express_company as ec on og.express_company_id = ec.id')
+                        ->fields('og.id,og.shop_id,og.goods_nums,og.goods_price,og.real_price,og.spec,og.express_no,og.express_time,og.support_status,g.name,g.img,ec.name as express_name,ec.alias')
+                        ->where("og.order_id=$id")->findAll();
+        $package = array();
+        foreach ($goods_info as $k => $v) {
+            $id = $v['shop_id'];
+            $package[$id]['express_info']['shop_id'] = $id;
+            $package[$id]['express_info']['express_name'] = $v['express_name'];
+            $package[$id]['express_info']['express_time'] = $v['express_time'];
+            $package[$id]['express_info']['alias'] = $v['alias'];
+            $package[$id]['express_info']['express_no'] = $v['express_no'];
+            unset($v['express_name']);
+            unset($v['express_time']);
+            unset($v['alias']);
+            unset($v['shop_id']);
+            unset($v['express_no']);
+            $package[$id]['goods'][] = $v;
+        }
+        $order_info['package'] = array_values($package);
+
+        $this->code = 0;
+        $this->content['order'] = $order_info;
+    }
+
+    //订单签收
+    public function order_sign() {
+        $id = Filter::int(Req::args("id"));
+        $flag = $this->model->table('order')->where("id=$id and user_id=" . $this->user['id'] . " and status=4 ")->find();
+        //$flag = $this->model->query("select * from tiny_order where id = $id and user_id=".$this->user['id']." and status = 4");
+        if (!empty($flag)) {
+            $this->code = 1043;
+        } else {
+            $result = $this->model->table('order')->where("id=$id and user_id=" . $this->user['id'] . " and status=3 and pay_status=1 and delivery_status=1")->data(array('delivery_status' => 2, 'status' => 4, 'completion_time' => date('Y-m-d H:i:s')))->update();
+            if ($result) {
+                //提取购买商品信息
+                $products = $this->model->table('order as od')->join('left join order_goods as og on od.id=og.order_id')->where('od.id=' . $id)->findAll();
+                foreach ($products as $product) {
+                    $data = array('goods_id' => $product['goods_id'], 'user_id' => $this->user['id'], 'order_no' => $product['order_no'], 'buy_time' => $product['create_time']);
+                    //订单签收之后生产评论
+                    $this->model->table('review')->data($data)->insert();
+                }
+                $this->code = 0;
+            } else {
+                $this->code = 1042;
+            }
+        }
+    }
+
+    public function my_review() {
+        $status = Filter::str(Req::args('status'));
+        $page = (int) Filter::int(Req::args('page'));
+
+        $where = array("r.user_id = " . $this->user['id'], "o.order_no is not null");
+        switch ($status) {
+            case "unreview":
+                $where[] = "r.status = '0'";
+                break;
+            case "reviewed":
+                $where[] = "r.status = '1'";
+                break;
+            case "all":
+                break;
+            default :
+                return;
+        }
+        if ($where) {
+            $where = implode(' AND ', $where);
+        }
+        $count = $this->model->table("review as r")->join("left join order as o on o.order_no = r.order_no")->fields("count(r.id) as count")->where($where)->find();
+        $page_count = ceil($count['count'] / 10);
+        //分页溢出
+        if ($page_count < $page) {
+            $this->code = 0;
+            $this->content = null;
+            return;
+        }
+        $offset = ($page - 1) * 10;
+        $order_no = $this->model->table("review as r")->join("order as o on o.order_no = r.order_no")->fields('r.order_no')->where($where)->order("r.id desc")->findAll();
+        $all = array();
+        foreach ($order_no as $k => $v) {
+            $order['order_no'] = $v['order_no'];
+            $total = $this->model->query("select order_amount from tiny_order where order_no =" . $v['order_no']);
+
+            $order['order_amount'] = $total[0]['order_amount'];
+            $one = $this->model->query("select re.id,re.goods_id,re.content,re.point,re.status,re.buy_time,re.comment_time,go.name,go.img as img,go.sell_price from tiny_review as re left join tiny_goods as go on re.goods_id = go.id where order_no = " . $v['order_no']);
+            foreach ($one as $kk => $vv) {
+                $goods_num = $this->model->query("select og.goods_nums from tiny_order_goods as og right join (select id from tiny_order where order_no = '" . $v['order_no'] . "') as o on og.order_id = o.id where og.goods_id =" . $vv['goods_id']);
+                $one[$kk]['goods_num'] = $goods_num[0]['goods_nums'];
+            }
+            $order['list'] = $one;
+            $all[] = $order;
+        }
+        $this->code = 0;
+        $this->content['review'] = $all;
+        $this->content['page_info'] = array('page_count' => $page_count, 'page_current' => $page);
+    }
+
+    //发表评论接口
+    public function post_review() {
+        $id = Filter::int(Req::args('id'));
+        $goods_id = Filter::int(Req::args('goods_id'));
+        $point = Filter::int(Req::args('point'));
+        $content = Filter::txt(Req::args('content'));
+        $content = TString::nl2br($content);
+        if ($point > 5)
+            $point = 5;
+        if ($point < 1)
+            $point = 1;
+        $result = $this->model->table('review')->data(array('point' => $point, 'content' => $content, "status" => 1, 'comment_time' => date("Y-m-d")))->where("status =0 and id = $id and user_id = " . $this->user['id'])->update();
+        if ($result) {
+            $satisfaction = $this->model->table('review')->where("status =1 and goods_id = $goods_id and point >3")->count();
+            $all_review_count = $this->model->table('review')->where("status =1 and goods_id = $goods_id")->count();
+            if ($all_review_count > 0) {
+                $rate = round($satisfaction / $all_review_count, 2);
+                if ($rate > 1) {
+                    $rate = 1.00;
+                }
+            }
+            $this->model->table('goods')->where("id = $goods_id")->data(array("review_count" => $all_review_count, "satisfaction_rate" => $rate))->where("id = $goods_id")->update();
+        } else {
+            $this->code = 1005;
+            return;
+        }
+        $this->code = 0;
+    }
+
+    //获取我的消息接口
+    public function get_message() {
+        $type = Req::args('type');
+        $status = Req::args("status");
+        $page = Req::args('page');
+
+        $customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
+
+        $message_ids = null;
+        if ($customer) {
+            $str = ',' . $customer['message_ids'] . ',';
+            switch ($status) {
+                case 'readed':
+                    preg_match_all('/,-(\d+)/', $str, $message_ids);
+                    break;
+                case 'unread':
+                    preg_match_all('/,(\d+)/', $str, $message_ids);
+                    break;
+                case 'all':
+                    preg_match_all('/,-?(\d+)/', $str, $message_ids);
+                    break;
+                default:
+                    break;
+            }
+            if (!empty($message_ids)) {
+                $ids = implode(',', $message_ids[1]);
+            }
+        }
+
+        if ($ids != '') {
+            $offset = $page > 0 ? ($page - 1) * 10 : 0;
+            if ($type == 'system') {
+                //$message = $this->model->table("message")->where("id in ($ids) and only = 0")->order("id desc")->findAll();
+                $message = $this->model->query("select * from tiny_message where id in ($ids) and only = 0 limit $offset,10");
+            } else if ($type == 'only') {
+                //$message = $this->model->table("message")->where("id in ($ids) and only =".$this->user['id'])->order("id desc")->findAll();
+                $message = $this->model->query("select * from tiny_message where id in ($ids) and only =" . $this->user['id'] . " limit $offset,10");
+            } else if ($type == 'all') {
+                //$message = $this->model->table("message")->where("id in ($ids) ")->order("id desc")->findAll();
+                $message = $this->model->query("select * from tiny_message where id in ($ids) limit $offset,10");
+            } else {
+                return;
+            }
+            $this->code = 0;
+            $this->content = $message;
+        } else {
+            $this->code = 0;
+            $this->content = null;
+        }
+    }
+
+    //将消息标为已读
+    public function read_message() {
+        $id = Filter::int(Req::args("id"));
+        $customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
+        $message_ids = ',' . $customer['message_ids'] . ',';
+        $message_ids = str_replace(",$id,", ',-' . $id . ',', $message_ids);
+        $message_ids = trim($message_ids, ',');
+        $result = $this->model->table("customer")->where("user_id=" . $this->user['id'])->data(array('message_ids' => $message_ids))->update();
+        if ($result) {
+            $this->code = 0;
+        }
+    }
+
+    //签收全部消息
+    public function sign_all_message() {
+        $customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
+        $str = ',' . $customer['message_ids'] . ',';
+        $signed = preg_replace('/,(\d+)/', ',-$1', $str);
+        $signed = trim($signed, ',');
+        $result = $this->model->table("customer")->where("user_id=" . $this->user['id'])->data(array('message_ids' => $signed))->update();
+        $this->code = 0;
+    }
+
+    //删除消息接口
+    public function del_message() {
+        $id = Filter::int(Req::args("id"));
+        $customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
+        $message_ids = ',' . $customer['message_ids'] . ',';
+        $message_ids = str_replace(",-$id,", ',', $message_ids);
+        $message_ids = rtrim($message_ids, ',');
+        $result = $this->model->table("customer")->where("user_id=" . $this->user['id'])->data(array('message_ids' => $message_ids))->update();
+        if ($result) {
+            $this->code = 0;
+        }
+    }
+
+    public function huabi() {
+        $id = $this->user['id'];
+        $customer = $this->model->table("customer as cu")->fields("cu.*,gr.name as gname")->join("left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = $id")->find();
+        $orders = $this->model->table("order as o")->join("payment as p on o.payment = p.id ")->where("o.user_id = $id and p.plugin_id in(1,20)")->findAll();
+        $order = array('amount' => 0, 'todayamount' => 0, 'pending' => 0, 'undelivery' => 0, 'unreceived' => 0, 'uncomment' => 0);
+        foreach ($orders as $obj) {
+            if ($obj['status'] < 5 && ($obj['pay_status'] == 1 || $obj['otherpay_status'] == 1)) {
+                if ($obj['type'] == 4) {
+                    $obj['order_amount'] = $obj['otherpay_amount'];
+                }
+                $order['amount'] += $obj['order_amount'];
+                if (strtotime($obj['pay_time']) >= strtotime('today')) {
+                    $order['todayamount'] += $obj['order_amount'];
+                }
+            }
+            if ($obj['status'] == 4) {
+                
+            } else if ($obj['status'] < 3) {
+                $order['pending'] ++;
+            } else if ($obj['status'] == 3) {
+                if ($obj['delivery_status'] == 0) {
+                    $order['undelivery'] ++;
+                } else if ($obj['delivery_status'] == 1) {
+                    $order['unreceived'] ++;
+                }
+            }
+        }
+
+        $comment = $this->model->table("review")->fields("count(*) as num")->where("user_id = $id and status=0")->find();
+
+        $this->code = 0;
+        $this->content['comment'] = $comment;
+        $this->content['order'] = $order;
+        $this->content['customer'] = $customer;
+    }
+
+    public function huabi_log() {
+        $page = Filter::int(Req::args('page'));
+        $type = Filter::str(Req::args('type'));
+        $where = '';
+        switch ($type) {
+            case 'in':
+                $where = ' and type in(1,2,4,5,6)';
+                break;
+            case 'out':
+                $where = ' and type in(0,3,7)';
+                break;
+            case 'all':
+                break;
+            default:
+                break;
+        }
+        //$customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
+        $count = $this->model->query('select count(id) as count from tiny_balance_log where user_id = ' . $this->user['id'] . $where);
+        $page_count = ceil($count[0]['count'] / 10);
+        if ($page_count == 0) {
+            $this->code = 0;
+            $this->content = null;
+            return;
+        }
+
+        $offset = ($page - 1) * 10;
+        if ($offset < 0) {
+            $this->code = 0;
+            $this->content = null;
+            return;
+        }
+        $log = $this->model->query('select * from tiny_balance_log where user_id =' . $this->user['id'] . $where . " order by id desc limit $offset,10");
+        if ($log) {
+            foreach ($log as $k => $v) {
+                $log[$k]['amount'] = $log[$k]['amount'] > 0 ? "+" . $log[$k]['amount'] : $log[$k]['amount'];
+            }
+        }
+
+        $this->code = 0;
+        $this->content = empty($log) ? null : $log;
+    }
+
+    //安全中心相关接口
+    public function verify() {
+        $type = Filter::str(Req::args('type'));
+        $code = Filter::str(Req::args('code'));
+
+        if ($code != '' && !empty($verifiedInfo) && $code == $verifiedInfo['code']) {
+            //code验证通过时
+            $this->code = 0;
+        } else {
+            $this->code = 1025;
+        }
+        //不需要验证码的
+        if ($type == 'pay_password') {
+            $pay_password = Filter::str(Req::args('pay_password'));
+            $customer = $this->model->query("select pay_password_open,pay_password,pay_validcode from tiny_customer where user_id =" . $this->user['id']);
+            if ($customer[0]['pay_password_open'] == 0) {
+                //用户没有开启支付密码
+                $this->code = 1000;
+                return;
+            } else if ($customer[0]['pay_password'] != CHash::md5($pay_password, $customer[0]['pay_validcode'])) {
+                //支付密码不正确
+                $this->code = 1016;
+                return;
+            } else {
+                //密码验证通过
+                $this->code = 0;
+            }
+        }
+        if ($this->code == 0) {
+            //验证通过时
+            $random = CHash::random(20, 'char');
+            Session::clear('verifiedInfo');
+            Session::set('random', $random);
+            $this->content['sign'] = $random;
+        }
+    }
+
+    //修改操作
+    public function update_obj() {
+        $obj = Filter::str(Req::args('obj'));
+        //修改邮箱和手机时需要code参数
+        $sign = Filter::str(Req::args('sign'));
+        $random = Session::get('random');
+        if ($random == NULL) {
+            $this->code = 1071;
+            return;
+        }
+        if ($sign == $random) {
+            //验证通过
+            if ($obj == 'password' || $obj == 'pay_password') {
+                //如果修改对象是密码，则不需要code验证
+                $password = Req::args('password');
+                $repassword = Req::args('repassword');
+                if ($password == $repassword) {
+                    if ($obj == 'password') {
+                        $validcode = CHash::random(8);
+                        $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $this->user['id'])->update();
+                        Session::clear('random');
+                        $this->code = 0;
+                        return;
+                    } else if ($obj == 'pay_password') {
+                        $validcode = CHash::random(8);
+                        $this->model->table('customer')->data(array('pay_password' => CHash::md5($password, $validcode), 'pay_validcode' => $validcode, 'pay_password_open' => 1))->where('user_id=' . $this->user['id'])->update();
+                        Session::clear('random');
+                        $this->code = 0;
+                        return;
+                    }
+                } else {
+                    $this->code = 1020;
+                    return;
+                }
+            } else if ($obj == 'mobile' || $obj == 'email') {
+                $code = Req::args('code');
+                $account = Req::args('account');
+                $activateObj = Session::get('activateObj');
+                $newCode = $activateObj['code'];
+                $newAccount = $activateObj['obj'];
+                if ($code == $newCode && $account == $newAccount) {
+                    if ($obj == 'email' && Validator::email($account)) {
+                        $result = $this->model->table('user')->where("email='" . $account . "' and id != " . $this->user['id'])->find();
+                        if (!$result) {
+                            $this->model->table('user')->data(array('email' => $account))->where('id=' . $this->user['id'])->update();
+                            $this->model->table('customer')->data(array('email_verified' => 1))->where('user_id=' . $this->user['id'])->update();
+                            Session::clear('random');
+                            Session::clear('activateObj');
+                            $this->code = 0;
+                            return;
+                        } else {
+                            $this->code = 1027;
+                            return;
+                        }
+                    } elseif ($obj == 'mobile' && Validator::mobi($account)) {
+                        $result = $this->model->table('customer')->where("mobile ='" . $account . "'" . '  and user_id!=' . $this->user['id'])->find();
+                        if (!$result) {
+                            $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1))->where('user_id=' . $this->user['id'])->update();
+                            Session::clear('random');
+                            Session::clear('activateObj');
+                            $this->code = 0;
+                            return;
+                        } else {
+                            $this->code = 1021;
+                            return;
+                        }
+                    }
+                }
+            }
+        } else {
+            $this->code = 1001;
+            return;
+        }
+    }
+
+    public function check_verify() {
+        $userInfo = $this->model->table('user as us')->join('left join customer as cu on us.id = cu.user_id')->fields('cu.mobile_verified,cu.mobile,cu.email_verified,us.email,cu.pay_password_open')->where('cu.user_id = ' . $this->user['id'])->find();
+        //隐藏敏感信息
+        $userInfo['email'] = preg_replace("/^(\w{3}).*(\w{2}@.+)$/i", "$1*****$2", $userInfo['email']);
+        $userInfo['mobile'] = preg_replace("/^(\d{3})\d+(\d{4})$/i", "$1*****$2", $userInfo['mobile']);
+        if (!empty($userInfo)) {
+            $this->code = 0;
+            $this->content = $userInfo;
+        } else {
+            
+        }
+    }
+
+    public function add_collect() {
+        $gid = Filter::int(Req::args('goods_id'));
+        //判读是否已经收藏过
+        $flag = $this->model->query("select * from tiny_attention where goods_id = $gid and user_id =" . $this->user['id']);
+        if ($flag) {
+            $this->code = 1092;
+            $this->content = "";
+            return;
+        }
+        $result = $this->model->query("insert into tiny_attention(`user_id`,`goods_id`,`time`) values(" . $this->user['id'] . ",$gid,'" . date('Y-m-d h:i:s') . "')");
+        if ($result) {
+            $this->code = 0;
+            $this->content = "";
+        }
+    }
+
+    public function get_collect() {
+        $page = Filter::int(Req::args('page'));
+        $count = $this->model->query("select count(*) as count from tiny_attention where user_id=" . $this->user['id']);
+        if ($count[0]['count'] == 0) {
+            $this->code = 0;
+            $this->content = "";
+            return;
+        }
+        $page_count = ceil($count[0]['count'] / 10);
+        if ($page > $page_count) {
+            $this->code = 0;
+            $this->content = "";
+            return;
+        }
+        $offset = ($page - 1) * 10;
+        $collect = $this->model->query("select c.*,g.name,g.img,g.sell_price,g.market_price from tiny_attention as c left join tiny_goods as g on c.goods_id = g.id where c.user_id = " . $this->user['id']);
+        if ($collect) {
+            $this->code = 0;
+            $this->content = $collect;
+        }
+    }
+
+    public function del_collect() {
+        $id = Filter::int(Req::args('goods_id'));
+        $result = $this->model->query("delete from tiny_attention where goods_id = $id and user_id = " . $this->user['id']);
+        if ($result) {
+            $this->code = 0;
+            $this->content = "";
+        }
+    }
+
+    public function is_collected() {
+        $goods_id = Filter::int(Req::args('goods_id'));
+        $flag = $this->model->query("select * from tiny_attention where goods_id = $goods_id and user_id =" . $this->user['id']);
+        if ($flag) {
+            //如果在收藏夹中
+            $this->code = 0;
+            $this->content = "";
+        } else {
+            //如果不在收藏夹中
+            $this->code = 1094;
+            $this->content = "";
+        }
+    }
+
+    //忘记密码，使用短信功能重置登录密码
+    public function forget_loginpwd() {
+        $code = Filter::int(Req::args("code"));
+        $mobile = Filter::int(Req::args("mobile"));
+        $newpassword = Filter::str(Req::args("newpassword"));
+        $zone = Filter::int(Req::args('zone'));
+
+        //验证情况标识
+        $pass = $this->sms_verify($code, $mobile, $zone);
+        if ($pass) {
+            $user = $this->model->query("select user_id from tiny_customer where mobile = $mobile");
+            if (!$user) {
+                $this->code = 1030;
+                return;
+            }
+            if (strlen($newpassword) >= 6) {
+                $validcode = CHash::random(8);
+                $this->model->table('user')->data(array('password' => CHash::md5($newpassword, $validcode), 'validcode' => $validcode))->where('id=' . $user[0]['user_id'])->update();
+                $this->code = 0;
+            } else {
+                $this->code = 1023;
+            }
+        } else {
+            $this->code = 1026;
+        }
+    }
+
+    public function sale_support() {
+        $id = Filter::sql(Req::args('id'));
+        $type = Filter::int(Req::args('type'));
+        $user_id = $this->user['id'];
+        $num = Filter::int(Req::args('num'));
+        $proof = Filter::int(Req::args('proof'));
+        $desc = Filter::sql(Req::args('desc'));
+        $province = Filter::sql(Req::args('province'));
+        $city = Filter::sql(Req::args('city'));
+        $county = Filter::sql(Req::args('county'));
+        $receiver = Filter::sql(Req::args('receiver'));
+        $mobile = Filter::sql(Req::args('mobile'));
+        $addr = Filter::sql(Req::args('addr'));
+        $time = date('Y-m-d H:i:s');
+        $img = Req::args('imgs');
+
+        //1.判断手机号
+        if (!Validator::mobi($mobile)) {
+            $this->code = 1024;
+            return;
+        }
+        $order_info = $this->model->query("select * from tiny_order_goods where id=$id");
+        if (empty($order_info)) {
+            //订单不存在
+            $this->code = 1097;
+            return;
+        } else {
+
+            $order_id = $order_info[0]['order_id'];
+            //验证订单是否属于自己
+            $result = $this->model->query("select * from tiny_order where id = $order_id and user_id = $user_id");
+
+            if (empty($result)) {
+                $this->code = 1101;
+                return;
+            }
+            //todo 检查订单是否超出时限
+
+            $order_no = $result[0]['order_no'];
+            if ($num == "" || $num > $order_info[0]['goods_nums']) {
+                //商品数量错误
+                $this->code = 1100;
+                return;
+            }
+
+            //2.验证售后信息
+
+            $sale_support = $this->model->query("select * from tiny_sale_support where order_no ='$order_no' and order_goods_id = $id");
+            if (!empty($sale_support)) {
+                //订单已经在售后
+                $this->code = 1098;
+                return;
+            }
+        }
+        if (is_array($img) && !empty($img)) {
+            $imgs = implode(',', $img);
+        } else {
+            $imgs = "";
+        }
+        //插入操作
+        $result = $this->model->query("insert into tiny_sale_support(`id`,`order_no`,`order_goods_id`,`type`,`user_id`,`num`,`proof`,`desc`,`imgs`,`receiver`,`mobile`,`province`,`city`,`county`,`addr`,`time`,`status`) values('','$order_no',$id,$type,$user_id,$num,$proof,'$desc','$imgs','$receiver',$mobile,$province,$city,$county,'$addr','$time',0)");
+        if ($result) {
+            $this->model->query("update tiny_order_goods set support_status = 1 where id = $id");
+            $this->code = 0;
+        }
+    }
+
+    //
+    public function support_info() {
+        $id = Filter::sql(Req::args('id'));
+        $info = $this->model->query("select * from tiny_sale_support where id=$id and user_id=" . $this->user['id']);
+        $this->code = 0;
+        $this->content = $info[0];
+    }
+
+    //
+    public function badge() {
+        //1.未读系统消息数量
+        //2.未读个人消息
+        //3.待收货数量
+        //4.代付款订单
+        //5.待评价
+        //6.购物车
+        //7.售后进度
+        $data = $this->getMessageCount();
+        $this->code = 0;
+        $this->content['sys'] = (int) $data['sys'];
+        $this->content['only'] = (int) $data['only'];
+        $this->content['unpay'] = (int) $this->getUnpayOrderCount();
+        $this->content['delivery'] = (int) $this->getDeliveryOrderCount();
+        $this->content['review'] = (int) $this->getUnreviewCount();
+        $this->content['cart'] = (int) $this->getCartCount();
+    }
+
+    //ok
+    private function getMessageCount() {
+        $data = $this->model->query("select message_ids from tiny_customer where user_id=" . $this->user['id']);
+        if ($data[0]['message_ids'] == "") {
+            return array('sys' => 0, 'only' => 0);
+        } else {
+            $message_ids = array();
+            $str = ',' . $data[0]['message_ids'] . ',';
+            preg_match_all('/,(\d+)/', $str, $message_ids);
+            if (empty($message_ids[1])) {
+                return array('sys' => 0, 'only' => 0);
+            }
+            $ids = implode(',', $message_ids[1]);
+            $sys = $this->model->query("select count(id) as count from tiny_message where id in ($ids) and only = 0");
+            $only = $this->model->query("select count(id) as count from tiny_message where id in ($ids) and only =" . $this->user['id']);
+            $data_sys = isset($sys[0]['count']) ? $sys[0]['count'] : 0;
+            $data_only = isset($only[0]['count']) ? $only[0]['count'] : 0;
+            return array('sys' => $data_sys, 'only' => $data_only);
+        }
+    }
+
+    private function getUnpayOrderCount() {
+        $data = $this->model->query("select count(id) as count from tiny_order where is_del = 0 and  pay_status = 0 and status = 2 and user_id=" . $this->user['id']);
+        return isset($data[0]['count']) ? $data[0]['count'] : 0;
+    }
+
+    private function getDeliveryOrderCount() {
+        $data = $this->model->query("select count(id) as count from tiny_order where is_del = 0 and delivery_status = 1 and status = 3 and user_id=" . $this->user['id']);
+        return isset($data[0]['count']) ? $data[0]['count'] : 0;
+    }
+
+    private function getCartCount() {
+        $cart = Cart::getCart();
+        return $cart->getNum();
+    }
+
+    private function getUnreviewCount() {
+        $data = $this->model->query("select count(id) as count from tiny_review where status =0 and user_id=" . $this->user['id']);
+        return isset($data[0]['count']) ? $data[0]['count'] : 0;
+    }
+
+    public function complaint() {
+        $user_id = $this->user['id'];
+        $type = Filter::int(Req::args('type'));
+        $content = Filter::sql(Req::args('content'));
+        $mobile = Filter::sql(Req::args('mobile'));
+        $time = date('Y-m-d H:i:s');
+        if ($mobile != "") {
+            if (!Validator::mobi($mobile)) {
+                $this->code = 1025;
+                return;
+            }
+        }
+        $result = $this->model->query("insert into tiny_complaint(`id`,`type`,`user_id`,`mobile`,`content`,`time`,`status`) values('',$type,$user_id,'$mobile','$content','$time',0)");
+        if ($result) {
+            $this->code = 0;
+            $this->content = null;
+            return;
+        } else {
+            
+        }
+    }
+
+    public function updatePayPassword() {
+        $old_pwd = Filter::str(Req::args('old_pay_pwd'));
+        $new_pwd = Filter::str(Req::args('new_pay_pwd'));
+
+        $result = $this->model->table('customer')->where('user_id=' . $this->user['id'])->fields('pay_password_open,pay_password,pay_validcode')->find();
+        if (!empty($result)) {
+            if ($result['pay_password_open'] == 0) {
+                $this->code = 1600;
+                return;
+            }
+            if ($result['pay_password'] == CHash::md5($old_pwd, $result['pay_validcode'])) {
+                $validcode = CHash::random(8);
+                $this->model->table('customer')->data(array('pay_password' => CHash::md5($new_pwd, $validcode), 'pay_validcode' => $validcode))->where('user_id=' . $this->user['id'])->update();
+                $this->code = 0;
+            } else {
+                $this->code = 1060;
+                return;
+            }
+        }
+    }
+
+    public function resetPayPasswordByMobile() {
+        $pay_pwd = Filter::str(Req::args('pay_pwd'));
+        $code = Filter::int(Req::args('code'));
+        $zone = Filter::int(Req::args('zone'));
+
+        $result = $this->model->table('customer')->where('user_id=' . $this->user['id'])->fields('mobile,mobile_verified,pay_password_open,pay_password,pay_validcode')->find();
+        if (!empty($result)) {
+            if ($result['mobile_verified'] == 1) {
+                if ($this->sms_verify($code, $result['mobile'], $zone)) {
+                    $validcode = CHash::random(8);
+                    $this->model->table('customer')->data(array('pay_password' => CHash::md5($pay_pwd, $validcode), 'pay_validcode' => $validcode, 'pay_password_open' => 1))->where('user_id=' . $this->user['id'])->update();
+                    $this->code = 0;
+                } else {
+                    $this->code = 1026;
+                }
+            } else {
+                $this->code = 1030;
+            }
+        }
+    }
+
+    public function getUpyun() {
+        $type = Req::args('type');
+        $upyun = Config::getInstance()->get("upyun");
+
+        $options = array(
+            'bucket' => $upyun['upyun_bucket'],
+            'allow-file-type' => 'jpg,gif,png,jpeg', // 文件类型限制，如：jpg,gif,png
+            'expiration' => time() + $upyun['upyun_expiration'],
+            'notify-url' => $upyun['upyun_notify-url'],
+            'ext-param' => "",
+        );
+        if ($type == 'avatar') {
+            $options['save-key'] = "/data/uploads/head/" . $this->user['id'] . "{.suffix}";
+            $options['ext-param'] = "avatar:{$this->user['id']}";
+        } else if ($type == 'support') {
+            $options['save-key'] = "/data/uploads/support/{year}/{mon}/{day}/{filemd5}{.suffix}";
+            $options['ext-param'] = "support";
+        } else {
+            $this->code = 1000;
+            return;
+        }
+        $policy = base64_encode(json_encode($options));
+        $signature = md5($policy . '&' . $upyun['upyun_formkey']);
+
+        $this->code = 0;
+        $this->content['policy'] = $policy;
+        $this->content['signature'] = $signature;
+    }
+
+    public function myCommission() {
+        $uid = $this->user['id'];
+        $commission = $this->model->table("commission")->where('user_id=' . $uid)->find();
+        if (empty($commission)) {
+            $this->code = 1104;
+            return;
+        } else {
+            //更新可用状态
+            $commission_set = Config::getInstance()->get("commission_set");
+            $lockdays = $commission_set['commission_locktime'];
+            $lockdays = is_int($lockdays) ? $lockdays : (int) $lockdays;
+            $available_time = date('Y-m-d H:i:s', strtotime("-$lockdays days"));
+            $result = $this->model->table('commission_log')->where("user_id  = $uid and status = 0 and time < '$available_time'")->data(array('status' => 1))->update();
+            if ($result > 0) {
+                $available_commission = $this->model->query("select SUM(commission_get) as count from tiny_commission_log where user_id=$uid and status =1");
+                $this->model->table('commission')->data(array('commission_available' => $available_commission[0]['count']))->where('user_id=' . $uid)->update();
+                $commission = $this->model->table("commission")->where('user_id=' . $uid)->find();
+            }
+        }
+        $this->code = 0;
+        $this->content = $commission;
+    }
+
+    public function commissionLog() {
+        $uid = $this->user['id'];
+        $page = Req::args('page');
+        $commission_log = $this->model->table("commission_log as c")->join("left join user as u on u.id = c.buyer_id")->fields('c.*,u.nickname,u.avatar')->where("user_id=$uid")->findPage($page, 10);
+        if (isset($commission_log['html'])) {
+            unset($commission_log['html']);
+        }
+        $this->code = 0;
+        $this->content = $commission_log;
+    }
+
+    public function commissionWithdraw() {
+        $uid = $this->user['id'];
+        $withdraw_type = Filter::sql(Req::args("withdraw_type"));
+        $account_name = Filter::sql(Req::args("account_name"));
+        $account = Filter::sql(Req::args("account"));
+        $bank = Filter::sql(Req::args("bank"));
+        $withdraw_amount = Filter::sql(Req::args("withdraw_amount"));
+        $time = time();
+        $withdraw_no = 'CM' . date("YmdHis") . rand(1000, 9999); //20
+
+        $record = $this->model->table('commission_withdraw')->where("user_id = $uid and status=0")->fields('id')->find();
+        if (!empty($record)) {
+            $this->code = 1106;
+            return;
+        }
+        //查询可提现的金额
+        $commission = $this->model->table("commission")->where('user_id=' . $uid)->find();
+        if (empty($commission)) {
+            $this->code = 1104;
+            return;
+        } else {
+            $commission_set = Config::getInstance()->get("commission_set");
+            if ($withdraw_amount < $commission_set['withdraw_min']) {
+                $this->code = 1105;
+                return;
+            } else if ($withdraw_amount > $commission['commission_available']) {
+                $this->code = 1107;
+                return;
+            }
+            if ($withdraw_type == 1) {//提现至金点
+                $isOk = $this->model->table('commission_withdraw')->data(array('user_id' => $uid, "withdraw_type" => 1, "withdraw_no" => $withdraw_no, "withdraw_amount" => $withdraw_amount, 'bank' => "", 'account_name' => "", 'account' => "", 'time' => date("Y-m-d H:i:s", $time), 'status' => 0))
+                        ->insert();
+            } else if ($withdraw_type == 2) {
+                $isOk = $this->model->table('commission_withdraw')->data(array('user_id' => $uid, "withdraw_type" => 2, "withdraw_no" => $withdraw_no, "withdraw_amount" => $withdraw_amount, 'bank' => $bank, 'account_name' => $account_name, 'account' => $account, 'time' => date("Y-m-d H:i:s", $time), 'status' => 0))
+                        ->insert();
+            } else {
+                $this->code = 1000;
+            }
+            if ($isOk) {
+                $this->code = 0;
+            }
+        }
+    }
+
+    public function withdrawHistory() {
+        $uid = $this->user['id'];
+        $page = Filter::sql(Req::args('page'));
+        $history = $this->model->table("commission_withdraw")->where("user_id = $uid")->findPage($page, 10);
+        if (isset($history['html'])) {
+            unset($history['html']);
+        }
+        $this->code = 0;
+        $this->content = $history;
+    }
+
+    public function myInvite() {
+        $uid = $this->user['id'];
+        $page = Filter::int(Req::args('page'));
+        $invite = $this->model->table("invite as at")->fields("at.*,go.nickname,go.avatar,cu.real_name")->join("left join user as go on at.invite_user_id = go.id LEFT JOIN customer AS cu ON at.invite_user_id=cu.user_id")->where("at.user_id = " . $uid)->findPage($page, 10);
+        if (isset($invite['html'])) {
+            unset($invite['html']);
+        }
+        if (!empty($invite['data'])) {
+            foreach ($invite['data'] as $k => $v) {
+                if ($v['createtime'] != '') {
+                    $invite['data'][$k]['createtime'] = date("Y-m-d H:i:s", $v['createtime']);
+                }
+            }
+        }
+        $this->code = 0;
+        $this->content = $invite;
+    }
+
+    public function myInviteQRCodeUrl() {
+        $uid = $this->user['id'];
+        $url = Url::fullUrlFormat("/index/invite") . "?uid=" . $uid;
+        $this->code = 0;
+        $this->content['url'] = $url;
+    }
+
+    public function changeHuabipayAccount() {
+        $order_id = Filter::sql(Req::args('order_id'));
+        $account = Filter::sql(Req::args('account'));
+
+        $order = new Model("order");
+        $order_info = $order->where("id = $order_id and type = 4 and user_id =" . $this->user['id'])->fields("pay_status,otherpay_status,huabipay_status")->find();
+        if (empty($order_info)) {
+            $this->code = 1110;
+            return;
+        } else {
+            if ($order_info['pay_status'] == 1 || $order_info['huabipay_status'] == 1) {
+                $this->code = 1111;
+                return;
+            }
+            $result = $order->data(array('huabi_account' => $account))->where("id = $order_id")->update();
+            if ($result) {
+                $this->code = 0;
+            } else {
+                $this->code = 1005;
+            }
+        }
+    }
+
+    public function getExpress() {
+        $com = Filter::sql(Req::args("com"));
+        $num = Filter::sql(Req::args("num"));
+        $data = Common::getExpress($com, $num);
+        if ($data['message'] == 'ok' && $data['status'] == 200) {
+            $this->code = 0;
+            $this->content['status'] = $data['state'];
+            $this->content['com'] = $data['com'];
+            $this->content['num'] = $data['nu'];
+            $this->content['pathdata'] = $data['data'];
+            return;
+        } else {
+            $this->code = 1112;
+        }
+    }
+
+    public function order_delete() {
+        $id  = Filter::int(Req::args('id'));
+        $isset = $this->model->table("order")->where("id=$id and user_id =".$this->user['id']." and status in(1,2,5,6)")->find();
+        if(empty($isset)){
+            $this->code = 1005;
+        }
+        $result = $this->model->table("order")->where("id = $id and user_id = ".$this->user['id'].' and status in (1,2,5,6)')->data(array('is_del'=>'1'))->update();
+        if($result){
+            if($isset['status']!=6){
+                if (($isset['type'] == 5||$isset['type']==6) && $isset['pay_point'] > 0) {
+                    $this->model->table("customer")->where("user_id=" . $this->user['id'])->data(array("point_coin" => "`point_coin`+" . $isset['pay_point']))->update();
+                    Log::pointcoin_log($isset['pay_point'], $this->user['id'], $isset['order_no'], "取消订单，退回积分", 2);
+                }
+            }
+             $this->code = 0;
+        }else{
+            $this->code = 1005;
+        }
+    }
+
+    public function _isCanApplyRefund($order_id) {
+        $isset = $this->model->table("refund")->where("order_id =$order_id and user_id =".$this->user['id'])->find();
+       if($isset){
+         return false;
+       }
+       $orderInfo = $this->model->table("order")->where("id = $order_id and user_id =".$this->user['id'])->find();
+       if(empty($orderInfo)){
+          return false;
+       }else{
+          if($orderInfo['order_amount']<=0){
+              return false;
+          }
+          if($orderInfo['type']==4){//华币订单
+              if($orderInfo['is_new']==0){
+               if($orderInfo['otherpay_status']==1 || $orderInfo['pay_status']==1){
+                        if($orderInfo['otherpay_amount']>0){
+                            return array("otherpay_status"=>$orderInfo['otherpay_status'],"pay_status"=>$orderInfo['pay_status'],"order_type"=>4,"order_id"=>$order_id,"order_no"=>$orderInfo['order_no'] ,"payment"=>$orderInfo['payment'],"refund_amount"=>$orderInfo['otherpay_amount']);
+                        }else{
+                            return false;
+                        }
+                   }else{
+                        return false;
+                   }
+                }else if($orderInfo['is_new']==1){
+                    if($orderInfo['pay_status']==1){
+                        if($orderInfo['is_return']==1){
+                            $refund_amount = $orderInfo['otherpay_amount'];
+                            if($refund_amount>0){
+                                 return array("order_type"=>$orderInfo['type'],"order_id"=>$order_id,"order_no"=>$orderInfo['order_no'] ,"payment"=>$orderInfo['payment'],"refund_amount"=>$refund_amount);
+                            }else{
+                               return false; 
+                            }
+                        }else{
+                            $refund_amount = $orderInfo['order_amount'];
+                            if($refund_amount>0){
+                                 return array("order_type"=>$orderInfo['type'],"order_id"=>$order_id,"order_no"=>$orderInfo['order_no'] ,"payment"=>$orderInfo['payment'],"refund_amount"=>$refund_amount);
+                            }else{
+                               return false; 
+                            }
+                        }
+                    }else{
+                        return false;
+                    }
+                }
+          }else{
+             if($orderInfo['pay_status']==1){
+                    return array("order_type"=>$orderInfo['type'],"order_id"=>$order_id,"order_no"=>$orderInfo['order_no'] ,"payment"=>$orderInfo['payment'],"refund_amount"=>$orderInfo['order_amount']);
+             }else{
+                    return false;
+             }
+          }
+       }
+    }
+
+    public function refund_apply_info() {
+        $order_id = Filter::int(Req::args("order_id"));
+        $info = $this->_isCanApplyRefund($order_id);
+        if ($info == false || empty($info)) {
+            $this->code = 1114;
+            return;
+        }
+        $this->code = 0;
+        $this->content = array('order_no' => $info['order_no'], 'order_id' => $info['order_id'], 'refund_amount' => $info['refund_amount']);
+    }
+
+    public function refund_apply_submit() {
+        $order_id = Filter::int(Req::args("order_id"));
+        $reason = Filter::sql(Req::args("reason"));
+        $reason_desc = Filter::sql(Req::args("reason_desc"));
+        $return = $this->_isCanApplyRefund($order_id);
+        if ($return == false || empty($return)) {
+            $this->code = 1114;
+            return;
+        } else {
+            $data['order_id'] = $return['order_id'];
+            $data['order_no'] = $return['order_no'];
+            $data['payment'] = $return['payment'];
+            $data['user_id'] = $this->user['id'];
+            $data['refund_amount'] = $return['refund_amount'];
+            $data['apply_reason'] = $reason . ($reason_desc == "" ? "" : ":" . $reason_desc);
+            $data['apply_time'] = date("Y-m-d H:i:s");
+            $data['refund_progress'] = 0;
+            $id = $this->model->table("refund")->data($data)->insert();
+            if ($id) {
+                //锁定订单，禁止发货
+                if ($return['order_type'] == 4) {//华币订单
+                    if ($return['pay_status'] == 1) {
+                        $isOk = $this->model->table("order")->data(array("pay_status" => '2'))->where("id = $order_id")->update();
+                    } else if ($return['otherpay_status'] == 1) {
+                        $isOk = $this->model->table("order")->data(array("pay_status" => '2'))->where("id = $order_id")->update();
+                    }
+                } else {
+                    $isOk = $this->model->table("order")->data(array("pay_status" => '2'))->where("id = $order_id")->update();
+                }
+                if ($isOk) {
+                    $this->code = 0;
+                    $this->content['refund_id'] = $id;
+                    return;
+                }
+            }
+        }
+        $this->code = 1005;
+    }
+
+    public function refund_progress() {
+        $order_id = Filter::sql(Req::args("order_id"));
+        $refund_info = $this->model->table("refund as r")
+                ->join("left join payment as p on r.payment = p.id")
+                ->fields("r.*,p.pay_name,plugin_id")
+                ->where("order_id = $order_id and user_id = " . $this->user['id'])
+                ->find();
+        if ($refund_info) {
+            $this->code = 0;
+            $this->content = $refund_info;
+        } else {
+            $this->code = 1115;
+        }
+    }
+
+    /*
+     * 银点记录获取
+     * type ： in 收入 out 支出 all 全部
+     */
+
+    public function silver_coin_log() {
+        $page = Filter::int(Req::args('page'));
+        $type = Filter::str(Req::args('type'));
+        $where = '';
+        switch ($type) {
+            case 'in':
+                $where = ' and type in(1,2,3,4)';
+                break;
+            case 'out':
+                $where = ' and type in(0,5)';
+                break;
+            case 'all':
+                break; 
+            default:
+                break;
+        }
+        $log = $this->model->table("silver_log")->where("user_id = " . $this->user['id'] . $where)->findPage($page, 10);
+        if (isset($log['html'])) {
+            unset($log['html']);
+        }
+        $this->code = 0;
+        $this->content = $log;
+    }
+
+    /*
+     * 金点兑换成银点
+     * @gold:需要兑换金点数
+     */
+
+    function gold_to_silver() {
+        $gold = Filter::float(Req::args("gold"));
+        $platform = Filter::str(Req::args("platform"));
+        $platform = $platform == NULL ? "unknow" : $platform;
+        if (is_numeric($gold) && $gold > 0) {
+            $userinfo = $this->model->table("customer")->where("user_id =" . $this->user['id'])->find();
+            if ($gold > $userinfo['balance']) {
+                $this->code = 1118; //金点不足，兑换失败
+            } else {
+                $config = Config::getInstance();
+                $other = $config->get("other");
+                if (isset($other['gold2silver']) && $other['gold2silver'] > 0) {
+                    $silver = round($gold * $other['gold2silver'], 2);
+                    $result = $this->model->table("customer")->data(array("balance" => "`balance`-{$gold}", "silver_coin" => "`silver_coin`+{$silver}"))->where("user_id =" . $this->user['id'])->update();
+                    if ($result) {
+                        $order_no = "Ex" . $platform . date("YmdHis");
+                        Log::balance((0 - $gold), $this->user['id'], $order_no, "兑换银点", 7);
+                        Log::silver_log($silver, $this->user['id'], $order_no, "金点兑换", 1);
+                        $this->code = 0;
+                        $this->content['gold'] = $gold;
+                        $this->content['silver'] = $silver;
+                    } else {
+                        $this->code = 1005;
+                    }
+                } else {
+                    $this->code = 1119; //兑换失败，加载配置失败
+                }
+            }
+        } else {
+            $this->code = 1120; //兑换失败，输入的数值有误
+        }
+    }
+
+    /*
+     * 获取充值套餐的礼品
+     */
+
+    function get_recharge_package_gift() {
+        $config = Config::getInstance();
+        $other = $config->get("other");
+        $package_set = $config->get("recharge_package_set");
+        if (is_array($package_set)) {
+            $where = implode(',', array_reverse(explode("|", $package_set[1]['gift'])));
+            $select1 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->findAll();
+            $where = implode(',', array_reverse(explode("|", $package_set[2]['gift'])));
+            $select2 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->findAll();
+
+            $this->code = 0;
+            $this->content['package1'] = $select1;
+            $this->content['package2_4'] = $select2;
+        } else {
+            $this->code = 1121;
+        }
+    }
+
+    /*
+     * 金点提现接口
+     */
+
+    function balance_withdraw() {
+        Filter::form();
+        $open_name = Filter::str(Req::args('name'));
+        $open_bank = Filter::str(Req::args('bank'));
+        $prov = Filter::str(Req::args('province'));
+        $city = Filter::str(Req::args("city"));
+        $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
+        $amount = Filter::float(Req::args('amount'));
+        $amount = round($amount, 2);
+        $can_withdraw_amount = Common::getCanWithdrawAmount4GoldCoin($this->user['id']);
+        if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
+            $this->code = 1134;
+            $this->content['can_withdraw_amount'] = $can_withdraw_amount;
+            return;
+            //exit(json_encode(array('status' => 'fail', 'msg' => '提现金额超出的账户可提现余额')));
+        }
+        $config = Config::getInstance();
+        $other = $config->get("other");
+        
+        if ($amount < $other['min_withdraw_amount']) {
+            $this->code = 1135;
+            $this->content['min_withdraw_amount'] = $other['min_withdraw_amount'];
+            return;
+            //exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于".$other['min_withdraw_amount'])));
+        }
+        $isset = $this->model->table("balance_withdraw")->where("user_id =" . $this->user['id'] . " and status =0")->find();
+        if ($isset) {
+            $this->code = 1136;
+            return;
+            //exit(json_encode(array('status' => 'fail', 'msg' => '申请失败，还有未处理完的提现申请')));
+        }
+        $withdraw_no = "BW" . date("YmdHis") . rand(100, 999);
+        $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0);
+        $result = $this->model->table('balance_withdraw')->data($data)->insert();
+        if ($result) {
+            $this->code = 0;
+            $this->content['id'] = $result;
+            $this->content['hand_fee'] = $other['withdraw_fee_rate']*$amount /100;
+            // exit(json_encode(array('status' => 'success', 'msg' => "申请提交成功")));
+        } else {
+            $this->code = 1005;
+            // exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
+        }
+    }
+    /*
+     * 判断是否是小区推广员
+     */
+    public function isDistrictPromoter() {
+        $promoter = Promoter::getPromoterInstance($this->user['id']);
+        if (is_object($promoter)) {
+            $this->content['is_promoter'] = 1;
+            $this->content['promoter_id'] =$promoter->id;
+        } else {
+            $this->content['is_promoter'] = 0;
+        }
+        $this->code = 0;
+    }
+    /*
+     * 根据id获取小区信息
+     */
+    public function getDistrictInfoById(){
+        $district_id = Filter::int(Req::args('district_id'));
+        if($district_id==NULL){
+            $this->code = 1000;
+            return;
+        }
+        $district_info = $this->model->table("district_shop")->where("id=$district_id")->fields("id,name,location")->find();
+        if(empty($district_info)){
+            $this->code = 1139;
+        }else{
+            $this->code = 0;
+            $this->content = $district_info;
+        }
+    }
+    /*
+     * 成为推广员
+     */
+    public function becomepromoter() {
+            $reference = Filter::int(Req::args('reference'));
+            $invitor_role = Filter::str(Req::args('invitor_role'));
+            $invitor_role = $invitor_role == NULL ? "shop" : $invitor_role; //默认是shop
+
+            $promoter = Promoter::getPromoterInstance($this->user['id']);
+            if (is_object($promoter)) {
+                $this->code = 1140;
+                return;
+            }
+            if ($reference == NULL) {
+                $this->code = 1126;
+                return;
+            } else {
+                if ($invitor_role == 'shop') {
+                    $district_info = $this->model->table("district_shop")->where("id = $reference")->fields("name,location")->find();
+                } else if ($invitor_role == 'promoter') {
+                    $district_info = $this->model
+                            ->table("district_promoter as dp")->join("left join district_shop as ds on dp.hirer_id = ds.id")
+                            ->where("dp.id = $reference")
+                            ->fields("ds.name,ds.location")
+                            ->find();
+                } else {
+                    $this->code = 1000;
+                    return;
+                }
+                if (!isset($district_info) || !$district_info) {
+                    $this->code = 1131;
+                    return;
+                }
+                $config = Config::getInstance()->get("district_set");
+                //礼品
+                if (isset($config['join_send_gift']) && $config['join_send_gift'] != "") {
+                    $gift = implode(",", explode("|", $config['join_send_gift']));
+                } else {
+                    $this->code = 1005;
+                    return;
+                }
+                $gift_list = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$gift})")->fields("p.id,g.img,g.name")->findAll();
+                $this->code=0;
+                $this->content['promoter_fee']=$config['promoter_fee'];
+                $this->content['refrence']=$reference;
+                $this->content['invitor_role']=$invitor_role;
+                $this->content["gift_list"]= $gift_list;
+                $this->content['district_info']=$district_info;
+            }
+    }
+    
+    /*
+     * 获取我的收益统计
+     */
+    public function getPromoterIncomeStatic(){
+        $promoter = Promoter::getPromoterInstance($this->user['id']);
+        if(!is_object($promoter)){
+            $this->code = 1141;
+            return;
+        }else{
+            $this->code = 0;
+            $this->content = $promoter->getIncomeStatistics();
+        }
+    }
+    /*
+     * 获取我的销售记录
+     */
+    public function getPromoterSaleRecord(){
+        $page = Filter::int(Req::args('page'));
+        $promoter = Promoter::getPromoterInstance($this->user['id']);
+        if(!is_object($promoter)){
+            $this->code = 1141;
+            return;
+        }else{
+            $this->code = 0;
+            $this->content = $promoter->getMySaleRecord($page);
+        }
+    }
+    public function getPrmoterIncomeRecord(){
+        $page = Filter::int(Req::args('page'));
+        $promoter = Promoter::getPromoterInstance($this->user['id']);
+        if(!is_object($promoter)){
+            $this->code = 1141;
+           return;
+        }else{
+            $this->code = 0;
+            $this->content = $promoter->getMyIncomeRecord($page);
+        }
+    }
+    /*
+     * 获取我的提现记录
+     */
+    public function getPromoterSettledRecord(){
+        $page = Filter::int(Req::args('page'));
+        $promoter = Promoter::getPromoterInstance($this->user['id']);
+        if(!is_object($promoter)){
+            $this->code = 1141;
+           return;
+        }else{
+            $this->code = 0;
+            $this->content = $promoter->getSettledHistory($page);
+        }
+    }
+    /*
+     * 申请提现
+     */
+    public function promoterDoSettle(){
+        $promoter = Promoter::getPromoterInstance($this->user['id']);
+        if(!is_object($promoter)){
+            $this->code = 1141;
+            return;
+        }else{
+            $data = Req::args();
+            unset($data['user_id']);
+            unset($data['token']);
+            $result = $promoter->applyDoSettle($data);
+            if($result['status']=='success'){
+                $this->code = 0;
+            }else{
+                $this->code = $result['msg_code'];
+            }
+        }
+    }
+    /*
+     * 二维码
+     */
+    public function getQrcodeFlagByGoodsId(){
+        $goods_id = Filter::int(Req::args('goods_id'));
+        $promoter = Promoter::getPromoterInstance($this->user['id']);
+        if(!is_object($promoter)){
+            $this->code = 1141;
+           return;
+        }else{
+            $result = $promoter->getQrcodeByGoodsId($goods_id,false);
+            if($result['status']=='success'){
+                $this->code =0;
+                $this->content['flag']=$result['flag'];
+                $this->content['goods_id']=$result['goods_id'];
+                $this->content['url']=$result['url'];
+            }else{
+                $this->code = $result['msg_code'];
+            }
+        }
+    }
+    /*
+     * 今点提现记录
+     */
+    public function getMyGoldWithdrawRecord(){
+        $page = Filter::int(Req::args('page'));
+        $withdraw_list = $this->model->table("balance_withdraw")->where("user_id = ".$this->user['id'])->order("id desc")->findPage($page,10);
+        if(isset($withdraw_list['html'])){
+            unset($withdraw_list['html']);
+        }
+        if(empty($withdraw_list)){
+            $this->code = 0;
+            $this->content= NULL;
+        }else{
+            $this->code = 0;
+            $this->content = $withdraw_list;
+        }
+    }
+    
+    public function pointcoin_log(){
+        $page = Filter::int(Req::args('page'));
+        $type = Filter::str(Req::args('type'));
+        $where = '';
+        switch ($type) {
+            case 'in':
+                $where = ' and type !=0 ';
+                break;
+            case 'out':
+                $where = ' and type =0 ';
+                break;
+            case 'all':
+                break; 
+            default:
+                break;
+        }
+        $log = $this->model->table("pointcoin_log")->where("user_id = " . $this->user['id'] . $where)->findPage($page, 10);
+        if (isset($log['html'])) {
+            unset($log['html']);
+        }
+        $this->code = 0;
+        $this->content = $log;
+    }
+    
+    public function getMyInvitePromoter(){
+        $page = Filter::int(Req::args('page'));
+        $promoter = Promoter::getPromoterInstance($this->user['id']);
+        if(!is_object($promoter)){
+            $this->code = 1141;
+            return;
+        }else{
+            $this->code = 0;
+            $this->content = $promoter->getMyInviteList($page);
+        }
+    }
+}

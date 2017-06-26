@@ -1,0 +1,147 @@
+<script src="{url:#js/swiper.min.js}"></script>
+<style>
+     .package{
+            padding: 8px 8px;
+            margin-bottom: 10px;
+            height: 280px;
+            background: #fff;
+            border: 1px solid #efefef;
+            border-left: none;
+            border-right: none;
+    }
+    .package .logo {
+            left: 0;
+            width: 160px;
+            font-size: 17px;
+            height: 30px;
+            line-height: 30px;
+            font-weight: 700;
+    }
+    .package .swiper-title {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: row;
+            flex-direction: row;
+            height: 30px;
+            margin-bottom: 10px;
+            background-color: rgba(128, 128, 128, 0.07);
+    }
+    .package .more {
+            text-align: right;
+            position: absolute;
+            right: .4em;
+            line-height: 30px;
+            color: #888;
+    }
+    .package .more span {
+            background: #e73626;
+            border-radius: 1.2em;
+            padding: 2px 8px;
+            color: #fff;
+    }
+    .package .thumbs {
+        display: block;
+        width: 100%;
+        height: 150px;
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .package .thumbs img {
+        max-width: 150px;
+        max-height: 150px;
+    }
+    .package .swiper-slide {
+        margin-right: 10px;
+        width: 150px;
+        height: 220px;
+    }
+    .package .title p{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient: vertical;
+        font-size:14px;
+        line-height: 16px;
+        color:gray;
+        min-height: 32px;
+    }
+    .package .package-btn{
+        text-align: center;
+    }
+    .tips p{
+        color:gray;
+        font-size:13px;
+    }
+</style>
+<div class="package" >
+    
+<div class="swiper-container swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 10,'freeMode': true,'pagination': ''}">
+    <div class="swiper-title"> <div class="logo">600元套餐</div> 
+    </div>
+    <div class="swiper-wrapper">
+        {list:items=$select1 item=$item}
+        <div class="swiper-slide">
+            <a href="{url:/index/package_info/type/1/gid/$item[goods_id]/pid/$item[id]}">
+                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                <div class="title"><p>{$item['name']}</p></div>
+                <div class="package-btn">
+                    <a href="{url:/index/package_info/type/1/gid/$item[goods_id]/pid/$item[id]}" class="btn btn-mini">查看</a>
+                </div>
+            </a>
+        </div>
+        {/list}
+    </div>
+</div>
+</div>
+<div class="package" >
+<div class="swiper-container swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 10,'freeMode': true,'pagination': ''}">
+    <div class="swiper-title"> <div class="logo">3600套餐</div> 
+    </div>
+    <div class="swiper-wrapper">
+        {list:items=$select2 item=$item}
+        <div class="swiper-slide">
+            <a href="{url:/index/package_info/type/1/gid/$item[goods_id]/pid/$item[id]}">
+                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                <div class="title"><p>{$item['name']}</p></div>
+                <div class="package-btn">
+                     <a href="{url:/index/package_info/type/1/gid/$item[goods_id]/pid/$item[id]}" class="btn btn-mini">查看</a>
+                </div>
+            </a>
+        </div>
+        {/list}
+    </div>
+</div>
+</div>
+<div class="package" >
+<div class="swiper-container swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 10,'freeMode': true,'pagination': ''}">
+    <div class="swiper-title"> <div class="logo">推广员套餐</div> 
+    </div>
+    <div class="swiper-wrapper">
+        {list:items=$select3 item=$item}
+        <div class="swiper-slide">
+            <a href="{url:/index/package_info/type/2/gid/$item[goods_id]/pid/$item[id]}">
+                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                <div class="title"><p>{$item['name']}</p></div>
+                <div class="package-btn">
+                     <a href="{url:/index/package_info/type/2/gid/$item[goods_id]/pid/$item[id]}" class="btn btn-mini">查看</a>
+                </div>
+            </a>
+        </div>
+        {/list}
+    </div>
+</div>
+</div>
+<div class="tips" style="padding-left:20px;padding-top:20px;">
+    <div style="float:left;width:40px;height:60px;">
+    <i class="iconfont icon-help" style="font-size:40px;color:gray;"></i>
+    </div>
+    <div style="float:left;width:250px;min-height:60px;">
+    <p><strong>温馨提示</strong><p>
+    <p>该区商品为套餐赠品，无法直接购买，可以通过充值相应套餐或成为小区推广员，系统将自动为你创建一个已付款订单。<p>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/product.css}" />
+<script type="text/javascript" charset="UTF-8" src="{url:#js/common.js}"></script>
+<script type="text/javascript" src="{url:#js/city-picker.js}" charset="utf-8"></script>
+<script src="{url:#js/swiper.min.js}"></script>
+<div class="swiper-container" id="swiper-product">
+    <div class="swiper-wrapper">
+        {list:items=unserialize($goods['imgs']) item=$img }
+        <div class="swiper-slide"><a class="small-img" href="javascript:;"><img src="{echo:Common::thumb($img,720,720,'both')}"  source="{url:@$img}"></a></div>
+        {/list}
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+<div class="pb20 bg-white">
+    <div class="product-title">
+        {$goods['name']}
+        <div class="red">{$goods['subtitle']}</div>
+    </div>
+    <div class="product-price">
+        <span id="sell_price"  class="price">{$currency_symbol}{$goods['sell_price']}</span>
+    </div>
+    <div class="weui_cells weui_cells_form">
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label for="name" class="weui_label">温馨提示 </label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+              {if:isset($promoter)&&$promoter==true}非卖品，推广员入驻赠送{else:}非卖品，该商品只能通过购买充值套餐赠送{/if}
+            </div>
+        </div>
+    </div>
+    <div class="weui_tab" style="margin-top:10px;border-top: 1px solid #E5E5E5;">
+        <div class="weui_navbar" id="product-navbar">
+            <a class="weui_navbar_item weui_bar_item_on" href="#product-detail">
+                商品详情
+            </a>
+            <a class="weui_navbar_item" href="#product-attr">
+                商品参数
+            </a>
+            <a class="weui_navbar_item" href="#product-protection">
+                售后保障
+            </a>
+        </div>
+        <div class="weui_tab_bd content-padded">
+            <div id="product-detail" class="weui_tab_bd_item weui_tab_bd_item_active">
+                <!--S 商品详情-->
+                <div class="clearfix" >
+                    {$goods['content']}
+                </div>
+                <!--E 商品详情-->
+            </div>
+            <div id="product-attr" class="weui_tab_bd_item">
+                <ul class="attr-list ">
+                    <li><div class="attr-name">商品名称：</div><div class="attr-value">{$goods['name']}</div></li>
+                    <li><div class="attr-name">商品编号：</div><div class="attr-value">{$goods['pro_no']}</div></li>
+                    <li><div class="attr-name">商品重量：</div><div class="attr-value">{$goods['weight']}g</div></li>
+                    <li><div class="attr-name">上架时间：</div><div class="attr-value">{$goods['create_time']}</div></li>
+                    {list:items=$goods_attrs}
+                    <li><div class="attr-name">{$item['name']}：</div><div class="attr-value">{$item['vname']}</div></li>
+                    {/list}
+                </ul>
+            </div>
+
+            <div id="product-protection" class="weui_tab_bd_item">
+                <!--S 售后保障-->
+                <div class="clearfix">
+                    {if:$goods['sale_protection']}
+                    <div class="mb20">
+                        {$goods['sale_protection']}
+                    </div>
+                    {/if}
+                    <div>
+                        {$sale_protection}
+                    </div>
+                </div>
+                <!--E 售后保障-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="btn-bar ">
+    <div class="weui-row weui-no-gutter">
+        <div class="weui-col-20" style="text-align: center;">
+            <a href="{url:/simple/cart}" id="view-cart">
+                <div class="product-cart">
+                    <span class="cart-num tip">{echo:count($cart)}</span>
+                    <i class="iconfont icon-cart"></i>
+                </div>
+            </a>
+        </div>
+        <div class="weui-col-80">
+            {if:isset($promoter)&&$promoter==true}
+              <a href="{url:/district/district}" class="btn btn-red">进入小区<i class="iconfont icon-next"></i></a>
+
+            {else:}
+              <a href="{url:/ucenter/recharge_center/package/$package/pid/$pid}" class="btn btn-red">马上充值<i class="iconfont icon-next"></i></a>
+            {/if}
+        </div>
+    </div>
+</div>
+<div class="message-lay"> </div>
+<script>
+</script>
+<script type="text/javascript" src="{url:#js/product.js}" charset="utf-8"></script>

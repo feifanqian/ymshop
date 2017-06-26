@@ -1,0 +1,118 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style>
+
+</style>
+<div class="container clearfix">
+    {widget:name=sub_navs action=ucsidebar sidebar=$sidebar act=$actionId}
+    <div class="uc-content">
+
+        <div class="tab" initdisabled="1">
+            <ul class="tab-head">
+                <li class="{echo:!$status?'current':''}"><a href="{url:/ucenter/order/}">全部订单</a><i></i></li>
+                <li class="{echo:$status=='unpay'?'current':''}"><a href="{url:/ucenter/order/status/unpay/}">待付款</a><i></i></li>
+                <li class="{echo:$status=='undelivery'?'current':''}"><a href="{url:/ucenter/order/status/undelivery/}">待收货</a><i></i></li>
+                <li class="{echo:$status=='review'?'current':''}"><a href="{url:/ucenter/review}">待评价</a><i></i></li>
+            </ul>
+
+            <div class="tab-body" >
+                <div class="order-y">
+                    <table class="simple">
+                        <tr>
+
+                            <th class="orderhead" width="50%" style="text-align: center;">订单详情</th> 
+                            <th class="orderhead" width="100">收货人</th> 
+                            <th class="orderhead" width="100" style="text-align: center;">金额</th>                             
+                            <th class="orderhead" width="120" style="text-align: center;">全部状态</th> 
+                            <th class="orderhead" width="150" style="text-align: center;">操作</th>
+                        </tr>
+                    </table>
+
+                    {list:items=$orderlist}
+                    {set:list($status, $btn) = $this->order_status($item);}
+                    <table class="simple simplelist" >
+                        <tr>
+                            <th class="orderhead" >订单号:<a href="{url:/ucenter/order_detail/id/$item[id]}"><i class="icon-order-{$item['type']}-32 ie6png"></i>{$item['order_no']}</a></th> 
+                            <th class="orderhead"style="text-align:right;" colspan="4">{$item['create_time']}&nbsp;&nbsp;</th>
+                        </tr>
+                        <tr class="orderodd">
+                            <td class="ordertextleft"> 
+                                <ul>
+                            {list:items=$item['goodslist'] item=$pic}
+                        <li><a href="{url:/index/product/id/$pic[goods_id]}" target="_blank">
+                            <p class='orderdet'>
+                                
+                                <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($pic['img'],100,100,'fwfh');}" alt="">
+                                <ins>{$pic['name']}</ins>
+                                <em>数量: {$pic['goods_nums']}</em>
+                                {if:$pic['speclist']}
+                                <em>规格: {$pic['speclist']}</em>
+                                {/if}
+                            </p>
+                            </a>
+                            </li>
+                            {/list}                   
+                            </ul>
+                            <td width="100">{$item['accept_name']}</td> 
+                            <td width="100"><p>{$currency_symbol}{$item['order_amount']}</p></td> 
+                            <td width="100"><p>{$status}</p></td> 
+                            <td width="120">
+                                {if:$item['status']==4}
+                                <p><a href="{url:/ucenter/review}"  class='red'><i class="iconfont icon-zan"></i>评价晒单</a></p>
+                                {/if}
+                                <p><p class="orderlitbtn">{$btn}</p>
+                            </td>               
+                        </tr>
+
+                    </table>
+
+                    {/list}
+                    <div class="page-nav" style="clear:both;">{$pagelist}</div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script type="text/javascript">
+    function order_sign(id) {
+         layer.confirm('您确定要签收吗？', {
+            title:'提示',
+            btn: ['确定','取消'] //按钮
+          }, function(){
+              $.post("{url:/ucenter/order_sign}", {id: id}, function (data) {
+                 if (data['status'] == 'success') {
+                        layer.msg('订单签收成功！',{icon:1,end:function(){
+                                location.reload();
+                            }
+                        });
+                     } else {
+                        layer.msg('订单签收',{icon:2});
+                     }
+                    }, 'json');
+          }, function(){
+              
+          });
+    }
+    
+    function order_delete(id){
+        layer.confirm('您确定要删除该订单吗？', {
+            title:'提示',
+            btn: ['确定','取消'] //按钮
+          }, function(){
+              $.post("{url:/ucenter/order_delete}", {id: id}, function (data) {
+                if (data['status'] == 'success') {
+                     layer.msg('订单删除成功',{icon:1,end:function(){
+                             location.reload();
+                         }
+                     });
+                } else {
+                   layer.msg('订单删除失败',{icon:2});
+                }
+            }, 'json');
+            
+          }, function(){
+            layer.msg('谢主人不杀之恩',{icon:6});
+          });
+    }
+</script>

@@ -1,0 +1,218 @@
+<!--S 产品展示-->
+{echo:JS::import('form')}
+
+<link type="text/css" rel="stylesheet" href="{url:#css/product.css}" />
+<link type="text/css" rel="stylesheet" href="{url:/static/js/stars/stars.css}" />
+<script type='text/javascript' src="{url:/static/js/stars/stars.js}"></script>
+<div class="container">
+    <div class="layout-2col mt20 clearfix" >
+        <div class="reviewsidebar">
+            <div class="reviewbox mt20">
+                {set:$help_category=array()}
+                {query:name=help} 
+                {set:$help_category[$item['category_id']][]=$item}
+                {/query}
+                {query:name=help_category}
+                <h2>{$item['name']}</h2>
+                <ul class="reviewmenu-list">
+                    {if:isset($help_category[$item['id']])}
+                    {list:items=$help_category[$item['id']]}
+                    <li><a  href="{url:/index/help/id/$item[id]}">{$item['title']}<span class="l-triangle"></span></a></li>
+                    {/list}
+                    {/if}
+                </ul>
+                {/query}
+            </div>
+        </div>
+        <!--        <div class="layout-2col mt20 clearfix" >
+                    <div class="sidebar">
+                        <div class="box">
+                            <h2 class="title">商品信息：</h2>
+                            <div  style="width: 200px; padding:15px;" >
+                                <img class="big-pic" width="60px"  src="{url:@$review[img]}" source="{url:@$review[img]}">
+                                <h1><a href="{url:/index/product/id/$review[gid]}">{$review['name']}</a></h1>
+                                <p>销售价：<b class="red">{$currency_symbol}{$review['sell_price']}</b></p>
+                                <p class="tc"><a href="{url:/index/product/id/$review[gid]}" class="btn btn-main" target="_blank">前去购买</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+        <!--        <div class="content">
+                    <div class="spec-info mt10 clearfix">
+                        <h1 class="title"><span style="font-size: 14px;">我要评价：</span></h1>
+                        <form action="{url:/}" method="post ">
+                            <input type="hidden" name="con" value="index">
+                            <input type="hidden" name="act" value="review_act">
+                            <table class="mt20 " style="width:100%">
+                                <tr><td class="label" width="100">*商品满意度</td> <td>
+                                        <div class='rate-comm' id='rate-commentone' ></div>
+                                        <input type="hidden" name="id" value="{$review['id']}">
+                                        <input style="visibility: hidden;width: 10px;" name="point" id="comment-pointone" pattern="int" alt="打分后才能提交！">
+                                        <label></label>
+                                    </td>
+                                </tr>
+                                <tr class="mt20"><td class="label"> </td> <td><div class="mt20">
+                                            <textarea name="content" style="height: 140px; width:100%"></textarea></div></td></tr>
+                                <tr><td colspan="2" class="tc"><input type="submit" value="提交评价" class="btn btn-main"></td></tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>-->
+        <div class="content">
+            <div class="spec-info mt10 clearfix"> 
+                <ul class="tab-head">
+                    <li class="reviewactive">待评价商品<i></i></li>
+                    <li>待晒单</li>
+                    <li>已评价<i></i></li>
+                </ul>
+                <table class="simple">
+                    <tr>
+                        <th class="orderhead" width="55%" style="text-align: center;">订单详情</th>
+                        <th class="orderhead" style="background: #f5f5f5;" width="100">收货人</th>
+                        <th class="orderhead" width="160" style="padding-left: 6%">金额</th>
+                        <th class="orderhead" width="166" style="text-align: center;background: #f5f5f5;">操作</th>
+                    </tr>
+                </table>
+                <table class="simple" >
+                    <tr>
+                        <th class="orderhead" >{$item['comment_time']}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   订单号:{$item['order_no']}</th> 
+                        <th class="orderhead" width="100" colspan="4" style="background: #f5f5f5;"></th>
+                    </tr>
+                    <tr class="orderodd {odd-even}">                            
+                        <td width="50%" class="ordertextleft" style="height:80px;"><a href="{url:/index/product/id/$review[gid]}"> 
+                                <img style="float: left;" class="big-pic" width="60px"  src="{url:@$review[img]}" source="{url:@$review[img]}">
+                                <p style="margin-top: 10px;">{$review['name']}</p></a>
+                            </a></td><td>&times;1</td> 
+                        <td><i class="iconfont icon-wode"></i></td> <td><p>支付金额：<b class="red">{$currency_symbol}{$review['sell_price']}</b></p></td>
+                        <td width="100px"><p><a href="{url:/ucenter/order_detail/id/$review[id]}">订单详情</a></p>
+                          
+                    </tr>
+                </table>
+                <h1 class="title"><span style="font-size: 14px;">我要评价：</span></h1>
+                <form class="reviewform" action="{url:/}" method="post ">
+                    <input type="hidden" name="con" value="index">
+                    <input type="hidden" name="act" value="review_act">
+                    <table class="mt20 reviewtable" style="width:100%">
+                        <tr><td class="label" width="70"><i class="red">*</i>评价：</td>
+                            <td>
+                                <div class=rate-comm id='rate-comment'></div>
+                                <input type="hidden" name="id" value="{$review['id']}">
+                                <input style="visibility: hidden;width: 10px;" name="point" id="comment-point" pattern="int" alt="打分后才能提交！"><label></label>            
+                            </td>
+                        </tr>
+                        <!--                        <tr><td colspan="2" class="label">
+                                                        <p>材质：<select name="material" style="margin: 0 75px;">
+                                                                <option value="volvo">请选择</option>
+                                                                <option value="saab">棉</option>
+                                                                <option value="fiat">麻</option>
+                                                            </select></p></td></tr>-->
+                        <tr class="mt20"><td class="label"> </td> 
+                            <td  colspan="2" style=" background:#F2F2F2;border:1px solid #ececec;padding-left: 10px;padding-bottom: 15px;" >
+                                <div class="mt20"><textarea name="content" style="height: 140px; width:98%;border:1px solid #CACACA;"></textarea></div></td></tr>
+                        <!--                        <tr><td colspan="3" class="reviewtc"><span class="fl">总结：<span class='tcspan'>大小合适</span><span class='tcspan'>高速卡</span>
+                                                            <span class='tcspan'>传输速度快</span><span class='tcspan'>手机用的</span><span class='tcspan'>容量大</span><span  class='tcspan'>与实物相符</span><span  class='tcspan'>值得信赖</span><span  class='tcspan'>收货快</span><span  class='tcspan'>价格便宜</span></span><a class="fr" href="">更多<i class='iconfont icon-jiantou-copy'></i></a></td> </tr>
+                                                <tr><td colspan="2" class="buy-dziying">买一点自营</td></tr>
+                                                <tr><td class="label" width="100" style="width: 130px;"><i class="red">*</i>商品与描述相符：</td>
+                                                    <td  class="mt20">
+                                                        <div class=rate-comm id='rate-commentone'></div>
+                                                        <input type="hidden" name="id" value="{$review['id']}">
+                                                        <input style="visibility: hidden;width: 10px;" name="point" id="comment-pointone" pattern="int" alt="打分后才能提交！"><label></label>                           
+                                                    </td>
+                                                </tr>
+                                                <tr><td class="label" width="100" style="width: 130px;"><i class="red">*</i>商品的服务态度：</td>
+                                                    <td  class="mt20">
+                                                        <div class=rate-comm id='rate-commenttwo'></div>
+                                                        <input type="hidden" name="id" value="{$review['id']}">
+                                                        <input style="visibility: hidden;width: 10px;" name="point" id="comment-pointtwo" pattern="int" alt="打分后才能提交！"><label></label>                     -->
+                        <!--                        <td class="tc">
+                                                    <span style="padding-right:20px"><input  type="checkbox" name="Anonymous comments">匿名评论</span>
+                                                    <input type="submit" value="提交评价" class="btn btn-main"></td>
+                                                </td>
+                                                </tr>-->
+                        <!--                        <tr><td class="label" width="100" style="width: 130px;"><i class="red">*</i>物流的发货速度：</td>
+                                                    <td  class="mt20">
+                                                        <div class=rate-comm id='rate-commentthree'></div>
+                                                        <input type="hidden" name="id" value="{$review['id']}">
+                                                        <input style="visibility: hidden;width: 10px;" name="point" id="comment-pointthree" pattern="int" alt="打分后才能提交！"><label></label>           
+                                                    </td>
+                                                </tr>   -->
+                        <tr><td colspan="2" class="tc"><input type="submit" value="提交评价" class="btn btn-main"></td></tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var options = {
+            max: 5,
+            image: '{url:/static/js/stars/stars.jpg}',
+            imageAll: '{url:/static/js/stars/stars-all.gif}',
+            title_format: function (value) {
+                var title = '';
+                switch (value) {
+                    case 1 :
+                        title = '很不满意';
+                        break;
+                    case 2 :
+                        title = '不满意';
+                        break;
+                    case 3 :
+                        title = '一般';
+                        break;
+                    case 4 :
+                        title = '满意';
+                        break;
+                    case 5 :
+                        title = '非常满意';
+                        break;
+                    default :
+                        title = comment_rank;
+                        break;
+                }
+                $('#comment-point').val(value);
+                FireEvent(document.getElementById('comment-point'), 'change');
+                return title;
+                $('#comment-pointone').val(value);
+                FireEvent(document.getElementById('comment-pointone'), 'change');
+                return title;
+                $('#comment-pointtwo').val(value);
+                FireEvent(document.getElementById('comment-pointtwo'), 'change');
+                return title;
+                $('#comment-pointthree').val(value);
+                FireEvent(document.getElementById('comment-pointthree'), 'change');
+                return title;
+            },
+            info_format: function (value) {
+                var info = '';
+                switch (value) {
+                    case 1 :
+                        info = '<div class="info-box">1分&nbsp;很不满意<div>商品样式和质量都非常差，太令人失望了！</div></div>';
+                        break;
+                    case 2 :
+                        info = '<div class="info-box">2分&nbsp;不满意<div>商品样式和质量不好，不能满足要求。</div></div>';
+                        break;
+                    case 3 :
+                        info = '<div class="info-box">3分&nbsp;一般<div>商品样式和质量感觉一般。</div></div>';
+                        break;
+                    case 4 :
+                        info = '<div class="info-box">4分&nbsp;满意<div>商品样式和质量都比较满意，符合我的期望。</div></div>';
+                        break;
+                    case 5 :
+                        info = '<div class="info-box">5分&nbsp;非常满意<div>我很喜欢！商品样式和质量都很满意，太棒了！</div></div>';
+                        break;
+                    default :
+                        info = value;
+                        break;
+                }
+                return info;
+            }
+        }
+        $('#rate-comment').rater(options);
+        $('#rate-commentone').rater(options);
+        $('#rate-commenttwo').rater(options);
+        $('#rate-commentthree').rater(options);
+    })
+</script>

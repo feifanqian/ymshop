@@ -1,0 +1,110 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+   <!-- <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>!-->
+    <a class="icon-delicious" href="{url:/districtadmin/list_hirer}"> 查看全部</a>
+<!--    <a class="icon-eye-blocked" href="{url:/order/order_list/status/2}"> 未审核</a>
+    <a class="icon-cogs" href="{url:/order/order_list/status/3}"> 执行中</a>-->
+
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:50px">选择</th>
+        <th style="width:65px">操作</th>
+        <th style="width:50px">小区名称</th>
+        <th style="width:60px">上级小区</th>
+        <th style="width:60px">创建者</th>
+        <th style="width:60px">所有者</th>
+        <th style="width:60px">创建时间</th>
+        <th style="width:60px">有效期</th>
+        <th style="width:60px">联系人</th>
+        <th style="width:100px">联系电话</th>
+        <th style="width:160px">收益情况</th>
+    </tr>
+    {query:name=district_shop as ds fields=ds.*,u1.nickname as founder_name,u1.avatar as founder_avatar,u2.nickname as owner_name,u2.avatar as owner_avatar,ds2.name as invite_shop_name join=left join user as u1 on ds.founder_id eq u1.id left join user as u2 on ds.owner_id eq u2.id left join district_shop as ds2 on ds.invite_shop_id eq ds2.id  where=$where id=$obj page=1 order= id desc}
+    <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:65px" class="btn_min">
+                <div class="operat hidden">
+                    <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                     <ul>
+                       <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=and--di.role_id--eq--{$item['id']}__and--di.role_type--eq--2"> 查看收益记录</a></li>
+                       <li><a class="icon-eye" href="javascript:;" onclick="viewAchievement('{$item['name']}',{$item['owner_id']},{$item['id']});"> 查看销售业绩</a></li>
+                       <li><a class="icon-plus" href="javascript:;" onclick="addPromoter({$item['id']});"> 添加官方推广员</a></li>
+                     </ul>
+                   </div>
+                </div>
+            </td>
+            <td style="width:60px">{$item['name']}</td>
+             <td style="width:140px">{$item['invite_shop_name']|"  "}</td>
+            <td style="width:140px">{$item['founder_name']|"unknow"}</td>
+            <td style="width:140px">{$item['owner_name']|"unknow"}</td>
+            <td style="width:60px">{$item['create_time']}</td>
+            <td style="width:60px">{$item['valid_period']}</td>
+            <td style="width:160px">{$item['linkman']}</td>
+            <td style="width:160px">{$item['link_mobile']}</td>
+            <td style="width:160px">待解锁：{$item['frezze_income']}&nbsp;可用：{$item['valid_income']}&nbsp;已结算：{$item['settled_income']}</td>
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<script type="text/javascript">
+function viewAchievement(name,id,district_id){
+layer.open({
+        id: id,
+        type: 2,
+        title: name,
+        shadeClose: true,
+        shade: false,
+//        maxmin: true, //开启最大化最小化按钮
+        area: ['893px', '600px'],
+        content: '{url:/districtadmin/chart}/role_type/2/user_id/'+id+"/district_id/"+district_id ,
+        full:function(){
+            console.log(option);
+        },
+        min:function(){
+            console.log(option);
+        },
+        restore:function(){
+            console.log(option);
+        }
+    });
+}
+function addPromoter(hirer_id){
+     index =  layer.open({
+            id:"select",
+            type: 2,
+            title:"选择用户",
+            area: ['880px', '520px'],
+            fixed: false, //不固定
+            maxmin: false,
+            zindex:2,
+            content: '{url:/districtadmin/radio_customer_select}'+"/hirer_id/"+hirer_id,
+          });
+}
+function callback(hirer_id,user_id){
+     var load = layer.load();
+     console.log(hirer_id+"|"+user_id);
+     $.post('{url:/districtadmin/addPromoter}', {hirer_id:hirer_id,user_id:user_id} , function(result){
+            layer.close(load);
+            if(result.status=='success'){
+               layer.msg("添加成功",function(){
+                  layer.closeAll(); 
+               });
+            }else{
+                layer.msg(result.msg);
+            }
+        },'json');
+}
+$("#condition").on("click",function(){
+    layer.msg("暂未完成，请等待");
+   return false;
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/commission/commission_list_order}',method:'get'});},data:{'o.order_no':{name:'订单编号'},'o.order_amount':{'name':'订单金额'},'c.status':{name:'佣金状态',values:{0:'时间锁定中',1:'已可用', 2:'已提现', 3:'已撤销'}},'u1.name':{name:'购买者用户名'},'u2.name':{name:'佣金收益者用户名'},'c.commission_get':{'name':'单笔佣金金额'},'c.commission_amount':{'name':'订单佣金总额'},'c.commission_level':{name:'佣金等级',values:{1:'1',2:'2',3:'3'}}}});
+})
+</script>

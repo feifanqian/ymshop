@@ -1,0 +1,148 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+<form action="" method="post">
+    <div class="tools_bar clearfix">
+        <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+        <a  class="icon-plus" href="javascript:;" onclick="add()" title="添加"> 添加</a><a href="javascript:;" class="icon-loop-2"
+        onclick="tools_reload()"> 刷新</a>
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+        <table class="default" >
+            <tr>
+                <th style="width:30px">选择</th>
+                <th style="width:70px">操作</th>
+                <th style="width:200px">商品图片</th>
+                <th>商品名称</th>
+                <th style="width:100px">显示排序</th>
+                <th style="width:100px">用户自定义</th>
+                <th style="width:100px">参数配置状态</th>
+            </tr>
+                {query:name=point_sale as ps fields=ps.*,go.name,go.img  join=left join goods as go on ps.goods_id eq go.id where=$where id=$obj page=1 order=ps.listorder}
+                <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+                  <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                    <li><a class="icon-pencil" href="#"  onclick="layer_open('{url:/marketing/point_sale_set/id/$item[id]}')"> 配置</a></li>
+                    <li><a class="fa fa-tasks" href="#"  onclick="set({$item['id']},'list')"> 排序</a></li>
+                    <li><a class="icon-close" href="javascript:;" onclick="set({$item['id']},'delete')"> 删除</a></li>
+                </ul></div></div> </td>
+                <td ><img src="{url:@$item[img]}" style="height:50px;"></td>
+                <td ><a href="{url:/index/pointbuy/id/$item[id]}" target="_blank">{$item['name']}</a></td>
+                <td >{$item['listorder']}</td>
+                <td>{if:$item['is_adjustable']==1}<span class="green">支持</span>{else:}<span class="red">不支持</span>{/if}</td>
+                <td>{if:$item['status']==1}<span class="green">已配置</span>{else:}<span class="red">未配置</span>{/if}</td></tr>
+                {/query}
+            </table>
+    </form>
+    <div class="page_nav">
+        {echo:$obj->pageBar()}
+    </div>
+    <div id='add' style="display:none;width:300px;height:60px;padding-top: 20px;padding-left: 20px;">
+          <input type="hidden" name="goods_id" id="goods_id" value="">
+          <input type="text"  id="goods_name" onclick="goods_select()" value="" alt="必需选择商品才能添加！" > 
+          <a href="javascript:;" onclick="goods_select()" class="button">选择商品 ...</a>
+   </div>
+{set:$shop="";}
+{list:$items=$shoplist}
+    {set:$shop.=$item['id'].':'."'".$item['name']."',"}
+{/list}
+{set:$shop=trim($shop,',');}
+{set:$category="";}
+{list:$items=$categorylist}
+    {set:$category.=$item['id'].':'."'".$item['name']."',"}
+{/list}
+{set:$category=trim($category,',');}
+    <script type="text/javascript">
+    var index;
+    function set(id,act){
+        if(act=="list"){
+            layer.prompt({title: '请输入排序值（越小越优先）', formType: 3}, function(value, index){
+                var load = layer.load();
+                $.post("{url:/marketing/point_sale_edit}",{id:id,action:act,value:value},function(data){
+                layer.close(load);
+                if(data.status=='success'){
+                   layer.msg("操作成功",function(){
+                      window.location.reload(); 
+                   });
+                }else{
+                    layer.msg(data.msg);
+                }
+            },'json');
+           });
+        }else if(act=="delete"){
+            layer.confirm('您确定要删除吗？', {
+                btn: ['删除','取消'] //按钮
+              }, function(){
+                var load = layer.load();
+                $.post("{url:/marketing/point_sale_edit}",{id:id,action:act},function(data){
+                layer.close(load);
+                if(data.status=='success'){
+                   layer.msg("操作成功",function(){
+                      window.location.reload(); 
+                   });
+                }else{
+                    layer.msg(data.msg);
+                }
+            },'json');
+           });
+        }
+        return true;
+    }
+    function goods_select(){
+//        art.dialog.open('{url:/marketing/radio_goods_select}',{id:'goods_select',title:'选择商品：',width:900,height:500,padding: '10px'});
+       index =  layer.open({
+            type: 2,
+            title:"选择商品",
+            area: ['880px', '520px'],
+            fixed: false, //不固定
+            maxmin: false,
+            zindex:2,
+            content: '{url:/marketing/radio_goods_select}',
+          });
+    }
+    function add(){
+        layer.open({
+        type: 1,
+        title: "选择商品", //不显示标题
+        btn:['确定','取消'],
+        zindex:1,
+        yes:function(){
+            var goods_id = $("#goods_id").val();
+            if(goods_id==""){
+                layer.msg("请选择积分购商品");
+                return false;
+            }
+            var load = layer.load();
+            $.post("{url:/marketing/point_sale_add}",{goods_id:goods_id},function(data){
+                layer.close(load);
+                if(data.status=='success'){
+                    layer.closeAll();
+                    layer_open("{url:/marketing/point_sale_set}"+"/id/"+data.id);
+                }else{
+                    layer.msg(data.msg);
+                }
+            },'json')
+        },
+        content: $('#add'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+      });
+    }
+    function layer_open(url){
+        console.log(url);
+        layer.open({
+            type: 2,
+            title:"编辑积分购设置",
+            area: ['880px', '240px'],
+            fixed: false, //不固定
+            maxmin: false,
+            content: url,
+          });
+    }
+    $("#goods_name").change(function(){
+        layer.close(index);
+    });
+    
+    $("#condition").on("click",function(){
+    $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/marketing/point_sale_list}',method:'get'});},data:{'go.name':{name:'商品名称'},'go.store_nums':{name:'库存'},'go.goods_no':{name:'产品编号'},'go.shop_id':{name:'商品商家',values:{{$shop}}},'go.category_id':{name:'商品分类',values:{{$category}}}
+    }});
+    });
+</script>

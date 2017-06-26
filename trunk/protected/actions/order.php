@@ -1,0 +1,723 @@
+<?php
+
+class OrderAction extends Controller {
+
+    public $model = null;
+    public $user = null;
+    public $code = 1000;
+    public $content = NULL;
+    private $cart = array();
+    private $selectcart = array();
+
+    public function __construct() {
+        $this->model = new Model();
+        $selectids = Req::args('selectids');
+        $cart = Cart::getCart();
+        $this->cart = $cart->all();
+        $this->selectcart = $this->cart;
+        $this->assign("cart", $this->cart);
+        //如果选择了商品,则只添加选中的商品
+        if ($selectids) {
+            $cart = array();
+            foreach ($this->cart as $k => $v) {
+                if (in_array($v['id'], $selectids)) {
+                    $cart[] = $v;
+                }
+            }
+            $this->assign("cart", $cart);
+            $this->selectcart = $cart;
+        }
+    }
+
+    //普通订单,确认订单
+    public function confirm() {
+        $type = Req::args('cart_type');
+        //直接购买类
+        if ($type == 'goods') {
+            $cart = Cart::getCart('goods');
+            $this->cart = $cart->all();
+            $this->selectcart = $this->cart;
+        } else {
+            
+        }
+        //如果选择的商品为空
+        if (!$this->selectcart) {
+            $this->code = 1041;
+            return;
+        }
+        $cartlist = $this->selectcart;
+        foreach ($cartlist as $k => &$v) {
+            $v['spec'] = array_values($v['spec']);
+        }
+        $this->content = array();
+        $this->content['cartlist'] = $cartlist;
+        $this->parserOrder();
+        $this->code = 0;
+    }
+
+    //非普通促销确认订单(促销抢购类订单)
+    public function info() {
+        $id = Filter::int(Req::args('id'));
+        $product_id = Req::args('pid');
+        $type = Req::args("type");
+        if ($type == 'groupbuy') {
+            $product_id = Filter::int($product_id);
+            $model = new Model("groupbuy as gb");
+            $item = $model->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.goods_id=gb.goods_id")->fields("*,pr.id as product_id,pr.store_nums")->where("gb.id=$id and pr.id=$product_id")->find();
+            if ($item) {
+                $start_diff = time() - strtotime($item['start_time']);
+                $end_diff = time() - strtotime($item['end_time']);
+                if ($item['is_end'] == 0 && $start_diff >= 0 && $end_diff < 0 && $item['store_nums'] > 0) {
+                    $product = $this->packGroupbuyProducts($item);
+                    $this->assign("product", $product);
+                } else {
+                    $this->code = 1054;
+                    return;
+                }
+            } else {
+                $this->code = 1051;
+                return;
+            }
+        } else if ($type == 'flashbuy') {
+            $model = new Model("flash_sale as fb");
+            $product_id = Filter::int($product_id);
+            $item = $model->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.goods_id=fb.goods_id")->fields("*,pr.id as product_id,pr.store_nums")->where("fb.id=$id and pr.id=$product_id")->find();
+            if ($item) {
+                $start_diff = time() - strtotime($item['start_time']);
+                $end_diff = time() - strtotime($item['end_time']);
+                if ($item['is_end'] == 0 && $start_diff >= 0 && $end_diff < 0 && $item['store_nums'] > 0) {
+                    $product = $this->packFlashbuyProducts($item);
+                    $this->assign("product", $product);
+                } else {
+                    $this->code = 1054;
+                    return;
+                }
+            } else {
+                $this->code = 1052;
+                return;
+            }
+        } else if ($type == 'bundbuy') {
+            //确认捆绑存在有效且所有的商品都在其中包括个数完全正确
+            $product_id = trim($product_id, "-");
+            $product_id_array = explode("-", $product_id);
+            foreach ($product_id_array as $key => $val) {
+                $product_id_array[$key] = Filter::int($val);
+            }
+            $product_ids = implode(',', $product_id_array);
+            $product_id = implode('-', $product_id_array);
+            $model = new Model("bundling");
+            $bund = $model->where("id=$id")->find();
+            if ($bund) {
+                $goods_id_array = explode(',', $bund['goods_id']);
+
+                $products = $model->table("goods as go")->join("left join products as pr on pr.goods_id=go.id")->where("pr.id in ($product_ids)")->fields("*,pr.id as product_id")->group("go.id")->findAll();
+                //检测库存与防偷梁换柱
+                foreach ($products as $value) {
+                    if ($value['store_nums'] <= 0 || !in_array($value['goods_id'], $goods_id_array)) {
+                        $this->code = 1054;
+                        return;
+                    }
+                }
+                if (count($goods_id_array) == count($products)) {
+                    $product = $this->packBundbuyProducts($products);
+                    $this->assign("product", $product);
+                    $this->assign("bund", $bund);
+                } else {
+                    $this->code = 1054;
+                    return;
+                }
+                $product_id = $product_id;
+            } else {
+                $this->code = 1053;
+                return;
+            }
+        }else if($type=='pointbuy'){
+            $model = new Model("point_sale as ps");
+            $product_id = Filter::int($product_id);
+            $item = $model->join("left join goods as go on ps.goods_id=go.id left join products as pr on pr.goods_id=ps.goods_id")->fields("*,pr.id as product_id,pr.store_nums")->where("ps.id=$id and pr.id=$product_id")->find();
+            if ($item) {
+               $order_products = $this->packPointbuyProducts($item);
+            } else {
+               $this->code = 1148;
+            }
+        }
+        $this->assign("id", $id);
+        $this->assign("order_type", $type);
+        $this->assign("pid", $product_id);
+        $this->parserOrder();
+        $this->code = 0;
+    }
+    
+    public function flashStatus($prom_id,$quota_num,$user_id){
+        $model = new Model();
+        $history =  $model->table("order")->where("type = 2 and prom_id = $prom_id and pay_status=0 and status not in (5,6) and is_del != 1 and user_id =".$user_id)->count();
+        if($history>0){
+           $this->code = 1108;
+           exit();
+        }
+        if($quota_num==0 || $quota_num =="" || $quota_num <0){
+            return true;
+        }else{
+            $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6 and od.user_id = $user_id");
+            if($sum[0]['sum']>= $quota_num){
+               $this->code = 1109;
+               exit();
+            }
+        }
+        return true;       
+    }
+    
+    //提交订单
+    public function submit() {
+        $address_id = Filter::int(Req::args('address_id'));
+        $payment_id = Filter::int(Req::args('payment_id'));
+        $prom_id = Filter::int(Req::args('prom_id'));
+        $is_invoice = Filter::int(Req::args('is_invoice'));
+        $invoice_type = Filter::int(Req::args('invoice_type'));
+        $invoice_title = Filter::text(Req::args('invoice_title'));
+        $user_remark = Filter::txt(Req::args('user_remark'));
+        $voucher_id = Filter::int(Req::args('voucher'));
+        $cart_type = Req::args('cart_type');
+
+        //非普通促销信息
+        $type = Req::args("type");
+        $id = Filter::int(Req::args('id'));
+        $product_id = Req::args('product_id');
+        $buy_num = Req::args('buy_num');
+
+        if (!$address_id || !$payment_id || ($is_invoice == 1 && $invoice_title == '')) {
+
+            if (is_array($product_id)) {
+                foreach ($product_id as $key => $val) {
+                    $product_id[$key] = Filter::int($val);
+                }
+                $product_id = implode('-', $product_id);
+            } else {
+                $product_id = Filter::int($product_id);
+            }
+            $data = Req::args();
+            $data['is_invoice'] = $is_invoice;
+            if (!$address_id)
+                $this->code = 1055;
+            else if (!$payment_id)
+                $this->code = 1056;
+            else
+                $this->code = 1057;
+            return;
+        }
+        //地址信息
+        $address_model = new Model('address');
+        $address = $address_model->where("id=$address_id and user_id=" . $this->user['id'])->find();
+        if (!$address) {
+            $this->code = 1055;
+            return;
+        }
+        //if(!$payment_id)$this->redirect("order",false,Req::args());
+        //订单类型: 0普通订单 1团购订单 2限时抢购 3捆绑促销
+        $order_type = 0;
+        $model = new Model('');
+
+        //团购处理
+        if ($type == "groupbuy") {
+            $product_id = Filter::int($product_id[0]);
+            $num = Filter::int($buy_num[0]);
+            if ($num < 1)
+                $num = 1;
+            $item = $model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("*,pr.id as product_id,pr.spec")->where("gb.id=$id")->find();
+            
+            $order_products = $this->packGroupbuyProducts($item, $num);
+            $groupbuy = $model->table("groupbuy")->where("id=$id")->find();
+            unset($groupbuy['description']);
+            $data['prom'] = serialize($groupbuy);
+            $data['prom_id'] = $id;
+            $order_type = 1;
+        }else if ($type == "flashbuy") {//抢购处理
+            $product_id = Filter::int($product_id[0]);
+            $num = Filter::int($buy_num[0]);
+            if ($num < 1)
+                $num = 1;
+            $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("fb.*,go.*,pr.*,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
+            $this->flashStatus($id, $item['quota_num'], $this->user['id']);
+            $order_products = $this->packFlashbuyProducts($item, $num);
+            $flashbuy = $model->table("flash_sale")->where("id=$id")->find();
+            unset($flashbuy['description']);
+            $data['prom'] = serialize($flashbuy);
+            $data['prom_id'] = $id;
+            $data['point']=$item['send_point']*$num;
+            $order_type = 2;
+        }else if ($type == "bundbuy") {//捆绑销售处理
+            if (is_array($product_id)) {
+                foreach ($product_id as $key => $val) {
+                    $product_id[$key] = Filter::int($val);
+                }
+            } else {
+                $product_id = Filter::int($product_id);
+            }
+
+            $product_ids = implode(',', $product_id);
+            $num = Filter::int($buy_num[0]);
+
+            $model = new Model("bundling");
+            $bund = $model->where("id=$id")->find();
+
+            if ($bund) {
+                $goods_id = $bund['goods_id'];
+                $products = $model->table("goods as go")->join("left join products as pr on pr.goods_id=go.id")->where("pr.id in ($product_ids)")->fields("*,pr.id as product_id,pr.spec")->group("go.id")->findAll();
+                $order_products = $this->packBundbuyProducts($products, $num);
+            }
+
+            $bundbuy = $model->table("bundling")->where("id=$id")->find();
+            unset($bundbuy['description']);
+            $data['prom'] = serialize($bundbuy);
+            $data['prom_id'] = $id;
+            $current = current($order_products);
+            $bundbuy_amount = sprintf("%01.2f", $bund['price']) * $current['num'];
+
+            $order_type = 3;
+        }else if($type=='pointbuy'){
+            $product_id = Filter::int($product_id[0]);
+            $num = Filter::int($buy_num[0]);
+            if ($num < 1)
+                $num = 1;
+            $pointbuy = $model->table("point_sale as ps")
+                    ->join("left join goods as go on ps.goods_id=go.id left join products as pr on pr.goods_id=ps.goods_id")
+                    ->fields("*,pr.id as product_id,pr.spec")
+                    ->where("ps.id=$id and pr.id = $product_id")
+                    ->find();
+            if(empty($pointbuy)){
+               $this->code = 1148;
+               return;
+            }
+            $order_products = $this->packPointbuyProducts($pointbuy, $num);
+            $user_point_coin = $model->table("customer")->where("user_id=".$this->user['id'])->fields('point_coin')->find();
+            if(empty($user_point_coin)||!isset($user_point_coin['point_coin'])){
+               $this->code = 1005;
+               return;
+            }else{
+                if($user_point_coin['point_coin']<$order_products[$product_id]['point']){
+                    $this->code = 1149;
+                    return;
+                }else{
+                    $office_point_coin = Common::getOfficialPromoterPointCoin($this->user['id']);
+                    if($user_point_coin['point_coin']-$office_point_coin<$order_products[$product_id]['point']){
+                        $this->code = 1151;
+                        return;
+                    }
+                }
+            }
+            $data['pay_point'] = $order_products[$product_id]['point'];
+            $data['prom'] = serialize($pointbuy);
+            $data['prom_id'] = $id;
+            $order_type = 5;
+        }
+        if ($order_type == 0) {
+            if ($cart_type == 'goods') {
+                $cart = Cart::getCart('goods');
+                $order_products = $cart->all();
+            } else {
+                $cart = Cart::getCart();
+                $order_products = $this->selectcart;
+            }
+            $data['prom_id'] = $prom_id;
+        }
+
+        //检测products 是否还有数据
+        if (empty($order_products)) {
+            $this->code = 1058;
+            return;
+        }
+         //=================限购处理==============
+                foreach ($order_products as $v){
+                    $buy_goods_id = $v['goods_id'];
+                    $buy_goods_num = $v['num'];
+                    //查询限购数量
+                    $limit_info = $model->table("goods")->where("id=$buy_goods_id")->fields("limit_buy_num,name")->find();
+                    if($limit_info['limit_buy_num']<=0){
+                        break;
+                    }
+                    //查询用户购买此商品的数量
+                    $buyed = $model->table("order as o")
+                            ->fields("SUM(`goods_nums`) as buyed_num")
+                            ->join("order_goods as og on og.order_id = o.id")
+                            ->where("o.user_id =".$this->user['id']." and o.status!=5 and o.status!=6 and o.create_time>'2017-03-09 00:00:00' and og.goods_id =$buy_goods_id")
+                            ->find();
+                    $buyed_num = $buyed['buyed_num']==NULL?0:$buyed['buyed_num'];
+                    if($limit_info['limit_buy_num']<($buy_goods_num+$buyed_num)){
+                        $this->code=1117;
+                        return;
+                    }
+                }
+          //======================================
+//        //商品总金额,重量,积分计算
+//        $payable_amount = 0.00;
+//        $real_amount = 0.00;
+//        $weight = 0;
+//        $point = 0;
+//        foreach ($order_products as $item) {
+//            $payable_amount+=$item['sell_total'];
+//            $real_amount+=$item['amount'];
+//            $weight += $item['weight'] * $item['num'];
+//            $point += $item['point'] * $item['num'];
+//        }
+//        if ($order_type == 3)
+//            $real_amount = $bundbuy_amount;
+//
+//        //计算运费
+//        $fare = new Fare($weight);
+//        $payable_freight = $fare->calculate($address_id);
+//        $real_freight = $payable_freight;
+        
+        //多物流商品总金额,重量,积分计算
+        $payable_amount = 0.00;
+        $real_amount = 0.00;
+        $weight = 0;
+        $point = 0;
+        $productarr = array();
+        foreach ($order_products as $item) {
+            $payable_amount+=$item['sell_total'];
+            $real_amount+=$item['amount'];
+            if (!$item['freeshipping']) {
+                $weight += $item['weight'] * $item['num'];
+            }
+            $point += $item['point'] * $item['num'];
+            $productarr[$item['id']] = $item['num'];
+        }
+        if ($order_type == 3)
+            $real_amount = $bundbuy_amount;
+
+        //计算运费
+        $fare = new Fare($weight);
+        $payable_freight = $fare->calculate($address_id, $productarr);
+        $real_freight = $payable_freight;
+
+        //计算订单优惠
+        $prom_order = array();
+        $discount_amount = 0;
+        if ($order_type == 0) {
+            if ($prom_id) {
+                $prom = new Prom($real_amount);
+                $prom_order = $model->table("prom_order")->where("id=$prom_id")->find();
+
+                //防止非法会员使用订单优惠
+                $user = $this->user;
+                $group_id = ',0,';
+                if (isset($user['group_id']))
+                    $group_id = ',' . $user['group_id'] . ',';
+
+                if (stripos(',' . $prom_order['group'] . ',', $group_id) !== false) {
+                    $prom_parse = $prom->parsePorm($prom_order);
+                    $discount_amount = $prom_parse['value'];
+                    if ($prom_order['type'] == 4)
+                        $discount_amount = $payable_freight;
+                    else if ($prom_order['type'] == 2) {
+                        $multiple = intval($prom_order['expression']);
+                        $multiple = $multiple == 0 ? 1 : $multiple;
+                        $point = $point * $multiple;
+                    }
+                    $data['prom'] = serialize($prom_order);
+                } else
+                    $data['prom'] = serialize(array());
+            }
+        }
+        //税计算
+        $tax_fee = 0;
+        $config = Config::getInstance();
+        $config_other = $config->get('other');
+        $open_invoice = isset($config_other['other_is_invoice']) ? !!$config_other['other_is_invoice'] : false;
+        $tax = isset($config_other['other_tax']) ? intval($config_other['other_tax']) : 0;
+        if ($open_invoice && $is_invoice) {
+            $tax_fee = $real_amount * $tax / 100;
+        }
+
+        //代金券处理
+        $voucher_value = 0;
+        $voucher = array();
+        if ($voucher_id) {
+            $voucher = $model->table("voucher")->where("id=$voucher_id and is_send=1 and user_id=" . $this->user['id'] . " and status = 0 and '" . date("Y-m-d H:i:s") . "' <=end_time and '" . date("Y-m-d H:i:s") . "' >=start_time and money<=" . $real_amount)->find();
+            if ($voucher) {
+                $voucher_value = $voucher['value'];
+                if ($voucher_value > $real_amount)
+                    $voucher_value = $real_amount;
+            }
+        }
+        //计算订单总金额
+        $order_amount = $real_amount + $payable_freight + $tax_fee - $discount_amount - $voucher_value;
+
+        //填写订单
+        $data['order_no'] = Common::createOrderNo();
+        $data['user_id'] = $this->user['id'];
+        $data['payment'] = $payment_id;
+        $data['status'] = 2;
+        $data['pay_status'] = 0;
+        $data['accept_name'] = Filter::text($address['accept_name']);
+        $data['phone'] = $address['phone'];
+        $data['mobile'] = $address['mobile'];
+        $data['province'] = $address['province'];
+        $data['city'] = $address['city'];
+        $data['county'] = $address['county'];
+        $data['addr'] = Filter::text($address['addr']);
+        $data['zip'] = $address['zip'];
+        $data['payable_amount'] = $payable_amount;
+        $data['payable_freight'] = $payable_freight;
+        $data['real_freight'] = $real_freight;
+        $data['create_time'] = date('Y-m-d H:i:s');
+        $data['user_remark'] = $user_remark;
+        $data['is_invoice'] = $is_invoice;
+        if ($is_invoice == 1) {
+            $data['invoice_title'] = $invoice_type . ':' . $invoice_title;
+        } else {
+            $data['invoice_title'] = '';
+        }
+
+        $data['taxes'] = $tax_fee;
+
+        $data['discount_amount'] = $discount_amount;
+
+        $data['order_amount'] = $order_amount;
+        $data['real_amount'] = $real_amount;
+
+        if(!isset($data['point'])){
+            $data['point'] = $point;
+        }
+        $data['type'] = $order_type;
+        $data['voucher_id'] = $voucher_id;
+        $data['voucher'] = serialize($voucher);
+        
+        //将所属商家信息加入订单数据中
+        $shop_ids = array();
+        foreach ($order_products as $k => $v) {
+                    $shop_ids[] = $v['shop_id'];
+        }
+        $data['shop_ids'] = implode(',', array_unique($shop_ids));
+        //==================小区推广标示====================
+        $flag =Filter::str(Req::args('flag'));
+        if($flag!=NULL){
+            $flag = trim($flag,',');
+            $flag_arr = explode(',', $flag);
+            $ids = implode(',', array_unique($flag_arr));
+            $data['qr_flag']=$ids;
+        }
+        //===============================================
+        //写入订单数据
+        $order_id = $model->table("order")->data($data)->insert();
+        //扣除使用的积分
+        if($order_type==5&&$data['pay_point']>0){
+            $model->table("customer")->data(array("point_coin"=>"`point_coin`-{$data['pay_point']}"))->where("user_id =".$this->user['id'])->update();
+            Log::pointcoin_log($data['pay_point'],$this->user['id'], $data['order_no'], "积分购下单", 0);
+        }
+        //写入订单商品
+        $tem_data = array();
+
+        foreach ($order_products as $item) {
+            $tem_data['order_id'] = $order_id;
+            $tem_data['goods_id'] = $item['goods_id'];
+            $tem_data['shop_id'] = $item['shop_id'];
+            $tem_data['product_id'] = $item['id'];
+            $tem_data['goods_price'] = $item['sell_price'];
+            $tem_data['real_price'] = $item['real_price'];
+            $tem_data['goods_nums'] = $item['num'];
+            $tem_data['goods_weight'] = $item['weight'];
+            $tem_data['prom_goods'] = serialize($item['prom_goods']);
+            $tem_data['spec'] = serialize($item['spec']);
+            $model->table("order_goods")->data($tem_data)->insert();
+        }
+        //发送提醒
+        $NoticeService = new NoticeService();
+        $data['user'] = $this->user['name'];
+        $NoticeService->send('create_order', $data);
+        //优惠券锁死
+        if (!empty($voucher)) {
+            $model->table("voucher")->where("id=$voucher_id and user_id=" . $this->user['id'])->data(array('status' => 2))->update();
+        }
+        //清空购物车与表单缓存
+        if ($order_type == 0) {
+            if ($cart_type == 'goods') {
+                $cart->clear();
+            } else {
+                foreach ($this->selectcart as $k => $v) {
+                    $cart->delItem($v['id']);
+                }
+            }
+            Session::clear("order_status");
+        }
+        $this->code = 0;
+        $this->content = $order_id;
+    }
+
+    //解析订单
+    private function parserOrder() {
+        $config = Config::getInstance();
+        $config_other = $config->get('other');
+        $open_invoice = isset($config_other['other_is_invoice']) ? !!$config_other['other_is_invoice'] : false;
+        $tax = isset($config_other['other_tax']) ? intval($config_other['other_tax']) : 0;
+
+        $area_ids = array();
+        $addresslist = $this->model->table("address")->where("user_id=" . $this->user['id'])->order("is_default desc")->findAll();
+        foreach ($addresslist as $add) {
+            $area_ids[$add['province']] = $add['province'];
+            $area_ids[$add['city']] = $add['city'];
+            $area_ids[$add['county']] = $add['county'];
+        }
+        $area_ids = implode(",", $area_ids);
+        $addressdict = array();
+        if ($area_ids != '')
+            $addressdict = $this->model->table("area")->where("id in($area_ids )")->findAll();
+        $dictarr = array();
+        foreach ($addressdict as $area) {
+            $dictarr[$area['id']] = $area['name'];
+        }
+
+        foreach ($addresslist as $k => &$v) {
+            $namearr = array();
+            if (isset($dictarr[$v['province']])) {
+                $namearr[] = $dictarr[$v['province']];
+            }
+            if (isset($dictarr[$v['city']])) {
+                $namearr[] = $dictarr[$v['city']];
+            }
+            if (isset($dictarr[$v['county']])) {
+                $namearr[] = $dictarr[$v['county']];
+            }
+            $v['address'] = implode(' ', $namearr);
+        }
+        unset($v);
+
+        $model = new Model("voucher");
+        $where = "user_id = " . $this->user['id'] . " and is_send = 1";
+        $where .= " and status = 0 and '" . date("Y-m-d H:i:s") . "' <=end_time";
+        $voucher = $model->where($where)->order("id desc")->findAll();
+
+        $this->content["voucher"] = $voucher;
+        $this->content["open_invoice"] = $open_invoice;
+        $this->content["tax"] = $tax;
+        $this->content["addresslist"] = $addresslist;
+        $this->content["addressdict"] = $addressdict;
+        $this->content["order_status"] = Session::get("order_status");
+    }
+
+    //打包团购订单商品信息
+    private function packGroupbuyProducts($item, $num = 1) {
+        $store_nums = $item['store_nums'];
+        $have_num = $item['max_num'] - $item['goods_num'];
+        if ($have_num > $store_nums)
+            $have_num = $store_nums;
+        if ($num > $have_num)
+            $num = $have_num;
+        $amount = sprintf("%01.2f", $item['price'] * $num);
+        $sell_total = $item['sell_price'] * $num;
+        $product_id = $item['product_id'];
+
+        $product[$product_id] = array('id' => $product_id, 'goods_id' => $item['goods_id'], 'name' => $item['name'], 'img' => $item['img'], 'num' => $num, 'store_nums' => $have_num, 'price' => $item['price'], 'spec' => unserialize($item['spec']), 'amount' => $amount, 'sell_total' => $sell_total, 'weight' => $item['weight'], 'point' => $item['point'], "prom_goods" => array(), "sell_price" => $item['sell_price'], "real_price" => $item['price'],"shop_id"=>$item['shop_id']);
+        return $product;
+    }
+
+    //打包抢购订单商品信息
+    private function packFlashbuyProducts($item, $num = 1) {
+        $store_nums = $item['store_nums'];
+        $quota_num = $item['quota_num'];
+        $have_num = $item['max_num'] - $item['goods_num'];
+        if ($have_num > $store_nums)
+            $have_num = $store_nums;
+//        if ($have_num > $quota_num)
+//            $have_num = $quota_num;
+        if ($num > $have_num)
+            $num = $have_num;
+        $amount = sprintf("%01.2f", $item['price'] * $num);
+        $sell_total = $item['sell_price'] * $num;
+        $product_id = $item['product_id'];
+
+        $product[$product_id] = array('id' => $product_id, 'goods_id' => $item['goods_id'], 'name' => $item['name'], 'img' => $item['img'], 'num' => $num, 'store_nums' => $have_num, 'price' => $item['price'], 'spec' => unserialize($item['spec']), 'amount' => $amount, 'sell_total' => $sell_total, 'weight' => $item['weight'], 'point' => $item['point'], "prom_goods" => array(), "sell_price" => $item['sell_price'], "real_price" => $item['price'],"shop_id"=>$item['shop_id']);
+        return $product;
+    }
+
+    //捆绑订单商品信息
+    private function packBundbuyProducts($items, $num = 1) {
+        $max_num = $num;
+        foreach ($items as $prod)
+            if ($max_num > $prod['store_nums'])
+                $max_num = $prod['store_nums'];
+        $num = $max_num;
+        foreach ($items as $item) {
+            $store_nums = $item['store_nums'];
+            $amount = sprintf("%01.2f", $item['sell_price'] * $num);
+            $sell_total = $item['sell_price'] * $num;
+            $product_id = $item['product_id'];
+
+            $product[$product_id] = array('id' => $product_id, 'goods_id' => $item['goods_id'], 'name' => $item['name'], 'img' => $item['img'], 'num' => $num, 'store_nums' => $item['store_nums'], 'price' => $item['sell_price'], 'spec' => unserialize($item['spec']), 'amount' => $amount, 'sell_total' => $sell_total, 'weight' => $item['weight'], 'point' => $item['point'], "prom_goods" => array(), "sell_price" => $item['sell_price'], "real_price" => $item['sell_price'],"shop_id"=>$item['shop_id']);
+        }
+        return $product;
+    }
+    //打包积分购订单商品信息
+      private function packPointbuyProducts($item, $num = 1) {
+        $price_set = unserialize($item['price_set']);
+        if($item['store_nums']<=0){
+           $this->code = 1054;
+           exit();
+        }
+        if(is_array($price_set)){
+           $real_price = $price_set[$item['product_id']]['cash'];
+           $cash = $price_set[$item['product_id']]['cash']*$num;
+           $point = $price_set[$item['product_id']]['point']*$num;
+        }else{
+           $this->code = 1005;
+           exit();
+        }
+        $sell_total = $item['sell_price'] * $num;
+        $product[$item['product_id']] = array(
+            'id' => $item['product_id'],
+            'goods_id' => $item['goods_id'], 
+            'name' => $item['name'], 
+            'img' => $item['img'], 
+            'num' => $num, 
+            'store_nums' => $item['store_nums'], 
+            'spec' => unserialize($item['spec']), 
+            'amount'=>$cash,
+            "real_price" =>$real_price,
+            'sell_total' => $sell_total,
+            "sell_price" => $item['sell_price'], 
+            'weight' => $item['weight'], 
+            'point' => $item['point'], 
+            'freeshipping' => $item['freeshipping'], 
+            "prom_goods" => array(),
+            'shop_id'=>$item['shop_id'],
+            'cash'=>$cash,
+            'point'=>$point
+        );
+        return $product;
+    }
+    public function calculate_fare() {
+        $weight = Filter::int(Req::args('weight'));
+        $product_info = Req::args('product');
+        $id = Filter::int(Req::args('id'));
+        if (!$id) {
+            $this->code = 1000;
+            return;
+        }
+
+        $fare = new Fare($weight);
+        $fee = $fare->calculate($id,$product_info);
+        $this->code = 0;
+        $this->content = array(
+            'fee' => $fee
+        );
+    }
+
+    /**
+     * 快递
+     */
+    public function express() {
+        $com = Filter::sql(Req::args('type'));
+        $no = Filter::sql(Req::args('no'));
+        $data = Common::getExpress($com, $no);
+        if($data['message']=='ok'&&$data['status']==200){
+           $this->code =0;
+           $this->content=array(
+                'expressdata' => $data['data']
+          );
+          return;
+       }else{
+          $this->code = 1112;
+      }
+    }
+
+}

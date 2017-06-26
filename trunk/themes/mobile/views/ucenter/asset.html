@@ -1,0 +1,217 @@
+{echo:JS::import("form")}
+<script src="{url:#js/swiper.min.js}"></script>
+<div class="swiper-container" id="swiper-banner">
+    <div class="swiper-wrapper">
+        {query:name=ad where=number eq 's5p0hsa8-fkj3-fs32-u3fq-r7dmgqkc'}
+        {set:$ads = unserialize($item['content'])}
+        {list:items=$ads item=$ad}
+        <div class="swiper-slide"><a href="{$ad['url']}"><img src="{url:@$ad[path]}"></a></div>
+        {/list}
+        {/query}
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+<script>
+    $("#swiper-banner").swiper({autoplay: 3000, pagination: '.swiper-pagination', loop: true});
+</script>
+<style type="text/css">
+    .weui-col-25{
+        text-align: center;
+    }
+    .weui-col-25 a{
+        display: block;
+        clear: both;
+        color: #999;
+        line-height: 25px;
+    }
+    .weui-col-25 i{
+        display: block;
+        clear: both;
+        color: #999;
+        line-height: 25px;
+    }
+    .layui-m-layercont{
+        padding-bottom: 5px;
+    }
+</style>
+<div class="weui_panel" id="huabi-score">
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+                <a class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-orange"></i>
+                            <i class="iconfont icon-qiandai icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>我的钱袋<i class="fa fa-question-circle" style="float:right;"></i></p>
+                    </div>
+                </a>
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <div class="weui-row">
+                            <div class="weui-col-25">
+                                <a href="javascript:void(0);"><i>{echo:sprintf("%01.2f",$order['todayamount'])}</i>今日消费</a>
+                            </div>
+                            <div class="weui-col-25">
+                                <a href="{url:/ucenter/pointcoin_log}"><i>{$customer['point_coin']}</i>剩余积分</a>
+                            </div>
+                            <div class="weui-col-25">
+                                <a href="{url:/ucenter/silver_log}"><i>{$customer['silver_coin']}</i>剩余银点</a>
+                            </div>
+                            <div class="weui-col-25">
+                                <a href="javascript:void(0);"><i>{echo:sprintf("%01.2f",$order['amount'])}</i>总消费</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="weui_panel" id="huabi-list">
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+<!--                <a class="weui_cell" href="{url:/ucenter/huabi_exchange}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-yellow"></i>
+                            <i class="iconfont icon-exchange icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>金点兑换</p>
+                    </div>
+                    <span class="weui_cell_ft">虚拟币兑换金点</span>
+                </a>-->
+                <a class="weui_cell" href="{url:/ucenter/recharge_center}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-jifenjilu icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>充值中心</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                <a class="weui_cell" href="{url:/ucenter/balance_log}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue" ></i>
+                            <i class="fa fa-rmb icon-stack-1x icon-inverse" style="line-height: 1.5em;font-size: 1.2em;"></i>
+                            
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>金点记录</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                <a class="weui_cell" href="{url:/ucenter/silver_log}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-recharge icon-stack-1x icon-inverse" ></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>银点记录</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                 <a class="weui_cell exchange" href="javascript:exchange();">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square fa-stack-2x icon-color-slateblue"></i>
+                                <i class="fa fa-random fa-stack-1x fa-inverse" style="line-height: 1.5em;font-size: 1.2em;"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>兑换银点</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                <a class="weui_cell exchange" href="{url:/ucenter/balance_withdraw}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square fa-stack-2x icon-color-slateblue"></i>
+                                <i class="fa fa-credit-card fa-stack-1x fa-inverse" style="line-height: 1.5em;font-size: 1.2em;"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>金点提现</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{if:isset($show_message)&&$show_message==true}
+<div style="position:fixed;bottom:70px;right:10px;z-index:99;" onclick="showMessage();"> 
+    <span class="fa-stack fa-3x ">
+        <i class="fa fa-circle fa-stack-2x" style="color:rgba(4, 4, 4, 0.16);"></i>
+        <i class="fa fa-gift fa-stack-1x black" style="color:#f33604;"></i>
+    </span>
+</div>
+{/if}
+{set:$curtab='asset';}
+<script>
+    $(".fa-question-circle").click(function(){
+       layer.open({
+            content: '<p style="text-align:justify;text-justify:inter-ideograph">金点和银点是您在商城的通用货币，可以通过充值兑换，金点可以提现，而银点只能用作消费，金点可以不可逆地兑换成银点。银点消费更优惠，建议您充值使用银点。</p>'
+            ,skin: 'footer'
+        })
+    });
+    function exchange(){
+        layer.open({
+        content: '<p>需兑换金点值：<input type="number" value="1" id="gold" style="border:none;border-bottom:1px solid gray;width:60px;font-size:20px;text-align:center;"></p>'+
+                '<p style="color: rgba(128, 128, 128, 0.59);">兑换比例：1金点={$gold2silver}银点</p>'
+        ,btn: ['兑换', '取消']
+        ,yes: function(index){
+          var gold = $("#gold").val();
+          if(!isNaN(gold)){
+             var load = layer.open({
+                type: 2
+                ,content: '兑换中'
+               });
+             $.post("{url:/ucenter/goldToSilver}",{gold:gold},function(result){
+                    layer.close(load);
+                    if(result.status=='success'){
+                        notify("您成功使用"+result.gold+"金点兑换了"+result.silver+"银点");
+                        setTimeout("window.location.reload();",3000);
+                    }else{
+                         notify(result.msg);
+                    }
+                },'json');
+          }else{
+               notify("请输入正确的数值");
+          }
+             
+        }
+      });
+    }
+   function notify(msg){
+       layer.open({
+        content: msg
+        ,skin: 'msg'
+        ,time: 4 //2秒后自动关闭
+       });
+   }
+   {if:isset($show_message)&&$show_message==true}
+   function showMessage(){
+       layer.open({
+        content: '您获得了充值奖励<br>【{$present}】<br>快来领取吧！<br>&nbsp;'
+        ,btn: ['马上领取', '忽略']
+        ,yes: function(index){
+          location.href="{url:/ucenter/accept_present}";
+        }
+      });
+   }
+   {/if}
+</script>

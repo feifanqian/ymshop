@@ -1,0 +1,195 @@
+ <?php
+
+class DistrictAction extends Controller {
+
+    public $model = null;
+    public $user = null;
+    public $code = 1000;
+    public $content = NULL;
+    public $hirer = NULL;
+
+    public function __construct() {
+        $this->model = new Model();
+    }
+    //调用需要实例化hirer的方法时
+    //需要调用实例化hirer的方法需要设置为protected
+    public function __call($name, $args = null) {
+        if($this->setHirer()){
+            return call_user_func_array([$this, $name], $args);
+        }
+        return false;
+    }
+    /*
+     * 实例化并设置hirer
+     */
+    public function setHirer() {
+        $district_id = Filter::int(Req::args('district_id'));
+        $user_id = $this->user['id'];
+        if ($district_id) {
+            $district_shop = Hirer::getHirerInstance($user_id, $district_id);
+            if (is_object($district_shop)) {
+                $this->hirer = $district_shop;
+                return true;
+            } else {
+                $this->code = 1132;
+                return false;
+            }
+        } else {
+            $this->code = 1133;
+            return false;
+        }
+    }
+    /*
+     * 申请入驻小区接口
+     */
+    public function applyForDistrict() {
+        $name = Filter::str(Req::args('name'));
+        $location = Filter::sql(Req::args('location'));
+        $linkman = Filter::str(Req::args('linkman'));
+        $linkmobile = Filter::str(Req::args('linkmobile'));
+        $reference = Filter::int(Req::args('reference'));
+
+        if (strlen($name) > 20 || strlen($name) < 3) {
+            $this->code = 1128;
+            return;
+        }
+        if ($location == NULL || $linkman == NULL || $linkmobile = NULL) {
+            $this->code = 1129;
+            return;
+        }
+        if ($reference) {
+            $isset = $this->model->table("district_shop")->where("id=$reference")->find();
+            if ($isset) {
+                $data['reference'] = $reference;
+            } else {
+                $this->code = 1130;
+                return;
+            }
+        }
+        $data['name'] = $name;
+        $data['location'] = $location;
+        $data['linkman'] = $linkman;
+        $data['linkmobile'] = $linkmobile;
+        $data['apply_time'] = date("Y-m-d H:i:s");
+        $data['user_id'] = $this->user['id'];
+        $data['pay_status'] = 0;
+        $data['status'] = 0;
+        $result = $this->model->table("district_apply")->data($data)->insert();
+        if ($result) {
+            $this->code = 0;
+            $this->content['id'] = $result;
+        } else {
+            $this->code = 1005;
+            return;
+        }
+    }
+
+    /*
+     * 获取小区列表，包括已开通小区，未支付小区，申请中小区
+     */
+    public function getDistrictList() {
+        $district = $this->model->table("district_shop")->where("owner_id=" . $this->user['id'])->findAll();
+        $apply_info = $this->model->table("district_apply")->where("user_id=" . $this->user['id'] . " and status != 1")->findAll();
+        if (empty($district) && empty($apply_info)) {
+            $this->code = 1131;
+            return;
+        } else {
+            $this->code = 0;
+            $this->content['district'] = $district;
+            $this->content['pending_district'] = $apply_info;
+        }
+    }
+
+    /*
+     * 获取小区的收益统计
+     */
+    protected function getDistrictInfo() {
+        $this->code = 0;
+        $this->content = $this->hirer->getPropertys();
+    }
+
+    /*
+     * 获取小区收益记录
+     */
+    protected function getDistrictIncomeRecord() {
+        $page = Filter::int(Req::args("page"));
+        $this->code =0;
+        $this->content=$this->hirer->getMyIncomeLog($page);
+    }
+    /*
+     * 获取小区销售记录
+     */
+    protected  function getDistrictSaleRecorde(){
+        $page = Filter::int(Req::args("page"));
+        $this->code =0;
+        $this->content=$this->hirer->getMySaleRecord($page);
+    }
+    /*
+     * 获取小区提现记录
+     */
+    protected function getDistrictWithdrawRecord(){
+        $page = Filter::int(Req::args("page"));
+        $this->code =0;
+        $this->content=$this->hirer->getSettledHistory($page);
+    }
+    /*
+     * 提交结算申请(提现)
+     */
+    protected function applyDoSettle(){
+        $data = Filter::inputFilter(Req::args());
+        $result = $this->hirer->applyDoSettle($data);
+        if($result['status']=='success'){
+            $this->code =0;
+        }else{
+            $this->code = $result['msg_code'];
+        }
+    }
+    /*
+     * 获取推广员列表
+     */
+    protected function getPromoterList(){
+        $page = Filter::int(Req::args('page'));
+        $this->code = 0;
+        $this->content = $this->hirer->getMyPrmoter($page);
+    }
+    /*
+     * 获取拓展小区列表
+     */
+    protected function getSubordinate(){
+        $this->code = 0;
+        $this->content = $this->hirer->getMySubordinate();
+    }
+    
+    /*
+     * 推广业绩图标数据
+     */
+    protected function districtAchievement(){
+            $type = Filter::int(Req::args('type'));
+            switch($type){
+                case 1:$start_time = date("Y-m-d 00:00:00");
+                       $end_time = date("Y-m-d 23:59:59");
+                       break;
+                case 2:$start_time = date("Y-m-d 00:00:00",strtotime("-1 days"));
+                        $end_time = date("Y-m-d 23:59:59",strtotime("-1 days"));
+                        break;
+                case 3:$start_time = date("Y-m-d 00:00:00",strtotime("-6 days"));
+                       $end_time = date("Y-m-d 23:59:59");
+                        break;
+                case 4:$start_time = date("Y-m-d 00:00:00",strtotime("-29 days"));
+                        $end_time = date("Y-m-d 23:59:59");
+                        break;
+                default :
+                    $this->code = 1000;
+                    exit();
+                    break;
+            }
+            $data = $this->hirer->getMyAchievementData($start_time, $end_time);
+            if(empty($data)){
+                $this->code = 1005;
+                return;
+            }else{
+                $this->code = 0;
+                $this->content['data']=$data;
+            }
+    }      
+}

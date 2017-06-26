@@ -1,0 +1,121 @@
+{echo:JS::import('form');}
+{echo:JS::import('dialog?skin=tinysimple');}
+{echo:JS::import('dialogtools');}
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+{set:$objInfo=array('password'=>'登录密码','email'=>'邮箱','mobile'=>'手机号码','paypwd'=>'支付密码')}
+{set:$items=array("验证身份","修改".$objInfo[$obj],"完成");}
+
+<form action="{url:/ucenter/update_obj_act}" name="form_update" class="simple" method="post">
+    <input type="hidden" name="obj" value="{$obj}">
+    <input type="hidden" name="type" value="{$type}">
+    <div class="weui_cells weui_cells_form">
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>修改{$objInfo[$obj]}</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </div>
+
+        {if:$obj=='password' || $obj=='paypwd'}
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">密码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input bind="repassword" minlen=6 maxlen=20 class="weui_input" type="password" name="password" pattern="required" placeholder="密码" alt="6-20任意字符组合">
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">确认密码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input bind="password" minlen=6 maxlen=20 class="weui_input" type="password"  name="repassword" pattern="required" placeholder="确认密码" alt="6-20任意字符组合">
+            </div>
+        </div>
+        {elseif:$obj=='mobile'}
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">手机号码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input type="text" id="account" class="weui_input" name="account" pattern="mobi" placeholder="手机号码" value="{$mobile}" alt="正确的手机号码">
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input type="text"  name="code" class="weui_input" pattern="\d{6}" alt="6位短信验证码" placeholder="短信验证码">
+            </div>
+            <div class="weui_cell_ft">
+                <input id="sendSMS" type="button" class="weui_btn weui_btn_primary weui_btn_mini" value="获取">
+            </div>
+        </div>
+        {elseif:$obj=='email'}
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">手机号码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input type="text" id="account" class="weui_input" name="account" pattern="email" placeholder="邮箱地址" value="{$account}" alt="正确邮箱地址">
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input type="text" class="weui_input"  name="code" pattern="\d{6}" alt="" placeholder="邮箱收到的验证码">
+            </div>
+            <div class="weui_cell_ft">
+                <input id="sendEmail" type="button" class="weui_btn weui_btn_primary weui_btn_mini" value="发送">
+            </div>
+        </div>
+        {/if}
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <div id="msgInfo" ></div>
+                <input type="submit" name="" class="weui_btn weui_btn_primary"" value="提交修改">
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(function(){
+    {if :isset($invalid)}
+    var form = new Form("form_update");
+    //autoValidate.showMsg({id:$("input[name='{$invalid['field']}']").get(0),error:true,msg:"{$invalid['msg']}"});
+    $("#msgInfo").text("{$invalid['msg']}");
+    {/if}
+            $("#sendSMS").click(function() {
+    var account = $("#account").val();
+    $.post("{url:/ucenter/send_objcode}", {account:account}, function(result) {
+    if (result['status'] == 'success') {
+    lockSendButton($("#sendSMS"), 120);
+    } else {
+    art.dialog.tips("<p class='fail'>" + result['msg'] + "</p>");
+    lockSendButton($("#sendSMS"), data['haveTime']);
+    }
+    }, 'json');
+    });
+    $("#sendEmail").on('click', function(){
+    var account = $("#account").val();
+    $.post("{url:/ucenter/send_objcode}", {account:account}, function(data){
+    if (data['status'] == 'fail'){
+    art.dialog.tips("<p class='fail'>" + data['msg'] + "</p>");
+    lockSendButton($("#sendEmail"), data['haveTime']);
+    } else{
+    lockSendButton($("#sendEmail"), 120);
+    }
+    }, 'json');
+    });
+    function lockSendButton(obj, haveTime){
+    var send_sms = obj;
+    send_sms.attr("disabled", true);
+    send_sms.addClass("btn-disable");
+    var i = haveTime;
+    send_sms.val(i + '秒后重新获取');
+    var timer = setInterval(function() {
+    i--;
+    send_sms.val(i + '秒后重新获取');
+    if (i <= 0) {
+    clearInterval(timer);
+    send_sms.val('获取验证码');
+    send_sms.removeClass("btn-disable");
+    send_sms.attr("disabled", false);
+    }
+    }, 1000);
+    }
+    });
+</script>

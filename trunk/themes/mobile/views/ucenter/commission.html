@@ -1,0 +1,66 @@
+<div class="weui_panel" id="huabi-score">
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+                <a class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-orange"></i>
+                            <i class="iconfont icon-qiandai icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>我的佣金</p>
+                    </div>
+                </a>
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <div class="weui-row">
+                            <div class="weui-col-33">
+                                <a href="{url:/ucenter/commission_log}"><i>{$commission['commission_available']}</i>可提取佣金</a>
+                            </div>
+                            <div class="weui-col-33">
+                                <a href="{url:/ucenter/commission_log}"><i>{$commission['commission_possess_now']}</i>当前持有佣金</a>
+                            </div>
+                            <div class="weui-col-33">
+                                <a href="{url:/ucenter/commission_log}"><i>{$commission['commission_withdrew']}</i>已提取佣金</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="weui_panel" id="huabi-list">
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+                <a class="weui_cell" href="{url:/ucenter/huabi_recharge}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-violetred"></i>
+                            <i class="iconfont icon-recharge icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>佣金管理</p>
+                    </div>
+                    <span class="weui_cell_ft">提取佣金</span>
+                </a>
+                <a class="weui_cell" href="{url:/ucenter/commission_log}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-jifenjilu icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>佣金记录</p>
+                    </div>
+                    <span class="weui_cell_ft">点击查看</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

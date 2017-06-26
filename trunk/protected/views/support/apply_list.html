@@ -1,0 +1,103 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+    <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/support/support_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>
+    <a class="icon-delicious" href="{url:/support/apply_list}"> 查看全部</a>
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:50px">选择</th>
+        <th>操作</th>
+        <th>售后类别</th>
+        <th>订单号 </th>
+        <th>申请人</th>
+        <th>申请描述 </th>
+        <th>售后联系人</th>
+        <th>联系电话</th>
+        <th>时间</th>
+        <th style="width:180px">状态</th>
+    </tr>
+    {query:name=sale_support as sp fields=sp.*,u.name join=left join user as u on sp.user_id eq u.id where=$where id=$obj page=1 order= id desc }
+        <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看详细</a></li>
+                {if:$item['status']==0}
+                <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},1,{$item['type']},{$item['user_id']})"> 通过请求</a></li>
+                <li><a class="icon-scissors" href="javascript:;" onclick="change_status({$item['id']},-1,{$item['type']},{$item['user_id']})"> 拒绝请求</a></li>
+                {/if}
+                {if:$item['status']==1}
+                <li><a class="icon-signup" href="javascript:;" onclick="change_status({$item['id']},2,{$item['type']},{$item['user_id']})"> 完成售后</a></li>
+                {/if}
+            <td><a href="?condition=and--sp.type--eq--{$item['type']}">{$type[$item['type']]}</a></td>
+            <td>{$item['order_no']}</td>
+            <td><a href="?condition=and--sp.user_id--eq--{$item['user_id']}">{$item['name']}</a></td>
+            <td>{$item['desc']}</td>
+            <td>{$item['receiver']}</td>
+            <td>{$item['mobile']}</td>
+            <td>{$item['time']}</td>
+            <td style="width:180px"><a href="?condition=and--sp.status--eq--{$item['status']}">{$status[$item['status']]}</a></td>
+        </td></tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<div id="status_dialog" style="display: none; position: relative;" class="form2">
+    <h3 id="order_title">提示：</h3>
+        <input type="hidden" name="support_id" id="support_id" value="">
+        <input type="hidden" name="support_status" id="support_status" value="">
+        <input type="hidden" name="user_id" id="user_id" value="">
+        <p name="message" id="message" ></p>
+        <br/><br/>
+    <div class="tc"><button class="focus_button" onclick="window.parent.submit_status()">已完成上述工作</button></div>
+</div>
+<script type="text/javascript">
+    function view(id){
+        art.dialog.open("{url:/support/detail_view/id/}"+id,{id:'view_dialog',title:'查看详细',resize:false,width:900,height:450});
+    }
+    function change_status(id,status,type,user_id){
+        var title = '';
+        if(status==-1){
+            title = '拒绝请求';
+            $("#message").html("请与用户沟通，将拒绝理由告知用户。");
+        }else if(status ==1){
+            title = '通过请求';
+            if(type==0){
+               $("#message").html("请与用户沟通，将退货地址告知用户。");
+           }else if(type==1){
+               $("#message").html("请与用户沟通，将换货地址告知用户。");
+            }else if(type==2){
+               $("#message").html("请与用户沟通，将维修地址告知用户。");
+            }
+        }else if(status==2){
+            $("#message").html("请确认信息，是否售后工作已经完成。");
+        }
+        $("#support_id").val(id);
+        $("#support_status").val(status);
+        $("#user_id").val(user_id);
+        art.dialog({id:'status_dialog',title:title,resize:false,width:300,height:200,padding:'0 5px',content:document.getElementById('status_dialog')});
+    }
+     function submit_status(){
+        var id     = $("#support_id").val();
+        var status = $("#support_status").val();
+        var user_id= $("#user_id").val();
+        if(true){
+            $.post('{url:/support/support_status}',{id:id,user_id:user_id,status:status},function(data){
+                art.dialog({id:'status_dialog'}).close();
+                if(data['status']='success'){
+                    art.dialog.tips("<p class='"+ data['status']+"'>"+data['msg']+"成功！</p>");
+                }else{
+                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"失败！</p>");
+                }
+                setTimeout("tools_reload()",2000);
+            },'json');
+    }
+}
+$("#condition").on("click",function(){
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/support/apply_list}',method:'get'});},data:{'sp.type':{name:'售后类型',values:{1:'退货退款',2:'换货',3:'维修'}},'sp.order_no':{name:'订单号'},'u.name':{name:'用户名'},'sp.status':{name:'售后状态',values:{'-1':'请求被拒绝','0':'未处理','1':'已处理，等待后续工作','2':'完成售后'}}}});
+});
+</script>

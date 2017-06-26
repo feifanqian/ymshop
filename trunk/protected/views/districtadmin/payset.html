@@ -1,0 +1,194 @@
+<h2 class="page_title">{$node_index['name']}</h2>
+<div class="form2">
+     <dl class="lineD">
+            <dt>提示</dt>
+            <dd>
+                <span>下列为支付参数，错误的填写会导致支付功能出错。</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>pid</dt>
+            <dd>
+                <input name="pid" type="text" value="{$params['pid']}"/>
+                <span>由支付提供方生成</span>
+            </dd>
+        </dl>
+    <dl class="lineD">
+            <dt>pkey</dt>
+            <dd>
+                <input name="pkey" type="text" value="{$params['pkey']}"/>
+                <span>由支付提供方生成</span>
+            </dd>
+        </dl>
+    <dl class="lineD">
+            <dt>mid</dt>
+            <dd>
+                <input name="mid" type="text" value="{$params['mid']}"/>
+                <button style='cursor: pointer;' onclick="generate();">{if:isset($params['mid'])}重新生成{else:}生成mid{/if}</button>
+            </dd>
+    </dl>
+    <dl class="lineD">
+            <dt></dt>
+            <dd>
+                <button style='cursor: pointer;width:60px;' onclick='submit();'>  提 交</button>
+                <button style='cursor: pointer;width:60px;' onclick='history.go(-1);'>  返 回</button>
+            </dd>
+    </dl>    
+</div>
+{if:isset($params['quote'])&&$params['quote']!=""}
+{set:$quote=unserialize($params['quote']);}
+{/if}
+<div id="quote" class="form2" style="display: none;">
+    <dl class="lineD">
+            <dt>商户名称</dt>
+            <dd>
+                <input name="merchname" type="text" value="{$quote['merchname']|'买一点商城'}" />(显示在支付界面)
+            </dd>
+  </dl>
+    <dl class="lineD">
+            <dt>联系人姓名</dt>
+            <dd>
+                <input name="contact" type="text" value="{$quote['contact']}" />
+                
+            </dd>
+  </dl>
+     <dl class="lineD">
+            <dt>联系人电话</dt>
+            <dd>
+                <input name="telephone" type="text" value="{$quote['telephone']}" />
+                
+            </dd>
+  </dl>
+     <dl class="lineD">
+            <dt>商户地址</dt>
+            <dd>
+                <input name="merchaddr" type="text" value="{$quote['merchaddr']}" />
+                
+            </dd>
+  </dl>
+     <dl class="lineD">
+            <dt>商户法人证件号码</dt>
+            <dd>
+                <input name="identitycard" type="text" value="{$quote['identitycard']}" />
+                
+            </dd>
+  </dl>
+     <dl class="lineD">
+            <dt>结算模式</dt>
+            <dd>
+               <select name="ratemodel">
+                   <option value="D0" {if:isset($quote['ratemodel'])&&$quote['ratemodel']=='D0'}checked{/if}>D0</option>
+                   <option value="T1" {if:isset($quote['ratemodel'])&&$quote['ratemodel']=='T1'}checked{/if}>T1</option>
+               </select>
+            </dd>
+  </dl>
+   <dl class="lineD">
+            <dt>费率(千分比)</dt>
+            <dd>
+                <input name="feerate" type="text" value="{$quote['feerate']|'5'}" />
+            </dd>
+  </dl>
+     <dl class="lineD">
+            <dt>银行开户名</dt>
+            <dd>
+                <input name="accountname" type="text" value="{$quote['accountname']}" />
+            </dd>
+  </dl>
+     <dl class="lineD">
+            <dt>银行卡卡号</dt>
+            <dd>
+                <input name="accountno" type="text" value="{$quote['accountno']}" />
+            </dd>
+  </dl>
+     <dl class="lineD">
+            <dt>开户行</dt>
+            <dd>
+                <input name="bankname" type="text" value="{$quote['bankname']}" />
+            </dd>
+  </dl>
+</div>
+<script>
+    function submit(){
+        var pid = $("input[name='pid']").val();
+        var pkey = $("input[name='pkey']").val();
+        var mid = $("input[name='mid']").val();
+        if(pid =="" || pkey=="" || mid==""){
+            layer.confirm('您的提交内容有空，确定要提交吗？', {
+                btn: ['确定','取消'] //按钮
+              }, function(){
+                  upload({pid:pid,pky:pkey,mid:mid});
+              }, function(){
+                  layer.closeAll();
+              });
+        }else{
+            upload({pid:pid,pky:pkey,mid:mid});
+        }
+
+    }
+    function upload(data){
+        $.post("{url:/districtadmin/payset_save}",data,function(result){
+            if(result.status=='success'){
+                layer.msg("保存成功",{icon:6},function(){
+                    window.location.reload();
+                })
+            }else{
+                layer.msg(result.msg,{icon:5});
+            }
+        },'json');
+    }
+    
+    function generate(){
+        layer.open({
+            title:"请填写下列信息（全部为必填）",
+            area: ['550px', '510px'],
+            type: 1,
+            closeBtn: 1, //不显示关闭按钮
+            anim: 2,
+            shadeClose: false, //开启遮罩关闭
+            content: $("#quote"),
+            btn: ['确定', '取消'],
+            yes: function(index, layero){
+                var flag = true;
+                var formdata={};
+               $("#quote input,select").each(function(i){
+                   if($(this).val()==""){
+                       $(this).focus();
+                       layer.msg("还有未填写的条目，请完善");
+                       flag = false;
+                       return false;
+                   }else{
+                       var key = $(this).attr("name");
+                       formdata[key]=$(this).val();
+                   }
+               });
+               if(flag==false){
+                   return false;
+               }
+                var comfirm = layer.confirm('您确定信息填写正确了吗?', {
+                    btn: ['确定','我再看看'] //按钮
+                  }, function(){
+                     layer.close(comfirm);
+                     var load = layer.load("提交中。。。");
+                     upload_generate_data(formdata,load);
+                  }, function(){
+                      layer.close(comfirm);
+                  });
+            }
+            ,btn2: function(index, layero){
+                layer.msg("您取消了");
+            }
+        });
+    }
+    function upload_generate_data(data,load){
+        $.post("{url:/districtadmin/quote}",data,function(result){
+            layer.close(load);
+            if(result.status=="success"){
+                layer.msg("报件成功",{icon:6},function(){
+                    window.location.reload();
+                });
+            }else{
+                layer.msg(result.msg,{icon:5,time:5});
+            }
+        },'json');
+    }
+</script>

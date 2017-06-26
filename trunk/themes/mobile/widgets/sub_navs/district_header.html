@@ -1,0 +1,16 @@
+{set:$act=Req::args('act');}
+{if:in_array($act,array('district','record','income'))}
+<div id="ucenter-top" style="height:100px;">
+    <h1 style="padding-top: 50px; color: rgba(72, 49, 10, 0.64);font-size: 14px;text-align: center;">{$district_name}</h1>
+</div>
+{else:}
+<div class="header header-white" style='max-width:9999px;'>
+    <div class="header-l">
+        <a  href="javascript:history.go(-1);"><i class="iconfont icon-prev"></i></a>
+    </div>
+    <!--<div class="title"><h2>{$title}</h2></div>-->
+    <div class="header-c">
+        <h2>{$title}</h2>
+    </div>
+</div>
+{/if}

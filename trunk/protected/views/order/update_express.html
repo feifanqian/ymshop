@@ -1,0 +1,54 @@
+{echo:JS::import("form")}
+<div style="overflow: auto;width:900px;height: 200px;">
+    <h3 class="lineD mt10">发货信息</h3>
+    <table class="default">
+        <input type="hidden" name="order_id" value="{$info['order_id']}">
+        <input type="hidden" name="shopname" value="{$info['admin']}">
+        <tr>
+            <th><b class="red">*</b>物流公司：</th>
+            <td class="golden">
+                <select name="express_company_id">{query:name=express_company  items=$itms item=$itm}
+                    <option value="{$itm['id']}" {if:$itm['id']==$info['express_company_id']}selected="selected"{/if}>{$itm['name']}</option>{/query}
+                </select>
+            </td>
+            <th><b class="red">*</b>物流单号：</th>
+            <td><input type="text" name="express_no" value="{$info['express_no']}"/></td>
+        </tr>
+        <div class="alone_footer tc"><button class="focus_button" id="_comfirm" onclick="">确认修改</button></div>
+    </table>
+</div>
+<script>
+    $(function () {
+        $("#_comfirm").click(function () {
+            var express_id = $("select[name=express_company_id]").val();
+            var express_no = $("input[name=express_no]").val();
+            var order_id = $("input[name=order_id]").val();
+            var shopname = $("input[name=shopname]").val();
+//        $.post("{url:/order/doc_invoice_update}", {order_id:order_id,shopname:shopname,express_company_id:express_id,express_no:express_no},
+//                function(data){
+//                    console.log(data);
+//                  if(data['status'] =="success"){
+//                     alert(1111);
+//                     window.parent.location.reload();
+//                  }else{
+//                      console.log(222222);
+//                      alert('操作失败了，请重试');
+//                  }
+//           },'json');
+            $.ajax({
+                type: 'POST',
+                url: "{url:/order/doc_invoice_update}",
+                data: {order_id: order_id, shopname: encodeURIComponent(shopname), express_company_id: express_id, express_no: express_no},
+                success: function (data) {
+                    if (data['status'] == "success") {
+                        window.parent.success();
+                    } else {
+                       window.parent.fail();
+                    }
+                },
+                dataType:'json'
+            });
+        });
+    });
+
+</script>

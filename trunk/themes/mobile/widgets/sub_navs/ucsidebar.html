@@ -1,0 +1,108 @@
+<style>
+    #widget_sub_navs .weui_panel .weui_cell .icon-stack {
+        margin-right: 5px;
+    }
+</style>
+<div id="widget_sub_navs ">
+    <div class="weui_panel " style="margin-top:10px;">
+        <div class="weui_panel_hd js_category">客户服务<p><i class="fa fa-navicon "></i><p></div>
+        <div class="weui_panel_bd js_categoryInner">
+            <div class="weui_media_box weui_media_small_appmsg">
+                <div class="weui_cells weui_cells_access">
+                    <a class="weui_cell" href="/user/review">
+                        <div class="weui_cell_hd">
+                            <span class="icon-stack icon-lg">
+                                <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                                <i class="iconfont icon-recharge icon-stack-1x icon-inverse"></i>
+                            </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>商品评价</p>
+                        </div>
+                        <span class="weui_cell_ft"></span>
+                    </a>
+                    <a class="weui_cell" href="/user/message">
+                        <div class="weui_cell_hd">
+                            <span class="icon-stack icon-lg">
+                                <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                                <i class="iconfont icon-email icon-stack-1x icon-inverse"></i>
+                            </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>我的消息</p>
+                        </div>
+                        <span class="weui_cell_ft"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui_panel">
+        <div class="weui_panel_hd js_category">账户管理<p><i class="fa fa-navicon "></i><p></div>
+        <div class="weui_panel_bd js_categoryInner">
+            <div class="weui_media_box weui_media_small_appmsg">
+                <div class="weui_cells weui_cells_access">
+                    <a class="weui_cell" href="/user/info">
+                        <div class="weui_cell_hd">
+                            <span class="icon-stack icon-lg">
+                                <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                                <i class="iconfont icon-my1 icon-stack-1x icon-inverse"></i>
+                            </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>个人资料</p>
+                        </div>
+                        <span class="weui_cell_ft"></span>
+                    </a>
+                    <a class="weui_cell" href="/user/address">
+                        <div class="weui_cell_hd">
+                            <span class="icon-stack icon-lg">
+                                <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                                <i class="iconfont icon-edit icon-stack-1x icon-inverse"></i>
+                            </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>收货地址</p>
+                        </div>
+                        <span class="weui_cell_ft"></span>
+                    </a>
+                    <a class="weui_cell" href="/user/safety">
+                        <div class="weui_cell_hd">
+                            <span class="icon-stack icon-lg">
+                                <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                                <i class="iconfont icon-password icon-stack-1x icon-inverse"></i>
+                            </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>账户安全</p>
+                        </div>
+                        <span class="weui_cell_ft"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--
+{set:$i = 0;}
+{list:items=$sidebar}
+<div class="weui_panel">
+    <div class="weui_panel_hd">{$key}</div>
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+                {list:items=$item item=$v}
+                {set:$i++}
+                <a class="weui_cell" {if:$act==$v}class="current"{/if} href="{url:/ucenter/$v}">
+                   <div class="weui_cell_hd"><div class="un un_{echo:sprintf('%02d',$i)}"></div></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>{$key}</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                {/list}
+            </div>
+        </div>
+    </div>
+</div>
+{/list}	-->

@@ -1,0 +1,55 @@
+
+{set:$con=Req::args('con');}
+{set:$act=Req::args('act');}
+{if:($con==null || $con=='index') && ($act==null || $act=='index' || $act=='category' || $act=='category_index')}
+<div class="header">
+    <div class="header-l">
+        <a id="logolink" href="/"><img src="{url:#images/logo.png}" alt="" class="icon-home"></a>
+        <a id="goprev" href="javascript:history.go(-1);" style="display:none"><i class="iconfont icon-prev"></i></a>
+    </div>
+    <!--<div class="title"><h2>{$title}</h2></div>-->
+    <div class="weui_search_bar header-c" id="search_bar">
+        <form id="search-form" class="weui_search_outer" action="{url:/}" method="get">
+            <input type="hidden" name="con" value="index">
+            <input type="hidden" name="act" value="search">
+            {token:}
+            <div class="weui_search_inner">
+                <i class="weui_icon_search"></i>
+                <input type="search" class="weui_search_input" name="keyword" id="search-keyword" value="{$keyword}" placeholder="搜索" required/>
+                <a href="javascript:" class="weui_icon_clear" id="search_clear"></a>
+            </div>
+        </form>
+        <a href="javascript:" class="weui_search_cancel" id="search_text">搜索</a>
+    </div>
+    <div class="header-r">
+        <a  href="{url:/index/category_index}"><i class="iconfont icon-fenlei"></i></a>
+    </div>
+</div>
+{else:}
+<div class="header header-white">
+    <div class="header-l">
+        <a  href="javascript:history.go(-1);"><i class="iconfont icon-prev"></i></a>
+    </div>
+    <!--<div class="title"><h2>{$title}</h2></div>-->
+    <div class="header-c">
+        <h2>{$title}</h2>
+    </div>
+    <div class="header-r">
+        <a  href="{url:/}"><i class="iconfont icon-home"></i></a>
+    </div>
+</div>
+{/if}
+<div id="search-panel">
+    <dl class="search-keywords" id="recentlywords">
+        <dt>最近搜索</dt>
+        <dd class="keywords-list fix" id="recentlywordsBox">
+            
+        </dd>
+    </dl>
+    <dl class="search-keywords" id="hotwords">
+        <dt>热门搜索</dt>
+        <dd class="keywords-list fix" id="hotwordsBox">
+            {query:name=tags order=is_hot desc,sort desc,num desc limit=30}<a href="javascript:;">{$item['name']}</a>{/query}
+        </dd>
+    </dl>
+</div>

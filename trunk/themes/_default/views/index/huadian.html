@@ -1,0 +1,47 @@
+
+<div class="bg-base flash-base" style="background:url('img.buy-d.cn/data/uploads/2016/11/04/29abbc15438f4c256c8702caec791cb8.jpg') no-repeat top center;">
+        <div class="container" style="font-family: Microsoft Yahei;">
+        <!--S 产品展示-->
+        <!--        <ol class="bread-crumb">
+                    <li><a href="#">限时▪抢购</a></li>
+                    <li><a href="#">特卖▪专场</a></li>
+                </ol>-->
+       <div style="margin:20px auto;width:1366px;"><h2 class="red" style="font-size:20px;">|推荐</h2></div>
+       <div>
+        <ul class="product-list clearfix" style="padding-top: 0px;width:1300px;">
+            {if:isset($recommend)}
+            {list:items=$recommend}
+            <li class="item  itemList" style="margin:0 0 -1px -1px;height:300px;">
+                <dl class="product">
+                    <dt class="" style="height: 203px; position: relative;margin: 0 auto;"><a href="{url:/index/product/id/}{$item['id']}"><img src="{echo:Common::thumb($item['img'],200,200,'fwfh')}" style="height:200px;width: 200px; "></a></dt>
+                    <dd class="" style="text-align: center;height: 20px;overflow: hidden;"><a href="{url:/index/flashbuy/id/}{$item['id']}">{echo:TString::msubstr($item['name'],0,15)}</a></dd>
+                    <dd class="" style="text-align: center;"><s  class='red'><span>原价￥{$item['sell_price']}元</s></span></dd>
+                    <dd style="text-align: center;font-weight:500"><span class="originalprice">兑换价</span><span style="font-size:18px;;color:red;">￥{$item['still_pay']}+{$item['huabipay_amount']}华点</span> </dd>
+                </dl>
+            </li>
+            {/list}
+            {/if}
+           
+        </ul>
+       </div>
+    <div style="margin:20px auto;width:1366px;"><h2 class="red" style="font-size:20px;">|超值</h2></div>
+    <div>
+        <ul class="product-list clearfix" style="padding-top:0px;width:1300px;">
+            {if:isset($normal['data'])}
+            {list:items=$normal['data']}
+            <li class="item  itemList" style="margin:0 0 -1px -1px;height:300px;">
+                <dl class="product" >
+                    <dt class="" style="height: 203px; position: relative;margin: 0 auto;"><a href="{url:/index/product/id/}{$item['id']}"><img src="{echo:Common::thumb($item['img'],200,200,'fwfh')}" style="height:200px;width: 200px; "></a></dt>
+                    <dd class="" style="text-align: center;height: 20px;overflow: hidden;"><a href="{url:/index/flashbuy/id/}{$item['id']}">{echo:TString::msubstr($item['name'],0,15)}</a></dd>
+                    <dd class="" style="text-align: center;"><s  class='red'><span>原价￥{$item['sell_price']}元</s></span></dd>
+                    <dd style="text-align: center;font-weight:500"><span class="originalprice">兑换价</span><span style="font-size:18px;;color:red;">￥{$item['still_pay']}+{$item['huabipay_amount']}华点</span> </dd>
+                </dl>
+            </li>
+            {/list}
+            {/if}
+           
+        </ul>
+       </div>
+    <div class="page-nav">{$normal['html']}</div>
+
+</div>

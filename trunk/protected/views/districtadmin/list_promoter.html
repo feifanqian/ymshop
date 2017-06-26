@@ -1,0 +1,132 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{set:$status=array("0"=>'正常','1'=>'禁用');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+   <!-- <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>!-->
+    <a class="icon-delicious" href="{url:/districtadmin/record_income}"> 查看全部</a>
+<!--    <a class="icon-eye-blocked" href="{url:/order/order_list/status/2}"> 未审核</a>
+    <a class="icon-cogs" href="{url:/order/order_list/status/3}"> 执行中</a>-->
+
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:10px">选择</th>
+        <th style="width:30px">操作</th>
+        <th style="width:50px">推广员</th>
+        <th style="width:50px">类型</th>
+        <th style="width:60px">所属小区</th>
+        <th style="width:60px">收益情况</th>
+        <th style="width:60px">状态</th>
+    </tr>
+    {set:$type=array("1"=>"经营商直推","2"=>"推广员推荐","3"=>"系统生成","4"=>"官方推广员");}
+    {query:name=district_promoter as dp fields=dp.*,u.nickname,u.avatar,ds.name as shop_name join=left join user as u on dp.user_id eq u.id left join district_shop as ds on dp.hirer_id eq ds.id where=$where id=$obj page=1 order= dp.valid_income desc,dp.frezze_income desc}
+    <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:65px" class="btn_min">
+                <div class="operat hidden">
+                    <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                     <ul>
+                       <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=and--di.role_id--eq--{$item['id']}__and--di.role_type--eq--1"> 查看收益记录</a></li>
+                       <li><a class="icon-eye" href="javascript:;" onclick="viewAchievement('{$item['nickname']|'unknow'}',{$item['user_id']});"> 查看销售业绩</a></li>
+                       <li><a class="icon-user-2" href="javascript:;" onclick="sendMsg('{$item['nickname']|'unknow'}',{$item['user_id']});"> 发送微信消息</a></li>
+                     </ul>
+                   </div>
+                </div>
+            </td>
+            <td style="width:60px">{$item['nickname']|"unknow"}</td>
+            <td style="width:60px">{$type[$item["type"]]}</td>
+            <td style="width:140px">{$item['shop_name']}</td>
+            <td style="width:140px">待解锁：{$item['frezze_income']} 可用：{$item['valid_income']} 已结算：{$item['settled_income']}</td>
+            <td style="width:160px">{$status[$item['status']]}</td>
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<script type="text/javascript">
+function viewAchievement(name,id){
+layer.open({
+        id: id,
+        type: 2,
+        title: name,
+        shadeClose: true,
+        shade: false,
+        area: ['893px', '600px'],
+        content: '{url:/districtadmin/chart}/role_type/1/user_id/'+id ,
+    });
+}
+function IsURL(str_url){
+        var strRegex = '^((https|http|ftp|rtsp|mms)?://)'
+        + '?(([0-9a-z_!~*\'().&=+$%-]+: )?[0-9a-z_!~*\'().&=+$%-]+@)?' //ftp的user@
+        + '(([0-9]{1,3}.){3}[0-9]{1,3}' // IP形式的URL- 199.194.52.184
+        + '|' // 允许IP和DOMAIN（域名）
+        + '([0-9a-z_!~*\'()-]+.)*' // 域名- www.
+        + '([0-9a-z][0-9a-z-]{0,61})?[0-9a-z].' // 二级域名
+        + '[a-z]{2,6})' // first level domain- .com or .museum
+        + '(:[0-9]{1,4})?' // 端口- :80
+        + '((/?)|' // a slash isn't required if there is no file name
+        + '(/[0-9a-z_!~*\'().;?:@&=+$,%#-]+)+/?)$';
+        var re=new RegExp(strRegex);
+        //re.test()
+        if (re.test(str_url)){
+            return (true);
+        }else{
+            return (false);
+        }
+}
+function sendMsg(name,id){
+    layer.open({
+        id: id,
+        type: 1,
+        title: "发送消息给"+name,
+        shadeClose: true,
+        shade: false,
+        area: ['400px', '350px'],
+        content:    '<div style="margin-left:20px;">'
+                    +'*消息内容：<br>'
+                    +'<textarea name="content" style="width:90%;height:150px;"></textarea>'
+                    +'<br>跳转链接：<br>'
+                    +'<input type="text" name="url" style="width:90%;height:25px;" value="https://www.buy-d.cn/district/district">'
+                    +'</div>' ,
+        btn:['确定','取消'],
+        success: function(layero, index){
+            $("textarea[name=content]").val("亲爱的"+name+"恭喜您，有新的推广员加入您的团队，您获得了1300金点奖励！");
+        },
+        yes: function(index, layero){
+          var content = $("textarea[name=content]").val();
+          var url = $("input[name=url]").val();
+          if(content==""){
+              layer.msg("消息内容不能为空");
+              return false;
+          }
+          if(url&&!IsURL(url)){
+              layer.msg("填写的URL格式错误");
+              return false;
+          }
+          layer.load();
+          $.post("{url:/districtadmin/sendMsg}",{content:content,url:url,user_id:id},function(data){
+              layer.closeAll('loading');
+              if(data.status=='success'){
+                  layer.msg("发送成功",function(){
+                     layer.closeAll(); 
+                  });
+              }else{
+                  layer.msg(data.msg);
+              }
+          },'json');
+        },
+        btn2: function(index, layero){
+        }
+    });
+}
+$("#condition").on("click",function(){
+    layer.msg("暂未完成，请等待");
+   return false;
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/commission/commission_list_order}',method:'get'});},data:{'o.order_no':{name:'订单编号'},'o.order_amount':{'name':'订单金额'},'c.status':{name:'佣金状态',values:{0:'时间锁定中',1:'已可用', 2:'已提现', 3:'已撤销'}},'u1.name':{name:'购买者用户名'},'u2.name':{name:'佣金收益者用户名'},'c.commission_get':{'name':'单笔佣金金额'},'c.commission_amount':{'name':'订单佣金总额'},'c.commission_level':{name:'佣金等级',values:{1:'1',2:'2',3:'3'}}}});
+})
+</script>

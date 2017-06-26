@@ -1,0 +1,34 @@
+<!-- 
+<div style="margin:2em 1em" >
+	<div class="message_{$type} ">{$msg}</div>
+</div> -->
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<div class="weui-msg">
+        <div class="weui-msg__icon-area">
+        	{if:$type=="fail"||$type=="error"}
+        	<i class="weui-icon-warn weui-icon_msg"></i>
+            {elseif:$type=='info'}
+            <i class="weui-icon-info weui-icon_msg"></i>
+            {else:}
+            <i class="weui-icon-success weui-icon_msg"></i>
+            {/if}
+        </div>
+        <div class="weui-msg__text-area">
+            <h2 class="weui-msg__title">{$msg}</h2>
+            <p class="weui-msg__desc">{$content}</p>
+        </div>
+        <div class="weui-msg__opr-area">
+            <p class="weui-btn-area">
+                {if:isset($redirect_url)&&isset($url_name)}
+                {if:$url_name=="了解什么是小区"}
+                   <a href="{url:/district/district/test/1}" class="weui-btn weui-btn_primary">进入小区</a>
+                {/if}
+                <a href="{$redirect_url}" class="weui-btn weui-btn_primary">{$url_name}</a>
+                <a href="javascript:history.back();" class="weui-btn weui-btn_default">返回</a>
+                {else:}
+                <a href="{url:/}" class="weui-btn weui-btn_primary">返回商城主页</a>
+                <a href="javascript:history.back();" class="weui-btn weui-btn_default">返回</a>
+                {/if}
+            </p>
+        </div>
+</div>

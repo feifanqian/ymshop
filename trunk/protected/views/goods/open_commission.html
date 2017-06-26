@@ -1,0 +1,161 @@
+{echo:JS::import("form")}
+<style type="text/css">
+    tr:nth-child(even){
+     background:#f1f2f3;
+ }
+</style>
+<div style="overflow: auto;width:850px;height: 500px;">
+    <h3> </h3>
+    <div>
+        <p style="text-align: center;">
+        <img src="{echo:Common::thumb($goods['img'],300,300);}" width="40">
+        <a href="{url:/index/product/id/$goods[id]}" target="_blank">{$goods['name']}</a>
+        </p>
+    </div>
+    <div>
+    <form action="{url:/goods/save_setting}" method="post" id="commission_form">
+        <div style="text-align: center">
+        <table align="center" width="100%" style="border-collapse: collapse;" >
+            <tr><th width="10%" style="text-align: center;">货号</th><th width="10%" style="text-align: center;">规格</th><th width="10%" style="text-align: center;">市场价</th><th width="10%" style="text-align: center;">销售价</th><th width="10%" style="text-align: center;">成本价</th><th style="text-align: center;">佣金设置</th><th width="15%" style="text-align: center;">操作</th></tr>
+            
+         {list:items=$products item=$product}  
+         <tr style="border-top: 1px solid gray;border-bottom: 1px solid gray;">
+          <td>{$product['pro_no']}</td><td>{$product['spec']}</td><td>{$product['market_price']}</td><td>{$product['sell_price']}</td><td>{$product['cost_price']}</td>
+          <td style="text-align: center;padding-left: 10px;">
+              <select class="type" name="type[{$product['id']}]" id="{$product['id']}" style="height:27px;margin-top:6px;width:130px; ">
+                     <option value="0" {if:isset($set)&& $set[$product['id']]['type']=='0'}selected="selected"{/if}>不参与分佣</option>
+                     <option value="1" {if:isset($set)&& $set[$product['id']]['type']=='1'}selected="selected"{/if}>按利润比例分成</option>
+                     <option value="2" {if:isset($set)&& $set[$product['id']]['type']=='2'}selected="selected"{/if}>按销售价比例分成</option>
+                     <option value="3" {if:isset($set)&& $set[$product['id']]['type']=='3'}selected="selected"{/if}>按固定佣金分成</option>
+             </select>&nbsp;&nbsp;
+             <input type='text' class="type_value_input" name="type_value[{$product['id']}]" value="{if:isset($set)}{$set[$product['id']]['type_value']}{/if}"maxlenth="10" style="heigth:23px;width:45px;margin-top: -2px;{if:!isset($set)||$set[$product['id']]['type_value']==''}display: none;{/if}">
+             <span>{if:isset($set)&&($set[$product['id']]['type']=='1'||$set[$product['id']]['type']=='2')}%{elseif:isset($set)&&($set[$product['id']]['type']=='3')}元{/if}</span>≈
+              <strong>
+               {if:isset($set)}
+               {if:$set[$product['id']]['type']=='1'}
+               {echo:round(($product['sell_price']-$product['cost_price'])*$set[$product['id']]['type_value']/100,2)}
+               {elseif:$set[$product['id']]['type']=='2'}
+               {echo:round($product['sell_price']*$set[$product['id']]['type_value']/100,2)}
+               {elseif:$set[$product['id']]['type']=='3'}
+               {echo:round($set[$product['id']]['type_value'])}
+               {else:}
+               0.00
+               {/if}
+               {else:}
+               0.00
+               {/if}
+               </strong>
+             <input type="hidden" class="sell-price" value="{$product['sell_price']}"><input type="hidden" class="cost-price" value="{$product['cost_price']}">
+             <label>元</label>
+          </td>
+          <td>
+              <input type="button" value="应用到其他" onclick="apply_all({$product['id']})" style="cursor:pointer;">
+          </td>
+         </tr>
+         {/list}
+        </table>
+        </div>
+        <div style="text-align: center;">
+            <input type="hidden" name="goods_id" value="{$goods['id']}">
+            <input type="button" id="_submit" value="保存设置" style="margin-top:20px;cursor:pointer;">
+        </div>
+    </form>
+    </div>
+</div>
+<script>
+   $(".type").change(function(){
+       switch($(this).val()){
+           case "0":
+               $(this).next().css('display','none').val('');
+               $(this).siblings('span').html('');
+               $(this).siblings('strong').html('0.00');
+               break;
+           case "1":
+               $(this).next().css('display','').val('');
+               $(this).siblings('span').html('%');
+               $(this).siblings('strong').html('0.00');
+               break;
+          case "2":
+               $(this).next().css('display','').val('');
+               $(this).siblings('span').html('%');
+               $(this).siblings('strong').html('0.00');
+               break;
+         case "3":
+               $(this).next().css('display','').val('');
+               $(this).siblings('span').html('元');
+               $(this).siblings('strong').html('0.00');
+               break;      
+       }
+   });
+   $('.type_value_input').bind('input propertychange',function(){
+       var sellprice = $(this).siblings(".sell-price").val();
+       var costprice = $(this).siblings(".cost-price").val();
+       console.log("sell-price:"+sellprice);
+       console.log("cost-price:"+costprice);
+       console.log("select："+$(this).siblings("select").val());
+       console.log("value:"+$(this).val());
+       console.log(isNaN($(this).val()));
+       
+       switch($(this).siblings("select").val()){
+           case　"0":
+               break;
+           case  "1":
+               if(!isNaN($(this).val())){
+                   var value = new Number((sellprice - costprice)*$(this).val() /100);
+                   console.log("value:"+value);
+                   $(this).siblings('strong').html(value.toFixed(2));
+               }
+               break;
+          case  "2":
+               if(!isNaN($(this).val())){
+                   var value = new Number(sellprice*$(this).val() /100);
+                   console.log("value:"+value);
+                   $(this).siblings('strong').html(value.toFixed(2));
+               }
+               break;
+         case  "3":
+               if(!isNaN($(this).val())){
+                   var value = new Number($(this).val());
+                   console.log("value:"+$(this).val());
+                  $(this).siblings('strong').html(value.toFixed(2));
+               }
+               break;
+       }
+   });
+   function apply_all(id){
+       var type = $("#"+id).val();
+       var type_value = $("#"+id).next().val();
+       var unit = $("#"+id).next().next().html();
+      // console.log(type+"|"+type_value);
+       $(".type").prop('value',type);
+       $("input[type=text]").prop('value',type_value).css('display',$("#"+id).next().css('display'));
+       $("span").html(unit);
+       $('.type_value_input').trigger("propertychange");
+   }
+   $("#_submit").click(function(e){
+       e.preventDefault();
+       var flag = true;
+       $(".type").each(function(){
+           if($(this).val() !="0" && $(this).next().val()==""){
+               $(this).next().focus();
+               flag = false;
+               return false;
+           }else if($(this).val() !="0" && isNaN($(this).next().val())){
+               $(this).next().focus();
+               flag = false;
+               return false;
+           }
+       });
+       if(flag){
+           $.post("{url:/goods/save_setting}", $("#commission_form").serialize(),
+                function(data){
+                  var obj = eval('(' + data + ')');
+                  if(obj.status =="success"){
+                     window.parent.location.reload();
+                  }else{
+                      alert('操作失败了，请重试');
+                  }
+           });
+       }
+   });
+</script>

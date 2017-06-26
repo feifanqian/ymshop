@@ -1,0 +1,40 @@
+{if:$order['type']==0||$order['type']==4}
+{set:$items=array("购物车","确认订单信息","选择支付","订购完成");}
+{widget:name=sub_navs action=crumbs items=$items step=4 current=4}
+{else:}
+{set:$items=array("确认订单信息","选择支付","订购完成");}
+{widget:name=sub_navs action=crumbs items=$items step=3 current=3}
+{/if}
+<div class="container">
+    <input type="hidden" name="order_id" value="{$order['id']}">
+    <div class="status-bar">
+        <span>
+        {if:$order['pay_status']==1}
+        <i class='icon-success-48'></i>支付成功，订购已完成！
+        {elseif:isset($payment_type) && $payment_type =='received'}
+        货到付款方式，{if:$order['status']<3}等待订单审核……{else:}订单审核通过！{/if}</b>
+        {/if}
+        {if:$order['type']==4&&$order['is_new']==1}
+        <i class='icon-success-48'></i>订购成功，请您使用您的华点账号<span style="color:red;">{$order['huabi_account']}</span>向 <span style="color:red;">wlucky2101</span>支付<span style="color:red;">{echo:sprintf("%01.0f",$order['huabipay_amount'])}</span>华点，收到您的华点转账后，客服人员会退还华点部分对应金点。
+        {elseif:$order['type']==4&&$order['otherpay_status']==1}
+        {if:$order['otherpay_amount']==0}
+        <i class='icon-success-48'></i>订购成功，请您使用您的华点账号<span style="color:red;">{$order['huabi_account']}</span>向 <span style="color:red;">wlucky2101</span>支付<span style="color:red;">{echo:sprintf("%01.0f",$order['huabipay_amount'])}</span>华点！
+        {else:}
+        <i class='icon-success-48'></i>支付成功，等待后台人工审核华点到账情况！
+        {/if}
+        {/if}
+        </span>
+    </div>
+    <div>
+        <table class="default">
+            <tr> <td style="width:200px;">订单编号：</td><td><i class="icon-order-{$order['type']}-32"></i>{$order['order_no']} &nbsp;&nbsp;&nbsp;&nbsp;<a href="{url:/ucenter/order_detail/id/$order[id]}" target="_blank"> 查看订单</a></td> </tr>
+            {if:$order['type']==4 && $order['otherpay_amount']==0}
+            {else:}
+            <tr> <td style="width:200px;">订单金额：</td><td class="red">{$currency_symbol}{if:$order['type']=='4'}{echo:$order['otherpay_amount']}{else:}{echo:$order['order_amount']}{/if}</td> </tr>
+            <tr> <td style="width:200px;">支付方式：</td><td id="pay_name">{$order['payname']}</td> </tr>
+            {/if}
+        </table>
+    </div>
+    <div class="mt10 mb10 clearfix">
+        <p class="tc mb10 "><a class="btn btn-main"  href="{url:/index/index}">继续购物</a>&nbsp;&nbsp;<a class="btn btn-gray"  href="{url:/ucenter/index}">用户中心</a></p></div>
+    </div>

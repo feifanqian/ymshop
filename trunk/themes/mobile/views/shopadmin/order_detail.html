@@ -1,0 +1,168 @@
+
+<div class="bd">
+    <div class="weui_panel weui_panel_access">
+        <div class="weui_panel_hd">
+            <div class="weui-row weui-no-gutter">
+                <div class="weui-col-40">订单号:</div>
+                <div class="weui-col-6x0" style="text-align: right;">
+                    {$orderinfo['order_no']}
+                </div>
+            </div>
+        </div>
+        <div class="weui_panel_hd">
+            <div class="weui-row weui-no-gutter">
+                <div class="weui-col-40">订单金额:</div>
+                <div class="weui-col-60 red" style="text-align: right;">
+                    ￥{echo:sprintf('%.2f', $orderinfo['totalamount']);}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui_panel">
+        <div class="weui_panel_hd">
+            <div class="weui-row weui-no-gutter">
+                商品清单:
+            </div>
+        </div>
+        <div class="weui_panel_bd">
+
+            {list:$items=$goodslist}
+            <a href="{url:/index/product/id/$item[goods_id]}" class="weui_media_box weui_media_appmsg">
+                <div class="weui_media_hd">
+                    <img class="weui_media_appmsg_thumb weui_media_text_img" src="{echo:Common::thumb($item['img'],100,100);}" />
+                </div>
+                <div class="weui_media_bd">
+                    <h4 class="weui_media_title">{$item['name']}</h4>
+                    <p class="weui_media_desc">商品数量: <span class="red">{$item['goods_nums']}</span></p>
+                    {if:$item['speclist']}
+                    <p class="weui_media_desc">商品规格: {$item['speclist']}</p>
+                    {/if}
+                    <p class="weui_media_desc">商品编号: {$item['goods_no']}</p>
+                    <p class="weui_media_desc">商品货号: {$item['pro_no']}</p>
+                    <div class="weui_timetips">
+                        
+                    </div>
+                </div>
+            </a>
+            {/list}
+        </div>
+    </div>
+
+    <div class="weui_panel">
+        <div class="weui_panel_hd">订单详情</div>
+        <div class="weui_panel_bd">
+            <div class="weui_media_box weui_media_text">
+                <h4 class="weui_media_title">收货信息</h4>
+                <p class="weui_media_desc">{$orderinfo['address']} {$orderinfo['addr']}</p>
+                <ul class="weui_media_info">
+                    <li class="weui_media_info_meta">收货人:{$orderinfo['accept_name']}</li>
+                    <li class="weui_media_info_meta">手机:{$orderinfo['mobile']}</li>
+                    <li class="weui_media_info_meta weui_media_info_meta_extra">{$orderinfo['zip']}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {if:$orderinfo['express_status']=='finished'}
+    <div class="weui_panel">
+        <div class="weui_panel_hd">物流详情</div>
+        <div class="weui_panel_bd">
+            <a href="javascript:;" class="viewexpress" data-id="{$expressinfo['id']}" data-number="{$expressinfo['express_no']}">
+            <div class="weui_media_box weui_media_text">
+                <h4 class="weui_media_title">{$expressinfo['name']}</h4>
+                <p class="weui_media_desc">{$expressinfo['express_no']}</p>
+            </div>
+            </a>
+        </div>
+    </div>
+    {/if}
+
+    <div class="weui_panel">
+        <div class="weui_panel_bd">
+            <div class="weui_media_box weui_media_text">
+                {if:$orderinfo['express_status']=='finished'}
+                <button type="button" class="weui_btn">已发货</button>
+                {else:}
+                <button type="button" id="writeexpress" class="weui_btn weui_btn_primary">填写发货信息</button>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+<div id="expressdetail" class="weui-popup-container">
+    <div class="weui-popup-overlay"></div>
+    <div class="weui-popup-modal">
+
+    </div>
+</div>
+<script>
+    var expresslist = {echo: json_encode($expresslist); };
+    $(function () {
+        $("#writeexpress").on("click", function () {
+            var text = '<input type="text" class="weui_input weui-prompt-input" id="weui-prompt-express-company" value="" placeholder="请选择物流公司" />' +
+                    '<input type="text" class="weui_input weui-prompt-input" id="weui-prompt-express-no" value="" placeholder="请输入物流单号" />';
+            $.modal({
+                title: '填写物流信息',
+                text: text,
+                autoClose: false,
+                buttons: [
+                    {
+                        text: "确定", onClick: function () {
+                            $.post("{url:/shopadmin/order_detail/id/$orderinfo[id]}", {
+                                express_company_id: $("#weui-prompt-express-company").data("values"),
+                                express_no: $("#weui-prompt-express-no").val(),
+                            }, function (data) {
+                                if (data.status == 'success') {
+                                    $.toast("操作成功", "success", function () {
+                                        location.reload();
+                                    });
+                                    $.closeModal();
+                                } else {
+                                    $.toast(data.msg, "forbidden");
+                                }
+                            }, 'json');
+                            return false;
+                        }
+                    },
+                    {
+                        text: "取消", className: "default", onClick: function () {
+                            $.closeModal();
+                        }
+                    }]
+            }, function () {
+                $("#weui-prompt-express-company").select({
+                    title: "选择物流公司",
+                    items: expresslist
+                });
+            });
+        });
+        $(".viewexpress").on("click", function () {
+            $.showLoading("正在加载...");
+            $.ajax({
+                url: "{url:/shopadmin/get_express_info}",
+                type: 'post',
+                data: {id: $(this).data("id"), number: $(this).data("number")},
+                dataType: 'json',
+                success: function (ret) {
+                    $.hideLoading();
+                    if (ret.status == "success") {
+                        var content = "";
+                        $.each(ret.data.content, function (i, j) {
+                            content = content + "<li><b>[" + j.time + "]</b><br/>" + j.context + "</li>";
+                        });
+                        content = "<ul class='express-list'>" + content + "</ul>";
+                        content += '<a href="javascript:;" class="weui_btn weui_btn_plain_primary close-popup">关闭</a><br/><br/>';
+                        $("#expressdetail .weui-popup-modal").html(content);
+                        $("#expressdetail").popup();
+
+
+                    } else {
+                        $.toast("加载物流失败", "forbidden");
+                    }
+                }, error: function (e) {
+                    $.hideLoading();
+                    layer.msg("加载物流失败");
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,13 @@
+
+{set:$weixin_openid = Cookie::get('weixin_openid');}
+{query:name=payment as pa fields=pa.*,pp.class_name join=left join pay_plugin as pp on pa.plugin_id eq pp.id where=pa.status eq 0 and (pa.client_type eq 1 or pa.client_type eq 2) order=pa.sort desc}
+    {if:$weixin_openid!=null}
+             {if:$item['class_name']!='alipaymobile'}
+                    <li ><input class="radio" type="radio" name="payment_id" {if:$key==0}checked="checked"{/if} value="{$item['id']}"><label><b>{$item['pay_name']}</b> {$item['pay_desc']}</label></li>
+             {/if}
+    {else:}
+            {if:$item['class_name']!='weixin'}
+                    <li ><input class="radio" type="radio" name="payment_id" {if:$key==0}checked="checked"{/if} value="{$item['id']}" data-name="{$item['pay_name']}"><label><b>{$item['pay_name']}</b> {$item['pay_desc']}</label> {if:$item['note']!=''}<span class="fr"><a class="payment-note" href="#" note="{echo:htmlspecialchars($item['note'])}">ÏêÇé</a></span>{/if}</li>
+             {/if}
+    {/if}
+{/query}

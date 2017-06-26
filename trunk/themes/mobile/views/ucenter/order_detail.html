@@ -1,0 +1,290 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+{set:list($status, $btn) = $this->order_status($order);}
+
+<div class="weui_cells weui_cells_access">
+    <div class="weui_cell">
+
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>订单状态</p>
+        </div>
+        <div class="weui_cell_ft">
+            {if:$order['type']==4&&$order['otherpay_status']==1}
+            {echo:$status}
+            {else:}
+            <a href="{echo:Url::urlFormat("/simple/order_status/order_id/$order[id]")}">{echo:$status} </a>
+            {/if}
+    </div>
+</div>
+<div class="weui_cell">
+    <div class="weui_cell_bd weui_cell_primary">
+        <p>订单编号</p>
+    </div>
+    <div class="weui_cell_hd">
+        {$order['order_no']}
+    </div>
+</div>
+</div>
+<div class="weui_cells weui_cells_access">
+    <div class="weui_panel_hd">订单动态</div>
+    <div class="weui_cell ">
+        <div class="weui_cell_bd">
+            <div>{$order['create_time']}&nbsp;&nbsp;<span class="black">订单创建</span>
+            </div>
+            {if:$order['pay_status']>0}
+            <div>{$order['pay_time']}&nbsp;&nbsp;<span class="black">订单支付，付款金额{$currency_symbol}<b>{$order['order_amount']}</b></span></div>
+            {/if}
+            {if:$order['delivery_status']>0}
+            <div>
+                {$order['send_time']}&nbsp;&nbsp;<span class="black">订单<b class="orange">全部商品</b>已发货</span></div>
+            {/if}
+            {if:$order['status']==4}
+            <div>
+                {$order['completion_time']}&nbsp;&nbsp;<span class="black">订单完成</span>
+            </div>
+            {/if}
+
+        </div>
+    </div>
+</div>
+
+<div class="weui_cells weui_cells_access">
+    <div class="weui_panel_hd">收货信息</div>
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>收货人</p>
+        </div>
+        <div class="weui_cell_hd">
+            {$order['accept_name']}
+        </div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>地&nbsp;&nbsp;&nbsp;&nbsp;址</p>
+        </div>
+        <div class="weui_cell_hd">
+            {$order['addr']}
+        </div>
+    </div>
+    <div class="weui_cell ">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>手&nbsp;&nbsp;&nbsp;&nbsp;机</p>
+        </div>
+        <div class="weui_cell_hd">
+            {$order['mobile']|'无'}
+        </div>
+    </div>
+    <div class="weui_cell ">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>电&nbsp;&nbsp;&nbsp;&nbsp;话</p>
+        </div>
+        <div class="weui_cell_hd">
+            {$order['phone']|'无'}
+        </div>
+    </div>
+</div>
+
+{if:$order['delivery_status']>0}
+<div class="weui_cells weui_cells_access">
+    <div class="weui_panel_hd">物流信息</div>
+    {if:$invoice && count($invoice)>1}
+    {set:$i=0;}
+    {list:items=$shopgoods}
+    {set:$i++;}
+    {set:$pic=reset($item);}
+    <a href="javascript:;" class="weui_media_box weui_media_appmsg viewexpress" data-id='{$pic['express_company_id']}' data-number="{$pic['express_no']}">
+       <div class="weui_media_hd">
+            <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($pic['img'],100)}" alt="">
+        </div>
+        <div class="weui_media_bd">
+            <h4 class="weui_media_title">包裹{echo:$i;}</h4>
+
+            <p class="weui_media_desc">快递公司:{echo:isset($expresslist[$pic['express_company_id']])?$expresslist[$pic['express_company_id']]['name']:'未知'}</p>
+            <p class="weui_media_desc">物流单号:
+                <span class="red">{$pic['express_no']}</span>
+            </p>
+        </div>
+    </a>
+    {/list}
+    {else:}
+    <div class="weui_cell ">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>物流公司</p>
+        </div>
+        <div class="weui_cell_hd">
+            {$invoice[0]['ec_name']}
+        </div>
+    </div>
+    <div class="weui_cell ">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>快递单号</p>
+        </div>
+        <div class="weui_cell_ft">
+            <a class="viewexpress" data-id='{$invoice[0]['express_company_id']}' data-number="{$invoice[0]['express_no']}" href="javascript:;">查询物流[{$invoice[0]['express_no']}]</a>
+        </div>
+    </div>
+    {/if}
+
+
+</div>
+{/if}
+{if:$order['type']==4}
+
+<div class="weui_cells">
+    <div class="weui_panel_hd">华点账号信息</div>
+    <div class="weui_cell ">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>您的账号</p>
+        </div>
+        <div class="weui_cell_hd">
+            {$order['huabi_account']}
+        </div>
+    </div>
+    <div class="weui_cell ">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>商城账号</p>
+        </div>
+        <div class="weui_cell_hd">
+            wlucky2101
+        </div>
+    </div>
+    <div class="weui_cell ">
+        {if:$order['is_new']}
+        <p style="color:#999999;font-size:12px;line-height:19px; "><i class="iconfont icon-qiandai" style="font-size:18px;"></i>支付小贴士：为了能够尽快给您出货，新的华点订单需要您先支付全额货款。在收到您向商城账号的<span class="red">{echo:sprintf("%.0f",$order['huabipay_amount'])}华点</span>转账后，客服将退还华点对应金点（<span class="red">{echo:sprintf("%.2f",$order['order_amount']-$order['otherpay_amount'])}金点</span>）。</p>
+        {else:}
+        <p style="color:#999999;font-size:12px;line-height:19px; "><i class="iconfont icon-qiandai" style="font-size:18px;"></i>支付小贴士：请使用您的华点账号向商城账号支付<span style="color: red;">{echo:sprintf("%01.0f",$order['huabipay_amount'])}</span>华点，并继续使用在线支付方式支付剩余人民币部分。华点到帐情况需人工审核，切勿重复付款哦，祝您购物愉快！</p>   
+        {/if}
+    </div>
+</div>
+{/if}
+<div class="weui_panel weui_panel_access" id='goodslist'>
+    <div class="weui_panel_hd">商品清单</div>
+    <div class="weui_panel_bd">
+        {set:$total=0.00;$subtotal=0.00;}
+        {list:items=$order_goods}
+        {set:$subtotal = ($item['real_price']*$item['goods_nums']);$total+=$subtotal; $subtotal = sprintf ("%01.2f",$subtotal);}
+        <a href="{url:/index/product/id/$item[goods_id]}" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],100)}" alt="">
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">{echo:TString::msubstr($item['name'],0,30)}</h4>
+                {set:$item['spec']=unserialize($item['spec']);}
+                {if:$item['spec']}
+                <p class="weui_media_desc">规格:
+                    ({list:items=$item['spec'] item=$spec}
+                    <span title="{$spec['name']}:{$spec['value'][2]}">{$spec['value'][2]}</span>
+                    {/list})
+                </p>
+                {/if}
+                <p class="weui_media_desc">数量: {$item['goods_nums']}</p>
+                <p class="weui_media_desc">价格:
+                    <span class="red">{$item['real_price']}</span>
+                </p>
+            </div>
+        </a>
+        {/list}
+    </div>
+    {if:$order['delivery_status']==0}
+    {if:$order['pay_status']==2 || $order['pay_status']==3 }
+     <div class="weui_panel_hd" style="height:0px;margin:0;padding:0;">
+    </div>
+    <div class="weui_panel_hd" style="float:right;">
+          <a href="{url:/ucenter/refund_progress/order_id/}{$order['id']}" class="btn btn-main btn-mini">查看退款进度</a>
+    </div>
+    {elseif:$order['pay_status']==1 || ($order['type']==4 && $order['otherpay_status']==1)}
+    <div class="weui_panel_hd" style="height:0px;margin:0;padding:0;">
+    </div>
+    <div class="weui_panel_hd" style="float:right;">
+          <a href="{url:/ucenter/refund_apply/order_id/}{$order['id']}" class="btn btn-main btn-mini">申请退款</a>
+    </div>
+    {/if}
+    {/if}
+</div>
+{set:$total = sprintf ("%01.2f",$total);}
+
+<div class="weui_cells weui_cells_access">
+    <div class="weui_panel_hd">订单金额</div>
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p></p>
+        </div>
+        <div class="weui_cell_hd">
+            <div class="pb10">
+                {if:$order['type']==3}
+                <p>套餐总金额：{$currency_symbol}{$order['real_amount']}</p>
+                {else:}
+                <p>商品总金额：{$currency_symbol}{$total}</p>
+                {/if}
+                <p>+ 运费：{$currency_symbol}{$order['real_freight']}</p>
+                {if:$order['taxes']>0}
+                <p>+ 税：{$currency_symbol}{$order['taxes']}</p>
+                {/if}
+                <p>- 优惠：{$currency_symbol}{$order['discount_amount']}</p>
+                {if:$order['adjust_amount']!=0}
+                <p>{if:$order['adjust_amount']>0}+{else:}-{/if} 价格调整：{$currency_symbol}{echo:trim($order['adjust_amount'],'-')}</p>
+                <p>调价原因：{$order['adjust_note']|'无原因'}</p>
+                {/if}
+                {if:isset($order['voucher_id'])&&$order['voucher_id']!=0}
+                {set:$voucher=unserialize($order['voucher']);}
+                <p>-优惠券：{$currency_symbol}{$voucher['value']}</p>
+                {/if}
+            </div>
+            <div class="t-line pt10 total">
+                订单支付金额：<b>{$currency_symbol}{$order['order_amount']}</b>
+            </div>
+            {if:$order['type']==4}
+            <div class="t-line pt7 ">
+                订单应付华点：<b>{echo:sprintf("%01.0f",$order['huabipay_amount'])}华点</b>
+            </div>
+            <div class="t-line pt7 ">
+                订单应付现金：<b>{$currency_symbol}{$order['otherpay_amount']}</b>
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>
+<div id="expressdetail" class="weui-popup-container">
+    <div class="weui-popup-overlay"></div>
+    <div class="weui-popup-modal">
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    function order_sign(id) {
+        $.post("{url:/ucenter/order_sign}", {id: id}, function (data) {
+            if (data['status'] == 'success') {
+                location.reload();
+            }
+        }, 'json');
+    }
+     $(".viewexpress").click(function () {
+            $.showLoading("正在加载...");
+            $.ajax({
+                url: "{url:/ucenter/get_express_info}",
+                type: 'post',
+                data: {id: $(this).data("id"), number: $(this).data("number")},
+                dataType: 'json',
+                success: function (ret) {
+                    $.hideLoading();
+                    if (ret.status == "success") {
+                        var content = "";
+                        $.each(ret.data.content, function (i, j) {
+                            content = content + "<li><b>[" + j.time + "]</b><br/>" + j.context + "</li>";
+                        });
+                        content = "<ul class='express-list'>" + content + "</ul>";
+                        content += '<a href="javascript:;" class="btn btn-main close-popup">关闭</a>';
+                        $("#expressdetail .weui-popup-modal").html(content);
+                        $("#expressdetail").popup();
+
+                    } else {
+                        $.toast("加载物流失败,请稍候重试", "forbidden");
+                    }
+                }, error: function (e) {
+                    $.hideLoading();
+                    $.toast("加载物流失败", "forbidden");
+                }
+            });
+     });
+   
+</script>

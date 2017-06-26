@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+    <div class="weui_tab_bd content-padded">
+            <div id="product-detail" class="weui_tab_bd_item weui_tab_bd_item_active">
+                <!--S 商品详情-->
+                <div class="clearfix" >
+                    {$goods['content']}
+                </div>
+                <!--E 商品详情-->
+            </div>
+            <div id="product-attr" class="weui_tab_bd_item">
+                <ul class="attr-list ">
+                    <li><div class="attr-name">商品名称：</div><div class="attr-value">{$goods['name']}</div></li>
+                    <li><div class="attr-name">商品编号：</div><div class="attr-value">{$goods['pro_no']}</div></li>
+                    <li><div class="attr-name">商品重量：</div><div class="attr-value">{$goods['weight']}g</div></li>
+                    <li><div class="attr-name">上架时间：</div><div class="attr-value">{$goods['create_time']}</div></li>
+                    {list:items=$goods_attrs}
+                    <li><div class="attr-name">{$item['name']}：</div><div class="attr-value">{$item['vname']}</div></li>
+                    {/list}
+                </ul>
+            </div>
+
+            <div id="product-protection" class="weui_tab_bd_item">
+                <!--S 售后保障-->
+                <div class="clearfix">
+                    {if:$goods['sale_protection']}
+                    <div class="mb20">
+                        {$goods['sale_protection']}
+                    </div>
+                    {/if}
+                    <div>
+                        {$sale_protection}
+                    </div>
+                </div>
+                <!--E 售后保障-->
+            </div>
+        </div>"
+    </body>
+</html>

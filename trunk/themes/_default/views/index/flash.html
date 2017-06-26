@@ -1,0 +1,38 @@
+<div class="bg-base flash-base">
+    <div class="container">
+        <!--S 产品展示-->
+        <!--        <ol class="bread-crumb">
+                    <li><a href="#">限时▪抢购</a></li>
+                    <li><a href="#">特卖▪专场</a></li>
+                </ol>-->
+
+        <ul class="product-list clearfix">
+            {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end asc,gb.id desc limit=12 page=1 id=$flashbuy}
+            <li class="item  itemList" >
+                <dl class="product">
+
+                    <dt class="img"><a href="{url:/index/flashbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],200,200,'fwfh')}" ></a>
+                        <span class="limited" style=" display: block;position: absolute;background: red;color: white;bottom: 10px;right: 0;padding: 0 5px;">限量：{$item['max_num']}份</span></dt>
+                    <dd class="title" style='height: 42px;'><a href="{url:/index/flashbuy/id/$item[id]}">{echo:TString::msubstr($item['title'],0,15)}</a></dd>
+                    <dd class="price"><span class="chophandprice">剁手价<span>{$item['price']}元</span></span><span class="originalprice">原价</span>{$item['sell_price']}元</span></dd>
+                    <dd class="flashshoping">{if:$item['is_end']==0}<a class="flashbtn btn-main" href="{url:/index/flashbuy/id/$item[id]}">立即抢购</a>{else:}
+                        <span class="flashbtn disabled btn-gray" style="padding: 5px 15px;">明天再来</span>{/if}</dd> 
+                </dl>
+            </li>
+            {/list}
+        </ul>
+
+        <div class="flashlongbanner">
+            {query:name=ad where=number eq '7ftlpjv6-bwhz-sad8-cvzy-z11we0mj'} 
+            {set:$lists = unserialize($item['content']);} 
+            {list:items=$lists item=$ad}
+            <a href="{url:$ad[url]}" target="_blank"><img src="{url:@$ad[path]}" alt="" style="width: 1050px;height: 100px;"></a>
+            {/list} 
+            {/query}
+            
+        </div>
+   
+        <!--        <div class=" mt10 page-nav">{echo:$flashbuy->pageBar();}</div>-->
+        <!--E 产品展示-->
+    </div>
+</div>

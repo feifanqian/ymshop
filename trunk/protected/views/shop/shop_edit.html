@@ -1,0 +1,302 @@
+{echo:JS::import('form');}
+{echo:JS::import('editor');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<h1 class="page_title">商家编辑</h1>
+<form action="{url:/shop/shop_save}" class=" " method="post" callback="check_tab_location" >
+  <input type="hidden" name="id" value="{$shop['id']|''}">
+  <div id="obj_form" class="form2 tab">
+    <!-- tab 头 start -->
+    <ul class="tab-head">
+      <li>基本信息</li>
+      <li>描述信息</li>
+      <li>SEO信息</li>
+      <li>售后保障</li>
+      <li>用户名密码</li>
+    </ul>
+    <!-- tab 头 end -->
+    <!-- tab body start -->
+    <div class="tab-body">
+      <!-- 基本信息 start -->
+      <div>
+        <dl class="lineD">
+          <dt> <b class="red">*</b>
+            分类：
+          </dt>
+          <dd>
+            <select name="category_id" id="category_id" pattern="[1-9]\d*" alt="选择分类，若无分类请先创建。">
+              <option value="0">选择分类</option>
+              {set:$id=isset($id)?$id:0;}
+              {query:name=shop_category order=path/}
+              {set:$shop_category = Common::treeArray($items)}
+              {list:items=$shop_category}
+              {if:!isset($path) || strpos($item['path'],$path)===false}
+              {set:$num = count(explode(',',$item['path']))-3;}
+                    <option value="{$item['id']}">{if:$num>0}├{/if}{echo:str_repeat('──',$num)}{$item['name']}</option>
+                    {/if}
+              {/list}
+            </select>
+            <label></label>
+          </dd>
+        </dl>
+        <dl class="lineD">
+          <dt>
+            <b class="red">*</b>
+            商家名称：
+          </dt>
+          <dd>
+            <input name="name" type="text" pattern="required" value="{$shop['name']|''}" style="width:400px;" alt="不能为空">
+            <label></label>
+          </dd>
+        </dl>
+        <dl class="lineD">
+          <dt>
+            商家副标题：
+          </dt>
+          <dd>
+            <input name="subtitle" type="text"  value="{$shop['subtitle']|''}" style="width:400px;" >
+            <label></label>
+          </dd>
+        </dl>
+        <dl class="lineD">
+          <dt>
+            商家星级：
+          </dt>
+          <dd>
+            <input name="star" type="text"  value="{$shop['star']|''}" >
+            <label></label>
+          </dd>
+        </dl>
+        <dl class="lineD">
+          <dt>
+            商家电话：
+          </dt>
+          <dd>
+            <input name="telphone" type="text"  value="{$shop['telphone']|''}" >
+            <label></label>
+          </dd>
+        </dl>
+        <dl class="lineD">
+          <dt>
+            商家官网：
+          </dt>
+          <dd>
+            <input name="website" type="text"  value="{$shop['website']|''}" >
+            <label></label>
+          </dd>
+        </dl>
+        <dl class="lineD">
+          <dt>
+            商家地址：
+          </dt>
+          <dd>
+            <input name="address" type="text"  value="{$shop['address']|''}" style="width:400px;" >
+            <label></label>
+          </dd>
+        </dl>
+        <dl class="lineD">
+          <dt>商家关键词：</dt>
+          <dd>
+            <input name="tag_ids" type="text"  value="{$shop['tag_ids']|''}" style="width:400px;">
+            <label></label>
+          </dd>
+        </dl>
+        <dl class="lineD">
+          <dt>商家包邮：</dt>
+          <dd>
+            <input name="freeshipping" type="radio"  value="1" {echo:isset($shop['freeshipping'])&&$shop['freeshipping']?'checked="checked"':''}/>是
+            <input name="freeshipping" type="radio"  value="0" {echo:!isset($shop['freeshipping'])||!$shop['freeshipping']?'checked="checked"':''} />否(按区域重量自动计算运费)
+            <label></label>
+          </dd>
+        </dl>
+        <dl class="lineD clearfix">
+          <dt>产品相册：</dt>
+          <dd class="min_inputs ">
+
+            <button class="button  select_button" type="button" >
+              <b class="icon-plus green"></b>
+              添加图片
+            </button> <b class="red">(注：点选图片，使其成为默认图片)</b>
+
+          </dd>
+        </dl>
+        <dl>
+          <dt></dt>
+          <dd>
+            <ul class="piclist" id="pic_list">
+              {if:isset($shop['imgs']) && $shop['imgs']!="" }
+              {set:$imgs=unserialize($shop['imgs']);}
+            {list:items=$imgs}
+              <li {if:$item == $shop['img']} class="current" {/if}>
+                <div class="bord">
+                  <input type="hidden" name="imgs[]" value="{$item}">
+                  <img src="{url:@$item}" data-src={$item} onclick="selectImg(this)" width="80" height="80" alt=""></div>
+                <div class="opera">
+                  <a class="icon-arrow-left-2" href="javascript:;"></a>&nbsp;&nbsp;<a class="icon-arrow-right-2" href="javascript:;"></a>&nbsp;&nbsp;<a class="icon-link" href="javascript:;" onclick="linkImg(this)"></a>&nbsp;&nbsp;<a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
+                </div>
+              </li>
+              {/list}
+            {/if}
+            </ul>
+              <input name="img" type="text" style="visibility: hidden;width:0;" value="{$shop['img']|''}" pattern="required" id="img_index" alt="添加商家图片"/>
+              <label></label>
+          </dd>
+        </dl>
+  </div>
+  <!-- 描述信息 start -->
+  <div>
+    <h2>详细介绍：</h2>
+    <div>
+        <textarea id="contentdetail" class="kindeditor" pattern="required" name="content" style="width:700px;height:360px;visibility:hidden;">{$shop['content']|''}</textarea>
+      <label></label>
+    </div>
+  </div>
+  <!-- 描述信息 end -->
+  <!-- 基本信息 end -->
+  <!-- SEO 信息 start -->
+  <div>
+    <dl class="lineD">
+      <dt>页面标题：</dt>
+      <dd>
+        <input name="seo_title" type="text" value="{$shop['seo_title']|''}">
+        <label>页面标题(TITLE)</label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt>页面关键词：</dt>
+      <dd>
+        <input name="seo_keywords" type="text" value="{$shop['seo_keywords']|''}">
+        <label>页面关键词(META_KEYWORDS)</label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt>页面描述：</dt>
+      <dd>
+        <input name="seo_description" type="text" value="{$shop['seo_description']|''}">
+        <label>页面描述(META_DESCRIPTION)</label>
+      </dd>
+    </dl>
+  </div>
+  <!-- SEO 信息 end -->
+  <!-- 售后保障 start -->
+  <div>
+    <h2>售后保障：</h2>
+    <div>
+      <textarea id="sale_protection" class="kindeditor" name="sale_protection" style="width:700px;height:360px;visibility:hidden;">{$shop['sale_protection']|''}</textarea>
+      <label></label>
+    </div>
+  </div>
+  <!-- 售后保障 end -->
+  <!-- 用户名密码 begin -->
+  <div>
+      <dl class="lineD">
+        <dt>用户名：</dt>
+        <dd>
+          <input name="username" type="text" value="{$shop['username']|''}">
+          <label>用户名</label>
+        </dd>
+      </dl>
+      <dl class="lineD">
+        <dt>密码：</dt>
+        <dd>
+          <input name="password" type="text" value="">
+          <label>密码(不修改时请留空)</label>
+        </dd>
+      </dl>
+  </div>
+  <!-- 用户名密码 end -->
+</div>
+<!-- tab 头 end -->
+<div style="text-align:center;margin-top:20px;">
+  <input type="submit" class="focus_button" value="提交" >
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <input type="reset" value="重置" class="button"></div>
+</div>
+</form>
+<script type="text/javascript">
+var form =  new Form();
+form.setValue('category_id','{$shop["category_id"]}');
+form.setValue('brand_id','{$shop["brand_id"]}');
+
+$(".select_button").on("click",function(){
+      uploadFile();
+      return false;
+    });
+$("#shop_no").on("change",function(){
+  var that = $(this);
+  if(that.val()){
+    var old_val = $("input[name='pro_no']").val();
+    $("input[name='pro_no']").val(that.val());
+    $("input[name='pro_no[]']").each(function(i){
+      var current_value = $(this).val();
+      var temp = old_val+'_'+(i+1);
+      if(current_value=='' || current_value==temp) $(this).val(that.val()+'_'+(i+1));
+    });
+  }
+
+})
+function uploadFile(){
+  art.dialog.open('{url:/admin/photoshop?type=shop}',{id:'upimg_dialog',lock:true,opacity:0.1,title:'选择图片',width:613,height:380});
+}
+function selectImg(id){
+  var img = $(id).attr('data-src');
+  $("#pic_list li").removeClass("current");
+  $(id).parent().parent().addClass("current");
+  $("#img_index").val(img);
+}
+//回写选择图片
+function setImg(value, needclose){
+  var show_src = value.substr(0,4)!="http" ? ADMIN.upyuncfg.upyun_cdnurl + value : value;
+
+  if($("#pic_list img[src='"+show_src+"']").get(0)){
+    art.dialog.alert("图片已经添加，请不要重复添加！");
+  }else{
+    $("#pic_list").append('<li> <div class="bord"><input type="hidden" name="imgs[]" value="'+value+'" /> <img src="'+show_src+'" data-src="'+value+'" onclick="selectImg(this)" width="80" height="80" alt=""></div> <div class="opera"><a class="icon-arrow-left-2" href="javascript:;" ></a>&nbsp;&nbsp;<a class="icon-arrow-right-2" href="javascript:;"></a>&nbsp;&nbsp;<a class="icon-link" href="javascript:;" onclick="linkImg(this)"></a>&nbsp;&nbsp;<a class="icon-close" href="javascript:;" onclick="delImg(this)"></a> </div> </li>');
+      bindEvent();
+      if($("#pic_list li.current").length <=0 ){
+        $("#pic_list li:eq(0)").addClass("current");
+        $("#img_index").val(value);
+      }
+      FireEvent(document.getElementById('img_index'),'change');
+      needclose = needclose==undefined ? 1 : needclose;
+      if(needclose){
+        art.dialog({id:'upimg_dialog'}).close();
+      }
+  }
+
+}
+//删除添加的图片
+function delImg(id){
+  $(id).parent().parent().remove();
+  if($("#pic_list li:eq(0)").length <= 0)$("#img_index").val('');
+}
+function linkImg(id){
+  var src = $(id).parent().parent().find('img').attr('src');
+  art.dialog({id:'linkDialog',title:'图片地址',content:'<div>图片地址：<input type="text" value='+src+' style="width:300px;"/></div>',width:420});
+}
+
+
+//选择分类
+$("#category_id").on("change",function(){
+  $.post("{url:/ajax/category_type}", {id: $(this).val()},function(data){
+    form.setValue('type_id',data.type_id);
+    $("#type_id").change();
+  },"json");
+})
+
+//操作左右按钮事件绑定
+function bindEvent(){
+  $(".icon-arrow-right-2").off();
+  $(".icon-arrow-left-2").off();
+  $(".icon-arrow-right-2").on("click",function(){
+    var current_tr = $(this).parent().parent();
+    current_tr.insertAfter(current_tr.next());
+  });
+    $(".icon-arrow-left-2").on("click",function(){
+    var current_tr = $(this).parent().parent();
+    if(current_tr.prev().html()!=null)current_tr.insertBefore(current_tr.prev());
+  });
+
+}
+bindEvent();
+</script>

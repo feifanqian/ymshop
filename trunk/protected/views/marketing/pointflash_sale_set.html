@@ -1,0 +1,100 @@
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+{echo:JS::import('editor');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<style type="text/css">
+ tr:nth-child(even){
+     background:#f1f2f3;
+ }
+ tr{
+     height: 50px;
+ }
+ inpu{
+     color:rgb(117, 45, 45);
+ }
+</style>
+<div style="overflow: auto;width:850px;margin:auto;">
+    <div>
+    <form action="" method="post" id='point_form'>
+        <input type="hidden" value="{$id}" name='id'>
+        <div>
+            <dl class="lineD">
+                <dt><b class="red">*</b> 抢购活动名称：</dt>
+                <dd>
+                  <input name="title" type="text" class="big" pattern="required" value="{$pointflash['title']}" />
+                  <label> 抢购活动名称必填！</label>
+                </dd>
+            </dl>
+            <dl class="lineD">
+                <dt><b class="red">*</b> 参加抢购数量：</dt>
+                <dd>
+                  <input name="max_sell_count" type="text" class="small" pattern="int" value="{$pointflash['max_sell_count']}" />
+                  <label> 此抢购活动最多允许抢购的商品数量！</label>
+                </dd>
+            </dl>
+            <dl class="lineD">
+                <dt><b class="red">*</b> 限购数量：</dt>
+                <dd>
+                  <input name="quota_count" type="text" class="small" pattern="int" value="{$pointflash['quota_count']|0}" />
+                  <label> 限时抢购每个人能购买的数量！0表示不限制</label>
+                </dd>
+            </dl>
+             <dl class="lineD">
+                <dt><b class="red">*</b>开始时间：</dt>
+                <dd>
+                  <input name="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$pointflash['start_date']|date('Y-m-d H:i:s',strtotime($pointflash['start_date']))|''}" onfocus="WdatePicker({minDate:'{echo:date('Y-m-d H:i:s')}',dateFmt:'yyyy-MM-dd HH:mm'})">
+                  <label></label>
+                </dd>
+            </dl>
+            <dl class="lineD">
+                <dt><b class="red">*</b>结束时间：</dt>
+                <dd>
+                  <input name="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$pointflash['end_date']|date('Y-m-d H:i:s',strtotime($pointflash['end_date']))|''}"  onfocus="WdatePicker({minDate:'{echo:date('Y-m-d H:i:s')}',dateFmt:'yyyy-MM-dd HH:mm'})">
+                  <label></label>
+                </dd>
+            </dl>
+        </div>
+        
+        <div style="text-align: center;min-height:130px;" >
+        <table align="center" width="100%" style="border-collapse: collapse;" >
+            <tr><th width="10%" style="text-align: center;">货号</th><th width="20%" style="text-align: center;">规格</th><th width="10%" style="text-align: center;">销售价</th><th style="text-align: center;">抢购积分购买设置</th><th width="15%" style="text-align: center;">操作</th></tr>
+            
+         {list:items=$products item=$product}  
+         <tr style="border-top: 1px solid gray;border-bottom: 1px solid gray;">
+          <td>{$product['pro_no']}</td><td>{$product['spec']}</td><td>{$product['sell_price']}</td>
+          <td style="text-align: center;padding-left: 10px;">
+            <input type="text" class="cash" name="cash[{$product['id']}]"  value="{$pointflash['price_set'][$product['id']]['cash']}" style="width:50px;">RMB+<input type="text" name="point[{$product['id']}]" class="point" style="width:50px;" value="{$pointflash['price_set'][$product['id']]['point']}">积分
+          </td>
+          <td>
+            <input type="button" value="应用到其他" onclick="apply_all({$product['id']})" style="cursor:pointer;">
+          </td>
+         </tr>
+         {/list}
+        </table>
+        </div>
+        <div style="text-align: center;height: 66px;">
+            <input type="button" id="_submit" value="提交抢购" style="margin-top:20px;cursor:pointer;background: rgba(35, 60, 89, 0);line-height: 20px;">
+        </div>
+    </form>
+    </div>
+</div>
+<script>
+    function apply_all(id){
+      var cash = $("input[name='cash["+id+"]']").val();
+      var point = $("input[name='point["+id+"]']").val();
+      $(".cash").val(cash);
+      $(".point").val(point);
+   }
+   $("#_submit").click(function(e){
+       e.preventDefault();
+       $.post("{url:/marketing/pointflash_sale_save/type/$type}", $("#point_form").serialize(),
+                function(data){
+                  if(data.status =="success"){
+                     window.parent.location.reload();
+                  }else{
+                      alert(data.msg);
+                  }
+           },'json');
+   });
+</script>

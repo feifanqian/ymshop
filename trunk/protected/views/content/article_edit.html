@@ -1,0 +1,84 @@
+{echo:JS::import('form');}
+{echo:JS::import('editor');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<h1 class="page_title">文章编辑</h1>
+<div id="obj_form" class="form2">
+    <form action="{url:/content/article_save}" method="post" >
+        {if:isset($id)}<input type="hidden" name="id" value="{$id}">{/if}
+    <dl class="lineD">
+      <dt>标题：</dt>
+      <dd>
+        <input name="title" type="text" pattern="required" value="{$title}">
+        <label>文章标题</label>
+      </dd>
+      </dl><dl class="lineD">
+      <dt>分类：</dt>
+      <dd>
+        <select id="category_id"  name="category_id"   pattern="int">
+        {query:name=category order=path /}
+        {set:$category = Common::treeArray($items);}
+        {list:items=$category}
+        {set:$num = count(explode(',',$item['path']))-3;}
+        <option value="{$item['id']}">{if:$num>0}├{/if}{echo:str_repeat('──',$num)}{$item['name']}</option>
+        {/list}
+        </select>
+
+        <label>（头条分类记得添加缩略图和摘要）</label>
+      </dd>
+      </dl>
+      <dl class="lineD">
+      <dt>缩略图：</dt>  
+      <dd >
+         <button class="button  select_button" type="button" >
+              <b class="icon-plus green"></b>
+              添加图片
+         </button> 
+         <input type="hidden" name="thumb_img" value="{if:isset($thumb_img)&&$thumb_img!=''}{$thumb_img}{/if}">
+      </dd>
+    </dl>
+      <dl class="lineD" {if:isset($thumb_img)&&$thumb_img!=""}{else:}style="display: none;"{/if} id="show_img">
+      <dt></dt>
+      <dd>{if:isset($thumb_img)&&$thumb_img!=""}<img src="{url:@$thumb_img}" width="100" height="100">{/if}</dd>
+      </dl>
+       <dl class="lineD">
+      <dt>摘要：</dt>  
+      <dd >
+          <textarea name="summary">{$summary}</textarea>
+          <label>100字之内</label>
+      </dd>
+    </dl>
+      <dl class="lineD">
+      <dt>内容：</dt>
+      <dd>
+          <textarea id="contentdetail" class="kindeditor" pattern="required" name="content" style="width:700px;height:360px;visibility:hidden;">{$content}</textarea>
+        <label></label>
+      </dd>
+    </dl>
+    <div style="text-align:center"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
+    </form>
+</div>
+<script type="text/javascript">
+var form =  new Form();
+form.setValue('category_id','{$category_id}');
+$(".select_button").on("click",function(){
+      uploadFile();
+      return false;
+    });
+function uploadFile(){
+  art.dialog.open('{url:/admin/photoshop?type=goods}',{id:'upimg_dialog',lock:true,opacity:0.1,title:'选择图片',width:613,height:380});
+}
+//回写选择图片
+function setImg(value, needclose){
+  var show_src = value.substr(0,4)!="http" ? ADMIN.upyuncfg.upyun_cdnurl + value : value;
+  if($("#show_img img").length==0){
+      $("#show_img dd").append('<img src="'+show_src+'" width="100" height="100">');
+      $("input[name='thumb_img']").val(value);
+      $("#show_img").show();
+  }else{
+      $("#show_img img").attr("src",show_src);
+      $("input[name='thumb_img']").val(value);
+  }
+  art.dialog({id:'upimg_dialog'}).close();
+}
+</script>

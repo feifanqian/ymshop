@@ -1,0 +1,101 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{set:$status=array("0"=>"<span class='green icon-busy'>未处理</span>","1"=>"<span class='gray icon-coin'>已通过</span>","-1"=>"<span class='red icon-remove'>已作废</span>");}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+    <a class="icon-delicious" href="{url:/districtadmin/apply_join}"> 查看全部</a>
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:50px">选择</th>
+        <th style="width:65px">操作</th>
+        <th style="width:80px">申请者</th>
+        <th style="width:100px;">小区名</th>
+        <th style="width:100px">具体位置</th>
+        <th style="width:140px">联系人</th>
+        <th style="width:140px">联系电话</th>
+        <th style="width:140px">推荐小区</th>
+        <th style="width:140px">申请时间</th>
+        <th style="width:140px">处理时间</th>
+        <th style="width:140px;">支付状态</th>
+        <th style="width:120px">状态</th>
+    </tr>
+    {query:name=district_apply as da join=left join user as u on da.user_id eq u.id left join district_shop as ds on da.reference eq ds.id fields=da.*,u.nickname,u.avatar,ds.name as invite_shop_name where=$where id=$obj page=1 order= id desc}
+        <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:65px" class="btn_min">
+                <div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                        <ul>
+                            {if:$item['status']==0}
+                            <li><a class="icon-key" href="javascript:;" onclick="pass({$item['id']})"> 通过请求</a></li>
+                            <li><a class="icon-remove" href="javascript:;" onclick="cancel({$item['id']})"> 作废该请求</a></li>
+                            <!--<li><a class="icon-credit" href="javascript:;" onclick="check_pay({$item['id']})"> 支付查询</a></li>-->
+                            {else:}
+                            <li><a class="icon-question" href="javascript:;"> 暂无可选操作</a></li>
+                            {/if}
+                        </ul>
+                   </div>
+                </div> 
+            </td>
+            <td style="width:120px">{$item['nickname']}</td>
+            <td style="width:80px">{$item['name']}</td>
+            <td style="width:100px;">{$item['location']}</td>
+            <td style="width:100px">{$item['linkman']}</td>
+            <td style="width:100px">{$item['linkmobile']}</td>
+            <td style="width:100px;">{$item['invite_shop_name']}</td>
+            <td style="width:140px">{$item['apply_time']}</td>
+            <td style="width:140px">{$item['admin_handle_time']|"-------"}</td>
+            <td style="width:140px">{if:$item['free']==1}<span class='red'>免费入驻</span>{else:}{if:$item['pay_status']==0}等待支付{elseif:$item['pay_status']==1}<span class="red">已支付</span>{/if}{/if}</td>
+            <td style="width:120px">{$status[$item['status']]}</td>
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<script type="text/javascript">
+function cancel(id){
+     layer.prompt({title: '请输入作废理由', formType: 2}, function(text, index){
+     layer.close(index);
+     var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+     $.post("{url:/districtadmin/updateApplyStatus}",{id:id,status:-1,reason:text},function(data){
+            layer.close(index);
+            if(data.status=='success'){
+            layer.msg('您拒绝了提现申请，理由是：'+text, {icon: 6},function(){
+                tools_reload();
+            }); 
+          }else{
+            layer.msg(data.msg, {icon: 5}); 
+          }
+        },'json');
+   });
+}
+function pass(id){
+    layer.confirm('您确定要通过吗？', {
+        btn: ['确定','取消'] //按钮
+      }, function(index){
+        layer.close(index);
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $.post("{url:/districtadmin/updateApplyStatus}",{id:id,status:1},function(data){
+             layer.close(index);
+            if(data.status=='success'){
+            layer.msg('操作成功', {icon: 6},function(){
+                tools_reload();
+            }); 
+          }else{
+            layer.msg(data.msg, {icon: 5}); 
+          }
+        },'json');
+      }, function(){
+          layer.msg("您取消了操作"); 
+        });
+}
+$("#condition").on("click",function(){
+    layer.msg("暂未完成，请等待");
+   return false;
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/commission/commission_withdraw}',method:'get'});},data:{'c.withdraw_no':{name:'申请单号'},'c.name':{name:'用户名'},'c.status':{name:'状态',values:{0:'未处理',1:'已转账',2:'已作废'}},'c.withdraw_amount':{name:'提现金额'},'c.bank':{name:'开户银行'}}});
+})
+</script>

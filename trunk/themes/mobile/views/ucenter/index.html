@@ -1,0 +1,205 @@
+{echo:JS::import("form")}
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style>
+    body {
+        padding-top:0;
+    }
+    .header {
+        display:none;
+    }
+    .weui-badge {
+        display: inline-block;
+        padding: .15em .4em;
+        min-width: 8px;
+        border-radius: 18px;
+        background-color: #F43530;
+        color: #FFFFFF;
+        line-height: 1.2;
+        text-align: center;
+        font-size: 12px;
+        vertical-align: middle;
+    }
+    .js_show .js_category{
+        font-size: 14px;
+        color: gray;
+    }
+    .js_category{
+        font-size: 14px;
+        color: black;
+    }
+    .js_category p{
+        width: 20px;
+        float: right;
+    }
+    .js_show .js_categoryInner{
+        display: block;
+    }
+    .js_categoryInner{
+        display: none;
+    }
+</style>
+<!--<div class=" p20 bg-title-2">
+    <table width="100%" class="user-info  ">
+        <tr>
+            <td width="60%"></td>
+            <td width="40%"></td>
+        </tr>
+        <tr>
+            <td>积分：{$customer['point']}</td>
+            <td>级别：{$customer['gname']|'普通会员'}</td>
+        </tr>
+    </table>
+</div>-->
+<div id="ucenter-top">
+    <div id="ucenter-avatar"><img src='{echo:Url::urlFormat("@".$user['avatar'])}' alt=""></div>
+    <div id="ucenter-account">
+        <p>昵称：{$user['nickname']}</p>
+        <p>级别：{$customer['gname']|'普通会员'}</p>
+    </div>
+</div>
+<div class="content-padded" id="orderstatus">
+    <div class="weui-row">
+        <div class="weui-col-20">
+            <a href="{url:/ucenter/order/}"><i class="iconfont icon-allorder"></i>全部订单</a>
+        </div>
+        <div class="weui-col-20">
+            <a href="{url:/ucenter/order/status/unpay}">
+                {if:$order['pending']}<span class="cart-num tip">{$order['pending']}</span>{/if}
+                <i class="iconfont icon-unpay"></i>待付款</a>
+        </div>
+        <div class="weui-col-20">
+            <a href="{url:/ucenter/order/status/undelivery}">
+                {if:$order['undelivery']}<span class="cart-num tip">{$order['undelivery']}</span>{/if}
+                <i class="iconfont icon-undelivery"></i>待发货</a>
+        </div>
+        <div class="weui-col-20">
+            <a href="{url:/ucenter/order/status/unreceived}">
+                {if:$order['unreceived']}<span class="cart-num tip">{$order['unreceived']}</span>{/if}
+                <i class="iconfont icon-deliveried"></i>已发货</a>
+        </div>
+        <div class="weui-col-20">
+            <a href="{url:/ucenter/review}">
+                {if:$comment['num']}<span class="cart-num tip">{$comment['num']}</span>{/if}
+                <i class="iconfont icon-uncomment"></i>待评价</a>
+        </div>
+    </div>
+</div>
+<div style='margin-top:10px;'>
+{if:$is_hirer==true}
+<div class="weui_panel js_show">
+    <div class="weui_panel_hd js_category">我的小区<p><i class="fa fa-navicon "></i><p></div>
+    <div class="weui_panel_bd js_categoryInner">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+                <a class="weui_cell" href="/district/district">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-home icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>进入小区</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
+{if:$is_promoter===true}
+ <div class="weui_panel js_show">
+    <div class="weui_panel_hd js_category">推广员中心{if:Req::args("first")==1}<span class="weui-badge" style="margin-left: 5px;margin-bottom:2px;">NEW</span>{/if}<p><i class="fa fa-navicon "></i><p></div>
+    <div class="weui_panel_bd js_categoryInner">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+                <a class="weui_cell" href="/ucenter/promoter_invite">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-tuan icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>邀请入驻</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                <a class="weui_cell" href="/ucenter/promoter_home">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-qiandai icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>我的收益</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                 <a class="weui_cell" href="/ucenter/promoter_income">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-qiandai icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>收益记录</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                 <a class="weui_cell" href="/ucenter/promoter_withdraw_list">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-jifenjilu icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>提现记录</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                  <a class="weui_cell" href="/ucenter/promoter_sale">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-allorder icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>产品销售记录</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+ {/if}
+{widget:name=sub_navs action=ucsidebar sidebar=$sidebar act=$actionId}
+</div>
+{if:!Common::checkInWechat()}
+<div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/simple/logout}" class="weui_btn weui_btn_primary">安全退出</a></div></div>
+{else:}
+    {if:isset($open_change)&&$open_change==true}
+    <!--<div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_account}" class="weui_btn weui_btn_primary">切换微信绑定账号</a></div></div>-->
+    {elseif:isset($open_bind)&&$open_bind==true}
+    <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_account}" class="weui_btn weui_btn_primary">绑定已有账号</a></div></div>
+    {/if}
+{/if}
+<script>
+    $(function(){
+        $('.js_category').on('click', function(){
+            if($(this).parent().hasClass("js_show")){
+                 $(this).next(".js_categoryInner").slideUp();
+                 $(this).parent().removeClass("js_show");
+            }else{
+                 $(this).next(".js_categoryInner").slideDown();
+                 $(this).parent().addClass("js_show");
+            }
+        });
+    });
+</script>

@@ -1,0 +1,25 @@
+
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+{if:count($attention['data'])>0}
+<div class="box">
+	<ul class="list-nav">
+	{list:items=$attention['data']}
+		<li class="list-item  item attention-list">
+			<a href="{url:/index/product/id/$item[gid]}"  class="layout-2 h-box m20 more" style="height:4.85em;overflow:hidden">
+			<div><img src="{echo:Common::thumb($item['img'],100,100)}"></div>
+			<div class="h-box">
+				<dl>
+				<dd class="name">{echo:TString::msubstr($item['name'],0,16)}</dd>
+				<dd class="price">价格：<b class="red">{$currency_symbol}{$item['sell_price']}  {if:$item['store_nums']>0}</b>有货{else:}缺货{/if}</dd>
+				</dl>
+			</div>
+			</a>
+		</li>
+	{/list}
+	</ul>
+</div>
+{else:}
+	<div class="ma20 bg-white p20">
+	<p class="p20">没有关注的商品，赶快收藏吧！</p>
+	</div>
+{/if}

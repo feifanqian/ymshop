@@ -1,0 +1,194 @@
+
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+<!--S 产品展示-->
+<link type="text/css" rel="stylesheet" href="{url:#css/product.css}" />
+<script type='text/javascript' src="{url:#js/jquery.enlarge.js}"></script>
+<style>
+    .product-info {
+        float:left;
+    }
+    .spec-values {float:left;margin-top:5px;}
+    .spec-values li{float:left;display:block;border:1px solid #eee;padding:5px;height:30px;min-width:35px;margin-right:5px;margin-bottom:5px}
+</style>
+<div class="bg-white">
+    <div class="product-title" style="margin-bottom:0;padding-bottom:10px;padding-top:50px;margin:0;">
+        {$bund['title']}
+    </div>
+</div>
+<div class="bg-white weui_cells" style="margin-top:0;">
+    <div class="weui-row weui-no-gutter product-groupbuy-price">
+        <div class="weui-col-50"><em>套餐价</em> <span class="red">{$currency_symbol}{$bund['price']}</span></div>
+        <div class="weui-col-50"><em>原价</em> <del class="del">{$currency_symbol}{$goods_price}</del></div>
+        <div class="weui-col-50"><em>折扣</em> <span class="del">{echo:sprintf("%0.2f",$bund['price']*10/$goods_price)}</span></div>
+        <div class="weui-col-50"><em>节省</em> <span class="del">{echo:$goods_price-$bund['price']}</span></div>
+    </div>
+</div>
+<div class="weui_panel weui_panel_access product-list">
+    <div class="weui_panel_hd">请选择商品规格</div>
+    <div class="weui_panel_bd">
+        {set:$sets_enable=true;}
+        {list:items=$goods}
+        <div class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <a href="{url:/index/product/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],100,100)}" class="weui_media_appmsg_thumb" width="60" height="60"></a>
+            </div>
+            <div class="weui_media_bd">
+                <div class="product-info" gid="{$item['id']}">
+                    <ul>
+                        <li ><h1 class="f18">{$item['name']}</h1></li>
+                        <li><label>销售价：</label><span id="sell_price" class="price">{$currency_symbol}{$item['sell_price']}</span></li>
+                        {if:$item['store_nums']<=0}{set:$sets_enable=false;}{/if}
+                        <li><label>库存：</label>(<span>{$item['store_nums']}</span>)</li>
+                    </ul>
+                    {set:$specs = unserialize($item['specs']);}
+                    {if:!empty($specs)}
+                    <div class="spec-info clearfix" >
+                        {list:items=$specs item=$spec}
+                        <div class="weui-row weui-no-gutter clearfix">
+                            <div class="weui-col-25">{$spec['name']}：</div>
+                            <div class="weui-col-75">
+                                <ul class="spec-values" spec_id="{$spec['id']}" goods_id="{$item['id']}">
+                                    {list:items=$spec['value'] item=$value}
+                                    <li data-value="{$spec['id']}:{$value['id']}">{if:$value['img']==''}<span>{$value['name']}</span>{else:}<img  src="{url:@}{echo:Common::thumb($value['img'],36,36)}" width="36" height="36"><label>{$value['name']}</label>{/if}<i></i></li>
+                                    {/list}
+                                </ul>
+                            </div>
+                        </div>
+                        {/list}
+                        <dl class="spec-msg" class="spec-item clearfix" style="display: none;">
+                            <dt></dt>
+                            <dd ><p class="msg icon_sp_area"><i class="weui_icon_warn"></i><span >请选择您要购买的商品规格</span></p>
+                            </dd>
+                        </dl>
+                    </div>
+                    {/if}
+                </div>
+            </div>
+
+        </div>
+    {/list}
+    </div>
+</div>
+<div class="btn-bar ">
+    <div class="weui-row weui-no-gutter">
+        <div class="weui-col-100">
+            {if:$sets_enable}
+            <a href="javascript:;" id="buy-now" class="btn weui_btn_block btn-red buy-now">立即购买 <i class="iconfont icon-next"></i></a>
+            {else:}
+            <a href="javascript:;" class="btn btn-gray btn-disable">库存不足</a>
+            {/if}
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var skuMap = {echo:JSON::encode($skumap)};
+
+    $(".product-info").each(function(){
+        var spec = $(this);
+        $(".spec-values li",spec).each(function(){
+        $(this).on("click",function(){
+            var disabled = $(this).hasClass('disabled');
+            if(disabled) return;
+            var flage = $(this).hasClass('selected');
+            
+            $(this).parent().find("li").removeClass("selected");
+            if(!flage){
+                $(this).addClass("selected");
+            }
+            changeStatus(spec);
+             if($(".spec-values",spec).length == $(".spec-values .selected",spec).length){
+                var sku = new Array();
+                $(".spec-values .selected",spec).each(function(i){
+                    sku[i]= $(this).attr("data-value");
+                })
+                var sku_key = ";"+sku.join(";")+";";
+                if(skuMap[sku_key]!=undefined){
+                    var sku = skuMap[sku_key];
+                }
+                $(".spec-msg",spec).css("display","none");
+             }
+        })
+    })
+    });
+    function changeStatus(spec){
+        var specs_array = new Array();
+        $(".spec-values",spec).each(function(i){
+            var selected = $(this).find(".selected");
+            if(selected.length>0)specs_array[i]=selected.attr("data-value");
+            else specs_array[i] = "\\\d+:\\\d+";
+        });
+        $(".spec-values",spec).each(function(i){
+            var selected = $(this).find(".selected");
+            $(this).find("li").removeClass("disabled");
+            var k = i;
+            $(this).find("li").each(function(){
+                
+                var temp = specs_array.slice();
+                temp[k] = $(this).attr('data-value');
+                var flage = false;
+                for(sku in skuMap){
+                    var reg = new RegExp(';'+temp.join(";")+';');
+                    if(reg.test(sku) && skuMap[sku]['store_nums']>0) flage = true;
+                }
+                if(!flage)$(this).addClass("disabled");
+            })
+
+        });
+    }
+   
+    //立即团购
+    $("#buy-now").on("click",function(){
+        var product = currentProduct();
+        var error_flag = false;
+        var ids = new Array();
+        
+        for(i in product){
+
+            if(product[i]){
+                ids[i] = product[i]['id'];
+            }
+            else{
+                error_flag = true;
+                $(".spec-msg:eq("+i+")").css("display","");
+                showMsgBar('warn',"请选择您要购买的商品规格！");
+            }
+        }
+        if(!error_flag){
+            ids = ids.join('-');
+            var url = "{url:/simple/order_info/type/bundbuy/id/$id/pid/}"+ids;
+            window.location.href = url;
+        }
+        return false;
+    });
+    
+    //取得当前商品
+    function currentProduct(){
+        var result = new Array();
+        $(".product-info").each(function(i){
+            var spec = $(this);
+            if($(".spec-values",spec).length==0){
+                result[i] = skuMap[spec.attr("gid")];
+            }else if($(".spec-values",spec).length == $(".spec-values .selected",spec).length){
+                var sku = new Array();
+                $(".spec-values .selected",spec).each(function(i){
+                    sku[i]= $(this).attr("data-value");
+                })
+                var sku_key = ";"+sku.join(";")+";"+spec.attr("gid");
+                if(skuMap[sku_key]!=undefined){
+                    result[i] = skuMap[sku_key];
+                }else result[i] = null;
+             }
+             else result[i] = null;
+        });
+        return result;
+    }
+    //展示信息
+    function showMsgBar(type,text){
+        $(".msg").find("span").text(text);
+        $(".msg").find("i").attr("class","weui_icon_"+type);
+    }
+    </script>
+<!--E 产品展示-->

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        <meta name="author" content=""/>
+        <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <link rel="stylesheet" href="{url:#css/weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/jquery.weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/iconfont.css}">
+        <link rel="stylesheet" href="{url:#css/common.css}">
+        {echo:JS::import('jquery');}
+
+        <!--<script src="{url:#js/jquery.mobile-1.4.3.min.js}"></script>-->
+        <script type="text/javascript" src="{url:#js/jquery.weui.min.js}"></script>
+        <script type="text/javascript" src="{url:#js/common.js}"></script>
+        {set:$title = isset($seo_title)?$seo_title:(isset($site_title)?$site_title:'fastshop');$title=TString::msubstr($title,0,12);}
+        <title>买一点商城</title>
+    </head>
+    <body>
+        <div class="viewport">
+            {widget:name=sub_navs action=header}
+
+            {if:!isset($userInfo)}
+            <form id="paysubmit" name="paysubmit" action="{echo:$paymentPlugin->submitUrl()}" method="{$paymentPlugin->method}">
+                {list:items = $sendData}
+                <input type='hidden' name='{$key}' value='{$item}' />
+                {/list}
+            </form>
+            <script type='text/javascript'>
+                document.forms['paysubmit'].submit();
+            </script>
+            {else:}
+            <div class="payform">
+                <form id="paysubmit" name="paysubmit" action="{echo:$paymentPlugin->submitUrl()}" method="{$paymentPlugin->method}">
+                    {list:items = $sendData}
+                    <input type='hidden' name='{$key}' value='{$item}' />
+                    {/list}
+                    <input type="hidden" name="order_id" value="{$order_id}">
+                    <input type="hidden" name="payment_id" value="{$payment_id}">
+                    <h1 class="weui_cells_title">{echo:$paymentPlugin->name}</h1>
+                    <div class="weui_cells weui_cells_form">
+                        <div class="weui_cell">
+                            <div class="weui_cell_hd"><label class="weui_label">{if:isset($pay_balance)&&$pay_balance==true}金点余额{elseif:isset($pay_silver)&&$pay_silver==true}银点余额{/if}</label></div>
+                            <div class="weui_cell_bd">
+                                <p>{if:isset($pay_balance)&&$pay_balance==true}{echo:$userInfo['balance']}{elseif:isset($pay_silver)&&$pay_silver==true}{echo:$userInfo['silver_coin']}{/if}</p>
+                            </div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_hd"><label for="" class="weui_label">支付密码</label></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <input type="password" class="weui_input" name="pay_password"> <label class="error">{$msg}</label>
+                            </div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <input type="submit" class="weui_btn weui_btn_primary" value="确定支付">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {/if}
+        </div>
+        {set:$curtab=isset($curtab)?$curtab:Req::args('con');}
+        {widget:name=tabbar action=item cart=0 current=ucenter}
+    </body>
+</html>

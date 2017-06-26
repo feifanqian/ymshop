@@ -1,0 +1,108 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1 maximum-scale=2, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Add to Home">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="x-rim-auto-match" content="none">
+<title>深圳问鼎世纪抽奖活动页</title>
+<link href="css/publi.css" rel="stylesheet" type="text/css">
+<link href="css/chuyouwuyi01.css" rel="stylesheet" type="text/css">
+<script src="js/jquery1.8.3.min.js"></script>
+<script type="text/javascript">
+	var phoneWidth = parseInt(window.screen.width);
+	var phoneScale = phoneWidth / 640;
+	var ua = navigator.userAgent;
+	if (/Android (\d+\.\d+)/.test(ua)) {
+		var version = parseFloat(RegExp.$1);
+		// andriod 2.3
+		if (version > 2.3) {
+			document.write('<meta name="viewport" content="width=640, minimum-scale = ' + phoneScale + ', maximum-scale = ' + phoneScale + ', target-densitydpi=device-dpi">');
+			// andriod 2.3以上
+		} else {
+			document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">');
+		}
+		// 其他系统
+	} else {
+		document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">');
+	}
+</script>
+<style type="text/css">
+  
+</style>
+<!--[if lt IE 9]>
+<script src="js/html5.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+<!-- ====================================loading -->
+<!--<section id="loading"></section>-->
+<!-- ====================================页面开始 -->
+<!--登录-->
+<section class="zadan">
+	<div class="zd_middle">
+		<div class="zd_zadan">
+		    <div><img src="img/160615zadan/logo.png" style="position:absolute;top: 405px;left: 114px;"></div>
+			<div class="zd_txt" style="width: 464px;margin: 0 auto;padding-top: 556px;">
+			    <input type="text" id="iphone1" placeholder="请输入您的姓名" />
+				<input type="text" id="iphone1" placeholder="请输入手机号" />
+				<a href="javascript:;" id="submit" class="mom_btn tc">
+					<img src="img/160615zadan/zd_cion07.png">
+				</a>
+			</div>
+		</div>
+	</div>
+
+</section>
+<!--弹出层-->
+<article id="tip">
+	<div class="pack pack_yl">
+		<h1 class="tc">温馨提示</h1>
+		<p class="tc"></p>
+		<a href="#">确定</a>
+	</div>
+</article>
+<!-- 网站要用到的一些类库 -->
+
+<script type="text/javascript">
+	var checkPhone = function(a) {
+		var patrn = /^((?:13|15|18|14|17)\d{9}|0(?:10|2\d|[3-9]\d{2})[1-9]\d{6,7})$/;
+		if (!patrn.exec(a)) return false;
+		return true;
+	};
+	$(function() {
+		$(window).on("load", function() {
+				$("#loading").fadeOut();
+			})
+			// ========================================浮层控制
+		$("#tip .pack a").on("click", function() {
+			$("#tip").fadeOut()
+			$("#tip .pack p").html("")
+			return false;
+		})
+
+		function alerths(str) {
+			$("#tip").fadeIn()
+			$("#tip .pack p").html(str)
+			return false;
+		}
+		$("#submit").on("click", function() {
+			$('html,body').animate({scrollTop:0}); 
+			var str = $("#iphone1").val()
+			if (str.length == 11 && checkPhone(str)) {
+		
+			} else {
+				alerths("请输入正确的手机号！")
+			}
+			return false;
+		})
+	})
+</script>
+
+</body>
+</html>

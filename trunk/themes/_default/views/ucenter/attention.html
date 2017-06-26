@@ -1,0 +1,115 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style>
+    .selectall {
+        font-size:14px;
+        width:100%;
+    }
+</style>
+<div class="container clearfix">
+    {widget:name=sub_navs action=ucsidebar sidebar=$sidebar act=$actionId}
+    <div class="content clearfix uc-content">
+        <!--            <table class="simple attention">
+                        <tr>
+                            <th width="30"></th><th width="100"></th> <th >商品</th> <th width="100">价格</th> <th width="60">库存</th> <th width="110">操作</th>
+                        </tr>
+                        {list:items=$attention['data']}
+                        <tr class="{if:$key%2==1}odd{else:}even{/if}">
+                            <td><input type="checkbox" name="id[]" value="{$item['id']}" ></td><td><a href="{url:/index/product/id/$item[gid]}" target="_blank"><img src="{echo:Common::thumb($item['img'],100,100)}" width="60" height="60"></a></td> <td><a href="{url:/index/product/id/$item[gid]}" target="_blank">{echo:TString::msubstr($item['name'],0,20)}</a>
+                                <p class="pt5">关注时间：{$item['time']}</p></td> <td class="red" style="font-size:14px;"><b>{$currency_symbol}{$item['sell_price']}</b></td> <td>{if:$item['store_nums']>0}有货{else:}缺货{/if}</td> <td><a href="{url:/index/product/id/$item[gid]}" class=" btn btn-main" target="_blank">去购买</a><p class="pt5">&nbsp;&nbsp;<a href="{url:/ucenter/attention_del/id/$item[id]}" >取消关注</a></p></td>
+                        </tr>
+                        {/list}
+                    </table> -->
+
+        <h1 class="title">我的收藏</h1>
+     
+        <?php if(!empty($attention['data'])){?>
+        <!--<p class="classification"><span class=" red">全部(2)</span><span>零食特产、粮油（1）</span><span>服饰内衣、鞋靴童装（1）</span></p>-->
+        <p class="selectall" style="padding-left: 10px;">
+            <input id="select-all-top" type="checkbox" ><label for="select-all-top">全选</label>
+            <a href="javascript:;" class="cancel-attention" >取消关注</a>
+        </p>
+       
+        <div class="simple collection" style="border: 0;">
+            <ul>
+                {list:items=$attention['data']}
+                <li style="width:19%;float: left;margin-right: 5px;" data-id="{$item['id']}">
+                    <p class="collectionimg"><a href="{url:/index/product/id/$item[gid]}" target="_blank"><img src="{echo:Common::thumb($item['img'],150,150,'fwfh')}" width="150" height="150"></a></p>
+                    <p class="collecttitle"><input type="checkbox" name="id[]" value="{$item['id']}" >
+                        <a href="{url:/index/product/id/$item[gid]}" target="_blank">{echo:TString::msubstr($item['name'],0,20)}</a></p>
+                    <p class="collectionprice red">{$currency_symbol}{$item['sell_price']} | {if:$item['store_nums']>0}有货{else:}缺货{/if}</p>
+                    <p class="carbtn">
+                        <a href="{url:/index/product/id/$item[gid]}" class=" btn btn-main ">去购买</a>&nbsp;&nbsp;
+                        <a href="javascript:;" class="cancel-attention-one" >取消收藏</a>
+                    </p>
+                </li>
+                {/list}
+            </ul>
+
+        </div>
+        <div class="">
+            <p class="fl selectall" style="padding-left: 10px;">
+                <input id="select-all-bottom" type="checkbox" ><label for="select-all-bottom">全选</label>
+                <a href="javascript:;" class="cancel-attention" >取消关注</a>
+            </p>
+        </div>
+        <div class="page-nav">{$attention['html']}</div>
+    </div>
+     <?php }?>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var addcart = function (ids) {
+            $.post("{url:/ucenter/attention_addcart}", {ids: ids.join(",")}, function (data) {
+                if (data['status'] == 'success') {
+                    layer.msg('加入购物车成功!', {time: 1000}, function () {
+                        location.reload();
+                    });
+                } else {
+                    layer.msg('加入购物车失败!');
+                }
+            }, "json");
+        };
+        var cancelattention = function (ids) {
+            $.post("{url:/ucenter/attention_cancelattention}", {ids: ids.join(",")}, function (data) {
+                if (data['status'] == 'success') {
+                    layer.msg('取消关注成功!', {time: 1000}, function () {
+                        location.reload();
+                    });
+                } else {
+                    layer.msg('取消关注失败!');
+                }
+            }, "json");
+        }
+        $(".selectall input[type=checkbox]").on("click", function () {
+            $('input[name="id[]"]').prop('checked', !!$(this).prop('checked'));
+        });
+        $(".add-cart").on("click", function () {
+            var ids = new Array();
+            $(".collection input:checked").map(function () {
+                ids.push($(this).val());
+            });
+            if (ids.length == 0) {
+                layer.msg("请选择需要操作的商品");
+                return;
+            }
+            addcart(ids);
+        });
+        $(".cancel-attention").on("click", function () {
+            var ids = new Array();
+            $(".collection input:checked").map(function () {
+                ids.push($(this).val());
+            });
+            if (ids.length == 0) {
+                layer.msg("请选择需要操作的商品");
+                return;
+            }
+            cancelattention(ids);
+        });
+        $(".add-cart-one").on("click", function () {
+            addcart([$(this).closest("li").data("id")]);
+        });
+        $(".cancel-attention-one").on("click", function () {
+            cancelattention([$(this).closest("li").data("id")]);
+        });
+    });
+</script>

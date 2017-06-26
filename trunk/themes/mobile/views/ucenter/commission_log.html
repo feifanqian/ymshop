@@ -1,0 +1,30 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+{set:$meesge=array('')}
+<style>
+    .weui_media_box .weui_media_desc {
+        line-height:25px;
+        color:#666;
+    }
+    .weui_media_box .weui_media_desc b {
+        margin-right:5px;
+        font-weight:normal;
+        color:#888;
+    }
+</style>
+{query:name=commission_log as c where=user_id eq $uid join=left join user as u on c.buyer_id eq u.id fields=c.*,u.nickname order=id desc page=1 id=$obj}
+<div class="weui_panel weui_panel_access">
+    <div class="weui_panel_hd">{$item['time']}</div>
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_text">
+            <p class="weui_media_desc">您的推广用户{$item['nickname']}{if:$item['type']==1}购买了商品{elseif:$item['type']==2}充值了{/if}</p>
+            <p class="weui_media_desc"><b>佣金金额:</b>¥{$item['commission_get']}</p>
+            <p class="weui_media_desc"><b>佣金级别：</b>{$item['commission_level']}</p>
+           {if:$item['status']==3} <p class="weui_media_desc"><b>备注与说明:</b>用户退款，佣金撤销</p>{/if}
+           {if:$item['status']==2} <p class="weui_media_desc"><b>备注与说明:</b>该笔佣金已提取</p>{/if}
+           {if:$item['status']==1} <p class="weui_media_desc"><b>备注与说明:</b>该笔佣金已计入可提取</p>{/if}
+           {if:$item['status']==0} <p class="weui_media_desc"><b>备注与说明:</b>等待计入可提取</p>{/if}
+        </div>
+    </div>
+</div>
+{/query}
+<div class="page-nav tc">{echo:$obj->pagebar(5)}</div>

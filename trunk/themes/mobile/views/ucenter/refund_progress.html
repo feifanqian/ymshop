@@ -1,0 +1,150 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<style type="text/css">
+  .weui-icon_msg {
+    font-size: 65px;
+  }
+</style>
+<script type="text/javascript" charset="UTF-8" src="/themes/_default/js/jquery.iframe-post-form.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+{if:$refund['refund_progress']==0}
+<div class="ma20 bg-white p20 ">
+  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                     <i class="weui-icon-waiting weui-icon_msg"></i>
+                  
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">客服处理</h4>
+                        <p class="weui-media-box__desc">等待客服处理退款请求</p>
+                        <p class="weui-media-box__desc">预计时间：{echo:date("Y-m-d H:i:s",strtotime($refund['apply_time'])+3600*24)}之前</p>
+                    </div>
+  </a>
+</div>
+{elseif:$refund['refund_progress']==-1}
+<div class="ma20 bg-white p20 ">
+  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                     <i class="weui-icon-warn weui-icon_msg-primary weui-icon_msg"></i>
+                  
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">客服处理</h4>
+                        <p class="weui-media-box__desc">对不起，系统拒绝了您的退款请求。</p>
+                        <p class="weui-media-box__desc">原因：{$refund['admin_note']}</p>
+                        <p class="weui-media-box__desc">时间：{$refund['admin_handle_time']}</p>
+                    </div>
+  </a>
+</div>
+{elseif:$refund['refund_progress']==1}
+{if:$refund['plugin_id']==1}
+<div class="ma20 bg-white p20 ">
+  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                     <i class="weui-icon-waiting weui-icon_msg"></i>
+                  
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">退款中</h4>
+                        <p class="weui-media-box__desc">等待系统退款...</p>
+                    </div>
+  </a>
+</div>
+{else:}
+<div class="ma20 bg-white p20 ">
+  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                     <i class="weui-icon-waiting weui-icon_msg"></i>
+                  
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">银行受理</h4>
+                        <p class="weui-media-box__desc">等待银行受理退款请求</p>
+                    </div>
+  </a>
+</div>
+{/if}
+<div class="ma20 bg-white p20 ">
+  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                     <i class="weui-icon-success weui-icon_msg"></i>
+                  
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">客服处理</h4>
+                        <p class="weui-media-box__desc">系统通过了您的退款请求</p>
+                        <p class="weui-media-box__desc">时间：{$refund['admin_handle_time']}</p>
+                    </div>
+  </a>
+</div>
+{elseif:$refund['refund_progress']==2}
+<div class="ma20 bg-white p20 ">
+  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                     <i class="weui-icon-waiting weui-icon_msg"></i>
+                  
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">银行受理</h4>
+                        <p class="weui-media-box__desc">银行系统受理中...</p>
+                        <p class="weui-media-box__desc">受理时间：{echo:date("Y-m-d H:i:s",strtotime($refund['bank_handle_time']))}</p>
+                    </div>
+  </a>
+</div>
+<div class="ma20 bg-white p20 ">
+  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                     <i class="weui-icon-success weui-icon_msg"></i>
+                  
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">客服处理</h4>
+                        <p class="weui-media-box__desc">系统通过了您的退款请求</p>
+                        <p class="weui-media-box__desc">时间：{$refund['admin_handle_time']}</p>
+                    </div>
+  </a>
+</div>
+{elseif:$refund['refund_progress']==3}
+<div class="ma20 bg-white p20 ">
+  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                     <i class="weui-icon-success weui-icon_msg"></i>
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">退款完成</h4>
+                        {if:isset($refund['refund_amount'])&&$refund['refund_amount']==0.00}
+                        <p class="weui-media-box__desc">应退现金0.00元，如有华点未退款，请您联系客服。</p>
+                        {elseif:isset($refund['refund_info'])&&$refund['refund_info']!=""}
+                           <p class="weui-media-box__desc" style="-webkit-line-clamp: 3;">{$refund['refund_info']}</p>   
+                        {else:}
+                           <p class="weui-media-box__desc">完成退款，钱款已退至使用{$refund['pay_name']}支付的账号中</p>
+                            <p class="weui-media-box__desc">若在七个工作日内都未收到退款，请与客服联系。</p>
+                        {/if}
+                        <p class="weui-media-box__desc">时间：{$refund['finish_time']}</p>
+                    </div>
+  </a>
+</div>
+{if:$refund['plugin_id']==1||$refund['plugin_id']==20}
+{else:}
+<div class="ma20 bg-white p20 ">
+  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                     <i class="weui-icon-success weui-icon_msg"></i>
+                  
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">银行受理</h4>
+                        <p class="weui-media-box__desc">银行系统受理退款请求</p>
+                        <p class="weui-media-box__desc">受理时间：{echo:date("Y-m-d H:i:s",strtotime($refund['bank_handle_time']))}</p>
+                    </div>
+  </a>
+</div>
+{/if}
+<div class="ma20 bg-white p20 ">
+  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                     <i class="weui-icon-success weui-icon_msg"></i>
+                  
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">客服处理</h4>
+                        <p class="weui-media-box__desc">系统通过了您的退款请求</p>
+                        <p class="weui-media-box__desc">时间：{$refund['admin_handle_time']}</p>
+                    </div>
+  </a>
+</div>
+{/if}
+<div class="ma20 bg-white p20 ">
+  <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                    <i class="weui-icon-success weui-icon_msg"></i>
+                    <div class="weui_media_bd">
+                        <h4 class="weui-media-box__title">申请发起</h4>
+                        <p class="weui-media-box__desc">单号：{$refund['order_no']}</p>
+                        <p class="weui-media-box__desc">金额：{$refund['refund_amount']}</p>
+                        {set:$reason=explode(':',$refund['apply_reason'])}
+                        <p class="weui-media-box__desc">原因：{$reason[0]}</p>
+                        <p class="weui-media-box__desc">时间：{$refund['apply_time']}</p>
+                    </div>
+ </a>
+
+</div>

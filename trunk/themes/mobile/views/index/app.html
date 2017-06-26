@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title>买一点商城APP</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <style>
+            body{
+                margin:0;
+                padding:0;
+
+                color:#444;
+            }
+            a {
+                color:#f60;
+                text-decoration: none;
+            }
+            #container {
+                position:absolute;
+                width:100%;
+                height:100%;
+                background:url("/static/images/appmobile.jpg") repeat-x center top;
+                background-size: 100% 100%;
+            }
+            #mainbody {
+                margin:0 auto;
+                position:relative;
+            }
+            a#ios,a#android{
+                position:absolute;
+                left:49.3%;
+                top:77.47%;
+                width:36.11%;
+                height:5.90%;
+                text-indent: -9999px;
+            }
+            a#android{
+                top:86.74%;
+            }
+
+            #copyright {
+                width:100%;
+                margin-top:50px;
+                font-size:12px;
+                text-align:center;
+                line-height:20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <div id="mainbody">
+            </div>
+            <a href="{$config['site_iosurl']}" target="_blank" id="ios">下载iOS版</a>
+            <a href="{$config['site_androidurl']}" target="_blank" id="android">下载安卓版</a>
+        </div>
+    </body>
+</html>

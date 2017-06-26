@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        <meta name="author" content=""/>
+        <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <link rel="stylesheet" href="{url:#css/weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/jquery.weui.min.css}">
+        <link rel="stylesheet" href="//at.alicdn.com/t/font_1470481166_1586952.css">
+        <link rel="stylesheet" href="{url:#css/common.css}">
+        {echo:JS::import('jquery');}
+
+        <!--<script src="{url:#js/jquery.mobile-1.4.3.min.js}"></script>-->
+        <script type="text/javascript" src="{url:#js/jquery.weui.min.js}"></script>
+        <script type="text/javascript" src="{url:#js/common.js}"></script>
+        <title>微信支付</title>
+        <style>
+            .wechattips {
+                position: absolute;
+                top:0px;right:15px;
+                z-index:999;
+                width: 11.156rem;
+                height: 4.2rem;
+                background:url("{url:#images/wechattips.png}");
+                background-size: contain;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="viewport">
+            {widget:name=sub_navs action=header}
+            <div class="weui_msg">
+                <div class="weui_icon_area"><i class="weui_icon_info weui_icon_msg"></i></div>
+                <div class="weui_text_area">
+                    <h2 class="weui_msg_title">温馨提示</h2>
+                    <p class="weui_msg_desc">请在弹出的窗口中完成支付,完成后请点击完成支付</p>
+                </div>
+                <div class="weui_opr_area">
+                    <p class="weui_btn_area">
+                            <a href="{$success_url}" class="weui_btn weui_btn_primary">完成支付</a>
+                            <a href="{$cancel_url}" class="weui_btn weui_btn_default">返回</a>
+                    </p>
+                </div>
+                    <div class="weui_extra_area">
+                        <a href="{$cancel_url}">查看详情</a>
+                    </div>
+            </div>
+
+            <script type="text/javascript">
+                //调用微信JS api 支付
+                function jsApiCall() {
+                    WeixinJSBridge.invoke(
+                            'getBrandWCPayRequest',
+                            {$jsApiParameters},
+                            function (res) {
+                                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                        $.toast('微信支付成功!', function () {
+                                            location.href = "{$success_url}";
+                                       });
+                                    
+                                } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                                        $.toast('用户取消支付!', 'cancel', function () {
+                                            location.href = "{$cancel_url}";
+                                        });
+                                } else {
+                                        $.toast('支付失败!', 'forbidden', function () {
+                                            location.href = "{$error_url}";
+                                        });
+                                }
+                            }
+                    );
+                }
+
+                function callpay() {
+                    if (typeof WeixinJSBridge == "undefined") {
+                        if (document.addEventListener) {
+                            document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                        } else if (document.attachEvent) {
+                            document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                            document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                        }
+                    } else {
+                        jsApiCall();
+                    }
+                }
+                window.onload = function () {
+                    callpay();
+                }
+            </script>
+
+        </div>
+        {set:$curtab='asset';}
+        {set:$curtab=isset($curtab)?$curtab:Req::args('con');}
+        {widget:name=tabbar action=item cart=0 current=ucenter}
+    </body>
+</html>

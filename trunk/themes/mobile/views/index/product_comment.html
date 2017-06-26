@@ -1,0 +1,119 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<script type="text/javascript" charset="UTF-8" src="{url:#js/common.js}"></script>
+{set:$gid = intval(Req::args('gid'))}
+<style>
+    .photos img{
+        width:50px;
+        margin-right: 5px;
+    }
+    .photos{
+        padding-left:70px;
+    }
+</style>
+<div class="ma20 bg-white">
+    <!--S 商品评价-->
+    <div  class="comment-list">
+        <div class="comment tab" id="comment">
+            <ul class="tab-head">
+                <li>很好</li>
+                <li>较好</li>
+                <li>一般</li>
+            </ul>
+            <div class="tab-body p20">
+                <div id="comment-a">
+                    <div class="page-content list-nav">
+                        <div class="item mt20 comment-item clearfix">
+                            <div class="layout-2 line-b ">
+                                <div ><img src="{avatar}" style="height:4em;width:4em;border-radius:2em;">
+                                    <span>{uname}</span>
+                                </div>
+                                <div>
+                                    <div><span class="score "><i style="width:{point}%"></i></span><span class="fr gray">{comment_time|今天}</span></div>
+                                    <div style="min-height:30px;"> {content}</div>
+                                </div>
+                            </div>
+                            <div class="p20 photos">{photos}</div>
+                        </div>
+                    </div>
+                    <div class="page-nav tc"></div>
+                </div>
+
+                <div id="comment-b">
+                    <div class="page-content">
+                        <div class="comment-item">
+                            <div class="consult-q">
+                               <div class="layout-2 line-b ">
+                                <div ><img src="{avatar}" style="height:4em;width:4em;border-radius:2em;">
+                                    <span>{uname}</span>
+                                </div>
+                                <div>
+                                    <div><span class="score "><i style="width:{point}%"></i></span><span class="fr gray">{comment_time|今天}</span></div>
+                                    <div  style="min-height:30px;"> {content}</div>
+                                </div>
+                            </div>
+                            <div class="p20 photos">{photos}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-nav tc"></div>
+                </div>
+
+                <div id="comment-c">
+                    <div class="page-content">
+                        <div class="comment-item">
+
+                            <div class="consult-q">
+                              <div class="layout-2 line-b ">
+                                <div ><img src="{avatar}" style="height:4em;width:4em;border-radius:2em;">
+                                    <span>{uname}</span>
+                                </div>
+                                <div>
+                                    <div><span class="score "><i style="width:{point}%"></i></span><span class="fr gray">{comment_time|今天}</span></div>
+                                    <div  style="min-height:30px;"> {content}</div>
+                                </div>
+                            </div>
+                            <div class="p20 photos">{photos}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-nav tc"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="weui-gallery" id="gallery">
+                <span class="weui-gallery__img" id="galleryImg"></span>
+                <div class="weui-gallery__opr">
+<!--                    <a href="javascript:" class="weui-gallery__del" id="gallery_delete">
+                        <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+                    </a>-->
+                </div>
+   </div>
+    <!--E 商品评价-->
+</div>
+<script type="text/javascript">
+    $gallery = $("#gallery");
+    $galleryImg = $("#galleryImg");
+    function showImg(element){
+         $galleryImg.css("background-image", "url("+$(element).attr("src")+")");
+         $gallery.fadeIn(100);
+    }
+    $(function(){
+        $("#comment-a").Paging({
+        url:'{url:/index/get_review}',
+                params:{id:{$gid}, score:'a', pagetype:4}
+        });
+        $("#comment-b").Paging({
+        url:'{url:/index/get_review}',
+                params:{id:{$gid}, score:'b', pagetype:4}
+        });
+        $("#comment-c").Paging({
+        url:'{url:/index/get_review}',
+                params:{id:{$gid}, score:'c', pagetype:4}
+        });
+        $gallery.on("click", function () {
+            $gallery.fadeOut(100);
+        });
+    });
+</script>

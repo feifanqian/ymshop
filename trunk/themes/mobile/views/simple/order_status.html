@@ -1,0 +1,214 @@
+{echo:JS::import('dialog?skin=simple');}
+<!--{if:$order['type']==0}
+{set:$items=array("购物车","确认订单信息","选择支付","订购完成");}
+{widget:name=sub_navs action=crumbs items=$items step=4 current=3}
+{else:}
+{set:$items=array("确认订单信息","选择支付","订购完成");}
+{widget:name=sub_navs action=crumbs items=$items step=3 current=2}
+{/if}-->
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<form action="{url:/payment/dopay}" method="post" id="payform">
+    <input type="hidden" name="order_id" value="{$order['id']}">
+    <input type="hidden" name="payment_id" value="{$order['payment']}">
+    <div class="mt10">
+        <div class="weui_cells weui_cells_access">
+            <a href="{url:/ucenter/order_detail/id/}{$order['id']}" class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>订单号</p>
+                </div>
+                <div class="weui_cell_ft">
+                    {$order['order_no']}
+                </div>
+            </a>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>订单金额</p>
+                </div>
+                <div class="weui_cell_hd">
+                    {$currency_symbol}{$order['order_amount']}{if:$order['type']==4}({echo:sprintf("%.0f",$order['huabipay_amount'])}华点+{$order['otherpay_amount']}RMB){/if}
+                </div>
+            </div>
+            {if:$order['type']==4}
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>您的华点账号</p>
+                </div>
+                <div class="weui_cell_hd">
+                    {$order['huabi_account']}
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>商城华点账号</p>
+                </div>
+                <div class="weui_cell_hd">
+                     wlucky2101
+                </div>
+            </div>
+            <div class="weui_cell">
+                {if:$order['is_new']==1}
+                <p style="color:#999999;font-size:12px;line-height:19px; "><i class="weui-icon-info" style="font-size:15px;"></i>支付小贴士：为了能够尽快给您出货，新的华点订单需要您先支付全额货款。在收到您向商城账号的<span class="red">{echo:sprintf("%.0f",$order['huabipay_amount'])}华点</span>转账后，客服将退款华点对应金点（<span class="red">{echo:sprintf("%.2f",$order['order_amount']-$order['otherpay_amount'])}金点</span>）。</p>
+                {else:}
+                <p style="color:#999999;font-size:12px;line-height:19px; "><i class="weui-icon-info" style="font-size:15px;"></i>支付小贴士：请使用您的华点账号向商城账号支付<span style="color: red;">{echo:sprintf("%01.0f",$order['huabipay_amount'])}</span>华点，并继续使用所选在线支付方式支付剩余人民币部分。华点到帐情况需人工审核，切勿重复付款哦，祝您购物愉快！</p>
+                {/if}
+            </div>
+            {/if}
+            <div class="weui_cell ">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>支付方式</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <input class="weui_input" id="paytype" name='paytype' type="text" value="{$order['payname']}" data-values="{$order['payment']}" style='text-align: right;display:inline-block;width:auto;' />
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+    </div>
+
+    <div class="ma20 clearfix">
+        <p class="tc"><input class="weui_btn weui_btn_primary" type="button" id="submitForm" value="{if:$order['type']==4}继续{else:}立即{/if}支付"></p>
+    </div>
+</form>
+<div class="js_dialog" id="comfirmDialog" style="opacity: 1;display:none;">
+            <div class="weui-mask"></div>
+            <div class="weui-dialog" >
+                <div class="weui-dialog__hd"><strong class="weui-dialog__title">支付信息</strong></div>
+                <div class="weui-form-preview">
+                <div class="weui-form-preview__hd" style="font-size:15px;">
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">应付款总金额</label>
+                        <em class="weui-form-preview__value" id="order_amount"></em>
+                    </div>
+                </div>
+                <div class="weui-form-preview__bd" style="font-size:14px;">
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">需支付华点</label>
+                        <span class="weui-form-preview__value" id="huadian_amount"></span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">支付人民币</label>
+                        <span class="weui-form-preview__value" id="rmb_amount"></span>
+                    </div>
+                     <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">商城华点账号</label>
+                        <span class="weui-form-preview__value" id="shop_huadian_account">wlucky2101</span>
+                    </div>
+                </div>
+                
+            </div>
+             <div class="weui-cell weui-cell_select weui-cell_select-after" style="font-size:13px;" >
+                <div class="weui-cell__hd">
+                    <label for="" class="weui-label">支付方式</label>
+                </div>
+               <div class="weui-cell__hd" style="float: right;">
+                     <label class="weui-form-preview__label" style="line-height:44px;margin-right:1px">华点+</label>
+                    <select class="weui-select" name="otherpay" style="padding: 0;width:auto;">
+                        {list:items=$paytypelist}
+                        {if:$item['plugin_id']!=19}
+                        <option value="{$item['id']}">{$item['pay_name']}</option>
+                        {/if}
+                        {/list}
+                    </select><i class="iconfont icon-next" style="font-size:9px;"></i>
+                </div>
+            </div>
+             
+             <div class="weui-cell " style="font-size:13px;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">华点账号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" pattern="" value="" id="user_huadian_account" placeholder="请输入您的华点账号">
+                </div>
+                <div class="weui-cell__ft">
+                    <i class="weui-icon-warn" style="font-size:12px;" id="input_notice"></i>
+                </div>
+            </div>
+            <div class="weui-cell">
+                    <p style="color:#999999;font-size:10px;"><i class="weui-icon-info" style="font-size:12px;"></i>支付小贴士：为了能够尽快给您出货，新的华点订单需要您先支付全额货款。在收到您向商城账号的华点转账后，客服将退款华点对应金点。</p>
+            </div>
+                <div class="weui-dialog__ft">
+                    <a href="javascript:CloseDialog();" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+                    <a href="javascript:SubmitInfo();" class="weui-dialog__btn weui-dialog__btn_primary">确认</a>
+                </div>
+  </div>
+</div>
+<script type="text/javascript" charset="UTF-8" src="/themes/_default/js/jquery.iframe-post-form.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+{widget:name=tabbar action=item cart=$cart current=ucenter}
+{set:$paydict = array();}
+{list:items=$paytypelist}
+{set:$paydict[]=array('title'=>$item['pay_name'], 'value'=>$item['id']);}
+{/list}
+<script type="text/javascript">
+    function CloseDialog(){
+         $("#comfirmDialog").fadeOut(500);
+    }
+    function SubmitInfo(){
+        var huadian_account = $("#user_huadian_account").val();
+        if(huadian_account==""||huadian_account==undefined){
+            $("#input_notice").removeClass().addClass("weui-icon-warn");
+            $("#user_huadian_account").focus();
+            return false;
+        }else{
+            $("input[name='payment_id']").val($("select[name='otherpay']").val());
+            $("#comfirmDialog").fadeOut(100);
+            $.hideLoading();
+            $.post('{url:/simple/changeOrder}',{order_id:{$order['id']},huabi_account:huadian_account},function(returns){
+                         if(returns.status=='success'){
+                            $("#payform").submit();
+                         }else if(returns.status=='fail'){
+                             $.hideLoading();
+                             $.toast(returns.msg,'forbidden');
+                             setTimeout(window.location.reload(true),1000);
+                         }
+                    },'json');
+        }
+    }
+    $(function () {
+        $("#submitForm").click(function(){
+                var payment_id = $("#paytype").attr("data-values");
+                var payname = $("#paytype").val();
+                if(payment_id==24||payname.indexOf('华点')!=-1){
+                    $("#comfirmDialog").fadeIn(500);
+                }else{
+                    $("#payform").submit();
+                }
+        });
+        $("#user_huadian_account").on("input",function(){
+            if($(this).val()==""){
+                console.log($(this).val());
+                $("#input_notice").removeClass().addClass("weui-icon-warn");
+            }else{
+                $("#input_notice").removeClass().addClass("weui-icon-success");
+            }
+        });
+        // $("#comfirmDialog").fadeIn(200);
+        $("#paytype").select({
+            title: "选择支付方式",
+            items: {echo: json_encode($paydict); },
+            onChange: function () {
+                var payment_id = $("#paytype").attr("data-values");
+                var payname = $("#paytype").val();
+                if(payment_id==24||payname.indexOf('华点')!=-1){
+                    $.showLoading();
+                    $.post('{url:/simple/huabipay_info}',{order_id:{$order['id']}},function(returns){
+                         $.hideLoading();
+                         if(returns.status=='success'){
+                             $("#order_amount").text(returns.data.order_amount);
+                             $("#huadian_amount").text(returns.data.huabi);
+                             $("#rmb_amount").text(returns.data.cash);
+                             $("#shop_huadian_account").text(returns.data.shop_huabi_account);
+                             $("#comfirmDialog").fadeIn(500);
+                         }else if(returns.status=='fail'){
+                             $.toast(returns.msg,'forbidden',function(){
+                                 window.location.reload(true);
+                             });
+                         }
+                    },'json');
+                }else{
+                    $("input[name='payment_id']").val($("#paytype").attr("data-values"));
+                }
+            }
+        });
+    });
+</script>
