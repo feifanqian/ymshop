@@ -15,6 +15,7 @@
     'type' => 'mysqli',
     'tablePre' => 'tiny_',
     'host' => '127.0.0.1',
+    //ddddd
     'user' => 'shopuser',
     'password' => 'C3hUU4NfwczshAHS',
     'name' => 'shop',
