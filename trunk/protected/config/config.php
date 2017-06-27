@@ -17,7 +17,7 @@
     'host' => '192.168.1.120',
     'user' => 'root',
     'password' => '123456',
-    'name' => 'shop',
+    'name' => 'ymshop',
     'port' => '3306',
   ),
   'route' => 
