@@ -605,12 +605,16 @@ class GoodsController extends Controller {
         $this->layout = '';
         $this->redirect();
     }
-
+    /*
+     * 图片库
+     */
     function photoshop() {
         $this->layout = '';
         $this->redirect();
     }
-   
+    /*
+     * 开启商品分佣
+     */
     function open_commission(){
         $this->layout = "blank";
         $id = Req::args("id");
@@ -642,7 +646,9 @@ class GoodsController extends Controller {
         $this->assign('goods',$goods);
         $this->redirect();
     }
-    
+    /*
+     * 关闭商品分佣
+     */
     function close_commission(){
         $goods_id = Req::args("gid");
         $goods = new Model('goods');
@@ -653,8 +659,10 @@ class GoodsController extends Controller {
         Log::op($this->manager['id'], "修改商品分佣设置", "管理员[" . $this->manager['name'] . "]:关闭了商品的分佣" ."[goods_id:$goods_id]");
         echo JSON::encode($info);
     }
-    
-    function save_setting(){
+    /*
+     * 保存商品分佣设置
+     */
+    public function save_setting(){
         $data = Req::args();
         unset($data['con']);
         unset($data['act']);
@@ -696,116 +704,10 @@ class GoodsController extends Controller {
         }
          echo JSON::encode($info);
     }
-    
-    function open_huabipay(){
-        $this->layout = "blank";
-        $id = Req::args("id");
-        $goods = new Model("goods");
-        $huabipay_set = $goods->where("id = $id")->fields("huabipay_set,id")->find();
-        if($huabipay_set['huabipay_set']!=""){
-             $set = unserialize($huabipay_set['huabipay_set']);
-             if(is_array($set)){
-                 $this->assign('pay_set',$set);
-             }
-        }
-        $product = new Model('products');
-        $products = $product->fields("sell_price,pro_no,spec,id")->where("goods_id = $id")->findAll();
-         foreach ($products as $k => $v){
-            $spec = unserialize($v['spec']);
-            if(!empty($spec)){
-                $spec_str = "";
-                foreach($spec as $kk=>$vv){
-                    $spec_str .= $vv['name'].":".$vv['value'][1]." ";
-                }
-                $products[$k]['spec']= $spec_str;
-            }else{
-                 $products[$k]['spec']= "无规格信息";
-            }
-        }
-        $config = Config::getInstance();
-        $other = $config->get('other');
-        $rmb2huabi = isset($other['rmb2huabi']) ? $other['rmb2huabi']:"?";
-        $this->assign('rmb2huabi',$rmb2huabi);
-        $this->assign('products',$products);
-        $this->assign('gid',$id);
-        $this->redirect();
-    }
-    
-    function save_huabipay_set(){
-        $close = Req::args("close");
-        $set_data = Req::args('data');
-        $id = Req::args('id');
-        $goods = new Model("goods");
-        if($id==null){
-            echo json_encode(array('status'=>'fail','msg'=>'提交的数据为空'));
-            exit();
-        }
-        if(empty($set_data)){
-            if(!empty($close)&&$close==1){
-                  $isOk =  $goods->where("id=$id and is_huabipay = 1")->data(array("is_huabipay"=>0))->update();
-                  if($isOk){
-                         echo json_encode(array('status'=>'success','msg'=>'关闭成功'));
-                         exit();
-                  }else{
-                         echo json_encode(array('status'=>'fail','msg'=>'关闭失败，数据库错误'));
-                         exit();
-                  }
-            }
-            echo json_encode(array('status'=>'fail','msg'=>'提交的数据为空'));
-            exit();
-        }
-        $is_open = false;
-        $format_data=array();
-        foreach($set_data as $k=>$v){
-            if($v['type']=='rate'){
-                if(!is_numeric($v['value'])||$v['value']<0||$v['value']>100){
-                    echo json_encode(array('status'=>'fail','msg'=>'rate在0-100之间'));
-                    exit();
-                }else{
-                    if($v['value']>0){
-                         $is_open = true;
-                    }
-                    $format_data[$v['product_id']]=array('type'=>'rate','value'=>$v['value']);
-                }
-            }else if($v['type']=='fixed'){
-                if($v['value']['huadian']<0||$v['value']['rmb']<0||!is_numeric($v['value']['huadian'])||!is_numeric($v['value']['rmb'])){
-                    echo json_encode(array('status'=>'fail','msg'=>'固定值错误'));
-                    exit();
-                }else{
-                    $is_open = true;
-                    $format_data[$v['product_id']]=array('type'=>'fixed','value'=>array('huadian'=>$v['value']['huadian'],'rmb'=>$v['value']['rmb']));
-                }
-            }
-        }
-        if($is_open&&!empty($format_data)){
-            $result = $goods->data(array('is_huabipay'=>1,'huabipay_set'=>serialize($format_data)))->where("id = $id")->update();
-        }else{
-            $result = $goods->data(array('is_huabipay'=>0,'huabipay_set'=>serialize($format_data)))->where("id = $id")->update(); 
-        }
-        if($result){
-             Log::op($this->manager['id'], "修改商品华点支付设置", "管理员[" . $this->manager['name'] . "]:修改了商品的华点支付设置 " . "[goods_id:$id,set:".json_encode($format_data)."]");
-             $info = array('status' =>'success', 'msg' => '设置成功');
-        }else{
-             $info = array('status' => 'fail', 'msg' => '设置失败，数据未改变');
-        }
-        echo JSON::encode($info);
-        exit();
-    }
-    //改变商品是否显示在套餐区
-    function change_package_status(){
-        $goods_id = Filter::int(Req::args('id'));
-        $status = Filter::int(Req::args('status'));
-        $status = $status==1?1:0;
-        $model = new Model();
-        $result = $model->table("goods")->data(array('is_package'=>$status))->where('id='.$goods_id)->update();
-        if($result){
-            exit(json_encode(array('status'=>'success','msg'=>"修改成功")));
-        }else{
-            exit(json_encode(array('status'=>'fail','msg'=>"修改失败,数据库错误")));
-        }
-    } 
-    
-    public function add_review(){
+    /*
+     * 添加评论
+     */
+     public function add_review(){
         $goods_id = Filter::int(Req::args('goods_id'));
         $model = new Model();
         $goods_info = $model->table("goods")->where("id=$goods_id")->find();
@@ -833,7 +735,10 @@ class GoodsController extends Controller {
                 $this->redirect();
         }
     }
-   public function add_review_post(){
+    /*
+     * 评论添加提交
+     */
+    public function add_review_post(){
         $gid = Filter::int(Req::args('gid')); //获取gid
         $point = intval(Req::args('point'));
         if ($point > 5)
