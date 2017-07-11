@@ -77,24 +77,24 @@
                                 <p style='line-height:40px;'>自定义</p>
                                 <i></i>
                             </div>
-                            <div class="weui-col-20" data-value="1" data-amount="600" id="package1">
-                               <p>续充</p>
-                               <p>¥600</p>
+                            <div class="weui-col-20" data-value="1" data-amount="{$package_set[1]['money']}" id="package1">
+                               <p>套餐一</p>
+                               <p>¥{$package_set[1]['money']}</p>
                                 <i></i>
                             </div>
-                            <div class="weui-col-20" data-value="2" data-amount="3600" id="package2">
-                               <p>VIP1</p>
-                               <p>¥3600</p>
+                            <div class="weui-col-20" data-value="2" data-amount="{$package_set[2]['money']}" id="package2">
+                               <p>套餐二</p>
+                               <p>¥{$package_set[2]['money']}</p>
                                 <i></i>
                             </div>
-                            <div class="weui-col-20" data-value="3" data-amount="10800">
-                                <p>VIP2</p>
-                                <p>¥10800</p>
+                            <div class="weui-col-20" data-value="3" data-amount="{$package_set[3]['money']}">
+                                <p>套餐三</p>
+                                <p>¥{$package_set[3]['money']}</p>
                                 <i></i>
                             </div>
-                            <div class="weui-col-20" data-value="4" data-amount="18000">
-                               <p>VIP3</p>
-                               <p>¥18000</p>
+                            <div class="weui-col-20" data-value="4" data-amount="{$package_set[4]['money']}">
+                               <p>套餐四</p>
+                               <p>¥{$package_set[4]['money']}</p>
                                 <i></i>
                             </div>
                         </div>
@@ -104,26 +104,14 @@
         </div>
     </div>
 </div>
-<div class="weui_cells weui_cells_access" id='gift_select_1' style='display:none;'>
+<div class="weui_cells weui_cells_access" id='gift_select_4' style='display:none;'>
             <div class="weui_cell">
                 <div class="weui_cell_bd weui_cell_primary">
                     <p><b>套餐礼品</b></p>
                 </div>
             </div>
-                <a class="weui_cell open-popup" id="gift_select_open_popup" data-target="#select_gift_package_1" href="javascript:;">
-                <div class="weui_cell_bd weui_cell_primary" id="current_select_1_gift">
-                </div>
-                <div class="weui_cell_ft"></div>
-                 </a>
- </div>
-<div class="weui_cells weui_cells_access" id='gift_select_2' style='display:none;'>
-            <div class="weui_cell">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p><b>套餐礼品</b></p>
-                </div>
-            </div>
-                <a class="weui_cell open-popup" id="gift_select_open_popup" data-target="#select_gift_package_2" href="javascript:;">
-                <div class="weui_cell_bd weui_cell_primary" id="current_select_2_gift">
+                <a class="weui_cell open-popup" id="gift_select_open_popup" data-target="#select_gift_package_4" href="javascript:;">
+                <div class="weui_cell_bd weui_cell_primary" id="current_select_4_gift">
                 </div>
                 <div class="weui_cell_ft"></div>
                  </a>
@@ -152,50 +140,17 @@
             {/if}
  </div>
 <form id="recharge-form" action="{url:/payment/dopay}" method="post">
-    <div class="weui_cells weui_cells_access" id='recommend' style='display:none;'>
-     <div class="weui_cell">
-<!--            <div class="weui_cell_hd"><label class="weui_label">充值金额</label></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input type="text" name="recharge" class="weui_input" placeholder="请输入充值金额">
-            </div>-->
-            <div class="weui_cell_bd weui_cell_primary">
-                <p><b>推荐人</b></p>
-            </div>
-            <div class="weui_cell_bd">
-                 <input type="text" name="recommend" class="weui_input" placeholder="用户名或手机号" style="text-align:right;">
-            </div>
-        </div>
-    </div>
     <input id="address_id" type="hidden" name="address_id" value="{echo:$addressone?$addressone['id']:0}" />
     <input id="gift" type="hidden" name="gift" value="" />
     <input type="hidden" name="package" value="0" />
     <input type="hidden" name="payment_id" value="{echo:$paytypeone ? $paytypeone['id']: 0}" />
     <div class="weui_cells weui_cells_access" id="recharge-dialog">
         <div class="weui_cell">
-<!--            <div class="weui_cell_hd"><label class="weui_label">充值金额</label></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input type="text" name="recharge" class="weui_input" placeholder="请输入充值金额">
-            </div>-->
-            <div class="weui_cell_bd weui_cell_primary">
-                <p><b>充值对象</b></p>
-            </div>
-            <div class="weui_cell_ft">
-                 <select class="weui-select" name="recharge_type">
-                        <option value="1">银点</option>
-                 </select>
-                 
-            </div>
-        </div>
-        <div class="weui_cell">
-<!--            <div class="weui_cell_hd"><label class="weui_label">充值金额</label></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input type="text" name="recharge" class="weui_input" placeholder="请输入充值金额">
-            </div>-->
             <div class="weui_cell_bd weui_cell_primary">
                 <p><b>充值金额</b></p>
             </div>
             <div class="weui_cell_bd">
-                 <input type="text  " name="recharge" class="weui_input" placeholder="请输入充值金额" style="text-align:right;">
+                 <input type="text" name="recharge" class="weui_input" placeholder="请输入充值金额" style="text-align:right;">
             </div>
         </div>
         <div class="weui_cell ">
@@ -208,16 +163,7 @@
                 {/if}
             </div>
         </div>
-        <div class="weui_cell ">
-            <div class="weui_cell_bd weui_cell_primary">
-                <p><b>兑换比率</b></p>
-            </div>
-            <div class="weui_cell_bd">
-                <span class="color-orange" id="rate">1人民币=1银点</span>
-            </div>
-        </div>
     </div>
-
     <div class="content-padded weui-row"><div class="weui-col-100"><input type="submit" value="立即充值" class="weui_btn weui_btn_primary weui_btn_block" /></div></div>
 </form>
 <div id="selectaddress" class="weui-popup-container popup-bottom">
@@ -247,7 +193,8 @@
         </div>
     </div>
 </div>
-<div id="select_gift_package_1" class="weui-popup-container popup-bottom">
+
+<div id="select_gift_package_4" class="weui-popup-container popup-bottom">
     <div class="weui-popup-modal" >
         <div class="toolbar">          
             <div class="toolbar-inner">          
@@ -257,38 +204,13 @@
         </div>
         <div class="modal-content" style="max-height:400px;">
             <div class="weui_cells weui_cells_radio">
-                {list:$items=$select1}
+                {list:$items=$select4}
                 <label class="weui_cell weui_check_label" for="s1{$item['id']}">
                     <div class="weui_cell_bd weui_cell_primary">
                          <p style="overflow: hidden;text-overflow: ellipsis;width:300px;height:50px;line-height: 25px;font-size:14px;"><img src="{url:@$item[img]}" style="height:50px;width:50px;border-radius:25px;">&nbsp;&nbsp;{$item['name']}</p> 
                     </div>
                     <div class="weui_cell_ft">
-                        <input type="radio" class="weui_check" name="select_gift_1_id" id="s1{$item['id']}" value="{$item['id']}" {if:$key==0}checked="checked"{/if}/>
-                               <span class="weui_icon_checked"></span>
-                    </div>
-                </label>
-                {/list}
-            </div>
-        </div>
-    </div>
-</div>
-<div id="select_gift_package_2" class="weui-popup-container popup-bottom">
-    <div class="weui-popup-modal">
-        <div class="toolbar">          
-            <div class="toolbar-inner">          
-                <a href="javascript:;" class="picker-button close-popup">完成</a>          
-                <h1 class="title"></h1>          
-            </div>          
-        </div>
-        <div class="modal-content">
-            <div class="weui_cells weui_cells_radio" style="max-height:400px;">
-               {list:$items=$select2}
-                <label class="weui_cell weui_check_label" for="s2{$item['id']}">
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:300px;height:50px;"><img src="{url:@$item[img]}" style="height:50px;width:50px;border-radius:25px;">&nbsp;&nbsp;{$item['name']}</p>
-                    </div>
-                    <div class="weui_cell_ft">
-                        <input type="radio" class="weui_check" name="select_gift_2_id" id="s2{$item['id']}" value="{$item['id']}" {if:$key==0}checked="checked"{/if}/>
+                        <input type="radio" class="weui_check" name="select_gift_4_id" id="s1{$item['id']}" value="{$item['id']}" {if:$key==0}checked="checked"{/if}/>
                                <span class="weui_icon_checked"></span>
                     </div>
                 </label>
@@ -303,38 +225,6 @@
 {/query}
 <script type="text/javascript">
     $(function () {
-//        $(window).load(function() {
-//            var now = new Date().getTime();
-//            var end = new Date("2017-03-01").getTime();
-//            if(now <end){
-//                setTimeout(function(){
-//                   layer.open({
-//                        content: '<img width="100%" src="http://img.buy-d.cn/data/uploads/2017/02/27/583018e4f469998e9098e1d95b7c0efe.jpg">'
-//                        ,btn: '我知道了'
-//                    });
-//
-//                },500);
-//             }
-//         }); 
-//        
-        $("select[name='recharge_type']").change(function(){
-            updateShowRate();
-        });
-        $("input[type='submit']").click(function(){
-            if($("input[name='package']").val()!=0){
-            if($("input[name='recommend']").val()==""){
-                     layer.open({
-                        content: '<p style="line-height:100px;">您确定没有推荐人吗？</p>'
-                        ,btn: ['我确定', '我想想']
-                        ,yes: function(index){
-                          layer.close(index);
-                          $("#recharge-form").submit();
-                        }
-                      });
-                      return false;
-                }
-            }
-        });
         $("#recharge-form").submit(function () {
             if (!$("input[name=recharge]").val()) {
                 $.toast("请输入充值金额", "text");
@@ -344,13 +234,12 @@
                 $.toast("请选择充值方式", "text");
                 return false;
             }
-            if($("input[name='package']").val()!=0){
+            if($("input[name='package']").val()==4){
                 if($("#address_id").val()==""||$("#address_id").val()=="0"){
                     $.toast("请选择地址信息", "text");
                     return false;
                 }
             }
-            $("select[name='recharge_type']").removeAttr('disabled');
         });
         $("#paytype").select({
             title: "选择支付方式",
@@ -360,14 +249,7 @@
             }
         });
     });
-    function updateShowRate(){
-        var recharge_type = $("select[name='recharge_type']").val();
-        if(recharge_type==0){
-            $("#rate").text("1人民币=1金点");
-        }else if(recharge_type==1){
-            $("#rate").text("1人民币={$gold2silver}银点");
-        }
-    }
+   
     $(".recharge-package div").click(function(){
         $(this).addClass("package-selected").siblings().removeClass("package-selected");
         $("input[name='package']").val($(this).data('value'));
@@ -375,27 +257,17 @@
         $("input[name='recharge']").val($(this).data('amount'));
         if($(this).data('value')==0){
             $("input[name='recharge']").removeAttr("readonly");
-            $("select[name='recharge_type']").removeAttr('disabled');
             $("#address_select").hide();
-            $("#gift_select_1").hide();
-            $("#gift_select_2").hide();
-            $("#recommend").hide();
+            $("#gift_select_4").hide();
         }else{
-            $("select[name='recharge_type']").val(1).attr('disabled','disabled');
             $("input[name='recharge']").attr("readonly","readonly");  
-            $("#rate").text("1人民币={$gold2silver}银点");
-            $("#address_select").show();
-            if($(this).data('value')==1){
-                $("input[name='select_gift_1_id']:checked").trigger("click");
-                $("#gift_select_1").show();
-                $("#gift_select_2").hide();
+            if($(this).data('value')==4){
+                $("#address_select").show();
+                $("#gift_select_4").show();
             }else{
-                $("input[name='select_gift_2_id']:checked").trigger("click");
-                $("#gift_select_2").show();
-                $("#gift_select_1").hide();
+                $("#address_select").hide();
+                $("#gift_select_4").hide();
             }
-            //$("input[name='select_gift_id']:checked").trigger("click");
-            $("#recommend").show();
         }
     });
     
@@ -411,18 +283,17 @@
         $("a.default", this).show();
         $(".close-popup").trigger("click");
     });
-    $("input[name='select_address_id']:checked").trigger("click");
     
-    $("input[name='select_gift_1_id']").on("click", function () {
+    
+    $("input[name='select_gift_4_id']").on("click", function () {
         $("#gift").val($(this).val());
-        $("#current_select_1_gift").html($(this).closest(".weui_cell").find(".weui_cell_bd").html());
+        $("#current_select_4_gift").html($(this).closest(".weui_cell").find(".weui_cell_bd").html());
         $(".close-popup").trigger("click");
     });
-    $("input[name='select_gift_2_id']").on("click", function () {
-        $("#gift").val($(this).val());
-        $("#current_select_2_gift").html($(this).closest(".weui_cell").find(".weui_cell_bd").html());
-        $(".close-popup").trigger("click");
-    });
+    
+    $("input[name='select_address_id']:checked").trigger("click");
+    $("input[name='select_gift_4_id']:checked").trigger("click"); 
+    
     {if:isset($package)&&isset($pid)}
     $("#package{$package}").trigger('click');
     $("#s{$package}{$pid}").trigger('click');

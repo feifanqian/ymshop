@@ -66,7 +66,6 @@ class IndexAction extends Controller {
         $banner = $this->model->query("select * from tiny_ad where id =56  and is_open = 1");
         $banner[0]['content'] = unserialize($banner[0]['content']);
         foreach ($banner[0]['content'] as $k=>$v){
-           // $banner[0]['content'][$k]['path'] = "http://img.buy-d.cn/".$banner[0]['content'][$k]['path'];
             if($banner[0]['content'][$k]['url']!=''){
                 $banner[0]['content'][$k]['url'] = json_decode($banner[0]['content'][$k]['url'],true);
             }else{
@@ -80,7 +79,6 @@ class IndexAction extends Controller {
         $banner = $this->model->query("select * from tiny_ad where id =55  and is_open = 1");
         $banner[0]['content'] = unserialize($banner[0]['content']);
         foreach ($banner[0]['content'] as $k=>$v){
-            //$banner[0]['content'][$k]['path'] = "http://img.buy-d.cn/".$banner[0]['content'][$k]['path'];
             if($banner[0]['content'][$k]['url']!=''){
                 $banner[0]['content'][$k]['url'] = json_decode($banner[0]['content'][$k]['url'],true);
             }else{
@@ -100,7 +98,6 @@ class IndexAction extends Controller {
             $info[$k]['category_name']=$c[0]['name'];
             $info[$k]['content']=  unserialize($info[$k]['content']);
             foreach ($info[$k]['content'] as $kk=>$vv){
-            //$info[$k]['content'][$kk]['path'] = "http://img.buy-d.cn/".$vv['path'];
           }
         }
         $this->code =0;
@@ -154,7 +151,6 @@ class IndexAction extends Controller {
           foreach ($ad as $kk => $vv){
              $ad[$kk]['imgs'] = unserialize($ad[$kk]['imgs']);
             foreach ($ad[$kk]['imgs'] as $k=>$v){
-               // $ad[$kk]['imgs'][$k]['path'] = "http://img.buy-d.cn/".$ad[$kk]['imgs'][$k]['path'];
                 if($ad[$kk]['imgs'][$k]['url']!=''){
                     $ad[$kk]['imgs'][$k]['url']=  json_decode($ad[$kk]['imgs'][$k]['url'],true);
                 }else{
@@ -171,7 +167,6 @@ class IndexAction extends Controller {
         foreach ($ad as $kk => $vv){
              $ad[$kk]['content'] = unserialize($ad[$kk]['content']);
             foreach ($ad[$kk]['content'] as $k=>$v){
-                //$ad[$kk]['content'][$k]['path'] = "http://img.buy-d.cn/".$ad[$kk]['content'][$k]['path'];
                 if($ad[$kk]['content'][$k]['url']!=''){
                     $ad[$kk]['content'][$k]['url'] = json_decode($ad[$kk]['content'][$k]['url'],true);
                 }else{
@@ -301,5 +296,17 @@ class IndexAction extends Controller {
         } else {
             $this->code = 1000;
         }
+    }
+
+    //获取套餐设置
+    public function recharge_package_set(){
+       $config = Config::getInstance();
+       $package_set = $config->get('recharge_package_set');
+       if($package_set){
+           $this->code =0;
+           $this->content = $package_set;
+       }else{
+           $this->code= 1005;
+       }
     }
 }

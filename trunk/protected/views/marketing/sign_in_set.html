@@ -1,0 +1,64 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('validator');}
+<h2 class="page_title">{$node_index['name']}</h2>
+<div class="form2">
+    <form name="config_form" method="post" action="{url:/marketing/sign_in_set}">
+        <dl class="lineD">
+            <dt>是否开启签到功能</dt>
+            <dd>
+                <select name="open">
+                    <option value="0">关闭</option>
+                    <option value="1">开启</option>
+                </select>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>签到积分赠送规则</dt>
+            <dd>
+                <select name="type">
+                    <option value="1">赠送固定积分</option>
+                    <option value="2">按规则赠送</option>
+                </select>
+                <input name="value">
+                <span>(规则可用变量{serial_day}->连续签到天数，例如0.1*{serial_day}+10)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>最高每日赠送积分</dt>
+            <dd>
+                <input name="max_sent" class="small"><span>(0表示不限制，固定赠送可忽略此项)</span>
+            </dd>
+        </dl> 
+         <dl class="lineD">
+            <dt>积分赠送规则说明</dt>
+            <dd>
+                <textarea name="introduce" ></textarea><br><span>(积分赠送规则说明)</span>
+            </dd>
+        </dl>
+        <div class="center">
+            <input type="submit" name="submit" class="button action fn" value="确 定">
+        </div>
+    </form>
+</div>
+
+<script>
+    {if:isset($message)}
+    art.dialog.tips('<p class="success">{$message}</p>');
+    {/if}
+    {if:isset($error)}
+    art.dialog.tips('<p class="error">{$error}</p>');
+    {/if}
+    var form = new Form('config_form');
+    {set:$config = Config::getInstance();}
+    var data = {echo:JSON::encode($config->get('sign_in_set'))};
+    form.init(data);
+    $("select[name=type]").change(function(){
+        if($(this).val()==1){
+            $("input[name=value]").val("").attr('placeholder',"请输入赠送的固定积分值");
+        }else{
+            $("input[name=value]").val("").attr('placeholder',"请输入赠送规则公式");
+        }
+    });
+</script>

@@ -75,7 +75,7 @@ class DistrictLogic {
         $data['status'] = 0;
         $result = $this->model->table("district_promoter")->data($data)->insert();
         if ($result) {
-            $this->sendMessage($user_id, "恭喜您，成为买一点商城会员，您获得了3600商城积分和会员推广权限！","https://www.buy-d.cn/ucenter/index?first=1","promoter_join_success");
+            $this->sendMessage($user_id, "恭喜您，成为圆梦商城会员，您获得了3600商城积分和会员推广权限！","https://www.buy-d.cn/ucenter/index?first=1","promoter_join_success");
             if($invitor_role == 'shop'){
                 $shop_info = $this->model->table("district_shop")->where("id=$hirer_id")->find();
                 $this->sendMessage($shop_info['owner_id'], "恭喜您，您邀请的推广员加入了您的团队，您获得了2300金点和1000商城积分奖励！","https://www.buy-d.cn/district/district","has_promoter_join");
@@ -494,7 +494,7 @@ class DistrictLogic {
             }
             $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$user_id." and oauth_type='wechat'")->find();
             if(!empty($oauth_info)){
-                $oauth_info['open_name'] = $oauth_info['open_name']==""?"买一点用户":$oauth_info['open_name'];
+                $oauth_info['open_name'] = $oauth_info['open_name']==""?"圆梦用户":$oauth_info['open_name'];
                 $params = array(
                     'touser'=>$oauth_info['open_id'],
                     'msgtype'=>'text',

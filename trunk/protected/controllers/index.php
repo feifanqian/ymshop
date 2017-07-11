@@ -877,7 +877,8 @@ class IndexController extends Controller {
             $this->assign("county", $county);
             $this->assign("address", $address);
             //销量计算
-            $sales_volume = $this->model->table("order_goods")->where("goods_id=".$id)->count();
+            $sales_volume = $this->model->table("order_goods as og")->join("left join order as o on og.order_id = o.id")->where("og.goods_id = $id and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->find();
+            $sales_volume = $sales_volume['sell_volume']==NULL?0:$sales_volume['sell_volume'];
             $sales_volume = $goods['base_sales_volume']+$sales_volume;
             $goods['sales_volume']=$sales_volume;
             $this->assign("child_category", $childCategory);
@@ -1814,6 +1815,31 @@ class IndexController extends Controller {
             $this->assign("skumap", $skumap);
             $this->redirect();
         } else {
+            Tiny::Msg($this, "404");
+        }
+    }
+    
+    public function personal_shop_list(){
+        $this->assign("seo_title","个人商铺专区");
+        
+        $this->redirect();
+    }
+    
+    public function personal_shop_index(){
+        $id = Filter::int(Req::args('id'));
+        $list_type = Filter::int(Req::args('list_type'));
+        $list_type = $list_type == NULL ? 1:$list_type;
+        $model = new Model();
+        $isset = $model->table('personal_shop')->where("id=$id")->find();
+        if($isset){
+            $personal_data = Common::getPersonalShopData($id);
+            $this->assign("all_sell_num",$personal_data['all_sell_num']);
+            $this->assign("all_goods_num",$personal_data['all_goods_num']);
+            $this->assign("list_type",$list_type);
+            $this->assign("id",$id);
+            $this->layout="";
+            $this->redirect();
+        }else{
             Tiny::Msg($this, "404");
         }
     }

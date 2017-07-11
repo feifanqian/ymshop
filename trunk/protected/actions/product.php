@@ -143,7 +143,8 @@ class ProductAction extends Controller {
             $goods['attrs'] = unserialize($goods['attrs']);
             
             //销量计算
-            $sales_volume = $this->model->table("order_goods")->where("goods_id=".$id)->count();
+            $sales_volume = $this->model->table("order_goods as og")->join("left join order as o on og.order_id = o.id")->where("og.goods_id = $id and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->find();
+            $sales_volume = $sales_volume['sell_volume']==NULL?0:$sales_volume['sell_volume'];
             $sales_volume = $goods['base_sales_volume']+$sales_volume;
             $goods['sales_volume']=$sales_volume;
             

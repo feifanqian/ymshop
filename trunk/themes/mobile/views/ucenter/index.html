@@ -87,7 +87,7 @@
 <div style='margin-top:10px;'>
 {if:$is_hirer==true}
 <div class="weui_panel js_show">
-    <div class="weui_panel_hd js_category">我的小区<p><i class="fa fa-navicon "></i><p></div>
+    <div class="weui_panel_hd js_category">我的小区<p><i class="ymicon icon-navicon"></i><p></div>
     <div class="weui_panel_bd js_categoryInner">
         <div class="weui_media_box weui_media_small_appmsg">
             <div class="weui_cells weui_cells_access">
@@ -110,7 +110,7 @@
 {/if}
 {if:$is_promoter===true}
  <div class="weui_panel js_show">
-    <div class="weui_panel_hd js_category">推广员中心{if:Req::args("first")==1}<span class="weui-badge" style="margin-left: 5px;margin-bottom:2px;">NEW</span>{/if}<p><i class="fa fa-navicon "></i><p></div>
+    <div class="weui_panel_hd js_category">推广员中心{if:Req::args("first")==1}<span class="weui-badge" style="margin-left: 5px;margin-bottom:2px;">NEW</span>{/if}<p><i class="ymicon icon-navicon"></i><p></div>
     <div class="weui_panel_bd js_categoryInner">
         <div class="weui_media_box weui_media_small_appmsg">
             <div class="weui_cells weui_cells_access">
@@ -189,6 +189,13 @@
     {elseif:isset($open_bind)&&$open_bind==true}
     <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_account}" class="weui_btn weui_btn_primary">绑定已有账号</a></div></div>
     {/if}
+{/if}
+{if:$sign_in_open==1}
+<!--<div id='sign_in' style="width:80px;height:50px;background-color: white;position:fixed;right:0px;bottom:80px;">
+    <a href='{url:/ucenter/sign_in}'>
+        <i class="ymicon icon-qiandao" style="line-height: 1.3em;font-size: 3.5em;color:red;"> </i> 
+    </a>
+</div>-->
 {/if}
 <script>
     $(function(){

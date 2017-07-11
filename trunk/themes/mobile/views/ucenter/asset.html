@@ -56,13 +56,13 @@
                                 <a href="javascript:void(0);"><i>{echo:sprintf("%01.2f",$order['todayamount'])}</i>今日消费</a>
                             </div>
                             <div class="weui-col-25">
+                                <a href="{url:/ucenter/balance_log}"><i>{$customer['balance']}</i>我的余额</a>
+                            </div>
+                            <div class="weui-col-25">
                                 <a href="{url:/ucenter/pointcoin_log}"><i>{$customer['point_coin']}</i>剩余积分</a>
                             </div>
                             <div class="weui-col-25">
-                                <a href="{url:/ucenter/silver_log}"><i>{$customer['silver_coin']}</i>剩余银点</a>
-                            </div>
-                            <div class="weui-col-25">
-                                <a href="javascript:void(0);"><i>{echo:sprintf("%01.2f",$order['amount'])}</i>总消费</a>
+                                <a href="javascript:void(0);"><i>{$customer['financial_coin']}</i>理财金币</a>
                             </div>
                         </div>
                     </div>
@@ -75,18 +75,6 @@
     <div class="weui_panel_bd">
         <div class="weui_media_box weui_media_small_appmsg">
             <div class="weui_cells weui_cells_access">
-<!--                <a class="weui_cell" href="{url:/ucenter/huabi_exchange}">
-                    <div class="weui_cell_hd">
-                        <span class="icon-stack icon-lg">
-                            <i class="iconfont icon-square icon-stack-2x icon-color-yellow"></i>
-                            <i class="iconfont icon-exchange icon-stack-1x icon-inverse"></i>
-                        </span>
-                    </div>
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <p>金点兑换</p>
-                    </div>
-                    <span class="weui_cell_ft">虚拟币兑换金点</span>
-                </a>-->
                 <a class="weui_cell" href="{url:/ucenter/recharge_center}">
                     <div class="weui_cell_hd">
                         <span class="icon-stack icon-lg">
@@ -103,48 +91,36 @@
                     <div class="weui_cell_hd">
                         <span class="icon-stack icon-lg">
                             <i class="iconfont icon-square icon-stack-2x icon-color-slateblue" ></i>
-                            <i class="fa fa-rmb icon-stack-1x icon-inverse" style="line-height: 1.5em;font-size: 1.2em;"></i>
+                            <i class="ymicon icon-record icon-stack-1x icon-inverse" style="line-height: 1.7em;font-size: 1.2em;"></i>
                             
                         </span>
                     </div>
                     <div class="weui_cell_bd weui_cell_primary">
-                        <p>金点记录</p>
-                    </div>
-                    <span class="weui_cell_ft"></span>
-                </a>
-                <a class="weui_cell" href="{url:/ucenter/silver_log}">
-                    <div class="weui_cell_hd">
-                        <span class="icon-stack icon-lg">
-                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
-                            <i class="iconfont icon-recharge icon-stack-1x icon-inverse" ></i>
-                        </span>
-                    </div>
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <p>银点记录</p>
-                    </div>
-                    <span class="weui_cell_ft"></span>
-                </a>
-                 <a class="weui_cell exchange" href="javascript:exchange();">
-                    <div class="weui_cell_hd">
-                        <span class="icon-stack icon-lg">
-                            <i class="iconfont icon-square fa-stack-2x icon-color-slateblue"></i>
-                                <i class="fa fa-random fa-stack-1x fa-inverse" style="line-height: 1.5em;font-size: 1.2em;"></i>
-                        </span>
-                    </div>
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <p>兑换银点</p>
+                        <p>余额记录</p>
                     </div>
                     <span class="weui_cell_ft"></span>
                 </a>
                 <a class="weui_cell exchange" href="{url:/ucenter/balance_withdraw}">
                     <div class="weui_cell_hd">
                         <span class="icon-stack icon-lg">
-                            <i class="iconfont icon-square fa-stack-2x icon-color-slateblue"></i>
-                                <i class="fa fa-credit-card fa-stack-1x fa-inverse" style="line-height: 1.5em;font-size: 1.2em;"></i>
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                                <i class="ymicon icon-card icon-stack-1x icon-inverse" style="line-height: 1.6em;font-size: 1.2em;"></i>
                         </span>
                     </div>
                     <div class="weui_cell_bd weui_cell_primary">
-                        <p>金点提现</p>
+                        <p>余额提现</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                <a class="weui_cell exchange" href="{url:/ucenter/balance_withdraw}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                                <i class="iconfont icon-square icon-stack-2x icon-color-slateblue" ></i>
+                                <i class="ymicon icon-coin3 icon-stack-1x icon-inverse " style="line-height: 1.6em;font-size: 1.2em;"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>理财金币</p>
                     </div>
                     <span class="weui_cell_ft"></span>
                 </a>
@@ -164,38 +140,10 @@
 <script>
     $(".fa-question-circle").click(function(){
        layer.open({
-            content: '<p style="text-align:justify;text-justify:inter-ideograph">金点和银点是您在商城的通用货币，可以通过充值兑换，金点可以提现，而银点只能用作消费，金点可以不可逆地兑换成银点。银点消费更优惠，建议您充值使用银点。</p>'
+            content: '<p style="text-align:justify;text-justify:inter-ideograph">理财金币是用于商城分红的凭证，余额和积分是您在商城的可用资产，可以用于商城的购买活动，此处的消费统计只针对余额支付的订单。</p>'
             ,skin: 'footer'
         })
     });
-    function exchange(){
-        layer.open({
-        content: '<p>需兑换金点值：<input type="number" value="1" id="gold" style="border:none;border-bottom:1px solid gray;width:60px;font-size:20px;text-align:center;"></p>'+
-                '<p style="color: rgba(128, 128, 128, 0.59);">兑换比例：1金点={$gold2silver}银点</p>'
-        ,btn: ['兑换', '取消']
-        ,yes: function(index){
-          var gold = $("#gold").val();
-          if(!isNaN(gold)){
-             var load = layer.open({
-                type: 2
-                ,content: '兑换中'
-               });
-             $.post("{url:/ucenter/goldToSilver}",{gold:gold},function(result){
-                    layer.close(load);
-                    if(result.status=='success'){
-                        notify("您成功使用"+result.gold+"金点兑换了"+result.silver+"银点");
-                        setTimeout("window.location.reload();",3000);
-                    }else{
-                         notify(result.msg);
-                    }
-                },'json');
-          }else{
-               notify("请输入正确的数值");
-          }
-             
-        }
-      });
-    }
    function notify(msg){
        layer.open({
         content: msg

@@ -6,10 +6,10 @@
   ),
   'globals' => 
   array (
-    'site_name' => '买一点商城',
-    'site_logo' => '',
-    'site_keywords' => '买一点商城',
-    'site_description' => '买一点商城',
+    'site_name' => '圆梦商城',
+    'site_logo' => '/data/uploads/2017/07/11/06287e5756643206989497298b7c3de6.png',
+    'site_keywords' => '圆梦商城',
+    'site_description' => '圆梦商城',
     'site_icp' => '粤ICP备16060168号',
     'site_url' => '',
     'site_androidurl' => 'http://www.baidu.com',
@@ -56,9 +56,9 @@
     'other_order_delay_point' => '0',
     'other_order_delay_pointflash' => '120',
     'other_verification_eamil' => NULL,
-    'rmb2huabi' => '0.085',
-    'gold2silver' => '1',
-    'withdraw_fee_rate' => '3',
+    'rmb2huabi' => NULL,
+    'gold2silver' => NULL,
+    'withdraw_fee_rate' => '10',
     'min_withdraw_amount' => '100',
   ),
   'wechat' => 
@@ -194,31 +194,47 @@
   array (
     1 => 
     array (
-      'point' => '600',
-      'withdraw_time' => '1',
-      'gift' => '1068|1058|1080',
-      'gift_num' => '1',
+      'money' => '500',
+      'point' => '500',
+      'financial_coin' => '500',
+      'gift' => '',
     ),
     2 => 
     array (
-      'point' => '3600',
-      'withdraw_time' => '6',
-      'gift' => '1074|239|161|240|241|242|1075|162|1073|192|163',
-      'gift_num' => '1',
+      'money' => '1000',
+      'point' => '1000',
+      'financial_coin' => '1000',
+      'gift' => '1162',
     ),
     3 => 
     array (
-      'point' => '10800',
-      'withdraw_time' => '18',
-      'gift' => '1074|239|161|240|241|242|1075|162|1073|192|163',
-      'gift_num' => '1',
+      'money' => '2000',
+      'point' => '2000',
+      'financial_coin' => '2000',
+      'gift' => '1165',
     ),
     4 => 
     array (
-      'point' => '18000',
-      'withdraw_time' => '30',
-      'gift' => '1074|239|161|240|241|242|1075|162|1073|192|163',
-      'gift_num' => '1',
+      'money' => '3600',
+      'point' => '3600',
+      'financial_coin' => '3600',
+      'gift' => '1155',
     ),
+  ),
+  'sign_in_set' => 
+  array (
+    'open' => '1',
+    'type' => '2',
+    'value' => '0.1*{serial_day}+10',
+    'max_sent' => '20',
+    'introduce' => '1.每日签到可获取10积分<br>
+2.累积签到越多，赠送越多<br>
+3.如签到中断，从初始值重新计算',
+  ),
+  'personal_shop_set' => 
+  array (
+    'open' => '1',
+    'goods_name' => '纤多多高纤多维蔬菜片',
+    'goods_id' => '483',
   ),
 );

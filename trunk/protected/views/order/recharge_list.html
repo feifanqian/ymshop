@@ -12,7 +12,6 @@
     <tr>
         <th width="30">选择</th>
         <th width="70">查看</th>
-        <th width='100'>充值类型</th>
         <th width="100">支付方式</th>
         <th width="80">支付状态</th>
         <th width="80">金额</th>
@@ -21,11 +20,9 @@
         <th width="80">付款时间</th>
         
     </tr>
-    {set:$recharge_type=array("0"=>'金点','1'=>"银点");}
-    {query:name=doc_receiving as dr fields= dr.id,py.pay_name,dr.amount,us.name,dr.create_time,dr.payment_time,re.recharge_type,re.status,re.recharge_no join= left join user as us on dr.user_id eq us.id left join payment as py on dr.payment_id eq py.id left join recharge as re on dr.order_id eq re.id where=$where id=$obj page=1 order=dr.id desc}
+    {query:name=doc_receiving as dr fields= dr.id,py.pay_name,dr.amount,us.name,dr.create_time,dr.payment_time,re.status,re.recharge_no join= left join user as us on dr.user_id eq us.id left join payment as py on dr.payment_id eq py.id left join recharge as re on dr.order_id eq re.id where=$where id=$obj page=1 order=dr.id desc}
         <tr><td width="30"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td width="70"><a href="javascript:view({$item['id']})" class=" icon-eye"> 查看</a></td>
-            <td width="100">{$recharge_type[$item['recharge_type']]}</td>
             <td width="100">{$item['pay_name']}</td>
             <td width="80">{$item['status']|'已支付'|'<span class="red">等待支付</span>'}</td>
             <td width="80">{$item['amount']}</td>

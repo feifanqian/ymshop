@@ -94,12 +94,10 @@ class Payment {
             $safebox = Safebox::getInstance();
             $user = $safebox->get('user');
             $recharge = new Model('recharge');
-            $argument['recharge_type']=  isset($argument['recharge_type'])? $argument['recharge_type']:0;
             $argument['package']=  isset($argument['package'])? $argument['package']:0;
             $data = array(
                 'user_id' => isset($argument['user_id'])? $argument['user_id']:$user['id'],
                 'recharge_no' => Common::createOrderNo(),
-                'recharge_type'=>$argument['recharge_type'],
                 'package'=>$argument['package'],
                 'account' => $argument['account'],
                 'time' => date('Y-m-d H:i:s'),

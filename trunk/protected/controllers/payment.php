@@ -132,190 +132,6 @@ class PaymentController extends Controller {
         }
     }
 
-    //银点支付
-    public function pay_silver() {
-        $model = new Model('user as us');
-        $userInfo = $model->join('left join customer as cu on us.id = cu.user_id')->where('cu.user_id = ' . $this->user['id'])->find();
-        if ($userInfo['pay_password_open'] == 1) {
-            $pay_password = Req::args('pay_password');
-            $order_id = Req::post('order_id');
-            $payment_id = Req::post('payment_id');
-            if ($userInfo['pay_password'] != CHash::md5($pay_password, $userInfo['pay_validcode'])) {
-                $msg = '支付密码错误';
-                $this->redirect('/payment/dopay/order_id/' . $order_id . '/payment_id/' . $payment_id, true, array('msg' => $msg));
-                exit;
-            }
-        }
-        $sign = Req::post('sign');
-        $args = Req::post();
-        unset($args['sign']);
-        unset($args['pay_password']);
-        unset($args['order_id']);
-        unset($args['payment_id']);
-
-        $total_fee = Filter::float(Req::post('total_fee'));
-        $attach = Filter::int(Req::post('attach'));
-
-        $return['attach'] = $attach;
-        $return['total_fee'] = $total_fee;
-        $return['order_no'] = Filter::sql(Req::post('order_no'));
-        $return['return_url'] = Req::post('return_url');
-
-        if (stripos($return['order_no'], 'recharge_') !== false) {
-            $msg = array('type' => 'fail', 'msg' => '银点支付方式,不能用于在线充值功能！');
-            $this->redirect('/index/msg', false, $msg);
-            exit;
-        }
-        if (floatval($return['total_fee']) < 0 || $return['order_no'] == '' || $return['return_url'] == '') {
-            $msg = array('type' => 'fail', 'msg' => '支付参数不正确！');
-            $this->redirect('/index/msg', false, $msg);
-            exit();
-        } else {
-
-            $payment = new Payment($attach);
-            $pay_silver = $payment->getPaymentPlugin();
-            $classConfig = $pay_silver->getClassConfig();
-
-            $filter_param = $pay_silver->filterParam($args);
-            //对待签名参数数组排序
-            $para_sort = $pay_silver->argSort($filter_param);
-            $mysign = $pay_silver->buildSign($para_sort, $classConfig['partner_key']);
-
-            if ($mysign == $sign) {
-                $user_id = $this->user['id'];
-                $model = new Model("customer");
-                $customer = $model->where("user_id=" . $user_id)->find();
-                if ($customer['silver_coin'] >= $total_fee) {
-                    $order = $model->table("order")->where("order_no='" . $return['order_no'] . "' and user_id=" . $user_id)->find();
-                    if ($order) {
-                        if ($order['pay_status'] == 0) {
-                            $silver_coin_component = Common::getSilverCoinComponent($user_id);
-                            $package_info = Common::getPackageAreaGoodsAmount($return['order_no']);
-                            if ($silver_coin_component == false || $silver_coin_component['other_silver'] < 0) {
-                                $msg = array('type' => 'fail', 'msg' => "抱歉，您的账号银点信息异常", 'content' => "请您联系客服或选择其他支付方式");
-                                file_put_contents('silverCoinErr.txt', date("Y-m-d H:i:s") . "|========用户{$user_id}银点异常======|\n", FILE_APPEND);
-                                $this->redirect('/index/msg', false, $msg);
-                                exit();
-                            }
-                            /*
-                             * 银点使用顺序 1：定向套餐银点 2：有华点限制的赠送银点 3：无华点限制的赠送银点 4：普通充值银点
-                             */
-                            if ($order['type'] == 4) {//为华点订单时，不能使用充值活动赠送的银点
-                                if (($silver_coin_component['all'] - $silver_coin_component['send_silver_limit']) > $package_info['all'] && ($silver_coin_component['all'] - $silver_coin_component['send_silver_limit'] - $silver_coin_component['package_limit_silver']) > $package_info['other_amount']) {
-                                    $flag = $model->table("customer")->where("user_id=" . $user_id)->data(array('silver_coin' => "`silver_coin`-" . $total_fee))->update();
-                                    if ($flag) {
-                                        $real_record = 0.00;
-                                        $note = array();
-                                        //如果有套餐商品就先使用定向套餐银点
-                                        if ($package_info['package_amount'] > 0 && $silver_coin_component['package_limit_silver'] > 0) {
-                                            //先记录定向银点的使用
-                                            $package_silver_record = Common::recordUseDetail4LimitSilverCoin($user_id, $package_info['package_amount'], $order['id']);
-                                            $real_record += $package_silver_record;
-                                            $note[] = $package_silver_record > 0 ? "{$package_silver_record}定向银点" : "";
-                                        }
-                                        if ($real_record < $package_info['all'] && $silver_coin_component['send_silver_no_limit'] > 0) {
-                                            $send_silver_no_limit_record = Common::recordUseDetail4SendSilverCoin($user_id, $package_info['all'] - $real_record, $order['id'], 0);
-                                            $real_record +=$send_silver_no_limit_record;
-                                            $note[] = $send_silver_no_limit_record > 0 ? "{$send_silver_no_limit_record}赠送无限制银点" : "";
-                                        }
-                                        if ($real_record < $package_info['all']) {
-                                            $other_silver_record = $package_info['all'] - $real_record;
-                                            $note[] = $other_silver_record > 0 ? "{$other_silver_record}普通银点" : "";
-                                        }
-                                        //记录支付日志
-                                        Log::silver_log((0 - $total_fee), $user_id, $return['order_no'], "使用了" . implode(",", $note), 0);
-                                    }
-                                } else {
-                                    $msg = array('type' => 'fail', 'msg' => "银点购买限制", 'msg' => "抱歉，您的银点余额中包含{$silver_coin_component['package_limit_silver']}定向银点和{$silver_coin_component['send_silver_limit']}不能用户华点订单的赠送银点。");
-                                    $this->redirect('/index/msg', false, $msg);
-                                    exit();
-                                }
-                            } else {
-                                if (($silver_coin_component['all']) > $package_info['all'] && ($silver_coin_component['all'] - $silver_coin_component['package_limit_silver']) > $package_info['other_amount']) {
-                                    $flag = $model->table("customer")->where("user_id=" . $user_id)->data(array('silver_coin' => "`silver_coin`-" . $total_fee))->update();
-                                    if ($flag) {
-                                        $real_record = 0.00;
-                                        $note = array();
-                                        //1.如果有套餐商品就先使用定向套餐银点
-                                        if ($package_info['package_amount'] > 0 && $silver_coin_component['package_limit_silver'] > 0) {
-                                            $package_silver_record = Common::recordUseDetail4LimitSilverCoin($user_id, $package_info['package_amount'], $order['id']);
-                                            $real_record += $package_silver_record;
-                                            $note[] = $package_silver_record > 0 ? "{$package_silver_record}定向银点" : "";
-                                        }
-                                        //2.如果还没记录完，就继续，开始记录到赠送的有华点限制的银点
-                                        if ($real_record < $package_info['all'] && $silver_coin_component['send_silver_limit'] > 0) {
-                                            $send_silver_limit_record = Common::recordUseDetail4SendSilverCoin($user_id, $package_info['all'] - $real_record, $order['id'], 1);
-                                            $real_record +=$send_silver_limit_record;
-                                            $note[] = $send_silver_limit_record > 0 ? "{$send_silver_limit_record}赠送银点（不可用于华点订单）" : "";
-                                        }
-                                        //3.记录到赠送的没有限制的银点
-                                        if ($real_record < $package_info['all'] && $silver_coin_component['send_silver_no_limit'] > 0) {
-                                            $send_silver_no_limit_record = Common::recordUseDetail4SendSilverCoin($user_id, $package_info['all'] - $real_record, $order['id'], 0);
-                                            $real_record +=$send_silver_no_limit_record;
-                                            $note[] = $send_silver_no_limit_record > 0 ? "{$send_silver_no_limit_record}赠送无限制银点" : "";
-                                        }
-                                        //4.记录到普通充值的银点上
-                                        if ($real_record < $package_info['all']) {
-                                            $other_silver_record = $package_info['all'] - $real_record;
-                                            $note[] = $other_silver_record > 0 ? "{$other_silver_record}普通银点" : "";
-                                        }
-                                        //记录支付日志
-                                        Log::silver_log((0 - $total_fee), $user_id, $return['order_no'], "使用了" . implode(",", $note), 0);
-                                    }
-                                } else {
-                                    $msg = array('type' => 'fail', 'msg' => "银点购买限制", 'msg' => "抱歉，您的银点余额中包含{$silver_coin_component['package_limit_silver']}定向银点，只能用于指定商品");
-                                    $this->redirect('/index/msg', false, $msg);
-                                    exit();
-                                }
-                            }
-                            $return['order_status'] = 'TINY_SECCESS';
-                            $filter_param = $pay_silver->filterParam($return);
-                            $para_sort = $pay_silver->argSort($filter_param);
-                            $sign = $pay_silver->buildSign($para_sort, $classConfig['partner_key']);
-                            $prestr = $pay_silver->createLinkstring($para_sort);
-
-                            $nextUrl = urldecode($return['return_url']);
-                            if (stripos($nextUrl, '?') === false) {
-                                // $return_url = $nextUrl.'?'.$prestr;
-                            } else {
-                                //$return_url = $nextUrl.'&'.$prestr;
-                            }
-                            $return_url = $nextUrl; //.= '&sign='.$sign;
-                            $return['sign'] = $sign;
-                            $this->redirect("$return_url", true, $return);
-                            exit;
-                        } else {
-                            $msg = array('type' => 'fail', 'msg' => '订单已经处理过，请查看订单信息！');
-                            $this->redirect('/index/msg', false, $msg);
-                            exit();
-                        }
-                    } else {
-                        $msg = array('type' => 'fail', 'msg' => '订单不存在！');
-                        $this->redirect('/index/msg', false, $msg);
-                        exit;
-                    }
-                } else {
-                    $msg = array('type' => 'fail', 'msg' => '银点不足,请选择其它支付方式！');
-                    $this->redirect('/index/msg', false, $msg);
-                    exit;
-                }
-            } else {
-                $msg = array('type' => 'fail', 'msg' => '签名错误！');
-                $this->redirect('/index/msg', false, $msg);
-                exit;
-            }
-        }
-    }
-
-//    public function pay_huabi() {
-//        $total_fee = Req::post('total_fee');
-//        $user_id = $this->user['id'];
-//        $model = new Model("customer");
-//        $flag = $model->table("customer")->where("user_id=" . $user_id)->data(array('balance' => "`balance`+" . $total_fee))->update();
-//        //记录支付日志
-//        Log::balance((0 + $total_fee), $user_id, '通过虚拟币支付方式兑换金点');
-//        $this->redirect();
-//    }
     //货到付款方式，服务器端处理
     public function pay_received() {
 
@@ -414,92 +230,63 @@ class PaymentController extends Controller {
             if ($recharge != null) {
                 //充值套餐判断，套餐充值是充值的银点
                 $package = Filter::int(Req::args('package'));
-                $address_id = Filter::int(Req::args('address_id'));
-                $recommend = Filter::sql(Req::args('recommend'));
-                $recharge_type = Filter::int(Req::args('recharge_type'));
-                $gift = Filter::int(Req::args("gift"));
+                
                 $package = $package == null ? 0 : $package;
+                
                 if (in_array($package, array(1, 2, 3, 4))) {
-                    $model = new Model();
                     $safebox = Safebox::getInstance();
                     $user = $safebox->get('user');
                     $config = Config::getInstance();
                     $package_set = $config->get("recharge_package_set");
-                    //判断礼物是否是套餐真实的
-                    $gift_arr = explode("|", $package_set[$package]['gift']);
-                    if ($gift == NULL) {
-                        $gift = $gift_arr[0];
-                    } else if (!in_array($gift, $gift_arr)) {
-                        $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '抱歉，您选择的套餐礼品不正确'));
-                        exit();
+                    
+                    if($package==4){
+                        $address_id = Filter::int(Req::args('address_id'));
+                        $gift = Filter::int(Req::args("gift"));
+                        //判断礼物是否是套餐真实的
+                        $gift_arr = explode("|", $package_set[4]['gift']);
+                        if (!in_array($gift, $gift_arr)) {
+                            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '抱歉，您选择的套餐礼品不正确'));
+                            exit();
+                        }
+                        if (!$address_id) {
+                            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '信息错误,未选择地址'));
+                            exit();
+                        }
                     }
-//                    if($package==1){//判断之前有没有充值过高级套餐
-//                        $count = $model->table('recharge')->where("package in (2,3,4) and status =1 and user_id=".$user['id'])->count();
-//                        if($count==0){
-//                                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '抱歉，套餐一仅用于续充，请先充值其他套餐'));
-//                                 exit();
-//                        }
-//                    }
-                    if (!$address_id) {
-                        $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '信息错误,未选择地址'));
-                        exit();
-                    }
-                    if ($recharge_type != 1) {
-                        $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '信息错误,充值套餐对象为金点'));
-                        exit();
-                    }
+                  
                     switch ($package) {
                         case 0 : $recharge = $recharge;
                             break;
-                        case 1 : $recharge = 600;
+                        case 1 : $recharge = $package_set[1]['money'];
                             break;
-                        case 2 : $recharge = 3600;
+                        case 2 : $recharge = $package_set[2]['money'];
                             break;
-                        case 3 : $recharge = 10800;
+                        case 3 : $recharge = $package_set[3]['money'];
                             break;
-                        case 4 : $recharge = 18000;
+                        case 4 : $recharge = $package_set[4]['money'];
                             break;
-                    }
-
-                    if ($recommend) {//如果填写了推荐人
-                        if (is_numeric($recommend) && strlen($recommend) == 11) {
-                            $info = $model->table("customer")->where("mobile='$recommend'")->find();
-                        } else {
-                            $info = $model->table('user')->where("name='$recommend'")->find();
-                        }
-                        if (empty($info)) {
-                            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => "找不到推荐人{$recommend}的信息"));
-                            exit();
-                        } else {
-                            $recommend = isset($info['id']) ? $info['id'] : $info['user_id'];
-                        }
                     }
                 }
                 if (is_numeric($recharge)) {
                     $safebox = Safebox::getInstance();
                     $user = $safebox->get('user');
-                    if (isset($user['id']) && ($user['id'] == 5 || $user['id'] == 693 || $user['id'] == 683 || $user['id'] == 2 || $user['id'] == 6 || $user['id'] == 42 || $user['id'] == 52)) {
-                        $recharge = 0.01;
-                    }
                     $recharge = round($recharge, 2);
                     $paymentInfo = $payment->getPayment();
-                    $data = array('account' => $recharge, 'paymentName' => $paymentInfo['name'], 'recharge_type' => $recharge_type, 'package' => $package);
+                    $data = array('account' => $recharge, 'paymentName' => $paymentInfo['name'],'package' => $package);
                     $packData = $payment->getPaymentInfo('recharge', $data);
                     $packData = array_merge($extendDatas, $packData);
                     $recharge_no = substr($packData['M_OrderNO'], 8);
-                    if ($package != 0) {
+                    if ($package == 4) {
                         $recharge_gift_model = new Model();
-                        $recharge_count = $model->table('recharge')->where("package in (1,2,3,4) and status =1 and user_id=" . $user['id'])->count();
+//                      $recharge_count = $model->table('recharge')->where("package in (1,2,3,4) and status =1 and user_id=" . $user['id'])->count();
                         $gift_data['user_id'] = $user['id'];
                         $gift_data['recharge_no'] = $recharge_no;
                         $gift_data['package'] = $package;
                         $gift_data['address_id'] = $address_id;
                         $gift_data['gift'] = $gift;
-                        $gift_data['is_first'] = $recharge_count > 0 ? 2 : 1; //判断是否是首次充
+//                      $gift_data['is_first'] = $recharge_count > 0 ? 2 : 1; //判断是否是首次充
                         $gift_data['status'] = 0;
-                        if ($recommend) {
-                            $gift_data['recommend'] = $recommend;
-                        }
+                        
                         $recharge_gift_model->table("recharge_gift")->data($gift_data)->insert();
                     }
                     $sendData = $paymentPlugin->packData($packData);
@@ -651,15 +438,6 @@ class PaymentController extends Controller {
                     $userInfo = $model->join('left join customer as cu on us.id = cu.user_id')->where('cu.user_id = ' . $this->user['id'])->find();
                     if ($userInfo['pay_password_open'] == 1) {
                         $this->assign('pay_balance', true);
-                        $this->assign('userInfo', $userInfo);
-                        $this->assign('order_id', $order_id);
-                        $this->assign('payment_id', $payment_id);
-                    }
-                } else if ($paymentPlugin instanceof pay_silver) {
-                    $model = new Model('user as us');
-                    $userInfo = $model->join('left join customer as cu on us.id = cu.user_id')->where('cu.user_id = ' . $this->user['id'])->find();
-                    if ($userInfo['pay_password_open'] == 1) {
-                        $this->assign('pay_silver', true);
                         $this->assign('userInfo', $userInfo);
                         $this->assign('order_id', $order_id);
                         $this->assign('payment_id', $payment_id);

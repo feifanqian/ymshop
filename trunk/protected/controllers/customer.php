@@ -53,16 +53,6 @@ class CustomerController extends Controller {
                     Log::balance($amount, $user_id,'' ,'管理员退款', 4, $this->manager['id']);
                     $info = array('status' => 'success', 'msg' => '金点退款成功。');
                 }
-            }else if($recharge_type==1){
-                 if ($type == 2) {
-                    $model->data(array('silver_coin' => "`silver_coin`+" . $amount))->where("user_id=$user_id")->update();
-                    Log::silver_log($amount, $user_id, '' ,'管理员充值', 3, $this->manager['id']);
-                    $info = array('status' => 'success', 'msg' => '银点充值成功。');
-                } else if ($type == 4) {
-                    $model->data(array('silver_coin' => "`silver_coin`+" . $amount))->where("user_id=$user_id")->update();
-                    Log::silver_log($amount, $user_id,'' ,'管理员退款', 4, $this->manager['id']);
-                    $info = array('status' => 'success', 'msg' => '银点退款成功。');
-                }
             }else if($recharge_type==2){
                 if ($type == 2) {
                     $model->data(array('point_coin' => "`point_coin`+" . $amount))->where("user_id=$user_id")->update();
@@ -90,16 +80,7 @@ class CustomerController extends Controller {
         $this->assign("condition", $condition);
         $this->redirect();
     }
-     public function silver_list() {
-        $condition = Req::args("condition");
-        $condition_str = Common::str2where($condition);
-        if ($condition_str)
-            $this->assign("where", $condition_str);
-        else
-            $this->assign("where", "1=1");
-        $this->assign("condition", $condition);
-        $this->redirect();
-    }
+
     public function pointcoin_list() {
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);

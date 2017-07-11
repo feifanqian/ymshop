@@ -87,6 +87,20 @@
         </dl>
         <dl class="lineD">
           <dt>
+            个人店铺：
+          </dt>
+          <dd>
+            <select name="personal_shop_id">
+              <option value="0">请选择店铺所有者...</option>
+              {query:name=personal_shop as ps join=left join customer as c on ps.user_id eq c.user_id }
+              <option value="{$item['id']}">{$item['real_name']}</option>
+              {/query}
+            </select>
+            <label></label>
+          </dd>
+        </dl>
+        <dl class="lineD">
+          <dt>
             <b class="red">*</b>
             商品名称：
           </dt>
@@ -422,6 +436,9 @@ form.setValue('category_id','{$category_id}');
 form.setValue('type_id','{$type_id}');
 form.setValue('brand_id','{$brand_id}');
 form.setValue('is_online','{$is_online}');
+{if:isset($personal_shop_id)&&$personal_shop_id!=""}
+form.setValue('personal_shop_id','{$personal_shop_id}');
+{/if}
 $("#type_id").change();
 
 {if:isset($products_info)}

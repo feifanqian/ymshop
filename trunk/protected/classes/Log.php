@@ -12,7 +12,7 @@ class Log {
 
     //余额日志变化写入
     public static function balance($amount, $user_id, $order_no='', $note = '', $type = 0, $admin_id = 0) {
-        //事件类型: 0:购物下单 1:用户充值 2:管理员充值 3:金点提现 4:管理员退款 5：佣金获取 6:推广收益 7：转化成银点 8:外平台返回
+        //事件类型: 0:购物下单 1:用户充值 2:管理员充值 3:金点提现 4:管理员退款 5：佣金获取 6:推广收益 7：转化成银点 8:外平台返回 9：商城分红
         $model = new Model('customer');
         $customer = $model->fields("balance")->where("user_id=" . $user_id)->find();
         if ($customer) {
@@ -37,27 +37,8 @@ class Log {
                 }
         }
     }
-     //银点日志变化写入
-    public static function silver_log($amount, $user_id, $order_no='', $note = '', $type = 0, $admin_id = 0) {
-        //事件类型: 0:购物下单 1:金点转换  2：用户充值 3:管理员充值  4:管理员退款  5:过期扣减 
-        $model = new Model('customer');
-        $customer = $model->fields("silver_coin")->where("user_id=" . $user_id)->find();
-        if ($customer) {
-            $log = array(   'admin_id' => $admin_id, 
-                            'user_id' => $user_id, 
-                            'type' => $type,
-                            'log_time' => date('Y-m-d H:i:s'), 
-                            'amount' => $amount, 
-                            'balance' => $customer['silver_coin'], 
-                            'note' => $note,
-                            'order_no'=>$order_no,);
-            $model->table("silver_log")->data($log)->insert();
-        }
-    }
-    
-     //银点日志变化写入
     public static function pointcoin_log($amount, $user_id, $order_no='', $note = '', $type = 0, $admin_id = 0) {
-        //事件类型: 0:购物下单 1:套餐充值 2:系统退回 3：管理员充值 4：管理员退款 5:推广员入驻赠送 6:推广员推荐奖励 7：小区销售积分奖励 8:经营商入驻赠送 9:购买商品赠送
+        //事件类型: 0:购物下单 1:套餐充值 2:系统退回 3：管理员充值 4：管理员退款 5:推广员入驻赠送 6:推广员推荐奖励 7：小区销售积分奖励 8:经营商入驻赠送 9:购买商品赠送 10:每日签到赠送 11：商城分红
         $model = new Model('customer');
         if($type==0){
             $amount = 0 - abs($amount);

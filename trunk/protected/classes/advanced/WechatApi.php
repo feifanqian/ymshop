@@ -23,7 +23,7 @@ class WechatApi extends Wechat {
             $this->onScan();
         }
         $items = array();
-        $items[] = new NewsResponseItem("欢迎光临买一点商城", "", "http://img.buy-d.cn/data/uploads/2016/09/07/b4f135e20157b7928bf8c892500f8f3c.png", "http://www.buy-d.cn/");
+        $items[] = new NewsResponseItem("欢迎光临圆梦商城", "", "http://img.buy-d.cn/data/uploads/2016/09/07/b4f135e20157b7928bf8c892500f8f3c.png", "http://www.buy-d.cn/");
         $items[] = new NewsResponseItem("柚皮王", "", Common::thumb("data/uploads/2016/08/06/ee00da59407af68dbabe51a78ffc15fe.jpg", 120, 120), "http://www.buy-d.cn/?con=index&act=search&tiny_token_=k2earyxvl9ohpz8gl7wyhba3bzidqm6j&keyword=%E6%9F%9A%E7%9A%AE%E7%8E%8B");
         $items[] = new NewsResponseItem("益天下", "", Common::thumb("data/uploads/2016/06/24/76156d180d43556554faecba7e5d6564.jpg", 120, 120), "http://www.buy-d.cn/?con=index&act=search&tiny_token_=yk0bw5y2ndlmkv8twhjxog5edmnd3hci&keyword=%E7%9B%8A%E5%A4%A9%E4%B8%8B");
         $this->responseNews($items);
@@ -149,7 +149,7 @@ class WechatApi extends Wechat {
                      $district_qrcodeinfo->data(array('visit_count'=>$result['visit_count']+1))->where('id='.$result['id'])->update();
                      $news = array();
                      if($is_first){
-                        $news[] = new NewsResponseItem("欢迎光临买一点商城", "", "http://img.buy-d.cn/data/uploads/2016/09/07/b4f135e20157b7928bf8c892500f8f3c.png", "http://www.buy-d.cn/"); 
+                        $news[] = new NewsResponseItem("欢迎光临圆梦商城", "", "http://img.buy-d.cn/data/uploads/2016/09/07/b4f135e20157b7928bf8c892500f8f3c.png", "http://www.buy-d.cn/"); 
                         $news[]=new NewsResponseItem($result['name'],$result['subtitle'],Url::fullUrlFormat('@' . Common::thumb($result['img'], 220, 220)),Url::fullUrlFormat('/index/product/id/' . $result['goods_id']."/flag/".$result['id']));
                      }else{
                          $news[]=new NewsResponseItem($result['name'],$result['subtitle'],Url::fullUrlFormat('@'.$result['img'])."!/both/360x200/force/true/fxfn/360x200",Url::fullUrlFormat('/index/product/id/' . $result['goods_id']."/flag/".$result['id']));

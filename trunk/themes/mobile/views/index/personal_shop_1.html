@@ -1,0 +1,101 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<script src="{url:#js/swiper.min.js}"></script>
+<style>
+    .swiper-slide{
+        margin-top: 10px;
+        width: 110px;
+        height: 160px;
+    }
+    .swiper-slide .thumbs img{
+        width: 110px;
+        height: 110px;
+    }
+    .swiper-slide .title p{
+/*        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center;*/
+        overflow: hidden;
+        display: -webkit-box;
+ 	-webkit-line-clamp: 2;
+ 	-webkit-box-orient: vertical;
+    }
+    .swiper-wrapper{
+        padding-left:10px;
+    }
+    .swiper-title{
+        height:50px;
+    }
+    .shop-logo{
+        width: 30px;
+        height: 30px;
+        float: left;
+    }
+    .shop-logo img{
+        width: 30px;
+        height: 30px;
+        border-radius: 15px;
+    }
+    .shop-name{
+        width:200px;
+        height: 30px;
+        overflow: hidden;
+        float: left;
+    }
+    .shop-name h2{
+        line-height: 30px;
+        text-indent: 10px;
+    }
+    .weui-cell__bd{
+        text-align: right;
+    }
+    .shop-qrcode{
+        padding-top:2px;
+        width:30px;
+        height: 30px;
+        float: right;
+    }
+    .shop-info{
+        display: block;
+        width: 100%;
+        height:30px;
+    }
+</style>
+{query:name=personal_shop as ps join=left join customer as c on ps.user_id eq c.user_id left join user as u on ps.user_id eq u.id fields=ps.*,c.real_name,u.avatar order=ps.listorder asc limit=12 page=1 pagesize=3 id=$personal_shop_list }
+<div class="weui-panel weui-panel_access">
+            <div class="weui-panel__hd">
+                <div class="shop-info">
+                    <div class="shop-logo">
+                        <img src="{url:'@'. $item[avatar]}">
+                    </div>
+                    <div class="shop-name">
+                        <h2>{$item['real_name']}的店铺</h2>
+                    </div>
+                    <div class="shop-qrcode">
+                    <i class="ymicon icon-erweima"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-panel__bd">
+               <div class="swiper-container swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 10,'freeMode': true,'pagination': ''}">
+                    <div class="swiper-wrapper">
+                            {query:name=goods where=personal_shop_id eq $item[id] item=$goods limit=10}
+                            <div class="swiper-slide">
+                                <a href="{url:/index/product/id/$goods[id]}">
+                                    <div class="thumbs"><img src="{echo:Common::thumb($goods['img'],220,220);}" alt=""></div>
+                                    <div class="title"><p>{$goods['name']}</p></div>
+                                </a>
+                            </div>
+                            {/query} 
+                    </div>
+                </div>
+            </div>
+            <div class="weui-panel__ft">
+                <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
+                    <div class="weui-cell__bd">查看更多</div>
+                    <span class="weui-cell__ft"></span>
+                </a>    
+            </div>
+</div>
+{/query}
+<div class=" plr20 pb20 tc page-nav">{echo:$personal_shop_list->pageBar(5);}</div>

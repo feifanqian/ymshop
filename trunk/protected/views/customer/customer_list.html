@@ -18,12 +18,11 @@
         <th style="width:60px">积分</th>
         <th style="width:100px">联系电话</th>
         <th>邮箱地址</th>
-        <th>华点账号</th>
         <th style="width:130px">注册时间</th>
         <th style="width:60px">状态</th>
         <th style="width:80px">会员等级</th>
         <th style="width:80px">金点余额</th>
-        <th style="width:80px">银点余额</th>
+        <th style="width:80px">理财金币</th>
         <th style="width:80px">积分币</th>
     </tr>
     {query:name=grade /}
@@ -48,9 +47,15 @@
                 <li><a class="icon-remove-2" href="javascript:confirm_action('{url:/customer/customer_del/id/$item[id]}')"> 删除</a></li>
             </ul></div></div> </td>
         <!--<td style="width:100px">{$item['name']}</td>-->
-        <td style="width:100px">{$item['real_name']}</td><td style="width:60px">{$item['point']}</td><td style="width:130px">{$item['mobile']}</td><td >{$item['email']}</td><td >{$item['huabi_account']}</td><td style="width:100px">{$item['reg_time']}</td><td style="width:60px">{echo:$item['status']==0?"未激活":($item['status']==1?"正常":"锁定");}</td><td style="width:80px">{$grade_name[$item['group_id']]|'默认会员'}</td>
+        <td style="width:100px">{$item['real_name']}</td>
+        <td style="width:60px">{$item['point']}</td>
+        <td style="width:130px">{$item['mobile']}</td>
+        <td >{$item['email']}</td>
+        <td style="width:100px">{$item['reg_time']}</td>
+        <td style="width:60px">{echo:$item['status']==0?"未激活":($item['status']==1?"正常":"锁定");}</td>
+        <td style="width:80px">{$grade_name[$item['group_id']]|'默认会员'}</td>
         <td style="width:80px">{$item['balance']}</td>
-        <td style="width:80px">{$item['silver_coin']}</td>
+        <td style="width:80px">{$item['financial_coin']}</td>
         <td style="width:80px">{$item['point_coin']}</td></tr>
     {/query}
 </table>
@@ -74,7 +79,6 @@
           <dl class="lineD">
           <dt>类型：</dt>
           <dd><input type="radio" name="recharge_type" value="0">金点
-              <input type="radio" name="recharge_type" value="1" checked="checked">银点
               <input type="radio" name="recharge_type" value="2" >积分币
           </dd>
           </dl>

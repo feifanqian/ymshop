@@ -719,6 +719,7 @@ class MarketingController extends Controller {
         $this->redirect();
     }
     
+    
     public function pointflash_sale_save(){
         $id = Filter::int(Req::args("id"));
         $type = Filter::str(Req::args("type"));
@@ -799,6 +800,93 @@ class MarketingController extends Controller {
             }
         }else{
             exit(json_encode(array('status'=>'fail','msg'=>'参数错误'))); 
+        }
+    }
+    
+    //签到设置
+    public function sign_in_set(){
+        $group = "sign_in_set";
+        $config = Config::getInstance();
+        if (Req::args('submit') != null) {
+                $configService = new ConfigService($config);
+                if (method_exists($configService, $group)) {
+                    $result = $configService->$group();
+                    if (is_array($result)) {
+                        $this->assign('message', $result['msg']);
+                    } else if ($result == true) {
+                        $this->assign('message', '信息保存成功！');
+                    }
+                    //清除opcache缓存
+                    if (extension_loaded('opcache')) {
+                        opcache_reset();
+                    }
+                    Log::op($this->manager['id'], "修改签到配置", "管理员[" . $this->manager['name'] . "]:修改了签到配置 ");
+                }
+        }
+        $this->assign('data', $config->get($group));
+        $this->redirect();
+    }
+    
+    //分红
+    public function bonus(){
+        $this->redirect();
+    }
+    
+    //提交分红
+    public function post_bonus(){
+        $bonus = Filter::float(Req::args('bonus'));
+        $explanation = Filter::str(Req::args('explanation'));
+        if($bonus<=0){
+            exit(json_encode(array("status"=>'fail','msg'=>"分红金额错误")));
+        }
+        $model = new Model();
+        $financial_coin_count = $model->table("customer")->fields("SUM(`financial_coin`) as count")->where("financial_coin > 0")->findAll();
+        $financial_coin_count = $financial_coin_count[0]['count']==NULL?0:$financial_coin_count[0]['count'];
+        if($financial_coin_count==0){
+            exit(json_encode(array("status"=>'fail','msg'=>"没有人拥有理财金币")));
+        }
+        $bonus_data = $model->table("customer")->where("financial_coin > 0")->fields("financial_coin,user_id")->findAll();
+        if($bonus_data){
+            $beneficiary_num = 0;
+            $has_bonus_count = 0.00;
+            $order_no = "B".date("YmdHis").rand(100, 999);
+            foreach ($bonus_data as $k=>$v){
+                 $need_add = round($bonus*$v['financial_coin']/$financial_coin_count,4);
+                 $need_add = sprintf("%.2f",substr(sprintf("%.4f", $need_add), 0, -2));
+                 if($need_add<=0){
+                     continue;
+                 }
+                 $result = $model->table('customer')->data(array('balance'=>"`balance`+{$need_add}"))->where("user_id =".$v['user_id'])->update();
+                 if($result){
+                     $beneficiary_num ++;
+                     $has_bonus_count += $need_add;
+                     Log::balance($need_add, $v['user_id'], $order_no, "商城分红",9,$this->manager['id']);
+                 }
+            }
+            if($beneficiary_num>0&&$has_bonus_count>0){
+                $max_bonus = $model->table("balance_log")->fields("amount as max")->where("order_no ='{$order_no}' and type =9 ")->order("amount desc")->find();
+                $min_bonus = $model->table("balance_log")->fields("amount as min")->where("order_no ='{$order_no}' and type =9 ")->order("amount asc")->find();
+                $model->table("bonus")->data(array("explanation"=>$explanation,"bonus"=>$bonus,'date'=>date("Y-m-d H:i:s"),'real_bonus'=>$has_bonus_count,'beneficiary_num'=>$beneficiary_num,'max_bonus'=>$max_bonus['max'],'min_bonus'=>$min_bonus['min']))
+                      ->insert();
+                exit(json_encode(array("status"=>'success','msg'=>"成功")));
+            }else{
+                exit(json_encode(array("status"=>'fail','msg'=>"分红失败，请跳转分红金额")));
+            }
+        }
+    }
+    
+    //获取预估数据
+    public function getCalculateData(){
+        if($this->is_ajax_request()){
+            $model = new Model();
+            $beneficiary_num = $model->table("customer")->where("financial_coin > 0")->count();
+            $financial_coin_count = $model->table("customer")->fields("SUM(`financial_coin`) as count")->where("financial_coin > 0")->findAll();
+            $financial_coin_count = $financial_coin_count[0]['count']==NULL?0:$financial_coin_count[0]['count'];
+            $financial_coin_max = $model->table("customer")->fields("financial_coin as max")->where("financial_coin > 0")->order("financial_coin desc")->find();
+            $financial_coin_min = $model->table("customer")->fields("financial_coin as min")->where("financial_coin > 0")->order("financial_coin asc")->find();
+            $financial_coin_max = empty($financial_coin_max)?0:$financial_coin_max['max'];
+            $financial_coin_min = empty($financial_coin_min)?0:$financial_coin_min['min'];
+            exit(json_encode(array('status'=>'success','beneficiary_num'=>$beneficiary_num,'count'=>(int)$financial_coin_count,'max'=>$financial_coin_max,'min'=>$financial_coin_min)));
         }
     }
 }

@@ -193,7 +193,7 @@ class CountController extends Controller {
         $date = explode('%20--%20', $time);
         $stime = date('Y-m-d 00:00:00', strtotime($date[0]));
         $etime = date('Y-m-d 00:00:00', strtotime($date[1] . '+1day'));
-        $title = "买一点销售订单[$stime - $etime]";
+        $title = "圆梦销售订单[$stime - $etime]";
         $where = "'$stime'< o.pay_time and o.pay_time<'$etime'";
          // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();

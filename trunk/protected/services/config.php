@@ -133,4 +133,23 @@ class ConfigService {
         $this->config->set('recharge_package_set', $recharge_package_set);
         return true;
     }
+    public function sign_in_set(){
+        $sign_in_set = array(
+            'open'=>Req::args("open"),
+            'type'=>Req::args("type"),
+            'value'=>Req::args('value'),
+            'max_sent'=>Req::args("max_sent"),
+            'introduce'=>Req::args("introduce")
+        );
+        $this->config->set('sign_in_set', $sign_in_set);
+        return true;
+    }
+    public function personal_shop_set(){
+        $personal_shop_set = array(
+            'open'=>Req::args("open"),
+            "goods_name"=>Req::args("goods_name"),
+            "goods_id"=>Req::args("goods_id")
+        );
+        $this->config->set("personal_shop_set",$personal_shop_set);
+    }
 }

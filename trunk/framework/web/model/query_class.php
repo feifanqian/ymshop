@@ -126,11 +126,9 @@ class Query {
         if ($this->page) {
             $sql = "select $this->distinct $this->fields from $this->table $this->join $this->where $this->group $this->having $this->order";
             $pageSql = "select count(*) as total from $this->table $this->join $this->where $this->group $this->having";
-
             $pagesize = isset($this->pagesize) ? intval($this->pagesize) : 10;
             $pagelength = isset($this->pagelength) ? intval($this->pagelength) : 5;
             $pagename = isset($this->pagename) ? $this->pagename : 'p';
-
             $items = $this->dbo->doSql($pageSql);
             $total = 0;
             if (is_array($items))

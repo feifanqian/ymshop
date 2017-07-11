@@ -272,42 +272,16 @@ class UcenterAction extends Controller {
         );
     }
 
+    //设置昵称
     public function set_nickname() {
         $new_name = Filter::str(Req::args('new'));
         if (strlen($new_name) > 20) {
+            $this->code = 1000;
             return;
         }
         $result = $this->model->query("update tiny_user set nickname = '$new_name' where id = " . $this->user['id']);
         if ($result) {
             $this->code = 0;
-        }
-    }
-
-    public function set_avatar() {
-        $upfile_path = Tiny::getPath("uploads") . "/head/";
-        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
-        //$upfile_url = strtr(Tiny::getPath("uploads_url")."head/",APP_URL,'');
-        $upfile = new UploadFile('imgfile', $upfile_path, '500k', '', 'hash', $this->user['id']);
-        $upfile->save();
-        $info = $upfile->getInfo();
-        $result = array();
-
-        if ($info[0]['status'] == 1) {
-            $result = array('error' => 0, 'url' => $upfile_url . $info[0]['path']);
-            $image_url = $upfile_url . $info[0]['path'];
-            $image = new Image();
-            $image->suffix = '';
-            $image->thumb(APP_ROOT . $image_url, 100, 100);
-            $model = new Model('user');
-            $model->data(array('avatar' => $image_url))->where("id=" . $this->user['id'])->update();
-
-            $safebox = Safebox::getInstance();
-            $user = $this->user;
-            $user['avatar'] = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
-            $safebox->set('user', $user);
-            $this->code = 0;
-        } else {
-            $this->code = 1099;
         }
     }
 
@@ -365,8 +339,9 @@ class UcenterAction extends Controller {
             $this->code = 0;
         }
     }
-
-    public function andorid_logout() {
+    
+    //退出登录
+    public function logout() {
         Session::clearAll();
         $result = $this->model->table("user")->data(array('token' => '', 'expire_time' => ''))->where('id=' . $this->user['id'])->update();
         if ($result) {
@@ -376,6 +351,7 @@ class UcenterAction extends Controller {
         }
     }
 
+    //通过旧密码重置登录密码
     public function reset_loginpwd() {
 
         $oldpassword = Filter::str(Req::args('oldpassword'));
@@ -403,105 +379,33 @@ class UcenterAction extends Controller {
         $this->code = 0;
     }
 
-    public function resetpwd1() {
-        $account = Filter::sql(Req::args('account'));
-        $this->safebox = Safebox::getInstance();
-        if (Validator::email($account)) {
-            $email = $account;
-            $model = $this->model->table('user');
-            $obj = $model->where("email = '" . $email . "'")->find();
-            if (!empty($obj)) {
-                $model = $this->model->table('reset_password');
-                $obj = $model->where("email = '" . $email . "'")->find();
-                $safecode = md5(md5($email) . md5(CHash::random(32)));
-                if (!empty($obj)) {
-                    $obj['safecode'] = $safecode;
-                    $model->data($obj)->update();
-                } else {
-                    $model->data(array('email' => $email, 'safecode' => $safecode))->add();
-                }
-                $reset_url = Url::fullUrlFormat("/simple/reset_password/safecode/$safecode");
-                $msg_content = '';
-                $site_url = Url::fullUrlFormat('/');
-                $msg_title = '找回密码--' . $this->site_name;
+    //通过手机验证修改登录密码
+    public function forget_loginpwd() {
+        $code = Filter::int(Req::args("code"));
+        $mobile = Filter::int(Req::args("mobile"));
+        $newpassword = Filter::str(Req::args("newpassword"));
+        $zone = Filter::int(Req::args('zone'));
 
-                $msg_template_model = new Model("msg_template");
-                $msg_template = $msg_template_model->where('id=3')->find();
-                if ($msg_template) {
-                    $msg_content = str_replace(array('{$site_name}', '{$reset_url}', '{$site_url}', '{$safecode}', '{$current_time}'), array($this->site_name, $reset_url, $site_url, $safecode, date('Y-m-d H:i:s')), $msg_template['content']);
-                    $msg_title = $msg_template['title'];
-                } else {
-                    $msg_content .='<p>亲爱的用户:</p>';
-                    $msg_content .='<p>您正在使用找回密码的功能,你的验证码是:' . $safecode . '<br/>';
-                }
-                $mail = new Mail();
-                $flag = $mail->send_email($email, $msg_title, $msg_content);
-                if ($flag) {
-                    $this->code = 0;
-                } else {
-                    $this->code = 1033;
-                }
-            } else {
+        //验证情况标识
+        $pass = $this->sms_verify($code, $mobile, $zone);
+        if ($pass) {
+            $user = $this->model->query("select user_id from tiny_customer where mobile = $mobile");
+            if (!$user) {
                 $this->code = 1030;
+                return;
             }
-        } elseif (Validator::mobi($account)) {
-            $mobile = $account;
-            $model = $this->model->table('customer');
-            $obj = $model->where("mobile = '" . $mobile . "'")->find();
-            $this->assign('accountType', 'mobile');
-            if (!empty($obj)) {
-                $sms = SMS::getInstance();
-                if ($sms->getStatus()) {
-                    $code = CHash::random('6', 'int');
-                    $result = $sms->sendCode($mobile, $code);
-                    if ($result['status'] == 'success') {
-                        $model = $this->model->table('reset_password');
-                        $model->data(array('email' => $mobile, 'safecode' => $code))->insert();
-                        $sms->flushCode($mobile);
-                        $this->code = 0;
-                    } else {
-                        $this->code = 1032;
-                    }
-                } else {
-                    $this->code = 1031;
-                }
-            } else {
-                $this->code = 1030;
-            }
-        } else {
-            $this->code = 1030;
-        }
-    }
-
-    public function resetpwd2() {
-        $safecode = Filter::sql(Req::args('safecode'));
-        $password = Req::args('password');
-        $repassword = Req::args('repassword');
-        if ($password == $repassword) {
-            $model = new Model('reset_password');
-            $obj = $model->where("safecode='" . $safecode . "'")->find();
-            if (!empty($obj)) {
+            if (strlen($newpassword) >= 6) {
                 $validcode = CHash::random(8);
-                if (strlen($safecode) == 32) {
-                    $umodel = $this->model->table('user');
-                    $umodel->where("email='" . Filter::sql($obj['email']) . "'")->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->update();
-                } else {
-                    $cumodel = $this->model->table('customer');
-                    $mobile = $obj['email'];
-                    $cuobj = $cumodel->where("mobile='$mobile'")->find();
-                    $umodel = $this->model->table('user');
-                    $umodel->where("id=" . $cuobj['user_id'] . "")->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->update();
-                }
-                $model->where('id=' . $obj['id'])->delete();
+                $this->model->table('user')->data(array('password' => CHash::md5($newpassword, $validcode), 'validcode' => $validcode))->where('id=' . $user[0]['user_id'])->update();
                 $this->code = 0;
             } else {
-                $this->code = 1025;
+                $this->code = 1023;
             }
         } else {
-            $this->code = 1020;
+            $this->code = 1026;
         }
     }
-
+    
     //第三方登录    
     public function thirdlogin() {
         $platform = Filter::sql(Req::args('platform'));
@@ -727,7 +631,6 @@ class UcenterAction extends Controller {
     }
 
     //订单查询   
-    //POST参数  
     //status:1.all 查询所有订单 2.unpay 查询未支付订单 3.undelivery 查询未发货订单 4. unreceived 查询未收货订单
     //page： 分页页码（默认一页十条）
     public function order() {
@@ -916,6 +819,7 @@ class UcenterAction extends Controller {
         }
     }
 
+    //我的评论
     public function my_review() {
         $status = Filter::str(Req::args('status'));
         $page = (int) Filter::int(Req::args('page'));
@@ -1081,6 +985,7 @@ class UcenterAction extends Controller {
         }
     }
 
+    //钱袋页
     public function huabi() {
         $id = $this->user['id'];
         $customer = $this->model->table("customer as cu")->fields("cu.*,gr.name as gname")->join("left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = $id")->find();
@@ -1117,7 +1022,8 @@ class UcenterAction extends Controller {
         $this->content['customer'] = $customer;
     }
 
-    public function huabi_log() {
+    //余额记录
+    public function balance_log() {
         $page = Filter::int(Req::args('page'));
         $type = Filter::str(Req::args('type'));
         $where = '';
@@ -1284,6 +1190,7 @@ class UcenterAction extends Controller {
         }
     }
 
+    //添加收藏
     public function add_collect() {
         $gid = Filter::int(Req::args('goods_id'));
         //判读是否已经收藏过
@@ -1300,6 +1207,7 @@ class UcenterAction extends Controller {
         }
     }
 
+   //获得收藏列表
     public function get_collect() {
         $page = Filter::int(Req::args('page'));
         $count = $this->model->query("select count(*) as count from tiny_attention where user_id=" . $this->user['id']);
@@ -1322,6 +1230,7 @@ class UcenterAction extends Controller {
         }
     }
 
+    //删除收藏
     public function del_collect() {
         $id = Filter::int(Req::args('goods_id'));
         $result = $this->model->query("delete from tiny_attention where goods_id = $id and user_id = " . $this->user['id']);
@@ -1331,6 +1240,7 @@ class UcenterAction extends Controller {
         }
     }
 
+    //判断是否收藏
     public function is_collected() {
         $goods_id = Filter::int(Req::args('goods_id'));
         $flag = $this->model->query("select * from tiny_attention where goods_id = $goods_id and user_id =" . $this->user['id']);
@@ -1344,34 +1254,8 @@ class UcenterAction extends Controller {
             $this->content = "";
         }
     }
-
-    //忘记密码，使用短信功能重置登录密码
-    public function forget_loginpwd() {
-        $code = Filter::int(Req::args("code"));
-        $mobile = Filter::int(Req::args("mobile"));
-        $newpassword = Filter::str(Req::args("newpassword"));
-        $zone = Filter::int(Req::args('zone'));
-
-        //验证情况标识
-        $pass = $this->sms_verify($code, $mobile, $zone);
-        if ($pass) {
-            $user = $this->model->query("select user_id from tiny_customer where mobile = $mobile");
-            if (!$user) {
-                $this->code = 1030;
-                return;
-            }
-            if (strlen($newpassword) >= 6) {
-                $validcode = CHash::random(8);
-                $this->model->table('user')->data(array('password' => CHash::md5($newpassword, $validcode), 'validcode' => $validcode))->where('id=' . $user[0]['user_id'])->update();
-                $this->code = 0;
-            } else {
-                $this->code = 1023;
-            }
-        } else {
-            $this->code = 1026;
-        }
-    }
-
+    
+    //售后
     public function sale_support() {
         $id = Filter::sql(Req::args('id'));
         $type = Filter::int(Req::args('type'));
@@ -1439,7 +1323,7 @@ class UcenterAction extends Controller {
         }
     }
 
-    //
+    //售后信息
     public function support_info() {
         $id = Filter::sql(Req::args('id'));
         $info = $this->model->query("select * from tiny_sale_support where id=$id and user_id=" . $this->user['id']);
@@ -1447,7 +1331,7 @@ class UcenterAction extends Controller {
         $this->content = $info[0];
     }
 
-    //
+    //角标初始化=========================================
     public function badge() {
         //1.未读系统消息数量
         //2.未读个人消息
@@ -1466,7 +1350,6 @@ class UcenterAction extends Controller {
         $this->content['cart'] = (int) $this->getCartCount();
     }
 
-    //ok
     private function getMessageCount() {
         $data = $this->model->query("select message_ids from tiny_customer where user_id=" . $this->user['id']);
         if ($data[0]['message_ids'] == "") {
@@ -1506,7 +1389,9 @@ class UcenterAction extends Controller {
         $data = $this->model->query("select count(id) as count from tiny_review where status =0 and user_id=" . $this->user['id']);
         return isset($data[0]['count']) ? $data[0]['count'] : 0;
     }
-
+    //角标初始化end=======================================
+    
+    //投诉建议
     public function complaint() {
         $user_id = $this->user['id'];
         $type = Filter::int(Req::args('type'));
@@ -1529,6 +1414,7 @@ class UcenterAction extends Controller {
         }
     }
 
+    //更新支付密码
     public function updatePayPassword() {
         $old_pwd = Filter::str(Req::args('old_pay_pwd'));
         $new_pwd = Filter::str(Req::args('new_pay_pwd'));
@@ -1550,6 +1436,7 @@ class UcenterAction extends Controller {
         }
     }
 
+    //重置支付密码
     public function resetPayPasswordByMobile() {
         $pay_pwd = Filter::str(Req::args('pay_pwd'));
         $code = Filter::int(Req::args('code'));
@@ -1571,6 +1458,7 @@ class UcenterAction extends Controller {
         }
     }
 
+    //获取又拍云上传参数
     public function getUpyun() {
         $type = Req::args('type');
         $upyun = Config::getInstance()->get("upyun");
@@ -1707,36 +1595,15 @@ class UcenterAction extends Controller {
         $this->content = $invite;
     }
 
+    //获取我的邀请二维码
     public function myInviteQRCodeUrl() {
         $uid = $this->user['id'];
         $url = Url::fullUrlFormat("/index/invite") . "?uid=" . $uid;
         $this->code = 0;
         $this->content['url'] = $url;
     }
-
-    public function changeHuabipayAccount() {
-        $order_id = Filter::sql(Req::args('order_id'));
-        $account = Filter::sql(Req::args('account'));
-
-        $order = new Model("order");
-        $order_info = $order->where("id = $order_id and type = 4 and user_id =" . $this->user['id'])->fields("pay_status,otherpay_status,huabipay_status")->find();
-        if (empty($order_info)) {
-            $this->code = 1110;
-            return;
-        } else {
-            if ($order_info['pay_status'] == 1 || $order_info['huabipay_status'] == 1) {
-                $this->code = 1111;
-                return;
-            }
-            $result = $order->data(array('huabi_account' => $account))->where("id = $order_id")->update();
-            if ($result) {
-                $this->code = 0;
-            } else {
-                $this->code = 1005;
-            }
-        }
-    }
-
+    
+    //获取快递信息
     public function getExpress() {
         $com = Filter::sql(Req::args("com"));
         $num = Filter::sql(Req::args("num"));
@@ -1753,6 +1620,7 @@ class UcenterAction extends Controller {
         }
     }
 
+    //订单删除接口
     public function order_delete() {
         $id  = Filter::int(Req::args('id'));
         $isset = $this->model->table("order")->where("id=$id and user_id =".$this->user['id']." and status in(1,2,5,6)")->find();
@@ -1772,7 +1640,9 @@ class UcenterAction extends Controller {
             $this->code = 1005;
         }
     }
-
+    
+    //================================申请退款相关接口start========================
+    //判断是否能够申请退款
     public function _isCanApplyRefund($order_id) {
         $isset = $this->model->table("refund")->where("order_id =$order_id and user_id =".$this->user['id'])->find();
        if($isset){
@@ -1826,7 +1696,8 @@ class UcenterAction extends Controller {
           }
        }
     }
-
+    
+    //退款信息获取接口
     public function refund_apply_info() {
         $order_id = Filter::int(Req::args("order_id"));
         $info = $this->_isCanApplyRefund($order_id);
@@ -1837,7 +1708,8 @@ class UcenterAction extends Controller {
         $this->code = 0;
         $this->content = array('order_no' => $info['order_no'], 'order_id' => $info['order_id'], 'refund_amount' => $info['refund_amount']);
     }
-
+    
+    //申请退管提交接口
     public function refund_apply_submit() {
         $order_id = Filter::int(Req::args("order_id"));
         $reason = Filter::sql(Req::args("reason"));
@@ -1876,7 +1748,8 @@ class UcenterAction extends Controller {
         }
         $this->code = 1005;
     }
-
+    
+    //退款进度
     public function refund_progress() {
         $order_id = Filter::sql(Req::args("order_id"));
         $refund_info = $this->model->table("refund as r")
@@ -1891,100 +1764,9 @@ class UcenterAction extends Controller {
             $this->code = 1115;
         }
     }
-
-    /*
-     * 银点记录获取
-     * type ： in 收入 out 支出 all 全部
-     */
-
-    public function silver_coin_log() {
-        $page = Filter::int(Req::args('page'));
-        $type = Filter::str(Req::args('type'));
-        $where = '';
-        switch ($type) {
-            case 'in':
-                $where = ' and type in(1,2,3,4)';
-                break;
-            case 'out':
-                $where = ' and type in(0,5)';
-                break;
-            case 'all':
-                break; 
-            default:
-                break;
-        }
-        $log = $this->model->table("silver_log")->where("user_id = " . $this->user['id'] . $where)->findPage($page, 10);
-        if (isset($log['html'])) {
-            unset($log['html']);
-        }
-        $this->code = 0;
-        $this->content = $log;
-    }
-
-    /*
-     * 金点兑换成银点
-     * @gold:需要兑换金点数
-     */
-
-    function gold_to_silver() {
-        $gold = Filter::float(Req::args("gold"));
-        $platform = Filter::str(Req::args("platform"));
-        $platform = $platform == NULL ? "unknow" : $platform;
-        if (is_numeric($gold) && $gold > 0) {
-            $userinfo = $this->model->table("customer")->where("user_id =" . $this->user['id'])->find();
-            if ($gold > $userinfo['balance']) {
-                $this->code = 1118; //金点不足，兑换失败
-            } else {
-                $config = Config::getInstance();
-                $other = $config->get("other");
-                if (isset($other['gold2silver']) && $other['gold2silver'] > 0) {
-                    $silver = round($gold * $other['gold2silver'], 2);
-                    $result = $this->model->table("customer")->data(array("balance" => "`balance`-{$gold}", "silver_coin" => "`silver_coin`+{$silver}"))->where("user_id =" . $this->user['id'])->update();
-                    if ($result) {
-                        $order_no = "Ex" . $platform . date("YmdHis");
-                        Log::balance((0 - $gold), $this->user['id'], $order_no, "兑换银点", 7);
-                        Log::silver_log($silver, $this->user['id'], $order_no, "金点兑换", 1);
-                        $this->code = 0;
-                        $this->content['gold'] = $gold;
-                        $this->content['silver'] = $silver;
-                    } else {
-                        $this->code = 1005;
-                    }
-                } else {
-                    $this->code = 1119; //兑换失败，加载配置失败
-                }
-            }
-        } else {
-            $this->code = 1120; //兑换失败，输入的数值有误
-        }
-    }
-
-    /*
-     * 获取充值套餐的礼品
-     */
-
-    function get_recharge_package_gift() {
-        $config = Config::getInstance();
-        $other = $config->get("other");
-        $package_set = $config->get("recharge_package_set");
-        if (is_array($package_set)) {
-            $where = implode(',', array_reverse(explode("|", $package_set[1]['gift'])));
-            $select1 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->findAll();
-            $where = implode(',', array_reverse(explode("|", $package_set[2]['gift'])));
-            $select2 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->findAll();
-
-            $this->code = 0;
-            $this->content['package1'] = $select1;
-            $this->content['package2_4'] = $select2;
-        } else {
-            $this->code = 1121;
-        }
-    }
-
-    /*
-     * 金点提现接口
-     */
-
+    //=================================申请退款相关接口end=========================
+    
+    //余额提现接口
     function balance_withdraw() {
         Filter::form();
         $open_name = Filter::str(Req::args('name'));
@@ -2029,9 +1811,26 @@ class UcenterAction extends Controller {
             // exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
         }
     }
-    /*
-     * 判断是否是小区推广员
-     */
+    
+    //获取我的余额提现记录
+    public function getMyGoldWithdrawRecord(){
+        $page = Filter::int(Req::args('page'));
+        $withdraw_list = $this->model->table("balance_withdraw")->where("user_id = ".$this->user['id'])->order("id desc")->findPage($page,10);
+        if(isset($withdraw_list['html'])){
+            unset($withdraw_list['html']);
+        }
+        if(empty($withdraw_list)){
+            $this->code = 0;
+            $this->content= NULL;
+        }else{
+            $this->code = 0;
+            $this->content = $withdraw_list;
+        }
+    }
+    
+    
+    //================================小区相关接口start==============================
+    //判断是否是小区推广员
     public function isDistrictPromoter() {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (is_object($promoter)) {
@@ -2042,9 +1841,8 @@ class UcenterAction extends Controller {
         }
         $this->code = 0;
     }
-    /*
-     * 根据id获取小区信息
-     */
+    
+    //根据id获取小区信息
     public function getDistrictInfoById(){
         $district_id = Filter::int(Req::args('district_id'));
         if($district_id==NULL){
@@ -2059,9 +1857,8 @@ class UcenterAction extends Controller {
             $this->content = $district_info;
         }
     }
-    /*
-     * 成为推广员
-     */
+    
+    // 成为推广员
     public function becomepromoter() {
             $reference = Filter::int(Req::args('reference'));
             $invitor_role = Filter::str(Req::args('invitor_role'));
@@ -2110,9 +1907,7 @@ class UcenterAction extends Controller {
             }
     }
     
-    /*
-     * 获取我的收益统计
-     */
+    //获取我的收益统计
     public function getPromoterIncomeStatic(){
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if(!is_object($promoter)){
@@ -2123,9 +1918,8 @@ class UcenterAction extends Controller {
             $this->content = $promoter->getIncomeStatistics();
         }
     }
-    /*
-     * 获取我的销售记录
-     */
+    
+    //获取我的销售记录
     public function getPromoterSaleRecord(){
         $page = Filter::int(Req::args('page'));
         $promoter = Promoter::getPromoterInstance($this->user['id']);
@@ -2137,6 +1931,8 @@ class UcenterAction extends Controller {
             $this->content = $promoter->getMySaleRecord($page);
         }
     }
+    
+    //获取我的收益记录
     public function getPrmoterIncomeRecord(){
         $page = Filter::int(Req::args('page'));
         $promoter = Promoter::getPromoterInstance($this->user['id']);
@@ -2148,9 +1944,8 @@ class UcenterAction extends Controller {
             $this->content = $promoter->getMyIncomeRecord($page);
         }
     }
-    /*
-     * 获取我的提现记录
-     */
+    
+    //获取我的提现记录
     public function getPromoterSettledRecord(){
         $page = Filter::int(Req::args('page'));
         $promoter = Promoter::getPromoterInstance($this->user['id']);
@@ -2162,9 +1957,21 @@ class UcenterAction extends Controller {
             $this->content = $promoter->getSettledHistory($page);
         }
     }
-    /*
-     * 申请提现
-     */
+    
+    //获取我邀请的推广员列表
+    public function getMyInvitePromoter(){
+        $page = Filter::int(Req::args('page'));
+        $promoter = Promoter::getPromoterInstance($this->user['id']);
+        if(!is_object($promoter)){
+            $this->code = 1141;
+            return;
+        }else{
+            $this->code = 0;
+            $this->content = $promoter->getMyInviteList($page);
+        }
+    }
+    
+    //推广员申请结算提现
     public function promoterDoSettle(){
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if(!is_object($promoter)){
@@ -2182,9 +1989,8 @@ class UcenterAction extends Controller {
             }
         }
     }
-    /*
-     * 二维码
-     */
+    
+    //根据商品获得商品的小区推广标示
     public function getQrcodeFlagByGoodsId(){
         $goods_id = Filter::int(Req::args('goods_id'));
         $promoter = Promoter::getPromoterInstance($this->user['id']);
@@ -2203,24 +2009,10 @@ class UcenterAction extends Controller {
             }
         }
     }
-    /*
-     * 今点提现记录
-     */
-    public function getMyGoldWithdrawRecord(){
-        $page = Filter::int(Req::args('page'));
-        $withdraw_list = $this->model->table("balance_withdraw")->where("user_id = ".$this->user['id'])->order("id desc")->findPage($page,10);
-        if(isset($withdraw_list['html'])){
-            unset($withdraw_list['html']);
-        }
-        if(empty($withdraw_list)){
-            $this->code = 0;
-            $this->content= NULL;
-        }else{
-            $this->code = 0;
-            $this->content = $withdraw_list;
-        }
-    }
+   
+    //================================小区相关接口end==============================
     
+    //积分币记录
     public function pointcoin_log(){
         $page = Filter::int(Req::args('page'));
         $type = Filter::str(Req::args('type'));
@@ -2245,15 +2037,61 @@ class UcenterAction extends Controller {
         $this->content = $log;
     }
     
-    public function getMyInvitePromoter(){
-        $page = Filter::int(Req::args('page'));
-        $promoter = Promoter::getPromoterInstance($this->user['id']);
-        if(!is_object($promoter)){
-            $this->code = 1141;
+    
+    //签到
+    public function sign_in(){
+        $config = Config::getInstance();
+        $set = $config->get('sign_in_set');
+        if($set['open']==0){
+            $this->code = 1153;
             return;
+        }
+        //判断今天是否签到过
+        $date = date("Y-m-d");
+        $is_signed = $this->model->table("sign_in")->where("date='$date'")->find();
+        if($is_signed){
+            $this->code = 1154;
         }else{
-            $this->code = 0;
-            $this->content = $promoter->getMyInviteList($page);
+            $last_sign = $this->model->table("sign_in")->order('date desc')->where("1=1")->find();
+            if($last_sign){
+                    //判断上次签到和这次签到中间是否有缺
+                    $yesterday = date("Y-m-d",strtotime("-1 day"));
+                    if($yesterday==$last_sign['date']){
+                        $data['serial_day']=$last_sign['serial_day']+1;
+                        $data['sign_in_count']=$last_sign['sign_in_count']+1;
+                    }else{
+                        $data['serial_day']=1;
+                        $data['sign_in_count']=$last_sign['sign_in_count']+1;
+                    }
+            }else{
+                 $data['serial_day']=1;
+                 $data['sign_in_count']=1;
+            }
+            $data['date']=$date;
+            $data['user_id']=$this->user['id'];
+            //读取签到送积分规则
+            $data['send_point']=Common::getSignInSendPointAmount($data['serial_day']);
+            $result = $this->model->table("sign_in")->data($data)->insert();
+            if($result){
+               $this->model->table("customer")->data(array('point_coin'=>"`point_coin`+".$data['send_point']))->where("user_id=".$this->user['id'])->update();
+               Log::pointcoin_log($data['send_point'], $this->user['id'], "", "每日签到赠送", 10);
+               $this->code = 0;
+               $this->content['send_point']=$data['send_point'];
+               $this->content['serial_day']=$data['serial_day'];
+               $this->content['sign_in_count']=$data['sign_in_count'];
+            }else{
+               $this->code = 1005; 
+            }
         }
     }
+    
+    //根据年月获取签到数据
+    public function getSignInDataByYm(){
+        $year = Filter::int(Req::args('y'));
+        $month= Filter::int(Req::args('m'));
+        $this->code = 0;
+        $data = Common::getSignInDataByUserID($year, $month, $this->user['id']);
+        $this->content = empty($data)?NULL:$data;
+    }
+    
 }

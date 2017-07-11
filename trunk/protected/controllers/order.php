@@ -564,29 +564,6 @@ class OrderController extends Controller {
         return $str;
     }
 
-    public function comfirm_huabipay() {
-        $id = intval(Req::args('id'));
-        $order = new Model('order');
-        $result = $order->data(array('huabipay_status' => 1))->where("id = $id and type = 4")->update();
-        if ($result) {
-            $order_info = $order->where('id=' . $id)->fields('order_no,otherpay_status,pay_status,huabipay_status,otherpay_amount,is_new')->find();
-            if($order_info['is_new']==0){
-                if ($order_info['otherpay_status'] == '1' && $order_info['huabipay_status'] == '1' && $order_info['pay_status'] == '0') {
-                    if ($order_info['otherpay_amount'] == 0) {
-                        Order::updateStatus($order_info['order_no']);
-                    } else {
-                        $order->data(array('pay_status' => '1', 'status' => '3'))->where('id=' . $id)->update();
-                    }
-                }
-            }
-            $info = array('status' => 'success', 'msg' => '操作成功');
-            Log::op($this->manager['id'], "确认华点到帐", "管理员[" . $this->manager['name'] . "]:确认了订单" . $order_info['order_no'] . "的华点支付");
-        } else {
-            $info = array('status' => 'fail', 'msg' => '操作失败');
-        }
-        echo JSON::encode($info);
-    }
-
     public function update_express() {
         $this->layout = "blank";
         $order_id = Filter::sql(Req::args("order_id"));
@@ -644,7 +621,9 @@ class OrderController extends Controller {
          echo json_encode(array('status' => 'fail', 'msg' => '操作失败'));
          exit;
     }
-   
+   /*
+    * 退款申请列表
+    */
    public function refund_apply_list(){
        $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
@@ -655,8 +634,10 @@ class OrderController extends Controller {
         }
         $this->redirect();
    }
-
- public function update_apply_status(){
+   /*
+    * 更新退款状态
+    */
+   public function update_apply_status(){
       $refund_id = Filter::sql(Req::args("id"));
       $status = Filter::sql(Req::args("status"));
       $refund = new Model("refund as r");
@@ -690,12 +671,14 @@ class OrderController extends Controller {
            exit;
        }
    }
-   
+   /*
+    * 发起实际退款操作
+    */
    public function doRefund($payment_id,$order_no,$refund_amount,$pay_time,$user_id,$refund_id){
         if($refund_amount==0||$refund_amount==0.00){
              $result = Order::refunded($refund_id);
                if($result){
-                   echo json_encode(array('status' => 'success', 'msg' => '操作成功，退款0元，若存在应退华点，请另人工退款'));
+                   echo json_encode(array('status' => 'success', 'msg' => '操作成功，退款0元'));
                    exit; 
                }else{
                    echo json_encode(array('status' => 'fail', 'msg' => '操作失败'));
@@ -713,7 +696,7 @@ class OrderController extends Controller {
            echo json_encode(array('status' => 'fail', 'msg' => '支付类加载失败,请确认支付方式'));
            exit;
         }
-        //金点和银点的直接操作
+        //余额直接退款
         if($paymentPlugin instanceof pay_balance){
             //退款操作
             $model = new Model("customer");
@@ -723,33 +706,14 @@ class OrderController extends Controller {
                Log::balance($refund_amount, $user_id, $order_no, '管理员退款',4);
                $result = Order::refunded($refund_id);
                if($result){
-                   echo json_encode(array('status' => 'success', 'msg' => '已退款至其金点支付账号中'));
+                   echo json_encode(array('status' => 'success', 'msg' => '已退款至余额'));
                    exit; 
                }else{
-                   echo json_encode(array('status' => 'fail', 'msg' => '金点已退回，但订单及退款信息更新失败，请联系开发人员'));
+                   echo json_encode(array('status' => 'fail', 'msg' => '余额已退回，但订单及退款信息更新失败，请联系开发人员'));
                    exit;
                }
             }else{
-                echo json_encode(array('status' => 'fail', 'msg' => '金点退款失败'));
-                exit;
-            }
-        }else if($paymentPlugin instanceof pay_silver){
-            //退款操作
-            $model = new Model("customer");
-            $flag = $model->data(array("silver_coin"=>"`silver_coin`+$refund_amount"))->where("user_id=$user_id")->update();
-            if ($flag) {
-               //记录支付日志
-               Log::silver_log($refund_amount, $user_id, $order_no, '管理员退款',4);
-               $result = Order::refunded($refund_id);
-               if($result){
-                   echo json_encode(array('status' => 'success', 'msg' => '已退款至其银点账号中'));
-                   exit; 
-               }else{
-                   echo json_encode(array('status' => 'fail', 'msg' => '银点已退回，但订单及退款信息更新失败，请联系开发人员'));
-                   exit;
-               }
-            }else{
-                echo json_encode(array('status' => 'fail', 'msg' => '银点退款失败'));
+                echo json_encode(array('status' => 'fail', 'msg' => '余额退款失败'));
                 exit;
             }
         }else{
@@ -757,30 +721,16 @@ class OrderController extends Controller {
                 return $refundResult;
         }
    }
-   
+   /*
+    *获取订单更新状态 
+    */
    public function checkUpdateInfo(){
        $order = new Model('order');
        $refund = new Model('refund');
        $allOrderCount = $order->where("1=1")->count();
        $undeliveryOrder = $order->where("pay_status=1 and delivery_status=0 and status != 6 and status !=5 ")->count();
-       $pendingHuadianOrder = $order -> where("type =4 and otherpay_status=1 and huabipay_status = 0 and status != 6 and status != 5")->count();
        $pendingRefundCount = $refund ->where('refund_progress=0')->count();
-       echo json_encode(array('status'=>'success','msg'=>'成功','time'=>time(),'data'=>array('allOrderCount'=>(int)$allOrderCount,'undeliveryOrder'=>(int)$undeliveryOrder,'pendingHuadianOrder'=>(int)$pendingHuadianOrder,'pendingRefundCount'=>(int)$pendingRefundCount)));
+       echo json_encode(array('status'=>'success','msg'=>'成功','time'=>time(),'data'=>array('allOrderCount'=>(int)$allOrderCount,'undeliveryOrder'=>(int)$undeliveryOrder,'pendingRefundCount'=>(int)$pendingRefundCount)));
        exit();
    }
-   
-   public function return_cash(){
-       if($this->is_ajax_request()){
-           $order_id = Filter::int(Req::args("order_id"));
-           $model = new Model();
-           $result = $model->table("order")->data(array("is_return"=>1))->where("id = {$order_id} and type = 4 and pay_status = 1")->update();
-           
-           if($result){
-               exit(json_encode(array("status"=>'success','msg'=>'标记成功')));
-           }else{
-               exit(json_encode(array("status"=>'fail','msg'=>'标记失败')));
-           }
-       }
-   }
-  
 }

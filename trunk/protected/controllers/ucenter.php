@@ -27,6 +27,7 @@ class UcenterController extends Controller {
 //            '我的积分' => 'point',
         )
     );
+    
 
     public function init() {
         header("Content-type: text/html; charset=" . $this->encoding);
@@ -121,32 +122,6 @@ class UcenterController extends Controller {
         return;
     }
 
-//    public function withdraw() {
-//        Filter::form();
-//        $name = Filter::txt(Req::args('name'));
-//        $type_name = Filter::txt(Req::args('type_name'));
-//        $account = Filter::txt(Req::args('account'));
-//        $amount = Filter::float(Req::args('amount'));
-//        $info = array('status' => 'success', 'msg' => '申请成功.');
-//
-//        $model = new Model('customer');
-//        $customer = $model->where("user_id=" . $this->user['id'])->find();
-//        if ($customer['balance'] < $amount) {
-//            $info = array('status' => 'fail', 'msg' => '提现金额超出的账户余额');
-//        }
-//        $obj = $model->table("withdraw")->where("user_id=" . $this->user['id'] . ' and status=0')->find();
-//        if ($obj) {
-//            $info = array('status' => 'fail', 'msg' => '还有未处理的申请，处理后才可再申请。');
-//        } else {
-//            $data = array('name' => $name, 'type_name' => $type_name, 'account' => $account, 'amount' => $amount, 'time' => date('Y-m-d H:i:s'), 'user_id' => $this->user['id']);
-//            $model->table("withdraw")->data($data)->insert();
-//            //发送提现申请提醒
-//            $NoticeService = new NoticeService();
-//            $template_data = array('user' => $this->user['name'], 'amount' => $amount, 'account' => $type_name . '(' . $account . ')', 'name' => $name);
-//            $NoticeService->send('withdrawal_application', $template_data);
-//        }
-//        echo JSON::encode($info);
-//    }
     //新的提现操作
     public function balance_withdraw() {
         if ($this->is_ajax_request()) {
@@ -187,7 +162,7 @@ class UcenterController extends Controller {
             $this->assign("gold2silver", $other['gold2silver']);
             $this->assign("withdraw_fee_rate", $other['withdraw_fee_rate']);
             $this->assign('min_withdraw_amount', $other['min_withdraw_amount']);
-            $this->assign('seo_title', '金点提现');
+            $this->assign('seo_title', '余额提现');
             $this->redirect();
         }
     }
@@ -775,9 +750,6 @@ class UcenterController extends Controller {
         $status = $item['status'];
         $pay_status = $item['pay_status'];
         $delivery_status = $item['delivery_status'];
-        $huabipay_status = $item['huabipay_status'];
-        $otherpay_status = $item['otherpay_status'];
-        $is_new = $item['is_new'];
         $order_type = $item['type'];
         $str = '';
         $btn = '';
@@ -1142,6 +1114,11 @@ class UcenterController extends Controller {
         if ($hirer > 0) {
             $is_hirer = true;
         }
+        
+        //签到
+        $sign_in_set = Config::getInstance()->get('sign_in_set');
+        $this->assign("sign_in_open",$sign_in_set['open']);
+        
         $this->assign('is_hirer', $is_hirer);
         $this->assign('is_promoter', $is_promoter);
         $this->assign("option", $options);
@@ -1165,31 +1142,20 @@ class UcenterController extends Controller {
     public function asset() {
         $id = $this->user['id'];
         $customer = $this->model->table("customer as cu")->fields("cu.*,gr.name as gname")->join("left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = $id")->find();
+        
+        //只记录余额支付的消费统计
         $orders = $this->model->table("order as o")->join("payment as p on o.payment = p.id ")->where("o.user_id = $id and p.plugin_id in(1,20)")->findAll();
         $order = array('amount' => 0, 'todayamount' => 0, 'pending' => 0, 'undelivery' => 0, 'unreceived' => 0, 'uncomment' => 0);
         foreach ($orders as $obj) {
-            if ($obj['status'] < 5 && ($obj['pay_status'] == 1 || $obj['otherpay_status'] == 1)) {
-                if ($obj['type'] == 4) {
-                    $obj['order_amount'] = $obj['otherpay_amount'];
-                }
+            if ($obj['status'] < 5 && $obj['pay_status'] == 1) {
                 $order['amount'] += $obj['order_amount'];
                 if (strtotime($obj['pay_time']) >= strtotime('today')) {
                     $order['todayamount'] += $obj['order_amount'];
                 }
             }
-            if ($obj['status'] == 4) {
-                
-            } else if ($obj['status'] < 3) {
-                $order['pending'] ++;
-            } else if ($obj['status'] == 3) {
-                if ($obj['delivery_status'] == 0) {
-                    $order['undelivery'] ++;
-                } else if ($obj['delivery_status'] == 1) {
-                    $order['unreceived'] ++;
-                }
-            }
         }
-
+        
+        //充值礼品判断
         $info = $this->model->table("recharge_presentlog")->where("user_id =" . $this->user['id'] . " and status=0")->find();
         if ($info) {
             $activity = $this->model->table("recharge_activity")->where("id = 1")->fields("accept_end_time")->find();
@@ -1200,17 +1166,14 @@ class UcenterController extends Controller {
                 $this->model->query("update tiny_recharge_presentlog set status='-1' where user_id =" . $this->user['id']);
             }
         }
-        $comment = $this->model->table("review")->fields("count(*) as num")->where("user_id = $id and status=0")->find();
-        $config = Config::getInstance();
-        $other = $config->get("other");
-        $this->assign("gold2silver", $other['gold2silver']);
-        $this->assign("comment", $comment);
+        
         $this->assign("order", $order);
         $this->assign("customer", $customer);
         $this->assign("seo_title", "钱袋");
         $this->redirect();
     }
-
+    
+    //充值中心
     public function recharge_center() {
         $package = Filter::int(Req::args('package'));
         $pid = Filter::int(Req::args('pid'));
@@ -1218,30 +1181,7 @@ class UcenterController extends Controller {
             $this->assign("package", $package);
             $this->assign("pid", $pid);
         }
-        $id = $this->user['id'];
-        $customer = $this->model->table("customer as cu")->fields("cu.*,gr.name as gname")->join("left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = $id")->find();
-        $orders = $this->model->table("order as o")->join("payment as p on o.payment = p.id ")->where("o.user_id = $id and p.plugin_id in(1,20)")->findAll();
-        $order = array('amount' => 0, 'todayamount' => 0, 'pending' => 0, 'undelivery' => 0, 'unreceived' => 0, 'uncomment' => 0);
-        foreach ($orders as $obj) {
-            if ($obj['status'] < 5 && ($obj['pay_status'] == 1 || $obj['otherpay_status'] == 1)) {
-                $order['amount'] += $obj['order_amount'];
-                if (strtotime($obj['pay_time']) >= strtotime('today')) {
-                    $order['todayamount'] += $obj['order_amount'];
-                }
-            }
-            if ($obj['status'] == 4) {
-                
-            } else if ($obj['status'] < 3) {
-                $order['pending'] ++;
-            } else if ($obj['status'] == 3) {
-                if ($obj['delivery_status'] == 0) {
-                    $order['undelivery'] ++;
-                } else if ($obj['delivery_status'] == 1) {
-                    $order['unreceived'] ++;
-                }
-            }
-        }
-        //充值套餐的地址
+        //地址
         $area_ids = array();
         $address = $this->model->table("address")->where("user_id=" . $this->user['id'])->order("is_default desc")->findAll();
         foreach ($address as $add) {
@@ -1259,48 +1199,31 @@ class UcenterController extends Controller {
         }
         $this->assign("parse_area", $parse_area);
         $this->assign('address', $address);
-
-        $client_type = Chips::clientType();
-        $client_type = ($client_type == "desktop") ? 0 : ($client_type == "wechat" ? 2 : 1);
-        $model = new Model("payment as pa");
-        $paytypelist = $model->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
-                        ->where("pa.status = 0 and pa.plugin_id not in(1,12,19,20) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
-
+        //支付列表
+        $paytypelist = Common::getValidPayList();
         $paytypeone = reset($paytypelist);
         $this->assign("paytypeone", $paytypeone);
         $this->assign("paytypelist", $paytypelist);
-
-        $comment = $this->model->table("review")->fields("count(*) as num")->where("user_id = $id and status=0")->find();
+        
         $config = Config::getInstance();
-        $other = $config->get("other");
         $package_set = $config->get("recharge_package_set");
         if (is_array($package_set)) {
-            $where = implode(',', array_reverse(explode("|", $package_set[1]['gift'])));
-            $select1 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->order("field(p.id,$where)")->findAll();
-            $this->assign("select1", $select1);
-            $where = implode(',', array_reverse(explode("|", $package_set[2]['gift'])));
-            $select2 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->order("field(p.id,$where)")->findAll();
-            $this->assign("select2", $select2);
+            if(isset($package_set[4]['gift'])&&$package_set[4]['gift']!=''){
+                $where = implode(',', array_reverse(explode("|", $package_set[4]['gift'])));
+                $select4 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->order("field(p.id,$where)")->findAll();
+                $this->assign("select4", $select4);
+            }
         }
-        $this->assign("gold2silver", $other['gold2silver']);
-        $this->assign("comment", $comment);
-        $this->assign("order", $order);
-        $this->assign("customer", $customer);
+        $this->assign('package_set',$package_set);
         $this->assign("seo_title", '充值中心');
         $this->redirect();
     }
-
+    
+    //余额记录
     public function balance_log() {
         $customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
         $this->assign("customer", $customer);
-        $this->assign('seo_title', '金点记录');
-        $this->redirect();
-    }
-
-    public function silver_log() {
-        $customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
-        $this->assign("customer", $customer);
-        $this->assign('seo_title', '银点记录');
+        $this->assign('seo_title', '余额记录');
         $this->redirect();
     }
 
@@ -2033,20 +1956,10 @@ class UcenterController extends Controller {
         $goods_id = substr($goods_id, 0, strpos($goods_id, '.png'));
         $promoter->getQrcodeByGoodsId($goods_id);
     }
-
+    
+    //申请创建小区
     public function apply_for_district() {
         if ($this->is_ajax_request()) {
-//            $isset = $this->model->table("district_apply")->where('user_id='.$this->user['id']." and status=0")->count();
-//            //一个人可以同时拥有多个小区
-//            //$hirer = Hirer::getHirerInstance($this->user['id']);
-//            if($isset!=0){
-//                echo json_encode(array('status'=>'fail','msg'=>'您已经申请过了，请等待处理结果'));
-//                exit();
-//            }
-//            }else if(is_object($hirer)){
-//                echo json_encode(array('status'=>'fail','msg'=>'您已经拥有小区了，不能在申请了'));
-//                exit();
-//            }
             $data = Filter::inputFilter(Req::args());
             if ($data['name'] == NULL || $data['location'] == NULL || $data['linkman'] == NULL || $data['linkmobile'] == NULL) {
                 echo json_encode(array('status' => 'fail', 'msg' => '请完善申请信息'));
@@ -2131,45 +2044,11 @@ class UcenterController extends Controller {
         }
     }
 
+    //成为小区推广者
     public function becomepromoter() {
         if ($this->is_ajax_request()) {
             echo json_encode(array('status' => 'fail', 'msg' => '抱歉，接口关闭了'));
             exit();
-//            $reference = Filter::int(Req::args('reference'));
-//            $promoter = Promoter::getPromoterInstance($this->user['id']);
-//            if (is_object($promoter)) {
-//                echo json_encode(array('status' => 'fail', 'msg' => '抱歉，您已经有雇佣关系了，暂时不能加入其他小区'));
-//                exit();
-//            }
-//            $district_set = Config::getInstance()->get("district_set");
-//            if (isset($district_set['promoter_join_line'])) {
-//                $amount = Common::getTotalAmount4Consumption($this->user['id']);
-//                if ($district_set['promoter_join_line'] > $amount) {
-//                    echo json_encode(array('status' => 'fail', 'msg' => '抱歉，您需要消费满' . $amount . "才能成为推广者"));
-//                    exit();
-//                }
-//            }
-//            $shop_info = $this->model->table('district_shop')->where("id=$reference")->find();
-//            if (empty($shop_info)) {
-//                echo json_encode(array('status' => 'fail', 'msg' => '抱歉，您要加入的小区不存在'));
-//                exit();
-//            } else {
-//                $data['user_id'] = $this->user['id'];
-//                $data['type'] = 1;
-//                $data['join_time'] = date("Y-m-d H:i:s");
-//                $data['hirer_id'] = $reference;
-//                $data['create_time'] = date('Y-m-d H:i:s');
-//                $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
-//                $data['status'] = 0;
-//                $isOk = $this->model->table('district_promoter')->data($data)->insert();
-//                if ($isOk) {
-//                    echo json_encode(array('status' => 'success', 'msg' => '成功'));
-//                    exit();
-//                } else {
-//                    echo json_encode(array('status' => 'fail', 'msg' => '数据库错误，请重试'));
-//                    exit();
-//                }
-//            }
         } else {
             $reference = Filter::int(Req::args('reference'));
             $invitor_role = Filter::str(Req::args('invitor_role'));
@@ -2244,35 +2123,7 @@ class UcenterController extends Controller {
         }
     }
 
-    function goldToSilver() {
-        $gold = Filter::float(Req::args("gold"));
-        if (is_numeric($gold) && $gold > 0) {
-            $userinfo = $this->model->table("customer")->where("user_id =" . $this->user['id'])->find();
-            if ($gold > $userinfo['balance']) {
-                exit(json_encode(array("status" => 'fail', 'msg' => "兑换失败，金点不足")));
-            } else {
-                $config = Config::getInstance();
-                $other = $config->get("other");
-                if (isset($other['gold2silver']) && $other['gold2silver'] > 0) {
-                    $silver = round($gold * $other['gold2silver'], 2);
-                    $result = $this->model->table("customer")->data(array("balance" => "`balance`-{$gold}", "silver_coin" => "`silver_coin`+{$silver}"))->where("user_id =" . $this->user['id'])->update();
-                    if ($result) {
-                        $order_no = "Ex" . date("YmdHis");
-                        Log::balance((0 - $gold), $this->user['id'], $order_no, "兑换银点", 7);
-                        Log::silver_log($silver, $this->user['id'], $order_no, "金点兑换", 1);
-                        exit(json_encode(array("status" => 'success', 'msg' => "兑换成功", 'gold' => $gold, 'silver' => $silver)));
-                    } else {
-                        exit(json_encode(array("status" => 'fail', 'msg' => "兑换失败，数据库错误")));
-                    }
-                } else {
-                    exit(json_encode(array("status" => 'fail', 'msg' => "兑换失败，加载配置失败")));
-                }
-            }
-        } else {
-            exit(json_encode(array("status" => 'fail', 'msg' => "兑换失败，输入的数值有误")));
-        }
-    }
-
+    //领取充值活动奖励 
     public function accept_present() {
         $activity = $this->model->table("recharge_activity")->where("id = 1")->fields("accept_end_time")->find();
         if ($this->is_ajax_request()) {
@@ -2311,11 +2162,6 @@ class UcenterController extends Controller {
         }
     }
 
-    public function silverDetail() {
-        if ($this->is_ajax_request()) {
-            exit(json_encode(array('status' => 'success', 'msg' => '成功', 'data' => Common::getsilverDetail($this->user['id']))));
-        }
-    }
 
     public function district_pay() {
         $id = Filter::int(Req::args('id'));
@@ -2348,7 +2194,8 @@ class UcenterController extends Controller {
             exit();
         }
     }
-
+    
+    //推广商品二维码页
     public function showQR() {
         $goods_id = Filter::int(Req::args("goods_id"));
         $promoter = Promoter::getPromoterInstance($this->user['id']);
@@ -2376,7 +2223,8 @@ class UcenterController extends Controller {
         }
         exit("error");
     }
-
+    
+    //获取推广员邀请信息
     public function promoter_invite() {
         if ($this->is_ajax_request()) {
             $page = Filter::int(Req::args('page'));
@@ -2415,7 +2263,8 @@ class UcenterController extends Controller {
             $this->redirect();
         }
     }
-
+    
+    //获取推广员推荐二维码
     public function getPromoterInviteQR() {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (is_object($promoter)) {
@@ -2424,5 +2273,79 @@ class UcenterController extends Controller {
             exit("您还不是推广员");
         }
     }
-
+    
+    //签到
+    public function sign_in(){
+        if($this->is_ajax_request()){
+            $action = Filter::str(Req::args('action'));
+            if($action=='sign'){
+                $config = Config::getInstance();
+                $set = $config->get('sign_in_set');
+                if($set['open']==0){
+                     exit(json_encode(array('status'=>'fail','msg'=>"系统关闭了签到功能"))); 
+                }
+                //判断今天是否签到过
+                $date = date("Y-m-d");
+                $is_signed = $this->model->table("sign_in")->where("date='$date'")->find();
+                if($is_signed){
+                    exit(json_encode(array('status'=>'fail','msg'=>"今天已经签到过了")));
+                }else{
+                    $last_sign = $this->model->table("sign_in")->order('date desc')->where("1=1")->find();
+                    if($last_sign){
+                            //判断上次签到和这次签到中间是否有缺
+                            $yesterday = date("Y-m-d",strtotime("-1 day"));
+                            if($yesterday==$last_sign['date']){
+                                $data['serial_day']=$last_sign['serial_day']+1;
+                                $data['sign_in_count']=$last_sign['sign_in_count']+1;
+                            }else{
+                                $data['serial_day']=1;
+                                $data['sign_in_count']=$last_sign['sign_in_count']+1;
+                            }
+                    }else{
+                         $data['serial_day']=1;
+                         $data['sign_in_count']=1;
+                    }
+                    $data['date']=$date;
+                    $data['user_id']=$this->user['id'];
+                    //读取签到送积分规则
+                    $data['send_point']=Common::getSignInSendPointAmount($data['serial_day']);
+                    $result = $this->model->table("sign_in")->data($data)->insert();
+                    if($result){
+                       $this->model->table("customer")->data(array('point_coin'=>"`point_coin`+".$data['send_point']))->where("user_id=".$this->user['id'])->update();
+                       Log::pointcoin_log($data['send_point'], $this->user['id'], "", "每日签到赠送", 10);
+                       exit(json_encode(array('status'=>'success','msg'=>"签到成功",'send_point'=>$data['send_point'])));
+                    }else{
+                       exit(json_encode(array('status'=>'fail','msg'=>"签到失败了"))); 
+                    }
+                }
+            }else if($action=='data'){
+                $year = Filter::int(Req::args("year"));
+                $month = Filter::int(Req::args("month"));
+                exit(json_encode(array("status"=>'success','data'=>  Common::getSignInDataByUserID($year, $month, $this->user['id']))));
+            }
+        }else{
+            $today = $this->model->table("sign_in")->where("date='".date("Y-m-d")."'")->find();
+            if($today){
+                $this->assign('serial_day',$today['serial_day']);
+                $this->assign("is_signed",true);
+            }else{
+                $yesterday = $this->model->table("sign_in")->where("date='".date("Y-m-d",strtotime("-1 day"))."'")->find();
+                if($yesterday){
+                    $this->assign('serial_day',$yesterday['serial_day']);
+                }else{
+                    $this->assign('serial_day',0);
+                }
+                $this->assign("is_signed",false);
+            }
+            $config = Config::getInstance();
+            $this->assign('sign_in_set', $config->get('sign_in_set'));
+            $this->assign('sign_data',Common::getSignInDataByUserID(date("Y"),date("m"),$this->user['id']));
+            $this->assign('year',date("Y"));
+            $this->assign("month",date("m"));
+            $this->assign('seo_title',"每日签到");
+            $this->redirect();
+        }    
+    }
+    
+    
 }

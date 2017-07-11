@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -57,7 +58,7 @@ class V1Controller extends Controller {
         "sign_all_message" => array("ucenter/sign_all_message", 1,1),
         "save_info" => array("ucenter/save_info", 1,1), //用户信息保存修改接口
         "huabi" => array("ucenter/huabi", 1,1), //华点信息接口
-        "huabi_log" => array("ucenter/huabi_log", 1,1), //华点的使用记录
+        "huabi_log" => array("ucenter/balance_log", 1,1), //华点的使用记录
         "dopay" => array("payment/dopay", 1,1), //发起支付
         "pay_balance" => array("payment/pay_balance", 1,1), //通过华点支付
         "paytype_list" => array("payment/paytype_list", 1,1), //支付方式
@@ -65,7 +66,7 @@ class V1Controller extends Controller {
         "set_nickname" => array("ucenter/set_nickname", 1,1), //设置昵称
         "verify" => array("ucenter/verify", 1,1), // 验证身份
         "update_obj" => array("ucenter/update_obj", 1,1), //修改目标属性
-        'andorid_logout' => array('ucenter/andorid_logout', 1,1), //安卓端登出
+        'andorid_logout' => array('ucenter/logout', 1,1), //安卓端登出
         "check_verify" => array('ucenter/check_verify', 1,1), //查询用户的验证信息
         "reset_loginpwd" => array('ucenter/reset_loginpwd', 1,1), //使用旧密码更新密码
         "add_collect" => array('ucenter/add_collect', 1,1), //添加收藏
@@ -143,6 +144,14 @@ class V1Controller extends Controller {
         "pointcoin_log"=>array("ucenter/pointcoin_log",1,1),
         //充值套餐详情
         "package_info"=>array("index/package_info",0,1),
+        
+        //圆梦new
+        "recharge_package_set"=>array("index/recharge_package_set",0,1),//套餐设置
+        "sign_in"=>array("ucenter/sign_in",1,1),
+        "get_sign_in_data_by_ym"=>array("ucenter/getSignInDataByYm",1,1),
+        "personal_shop_list"=>array("personalShop/shopList",0,1),
+        "shop_index_goods"=>array("personalShop/shopIndexGoods",0,1),
+        "shop_goods_list_by_time"=>array("personalShop/shopGoodsListByTime",0,1),
     );
 
     //分析请求的action,将请求分发到不同的action中去

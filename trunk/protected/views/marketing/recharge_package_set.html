@@ -37,11 +37,11 @@
 <div class="form2">
     <form name="config_form" method="post" action="{url:/marketing/recharge_package_set}">
         <table>
-            <tr><th>套 餐</th><th>金 额</th><th>赠送积分</th><th>增加提现有效期（月）</th><th>赠送商品</th><th>赠送商品数量</th></tr>
-            <tr><td>1</td><td>600</td><td><input type="number" name="package[1][point]" value="{$package[1]['point']}"></td><td><input type="number" name="package[1][withdraw_time]" value="{$package[1]['withdraw_time']}"  ></td><td><input type="text" name="package[1][gift]" value="{$package[1]['gift']}" readonly id="package1"></td><td><input type="number" name="package[1][gift_num]"value="{$package[1]['gift_num']}"></td></tr>
-            <tr><td>2</td><td>3600</td><td><input type="number" name="package[2][point]" value="{$package[2]['point']}"></td><td><input type="number" name="package[2][withdraw_time]" value="{$package[2]['withdraw_time']}" ></td><td><input type="text" name="package[2][gift]" value="{$package[2]['gift']}" readonly id="package2"></td><td><input type="number" name="package[2][gift_num]" value="{$package[2]['gift_num']}"></td></tr>
-            <tr><td>3</td><td>10800</td><td><input type="number" name="package[3][point]" value="{$package[3]['point']}"></td><td><input type="number" name="package[3][withdraw_time]" value="{$package[3]['withdraw_time']}" ></td><td><input type="text" name="package[3][gift]" value="{$package[3]['gift']}" readonly id="package3"></td><td><input type="number" name="package[3][gift_num]" value="{$package[3]['gift_num']}"></td></tr>
-            <tr><td>4</td><td>18000</td><td><input type="number" name="package[4][point]" value="{$package[4]['point']}"></td><td><input type="number" name="package[4][withdraw_time]" value="{$package[4]['withdraw_time']}" ></td><td><input type="text" name="package[4][gift]" value="{$package[4]['gift']}" readonly id="package4"></td><td><input type="number" name="package[4][gift_num]" value="{$package[4]['gift_num']}"></td></tr>
+            <tr><th>套 餐</th><th>金 额</th><th>赠送积分</th><th>赠送理财金币</th><th>赠送商品</th></tr>
+            <tr><td>1</td><td><input type="number" name="package[1][money]" value="{$package[1]['money']}"></td><td><input type="number" name="package[1][point]" value="{$package[1]['point']}"></td><td><input type="number" name="package[1][financial_coin]" value="{$package[1]['financial_coin']}"  ></td><td></td></tr>
+            <tr><td>2</td><td><input type="number" name="package[2][money]" value="{$package[2]['money']}"></td><td><input type="number" name="package[2][point]" value="{$package[2]['point']}"></td><td><input type="number" name="package[2][financial_coin]" value="{$package[2]['financial_coin']}" ></td><td></td></tr>
+            <tr><td>3</td><td><input type="number" name="package[3][money]" value="{$package[3]['money']}"></td><td><input type="number" name="package[3][point]" value="{$package[3]['point']}"></td><td><input type="number" name="package[3][financial_coin]" value="{$package[3]['financial_coin']}" ></td><td></td></tr>
+            <tr><td>4</td><td><input type="number" name="package[4][money]" value="{$package[4]['money']}"></td><td><input type="number" name="package[4][point]" value="{$package[4]['point']}"></td><td><input type="number" name="package[4][financial_coin]" value="{$package[4]['financial_coin']}" ></td><td><input type="text" name="package[4][gift]" value="{$package[4]['gift']}" readonly id="package4" placeholder="没有可不选"></td></tr>
         </table>
            
         <div class="center">
@@ -60,7 +60,7 @@
     {if:isset($message)}
     art.dialog.tips('<p class="success">{$message}</p>');
     {/if}
-     function add1(){
+     function add(that){
         layer.open({
         type: 1,
         area: ['420px', '200px'],
@@ -68,40 +68,19 @@
         btn:['确定','取消'],
         zindex:1,
         yes:function(){
-            $("#package1").val($("#product_ids").val());
-            layer.closeAll();
-        },
-        content: $('#add'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
-      });
-    }
-     function add2(){
-        layer.open({
-        type: 1,
-        area: ['420px', '200px'],
-        title: "选择赠送礼品（多选一）", //不显示标题
-        btn:['确定','取消'],
-        zindex:1,
-        yes:function(){
-            $("#package2").val($("#product_ids").val());
-            $("#package3").val($("#product_ids").val());
-            $("#package4").val($("#product_ids").val());
+            $(that).val($("#product_ids").val());
             layer.closeAll();
         },
         content: $('#add'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
       });
     }
     $(function(){
-        $("#package1").click(function(){
+        $("#package1,#package2,#package3,#package4").click(function(){
             $("#product_ids").val($(this).val());
-            add1();
-        })
-        $("#package2,#package3,#package4").click(function(){
-            $("#product_ids").val($(this).val());
-            add2();
+            add(this);
         });
     })
     function select(){
-//        art.dialog.open('{url:/marketing/radio_goods_select}',{id:'goods_select',title:'选择商品：',width:900,height:500,padding: '10px'});
        index =  layer.open({
             id:"select",
             type: 2,

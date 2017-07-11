@@ -276,120 +276,39 @@ class Order {
             $user_id = $recharge['user_id'];
             //给用户充值
             $result = "";
-            if($recharge['package']==0){
-                if($recharge['recharge_type']=='0'){
-                    $result = $model->table("customer")->data(array('balance' => "`balance`+" . $account))->where("user_id=" . $user_id)->update();
-                     //写充值日志
-                    if($result){
-                        Log::balance($account, $user_id, $recharge_no,'用户充值', 1);
-                    }
-                }else if($recharge['recharge_type']=='1'){
-                    if($recharge['package']==0){
-//                      $config = Config::getInstance();
-//                      $other = $config->get("other");
-//                      $silver = round($account*$other['gold2silver'],2);
-                        $silver = $account;
-                         //查询是否有充值活动
-                        $recharge_activity_2 = $model->table("recharge_activity")->where("id = 2 or name='充值银点送银点'")->find();
-                        if(!empty($recharge_activity_2)){
-                            $count = $model->table("recharge_sendsilver")->where("user_id=".$user_id)->count();
-                            if($count==0){//判断是否参加过
-                                if($recharge_activity_2['status']==0&&strtotime($recharge_activity_2['start_time'])<=time()&&  strtotime($recharge_activity_2['end_time'])>=time()){//活动有效
-                                    $set = unserialize($recharge_activity_2['set']);
-                                    if(is_array($set)){
-                                        if($account>=$set['min']){
-                                            if($account<=$set['max']){
-                                                $send = $account;
-                                            }else if($account>=$set['max']){
-                                                $send = $set['max'];
-                                            }
-                                            $inser_data = array("user_id"=>$user_id,
-                                                "recharge_no"=>$recharge_no,
-                                                "recharge_amount"=>$account,
-                                                'recharge_time'=>date("Y-m-d H:i:s"),
-                                                "send_silver"=>$send,
-                                                "used_amount"=>0.00,
-                                                "loss_amount"=>$send,
-                                                "is_all_used"=>0);
-                                            if($set['limit']==1){//判断是否添加华点支付限制
-                                                $inser_data['huadian_limit']=1;
-                                            }else{
-                                                $inser_data['huadian_limit']=0;
-                                            }
-                                            $model->table("recharge_sendsilver")
-                                            ->data($inser_data)
-                                            ->insert();
-                                            $silver +=$send;
-                                        }
-                                    }
-                                }else if($recharge_activity_2['status']==0&&strtotime($recharge_activity_2['end_time'])<time()){//过期
-                                    $model->table("recharge_activity")->where("id = 2 or name='充值银点送银点'")->data(array("status"=>1))->update();
-                                }
-                            }
-                        }
-                        $result = $model->table("customer")->data(array('silver_coin' => "`silver_coin`+" . $silver))->where("user_id=" . $user_id)->update();
-                        if($result){
-                            if(isset($send)){
-                                if($set['limit']==1){
-                                    $note = "用户充值【包含{$send}赠送银点,赠送银点不能用于华点订单】";
-                                }else{
-                                    $note = "用户充值【包含{$send}赠送银点】";
-                                }
-                                Log::silver_log($silver, $user_id, $recharge_no,$noe, 2);
-                            }else{
-                                Log::silver_log($silver, $user_id, $recharge_no,'用户充值', 2);
-                            }
-                        }
-                    }
+            if($recharge['package']==0){//普通充值
+                //增加余额
+                $result = $modle->table("customer")->where("user_id = $user_id")->data(array("balance"=>"`balance`+$account"))->update();
+                //?是否需要加积分和理财金币
+                if($result){
+                    Log::balance($account, $user_id, $recharge['recharge_no'], "用户充值", 1);
                 }
             }else{//套餐充值处理
-               $config = Config::getInstance();
-               $package_set = $config->get("recharge_package_set"); 
-               switch ($recharge['package']){
+                $config = Config::getInstance();
+                $package_set = $config->get("recharge_package_set"); 
+                switch ($recharge['package']){
                     case 1: $set = $package_set[1];break;
                     case 2: $set = $package_set[2];break;
                     case 3: $set = $package_set[3];break;
-                    case 4: $set = $package_set[4];break;//半年
+                    case 4: $set = $package_set[4];break;
                 }
-                if(isset($set['withdraw_time'])){
-                    //更新可提现时间
-                    $withdraw_deadline = $model->table("customer")->where("user_id=".$user_id)->fields('user_id,withdraw_deadline')->find();
-                    if($withdraw_deadline){
-                        if(time()> strtotime($withdraw_deadline['withdraw_deadline'])){//已经过期
-                            $model->table("customer")->where("user_id=".$user_id)->data(array("withdraw_deadline"=>date("Y-m-d H:i:s",strtotime("+{$set['withdraw_time']} month"))))->update();
-                        }else{
-                            $model->table("customer")->where("user_id=".$user_id)->data(array("withdraw_deadline"=>date("Y-m-d H:i:s",strtotime("+{$set['withdraw_time']} month",strtotime($withdraw_deadline['withdraw_deadline'])))))->update();
-                        }
-                    }
-                }
-                 //如果需要加积分的
+                //如果需要加积分的
                 if(isset($set['point'])&& $set['point']>0){
                     $result = $model->table("customer")->data(array('point_coin' => "`point_coin`+" . $set['point']))->where("user_id=" . $user_id)->update();
                     if($result){
                         Log::pointcoin_log($set['point'], $user_id, $recharge_no,"套餐赠送积分", 1);
                     }
                 }
-//                //如果需要加银点的
-//                if(isset($set['silver'])&& $set['silver']>0){
-//                    $result = $model->table("customer")->data(array('silver_coin' => "`silver_coin`+" . $set['silver']))->where("user_id=" . $user_id)->update();
-//                    if($result){
-//                        $limit_record['user_id']=$recharge['user_id'];
-//                        $limit_record['recharge_no']=$recharge['recharge_no'];
-//                        $limit_record['recharge_amount']=$limit_record['loss_amount']=$set['silver'];
-//                        $limit_record['used_amount']=0.00;
-//                        $limit_record['timelimit']=$set['silver_timelimit']==0?0:1;//0 表示没有时间限制
-//                        $limit_record['dead_line']=$set['silver_timelimit']>0?date("Y-m-d 23:59:59",strtotime("+{$set['silver_timelimit']} month")):NULL;
-//                        $limit_record['is_all_used']=0;
-//                        $limit_record['is_dead']=0;
-//                        $model->table("silver_limit")->data($limit_record)->insert();
-//                        Log::silver_log($set['silver'], $user_id, $recharge_no,'套餐充值定向银点(指定专区商品可用)【有效期至：'.date("Y-m-d 23:59:59",strtotime("+{$set['silver_timelimit']} month")).'】', 2);
-//                    }
-//                }
-                if(isset($set['gift'])&&isset($set['gift_num'])){
-                   $order_result = self::autoCreateOrderForRechargeGift($recharge['recharge_no'],"",$set['gift_num']);//套餐赠送的商品
+                //如果需要加理财金币
+                if(isset($set['financial_coin'])&& $set['financial_coin']>0){
+                    $result = $model->table("customer")->data(array('financial_coin' => "`financial_coin`+" . $set['financial_coin']))->where("user_id=" . $user_id)->update();
+                }
+                //如果需要赠送礼品
+                if(isset($set['gift'])){
+                   $order_result = self::autoCreateOrderForRechargeGift($recharge['recharge_no'],"",1);//套餐赠送的商品
                    if(!$order_result){
-                     file_put_contents('autoCreateOrderErr.txt', date("Y-m-d H:i:s")."==充值订单号=={$recharge['recharge_no']}==\n",FILE_APPEND);
-                    }
+                        file_put_contents('autoCreateOrderErr.txt', date("Y-m-d H:i:s")."==充值订单号=={$recharge['recharge_no']}==\n",FILE_APPEND);
+                   }
                 }
                 $result =true;
             }
@@ -412,8 +331,8 @@ class Order {
                 }else{
                     $model->table("doc_receiving")->data($receivingData)->where("id =".$issetReceiving['id'])->update();
                 }
-                self::updateCommission(2, $recharge['id'], $user_id);//分销系统佣金
-                self::rechargeActivity($recharge);
+//                self::updateCommission(2, $recharge['id'], $user_id);//分销系统佣金
+//                self::rechargeActivity($recharge);
                 return $recharge['id'];
             }
             return false;
@@ -672,7 +591,6 @@ class Order {
         $district_sale = $model->table('district_sales')->where('order_id = '.$order_id.' and status=0')->fields('id')->findAll();
         if(!empty($district_sale)){
             $ids = implode(',', $district_sale);
-//            $model->table('district_incomelog')->where("status = 0 and orgin in ($ids) and (type = 1 or type =2)")->data(array('status'=>-1))->update();
             $model->query("update tiny_district_incomelog set status=-1 where status=0 and orgin in ({$ids}) and (type=1 or type=2)");
             $model->query("update tiny_district_sales set status = -1 where status = 0 and id in ({$ids})");
         }
@@ -681,87 +599,6 @@ class Order {
             $mode->table("commission_log")->where("order_id = {$order_id}")->data(array('status'=>3))->update();
         }
         
-    }
-    /*
-     * 充值送礼品活动逻辑
-     */
-    public static function rechargeActivity($rechargeInfo){
-        $model = new Model();
-        $activity = $model->table('recharge_activity')->where("id =1")->find();
-        if($activity){
-            if($activity['status']==0 && strtotime($activity['end_time'])>time()&&  strtotime($activity['start_time'])<time()){//未过期
-                if($activity['recharge_type']==0||($rechargeInfo['recharge_type']==0&&$activity['recharge_type']==1)||($rechargeInfo['recharge_type']==1&&$activity['recharge_type']==2)){
-                $isset =  $model->table("recharge_presentlog")->where("user_id=".$rechargeInfo['user_id'])->find();//已经参与过了
-                if($isset){
-                    return false;
-                }else{
-                    if($activity['set']!=""){
-                        $set = unserialize($activity['set']);
-                        if(is_array($set)){
-                            usort($set, function($a,$b){
-                                if($a['recharge_amount_limit']>$b['recharge_amount_limit']){
-                                    return 1;
-                                }else if($a['recharge_amount_limit']<$b['recharge_amount_limit']){
-                                    return -1;
-                                }else{
-                                    return 0;
-                                }
-                            });
-                            $present = "";
-                            foreach($set as $v){
-                                if($rechargeInfo['account']>=$v['recharge_amount_limit']){
-                                    $present=$v['present'];
-                                }
-                            }
-                            if($present!=""){
-                                $data['user_id']=$rechargeInfo['user_id'];
-                                $data['recharge_no']=$rechargeInfo['recharge_no'];
-                                $data['recharge_type']=$rechargeInfo['recharge_type'];
-                                $data['recharge_time']=date("Y-m-d H:i:s");
-                                $data['recharge_amount']=$rechargeInfo['account'];
-                                $data['payment_name']=$rechargeInfo['payment_name'];
-                                $data['present']=$present;
-                                $data['status']=0;
-                                $result =$model->table("recharge_presentlog")->data($data)->insert();
-                                if($result){
-                                    $oauth_info = new Model('oauth_user');
-                                    $v = $oauth_info->where("oauth_type='wechat' and user_id = ".$rechargeInfo['user_id'])->find();
-                                    if(empty($v)){
-                                        return false;
-                                    }
-                                    $wechatcfg = $model->table("oauth")->where("class_name='WechatOAuth'")->find();
-                                    $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
-                                    $token = $wechat->getAccessToken();
-                                    if($token==''){
-                                        return false;
-                                    }
-                                    $v['open_name'] = $v['open_name']==""?"买一点用户":$v['open_name'];
-                                    $params = array(
-                                        'touser'=>$v['open_id'],
-                                        'msgtype'=>'news',
-                                        'news'=>array(
-                                            'articles'=>array('0'=>array(
-                                                'title'=>'买一点温馨提示',
-                                                'description'=>"亲爱的{$v['open_name']}，恭喜您获得充值奖励【{$present}】，快来填写您的礼品领取地址>>>",
-                                                'url'=>'http://www.buy-d.cn/user/accept_present',
-                                                'picurl'=>'http://img.buy-d.cn/data/uploads/2017/01/20/773cd5cbe5df9f03af5164b7f34806f1.png'
-                                            )
-                                           )
-                                        )
-                                    );
-                                    Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params,JSON_UNESCAPED_UNICODE));
-                                }
-                                return true;
-                            }
-                        }
-                    }
-                }
-              }
-            }else if($activity['status']==0 &&  strtotime($activity['end_time'])<time()){//过期
-                $model->table('recharge_activity')->where("id=1")->data(array("status"=>1))->update();
-            }
-        }
-        return FALSE;
     }
     /*
      * 套餐充值自动创建已付款订单

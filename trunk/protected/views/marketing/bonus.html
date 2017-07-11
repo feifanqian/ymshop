@@ -1,0 +1,126 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+<style>
+    #add table{
+        width:100%;
+    }
+    #add th{
+        text-align: center;
+        width:70px;
+        background-color: #eee;
+    }
+    #add td{
+        padding-top: 30px;
+        text-align: center;
+    }
+    #add textarea{
+        margin:10px auto;
+        margin-left:10px;
+    }
+ 
+</style>
+<form action="" method="post">
+    <div class="tools_bar clearfix">
+        <a  class="icon-plus" href="javascript:;" onclick="add()"> 添加</a><a href="javascript:;" class="icon-loop-2"
+        onclick="tools_reload()"> 刷新</a></div>
+        <table class="default" >
+            <tr>
+                <th>分红说明</th>
+                <th>分红时间</th>
+                <th>分红金额</th>
+                <th>实际分红</th>
+                <th style="width:70px">受益人数</th>
+                <th style="width:70px">最高分红</th>
+                <th style="width:70px">最低分红</th>
+                <th style="width:60px">状态</th>
+            </tr>
+                {query:name=bonus as b fields=b.* id=$obj page=1}
+                <tr>
+                <td>{$item['explanation']}</td>
+                <td>{$item['date']}</td>
+                <td>{$item['bonus']}</td>
+                <td>{$item['real_bonus']}</td>
+                <td style="width:70px;">{$item['beneficiary_num']}</td>
+                <td style="width:70px">{$item['max_bonus']}</td>
+                <td style="width:70px">{$item['min_bonus']}</td>
+                <td style="width:60px"></td>
+                </tr>
+                {/query}
+            </table>
+    </form>
+    <div class="page_nav">
+        {echo:$obj->pageBar()}
+    </div>
+    <div id='add' style="display:none;">
+        <table>
+            <tr><th>分红说明</th><th>分红金额</th><th>预计收益人数</th><th>预计最高分红</th><th>预计最低分红</th></tr>
+            <tr><td><input name="explanation" value='默认分红'></td><td><input name='bonus_money' type="number"></td><td><span id='count'></span></td><td><span id='max'></span></td><td><span id='min'></span></td></tr>
+        </table>
+    </div>
+    <script type="text/javascript">
+     var beneficiary_num;
+     var count;
+     var max;
+     var min;
+     function add(){
+        var load = layer.load();
+        $.post("{url:/marketing/getCalculateData}",{},function(data){
+            layer.close(load);
+            if(data.status=='success'){
+                beneficiary_num = data.beneficiary_num;
+                count = data.count;
+                max   = data.max;
+                min   = data.min;
+                $("#count").html(beneficiary_num);
+                layer.open({
+                    type: 1,
+                    area: ['600px', '200px'],
+                    title: "发布分红", //不显示标题
+                    btn:['确定','预计计算','取消'],
+                    zindex:1,
+                    yes:function(){
+                        var bonus = $("input[name=bonus_money]").val();
+                        var explanation = $("input[name=explanation]").val();
+                        if(explanation==undefined){
+                            explanation = "";
+                        }
+                        if(bonus!==undefined && bonus>0){
+                            load = layer.load();
+                            $.post("{url:/marketing/post_bonus}",{bonus:bonus,explanation:explanation},function(data){
+                                layer.close(load);    
+                                if(data.status=='success'){
+                                    layer.msg(data.msg,function(){
+                                        window.location.reload();
+                                    })
+                                }else{
+                                    layer.msg(data.msg);
+                                }
+                            },'json');
+                        }else{
+                            layer.msg("请填写正确的分红金额");
+                            return false;
+                        }
+                    },
+                    btn2:function(){
+                        var bonus = $("input[name=bonus_money]").val();
+                        if(bonus!==undefined && bonus>0){
+                            $("#max").html((bonus*max/count).toFixed(2));
+                            $("#min").html((bonus*min/count).toFixed(2));
+                        }else{
+                            layer.msg("请填写正确的分红金额");
+                        }
+                        return false;
+                    },
+                    btn3:function(){
+                        
+                    },
+                    content: $('#add'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                  });
+            }else{
+                layer.msg("出错了，请重试");
+            }
+        },'json');
+    }
+</script>

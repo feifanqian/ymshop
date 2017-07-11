@@ -60,13 +60,13 @@ class LinuxCliTask{
               }
              if(!empty($voucher_list1)){
                  foreach($voucher_list1 as $k => $v){
-                     $v['open_name'] = $v['open_name']==""?"买一点用户":$v['open_name'];
+                     $v['open_name'] = $v['open_name']==""?"圆梦用户":$v['open_name'];
                      $params = array(
                          'touser'=>$v['open_id'],
                          'msgtype'=>'news',
                          'news'=>array(
                              'articles'=>array('0'=>array(
-                                 'title'=>'买一点温馨提示',
+                                 'title'=>'圆梦温馨提示',
                                  'description'=>"亲爱的{$v['open_name']},您有一张价值{$v['value']}元的优惠券已经过期了。",
                                  'url'=>'www.buy-d.cn',
                                  'picurl'=>'http://img.buy-d.cn/data/uploads/2017/02/13/0da1a14455a4b1b63bd09eaa2209f809.png'
@@ -80,13 +80,13 @@ class LinuxCliTask{
              }
              if(!empty($voucher_list2)){
                  foreach($voucher_list2 as $k => $v){
-                     $v['open_name'] = $v['open_name']==""?"买一点用户":$v['open_name'];
+                     $v['open_name'] = $v['open_name']==""?"圆梦用户":$v['open_name'];
                      $params = array(
                          'touser'=>$v['open_id'],
                          'msgtype'=>'news',
                          'news'=>array(
                              'articles'=>array('0'=>array(
-                                 'title'=>'买一点温馨提示',
+                                 'title'=>'圆梦温馨提示',
                                  'description'=>"亲爱的{$v['open_name']},您有一张价值{$v['value']}元的优惠券将于三日后过期，赶快去使用吧>>>",
                                  'url'=>'www.buy-d.cn',
                                  'picurl'=>'http://img.buy-d.cn/data/uploads/2017/02/13/0da1a14455a4b1b63bd09eaa2209f809.png'
@@ -100,13 +100,13 @@ class LinuxCliTask{
              }
              if(!empty($voucher_list3)){
                  foreach($voucher_list3 as $k => $v){
-                     $v['open_name'] = $v['open_name']==""?"买一点用户":$v['open_name'];
+                     $v['open_name'] = $v['open_name']==""?"圆梦用户":$v['open_name'];
                      $params = array(
                          'touser'=>$v['open_id'],
                          'msgtype'=>'news',
                          'news'=>array(
                              'articles'=>array('0'=>array(
-                                 'title'=>'买一点温馨提示',
+                                 'title'=>'圆梦温馨提示',
                                  'description'=>"亲爱的{$v['open_name']},您有一张价值{$v['value']}元的优惠券将于十日后过期，赶快去使用吧>>>",
                                  'url'=>'www.buy-d.cn',
                                  'picurl'=>'http://img.buy-d.cn/data/uploads/2017/02/13/0da1a14455a4b1b63bd09eaa2209f809.png'
@@ -120,13 +120,13 @@ class LinuxCliTask{
              }
              if(!empty($voucher_list4)){
                  foreach($voucher_list4 as $k => $v){
-                     $v['open_name'] = $v['open_name']==""?"买一点用户":$v['open_name'];
+                     $v['open_name'] = $v['open_name']==""?"圆梦用户":$v['open_name'];
                      $params = array(
                          'touser'=>$v['open_id'],
                          'msgtype'=>'news',
                          'news'=>array(
                              'articles'=>array('0'=>array(
-                                 'title'=>'买一点温馨提示',
+                                 'title'=>'圆梦温馨提示',
                                  'description'=>"亲爱的{$v['open_name']},您有一张价值{$v['value']}元的优惠券还有十五天就要过期啦，赶快去使用吧>>>",
                                  'url'=>'www.buy-d.cn',
                                  'picurl'=>'http://img.buy-d.cn/data/uploads/2017/02/13/0da1a14455a4b1b63bd09eaa2209f809.png'

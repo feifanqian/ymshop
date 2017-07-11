@@ -1,0 +1,62 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+<style>
+    #add table{
+        width:100%;
+    }
+    #add th{
+        text-align: center;
+        width:70px;
+        background-color: #eee;
+    }
+    #add td{
+        padding-top: 30px;
+        text-align: center;
+    }
+    #add textarea{
+        margin:10px auto;
+        margin-left:10px;
+    }
+ 
+</style>
+<form action="" method="post">
+     <div class="tools_bar clearfix">
+        <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+        <a  class="icon-plus" href="javascript:;" onclick="add()"> 添加</a><a href="javascript:;" class="icon-loop-2"
+        onclick="tools_reload()"> 刷新</a></div>
+        <table class="default" >
+            <tr>
+                <th style="width:30px">选择</th>
+                <th style="width:70px">操作</th>
+                <th >店铺名称</th>
+                <th>创建时间</th>
+                <th style="width:70px">状态</th>
+               
+            </tr>
+                {query:name=personal_shop as ps join=left join customer as c on ps.user_id eq c.user_id fields=ps.*,c.real_name  id=$obj page=1}
+                <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+                  <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                    <li><a class="icon-pencil" href="javascript:;" onclick=""> 编辑</a></li>
+                    <li><a class="icon-close" href="javascript:;" onclick=""> 删除</a></li>
+                </ul></div></div> </td>
+                <td >
+                    <a href="{url:/index/flashbuy/id/$item[id]}" target="_blank">{$item['real_name']}的个人店铺</a></td>
+                <td>{$item['create_date']}</td>
+                <td style="width:60px">{if:$item['status']==1}<b class="green">正常</b>{else:}<b class="gary">隐藏</b>{/if}</td>
+                </tr>
+                {/query}
+            </table>
+    </form>
+    <div class="page_nav">
+        {echo:$obj->pageBar()}
+    </div>
+    <div id='add' style="display:none;">
+        <table>
+            <tr><th>分红说明</th><th>分红金额</th><th>预计收益人数</th><th>预计最高分红</th><th>预计最低分红</th></tr>
+            <tr><td><input name="explanation" value='默认分红'></td><td><input name='bonus_money' type="number"></td><td><span id='count'></span></td><td><span id='max'></span></td><td><span id='min'></span></td></tr>
+        </table>
+    </div>
+    <script type="text/javascript">
+</script>

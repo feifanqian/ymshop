@@ -326,13 +326,13 @@ class DistrictadminController extends Controller {
                                 $wechatcfg = $model->table("oauth")->where("class_name='WechatOAuth'")->find();
                                 $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
                                 $token = $wechat->getAccessToken();
-                                $oauth_info['open_name'] = $oauth_info['open_name']==""?"买一点用户":$oauth_info['open_name'];
+                                $oauth_info['open_name'] = $oauth_info['open_name']==""?"圆梦用户":$oauth_info['open_name'];
 //                                $params = array(
 //                                    'touser'=>$oauth_info['open_id'],
 //                                    'msgtype'=>'news',
 //                                    'news'=>array(
 //                                        'articles'=>array('0'=>array(
-//                                            'title'=>'买一点温馨提示',
+//                                            'title'=>'圆梦温馨提示',
 //                                            'description'=>"亲爱的{$oauth_info['open_name']},恭喜您，入驻小区申请通过了！快来看看吧>>>",
 //                                            'url'=>'www.buy-d.cn/district/district',
 //                                            'picurl'=>'http://img.buy-d.cn/data/uploads/2017/03/18/2e87d2ec1e5a600832482853c5c71a84.jpg'

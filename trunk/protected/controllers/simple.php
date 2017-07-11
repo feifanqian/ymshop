@@ -630,27 +630,18 @@ class SimpleController extends Controller {
         $voucher = $model->where($where)->order("id desc")->findAll();
 
         $wechataddress = array();
-//        if (Common::checkInWechat() && !$area_ids) {
-//            $tools = new JsApiPay();
-//            $openid = $tools->GetOpenid();
-//            //获取共享收货地址js函数参数
-//            $wechataddress = $tools->GetEditAddressParameters();
-//        }
         $wechataddress = $wechataddress ? $wechataddress : '[]';
         $this->assign("wechataddress", $wechataddress);
 
         $totalweight = $totalfare = $totalpoint = $totalamount = 0;
         //判断华点用
         $productarr = array();
-        $goods_arr = array();
-        $product_amount=array();
         
         foreach ($this->selectcart as $k => $v) {
             $totalamount+=$v['amount'];
             $totalweight+=$v['weight'] * $v['num'];
             $totalpoint+=$v['point'] * $v['num'];
             $productarr[$v['id']] = $v['num'];
-            $goods_arr[] = $v['goods_id'];
             if(!isset($product_amount[$v['id']])){
                 $product_amount[$v['id']]=0.00;
             }
@@ -661,25 +652,10 @@ class SimpleController extends Controller {
         $client_type = ($client_type == "desktop") ? 0 : ($client_type == "wechat" ? 2 : 1);
         //小区不支持华点
         $flag = Cookie::get('flag');
-        if($flag==NULL||empty($flag)){
-            $plugin_ids = "12";
-        }else{
-            $plugin_ids = "12,19";
-        }
+        
         $model = new Model("payment as pa");
         $paytypelist = $model->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
-                        ->where("pa.status = 0 and pa.plugin_id not in($plugin_ids) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
-        $huadian_result =Common::parserHuadianOrder($goods_arr, $productarr, $product_amount);
-        if($huadian_result===false){
-            foreach ($paytypelist as $k =>$v){
-                if($v['plugin_id']=='19'){
-                    unset($paytypelist[$k]);
-                }
-            }
-        }else{
-            $this->assign('huadian',$huadian_result['huadian']);
-            $this->assign('rmb',$huadian_result['rmb']);
-        }
+                        ->where("pa.status = 0 and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
         $paytypeone = reset($paytypelist);
         $this->assign("paytypeone", $paytypeone);
         $this->assign("paytypelist", $paytypelist);
@@ -1002,10 +978,11 @@ class SimpleController extends Controller {
 
             $client_type = Chips::clientType();
             $client_type = ($client_type == "desktop") ? 0 : ($client_type == "wechat" ? 2 : 1);
-            //去除华点支付
+            
             $model = new Model("payment as pa");
             $paytypelist = $model->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
-                            ->where("pa.status = 0 and pa.plugin_id not in(12,19) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
+                            ->where("pa.status = 0 and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
+            
             $paytypeone = reset($paytypelist);
             $this->assign("paytypeone", $paytypeone);
             $this->assign("paytypelist", $paytypelist);
@@ -1109,7 +1086,6 @@ class SimpleController extends Controller {
             $user_remark = Filter::txt(Req::args('user_remark'));
             $voucher_id = Filter::int(Req::args('voucher'));
             $cart_type = Req::args('cart_type');
-            $pay_type = Req::args('pay_type');//华点支付标识
             
             //非普通促销信息
             $type = Req::args("type");
@@ -1154,10 +1130,7 @@ class SimpleController extends Controller {
                 $this->redirect("order", false, $data);
                 exit;
             }
-            //if(!$payment_id)$this->redirect("order",false,Req::args());
-
             if ($this->getModule()->checkToken('order')) {
-
                 //订单类型: 0普通订单 1团 
                 $model = new Model('');
                 $order_type = 0;
@@ -1372,7 +1345,7 @@ class SimpleController extends Controller {
                 //计算订单优惠
                 $prom_order = array();
                 $discount_amount = 0;
-                if ($order_type == 0 && $pay_type != 'huabipay') {//设置华点订单不享受优惠
+                if ($order_type == 0){
                     if ($prom_id) {
                         $prom = new Prom($real_amount);
                         $prom_order = $model->table("prom_order")->where("id=$prom_id")->find();
@@ -1412,11 +1385,6 @@ class SimpleController extends Controller {
                 $voucher_value = 0;
                 $voucher = array();
                 if ($voucher_id) {
-                    if($pay_type == 'huabipay'){
-                        $data['msg'] = array('fail', "华币订单不支持优惠券，抱歉！");
-                        $this->redirect("order", false, $data);
-                         exit;
-                    }
                     $voucher = $model->table("voucher")->where("id=$voucher_id and is_send=1 and user_id=" . $this->user['id'] . " and status = 0 and '" . date("Y-m-d H:i:s") . "' <=end_time and '" . date("Y-m-d H:i:s") . "' >=start_time and money<=" . $real_amount)->find();
                     if ($voucher) {
                         $voucher_value = $voucher['value'];
@@ -1427,43 +1395,6 @@ class SimpleController extends Controller {
                 //计算订单总金额
                 $order_amount = $real_amount + $payable_freight + $tax_fee - $discount_amount - $voucher_value;
                 
-                if($pay_type == 'huabipay'){
-                    $order_type = 4;
-                     
-                    $huadian_result =Common::parserHuadianOrder($goods_arr, $productarr, $product_amount);
-                    if($huadian_result===false){
-                        $msg = array('type' => 'fail', 'msg' => '该订单不支持华点支付！');
-                        $this->redirect('/index/msg', false, $msg);
-                        exit();
-                    }else{
-                        $huabipay_amount = $huadian_result['huadian'];
-                        $still_pay = $huadian_result['rmb'];
-                    }
-                    $data['huabipay_amount']=$huabipay_amount;
-                    $data['otherpay_amount']=$still_pay;
-                    $data['huabipay_status']=0;
-                    //===============================================
-                    $data['is_new']=1;//新的华点订单，兼容之前的
-                    $data['is_return']=0;//是否返还华点对应RMB
-                    //===============================================
-//                    if($still_pay>0){
-//                        $data['otherpay_status']=0;
-//                    }else{
-//                        $data['otherpay_status']=1;//如果需要支付的值为0 ，则自动标记为已支付。
-//                    }
-                    $data['otherpay_status'] = 0;
-                    $data['huabi_account']=Filter::sql(Req::args('huabi_account'));
-                    
-                    $client_type = Chips::clientType();
-                    $client_type = ($client_type == "desktop") ? 0 : ($client_type == "wechat" ? 2 : 1);
-                    $model = new Model("payment as pa");
-                    $payment = $model->fields("pa.id")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
-                                    ->where("pa.status = 0 and pa.plugin_id not in(12) and pa.client_type = $client_type")->order("pa.sort desc")->find();
-                    $payment_id = $payment['id'];
-                }else{
-                    $data['huabi_account']="";
-                }
-
                 //填写订单
                 $data['order_no'] = Common::createOrderNo();
                 $data['user_id'] = $this->user['id'];
@@ -1497,10 +1428,7 @@ class SimpleController extends Controller {
 
                 $data['order_amount'] = $order_amount;
                 $data['real_amount'] = $real_amount;
-//                if($order_amount<=0){
-//                    $data['status'] = 3;
-//                    $data['pay_status'] = 1;
-//                }
+
                 if(!isset($data['point'])){
                     $data['point'] = $point;
                 }
@@ -1596,108 +1524,11 @@ class SimpleController extends Controller {
             $this->noRight();
         }
     }
-    public function changeOrder(){
-        $user_id = $this->user['id'];
-        $order_id =  Filter::int(Req::args("order_id"));
-        $huabi_account = Filter::sql(Req::args("huabi_account"));
-        $order = new Model("order");
-        $order_info = $order->where("id=$order_id and user_id = $user_id and pay_status = 0 and status < 4")->fields('id,order_amount,type,prom_id,voucher_id')->find();
-        if(empty($order_info)){
-            echo json_encode(array("status"=>'fail','msg'=>'订单信息不存在')); 
-            exit();
-        }else{
-            if($order_info['type']==4){
-                echo json_encode(array("status"=>'fail','msg'=>'订单已经是华点订单')); 
-                exit();
-            }
-            if($huabi_account ==""){
-                echo json_encode(array("status"=>'fail','msg'=>'用户华点账号为空')); 
-                exit();
-            }
-            $order_goods = new Model("order_goods as og");
-            $goods = $order_goods->where("og.order_id = $order_id and g.is_huabipay = 1")->join("left join goods as g on og.goods_id = g.id")->fields("og.goods_id,og.product_id,og.goods_nums,og.real_price,g.huabipay_set")->findAll();
-           if(empty($goods) || $order_info['type']!= 0||$order_info['voucher_id']!= 0||$order_info['prom_id']!=0){
-               echo json_encode(array("status"=>'fail','msg'=>'该订单不支持使用华点付款')); 
-               exit();
-           }else{
-                //判断华点用
-                $productarr =array();
-                $goods_arr = array();
-                $product_amount=array();
-                foreach ($goods as $item) {
-                    $productarr[$item['product_id']] = $item['goods_nums'];
-                    $goods_arr[]=$item['goods_id'];
-                    if(!isset($product_amount[$item['product_id']])){
-                         $product_amount[$item['product_id']]=0.00;
-                    }
-                    $product_amount[$item['product_id']]+=$item['real_price']*$item['goods_nums'];
-                }
-                
-                $huadian_result =Common::parserHuadianOrder($goods_arr, $productarr, $product_amount);
-                if($huadian_result===false){
-                     echo json_encode(array("status"=>'fail','msg'=>'该订单不支持使用华点付款')); 
-                    exit();
-                }
-                if($huadian_result['rmb']==0){
-                    $otherpay_status=1;
-                }else{
-                    $otherpay_status=0;
-                }
-               $result = $order->data(array("huabipay_amount"=>$huadian_result['huadian'],"otherpay_amount"=>$huadian_result['rmb'],"huabipay_status"=>0,"otherpay_status"=>$otherpay_status,"huabi_account"=>$huabi_account,"type"=>4,"is_new"=>1,"is_return"=>0))->where("id =$order_id and user_id = $user_id")->update();
-               if($result){
-                    echo json_encode(array("status"=>'success','msg'=>'成功',"order_id"=>$order_info['id'])); 
-                    exit();
-               }else{
-                    echo json_encode(array("status"=>'fail','msg'=>'数据库异常')); 
-                    exit();
-               }
-            }
-        }
-    }
-     public function huabipay_info(){
-        $user_id = $this->user['id'];
-        $order_id = Req::args("order_id");
-        $order = new Model("order");
-        $order_info = $order->where("id=$order_id and user_id = $user_id and pay_status = 0 and status < 4")->fields('order_no,voucher_id,order_amount,prom_id,type')->find();
-        if(empty($order_info)){
-            echo json_encode(array("status"=>'fail','msg'=>'订单信息不存在')); 
-            exit();
-        }else{
-            $order_goods = new Model("order_goods as og");
-            $goods = $order_goods->where("og.order_id = $order_id and g.is_huabipay = 1")->join("left join goods as g on og.goods_id = g.id")->fields("og.goods_id,og.product_id,og.goods_nums,og.real_price,g.huabipay_set")->findAll();
-           if(empty($goods) || $order_info['type']== 2 ||  $order_info['type']==3 ||$order_info['voucher_id']!=0||$order_info['prom_id']!=0){
-               echo json_encode(array("status"=>'fail','msg'=>'抱歉!订单不支持华点支付')); 
-               exit();
-           }else{
-               //判断华点用
-                $productarr =array();
-                $goods_arr = array();
-                $product_amount=array();
-                foreach ($goods as $item) {
-                    $productarr[$item['product_id']] = $item['goods_nums'];
-                    $goods_arr[]=$item['goods_id'];
-                    if(!isset($product_amount[$item['product_id']])){
-                         $product_amount[$item['product_id']]=0.00;
-                    }
-                    $product_amount[$item['product_id']]+=$item['real_price']*$item['goods_nums'];
-                }
-                
-                $huadian_result =Common::parserHuadianOrder($goods_arr, $productarr, $product_amount);
-                if($huadian_result===false){
-                     echo json_encode(array("status"=>'fail','msg'=>'该订单不支持使用华点付款')); 
-                    exit();
-                }
-               echo json_encode(array('status'=>'success','msg'=>'成功','data'=>array('order_no'=>$order_info['order_no'],'order_amount'=>$order_info['order_amount'],'cash'=>$huadian_result['rmb'],'huabi'=>$huadian_result['huadian'],'shop_huabi_account'=>'wlucky2101')));
-               exit();
-            }
-        }
-    }
-
     public function order_status() {
         if ($this->checkOnline()) {
             $order_id = Filter::int(Req::get("order_id"));
             if ($order_id) {
-                $order = $this->model->table("order as od")->join("left join payment as pa on od.payment= pa.id")->fields("od.id,od.order_no,od.payment,od.pay_status,od.order_amount,pa.pay_name as payname,od.type,od.status,od.huabipay_amount,od.otherpay_amount,od.otherpay_status,od.huabi_account,od.is_new,od.is_return")->where("od.id=$order_id and od.status<4 and od.user_id = " . $this->user['id'])->find();
+                $order = $this->model->table("order as od")->join("left join payment as pa on od.payment= pa.id")->fields("od.id,od.order_no,od.payment,od.pay_status,od.order_amount,pa.pay_name as payname,od.type,od.status")->where("od.id=$order_id and od.status<4 and od.user_id = " . $this->user['id'])->find();
                 if ($order) {
                     if ($order['pay_status'] == 0) {
                         $payment_plugin = Common::getPaymentInfo($order['payment']);

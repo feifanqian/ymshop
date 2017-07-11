@@ -780,4 +780,31 @@ class GoodsController extends Controller {
              }
         }    
     }
+    
+    public function personal_shop_set(){
+        $group = "personal_shop_set";
+        $config = Config::getInstance();
+        if (Req::args('submit') != null) {
+                $configService = new ConfigService($config);
+                if (method_exists($configService, $group)) {
+                    $result = $configService->$group();
+                    if (is_array($result)) {
+                        $this->assign('message', $result['msg']);
+                    } else if ($result == true) {
+                        $this->assign('message', '信息保存成功！');
+                    }
+                    //清除opcache缓存
+                    if (extension_loaded('opcache')) {
+                        opcache_reset();
+                    }
+                    Log::op($this->manager['id'], "修改个人配置", "管理员[" . $this->manager['name'] . "]:修改个人配置 ");
+                }
+        }
+        $this->assign('data', $config->get($group));
+        $this->redirect();
+    }
+    
+    public function personal_shop_list(){
+        $this->redirect();
+    }
 }
