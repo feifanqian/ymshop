@@ -54,7 +54,7 @@
             </div>
         </div>
     </div>
-     <div style='padding:0px 24px;margin-top:10px;margin-bottom:20px;'>
+     <div style='padding:0px 24px;margin-top:10px;margin-bottom:60px;'>
         <h2><i class='fa fa-2x fa-calendar red'></i><span style='font-size:20px;margin-left:4px;'>签到规则</span></h2>
         <p>{$sign_in_set['introduce']}</p>
     </div>
@@ -201,11 +201,7 @@ $(function(){
                     ,btn: '我知道了'
                });
             }else{
-                layer.open({
-                    content: data.msg
-                    ,skin: 'msg'
-                    ,time: 4 
-                  });
+                  $.toast(data.msg);
             }
         },'json');
     }
