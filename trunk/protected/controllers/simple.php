@@ -1593,7 +1593,7 @@ class SimpleController extends Controller {
         if ($this->checkOnline()) {
             $order_id = Filter::int(Req::args("order_id"));
             if ($order_id) {
-                $order = $this->model->table("order as od")->join("left join payment as pa on od.payment= pa.id")->fields("od.id,od.order_no,od.payment,od.pay_status,od.order_amount,od.otherpay_amount,pa.pay_name as payname,od.type,od.status,od.huabipay_status,od.otherpay_status,od.huabipay_amount,od.otherpay_amount,od.huabi_account,od.is_new")->where("od.id=$order_id and od.status<4 and od.user_id = " . $this->user['id'])->find();
+                $order = $this->model->table("order as od")->join("left join payment as pa on od.payment= pa.id")->fields("od.id,od.order_no,od.payment,od.pay_status,od.order_amount,pa.pay_name as payname,od.type,od.status")->where("od.id=$order_id and od.status<4 and od.user_id = " . $this->user['id'])->find();
                 if ($order) {
                     if ($order['pay_status'] == 1) {
                         $this->assign("order", $order);

@@ -25,16 +25,6 @@ class Log {
                             'note' => $note,
                             'order_no'=>$order_no,);
                 $id = $model->table("balance_log")->data($log)->insert();
-                if($type==7||$type==0||$type==3){
-                    if($type==7){
-                        $record_type = 2;
-                    }else if($type==0){
-                        $record_type = 3;
-                    }else if($type==3){
-                        $record_type = 1;
-                    }
-                    Common::recordUseDetail4GoldCoin($user_id, $record_type, abs($amount), $id);
-                }
         }
     }
     public static function pointcoin_log($amount, $user_id, $order_no='', $note = '', $type = 0, $admin_id = 0) {

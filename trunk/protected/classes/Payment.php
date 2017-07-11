@@ -73,11 +73,7 @@ class Payment {
             $payment ['M_Remark'] = $order['user_remark'];
             $payment ['M_OrderId'] = $order['id'];
             $payment ['M_OrderNO'] = $order['order_no'];
-            if($order['is_new']==0&&$order['type']==4){
-                $payment ['M_Amount'] = $order['otherpay_amount'];
-            }else{
-                $payment ['M_Amount'] = $order['order_amount'];
-            }
+            $payment ['M_Amount'] = $order['order_amount'];
             //用户信息
             $payment ['P_Mobile'] = $order['mobile'];
             $payment ['P_Name'] = $order['accept_name'];

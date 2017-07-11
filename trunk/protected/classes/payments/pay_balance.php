@@ -6,7 +6,7 @@
  */
 class pay_balance extends PaymentPlugin
 {
-    public $name = '金点支付';
+    public $name = '余额支付';
 
 	//提交地址
     public function submitUrl()

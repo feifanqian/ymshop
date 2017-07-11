@@ -915,7 +915,7 @@ textarea {
   margin-top: 30px;
 }
 #header .head-main .search-keyword {
-  border: 2px solid #c91313;
+  border: 2px solid #ed5118;
   border-right: none;
   height: 21px;
   line-height: 21px;
@@ -929,8 +929,8 @@ textarea {
   width: 84px;
   height: 34px;
   font-size: 14px;
-  background-color: #eb2f38;
-  border: 1px solid #c91313;
+  background-color: #ed5118;
+  border: 1px solid #ed5118;
   cursor: pointer;
   color: #fff;
 }
@@ -976,7 +976,7 @@ textarea {
 #header .nav {
   height: 46px;
   background-color: #fff;
-  border-bottom: 2px solid #cd1515;
+  border-bottom: 2px solid #ed5118;
 }
 #header .nav li {
   float: left;
@@ -984,7 +984,7 @@ textarea {
 }
 #header .nav li.category-box {
   width: 240px;
-  background-color: #dd2727;
+  background-color: #ed5118;
   height: 47px;
   margin-bottom: -2px;
   display: block;
@@ -1001,7 +1001,7 @@ textarea {
 }
 #header .nav li.category-box.on .link a {
   color: #fff;
-  background: #cb2020;
+  background: #ed5118;
 }
 #header .nav li.category-box > .link a {
   color: #fff;
@@ -1018,7 +1018,7 @@ textarea {
 }
 #header .nav .link a.current {
   background-color: #fff;
-  color: #dd2727;
+  color: #ed5118;
 }
 .cart-box {
   position: relative;
@@ -1175,7 +1175,7 @@ textarea {
 }
 .banner .sidebar .sidebar-inner .sidebar-body .sidebar-btn-list li .iconfont {
   font-size: 32px;
-  color: #DF322E;
+  color: #ed5118;
 }
 .banner .sidebar .sidebar-inner .sidebar-body .sidebar-btn-list li a {
   display: block;
@@ -1197,7 +1197,7 @@ textarea {
   height: 396px;
   display: none;
   width: 240px;
-  background-color: #e13d3d;
+  background-color: #ec5e2a;
 }
 .category li {
   display: block;
@@ -1929,8 +1929,8 @@ textarea {
 }
 .btn-main {
   color: #FFF;
-  background-color: #dd2727;
-  border-color: #c71f1f;
+  background-color: #ed5118;
+  border-color: #ed5118;
   font-size: 14px;
   font-family: 微软雅黑;
 }
@@ -2004,7 +2004,7 @@ i.triangle-b,
   vertical-align: middle;
   height: 0;
   width: 0;
-  border-top: 8px solid #dd2727;
+  border-top: 8px solid #ed5118;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
   border-bottom: 0 solid transparent;
@@ -2041,7 +2041,7 @@ i.triangle-b {
   left: 66px;
 }
 .tab .tab-head li.current {
-  border-bottom: 3px solid #dd2727;
+  border-bottom: 3px solid #ed5118;
   z-index: 100;
   zoom: 1;
 }

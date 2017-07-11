@@ -14,15 +14,6 @@
         {elseif:isset($payment_type) && $payment_type =='received'}
         货到付款方式，{if:$order['status']<3}等待订单审核……{else:}订单审核通过！{/if}</b>
         {/if}
-        {if:$order['type']==4&&$order['is_new']==1}
-        <i class='icon-success-48'></i>订购成功，请您使用您的华点账号<span style="color:red;">{$order['huabi_account']}</span>向 <span style="color:red;">wlucky2101</span>支付<span style="color:red;">{echo:sprintf("%01.0f",$order['huabipay_amount'])}</span>华点，收到您的华点转账后，客服人员会退还华点部分对应金点。
-        {elseif:$order['type']==4&&$order['otherpay_status']==1}
-        {if:$order['otherpay_amount']==0}
-        <i class='icon-success-48'></i>订购成功，请您使用您的华点账号<span style="color:red;">{$order['huabi_account']}</span>向 <span style="color:red;">wlucky2101</span>支付<span style="color:red;">{echo:sprintf("%01.0f",$order['huabipay_amount'])}</span>华点！
-        {else:}
-        <i class='icon-success-48'></i>支付成功，等待后台人工审核华点到账情况！
-        {/if}
-        {/if}
         </span>
     </div>
     <div>
@@ -30,7 +21,7 @@
             <tr> <td style="width:200px;">订单编号：</td><td><i class="icon-order-{$order['type']}-32"></i>{$order['order_no']} &nbsp;&nbsp;&nbsp;&nbsp;<a href="{url:/ucenter/order_detail/id/$order[id]}" target="_blank"> 查看订单</a></td> </tr>
             {if:$order['type']==4 && $order['otherpay_amount']==0}
             {else:}
-            <tr> <td style="width:200px;">订单金额：</td><td class="red">{$currency_symbol}{if:$order['type']=='4'}{echo:$order['otherpay_amount']}{else:}{echo:$order['order_amount']}{/if}</td> </tr>
+            <tr> <td style="width:200px;">订单金额：</td><td class="red">{$currency_symbol}{echo:$order['order_amount']}</td> </tr>
             <tr> <td style="width:200px;">支付方式：</td><td id="pay_name">{$order['payname']}</td> </tr>
             {/if}
         </table>
