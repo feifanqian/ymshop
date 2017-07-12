@@ -25,10 +25,10 @@ address,cite,code,em,th,i{font-weight:normal; font-style:normal;}
 }
 .account-box{
 	background: #fff;
-	padding: 0 25px;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.24);
 }
 .account-title{
-	border-bottom: 1px solid rgba(128, 128, 128, 0.34);
+	border-bottom: 1px dashed rgba(128, 128, 128, 0.34);
 	height: 50px;
 	line-height: 50px;
 	font-size: 16px;
@@ -43,12 +43,24 @@ address,cite,code,em,th,i{font-weight:normal; font-style:normal;}
 .f-rili-table .f-on{background-color:cornflowerblue;color: #fff;}
 .f-number{cursor: pointer;}
 .f-rili-table{width: 100%;}
-.f-rili-th{float: left;width: 14.25%;text-align: center;line-height: 46px;height: 46px;color: #333333; font-weight:700;}
+.f-rili-th{float: left;width: 14.25%;text-align: center;line-height: 46px;height: 46px;color: #696969; font-weight:700;}
 .f-td{float: left;width: 14.25%;text-align: center;height:40px;line-height: 40px;position: relative;}
-.signed{position: absolute;width: 20px;height: 20px;top: 7px;left: 0;margin-left: 26px;}
+.signed{position: absolute;width: 20px;height: 20px;top: 15px;left: 0;margin-left: 26px;}
 .f-table-msg{position: absolute;z-index: 2;top: 34px;left:50%;margin-left: -120px; width: 280px;background: url(../images/bg-msg.png) no-repeat bottom;line-height: 55px;height: 46px;text-align: center;display: none;color: #666;}
 .f-day{
     font-size: 15px;
-    color:#333333;
+    color:#919191;
 }
+.gou{
+    background: url(../images/gou.png) no-repeat center;
+    background-size: cover;
+}
+.cha{
+    width: 15px;
+    height: 15px;
+    background: url(../images/cha.png) no-repeat center;
+    background-size: cover;
+    top:20px;
+}
+
 
