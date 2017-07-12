@@ -71,7 +71,7 @@ class IndexController extends Controller {
         if (isset($this->user['id'])) {
             $this->redirect('index');
         } else {
-            $uid = Filter::int(Req::args('uid'));
+            $uid = Filter::int(Req::args('invitor_id'));
             Cookie::set("inviter", $uid);
             $this->noRight();
         }
@@ -1412,47 +1412,47 @@ class IndexController extends Controller {
     public function guide(){
         $this->redirect();
     }
-    //参与抽奖
-    public function joinLottery(){
-         if($this->is_ajax_request()){
-             $name = Filter::sql(Req::args("name"));
-             $mobile = Filter::sql(Req::args("mobile"));
-             if($name!=""&&$mobile!=""&&  is_numeric($mobile) &&strlen($mobile)==11){
-                 $model = new Model();
-                 $isset = $model->table('lottery')->where("mobile='$mobile'")->find();
-                 if(!$isset){
-                     $result = $model->table('lottery')->data(array("name"=>$name,"mobile"=>$mobile,'create_time'=>date("Y-m-d H:i:s"),'is_lottery'=>0))->insert();
-                     if($result){
-                         exit(json_encode(array('status'=>'success','msg'=>"成功")));
-                     }else{
-                         exit(json_encode(array('status'=>'fail','msg'=>"数据库插入失败")));
-                     }
-                 }else{
-                     exit(json_encode(array('status'=>'fail','msg'=>"该手机号码已经参加了抽奖活动")));
-                 }
-             }
-         }else{
-            $this->layout = '';
-            $this->redirect();
-         }
-    }
-    //开奖页面
-    public function lottery(){
-        if($this->is_ajax_request()){
-            $model = new Model();
-            $lottery = $model->table("lottery")-> where("is_lottery=0")->order(" rand()")->find();
-            if(!empty($lottery)){
-               $model->table('lottery')->data(array('is_lottery'=>1,'lottery_time'=>date("Y-m-d H:i:s")))->where('id='.$lottery['id'])->update();
-                exit(json_encode(array("status"=>'success','mobile'=>$lottery['mobile'],'name'=>$lottery['name'])));
-            }else{
-                exit(json_encode(array("status"=>'fail','msg'=>"数据库中获取不到新的获奖人信息")));
-            }
-        }else{
-            $this->layout="_blank";
-            $this->redirect();
-        }
-    }
-    
+//    //参与抽奖
+//    public function joinLottery(){
+//         if($this->is_ajax_request()){
+//             $name = Filter::sql(Req::args("name"));
+//             $mobile = Filter::sql(Req::args("mobile"));
+//             if($name!=""&&$mobile!=""&&  is_numeric($mobile) &&strlen($mobile)==11){
+//                 $model = new Model();
+//                 $isset = $model->table('lottery')->where("mobile='$mobile'")->find();
+//                 if(!$isset){
+//                     $result = $model->table('lottery')->data(array("name"=>$name,"mobile"=>$mobile,'create_time'=>date("Y-m-d H:i:s"),'is_lottery'=>0))->insert();
+//                     if($result){
+//                         exit(json_encode(array('status'=>'success','msg'=>"成功")));
+//                     }else{
+//                         exit(json_encode(array('status'=>'fail','msg'=>"数据库插入失败")));
+//                     }
+//                 }else{
+//                     exit(json_encode(array('status'=>'fail','msg'=>"该手机号码已经参加了抽奖活动")));
+//                 }
+//             }
+//         }else{
+//            $this->layout = '';
+//            $this->redirect();
+//         }
+//    }
+//    //开奖页面
+//    public function lottery(){
+//        if($this->is_ajax_request()){
+//            $model = new Model();
+//            $lottery = $model->table("lottery")-> where("is_lottery=0")->order(" rand()")->find();
+//            if(!empty($lottery)){
+//               $model->table('lottery')->data(array('is_lottery'=>1,'lottery_time'=>date("Y-m-d H:i:s")))->where('id='.$lottery['id'])->update();
+//                exit(json_encode(array("status"=>'success','mobile'=>$lottery['mobile'],'name'=>$lottery['name'])));
+//            }else{
+//                exit(json_encode(array("status"=>'fail','msg'=>"数据库中获取不到新的获奖人信息")));
+//            }
+//        }else{
+//            $this->layout="_blank";
+//            $this->redirect();
+//        }
+//    }
+//    
     
     //套餐专区
     public function package_area(){

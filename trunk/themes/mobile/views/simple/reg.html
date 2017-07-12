@@ -8,23 +8,15 @@
                 <input name="mobile" id="mobile"  class="input" pattern="mobi" placeholder="手机" alt="手机格式不正确!">
             </div>
             <div class="weui_cell">
-                <input name="name" id="name"  class="input" pattern="name" placeholder="用户名" alt="用户名不正确!">
-            </div>
-            <div class="weui_cell">
                 <input bind="repassword" minlen=6 maxlen=20 class="input" type="password" name="password" pattern="required" placeholder="密码" alt="6-20任意字符组合">
             </div>
             <div class="weui_cell">
                 <input bind="password" minlen=6 maxlen=20 class="input" type="password"  name="repassword" pattern="required" placeholder="确认密码" alt="6-20任意字符组合">
             </div>
-            {if:isset($reg_way[1]) && class_exists('SMS') && SMS::getInstance()->getStatus()}
+           
             <div class="weui_cell">
                 <input type="text" class="input input-sm" name="mobile_code" pattern="\d{6}" placeholder="验证码" alt="6位短信验证码"><label></label><input id="sendSMS" type="button" class="btn btn-default btn-mini" value="获取短信验证码">
             </div>
-            {else:}
-            <div class="weui_cell">
-                <input type="text" class="input input-sm" name="verifyCode" id="verifyCode"  pattern="\w{4}" maxlength="4" style="width: 80px;" alt="验证码不正确"><img id="captcha_img"  src="{url:/simple/captcha/h/40/w/120/bc/f1f1f1}"><label><a href="javascript:void(0)" class="red" onclick="document.getElementById('captcha_img').src = '{url:/simple/captcha/h/40/w/120/bc/f1f1f1/random/}' + Math.random()">换一张</a></label>
-            </div>
-            {/if}
             <div class="weui_cells weui_cells_checkbox">
                 <label class="weui_cell weui_check_label" for="s11">
                     <div class="weui_cell_hd">

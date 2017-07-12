@@ -163,7 +163,9 @@ class SimpleController extends Controller {
         $this->assign("invalid", $info);
         $this->redirect("reg", false, Req::args());
     }
-
+    
+    
+    
     //账户激活邮件认证
     public function activation_user() {
         $code = Filter::text(Req::args('code'));

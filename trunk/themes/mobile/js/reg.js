@@ -119,7 +119,7 @@ $(function () {
                 $.post(REG.ajax_mobile_chk_url + $(this).val(), function (data) {
                     var msg = '合法用户';
                     if (!data['status']) {
-                        msg = '用户已存在';
+                        msg = '该手机号已经注册过了';
                         current_input.next().show();
                         current_input.parent().removeClass('valid').addClass('invalid');
                     } else {
