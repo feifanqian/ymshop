@@ -620,9 +620,34 @@ class Common {
      static function getSignInDataByUserID($year,$month,$user_id){
          $model  = new Model("sign_in");
          $days   = cal_days_in_month(CAL_GREGORIAN,$month,$year);
+         
+         //判断今天是否在该月中
+         $now = time();
+         $now_day = intval(date('d'));
+         $ym_start_time = strtotime($year."-".$month."-"."1");
+         $ym_end_time  =  strtotime($year."-".$month."-".$days);
+         
+         $return =array();
+         if($now>$ym_end_time){
+             for($i=1;$i<=$days;$i++){
+                 $return[$i]['sign']="-1";
+             }
+         }else if($now>=$ym_start_time&&$now<$ym_end_time){
+             for($i=1;$i<=$days;$i++){
+                 if($i<$now_day){
+                    $return[$i]['sign']="-1";
+                 }else{
+                     $return[$i]['sign']="0";
+                 }
+             }
+         }else{
+             for($i=1;$i<=$days;$i++){
+                 $return[$i]['sign']="0";
+             }
+         }
+         
          $sign_data = $model->where("date >= '$year-$month-01' and date <= '$year-$month-$days' and user_id=$user_id")->fields("date,send_point")->findAll();
          if($sign_data){
-             $return =array();
              foreach($sign_data as $v){
                  $day = intval(date("d",  strtotime($v['date'])));
                  $return[$day]['sign']=1;
@@ -630,7 +655,7 @@ class Common {
              }
              return $return;
          }else{
-             return array();
+             return $return;
          }
      }
      
