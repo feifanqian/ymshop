@@ -9,16 +9,22 @@
         color:#fac532;
         width:40px;
         border-radius: 10px;
-        font-size: 20px;
-        padding:0px 7px;
+        font-size: 16px;
+        padding:0px 10px;
+        padding-bottom: 3px;
     }
     .weui-media-box__title{
         color:#333333 !important;
-        font-size: 20px;
+        font-size: 16px !important;
+        font-weight: 300;
     }
     .weui-media-box__title img{
         width: 20px;
         margin-right: 10px;
+    }
+    .header-white h2{
+        font-size: 20px !important;
+        font-weight: 300;
     }
 </style>
 {query:name=personal_shop as ps join=left join customer as c on ps.user_id eq c.user_id left join user as u on ps.user_id eq u.id fields=ps.*,c.real_name,u.avatar,u.nickname order=ps.listorder asc limit=12 page=1 pagesize=3 id=$personal_shop_list }
