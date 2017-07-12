@@ -3,25 +3,25 @@
         <div class="weui_tabbar_icon">
             <i class="iconfont icon-home"></i>
         </div>
-        <p class="weui_tabbar_label">首页</p>
+        <p class="weui_tabbar_label" style='margin-top:10px;'>首页</p>
     </a>
     <a href="{url:/ucenter/asset}" class="weui_tabbar_item {echo:$current=='asset'?'weui_bar_item_on':''}">
         <div class="weui_tabbar_icon">
             <i class="iconfont icon-qiandai"></i>
         </div>
-        <p class="weui_tabbar_label">钱袋</p>
+        <p class="weui_tabbar_label"  style='margin-top:10px;' >钱袋</p>
     </a>
     <a href="{url:/simple/cart}" class="weui_tabbar_item {echo:$current=='cart'?'weui_bar_item_on':''}">
         <div class="weui_tabbar_icon">
             {if:$cart}<span class="cart-num tip">{echo:isset($cart)?count($cart):0}</span>{/if}
             <i class="iconfont icon-cart1"></i>
         </div>
-        <p class="weui_tabbar_label">购物车</p>
+        <p class="weui_tabbar_label"  style='margin-top:10px;'>购物车</p>
     </a>
     <a href="{url:/ucenter/index}?ref=2" class="weui_tabbar_item {echo:$current=='ucenter'?'weui_bar_item_on':''}">
         <div class="weui_tabbar_icon">
             <i class="iconfont icon-my1"></i>
         </div>
-        <p class="weui_tabbar_label">我</p>
+        <p class="weui_tabbar_label"  style='margin-top:10px;'>我</p>
     </a>
 </div>
