@@ -35,7 +35,7 @@
         <div class="weui-media-box__bd">
             <h4 class="weui-media-box__title"><img src='{url:@static/images/personal-shop.png}'>{$item['real_name']|$item['nickname']}的个人店铺</h4>
             {set:$personal_data = Common::getPersonalShopData($item['id'])}
-            <p class="weui-media-box__desc">销量：{$personal_data['all_sell_num']} 共{$personal_data['all_goods_num']}件商品</p>
+            <p class="weui-media-box__desc">销量{$personal_data['all_sell_num']} 共{$personal_data['all_goods_num']}件商品</p>
         </div>
         <div class="weui-media-box__ft">
             <a class='shop-btn' href="{url:/index/personal_shop_index/id/$item[id]}">进店</a>
