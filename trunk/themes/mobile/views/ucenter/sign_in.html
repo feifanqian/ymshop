@@ -55,8 +55,8 @@
         </div>
     </div>
      <div style='padding:0px 24px;margin-top:10px;margin-bottom:60px;'>
-        <h2><i class='ymicon icon-time2' style='font-size:18px;color:red;'></i><span style='font-size:16px;margin-left:4px;'>签到规则</span></h2>
-        <p>{$sign_in_set['introduce']}</p>
+        <h2><i class='ymicon icon-time2' style='font-size:18px;color:red;'></i><span style='font-size:16px;margin-left:4px;color:#696969'>签到规则</span></h2>
+        <p style='color:#919191;'>{$sign_in_set['introduce']}</p>
     </div>
 <div id="success-dialog" style="display: none;">
     <img width="246px" src="{url:@static/images/sign_success_image.png}">
@@ -152,9 +152,9 @@ $(function(){
             //这里为一个单元格，添加内容在此
             mystr += "<div class='f-td f-number'><span class='f-day'>"+(i+1)+"</span>";
             if(sign_data[i+1]['sign']=='1'){
-                mystr +="<div class='signed'><i class='ymicon icon-gou' style='color:gold;font-size:15px;'></i></div>";
+                mystr +="<div class='signed gou'></div>";
             }else if(sign_data[i+1]['sign']=='-1'){
-                mystr +="<div class='signed'><i class='ymicon icon-cha' style='color:red;font-size:13px;'></i></div>";
+                mystr +="<div class='signed cha'></div>";
             }
             mystr +="</div>"; 
         }
@@ -193,7 +193,7 @@ $(function(){
             if(data.status=='success'){
                 $("#sign_button").html("已签到");
                 $("#serial_day").html(parseInt($("#serial_day").html())+1);
-                $(".f-today").append("<div class='signed'><i class='ymicon icon-gou' style='color:gold;font-size:15px;'></i></div>");
+                $(".f-today").append("<div class='signed gou'></div>");
                 layer.open({
                     title: [
                       '签到成功',
@@ -203,7 +203,7 @@ $(function(){
                     ,btn: '我知道了'
                });
             }else{
-                  $.toast(data.msg);
+                  $.toast(data.msg,'forbidden');
             }
         },'json');
     }
