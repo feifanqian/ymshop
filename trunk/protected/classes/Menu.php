@@ -131,14 +131,8 @@ class Menu {
             '/wxmanager/wx_response_edit' => array('name' => '资源编辑', 'parent' => 'weixin'),
             '/support/apply_list'=>array('name'=>'申请列表','parent'=>'support'),
             '/complaint/complaint_list'=>array('name'=>'投诉列表','parent'=>'complaint'),
-            '/commission/commission_list_order'=>array('name'=>'普通订单佣金记录','parent'=>'commission'),
-            '/commission/commission_list_recharge'=>array('name'=>'充值订单佣金记录','parent'=>'commission'),
-            '/commission/commission_withdraw'=>array('name'=>'佣金提现申请','parent'=>'commission_manager'),
-            '/commission/commission_count'=>array('name'=>'推客佣金统计','parent'=>'commission_manager'),
-            '/commission/commission_setting'=>array('name'=>'佣金设置','parent'=>'commission_set'),
             '/districtadmin/record_sale'=>array('name'=>'销售记录','parent'=>'record'),
             '/districtadmin/record_income'=>array('name'=>'收益记录','parent'=>'record'),
-           // '/districtadmin/record_qrcode'=>array('name'=>'二维码推广记录','parent'=>'record'),
             '/districtadmin/list_hirer'=>array('name'=>'商户','parent'=>'personnel'),
             '/districtadmin/list_promoter'=>array('name'=>'推广者','parent'=>'personnel'),
             '/districtadmin/apply_withdraw'=>array('name'=>'提现申请','parent'=>'apply'),
@@ -194,7 +188,6 @@ class Menu {
             'system' => array('link' => '/admin/index', 'name' => '系统设置'),
             'support'=>array('link'=>'/support/apply_list','name'=>'售后中心'),
             'complaint'=>array('link'=>'/complaint/complaint_list','name'=>'投诉中心'),
-            'commission'=>array('link'=>'/commission/commission_list_order','name'=>'佣金系统'),
             'districtadmin'=>array('link'=>'/districtadmin/record_sale','name'=>'小区管理'),
         );
 
