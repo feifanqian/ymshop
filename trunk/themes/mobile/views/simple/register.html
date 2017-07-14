@@ -1,31 +1,41 @@
 {echo:JS::import('dialog?skin=tinysimple');}
 {echo:JS::import('dialogtools');}
-{set:$config = Config::getInstance(); $other = $config->get('other'); $reg_way = isset($other['other_reg_way'])?$other['other_reg_way']:0;$reg_way = explode(',',$reg_way);$reg_way = array_flip($reg_way);}
+<style>
+    .ymicon{
+        font-size:20px;
+    }
+    .input-area{
+        width:100%;
+        display: flex;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+    .input-area input{
+        border:none;
+    }
+    .weui_cell{
+        margin-top: 10px;
+    }
+</style>
 <div class="">
-    <div class="weui_cells">
-        <form action="{url:/simple/reg_act}" class="reg-box" method="post" callback="checkReadme">
-            <div class="weui_cell" style="margin-top:10px">
-                <input name="mobile" id="mobile"  class="input" pattern="mobi" placeholder="手机" alt="手机格式不正确!">
+        <form action="{url:/simple/register_act}" autocomplete="off" class="reg-box" method="post" callback="checkReadme">
+            <div class="weui_cell">
+                <div class="input-area"><i class="ymicon icon-shoujihao"></i><input name="mobile" id="mobile" value="{$mobile}" class="input" pattern="mobi" placeholder="请输入注册手机" alt="手机格式不正确!"></div>
             </div>
             <div class="weui_cell">
-                <input name="name" id="name"  class="input" pattern="name" placeholder="用户名" alt="用户名不正确!">
+                <div class="input-area"><i class="ymicon icon-xingming"></i><input name="realname" id="realname" value="{$realname}" class="input" pattern="required" placeholder="请输入您的姓名" alt="姓名不能为空!"></div>
             </div>
             <div class="weui_cell">
-                <input bind="repassword" minlen=6 maxlen=20 class="input" type="password" name="password" pattern="required" placeholder="密码" alt="6-20任意字符组合">
+                <div class="input-area"><i class="ymicon icon-mima1"></i><input bind="repassword" minlen=6 value="{$password}" maxlen=20 class="input" type="password" name="password" pattern="required" placeholder="请输入登录密码" alt="6-20任意字符组合"></div>
             </div>
             <div class="weui_cell">
-                <input bind="password" minlen=6 maxlen=20 class="input" type="password"  name="repassword" pattern="required" placeholder="确认密码" alt="6-20任意字符组合">
+                <div class="input-area"><i class="ymicon icon-querenmima"></i><input bind="password" minlen=6 maxlen=20 value="{$repassword}" class="input" type="password"  name="repassword" pattern="required" placeholder="请您确认密码" alt="6-20任意字符组合"></div>
             </div>
-            {if:isset($reg_way[1]) && class_exists('SMS') && SMS::getInstance()->getStatus()}
             <div class="weui_cell">
-                <input type="text" class="input input-sm" name="mobile_code" pattern="\d{6}" placeholder="验证码" alt="6位短信验证码"><label></label><input id="sendSMS" type="button" class="btn btn-default btn-mini" value="获取短信验证码">
+                <div class="input-area"><i class="ymicon icon-jiaoyanma"></i><input type="text" class="input input-sm" name="mobile_code" pattern="\d{6}" placeholder="手机验证码" alt="6位短信验证码"><label></label><input id="sendSMS" type="button" class="btn btn-default btn-mini" value="获取短信验证码"></div>
             </div>
-            {else:}
-            <div class="weui_cell">
-                <input type="text" class="input input-sm" name="verifyCode" id="verifyCode"  pattern="\w{4}" maxlength="4" style="width: 80px;" alt="验证码不正确"><img id="captcha_img"  src="{url:/simple/captcha/h/40/w/120/bc/f1f1f1}"><label><a href="javascript:void(0)" class="red" onclick="document.getElementById('captcha_img').src = '{url:/simple/captcha/h/40/w/120/bc/f1f1f1/random/}' + Math.random()">换一张</a></label>
-            </div>
-            {/if}
-            <div class="weui_cells weui_cells_checkbox">
+            <div class="weui_cell weui_cells_checkbox" style="padding:0px;">
                 <label class="weui_cell weui_check_label" for="s11">
                     <div class="weui_cell_hd">
                         <input type="checkbox" class="weui_check" name="checkbox1" id="readme" checked="checked">
@@ -37,15 +47,10 @@
                 </label>
             </div>
             <div class="weui_cell">
-                
                 <button class="weui_btn weui_btn_primary">立即注册</button>
-            </div>
-            <div class="weui_cell">
-                <a href="{url:/simple/login}" class="weui_btn weui_btn_default weui_btn_block">立即登录</a>
             </div>
             {token:key=reg}
         </form>
-    </div>
 </div>
 <div id="license" class="weui-popup-container popup-bottom">
     <div class="weui-popup-modal" style="height:100% !important;">
@@ -81,7 +86,6 @@
 <script>
     {if:isset($invalid)}
     var form = new Form();
-    form.setValue('email', '{$email}');
     autoValidate.showMsg({id: $("input[name='{$invalid['field']}']").get(0), error: true, msg: "{$invalid['msg']}"});
     {/if}
 </script>

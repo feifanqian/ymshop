@@ -31,6 +31,7 @@ $(function () {
             dataType: 'json',
             success: function (result) {
                 if (result['status'] == 'success') {
+                    $.toast(result['msg']);
                     $('#mobile').attr("readonly", "readonly");
                     var send_sms = $("#sendSMS");
                     send_sms.attr("disabled", true);
@@ -49,7 +50,7 @@ $(function () {
                         }
                     }, 1000);
                 } else {
-                    art.dialog.tips("<p class='fail'>" + result['msg'] + "</p>");
+                    $.toast(result['msg'],'forbidden');
                 }
             }
         });

@@ -701,4 +701,55 @@ class Common {
         $all_sell_num = $all_sell_num['all_sell_num']==NULL?0:$all_sell_num['all_sell_num'];
         return array("all_goods_num"=>$all_goods_num,"all_sell_num"=>$all_sell_num);
     }
+    
+    //绑定邀请关系
+    static function buildInviteShip($inviter_id ,$new_user_id ,$way="wap"){
+        if($inviter_id==$new_user_id){
+            return array('status'=>'fail','msg'=>"inviter can't be youself");
+        }
+        $model  = new Model();
+        $isset  = $model->table("user")->where("id={$inviter_id}")->find();
+        $notset = $model->table('invite')->where("invite_user_id={$new_user_id}")->find();
+        
+        if($isset && empty($notset)){
+            $result = $model->table("invite")->data(array('user_id'=>$inviter_id,'invite_user_id'=>$new_user_id,'from'=>$way,'createtime'=>time()))->insert();
+            if($result){
+                return true;
+            }else{
+                return array('status'=>'fail','msg'=>'db error');
+            }
+        }else{
+            return array('status'=>'fail','msg'=>'inviter is null or ship is builded');
+        }
+    }
+    
+    
+     //为新用户赠送积分
+     static function sendPointCoinToNewComsumer($user_id){
+         $model = new Model("customer");
+         $result = $model->where("user_id = $user_id")->data(array('point_coin'=>"`point_coin`+100"))->update();
+         if($result){
+             Log::pointcoin_log(100, $user_id, '', '新用户积分奖励', 10);
+             return TRUE;
+         }else{
+             return FALSE;
+         }
+     }
+     
+     //获取推广二维码flag
+     static function getQrcodeFlag($goods_id,$user_id){
+        $model = new Model();
+        $goods_info = $model->table("goods")->where("id=$goods_id and is_online = 0")->fields('id,img')->find();
+        if (empty($goods_info)) {
+              return array('status' => 'fail', 'msg'=>"商品不存在",'msg_code' => 1000);
+        }
+        $info = $model->table('promote_qrcode')->where("user_id ={$user_id} and goods_id = {$goods_id}")->fields('id')->find();
+        if (empty($info)) {
+            $id = $model->table('promote_qrcode')->data(array('user_id' => $user_id,  'goods_id' => $goods_id, 'scan_times' => 0, 'sell_count' => 0, 'create_date' => date("Y-m-d H:i:s")))->insert();
+        } else {
+            $id = $info['id'];
+        }
+        $url = Url::fullUrlFormat("/index/product/id/$goods_id/flag/" . $id);
+        return array('status' => 'success', 'flag' => $id,'url'=>$url, 'goods_id' => $goods_id);
+     }
 }

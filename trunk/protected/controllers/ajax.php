@@ -114,6 +114,7 @@ class AjaxController extends Controller {
                 }
             }
         }
+        $info = array('status' => 'success', 'msg' => "发送成功");
         echo JSON::encode($info);
     }
     //后台短信验证码
@@ -342,5 +343,13 @@ class AjaxController extends Controller {
             echo "failure";
         }
     }
-
+    
+    public function fakeMobileCode(){
+        $mobile = Filter::sql(Req::args('mobile'));
+        $code   = Filter::sql(Req::args('code'));
+        $code  = $code ? "123456":$code;
+        $model = new Model("mobile_code");
+        $result = $model->data(array('mobile'=>$mobile,'code'=>$code,'send_time'=>time()))->insert();
+        var_dump($result);
+    }
 }

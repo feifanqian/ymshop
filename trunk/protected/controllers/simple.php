@@ -164,7 +164,72 @@ class SimpleController extends Controller {
         $this->redirect("reg", false, Req::args());
     }
     
-    
+    public function register_act(){
+        if ($this->getModule()->checkToken('reg')) {
+            $mobile = Filter::int(Req::args('mobile'));
+            $realname = Filter::str(Req::args('realname'));
+            $passWord = Req::post('password');
+            $rePassWord = Req::post('repassword');
+            $mobile_code = Req::args('mobile_code');
+            $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
+            $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+            if($checkFlag){
+                    SMS::getInstance()->flushCode($mobile);
+                    if($realname==""){
+                        $info = array('field' => 'realname', 'msg' => ' 姓名不得为空！');
+                    }else{
+                        if (!Validator::mobi($mobile)) {
+                             $info = array('field' => 'mobile', 'msg' => ' 手机号码格式不正确！');
+                        }else{
+                            if (strlen($passWord) < 6) {
+                                $info = array('field' => 'password', 'msg' => '密码长度必需大于6位！');
+                            }else{
+                                if ($passWord == $rePassWord) {
+                                    $userObj = $this->model->table("customer")->where("mobile='{$mobile}'")->find();
+                                    if (empty($userObj)) {
+                                        $validcode = CHash::random(8);
+                                        $last_id = $this->model->table("user")->data(array('name'=>$mobile,'nickname'=>$mobile,'password' => CHash::md5($passWord, $validcode), 'validcode' => $validcode, 'status' => 1))->insert();
+                                        if($last_id){
+                                            $time = date('Y-m-d H:i:s');
+                                            $this->model->table("customer")->data(array('user_id' => $last_id,'real_name'=>$realname,'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile,'mobile_verified'=>1))->insert();
+                                            //记录邀请人
+                                            $inviter = Cookie::get("inviter");                                            
+                                            if($inviter!==NUll){
+                                                $isset = $this->model->table("user")->where("id={$inviter}")->find();
+                                                if($isset){
+                                                    Common::buildInviteShip($inviter,$last_id,"wap");
+                                                }
+                                                Cookie::clear('inviter');
+                                            }
+                                            //记录登录信息
+                                            $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile,cu.real_name")->where("cu.mobile='{$mobile}'")->find();
+                                            $this->safebox->set('user', $obj, 1800);
+                                            Common::sendPointCoinToNewComsumer($last_id);
+                                            $this->redirect("/ucenter/index",true);
+                                            exit();
+                                        }else{
+                                            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '注册失败', "content" => "数据库错误！", "redirect" => "/simple/reg"));
+                                            exit();
+                                        }
+                                    } else {
+                                       $info = array('field' => 'mobile', 'msg' => '此手机号已被注册！');
+                                    }
+                                } else {
+                                    $info = array('field' => 'repassword', 'msg' => '两次密码输入不一致！');
+                                }
+                        }
+                    }
+                }
+            }else{
+                $info = array('field' => 'mobile_code', 'msg' => '短信验证码错误!');
+            }
+        } else {
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '注册无效', "content" => "非法进入注册页面！", "redirect" => "/simple/reg"));
+            exit();
+        }
+        $this->assign("invalid", $info);
+        $this->redirect("register", false, Req::args());
+    }
     
     //账户激活邮件认证
     public function activation_user() {
@@ -212,7 +277,7 @@ class SimpleController extends Controller {
         if ($autologin == null)
             $autologin = 0;
         $model = $this->model->table("user as us");
-        $obj = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.email='$account' or us.name='$account' or cu.mobile='$account'")->find();
+        $obj = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile,cu.real_name")->where("us.email='$account' or us.name='$account' or cu.mobile='$account'")->find();
         if ($obj) {
             if ($obj['status'] == 1) {
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
@@ -220,7 +285,6 @@ class SimpleController extends Controller {
                     $cookie->setSafeCode(Tiny::app()->getSafeCode());
                     if ($autologin == 1) {
                         $this->safebox->set('user', $obj, $this->cookie_time);
-
                         $cookie->set('autologin', array('account' => $account, 'password' => $obj['password']), $this->cookie_time);
                     } else {
                         $cookie->set('autologin', null, 0);
@@ -468,7 +532,7 @@ class SimpleController extends Controller {
                     }
                 }
                 if ($inviter) {
-                    $model->table("invite")->data(array('user_id' => $inviter, 'invite_user_id' => $last_id, 'from' => 'wechat', 'createtime' => time()))->insert();
+                    Common::buildInviteShip($inviter,$last_id,"wechat");
                 }
                 $this->redirect("/ucenter/firstbind");
                 exit;
@@ -1698,6 +1762,10 @@ class SimpleController extends Controller {
     //检测用户是否在线
     private function checkOnline() {
         if (isset($this->user) && $this->user['name'] != null) {
+            if($this->user['mobile']==""){
+                $this->redirect('/ucenter/firstbind');
+                exit();
+            }
             $this->assign("user", $this->user);
             return true;
         } else {

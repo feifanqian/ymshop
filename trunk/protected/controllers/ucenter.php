@@ -68,10 +68,15 @@ class UcenterController extends Controller {
     }
 
     public function checkRight($actionId) {
-        if (isset($this->user['name']) && $this->user['name'] != null)
+        if (isset($this->user['name']) && $this->user['name'] != null){
+            if($this->user['mobile']==""&&$actionId!='firstbind'){
+                $this->redirect('firstbind');
+                exit();
+            }
             return true;
-        else
+        }else{
             return false;
+        }
     }
 
     public function noRight() {
@@ -103,7 +108,7 @@ class UcenterController extends Controller {
                 exit;
             }
         }
-        $url = Url::fullUrlFormat("/index/invite") . "?invitor_id=" . $this->user['id'];
+        $url = Url::fullUrlFormat("/index/invite") . "?inviter_id=" . $this->user['id'];
         $qrCode = new QrCode();
         $qrCode
                 ->setText($url)
@@ -570,28 +575,44 @@ class UcenterController extends Controller {
     public function firstbind() {
         $info = $this->model->table("customer as cu ")->fields("cu.*,us.email,us.name,us.nickname,us.avatar,gr.name as gname")->join("left join user as us on cu.user_id = us.id left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = " . $this->user['id'])->find();
         if ($info) {
+            if($info['mobile']!=''){
+                 Tiny::Msg($this, 404);
+                 exit();
+            }
             $this->assign("info", $info);
             $info = array_merge($info, Req::args());
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ($this->is_ajax_request()) {
+                $realname = Filter::sql(Req::post('realname'));
                 $mobile = Filter::sql(Req::post('mobile'));
                 $validatecode = Filter::sql(Req::post('validatecode'));
-                $exist = $this->model->table("customer")->where("mobile='{$mobile}'")->find();
-                if (!$exist) {
-                    $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
-                    if ($ret['status'] == 'success') {
-                        $data = array(
-                            'mobile' => $mobile
-                        );
-                        $this->model->table("customer")->data($data)->where("user_id={$this->user['id']}")->update();
-                        Common::voucherCreateForNewUser($this->user['id']);
-                        SMS::getInstance()->flushCode($mobile);
-                        $ret["message"] = "验证成功";
+                if($realname && $mobile && $validatecode){
+                    $exist = $this->model->table("customer")->where("mobile='{$mobile}'")->find();
+                    if (!$exist) {
+                        $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
+                        if ($ret['status'] == 'success') {
+                            $data = array(
+                                'mobile' => $mobile,
+                                'real_name'=>$realname,
+                                'mobile_verified'=>1
+                            );
+                            $this->model->table("customer")->data($data)->where("user_id={$this->user['id']}")->update();
+                            SMS::getInstance()->flushCode($mobile);
+                            $user = $this->user;
+                            $user['mobile']=$mobile;
+                            $user['real_name']=$realname;
+                            $this->safebox->set('user', $user);
+                            Common::sendPointCoinToNewComsumer($this->user['id']);
+                            $ret["message"] = "验证成功";
+                        } else {
+                            $ret['message'] = "验证码不正确";
+                        }
                     } else {
-                        $ret['message'] = "验证码不正确";
+                        $ret['status'] = "fail";
+                        $ret['message'] = "该手机号已经绑定过了";
                     }
-                } else {
+                }else{
                     $ret['status'] = "fail";
-                    $ret['message'] = "该手机号已经领取过";
+                    $ret['message'] = "参数错误";
                 }
                 echo json_encode($ret);
                 exit;
@@ -605,7 +626,11 @@ class UcenterController extends Controller {
 
     public function invite() {
         $page = Filter::int(Req::args('p'));
-        $invite = $this->model->table("invite as at")->fields("at.*,go.nickname,go.avatar,cu.real_name")->join("left join user as go on at.invite_user_id = go.id LEFT JOIN customer AS cu ON at.invite_user_id=cu.user_id")->where("at.user_id = " . $this->user['id'])->findPage($page);
+        $invite = $this->model->table("invite as i")
+                ->fields("i.*,u.nickname,u.avatar,cu.real_name")
+                ->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")
+                ->where("i.user_id = " . $this->user['id'])
+                ->findPage($page,10,4);
         $this->assign("invite", $invite);
         $this->assign("seo_title", "我的邀请");
         $this->redirect();
@@ -2198,19 +2223,14 @@ class UcenterController extends Controller {
     //推广商品二维码页
     public function showQR() {
         $goods_id = Filter::int(Req::args("goods_id"));
-        $promoter = Promoter::getPromoterInstance($this->user['id']);
-        if (!is_object($promoter)) {
-            $this->redirect("/index/msg", false, array('type' => "info", "msg" => '权限不足', "content" => "抱歉，您还不是推广员"));
-            exit();
-        }
         $goods_info = $this->model->table("goods")->where("id = $goods_id")->find();
         if ($goods_info) {
-            $result = $promoter->getQrcodeByGoodsId($goods_id, false);
+            $result = Common::getQrcodeFlag($goods_id, $this->user['id']);
             if ($result['status'] == 'success') {
                 $this->assign("flag", $result['flag']);
                 $this->assign("url", $result['url']);
             } else {
-                $this->redirect("/index/msg", false, array('type' => "info", "msg" => '出现错误', "content" => "抱歉，系统异常"));
+                $this->redirect("/index/msg", false, array('type' => "info", "msg" => $result['msg']));
                 exit();
             }
             $this->layout = "none";
@@ -2220,8 +2240,10 @@ class UcenterController extends Controller {
             $this->assign("goods_subtitle", $goods_info['subtitle']);
             $this->redirect();
             exit();
+        }else{
+            $this->redirect("/index/msg", false, array('type' => "info", "msg" => "商品信息未找到"));
+            exit();
         }
-        exit("error");
     }
     
     //获取推广员邀请信息

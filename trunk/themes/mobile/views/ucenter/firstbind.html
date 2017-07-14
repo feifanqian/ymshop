@@ -122,6 +122,7 @@
                 <div id="left">
                     <form action="#" method="post">
                         <dl>
+                            <dd><input type="text" name='realname' id="realname" maxlength="11" placeholder="请输入您的姓名" /></dd>
                             <dd><input type="number" name='mobile' id="mobile" maxlength="11" placeholder="请输入手机号码" /></dd>
                             <dd id="validatediv"><input type="number" size="6" name='validatecode' maxlength="6" id="validatecode" placeholder="验证码" style="width:130px;" />
                                 <input type="button" id="getcode" name='getcode' value="获取" style="width:60px;float:right;"/></dd>
@@ -139,13 +140,14 @@
         <script>
             $(function () {
                 $("form").on("submit", function () {
+                    var realname = $("#realname").val();
                     var mobile = $("#mobile").val();
                     var validatecode = $("#validatecode").val();
                     if (mobile && validatecode) {
                         $.showLoading();
                         $.ajax({
                             url: "{url:/ucenter/firstbind}",
-                            data: {mobile: mobile, validatecode: validatecode},
+                            data: {realname:realname,mobile: mobile, validatecode: validatecode},
                             type: 'post',
                             dataType: 'json',
                             success: function (ret) {
@@ -153,14 +155,14 @@
                                 if (ret.status == "success") {
                                     $("#pulldone").show();
                                     setTimeout(function () {
-                                        location.href = "{url:/}";
-                                    }, 2000);
+                                        location.href = "{url:/ucenter/index}";
+                                    }, 3000);
                                 } else {
                                     $.toast(ret.message, "forbidden");
                                 }
                             }, error: function (e) {
                                 $.hideLoading();
-                                $.toast("验证码发送失败!", "forbidden");
+                                $.toast("抱歉出错了!", "forbidden");
                             }
                         });
                     } else {

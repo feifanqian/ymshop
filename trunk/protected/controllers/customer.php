@@ -36,8 +36,8 @@ class CustomerController extends Controller {
         $type = Filter::int(Req::args('type'));
         $amount = Filter::float(Req::args('amount'));
         $recharge_type = Filter::int(Req::args('recharge_type'));
-        //事件类型: 0:订单支付 1:用户充值 2:管理员充值 3:提现 4:退款到余额  ||||金点的
-        //事件类型: 0:购物下单 1:金点转换  2：用户充值 3:管理员充值  4:管理员退款  5:过期扣减 ||||银点的
+        //事件类型: 0:订单支付 1:用户充值 2:管理员充值 3:提现 4:退款到余额  ||||余额的
+        //事件类型: 0:购物下单 1:余额转换  2：用户充值 3:管理员充值  4:管理员退款  5:过期扣减 ||||银点的
         $model = new Model("customer");
         $obj = $model->where("user_id=$user_id")->find();
         $info = array('status' => 'fail');
@@ -47,11 +47,11 @@ class CustomerController extends Controller {
                 if ($type == 2) {
                     $model->data(array('balance' => "`balance`+" . $amount))->where("user_id=$user_id")->update();
                     Log::balance($amount, $user_id, '' ,'管理员充值', 2, $this->manager['id']);
-                    $info = array('status' => 'success', 'msg' => '金点充值成功。');
+                    $info = array('status' => 'success', 'msg' => '余额充值成功。');
                 } else if ($type == 4) {
                     $model->data(array('balance' => "`balance`+" . $amount))->where("user_id=$user_id")->update();
                     Log::balance($amount, $user_id,'' ,'管理员退款', 4, $this->manager['id']);
-                    $info = array('status' => 'success', 'msg' => '金点退款成功。');
+                    $info = array('status' => 'success', 'msg' => '余额退款成功。');
                 }
             }else if($recharge_type==2){
                 if ($type == 2) {
@@ -189,7 +189,7 @@ class CustomerController extends Controller {
                         $update = $model->query("update tiny_balance_withdraw set status=1,note='{$note}',real_amount={$real_amount},fee_rate={$other['withdraw_fee_rate']},mer_seq_id='{$params['merSeqId']}',submit_date='{$date}' where id = $id and status= 0");
                         if($update){
                             $model->table('customer')->data(array('balance' => "`balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
-                            Log::balance(0 - $obj['amount'], $obj['user_id'],$obj['withdraw_no'],"金点提现", 3, $this->manager['id']);
+                            Log::balance(0 - $obj['amount'], $obj['user_id'],$obj['withdraw_no'],"余额提现", 3, $this->manager['id']);
                             Log::op($this->manager['id'], "通过提现申请", "管理员[" . $this->manager['name'] . "]:通过了提现申请 " . $obj['withdraw_no']);
                             exit(json_encode(array('status'=>'success','msg'=>'提现成功')));
                         }
@@ -202,7 +202,7 @@ class CustomerController extends Controller {
                     }
                 }
             } else {
-               exit(json_encode(array('status'=>'fail','msg'=>'提现金额大于可提现金点余额')));
+               exit(json_encode(array('status'=>'fail','msg'=>'提现金额大于可提现余额余额')));
             }
             //扣除账户里的余额
         }

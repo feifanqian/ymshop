@@ -68,11 +68,12 @@ class IndexController extends Controller {
 
     //邀请注册
     public function invite() {
+        $inviter_id = Filter::int(Req::args('inviter_id'));
         if (isset($this->user['id'])) {
+            Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
             $this->redirect('index');
         } else {
-            $uid = Filter::int(Req::args('invitor_id'));
-            Cookie::set("inviter", $uid);
+            Cookie::set("inviter", $inviter_id);
             $this->noRight();
         }
         return;
@@ -565,7 +566,7 @@ class IndexController extends Controller {
                Cookie::set('flag',array($flag,$flag_in_cookie,3600));
            }
            if(!Common::checkInWechat()){
-               $this->model->query("update tiny_district_qrcodeinfo set visit_count = visit_count + 1 where id = $flag");
+               $this->model->query("update tiny_promote_qrcode set scan_times = scan_times + 1 where id = $flag");
            }
         }
         $this->assign('id', $id);
@@ -652,7 +653,6 @@ class IndexController extends Controller {
                 $this->assign("sale_protection", $sale_protection['content']);
             }
             $area_ids = array(1, 2, 3);
-            $is_promoter=false;
             if ($this->user) {
                 //查询默认收货地址
                 $one = $this->model->table("address")->where("user_id=" . $this->user['id'])->order("is_default desc")->find();
@@ -665,15 +665,10 @@ class IndexController extends Controller {
                     }
                     $address = implode(' ', $parse_area);
                 }
-                //查询是否是小区推广者
-                $promoter = Promoter::getPromoterInstance($this->user['id']);
-                if(is_object($promoter)){
-                    $is_promoter = true;
-                }
+                $this->assign('is_login',true);
             }
             $address = isset($address) ? $address : "北京 北京市 东城区";
             list($province, $city, $county) = $area_ids;
-            $this->assign('is_promoter',$is_promoter);
             $this->assign("province", $province);
             $this->assign("city", $city);
             $this->assign("county", $county);

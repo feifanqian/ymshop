@@ -51,6 +51,9 @@
     </table>
 </div>-->
 <div id="ucenter-top">
+    {if:$user['avatar']==""}
+    {set:$user['avatar']="static/images/avatar.jpeg"}
+    {/if}
     <div id="ucenter-avatar"><img src='{echo:Url::urlFormat("@".$user['avatar'])}' alt=""></div>
     <div id="ucenter-account">
         <p>昵称：{$user['nickname']}</p>

@@ -46,5 +46,75 @@ class Log {
             $model->table("pointcoin_log")->data($log)->insert();
         }
     }
-
+    
+    //收益记录
+    public static function incomeLog($amount , $user_id , $record_id , $note ,$type ,$status){
+        //事件类型 
+        //类型一：商品推广收益(+)
+        //1：普通用户推广商品收益 (加锁)
+        //2：推广员享受普通用户的推广商品收益分成 （加锁） 
+        //3：小区主享受普通用户的推广商品收益分成  （加锁）
+        //4：推广员推广商品分成 （加锁）
+        //5：小区主享受推广员的推广商品收益分成 （加锁）
+        //6：拓展小区主享受下级小区推广商品分成 （加锁）
+        //类型二：邀请收益(+)
+        //7: 推广员邀请会员收益 （不加锁）
+        //8: 推广员邀请推广员收益 （不加锁）
+        //9: 小区邀请小区收益 （不加锁）
+        //类型三：收益减少
+        //10：收益提取
+        //11:收益撤销（用户退款）
+        //类型四：收益解锁
+        //12:收益解锁
+        $model = new model();
+        $customer = $model->table("customer")->where("user_id={$user_id}")->fields("valid_income,frezze_income,withdraw_income")->find();
+        if(!$customer){
+            return false;
+        }
+        $data = array();
+        if(in_array($type,array(1,2,3,4,5,6))){
+            $data['valid_income_change'] = 0.00;
+            $data['frezze_income_change'] = abs($amount);
+            $data['withdraw_income_change'] = 0.00;
+        }else if(in_array($type, array(7,8,9))){
+            $data['valid_income_change'] = abs($amount);
+            $data['frezze_income_change'] = 0.00;
+            $data['withdraw_income_change'] = 0.00;
+        }else if(in_array($type,array(10,11))){
+            if($type==10){
+                $data['valid_income_change'] =0 - abs($amount);
+                $data['frezze_income_change'] = 0.00;
+                $data['withdraw_income_change'] = abs($amount);
+            }else if($type ==11){
+                $data['valid_income_change'] = 0.00;
+                $data['frezze_income_change'] = 0 - abs($amount);
+                $data['withdraw_income_change'] = abs($amount);
+            }
+        }else if($type == 12){
+            $data['valid_income_change'] =  abs($amount);
+            $data['frezze_income_change'] = 0 - abs($amount);
+            $data['withdraw_income_change'] =0.00;
+        }else{
+            return false;
+        }
+        $result = $model->table("customer")->data(array("valid_income"=>"`valid_income`+({$data['valid_income_change']})","frezze_income"=>"`frezze_income`+({$data['frezze_income_change']})","withdraw_income"=>"`withdraw_income`+({$data['withdraw_income_change']})"))
+                  ->where("user_id={$user_id}")->update();
+        if($result){
+            $data['user_id']=$user_id;
+            $data['type']=$type;
+            $data['record_id']=$record_id;
+            $data['current_valid_income']=$customer['valid_income']+$data['valid_income_change'];
+            $data['current_frezze_income']=$customer['frezze_income']+$data['frezze_income_change'];
+            $data['current_withdraw_income']=$customer['withdraw_income']+$data['withdraw_income_change'];
+            $data['date']=date("Y-m-d H:i:s");
+            $result = $model->table("promote_income_log")->data($data)->insert();
+            if($result){
+                return true;
+            }else{
+                file_put_contents('incomelogError.txt', "记录失败：user_id:$user_id|".json_encode($data)."\n",FILE_APPEND);
+            }
+        }else{
+            file_put_contents('incomelogError.txt', "更新失败：user_id:$user_id|".json_encode($data)."\n",FILE_APPEND);
+        }
+    }
 }

@@ -17,7 +17,7 @@
                 <button class="weui_btn weui_btn_primary">登录</button>
             </div>
             <div class="weui_cell">
-                <a href="{url:/simple/reg}" class="weui_btn weui_btn_default weui_btn_block">立即注册</a>
+                <a href="{url:/simple/register}" class="weui_btn weui_btn_default weui_btn_block">立即注册</a>
             </div>
 <!--            <div class="weui_cell">
                 <div class="weui_cell_hd"><label class="weui_label">其它方式</label></div>
@@ -51,12 +51,13 @@
             if (current_input.attr('id') == 'account') {
                 $.post("{url:/ajax/account/account/}" + $(this).val(), function (data) {
                     var msg = '合法用户';
-                    if (data['status']) {
+                    if (!data['status']) {
                         msg = '用户不存在';
                         current_input.next().show();
                         current_input.parent().removeClass('valid').addClass('invalid');
+                        autoValidate.showMsg({id: document.getElementById('account'), error: data['status'], msg: msg});
                     }
-                    autoValidate.showMsg({id: document.getElementById('account'), error: data['status'], msg: msg});
+                    
                 }, 'json');
             }
             $(".invalid-msg").show();
