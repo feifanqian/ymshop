@@ -81,17 +81,6 @@
 </div>
 
 <script type="text/javascript">
-    function promoter(uid,status){
-        $.post("{url:/commission/setPromoter}",{user_id:uid,status:status},function(data){
-            if(data['status']=='success'){
-            art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"</p>",2);
-            setTimeout("tools_reload()",2000);
-          }else{
-            art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"</p>");
-          }
-        },'json');
-        return false;
-    }
     function balance_op(user_id,type){
         $("#user_id").val(user_id);
         $("#type").val(type);
