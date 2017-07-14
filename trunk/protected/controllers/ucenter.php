@@ -93,21 +93,21 @@ class UcenterController extends Controller {
     //生成邀请码
     public function buildinvite() {
         $user_id = Filter::int(Req::args('uid'));
-//        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-//            $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
-//            $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
-//            $token = $wechat->getAccessToken();
-//            $params = array(
-//                "action_name" => "QR_LIMIT_STR_SCENE",
-//                "action_info" => array("scene" => array("scene_str" => "invite-{$user_id}"))
-//            );
-//            $ret = Http::curlPost("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={$token}", json_encode($params));
-//            $ret = json_decode($ret, TRUE);
-//            if (isset($ret['ticket'])) {
-//                $this->redirect("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={$ret['ticket']}");
-//                exit;
-//            }
-//        }
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+            $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+            $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+            $token = $wechat->getAccessToken();
+            $params = array(
+                "action_name" => "QR_LIMIT_STR_SCENE",
+                "action_info" => array("scene" => array("scene_str" => "invite-{$user_id}"))
+            );
+            $ret = Http::curlPost("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={$token}", json_encode($params));
+            $ret = json_decode($ret, TRUE);
+            if (isset($ret['ticket'])) {
+                $this->redirect("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={$ret['ticket']}");
+                exit;
+            }
+        }
         $url = Url::fullUrlFormat("/index/invite") . "?inviter_id=" . $this->user['id'];
         $qrCode = new QrCode();
         $qrCode
