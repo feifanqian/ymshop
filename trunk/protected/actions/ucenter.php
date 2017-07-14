@@ -2052,7 +2052,7 @@ class UcenterAction extends Controller {
         if($is_signed){
             $this->code = 1154;
         }else{
-            $last_sign = $this->model->table("sign_in")->order('date desc')->where("1=1")->find();
+            $last_sign = $this->model->table("sign_in")->order('date desc')->where("user_id=".$this->user['id'])->find();
             if($last_sign){
                     //判断上次签到和这次签到中间是否有缺
                     $yesterday = date("Y-m-d",strtotime("-1 day"));
