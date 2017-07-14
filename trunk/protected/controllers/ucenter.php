@@ -2351,7 +2351,7 @@ class UcenterController extends Controller {
                 $this->assign('serial_day',$today['serial_day']);
                 $this->assign("is_signed",true);
             }else{
-                $yesterday = $this->model->table("sign_in")->where("date='".date("Y-m-d",strtotime("-1 day"))."'")->find();
+                $yesterday = $this->model->table("sign_in")->where("date='".date("Y-m-d",strtotime("-1 day"))."' and user_id=".$this->user['id'])->find();
                 if($yesterday){
                     $this->assign('serial_day',$yesterday['serial_day']);
                 }else{
