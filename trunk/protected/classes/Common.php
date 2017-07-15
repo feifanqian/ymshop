@@ -729,7 +729,7 @@ class Common {
          $model = new Model("customer");
          $result = $model->where("user_id = $user_id")->data(array('point_coin'=>"`point_coin`+100"))->update();
          if($result){
-             Log::pointcoin_log(100, $user_id, '', '新用户积分奖励', 10);
+             Log::pointcoin_log(200, $user_id, '', '新用户积分奖励', 10);
              return TRUE;
          }else{
              return FALSE;
@@ -751,5 +751,14 @@ class Common {
         }
         $url = Url::fullUrlFormat("/index/product/id/$goods_id/flag/" . $id);
         return array('status' => 'success', 'flag' => $id,'url'=>$url, 'goods_id' => $goods_id);
+     }
+     
+     static function getPromoterRoleTypeAndInviteShip($user_id){
+         $model = new Model();
+         $is_district_promoter = $model->table('district_promoter')->where("user_id=$user_id")->fields("type,hirer_id")->find();
+         $role_type = $is_district_promoter ? 2:1;
+         $is_district_hirer = $model->table("district_shop")->where("owner_id=$user_id")->find();
+         $role_type = $is_district_hirer ? 3:$role_type;
+         
      }
 }
