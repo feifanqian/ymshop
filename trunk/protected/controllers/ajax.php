@@ -114,7 +114,6 @@ class AjaxController extends Controller {
                 }
             }
         }
-        $info = array('status' => 'success', 'msg' => "发送成功");
         echo JSON::encode($info);
     }
     //后台短信验证码
