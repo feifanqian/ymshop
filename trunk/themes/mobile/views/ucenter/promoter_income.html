@@ -178,7 +178,7 @@
                             </div>
                             <div class="weui-flex__item">
                                 <p class="item-title">已提取收益</p>
-                                <p class="{echo:$item['withdraw_income_change']>0?'increase':($item['withdraw_income_change']<0?'decrease':'maintain')}">{$item['withdraw_income_change']}</p>
+                                <p class="{echo:$item['settled_income_change']>0?'increase':($item['settled_income_change']<0?'decrease':'maintain')}">{$item['settled_income_change']}</p>
                             </div>
                         </div>
                         </div>
@@ -243,7 +243,7 @@
                                         '<div class="weui-flex__item">'+
                                             '<p class="item-title">已提取收益</p>'+
                                             '<p class="'+
-                                            (o.withdraw_income_change>0?'increase':(o.withdraw_income_change<0?'decrease':'maintain'))+'">'+o.withdraw_income_change+'</p>'+
+                                            (o.settled_income_change>0?'increase':(o.settled_income_change<0?'decrease':'maintain'))+'">'+o.settled_income_change+'</p>'+
                                         '</div>'+
                                     '</div>'+
                                     '</div>'+

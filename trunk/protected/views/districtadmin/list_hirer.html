@@ -14,39 +14,35 @@
     <tr>
         <th style="width:50px">选择</th>
         <th style="width:65px">操作</th>
-        <th style="width:50px">小区名称</th>
-        <th style="width:60px">上级小区</th>
-        <th style="width:60px">创建者</th>
-        <th style="width:60px">所有者</th>
-        <th style="width:60px">创建时间</th>
-        <th style="width:60px">有效期</th>
-        <th style="width:60px">联系人</th>
-        <th style="width:100px">联系电话</th>
-        <th style="width:160px">收益情况</th>
+        <th>小区名称</th>
+        <th style="width:160px">上级小区</th>
+        <th style="width:160px">所有者</th>
+        <th style="width:160px">创建时间</th>
+        <th style="width:160px">有效期</th>
+        <th style="width:160px">联系人</th>
+        <th style="width:200px">联系电话</th>
     </tr>
-    {query:name=district_shop as ds fields=ds.*,u1.nickname as founder_name,u1.avatar as founder_avatar,u2.nickname as owner_name,u2.avatar as owner_avatar,ds2.name as invite_shop_name join=left join user as u1 on ds.founder_id eq u1.id left join user as u2 on ds.owner_id eq u2.id left join district_shop as ds2 on ds.invite_shop_id eq ds2.id  where=$where id=$obj page=1 order= id desc}
+    {query:name=district_shop as ds fields=ds.*,c.real_name,ds2.name as invite_shop_name join=left join customer as c on ds.owner_id eq c.user_id left join district_shop as ds2 on ds.invite_shop_id eq ds2.id  where=$where id=$obj page=1 order= id desc}
     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden">
                     <a  class="icon-cog action" href="javascript:;"> 处理</a>
                     <div class="menu_select">
                      <ul>
-                       <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=and--di.role_id--eq--{$item['id']}__and--di.role_type--eq--2"> 查看收益记录</a></li>
+                       <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=and--pil.district_id--eq--{$item['id']}"> 查看收益记录</a></li>
                        <li><a class="icon-eye" href="javascript:;" onclick="viewAchievement('{$item['name']}',{$item['owner_id']},{$item['id']});"> 查看销售业绩</a></li>
                        <li><a class="icon-plus" href="javascript:;" onclick="addPromoter({$item['id']});"> 添加官方推广员</a></li>
                      </ul>
                    </div>
                 </div>
             </td>
-            <td style="width:60px">{$item['name']}</td>
-             <td style="width:140px">{$item['invite_shop_name']|"  "}</td>
-            <td style="width:140px">{$item['founder_name']|"unknow"}</td>
-            <td style="width:140px">{$item['owner_name']|"unknow"}</td>
+            <td>{$item['name']}</td>
+             <td style="width:140px">{$item['invite_shop_name']|"无"}</td>
+            <td style="width:140px">{$item['real_name']|"unknow"}</td>
             <td style="width:60px">{$item['create_time']}</td>
             <td style="width:60px">{$item['valid_period']}</td>
             <td style="width:160px">{$item['linkman']}</td>
             <td style="width:160px">{$item['link_mobile']}</td>
-            <td style="width:160px">待解锁：{$item['frezze_income']}&nbsp;可用：{$item['valid_income']}&nbsp;已结算：{$item['settled_income']}</td>
         </tr>
     {/query}
 </table>

@@ -1189,4 +1189,9 @@ class PaymentController extends Controller {
             }
         }
     }
+    
+    public function test(){
+        $orderNo = Filter::str(Req::args('order_no'));
+        var_dump(Order::updateStatus($orderNo));
+    }
 }

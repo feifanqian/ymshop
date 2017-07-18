@@ -1,7 +1,6 @@
 {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
-{set:$status=array('-1'=>"已撤销",'0'=>"<span class='icon icon-lock'>时间锁定中</span>","1"=>'已可用')}
-{set:$role=array("1"=>'推广员','2'=>'小区商户');}
+{set:$role=array("1"=>'普通用户','2'=>'推广员','3'=>'小区商户');}
 <form action="" method="post">
 <div class="tools_bar clearfix">
     <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
@@ -16,48 +15,50 @@
     <tr>
         <th style="width:50px">选择</th>
         <th style="width:65px">操作</th>
-        <th style="width:100px">收益类型</th>
-        <th style="width:160px">收益金额</th>
-        <th style="width:140px">所属角色</th>
-        <th style="width:140px">时间</th>
-        <th style="width:160px">收益状态</th>
+        <th>所属角色</th>
+        <th>角色名称</th>
+        <th>收益类型</th>
+        <th>可用收益</th>
+        <th>锁定收益</th>
+        <th>已结算收益</th>
     </tr>
-    {query:name=district_incomelog as di fields=di.* where=$where id=$obj page=1 order= id desc}
+    {query:name=promote_income_log as pil  where=$where id=$obj page=1 order= id desc}
     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden">
                     <a  class="icon-cog action" href="javascript:;"> 处理</a>
                     <div class="menu_select">
                      <ul>
-                       {if:in_array($item['type'],array('1','2'))}
-                       <li><a class="icon-eye" href="{url:/districtadmin/record_sale}?condition=and--ds.id--eq--{$item['origin']}"> 查看来源</a></li>
-                       {elseif:$item['type']==3}
-                       <li><a class="icon-eye" href="{url:/districtadmin/apply_join}?condition=and--da.id--eq--{$item['origin']}"> 查看来源</a></li>
-                       {elseif:$item['type']==6}
-                       <li><a class="icon-eye" href="{url:/districtadmin/apply_withdraw}?condition=and--dw.id--eq--{$item['origin']}"> 查看来源</a></li>
-                       {elseif:$item['type']==7}
+                       {if:$item['type']==10}
+                       <li><a class="icon-eye" href="{url:/districtadmin/apply_join}?condition=and--da.id--eq--{$item['record_id']}"> 查看来源</a></li>
+                       {elseif:in_array($item['type'],array("1","2","3","4","5","6","12","13"))}
+                       <li><a class="icon-eye" href="{url:/districtadmin/record_sale}?condition=and--psl.id--eq--{$item['record_id']}"> 查看来源</a></li>
+                       {elseif:$item['type']==11}
+                       <li><a class="icon-eye" href="{url:/districtadmin/apply_withdraw}?condition=and--dw.id--eq--{$item['record_id']}"> 查看来源</a></li>
+                       {else:}
                        <li><a class="icon-eye" href="javascript:;"> 暂无可选操作</a></li>
                        {/if}
+                       <li><a class="icon-eye" href="{url:/customer/customer_list}?condition=and--user_id--eq--{$item['user_id']}"> 查看用户信息</a></li>
                      </ul>
                    </div>
                 </div>
             </td>
-            <td style="width:100px">{$item['type_info']}</td>
-            <td style="width:140px">{$item['amount']}</td>
-            <td style="width:140px">
-            {set:$role_id = $item['role_id'];}
-            {if:$item['role_type']==1}
-                    {query:name=district_promoter as dp join=left join user as u on dp.user_id eq u.id where=dp.id eq $role_id fields=dp.user_id,u.nickname,u.avatar items=$promoters item=$promoter}
-                    推广员：{$promoter['nickname']|"unknow"}
-                    {/query}
-                {else:}
-                    {query:name=district_shop where=id eq $role_id fields=name items=$shops item=$shop}
-                    商&nbsp;&nbsp;&nbsp;户：{echo:$shop['name']}
-                    {/query}
+            <td>{$role[$item['role_type']]}</td>
+            {if:in_array($item['role_type'],array("1","2"))}
+                {set:$user_id=$item['role_id'];}
+                {query:name=customer as c join=left join user as u on c.user_id eq u.id fields=c.real_name,u.nickname where=c.user_id eq $user_id item=$customer}
+                    <td>{echo:$customer['real_name']==""?$customer['nickname']:$customer['real_name']}</td>
+                {/query}
+            {else:}
+                {set:$district_id=$item['role_id'];}
+                 {query:name=district_shop as ds where=id eq $district_id fields=ds.name item=$shop}
+                     <td>{$shop['name']}</td>
+                 {/query}
             {/if}
-            </td>
-            <td style="width:160px">{$item['record_time']}</td>
-            <td style="width:160px">{$status[$item['status']]}</td>
+            <td>{$item['note']}</td>
+            <td>{echo:$item['valid_income_change']>=0?"+".$item['valid_income_change']:$item['valid_income_change']}</td>
+            <td>{echo:$item['frezze_income_change']>=0?"+".$item['frezze_income_change']:$item['frezze_income_change']}</td>
+            <td>{echo:$item['settled_income_change']>=0?"+".$item['settled_income_change']:$item['settled_income_change']}</td>
         </tr>
     {/query}
 </table>

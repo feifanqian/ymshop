@@ -18,7 +18,7 @@
         <th style="width:140px">销售小区</th>
         <th style="width:160px">时间</th>
     </tr>
-    {query:name=district_sales as ds fields=ds.*,g.name as goods_name,g.img,shop.name as shop_name join=left join goods as g on ds.goods_id eq g.id left join district_shop as shop on ds.hirer_id eq shop.id where=$where id=$obj page=1 order= id desc}
+    {query:name=promote_sale_log as psl fields=psl.*,g.name as goods_name,g.img,shop.name as shop_name join=left join goods as g on psl.goods_id eq g.id left join district_shop as shop on psl.beneficiary_three_id eq shop.id where=$where id=$obj page=1 order= id desc}
     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden">
@@ -26,7 +26,7 @@
                     <div class="menu_select">
                      <ul>
                        <li><a class="icon-eye" href="javascript:;" onclick="view({$item['order_id']})"> 查看订单信息</a></li>
-                       <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=and--di.origin--eq--{$item['id']}" > 查看此项收益</a></li>
+                       <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=and--pil.record_id--eq--{$item['id']}" > 查看此项收益</a></li>
                      </ul>
                    </div>
                 </div>
@@ -35,7 +35,7 @@
             <td style="width:160px"><p style='text-align: center;'><a href="{url:/index/product/id/$item[goods_id]}"><img src="{echo:Common::thumb($item['img'],30,30);}" style='border-radius:5px;cursor:pointer;'/></a></p><p style='display:none;'>{$item['goods_name']}</p></td>
             <td style="width:140px">{$item['goods_nums']}</td>
             <td style="width:140px"><a href="?condition=and--c.hirer_id--eq--{$item['hirer_id']}">{$item['shop_name']}</a></td>
-            <td style="width:160px">{$item['record_time']}</td>
+            <td style="width:160px">{$item['record_date']}</td>
         </tr>
     {/query}
 </table>

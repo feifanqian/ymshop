@@ -12,7 +12,8 @@
         <th style="width:50px">选择</th>
         <th style="width:65px">操作</th>
         <th style="width:120px">申请提现单号</th>
-        <th style="width:80px">申请者</th>
+        <th style="width:80px">申请者角色</th>
+        <th style="width:80px">申请者名称</th>
         <th style="width:100px;text-align: center;">申请提现金额 </th>
         <th style="width:100px">提现方式</th>
         <th style="width:140px">银行</th>
@@ -22,8 +23,9 @@
         <th style="width:140px;">处理时间</th>
         <th style="width:90px">状态</th>
     </tr>
-    {query:name=district_withdraw as dw where=$where id=$obj page=1 order= id desc}
-        <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+    {set:$role=array("1"=>'普通用户','2'=>'推广员','3'=>'小区商户');}
+    {query:name=district_withdraw as dw fields=dw.* where=$where id=$obj page=1 order=dw.id desc}
+     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a>
                     <div class="menu_select">
@@ -39,20 +41,22 @@
                 </div> 
             </td>
             <td style="width:120px">{$item['withdraw_no']}</td>
+            <td style="width:80px">{$role[$item['role_type']]}</td>
             <td style="width:80px">
-                {set:$role_id = $item['role_id'];}
-                {if:$item['role_type']==1}
-                    {query:name=district_promoter as dp join=left join user as u on dp.user_id eq u.id where=dp.id eq $role_id fields=dp.user_id,u.nickname,u.avatar items=$promoters item=$promoter}
-                    推广员：{echo:$promoter['nickname']}
-                    {/query}
-                {else:}
-                    {query:name=district_shop where=id eq $role_id fields=name items=$shops item=$shop}
-                    商&nbsp;&nbsp;&nbsp;户：{echo:$shop['name']}
-                    {/query}
-                {/if}
+            {if:in_array($item['role_type'],array("1","2"))}
+                {set:$user_id=$item['role_id'];}
+                {query:name=customer as c join=left join user as u on c.user_id eq u.id fields=c.real_name,u.nickname where=c.user_id eq $user_id item=$customer}
+                    {echo:$customer['real_name']==""?$customer['nickname']:$customer['real_name']}
+                {/query}
+            {else:}
+                {set:$district_id=$item['role_id'];}
+                 {query:name=district_shop as ds where=id eq $district_id fields=ds.name item=$shop}
+                     {$shop['name']}
+                 {/query}
+            {/if}
             </td>
             <td style="width:100px;text-align: center;">{$item['withdraw_amount']}</td>
-            <td style="width:100px">{if:$item['withdraw_type']==1}金点账户{elseif:$item['withdraw_type']==2}银行卡{/if}</td>
+            <td style="width:100px">{if:$item['withdraw_type']==1}账户余额{elseif:$item['withdraw_type']==2}银行卡{/if}</td>
             {if:$item['withdraw_type']==1}
             <td style="width:140px">-----------</td>
             <td style="width:140px">-----------</td>

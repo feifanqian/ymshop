@@ -111,13 +111,12 @@
     </div>
 </div>
 {/if}
-{if:$is_promoter===true}
  <div class="weui_panel js_show">
-    <div class="weui_panel_hd js_category">推广员中心{if:Req::args("first")==1}<span class="weui-badge" style="margin-left: 5px;margin-bottom:2px;">NEW</span>{/if}<p><i class="ymicon icon-navicon"></i><p></div>
+    <div class="weui_panel_hd js_category">推广中心{if:Req::args("first")==1}<span class="weui-badge" style="margin-left: 5px;margin-bottom:2px;">NEW</span>{/if}<p><i class="ymicon icon-navicon"></i><p></div>
     <div class="weui_panel_bd js_categoryInner">
         <div class="weui_media_box weui_media_small_appmsg">
             <div class="weui_cells weui_cells_access">
-                <a class="weui_cell" href="/ucenter/promoter_invite">
+<!--                <a class="weui_cell" href="/ucenter/promoter_invite">
                     <div class="weui_cell_hd">
                         <span class="icon-stack icon-lg">
                             <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
@@ -128,7 +127,8 @@
                         <p>邀请入驻</p>
                     </div>
                     <span class="weui_cell_ft"></span>
-                </a>
+                </a>-->
+                {if:$is_hirer!=true}
                 <a class="weui_cell" href="/ucenter/promoter_home">
                     <div class="weui_cell_hd">
                         <span class="icon-stack icon-lg">
@@ -141,6 +141,7 @@
                     </div>
                     <span class="weui_cell_ft"></span>
                 </a>
+                {/if}
                  <a class="weui_cell" href="/ucenter/promoter_income">
                     <div class="weui_cell_hd">
                         <span class="icon-stack icon-lg">
@@ -181,7 +182,6 @@
         </div>
     </div>
 </div>
- {/if}
 {widget:name=sub_navs action=ucsidebar sidebar=$sidebar act=$actionId}
 </div>
 {if:!Common::checkInWechat()}

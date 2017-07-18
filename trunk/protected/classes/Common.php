@@ -745,20 +745,62 @@ class Common {
         }
         $info = $model->table('promote_qrcode')->where("user_id ={$user_id} and goods_id = {$goods_id}")->fields('id')->find();
         if (empty($info)) {
-            $id = $model->table('promote_qrcode')->data(array('user_id' => $user_id,  'goods_id' => $goods_id, 'scan_times' => 0, 'sell_count' => 0, 'create_date' => date("Y-m-d H:i:s")))->insert();
+            $id = $model->table('promote_qrcode')->data(array('user_id' => $user_id,  'goods_id' => $goods_id, 'scan_times' => 0, 'sell_count' => 0, 'create_date' => date("Y-m-d H:i:s"),'update_date' => date("Y-m-d H:i:s")))->insert();
         } else {
             $id = $info['id'];
+            $model->table("promote_qrcode")->where("user_id ={$user_id} and goods_id = {$goods_id}")->data(array('update_date'=>date("Y-m-d H:i:s")))->update();
         }
         $url = Url::fullUrlFormat("/index/product/id/$goods_id/flag/" . $id);
         return array('status' => 'success', 'flag' => $id,'url'=>$url, 'goods_id' => $goods_id);
      }
      
-     static function getPromoterRoleTypeAndInviteShip($user_id){
+     //获取我的推广信息，包括上级邀请者及所属小区
+     static function getMyPromoteInfo($user_id){
          $model = new Model();
          $is_district_promoter = $model->table('district_promoter')->where("user_id=$user_id")->fields("type,hirer_id")->find();
          $role_type = $is_district_promoter ? 2:1;
          $is_district_hirer = $model->table("district_shop")->where("owner_id=$user_id")->find();
          $role_type = $is_district_hirer ? 3:$role_type;
-         
+         $result = array();
+         $district_id = 1;
+         if($role_type==1){
+             $inviter_info = $model->table("invite")->where("invite_user_id=".$user_id)->find();
+             if($inviter_info){//有邀请关系
+                $inviter_promoter_info = $model->table('district_promoter')->where("user_id=".$inviter_info['user_id'])->fields("type,hirer_id")->find();
+                $inviter_role = $inviter_promoter_info ? 2:1;
+                $inviter_hirer_info = $model->table("district_shop")->where("owner_id=".$inviter_info['user_id'])->find();
+                $inviter_role = $inviter_hirer_info ? 3:$role_type;
+                $result['inviter_user_id']=$inviter_info['user_id'];
+                $result['inviter_role']=$inviter_role;
+                $district_id= $inviter_info['district_id'];
+             }
+         }else{
+            $district_id = $role_type==2 ? $is_district_promoter['hirer_id']:$is_district_hirer['id'];
+         }
+         $result['district_id']=$district_id;
+         $result['my_role']=$role_type;
+         $district_info = $model->table("district_shop")->where("id=".$result['district_id'])->find();
+         $result['district_user_id']=$district_info?$district_info['owner_id']:NULL;
+         if($district_info['invite_shop_id']!=""){
+             $result['superior_district_id'] =$district_info['invite_shop_id'];
+             $district_inviter_info = $model->table("district_shop")->where("id=". $result['superior_district_id'])->find();
+             $result['superior_district_user_id'] = $district_inviter_info?$district_inviter_info['owner_id']:NULL;
+         }
+         return $result;
+     }
+     
+     static function updateDistrictIdInInviteShip($user_id,$district_id){
+          $model = new Model();
+          $result = $model->table("invite")->where("invite_user_id=".$user_id)->find();
+          if($result){
+              $result = $model->table("invite")->where("invite_user_id=".$user_id)->data(array("district_id"=>$district_id))->update();
+              if($result){
+                  return TRUE;
+              }else{
+                  return FALSE;
+              }
+          }else{
+              return FALSE;
+          }
      }
 }

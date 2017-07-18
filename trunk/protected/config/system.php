@@ -7,7 +7,7 @@
   'globals' => 
   array (
     'site_name' => '圆梦商城',
-    'site_logo' => '/data/uploads/2017/07/11/06287e5756643206989497298b7c3de6.png',
+    'site_logo' => '/data/uploads/2017/07/17/155a19c1ae495f61bdff0490b4a2ce9a.png',
     'site_keywords' => '圆梦商城',
     'site_description' => '圆梦商城',
     'site_icp' => '粤ICP备16060168号',
