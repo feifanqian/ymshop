@@ -22,10 +22,10 @@ class WxPayConfig {
      * 获取地址：https://mp.weixin.qq.com/advanced/advanced?action=dev&t=advanced/dev&token=2005451881&lang=zh_CN
      * @var string
      */
-    const APPID = 'wx70ace2143fc5d154';
-    const MCHID = '1369681802';
-    const KEY = 'Jpm78Cj7d8x6DEAyjYzwTVpjFRe2FPpZ';
-    const APPSECRET = '4df6114ac0d3f69d4ffa12896459048e';
+    const APPID = 'wx442dec4e782c99d8';
+    const MCHID = '1485608362';
+    const KEY = '835b565520c99db487f58d5ca6f8a67c';
+    const APPSECRET = 'c85855b0c540b9929277a3ef86a41bc8';
     //=======【证书路径设置】=====================================
     /**
      * TODO：设置商户证书路径
@@ -54,10 +54,10 @@ class WxPayConfig {
      */
     const REPORT_LEVENL = 1;
 
-    public static $appid = 'wx70ace2143fc5d154';
-    public static $mchid = '1369681802';
-    public static $appkey = 'Jpm78Cj7d8x6DEAyjYzwTVpjFRe2FPpZ';
-    public static $appsecret = '4df6114ac0d3f69d4ffa12896459048e';
+    public static $appid = 'wx442dec4e782c99d8';
+    public static $mchid = '1485608362';
+    public static $appkey = '835b565520c99db487f58d5ca6f8a67c';
+    public static $appsecret = 'c85855b0c540b9929277a3ef86a41bc8';
     public static $notifyurl = '/';
     public static $sslcert ='/key/apiclient_cert.pem';
     public static $sslkey = '/key/apiclient_key.pem';
