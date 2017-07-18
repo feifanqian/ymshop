@@ -45,6 +45,7 @@ class ChinapayDf {
         }
     }
     public function DfPay($params){
+        return true;
         $merDate = $params["merDate"];
 	$merSeqId = $params["merSeqId"];
         if(($merSeqId=='')&&($merDate=='')){

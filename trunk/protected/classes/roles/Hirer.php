@@ -45,34 +45,12 @@ class Hirer extends Object{
     }
     
     public function getMyIncomeLog($page=1){//获取收入记录，收入应该包括：1-小区推广产品的营业额的3%，2-拓展推广小区的收入的1%，3-拓展一个小区直接加10000*10%
-        $log = $this->model->table('district_incomelog')->where("role_type=2 and role_id =".$this->id)->order('record_time desc')->findPage($page,10);
+        $log = $this->model->table("promote_income_log")->where("role_id=".$this->id." and role_type =3")->findPage($page,10);
         if(isset($log['html'])){
             unset($log['html']);
         }
         if(empty($log)){
             return array();
-        }
-        $status = array("-1"=>'info',"0"=>'waiting',"1"=>'success');
-        //1.推广商品获得 2：下级小区推广分成 3：拓展小区分成 4.奖励收入 5奖励支出 6转账提现 7推广员入驻分成
-        $type = array("1"=>'income',"2"=>'income',"3"=>'income',"4"=>'income',"5"=>'expend',"6"=>'expend',"7"=>'income');
-        $tips = array("-1"=>'已撤销',"0"=>'待解锁',"1"=>'已可用');
-        foreach ($log['data'] as $k=>$v){
-            $line_data = array();
-            $line_data['id']=$v['id'];
-            $line_data['weekday']=Common::formatTimeToShow($v['record_time']);
-            $line_data['month'] = date("m-d",strtotime($v['record_time']));
-            $line_data['status_icon']=$status["{$v['status']}"];
-            $line_data['status']=$v['status'];
-            $line_data['amount'] = $v['amount'];
-            $line_data['type']= $type["{$v['type']}"];
-            $line_data['origin_type'] = $v['type'];
-            $line_data['origin']=$v['type_info'];
-            if(in_array($v['type'], array(1,2,3,7))){
-                $line_data['status_tips']=$tips["{$v['status']}"];
-            }else{
-                $line_data['status_tips']= '已转账';
-            }
-            $log['data'][$k] = $line_data;
         }
         return $log;
     }
@@ -121,10 +99,10 @@ class Hirer extends Object{
         if(strtotime($start)>strtotime($end)){
             return false;
         }
-        $record = $this->model->table("district_sales as ds")
-                ->where("record_time>='$start' and record_time<='$end' and hirer_id=".$this->id)
-                ->fields('amount,record_time as time')
-                ->order('record_time desc')
+        $record = $this->model->table("promote_sale_log as psl")
+                ->where("record_date>='$start' and record_date<='$end' and beneficiary_three_id=".$this->id)
+                ->fields('amount,record_date as time')
+                ->order('record_date desc')
                 ->findAll();
         if(date("Y-m-d",strtotime($start))==date("Y-m-d",strtotime($end))){
             Common::formatDataToShowInChart($start,$end,$record,'hour');
@@ -170,12 +148,12 @@ class Hirer extends Object{
         }
     }
     public function getMySaleRecord($page=1){
-      $record = $this->model->table('district_sales as ds')
-              ->join('left join goods as g on ds.goods_id = g.id left join district_incomelog as di on ds.id = di.origin')
-              ->fields('ds.id,ds.order_no,ds.unit_price,ds.goods_nums,ds.amount,ds.record_time,di.amount as income,g.img,g.name')
-              ->where("ds.hirer_id =".$this->id." and di.role_id =".$this->id." and di.role_type = 2")
-              ->order("ds.record_time desc")
-              ->findPage($page,10);
+      $record = $this->model->table('promote_sale_log as psl')
+                ->join("left join goods as g on psl.goods_id = g.id")
+                ->where("psl.beneficiary_three_id =" . $this->id)
+                ->fields("psl.*,g.img,g.name")
+                ->order("psl.record_date desc")
+                ->findPage($page, 10);
       if(empty($record)){
           return array();
       }
@@ -185,14 +163,14 @@ class Hirer extends Object{
       foreach($record['data'] as $k => $v){
           $line_data = array();
           $line_data['id']=$v['id'];
-          $line_data['weekday']=Common::formatTimeToShow($v['record_time']);
-          $line_data['month']=date('m-d',strtotime($v['record_time']));
+          $line_data['weekday']=Common::formatTimeToShow($v['record_date']);
+          $line_data['month']=date('m-d',strtotime($v['record_date']));
           $line_data['img_url']=Url::urlFormat("@".$v['img']);
           $line_data['name']=$v['name'];
           $line_data['unit_price']=$v['unit_price'];
           $line_data['sell_num']=$v['goods_nums'];
           $line_data['amount']= $v['amount'];
-          $line_data['income']=$v['income'];
+          $line_data['income']=$v['beneficiary_three_income'];
           $record['data'][$k]=$line_data;
       }
       return $record;
@@ -200,7 +178,7 @@ class Hirer extends Object{
     }
     public function getSettledHistory($page){
         $history = $this->model->table('district_withdraw')
-                ->where('role_type = 2 and role_id = '.$this->id)
+                ->where('role_type = 3 and role_id = '.$this->id)
                 ->order('apply_time desc')
                 ->findPage($page,10);
         if(empty($history)){
@@ -209,10 +187,10 @@ class Hirer extends Object{
         if(isset($history['html'])){
             unset($history['html']);
         }
-        $line_data = array('id'=>1,'weekday'=>'周一','month'=>'12-03','status'=>'success','amount'=>'1.22','settle_type'=>'提现到金点账号','status_tips'=>'已转账');
+        $line_data = array('id'=>1,'weekday'=>'周一','month'=>'12-03','status'=>'success','amount'=>'1.22','settle_type'=>'提现到账号余额','status_tips'=>'已转账');
         $status=array('-1'=>"info",'0'=>'waiting','1'=>'success');
         $status_tips=array('-1'=>'<span class="red">未通过</span>','0'=>'<span class="green">待处理</spam>','1'=>'已转账');
-        $type=array('1'=>'提现至金点账户','2'=>'提现到银行卡');
+        $type=array('1'=>'提现至账户余额','2'=>'提现到银行卡');
         foreach($history['data'] as $k => $v){
           $line_data = array();
           $line_data['id']=$v['id'];
@@ -230,7 +208,7 @@ class Hirer extends Object{
     }
     
     public function applyDoSettle($data){//提交结算申请
-        $count = $this->model->table('district_withdraw')->where('role_type=2 and role_id ='.$this->id." and status=0")->count();
+        $count = $this->model->table('district_withdraw')->where('role_type=3 and role_id ='.$this->id." and status=0")->count();
         $count=0;
         if($count>0){
              return array('status'=>'fail','msg'=>'抱歉！您还有未处理完的提现请求，请等待系统处理完成后再提交','msg_code'=>1137);
@@ -266,7 +244,7 @@ class Hirer extends Object{
         $sql_data['withdraw_no']="w".Common::createOrderNo();
         $sql_data['withdraw_amount']=$data['amount'];
         $sql_data['apply_time']=date("Y-m-d H:i:s");
-        $sql_data['role_type']=2;
+        $sql_data['role_type']=3;
         $sql_data['role_id']=$this->id;
         $sql_data['status']=0;
         $id = $this->model->table('district_withdraw')->data($sql_data)->insert();

@@ -43,9 +43,9 @@
                     <h1 class="weui_cells_title">{echo:$paymentPlugin->name}</h1>
                     <div class="weui_cells weui_cells_form">
                         <div class="weui_cell">
-                            <div class="weui_cell_hd"><label class="weui_label">{if:isset($pay_balance)&&$pay_balance==true}金点余额{elseif:isset($pay_silver)&&$pay_silver==true}银点余额{/if}</label></div>
+                            <div class="weui_cell_hd"><label class="weui_label">{if:isset($pay_balance)&&$pay_balance==true}账户余额{/if}</label></div>
                             <div class="weui_cell_bd">
-                                <p>{if:isset($pay_balance)&&$pay_balance==true}{echo:$userInfo['balance']}{elseif:isset($pay_silver)&&$pay_silver==true}{echo:$userInfo['silver_coin']}{/if}</p>
+                                <p>{if:isset($pay_balance)&&$pay_balance==true}{echo:$userInfo['balance']}{/if}</p>
                             </div>
                         </div>
                         <div class="weui_cell">

@@ -136,7 +136,7 @@ class Promoter extends Object {
             if($v['beneficiary_one_user_id']==$this->user_id){
                 $income =$v['beneficiary_one_income'];
             }else if($v['beneficiary_two_user_id']==$this->user_id){
-                $income +=$v['beneficiary_two_income'];
+                $income =$v['beneficiary_two_income'];
             }
             
             $line_data['income'] = $income;
@@ -213,7 +213,7 @@ class Promoter extends Object {
         $sql_data['withdraw_amount'] = $data['amount'];
         $sql_data['apply_time'] = date("Y-m-d H:i:s");
         $sql_data['role_type'] = $this->role_type;
-        $sql_data['role_id'] = $this->user_id;
+        $sql_data['role_id'] = intval($this->user_id);
         $sql_data['status'] = 0;
         $id = $this->model->table('district_withdraw')->data($sql_data)->insert();
         if ($id) {

@@ -16,9 +16,9 @@
         <th style="width:80px">申请者名称</th>
         <th style="width:100px;text-align: center;">申请提现金额 </th>
         <th style="width:100px">提现方式</th>
-        <th style="width:140px">银行</th>
-        <th style="width:140px">开户名</th>
-        <th style="width:160px">账号</th>
+        <th style="width:100px">银行</th>
+        <th style="width:140px">卡号</th>
+        <th style="width:160px">开户名</th>
         <th style="width:140px;">申请时间</th>
         <th style="width:140px;">处理时间</th>
         <th style="width:90px">状态</th>
@@ -31,11 +31,10 @@
                     <div class="menu_select">
                         <ul>
                             {if:$item['status']==0}
-                            <li>{if:$item['withdraw_type']==1}<a class="icon-coin" href="javascript:;" onclick="pass({$item['id']})"> 金点转账{elseif:$item['withdraw_type']==2}<a class="icon-paypal" href="javascript:;" onclick="pass({$item['id']})"> 允许，并人工转账{/if}</a></li>
+                            <li>{if:$item['withdraw_type']==1}<a class="icon-coin" href="javascript:;" onclick="pass({$item['id']})"> 余额转账{elseif:$item['withdraw_type']==2}<a class="icon-paypal" href="javascript:;" onclick="pass({$item['id']})"> 发起代付{/if}</a></li>
                             <li><a class="icon-remove" href="javascript:;" onclick="cancel({$item['id']})"> 作废该请求</a></li>
-                            {else:}
-                            <li><a class="icon-question" href="javascript:;"> 暂无可选操作</a></li>
                             {/if}
+                            <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=pil.role_type--eq--{$item['role_type']}__and--pil.role_id--eq--{$item['role_id']}"> 查看收益记录</a></li>
                         </ul>
                    </div>
                 </div> 
@@ -63,9 +62,9 @@
             <td style="width:140px">-----------</td>
             {else:$item['withdraw_type']==2}
             {set:$cardinfo = unserialize($item['card_info']);}
-            <td style="width:140px">{$cardinfo['bank_name']|"???"}</td>
+            <td style="width:100px">{$cardinfo['bank_name']|"???"}</td>
             <td style="width:140px">{$cardinfo['card_number']|"???"}</td>
-            <td style="width:140px">{$cardinfo['bank_account_name']|"???"}</td>
+            <td style="width:100px">{$cardinfo['bank_account_name']|"???"}</td>
             {/if}
             <td style="width:140px">{$item['apply_time']}</td>
             <td style="width:140px">{$item['admin_handle_time']|"-------"}</td>

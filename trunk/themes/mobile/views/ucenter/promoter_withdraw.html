@@ -105,11 +105,13 @@
             var bank_name = $("input[name='bank_name']").val();
             var card_number = $("input[name='card_number']").val();
             var bank_account_name = $("input[name='bank_account_name']").val();
-            if(bank_name==''||card_number==''||bank_account_name==''){
+            var province = $("input[name='province']").val();
+            var city = $("input[name='city']").val();
+            if(bank_name==''||card_number==''||bank_account_name==''||province==''||city==""){
                 notification("请完善银行卡信息");
                 return false;
             }else{
-                var formdata={type:2,amount:withdraw_amount,bank_name:bank_name,card_number:card_number,bank_account_name:bank_account_name};
+               var formdata={type:2,amount:withdraw_amount,bank_name:bank_name,card_number:card_number,bank_account_name:bank_account_name,province:province,city:city};
             }
         }
         layer.open({

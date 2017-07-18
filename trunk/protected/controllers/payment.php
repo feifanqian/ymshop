@@ -820,7 +820,7 @@ class PaymentController extends Controller {
             $input->SetOpenid($openId);
 
             $order = WxPayApi::unifiedOrder($input);
-
+            
             $jsApiParameters = $tools->GetJsApiParameters($order);
 
             //获取共享收货地址js函数参数

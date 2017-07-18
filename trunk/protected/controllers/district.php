@@ -134,7 +134,7 @@ class DistrictController extends Controller {
     }
     
     public function income_settle_submit(){
-         if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){
+         if($this->is_ajax_request()){
              $data = Req::args();
              unset($data['con']);
              unset($data['act']);
@@ -170,7 +170,7 @@ class DistrictController extends Controller {
         $this->redirect();
     }
     public function district_promoter(){
-        if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){
+        if($this->is_ajax_request()){
             $page = Filter::int(Req::args('p'));
             $data = $this->hirer->getMyPrmoter($page);
             if(empty($data)){
@@ -186,14 +186,14 @@ class DistrictController extends Controller {
         }
     }
     public function district_promoter_fire(){
-        if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){
+        if($this->is_ajax_request()){
             $id = Filter::int(Req::args('id'));
         }else{
             echo json_encode(array('status'=>'fail','msg'=>'bad request'));
         }
     }
     public function district_promoter_setcode(){
-        if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){
+        if($this->is_ajax_request()){
             $code = Filter::sql(Req::args('code'));
             echo json_encode($this->hirer->setPromoterJoinCode($code));
         }else{
@@ -202,7 +202,7 @@ class DistrictController extends Controller {
         exit();
     }
     public function district_promoter_achievement(){
-        if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){
+        if($this->is_ajax_request()){
             $type = Filter::int(Req::args('type'));
             $id = Filter::int(Req::args('id'));
             switch($type){
@@ -234,7 +234,7 @@ class DistrictController extends Controller {
         }
     }            
     public function district_achievement(){
-        if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){
+        if($this->is_ajax_request()){
             $type = Filter::int(Req::args('type'));
             switch($type){
                 case 1:$start_time = date("Y-m-d 00:00:00");
@@ -276,7 +276,7 @@ class DistrictController extends Controller {
         $this->redirect();
     }
     public function record_income(){
-        if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){
+        if($this->is_ajax_request()){
             $page = Filter::int(Req::args('p'));
             $data = $this->hirer->getMyIncomeLog($page);
             if(empty($data)){
@@ -292,7 +292,7 @@ class DistrictController extends Controller {
         };
     }
     public function record_settled(){
-        if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){
+        if($this->is_ajax_request()){
             $page = Filter::int(Req::args('p'));
             $data = $this->hirer->getSettledHistory($page);
             if(empty($data)){
@@ -308,7 +308,7 @@ class DistrictController extends Controller {
         };
     }
     public function record_sell(){
-        if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){
+        if($this->is_ajax_request()){
             $page = Filter::int(Req::args('p'));
             $data = $this->hirer->getMySaleRecord($page);
             if(empty($data)){

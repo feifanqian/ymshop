@@ -71,28 +71,28 @@ class Log {
             $data['valid_income_change'] = 0.00;
             $data['frezze_income_change'] = abs($amount);
             $data['settled_income_change'] = 0.00;
-        }else if(in_array($type, array(7,8,9))){
+        }else if(in_array($type, array(7,8,9,10))){
             $data['valid_income_change'] = abs($amount);
             $data['frezze_income_change'] = 0.00;
             $data['settled_income_change'] = 0.00;
-        }else if(in_array($type,array(10,11))){
-            if($type==10){
+        }else if(in_array($type,array(11,12))){
+            if($type==11){
                 $data['valid_income_change'] =0 - abs($amount);
                 $data['frezze_income_change'] = 0.00;
                 $data['settled_income_change'] = abs($amount);
-            }else if($type ==11){
+            }else if($type ==12){
                 $data['valid_income_change'] = 0.00;
                 $data['frezze_income_change'] = 0 - abs($amount);
                 $data['settled_income_change'] = abs($amount);
             }
-        }else if($type == 12){
+        }else if($type == 13){
             $data['valid_income_change'] =  abs($amount);
             $data['frezze_income_change'] = 0 - abs($amount);
             $data['settled_income_change'] =0.00;
         }else{
             return false;
         }
-        if($role_type===1||$role_type==2){
+        if($role_type==1||$role_type==2){
              $customer = $model->table("customer")->where("user_id={$role_id}")->fields("valid_income,frezze_income,settled_income")->find();
              if(!$customer){
                 return false;
@@ -124,9 +124,11 @@ class Log {
                 return true;
             }else{
                 file_put_contents('incomelogError.txt', "记录失败：user_id:$user_id|".json_encode($data)."\n",FILE_APPEND);
+                return false;
             }
         }else{
             file_put_contents('incomelogError.txt', "更新失败：user_id:$user_id|".json_encode($data)."\n",FILE_APPEND);
+            return false;
         }
     }
 }
