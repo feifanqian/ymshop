@@ -48,7 +48,7 @@
         <td style="width:80px">{$item['balance']}</td>
         <td style="width:80px">{$item['financial_coin']}</td>
         <td style="width:80px">{$item['point_coin']}</td>
-        <td>可用收益：{$item['valid_income']} 待解锁收益：{$item['frezze_income']} 已结算收益:{$item['withdraw_income']}</td>
+        <td>可用收益：{$item['valid_income']} 待解锁收益：{$item['frezze_income']} 已结算收益:{$item['settled_income']}</td>
         <td style="width:60px">{echo:$item['status']==0?"未激活":($item['status']==1?"正常":"锁定");}</td>
         </tr>
     {/query}
