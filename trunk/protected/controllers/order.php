@@ -262,14 +262,8 @@ class OrderController extends Controller {
     public function order_view() {
         $this->layout = "blank";
         $id = Req::args("id");
-        $order_no = Req::args("order_no");
         $model = new Model("order");
-        if($id){
-            $order = $model->where("id=$id")->find();
-        }else{
-            $order = $model->where("order_no='$order_no'")->find();
-        }
-        
+        $order = $model->where("id=$id")->find();
         if ($order) {
             $this->assign("id", $id);
             $this->redirect();
