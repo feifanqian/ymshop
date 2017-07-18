@@ -337,14 +337,11 @@ class DistrictLogic {
             return FALSE;
         }
 
-        $qrcode_info = $this->model->table("district_qrcodeinfo as dq")
-                ->join("district_shop as ds on dq.hirer_id = ds.id")
-                ->fields("dq.*,ds.invite_shop_id")
-                ->where("dq.id in ($ids) and dq.status = 0")
-                ->findAll();
+        $qrcode_info = $this->model->table("promote_qrcode")->where("id in ({$ids}) and status = 1")->findAll();
         if (empty($qrcode_info)) {
             return FALSE;
         }
+        
         $promoter_info = array();
         foreach ($qrcode_info as $v) {
             $promoter_info[$v['goods_id']] = $v;
@@ -353,63 +350,68 @@ class DistrictLogic {
             return false;
         }
         //获取分配比例
-        $config_all = Config::getInstance();
-        $set = $config_all->get('district_set');
-        $config = array('hirer' => $set['percentage2hirer'], 'invite_shop' => $set['percentage2inviter']);
+//        $config_all = Config::getInstance();
+//        $set = $config_all->get('district_set');
+//        $config = array('hirer' => $set['percentage2hirer'], 'invite_shop' => $set['percentage2inviter']);
+        $config = array('beneficiary_one'=>5,'beneficiary_two'=>10,'beneficiary_three'=>3,'beneficiary_four'=>1);
         //分析订单中是否有与推广信息匹配的
         foreach ($order_goods_info as $k => $v) {
             if (isset($promoter_info[$v['goods_id']])) {
-                //插入小区销售记录表
-                $sale_data['order_id'] = $order_info['order_id'];
-                $sale_data['order_no'] = $order_info['order_no'];
-                $sale_data['goods_id'] = $v['goods_id'];
+                $sale_data = array(); //销售记录
+                $income_log = array();
+                //1:判断推荐人类型 为普通类型还是付费推广员，若为普通推广员（普通会员）则要查询是否有邀请关系，根据邀请关系分配
+                $sale_data['goods_id']   = $v['goods_id'];
                 $sale_data['goods_nums'] = $v['goods_nums'];
                 $sale_data['product_id'] = $v['product_id'];
-                $sale_data['hirer_id'] = $promoter_info[$v['goods_id']]['hirer_id'];
-                $sale_data['promoter_id'] = $promoter_info[$v['goods_id']]['promoter_id'];
                 $sale_data['unit_price'] = $v['unit_price'];
-                $sale_data['amount'] = $v['unit_price'] * $v['goods_nums'];
-                $sale_data['from_qrcode_id'] = $promoter_info[$v['goods_id']]['id'];
-                $sale_data['record_time'] = date('Y-m-d H:i:s');
-                $sale_data['status'] = 0;
-                $this->model->table('district_qrcodeinfo')->data(array('sell_count' => $promoter_info[$v['goods_id']]['sell_count'] + $v['goods_nums']))->where('id=' . $promoter_info[$v['goods_id']]['id'])->update();
-                $id = $this->model->table('district_sales')->data($sale_data)->insert();
-                //插入小区收入记录
-                if ($id) {
-                    $income_data['type'] = 1;
-                    $income_data['type_info'] = "推广商品获得";
-                    $income_data['origin'] = $id;
-                    $income_data['role_type'] = 1;
-                    $income_data['role_id'] = $promoter_info[$v['goods_id']]['promoter_id'];
-                    $income_data['record_time'] = date("Y-m-d H:i:s");
-                    $income_data['status'] = 0;
-                    $sale_split = Common::getPromoterSaleSplit($income_data['role_id'], $set); //根据推广者业绩匹配分成比例
-                    $income_data['amount'] = round($sale_split * $v['unit_price'] * $v['goods_nums'] / 100, 2);
-                    $isOk = $this->model->table("district_incomelog")->data($income_data)->insert(); //推广者收入
-                    if ($isOk) {
-                        $this->model->query("update tiny_district_promoter set frezze_income = frezze_income + {$income_data['amount']} where id={$income_data['role_id']}");
-                        $this->addSendPointCoin("promoter", $income_data['role_id'],$sale_data['amount'] ,  $order_info['order_no'], 7);
-                    }
-                    $income_data['amount'] = round($config['hirer'] * $v['unit_price'] * $v['goods_nums'] / 100, 2);
-                    $income_data['role_type'] = 2;
-                    $income_data['role_id'] = $promoter_info[$v['goods_id']]['hirer_id'];
-                    $isOk = $this->model->table("district_incomelog")->data($income_data)->insert(); //商户雇主收入
-                    if ($isOk) {
-                        $this->model->query("update tiny_district_shop set frezze_income = frezze_income + {$income_data['amount']} where id={$income_data['role_id']}");
-                        $this->addSendPointCoin("shop", $income_data['role_id'],$sale_data['amount'] ,  $order_info['order_no'], 7);
-                    }
-                    //如果有上级小区
-                    if ($promoter_info[$v['goods_id']]['invite_shop_id'] != null && $promoter_info[$v['goods_id']]['invite_shop_id'] != "") {
-                        $income_data['amount'] = round($config['invite_shop'] * $v['unit_price'] * $v['goods_nums'] / 100, 2);
-                        $income_data['role_type'] = 2;
-                        $income_data['role_id'] = $promoter_info[$v['goods_id']]['invite_shop_id'];
-                        $income_data['type_info'] = "拓展小区推广分成";
-                        $income_data['type'] = 2;
-                        $isOk = $this->model->table("district_incomelog")->data($income_data)->insert(); //拓展分成收入
-                        if ($isOk) {
-                            $this->model->query("update tiny_district_shop set frezze_income = frezze_income + {$income_data['amount']} where id={$income_data['role_id']}");
+                $sale_data['amount']     = $v['unit_price'] * $v['goods_nums'];
+                $sale_data['record_date']= date("Y-m-d H:i:s");
+                $sale_data['contributor_user_id']=$promoter_info[$v['goods_id']]['user_id'];
+                $my_info = Common::getMyPromoteInfo($promoter_info[$v['goods_id']]['user_id']);
+                $sale_data['contributor_role']=$my_info['my_role'];
+                switch ($my_info['my_role']){
+                    case 1:
+                        $sale_data['beneficiary_one_user_id']=$promoter_info[$v['goods_id']]['user_id'];
+                        $sale_data['beneficiary_one_income'] =round($config['beneficiary_one']*$sale_data['amount']/100,2);
+                        $income_log[] = array('amount'=>$sale_data['beneficiary_one_income'],'role_type'=>1,'role_id'=>$sale_data['beneficiary_one_user_id'],'type'=>1);
+                        if(isset($my_info['inviter_role'])&&$my_info['inviter_role']!=1){
+                            $sale_data['beneficiary_two_user_id']=$my_info['inviter_user_id'];
+                            $sale_data['beneficiary_two_income'] =round(($config['beneficiary_two']-$config['beneficiary_one'])*$sale_data['amount']/100,2);
+                            $income_log[] = array('amount'=>$sale_data['beneficiary_two_income'],'role_type'=>2,'role_id'=>$sale_data['beneficiary_two_user_id'],'type'=>2);
                         }
+                        break;
+                    case 2:
+                        $sale_data['beneficiary_two_user_id']=$my_info[$v['goods_id']]['user_id'];
+                        $sale_data['beneficiary_two_income'] =round($config['beneficiary_two']*$sale_data['amount']/100,2);
+                        $income_log[] = array('amount'=>$sale_data['beneficiary_two_income'],'role_type'=>2,'role_id'=>$sale_data['beneficiary_two_user_id'],'type'=>4);
+                        break;
+                    case 3:
+                        $sale_data['beneficiary_two_user_id']=$my_info[$v['goods_id']]['user_id'];
+                        $sale_data['beneficiary_two_income'] =round($config['beneficiary_two']*$sale_data['amount']/100,2);
+                        $income_log[] = array('amount'=>$sale_data['beneficiary_two_income'],'role_type'=>2,'role_id'=>$sale_data['beneficiary_two_user_id'],'type'=>4);
+                        break;
+                    default :
+                        break;
+                }
+                
+                $sale_data['beneficiary_three_id']=$my_info['district_id'];
+                $sale_data['beneficiary_three_income'] =round($config['beneficiary_three']*$sale_data['amount']/100,2);
+                $sale_data['order_no']=$order_info['order_no'];
+                $type = $my_info['my_role']== 1 ? 3 : 5;
+                $income_log[] = array('amount'=>$sale_data['beneficiary_three_income'],'role_type'=>3,'role_id'=>$sale_data['beneficiary_three_id'],'type'=>$type);
+                if(isset($my_info['superior_district_id'])&&$my_info['superior_district_id']!=NULL){
+                    $sale_data['beneficiary_four_id']=$my_info['superior_district_id'];
+                    $sale_data['beneficiary_four_income'] =round($config['beneficiary_four']*$sale_data['amount']/100,2);
+                    $income_log[] = array('amount'=>$sale_data['beneficiary_two_user_id'],'role_type'=>3,'role_id'=>$sale_data['beneficiary_two_income'],'type'=>6);
+                }
+                $last_id = $this->model->table("promote_sale_log")->data($sale_data)->insert();
+                if($last_id){
+                    $this->model->table("promote_qrcode")->data(array('sell_count'=>"`sell_count`+".$v['goods_nums']))->where("id=".$promoter_info[$v['goods_id']]['id'])->update();
+                    foreach($income_log as $v){
+                        Log::incomeLog($v['amount'], $v['role_type'],$v['role_id'], $last_id, $v['type']);
                     }
+                }else{
+                    file_put_contents('saleLogError.txt', "销售数据插入失败：|".json_encode($sale_data)."\n",FILE_APPEND);
                 }
             }
         }
