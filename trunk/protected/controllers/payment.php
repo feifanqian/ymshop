@@ -60,7 +60,7 @@ class PaymentController extends Controller {
         $return['return_url'] = Req::post('return_url');
 
         if (stripos($return['order_no'], 'recharge_') !== false) {
-            $msg = array('type' => 'fail', 'msg' => '金点支付方式,不能用于在线充值功能！');
+            $msg = array('type' => 'fail', 'msg' => '余额支付方式,不能用于在线充值功能！');
             $this->redirect('/index/msg', false, $msg);
             exit;
         }
@@ -120,7 +120,7 @@ class PaymentController extends Controller {
                         exit;
                     }
                 } else {
-                    $msg = array('type' => 'fail', 'msg' => '金点不足,请选择其它支付方式！');
+                    $msg = array('type' => 'fail', 'msg' => '余额不足,请选择其它支付方式！');
                     $this->redirect('/index/msg', false, $msg);
                     exit;
                 }
