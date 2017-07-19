@@ -88,11 +88,6 @@ table.attention td{padding: 4px 8px;}
     height: 100%;
     top: 48px;
     left: 0;
-    background: url("../images/invite_bg.jpg") no-repeat 100% 100%;
-    background-size: cover;
-}
-.invite_bg1 {
-    background: url("../images/invite_bg1.jpg") no-repeat 100% 100%;
 }
 .invite_main {
     width:85%;
@@ -104,11 +99,11 @@ table.attention td{padding: 4px 8px;}
 }
 .invite_avatar {
     position: absolute;
-    top:16.5%;
-    width:27.1%;
-    left:50%;
-    height:17.7%;
-    margin-left:-13.2%;
+    top: 15.5%;
+    width: 31.1%;
+    left: 50%;
+    height: 19.7%;
+    margin-left: -15.2%;
 }
 .invite_avatar img {
     width:100%;
