@@ -163,7 +163,9 @@ class SimpleController extends Controller {
         $this->assign("invalid", $info);
         $this->redirect("reg", false, Req::args());
     }
-    
+    public function reg(){
+        $this->redirect("register");
+    }
     public function register_act(){
         if ($this->getModule()->checkToken('reg')) {
             $mobile = Filter::int(Req::args('mobile'));
