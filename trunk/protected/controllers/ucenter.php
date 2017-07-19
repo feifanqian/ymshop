@@ -138,7 +138,8 @@ class UcenterController extends Controller {
             $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
             $amount = Filter::float(Req::args('amount'));
             $amount = round($amount, 2);
-            $can_withdraw_amount = Common::getCanWithdrawAmount4GoldCoin($this->user['id']);
+            $customer = $this->model->table("customer")->where("user_id =".$this->user['id'])->fields('balance')->find();
+            $can_withdraw_amount =$customer?$customer['balance']:0;
             if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
                 exit(json_encode(array('status' => 'fail', 'msg' => '提现金额超出的账户可提现余额')));
             }

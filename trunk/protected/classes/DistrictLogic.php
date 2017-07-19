@@ -75,13 +75,13 @@ class DistrictLogic {
         $data['status'] = 0;
         $result = $this->model->table("district_promoter")->data($data)->insert();
         if ($result) {
-            $this->sendMessage($user_id, "恭喜您，成为圆梦商城会员，您获得了3600商城积分和会员推广权限！","https://www.buy-d.cn/ucenter/index?first=1","promoter_join_success");
+            $this->sendMessage($user_id, "恭喜您，成为圆梦商城推广员，您获得了".$this->config['join_send_point']."商城积分！","https://www.ymlypt.com/ucenter/index","promoter_join_success");
             if($invitor_role == 'shop'){
                 $shop_info = $this->model->table("district_shop")->where("id=$hirer_id")->find();
-                $this->sendMessage($shop_info['owner_id'], "恭喜您，您邀请的推广员加入了您的团队，您获得了2300金点和1000商城积分奖励！","https://www.buy-d.cn/district/district","has_promoter_join");
+                $this->sendMessage($shop_info['owner_id'], "恭喜您，您邀请的推广员加入了您的团队，您获得了".$this->config['shop_invite_promoter_money']."余额奖励和".$this->config['promoter_invite_promoter_point']."商城积分奖励！","https://www.ymlypt.com/district/district","has_promoter_join");
             }else{
-                $this->sendMessage($district_info['owner_id'], "恭喜您，有新的推广员加入您的团队，您获得了1300金点奖励！","https://www.buy-d.cn/district/district","has_promoter_join");
-                $this->sendMessage($district_info['invitor_user_id'],"恭喜您，您邀请的推广员加入了您的团队，您获得了1000金点和1000商城积分奖励！","https://www.buy-d.cn/ucenter/promoter_invite","invite_promoter_success");
+                $this->sendMessage($district_info['owner_id'], "恭喜您，有新的推广员加入您的团队，您获得了". $this->config['shop_invite_indirect_money']."余额奖励！","https://www.ymlypt.com/district/district","has_promoter_join");
+                $this->sendMessage($district_info['invitor_user_id'],"恭喜您，您邀请的推广员加入了您的团队，您获得了".$this->config['promoter_invite_promoter_money']."余额奖励和".$this->config['promoter_invite_promoter_point']."商城积分奖励！","https://www.ymlypt.com/ucenter/promoter_invite","invite_promoter_success");
             }
             return array("status" => 'success');
         } else {
@@ -170,7 +170,6 @@ class DistrictLogic {
      * @param  array $order 订单
      * @return array
      */
-
     function addInviteIncome($order) {
         $error_msg = array();
         if ($order['invitor_role'] == 'shop') {//经营商直推
@@ -178,24 +177,13 @@ class DistrictLogic {
             if ($amount <= 0) {
                 return array("status" => 'fail', 'msg' => '配置错误');
             }
-            $data['type'] = 7;
-            $data['type_info'] = "推广员推荐分成";
-            $data['origin'] = $order['id'];
-            $data['amount'] = $amount;
-            $data['role_type'] = 2;
-            $data['role_id'] = $order['invitor_id'];
-            $data['record_time'] = date("Y-m-d H:i:s");
-            $data['status'] = 1;
-            $result = $this->model->table("district_incomelog")->data($data)->insert();
-            if ($result) {
-                $this->model->table("district_shop")->where("id =" . $order['invitor_id'])->data(array("valid_income" => "`valid_income`+$amount"))->update();
-                $error_msg[] = 'shop邀请收益分配成功';
-            } else {
+            $result = Log::incomeLog($amount, 3, $order['invitor_id'], $order['id'], 9);
+            if (!$result) {
                 $error_msg[]= 'shop邀请收益分配失败';
             }
             $result = $this->addSendPointCoin("shop", $order['invitor_id'], $this->config['promoter_invite_promoter_point'],$order['order_no'],6);
             if (!$result) {
-                $error_msg[] = "promoter积分奖励失败";
+                $error_msg[] = "shop邀请积分奖励失败";
             }
             if (empty($error_msg)) {
                 return array("status" => 'success');
@@ -207,42 +195,24 @@ class DistrictLogic {
             $amount = $this->config['promoter_invite_promoter_money'];
             if ($amount <= 0) {
                 return array("status" => 'fail', 'msg' => '配置错误');
-                ;
             }
-            $data['type'] = 7;
-            $data['type_info'] = "推广员推荐分成";
-            $data['origin'] = $order['id'];
-            $data['amount'] = $amount;
-            $data['role_type'] = 1;
-            $data['role_id'] = $order['invitor_id'];
-            $data['record_time'] = date("Y-m-d H:i:s");
-            $data['status'] = 1;
-            $result = $this->model->table("district_incomelog")->data($data)->insert();
-            if ($result) {
-                $this->model->table("district_promoter")->where("id =" . $order['invitor_id'])->data(array("valid_income" => "`valid_income`+$amount"))->update();
-            } else {
-                $error_msg[] = "promoter邀请收益分配失败";
-            }
-            $result = $this->addSendPointCoin("promoter", $order['invitor_id'], $this->config['promoter_invite_promoter_point'],$order['order_no'],6);
-            if (!$result) {
-                $error_msg[] = "promoter积分奖励失败";
-            }
-            
-            //雇主的间接收益
-            $invitor_info = $this->model->table("district_promoter")->where("id=".$order['invitor_id'])->find();
-            if($invitor_info){
-                $amount = $this->config['shop_invite_indirect_money'];
-                $data['role_type'] = 2;
-                $data['role_id'] = $invitor_info['hirer_id'];
-                $data['amount'] = $amount;
-                $result = $this->model->table("district_incomelog")->data($data)->insert();
-                if ($result) {
-                    $this->model->table("district_shop")->where("id =" . $invitor_info['hirer_id'])->data(array("valid_income" => "`valid_income`+$amount"))->update();
-                } else {
-                    $error_msg[] = '雇主的间接收益分配记录失败';
-                }
+            $promoter_info = $this->model->table("district_promoter")->where("id=".$order['invitor_id'])->find();
+            if(!$promoter_info){
+                $error_msg[] = "推广员邀请者信息未找到";
             }else{
-                $error_msg[] = '雇主信息获取失败';
+                $result = Log::incomeLog($amount, 2, $promoter_info['user_id'], $order['id'], 8);
+                if (!$result) {
+                    $error_msg[] = "promoter邀请收益分配失败";
+                }
+                $result = $this->addSendPointCoin("promoter", $order['invitor_id'], $this->config['promoter_invite_promoter_point'],$order['order_no'],6);
+                if (!$result) {
+                    $error_msg[] = "promoter积分奖励失败";
+                }
+            }
+            $amount = $this->config['shop_invite_indirect_money'];
+            $result = Log::incomeLog($amount, 3, $promoter_info['hirer_id'], $order['id'], 9,"小区间接邀请推广员收益");
+            if (!$result) {
+                $error_msg[] = '雇主的间接收益分配记录失败';
             }
             if (empty($error_msg)) {
                 return array("status" => 'success');
@@ -272,7 +242,7 @@ class DistrictLogic {
         $data['type'] = 0;
         $data['order_no'] = Common::createOrderNo();
         $data['user_id'] = $user_id;
-        $data['payment'] = 31; //默认银点
+        $data['payment'] = 1;
         $data['status'] = 3;
         $data['pay_status'] = 1;
         $data['accept_name'] = Filter::text($address['accept_name']);
@@ -350,10 +320,10 @@ class DistrictLogic {
             return false;
         }
         //获取分配比例
-//        $config_all = Config::getInstance();
-//        $set = $config_all->get('district_set');
-//        $config = array('hirer' => $set['percentage2hirer'], 'invite_shop' => $set['percentage2inviter']);
-        $config = array('beneficiary_one'=>5,'beneficiary_two'=>10,'beneficiary_three'=>3,'beneficiary_four'=>1);
+        $config_all = Config::getInstance();
+        $set = $config_all->get('district_set');
+        $normal_config = array('beneficiary_one'=>5,'beneficiary_two'=>10,'beneficiary_three'=>3,'beneficiary_four'=>1);
+        $config = array_merge($normal_config, $set);
         //分析订单中是否有与推广信息匹配的
         foreach ($order_goods_info as $k => $v) {
             if (isset($promoter_info[$v['goods_id']])) {

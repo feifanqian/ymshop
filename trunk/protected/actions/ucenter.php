@@ -57,7 +57,7 @@ class UcenterAction extends Controller {
         $mobile = Filter::sql(Req::args('mobile'));
         $zone = Filter::int(Req::args('zone'));
         $password = Filter::str(Req::args('password'));
-
+        $inviter_id = Filter::int(Req::args('inviter_id'));
 
         if (!Validator::mobi($mobile)) {
             $this->code = 1024;
@@ -77,16 +77,25 @@ class UcenterAction extends Controller {
                 }
                 $validcode = CHash::random(8);
                 $token = CHash::random(32, 'char');
-                $result = $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode),
-                            'validcode' => $validcode,
-                            'token' => $token))->insert();
-                if ($result) {
-                    $this->model->table('customer')->data(array('user_id' => $result, 'mobile' => $mobile, 'reg_time' => date('Y-m-d H:i:s'), 'mobile_verified' => 1))->insert();
+                
+                $email = $mobile . "@no.com";
+                $time = date('Y-m-d H:i:s');
+                $validcode = CHash::random(8);
+                $last_id = $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day')),'email' => $email, 'nickname' => $mobile, 'password' => CHash::md5($password, $validcode), 'avatar' => '/static/images/avatar.jpeg', 'validcode' => $validcode))->insert();
+                //更新用户名
+                if($last_id){
+                    $name = "u" . sprintf("%09d", $last_id);
+                    $this->model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
+                    $this->model->table("customer")->data(array('mobile' => $mobile, 'mobile_verified' => 1, 'balance' => 0, 'score' => 0, 'user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time))->insert();
+                    if($inviter_id){
+                        Common::buildInviteShip($inviter_id, $last_id, $platform);
+                    }
+                    Common::sendPointCoinToNewComsumer($last_id);
                     $this->code = 0;
-                    $this->content['user_id'] = $result;
+                    $this->content['user_id'] = $last_id;
                     $this->content['token'] = $token;
                 } else {
-                    
+                    $this->code = 1005;
                 }
             }
         } else {
@@ -239,7 +248,7 @@ class UcenterAction extends Controller {
         $account = Filter::sql(Req::post('account'));
         $passWord = Req::post('password');
         $model = $this->model->table("user as us");
-        $obj = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.email='$account' or us.name='$account' or cu.mobile='$account'")->find();
+        $obj = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.name='$account' or cu.mobile='$account' or us.email='$account'")->find();
         if ($obj) {
             if ($obj['status'] == 1) {
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
@@ -441,15 +450,16 @@ class UcenterAction extends Controller {
         $zone = Filter::int(Req::args('zone'));
         $passWord = Filter::sql(Req::args('password'));
 
+         if (!Validator::mobi($mobile)) {
+            $this->code = 1024;
+            return;
+        }
+        
         $nickname = Filter::sql(Req::args('nickname'));
         $head = Filter::str(Req::args('head'));
-
+        
+        $inviter_id = Filter::int(Req::args("inviter_id"));
         $oauthuser = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and open_id='{$openid}'")->find();
-//        $verify_flag = $this->sms_verify($code,$mobile,$zone);
-//        if(!$verify_flag){
-//            $this->code = 1025;
-//            return;
-//        }
         if ($oauthuser && $oauthuser['user_id']) {
             $this->code = 1059;
             return;
@@ -466,36 +476,37 @@ class UcenterAction extends Controller {
             }
             //如果没有账号则需要新创建一个
             if (!$ext) {
-                $openname = $mobile;
                 $email = $mobile . "@no.com";
                 $time = date('Y-m-d H:i:s');
                 $validcode = CHash::random(8);
                 $model = $this->model->table("user");
                 $last_id = $model->data(array('email' => $email, 'nickname' => $nickname, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $head, 'validcode' => $validcode))->insert();
-                $name = "u" . sprintf("%09d", $last_id);
-                //更新用户名和邮箱
-                $model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
-                $model->table("customer")->data(array('mobile' => $mobile, 'mobile_verified' => 1, 'balance' => 0, 'score' => 0, 'user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time))->insert();
-            } else {
-                
+                if($last_id){   
+                    $name = "u" . sprintf("%09d", $last_id);
+                    //更新用户名和邮箱
+                    $model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
+                    $model->table("customer")->data(array('mobile' => $mobile, 'mobile_verified' => 1, 'balance' => 0, 'score' => 0, 'user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time))->insert();
+                    if($inviter_id){
+                        Common::buildInviteShip($inviter_id, $last_id, $platform);
+                    }
+                }else{
+                    $this->code= 1005;
+                }
             }
             $token = CHash::random(32, 'char');
             $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $last_id)->update();
             $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $last_id)->update();
-            $openname = $mobile;
-            if (!$oauthuser) {
-                $this->model->table("oauth_user")->data(array(
-                    'open_name' => $openname,
-                    'oauth_type' => $platform,
-                    'user_id' => $last_id,
-                    'posttime' => time(),
-                    'token' => $token,
-                    'expires' => 7200,
-                    'open_id' => $openid
-                ))->insert();
-            } else {
-                $this->model->table("oauth_user")->data(array('user_id' => $last_id, 'token' => $token, 'posttime' => time()))->where("id='{$oauthuser['id']}'")->update();
-            }
+            $openname = $nickname?$nickname:$mobile;
+            $this->model->table("oauth_user")->data(array(
+                'open_name' => $openname,
+                'oauth_type' => $platform,
+                'user_id' => $last_id,
+                'posttime' => time(),
+                'token' => $token,
+                'expires' => 7200,
+                'open_id' => $openid
+            ))->insert();
+            
             $this->code = 0;
             $this->content = array(
                 'user_id' => $last_id,

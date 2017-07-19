@@ -74,7 +74,7 @@ class V1Controller extends Controller {
         "del_collect" => array('ucenter/del_collect', 1,1), //删除收藏
         "is_collected" => array('ucenter/is_collected', 1,1), //判断是否收藏过某个商品
         "forget_loginpwd" => array('ucenter/forget_loginpwd', 0,1), //忘记密码，通过手机验证找回
-        "app_signup" => array('ucenter/app_signup', 0,1), //忘记密码，通过手机注册
+        "app_signup" => array('ucenter/app_signup', 0,1), //通过手机注册
         "bp_banner" => array('index/bp_banner', 0,1),
         "category_ad" => array('index/category_ad', 0,1), //获取分类广告
         "get_category" => array('index/get_category', 0,1),

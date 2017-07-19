@@ -19,14 +19,14 @@
             <dd>&nbsp;</dd>
         </dl>
         <dl class="lineD">
-            <dt>小区入驻加盟费:</dt>
+            <dt>小区入驻加盟费：</dt>
             <dd>
                 <input name="join_fee" type="text" value="" class="small"/>
                 <span>元</span>
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>推广员入驻费:</dt>
+            <dt>推广员入驻费：</dt>
             <dd>
                 <input name="promoter_fee" type="text" value="" class="small" />
                 <span>元</span>
@@ -90,39 +90,41 @@
             <dt>提现手续费：</dt>
             <dd>
                 <input name="withdraw_fee_rate" type="text" value="" class="small"/>
+                <span>%(提取收益到银行卡时的手续费)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>拓展展小区分成：</dt>
+            <dd>
+                <input name="percentage2join_fee" type="text" value="" class="small" pattern="int"/>
+                <span>%(拓展一个小区给推荐者的分成比例)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>普通用户分成：</dt>
+              <dd>
+                <input name="beneficiary_one" type="text" value="" class="small" pattern="int"/>
                 <span>%</span>
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>扩展小区分成:</dt>
-            <dd>
-                <input name="percentage2join_fee" type="text" value="" class="small" pattern="int"/>
-                <span>%（拓展一个小区给推荐者的分成比例）</span>
+            <dt>推广员分成：</dt>
+              <dd>
+                <input name="beneficiary_two" type="text" value="" class="small" pattern="int"/>
+                <span>%(需大于普通用户分成)</span>
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>推广员提成:</dt>
+            <dt>小区商户分成：</dt>
             <dd>
-                <!--<input name="percentage2promoter" type="text" value="" class="small" pattern="int"/>-->
-                <div style="height:100px;">
-                    level 1：总业绩在0到<input name="level_line_1" class="small">以内（包含），享受<input name="percentage_lv1" class="small">%业绩提成<br>
-                    level 2：总业绩大于level 1，不大于<input name="level_line_2" class="small">，享受<input name="percentage_lv2" class="small">%业绩提成<br>
-                    level 3：总业绩在大于level 2，享受<input name="percentage_lv3" class="small">%业绩提成<br>
-                </div>
-            </dd>
-        </dl>
-        <dl class="lineD">
-            <dt>小区商户提成：</dt>
-            <dd>
-                
-                <input name="percentage2hirer" type="text" value="" class="small" pattern="int"/>
+                <input name="beneficiary_three" type="text" value="" class="small" pattern="int"/>
                 <span>%</span>
             </dd>
         </dl>
         <dl class="lineD">
             <dt>上级小区分成：</dt>
             <dd>
-                <input name="percentage2inviter" type="text" value="" class="small" pattern="int"/>
+                <input name="beneficiary_four" type="text" value="" class="small" pattern="int"/>
                 <span>%</span>
             </dd>
         </dl>
@@ -134,7 +136,7 @@
             <dt>赠送经营代理：</dt>
             <dd>
                 <input name="invite_promoter_num" type="text" value="" class="small" pattern="int"/>
-                <span>个（成功邀请多少个推广员，免费送经营商代理权）</span>
+                <span>个(成功邀请多少个推广员，免费送经营商代理权)</span>
             </dd>
         </dl>
         <dl class="lineD">

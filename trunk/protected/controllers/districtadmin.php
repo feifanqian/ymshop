@@ -299,30 +299,21 @@ class DistrictadminController extends Controller {
                             if ($result) {
                                 Log::pointcoin_log(round($set['join_fee'], 2), $apply_info['user_id'], "", "经营商入驻赠送", 8);
                             }
-                        }
-                        if ($data['invite_shop_id'] != "") {
-                            //获取分配比例
-
-                            if (isset($set['percentage2join_fee'])) {
-                                $rate = round($set['percentage2join_fee'] / 100, 2);
-                            } else {
-                                $rate = 0.1;
+                            if ($data['invite_shop_id'] != "") {
+                                //获取分配比例
+                                if (isset($set['percentage2join_fee'])) {
+                                    $rate = round($set['percentage2join_fee'] / 100, 2);
+                                } else {
+                                    $rate = 0.1;
+                                }
+                                if (isset($set['join_fee'])) {
+                                    $fee = round($set['join_fee'], 2);
+                                } else {
+                                    $fee = 10000;
+                                }
+                                $income_amount = $fee*$rate;
+                                Log::incomeLog($income_amount, 3, $data['invite_shop_id'], $apply_info['id'], 10);
                             }
-                            if (isset($set['join_fee'])) {
-                                $fee = round($set['join_fee'], 2);
-                            } else {
-                                $fee = 10000;
-                            }
-                            $income['type'] = 3;
-                            $income['amount'] = $fee * $rate;
-                            $income['role_type'] = 2;
-                            $income['role_id'] = $data['invite_shop_id'];
-                            $income['record_time'] = date("Y-m-d H:i:s");
-                            $income['origin'] = $isOk;
-                            $income['status'] = 1;
-                            $income['type_info'] = "拓展小区分成";
-                            $model->table("district_incomelog")->data($income)->insert();
-                            $model->table("district_shop")->where("id =" . $data['invite_shop_id'])->data(array("valid_income" => "`valid_income`+" . $income['amount']))->update();
                         }
                         $result = $model->table('district_apply')->where("id=$id")->data(array('status' => 1, 'admin_handle_time' => date('Y-m-d H:i:s')))->update();
                         if ($result) {
@@ -332,24 +323,11 @@ class DistrictadminController extends Controller {
                                 $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
                                 $token = $wechat->getAccessToken();
                                 $oauth_info['open_name'] = $oauth_info['open_name'] == "" ? "圆梦用户" : $oauth_info['open_name'];
-//                                $params = array(
-//                                    'touser'=>$oauth_info['open_id'],
-//                                    'msgtype'=>'news',
-//                                    'news'=>array(
-//                                        'articles'=>array('0'=>array(
-//                                            'title'=>'圆梦温馨提示',
-//                                            'description'=>"亲爱的{$oauth_info['open_name']},恭喜您，入驻小区申请通过了！快来看看吧>>>",
-//                                            'url'=>'www.buy-d.cn/district/district',
-//                                            'picurl'=>'http://img.buy-d.cn/data/uploads/2017/03/18/2e87d2ec1e5a600832482853c5c71a84.jpg'
-//                                        )
-//                                       )
-//                                    )
-//                                );
                                 $params = array(
                                     'touser' => $oauth_info['open_id'],
                                     'msgtype' => 'text',
                                     "text" => array(
-                                        'content' => "亲爱的{$oauth_info['open_name']},恭喜您，申请入驻小区审核通过，正式成为小区经营商，更多权益请<a href=\"https://www.buy-d.cn/district/district\">点击查看>>></a>"
+                                        'content' => "亲爱的{$oauth_info['open_name']},恭喜您，申请入驻小区审核通过，正式成为小区经营商，更多权益请<a href=\"https://www.ymlypt.com/district/district\">点击查看>>></a>"
                                     )
                                 );
                                 $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
@@ -556,8 +534,8 @@ class DistrictadminController extends Controller {
         $group = "district_set";
         $config = Config::getInstance();
         if (Req::args('submit') != null) {
-            if (Req::args('level_line_1') >= Req::args('level_line_2')) {
-                $this->assign('error', 'level 1不能大于或等于level 2！');
+            if (Req::args('beneficiary_one') >= Req::args('beneficiary_two')) {
+                $this->assign('error', '普通用户提成不能大于推广员！');
             } else {
                 $configService = new ConfigService($config);
                 if (method_exists($configService, $group)) {

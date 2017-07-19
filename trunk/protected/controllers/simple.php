@@ -188,8 +188,11 @@ class SimpleController extends Controller {
                                     $userObj = $this->model->table("customer")->where("mobile='{$mobile}'")->find();
                                     if (empty($userObj)) {
                                         $validcode = CHash::random(8);
-                                        $last_id = $this->model->table("user")->data(array('name'=>$mobile,'nickname'=>$mobile,'password' => CHash::md5($passWord, $validcode), 'validcode' => $validcode, 'status' => 1))->insert();
+                                        $last_id = $this->model->table("user")->data(array('nickname'=>$mobile,'password' => CHash::md5($passWord, $validcode), 'validcode' => $validcode, 'status' => 1))->insert();
                                         if($last_id){
+                                            $name = "u" . sprintf("%09d", $last_id);
+                                            //更新用户名和邮箱
+                                            $this->model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
                                             $time = date('Y-m-d H:i:s');
                                             $this->model->table("customer")->data(array('user_id' => $last_id,'real_name'=>$realname,'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile,'mobile_verified'=>1))->insert();
                                             //记录邀请人

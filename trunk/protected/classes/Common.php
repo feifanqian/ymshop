@@ -237,8 +237,8 @@ class Common {
     //获取快递信息
     static function getExpress($com,$num){
         $post_data = array();
-        $post_data["customer"] = '440B82938FC63D49F59D8048D7481D90';
-        $key= 'fLnyAwGu1227' ;
+        $post_data["customer"] = '4AAEB1391202A6CBECCD643E35DD17E6';
+        $key= 'qxzjfZVP3082' ;
         $post_data["param"] = '{"com":"'.$com.'","num":"'.$num.'"}';
 
         $url='http://poll.kuaidi100.com/poll/query.do';
@@ -463,16 +463,8 @@ class Common {
                       }else{
                           $fee = 10000;
                       }
-                      $income['type']=3;
-                      $income['amount']=$fee*$rate;
-                      $income['role_type']=2;
-                      $income['role_id']=$data['invite_shop_id'];
-                      $income['record_time']=date("Y-m-d H:i:s");
-                      $income['origin']=$isOk;
-                      $income['type_info']="拓展小区加盟费分成";
-                      $income['status']=0;
-                      $model->table("district_incomelog")->data($income)->insert();
-                      $model->table("district_shop")->data(array("frezze_income"=>"`frezze_income`+".$income['amount']))->where("id=".$data['invite_shop_id'])->update();
+                      $income_amount = $fee*$rate;
+                      Log::incomeLog($income_amount, 3, $data['invite_shop_id'], $apply_info['id'], 10);
                   }
                   $result = $model->table('district_apply')->where("id=$apply_id")->data(array('status'=>1))->update();
                   if($result){
@@ -669,11 +661,11 @@ class Common {
         return $paytypelist;
      }
      
-     static function autoCreatePersonalShop($user_id , $goods_id){
+     static function autoCreatePersonalShop($user_id , $goods_ids){
          $config = Config::getInstance();
          $set =$config->get('personal_shop_set');
-         if($set){
-             if($goods_id == $set['goods_id']){
+         if($set&&isset($set['open'])&&$set['open']==1){
+             if(in_array($set['goods_id'], $goods_ids)){
                 $model = new Model();
                 $isset = $model->table("personal_shop")->where("user_id=$user_id")->find();
                 if($isset){
@@ -712,7 +704,8 @@ class Common {
         $notset = $model->table('invite')->where("invite_user_id={$new_user_id}")->find();
         
         if($isset && empty($notset)){
-            $result = $model->table("invite")->data(array('user_id'=>$inviter_id,'invite_user_id'=>$new_user_id,'from'=>$way,'createtime'=>time()))->insert();
+            $inviter_info = self::getMyPromoteInfo($inviter_id);
+            $result = $model->table("invite")->data(array('user_id'=>$inviter_id,'invite_user_id'=>$new_user_id,'from'=>$way,'district_id'=>$inviter_info['district_id'],'createtime'=>time()))->insert();
             if($result){
                 return true;
             }else{
@@ -759,7 +752,7 @@ class Common {
          $model = new Model();
          $is_district_promoter = $model->table('district_promoter')->where("user_id=$user_id")->fields("type,hirer_id")->find();
          $role_type = $is_district_promoter ? 2:1;
-         $is_district_hirer = $model->table("district_shop")->where("owner_id=$user_id")->find();
+         $is_district_hirer = $model->table("district_shop")->where("owner_id=$user_id")->order("id asc")->find();
          $role_type = $is_district_hirer ? 3:$role_type;
          $result = array();
          $district_id = 1;
@@ -770,9 +763,9 @@ class Common {
                 $inviter_role = $inviter_promoter_info ? 2:1;
                 $inviter_hirer_info = $model->table("district_shop")->where("owner_id=".$inviter_info['user_id'])->find();
                 $inviter_role = $inviter_hirer_info ? 3:$role_type;
-                $result['inviter_user_id']=$inviter_info['user_id'];
-                $result['inviter_role']=$inviter_role;
-                $district_id= $inviter_info['district_id'];
+                $result['inviter_user_id']=$inviter_info['user_id'];//邀请者的id、
+                $result['inviter_role']=$inviter_role;//邀请者的身份
+                $district_id= $inviter_info['district_id'];//普通会员所属小区以邀请关系中的小区为准，没有邀请关系固定为官方的。
              }
          }else{
             $district_id = $role_type==2 ? $is_district_promoter['hirer_id']:$is_district_hirer['id'];
