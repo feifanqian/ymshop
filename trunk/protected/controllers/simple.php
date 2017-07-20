@@ -193,7 +193,7 @@ class SimpleController extends Controller {
                                     $userObj = $this->model->table("customer")->where("mobile='{$mobile}'")->find();
                                     if (empty($userObj)) {
                                         $validcode = CHash::random(8);
-                                        $last_id = $this->model->table("user")->data(array('avatar' => '/static/images/avatar.jpeg','nickname'=>$mobile,'password' => CHash::md5($passWord, $validcode), 'validcode' => $validcode, 'status' => 1))->insert();
+                                        $last_id = $this->model->table("user")->data(array('avatar' => '','nickname'=>$mobile,'password' => CHash::md5($passWord, $validcode), 'validcode' => $validcode, 'status' => 1))->insert();
                                         if($last_id){
                                             $name = "u" . sprintf("%09d", $last_id);
                                             //更新用户名和邮箱
