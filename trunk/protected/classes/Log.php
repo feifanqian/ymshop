@@ -12,7 +12,7 @@ class Log {
 
     //余额日志变化写入
     public static function balance($amount, $user_id, $order_no='', $note = '', $type = 0, $admin_id = 0) {
-        //事件类型: 0:购物下单 1:用户充值 2:管理员充值 3:金点提现 4:管理员退款 5：佣金获取 6:推广收益 7：转化成银点 8:外平台返回 9：商城分红
+        //事件类型: 0:购物下单 1:用户充值 2:管理员充值 3:余额提现 4:管理员退款 5：佣金获取 6:推广收益 7：商城分红
         $model = new Model('customer');
         $customer = $model->fields("balance")->where("user_id=" . $user_id)->find();
         if ($customer) {
@@ -24,7 +24,7 @@ class Log {
                             'type' => $type, 
                             'note' => $note,
                             'order_no'=>$order_no,);
-                $id = $model->table("balance_log")->data($log)->insert();
+            $id = $model->table("balance_log")->data($log)->insert();
         }
     }
     public static function pointcoin_log($amount, $user_id, $order_no='', $note = '', $type = 0, $admin_id = 0) {
