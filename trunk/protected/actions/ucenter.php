@@ -1918,7 +1918,7 @@ class UcenterAction extends Controller {
         }
         //判断今天是否签到过
         $date = date("Y-m-d");
-        $is_signed = $this->model->table("sign_in")->where("date='$date'")->where("user_id=".$this->user['id'])->find();
+        $is_signed = $this->model->table("sign_in")->where("date='$date' and user_id=".$this->user['id'])->find();
         if($is_signed){
             $this->code = 1154;
         }else{
