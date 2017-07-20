@@ -37,7 +37,7 @@ class UcenterAction extends Controller {
     //验证短信
     private function sms_verify($code, $mobile, $zone) {
         $url = "https://webapi.sms.mob.com/sms/verify";
-        $appkey = "15b0ce2de2896";
+        $appkey = "1f4d2d20dd266";
         $return = $this->postRequest($url, array('appkey' => $appkey,
             'phone' => $mobile,
             'zone' => $zone,
