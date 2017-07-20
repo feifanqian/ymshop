@@ -22,7 +22,7 @@
         <th style="width:60px">状态</th>
     </tr>
     {set:$type=array("1"=>"经营商直推","2"=>"推广员推荐","3"=>"系统生成","4"=>"官方推广员");}
-    {query:name=district_promoter as dp fields=dp.hirer_id,dp.user_id,c.real_name,c.valid_income,c.frezze_income,c.settled_income,u.avatar,ds.name as shop_name join=left join customer as c on dp.user_id eq c.user_id left join district_shop as ds on dp.hirer_id eq ds.id where=$where id=$obj page=1 order= c.valid_income desc,c.frezze_income desc}
+    {query:name=district_promoter as dp fields=dp.hirer_id,dp.user_id,c.real_name,c.valid_income,c.frezze_income,c.settled_income,u.avatar,u.nickname,ds.name as shop_name join=left join user as u on u.id eq dp.user_id left join customer as c on dp.user_id eq c.user_id left join district_shop as ds on dp.hirer_id eq ds.id where=$where id=$obj page=1 order= c.valid_income desc,c.frezze_income desc}
     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden">
@@ -36,7 +36,7 @@
                    </div>
                 </div>
             </td>
-            <td style="width:60px">{$item['real_name']|"unknow"}</td>
+            <td style="width:60px">{$item['real_name']|$item['nickname']}</td>
             <td style="width:60px">{$type[$item["type"]]}</td>
             <td style="width:140px">{$item['shop_name']}</td>
             <td style="width:140px">待解锁：{$item['frezze_income']} 可用：{$item['valid_income']} 已结算：{$item['settled_income']}</td>
