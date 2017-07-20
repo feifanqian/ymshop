@@ -860,10 +860,7 @@ class UcenterAction extends Controller {
         $orders = $this->model->table("order as o")->join("payment as p on o.payment = p.id ")->where("o.user_id = $id and p.plugin_id in(1,20)")->findAll();
         $order = array('amount' => 0, 'todayamount' => 0, 'pending' => 0, 'undelivery' => 0, 'unreceived' => 0, 'uncomment' => 0);
         foreach ($orders as $obj) {
-            if ($obj['status'] < 5 && ($obj['pay_status'] == 1 || $obj['otherpay_status'] == 1)) {
-                if ($obj['type'] == 4) {
-                    $obj['order_amount'] = $obj['otherpay_amount'];
-                }
+            if ($obj['status'] < 5) {
                 $order['amount'] += $obj['order_amount'];
                 if (strtotime($obj['pay_time']) >= strtotime('today')) {
                     $order['todayamount'] += $obj['order_amount'];
