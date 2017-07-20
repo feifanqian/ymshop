@@ -1700,7 +1700,8 @@ class UcenterAction extends Controller {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (is_object($promoter)) {
             $this->content['is_promoter'] = 1;
-            $this->content['promoter_id'] =$promoter->id;
+            $this->content['promoter_role']=$promoter->role_type;
+            $this->content['promoter_id'] =$promoter->role_type==1?NULL:$promoter->id;
         } else {
             $this->content['is_promoter'] = 0;
         }
@@ -1831,6 +1832,10 @@ class UcenterAction extends Controller {
             $this->code = 1141;
             return;
         }else{
+            if($promoter->role_type==1){
+                $this->code = 1156;
+                return;
+            }
             $this->code = 0;
             $this->content = $promoter->getMyInviteList($page);
         }

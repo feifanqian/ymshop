@@ -86,10 +86,10 @@ class Promoter extends Object {
         if (strtotime($start) > strtotime($end)) {
             return false;
         }
-        $record = $this->model->table("district_sales as ds")
-                ->where("record_time>='$start' and record_time<='$end' and promoter_id=" . $this->id)
-                ->fields('amount,record_time as time')
-                ->order('record_time desc')
+        $record = $this->model->table("promote_sale_log as psl")
+                ->where("record_date>='$start' and record_date<='$end' and contributor_role=" . $this->role_type." and contributor_user_id=".$this->user_id)
+                ->fields('amount,record_date as time')
+                ->order('record_daet desc')
                 ->findAll();
         if (date("Y-m-d", strtotime($start)) == date("Y-m-d", strtotime($end))) {
             Common::formatDataToShowInChart($start, $end, $record, 'hour');

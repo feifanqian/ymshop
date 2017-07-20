@@ -2254,6 +2254,10 @@ class UcenterController extends Controller {
             $page = Filter::int(Req::args('page'));
             $promoter = Promoter::getPromoterInstance($this->user['id']);
             if (is_object($promoter)) {
+                if($promoter->role_type==1){
+                    echo json_encode(array('status' => 'fail', 'msg' => "你还不是付费推广员"));
+                    exit();
+                }
                 $data = $promoter->getMyInviteList($page);
                 if (empty($data)) {
                     echo json_encode(array('status' => 'fail', 'msg' => "数据为空"));
@@ -2268,6 +2272,10 @@ class UcenterController extends Controller {
             $this->assign("seo_title", "邀请入驻");
             $promoter = Promoter::getPromoterInstance($this->user['id']);
             if (is_object($promoter)) {
+                if($promoter->role_type==1){
+                    $this->redirect("/index/msg", false, array('type' => "info", "msg" => '抱歉', "content" => "您还不是付费推广员，暂时没有邀请权限"));
+                exit();
+                }
                 $data = $promoter->getMyInviteList(1);
                 $this->assign("data", $data);
                 $invite_count = $this->model->table("district_order")->where("pay_status=1 and invitor_role='promoter' and invitor_id=$promoter->id")->count();

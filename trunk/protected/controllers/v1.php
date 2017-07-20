@@ -123,7 +123,7 @@ class V1Controller extends Controller {
         'get_subordinate' => array("district/getSubordinate", 1,1), //获取我的拓展小区
         'district_achievement' => array("district/districtAchievement", 1,1), //获取小区业绩数据
         //推广员相关
-        'is_district_promoter' => array("ucenter/isDistrictPromoter", 1,1),//判断是否是小区推广员
+        'isDistrictPromoter' => array("ucenter/isDistrictPromoter", 1,1),//判断是否是小区推广员
         'get_district_info_by_id' => array("ucenter/getDistrictInfoById", 1,1),//获取小区信息
         'become_promoter' => array("ucenter/becomepromoter", 1,1),//成为小区推广员
         'get_promoter_income_static' => array("ucenter/getPromoterIncomeStatic", 1,1),//获取推广员收益统计
@@ -134,8 +134,6 @@ class V1Controller extends Controller {
         'get_qrcode_flag_by_goods_id' => array("ucenter/getQrcodeFlagByGoodsId", 1,1),
         'get_my_balance_withdraw_record'=>array("ucenter/getMyGoldWithdrawRecord",1,1),
         'get_my_invite_promoter'=>array("ucenter/getMyInvitePromoter",1,1),//获取我邀请的推广员列表
-        //银点支付
-        'pay_silver'=>array("payment/pay_silver",1,1),
         "point_sale"=>array("product/point_sale",0,1),//获取积分购列表
         "pointbuy"=>array("product/pointbuy",0,1),//获取积分购列表
         //提现
