@@ -58,7 +58,8 @@ class UcenterAction extends Controller {
         $zone = Filter::int(Req::args('zone'));
         $password = Filter::str(Req::args('password'));
         $inviter_id = Filter::int(Req::args('inviter_id'));
-
+        $realname = Filter::str(Req::args('realname'));
+        
         if (!Validator::mobi($mobile)) {
             $this->code = 1024;
             return;
@@ -77,11 +78,8 @@ class UcenterAction extends Controller {
                 }
                 $validcode = CHash::random(8);
                 $token = CHash::random(32, 'char');
-                
-                $email = $mobile . "@no.com";
                 $time = date('Y-m-d H:i:s');
-                $validcode = CHash::random(8);
-                $last_id = $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day')),'email' => $email, 'nickname' => $mobile, 'password' => CHash::md5($password, $validcode), 'avatar' => '/static/images/avatar.jpeg', 'validcode' => $validcode))->insert();
+                $last_id = $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day')), 'nickname' => $mobile, 'password' => CHash::md5($password, $validcode), 'avatar' => '/static/images/avatar.jpeg', 'validcode' => $validcode))->insert();
                 //更新用户名
                 if($last_id){
                     $name = "u" . sprintf("%09d", $last_id);
