@@ -1701,7 +1701,7 @@ class UcenterAction extends Controller {
         if (is_object($promoter)) {
             $this->content['is_promoter'] = 1;
             $this->content['promoter_role']=$promoter->role_type;
-            $this->content['promoter_id'] =$promoter->role_type==1?NULL:$promoter->id;
+            $this->content['promoter_id'] =$promoter->role_type==1?NULL:$promoter->promoter_id;
         } else {
             $this->content['is_promoter'] = 0;
         }
