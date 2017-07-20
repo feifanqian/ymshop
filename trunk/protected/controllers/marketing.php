@@ -860,7 +860,7 @@ class MarketingController extends Controller {
                  if($result){
                      $beneficiary_num ++;
                      $has_bonus_count += $need_add;
-                     Log::balance($need_add, $v['user_id'], $order_no, "商城分红",9,$this->manager['id']);
+                     Log::balance($need_add, $v['user_id'], $order_no, "商城分红",7,$this->manager['id']);
                  }
             }
             if($beneficiary_num>0&&$has_bonus_count>0){
