@@ -284,7 +284,6 @@ class Order {
             if($recharge['package']==0){//普通充值
                 //增加余额
                 $result = $modle->table("customer")->where("user_id = $user_id")->data(array("balance"=>"`balance`+$account"))->update();
-                //?是否需要加积分和理财金币
                 if($result){
                     Log::balance($account, $user_id, $recharge['recharge_no'], "用户充值", 1);
                 }
