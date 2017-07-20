@@ -9,11 +9,12 @@ class Promoter extends Object {
         $this->model = new Model();
         
         $base_info = $this->model->table("customer")->fields('user_id,valid_income,frezze_income,settled_income')->where("user_id=$user_id")->find();
-        $pay_promoter   = $this->model->table('district_promoter')->where("user_id=$user_id")->fields("hirer_id,type")->find();
+        $pay_promoter   = $this->model->table('district_promoter')->where("user_id=$user_id")->fields("id,hirer_id,type")->find();
         $role_type = $pay_promoter ? 2 : 1;
         $base_info['role_type']=$role_type;
         $base_info['can_withdraw']=true;
         if($pay_promoter){
+            $base_info['promoter_id']=$pay_promoter['id'];
             $base_info['can_withdraw']=$pay_promoter['type']==4?false:true;
         }
         if (!empty($base_info)) {
@@ -58,32 +59,24 @@ class Promoter extends Object {
     }
  
     public function getQrcodeByGoodsId($goods_id, $show_img = true) {//根据推广商品获取二维码,返回一张图
-        $goods_info = $this->model->table("goods")->where("id=$goods_id")->fields('id,img')->find();
-        if (empty($goods_info)) {
+        $result  = Common::getQrcodeFlag($promoter->user_id,$goods_id);
+        if($result['status']=='success'){
             if ($show_img) {
-                exit();
-            } else {
-                return array('status' => 'fail', 'msg_code' => 1000);
+                $qrCode = new QrCode();
+                $qrCode->setText($result['url'])
+                        ->setSize(300)
+                        ->setPadding(10)
+                        ->setErrorCorrection('medium')
+                        ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+                        ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+                        ->setLabelFontSize(16)
+                        ->setImageType(QrCode::IMAGE_TYPE_PNG);
+                header('Content-Type: ' . $qrCode->getContentType());
+                $qrCode->render();
+                return;
             }
         }
-        $id = Common::getQrcodeFlag($goods_id,$this->user_id);
-        $url = Url::fullUrlFormat("/index/product/id/$goods_id/flag/" . $id);
-        if ($show_img) {
-            $qrCode = new QrCode();
-            $qrCode->setText($url)
-                    ->setSize(300)
-                    ->setPadding(10)
-                    ->setErrorCorrection('medium')
-                    ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
-                    ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
-                    ->setLabelFontSize(16)
-                    ->setImageType(QrCode::IMAGE_TYPE_PNG);
-            header('Content-Type: ' . $qrCode->getContentType());
-            $qrCode->render();
-            return;
-        } else {
-            return array('status' => 'success', 'flag' => $id, 'goods_id' => $goods_id, 'url' => $url);
-        }
+        return $result;
     }
 
     public function getMyPromoterGoodsList() {//获取我的推广商品列表
@@ -226,9 +219,11 @@ class Promoter extends Object {
     /*
      * 推广者邀请推广者二维码
      */
-
     public function getInviteQR4Promoter() {
-        $url = Url::fullUrlFormat("/ucenter/becomepromoter/reference/{$this->id}/invitor_role/promoter");
+        if($this->role_type==1){
+            return false;
+        }
+        $url = Url::fullUrlFormat("/ucenter/becomepromoter/reference/{$this->promoter_id}/invitor_role/promoter");
         $qrCode = new QrCode();
         $logo = APP_ROOT."static/images/logo1.png";
         $qrCode = new QrCode();
