@@ -303,6 +303,11 @@ class IndexAction extends Controller {
        $config = Config::getInstance();
        $package_set = $config->get('recharge_package_set');
        if($package_set){
+           if(isset($package_set[4]['gift'])&&$package_set[4]['gift']!=''){
+                $where = implode(',', array_reverse(explode("|", $package_set[4]['gift'])));
+                $select4 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->order("field(p.id,$where)")->findAll();
+                $package_set['gift']=$select4;
+            }
            $this->code =0;
            $this->content = $package_set;
        }else{
