@@ -228,7 +228,7 @@ class PaymentController extends Controller {
             $payment_info = $payment->getPayment();
             //充值处理
             if ($recharge != null) {
-                //充值套餐判断，套餐充值是充值的银点
+                //充值套餐判断
                 $package = Filter::int(Req::args('package'));
                 
                 $package = $package == null ? 0 : $package;
@@ -597,7 +597,7 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     function async_callback() {
-        //file_put_contents("aa.txt", $GLOBALS['HTTP_RAW_POST_DATA']);
+        file_put_contents("aa.txt", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
         $payment = new Payment($payment_id);
