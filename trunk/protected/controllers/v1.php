@@ -58,7 +58,7 @@ class V1Controller extends Controller {
         "sign_all_message" => array("ucenter/sign_all_message", 1,1),
         "save_info" => array("ucenter/save_info", 1,1), //用户信息保存修改接口
         "huabi" => array("ucenter/huabi", 1,1), //华点信息接口
-        "huabi_log" => array("ucenter/balance_log", 1,1), //华点的使用记录
+        "balance_log" => array("ucenter/balance_log", 1,1), //余额的使用记录
         "dopay" => array("payment/dopay", 1,1), //发起支付
         "pay_balance" => array("payment/pay_balance", 1,1), //通过华点支付
         "paytype_list" => array("payment/paytype_list", 1,1), //支付方式
