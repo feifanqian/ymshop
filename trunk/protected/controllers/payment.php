@@ -617,6 +617,7 @@ class PaymentController extends Controller {
         unset($callbackData['act']);
         unset($callbackData['payment_id']);
         $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
+        file_put_contents("aa.txt", $orderNo."|".$money,FILE_APPEND);
         //支付成功
         if ($return == 1) {
             if (stripos($orderNo, 'promoter') !== false) {
@@ -723,8 +724,8 @@ class PaymentController extends Controller {
                 $cancel_url = Url::urlFormat("/ucenter/district_pay/id/{$order['id']}");
                 $error_url = Url::urlFormat("/ucenter/district_pay/id/{$order['id']}");
             } else if (stripos($out_trade_no, 'recharge') !== false) {//充值订单
-                $order_no = substr($order_no, 8);
-                $order = $this->model->table("recharge")->where("recharge_no ='" . $order_no . "'")->find();
+                $recharge_no = substr($order_no, 8);
+                $order = $this->model->table("recharge")->where("recharge_no ='" . $recharge_no . "'")->find();
                 if (!$order) {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
                     exit();
@@ -781,8 +782,8 @@ class PaymentController extends Controller {
                 $cancel_url = Url::urlFormat("/ucenter/district_pay/id/{$order['id']}");
                 $error_url = Url::urlFormat("/ucenter/district_pay/id/{$order['id']}");
             } else if (stripos($out_trade_no, 'recharge') !== false) {//充值订单
-                $order_no = substr($order_no, 8);
-                $order = $this->model->table("recharge")->where("recharge_no ='" . $order_no . "'")->find();
+                $recharge_no = substr($order_no, 8);
+                $order = $this->model->table("recharge")->where("recharge_no ='" . $recharge_no . "'")->find();
                 if (!$order) {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
                     exit();
