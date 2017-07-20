@@ -267,7 +267,6 @@ class Order {
      * 充值
      */
     public static function recharge($recharge_no, $payment_id = 0, $callback_info = null) {
-        file_put_contents("aa.txt", $recharge_no,FILE_APPEND);
         $model = new Model("recharge");
         $recharge = $model->where("recharge_no='" . $recharge_no . "'")->find();
         if (empty($recharge)) {

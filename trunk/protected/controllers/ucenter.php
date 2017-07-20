@@ -259,19 +259,18 @@ class UcenterController extends Controller {
         $other = $config->get("other");
         $package_set = $config->get("recharge_package_set");
         if (is_array($package_set)) {
-            $where = implode(',', explode("|", $package_set[1]['gift']));
-            $select1 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->findAll();
-            $this->assign("select1", $select1);
-            $where = implode(',', explode("|", $package_set[2]['gift']));
-            $select2 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->findAll();
-            $this->assign("select2", $select2);
+            if(isset($package_set[4]['gift'])&&$package_set[4]['gift']!=''){
+                $where = implode(',', array_reverse(explode("|", $package_set[4]['gift'])));
+                $select4 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->order("field(p.id,$where)")->findAll();
+                $this->assign("select4", $select4);
+            }
         }
-        $this->assign("gold2silver", $other['gold2silver']);
         $this->assign("withdraw_fee_rate", $other['withdraw_fee_rate']);
         $this->assign('min_withdraw_amount', $other['min_withdraw_amount']);
         $package = Filter::int(Req::args('package'));
         //套餐充值
         $pid = Filter::int(Req::args('pid'));
+        $this->assign('package_set',$package_set);
         if ($package && $pid) {
             $this->assign("package", $package);
             $this->assign("pid", $pid);

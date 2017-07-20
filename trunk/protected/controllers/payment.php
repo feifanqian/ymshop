@@ -617,7 +617,6 @@ class PaymentController extends Controller {
         unset($callbackData['act']);
         unset($callbackData['payment_id']);
         $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
-        file_put_contents("aa.txt", $orderNo."|".$money,FILE_APPEND);
         //支付成功
         if ($return == 1) {
             if (stripos($orderNo, 'promoter') !== false) {
