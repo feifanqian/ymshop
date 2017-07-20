@@ -137,16 +137,16 @@
                     {/query}
                 </dl>
                 {/query}
-                {set:$config = Config::getInstance();}
-                {set:$globals=$config->get("globals");}
-                {set:$contactqq=explode('|',$globals['site_contactqq']);}
                  <dl>
                      <dt class='clearfix' style="text-align:center;><span class="fl">QQ客服</span></dt>
-                {if:!empty($contactqq)}
+                    {set:$config = Config::getInstance();}
+                    {set:$globals=$config->get("globals");}
+                    {if:$globals['site_contactqq']!=""}
+                    {set:$contactqq=explode('|',$globals['site_contactqq']);}
                     {list:items=$contactqq item=$qq}
                      <dd><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$qq}&site=qq&menu=yes"><img border="0" src="/static/images/contact_qq.gif" alt="调戏客服" title="调戏客服{$key}"/></a></dd>
                     {/list}
-                {/if}
+                    {/if}
                  </dl>
                 <dl>
                      <dt class='clearfix' style="text-align:center;><span class="fl">微信客服</span></dt>
