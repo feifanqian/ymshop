@@ -132,7 +132,7 @@ class V1Controller extends Controller {
         'get_promoter_settled_record' => array("ucenter/getPromoterSettledRecord", 1,1),//获取推广员提现记录
         'promoter_do_settle' => array("ucenter/promoterDoSettle", 1,1),//申请提现
         'get_qrcode_flag_by_goods_id' => array("ucenter/getQrcodeFlagByGoodsId", 1,1),
-        'get_my_gold_withdraw_record'=>array("ucenter/getMyGoldWithdrawRecord",1,1),
+        'get_my_balance_withdraw_record'=>array("ucenter/getMyGoldWithdrawRecord",1,1),
         'get_my_invite_promoter'=>array("ucenter/getMyInvitePromoter",1,1),//获取我邀请的推广员列表
         //银点支付
         'pay_silver'=>array("payment/pay_silver",1,1),
