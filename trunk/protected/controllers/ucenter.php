@@ -600,7 +600,7 @@ class UcenterController extends Controller {
                             //默认密码
                             $passWord = $mobile;
                             $validcode = CHash::random(8);
-                            $this->$model->table('user')->data(array('password' => CHash::md5($passWord, $validcode),'validcode' => $validcode))->where("id={$this->user['id']}")->update();
+                            $this->model->table('user')->data(array('password' => CHash::md5($passWord, $validcode),'validcode' => $validcode))->where("id={$this->user['id']}")->update();
                 
                             SMS::getInstance()->flushCode($mobile);
                             $user = $this->user;
