@@ -68,7 +68,7 @@ class Log {
         $model = new model();
        
         $data = array();
-        if(in_array($type,array(1,2,3,4,5,6))){
+        if(in_array($type,array(0,1,2,3,4,5,6))){
             $data['valid_income_change'] = 0.00;
             $data['frezze_income_change'] = abs($amount);
             $data['settled_income_change'] = 0.00;
