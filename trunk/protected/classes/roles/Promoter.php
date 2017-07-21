@@ -247,7 +247,7 @@ class Promoter extends Object {
         $record = $this->model->table('district_order as do')
                 ->join('left join user as u on do.user_id = u.id')
                 ->fields('u.avatar,u.nickname,do.create_date')
-                ->where("do.pay_status =1 and do.invitor_role = 'promoter' and do.invitor_id=".$this->id)
+                ->where("do.pay_status =1 and do.invitor_role = 'promoter' and do.invitor_id=".$this->promoter_id)
                 ->order("do.pay_date desc")
                 ->findPage($page, 10);
         if (empty($record)) {
