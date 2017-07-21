@@ -75,13 +75,13 @@ class DistrictLogic {
         $data['status'] = 0;
         $result = $this->model->table("district_promoter")->data($data)->insert();
         if ($result) {
-            $this->sendMessage($user_id, "恭喜您，成为圆梦商城推广员，您获得了".$this->config['join_send_point']."商城积分！","https://www.ymlypt.com/ucenter/index","promoter_join_success");
+            $this->sendMessage($user_id, "恭喜您，成为圆梦商城推广员，您获得了".$this->config['join_send_point']."商城积分！","http://www.ymlypt.com/ucenter/index","promoter_join_success");
             if($invitor_role == 'shop'){
                 $shop_info = $this->model->table("district_shop")->where("id=$hirer_id")->find();
-                $this->sendMessage($shop_info['owner_id'], "恭喜您，您邀请的推广员加入了您的团队，您获得了".$this->config['shop_invite_promoter_money']."余额奖励和".$this->config['promoter_invite_promoter_point']."商城积分奖励！","https://www.ymlypt.com/district/district","has_promoter_join");
+                $this->sendMessage($shop_info['owner_id'], "恭喜您，您邀请的推广员加入了您的团队，您获得了".$this->config['shop_invite_promoter_money']."余额奖励和".$this->config['promoter_invite_promoter_point']."商城积分奖励！","http://www.ymlypt.com/district/district","has_promoter_join");
             }else{
-                $this->sendMessage($district_info['owner_id'], "恭喜您，有新的推广员加入您的团队，您获得了". $this->config['shop_invite_indirect_money']."余额奖励！","https://www.ymlypt.com/district/district","has_promoter_join");
-                $this->sendMessage($district_info['invitor_user_id'],"恭喜您，您邀请的推广员加入了您的团队，您获得了".$this->config['promoter_invite_promoter_money']."余额奖励和".$this->config['promoter_invite_promoter_point']."商城积分奖励！","https://www.ymlypt.com/ucenter/promoter_invite","invite_promoter_success");
+                $this->sendMessage($district_info['owner_id'], "恭喜您，有新的推广员加入您的团队，您获得了". $this->config['shop_invite_indirect_money']."余额奖励！","http://www.ymlypt.com/district/district","has_promoter_join");
+                $this->sendMessage($district_info['invitor_user_id'],"恭喜您，您邀请的推广员加入了您的团队，您获得了".$this->config['promoter_invite_promoter_money']."余额奖励和".$this->config['promoter_invite_promoter_point']."商城积分奖励！","http://www.ymlypt.com/ucenter/promoter_invite","invite_promoter_success");
             }
             return array("status" => 'success');
         } else {
