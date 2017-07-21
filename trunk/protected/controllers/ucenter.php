@@ -597,6 +597,11 @@ class UcenterController extends Controller {
                                 'mobile_verified'=>1
                             );
                             $this->model->table("customer")->data($data)->where("user_id={$this->user['id']}")->update();
+                            //默认密码
+                            $passWord = $mobile;
+                            $validcode = CHash::random(8);
+                            $this->$model->table('user')->data(array('password' => CHash::md5($passWord, $validcode),'validcode' => $validcode))->where("id={$this->user['id']}")->update();
+                
                             SMS::getInstance()->flushCode($mobile);
                             $user = $this->user;
                             $user['mobile']=$mobile;
