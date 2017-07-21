@@ -796,4 +796,19 @@ class Common {
               return FALSE;
           }
      }
+     
+     static function setIncomeByInviteShip($order){
+         $model = new Model();
+         $inviter_info = $model->table("invite")->where("invite_user_id=".$order['user_id'])->find();
+         if($inviter_info){
+             $is_promoter = $model->table("district_promoter")->where("user_id=".$inviter_info['user_id'])->find();
+             $role_type = $is_promoter?2:1;
+             $income1 = round($order['order_amount']*5/100,2);
+             Log::incomeLog($income1, $role_type, $inviter_info['user_id'], $order['id'], 0);
+             $income2 = round($order['order_amount']*3/100,2);
+             Log::incomeLog($income2, 3, $inviter_info['district_id'], $order['id'], 0);
+         }else{
+             return false;
+         }
+     }
 }
