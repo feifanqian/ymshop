@@ -335,50 +335,7 @@ class SimpleController extends Controller {
         if ($code != $verifyCode)
             $this->redirect('forget_password', false);
 
-        if (Validator::email($account)) {
-            $email = $account;
-            $model = $this->model->table('user');
-            $obj = $model->where("email = '" . $email . "'")->find();
-            if (!empty($obj)) {
-                $model = $this->model->table('reset_password');
-                $obj = $model->where("email = '" . $email . "'")->find();
-                $safecode = md5(md5($email) . md5(CHash::random(32)));
-                if (!empty($obj)) {
-                    $obj['safecode'] = $safecode;
-                    $model->data($obj)->update();
-                } else {
-                    $model->data(array('email' => $email, 'safecode' => $safecode))->add();
-                }
-                $reset_url = Url::fullUrlFormat("/simple/reset_password/safecode/$safecode");
-                $msg_content = '';
-                $site_url = Url::fullUrlFormat('/');
-                $msg_title = '找回密码--' . $this->site_name;
-
-                $msg_template_model = new Model("msg_template");
-                $msg_template = $msg_template_model->where('id=3')->find();
-                if ($msg_template) {
-                    $msg_content = str_replace(array('{$site_name}', '{$reset_url}', '{$site_url}', '{$current_time}'), array($this->site_name, $reset_url, $site_url, date('Y-m-d H:i:s')), $msg_template['content']);
-                    $msg_title = $msg_template['title'];
-                } else {
-                    $msg_content .='<p>亲爱的用户:</p>';
-                    $msg_content .='<p>感谢您注册' . $this->site_name . ',请点击以下链接重置您的密码。<br/><br/>';
-                    $msg_content .="<a href='{$reset_url}' target='_blank'>{$reset_url}</a><br/><br/>";
-                    $msg_content .='愿您在' . $this->site_name . '度过愉快的时光。<br/><br/>';
-                    $msg_content .="<a href='" . $site_url . "'>" . $this->site_name . "</a></p>";
-                }
-                $mail = new Mail();
-                $flag = $mail->send_email($email, $msg_title, $msg_content);
-                if ($flag) {
-                    $this->assign('status', 'success');
-                } else {
-                    $this->assign('status', 'error');
-                }
-            } else {
-                $this->assign('status', 'fail');
-            }
-            $this->assign('accountType', 'email');
-            $this->redirect('forget_result', false);
-        } elseif (Validator::mobi($account)) {
+        if (Validator::mobi($account)) {
             $mobile = $account;
             $model = $this->model->table('customer');
             $obj = $model->where("mobile = '" . $mobile . "'")->find();
