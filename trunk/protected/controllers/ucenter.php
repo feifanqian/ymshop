@@ -2281,11 +2281,11 @@ class UcenterController extends Controller {
             if (is_object($promoter)) {
                 if($promoter->role_type==1){
                     $this->redirect("/index/msg", false, array('type' => "info", "msg" => '抱歉', "content" => "您还不是付费推广员，暂时没有邀请权限"));
-                exit();
+                    exit();
                 }
                 $data = $promoter->getMyInviteList(1);
                 $this->assign("data", $data);
-                $invite_count = $this->model->table("district_order")->where("pay_status=1 and invitor_role='promoter' and invitor_id=$promoter->id")->count();
+                $invite_count = $this->model->table("district_order")->where("pay_status=1 and invitor_role='promoter' and invitor_id=$promoter->promoter_id")->count();
                 $this->assign("invite_count", $invite_count);
                 $config = Config::getInstance()->get("district_set");
                 $this->assign("invite_promoter_num", $config['invite_promoter_num']);
