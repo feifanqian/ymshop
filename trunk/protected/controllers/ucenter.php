@@ -581,6 +581,7 @@ class UcenterController extends Controller {
                 $user['real_name']=$info['real_name'];
                 $this->safebox->set('user', $user);
                 $this->redirect("index");
+                exit();
             }
             $this->assign("info", $info);
             $info = array_merge($info, Req::args());
