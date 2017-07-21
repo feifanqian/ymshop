@@ -137,7 +137,7 @@
 {set:$point_sale_limit_1 = ($index["point_sale"]-1)*20;}
 {set:$point_sale_limit_2 = $point_sale_limit_1+10;}
 <div id="swiper-point" >
-<div class="swiper-container swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 0,'freeMode': true,'pagination': '','slidesPerColumn':'2'}">
+<div class="swiper-container swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 0,'freeMode': true,'pagination': '','slidesPerColumn':'1'}">
     <div class="swiper-title"> <div class="logo">积分购</div> 
         <a class="more" href="{url:/index/point}"><span>积分购专场</span><i class="iconfont icon-next"></i></a> 
     </div>
@@ -236,6 +236,7 @@
     {/query}
     <div class="swiper-wrapper">
         {set:$path_like = "like '$categ[path]%'";$num=0;}
+        {if:isset($index["category_".$categ['id']])}
         {set:$limit = ($index["category_".$categ['id']]-1)*10;}
         {query:name=goods where= is_online eq 0 and category_id in (select id from tiny_goods_category where path $path_like) order=sort desc limit=$limit,10}
         <div class="swiper-slide">
@@ -253,6 +254,7 @@
             </a>
         </div>
         {/query}
+        {/if}
     </div>
 </div>
 {/if}
