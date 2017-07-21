@@ -1102,6 +1102,8 @@ class IndexController extends Controller {
                 'category_77'=>1,
                 'category_98'=>1,
                 'category_135'=>1,
+                'category_161'=>1,
+                'category_162'=>1,
             );
             Cookie::set('index',$index);
         }else{
