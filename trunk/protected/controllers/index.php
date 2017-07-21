@@ -48,7 +48,8 @@ class IndexController extends Controller {
         $config = Config::getInstance()->get("globals");
         
         if(stripos(strtolower($_SERVER["HTTP_USER_AGENT"]), 'micromessenger') !== FALSE){
-            $this->redirect("http://a.app.qq.com/o/simple.jsp?pkgname=com.yidu.wowecoin");
+//            $this->redirect("http://a.app.qq.com/o/simple.jsp?pkgname=com.yidu.wowecoin");
+            $this->redirect("http://www.ymlypt.com");
             exit();
         }
         if ($download || $version) {
