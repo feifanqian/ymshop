@@ -136,11 +136,10 @@
     {widget:name=sub_navs action=ucsidebar sidebar=$sidebar act=$actionId}
     <div class="content clearfix uc-content">
         <h1 class="title"><span>账户金额管理：</span></h1>
-        <div class="box p15 mt10 clearfix">金点余额：<b class="red f18">{$currency_symbol}{$customer['balance']|'0.00'}</b>&nbsp;银点余额：<b class="red f18">{$currency_symbol}{$customer['silver_coin']|'0.00'}</b> &nbsp;<i class="fa fa-question-circle" style='cursor: pointer;padding-left:15px;'></i><span class="fr" style="    float: right;"><a href="javascript:;" id="exchange" class="btn btn-main btn-mini" style="font-size: 16px;padding:0 5px;" title="金点兑换银点，消费更实惠">兑换银点</a>　<a href="javascript:;" id="recharge-btn" class="btn btn-main btn-mini" title="充值银点更划算喏！" style="font-size: 16px;padding:0 5px;">在线充值</a> <a href="javascript:;" id="withdraw-btn" class="btn btn-main btn-mini" style="font-size: 16px;padding:0 5px;">金点提现</a></span></div>
+        <div class="box p15 mt10 clearfix">账户余额：<b class="red f18">¥{$customer['balance']|'0.00'}</b>&nbsp;积分余额：<b class="red f18">{$customer['point_coin']|'0.00'}</b>&nbsp;理财金币：<b class="red f18">{$customer['financial_coin']|'0.00'}</b>&nbsp;<i class="fa fa-question-circle" style='cursor: pointer;padding-left:15px;'></i><span class="fr" style="    float: right;">　<a href="javascript:;" id="recharge-btn" class="btn btn-main btn-mini" title="充值银点更划算喏！" style="font-size: 16px;padding:0 5px;">在线充值</a> <a href="javascript:;" id="withdraw-btn" class="btn btn-main btn-mini" style="font-size: 16px;padding:0 5px;">余额提现</a></span></div>
         <div class="mt10 tab">
             <ul class="tab-head">
-                <li>金点记录<i></i></li>
-                <li>银点记录<i></i></li>
+                <li>余额记录<i></i></li>
                 <li>提现申请记录<i></i></li>
             </ul>
             <div class="tab-body">
@@ -152,19 +151,6 @@
                         {query:name=balance_log where=user_id eq $user[id] order=id desc page=1 id=$obj}
                         <tr class="{if:$key%2==1}odd{else:}even{/if}">
                             <td>{$item['time']}</td> <td>{$item['amount']}</td><td>{$currency_symbol}{$item['amount_log']}</td><td>{$item['note']}</td>
-                        </tr>
-                        {/query}
-                    </table>
-                    <div class="page-nav">{echo:$obj->pagebar()}</div>
-                </div>
-                <div>
-                    <table class="simple simplelist">
-                        <tr>
-                            <th width="160">时间</th> <th width="120">存入 / 取出</th><th width="120">余额</th> <th >备注</th>
-                        </tr>
-                        {query:name=silver_log where=user_id eq $user[id] order=id desc page=1 id=$obj}
-                        <tr class="{if:$key%2==1}odd{else:}even{/if}">
-                            <td>{$item['log_time']}</td> <td>{$item['amount']}</td><td>{$currency_symbol}{$item['balance']}</td><td>{$item['note']}</td>
                         </tr>
                         {/query}
                     </table>
@@ -190,22 +176,15 @@
 </div>
 <div id="recharge-dialog" class="hidden">
     <form action="{url:/payment/dopay}" method="post" callback="close_dialog" style="min-height:600px;margin-bottom:20px;">
-        <table class="form" style="width:500px;">
-            <tr>
-                <td class="label">充值对象：</td>
-                <td><select name='recharge_type'>
-                        <option value="1">银点</option>
-                    </select><label></label>
-                </td>
-            </tr>
+        <table class="form">
             <tr>
                 <td class="label">充值套餐：</td>
                 <td class="recharge-package">
                     <em class="package package-selected" data-value="0" data-amount="">自定义<i></i></em>
-                    <em class="package" data-value="1" data-amount="600" id="package1">续充<i></i></em> 
-                    <em class="package" data-value="2" data-amount="3600" id="package2">VIP1<i></i></em> 
-                    <em class="package" data-value="3" data-amount="10800">VIP2<i></i></em> 
-                    <em class="package" data-value="4" data-amount="18000">VIP3<i></i></em>
+                    <em class="package" data-value="1" data-amount="{$package_set[1]['money']}" id="package1">套餐一<i></i></em> 
+                    <em class="package" data-value="2" data-amount="{$package_set[2]['money']}" id="package2">套餐二<i></i></em> 
+                    <em class="package" data-value="3" data-amount="{$package_set[3]['money']}">套餐三<i></i></em> 
+                    <em class="package" data-value="4" data-amount="{$package_set[4]['money']}">套餐四<i></i></em>
                     <input type="hidden" name="package" value="0">
                 </td>
             </tr>
@@ -222,22 +201,11 @@
                     </select>
                 </td>
             </tr>
-             <tr class="recommend-info" style="display:none;">
-                <td class="label">推 荐 人：</td>
-                <td><input type="text" name="recommend" placeholder="用户名或绑定手机号" style="width:126px; "> <label></label></td>
-            </tr>  
              <tr class="select_gift" style="display:none;">
                 <td class="label">套餐礼品：</td>
                 <td>
-                    <div class="select1">
-                    {list:$items=$select1}
-                    <label for="s1{$item['id']}">
-                        <p class="select_option"><input type="radio" name="gift" value="{$item['id']}" id="s1{$item['id']}"><img src="{url:@$item[img]}" style="width:50px;height:50px;border-radius:25px;">{$item['name']}<i></i></p>
-                    <label> 
-                    {/list}
-                    </div>
-                     <div class="select2">
-                     {list:$items=$select2}
+                     <div class="select4">
+                     {list:$items=$select4}
                     <label for="s2{$item['id']}">
                         <p class="select_option"><input type="radio" name="gift" value="{$item['id']}" id="s2{$item['id']}"><img src="{url:@$item[img]}" style="width:50px;height:50px;border-radius:25px;">{$item['name']}<i></i></p>
                     <label> 
@@ -274,7 +242,7 @@
     <form id="withdraw_form">
         <table class="form" style="width:400px;">
             <tr>
-                <td class="label">金点余额：</td>
+                <td class="label">账户余额：</td>
                 <td> <label class="f18 red">{$currency_symbol}{$customer['balance']}</label></td>
             </tr>
             <tr>
@@ -322,21 +290,17 @@
         $("input[name='recharge']").val($(this).data('amount'));
         if($(this).data('value')==0){
             $(".address,.recommend-info").hide();
-            //$("input[name='recharge']").removeAttr("readonly");
             $("select[name='recharge_type']").removeAttr('disabled');
             $(".select_gift").hide();
         }else{
-            if($(this).data('value')==1){
-                $(".select1 input:first").trigger("click");
-                $(".select1").show();
-                $(".select2").hide();
+            if($(this).data('value')==4){
+                $(".select4 input:first").trigger("click");
+                $(".select_gift").show();
+                 $(".address").show();
             }else{
-                $(".select2 input:first").trigger("click");
-                $(".select2").show();
-                $(".select1").hide();
+                $(".select_gift").hide();
+                $(".address").hide();
             }
-            $(".select_gift").show();
-            $(".address,.recommend-info").show();
             //$("select[name='recharge_type']").val(1).attr('disabled','disabled');
             $("input[name='recharge']").attr("readonly","readonly");  
         }
@@ -348,7 +312,7 @@
         //art.dialog({id: 'recharge-dialog', title: '在线充值', content: document.getElementById('recharge-dialog'), lock: true});
         layer.open({
             type: 1,
-           area: ['580px', '640px'],
+           area: ['700px', '640px'],
            scrollbar: false,
             title: false, //不显示标题
             content: $('#recharge-dialog'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
@@ -429,37 +393,13 @@
        layer.closeAll('tips');
     });
     $(".fa-question-circle").mouseenter(function(){
-        layer.tips('金点可提现，银点只能消费用，<br/>一个金点可以兑换{$gold2silver}个银点。', ".fa-question-circle", {
+        layer.tips('理财金币是用于商城分红的凭证，余额和积分是您在商城的可用资产，可以用于商城的购买活动。', ".fa-question-circle", {
             tips: [1, '#c91313'], //还可配置颜色
             time: 99999
         });
     });
     $(".fa-question-circle").mouseout(function(){
        layer.closeAll('tips');
-    });
-    $("#exchange").click(function(){
-        layer.prompt({
-            skin:'dialog',
-            formType: 0,
-            title: '请输入您要兑换的金点数量',
-          }, function(value, index, elem){
-            if(!isNaN(value)){
-                var load = layer.load();
-                $.post("{url:/ucenter/goldToSilver}",{gold:value},function(result){
-                    layer.close(load);
-                    if(result.status=='success'){
-                        layer.msg("您成功使用"+result.gold+"金点兑换了"+result.silver+"银点",{icon:6,time:3000},function(){
-                            window.location.reload();
-                        });
-                    }else{
-                        layer.msg(result.msg,{icon:5,time:5000});
-                    }
-                },'json');
-            }else{
-                layer.msg("请您输入正确的数值");
-                return false;
-            }
-          });
     });
     $(function(){
         $(".address-list li").each(function () {
