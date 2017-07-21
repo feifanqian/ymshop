@@ -1099,6 +1099,8 @@ class IndexController extends Controller {
         $category_135 = $this->model->table('goods')->where("is_online = 0 and category_id in (select id from tiny_goods_category where path like ',135,%')")->count();
         
         $index = Cookie::get('index');
+        $index = NULL;
+        Cookie::clear("index");
         if($index==NULL||!is_array($index)){
             $index = array(
                 'point_sale'=>1,
