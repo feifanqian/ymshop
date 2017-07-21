@@ -567,7 +567,13 @@ class IndexController extends Controller {
                Cookie::set('flag',array($flag,$flag_in_cookie,3600));
            }
            if(!Common::checkInWechat()){
-               $this->model->query("update tiny_promote_qrcode set scan_times = scan_times + 1 where id = $flag");
+               $qr_info = $this->model->table("promote_qrcode")->where("id=$flag")->find();
+               if($qr_info){
+                   if(!$this->user){
+                        Cookie::set("inviter", $qr_info['user_id']);
+                   }
+                   $this->model->query("update tiny_promote_qrcode set scan_times = scan_times + 1 where id = $flag");
+               }
            }
         }
         $this->assign('id', $id);
