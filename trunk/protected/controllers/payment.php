@@ -661,7 +661,6 @@ class PaymentController extends Controller {
             } else if (stripos($orderNo, 'recharge') !== false) {//充值方式
                 $recharge_no = substr($orderNo, stripos($orderNo, 'recharge') + 8);
                 $recharge_no = $recharge_no == "" ? 0 : $recharge_no;
-                file_put_contents("aa.txt", "{$recharge_no}",FILE_APPEND);
                 $recharge = new Model('recharge');
                 $recharge_info = $recharge->where("recharge_no='{$recharge_no}'")->find();
                 if (!empty($recharge_info)) {
