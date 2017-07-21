@@ -593,7 +593,6 @@ class UcenterController extends Controller {
                     $exist = $this->model->table("customer")->where("mobile='{$mobile}'")->find();
                     if (!$exist) {
                         $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
-                        $ret['status'] = $validatecode=='123456'?'success':'fail';
                         if ($ret['status'] == 'success') {
                             $data = array(
                                 'mobile' => $mobile,
