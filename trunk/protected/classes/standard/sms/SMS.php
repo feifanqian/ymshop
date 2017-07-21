@@ -55,6 +55,7 @@ class SMS extends ClassConfig {
             'templateCode' => $this->config['templateCode'],
             'zone' => '86',
             'phone' => $mobile,
+            'AppName'=>"圆梦购物网",
             'code' => $code,
         );
 
