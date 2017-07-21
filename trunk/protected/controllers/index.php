@@ -566,7 +566,7 @@ class IndexController extends Controller {
            }else if($flag!=$flag_in_cookie){
                Cookie::set('flag',array($flag,$flag_in_cookie,3600));
            }
-           if(!Common::checkInWechat()){
+           if(Common::checkInWechat()){
                $qr_info = $this->model->table("promote_qrcode")->where("id=$flag")->find();
                if($qr_info){
                    if(!$this->user){
