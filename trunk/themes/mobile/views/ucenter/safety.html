@@ -20,7 +20,7 @@
         </a>
 
         {if:isset($userInfo['email_verified']) && $userInfo['email_verified']==1}
-        <a href="{url:/ucenter/check_identity/obj/email}" class="weui_media_box weui_media_appmsg checked">
+<!--        <a href="{url:/ucenter/check_identity/obj/email}" class="weui_media_box weui_media_appmsg checked">
             <div class="weui_media_hd">
                 <i class="iconfont icon-email"></i>
             </div>
@@ -28,11 +28,11 @@
                 <h4 class="weui_media_title">邮箱验证</h4>
                 <p class="weui_media_desc">您验证的邮箱： {$userInfo['email']}</p>
             </div>
-            <div class="weui_panel_ft"></div>
+            <div class="weui_panel_ft"></div>-->
         </a>
 
         {else:}
-        <a href="{url:/ucenter/activate_obj/obj/email}" class="weui_media_box weui_media_appmsg">
+<!--        <a href="{url:/ucenter/activate_obj/obj/email}" class="weui_media_box weui_media_appmsg">
             <div class="weui_media_hd">
                 <i class="iconfont icon-email"></i>
             </div>
@@ -41,7 +41,7 @@
                 <p class="weui_media_desc">开启邮箱验证，更好的保护账户安全。</p>
             </div>
             <div class="weui_panel_ft"></div>
-        </a>
+        </a>-->
         {/if}
 
         {if:isset($userInfo['mobile_verified']) && $userInfo['mobile_verified']==1}

@@ -28,7 +28,6 @@
             </div>
             <form id="info-form" class="simple" action="{url:/ucenter/info_save}" method="post" style="border: 0;">
                 <table class="form">
-                    <tr><td class="label">会员邮箱：</td><td>{if:Validator::match('u\d+@no.com',$info['email'])}<input type="text" pattern="email" name="email" value="{$email}" alt="邮箱格式错误"> <label></label>{else:}{$email}{/if}</td></tr>
                     <tr><td class="label">会员级别：</td><td>{$gname|'默认分组'}</td></tr>
                     <tr>
                         <td class="label">用户名：</td><td>{$name}</td>
@@ -64,11 +63,6 @@
                         <td >
                             <span><i class="iconfont icon-shouji" style='float: left;'></i><span style='float: left;'>手机</span>
                                 <span ><a href="{url:/ucenter/check_identity/obj/mobile}" style='color:#4D8C0F;padding: 0 10px;float: left;'>更换绑定</a></span></span>
-                            <span><i class="iconfont icon-youxiang" style='float: left;'></i><span style='float:left;'>邮箱</span>
-                                {if:$user['email']==''}
-                                <span ><a href="{url:/ucenter/check_identity/obj/email}" style='color:#C30052;padding: 0 10px;float: left;'>未绑定</a></span>
-                                <span style="padding: 0 10px;color:#9d9d9d;float: left;">（首次绑定送20积分）</span></span>
-                            {/if}
                         </td>
                     </tr> 
                     <tr><td></td><td style="color:#9d9d9d">注：修改密码、手机等信息请到<a href="{url:/ucenter/safety/}" class="blue" style="font-weight: 500;padding: 0 10px;">安全设置</a></td></tr>

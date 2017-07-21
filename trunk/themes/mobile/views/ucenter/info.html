@@ -5,7 +5,6 @@
 <div class="ma20 bg-white p20">
     <form  action="{url:/ucenter/info_save}" method="post">
         <dl>
-            <dd class="input gray">{if:Validator::match('u\d+@no.com',$info['email'])}<input type="text" pattern="email" name="email" placeholder="邮箱" value="{$email}" alt="邮箱格式错误" />{else:}邮箱：{$email}{/if}</dd>
             <!--<dd class="input gray">{$gname|'默认分组'}</dd>-->
             <dd class="input gray">用户名: {$name}</dd>
             <dd><input  class="input" type="text" pattern="required" name="nickname" maxlen="20" value="{$nickname}" placeholder="昵称" alt="昵称不能为空"></dd>
