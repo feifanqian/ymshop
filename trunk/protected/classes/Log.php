@@ -50,6 +50,7 @@ class Log {
     //收益记录
     public static function incomeLog($amount , $role_type, $role_id , $record_id ,$type ,$note=""){
         $type_info=array(
+            "0"=>"下级会员购买收益分成",
             "1"=>"用户推广商品收益",
             "2"=>"推广员享受用户的推广商品收益分成",
             "3"=>"小区主享受用户的推广商品收益分成",
