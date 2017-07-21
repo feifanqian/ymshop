@@ -1106,7 +1106,7 @@ class PaymentController extends Controller {
             $invitor_role = Filter::str(Req::args("invitor_role"));
             //1.判断信息是否正确。
             $promoter = Promoter::getPromoterInstance($this->user['id']);
-            if (is_object($promoter)) {
+            if (is_object($promoter)&&$promoter->role_type==2) {
                 $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您已经有雇佣关系了，暂时不能加入其他小区"));
                 exit();
             }
