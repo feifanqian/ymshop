@@ -975,7 +975,7 @@ class UcenterController extends Controller {
 
     //保存地址
     public function address_save() {
-        $rules = array('zip:zip:邮政编码格式不正确!', 'addr:required:内容不能为空！', 'accept_name:required:收货人姓名不能为空!,mobile:mobi:手机格式不正确!,phone:phone:电话格式不正确', 'province:[1-9]\d*:选择地区必需完成', 'city:[1-9]\d*:选择地区必需完成', 'county:[1-9]\d*:选择地区必需完成');
+        $rules = array('addr:required:内容不能为空！', 'accept_name:required:收货人姓名不能为空!','mobile:mobi:手机格式不正确!', 'province:[1-9]\d*:选择地区必需完成', 'city:[1-9]\d*:选择地区必需完成', 'county:[1-9]\d*:选择地区必需完成');
         $info = Validator::check($rules);
 
         if (!is_array($info) && $info == true) {
