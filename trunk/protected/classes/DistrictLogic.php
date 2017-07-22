@@ -50,7 +50,7 @@ class DistrictLogic {
         }
         $isset = $this->model->table("district_promoter")->where("user_id = $user_id")->find();
         if ($isset) {
-            return array('status' => 'fail', "msg" => "该用户已经是推广员");
+            return array('status' => 'fail', "msg" => "该用户已经是代理商");
         }
         if ($invitor_role == 'shop') {
             $hirer_id = $invitor_id;
@@ -66,7 +66,7 @@ class DistrictLogic {
             return array('status' => 'fail', "msg" => "参数错误");
         }
         $data['user_id'] = $user_id;
-        $data['type'] = $invitor_role == 'shop' ? 1 : 2; //1:小区商户自主邀请2:推广员推广
+        $data['type'] = $invitor_role == 'shop' ? 1 : 2; //1:小区商户自主邀请2:代理商推广
         $data['join_time'] = date("Y-m-d H:i:s");
         $data['hirer_id'] = $hirer_id;
         $data['create_time'] = date('Y-m-d H:i:s');
@@ -75,13 +75,13 @@ class DistrictLogic {
         $data['status'] = 0;
         $result = $this->model->table("district_promoter")->data($data)->insert();
         if ($result) {
-            $this->sendMessage($user_id, "恭喜您，成为圆梦商城推广员，您获得了".$this->config['join_send_point']."商城积分！","http://www.ymlypt.com/ucenter/index","promoter_join_success");
+            $this->sendMessage($user_id, "恭喜您，成为圆梦商城代理商，您获得了".$this->config['join_send_point']."商城积分！","http://www.ymlypt.com/ucenter/index","promoter_join_success");
             if($invitor_role == 'shop'){
                 $shop_info = $this->model->table("district_shop")->where("id=$hirer_id")->find();
-                $this->sendMessage($shop_info['owner_id'], "恭喜您，您邀请的推广员加入了您的团队，您获得了".$this->config['shop_invite_promoter_money']."余额奖励和".$this->config['promoter_invite_promoter_point']."商城积分奖励！","http://www.ymlypt.com/district/district","has_promoter_join");
+                $this->sendMessage($shop_info['owner_id'], "恭喜您，您邀请的代理商加入了您的团队，您获得了".$this->config['shop_invite_promoter_money']."余额奖励和".$this->config['promoter_invite_promoter_point']."商城积分奖励！","http://www.ymlypt.com/district/district","has_promoter_join");
             }else{
-                $this->sendMessage($district_info['owner_id'], "恭喜您，有新的推广员加入您的团队，您获得了". $this->config['shop_invite_indirect_money']."余额奖励！","http://www.ymlypt.com/district/district","has_promoter_join");
-                $this->sendMessage($district_info['invitor_user_id'],"恭喜您，您邀请的推广员加入了您的团队，您获得了".$this->config['promoter_invite_promoter_money']."余额奖励和".$this->config['promoter_invite_promoter_point']."商城积分奖励！","http://www.ymlypt.com/ucenter/promoter_invite","invite_promoter_success");
+                $this->sendMessage($district_info['owner_id'], "恭喜您，有新的代理商加入您的团队，您获得了". $this->config['shop_invite_indirect_money']."余额奖励！","http://www.ymlypt.com/district/district","has_promoter_join");
+                $this->sendMessage($district_info['invitor_user_id'],"恭喜您，您邀请的代理商加入了您的团队，您获得了".$this->config['promoter_invite_promoter_money']."余额奖励和".$this->config['promoter_invite_promoter_point']."商城积分奖励！","http://www.ymlypt.com/ucenter/promoter_invite","invite_promoter_success");
             }
             return array("status" => 'success');
         } else {
@@ -90,7 +90,7 @@ class DistrictLogic {
     }
 
     /**
-     * 推广员支付入驻费用后
+     * 代理商支付入驻费用后
      *
      * @access public
      * @param string $order_no 订单号
@@ -112,7 +112,7 @@ class DistrictLogic {
             $update['pay_status'] = 1;
             $update['pay_date'] = date("Y-m-d H:i:s");
             $update['payment_id'] = $payment_id;
-            //步骤1：更新推广员入驻订单状态
+            //步骤1：更新代理商入驻订单状态
             $step1 = $this->model->table("district_order")->data($update)->where("id = " . $order['id'])->update();
             $this->client_type = Common::getPayClientByPaymentID($payment_id);
             $result_str = array();
@@ -129,20 +129,20 @@ class DistrictLogic {
                 $params['user_id'] = $order['user_id'];
                 $params['invitor_id'] = $order['invitor_id'];
                 $params['invitor_role'] = $order['invitor_role'];
-                //步骤2:创建推广员账号
+                //步骤2:创建代理商账号
                 $step2 = $this->buildPrmoterAccount($params);
                 if ($step2['status'] == "success") {
-                    $result_str[]="创建推广员账号成功";
+                    $result_str[]="创建代理商账号成功";
                 } else {
-                    $result_str[]="创建推广员账号失败";
+                    $result_str[]="创建代理商账号失败";
                     $return =false;
                 }
                 //步骤3:自动创建礼品订单
                 $step3 = $this->autoCreateOrderForPromoter($order);
                 if ($step3) {
-                    $result_str[]="推广员赠送订单创建成功";
+                    $result_str[]="代理商赠送订单创建成功";
                 } else {
-                    $result_str[]="推广员赠送订单创建失败";
+                    $result_str[]="代理商赠送订单创建失败";
                     $return =false;
                 }
                 //步骤4：分配邀请收益
@@ -190,7 +190,7 @@ class DistrictLogic {
             } else {
                 return array("status" => 'fail', 'msg' => implode("|", $error_msg));
             }
-        } else if ($order['invitor_role'] == 'promoter') {//推广员推荐推广员
+        } else if ($order['invitor_role'] == 'promoter') {//代理商推荐代理商
             
             $amount = $this->config['promoter_invite_promoter_money'];
             if ($amount <= 0) {
@@ -198,7 +198,7 @@ class DistrictLogic {
             }
             $promoter_info = $this->model->table("district_promoter")->where("id=".$order['invitor_id'])->find();
             if(!$promoter_info){
-                $error_msg[] = "推广员邀请者信息未找到";
+                $error_msg[] = "代理商邀请者信息未找到";
             }else{
                 $result = Log::incomeLog($amount, 2, $promoter_info['user_id'], $order['id'], 8);
                 if (!$result) {
@@ -210,7 +210,7 @@ class DistrictLogic {
                 }
             }
             $amount = $this->config['shop_invite_indirect_money'];
-            $result = Log::incomeLog($amount, 3, $promoter_info['hirer_id'], $order['id'], 9,"小区间接邀请推广员收益");
+            $result = Log::incomeLog($amount, 3, $promoter_info['hirer_id'], $order['id'], 9,"小区间接邀请代理商收益");
             if (!$result) {
                 $error_msg[] = '雇主的间接收益分配记录失败';
             }
@@ -223,7 +223,7 @@ class DistrictLogic {
     }
 
     /**
-     * 自动为入驻推广员创建订单
+     * 自动为入驻代理商创建订单
      * @access public
      * @param array $callbackData 支付返回参数
      * @return boolean
@@ -269,7 +269,7 @@ class DistrictLogic {
         $data['voucher_id'] = 0;
         $data['voucher'] = serialize(array());
         $data['prom_id'] = 0;
-        $data['admin_remark'] = "自动创建订单，来自于推广员入驻";
+        $data['admin_remark'] = "自动创建订单，来自于代理商入驻";
         $data['shop_ids']=$product['shop_id'];
         $order_id = $this->model->table('order')->data($data)->insert();
 
@@ -329,7 +329,7 @@ class DistrictLogic {
             if (isset($promoter_info[$v['goods_id']])) {
                 $sale_data = array(); //销售记录
                 $income_log = array();
-                //1:判断推荐人类型 为普通类型还是付费推广员，若为普通推广员（普通会员）则要查询是否有邀请关系，根据邀请关系分配
+                //1:判断推荐人类型 为普通类型还是付费代理商，若为普通代理商（普通会员）则要查询是否有邀请关系，根据邀请关系分配
                 $sale_data['goods_id']   = $v['goods_id'];
                 $sale_data['goods_nums'] = $v['goods_nums'];
                 $sale_data['product_id'] = $v['product_id'];
@@ -401,7 +401,7 @@ class DistrictLogic {
         if ($amount == 0) {
             return true;
         }
-        $type_info = array("5"=>"推广员入驻赠送","6"=>"推广员推荐奖励","7"=>"小区销售奖励");
+        $type_info = array("5"=>"代理商入驻赠送","6"=>"代理商推荐奖励","7"=>"小区销售奖励");
         if ($role == 'user') {
             //加积分
             $result = $this->model->table("customer")->where("user_id=" . $role_id)->data(array("point_coin" => "`point_coin`+$amount"))->update();

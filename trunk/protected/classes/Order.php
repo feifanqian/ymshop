@@ -315,6 +315,19 @@ class Order {
                         file_put_contents('autoCreateOrderErr.txt', date("Y-m-d H:i:s")."==充值订单号=={$recharge['recharge_no']}==\n",FILE_APPEND);
                    }
                 }
+                if($recharge['package']==4){
+                    $isPromoter = $model->table("district_promoter")->where("user_id=".$recharge['user_id'])->find();
+                    if(!$isPromoter){
+                        $inviter_info = $model->table("invite")->where("invite_user_id=".$recharge['user_id'])->find();
+
+                        //自动升级为代理商
+                        $promoter_data['user_id']=$recharge['user_id'];
+                        $promoter_data['type']=5;
+                        $promoter_data['create_time']=$promoter_data['create_time']=date("Y-m-d H:i:s");
+                        $promoter_data['hirer_id']=$inviter_info?$inviter_info['district_id']:1;
+                        $model->table("district_promoter")->data($promoter_data)->insert();
+                    }
+                }
                 $result =true;
             }
             if ($result) {

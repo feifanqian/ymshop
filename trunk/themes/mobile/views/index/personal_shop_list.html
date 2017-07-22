@@ -26,6 +26,15 @@
         font-weight: 300;
     }
 </style>
+ {set:$config = Config::getInstance()->get('personal_shop_set');}
+ {set:$goods_id = $config['goods_id'];}
+ {if:$config['open']==1}
+<div class="sign_tip" style="position: fixed;bottom:65px;right:11px;z-index:111;color:white;border:1px solid #fac532;border-radius: 5px;">
+<a href="{url:/index/product/id/$goods_id}" style="color:#fac532;font-size: 15px;">
+    &nbsp;我也要<br>开通店铺
+</a>
+</div>
+{/if}
 {query:name=personal_shop as ps join=left join customer as c on ps.user_id eq c.user_id left join user as u on ps.user_id eq u.id fields=ps.*,c.real_name,u.avatar,u.nickname order=ps.listorder asc limit=12 page=1 pagesize=3 id=$personal_shop_list }
 <div class='shop-list-container'>
     <div href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">

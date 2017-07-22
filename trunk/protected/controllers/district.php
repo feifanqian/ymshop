@@ -25,13 +25,13 @@ class DistrictController extends Controller {
         $district = $this->model->table("district_shop")->where("owner_id=".$this->user['id'])->findAll();
         $apply_info = $this->model->table("district_apply")->where("user_id = ".$this->user['id']." and status != 1")->findAll();
         if(empty($district)&&empty($apply_info)){
-//            $this->redirect("/index/msg", false, array('type' => "info", "msg" => '我的小区',"content"=>"您暂时还没有入驻小区","redirect_url"=>Url::urlFormat("/district_introduce.html"),'url_name'=>'了解什么是小区'));
+//            $this->redirect("/index/msg", false, array('type' => "info", "msg" => '我的专区',"content"=>"您暂时还没有入驻专区","redirect_url"=>Url::urlFormat("/district_introduce.html"),'url_name'=>'了解什么是专区'));
 //           exit();
         }else{
             $this->assign("district",$district);
             $this->assign("apply_info",$apply_info);
         }
-        $this->assign('seo_title',"小区登录");
+        $this->assign('seo_title',"专区登录");
         $this->assign('current',"district");
         $this->redirect();
     }
@@ -74,7 +74,7 @@ class DistrictController extends Controller {
                         $this->test = true;
                         return true;
                     }else{
-                       $this->redirect("/index/msg", false, array('type' => "info", "msg" => '我的小区',"content"=>"您暂时还没有入驻小区,不能查看更多啦","redirect_url"=>Url::urlFormat("/ucenter/apply_for_district"),'url_name'=>'马上申请'));
+                       $this->redirect("/index/msg", false, array('type' => "info", "msg" => '我的专区',"content"=>"您暂时还没有入驻专区,不能查看更多啦","redirect_url"=>Url::urlFormat("/ucenter/apply_for_district"),'url_name'=>'马上申请'));
                        exit();
                     }
                 }else if(Req::args("test")){
@@ -101,7 +101,7 @@ class DistrictController extends Controller {
             }
         }else if(!$district_id){
                 $this->layout="district_layout";
-                $this->assign('seo_title','小区登录');
+                $this->assign('seo_title','专区登录');
                 $this->redirect("/district/login",false);
         }else{//权限问题
             
@@ -119,7 +119,7 @@ class DistrictController extends Controller {
             $data = $this->hirer->getIncomeStatistics();
         }
         $this->assign('data',$data);
-        $this->assign('seo_title','小区收益');
+        $this->assign('seo_title','专区收益');
         $this->redirect();
     }
     public function income_settle(){
@@ -147,11 +147,11 @@ class DistrictController extends Controller {
         if($this->test){
               $this->assign('test',true);
         }
-        $this->assign("seo_title", "小区管理");
+        $this->assign("seo_title", "专区管理");
         $this->redirect();
     }
     public function district_info(){
-        $this->assign("seo_title", "小区信息");
+        $this->assign("seo_title", "专区信息");
         $this->redirect();
     }
     public function district_info_save(){
@@ -181,7 +181,7 @@ class DistrictController extends Controller {
             exit();
         }else{ 
             $this->assign('data',$this->hirer->getMyPrmoter(1));
-            $this->assign("seo_title", "推广员");
+            $this->assign("seo_title", "代理商");
             $this->redirect();
         }
     }
@@ -264,7 +264,7 @@ class DistrictController extends Controller {
             $start_time = date("Y-m-d 00:00:00");
             $end_time = date("Y-m-d 23:59:59");
             $this->assign('data',$this->hirer->getMyAchievementData($start_time, $end_time));
-            $this->assign("seo_title", "小区业绩");
+            $this->assign("seo_title", "专区业绩");
             $this->redirect();
         }
     }

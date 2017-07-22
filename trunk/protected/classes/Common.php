@@ -806,7 +806,7 @@ class Common {
              $first_promoter_user_id = self::getFirstPromoter($inviter_info['user_id']);
              if($first_promoter_user_id){
                 $income2 = round($order['order_amount']*5/100,2);
-                Log::incomeLog($income2, 2, $first_promoter_user_id, $order['id'], 0,"下级消费分成(上级第一个推广员)");
+                Log::incomeLog($income2, 2, $first_promoter_user_id, $order['id'], 0,"下级消费分成(上级第一个代理商)");
              }
              $income3 = round($order['order_amount']*3/100,2);
              Log::incomeLog($income3, 3, $inviter_info['district_id'], $order['id'], 0,"下级消费分成(所属小区)");

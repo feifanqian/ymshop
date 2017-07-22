@@ -1891,7 +1891,7 @@ class UcenterController extends Controller {
     public function promoter_income() {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
-            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是代理商"));
             exit();
         }
         if ($this->is_ajax_request()) {
@@ -1913,7 +1913,7 @@ class UcenterController extends Controller {
     public function promoter_sale() {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
-            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是代理商"));
             exit();
         }
         if ($this->is_ajax_request()) {
@@ -1961,7 +1961,7 @@ class UcenterController extends Controller {
     public function promoter_withdraw_list() {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
-            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是代理商"));
             exit();
         }
         if ($this->is_ajax_request()) {
@@ -1983,7 +1983,7 @@ class UcenterController extends Controller {
     public function promoter_getqrcode() {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
-            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是代理商"));
             exit();
         }
         $goods_id = Req::args('goods_id');
@@ -2023,7 +2023,7 @@ class UcenterController extends Controller {
                         }
                         $data['pay_status']=1; //将免费入驻标记为已经支付
                     } else {
-                         exit(json_encode(array('status'=>'fail',"msg"=>"您不是推广员")));;
+                         exit(json_encode(array('status'=>'fail',"msg"=>"您不是代理商")));;
                     }
                 } else {
                     unset($data['free']);
@@ -2063,7 +2063,7 @@ class UcenterController extends Controller {
                     $this->redirect();
                     exit();
                 } else {
-                    $this->redirect("/index/msg", false, array('type' => "info", "msg" => '抱歉', "content" => "您还不是推广员"));
+                    $this->redirect("/index/msg", false, array('type' => "info", "msg" => '抱歉', "content" => "您还不是代理商"));
                     exit();
                 }
             }
@@ -2078,7 +2078,7 @@ class UcenterController extends Controller {
         }
     }
 
-    //成为小区推广者
+    //成为小区代理商
     public function becomepromoter() {
         if ($this->is_ajax_request()) {
             echo json_encode(array('status' => 'fail', 'msg' => '抱歉，接口关闭了'));
@@ -2151,7 +2151,7 @@ class UcenterController extends Controller {
                 $this->assign('data', $district_info);
                 $this->assign("reference", $reference);
                 $this->assign("invitor_role", $invitor_role);
-                $this->assign('seo_title', "成为推广者");
+                $this->assign('seo_title', "成为代理商");
                 $this->redirect();
             }
         }
@@ -2255,14 +2255,14 @@ class UcenterController extends Controller {
         }
     }
     
-    //获取推广员邀请信息
+    //获取代理商邀请信息
     public function promoter_invite() {
         if ($this->is_ajax_request()) {
             $page = Filter::int(Req::args('page'));
             $promoter = Promoter::getPromoterInstance($this->user['id']);
             if (is_object($promoter)) {
                 if($promoter->role_type==1){
-                    echo json_encode(array('status' => 'fail', 'msg' => "你还不是付费推广员"));
+                    echo json_encode(array('status' => 'fail', 'msg' => "你还不是付费代理商"));
                     exit();
                 }
                 $data = $promoter->getMyInviteList($page);
@@ -2273,14 +2273,14 @@ class UcenterController extends Controller {
                 echo json_encode(array('status' => 'success', 'data' => $data['data']));
                 exit();
             } else {
-                exit("您还不是推广员");
+                exit("您还不是代理商");
             }
         } else {
             $this->assign("seo_title", "邀请入驻");
             $promoter = Promoter::getPromoterInstance($this->user['id']);
             if (is_object($promoter)) {
                 if($promoter->role_type==1){
-                    $this->redirect("/index/msg", false, array('type' => "info", "msg" => '抱歉', "content" => "您还不是付费推广员，暂时没有邀请权限"));
+                    $this->redirect("/index/msg", false, array('type' => "info", "msg" => '抱歉', "content" => "您还不是付费代理商，暂时没有邀请权限"));
                     exit();
                 }
                 $data = $promoter->getMyInviteList(1);
@@ -2296,20 +2296,20 @@ class UcenterController extends Controller {
                     $this->assign("has_district_shop", 0);
                 }
             } else {
-                $this->redirect("/index/msg", false, array('type' => "info", "msg" => '抱歉', "content" => "您还不是推广员"));
+                $this->redirect("/index/msg", false, array('type' => "info", "msg" => '抱歉', "content" => "您还不是代理商"));
                 exit();
             }
             $this->redirect();
         }
     }
     
-    //获取推广员推荐二维码
+    //获取代理商推荐二维码
     public function getPromoterInviteQR() {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (is_object($promoter)) {
             $promoter->getInviteQR4Promoter();
         } else {
-            exit("您还不是推广员");
+            exit("您还不是代理商");
         }
     }
     
