@@ -801,16 +801,45 @@ class Common {
          $model = new Model();
          $inviter_info = $model->table("invite")->where("invite_user_id=".$order['user_id'])->find();
          if($inviter_info){
-             file_put_contents("22.txt", json_encode($inviter_info)."\n",FILE_APPEND);
-             $is_promoter = $model->table("district_promoter")->where("user_id=".$inviter_info['user_id'])->find();
-             $role_type = $is_promoter?2:1;
              $income1 = round($order['order_amount']*5/100,2);
-             file_put_contents("22.txt", $income1."\n",FILE_APPEND);
-             Log::incomeLog($income1, $role_type, $inviter_info['user_id'], $order['id'], 0);
-             $income2 = round($order['order_amount']*3/100,2);
-             Log::incomeLog($income2, 3, $inviter_info['district_id'], $order['id'], 0);
+             Log::incomeLog($income1, 1, $inviter_info['user_id'], $order['id'], 0,"下级消费分成(上级邀请者)");
+             $first_promoter_user_id = self::getFirstPromoter($inviter_info['user_id']);
+             if($first_promoter_user_id){
+                $income2 = round($order['order_amount']*5/100,2);
+                Log::incomeLog($income2, 2, $first_promoter_user_id, $order['id'], 0,"下级消费分成(上级第一个推广员)");
+             }
+             $income3 = round($order['order_amount']*3/100,2);
+             Log::incomeLog($income3, 3, $inviter_info['district_id'], $order['id'], 0,"下级消费分成(所属小区)");
          }else{
              return false;
          }
+     }
+
+     static function getFirstPromoter($user_id){
+        $model = new Model();
+        $is_promoter = $model->table("district_promoter")->where("user_id=".$user_id)->find();
+        if($is_promoter){
+            return $user_id;
+        }else{
+            //根据邀请关系找到上级第一个推广者（代理商）
+            $is_break = false;
+            $now_user_id = $user_id;
+            $promoter_user_id = NULL;
+            while(!$is_break){
+                $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
+                if($inviter_info){
+                    $is_promoter = $model->table("district_promoter")->where("user_id=".$inviter_info['user_id'])->find();
+                    if($is_promoter){
+                        $prmoter_user_id = $inviter_info['user_id'];
+                        $is_break = true;
+                    }else{
+                        $now_user_id = $inviter_info['user_id'];
+                    }
+                }else{
+                    $is_break = true;
+                }
+            }
+            return $promoter_user_id;
+        }
      }
 }
