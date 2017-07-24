@@ -323,9 +323,31 @@ class Order {
                         //自动升级为代理商
                         $promoter_data['user_id']=$recharge['user_id'];
                         $promoter_data['type']=5;
-                        $promoter_data['create_time']=$promoter_data['create_time']=date("Y-m-d H:i:s");
+                        $promoter_data['create_time']=$promoter_data['join_time']=date("Y-m-d H:i:s");
                         $promoter_data['hirer_id']=$inviter_info?$inviter_info['district_id']:1;
+                        $promoter_data['status']=1;
                         $model->table("district_promoter")->data($promoter_data)->insert();
+                        if($inviter_info){
+                            $config = Config::getInstance()->get("district_set");
+
+                            $first_promoter_user_id = Common::getFirstPromoter($inviter_info['user_id']);
+                            if($first_promoter_user_id){
+                                Log::incomeLog($config['up_income1'], 2, $first_promoter_user_id, $recharge['id'], 14,"下级会员升级为代理商奖励");
+                                $result = $model->table("customer")->data(array("point_coin"=>"`point_coin`+".$config['up_point1']))->where("user_id=".$first_promoter_user_id)->update();
+                                if($result){
+                                    Log::pointcoin_log($config['up_point1'],$first_promoter_user_id,'','下级会员升级为代理商奖励',5);
+                                }
+
+                            }
+                        }
+                        $district_info = $model->table("district_shop")->where("id=".$promoter_data['hirer_id'])->find();
+                        if($district_info){
+                            Log::incomeLog($config['up_income2'], 3, $district_info['id'], $recharge['id'], 14,"专区会员升级为代理商奖励）");
+                            $result = $model->table("customer")->data(array("point_coin"=>"`point_coin`+".$config['up_point2']))->where("user_id=".$district_info['owner_id'])->update();
+                            if($result){
+                                Log::pointcoin_log($config['up_point2'],$district_info['owner_id'],'','专区会员升级为代理商奖励',5);
+                            }
+                        }
                     }
                 }
                 $result =true;

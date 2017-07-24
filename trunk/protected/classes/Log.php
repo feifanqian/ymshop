@@ -28,7 +28,7 @@ class Log {
         }
     }
     public static function pointcoin_log($amount, $user_id, $order_no='', $note = '', $type = 0, $admin_id = 0) {
-        //事件类型: 0:购物下单 1:套餐充值 2:系统退回 3：管理员充值 4：管理员退款 5:推广员入驻赠送 6:推广员推荐奖励 7：小区销售积分奖励 8:经营商入驻赠送 9:购买商品赠送 10:每日签到赠送 11：商城分红
+        //事件类型: 0:购物下单 1:套餐充值 2:系统退回 3：管理员充值 4：管理员退款 5:代理商入驻赠送 6:代理商推荐奖励 7：小区销售积分奖励 8:经营商入驻赠送 9:购买商品赠送 10:每日签到赠送 11：商城分红
         $model = new Model('customer');
         if($type==0){
             $amount = 0 - abs($amount);
@@ -52,18 +52,19 @@ class Log {
         $type_info=array(
             "0"=>"下级会员购买收益分成",
             "1"=>"用户推广商品收益",
-            "2"=>"推广员享受用户的推广商品收益分成",
+            "2"=>"代理商享受用户的推广商品收益分成",
             "3"=>"小区主享受用户的推广商品收益分成",
-            "4"=>"推广员推广商品分成",
-            "5"=>"小区享受推广员的推广商品收益分成",
+            "4"=>"代理商推广商品分成",
+            "5"=>"小区享受代理商的推广商品收益分成",
             "6"=>"上级小区享受下级小区推广商品分成",
             "7"=>"会员邀请收益",
-            "8"=>"推广员邀请推广员收益",
-            "9"=>"小区邀请推广员收益",
+            "8"=>"代理商邀请代理商收益",
+            "9"=>"小区邀请代理商收益",
             "10"=>"小区邀请小区收益",
             "11"=>"收益提取",
             "12"=>"收益撤销",
             "13"=>"收益解锁",
+            "14"=>"下级会员升级奖励"
         );
         $model = new model();
        
@@ -72,7 +73,7 @@ class Log {
             $data['valid_income_change'] = 0.00;
             $data['frezze_income_change'] = abs($amount);
             $data['settled_income_change'] = 0.00;
-        }else if(in_array($type, array(7,8,9,10))){
+        }else if(in_array($type, array(7,8,9,10,14))){
             $data['valid_income_change'] = abs($amount);
             $data['frezze_income_change'] = 0.00;
             $data['settled_income_change'] = 0.00;

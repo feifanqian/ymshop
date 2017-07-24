@@ -10,10 +10,23 @@
                 <dd>
                 <label><input type="radio" name="status" value="1" >开启</label>
                 <label><input type="radio" name="status" value="0">关闭</label>
-            	<label>（关闭后，系统将冻结小区功能）</label>
+                <label>（关闭后，系统将冻结小区功能）</label>
              </dd>
         </dl>
--->        
+-->     
+        <dl class="lineD">
+            <dt>会员消费奖励：</dt>
+            <dd>
+                下级会员消费，上级会员获得账单金额<input name="income1" type="text" value="" class="small"/>%奖励，上级第一个代理商获得<input name="income2" type="text" value="" class="small"/>%奖励，会员所属经营商（小区主）<input name="income3" type="text" value="" class="small"/>%奖励，
+                会员所属经营商的邀请经营商获得<input name="income4" type="text" value="" class="small"/>%奖励，不存在不分配。
+        </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>会员升级奖励：</dt>
+            <dd>
+                下级会员升级为代理商，上级第一个代理商获得<input name="up_income1" type="text" value="" class="small"/>收益奖励和<input name="up_point1" type="text" value="" class="small"/>积分奖励，会员所属经营商（小区主）<input name="up_income2" type="text" value="" class="small"/>收益奖励和<input name="up_point2" type="text" value="" class="small"/>积分奖励，不存在不分配。
+        </dd>
+        </dl>
         <dl class="lineD">
             <dt>①金额设置：</dt>
             <dd>&nbsp;</dd>
@@ -26,7 +39,7 @@
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>推广员入驻费：</dt>
+            <dt>代理商入驻费：</dt>
             <dd>
                 <input name="promoter_fee" type="text" value="" class="small" />
                 <span>元</span>
@@ -40,18 +53,18 @@
             </dd>
         </dl>
 <!--        <dl class="lineD">
-            <dt>小区推广员门槛：</dt>
+            <dt>小区代理商门槛：</dt>
             <dd>
                 <input name="promoter_join_line" type="text" value="" class="small" pattern="int"/>
-                <span>元（需在商城消费多少元才能获得推广员资格）</span>
+                <span>元（需在商城消费多少元才能获得代理商资格）</span>
             </dd>
         </dl>-->
         <dl class="lineD">
-            <dt>②推广员入驻奖励：</dt>
+            <dt>②代理商入驻奖励：</dt>
             <dd>&nbsp;</dd>
         </dl>
         <dl class="lineD">
-            <dt>推广员入驻赠送：</dt>
+            <dt>代理商入驻赠送：</dt>
             <dd>
                 <input name="join_send_gift" readonly type="text" value="" class="small" onclick='add()'/>
                 <span><a href="javascript:;" onclick="add()" class="button">选择礼品</a></span>+
@@ -60,7 +73,7 @@
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>推广员推荐推广员：</dt>
+            <dt>代理商推荐代理商：</dt>
             <dd>
                 <input name="promoter_invite_promoter_money" type="text" value="" class="small" />
                 <span>元</span>+
@@ -69,14 +82,14 @@
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>经销商直推推广员：</dt>
+            <dt>经销商直推代理商：</dt>
             <dd>
                 <input name="shop_invite_promoter_money" type="text" value="" class="small"/>
                 <span>元</span>
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>经销商间推推广员：</dt>
+            <dt>经销商间推代理商：</dt>
             <dd>
                 <input name="shop_invite_indirect_money" type="text" value="" class="small" />
                 <span>元</span>
@@ -108,7 +121,7 @@
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>推广员分成：</dt>
+            <dt>代理商分成：</dt>
               <dd>
                 <input name="beneficiary_two" type="text" value="" class="small" pattern="int"/>
                 <span>%(需大于普通用户分成)</span>
@@ -136,7 +149,7 @@
             <dt>赠送经营代理：</dt>
             <dd>
                 <input name="invite_promoter_num" type="text" value="" class="small" pattern="int"/>
-                <span>个(成功邀请多少个推广员，免费送经营商代理权)</span>
+                <span>个(成功邀请多少个代理商，免费送经营商代理权)</span>
             </dd>
         </dl>
         <dl class="lineD">
