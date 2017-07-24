@@ -342,7 +342,7 @@ class Order {
                         }
                         $district_info = $model->table("district_shop")->where("id=".$promoter_data['hirer_id'])->find();
                         if($district_info){
-                            Log::incomeLog($config['up_income2'], 3, $district_info['id'], $recharge['id'], 14,"专区会员升级为代理商奖励）");
+                            Log::incomeLog($config['up_income2'], 3, $district_info['id'], $recharge['id'], 14,"专区会员升级为代理商奖励");
                             $result = $model->table("customer")->data(array("point_coin"=>"`point_coin`+".$config['up_point2']))->where("user_id=".$district_info['owner_id'])->update();
                             if($result){
                                 Log::pointcoin_log($config['up_point2'],$district_info['owner_id'],'','专区会员升级为代理商奖励',5);

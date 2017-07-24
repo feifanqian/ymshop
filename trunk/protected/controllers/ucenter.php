@@ -611,13 +611,47 @@ class UcenterController extends Controller {
                             $user['real_name']=$realname;
                             $this->safebox->set('user', $user);
                             Common::sendPointCoinToNewComsumer($this->user['id']);
+                            $ret['status'] = "success";
                             $ret["message"] = "验证成功";
+                            $ret['show_point'] = 1;
                         } else {
+                            $ret['status'] = "fail";
                             $ret['message'] = "验证码不正确";
                         }
                     } else {
-                        $ret['status'] = "fail";
-                        $ret['message'] = "该手机号已经绑定过了";
+                        if(Common::checkInWechat()){
+                            $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
+                            if($ret['status']=='success'){
+                                SMS::getInstance()->flushCode($mobile);
+                                $is_bind = $this->model->table("oauth_user")->where("user_id=".$exist['user_id'])->find();
+                                if($is_bind){
+                                    $ret['status'] = "fail";
+                                    $ret['message'] = "该手机号已经绑定过了";
+                                }else{
+                                    $result = $this->model->table("oauth_user")->where("user_id=".$this->user['id'])->data(array("user_id"=>$exist['user_id']))->update();
+                                    if($result){
+                                        $user = $this->user;
+                                        $user['id']=$exist['user_id'];
+                                        $user['mobile']=$mobile;
+                                        $user['real_name']=$realname;
+                                        $this->safebox->set('user', $user);
+                                        $ret['status'] = "success";
+                                        $ret["message"] = "微信绑定成功";
+                                        $ret['show_point'] = 0;
+                                    }else{
+                                        $ret['status'] = "fail";
+                                        $ret["message"] = "微信绑定失败";
+                                    }
+                                }
+                            }else{
+                                $ret['status'] = "fail";
+                                $ret['message'] = "验证码不正确";
+                            }
+                            
+                        }else{
+                            $ret['status'] = "fail";
+                            $ret['message'] = "该手机号已经绑定过了";
+                        }
                     }
                 }else{
                     $ret['status'] = "fail";
@@ -975,7 +1009,7 @@ class UcenterController extends Controller {
 
     //保存地址
     public function address_save() {
-        $rules = array('addr:required:内容不能为空！', 'accept_name:required:收货人姓名不能为空!','mobile:mobi:手机格式不正确!', 'province:[1-9]\d*:选择地区必需完成', 'city:[1-9]\d*:选择地区必需完成', 'county:[1-9]\d*:选择地区必需完成');
+        $rules = array('addr:required:内容不能为空！', 'accept_name:required:收货人姓名不能为空!,mobile:mobi:手机格式不正确!','province:[1-9]\d*:选择地区必需完成', 'city:[1-9]\d*:选择地区必需完成', 'county:[1-9]\d*:选择地区必需完成');
         $info = Validator::check($rules);
 
         if (!is_array($info) && $info == true) {
@@ -1891,7 +1925,7 @@ class UcenterController extends Controller {
     public function promoter_income() {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
-            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是代理商"));
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
             exit();
         }
         if ($this->is_ajax_request()) {
@@ -1913,7 +1947,7 @@ class UcenterController extends Controller {
     public function promoter_sale() {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
-            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是代理商"));
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
             exit();
         }
         if ($this->is_ajax_request()) {
@@ -1961,7 +1995,7 @@ class UcenterController extends Controller {
     public function promoter_withdraw_list() {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
-            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是代理商"));
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
             exit();
         }
         if ($this->is_ajax_request()) {
@@ -1983,7 +2017,7 @@ class UcenterController extends Controller {
     public function promoter_getqrcode() {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
-            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是代理商"));
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
             exit();
         }
         $goods_id = Req::args('goods_id');
@@ -1991,7 +2025,7 @@ class UcenterController extends Controller {
         $promoter->getQrcodeByGoodsId($goods_id);
     }
     
-    //申请创建小区
+    //申请创建专区
     public function apply_for_district() {
         if ($this->is_ajax_request()) {
             $data = Filter::inputFilter(Req::args());
@@ -2015,7 +2049,7 @@ class UcenterController extends Controller {
                         }
                         $hirer = $this->model->table("district_shop")->where("owner_id =" . $this->user['id'])->find();
                         if ($hirer) {
-                            exit(json_encode(array('status'=>'fail',"msg"=>"您已经拥有小区了")));
+                            exit(json_encode(array('status'=>'fail',"msg"=>"您已经拥有专区了")));
                         }
                         $apply = $this->model->table("district_apply")->where("free = 1 and status = 0 and user_id = ".$this->user['id'])->find();
                         if($apply){
@@ -2055,7 +2089,7 @@ class UcenterController extends Controller {
                     }
                     $hirer = $this->model->table("district_shop")->where("owner_id =" . $this->user['id'])->find();
                     if ($hirer) {
-                        $this->redirect("/index/msg", false, array('type' => "info", "msg" => '抱歉', "content" => "您已经拥有小区了"));
+                        $this->redirect("/index/msg", false, array('type' => "info", "msg" => '抱歉', "content" => "您已经拥有专区了"));
                         exit();
                     }
                     $this->assign('seo_title', "免费入驻申请");
@@ -2078,7 +2112,7 @@ class UcenterController extends Controller {
         }
     }
 
-    //成为小区代理商
+    //成为专区推广者
     public function becomepromoter() {
         if ($this->is_ajax_request()) {
             echo json_encode(array('status' => 'fail', 'msg' => '抱歉，接口关闭了'));
@@ -2090,7 +2124,7 @@ class UcenterController extends Controller {
 
             $promoter = Promoter::getPromoterInstance($this->user['id']);
             if (is_object($promoter)&&$promoter->role_type==2) {
-                $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您已经有雇佣关系了，暂时不能加入其他小区"));
+                $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您已经有雇佣关系了，暂时不能加入其他专区"));
                 exit();
             }
             if ($reference == null) {
@@ -2109,7 +2143,7 @@ class UcenterController extends Controller {
                     exit();
                 }
                 if (!isset($district_info) || !$district_info) {
-                    $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "小区信息错误"));
+                    $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "专区信息错误"));
                     exit();
                 }
                 //礼品地址
@@ -2136,7 +2170,7 @@ class UcenterController extends Controller {
                 if (isset($config['join_send_gift']) && $config['join_send_gift'] != "") {
                     $gift = implode(",", explode("|", $config['join_send_gift']));
                 } else {
-                    $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "小区配置信息错误"));
+                    $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "专区配置信息错误"));
                     exit();
                 }
                 $gift_list = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$gift})")->fields("p.id,g.img,g.name")->findAll();
@@ -2151,7 +2185,7 @@ class UcenterController extends Controller {
                 $this->assign('data', $district_info);
                 $this->assign("reference", $reference);
                 $this->assign("invitor_role", $invitor_role);
-                $this->assign('seo_title', "成为代理商");
+                $this->assign('seo_title', "成为推广者");
                 $this->redirect();
             }
         }
@@ -2325,7 +2359,7 @@ class UcenterController extends Controller {
                 }
                 //判断今天是否签到过
                 $date = date("Y-m-d");
-                $is_signed = $this->model->table("sign_in")->where("date='$date'")->find();
+                $is_signed = $this->model->table("sign_in")->where("date='{$date}' and user_id=".$this->user['id'])->find();
                 if($is_signed){
                     exit(json_encode(array('status'=>'fail','msg'=>"今天已经签到过了")));
                 }else{
@@ -2363,7 +2397,7 @@ class UcenterController extends Controller {
                 exit(json_encode(array("status"=>'success','data'=>  Common::getSignInDataByUserID($year, $month, $this->user['id']))));
             }
         }else{
-            $today = $this->model->table("sign_in")->where("date='".date("Y-m-d")."'")->find();
+            $today = $this->model->table("sign_in")->where("date='".date("Y-m-d")."' and user_id=".$this->user['id'])->find();
             if($today){
                 $this->assign('serial_day',$today['serial_day']);
                 $this->assign("is_signed",true);

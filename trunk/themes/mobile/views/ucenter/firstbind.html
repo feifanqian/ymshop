@@ -153,7 +153,11 @@
                             success: function (ret) {
                                 $.hideLoading();
                                 if (ret.status == "success") {
-                                    $("#pulldone").show();
+                                    if(ret.show_point==1){
+                                        $("#pulldone").show();
+                                    }else{
+                                        $.toast("绑定微信账号成功");
+                                    }
                                     setTimeout(function () {
                                         location.href = "{url:/ucenter/index}";
                                     }, 3000);

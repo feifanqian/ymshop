@@ -247,20 +247,20 @@ class Common {
         $o=""; 
         foreach ($post_data as $k=>$v)
         {
-            $o.= "$k=".urlencode($v)."&";		//默认UTF-8编码格式
+            $o.= "$k=".urlencode($v)."&";       //默认UTF-8编码格式
         }
         $post_data=substr($o,0,-1);
         $ch = curl_init();
-	curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_HEADER, 0);
-	curl_setopt($ch, CURLOPT_URL,$url);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_URL,$url);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
         
-	$result = curl_exec($ch);
+    $result = curl_exec($ch);
         curl_close($ch);
-	$data = str_replace("\&quot;",'"',$result );
-	$data = json_decode($data,true);
+    $data = str_replace("\&quot;",'"',$result );
+    $data = json_decode($data,true);
         return $data;
     }
     
@@ -836,8 +836,8 @@ class Common {
                 $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
                 if($inviter_info){
                     $is_promoter = $model->table("district_promoter")->where("user_id=".$inviter_info['user_id'])->find();
-                    if($is_promoter){
-                        $prmoter_user_id = $inviter_info['user_id'];
+                    if(!empty($is_promoter)){
+                        $promoter_user_id = $inviter_info['user_id'];
                         $is_break = true;
                     }else{
                         $now_user_id = $inviter_info['user_id'];
