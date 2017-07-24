@@ -168,7 +168,6 @@ class LinuxCliTask{
        }
     }
 }
-
 //应用目录，为了程序的更好应用与开发。
 define("APP_ROOT", dirname(__file__) . DIRECTORY_SEPARATOR);
 //引入框架文件
