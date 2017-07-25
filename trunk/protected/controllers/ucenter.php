@@ -1278,7 +1278,7 @@ class UcenterController extends Controller {
         if (is_array($package_set)) {
             if(isset($package_set[4]['gift'])&&$package_set[4]['gift']!=''){
                 $where = implode(',', array_reverse(explode("|", $package_set[4]['gift'])));
-                $select4 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->order("field(p.id,$where)")->findAll();
+                $select4 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name,g.id as goods_id")->order("field(p.id,$where)")->findAll();
                 $this->assign("select4", $select4);
             }
         }
