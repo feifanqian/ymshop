@@ -72,7 +72,7 @@ class Hirer extends Object{
                 $line_data['id']=$v['id'];
                 $lint_data['join_time']=$v['join_time'];
                 if($v['avatar']==''){
-                    $line_data['avatar']="http://errorpage.b0.upaiyun.com/buy-d-404";
+                    $line_data['avatar']="/static/images/avatar.jpeg";
                 }else{
                     $line_data['avatar']=Url::urlFormat('@'.$v['avatar']);
                 }
