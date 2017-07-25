@@ -71,16 +71,16 @@ and open the template in the editor.
                   $("#goods_img").css("max-height",img_height+"px");
                   new QRCode(document.getElementById("qr"), "{$url}"); 
                   convertImgToBase64("#goods_img","{echo:Common::thumb($img_url,1000,1000)}");
-                  document.getElementById("goods_img").onload = function () {
-                         Html2image();
-                         layer.open({
-                            content: '长按图片可将图片保存，或者发送给朋友哦'
-                            ,fixed:false
-                            ,top: -150
-                            ,skin: 'msg'
-                            ,time: 4 //2秒后自动关闭
-                          });
-                  }
+//                  document.getElementById("goods_img").onload = function () {
+//                         Html2image();
+//                         layer.open({
+//                            content: '长按图片可将图片保存，或者发送给朋友哦'
+//                            ,fixed:false
+//                            ,top: -150
+//                            ,skin: 'msg'
+//                            ,time: 4 //2秒后自动关闭
+//                          });
+//                  }
               });
         </script>  
     </head>
@@ -111,7 +111,7 @@ and open the template in the editor.
         }
         .goods_show_head p{
             font-weight: bold;
-            font-size: 15px;
+            font-size: 18px;
             color:black;
             text-align: center;
             padding: 0 20px;
@@ -168,6 +168,13 @@ and open the template in the editor.
             padding: 0;
             margin: 0;
         }
+        .tips{
+            margin-top:0px;
+            padding-top:0px;
+        }
+        .sub_title{
+            margin-bottom: 0px;
+        }
     </style>
        <div class="container">
         <div id="goods">
@@ -198,7 +205,8 @@ and open the template in the editor.
                     </p>
                     <p class="tips">
                         长按二维码扫描购买<br/>
-                        <span>©2017 圆梦商城</span>
+                        分享此产品可赚取产品差价
+                        <span>©2017 圆梦购物网</span>
                     </p>
                     
                 </div>
