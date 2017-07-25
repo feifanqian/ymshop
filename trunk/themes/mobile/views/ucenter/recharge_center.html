@@ -1,5 +1,6 @@
-
 <link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<script src="{url:#js/swiper.min.js}"></script>
 <style type="text/css">
     .weui-col-20{
         text-align: center;
@@ -32,7 +33,9 @@
         z-index: 1;
         padding-left: 15px;
     }
-    
+    .weui-select-modal{
+        min-height: 250px;
+    }
     .package-selected{
         border: 3px solid #e9630a;
         position: relative;
@@ -50,8 +53,12 @@
        padding:0px;   
     }
     .layui-m-layerbtn{
-         height: 43px;
+        height: 43px;
         line-height: 43px;
+    }
+    .swiper-slide{
+        width:60px;
+        height:60px;
     }
 </style>
 <div class="weui_panel" id="huabi-score">
@@ -77,24 +84,20 @@
                                 <p style='line-height:40px;'>自定义</p>
                                 <i></i>
                             </div>
-                            <div class="weui-col-20" data-value="1" data-amount="{$package_set[1]['money']}" id="package1">
-                               <p>套餐一</p>
-                               <p>¥{$package_set[1]['money']}</p>
+                            <div class="weui-col-20" data-value="1" data-amount="{$package_set[1]['money']}" data-point="{$package_set[1]['point']}" data-financial="{$package_set[1]['financial_coin']}">
+                               <p style='line-height:40px;'>套餐一</p>
                                 <i></i>
                             </div>
-                            <div class="weui-col-20" data-value="2" data-amount="{$package_set[2]['money']}" id="package2">
-                               <p>套餐二</p>
-                               <p>¥{$package_set[2]['money']}</p>
+                            <div class="weui-col-20" data-value="2" data-amount="{$package_set[2]['money']}" data-point="{$package_set[1]['point']}" data-financial="{$package_set[1]['financial_coin']}">
+                               <p style='line-height:40px;'>套餐二</p>
                                 <i></i>
                             </div>
-                            <div class="weui-col-20" data-value="3" data-amount="{$package_set[3]['money']}">
-                                <p>套餐三</p>
-                                <p>¥{$package_set[3]['money']}</p>
+                            <div class="weui-col-20" data-value="3" data-amount="{$package_set[3]['money']}" data-point="{$package_set[1]['point']}" data-financial="{$package_set[1]['financial_coin']}">
+                                <p style='line-height:40px;'>套餐三</p>
                                 <i></i>
                             </div>
-                            <div class="weui-col-20" data-value="4" data-amount="{$package_set[4]['money']}">
-                               <p>代理商套餐</p>
-                               <p>¥{$package_set[4]['money']}</p>
+                            <div class="weui-col-20" data-value="4" data-amount="{$package_set[4]['money']}" data-point="{$package_set[1]['point']}" data-financial="{$package_set[1]['financial_coin']}">
+                               <p>代理商<br>套餐</p>
                                 <i></i>
                             </div>
                         </div>
@@ -103,6 +106,24 @@
             </div>
         </div>
     </div>
+</div>
+<div class="weui-form-preview" id='package_info' style='display: none;'>
+            <div class="weui-form-preview__hd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">套餐金额</label>
+                    <em class="weui-form-preview__value" id="package_money"></em>
+                </div>
+            </div>
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">另赠送积分</label>
+                    <span class="weui-form-preview__value" id="package_point"></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">赠分红点数</label>
+                    <span class="weui-form-preview__value" id="package_financial_coin"></span>
+                </div>
+            </div>
 </div>
 <div class="weui_cells weui_cells_access" id='gift_select_4' style='display:none;'>
             <div class="weui_cell">
@@ -255,11 +276,17 @@
         $("input[name='package']").val($(this).data('value'));
         $("input[name='package']").val($(this).data('value'));
         $("input[name='recharge']").val($(this).data('amount'));
+        $("#package_money").html("¥"+$(this).data('amount'));
+        $("#package_point").html($(this).data('point'));
+        $("#package_financial_coin").html($(this).data('financial'));
+
         if($(this).data('value')==0){
             $("input[name='recharge']").removeAttr("readonly");
             $("#address_select").hide();
             $("#gift_select_4").hide();
+            $("#package_info").hide();
         }else{
+            $("#package_info").show();
             $("input[name='recharge']").attr("readonly","readonly");  
             if($(this).data('value')==4){
                 $("#address_select").show();

@@ -5,6 +5,11 @@
 
 <script type="text/javascript" charset="UTF-8" src="{url:#js/order.js}"></script>
 <link type="text/css" rel="stylesheet" href="{url:#css/simple.css}" />
+<style>
+    .weui-select-modal{
+        min-height: 250px;
+    }
+</style>
 <form action="{url:/simple/order_act}" method="post">
     {set:$addressone=reset($address)}
     <input id="address_id" class="radio" type="hidden" name="address_id" value="{echo:$addressone?$addressone['id']:0}" />
