@@ -71,16 +71,16 @@ and open the template in the editor.
                   $("#goods_img").css("max-height",img_height+"px");
                   new QRCode(document.getElementById("qr"), "{$url}"); 
                   convertImgToBase64("#goods_img","{echo:Common::thumb($img_url,1000,1000)}");
-//                  document.getElementById("goods_img").onload = function () {
-//                         Html2image();
-//                         layer.open({
-//                            content: '长按图片可将图片保存，或者发送给朋友哦'
-//                            ,fixed:false
-//                            ,top: -150
-//                            ,skin: 'msg'
-//                            ,time: 4 //2秒后自动关闭
-//                          });
-//                  }
+                  document.getElementById("goods_img").onload = function () {
+                         Html2image();
+                         layer.open({
+                            content: '长按图片可将图片保存，或者发送给朋友哦'
+                            ,fixed:false
+                            ,top: -150
+                            ,skin: 'msg'
+                            ,time: 4 //2秒后自动关闭
+                          });
+                  }
               });
         </script>  
     </head>
