@@ -1174,7 +1174,7 @@ class UcenterController extends Controller {
         }
         $is_promoter = false;
         $promoter = Promoter::getPromoterInstance($this->user['id']);
-        if (is_object($promoter)) {
+        if (is_object($promoter)&&$promoter->role_type==2) {
             $is_promoter = true;
         }
         $is_hirer = false;
