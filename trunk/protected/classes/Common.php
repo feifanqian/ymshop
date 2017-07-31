@@ -815,7 +815,7 @@ class Common {
              $district_info = $model->table("district_shop")->where("id=".$inviter_info['district_id'])->find();
              if($district_info&&$district_info['invite_shop_id']!=""){
                 $income4 = round($order['order_amount']*$config['income4']/100,2);
-                Log::incomeLog($income4, 3, $inviter_info['invite_shop_id'], $order['id'], 6,"专区邀请者分成");
+                Log::incomeLog($income4, 3, $district_info['invite_shop_id'], $order['id'], 6,"专区邀请者分成");
              }
          }else{
              return false;
