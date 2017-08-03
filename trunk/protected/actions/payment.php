@@ -385,7 +385,6 @@ class PaymentAction extends Controller {
         return;
     }
     
-】
     public function pay_district() {
         //获得payment_id 获得相关参数
         $payment_id = Filter::int(Req::args('payment_id'));
