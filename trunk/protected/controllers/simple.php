@@ -1724,10 +1724,10 @@ class SimpleController extends Controller {
     //检测用户是否在线
     private function checkOnline() {
         if (isset($this->user) && $this->user['name'] != null) {
-            if($this->user['mobile']==""){
-                $this->redirect('/ucenter/firstbind');
-                exit();
-            }
+//            if($this->user['mobile']==""){
+//                $this->redirect('/ucenter/firstbind');
+//                exit();
+//            }
             $this->assign("user", $this->user);
             return true;
         } else {
