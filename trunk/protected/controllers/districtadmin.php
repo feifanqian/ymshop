@@ -298,6 +298,7 @@ class DistrictadminController extends Controller {
                             $result = $model->table("customer")->where("user_id=" . $apply_info['user_id'])->data(array("point_coin" => "`point_coin`+" . round($set['join_fee'], 2)))->update();
                             if ($result) {
                                 Log::pointcoin_log(round($set['join_fee'], 2), $apply_info['user_id'], "", "经营商入驻赠送", 8);
+                                $model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$set['join_fee'] ))->where("user_id=" . $apply_info['user_id'])->update();
                             }
                             if ($data['invite_shop_id'] != "") {
                                 //获取分配比例
