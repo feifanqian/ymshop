@@ -288,6 +288,11 @@ class Order {
                 if($result){
                     Log::balance($account, $user_id, $recharge['recharge_no'], "用户充值", 1);
                 }
+                $result = $model->table("customer")->data(array('point_coin' => "`point_coin`+" . $account))->where("user_id=" . $user_id)->update();
+                if($result){
+                    Log::pointcoin_log($account, $user_id, $recharge_no,"充值送积分", 1);
+                }
+                $result = $model->table("customer")->data(array('financial_coin' => "`financial_coin`+" . $account))->where("user_id=" . $user_id)->update();
             }else{//套餐充值处理
                 $config = Config::getInstance();
                 $package_set = $config->get("recharge_package_set"); 
