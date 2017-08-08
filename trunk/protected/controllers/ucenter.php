@@ -69,10 +69,10 @@ class UcenterController extends Controller {
 
     public function checkRight($actionId) {
         if (isset($this->user['name']) && $this->user['name'] != null){
-            if($this->user['mobile']==""&&$actionId!='firstbind'){
-                $this->redirect('firstbind');
-                exit();
-            }
+//            if($this->user['mobile']==""&&$actionId!='firstbind'){
+//                $this->redirect('firstbind');
+//                exit();
+//            }
             return true;
         }else{
             return false;
