@@ -284,7 +284,7 @@ class Order {
             $result = "";
             if($recharge['package']==0){//普通充值
                 //增加余额
-                $result = $modle->table("customer")->where("user_id = $user_id")->data(array("balance"=>"`balance`+$account"))->update();
+                $result = $model->table("customer")->where("user_id = $user_id")->data(array("balance"=>"`balance`+$account"))->update();
                 if($result){
                     Log::balance($account, $user_id, $recharge['recharge_no'], "用户充值", 1);
                 }
