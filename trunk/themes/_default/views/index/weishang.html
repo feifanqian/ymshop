@@ -48,11 +48,11 @@ $(function(){
     <div class="container">
         <!--S 产品展示-->
         <ol class="bread-crumb">
-            <li class="bold_producttit"><a href="#">积分购</a></li>
+            <li class="bold_producttit"><a href="#">微商购</a></li>
             <li><a href="#">惊爆单品 诚意推荐</a></li>
         </ol>
         <ul class="groupproduct-list clearfix">
-            {query:name=point_sale as ps fields=*,ps.id as id join=left join goods as go on ps.goods_id eq go.id  where=ps.status eq 1  order=ps.listorder asc limit=12 pagesize=12 page=1 id=$point_sale}
+            {query:name=pointwei_sale as ps fields=*,ps.id as id join=left join goods as go on ps.goods_id eq go.id  where=ps.status eq 1  order=ps.listorder asc limit=12 pagesize=12 page=1 id=$pointwei_sale}
             <li class="item" style="text-align: center;">
                 <dl class="groupproduct" 
                     style=" background: -webkit-linear-gradient(rgba(23, 22, 22, 0.07), rgba(229, 229, 229, 0)); /* Safari 5.1 - 6.0 */
@@ -60,9 +60,9 @@ $(function(){
                             background: -moz-linear-gradient(rgba(23, 22, 22, 0.07), rgba(229, 229, 229, 0)); /* Firefox 3.6 - 15 */
                             background: linear-gradient(rgba(23, 22, 22, 0.07), rgba(229, 229, 229, 0)); /* 标准的语法 */
                             border-radius:15px;">
-                    <dt class="img"><a href="{url:/index/pointbuy/id/$item[id]}"><img  style="border-radius:15px;width:380px;height:280px;" src="{echo:Common::thumb($item['img'],380,280,'both')}" ></a></dt>
+                    <dt class="img"><a href="{url:/index/weibuy/id/$item[id]}"><img  style="border-radius:15px;width:380px;height:280px;" src="{echo:Common::thumb($item['img'],380,280,'both')}" ></a></dt>
                     
-                    <dd class="title"><a href="{url:/index/pointbuy/id/$item[id]}"><p class='name'>{$item['name']}</p></a></dd>
+                    <dd class="title"><a href="{url:/index/weibuy/id/$item[id]}"><p class='name'>{$item['name']}</p></a></dd>
                     <dd class="price">
                          {set:$set = current(unserialize($item['price_set']));}
                         <ul>
@@ -75,7 +75,7 @@ $(function(){
             </li>
             {/query}
         </ul>
-        <div class=" mt10 page-nav">{echo:$point_sale->pageBar();}</div>
+        <div class=" mt10 page-nav">{echo:$pointwei_sale->pageBar();}</div>
         <!--E 产品展示-->
     </div>
 </div>

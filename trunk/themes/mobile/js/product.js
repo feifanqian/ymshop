@@ -98,6 +98,9 @@ $(function () {
                 }else if(type == "pointflash"){
                     var url = Product.pointflashUrl + product['id'];
                     location.href = url;
+                }else if(type == "weibuy"){
+                    var url = Product.weibuyUrl + product['id'];
+                    location.href = url;
                 }else {
                     $.post(Product.addGoodsCartUrl, {id: product['id'], num: num}, function (data) {
                         if (data.length < 1) {
