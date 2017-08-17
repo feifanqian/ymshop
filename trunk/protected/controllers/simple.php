@@ -998,6 +998,22 @@ class SimpleController extends Controller {
                     Tiny::Msg($this, "你提交的积分购不存在！", 404);
                     exit;
                 }
+            }else if($type == 'weibuy'){
+                $model = new Model("pointwei_sale as ps");
+                $product_id = Filter::int($product_id);
+                $item = $model->join("left join goods as go on ps.goods_id=go.id left join products as pr on pr.goods_id=ps.goods_id")->fields("*,pr.id as product_id,pr.store_nums")->where("ps.id=$id and pr.id=$product_id")->find();
+                if ($item) {
+                    if ($item['status'] == 1 && $item['store_nums'] > 0) {
+                        //$this->flashStatus($id,$item['quota_num'],$this->user['id'],true);
+                        $product = $this->packPointbuyProducts($item);
+                        $this->assign("product", $product);
+                    } else {
+                        $this->redirect("/index/weibuy/id/$id");
+                    }
+                } else {
+                    Tiny::Msg($this, "你提交的积分购不存在！", 404);
+                    exit;
+                }
             }else if($type=="pointflash"){
                 $model = new Model("pointflash_sale as ps");
                 $product_id = Filter::int($product_id);

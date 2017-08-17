@@ -272,6 +272,9 @@ $(function () {
             if(PRODUCT.pointbuy==1){
                 location.href = PRODUCT.pointBuyUrl+id;
                 return false;
+            }else if(PRODUCT.weibuy==1){
+                location.href = PRODUCT.weiBuyUrl+id;
+                return false; 
             }
             $.post(PRODUCT.addGoodsCartUrl, {id: id, num: num}, function (data) {
                 if (data.length < 1) {
