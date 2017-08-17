@@ -68,6 +68,9 @@ class UcenterController extends Controller {
     }
 
     public function checkRight($actionId) {
+        if($actionId=='buildinvite'){
+                return true;
+        }
         if (isset($this->user['name']) && $this->user['name'] != null){
 //            if($this->user['mobile']==""&&$actionId!='firstbind'){
 //                $this->redirect('firstbind');
@@ -108,7 +111,7 @@ class UcenterController extends Controller {
                 exit;
             }
         }
-        $url = Url::fullUrlFormat("/index/invite") . "?inviter_id=" . $this->user['id'];
+        $url = Url::fullUrlFormat("/index/invite") . "?inviter_id=" . $user_id;
         $qrCode = new QrCode();
         $qrCode
                 ->setText($url)
