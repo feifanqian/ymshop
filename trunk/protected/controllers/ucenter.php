@@ -1653,7 +1653,7 @@ class UcenterController extends Controller {
                     if ($account_info['other_user_id'] == 0 || $account_info['other_user_id'] == "") {//如果另一个账号信息不存在
                         //查询手机号绑定的账号
                         $other_account = $this->model->table('customer')->where("mobile='" . $mobile . "'")->fields('user_id,mobile')->find();
-                        if (empty($other_account) && $other_account['user_id'] == 0) {
+                        if (empty($other_account) || $other_account['user_id'] == 0) {
                             $ret['status'] = "fail";
                             $ret['message'] = "切换失败,该手机号绑定的账号不存在";
                             echo json_encode($ret);
