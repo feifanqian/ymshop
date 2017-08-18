@@ -228,19 +228,6 @@
                 </div>
             </a>
         </div>
-        {/query}
-        {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end asc,gb.id desc limit=12}
-        <div class="swiper-slide">
-            <a href="{url:/index/pointwei/id/$item[id]}">
-                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
-                <div class="title">{echo:TString::msubstr($item['name'],0,10,'utf-8','');}</div>
-                <div class="prices">
-                    <span class="gb-price">{$currency_symbol}{$item['price']}</span>
-                    <del class="tag-price">{$currency_symbol}{$item['sell_price']}</del>
-                    <span class="sale">{echo:sprintf("%0.1f",$item['price']*10/$item['sell_price'])}<i class="f4">折</i></span>
-                </div>
-            </a>
-        </div>
         {/query}   
     </div>
 </div>
