@@ -802,6 +802,44 @@ class SimpleController extends Controller {
         );
         return $product;
     }
+    //打包微商购订单商品信息
+    private function packWeibuyProducts($item, $num = 1) {
+        $price_set = unserialize($item['price_set']);
+        if($item['store_nums']<=0){
+           $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '库存不足',"content"=>"抱歉，该商品已经售罄"));
+           exit();
+        }
+        if(is_array($price_set)){
+           $real_price = $price_set[$item['product_id']]['cash'];
+           $cash = $price_set[$item['product_id']]['cash']*$num;
+           $point = $price_set[$item['product_id']]['point']*$num;
+        }else{
+           $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '配置出错',"content"=>"抱歉，系统配置出现错误"));
+           exit();
+        }
+        $sell_total = $item['sell_price'] * $num;
+        $product[$item['product_id']] = array(
+            'id' => $item['product_id'],
+            'goods_id' => $item['goods_id'], 
+            'name' => $item['name'], 
+            'img' => $item['img'], 
+            'num' => $num, 
+            'store_nums' => $item['store_nums'], 
+            'spec' => unserialize($item['spec']), 
+            'amount'=>$cash,
+            "real_price" =>$real_price,
+            'sell_total' => $sell_total,
+            "sell_price" => $item['sell_price'], 
+            'weight' => $item['weight'], 
+            'point' => $item['point'], 
+            'freeshipping' => $item['freeshipping'], 
+            "prom_goods" => array(),
+            'shop_id'=>$item['shop_id'],
+            'cash'=>$cash,
+            'point'=>$point
+        );
+        return $product;
+    }
      //打包积分购订单商品信息
     private function packPointFlashProducts($item, $num = 1) {
         $price_set = unserialize($item['price_set']);
@@ -993,6 +1031,22 @@ class SimpleController extends Controller {
                         $this->assign("product", $product);
                     } else {
                         $this->redirect("/index/pointbuy/id/$id");
+                    }
+                } else {
+                    Tiny::Msg($this, "你提交的积分购不存在！", 404);
+                    exit;
+                }
+            }else if($type == 'weibuy' || $type == 'pointwei'){
+                $model = new Model("pointwei_sale as ps");
+                $product_id = Filter::int($product_id);
+                $item = $model->join("left join goods as go on ps.goods_id=go.id left join products as pr on pr.goods_id=ps.goods_id")->fields("*,pr.id as product_id,pr.store_nums")->where("ps.id=$id and pr.id=$product_id")->find();
+                if ($item) {
+                    if ($item['status'] == 1 && $item['store_nums'] > 0) {
+                        //$this->flashStatus($id,$item['quota_num'],$this->user['id'],true);
+                        $product = $this->packPointbuyProducts($item);
+                        $this->assign("product", $product);
+                    } else {
+                        $this->redirect("/index/weibuy/id/$id");
                     }
                 } else {
                     Tiny::Msg($this, "你提交的积分购不存在！", 404);
@@ -1263,6 +1317,42 @@ class SimpleController extends Controller {
                         $data['prom'] = serialize($pointbuy);
                         $data['prom_id'] = $id;
                         $order_type = 5;
+                }else if($type == 'weibuy' || $type == 'pointwei'){
+                        $product_id = Filter::int($product_id[0]);
+                        $num = Filter::int($buy_num[0]);
+                        if ($num < 1)
+                            $num = 1;
+                        $item = $model->table("pointwei_sale as ps")
+                                ->join("left join goods as go on ps.goods_id=go.id left join products as pr on pr.goods_id=ps.goods_id")
+                                ->fields("*,pr.id as product_id,pr.spec")
+                                ->where("ps.id=$id and pr.id = $product_id")
+                                ->find();
+                        $weibuy = $model->table("pointwei_sale")->where("id=$id")->find();
+                        if(empty($weibuy)||empty($item)){
+                            $this->redirect("/index/msg", true, array('msg' => '你提交的微商购不存在！', 'type' => 'error'));
+                            exit();
+                        }
+                        $order_products = $this->packWeibuyProducts($item, $num);
+                        $user_point_coin = $model->table("customer")->where("user_id=".$this->user['id'])->fields('point_coin')->find();
+                        if(empty($user_point_coin)||!isset($user_point_coin['point_coin'])){
+                            $this->redirect("/index/msg", true, array('msg' => '查询失败','content'=>'查询用户积分失败', 'type' => 'error'));
+                            exit();
+                        }else{
+                            if($user_point_coin['point_coin']<$order_products[$product_id]['point']){
+                                $this->redirect("/index/msg", true, array('msg' => '积分不足','content'=>'用户积分不足，无法购买', 'type' => 'error'));
+                                exit();
+                            }else{
+                                $office_point_coin = Common::getOfficialPromoterPointCoin($this->user['id']);
+                                if($user_point_coin['point_coin']-$office_point_coin<$order_products[$product_id]['point']){
+                                    $this->redirect("/index/msg", true, array('msg' => '可用积分不足','content'=>'您的积分中含有不可用的返利积分', 'type' => 'error'));
+                                    exit();
+                                }
+                            }
+                        }
+                        $data['pay_point'] = $order_products[$product_id]['point'];
+                        $data['prom'] = serialize($weibuy);
+                        $data['prom_id'] = $id;
+                        $order_type = 7;
                 }else if($type=="pointflash"){
                         $product_id = Filter::int($product_id[0]);
                         $num = Filter::int($buy_num[0]);

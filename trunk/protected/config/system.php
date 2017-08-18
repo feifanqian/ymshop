@@ -167,6 +167,14 @@
   ),
   'district_set' => 
   array (
+    'income1' => '5',
+    'income2' => '5',
+    'income3' => '3',
+    'income4' => '1',
+    'up_income1' => '1',
+    'up_point1' => '1',
+    'up_income2' => '1',
+    'up_point2' => '1',
     'join_fee' => '180000',
     'promoter_fee' => '3600',
     'min_withdraw_amount' => '1',

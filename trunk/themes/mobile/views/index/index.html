@@ -116,7 +116,7 @@
     <ul>
         <li><a href="{url:/index/category_index}"> <span class="t" style="background:#ffc30a;"><i class="iconfont icon-item"> </i></span><em> 全部商品 </em>  </a></li>
         <li> <a href="{url:/index/flash}"> <span class="t" style="background:#fd8b62;"> <i class="iconfont icon-flash"> </i></span> <em> 抢购 </em>  </a> </li>
-        <li> <a href="{url:/index/group}"> <span class="t" style="background:#ef6392;"> <i class="iconfont icon-tuan"> </i></span> <em> 团购 </em> </a> </li>
+        <li> <a href="{url:/index/group}"> <span class="t" style="background:#ef6392;"> <i class="iconfont icon-tuan"> </i></span> <em> 爆品 </em> </a> </li>
         <li> <a href="{url:/index/point}"> <span class="t" style="background:#ce94d9;"> <i class="iconfont icon-qiandai"> </i> </span><em> 积分购 </em>  </a> </li>
         <li> <a href="{url:/index/personal_shop_list}"> <span class="t" style="background:#91a8ff;"> <i class="ymicon icon-dianpu"  style="line-height: 1.3em;font-size: 3.5em;color:white;"> </i> </span><em> 店铺专区 </em>  </a> </li>
     </ul>
@@ -210,6 +210,38 @@
         </div>
         {/query}
         
+    </div>
+</div>
+<div class="swiper-container swiper-init" id="swiper-qiang" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 0,'freeMode': true,'pagination': '','slidesPerColumn':'1'}">
+    <div class="swiper-title"> <div class="logo">微商专区</div> 
+        <a class="more" href="{url:/index/flash}"><span>微商专场</span><i class="iconfont icon-next"></i></a> 
+    </div>
+    <div class="swiper-wrapper">
+        {query:name=pointwei_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id order=ps.id desc limit=12}
+        <div class="swiper-slide">
+            <a href="{url:/index/pointwei/id/$item[id]}">
+                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                <div class="title"><p>{$item['name']}</p></div>
+                <div class="prices">
+                     
+                    <span class="gb-price">{$currency_symbol}{$item['sell_price']}</span>
+                </div>
+            </a>
+        </div>
+        {/query}
+        {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end asc,gb.id desc limit=12}
+        <div class="swiper-slide">
+            <a href="{url:/index/pointwei/id/$item[id]}">
+                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                <div class="title">{echo:TString::msubstr($item['name'],0,10,'utf-8','');}</div>
+                <div class="prices">
+                    <span class="gb-price">{$currency_symbol}{$item['price']}</span>
+                    <del class="tag-price">{$currency_symbol}{$item['sell_price']}</del>
+                    <span class="sale">{echo:sprintf("%0.1f",$item['price']*10/$item['sell_price'])}<i class="f4">折</i></span>
+                </div>
+            </a>
+        </div>
+        {/query}   
     </div>
 </div>
 {set:$colorarr=array('yellow', 'violetred', 'slateblue', 'orange');}

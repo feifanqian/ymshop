@@ -303,6 +303,11 @@ class IndexController extends Controller {
         $this->assign('seo_keywords', '积分,优惠促销精选,更多优惠.');
         $this->redirect();
     }
+    public function weishang() {
+        $this->assign('seo_title', '积分,优惠精选');
+        $this->assign('seo_keywords', '积分,优惠促销精选,更多优惠.');
+        $this->redirect();
+    }
     //团购
     public function groupbuy() {
         $id = Filter::int(Req::args("id"));
@@ -436,6 +441,142 @@ class IndexController extends Controller {
     public function pointbuy() {
         $id = Filter::int(Req::args("id"));
         $goods = $this->model->table("point_sale as ps")->fields("ps.price_set,go.*")->join("left join goods as go on ps.goods_id = go.id")->where("ps.id=$id and ps.status=1")->find();
+        if ($goods) {
+            //检测抢购是否结束
+            if ($goods['store_nums'] <= 0) {
+                $this->assign("store_empty",true);
+            }
+            $price_set = unserialize($goods['price_set']);
+            $skumap = array();
+            $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = {$goods['id']}")->findAll();
+            if ($products) {
+                foreach ($products as $product) {
+                    $product['sell_price']=$price_set[$product['id']]['cash']."+".$price_set[$product['id']]['point']."积分";
+                    $skumap[$product['specs_key']] = $product;
+                }
+            }
+            $attr_array = unserialize($goods['attrs']);
+            $goods_attrs = array();
+            if ($attr_array) {
+                $rows = $this->model->fields("ga.*,av.name as vname,av.id as vid")->table("goods_attr as ga")->join("left join attr_value as av on ga.id=av.attr_id")->where("ga.type_id = $goods[type_id]")->findAll();
+                $attrs = $_attrs = array();
+                foreach ($rows as $row) {
+                    $attrs[$row['id'] . '-' . $row['vid']] = $row;
+                    $_attrs[$row['id']] = $row;
+                }
+                foreach ($attr_array as $key => $value) {
+                    if (isset($attrs[$key . '-' . $value]))
+                        $goods_attrs[] = $attrs[$key . '-' . $value];
+                    else {
+                        $_attrs[$key]['vname'] = $value;
+                        $goods_attrs[] = $_attrs[$key];
+                    }
+                }
+                unset($attrs, $_attrs);
+            }
+             //评论
+            $comment = array();
+            $review = array('1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0);
+            $rows = $this->model->table("review")->fields("count(id) as num,point")->where("status=1 and goods_id = {$goods['id']}")->group("point")->findAll();
+            foreach ($rows as $row) {
+                $review[$row['point']] = intval($row['num']);
+            }
+            $a = ($review[4] + $review[5]);
+            $b = ($review[3]);
+            $c = ($review[1] + $review[2]);
+            $total = $a + $b + $c;
+            $comment['total'] = $total;
+            if ($total == 0)
+                $total = 1;
+            $comment['a'] = array('num' => $a, 'percent' => round((100 * $a / $total)));
+            $comment['b'] = array('num' => $b, 'percent' => round((100 * $b / $total)));
+            $comment['c'] = array('num' => $c, 'percent' => round((100 * $c / $total)));
+            $this->assign("comment", $comment);
+            $this->assign("price",  current($price_set));
+            $this->assign('id', $id);
+            $this->assign("skumap", $skumap);
+            $this->assign("attr_array", $attr_array);
+            $this->assign("goods_attrs", $goods_attrs);
+            $this->assign("goods", $goods);
+            $this->redirect();
+        } else {
+            Tiny::Msg($this, "404");
+        }
+    }
+
+    //微商购
+    public function pointwei() {
+        $id = Filter::int(Req::args("id"));
+        // var_dump($id);die;
+        $goods = $this->model->table("pointwei_sale as ps")->fields("ps.price_set,go.*")->join("left join goods as go on ps.goods_id = go.id")->where("ps.id=$id and ps.status=1")->find();
+        if ($goods) {
+            //检测抢购是否结束
+            if ($goods['store_nums'] <= 0) {
+                $this->assign("store_empty",true);
+            }
+            $price_set = unserialize($goods['price_set']);
+            // var_dump($price_set);
+            $skumap = array();
+            $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = {$goods['id']}")->findAll();
+            if ($products) {
+                // var_dump($products);die;
+                foreach ($products as $product) {
+                    $product['sell_price']=$price_set[$product['id']]['cash']."+".$price_set[$product['id']]['point']."积分";
+                    $skumap[$product['specs_key']] = $product;
+                }
+            }
+            $attr_array = unserialize($goods['attrs']);
+            $goods_attrs = array();
+            if ($attr_array) {
+                $rows = $this->model->fields("ga.*,av.name as vname,av.id as vid")->table("goods_attr as ga")->join("left join attr_value as av on ga.id=av.attr_id")->where("ga.type_id = $goods[type_id]")->findAll();
+                $attrs = $_attrs = array();
+                foreach ($rows as $row) {
+                    $attrs[$row['id'] . '-' . $row['vid']] = $row;
+                    $_attrs[$row['id']] = $row;
+                }
+                foreach ($attr_array as $key => $value) {
+                    if (isset($attrs[$key . '-' . $value]))
+                        $goods_attrs[] = $attrs[$key . '-' . $value];
+                    else {
+                        $_attrs[$key]['vname'] = $value;
+                        $goods_attrs[] = $_attrs[$key];
+                    }
+                }
+                unset($attrs, $_attrs);
+            }
+             //评论
+            $comment = array();
+            $review = array('1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0);
+            $rows = $this->model->table("review")->fields("count(id) as num,point")->where("status=1 and goods_id = {$goods['id']}")->group("point")->findAll();
+            foreach ($rows as $row) {
+                $review[$row['point']] = intval($row['num']);
+            }
+            $a = ($review[4] + $review[5]);
+            $b = ($review[3]);
+            $c = ($review[1] + $review[2]);
+            $total = $a + $b + $c;
+            $comment['total'] = $total;
+            if ($total == 0)
+                $total = 1;
+            $comment['a'] = array('num' => $a, 'percent' => round((100 * $a / $total)));
+            $comment['b'] = array('num' => $b, 'percent' => round((100 * $b / $total)));
+            $comment['c'] = array('num' => $c, 'percent' => round((100 * $c / $total)));
+            $this->assign("comment", $comment);
+            $this->assign("price",  current($price_set));
+            $this->assign('id', $id);
+            $this->assign("skumap", $skumap);
+            $this->assign("attr_array", $attr_array);
+            $this->assign("goods_attrs", $goods_attrs);
+            $this->assign("goods", $goods);
+            $this->redirect();
+        } else {
+            Tiny::Msg($this, "404");
+        }
+    }
+
+    public function weibuy() {
+        $id = Filter::int(Req::args("id"));
+        $goods = $this->model->table("pointwei_sale as ps")->fields("ps.price_set,go.*")->join("left join goods as go on ps.goods_id = go.id")->where("ps.id=$id and ps.status=1")->find();
         if ($goods) {
             //检测抢购是否结束
             if ($goods['store_nums'] <= 0) {
