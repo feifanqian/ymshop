@@ -504,7 +504,18 @@ class GoodsController extends Controller {
         }
         //更新商品相关货品的部分信息
         $goods->data(array('store_nums' => $g_store_nums, 'warning_line' => $g_warning_line, 'weight' => $g_weight, 'sell_price' => $g_sell_price, 'market_price' => $g_market_price, 'cost_price' => $g_cost_price,'limit_buy_num'=>$limit_buy_num,'base_sales_volume'=>$base_sales_volume))->where("id=" . $goods_id)->update();
-        
+        if($_POST['is_weishang']==1){
+            $good=$goods->where('id='.$goods_id)->find();
+            $products=new Model('products');
+            $product=$products->where("goods_id = " . $goods_id)->find();
+            $pointwei=new Model('pointwei_sale');
+            $product_id=$product['id'];
+            $sell_price=$good['sell_price'];
+            $len=strlen($sell_price);
+            $datas['goods_id']=$goods_id;
+            $datas['price_set']='a:1:{i:'.$product_id.';a:2:{s:4:"cash";s:'.$len.':"'.$sell_price.'";s:5:"point";s:1:"0";}}';
+            $pointwei->data($datas)->insert();
+        }
         $keys = array_keys($values_dcr);
         $keys = implode("','", $keys);
         //清理多余的货品
