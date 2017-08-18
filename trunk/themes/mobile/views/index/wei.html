@@ -5,7 +5,7 @@
 <!--S 产品展示-->
 {query:name=pointwei_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id where=ps.status eq 1 and go.store_nums gt 0 order=ps.listorder asc limit=12 page=1 pagesize=5 id=$pointbuy}
 <div class=" bg-white m_20 mt20">
-        <div class="img tc box-header mb20"><a href="{url:/index/pointwei/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],367,367)}" width="100%" ></a></div>
+        <div class="img tc box-header mb20"><a href="{url:/index/pointwei/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],367,367)}" width="100%" height="300"></a></div>
         <div class="p20 ">
             <ul class="list">
                 <li class=" item plr20"><a href="{url:/index/pointwei/id/$item[id]}">{$item['name']}</a></li>
