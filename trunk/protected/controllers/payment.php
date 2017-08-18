@@ -493,6 +493,9 @@ class PaymentController extends Controller {
         $return = $paymentPlugin->callback($callbackData, $payment_id, $money, $message, $orderNo);
         //支付成功
         if ($return == 1) {
+            $model = new Model("order");
+            $order = $model->where("order_no='{$orderNo}'")->find();
+            $result=Common::setIncomeByInviteShip1($order);
             if (stripos($orderNo, 'promoter') !== false) {//如果是推广员入驻订单
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
                 if ($order) {

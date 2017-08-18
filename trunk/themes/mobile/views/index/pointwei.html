@@ -18,8 +18,9 @@
 </div>
 <div class="bg-white weui_cells" style="margin-top:0;">
     <div class="weui-row weui-no-gutter product-flashbuy-price">
-        <div class="weui-col-70"><em>微购价</em> <span class="red">{$currency_symbol}{$price['cash']}+{$price['point']}积分</span></div>
-        <div class="weui-col-30"><em>原价</em> <del class="del">{$currency_symbol}{$goods['sell_price']}</del></div>
+        <!-- <div class="weui-col-70"><em>微购价</em> <span class="red">{$currency_symbol}{$price['cash']}+{$price['point']}积分</span></div> -->
+        <div class="weui-col-70"><em>微购价</em> <span class="red">{$currency_symbol}{$goods['sell_price']}</span></div>
+        <!-- <div class="weui-col-30"><em>原价</em> <del class="del">{$currency_symbol}{$goods['sell_price']}</del></div> -->
     </div>
     <div class="weui_cells weui_cells_form">
         <a class="weui_cell open-popup" data-target="#selectid" href="javascript:;">
@@ -91,7 +92,8 @@
                     </div>
                     <div class="product">
                         <div class="price">
-                            <i>{$currency_symbol}</i><em>{$price['cash']}+{$price['point']}积分</em>
+                            <!-- <i>{$currency_symbol}</i><em>{$price['cash']}+{$price['point']}积分</em> -->
+                            <i>{$currency_symbol}</i><em>{$goods['sell_price']}</em>
                         </div>
                         <div class="remainnums">库存:<em id="store_nums" class="red">{$goods['store_nums']}</em></div>
                         <div class="choice">选择:<em id="choiceattr"></em></div>

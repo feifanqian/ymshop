@@ -66,8 +66,8 @@ $(function(){
                     <dd class="price">
                          {set:$set = current(unserialize($item['price_set']));}
                         <ul>
-                            <li class=""><span class="price fl">原价：<del class="tag-price">{$currency_symbol}{$item['sell_price']}</del></span></li>
-                            <li class="red" style="font-size: 20px; padding-top: 15px;"> ¥{$set['cash']}+{$set['point']}<span style='font-size:10px;'>积分</span></li>
+                            <!-- <li class=""><span class="price fl">原价：<del class="tag-price">{$currency_symbol}{$item['sell_price']}</del></span></li> -->
+                            <li class="red" style="font-size: 20px; padding-top: 15px;"> ¥{$item['sell_price']}</li>
                             
                         </ul>
                     </dd>

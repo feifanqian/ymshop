@@ -223,9 +223,8 @@
                 <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
                 <div class="title"><p>{$item['name']}</p></div>
                 <div class="prices">
-                     <del class="tag-price">{$currency_symbol}{$item['sell_price']}</del>
-                    {set:$set = current(unserialize($item['price_set']));}
-                    <span class="gb-price">{$currency_symbol}{$set['cash']}+{$set['point']}积分</span>
+                     
+                    <span class="gb-price">{$currency_symbol}{$item['sell_price']}</span>
                 </div>
             </a>
         </div>

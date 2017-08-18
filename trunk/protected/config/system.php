@@ -167,7 +167,7 @@
   ),
   'district_set' => 
   array (
-    'income1' => '1',
+    'income1' => '5',
     'income2' => '5',
     'income3' => '3',
     'income4' => '1',
