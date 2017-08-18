@@ -170,4 +170,8 @@
             pointWeiUrl : "{url:/simple/order_info/type/pointwei/id/$id/pid/}",
             id : "{$id}",
             currency : "{$currency_symbol}",
-    };</script>
+    };
+    function showQrcode(goods_id){
+            window.location.href="{url:/ucenter/showQR/goods_id/}"+goods_id;
+    }
+</script>

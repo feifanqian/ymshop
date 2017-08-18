@@ -2269,7 +2269,8 @@ class UcenterController extends Controller {
     //推广商品二维码页
     public function showQR() {
         $goods_id = Filter::int(Req::args("goods_id"));
-        $goods_info = $this->model->table("goods")->where("id = $goods_id")->find();
+        $goods_info = $this->model->table("goods")->where("id = ".$goods_id)->find();
+        // var_dump($goods_info);die;
         if ($goods_info) {
             $result = Common::getQrcodeFlag($goods_id, $this->user['id']);
             if ($result['status'] == 'success') {
