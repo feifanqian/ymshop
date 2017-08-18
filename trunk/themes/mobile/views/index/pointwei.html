@@ -151,6 +151,14 @@
         <input type="button" value="去结算 " class="btn_in" id="btn_check">
     </div>
 </div>
+{if:isset($is_login)&&$is_login==true}
+<div style="position:fixed;bottom:70px;right:10px;z-index:99;" onclick="showQrcode({$goods['id']});"> 
+    <span class="fa-stack fa-3x ">
+        <i class="fa fa-circle fa-stack-2x" style="color:rgba(4, 4, 4, 0.16);"></i>
+        <i class="fa fa-qrcode fa-stack-1x black" style="color:#f3a204;"></i>
+    </span>
+</div>
+{/if}
 <script type="text/javascript" src="{url:#js/product.js}?v=20170818" charset="utf-8"></script>
 <script>
     var Product = {
