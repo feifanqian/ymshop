@@ -403,7 +403,11 @@ class IndexController extends Controller {
             Tiny::Msg($this, "404");
         }
     }
-
+    
+    public function wei(){
+        $this->assign("seo_title","微商专区");
+        $this->redirect();
+    }
     //捆绑
     public function bundbuy() {
         $id = Filter::int(Req::args("id"));
@@ -568,6 +572,7 @@ class IndexController extends Controller {
             $this->assign("attr_array", $attr_array);
             $this->assign("goods_attrs", $goods_attrs);
             $this->assign("goods", $goods);
+            $this->assign("seo_title","微商专区");
             $this->redirect();
         } else {
             Tiny::Msg($this, "404");
