@@ -149,7 +149,7 @@
         <input type="button" value="去结算 " class="btn_in" id="btn_check">
     </div>
 </div>
-
+<script type="text/javascript" src="{url:#js/product.js}" charset="utf-8"></script>
 <script>
     var Product = {
             skuMap : {echo:JSON::encode($skumap)},
@@ -159,8 +159,7 @@
             addGoodsCartUrl : "{url:/index/goods_add}",
             goodsOrderUrl : "{url:/simple/order/cart_type/goods}",
             directUrl : "{url:/simple/order_info/type/direct}",
-            pointweiUrl : "{url:/simple/order_info/type/pointwei/id/$id/pid/}",
+            pointWeiUrl : "{url:/simple/order_info/type/pointwei/id/$id/pid/}",
             id : "{$id}",
             currency : "{$currency_symbol}",
     };</script>
-<script type="text/javascript" src="{url:#js/product.js}" charset="utf-8"></script>

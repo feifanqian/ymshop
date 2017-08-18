@@ -507,6 +507,7 @@ class IndexController extends Controller {
     //微商购
     public function pointwei() {
         $id = Filter::int(Req::args("id"));
+        // var_dump($id);die;
         $goods = $this->model->table("pointwei_sale as ps")->fields("ps.price_set,go.*")->join("left join goods as go on ps.goods_id = go.id")->where("ps.id=$id and ps.status=1")->find();
         if ($goods) {
             //检测抢购是否结束
@@ -514,9 +515,11 @@ class IndexController extends Controller {
                 $this->assign("store_empty",true);
             }
             $price_set = unserialize($goods['price_set']);
+            // var_dump($price_set);
             $skumap = array();
             $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = {$goods['id']}")->findAll();
             if ($products) {
+                // var_dump($products);die;
                 foreach ($products as $product) {
                     $product['sell_price']=$price_set[$product['id']]['cash']."+".$price_set[$product['id']]['point']."积分";
                     $skumap[$product['specs_key']] = $product;

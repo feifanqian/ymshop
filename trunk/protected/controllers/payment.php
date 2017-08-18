@@ -328,6 +328,9 @@ class PaymentController extends Controller {
                         case '6':
                             $order_delay = isset($config_other['other_order_delay_pointflash']) ? intval($config_other['other_order_delay_pointflash']) : 0;
                             break;
+                        case '7':
+                            $order_delay = isset($config_other['other_order_delay_pointwei']) ? intval($config_other['other_order_delay_pointwei']) : 0;
+                            break;    
                         default:
                             $order_delay = 0;
                             break;
