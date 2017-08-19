@@ -377,7 +377,7 @@ class GoodsController extends Controller {
         $limit_buy_num = Req::args("limit_buy_num");
         $base_sales_volume = Req::args("base_sales_volume");
         if ($is_online == null)
-            Req::args("is_online", 1);
+            Req::args("is_online", 0);
 
 
         //values的笛卡尔积

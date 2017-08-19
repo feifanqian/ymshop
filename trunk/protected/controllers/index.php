@@ -510,6 +510,9 @@ class IndexController extends Controller {
 
     //微商购
     public function pointwei() {
+        if(isset($_SESSION['Tiny_user'])){
+            $this->assign('is_login',1);
+        }
         $id = Filter::int(Req::args("id"));
         // var_dump($id);die;
         $goods = $this->model->table("pointwei_sale as ps")->fields("ps.price_set,go.*")->join("left join goods as go on ps.goods_id = go.id")->where("ps.id=$id and ps.status=1")->find();

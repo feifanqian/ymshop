@@ -99,7 +99,7 @@ class Log {
              if(!$customer){
                 return false;
             }
-            $result = $model->table("customer")->data(array("valid_income"=>"`valid_income`+({$data['valid_income_change']})","frezze_income"=>"`frezze_income`+({$data['frezze_income_change']})","settled_income"=>"`settled_income`+({$data['settled_income_change']})"))
+            $result = $model->table("customer")->data(array("valid_income"=>"`valid_income`+({$data['valid_income_change']})","frezze_income"=>"`frezze_income`+({$data['frezze_income_change']})","settled_income"=>"`settled_income`+({$data['settled_income_change']})","balance"=>"`frezze_income`+({$data['frezze_income_change']})"))
                   ->where("user_id={$role_id}")->update();
         }else if($role_type==3){
             $customer = $model->table("district_shop")->where("id={$role_id}")->fields("valid_income,frezze_income,settled_income")->find();
