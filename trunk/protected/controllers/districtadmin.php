@@ -300,21 +300,21 @@ class DistrictadminController extends Controller {
                                 Log::pointcoin_log(round($set['join_fee'], 2), $apply_info['user_id'], "", "经营商入驻赠送", 8);
                                 $model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$set['join_fee'] ))->where("user_id=" . $apply_info['user_id'])->update();
                             }
-                            if ($data['invite_shop_id'] != "") {
-                                //获取分配比例
-                                if (isset($set['percentage2join_fee'])) {
-                                    $rate = round($set['percentage2join_fee'] / 100, 2);
-                                } else {
-                                    $rate = 0.1;
-                                }
-                                if (isset($set['join_fee'])) {
-                                    $fee = round($set['join_fee'], 2);
-                                } else {
-                                    $fee = 10000;
-                                }
-                                $income_amount = $fee*$rate;
-                                Log::incomeLog($income_amount, 3, $data['invite_shop_id'], $apply_info['id'], 10);
-                            }
+                            // if ($data['invite_shop_id'] != "") {
+                            //     //获取分配比例
+                            //     if (isset($set['percentage2join_fee'])) {
+                            //         $rate = round($set['percentage2join_fee'] / 100, 2);
+                            //     } else {
+                            //         $rate = 0.1;
+                            //     }
+                            //     if (isset($set['join_fee'])) {
+                            //         $fee = round($set['join_fee'], 2);
+                            //     } else {
+                            //         $fee = 10000;
+                            //     }
+                            //     $income_amount = $fee*$rate;
+                            //     Log::incomeLog($income_amount, 3, $data['invite_shop_id'], $apply_info['id'], 10);
+                            // }
                         }
                         $result = $model->table('district_apply')->where("id=$id")->data(array('status' => 1, 'admin_handle_time' => date('Y-m-d H:i:s')))->update();
                         if ($result) {

@@ -1,4 +1,4 @@
-<?php return array (
+ <?php return array (
   'classes' => 
   array (
     0 => 'classes.*',
@@ -14,9 +14,9 @@
   array (
     'type' => 'mysqli',
     'tablePre' => 'tiny_',
-    'host' => 'localhost',
+    'host' => '192.168.1.120',
     'user' => 'root',
-    'password' => '',
+    'password' => '123456',
     'name' => 'ymshop',
     'port' => '3306',
   ),
