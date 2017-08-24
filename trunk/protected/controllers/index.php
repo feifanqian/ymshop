@@ -294,7 +294,7 @@ class IndexController extends Controller {
     }
 
     public function flash() {
-        $this->assign('seo_title', '抢购,优惠精选');
+        $this->assign('seo_title', '秒杀,优惠精选');
         $this->assign('seo_keywords', '抢购,优惠促销精选,限时抢购,更多优惠.');
         $this->redirect();
     }
@@ -1777,7 +1777,7 @@ class IndexController extends Controller {
     }
     
     public function personal_shop_list(){
-        $this->assign("seo_title","个人商铺专区");
+        $this->assign("seo_title","会员专区");
         
         $this->redirect();
     }
