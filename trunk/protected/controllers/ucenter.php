@@ -600,7 +600,8 @@ class UcenterController extends Controller {
                             $data = array(
                                 'mobile' => $mobile,
                                 'real_name'=>$realname,
-                                'mobile_verified'=>1
+                                'mobile_verified'=>1,
+                                'point_coin'=>200
                             );
                             $this->model->table("customer")->data($data)->where("user_id={$this->user['id']}")->update();
                             //默认密码
