@@ -14,9 +14,9 @@
   array (
     'type' => 'mysqli',
     'tablePre' => 'tiny_',
-    'host' => '192.168.1.120',
+    'host' => 'localhost',
     'user' => 'root',
-    'password' => '123456',
+    'password' => '',
     'name' => 'ymshop',
     'port' => '3306',
   ),

@@ -161,7 +161,7 @@ class DistrictController extends Controller {
         $data = $this->model->table("district_shop")->where("invite_shop_id =".$this->hirer->id)->fields('name,id,linkman')->findAll();
         if(!empty($data)){
             foreach ($data as $key => $v) {
-                $count = $this->model->table("district_promoter")->fields("COUNT(*) as count,hirer_id")->group("hirer_id")->where("hirer_id={$v['id']}")->select();
+                $count = $this->model->table("district_promoter")->fields("COUNT(*) as count,hirer_id")->group("hirer_id")->where("hirer_id={$v['id']}")->find();
                 $data[$key]['member']=  isset($count['count'])&&$count['count']!=NULL?$count['count']:0;
             }
         }

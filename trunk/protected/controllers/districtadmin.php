@@ -300,6 +300,15 @@ class DistrictadminController extends Controller {
                                 Log::pointcoin_log(round($set['join_fee'], 2), $apply_info['user_id'], "", "经营商入驻赠送", 8);
                                 $model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$set['join_fee'] ))->where("user_id=" . $apply_info['user_id'])->update();
                             }
+                            if($data['invite_shop_id'] != ""){
+                                //添加积分收益记录
+                                $uinfo=$model->table("district_shop")->where("id=" . $data['invite_shop_id'])->find();
+                                $uid=$uinfo['owner_id'];
+                                if($uid){
+                                    $model->table("customer")->data(array("point_coin"=>"`point_coin`+18000","financial_coin"=>"`financial_coin`+18000"))->where("user_id=" . $uid)->update();
+                                    Log::pointcoin_log(18000, $uid, "", "经销商邀请经销商收益", 8);
+                                }
+                            }
                             // if ($data['invite_shop_id'] != "") {
                             //     //获取分配比例
                             //     if (isset($set['percentage2join_fee'])) {
