@@ -166,7 +166,7 @@ class DistrictController extends Controller {
             }
         }
         $this->assign('data',$data);
-        $this->assign("seo_title", "经营商");
+        $this->assign("seo_title", "经销商");
         $this->redirect();
     }
     public function district_promoter(){

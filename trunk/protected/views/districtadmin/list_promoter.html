@@ -17,11 +17,11 @@
         <th style="width:30px">操作</th>
         <th style="width:50px">代理商</th>
         <th style="width:50px">类型</th>
-        <th style="width:60px">所属小区</th>
+        <th style="width:60px">所属专区</th>
         <th style="width:60px">收益情况</th>
         <th style="width:60px">状态</th>
     </tr>
-    {set:$type=array("1"=>"经营商直推","2"=>"代理商推荐","3"=>"系统生成","4"=>"官方代理商","5"=>"自升级");}
+    {set:$type=array("1"=>"经销商直推","2"=>"代理商推荐","3"=>"系统生成","4"=>"官方代理商","5"=>"自升级");}
     {query:name=district_promoter as dp fields=dp.hirer_id,dp.type,dp.user_id,dp.status,c.real_name,c.valid_income,c.frezze_income,c.settled_income,u.avatar,u.nickname,ds.name as shop_name join=left join user as u on u.id eq dp.user_id left join customer as c on dp.user_id eq c.user_id left join district_shop as ds on dp.hirer_id eq ds.id where=$where id=$obj page=1 order= c.valid_income desc,c.frezze_income desc}
     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
@@ -125,8 +125,7 @@ function sendMsg(name,id){
     });
 }
 $("#condition").on("click",function(){
-    layer.msg("暂未完成，请等待");
-   return false;
-  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/commission/commission_list_order}',method:'get'});},data:{'o.order_no':{name:'订单编号'},'o.order_amount':{'name':'订单金额'},'c.status':{name:'佣金状态',values:{0:'时间锁定中',1:'已可用', 2:'已提现', 3:'已撤销'}},'u1.name':{name:'购买者用户名'},'u2.name':{name:'佣金收益者用户名'},'c.commission_get':{'name':'单笔佣金金额'},'c.commission_amount':{'name':'订单佣金总额'},'c.commission_level':{name:'佣金等级',values:{1:'1',2:'2',3:'3'}}}});
+    
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_promoter}',method:'get'});},data:{'c.real_name':{name:'代理商'},'ds.name':{'name':'所属专区'}}});
 })
 </script>

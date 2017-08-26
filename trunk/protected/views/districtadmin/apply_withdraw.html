@@ -23,7 +23,7 @@
         <th style="width:140px;">处理时间</th>
         <th style="width:90px">状态</th>
     </tr>
-    {set:$role=array("1"=>'普通用户','2'=>'推广员','3'=>'小区商户');}
+    {set:$role=array("1"=>'普通用户','2'=>'推广员','3'=>'专区商户');}
     {query:name=district_withdraw as dw fields=dw.* where=$where id=$obj page=1 order=dw.id desc}
      <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
@@ -114,8 +114,7 @@ function pass(id){
         });
 }
 $("#condition").on("click",function(){
-    layer.msg("暂未完成，请等待");
-   return false;
-  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/commission/commission_withdraw}',method:'get'});},data:{'c.withdraw_no':{name:'申请单号'},'c.name':{name:'用户名'},'c.status':{name:'状态',values:{0:'未处理',1:'已转账',2:'已作废'}},'c.withdraw_amount':{name:'提现金额'},'c.bank':{name:'开户银行'}}});
+    
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/apply_withdraw}',method:'get'});},data:{'dw.withdraw_no':{name:'提现订单号'},'dw.status':{name:'状态',values:{0:'未处理',1:'已转账',2:'已作废'}},'dw.withdraw_amount':{name:'提现金额'}}});
 })
 </script>

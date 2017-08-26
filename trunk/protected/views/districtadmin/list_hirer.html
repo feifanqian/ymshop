@@ -14,22 +14,22 @@
     <tr>
         <th style="width:50px">选择</th>
         <th style="width:65px">操作</th>
-        <th>小区名称</th>
-        <th style="width:100px">上级小区</th>
+        <th>专区名称</th>
+        <th style="width:100px">上级专区</th>
         <th style="width:100px">所有者</th>
         <th style="width:160px">创建时间</th>
         <th style="width:60px">联系人</th>
         <th style="width:200px">联系电话</th>
         <th>收益</th>
     </tr>
-    {query:name=district_shop as ds fields=ds.*,c.real_name,ds2.name as invite_shop_name join=left join customer as c on ds.owner_id eq c.user_id left join district_shop as ds2 on ds.invite_shop_id eq ds2.id  where=$where id=$obj page=1 order= id desc}
+    {list:$items=$list['data']}
     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden">
                     <a  class="icon-cog action" href="javascript:;"> 处理</a>
                     <div class="menu_select">
                      <ul>
-                       <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=pil.role_type--eq--3__and--pil.role_id--eq--{$item['id']}"> 查看收益记录</a></li>
+                       <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=p.role_type--eq--3__and--p.role_id--eq--{$item['id']}"> 查看收益记录</a></li>
                        <li><a class="icon-eye" href="javascript:;" onclick="viewAchievement('{$item['name']}',{$item['owner_id']},{$item['id']});"> 查看销售业绩</a></li>
                        <li><a class="icon-plus" href="javascript:;" onclick="addPromoter({$item['id']});"> 添加官方推广员</a></li>
                      </ul>
@@ -44,11 +44,11 @@
             <td style="width:160px">{$item['link_mobile']}</td>
             <td>可用收益：{$item['valid_income']} 待解锁收益：{$item['frezze_income']} 已结算收益:{$item['settled_income']}</td>
         </tr>
-    {/query}
+    {/list}
 </table>
 </form>
 <div class="page_nav">
-{echo:$obj->pageBar()}
+{$list['html']}
 </div>
 <script type="text/javascript">
 function viewAchievement(name,id,district_id){
@@ -99,8 +99,8 @@ function callback(hirer_id,user_id){
         },'json');
 }
 $("#condition").on("click",function(){
-    layer.msg("暂未完成，请等待");
-   return false;
-  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/commission/commission_list_order}',method:'get'});},data:{'o.order_no':{name:'订单编号'},'o.order_amount':{'name':'订单金额'},'c.status':{name:'佣金状态',values:{0:'时间锁定中',1:'已可用', 2:'已提现', 3:'已撤销'}},'u1.name':{name:'购买者用户名'},'u2.name':{name:'佣金收益者用户名'},'c.commission_get':{'name':'单笔佣金金额'},'c.commission_amount':{'name':'订单佣金总额'},'c.commission_level':{name:'佣金等级',values:{1:'1',2:'2',3:'3'}}}});
+   //  layer.msg("暂未完成，请等待");
+   // return false;
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_hirer}',method:'get'});},data:{'ds.name':{name:'专区名称'},'d.name':{'name':'上级专区'},'c.real_name':{name:'所有者'},'ds.linkman':{name:' 联系人'},'ds.link_mobile':{name:'联系电话'}}});
 })
 </script>

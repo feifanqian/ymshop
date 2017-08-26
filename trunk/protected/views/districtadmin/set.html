@@ -6,25 +6,25 @@
 <div class="form2">
     <form name="config_form" method="post" action="{url:/districtadmin/set}">
 <!--         <dl class="lineD">
-         <dt>小区功能</dt>
+         <dt>专区功能</dt>
                 <dd>
                 <label><input type="radio" name="status" value="1" >开启</label>
                 <label><input type="radio" name="status" value="0">关闭</label>
-                <label>（关闭后，系统将冻结小区功能）</label>
+                <label>（关闭后，系统将冻结专区功能）</label>
              </dd>
         </dl>
 -->     
         <dl class="lineD">
             <dt>会员消费奖励：</dt>
             <dd>
-                下级会员消费，上级会员获得账单金额<input name="income1" type="text" value="" class="small"/>%奖励，上级第一个代理商获得<input name="income2" type="text" value="" class="small"/>%奖励，会员所属经营商（小区主）<input name="income3" type="text" value="" class="small"/>%奖励，
-                会员所属经营商的邀请经营商获得<input name="income4" type="text" value="" class="small"/>%奖励，不存在不分配。
+                下级会员消费，上级会员获得账单金额<input name="income1" type="text" value="" class="small"/>%奖励，上级第一个代理商获得<input name="income2" type="text" value="" class="small"/>%奖励，会员所属经销商（专区主）<input name="income3" type="text" value="" class="small"/>%奖励，
+                会员所属经销商的邀请经销商获得<input name="income4" type="text" value="" class="small"/>%奖励，不存在不分配。
         </dd>
         </dl>
         <dl class="lineD">
             <dt>会员升级奖励：</dt>
             <dd>
-                下级会员升级为代理商，上级第一个代理商获得<input name="up_income1" type="text" value="" class="small"/>收益奖励和<input name="up_point1" type="text" value="" class="small"/>积分奖励，会员所属经营商（小区主）<input name="up_income2" type="text" value="" class="small"/>收益奖励和<input name="up_point2" type="text" value="" class="small"/>积分奖励，不存在不分配。
+                下级会员升级为代理商，上级第一个代理商获得<input name="up_income1" type="text" value="" class="small"/>收益奖励和<input name="up_point1" type="text" value="" class="small"/>积分奖励，会员所属经销商（专区主）<input name="up_income2" type="text" value="" class="small"/>收益奖励和<input name="up_point2" type="text" value="" class="small"/>积分奖励，不存在不分配。
         </dd>
         </dl>
         <dl class="lineD">
@@ -32,7 +32,7 @@
             <dd>&nbsp;</dd>
         </dl>
         <dl class="lineD">
-            <dt>小区入驻加盟费：</dt>
+            <dt>专区入驻加盟费：</dt>
             <dd>
                 <input name="join_fee" type="text" value="" class="small"/>
                 <span>元</span>
@@ -53,7 +53,7 @@
             </dd>
         </dl>
 <!--        <dl class="lineD">
-            <dt>小区代理商门槛：</dt>
+            <dt>专区代理商门槛：</dt>
             <dd>
                 <input name="promoter_join_line" type="text" value="" class="small" pattern="int"/>
                 <span>元（需在商城消费多少元才能获得代理商资格）</span>
@@ -107,10 +107,10 @@
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>拓展展小区分成：</dt>
+            <dt>拓展展专区分成：</dt>
             <dd>
                 <input name="percentage2join_fee" type="text" value="" class="small" pattern="int"/>
-                <span>%(拓展一个小区给推荐者的分成比例)</span>
+                <span>%(拓展一个专区给推荐者的分成比例)</span>
             </dd>
         </dl>
         <dl class="lineD">
@@ -128,14 +128,14 @@
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>小区商户分成：</dt>
+            <dt>专区商户分成：</dt>
             <dd>
                 <input name="beneficiary_three" type="text" value="" class="small" pattern="int"/>
                 <span>%</span>
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>上级小区分成：</dt>
+            <dt>上级专区分成：</dt>
             <dd>
                 <input name="beneficiary_four" type="text" value="" class="small" pattern="int"/>
                 <span>%</span>
@@ -149,15 +149,15 @@
             <dt>赠送经营代理：</dt>
             <dd>
                 <input name="invite_promoter_num" type="text" value="" class="small" pattern="int"/>
-                <span>个(成功邀请多少个代理商，免费送经营商代理权)</span>
+                <span>个(成功邀请多少个代理商，免费送经销商代理权)</span>
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>小区自动审核:</dt>
+            <dt>专区自动审核:</dt>
             <dd>
                 <label><input type="radio" name="auto_pass" value="1" >开启</label>
                 <label><input type="radio" name="auto_pass" value="0">关闭</label>
-                <span>（开启后，若支付了加盟费，则自动创建小区）</span>
+                <span>（开启后，若支付了加盟费，则自动创建专区）</span>
             </dd>
         </dl>
         <dl class="lineD">

@@ -102,7 +102,7 @@
 </style>
 <div id="record-container">
     <div class="weui_panel">
-        <div class="weui_panel_hd">邀请列表{if:$has_district_shop==0}<a href="javascript:;" id="free" class="weui-btn weui-btn_mini {if:$invite_count>=$invite_promoter_num}weui-btn_plain-primary{else:}weui-btn_plain-disabled{/if}"  style="float:right;margin-top:-7px;margin-left:5px;"><i class="fa fa-gift" ></i> 晋级经营商</a>{/if}&nbsp;<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-primary " id="setCode" style="float:right;margin-top:-7px;"><i class="fa fa-flag" ></i> 我要邀请</a></div>
+        <div class="weui_panel_hd">邀请列表{if:$has_district_shop==0}<a href="javascript:;" id="free" class="weui-btn weui-btn_mini {if:$invite_count>=$invite_promoter_num}weui-btn_plain-primary{else:}weui-btn_plain-disabled{/if}"  style="float:right;margin-top:-7px;margin-left:5px;"><i class="fa fa-gift" ></i> 晋级经销商</a>{/if}&nbsp;<a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-primary " id="setCode" style="float:right;margin-top:-7px;"><i class="fa fa-flag" ></i> 我要邀请</a></div>
         {if:!isset($data['data'])||count($data['data'])==0}
 
         {else:}
@@ -205,9 +205,9 @@
             window.location.href="{url:/ucenter/apply_for_district?free=1}";
      {else:}
         layer.open({
-                 title:"<p style='color:white;'>免费晋级经营商</p>"
+                 title:"<p style='color:white;'>免费晋级经销商</p>"
                 , style: 'background: -webkit-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Safari 5.1 - 6.0 */background: -o-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Opera 11.1 - 12.0 */background: -moz-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Firefox 3.6 - 15 */background: linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* 标准的语法 */' //自定风格
-                ,content: '<p style="color:white;font-size: 13px;">成功推荐<span class="red">{$invite_promoter_num}</span>个推广员，即可免费申请经营商。<br>当前您一共推荐了<span class="red">{$invite_count}</span>个，还需要继续努力哦</p>'
+                ,content: '<p style="color:white;font-size: 13px;">成功推荐<span class="red">{$invite_promoter_num}</span>个推广员，即可免费申请经销商。<br>当前您一共推荐了<span class="red">{$invite_count}</span>个，还需要继续努力哦</p>'
                 ,btn: '我知道了'
               }); 
     {/if}

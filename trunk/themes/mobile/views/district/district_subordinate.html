@@ -27,11 +27,11 @@
     <a href="javascript:;" class="weui-btn weui-btn_primary">我要邀请</a>
 </div>
 <div class="ma20 bg-white p20 ">
-<div class="weui-cells__title">我的下级经营商</div>
+<div class="weui-cells__title">我的下级经销商</div>
 {set:$i=0;}
 {foreach:items=$data key=$k item=$item}
 <div class="weui-flex">
-       <div class="weui-flex__item"><div class="shop"><p>小区名：{$item['name']}</p><p>联系人：{$item['linkman']}</p><p>推广员数量：{$item['member']}</p></div></div>
+       <div class="weui-flex__item"><div class="shop"><p>专区名：{$item['name']}</p><p>联系人：{$item['linkman']}</p><p>推广员数量：{$item['member']}</p></div></div>
 </div>
 {/foreach}
 {if:count($data)==0}
@@ -44,7 +44,7 @@
     $(".weui-btn").click(function(){
          layer.open({
             style: 'background: -webkit-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Safari 5.1 - 6.0 */background: -o-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Opera 11.1 - 12.0 */background: -moz-linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* Firefox 3.6 - 15 */background: linear-gradient(rgb(9, 154, 238), rgba(255, 228, 9, 0.65)); /* 标准的语法 */' //自定风格
-            ,content: '<p style="color:white;">申请入驻小区，即可获得商城赠送商品，尊享小区销售提成，更可获得小区升值空间。</p><br><img src="{url:/district/getInviteQrcode/type/shop}" style="width:200px;height:200px;"><p style="color:white;"><i class="fa fa-paw"></i>扫描二维码，马上创建小区</p>'
+            ,content: '<p style="color:white;">申请入驻专区，即可获得商城赠送商品，尊享专区销售提成，更可获得专区升值空间。</p><br><img src="{url:/district/getInviteQrcode/type/shop}" style="width:200px;height:200px;"><p style="color:white;"><i class="fa fa-paw"></i>扫描二维码，马上创建专区</p>'
             ,btn: '完成'
           });
     });

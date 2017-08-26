@@ -20,8 +20,8 @@
         <div class="weui-msg__opr-area">
             <p class="weui-btn-area">
                 {if:isset($redirect_url)&&isset($url_name)}
-                {if:$url_name=="了解什么是小区"}
-                   <a href="{url:/district/district/test/1}" class="weui-btn weui-btn_primary">进入小区</a>
+                {if:$url_name=="了解什么是专区"}
+                   <a href="{url:/district/district/test/1}" class="weui-btn weui-btn_primary">进入专区</a>
                 {/if}
                 <a href="{$redirect_url}" class="weui-btn weui-btn_primary">{$url_name}</a>
                 <a href="javascript:history.back();" class="weui-btn weui-btn_default">返回</a>

@@ -137,7 +137,7 @@ class Menu {
             '/districtadmin/list_promoter'=>array('name'=>'推广者','parent'=>'personnel'),
             '/districtadmin/apply_withdraw'=>array('name'=>'提现申请','parent'=>'apply'),
             '/districtadmin/apply_join'=>array('name'=>'入驻申请','parent'=>'apply'),
-            '/districtadmin/set'=>array('name'=>'小区设置','parent'=>'set'),
+            '/districtadmin/set'=>array('name'=>'专区设置','parent'=>'set'),
             '/districtadmin/payset'=>array('name'=>'秒到支付','parent'=>'set'),
         );
         //分组菜单
@@ -171,10 +171,10 @@ class Menu {
             'commission'=>array('name'=>'佣金记录','parent'=>'commission'),
             'commission_manager'=>array('name'=>'佣金管理','parent'=>'commission'),
             'commission_set'=>array('name'=>'佣金设置','parent'=>'commission'),
-            'record'=>array('name'=>'小区记录','parent'=>'districtadmin'),
-            'personnel'=>array('name'=>'小区人员','parent'=>'districtadmin'),
+            'record'=>array('name'=>'专区记录','parent'=>'districtadmin'),
+            'personnel'=>array('name'=>'专区人员','parent'=>'districtadmin'),
             'apply'=>array('name'=>'申请信息','parent'=>'districtadmin'),
-            'set'=>array('name'=>'小区配置','parent'=>'districtadmin'),
+            'set'=>array('name'=>'专区配置','parent'=>'districtadmin'),
         );
         //主菜单
         $menu = array(
@@ -188,7 +188,7 @@ class Menu {
             'system' => array('link' => '/admin/index', 'name' => '系统设置'),
             'support'=>array('link'=>'/support/apply_list','name'=>'售后中心'),
             'complaint'=>array('link'=>'/complaint/complaint_list','name'=>'投诉中心'),
-            'districtadmin'=>array('link'=>'/districtadmin/record_sale','name'=>'小区管理'),
+            'districtadmin'=>array('link'=>'/districtadmin/record_sale','name'=>'专区管理'),
         );
 
         $safebox = Safebox::getInstance();

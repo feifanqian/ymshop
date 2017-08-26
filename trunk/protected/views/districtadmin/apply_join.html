@@ -12,11 +12,11 @@
         <th style="width:50px">选择</th>
         <th style="width:65px">操作</th>
         <th style="width:80px">申请者</th>
-        <th style="width:100px;">小区名</th>
+        <th style="width:100px;">专区名</th>
         <th style="width:100px">具体位置</th>
         <th style="width:140px">联系人</th>
         <th style="width:140px">联系电话</th>
-        <th style="width:140px">推荐小区</th>
+        <th style="width:140px">推荐专区</th>
         <th style="width:140px">申请时间</th>
         <th style="width:140px">处理时间</th>
         <th style="width:140px;">支付状态</th>
@@ -39,12 +39,12 @@
                    </div>
                 </div> 
             </td>
-            <td style="width:120px">{$item['nickname']}</td>
+            <td style="width:120px">{$item['nickname']|'未知'}</td>
             <td style="width:80px">{$item['name']}</td>
             <td style="width:100px;">{$item['location']}</td>
             <td style="width:100px">{$item['linkman']}</td>
             <td style="width:100px">{$item['linkmobile']}</td>
-            <td style="width:100px;">{$item['invite_shop_name']}</td>
+            <td style="width:100px;">{$item['invite_shop_name']|'无'}</td>
             <td style="width:140px">{$item['apply_time']}</td>
             <td style="width:140px">{$item['admin_handle_time']|"-------"}</td>
             <td style="width:140px">{if:$item['free']==1}<span class='red'>免费入驻</span>{else:}{if:$item['pay_status']==0}等待支付{elseif:$item['pay_status']==1}<span class="red">已支付</span>{/if}{/if}</td>
@@ -94,8 +94,7 @@ function pass(id){
         });
 }
 $("#condition").on("click",function(){
-    layer.msg("暂未完成，请等待");
-   return false;
-  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/commission/commission_withdraw}',method:'get'});},data:{'c.withdraw_no':{name:'申请单号'},'c.name':{name:'用户名'},'c.status':{name:'状态',values:{0:'未处理',1:'已转账',2:'已作废'}},'c.withdraw_amount':{name:'提现金额'},'c.bank':{name:'开户银行'}}});
+   
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/apply_join}',method:'get'});},data:{'u.nickname':{name:'  申请者'},'da.name':{name:'专区名'},'da.location':{name:'位置'},'da.linkman':{name:'联系人'},'da.linkmobile':{name:'联系电话'},'ds.name':{name:'推荐专区'},'da.status':{name:'状态',values:{0:'未处理',1:'已通过',2:'已作废'}}}});
 })
 </script>

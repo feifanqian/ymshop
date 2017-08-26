@@ -210,7 +210,7 @@ class DistrictLogic {
                 }
             }
             $amount = $this->config['shop_invite_indirect_money'];
-            $result = Log::incomeLog($amount, 3, $promoter_info['hirer_id'], $order['id'], 9,"小区间接邀请代理商收益");
+            $result = Log::incomeLog($amount, 3, $promoter_info['hirer_id'], $order['id'], 9,"专区间接邀请代理商收益");
             if (!$result) {
                 $error_msg[] = '雇主的间接收益分配记录失败';
             }
@@ -401,7 +401,7 @@ class DistrictLogic {
         if ($amount == 0) {
             return true;
         }
-        $type_info = array("5"=>"代理商入驻赠送","6"=>"代理商推荐奖励","7"=>"小区销售奖励");
+        $type_info = array("5"=>"代理商入驻赠送","6"=>"代理商推荐奖励","7"=>"专区销售奖励");
         if ($role == 'user') {
             //加积分
             $result = $this->model->table("customer")->where("user_id=" . $role_id)->data(array("point_coin" => "`point_coin`+$amount"))->update();

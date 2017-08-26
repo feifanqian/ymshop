@@ -292,7 +292,7 @@ class Order {
                 if($result){
                     Log::pointcoin_log($account, $user_id, $recharge_no,"充值送积分", 1);
                 }
-                $result = $model->table("customer")->data(array('financial_coin' => "`financial_coin`+" . $account))->where("user_id=" . $user_id)->update();
+                // $result = $model->table("customer")->data(array('financial_coin' => "`financial_coin`+" . $account))->where("user_id=" . $user_id)->update();
             }else{//套餐充值处理
                 $config = Config::getInstance();
                 $package_set = $config->get("recharge_package_set"); 
@@ -338,7 +338,7 @@ class Order {
                             $first_promoter_user_id = Common::getFirstPromoter($inviter_info['user_id']);
                             if($first_promoter_user_id){
                                 Log::incomeLog($config['up_income1'], 2, $first_promoter_user_id, $recharge['id'], 14,"下级会员升级为代理商奖励");
-                                $result = $model->table("customer")->data(array("point_coin"=>"`point_coin`+".$config['up_point1']))->where("user_id=".$first_promoter_user_id)->update();
+                                $result = $model->table("customer")->data(array("point_coin"=>"`point_coin`+".$config['up_point1'],"financial_coin"=>"`financial_coin`+".$config['up_point1']))->where("user_id=".$first_promoter_user_id)->update();
                                 if($result){
                                     Log::pointcoin_log($config['up_point1'],$first_promoter_user_id,'','下级会员升级为代理商奖励',5);
                                 }

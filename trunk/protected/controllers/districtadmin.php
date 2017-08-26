@@ -48,28 +48,46 @@ class DistrictadminController extends Controller {
     }
 
     public function record_income() {
+        $this->model=new Model();
+        $page = intval(Req::args("p"));
+        $page_size = 10;
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
 
         if ($condition_str) {
+            $where = $condition_str;
             $this->assign("where", $condition_str);
         } else {
+            $where = "1=1";
             $this->assign("where", "1=1");
         }
         $this->assign("condition", $condition);
+        // var_dump($where);die;
+        // $where="c.real_name='练聪'";
+        $list = $this->model->table('promote_income_log as p')->join('left join user as u on p.role_id=u.id left join customer as c on p.role_id=c.user_id left join district_shop as d on p.role_id=d.id')->fields("p.*,u.nickname,c.real_name,d.name as shopname")->where($where)->order("id desc")->findPage($page, $page_size);
+        
+        // var_dump($list);die;
+        $this->assign("list", $list);
         $this->redirect();
     }
 
     public function list_hirer() {
+        $this->model=new Model();
+        $page = intval(Req::args("p"));
+        $page_size = 10;
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
 
         if ($condition_str) {
+            $where = $condition_str;
             $this->assign("where", $condition_str);
         } else {
+            $where = "1=1";
             $this->assign("where", "1=1");
         }
         $this->assign("condition", $condition);
+        $list = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id left join district_shop as d on ds.invite_shop_id=d.id')->fields("ds.*,c.real_name,d.name as invite_shop_name")->where($where)->order("ds.id desc")->findPage($page, $page_size);
+        $this->assign("list", $list);
         $this->redirect();
     }
 
@@ -277,7 +295,7 @@ class DistrictadminController extends Controller {
                     $isOk = $model->table('district_shop')->data($data)->insert();
                     if ($isOk) {
                         $shop_count = $model->table("district_shop")->where("owner_id =" . $apply_info['user_id'])->count();
-                        if ($shop_count == 1) {//如果是第一次创建小区，就自动创建推广员，或者将推广员账号绑定到小区下
+                        if ($shop_count == 1) {//如果是第一次创建专区，就自动创建推广员，或者将推广员账号绑定到专区下
                             $promoter_info = $model->table("district_promoter")->where("user_id=" . $apply_info['user_id'])->find();
                             if (!$promoter_info) {
                                 $insert_data['user_id'] = $apply_info['user_id'];
@@ -297,7 +315,7 @@ class DistrictadminController extends Controller {
                         if ($apply_info['free'] == 0) {
                             $result = $model->table("customer")->where("user_id=" . $apply_info['user_id'])->data(array("point_coin" => "`point_coin`+" . round($set['join_fee'], 2)))->update();
                             if ($result) {
-                                Log::pointcoin_log(round($set['join_fee'], 2), $apply_info['user_id'], "", "经营商入驻赠送", 8);
+                                Log::pointcoin_log(round($set['join_fee'], 2), $apply_info['user_id'], "", "经销商入驻赠送", 8);
                                 $model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$set['join_fee'] ))->where("user_id=" . $apply_info['user_id'])->update();
                             }
                             if($data['invite_shop_id'] != ""){
@@ -337,7 +355,7 @@ class DistrictadminController extends Controller {
                                     'touser' => $oauth_info['open_id'],
                                     'msgtype' => 'text',
                                     "text" => array(
-                                        'content' => "亲爱的{$oauth_info['open_name']},恭喜您，申请入驻小区审核通过，正式成为小区经营商，更多权益请<a href=\"https://www.ymlypt.com/district/district\">点击查看>>></a>"
+                                        'content' => "亲爱的{$oauth_info['open_name']},恭喜您，申请入驻专区审核通过，正式成为专区经销商，更多权益请<a href=\"https://www.ymlypt.com/district/district\">点击查看>>></a>"
                                     )
                                 );
                                 $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
@@ -346,7 +364,7 @@ class DistrictadminController extends Controller {
                             $NoticeService = new NoticeService();
                             $jpush = $NoticeService->getNotice('jpush');
                             $audience['alias'] = array($apply_info['user_id']);
-                            $jpush->setPushData('all', $audience, '恭喜您，申请入驻小区审核通过，正式成为小区经营商', 'district_join_success', '');
+                            $jpush->setPushData('all', $audience, '恭喜您，申请入驻专区审核通过，正式成为专区经销商', 'district_join_success', '');
                             $result = $jpush->push();
                             file_put_contents('jpush.txt', json_encode($result), FILE_APPEND);
                             echo json_encode(array("status" => 'success', 'msg' => '成功'));
@@ -424,7 +442,7 @@ class DistrictadminController extends Controller {
                                 if ($params["transAmt"] <= 0) {
                                     exit(json_encode(array('status' => 'fail', 'msg' => '代付金额小于或等于0')));
                                 }
-                                $params['purpose'] = "小区用户提现";
+                                $params['purpose'] = "专区用户提现";
                                 $result = $ChinapayDf->DfPay($params);
                                 if ($result) {
                                     $isOk = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到银行卡');
@@ -462,7 +480,7 @@ class DistrictadminController extends Controller {
                                 if ($params["transAmt"] <= 0) {
                                     exit(json_encode(array('status' => 'fail', 'msg' => '代付金额小于或等于0')));
                                 }
-                                $params['purpose'] = "小区用户提现";
+                                $params['purpose'] = "专区用户提现";
                                 $result = $ChinapayDf->DfPay($params);
 
                                 if ($result) {
@@ -559,7 +577,7 @@ class DistrictadminController extends Controller {
                     if (extension_loaded('opcache')) {
                         opcache_reset();
                     }
-                    Log::op($this->manager['id'], "修改小区配置", "管理员[" . $this->manager['name'] . "]:修改了佣金配置 ");
+                    Log::op($this->manager['id'], "修改专区配置", "管理员[" . $this->manager['name'] . "]:修改了佣金配置 ");
                 }
             }
         }
@@ -648,7 +666,7 @@ class DistrictadminController extends Controller {
                 $model = new Model();
                 $isset = $model->table("district_shop")->where("id=$hirer_id")->find();
                 if (!$isset) {
-                    exit(json_encode(array("status" => 'fail', 'msg' => "经营商不存在")));
+                    exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
                 }
                 $data['user_id'] = $user_id;
                 $data['type'] = 4;
@@ -661,7 +679,7 @@ class DistrictadminController extends Controller {
                 if ($result) {
                     $logic = DistrictLogic::getInstance();
                     if (strip_tags(Url::getHost(), 'buy-d')) {
-                        $this->sendMessage($user_id, "恭喜您，成为经营商【{$isset['name']}】的官方推广员，快来看看吧>>>", "https://www.buy-d.cn/ucenter/index?first=1", "promoter_join_success");
+                        $this->sendMessage($user_id, "恭喜您，成为经销商【{$isset['name']}】的官方推广员，快来看看吧>>>", "https://www.buy-d.cn/ucenter/index?first=1", "promoter_join_success");
                     }
                     exit(json_encode(array("status" => 'success', 'msg' => "成功")));
                 } else {

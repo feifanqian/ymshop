@@ -27,25 +27,26 @@
         onclick="tools_reload()"> 刷新</a></div>
         <table class="default" >
             <tr>
+                <th>受益人</th>
                 <th>分红说明</th>
                 <th>分红时间</th>
-                <th>分红金额</th>
                 <th>实际分红</th>
-                <th style="width:70px">受益人数</th>
+                <th>余额</th>
+                <!-- <th style="width:70px">受益人数</th>
                 <th style="width:70px">最高分红</th>
                 <th style="width:70px">最低分红</th>
-                <th style="width:60px">状态</th>
+                <th style="width:60px">状态</th> -->
             </tr>
-                {query:name=bonus as b fields=b.* id=$obj page=1}
+                {query:name=balance_log as b join=left join customer as c on b.user_id eq c.user_id fields=b.*,c.real_name where=c.financial_coin gt 0 order=b.id desc id=$obj page=1}
                 <tr>
-                <td>{$item['explanation']}</td>
-                <td>{$item['date']}</td>
-                <td>{$item['bonus']}</td>
-                <td>{$item['real_bonus']}</td>
-                <td style="width:70px;">{$item['beneficiary_num']}</td>
-                <td style="width:70px">{$item['max_bonus']}</td>
-                <td style="width:70px">{$item['min_bonus']}</td>
-                <td style="width:60px"></td>
+                <td>{$item['real_name']}</td>
+                <td>{$item['note']}</td>
+                <td>{$item['time']}</td>
+                <td>{$item['amount']}</td>
+                <td style="width:70px;">{$item['amount_log']}</td>
+                <!-- <td style="width:70px">{$item['max_bonus']}</td>
+                <td style="width:70px">{$item['min_bonus']}</td> -->
+                <!-- <td style="width:60px"></td> -->
                 </tr>
                 {/query}
             </table>
@@ -56,7 +57,7 @@
     <div id='add' style="display:none;">
         <table>
             <tr><th>分红说明</th><th>分红金额</th><th>预计收益人数</th><th>预计最高分红</th><th>预计最低分红</th></tr>
-            <tr><td><input name="explanation" value='默认分红'></td><td><input name='bonus_money' type="number"></td><td><span id='count'></span></td><td><span id='max'></span></td><td><span id='min'></span></td></tr>
+            <tr><td><input name="explanation" value='默认分红'></td><td><input name='bonus_money' type="number"></td><td><span id='count'></span></td><td><span id='max'><input name='bonus_max' type="number" readonly="true"></span></td><td><span id='min'><input name='bonus_min' type="number" readonly="true"></span></td></tr>
         </table>
     </div>
     <script type="text/javascript">
@@ -73,10 +74,14 @@
                 count = data.count;
                 max   = data.max;
                 min   = data.min;
+                console.log(max);
+                console.log(min);
                 $("#count").html(beneficiary_num);
+                $("input[name=bonus_max]").val(max);
+                $("input[name=bonus_min]").val(min);
                 layer.open({
                     type: 1,
-                    area: ['600px', '200px'],
+                    area: ['800px', '200px'],
                     title: "发布分红", //不显示标题
                     btn:['确定','预计计算','取消'],
                     zindex:1,
@@ -88,7 +93,7 @@
                         }
                         if(bonus!==undefined && bonus>0){
                             load = layer.load();
-                            $.post("{url:/marketing/post_bonus}",{bonus:bonus,explanation:explanation},function(data){
+                            $.post("{url:/marketing/post_bonus}",{bonus:bonus,explanation:explanation,beneficiary_num:beneficiary_num,bonus_max:max,bonus_min:min},function(data){
                                 layer.close(load);    
                                 if(data.status=='success'){
                                     layer.msg(data.msg,function(){

@@ -7,7 +7,7 @@
   'globals' => 
   array (
     'site_name' => '圆梦商城',
-    'site_logo' => '/data/uploads/2017/07/17/155a19c1ae495f61bdff0490b4a2ce9a.png',
+    'site_logo' => '/data/uploads/2017/08/26/b8e2ec9675b5bc0de7a1a6d5aa4f46d8.png',
     'site_keywords' => '圆梦商城',
     'site_description' => '圆梦商城',
     'site_icp' => '粤ICP备16060168号',
@@ -167,7 +167,7 @@
   ),
   'district_set' => 
   array (
-    'income1' => '5',
+    'income1' => '20',
     'income2' => '5',
     'income3' => '3',
     'income4' => '1',

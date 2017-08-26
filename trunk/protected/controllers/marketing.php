@@ -829,6 +829,7 @@ class MarketingController extends Controller {
     
     //分红
     public function bonus(){
+        
         $this->redirect();
     }
     
@@ -836,6 +837,9 @@ class MarketingController extends Controller {
     public function post_bonus(){
         $bonus = Filter::float(Req::args('bonus'));
         $explanation = Filter::str(Req::args('explanation'));
+        // $beneficiary_num = Filter::str(Req::args('beneficiary_num'));
+        $bonus_max = Filter::str(Req::args('bonus_max'));
+        $bonus_min = Filter::str(Req::args('bonus_min'));
         if($bonus<=0){
             exit(json_encode(array("status"=>'fail','msg'=>"分红金额错误")));
         }
@@ -852,10 +856,12 @@ class MarketingController extends Controller {
             $order_no = "B".date("YmdHis").rand(100, 999);
             foreach ($bonus_data as $k=>$v){
                  $need_add = round($bonus*$v['financial_coin']/$financial_coin_count,4);
+                 // var_dump($need_add);die;
                  $need_add = sprintf("%.2f",substr(sprintf("%.4f", $need_add), 0, -2));
                  if($need_add<=0){
                      continue;
                  }
+                 // var_dump($need_add);die;
                  $result = $model->table('customer')->data(array('balance'=>"`balance`+{$need_add}"))->where("user_id =".$v['user_id'])->update();
                  if($result){
                      $beneficiary_num ++;
@@ -864,9 +870,9 @@ class MarketingController extends Controller {
                  }
             }
             if($beneficiary_num>0&&$has_bonus_count>0){
-                $max_bonus = $model->table("balance_log")->fields("amount as max")->where("order_no ='{$order_no}' and type =9 ")->order("amount desc")->find();
-                $min_bonus = $model->table("balance_log")->fields("amount as min")->where("order_no ='{$order_no}' and type =9 ")->order("amount asc")->find();
-                $model->table("bonus")->data(array("explanation"=>$explanation,"bonus"=>$bonus,'date'=>date("Y-m-d H:i:s"),'real_bonus'=>$has_bonus_count,'beneficiary_num'=>$beneficiary_num,'max_bonus'=>$max_bonus['max'],'min_bonus'=>$min_bonus['min']))
+                // $max_bonus = $model->table("balance_log")->fields("amount as max")->where("order_no ='{$order_no}' and type =9 ")->order("amount desc")->find();
+                // $min_bonus = $model->table("balance_log")->fields("amount as min")->where("order_no ='{$order_no}' and type =9 ")->order("amount asc")->find();
+                $model->table("bonus")->data(array("explanation"=>$explanation,"bonus"=>$bonus,'date'=>date("Y-m-d H:i:s"),'real_bonus'=>$has_bonus_count,'beneficiary_num'=>$beneficiary_num,'max_bonus'=>$bonus_max,'min_bonus'=>$bonus_min))
                       ->insert();
                 exit(json_encode(array("status"=>'success','msg'=>"成功")));
             }else{

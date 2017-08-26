@@ -720,7 +720,7 @@ class PaymentController extends Controller {
                 $success_url = Url::urlFormat("/ucenter/index/first/1");
                 $cancel_url = Url::urlFormat("/ucenter/becomepromoter/reference/{$order['invitor_id']}/invitor_role/{$order['invitor_role']}");
                 $error_url = Url::urlFormat("/ucenter/becomepromoter/reference/{$order['invitor_id']}/invitor_role/{$order['invitor_role']}");
-            } else if (stripos($out_trade_no, 'district') !== false) {//小区入驻订单
+            } else if (stripos($out_trade_no, 'district') !== false) {//专区入驻订单
                 $apply_id = intval(substr($order_no, stripos($order_no, 'district') + 8));
                 $order = $this->model->table("district_apply")->where("id=$apply_id")->find();
                 if (!$order) {
@@ -778,7 +778,7 @@ class PaymentController extends Controller {
                 $success_url = Url::urlFormat("/ucenter/index/first/1");
                 $cancel_url = Url::urlFormat("/ucenter/becomepromoter/reference/{$order['invitor_id']}/invitor_role/{$order['invitor_role']}");
                 $error_url = Url::urlFormat("/ucenter/becomepromoter/reference/{$order['invitor_id']}/invitor_role/{$order['invitor_role']}");
-            } else if (stripos($out_trade_no, 'district') !== false) {//小区入驻订单
+            } else if (stripos($out_trade_no, 'district') !== false) {//专区入驻订单
                 $apply_id = intval(substr($order_no, stripos($order_no, 'district') + 8));
                 $order = $this->model->table("district_apply")->where("id=$apply_id")->find();
                 if (!$order) {
@@ -947,7 +947,7 @@ class PaymentController extends Controller {
                                     ->data(array(
                                         'md_amount' => $amount,
                                         'md_mid' => $pay_params['mid'],
-                                        'remark' => "小区加盟",
+                                        'remark' => "专区加盟",
                                         'create_time' => date("Y-m-d H:i:s"),
                                         'type' => 1,
                                         'type_id' => $id,
@@ -1044,7 +1044,7 @@ class PaymentController extends Controller {
         $district_id = Filter::int(Req::args('district_id'));
 
         if ($district_id) {
-            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "小区支付已经关闭"));
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "专区支付已经关闭"));
             exit();
 //            $model = new Model();
 //            $district_info = $model->table("district_apply")->where("id={$district_id}")->find();
@@ -1115,7 +1115,7 @@ class PaymentController extends Controller {
             //1.判断信息是否正确。
             $promoter = Promoter::getPromoterInstance($this->user['id']);
             if (is_object($promoter)&&$promoter->role_type==2) {
-                $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您已经有雇佣关系了，暂时不能加入其他小区"));
+                $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您已经有雇佣关系了，暂时不能加入其他专区"));
                 exit();
             }
             $config = Config::getInstance()->get("district_set");
@@ -1133,7 +1133,7 @@ class PaymentController extends Controller {
                 if ($invitor_role == 'shop') {
                     $district_info = $this->model->table("district_shop")->where("id = $reference")->find();
                     if (!$district_info) {
-                        $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "小区信息错误"));
+                        $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "专区信息错误"));
                         exit();
                     }
                     $insert_data['invitor_role'] = 'shop';
@@ -1143,7 +1143,7 @@ class PaymentController extends Controller {
                             ->where("dp.id = $reference")
                             ->find();
                     if (!$district_info) {
-                        $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "小区信息错误"));
+                        $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "专区信息错误"));
                         exit();
                     }
                     $insert_data['invitor_role'] = "promoter";
