@@ -37,7 +37,7 @@
                 <th style="width:70px">最低分红</th>
                 <th style="width:60px">状态</th> -->
             </tr>
-                {query:name=balance_log as b join=left join customer as c on b.user_id eq c.user_id fields=b.*,c.real_name where=c.financial_coin gt 0 order=b.id desc id=$obj page=1}
+                {query:name=balance_log as b join=left join customer as c on b.user_id eq c.user_id fields=b.*,c.real_name where=b.type eq 7 and c.financial_coin gt 0 order=b.id desc id=$obj page=1}
                 <tr>
                 <td>{$item['real_name']}</td>
                 <td>{$item['note']}</td>
