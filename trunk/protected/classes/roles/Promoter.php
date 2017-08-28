@@ -79,6 +79,27 @@ class Promoter extends Object {
         return $result;
     }
 
+    public function getQrcodeByGoodsId1($user_id,$goods_id, $show_img = true) {//根据推广商品获取二维码,返回一张图
+        $result  = Common::getQrcodeFlag($goods_id,$user_id);
+        if($result['status']=='success'){
+            if ($show_img) {
+                $qrCode = new QrCode();
+                $qrCode->setText($result['url'])
+                        ->setSize(300)
+                        ->setPadding(10)
+                        ->setErrorCorrection('medium')
+                        ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+                        ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+                        ->setLabelFontSize(16)
+                        ->setImageType(QrCode::IMAGE_TYPE_PNG);
+                header('Content-Type: ' . $qrCode->getContentType());
+                $qrCode->render();
+                return;
+            }
+        }
+        return $result;
+    }
+
     public function getMyPromoterGoodsList() {//获取我的推广商品列表
     }
 

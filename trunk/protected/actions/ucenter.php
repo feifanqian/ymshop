@@ -1864,11 +1864,12 @@ class UcenterAction extends Controller {
     public function getQrcodeFlagByGoodsId(){
         $goods_id = Filter::int(Req::args('goods_id'));
         $promoter = Promoter::getPromoterInstance($this->user['id']);
+        $user_id=$this->user['id'];
         if(!is_object($promoter)){
             $this->code = 1141;
            return;
         }else{
-            $result = $promoter->getQrcodeByGoodsId($goods_id,false);
+            $result = $promoter->getQrcodeByGoodsId1($user_id,$goods_id,false);
             if($result['status']=='success'){
                 $this->code =0;
                 $this->content['flag']=$result['flag'];
