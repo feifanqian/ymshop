@@ -6,10 +6,10 @@
   ),
   'globals' => 
   array (
-    'site_name' => '圆梦商城',
+    'site_name' => '圆梦购销网',
     'site_logo' => '/data/uploads/2017/08/26/b8e2ec9675b5bc0de7a1a6d5aa4f46d8.png',
-    'site_keywords' => '圆梦商城',
-    'site_description' => '圆梦商城',
+    'site_keywords' => '圆梦购销网',
+    'site_description' => '圆梦购销网',
     'site_icp' => '粤ICP备16060168号',
     'site_url' => '',
     'site_androidurl' => 'http://www.baidu.com',
