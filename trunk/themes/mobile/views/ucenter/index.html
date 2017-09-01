@@ -64,7 +64,13 @@
     <div id="ucenter-account">
         <p>昵称：{$user['nickname']}</p>
         <p>级别：{echo:$is_hirer?"经销商":($is_promoter?"代理商":'普通会员')}</p>
+        {if:$is_hirer==false && $is_promoter==false}
+        <p id="ucenter-beagent" style="border: 1px solid white;border-radius: 5px;text-align: center">如何成为代理商</p>
+        {/if}
     </div>
+    <!-- <div id="ucenter-beagent" style="position: absolute;top: 100px;left: 100px;color: #fff;">
+        <p>如何成为代理商</p>
+    </div> -->
 </div>
 <div class="content-padded" id="orderstatus">
     <div class="weui-row">
@@ -227,5 +233,17 @@
                  $(this).parent().addClass("js_show");
             }
         });
+        $("#ucenter-beagent").click(function(){
+       layer.open({
+            type: 3,
+            title: '成为代理商',
+            shade: true,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['100%', 'auto'],
+            content: '<p style="text-align:justify;text-justify:inter-ideograph">分红点数是用于商城分红的凭证，分红点数是5000：1股分红。余额和积分是您在商城的可用资产，可以用于商城的购买活动，此处的消费统计只针对余额支付的订单。</p>'
+            ,skin: 'header'
+        })
+    });
+
     });
 </script>
