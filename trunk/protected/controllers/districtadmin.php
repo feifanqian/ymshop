@@ -659,11 +659,14 @@ class DistrictadminController extends Controller {
             if (!$user_id || !$hirer_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
             }
-            $promoter = Promoter::getPromoterInstance($user_id);
-            if (is_object($promoter)) {
+            // $promoter = Promoter::getPromoterInstance($user_id);
+            $model = new Model();
+            $promoter=$model->table('district_promoter')->where('user_id='.$user_id.' and hirer_id='.$hirer_id)->find();
+            // var_dump($promoter);die;
+            if ($promoter) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "该用户已经有雇佣关系了")));
             } else {
-                $model = new Model();
+                
                 $isset = $model->table("district_shop")->where("id=$hirer_id")->find();
                 if (!$isset) {
                     exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
@@ -676,6 +679,7 @@ class DistrictadminController extends Controller {
                 $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
                 $data['status'] = 0;
                 $result = $model->table("district_promoter")->data($data)->insert();
+
                 if ($result) {
                     $logic = DistrictLogic::getInstance();
                     if (strip_tags(Url::getHost(), 'buy-d')) {
@@ -749,6 +753,55 @@ class DistrictadminController extends Controller {
             }
         } else {
             exit(json_encode(array("status" => 'fail', 'msg' => "用户微信信息不存在")));
+        }
+    }
+
+    /*
+     * 发送微信通知
+     * @params 
+     */
+    public function sendMessage($user_id,$content,$url,$type){
+        $need_weixin = true;
+        $need_jpush = true;
+        if($type=="promoter_join_success"){
+            if(!$this->client_type||$this->client_type=='unknow'){
+                return false;
+            }
+            if($this->client_type=='ios'||$this->client_type=='android'){
+                $need_weixin = false;
+            }else if($this->client_type=='weixin'){
+                $need_jpush = false;
+            }else{
+                return false;
+            }
+        }
+        if($need_weixin){
+            if($this->token==NULL){
+                $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+                $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+                $this->token = $wechat->getAccessToken();
+            }
+            $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$user_id." and oauth_type='wechat'")->find();
+            if(!empty($oauth_info)){
+                $oauth_info['open_name'] = $oauth_info['open_name']==""?"圆梦用户":$oauth_info['open_name'];
+                $params = array(
+                    'touser'=>$oauth_info['open_id'],
+                    'msgtype'=>'text',
+                    "text"=>array(
+                        'content'=>"<a href=\"$url\">亲爱的{$oauth_info['open_name']},$content</a>"
+                    )
+                );
+                Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$this->token, json_encode($params,JSON_UNESCAPED_UNICODE));
+            }
+        }
+        if($need_jpush){
+            if(!$this->jpush){
+                $NoticeService = new NoticeService();
+                $this->jpush = $NoticeService->getNotice('jpush');
+            }
+            $audience['alias']=array($user_id);
+            $this->jpush->setPushData('all', $audience, $content, $type, "");
+            $this->jpush->push();
         }
     }
 

@@ -119,10 +119,10 @@
                     <label class="weui-form-preview__label">另赠送积分</label>
                     <span class="weui-form-preview__value" id="package_point"></span>
                 </div>
-                <!-- <div class="weui-form-preview__item">
+                <div class="weui-form-preview__item" id="send_financial" style='display:none;'>
                     <label class="weui-form-preview__label">赠分红点数</label>
                     <span class="weui-form-preview__value" id="package_financial_coin"></span>
-                </div> -->
+                </div>
             </div>
 </div>
 <div class="weui_cells weui_cells_access" id='gift_select_4' style='display:none;'>
@@ -291,9 +291,11 @@
             if($(this).data('value')==4){
                 $("#address_select").show();
                 $("#gift_select_4").show();
+                $("#send_financial").show();
             }else{
                 $("#address_select").hide();
                 $("#gift_select_4").hide();
+                $("#send_financial").hide();
             }
         }
     });
