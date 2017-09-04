@@ -1186,7 +1186,19 @@ class UcenterController extends Controller {
         if ($hirer > 0) {
             $is_hirer = true;
         }
-        
+        if($customer['financial_coin']>=5000){
+            $data=array(
+                  'financial_coin'=>"`financial_coin`-5000",
+                  'financial_stock'=>"`financial_stock`+1",
+                );
+            $this->model->table('customer')->data($data)->where('user_id='.$id)->update();//自动分配分红股
+            $current_date = date('Y-m-d',time());
+            ignore_user_abort();//关掉浏览器，PHP脚本也可以继续执行.
+            set_time_limit(0);    
+            if(time()>strtotime("$current_date + 360 days")){ //360天后自动清除该分红股
+                $this->model->table('customer')->data(array('financial_stock'=>"`financial_stock`-1"))->where('user_id='.$id)->update();
+            }     
+        }
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
         $this->assign("sign_in_open",$sign_in_set['open']);
@@ -1921,7 +1933,9 @@ class UcenterController extends Controller {
             exit();
         }
         $data = $promoter->getIncomeStatistics();
+        $customer=$this->model->table('customer')->fields('financial_stock')->where('user_id='.$this->user['id'])->find();
         $this->assign('data', $data);
+        $this->assign('financial_stock', $customer['financial_stock']);
         $this->assign('seo_title', '我的收益');
         $this->redirect();
     }
