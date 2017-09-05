@@ -656,11 +656,16 @@ class DistrictadminController extends Controller {
         if ($this->is_ajax_request()) {
             $user_id = Req::args("user_id");
             $hirer_id = Req::args("hirer_id");
+            $pointcoin = Req::args("pointcoin");
+            $financialcoin = Req::args("financialcoin");
             if (!$user_id || !$hirer_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
             }
             // $promoter = Promoter::getPromoterInstance($user_id);
             $model = new Model();
+            //赠送积分和分红点
+            $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})","financial_coin"=>"`financial_coin`+({$financialcoin})"))->update();
+            Log::pointcoin_log($pointcoin,$user_id,"","代理商入驻赠送",5);
             $promoter=$model->table('district_promoter')->where('user_id='.$user_id.' and hirer_id='.$hirer_id)->find();
             // var_dump($promoter);die;
             if ($promoter) {
@@ -690,6 +695,7 @@ class DistrictadminController extends Controller {
                     exit(json_encode(array("status" => 'fail', 'msg' => "数据库错误")));
                 }
             }
+            
         }
     }
 
