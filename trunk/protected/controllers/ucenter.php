@@ -1187,16 +1187,17 @@ class UcenterController extends Controller {
             $is_hirer = true;
         }
         if($customer['financial_coin']>=5000){
+            $stock=intval($customer['financial_coin']/5000);
             $data=array(
-                  'financial_coin'=>"`financial_coin`-5000",
-                  'financial_stock'=>"`financial_stock`+1",
+                  'financial_coin'=>"`financial_coin`-5000*({$stock})",
+                  'financial_stock'=>"`financial_stock`+({$stock})",
                 );
             $this->model->table('customer')->data($data)->where('user_id='.$id)->update();//自动分配分红股
             $current_date = date('Y-m-d',time());
             ignore_user_abort();//关掉浏览器，PHP脚本也可以继续执行.
             set_time_limit(0);    
             if(time()>strtotime("$current_date + 360 days")){ //360天后自动清除该分红股
-                $this->model->table('customer')->data(array('financial_stock'=>"`financial_stock`-1"))->where('user_id='.$id)->update();
+                $this->model->table('customer')->data(array('financial_stock'=>"`financial_stock`-({$stock})"))->where('user_id='.$id)->update();
             }     
         }
         //签到
