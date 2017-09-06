@@ -48,7 +48,7 @@
                 <td style="width:60px">{echo:$customer['real_name']==""?$customer['nickname']:$customer['real_name']}</td>
             {/query}
             {else:}
-                <td style="width:60px">官方</td>
+                <td style="width:60px"></td>
             {/if}
             <td style="width:60px">{$type[$item["type"]]}</td>
             <td style="width:140px">{$item['shop_name']}</td>
@@ -147,17 +147,17 @@ function addPromoters(){
             id:"select",
             type: 2,
             title:"选择用户",
-            area: ['880px', '520px'],
+            area: ['980px', '520px'],
             fixed: false, //不固定
             maxmin: false,
             zindex:2,
             content: '{url:/districtadmin/radio_customer_select}',
           });
 }
-function callback(hirer_id,user_id,pointcoin,financialcoin){
+function callback(hirer_id,user_id,pointcoin,financialcoin,ds_promoter){
      var load = layer.load();
      console.log(hirer_id+"|"+user_id);
-     $.post('{url:/districtadmin/addPromoter}', {hirer_id:hirer_id,user_id:user_id,pointcoin:pointcoin,financialcoin:financialcoin} , function(result){
+     $.post('{url:/districtadmin/addPromoter}', {hirer_id:hirer_id,user_id:user_id,pointcoin:pointcoin,financialcoin:financialcoin,ds_promoter} , function(result){
             layer.close(load);
             if(result.status=='success'){
                layer.msg("添加成功",function(){

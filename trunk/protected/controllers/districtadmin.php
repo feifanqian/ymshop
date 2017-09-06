@@ -658,44 +658,69 @@ class DistrictadminController extends Controller {
             $hirer_id = Req::args("hirer_id");
             $pointcoin = Req::args("pointcoin")!=null?Req::args("pointcoin"):0;
             $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
-            if (!$user_id || !$hirer_id) {
+            $ds_promoter = Req::args("ds_promoter");
+            if (!$user_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
             }
             // $promoter = Promoter::getPromoterInstance($user_id);
             $model = new Model();
             //赠送积分和分红点
-            if($pointcoin>0 && $financialcoin>0){
+            if($pointcoin>0 || $financialcoin>0){
                $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})","financial_coin"=>"`financial_coin`+({$financialcoin})"))->update();
                Log::pointcoin_log($pointcoin,$user_id,"","代理商入驻赠送",5);
             }
-            $promoter=$model->table('district_promoter')->where('user_id='.$user_id.' and hirer_id='.$hirer_id)->find();
+            $promoter=$model->table('district_promoter')->where('user_id='.$user_id)->find();
             // var_dump($promoter);die;
             if ($promoter) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "该用户已经有雇佣关系了")));
             } else {
-                
-                $isset = $model->table("district_shop")->where("id=$hirer_id")->find();
-                if (!$isset) {
-                    exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
-                }
-                $data['user_id'] = $user_id;
-                $data['type'] = 4;
-                $data['join_time'] = date("Y-m-d H:i:s");
-                $data['hirer_id'] = $hirer_id;
-                $data['create_time'] = date('Y-m-d H:i:s');
-                $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
-                $data['status'] = 0;
-                $result = $model->table("district_promoter")->data($data)->insert();
-
-                if ($result) {
+                if(isset($hirer_id) && $hirer_id!='') {   //经销商推代理商
+                    $isset = $model->table("district_shop")->where("id=$hirer_id")->find();
+                    if (!$isset) {
+                        exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
+                    }
+                    $data['user_id'] = $user_id;
+                    $data['type'] = 4;
+                    $data['join_time'] = date("Y-m-d H:i:s");
+                    $data['hirer_id'] = $hirer_id;
+                    $data['create_time'] = date('Y-m-d H:i:s');
+                    $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
+                    $data['status'] = 0;
+                    $result = $model->table("district_promoter")->data($data)->insert();
+                    if ($result) {
+                        $logic = DistrictLogic::getInstance();
+                        if (strip_tags(Url::getHost(), 'ymlypt')) {
+                            $this->sendMessage($user_id, "恭喜您，成为经销商【{$isset['name']}】的官方代理商，快来看看吧>>>", "https://www.ymlypt.com/ucenter/index?first=1", "promoter_join_success");
+                        }
+                        exit(json_encode(array("status" => 'success', 'msg' => "成功")));
+                    } else {
+                        exit(json_encode(array("status" => 'fail', 'msg' => "数据库错误")));
+                    }
+                }elseif(isset($ds_promoter) && $ds_promoter!=''){     //代理商代理商
+                    $isset = $model->table("district_promoter")->where("user_id=$ds_promoter")->find();
+                    if (!$isset) {
+                        exit(json_encode(array("status" => 'fail', 'msg' => "代理商不存在")));
+                    }
+                    $data['user_id'] = $user_id;
+                    $data['type'] = 2;
+                    $data['join_time'] = date("Y-m-d H:i:s");
+                    $data['invitor_id'] = $ds_promoter;
+                    $data['create_time'] = date('Y-m-d H:i:s');
+                    $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
+                    $data['status'] = 0;
+                    $result = $model->table("district_promoter")->data($data)->insert();
+                    if ($result) {
                     $logic = DistrictLogic::getInstance();
-                    if (strip_tags(Url::getHost(), 'buy-d')) {
-                        $this->sendMessage($user_id, "恭喜您，成为经销商【{$isset['name']}】的官方推广员，快来看看吧>>>", "https://www.ymlypt.com/ucenter/index?first=1", "promoter_join_success");
+                    $customer=$model->table('customer as c')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$ds_promoter)->fields('c.real_name,u.nickname')->find();
+                    $name=$customer['real_name']!=''?$customer['real_name']:$customer['nickname'];
+                    if (strip_tags(Url::getHost(), 'ymlypt')) {
+                        $this->sendMessage($user_id, "恭喜您，成为代理商【{$name}】下的官方代理商，快来看看吧>>>", "https://www.ymlypt.com/ucenter/index?first=1", "promoter_join_success");
                     }
                     exit(json_encode(array("status" => 'success', 'msg' => "成功")));
                 } else {
                     exit(json_encode(array("status" => 'fail', 'msg' => "数据库错误")));
                 }
+              }
             }
             
         }
@@ -708,6 +733,8 @@ class DistrictadminController extends Controller {
             $pointcoin = Req::args("pointcoin")!=null?Req::args("pointcoin"):0;
             $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
             $district_name = Req::args("district_name");
+            $linkman = Req::args("linkman");
+            $link_mobile = Req::args("link_mobile");
             if (!$user_id || !$hirer_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
             }
@@ -738,8 +765,8 @@ class DistrictadminController extends Controller {
                 $data['valid_period'] = date("Y-m-d H:i:s", strtotime("+3 years"));
                 $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
                 $data['status'] = 0;
-                $data['linkman'] = $customer['real_name']==''?$customer['nickname']:$customer['real_name'];
-                $data['link_mobile'] = $customer['mobile'];
+                $data['linkman'] = $linkman;
+                $data['link_mobile'] = $link_mobile;
                 $data['location'] = $customer['city'];
                 $result = $model->table("district_shop")->data($data)->insert();
 
