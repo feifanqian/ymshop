@@ -6,6 +6,7 @@
     <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
    <!-- <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>!-->
     <a class="icon-delicious" href="{url:/districtadmin/record_income}"> 查看全部</a>
+    <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方代理商</a>
 <!--    <a class="icon-eye-blocked" href="{url:/order/order_list/status/2}"> 未审核</a>
     <a class="icon-cogs" href="{url:/order/order_list/status/3}"> 执行中</a>-->
 
@@ -16,13 +17,16 @@
         <th style="width:10px">选择</th>
         <th style="width:30px">操作</th>
         <th style="width:50px">代理商</th>
+        <th style="width:50px">联系电话</th>
+        <!-- <th style="width:50px">邀请人</th> -->
         <th style="width:50px">类型</th>
         <th style="width:60px">所属专区</th>
         <th style="width:60px">收益情况</th>
+        <th style="width:60px">加入时间</th>
         <th style="width:60px">状态</th>
     </tr>
     {set:$type=array("1"=>"经销商直推","2"=>"代理商推荐","3"=>"系统生成","4"=>"官方代理商","5"=>"自升级");}
-    {query:name=district_promoter as dp fields=dp.hirer_id,dp.type,dp.user_id,dp.status,c.real_name,c.valid_income,c.frezze_income,c.settled_income,u.avatar,u.nickname,ds.name as shop_name join=left join user as u on u.id eq dp.user_id left join customer as c on dp.user_id eq c.user_id left join district_shop as ds on dp.hirer_id eq ds.id where=$where id=$obj page=1 order= c.valid_income desc,c.frezze_income desc}
+    {query:name=district_promoter as dp fields=dp.hirer_id,dp.type,dp.user_id,dp.status,dp.join_time,c.user_id,c.real_name,c.mobile,c.valid_income,c.frezze_income,c.settled_income,u.avatar,u.nickname,ds.name as shop_name,i.user_id as uid join=left join user as u on u.id eq dp.user_id left join customer as c on dp.user_id eq c.user_id left join district_shop as ds on dp.hirer_id eq ds.id left join invite as i on dp.user_id eq i.invite_user_id where=$where id=$obj page=1 order= dp.id desc}
     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden">
@@ -37,9 +41,13 @@
                 </div>
             </td>
             <td style="width:60px">{$item['real_name']|$item['nickname']}</td>
+            <td style="width:140px">{$item['mobile']}</td>
+            
+            
             <td style="width:60px">{$type[$item["type"]]}</td>
             <td style="width:140px">{$item['shop_name']}</td>
             <td style="width:140px">待解锁：{$item['frezze_income']} 可用：{$item['valid_income']} 已结算：{$item['settled_income']}</td>
+            <td style="width:160px">{$item['join_time']}</td>
             <td style="width:160px">{$status[$item['status']]}</td>
         </tr>
     {/query}
@@ -128,4 +136,30 @@ $("#condition").on("click",function(){
     
   $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_promoter}',method:'get'});},data:{'c.real_name':{name:'代理商'},'ds.name':{'name':'所属专区'}}});
 })
+function addPromoters(){
+     index =  layer.open({
+            id:"select",
+            type: 2,
+            title:"选择用户",
+            area: ['880px', '520px'],
+            fixed: false, //不固定
+            maxmin: false,
+            zindex:2,
+            content: '{url:/districtadmin/radio_customer_select}',
+          });
+}
+function callback(hirer_id,user_id,pointcoin,financialcoin){
+     var load = layer.load();
+     console.log(hirer_id+"|"+user_id);
+     $.post('{url:/districtadmin/addPromoter}', {hirer_id:hirer_id,user_id:user_id,pointcoin:pointcoin,financialcoin:financialcoin} , function(result){
+            layer.close(load);
+            if(result.status=='success'){
+               layer.msg("添加成功",function(){
+                  layer.closeAll(); 
+               });
+            }else{
+                layer.msg(result.msg);
+            }
+        },'json');
+}
 </script>

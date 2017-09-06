@@ -656,16 +656,18 @@ class DistrictadminController extends Controller {
         if ($this->is_ajax_request()) {
             $user_id = Req::args("user_id");
             $hirer_id = Req::args("hirer_id");
-            $pointcoin = Req::args("pointcoin");
-            $financialcoin = Req::args("financialcoin");
+            $pointcoin = Req::args("pointcoin")!=null?Req::args("pointcoin"):0;
+            $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
             if (!$user_id || !$hirer_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
             }
             // $promoter = Promoter::getPromoterInstance($user_id);
             $model = new Model();
             //赠送积分和分红点
-            $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})","financial_coin"=>"`financial_coin`+({$financialcoin})"))->update();
-            Log::pointcoin_log($pointcoin,$user_id,"","代理商入驻赠送",5);
+            if($pointcoin>0 && $financialcoin>0){
+               $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})","financial_coin"=>"`financial_coin`+({$financialcoin})"))->update();
+               Log::pointcoin_log($pointcoin,$user_id,"","代理商入驻赠送",5);
+            }
             $promoter=$model->table('district_promoter')->where('user_id='.$user_id.' and hirer_id='.$hirer_id)->find();
             // var_dump($promoter);die;
             if ($promoter) {
@@ -688,7 +690,63 @@ class DistrictadminController extends Controller {
                 if ($result) {
                     $logic = DistrictLogic::getInstance();
                     if (strip_tags(Url::getHost(), 'buy-d')) {
-                        $this->sendMessage($user_id, "恭喜您，成为经销商【{$isset['name']}】的官方推广员，快来看看吧>>>", "https://www.buy-d.cn/ucenter/index?first=1", "promoter_join_success");
+                        $this->sendMessage($user_id, "恭喜您，成为经销商【{$isset['name']}】的官方推广员，快来看看吧>>>", "https://www.ymlypt.com/ucenter/index?first=1", "promoter_join_success");
+                    }
+                    exit(json_encode(array("status" => 'success', 'msg' => "成功")));
+                } else {
+                    exit(json_encode(array("status" => 'fail', 'msg' => "数据库错误")));
+                }
+            }
+            
+        }
+    }
+
+    public function addPromoters() {
+        if ($this->is_ajax_request()) {
+            $user_id = Req::args("user_id");
+            $hirer_id = Req::args("hirer_id");
+            $pointcoin = Req::args("pointcoin")!=null?Req::args("pointcoin"):0;
+            $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
+            $district_name = Req::args("district_name");
+            if (!$user_id || !$hirer_id) {
+                exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
+            }
+            // $promoter = Promoter::getPromoterInstance($user_id);
+            $model = new Model();
+            //赠送积分和分红点
+            if($pointcoin>0 && $financialcoin>0){
+                $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})","financial_coin"=>"`financial_coin`+({$financialcoin})"))->update();
+                Log::pointcoin_log($pointcoin,$user_id,"","经销商入驻赠送",8);
+            }
+            $promoter=$model->table('district_shop')->where('owner_id='.$user_id)->find();
+            
+            if ($promoter) {
+                exit(json_encode(array("status" => 'fail', 'msg' => "该用户已经有雇佣关系了")));
+            } else {
+                
+                $isset = $model->table("district_shop")->where("id=$hirer_id")->find();
+                if (!$isset) {
+                    exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
+                }
+                $customer=$model->table('customer as c')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$user_id)->fields('c.real_name,c.mobile,c.city,u.nickname')->find();
+                $data['name'] = $district_name;
+                $data['asset'] = 1000;
+                $data['founder_id'] = $user_id;
+                $data['owner_id'] = $user_id;
+                $data['invite_shop_id'] = $hirer_id;
+                $data['create_time'] = date('Y-m-d H:i:s');
+                $data['valid_period'] = date("Y-m-d H:i:s", strtotime("+3 years"));
+                $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
+                $data['status'] = 0;
+                $data['linkman'] = $customer['real_name']==''?$customer['nickname']:$customer['real_name'];
+                $data['link_mobile'] = $customer['mobile'];
+                $data['location'] = $customer['city'];
+                $result = $model->table("district_shop")->data($data)->insert();
+
+                if ($result) {
+                    $logic = DistrictLogic::getInstance();
+                    if (strip_tags(Url::getHost(), 'buy-d')) {
+                        $this->sendMessage($user_id, "恭喜您，成为官方经销商，快来看看吧>>>", "https://www.ymlypt.com/ucenter/index?first=1", "promoter_join_success");
                     }
                     exit(json_encode(array("status" => 'success', 'msg' => "成功")));
                 } else {
@@ -704,6 +762,30 @@ class DistrictadminController extends Controller {
      */
 
     public function radio_customer_select() {
+        $this->layout = "blank";
+        $s_type = Req::args("s_type");
+        $s_content = Req::args("s_content");
+        $hirer_id = Req::args("hirer_id");
+        $where = "1=1";
+        if ($s_content && $s_content != '') {
+
+            if ($s_type == 1) {
+                $where = "mobile = $s_content";
+            } else if ($s_type == 2) {
+                $where = "real_name like '%{$s_content}%' ";
+            } else if ($s_type == 0) {
+                $where = "user_id = $s_content";
+            }
+        }
+        $this->assign("s_type", $s_type);
+        $this->assign("s_content", $s_content);
+        $this->assign("hirer_id", $hirer_id);
+
+        $this->assign("where", $where);
+        $this->redirect();
+    }
+
+    public function radio_customer_selects() {
         $this->layout = "blank";
         $s_type = Req::args("s_type");
         $s_content = Req::args("s_content");

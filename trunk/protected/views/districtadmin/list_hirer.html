@@ -5,7 +5,7 @@
     <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
    <!-- <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>!-->
     <a class="icon-delicious" href="{url:/districtadmin/list_hirer}"> 查看全部</a>
-    <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方推广员</a>
+    <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方经销商</a>
 <!--    <a class="icon-eye-blocked" href="{url:/order/order_list/status/2}"> 未审核</a>
     <a class="icon-cogs" href="{url:/order/order_list/status/3}"> 执行中</a>-->
 
@@ -90,17 +90,17 @@ function addPromoters(){
             id:"select",
             type: 2,
             title:"选择用户",
-            area: ['880px', '520px'],
+            area: ['1000px', '520px'],
             fixed: false, //不固定
             maxmin: false,
             zindex:2,
-            content: '{url:/districtadmin/radio_customer_select}',
+            content: '{url:/districtadmin/radio_customer_selects}',
           });
 }
-function callback(hirer_id,user_id,pointcoin,financialcoin){
+function callback(hirer_id,user_id,pointcoin,financialcoin,district_name){
      var load = layer.load();
      console.log(hirer_id+"|"+user_id);
-     $.post('{url:/districtadmin/addPromoter}', {hirer_id:hirer_id,user_id:user_id,pointcoin:pointcoin,financialcoin:financialcoin} , function(result){
+     $.post('{url:/districtadmin/addPromoters}', {hirer_id:hirer_id,user_id:user_id,pointcoin:pointcoin,financialcoin:financialcoin,district_name:district_name} , function(result){
             layer.close(load);
             if(result.status=='success'){
                layer.msg("添加成功",function(){
