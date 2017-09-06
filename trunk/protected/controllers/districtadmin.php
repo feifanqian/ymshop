@@ -701,6 +701,9 @@ class DistrictadminController extends Controller {
                     if (!$isset) {
                         exit(json_encode(array("status" => 'fail', 'msg' => "代理商不存在")));
                     }
+                    //添加邀请关系
+                    $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'web','district_id'=>1,'createtime'=>time()))->insert();
+                    
                     $data['user_id'] = $user_id;
                     $data['type'] = 2;
                     $data['join_time'] = date("Y-m-d H:i:s");
@@ -772,7 +775,7 @@ class DistrictadminController extends Controller {
 
                 if ($result) {
                     $logic = DistrictLogic::getInstance();
-                    if (strip_tags(Url::getHost(), 'buy-d')) {
+                    if (strip_tags(Url::getHost(), 'ymlypt')) {
                         $this->sendMessage($user_id, "恭喜您，成为官方经销商，快来看看吧>>>", "https://www.ymlypt.com/ucenter/index?first=1", "promoter_join_success");
                     }
                     exit(json_encode(array("status" => 'success', 'msg' => "成功")));
