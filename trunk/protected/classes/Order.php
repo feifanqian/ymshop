@@ -689,8 +689,8 @@ class Order {
         $data['taxes'] = 0;
         $data['discount_amount'] = 0;
         // $data['order_amount'] = $product['sell_price']*$gift_num;
-        $data['order_amount'] = 123;
-        // var_dump($data['order_amount']);die;
+        // $data['order_amount'] = 123;
+        var_dump($data['order_amount']);exit();
         $data['real_amount'] = $product['sell_price']*$gift_num;
         $data['point'] = 0;
         $data['voucher_id'] = 0;
