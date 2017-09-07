@@ -506,7 +506,7 @@ class SimpleController extends Controller {
                 if ($inviter) {
                     Common::buildInviteShip($inviter,$last_id,"wechat");
                 }
-                $this->redirect("/ucenter/firstbind");
+                // $this->redirect("/ucenter/firstbind");
                 exit;
             }
             Session::set('oauth_user_info', $userinfo);
