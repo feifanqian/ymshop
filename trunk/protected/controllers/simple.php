@@ -582,7 +582,7 @@ class SimpleController extends Controller {
                         if ($inviter) {
                             $model->table("invite")->data(array('user_id' => $inviter, 'invite_user_id' => $last_id, 'from' => $userinfo['oauth_type'], 'createtime' => time()))->insert();
                         }
-                        $this->redirect("/ucenter/firstbind");
+                        // $this->redirect("/ucenter/firstbind");
                         exit;
                     } else {
                         $info = array('exist' => 'yes', 'field' => 'repassword', 'msg' => '两次密码输入不一致！');
