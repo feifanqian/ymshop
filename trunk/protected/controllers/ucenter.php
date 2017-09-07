@@ -604,6 +604,7 @@ class UcenterController extends Controller {
                                 'point_coin'=>200
                             );
                             $this->model->table("customer")->data($data)->where("user_id={$this->user['id']}")->update();
+                            Log::pointcoin_log(200, $user_id, '', '新用户积分奖励', 10);
                             //默认密码
                             $passWord = $mobile;
                             $validcode = CHash::random(8);
@@ -614,7 +615,7 @@ class UcenterController extends Controller {
                             $user['mobile']=$mobile;
                             $user['real_name']=$realname;
                             $this->safebox->set('user', $user);
-                            Common::sendPointCoinToNewComsumer($this->user['id']);
+                            // Common::sendPointCoinToNewComsumer($this->user['id']);
                             $ret['status'] = "success";
                             $ret["message"] = "验证成功";
                             $ret['show_point'] = 1;
