@@ -53,7 +53,8 @@
                     <div class="weui_cell_bd weui_cell_primary">
                         <div class="weui-row">
                             <div class="weui-col-25">
-                                <a href="javascript:void(0);"><i>{echo:sprintf("%01.2f",$order['todayamount'])}</i>今日消费</a>
+                                <!-- <a href="javascript:void(0);"><i>{echo:sprintf("%01.2f",$order['todayamount'])}</i>今日消费</a> -->
+                                <a href="javascript:void(0);"><i>{$order['todayamount']}</i>今日消费</a>
                             </div>
                             <div class="weui-col-25">
                                 <a href="{url:/ucenter/balance_log}"><i>{$customer['balance']}</i>我的余额</a>
