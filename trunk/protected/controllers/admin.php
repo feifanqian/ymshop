@@ -87,7 +87,7 @@ class AdminController extends Controller {
         $name = Req::args('name');
         $modle = new Model('manager');
         $mobile = $modle->where("name='$name'")->fields("name,mobile")->find();
-        $ret = SMS::getInstance()->checkCode($mobile['mobile'], $verifyCode);
+        // $ret = SMS::getInstance()->checkCode($mobile['mobile'], $verifyCode);
         $ret['status'] = 'success';
         if($ret['status'] != 'success'){  
         //        $code = $this->safebox->get($this->captchaKey);
