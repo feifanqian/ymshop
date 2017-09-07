@@ -475,7 +475,7 @@ class OrderAction extends Controller {
 
         $data['order_amount'] = $order_amount;
         $data['real_amount'] = $real_amount;
-        var_dump($data['real_amount']);die;
+
         if(!isset($data['point'])){
             $data['point'] = $point;
         }

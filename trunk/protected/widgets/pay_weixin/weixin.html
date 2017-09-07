@@ -11,7 +11,7 @@
     $input->SetBody($order_name);
     //$input->SetAttach("test");
     $input->SetOut_trade_no('code_'.substr(time(),4).'_'.$order_no);
-    $input->SetTotal_fee($order_amount*100);
+    $input->SetTotal_fee($order_amount);
     $input->SetTime_start(date("YmdHis"));
     $input->SetTime_expire(date("YmdHis", time() + 600));
     //$input->SetGoods_tag("test");
