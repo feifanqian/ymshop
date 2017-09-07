@@ -152,11 +152,17 @@ class LinuxCliTask{
                           'financial_stock'=>"`financial_stock`+({$stock})",
                         );
                     $this->model->table('customer')->data($data)->where('user_id='.$v['user_id'])->update();//自动分配分红股
+                    echo date("Y-m-d H:i:s")."=={$v['user_id']}自动分配分红股成功==\n";
                     $current_date = date('Y-m-d',time());
                     ignore_user_abort();//关掉浏览器，PHP脚本也可以继续执行.
                     set_time_limit(0);    
                     if(time()>strtotime("$current_date + 360 days")){ //360天后自动清除该分红股
-                        $this->model->table('customer')->data(array('financial_stock'=>"`financial_stock`-({$stock})"))->where('user_id='.$v['user_id'])->update();
+                        $res=$this->model->table('customer')->data(array('financial_stock'=>"`financial_stock`-({$stock})"))->where('user_id='.$v['user_id'])->update();
+                        if($res){
+                            echo date("Y-m-d H:i:s")."success=={$v['user_id']}==360天后自动清除该分红股==\n";
+                        }else{
+                            echo date("Y-m-d H:i:s")."error";
+                        }
                     }
                 }
             }
