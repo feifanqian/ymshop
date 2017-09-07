@@ -1186,7 +1186,7 @@ class UcenterController extends Controller {
         if ($hirer > 0) {
             $is_hirer = true;
         }
-        if($customer['financial_coin']>=5000){
+        if(isset($customer['financial_coin']) && $customer['financial_coin']>=5000){
             $stock=intval($customer['financial_coin']/5000);
             $data=array(
                   'financial_coin'=>"`financial_coin`-5000*({$stock})",
