@@ -140,6 +140,28 @@ class LinuxCliTask{
              }
             echo date("Y-m-d H:i:s").":"."notify success\r\n";die;
      }
+
+    public function autoUpdateFinancial(){
+        $customer=$this->model->table('customer')->fields('user_id,financial_coin,financial_stock')->where('financial_coin>0')->findAll();
+        if($customer){
+            foreach($customer as $k => $v){
+                if($v['financial_coin']>=5000){
+                    $stock=intval($v['financial_coin']/5000);
+                    $data=array(
+                          'financial_coin'=>"`financial_coin`-5000*({$stock})",
+                          'financial_stock'=>"`financial_stock`+({$stock})",
+                        );
+                    $this->model->table('customer')->data($data)->where('user_id='.$v['user_id'])->update();//自动分配分红股
+                    $current_date = date('Y-m-d',time());
+                    ignore_user_abort();//关掉浏览器，PHP脚本也可以继续执行.
+                    set_time_limit(0);    
+                    if(time()>strtotime("$current_date + 360 days")){ //360天后自动清除该分红股
+                        $this->model->table('customer')->data(array('financial_stock'=>"`financial_stock`-({$stock})"))->where('user_id='.$v['user_id'])->update();
+                    }
+                }
+            }
+        }
+    }
   
     private function doCurl($url,$post_data,$time_out =30){
         $post_data = is_array($post_data)?http_build_query($post_data):$post_data;

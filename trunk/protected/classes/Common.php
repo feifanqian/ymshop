@@ -720,7 +720,7 @@ class Common {
      //为新用户赠送积分
      static function sendPointCoinToNewComsumer($user_id){
          $model = new Model("customer");
-         $result = $model->where("user_id = $user_id")->data(array('point_coin'=>"`point_coin`+200"))->update();
+         $result = $model->where("user_id = $user_id")->data(array('point_coin'=>200))->update();
          if($result){
              Log::pointcoin_log(200, $user_id, '', '新用户积分奖励', 10);
              return TRUE;
