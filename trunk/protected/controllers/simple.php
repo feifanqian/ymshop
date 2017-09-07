@@ -489,7 +489,7 @@ class SimpleController extends Controller {
                 //更新用户名和邮箱
                 $model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = '{$last_id}'")->update();
                 //更新customer表
-                $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $userinfo['open_name'], 'reg_time' => $time, 'login_time' => $time))->insert();
+                $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
                 //记录登录信息
                 $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id='$last_id'")->find();
                 $this->safebox->set('user', $obj, 1800);
