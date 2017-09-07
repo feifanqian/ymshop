@@ -270,7 +270,7 @@ class PaymentController extends Controller {
                 if (is_numeric($recharge)) {
                     $safebox = Safebox::getInstance();
                     $user = $safebox->get('user');
-                    $recharge = round($recharge, 2);
+                    // $recharge = round($recharge, 2);
                     $paymentInfo = $payment->getPayment();
                     $data = array('account' => $recharge, 'paymentName' => $paymentInfo['name'],'package' => $package);
                     $packData = $payment->getPaymentInfo('recharge', $data);
