@@ -482,8 +482,8 @@ class SimpleController extends Controller {
                 $nickname = $userinfo['open_name'];
                 $time = date('Y-m-d H:i:s');
                 $validcode = CHash::random(8);
-                $model = $this->model->table("user");
-                $last_id = $model->data(array('nickname' => $nickname, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+                $model = $this->model;
+                $last_id = $model->table("user")->data(array('nickname' => $nickname, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
                 $name = "u" . sprintf("%09d", $last_id);
                 $email = $name . "@no.com";
                 //更新用户名和邮箱
