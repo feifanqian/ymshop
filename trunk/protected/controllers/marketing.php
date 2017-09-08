@@ -862,7 +862,7 @@ class MarketingController extends Controller {
                      continue;
                  }
                  // var_dump($need_add);die;
-                 $result = $model->table('customer')->data(array('balance'=>"`balance`+{$need_add}"))->where("user_id =".$v['user_id'])->update();
+                 $result = $model->table('customer')->data(array('financial_coin'=>"`financial_coin`+{$need_add}"))->where("user_id =".$v['user_id'])->update();
                  if($result){
                      $beneficiary_num ++;
                      $has_bonus_count += $need_add;
