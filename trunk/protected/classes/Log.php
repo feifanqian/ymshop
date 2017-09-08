@@ -124,11 +124,11 @@ class Log {
             if($result){
                 return true;
             }else{
-                file_put_contents('incomelogError.txt', "记录失败：user_id:$user_id|".json_encode($data)."\n",FILE_APPEND);
+                file_put_contents('incomelogError.txt', "记录失败：user_id:$role_id|".json_encode($data)."\n",FILE_APPEND);
                 return false;
             }
         }else{
-            file_put_contents('incomelogError.txt', "更新失败：user_id:$user_id|".json_encode($data)."\n",FILE_APPEND);
+            file_put_contents('incomelogError.txt', "更新失败：user_id:$role_id|".json_encode($data)."\n",FILE_APPEND);
             return false;
         }
     }
