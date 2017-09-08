@@ -844,18 +844,18 @@ class MarketingController extends Controller {
             exit(json_encode(array("status"=>'fail','msg'=>"分红金额错误")));
         }
         $model = new Model();
-        $financial_coin_count = $model->table("customer")->fields("SUM(`financial_coin`) as count")->where("financial_coin > 0")->findAll();
+        $financial_coin_count = $model->table("customer")->fields("SUM(`financial_stock`) as count")->where("financial_stock > 0")->findAll();
         $financial_coin_count = $financial_coin_count[0]['count']==NULL?0:$financial_coin_count[0]['count'];
         if($financial_coin_count==0){
-            exit(json_encode(array("status"=>'fail','msg'=>"没有人拥有理财金币")));
+            exit(json_encode(array("status"=>'fail','msg'=>"没有人拥有分红股")));
         }
-        $bonus_data = $model->table("customer")->where("financial_coin > 0")->fields("financial_coin,user_id")->findAll();
+        $bonus_data = $model->table("customer")->where("financial_stock > 0")->fields("financial_coin,user_id,financial_stock")->findAll();
         if($bonus_data){
             $beneficiary_num = 0;
-            $has_bonus_count = 0.00;
+            $has_bonus_count = 0;
             $order_no = "B".date("YmdHis").rand(100, 999);
             foreach ($bonus_data as $k=>$v){
-                 $need_add = round($bonus*$v['financial_coin']/$financial_coin_count,4);
+                 $need_add = round($bonus*$v['financial_stock']/$financial_coin_count,4);
                  // var_dump($need_add);die;
                  $need_add = sprintf("%.2f",substr(sprintf("%.4f", $need_add), 0, -2));
                  if($need_add<=0){
@@ -866,7 +866,7 @@ class MarketingController extends Controller {
                  if($result){
                      $beneficiary_num ++;
                      $has_bonus_count += $need_add;
-                     Log::balance($need_add, $v['user_id'], $order_no, "商城分红",7,$this->manager['id']);
+                     Log::balance($need_add, $v['user_id'], $order_no, $explanation,7,$this->manager['id']);
                  }
             }
             if($beneficiary_num>0&&$has_bonus_count>0){

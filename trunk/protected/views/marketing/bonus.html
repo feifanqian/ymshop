@@ -28,18 +28,20 @@
         <table class="default" >
             <tr>
                 <th>受益人</th>
+                <th>分红股</th>
                 <th>分红说明</th>
                 <th>分红时间</th>
-                <th>实际分红</th>
+                <th>实际分红</th>   
                 <th>余额</th>
                 <!-- <th style="width:70px">受益人数</th>
                 <th style="width:70px">最高分红</th>
                 <th style="width:70px">最低分红</th>
                 <th style="width:60px">状态</th> -->
             </tr>
-                {query:name=balance_log as b join=left join customer as c on b.user_id eq c.user_id fields=b.*,c.real_name where=b.type eq 7 and c.financial_coin gt 0 order=b.id desc id=$obj page=1}
+                {query:name=balance_log as b join=left join customer as c on b.user_id eq c.user_id fields=b.*,c.real_name,c.financial_stock where=b.type eq 7 and c.financial_coin gt 0 order=b.id desc id=$obj page=1}
                 <tr>
                 <td>{$item['real_name']}</td>
+                <td>{$item['financial_stock']}</td>
                 <td>{$item['note']}</td>
                 <td>{$item['time']}</td>
                 <td>{$item['amount']}</td>
