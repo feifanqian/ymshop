@@ -153,7 +153,7 @@ class LinuxCliTask{
                         );
                     $ret=$this->model->table('customer')->data($data)->where('user_id='.$v['user_id'])->update();//自动分配分红股
                     if($ret){
-                        echo date("Y-m-d H:i:s")."=={$v['real_name']}==自动分配分红股成功==\n";
+                        echo date("Y-m-d H:i:s")."=={$v['real_name']}==自动分配{$stock}个分红股成功==\n";
                     }            
                     $current_date = date('Y-m-d',time());
                     ignore_user_abort();//关掉浏览器，PHP脚本也可以继续执行.
