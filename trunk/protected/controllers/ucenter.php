@@ -604,7 +604,7 @@ class UcenterController extends Controller {
                                 'point_coin'=>200
                             );
                             $this->model->table("customer")->data($data)->where("user_id={$this->user['id']}")->update();
-                            Log::pointcoin_log(200, $user_id, '', '新用户积分奖励', 10);
+                            Log::pointcoin_log(200, $this->user['id'], '', '微信新用户积分奖励', 10);
                             //默认密码
                             $passWord = $mobile;
                             $validcode = CHash::random(8);
