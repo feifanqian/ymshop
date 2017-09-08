@@ -29,11 +29,11 @@ class Log {
     }
     public static function pointcoin_log($amount, $user_id, $order_no='', $note = '', $type = 0, $admin_id = 0) {
         //事件类型: 0:购物下单 1:套餐充值 2:系统退回 3：管理员充值 4：管理员退款 5:代理商入驻赠送 6:代理商推荐奖励 7：专区销售积分奖励 8:经营商入驻赠送 9:购买商品赠送 10:每日签到赠送 11：商城分红
-        $model = new Model('customer');
+        $model = new Model();
         if($type==0){
             $amount = 0 - abs($amount);
         }
-        $customer = $model->fields("point_coin")->where("user_id=" . $user_id)->find();
+        $customer = $model->table('customer')->fields("point_coin")->where("user_id=" . $user_id)->find();
         if ($customer) {
             $log = array(   'admin_id' => $admin_id, 
                             'user_id' => $user_id, 
