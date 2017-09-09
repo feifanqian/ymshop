@@ -96,7 +96,7 @@ class pay_alipaydirect extends PaymentPlugin {
 
         //基本参数
         if (Chips::clientType() == 'desktop') {
-            $return['service'] = 'trade_create_by_buyer';
+            $return['service'] = 'create_partner_trade_by_buyer';
             // $return['service'] = 'trade_create_by_buyer';
         } else {
             $return['service'] = 'alipay.wap.create.direct.pay.by.user';
