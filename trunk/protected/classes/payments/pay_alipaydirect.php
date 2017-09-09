@@ -101,7 +101,7 @@ class pay_alipaydirect extends PaymentPlugin {
             $return['service'] = 'alipay.wap.create.direct.pay.by.user';
         }
         $return['partner'] = $return['seller_id'] = $payment['M_PartnerId'];
-        $return['_input_charset'] = 'utf-8';
+        $return['_input_charset'] = 'gb2312';
         $return['payment_type'] = 1;
         $return['return_url'] = $this->callbackUrl;
         $return['notify_url'] = $this->asyncCallbackUrl;
