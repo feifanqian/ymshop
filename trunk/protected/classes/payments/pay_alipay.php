@@ -73,7 +73,7 @@ class pay_alipay extends PaymentPlugin {
         $return = array();
 
         //基本参数
-        $return['service'] = 'create_partner_trade_by_buyer';
+        $return['service'] = 'trade_create_by_buyer';
         $return['seller_id'] = $payment['M_PartnerId'];
         $return['partner'] = $payment['M_PartnerId'];
         $return['_input_charset'] = 'utf-8';
