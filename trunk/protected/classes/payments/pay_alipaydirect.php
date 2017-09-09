@@ -12,7 +12,7 @@ class pay_alipaydirect extends PaymentPlugin {
     //提交地址
     public function submitUrl() {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-            $this->method = "POST";
+            $this->method = "GET";
             return '/payment/pay_alipay_submit';
         } else {
             return 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8';
