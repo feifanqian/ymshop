@@ -98,9 +98,9 @@ class pay_alipaydirect extends PaymentPlugin {
         if (Chips::clientType() == 'desktop') {
             // $return['service'] = 'create_direct_pay_by_user';
             $return['service'] = 'trade_create_by_buyer';
-            $return['logistics_fee'] = "0.00";
-            $return['logistics_type'] = "EXPRESS";
-            $return['logistics_payment'] = "BUYER_PAY_AFTER_RECEIVE";
+            // $return['logistics_fee'] = "0.00";
+            // $return['logistics_type'] = "EXPRESS";
+            // $return['logistics_payment'] = "BUYER_PAY_AFTER_RECEIVE";
         } else {
             $return['service'] = 'alipay.wap.create.direct.pay.by.user';
         }
