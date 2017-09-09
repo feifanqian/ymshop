@@ -12,7 +12,7 @@ class pay_alipaydirect extends PaymentPlugin {
     //提交地址
     public function submitUrl() {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-            $this->method = "GET";
+            $this->method = "POST";
             return '/payment/pay_alipay_submit';
         } else {
             return 'https://mapi.alipay.com/gateway.do?_input_charset=utf-8';
@@ -101,7 +101,7 @@ class pay_alipaydirect extends PaymentPlugin {
             $return['service'] = 'alipay.wap.create.direct.pay.by.user';
         }
         $return['partner'] = $return['seller_id'] = $payment['M_PartnerId'];
-        $return['_input_charset'] = 'gb2312';
+        $return['_input_charset'] = 'utf-8';
         $return['payment_type'] = 1;
         $return['return_url'] = $this->callbackUrl;
         $return['notify_url'] = $this->asyncCallbackUrl;
