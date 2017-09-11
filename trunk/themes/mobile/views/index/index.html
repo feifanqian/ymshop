@@ -217,7 +217,7 @@
         <a class="more" href="{url:/index/wei}"><span>微商专场</span><i class="iconfont icon-next"></i></a> 
     </div>
     <div class="swiper-wrapper">
-        {query:name=pointwei_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id where=ps.status eq 1 order=ps.id desc limit=12}
+        {query:name=pointwei_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id where=go.is_online eq 0 and ps.status eq 1 order=ps.id desc limit=12}
         <div class="swiper-slide">
             <a href="{url:/index/pointwei/id/$item[id]}">
                 <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
