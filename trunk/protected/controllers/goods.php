@@ -376,6 +376,7 @@ class GoodsController extends Controller {
         $is_online = Req::args("is_online");
         $limit_buy_num = Req::args("limit_buy_num");
         $base_sales_volume = Req::args("base_sales_volume");
+        $weishang = Req::args("weishang");
         if ($is_online == null)
             Req::args("is_online", 0);
 
@@ -442,10 +443,16 @@ class GoodsController extends Controller {
             $gdata['pro_no'] = $gdata['pro_no'][0];
         if ($id == 0) {
             $gdata['create_time'] = date("Y-m-d H:i:s");
+            // var_dump($_POST['is_weishang']);die;
             $goods_id = $goods->data($gdata)->save();
+            if($_POST['weishang']==1){
+              $res=$goods->data(array('weishang'=>1))->where('id='.$goods_id)->update();
+              
+            }
             Log::op($this->manager['id'], "添加商品", "管理员[" . $this->manager['name'] . "]:添加了商品 " . Req::args('name'));
         } else {
             $goods_id = $id;
+            // var_dump($gdata);die;
             $goods->data($gdata)->where("id=" . $id)->update();
             Log::op($this->manager['id'], "修改商品", "管理员[" . $this->manager['name'] . "]:修改了商品 " . Req::args('name'));
         }
@@ -504,7 +511,7 @@ class GoodsController extends Controller {
         }
         //更新商品相关货品的部分信息
         $goods->data(array('store_nums' => $g_store_nums, 'warning_line' => $g_warning_line, 'weight' => $g_weight, 'sell_price' => $g_sell_price, 'market_price' => $g_market_price, 'cost_price' => $g_cost_price,'limit_buy_num'=>$limit_buy_num,'base_sales_volume'=>$base_sales_volume))->where("id=" . $goods_id)->update();
-        if($_POST['is_weishang']==1){
+        if($_POST['weishang']==1){
             $good=$goods->where('id='.$goods_id)->find();
             $products=new Model('products');
             $product=$products->where("goods_id = " . $goods_id)->find();
@@ -512,12 +519,21 @@ class GoodsController extends Controller {
             $product_id=$product['id'];
             $sell_price=$good['sell_price'];
             $len=strlen($sell_price);
-            $datas['goods_id']=$goods_id;
-            $datas['price_set']='a:1:{i:'.$product_id.';a:2:{s:4:"cash";s:'.$len.':"'.$sell_price.'";s:5:"point";s:1:"0";}}';
-            $datas['is_adjustable']=0;
-            $datas['listorder']=0;
-            $datas['status']=1;
-            $res=$pointwei->data($datas)->insert();
+            $exist=$pointwei->where('goods_id='.$goods_id)->find();
+            if($exist){
+                $datas['price_set']='a:1:{i:'.$product_id.';a:2:{s:4:"cash";s:'.$len.':"'.$sell_price.'";s:5:"point";s:1:"0";}}';
+                $datas['is_adjustable']=0;
+                $datas['listorder']=0;
+                $datas['status']=1;
+                $pointwei->data($datas)->where("goods_id=" . $goods_id)->update();
+            }else{
+                $datas['goods_id']=$goods_id;
+                $datas['price_set']='a:1:{i:'.$product_id.';a:2:{s:4:"cash";s:'.$len.':"'.$sell_price.'";s:5:"point";s:1:"0";}}';
+                $datas['is_adjustable']=0;
+                $datas['listorder']=0;
+                $datas['status']=1;
+                $pointwei->data($datas)->insert();
+            }
         }
         $keys = array_keys($values_dcr);
         $keys = implode("','", $keys);
