@@ -51,6 +51,8 @@
                     <ul>
                         <li><a class="icon-point-up" href="{url:/goods/set_online/status/0/id/$item[id]}"> 上架</a></li>
                         <li><a class="icon-point-down" href="{url:/goods/set_online/status/1/id/$item[id]}"> 下架</a></li>
+                        <!-- <li><a class="icon-point-down" href="{url:/goods/set_weishang/status/1/id/$item[id]}"> 加入微商专区</a></li>
+                        <li><a class="icon-point-down" href="{url:/goods/set_weishang/status/0/id/$item[id]}"> 移出微商专区</a></li> -->
                         <li><a class="icon-pencil" href="{url:/goods/goods_edit/id/$item[id]}"> 编辑</a></li>
                         <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/goods/goods_del/id/$item[id]}')"> 删除</a></li>
                         {if:$item['is_commission']==0}

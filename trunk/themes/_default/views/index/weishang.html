@@ -52,7 +52,7 @@ $(function(){
             <li><a href="#">惊爆单品 诚意推荐</a></li>
         </ol>
         <ul class="groupproduct-list clearfix">
-            {query:name=pointwei_sale as ps fields=*,ps.id as id join=left join goods as go on ps.goods_id eq go.id  where=ps.status eq 1  order=ps.listorder asc limit=12 pagesize=12 page=1 id=$pointwei_sale}
+            {query:name=pointwei_sale as ps fields=*,ps.id as id join=left join goods as go on ps.goods_id eq go.id  where=ps.status eq 1 and go.is_weishang eq 1 and go.is_online eq 0  order=ps.listorder asc limit=12 pagesize=12 page=1 id=$pointwei_sale}
             <li class="item" style="text-align: center;">
                 <dl class="groupproduct" 
                     style=" background: -webkit-linear-gradient(rgba(23, 22, 22, 0.07), rgba(229, 229, 229, 0)); /* Safari 5.1 - 6.0 */

@@ -47,6 +47,15 @@ class GoodsController extends Controller {
         $this->redirect("goods_list");
     }
 
+    //商品加入移除微商区
+    // public function set_weishang() {
+    //     $id = Req::args('id');
+    //     $status = Req::args('status');
+    //     $model = new Model('goods');
+    //     $res=$model->data(array('is_weishang' =>$status))->where('id = '.$id)->update();
+    //     $this->redirect("goods_list");
+    // }
+
     function goods_type_save() {
         $attr_id = Req::args('attr_id');
         $attr_name = Req::args('attr_name');
@@ -445,10 +454,6 @@ class GoodsController extends Controller {
             $gdata['create_time'] = date("Y-m-d H:i:s");
             // var_dump($_POST['is_weishang']);die;
             $goods_id = $goods->data($gdata)->save();
-            if($_POST['weishang']==1){
-              $res=$goods->data(array('weishang'=>1))->where('id='.$goods_id)->update();
-              
-            }
             Log::op($this->manager['id'], "添加商品", "管理员[" . $this->manager['name'] . "]:添加了商品 " . Req::args('name'));
         } else {
             $goods_id = $id;
@@ -511,7 +516,7 @@ class GoodsController extends Controller {
         }
         //更新商品相关货品的部分信息
         $goods->data(array('store_nums' => $g_store_nums, 'warning_line' => $g_warning_line, 'weight' => $g_weight, 'sell_price' => $g_sell_price, 'market_price' => $g_market_price, 'cost_price' => $g_cost_price,'limit_buy_num'=>$limit_buy_num,'base_sales_volume'=>$base_sales_volume))->where("id=" . $goods_id)->update();
-        if($_POST['weishang']==1){
+        if($_POST['is_weishang']==1){
             $good=$goods->where('id='.$goods_id)->find();
             $products=new Model('products');
             $product=$products->where("goods_id = " . $goods_id)->find();
