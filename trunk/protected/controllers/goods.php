@@ -514,7 +514,10 @@ class GoodsController extends Controller {
             $len=strlen($sell_price);
             $datas['goods_id']=$goods_id;
             $datas['price_set']='a:1:{i:'.$product_id.';a:2:{s:4:"cash";s:'.$len.':"'.$sell_price.'";s:5:"point";s:1:"0";}}';
-            $pointwei->data($datas)->insert();
+            $datas['is_adjustable']=0;
+            $datas['listorder']=0;
+            $datas['status']=1;
+            $res=$pointwei->data($datas)->insert();
         }
         $keys = array_keys($values_dcr);
         $keys = implode("','", $keys);
