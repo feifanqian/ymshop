@@ -46,10 +46,10 @@
                     </tr>
                     <tr>
                         <td class="label">手机号码：</td>
-                        {if:$mobile!=null}
-                        <td>{$mobile}</td>
-                        {else:}
+                        {if:$mobile==''}
                         <td>未绑定</td>
+                        {else:}
+                        <td>{$mobile}</td>
                         {/if}
                     </tr>
                     <tr>
