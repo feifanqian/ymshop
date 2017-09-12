@@ -14,8 +14,8 @@ class pay_unionpaywap extends PaymentPlugin {
 
     //提交地址
     public function submitUrl() {
-        //return 'https://101.231.204.80:5000/gateway/api/frontTransReq.do'; //测试环境请求地址
-        return 'https://gateway.95516.com/gateway/api/frontTransReq.do'; //生产环境
+        return 'https://101.231.204.80:5000/gateway/api/frontTransReq.do'; //测试环境请求地址
+        // return 'https://gateway.95516.com/gateway/api/frontTransReq.do'; //生产环境
     }
 
     //取得配制参数
@@ -128,8 +128,8 @@ class pay_unionpaywap extends PaymentPlugin {
             'version' => '5.0.0',		      //版本号
             'encoding' => 'UTF-8',		      //编码方式
             'signMethod' => '01',		      //签名方法
-            'txnType' => '01',		              //交易类型
-            'txnSubType' => '01',		      //交易子类
+            'txnType' => '04',		              //交易类型
+            'txnSubType' => '00',		      //交易子类
             'bizType' => '000201',		      //业务类型
             'accessType' => '0',		      //接入类型
             'channelType' => '08',		      //渠道类型
