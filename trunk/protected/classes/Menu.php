@@ -138,7 +138,7 @@ class Menu {
             '/districtadmin/apply_withdraw'=>array('name'=>'提现申请','parent'=>'apply'),
             '/districtadmin/apply_join'=>array('name'=>'入驻申请','parent'=>'apply'),
             '/districtadmin/set'=>array('name'=>'专区设置','parent'=>'set'),
-            '/districtadmin/payset'=>array('name'=>'秒到支付','parent'=>'set'),
+            // '/districtadmin/payset'=>array('name'=>'秒到支付','parent'=>'set'),
         );
         //分组菜单
         $subMenu = array(
