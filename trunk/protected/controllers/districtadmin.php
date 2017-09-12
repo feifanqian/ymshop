@@ -773,7 +773,15 @@ class DistrictadminController extends Controller {
                 $data['location'] = $customer['city'];
                 $result = $model->table("district_shop")->data($data)->insert();
 
-                if ($result) {
+                $datas['user_id'] = $user_id;
+                $datas['type'] = 4;
+                $datas['join_time'] = date("Y-m-d H:i:s");
+                $datas['hirer_id'] = $result;
+                $datas['create_time'] = date('Y-m-d H:i:s');
+                $datas['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
+                $datas['status'] = 0;
+                $res = $model->table("district_promoter")->data($datas)->insert();
+                if ($result && $res) {
                     $logic = DistrictLogic::getInstance();
                     if (strip_tags(Url::getHost(), 'ymlypt')) {
                         $this->sendMessage($user_id, "恭喜您，成为官方经销商，快来看看吧>>>", "https://www.ymlypt.com/ucenter/index?first=1", "promoter_join_success");
