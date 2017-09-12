@@ -11,7 +11,11 @@
             <dd><input class="input" type="text" pattern="required" name="real_name" maxlen="20" value="{$real_name}"  placeholder="真实姓名"></dd>
             <dd>性别：</td><td><input name="sex" type="radio" value="0" checked="checked"> <label> 女</label>&nbsp;&nbsp;<input name="sex" type="radio" {if:isset($sex) && $sex==1}checked="checked"{/if} value="1"> <label> 男</label></dd>
             <dd><input class="input" name="birthday" type="text" onfocus="WdatePicker()" class="Wdate"  value="{$birthday}" placeholder="生日" alt="出生日期"></dd>
+            {if:$mobile==''}
+            <dd class="input gray">手机号码：未绑定</dd>
+            {else:}
             <dd class="input gray">手机号码：{$mobile}</dd>
+            {/if}
             <dd id="areas" class="h-box" >
                 <div class="flex_1">
                     <div class="select">
