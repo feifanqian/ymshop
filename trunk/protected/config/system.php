@@ -203,25 +203,22 @@
       'money' => '500',
       'point' => '500',
       'financial_coin' => '500',
-      'gift' => '',
     ),
     2 => 
     array (
       'money' => '1000',
       'point' => '1000',
       'financial_coin' => '1000',
-      'gift' => '1162',
     ),
     3 => 
     array (
       'money' => '2000',
       'point' => '2000',
       'financial_coin' => '2000',
-      'gift' => '1165',
     ),
     4 => 
     array (
-      'money' => '3600',
+      'money' => '46151',
       'point' => '3600',
       'financial_coin' => '3600',
       'gift' => '1155',
