@@ -67,7 +67,7 @@ class pay_unionpaywap extends PaymentPlugin {
         
         $params = array(
             //以下信息非特殊情况不需要改动
-            'version' => '5.0.0', //版本号
+            'version' => '5.1.0', //版本号
             'encoding' => 'utf-8', //编码方式
             'txnType' => '01', //交易类型
             'txnSubType' => '01', //交易子类
@@ -165,7 +165,7 @@ class pay_unionpaywap extends PaymentPlugin {
         UnionPayServices::setCertPath('wap');
         $params = array(
 		//以下信息非特殊情况不需要改动
-		'version' => '5.0.0',		  //版本号
+		'version' => '5.1.0',		  //版本号
 		'encoding' => 'utf-8',		  //编码方式
 		'signMethod' => '01',		  //签名方法
 		'txnType' => '00',		  //交易类型
