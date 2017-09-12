@@ -45,7 +45,12 @@
                         <td class="label">生日：</td><td><input name="birthday" type="text" onfocus="WdatePicker()" class="Wdate"  value="{$birthday}" ><label></label></td>
                     </tr>
                     <tr>
-                        <td class="label">手机号码：</td><td>{$mobile}</td>
+                        <td class="label">手机号码：</td>
+                        {if:$mobile!=null}
+                        <td>{$mobile}</td>
+                        {else:}
+                        <td>未绑定</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td class="label">电话号码：</td><td><input type="text" name="phone"  value="{$phone}" empty pattern="phone" alt="请正确填写电话号码"><label></label></td>
