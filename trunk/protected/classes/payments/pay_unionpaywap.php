@@ -128,8 +128,8 @@ class pay_unionpaywap extends PaymentPlugin {
             'version' => '5.0.0',		      //版本号
             'encoding' => 'UTF-8',		      //编码方式
             'signMethod' => '01',		      //签名方法
-            'txnType' => '04',		              //交易类型
-            'txnSubType' => '00',		      //交易子类
+            'txnType' => '01',		              //交易类型
+            'txnSubType' => '01',		      //交易子类
             'bizType' => '000201',		      //业务类型
             'accessType' => '0',		      //接入类型
             'channelType' => '08',		      //渠道类型
