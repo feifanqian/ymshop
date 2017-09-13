@@ -41,7 +41,7 @@
             <tr><td>1</td><td><input type="number" name="package[1][money]" value="{$package[1]['money']}"></td><td><input type="number" name="package[1][point]" value="{$package[1]['point']}"></td><td><input type="number" name="package[1][financial_coin]" value="{$package[1]['financial_coin']}"  ></td><td></td></tr>
             <tr><td>2</td><td><input type="number" name="package[2][money]" value="{$package[2]['money']}"></td><td><input type="number" name="package[2][point]" value="{$package[2]['point']}"></td><td><input type="number" name="package[2][financial_coin]" value="{$package[2]['financial_coin']}" ></td><td></td></tr>
             <tr><td>3</td><td><input type="number" name="package[3][money]" value="{$package[3]['money']}"></td><td><input type="number" name="package[3][point]" value="{$package[3]['point']}"></td><td><input type="number" name="package[3][financial_coin]" value="{$package[3]['financial_coin']}" ></td><td></td></tr>
-            <tr><td>4</td><td><input type="text" name="package[4][money]" value="{$package[4]['money']}" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:58px;"></td><td><input type="number" name="package[4][point]" value="{$package[4]['point']}"></td><td><input type="number" name="package[4][financial_coin]" value="{$package[4]['financial_coin']}" ></td><td><input type="text" name="package[4][gift]" value="{$package[4]['gift']}" readonly id="package4" placeholder="没有可不选"></td></tr>
+            <tr><td>4</td><td><input type="text" name="package[4][money]" value="{$package[4]['money']}" onkeyup="if(/^d+$/.test(this.value)){alert('只能整数');this.value='';}" style="width:58px;"></td><td><input type="number" name="package[4][point]" value="{$package[4]['point']}"></td><td><input type="number" name="package[4][financial_coin]" value="{$package[4]['financial_coin']}" ></td><td><input type="text" name="package[4][gift]" value="{$package[4]['gift']}" readonly id="package4" placeholder="没有可不选"></td></tr>
         </table>
            
         <div class="center">
@@ -122,4 +122,5 @@
             $("#product_ids").val(arr.join("|"));
         }
     }
+    
 </script>
