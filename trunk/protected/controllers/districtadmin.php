@@ -687,7 +687,7 @@ class DistrictadminController extends Controller {
                     $data['hirer_id'] = $hirer_id;
                     $data['create_time'] = date('Y-m-d H:i:s');
                     $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
-                    $data['status'] = 0;
+                    $data['status'] = 1;
                     $result = $model->table("district_promoter")->data($data)->insert();
                     if ($result) {
                         $logic = DistrictLogic::getInstance();
@@ -769,7 +769,7 @@ class DistrictadminController extends Controller {
                 $data['create_time'] = date('Y-m-d H:i:s');
                 $data['valid_period'] = date("Y-m-d H:i:s", strtotime("+3 years"));
                 $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
-                $data['status'] = 0;
+                $data['status'] = 1;
                 $data['linkman'] = $linkman;
                 $data['link_mobile'] = $link_mobile;
                 $data['location'] = $customer['city'];
@@ -783,7 +783,7 @@ class DistrictadminController extends Controller {
                 $datas['hirer_id'] = $result;
                 $datas['create_time'] = date('Y-m-d H:i:s');
                 $datas['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
-                $datas['status'] = 0;
+                $datas['status'] = 1;
                 $res = $model->table("district_promoter")->data($datas)->insert();
                 if ($result && $res) {
                     $logic = DistrictLogic::getInstance();
