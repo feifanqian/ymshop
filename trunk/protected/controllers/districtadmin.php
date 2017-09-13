@@ -773,7 +773,9 @@ class DistrictadminController extends Controller {
                 $data['link_mobile'] = $link_mobile;
                 $data['location'] = $customer['city'];
                 $result = $model->table("district_shop")->data($data)->insert();
-
+                
+                $owner=$model->table('district_shop')->fields('id,owner_id')->where('id='.$hirer_id)->find();
+                $model->table('invite')->data(array('user_id'=>$owner['owner_id'],'invite_user_id'=>$user_id,'from'=>'web','district_id'=>$owner['id'],'createtime'=>time()))->insert();
                 $datas['user_id'] = $user_id;
                 $datas['type'] = 4;
                 $datas['join_time'] = date("Y-m-d H:i:s");
