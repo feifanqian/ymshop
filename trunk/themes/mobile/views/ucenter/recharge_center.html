@@ -273,7 +273,7 @@
    
     $(".recharge-package div").click(function(){
         $(this).addClass("package-selected").siblings().removeClass("package-selected");
-        $("input[name='package']").val($(this).data('value'));
+        // $("input[name='package']").val($(this).data('value'));
         $("input[name='package']").val($(this).data('value'));
         $("input[name='recharge']").val($(this).data('amount'));
         $("#package_money").html("¥"+$(this).data('amount'));
