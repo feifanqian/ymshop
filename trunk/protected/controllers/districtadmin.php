@@ -79,11 +79,11 @@ class DistrictadminController extends Controller {
         $condition_str = Common::str2where($condition);
 
         if ($condition_str) {
-            $where = $condition_str;
+            $where = 'ds.status=1 and '.$condition_str;
             $this->assign("where", $condition_str);
         } else {
-            $where = "1=1";
-            $this->assign("where", "1=1");
+            $where = "ds.status=1";
+            $this->assign("where", "status=1");
         }
         $this->assign("condition", $condition);
         $list = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id left join district_shop as d on ds.invite_shop_id=d.id')->fields("ds.*,c.real_name,d.name as invite_shop_name")->where($where)->order("ds.id desc")->findPage($page, $page_size);
@@ -223,9 +223,10 @@ class DistrictadminController extends Controller {
         $condition_str = Common::str2where($condition);
 
         if ($condition_str) {
-            $this->assign("where", $condition_str);
+            $where='dp.status=1 and '.$condition_str;
+            $this->assign("where", $where);
         } else {
-            $this->assign("where", "1=1");
+            $this->assign("where", "dp.status=1");
         }
         $this->assign("condition", $condition);
         $this->redirect();
@@ -937,18 +938,28 @@ class DistrictadminController extends Controller {
     public function hirer_del(){
        $hirer_id = Req::args("hirer_id");
        $model=new Model();
-       // $model->table('district_shop')fields('')->where('id='.$hirer_id)->find();
-       $model->table('district_shop')->where('id='.$hirer_id)->delete();
-       $model->table('district_promoter')->where('hirer_id='.$hirer_id)->delete();
+       $exist=$model->table('district_shop')->where('invite_shop_id='.$hirer_id)->find();
+       if($exist){
+         $msg = array('error', "移除失败，该经销商已有下级经销商" );
+       }else{
+       $model->table('district_shop')->where('id='.$hirer_id)->data(array('status'=>0))->update();
+       $model->table('district_promoter')->where('hirer_id='.$hirer_id)->data(array('status'=>0))->update();
        $msg = array('success', "成功移除经销商 " );
+       }
        $this->redirect("list_hirer", false, array('msg' => $msg)); 
     }
     
     public function promoter_del(){
        $id = Req::args("id");
        $model=new Model();
-       $model->table('district_promoter')->where('id='.$id)->delete();
-       $msg = array('success', "成功移除代理商 " );
-       $this->redirect("list_hirer", false, array('msg' => $msg)); 
+       $promoter=$model->table('district_promoter')->fields('user_id')->where('id='.$id)->find();
+       $exist=$model->table('district_promoter')->where('invitor_id='.$promoter['user_id'])->find();
+       if($exist){
+          $msg = array('error', "移除失败，该代理商已有下级代理商" );  
+       }else{
+         $model->table('district_promoter')->where('id='.$id)->data(array('status'=>0))->update();
+         $msg = array('success', "成功移除代理商 " );
+       }
+       $this->redirect("list_promoter", false, array('msg' => $msg)); 
     }
 }

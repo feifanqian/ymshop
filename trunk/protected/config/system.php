@@ -218,7 +218,7 @@
     ),
     4 => 
     array (
-      'money' => '46151',
+      'money' => '5000',
       'point' => '3600',
       'financial_coin' => '3600',
       'gift' => '1155',
