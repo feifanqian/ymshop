@@ -218,12 +218,7 @@ class DistrictadminController extends Controller {
     }
 
     public function list_promoter() {
-        $model=new Model();
-    
-    $data=$model->table('district_shop')->fields('id,owner_id')->where('id>1')->findAll();
-     foreach($data as $k=>$v){
-  $model->table('invite')->data(array('user_id'=>1,'invite_user_id'=>$v['owner_id'],'from'=>'web','district_id'=>1,'createtime'=>time()))->insert();
-    }
+
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
 
