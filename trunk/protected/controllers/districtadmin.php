@@ -706,7 +706,7 @@ class DistrictadminController extends Controller {
                     $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'web','district_id'=>1,'createtime'=>time()))->insert();
                     
                     $data['user_id'] = $user_id;
-                    $data['type'] = 2;
+                    $data['type'] = 3;
                     $data['join_time'] = date("Y-m-d H:i:s");
                     $data['invitor_id'] = $ds_promoter;
                     $data['create_time'] = date('Y-m-d H:i:s');
@@ -777,7 +777,7 @@ class DistrictadminController extends Controller {
                 $owner=$model->table('district_shop')->fields('id,owner_id')->where('id='.$hirer_id)->find();
                 $model->table('invite')->data(array('user_id'=>$owner['owner_id'],'invite_user_id'=>$user_id,'from'=>'web','district_id'=>$owner['id'],'createtime'=>time()))->insert();
                 $datas['user_id'] = $user_id;
-                $datas['type'] = 4;
+                $datas['type'] = 3;
                 $datas['join_time'] = date("Y-m-d H:i:s");
                 $datas['hirer_id'] = $result;
                 $datas['create_time'] = date('Y-m-d H:i:s');
@@ -934,4 +934,21 @@ class DistrictadminController extends Controller {
         }
     }
 
+    public function hirer_del(){
+       $hirer_id = Req::args("hirer_id");
+       $model=new Model();
+       // $model->table('district_shop')fields('')->where('id='.$hirer_id)->find();
+       $model->table('district_shop')->where('id='.$hirer_id)->delete();
+       $model->table('district_promoter')->where('hirer_id='.$hirer_id)->delete();
+       $msg = array('success', "成功移除经销商 " );
+       $this->redirect("list_hirer", false, array('msg' => $msg)); 
+    }
+    
+    public function promoter_del(){
+       $id = Req::args("id");
+       $model=new Model();
+       $model->table('district_promoter')->where('id='.$id)->delete();
+       $msg = array('success', "成功移除代理商 " );
+       $this->redirect("list_hirer", false, array('msg' => $msg)); 
+    }
 }

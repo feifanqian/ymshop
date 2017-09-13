@@ -32,7 +32,7 @@
                      <ul>
                        <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=p.role_type--eq--3__and--p.role_id--eq--{$item['id']}"> 查看收益记录</a></li>
                        <li><a class="icon-eye" href="javascript:;" onclick="viewAchievement('{$item['name']}',{$item['owner_id']},{$item['id']});"> 查看销售业绩</a></li>
-                       <!-- <li><a class="icon-plus" href="javascript:;" onclick="addPromoter({$item['id']});"> 添加官方推广员</a></li> -->
+                       <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/hirer_del/hirer_id/$item[id]}')"> 移出经销商</a></li>
                      </ul>
                    </div>
                 </div>
@@ -115,5 +115,5 @@ $("#condition").on("click",function(){
    //  layer.msg("暂未完成，请等待");
    // return false;
   $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_hirer}',method:'get'});},data:{'ds.name':{name:'专区名称'},'d.name':{'name':'上级专区'},'c.real_name':{name:'所有者'},'ds.linkman':{name:' 联系人'},'ds.link_mobile':{name:'联系电话'}}});
-})
+});
 </script>
