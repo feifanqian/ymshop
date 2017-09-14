@@ -7,6 +7,9 @@
 </style>
 <div class="invite_bg" style="visibility:visible;">
     <div class="invite_main">
+        {if:$user['avatar']==""}
+        {set:$user['avatar']="static/images/avatar.jpeg"}
+        {/if}
         <div class="invite_avatar"><img src="{echo:Url::urlFormat('@'.$user['avatar'])}" /></div>
         <h3 class="invite_name">{$user['real_name']|$user['nickname']}</h3>
         <div class="invite_qr"><img src="/user/buildinvite?uid={$user['id']|0}" /></div>
