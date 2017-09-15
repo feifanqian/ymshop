@@ -97,7 +97,7 @@ class WechatApi extends Wechat {
      * @return void
      */
     protected function onLink() {
-        
+        $this->responseText('test');
     }
 
     /**
