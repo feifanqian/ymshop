@@ -114,7 +114,7 @@ class WechatApi extends Wechat {
         $st=$res['content'];
         $stt=unserialize($st);
         $str=$stt['content'];
-        $this->responseText("未找到与「{$str}」相关的商品");
+        $this->responseText("{$str}");
     }
 
     /**
