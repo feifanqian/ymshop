@@ -106,9 +106,14 @@ class WechatApi extends Wechat {
      * @return void
      */
     protected function onClick() {
-        // $model=new Model();
-        // $str = $model->table("wx_response as wr")->join('wx_public as wp on wp.key=wr.event_key')->where()->fields("id,name,subtitle,sell_price,img")->order("sort desc")->limit("0,6");
-        $this->responseText('有什么问题可以直接在输入框里咨询');
+        $model=new Model();
+        $menu=$model->table('wx_public')->fields('menus')->where('id=6')->find();
+        $s=json_decode($menu['menus'],true);
+        $key=$s['button'][2]['sub_button'][3]['key'];
+        $res = $model->table("wx_response")->where("event_key='{$key}'")->find();
+        $st=$res['content'];
+        $str=unserialize($st);
+        $this->responseText('{$str}');
     }
 
     /**

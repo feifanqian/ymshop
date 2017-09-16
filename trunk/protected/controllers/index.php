@@ -1228,6 +1228,7 @@ class IndexController extends Controller {
     }
 
     function index() {
+        
         if (!$this->user && Common::checkInWechat()) {
             $this->noRight();
         }
