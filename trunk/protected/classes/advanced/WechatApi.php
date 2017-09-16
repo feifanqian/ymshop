@@ -53,7 +53,7 @@ class WechatApi extends Wechat {
             $keyword = Filter::text($keyword);
             $keyword = Filter::commonChar($keyword);
         }
-        $where = "name like '%$keyword%'";
+        $where = "is_online=0 and name like '%$keyword%'";
         $model = new Model();
         $goods_model = $model->table("goods as go")->where($where)->fields("id,name,subtitle,sell_price,img")->order("sort desc")->limit("0,6");
         $goods = $goods_model->where($where)->findAll();
