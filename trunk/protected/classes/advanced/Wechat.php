@@ -278,6 +278,10 @@ class Wechat {
         $this->sendout(new NewsResponse($this->getRequest('fromusername'), $this->getRequest('tousername'), $items, $funcFlag));
     }
 
+    protected function responseKefu($content, $funcFlag = 0){
+        $this->sendout(new KefuResponse($this->getRequest('fromusername'), $this->getRequest('tousername'), $content, $funcFlag));
+    }
+
     /**
      * 分析消息类型，并分发给对应的函数
      *
@@ -514,6 +518,33 @@ XML;
 
     public function __toString() {
         return sprintf($this->template, $this->title, $this->description, $this->picUrl, $this->url
+        );
+    }
+
+}
+
+/**
+ * 用于发送给客服的文本消息类型
+ */
+class KefuResponse extends WechatResponse {
+
+    protected $content;
+
+    public function __construct($toUserName, $fromUserName, $content, $funcFlag = 0) {
+        parent::__construct($toUserName, $fromUserName, $funcFlag);
+        $this->content = $content;
+        $this->template = <<<XML
+<xml>
+<ToUserName><![CDATA[%s]]></ToUserName>
+<FromUserName><![CDATA[%s]]></FromUserName>
+<CreateTime>%s</CreateTime>
+<MsgType><![CDATA[transfer_customer_service]]></MsgType>
+</xml>
+XML;
+    }
+
+    public function __toString() {
+        return sprintf($this->template, $this->toUserName, $this->fromUserName, time(), $this->content, $this->funcFlag
         );
     }
 

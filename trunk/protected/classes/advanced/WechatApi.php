@@ -69,7 +69,8 @@ class WechatApi extends Wechat {
         if ($list) {
             $this->responseNews($list);
         } else {
-            $this->responseText("未找到与「{$keyword}」相关的商品");
+            // $this->responseText("未找到与「{$keyword}」相关的商品");
+            $this->responseKefu($keyword);
         }
     }
 
