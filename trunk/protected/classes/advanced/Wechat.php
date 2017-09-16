@@ -265,7 +265,7 @@ class Wechat {
      * @return void
      */
     protected function responseMusic($title, $description, $musicUrl, $hqMusicUrl, $funcFlag = 0) {
-        $this->sendout(new MusicResponse($this->getRequest('tousername'), $this->getRequest('fromusername'), $title, $description, $musicUrl, $hqMusicUrl, $funcFlag));
+        $this->sendout(new MusicResponse($this->getRequest('fromusername'), $this->getRequest('tousername'), $title, $description, $musicUrl, $hqMusicUrl, $funcFlag));
     }
 
     /**
@@ -279,7 +279,7 @@ class Wechat {
     }
 
     protected function responseKefu($content, $funcFlag = 0){
-        $this->sendout(new KefuResponse($this->getRequest('tousername'), $this->getRequest('fromusername'), $content, $funcFlag));
+        $this->sendout(new KefuResponse($this->getRequest('fromusername'), $this->getRequest('tousername'), $content, $funcFlag));
     }
 
     /**
@@ -380,7 +380,7 @@ abstract class WechatResponse {
     protected $funcFlag;
     protected $template;
 
-    public function __construct($toUserName, $fromUserName, $funcFlag) {
+    public function __construct($fromUserName, $toUserName, $funcFlag) {
         $this->toUserName = $toUserName;
         $this->fromUserName = $fromUserName;
         $this->funcFlag = $funcFlag;
@@ -396,8 +396,8 @@ class TextResponse extends WechatResponse {
 
     protected $content;
 
-    public function __construct($toUserName, $fromUserName, $content, $funcFlag = 0) {
-        parent::__construct($toUserName, $fromUserName, $funcFlag);
+    public function __construct($fromUserName, $toUserName, $content, $funcFlag = 0) {
+        parent::__construct($fromUserName, $toUserName, $funcFlag);
         $this->content = $content;
         $this->template = <<<XML
 <xml>
@@ -412,7 +412,7 @@ XML;
     }
 
     public function __toString() {
-        return sprintf($this->template, $this->toUserName, $this->fromUserName, time(), $this->content, $this->funcFlag
+        return sprintf($this->template, $this->fromUserName, $this->toUserName, time(), $this->content, $this->funcFlag
         );
     }
 
@@ -465,8 +465,8 @@ class NewsResponse extends WechatResponse {
 
     protected $items = array();
 
-    public function __construct($toUserName, $fromUserName, $items, $funcFlag) {
-        parent::__construct($toUserName, $fromUserName, $funcFlag);
+    public function __construct($fromUserName, $toUserName, $items, $funcFlag) {
+        parent::__construct($fromUserName, $toUserName, $funcFlag);
         $this->items = $items;
         $this->template = <<<XML
 <xml>
@@ -484,7 +484,7 @@ XML;
     }
 
     public function __toString() {
-        return sprintf($this->template, $this->toUserName, $this->fromUserName, time(), count($this->items), implode($this->items), $this->funcFlag
+        return sprintf($this->template, $this->fromUserName, $this->toUserName, time(), count($this->items), implode($this->items), $this->funcFlag
         );
     }
 
@@ -530,8 +530,8 @@ class KefuResponse extends WechatResponse {
 
     protected $content;
 
-    public function __construct($toUserName, $fromUserName, $content, $funcFlag = 0) {
-        parent::__construct($toUserName, $fromUserName, $funcFlag);
+    public function __construct($fromUserName, $toUserName, $content, $funcFlag = 0) {
+        parent::__construct($fromUserName, $toUserName, $funcFlag);
         $this->content = $content;
         $this->template = <<<XML
 <xml>
@@ -544,7 +544,7 @@ XML;
     }
 
     public function __toString() {
-        return sprintf($this->template, $this->toUserName, $this->fromUserName, time(), $this->content, $this->funcFlag
+        return sprintf($this->template, $this->fromUserName, $this->toUserName, time(), $this->content, $this->funcFlag
         );
     }
 
