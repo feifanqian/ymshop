@@ -251,7 +251,7 @@ class Wechat {
      * @return void
      */
     protected function responseText($content, $funcFlag = 0) {
-        $this->sendout(new TextResponse($this->getRequest('tousername'), $this->getRequest('fromusername'), $content, $funcFlag));
+        $this->sendout(new TextResponse($this->getRequest('fromusername'), $this->getRequest('tousername'), $content, $funcFlag));
     }
 
     /**
