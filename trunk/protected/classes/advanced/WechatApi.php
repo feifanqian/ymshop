@@ -112,7 +112,8 @@ class WechatApi extends Wechat {
         $key=$s['button'][2]['sub_button'][3]['key'];
         $res = $model->table("wx_response")->where("event_key='{$key}'")->find();
         $st=$res['content'];
-        $str=unserialize($st);
+        $stt=unserialize($st);
+        $str=$stt['content'];
         $this->responseText("未找到与「{$str}」相关的商品");
     }
 
