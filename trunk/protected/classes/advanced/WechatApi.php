@@ -69,6 +69,7 @@ class WechatApi extends Wechat {
         if ($list) {
             $this->responseNews($list);
         }elseif(strstr($keyword, "您好") || strstr($keyword, "你好") || strstr($keyword, "在吗") || strstr($keyword, "有人吗") || strstr($keyword,"是")){
+            $this->responseText("正在为您联系客服，请稍后。。。");
             $this->responseKefu($keyword);
         } else {
             $this->responseText("未找到与「{$keyword}」相关的商品，若有需要可回复是为您联系客服帮助");
