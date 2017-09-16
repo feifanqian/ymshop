@@ -275,7 +275,7 @@ class Wechat {
      * @return void
      */
     protected function responseNews($items, $funcFlag = 0) {
-        $this->sendout(new NewsResponse($this->getRequest('tousername'), $this->getRequest('fromusername'), $items, $funcFlag));
+        $this->sendout(new NewsResponse($this->getRequest('fromusername'), $this->getRequest('tousername'), $items, $funcFlag));
     }
 
     protected function responseKefu($content, $funcFlag = 0){
