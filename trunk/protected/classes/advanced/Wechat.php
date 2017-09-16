@@ -251,7 +251,7 @@ class Wechat {
      * @return void
      */
     protected function responseText($content, $funcFlag = 0) {
-        $this->sendout(new TextResponse($this->getRequest('fromusername'), $this->getRequest('tousername'), $content, $funcFlag));
+        $this->sendout(new TextResponse($this->getRequest('tousername'), $this->getRequest('fromusername'), $content, $funcFlag));
     }
 
     /**
@@ -265,7 +265,7 @@ class Wechat {
      * @return void
      */
     protected function responseMusic($title, $description, $musicUrl, $hqMusicUrl, $funcFlag = 0) {
-        $this->sendout(new MusicResponse($this->getRequest('fromusername'), $this->getRequest('tousername'), $title, $description, $musicUrl, $hqMusicUrl, $funcFlag));
+        $this->sendout(new MusicResponse($this->getRequest('tousername'), $this->getRequest('fromusername'), $title, $description, $musicUrl, $hqMusicUrl, $funcFlag));
     }
 
     /**
@@ -275,11 +275,11 @@ class Wechat {
      * @return void
      */
     protected function responseNews($items, $funcFlag = 0) {
-        $this->sendout(new NewsResponse($this->getRequest('fromusername'), $this->getRequest('tousername'), $items, $funcFlag));
+        $this->sendout(new NewsResponse($this->getRequest('tousername'), $this->getRequest('fromusername'), $items, $funcFlag));
     }
 
     protected function responseKefu($content, $funcFlag = 0){
-        $this->sendout(new KefuResponse($this->getRequest('fromusername'), $this->getRequest('tousername'), $content, $funcFlag));
+        $this->sendout(new KefuResponse($this->getRequest('tousername'), $this->getRequest('fromusername'), $content, $funcFlag));
     }
 
     /**
