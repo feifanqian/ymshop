@@ -712,7 +712,7 @@ class DistrictadminController extends Controller {
                     $data['invitor_id'] = $ds_promoter;
                     $data['create_time'] = date('Y-m-d H:i:s');
                     $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
-                    $data['status'] = 0;
+                    $data['status'] = 1;
                     $result = $model->table("district_promoter")->data($data)->insert();
                     if ($result) {
                     $logic = DistrictLogic::getInstance();
