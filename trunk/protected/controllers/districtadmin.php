@@ -682,7 +682,7 @@ class DistrictadminController extends Controller {
                         exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
                     }
                     $data['user_id'] = $user_id;
-                    $data['type'] = 4;
+                    $data['type'] = 3;
                     $data['join_time'] = date("Y-m-d H:i:s");
                     $data['hirer_id'] = $hirer_id;
                     $data['create_time'] = date('Y-m-d H:i:s');
