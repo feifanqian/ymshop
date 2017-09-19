@@ -1,11 +1,5 @@
 {echo:JS::import('dialog?skin=simple');}
-<!--{if:$order['type']==0}
-{set:$items=array("购物车","确认订单信息","选择支付","订购完成");}
-{widget:name=sub_navs action=crumbs items=$items step=4 current=3}
-{else:}
-{set:$items=array("确认订单信息","选择支付","订购完成");}
-{widget:name=sub_navs action=crumbs items=$items step=3 current=2}
-{/if}-->
+
 <style>
     .weui-select-modal{
         min-height: 250px;
