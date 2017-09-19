@@ -1805,4 +1805,8 @@ class IndexController extends Controller {
     public function invitepay(){
         $this->redirect();
     }
+
+    public function demo(){
+        $this->redirect();
+    }
 }
