@@ -148,7 +148,7 @@ class UcenterController extends Controller {
                 exit;
             }
         }
-        $url = Url::fullUrlFormat("/index/invite") . "?inviter_id=" . $user_id;
+        $url = Url::fullUrlFormat("/index/demo") . "?inviter_id=" . $user_id;
         $qrCode = new QrCode();
         $qrCode
                 ->setText($url)
