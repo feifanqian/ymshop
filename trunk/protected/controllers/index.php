@@ -1801,4 +1801,8 @@ class IndexController extends Controller {
             Tiny::Msg($this, "404");
         }
     }
+
+    public function invitepay(){
+        $this->redirect();
+    }
 }
