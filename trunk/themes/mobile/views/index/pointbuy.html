@@ -5,7 +5,7 @@
 <div class="swiper-container" id="swiper-product">
     <div class="swiper-wrapper">
         {list:items=unserialize($goods['imgs']) item=$img }
-        <div class="swiper-slide"><a class="small-img" href="javascript:;"><img src="{echo:Common::thumb($img,367)}"  source="{url:@$img}"></a></div>
+        <div class="swiper-slide"><a class="small-img" href="javascript:;"><img src="{echo:Common::thumb($img,720,720,'both')}"  source="{url:@$img}"></a></div>
         {/list}
     </div>
     <div class="swiper-pagination"></div>
