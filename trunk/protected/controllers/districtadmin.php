@@ -671,10 +671,10 @@ class DistrictadminController extends Controller {
                $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})","financial_coin"=>"`financial_coin`+({$financialcoin})"))->update();
                Log::pointcoin_log($pointcoin,$user_id,"","代理商入驻赠送",5);
             }
-            $promoter=$model->table('district_promoter')->where('user_id='.$user_id)->find();
+            $promoter=$model->table('district_promoter')->where('status=1 and user_id='.$user_id)->find();
             // var_dump($promoter);die;
             if ($promoter) {
-                exit(json_encode(array("status" => 'fail', 'msg' => "该用户已经有雇佣关系了")));
+                    exit(json_encode(array("status" => 'fail', 'msg' => "该用户已经有雇佣关系了")));               
             } else {
                 if(isset($hirer_id) && $hirer_id!='') {   //经销商推代理商
                     $isset = $model->table("district_shop")->where("id=$hirer_id")->find();
@@ -703,7 +703,7 @@ class DistrictadminController extends Controller {
                     if (!$isset) {
                         exit(json_encode(array("status" => 'fail', 'msg' => "代理商不存在")));
                     }
-                    //添加邀请关系
+                    //添加邀请关系    
                     $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'web','district_id'=>1,'createtime'=>time()))->insert();
                     
                     $data['user_id'] = $user_id;
@@ -823,10 +823,29 @@ class DistrictadminController extends Controller {
                 $where = "user_id = $s_content";
             }
         }
+        $s_shop = Req::args("s_shop");
+        $s_promote = Req::args("s_promote");
+        $pointcoin = Req::args("pointcoin");
+        $financialcoin = Req::args("financialcoin");
+        if($s_shop && $s_shop!=''){
+            $where1="name like '%{$s_shop}%' ";
+        }else{
+            $where1="1=1";
+        }
+        if($s_promote && $s_promote!=''){
+            $where2="c.real_name like '%{$s_promote}%' or u.nickname like '%{$s_promote}%'";
+        }else{
+            $where2="1=1";
+        }
+        $this->assign("s_shop", $s_shop);
+        $this->assign("s_promote", $s_promote);
+        $this->assign("pointcoin", $pointcoin);
+        $this->assign("financialcoin", $financialcoin);
         $this->assign("s_type", $s_type);
         $this->assign("s_content", $s_content);
         $this->assign("hirer_id", $hirer_id);
-
+        $this->assign("where1", $where1);
+        $this->assign("where2", $where2);
         $this->assign("where", $where);
         $this->redirect();
     }
@@ -847,6 +866,25 @@ class DistrictadminController extends Controller {
                 $where = "user_id = $s_content";
             }
         }
+        $s_shop = Req::args("s_shop");
+        $district_name = Req::args("district_name");
+        $linkman = Req::args("linkman");
+        $link_mobile = Req::args("link_mobile");
+        $pointcoin = Req::args("pointcoin");
+        $financialcoin = Req::args("financialcoin");
+        if($s_shop && $s_shop!=''){
+            $wheres="name like '%{$s_shop}%' ";
+        }else{
+            $wheres="1=1";
+        }
+
+        $this->assign("s_shop", $s_shop);
+        $this->assign("district_name", $district_name);
+        $this->assign("linkman", $linkman);
+        $this->assign("link_mobile", $link_mobile);
+        $this->assign("pointcoin", $pointcoin);
+        $this->assign("financialcoin", $financialcoin);
+        $this->assign("wheres", $wheres);
         $this->assign("s_type", $s_type);
         $this->assign("s_content", $s_content);
         $this->assign("hirer_id", $hirer_id);
@@ -946,8 +984,8 @@ class DistrictadminController extends Controller {
        if($exist){
          $msg = array('error', "移除失败，该经销商已有下级经销商" );
        }else{
-       $model->table('district_shop')->where('id='.$hirer_id)->data(array('status'=>0))->update();
-       $model->table('district_promoter')->where('hirer_id='.$hirer_id)->data(array('status'=>0))->update();
+       $model->table('district_shop')->where('id='.$hirer_id)->delete();
+       $model->table('district_promoter')->where('hirer_id='.$hirer_id)->delete();
        $msg = array('success', "成功移除经销商 " );
        }
        $this->redirect("list_hirer", false, array('msg' => $msg)); 
@@ -961,9 +999,22 @@ class DistrictadminController extends Controller {
        if($exist){
           $msg = array('error', "移除失败，该代理商已有下级代理商" );  
        }else{
-         $model->table('district_promoter')->where('id='.$id)->data(array('status'=>0))->update();
+         $model->table('district_promoter')->where('id='.$id)->delete();
          $msg = array('success', "成功移除代理商 " );
        }
        $this->redirect("list_promoter", false, array('msg' => $msg)); 
+    }
+
+    public function selectShop(){
+        $shop = Req::args("shop");
+        if($shop && $shop!=''){
+            $wheres="name like '%{$shop}%' ";
+        }else{
+            $wheres="1=1";
+        }
+        $model=new Model();
+        $shop=$model->table('district_shop')->where($wheres)->findAll();
+        $this->assign("wheres", $wheres);
+        $this->redirect('radio_customer_selects');
     }
 }

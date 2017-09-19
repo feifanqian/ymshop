@@ -354,6 +354,13 @@ class Order {
                             }
                         }
                     }
+                    // else{ //曾经是代理商，后降级为普通会员，重新升级为代理商，但上级推广员和经销商不用给奖励，因为第一次成为代理商的时候已经给了
+                    //     $promoter_data['type']=5;
+                    //     $promoter_data['create_time']=$promoter_data['join_time']=date("Y-m-d H:i:s");
+                    //     // $promoter_data['hirer_id']=$inviter_info?$inviter_info['district_id']:1;
+                    //     $promoter_data['status']=1;
+                    //     $model->table("district_promoter")->data($promoter_data)->where("user_id=".$recharge['user_id'])->update();
+                    // }
                 }
                 $result =true;
             }
