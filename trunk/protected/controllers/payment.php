@@ -456,6 +456,120 @@ class PaymentController extends Controller {
         }
     }
 
+    public function doPay1() {
+        // 获得payment_id 获得相关参数
+        $payment_id = Filter::int(Req::args('payment_id'));
+        $order_no = Filter::int(Req::args('order_no'));
+        $order_amount = Req::args('order_amount');
+        $data=array(
+              'order_no'=>$order_no,
+              'user_id'=>$this->user['id'],
+              'shop_ids'=>1,
+              'payment'=>$payment_id,
+              'status'=>1,
+              'pay_status'=>0,
+              'delivery_status'=>0,
+              'accept_name'=>'',
+              'phone'=>'',
+              'mobile'=>'',
+              'payable_amount'=>$order_amount,
+              'real_amount'=>$real_amount,
+              'payable_freight'=>0,
+              'real_freight'=>0,
+              'pay_time'=>date('Y-m-d H:i:s'),
+              'create_time'=>date('Y-m-d H:i:s'),
+              'handling_fee'=>0.00,
+              'order_amount'=>$order_amount,
+              'point'=>0,
+              'pay_point'=>0,
+              'type'=>0
+            );
+        $model = new Model('order');
+        $order_id=$model->data($data)->insert();
+        $extendDatas = Req::args();
+        if ($payment_id) {
+            $payment = new Payment($payment_id);
+            $paymentPlugin = $payment->getPaymentPlugin();
+            if (!is_object($paymentPlugin)) {
+                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付方式不存在，或被禁用'));
+                exit();
+            }
+            $payment_info = $payment->getPayment();
+             if ($order_id != null) {
+                
+                $order = $model->where('id=' . $order_id)->find();
+                if ($order['pay_status'] == '1') {
+                    $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '已付款订单，无法再次进行支付。'));
+                    exit();
+                }
+                if ($order) {
+                    if ($order['order_amount'] == 0 && $payment_info['class_name'] != 'balance') {
+                        $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '0元订单，仅限预付款支付，请选择预付款支付方式。'));
+                        exit();
+                    }
+                    //获取订单可能延时时长，0不限制
+                    $config = Config::getInstance();
+                    $config_other = $config->get('other');
+                    switch ($order['type']) {
+                        case '1':
+                            $order_delay = isset($config_other['other_order_delay_group']) ? intval($config_other['other_order_delay_group']) : 120;
+                            break;
+                        case '2':
+                            $order_delay = isset($config_other['other_order_delay_flash']) ? intval($config_other['other_order_delay_flash']) : 120;
+                            break;
+                        case '3':
+                            $order_delay = isset($config_other['other_order_delay_bund']) ? intval($config_other['other_order_delay_bund']) : 0;
+                            break;
+                        case '5':
+                            $order_delay = isset($config_other['other_order_delay_point']) ? intval($config_other['other_order_delay_point']) : 0;
+                            break;
+                        case '6':
+                            $order_delay = isset($config_other['other_order_delay_pointflash']) ? intval($config_other['other_order_delay_pointflash']) : 0;
+                            break;
+                        case '7':
+                            $order_delay = isset($config_other['other_order_delay_pointwei']) ? intval($config_other['other_order_delay_pointwei']) : 0;
+                            break;    
+                        default:
+                            $order_delay = 0;
+                            break;
+                    }
+
+                    $time = strtotime("-" . $order_delay . " Minute");
+                    $create_time = strtotime($order['create_time']);
+                    if ($create_time >= $time || $order_delay == 0) {         
+                            $packData = $payment->getPaymentInfo('order', $order_id);
+                            $packData = array_merge($extendDatas, $packData);
+                            $sendData = $paymentPlugin->packData($packData);
+                            if (!$paymentPlugin->isNeedSubmit()) {
+                                exit();
+                            }
+                         
+                    } 
+                }
+            }
+            if (!empty($sendData)) {
+                $this->assign("paymentPlugin", $paymentPlugin);
+                $this->assign("sendData", $sendData);
+                if ($paymentPlugin instanceof pay_balance) {
+                    $model = new Model('user as us');
+                    $userInfo = $model->join('left join customer as cu on us.id = cu.user_id')->where('cu.user_id = ' . $this->user['id'])->find();
+                    if ($userInfo['pay_password_open'] == 1) {
+                        $this->assign('pay_balance', true);
+                        $this->assign('userInfo', $userInfo);
+                        $this->assign('order_id', $order_id);
+                        $this->assign('payment_id', $payment_id);
+                    }
+                }
+                $this->redirect('pay_form', false);
+            } else {
+                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '需要支付的订单已经不存在。'));
+                exit();
+            }
+        } else {
+            echo "fail";
+        }
+    }
+
     public function notify() {
         $payment = new Payment('wxpayqrcode');
         $payment_weixin = $payment->getPaymentPlugin();
