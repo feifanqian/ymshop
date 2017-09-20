@@ -1807,9 +1807,56 @@ class IndexController extends Controller {
     }
 
     public function demo(){
-        Common::buildInviteShip(1, $this->user['id'], "second-wap");
+        $openid = Filter::sql(Req::args('openid'));
+        $code = Filter::int(Req::args('code'));
+        $oauth = new WechatOAuth();
+        $extend = null;
+        $token = $oauth->getAccessToken($code, $extend);
+        $userinfo = $oauth->getUserInfo();
+        $passWord = CHash::random(6);
+        $nickname = $userinfo['open_name'];
+        $time = date('Y-m-d H:i:s');
+        $validcode = CHash::random(8);
+        $model = $this->model;
+        $last_id = $model->table("user")->data(array('nickname' => $nickname, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+        $name = "u" . sprintf("%09d", $last_id);
+        $email = $name . "@no.com";
+                //更新用户名和邮箱
+        $model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = '{$last_id}'")->update();
+                //更新customer表
+        $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+        Log::pointcoin_log(200, $last_id, '', '微信新用户积分奖励', 10);
+                //记录登录信息
+        $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id='$last_id'")->find();
+        $this->safebox->set('user', $obj, 1800);
+        $this->model->table("oauth_user")->data(array(
+                'open_name' => $userinfo['open_name'],
+                'oauth_type' => 'wechat',
+                'user_id' => $last_id,
+                'posttime' => time(),
+                'token' => $token,
+                'expires' => 7200,
+                'open_id' =>$openid 
+            ))->insert();
+
+        $this->model->table('oauth_user')->where("oauth_type='{$userinfo['oauth_type']}' and open_id='{$userinfo['open_id']}'")->data(array('user_id' => $last_id))->update();
+                //记录邀请人
+        $inviter = Cookie::get("inviter");
+        if (!$inviter) {
+            $one = $model->table("invite_wechat")->where("invite_openid='{$userinfo['open_id']}'")->find();
+            if ($one) {
+                $inviter = $one['user_id'];
+                $model->table("invite_wechat")->where("invite_openid='{$userinfo['open_id']}'")->delete();
+            }
+        }
+        if ($inviter) {
+            Common::buildInviteShip($inviter,$last_id,"wechat");
+        }
+                
+        Common::buildInviteShip(1, $last_id, "wechat");
         $order_no=date('YmdHis').rand(1000,9999);
         $this->assign('order_no',$order_no);
+        
         $this->redirect();
     }
 }
