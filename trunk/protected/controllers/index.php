@@ -1807,8 +1807,8 @@ class IndexController extends Controller {
     }
 
     public function demo(){
-        $openid = Filter::sql(Req::args('openid'));
-        $code = Filter::sql(Req::args('code'));
+        // $openid = Filter::sql(Req::args('openid'));
+        // $code = Filter::sql(Req::args('code'));
         // $oauth = new WechatOAuth();
         // $extend = null;
         // $token = $oauth->getAccessToken($code, $extend);
@@ -1851,8 +1851,8 @@ class IndexController extends Controller {
         // Common::buildInviteShip(1, $last_id, "wechat");
         $order_no=date('YmdHis').rand(1000,9999);
         $this->assign('order_no',$order_no);
-        $this->assign('code',$code);
-        $this->assign('openid',$openid);
+        // $this->assign('code',$code);
+        // $this->assign('openid',$openid);
         $this->redirect();
     }
 }
