@@ -1807,8 +1807,8 @@ class IndexController extends Controller {
     }
 
     public function demo(){
-        // $openid = Filter::sql(Req::args('openid'));
-        // $code = Filter::sql(Req::args('code'));
+        $openid = Filter::sql(Req::args('openid'));
+        $code = Filter::sql(Req::args('code'));
         // $oauth = new WechatOAuth();
         // $extend = null;
         // $token = $oauth->getAccessToken($code, $extend);
