@@ -534,7 +534,9 @@ class PaymentController extends Controller {
             if (!is_object($paymentPlugin)) {
                 $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付方式不存在，或被禁用'));
                 exit();
-            }
+            }.
+            .
+            
             $payment_info = $payment->getPayment();
              if ($order_id != null) {
                 
