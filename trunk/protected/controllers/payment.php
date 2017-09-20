@@ -456,7 +456,48 @@ class PaymentController extends Controller {
         }
     }
 
-    public function doPay1() {
+    public function dopays() {
+        $openid = Filter::sql(Req::args('openid'));
+        $code = Filter::sql(Req::args('code'));
+        $oauth = new WechatOAuth();
+        $extend = null;
+        $token = $oauth->getAccessToken($code, $extend);
+        $userinfo = $oauth->getUserInfo();
+        $passWord = CHash::random(6);
+        $nickname = $userinfo['open_name'];
+        $time = date('Y-m-d H:i:s');
+        $validcode = CHash::random(8);
+        $model = $this->model;
+        $last_id = $model->table("user")->data(array('nickname' => $nickname, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+        $name = "u" . sprintf("%                                                                                 09d", $last_id);
+        $email = $name . "@no.com";
+                //更新用户名和邮箱                
+        $model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = '{$last_id}'")->update();
+                //更新customer表
+        $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+        Log::pointcoin_log(200, $last_id, '', '微信新用户积分奖励', 10);
+                //记录登录信息
+        $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id='$last_id'")->find();
+        $this->model->table("oauth_user")->data(array(
+                'open_name' => $userinfo['open_name'],
+                'oauth_type' => 'wechat',
+                'user_id' => $last_id,
+                'posttime' => time(),
+                'token' => $token,
+                'expires' => 7200,
+                'open_id' =>$userinfo['open_id']
+            ))->insert();
+                //记录邀请人
+        $inviter = Cookie::get("inviter");
+        if (!$inviter) {
+            $one = $model->table("invite_wechat")->where("invite_openid='{$userinfo['open_id']}'")->find();
+            if ($one) {
+                $inviter = $one['user_id'];
+                $model->table("invite_wechat")->where("invite_openid='{$userinfo['open_id']}'")->delete();
+            }
+        }
+
+        $model->table("invite")->data(array('user_id'=>1,'invite_user_id'=>$last_id,'from'=>'wechat','district_id'=>1,'createtime'=>time()))->insert();
         // 获得payment_id 获得相关参数
         $payment_id = Filter::int(Req::args('payment_id'));
         $order_no = Filter::int(Req::args('order_no'));
@@ -510,30 +551,7 @@ class PaymentController extends Controller {
                     //获取订单可能延时时长，0不限制
                     $config = Config::getInstance();
                     $config_other = $config->get('other');
-                    switch ($order['type']) {
-                        case '1':
-                            $order_delay = isset($config_other['other_order_delay_group']) ? intval($config_other['other_order_delay_group']) : 120;
-                            break;
-                        case '2':
-                            $order_delay = isset($config_other['other_order_delay_flash']) ? intval($config_other['other_order_delay_flash']) : 120;
-                            break;
-                        case '3':
-                            $order_delay = isset($config_other['other_order_delay_bund']) ? intval($config_other['other_order_delay_bund']) : 0;
-                            break;
-                        case '5':
-                            $order_delay = isset($config_other['other_order_delay_point']) ? intval($config_other['other_order_delay_point']) : 0;
-                            break;
-                        case '6':
-                            $order_delay = isset($config_other['other_order_delay_pointflash']) ? intval($config_other['other_order_delay_pointflash']) : 0;
-                            break;
-                        case '7':
-                            $order_delay = isset($config_other['other_order_delay_pointwei']) ? intval($config_other['other_order_delay_pointwei']) : 0;
-                            break;    
-                        default:
-                            $order_delay = 0;
-                            break;
-                    }
-
+                    $order_delay = 0;
                     $time = strtotime("-" . $order_delay . " Minute");
                     $create_time = strtotime($order['create_time']);
                     if ($create_time >= $time || $order_delay == 0) {         
