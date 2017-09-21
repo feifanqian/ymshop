@@ -1806,7 +1806,15 @@ class IndexController extends Controller {
         $this->redirect();
     }
 
-    public function demo(){        
+    public function demo(){
+       $inviter_id = Filter::int(Req::args('inviter_id'));
+        if (isset($this->user['id'])) {
+            Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
+        } else {
+            Cookie::set("inviter", $inviter_id);
+            $this->noRight();
+        }
+        return;        
         $order_no=date('YmdHis').rand(1000,9999);
         $this->assign('order_no',$order_no);
         $this->redirect();
