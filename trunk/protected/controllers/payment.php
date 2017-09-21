@@ -867,7 +867,7 @@ class PaymentController extends Controller {
                 $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
                 $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
                 $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
-            } else {//商品订单
+            } else if(stripos($out_trade_no, 'offline')!== false){//线下订单
                 var_dump($order_no);die;
                 $order = $this->model->table("offline_order")->where("order_no='{$order_no}'")->find();
                 if (!$order) {
