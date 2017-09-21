@@ -541,6 +541,7 @@ class PaymentController extends Controller {
                     if ($create_time >= $time || $order_delay == 0) {         
                             $packData = $payment->getPaymentInfo('offline', $order_id);
                             $packData = array_merge($extendDatas, $packData);
+                            var_dump($packData);die;
                             $sendData = $paymentPlugin->packData($packData);
                             if (!$paymentPlugin->isNeedSubmit()) {
                                 exit();

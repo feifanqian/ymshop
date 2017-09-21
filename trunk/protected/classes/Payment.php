@@ -130,7 +130,7 @@ class Payment {
             $payment ['M_Amount'] = $order['order_amount'];
             //用户信息
             $payment ['P_Mobile'] = '';
-            $payment ['P_Name'] = '';
+            $payment ['P_Name'] = '游客';
             $payment ['P_PostCode'] = '';
             $payment ['P_Telephone'] = '';
             $payment ['P_Address'] = '';
