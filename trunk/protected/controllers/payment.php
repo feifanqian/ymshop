@@ -829,6 +829,7 @@ class PaymentController extends Controller {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
             $out_trade_no = $_GET['out_trade_no'];
             $order_no = $out_trade_no;
+            var_dump($order_no);die;
             if (stripos($out_trade_no, 'promoter') !== false) {//推广员入驻订单
                 $order = $this->model->table("district_order")->where("order_no ='" . $order_no . "'")->find();
                 if (!$order) {
