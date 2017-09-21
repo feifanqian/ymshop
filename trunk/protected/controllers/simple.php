@@ -478,7 +478,8 @@ class SimpleController extends Controller {
             $userinfo['oauth_type'] = $type;
 
             if ($type == 'wechat') {
-                var_dump(1234);die;
+                $str='http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+                var_dump($str);die;
                 $passWord = CHash::random(6);
                 $nickname = $userinfo['open_name'];
                 $time = date('Y-m-d H:i:s');
@@ -509,8 +510,7 @@ class SimpleController extends Controller {
                     Common::buildInviteShip($inviter,$last_id,"wechat");
                 }
                 // $this->redirect("/ucenter/firstbind");
-                $str='http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-                // var_dump($str);die;
+                
                 if(strpos($str,'user')){
                     $this->redirect("/ucenter/index");
                 }elseif(strpos($str,'demo')){
