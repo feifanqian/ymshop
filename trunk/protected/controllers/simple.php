@@ -479,7 +479,7 @@ class SimpleController extends Controller {
 
             if ($type == 'wechat') {
                 $str='http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-                var_dump($str);die;
+                // var_dump($str);die;
                 $passWord = CHash::random(6);
                 $nickname = $userinfo['open_name'];
                 $time = date('Y-m-d H:i:s');
@@ -529,7 +529,7 @@ class SimpleController extends Controller {
      * 用户绑定
      */
     public function oauth_bind() {
-        var_dump(222);die;
+        // var_dump(222);die;
         $userinfo = Session::get('oauth_user_info');
         $str='http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         // var_dump($str);die;
@@ -551,7 +551,7 @@ class SimpleController extends Controller {
      */
     public function oauth_bind_act() {
         $userinfo = Session::get('oauth_user_info');
-        var_dump(123);die;
+        // var_dump(123);die;
         if ($userinfo) {
             $account = Filter::sql(Req::args('account'));
             $passWord = Req::post('password');
