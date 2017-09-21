@@ -49,16 +49,13 @@ class Payment {
      * R表示店铺 ; P表示用户;
      */
     public function getPaymentInfo($type, $argument) {
-
         $controller = Tiny::app()->getController();
         //支付信息
         $payment = array();
-
         //取的支付商户的ID与密钥
         $paymentObj = $this->getPayment();
         $payment['M_PartnerId'] = isset($this->_config['partner_id']) ? $this->_config['partner_id'] : '';
         $payment['M_PartnerKey'] = isset($this->_config['partner_key']) ? $this->_config['partner_key'] : '';
-
         $model = new Model("order");
         if ($type == 'order') {
             $order_id = $argument;
@@ -69,7 +66,6 @@ class Payment {
                 $controller->redirect('/index/msg', false, $msg);
                 exit;
             }
-
             $payment ['M_Remark'] = $order['user_remark'];
             $payment ['M_OrderId'] = $order['id'];
             $payment ['M_OrderNO'] = $order['order_no'];
