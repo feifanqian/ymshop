@@ -549,7 +549,7 @@ class PaymentController extends Controller {
                     
                 }
             }
-            var_dump($packData);die;
+            var_dump($order);die;
             if (!empty($sendData)) {
                 $this->assign("paymentPlugin", $paymentPlugin);
                 $this->assign("sendData", $sendData);
