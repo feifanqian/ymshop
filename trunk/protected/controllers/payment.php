@@ -829,7 +829,7 @@ class PaymentController extends Controller {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
             $out_trade_no = $_GET['out_trade_no'];
             $order_no = $out_trade_no;
-            var_dump($order_no);die;
+            // var_dump($order_no);die;
             if (stripos($out_trade_no, 'promoter') !== false) {//推广员入驻订单
                 $order = $this->model->table("district_order")->where("order_no ='" . $order_no . "'")->find();
                 if (!$order) {
@@ -898,6 +898,7 @@ class PaymentController extends Controller {
             $return_url = Filter::sql($_POST['return_url']);
             //获取真实订单号 exp :5567_promoter2017050514260743
             $order_no = substr($out_trade_no, 5);
+            // var_dump($out_trade_no);die;
             if (stripos($out_trade_no, 'promoter') !== false) {//推广员入驻订单
                 $order = $this->model->table("district_order")->where("order_no ='" . $order_no . "'")->find();
                 if (!$order) {
@@ -937,7 +938,7 @@ class PaymentController extends Controller {
                 $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
                 $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
             }else {//线下订单
-                var_dump($order_no);die;
+
                 $order = $this->model->table("offline_order")->where("order_no='{$order_no}'")->find();
                 if (!$order) {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
