@@ -117,7 +117,7 @@ class Payment {
         }elseif($type == "offline"){
             $order_id = $argument;
             //获取订单信息
-            $order = $model->table('offline_order')->where('id = ' . $order_id . ' and status = 2')->find();
+            $order = $model->table('offline_order')->where('id = ' . $order_id )->find();
             if (empty($order)) {
                 $msg = array('type' => 'fail', 'msg' => '订单信息不正确，不能进行支付！');
                 $controller->redirect('/index/msg', false, $msg);
