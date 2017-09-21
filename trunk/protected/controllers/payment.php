@@ -510,7 +510,7 @@ class PaymentController extends Controller {
         //       'order_amount'=>$order_amount,
         //       'create_time'=>date('Y-m-d H:i:s'),
         //     );
-        $data['type']=0;
+        $data['type']=8;
         $data['order_no'] = $order_no;
         $data['user_id'] = $this->user['id'];
         $data['payment'] = $payment_id;
@@ -542,7 +542,6 @@ class PaymentController extends Controller {
         $data['prom_id']=0;
         $data['admin_remark']="";
         $data['shop_ids']=1;
-        $data['order_type']=2;
         $model = new Model('order');
         $order_id=$model->data($data)->insert();
         $extendDatas = Req::args();
