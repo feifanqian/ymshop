@@ -860,7 +860,7 @@ class PaymentController extends Controller {
                 $cancel_url = Url::urlFormat("/ucenter/recharge_center");
                 $error_url = Url::urlFormat("/ucenter/recharge_center");
             } else if(stripos($out_trade_no, 'offline')!== false){//线下订单
-                // var_dump($order_no);die;
+                var_dump($order_no);die;
                 $order = $this->model->table("offline_order")->where("order_no='{$order_no}'")->find();
                 if (!$order) {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
