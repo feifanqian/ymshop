@@ -246,6 +246,32 @@ class OrderController extends Controller {
         $this->redirect();
     }
 
+    public function offlineorder_list() {
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str)
+            $this->assign("where", $condition_str);
+        else {
+            $status = Req::args("status");
+            if ($status)
+                $this->assign("where", "od.type==8 and od.status=" . $status);
+            else
+                $this->assign("where", "od.type==8 and od.status !=6");
+        }
+        $this->assign("condition", $condition);
+        $this->assign("status", array('0' => '<span class="red">等待审核</span>', '1' => '<span class="red">等待审核</span>', '2' => '<span class="red">等待审核</span>', '3' => '已审核', '4' => '已完成', '5' => '已取消', '6' => '<span class="red"><s>已作废</s></span>'));
+        $this->assign("pay_status", array('0' => '<span class="red">未付款</span>', '1' => '已付款', '2' => '申请退款', '3' => '已退款'));
+        $this->assign("delivery_status", array('0' => '<span class="red">未发货</span>', '1' => '已发货', '2' => '已签收', '3' => '申请换货', '4' => '已换货'));
+        $model = new Model("payment");
+        $items = $model->findAll();
+        $payment = array();
+        foreach ($items as $item) {
+            $payment[$item['id']] = $item['pay_name'];
+        }
+        $this->assign("payment", $payment);
+        $this->redirect();
+    }
+
     public function order_edit() {
         $this->layout = "blank";
         $id = Req::args("id");
