@@ -504,7 +504,7 @@ class PaymentController extends Controller {
         // var_dump($this->user['id']);die;
         $order_amount = Req::args('order_amount');
         $data=array(
-              'order_no'=>date('YmdHis').rand(1000,9999),
+              'order_no'=>$order_no,
               'user_id'=>$this->user['id'],
               'pay_status'=>0,
               'order_amount'=>$order_amount,
@@ -868,6 +868,7 @@ class PaymentController extends Controller {
                 $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
                 $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
             } else {//商品订单
+                var_dump($order_no);die;
                 $order = $this->model->table("offline_order")->where("order_no='{$order_no}'")->find();
                 if (!$order) {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
