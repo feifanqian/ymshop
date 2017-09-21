@@ -513,7 +513,7 @@ class SimpleController extends Controller {
                 $demo = Session::get('demo');
                 if(strpos($str,'user')){
                     $this->redirect("/ucenter/index");
-                }elseif(isset($demo && $demo==1)){
+                }elseif($demo!=null && $demo==1){
                     $this->redirect("/index/demo");
                 }else{
                     $this->redirect("/index/index");
