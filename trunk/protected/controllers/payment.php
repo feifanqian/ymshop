@@ -500,7 +500,7 @@ class PaymentController extends Controller {
         // $model->table("invite")->data(array('user_id'=>1,'invite_user_id'=>$last_id,'from'=>'wechat','district_id'=>1,'createtime'=>time()))->insert();
         // 获得payment_id 获得相关参数
         $payment_id = Filter::int(Req::args('payment_id'));
-        $order_no = Filter::int(Req::args('order_no'));
+        $order_no = Req::args('order_no');
         $order_amount = Req::args('order_amount');
         $data=array(
               'order_no'=>$order_no,
@@ -549,7 +549,7 @@ class PaymentController extends Controller {
                     
                 }
             }
-            var_dump($order_id);die;
+            var_dump($order_no);die;
             if (!empty($sendData)) {
                 $this->assign("paymentPlugin", $paymentPlugin);
                 $this->assign("sendData", $sendData);
