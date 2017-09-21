@@ -456,67 +456,20 @@ class PaymentController extends Controller {
         }
     }
 
-    public function dopays() {
-        // $openid = Filter::sql(Req::args('openid'));
-        // $code = Filter::sql(Req::args('code'));
-        // $oauth = new WechatOAuth();
-        // $extend = null;
-        // $token = $oauth->getAccessToken($code, $extend);
-        // $userinfo = $oauth->getUserInfo();
-        // $passWord = CHash::random(6);
-        // $nickname = $userinfo['open_name'];
-        // $time = date('Y-m-d H:i:s');
-        // $validcode = CHash::random(8);
-        // $model = $this->model;
-        // $last_id = $model->table("user")->data(array('nickname' => $nickname, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
-        // $name = "u" . sprintf("%                                                                                 09d", $last_id);
-        // $email = $name . "@no.com";
-        //         //更新用户名和邮箱                
-        // $model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = '{$last_id}'")->update();
-        //         //更新customer表
-        // $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
-        // Log::pointcoin_log(200, $last_id, '', '微信新用户积分奖励', 10);
-        //         //记录登录信息
-        // $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id='$last_id'")->find();
-        // $this->model->table("oauth_user")->data(array(
-        //         'open_name' => $userinfo['open_name'],
-        //         'oauth_type' => 'wechat',
-        //         'user_id' => $last_id,
-        //         'posttime' => time(),
-        //         'token' => $token,
-        //         'expires' => 7200,
-        //         'open_id' =>$userinfo['open_id']
-        //     ))->insert();
-        //         //记录邀请人
-        // $inviter = Cookie::get("inviter");
-        // if (!$inviter) {
-        //     $one = $model->table("invite_wechat")->where("invite_openid='{$userinfo['open_id']}'")->find();
-        //     if ($one) {
-        //         $inviter = $one['user_id'];
-        //         $model->table("invite_wechat")->where("invite_openid='{$userinfo['open_id']}'")->delete();
-        //     }
-        // }
-
-        // $model->table("invite")->data(array('user_id'=>1,'invite_user_id'=>$last_id,'from'=>'wechat','district_id'=>1,'createtime'=>time()))->insert();
+    public function dopays() { //线下支付方式
         // 获得payment_id 获得相关参数
         $payment_id = Filter::int(Req::args('payment_id'));
         $order_no = Req::args('order_no');
-        // var_dump($order_no);die;
         $order_amount = Req::args('order_amount');
-        // $data=array(
-        //       'order_no'=>$order_no,
-        //       'user_id'=>$this->user['id'],
-        //       'pay_status'=>0,
-        //       'order_amount'=>$order_amount,
-        //       'create_time'=>date('Y-m-d H:i:s'),
-        //     );
+        $oauth = new WechatOAuth();
+        $userinfo = $oauth->getUserInfo();
         $data['type']=8;
         $data['order_no'] = $order_no;
         $data['user_id'] = $this->user['id'];
         $data['payment'] = $payment_id;
         $data['status'] = 2; 
         $data['pay_status'] = 0;
-        $data['accept_name'] = '游客';
+        $data['accept_name'] = $userinfo['open_name'];
         $data['phone'] = '';
         $data['mobile'] = '';
         $data['province'] = '';
@@ -582,7 +535,6 @@ class PaymentController extends Controller {
                     
                 }
             }
-            // var_dump($order_id);die;
             if (!empty($sendData)) {
                 $this->assign("paymentPlugin", $paymentPlugin);
                 $this->assign("sendData", $sendData);
@@ -962,17 +914,7 @@ class PaymentController extends Controller {
                 $success_url = Url::urlFormat("/ucenter/asset");
                 $cancel_url = Url::urlFormat("/ucenter/recharge_center");
                 $error_url = Url::urlFormat("/ucenter/recharge_center");
-            } else if (stripos($out_trade_no, 'offline') !== false){//线下订单
-               var_dump($order_no);die;
-                $order = $this->model->table("offline_order")->where("order_no='{$order_no}'")->find();
-                if (!$order) {
-                    $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
-                    exit();
-                }
-                $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
-                $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
-                $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
-            }else {//商品订单
+            } else {//商品订单
                 $order = $this->model->table("order")->where("order_no='{$order_no}'")->find();
                 if (!$order) {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));

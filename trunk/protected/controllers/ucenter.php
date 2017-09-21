@@ -613,7 +613,6 @@ class UcenterController extends Controller {
     }
 
     public function firstbind() {
-        // var_dump(111);die;
         $info = $this->model->table("customer as cu ")->fields("cu.*,us.email,us.name,us.nickname,us.avatar,gr.name as gname")->join("left join user as us on cu.user_id = us.id left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = " . $this->user['id'])->find();
         if ($info) {
             if($info['mobile']!=''){
@@ -919,7 +918,7 @@ class UcenterController extends Controller {
                     $str = '<span class="text-info">等待发货</span>';
                 }else if($delivery_status == 0 && $order_type==8){
                     $this->model->table('order')->data(array('delivery_status'=>2))->where('id='.$item['id'])->update();
-                    $str = '<span class="text-info">线下订单直接收货</span>';
+                    $str = '<span class="text-info">线下订单已成功支付</span>';
                 } else if ($delivery_status == 1) {
                     $str = '<span class="text-info">已发货</span>';
                     $btn = '<a href="javascript:;" class="btn btn-main btn-mini" onclick="order_sign(' . $item['id'] . ')">确认收货</a>';
@@ -2328,7 +2327,6 @@ class UcenterController extends Controller {
     public function showQR() {
         $goods_id = Filter::int(Req::args("goods_id"));
         $goods_info = $this->model->table("goods")->where("id = ".$goods_id)->find();
-        // var_dump($goods_info);die;
         if ($goods_info) {
             $result = Common::getQrcodeFlag($goods_id, $this->user['id']);
             if ($result['status'] == 'success') {
