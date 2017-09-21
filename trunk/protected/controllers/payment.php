@@ -538,16 +538,15 @@ class PaymentController extends Controller {
                     $order_delay = 0;
                     $time = strtotime("-" . $order_delay . " Minute");
                     $create_time = strtotime($order['create_time']);
-                    if ( $order_delay == 0) {         
-                            $packData = $payment->getPaymentInfo('offline', $order_id);
-                            $packData = array_merge($extendDatas, $packData);
+                    $packData = $payment->getPaymentInfo('offline', $order_id);
+                    $packData = array_merge($extendDatas, $packData);
 
-                            $sendData = $paymentPlugin->packData($packData);
+                    $sendData = $paymentPlugin->packData($packData);
                             if (!$paymentPlugin->isNeedSubmit()) {
                                 exit();
                             }
                          
-                    } 
+                    
                 }
             }
             var_dump($packData);die;
