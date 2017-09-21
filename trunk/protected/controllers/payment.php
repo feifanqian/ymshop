@@ -504,7 +504,7 @@ class PaymentController extends Controller {
         // var_dump($order_no);die;
         $order_amount = Req::args('order_amount');
         $data=array(
-              'order_no'=>1234,
+              'order_no'=>$order_no,
               'user_id'=>$this->user['id'],
               'pay_status'=>0,
               'order_amount'=>$order_amount,
