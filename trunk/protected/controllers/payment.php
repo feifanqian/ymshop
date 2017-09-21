@@ -463,13 +463,14 @@ class PaymentController extends Controller {
         $order_amount = Req::args('order_amount');
         // $oauth = new WechatOAuth();
         // $userinfo = $oauth->getUserInfo();
+        $accept_name = Session::get('openname');
         $data['type']=8;
         $data['order_no'] = $order_no;
         $data['user_id'] = $this->user['id'];
         $data['payment'] = $payment_id;
         $data['status'] = 2; 
         $data['pay_status'] = 0;
-        $data['accept_name'] = '游客';
+        $data['accept_name'] = $accept_name;
         $data['phone'] = '';
         $data['mobile'] = '';
         $data['province'] = '';

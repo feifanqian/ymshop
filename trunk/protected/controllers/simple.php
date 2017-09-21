@@ -471,12 +471,13 @@ class SimpleController extends Controller {
                     'expires' => $token['expires_in'],
                     'open_id' => $token['openid']
                 ))->insert();
+                Session::set('openname', $userinfo['open_name']);
             }
             $oauth_info = $oauth->getConfig();
             $userinfo['type_name'] = $oauth_info['name'];
             $userinfo['open_id'] = $token['openid'];
             $userinfo['oauth_type'] = $type;
-
+            
             if ($type == 'wechat') {
                 $str='http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 $passWord = CHash::random(6);
