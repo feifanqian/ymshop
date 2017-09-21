@@ -914,8 +914,10 @@ class UcenterController extends Controller {
                 }
                 break;
             case '3':
-                if ($delivery_status == 0) {
+                if ($delivery_status == 0 && $order_type!=8) {
                     $str = '<span class="text-info">等待发货</span>';
+                }else if($delivery_status == 0 && $order_type==8){
+                    $str = '<span class="text-info">线下订单直接收货</span>';
                 } else if ($delivery_status == 1) {
                     $str = '<span class="text-info">已发货</span>';
                     $btn = '<a href="javascript:;" class="btn btn-main btn-mini" onclick="order_sign(' . $item['id'] . ')">确认收货</a>';
