@@ -941,6 +941,7 @@ class PaymentController extends Controller {
                 $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
                 $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
             }else {//商品订单
+                var_dump($out_trade_no);die;
                 $order = $this->model->table("order")->where("order_no='{$order_no}'")->find();
                 if (!$order) {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
