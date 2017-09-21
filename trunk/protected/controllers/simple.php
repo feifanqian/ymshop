@@ -511,6 +511,8 @@ class SimpleController extends Controller {
                 $str='http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 if(strpos($str,'user')){
                     $this->redirect("/ucenter/index");
+                }elseif(strpos($str,'demo')){
+                    $this->redirect("/index/demo");
                 }else{
                     $this->redirect("/index/index");
                 }       
