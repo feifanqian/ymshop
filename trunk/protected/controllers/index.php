@@ -1807,6 +1807,7 @@ class IndexController extends Controller {
     }
 
     public function demo(){
+       Session::set('demo', 1);
        $inviter_id = Filter::int(Req::args('inviter_id'));
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");

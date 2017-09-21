@@ -510,10 +510,10 @@ class SimpleController extends Controller {
                     Common::buildInviteShip($inviter,$last_id,"wechat");
                 }
                 // $this->redirect("/ucenter/firstbind");
-                
+                $demo = Session::get('demo');
                 if(strpos($str,'user')){
                     $this->redirect("/ucenter/index");
-                }elseif(strpos($str,'demo')){
+                }elseif(isset($demo && $demo==1)){
                     $this->redirect("/index/demo");
                 }else{
                     $this->redirect("/index/index");
