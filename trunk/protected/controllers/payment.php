@@ -514,7 +514,7 @@ class PaymentController extends Controller {
               'phone'=>'',
               'mobile'=>'',
               'payable_amount'=>$order_amount,
-              'real_amount'=>$real_amount,
+              'real_amount'=>$order_amount,
               'payable_freight'=>0,
               'real_freight'=>0,
               'pay_time'=>date('Y-m-d H:i:s'),
