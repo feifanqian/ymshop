@@ -531,6 +531,7 @@ class SimpleController extends Controller {
     public function oauth_bind() {
         $userinfo = Session::get('oauth_user_info');
         $str='http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        var_dump($str);die;
         if ($userinfo) {
             $this->assign('type_name', $userinfo['type_name']);
             $this->assign('open_name', $userinfo['open_name']);
