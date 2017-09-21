@@ -857,7 +857,7 @@ class PaymentController extends Controller {
                 $success_url = Url::urlFormat("/ucenter/asset");
                 $cancel_url = Url::urlFormat("/ucenter/recharge_center");
                 $error_url = Url::urlFormat("/ucenter/recharge_center");
-            } else if(stripos($out_trade_no, 'order'){//商品订单
+            } else if(stripos($out_trade_no, 'order')!== false){//商品订单
                 $order = $this->model->table("order")->where("order_no='{$order_no}'")->find();
                 if (!$order) {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
