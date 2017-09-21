@@ -613,6 +613,7 @@ class UcenterController extends Controller {
     }
 
     public function firstbind() {
+        var_dump(111);die;
         $info = $this->model->table("customer as cu ")->fields("cu.*,us.email,us.name,us.nickname,us.avatar,gr.name as gname")->join("left join user as us on cu.user_id = us.id left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = " . $this->user['id'])->find();
         if ($info) {
             if($info['mobile']!=''){
