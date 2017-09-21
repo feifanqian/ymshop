@@ -1810,6 +1810,7 @@ class IndexController extends Controller {
        $inviter_id = Filter::int(Req::args('inviter_id'));
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
+            $this->redirect();
         } else {
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
