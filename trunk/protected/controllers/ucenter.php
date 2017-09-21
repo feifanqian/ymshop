@@ -917,7 +917,7 @@ class UcenterController extends Controller {
                 if ($delivery_status == 0 && $order_type!=8) {
                     $str = '<span class="text-info">等待发货</span>';
                 }else if($delivery_status == 0 && $order_type==8){
-                    $this->model->table('order')->data(array('delivery_status'=>1))->where('id='.$item['id'])->update();
+                    $this->model->table('order')->data(array('delivery_status'=>2))->where('id='.$item['id'])->update();
                     $str = '<span class="text-info">线下订单直接收货</span>';
                 } else if ($delivery_status == 1) {
                     $str = '<span class="text-info">已发货</span>';
