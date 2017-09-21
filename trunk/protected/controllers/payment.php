@@ -501,7 +501,7 @@ class PaymentController extends Controller {
         // 获得payment_id 获得相关参数
         $payment_id = Filter::int(Req::args('payment_id'));
         $order_no = Req::args('order_no');
-        // var_dump($this->user['id']);die;
+        var_dump($order_no);die;
         $order_amount = Req::args('order_amount');
         $data=array(
               'order_no'=>$order_no,
