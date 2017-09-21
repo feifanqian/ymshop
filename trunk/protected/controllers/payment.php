@@ -503,14 +503,46 @@ class PaymentController extends Controller {
         $order_no = Req::args('order_no');
         // var_dump($order_no);die;
         $order_amount = Req::args('order_amount');
-        $data=array(
-              'order_no'=>$order_no,
-              'user_id'=>$this->user['id'],
-              'pay_status'=>0,
-              'order_amount'=>$order_amount,
-              'create_time'=>date('Y-m-d H:i:s'),
-            );
-        $model = new Model('offline_order');
+        // $data=array(
+        //       'order_no'=>$order_no,
+        //       'user_id'=>$this->user['id'],
+        //       'pay_status'=>0,
+        //       'order_amount'=>$order_amount,
+        //       'create_time'=>date('Y-m-d H:i:s'),
+        //     );
+        $data['type']=0;
+        $data['order_no'] = $order_no;
+        $data['user_id'] = $this->user['id'];
+        $data['payment'] = $payment_id;
+        $data['status'] = 0; 
+        $data['pay_status'] = 0;
+        $data['accept_name'] = '游客';
+        $data['phone'] = '';
+        $data['mobile'] = '';
+        $data['province'] = '';
+        $data['city'] = '';
+        $data['county'] = '';
+        $data['addr'] = '';
+        $data['zip'] = '';
+        $data['payable_amount'] = $order_amount;
+        $data['payable_freight'] = 0;
+        $data['real_freight'] = 0;
+        $data['create_time'] = date('Y-m-d H:i:s');
+        $data['pay_time'] = date("Y-m-d H:i:s");
+        $data['is_invoice'] = 0;
+        $data['handling_fee'] = 0;
+        $data['invoice_title'] = '';
+        $data['taxes'] = 0;
+        $data['discount_amount'] = 0;
+        $data['order_amount'] = $order_amount;
+        $data['real_amount'] = $order_amount;
+        $data['point'] = 0;
+        $data['voucher_id'] = 0;
+        $data['voucher'] = serialize(array());
+        $data['prom_id']=0;
+        $data['admin_remark']="";
+        $data['shop_ids']=1;
+        $model = new Model('order');
         $order_id=$model->data($data)->insert();
         $extendDatas = Req::args();
         if ($payment_id) {
@@ -539,7 +571,7 @@ class PaymentController extends Controller {
                     $order_delay = 0;
                     $time = strtotime("-" . $order_delay . " Minute");
                     $create_time = strtotime($order['create_time']);
-                    $packData = $payment->getPaymentInfo('offline', $order_id);
+                    $packData = $payment->getPaymentInfo('order', $order_id);
                     $packData = array_merge($extendDatas, $packData);
 
                     $sendData = $paymentPlugin->packData($packData);
@@ -941,7 +973,6 @@ class PaymentController extends Controller {
                 $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
                 $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
             }else {//商品订单
-                var_dump($out_trade_no);die;
                 $order = $this->model->table("order")->where("order_no='{$order_no}'")->find();
                 if (!$order) {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
