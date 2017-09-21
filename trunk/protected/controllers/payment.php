@@ -514,7 +514,7 @@ class PaymentController extends Controller {
         $data['order_no'] = $order_no;
         $data['user_id'] = $this->user['id'];
         $data['payment'] = $payment_id;
-        $data['status'] = 0; 
+        $data['status'] = 2; 
         $data['pay_status'] = 0;
         $data['accept_name'] = '游客';
         $data['phone'] = '';
@@ -542,6 +542,7 @@ class PaymentController extends Controller {
         $data['prom_id']=0;
         $data['admin_remark']="";
         $data['shop_ids']=1;
+        $data['order_type']=2;
         $model = new Model('order');
         $order_id=$model->data($data)->insert();
         $extendDatas = Req::args();
