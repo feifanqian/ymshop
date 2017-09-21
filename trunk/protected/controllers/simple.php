@@ -414,7 +414,7 @@ class SimpleController extends Controller {
      * @return void
      */
     function callback() {
-        var_dump(123);die;
+        // var_dump(123);die;
         $type = Filter::sql(Req::args('type'));
         $code = Filter::sql(Req::args('code'));
         (empty($type) || empty($code)) && die('参数错误');
@@ -530,13 +530,16 @@ class SimpleController extends Controller {
      */
     public function oauth_bind() {
         $userinfo = Session::get('oauth_user_info');
+        $str='http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         if ($userinfo) {
             $this->assign('type_name', $userinfo['type_name']);
             $this->assign('open_name', $userinfo['open_name']);
             $this->assign('head_img', $userinfo['head']);
             $this->assign("user", $this->user);
             $this->redirect("/simple/oauth_bind");
-        } else {
+        } elseif (strpos($str,'demo')){
+            $this->redirect("/index/demo");
+        }else{
             $this->redirect("/index/index");
         }
     }
