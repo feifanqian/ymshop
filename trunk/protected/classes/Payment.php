@@ -114,6 +114,27 @@ class Payment {
             $payment ['M_OrderNO'] = $argument['order_no'];
             $payment ['M_OrderId'] = $argument['order_id'];
             $payment ['M_Amount']  = $argument['amount'];
+        }elseif($type == "offline"){
+            $order_id = $argument;
+            //获取订单信息
+            $order = $model->table('offline_order')->where('id = ' . $order_id . ' and status = 2')->find();
+            if (empty($order)) {
+                $msg = array('type' => 'fail', 'msg' => '订单信息不正确，不能进行支付！');
+                $controller->redirect('/index/msg', false, $msg);
+                exit;
+            }
+
+            $payment ['M_Remark'] = '';
+            $payment ['M_OrderId'] = $order['id'];
+            $payment ['M_OrderNO'] = $order['order_no'];
+            $payment ['M_Amount'] = $order['order_amount'];
+            //用户信息
+            $payment ['P_Mobile'] = '';
+            $payment ['P_Name'] = '';
+            $payment ['P_PostCode'] = '';
+            $payment ['P_Telephone'] = '';
+            $payment ['P_Address'] = '';
+            $payment ['P_Email'] = '';
         }
 
         $config = Config::getInstance();

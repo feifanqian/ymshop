@@ -505,27 +505,11 @@ class PaymentController extends Controller {
         $data=array(
               'order_no'=>$order_no,
               'user_id'=>$this->user['id'],
-              'shop_ids'=>1,
-              'payment'=>$payment_id,
-              'status'=>1,
               'pay_status'=>0,
-              'delivery_status'=>0,
-              'accept_name'=>'',
-              'phone'=>'',
-              'mobile'=>'',
-              'payable_amount'=>$order_amount,
-              'real_amount'=>$order_amount,
-              'payable_freight'=>0,
-              'real_freight'=>0,
-              'pay_time'=>date('Y-m-d H:i:s'),
-              'create_time'=>date('Y-m-d H:i:s'),
-              'handling_fee'=>0.00,
               'order_amount'=>$order_amount,
-              'point'=>0,
-              'pay_point'=>0,
-              'type'=>0
+              'create_time'=>date('Y-m-d H:i:s'),
             );
-        $model = new Model('order');
+        $model = new Model('offline_order');
         $order_id=$model->data($data)->insert();
         $extendDatas = Req::args();
         if ($payment_id) {
@@ -555,7 +539,7 @@ class PaymentController extends Controller {
                     $time = strtotime("-" . $order_delay . " Minute");
                     $create_time = strtotime($order['create_time']);
                     if ($create_time >= $time || $order_delay == 0) {         
-                            $packData = $payment->getPaymentInfo('order', $order_id);
+                            $packData = $payment->getPaymentInfo('offline', $order_id);
                             $packData = array_merge($extendDatas, $packData);
                             $sendData = $paymentPlugin->packData($packData);
                             if (!$paymentPlugin->isNeedSubmit()) {
