@@ -22,14 +22,16 @@ class DistrictController extends Controller {
         $this->assign('current',$current);
     }
     public function login(){
-        $district = $this->model->table("district_shop")->where("owner_id=".$this->user['id'])->findAll();
-        $apply_info = $this->model->table("district_apply")->where("user_id = ".$this->user['id']." and status != 1")->findAll();
-        if(empty($district)&&empty($apply_info)){
-//            $this->redirect("/index/msg", false, array('type' => "info", "msg" => '我的专区',"content"=>"您暂时还没有入驻专区","redirect_url"=>Url::urlFormat("/district_introduce.html"),'url_name'=>'了解什么是专区'));
-//           exit();
-        }else{
-            $this->assign("district",$district);
-            $this->assign("apply_info",$apply_info);
+        if($this->user['id']!=null){
+            $district = $this->model->table("district_shop")->where("owner_id=".$this->user['id'])->findAll();
+            $apply_info = $this->model->table("district_apply")->where("user_id = ".$this->user['id']." and status != 1")->findAll();
+            if(empty($district)&&empty($apply_info)){
+    //            $this->redirect("/index/msg", false, array('type' => "info", "msg" => '我的专区',"content"=>"您暂时还没有入驻专区","redirect_url"=>Url::urlFormat("/district_introduce.html"),'url_name'=>'了解什么是专区'));
+    //           exit();
+            }else{
+                $this->assign("district",$district);
+                $this->assign("apply_info",$apply_info);
+            }
         }
         $this->assign('seo_title',"专区登录");
         $this->assign('current',"district");
