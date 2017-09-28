@@ -517,6 +517,8 @@ class SimpleController extends Controller {
                     $this->redirect("/index/demo");
                 }elseif(strpos($str,'order')){
                     $this->redirect("/user/order");
+                }elseif(strpos($str,'district')){
+                    $this->redirect("/district/login");
                 }else{
                     $this->redirect("/index/index");
                 }       
