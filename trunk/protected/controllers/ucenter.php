@@ -96,6 +96,7 @@ class UcenterController extends Controller {
     //生成邀请码
     public function buildinvite() {
         $user_id = Filter::int(Req::args('uid'));
+        var_dump($user_id);die;
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
             $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
             $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
