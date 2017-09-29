@@ -696,7 +696,7 @@ class Common {
     
     //绑定邀请关系
     static function buildInviteShip($inviter_id ,$new_user_id ,$way="wap"){
-        var_dump($new_user_id);die;
+        // var_dump($new_user_id);die;
         if($inviter_id==$new_user_id){
             return array('status'=>'fail','msg'=>"inviter can't be youself");
         }
