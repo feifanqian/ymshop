@@ -707,7 +707,7 @@ class Common {
         if($isset && empty($notset)){
             $inviter_info = self::getMyPromoteInfo($inviter_id);
             $result = $model->table("invite")->data(array('user_id'=>$inviter_id,'invite_user_id'=>$new_user_id,'from'=>$way,'district_id'=>$inviter_info['district_id'],'createtime'=>time()))->insert();
-            var_dump($result);die;
+            // var_dump($result);die;
             if($result){
                 return true;
             }else{
