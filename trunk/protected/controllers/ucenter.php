@@ -98,7 +98,7 @@ class UcenterController extends Controller {
         $user_id = Filter::int(Req::args('uid'));
         // var_dump($user_id);die;
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-            var_dump(123);die;
+            // var_dump(123);die;
             $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
             $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
             $token = $wechat->getAccessToken();
