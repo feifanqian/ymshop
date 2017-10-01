@@ -69,6 +69,7 @@ class IndexController extends Controller {
 
     //邀请注册
     public function invite() {
+        var_dump(111);die;
         $inviter_id = Filter::int(Req::args('inviter_id'));
         if (isset($this->user['id'])) {
             // var_dump(123);die;
