@@ -1805,8 +1805,9 @@ class IndexController extends Controller {
     }
 
     public function invitepay(){
-        $uid=$this->user['id'];
-        var_dump($uid);die;
+        $id=$this->user['id'];
+        $uid=Filter::int($id);
+        // var_dump($uid);die;
         $model = new Model();
         $model = new Model("user as us");
         $user = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.id='$uid'")->find();
