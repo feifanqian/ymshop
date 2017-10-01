@@ -134,7 +134,7 @@ class UcenterController extends Controller {
 
      //生成邀请支付码
     public function buildinvitepay() {
-        $user_id = 1;
+        $user_id = Filter::int(Req::args('uid'));
         // if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
         //     $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
         //     $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
