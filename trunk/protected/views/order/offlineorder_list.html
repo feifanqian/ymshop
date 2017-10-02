@@ -51,8 +51,7 @@
             <td style="width:50px">{$item['order_amount']}{if:$item['type']==5||$item['type']==6}<br>{$item['pay_point']}积分{/if}</td>
             <td style="width:50px"><a href="?condition=and--user_id--eq--{$item['user_id']}">{$item['uname']}</a></td>
             <td style="width:30px"><a href="?condition=and--real_name--eq--{$item['real_name']}">{$item['real_name']}</a></td>
-            <td style="width:50px"><a href="?condition=and--mobile--eq--{$item['mobile']}">{$item['mobile']}</a></td>
-            
+            <td style="width:50px"><a href="?condition=and--mobile--eq--{$item['mobile']}">{$item['mobile']}</a></td>  
             <td style="width:80px">{$payment[$item['payment']]}</td>
             <td style="width:150px"><a href="?condition=and--pay_status--eq--{$item['pay_status']}">
                     {echo:$pay_status[$item['pay_status']]}
