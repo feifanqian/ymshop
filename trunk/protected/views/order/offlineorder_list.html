@@ -26,7 +26,7 @@
         <th style="width:50px">订单状态</th>
         <th style="width:50px">打印</th>
     </tr>
-    {query:name=order as od fields=od.*,us.name as uname,us.status as ustatus join= left join user as us on od.user_id eq us.id where=$where id=$obj page=1 order= id desc }
+    {query:name=order as od fields=od.*,us.name as uname,us.status as ustatus,cu.real_name join= left join user as us on od.user_id eq us.id left join customer as cu on od.user_id eq cu.user_id where=$where id=$obj page=1 order= id desc }
         <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"><i class="icon-order-{$item['type']}"></i></td>
             <td style="width:50px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
                 <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看</a></li>
@@ -50,7 +50,7 @@
                 <td style="width:100px"><span>{$item['order_no']}</span>{if:$item['admin_remark']!=''}<i class='icon-attachment admin-remark'></i><p style="display:none;">{$item['admin_remark']}</p>{/if}</td>
             <td style="width:50px">{$item['order_amount']}{if:$item['type']==5||$item['type']==6}<br>{$item['pay_point']}积分{/if}</td>
             <td style="width:50px"><a href="?condition=and--user_id--eq--{$item['user_id']}">{$item['uname']}</a></td>
-            <td style="width:30px"><a href="?condition=and--accept_name--eq--{$item['accept_name']}">{$item['accept_name']}</a></td>
+            <td style="width:30px"><a href="?condition=and--real_name--eq--{$item['real_name']}">{$item['real_name']}</a></td>
             <td style="width:50px"><a href="?condition=and--mobile--eq--{$item['mobile']}">{$item['mobile']}</a></td>
             
             <td style="width:80px">{$payment[$item['payment']]}</td>
