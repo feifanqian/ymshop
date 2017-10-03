@@ -622,7 +622,7 @@ class PaymentController extends Controller {
             if($order['type']==8){//线下分账
              $seller_id=$order['shop_ids'];
              $invite_id=Session::get('invite_id');
-             exit($invite_id);
+             var_dump($invite_id);die;
              if($seller_id!=$invite_id){
                 Common::offlineBeneficial($orderNo,$invite_id);     
              }
