@@ -407,7 +407,7 @@ class Controller extends Object {
                 $file->write($tem);
                 unset($file);
             }
-             $this->renderExecute($runfile, $data);
+            echo $this->renderExecute($runfile, $data);
         } else {
             Tiny::Msg($this, '请求的页面不存在！', 404);
         }
