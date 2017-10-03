@@ -461,9 +461,26 @@ class PaymentController extends Controller {
         $payment_id = Filter::int(Req::args('payment_id'));
         $order_no = Req::args('order_no');
         $order_amount = Req::args('order_amount');
+        $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
         // $oauth = new WechatOAuth();
         // $userinfo = $oauth->getUserInfo();
         $user_id = $this->user['id'];
+        $invite=$this->model->table('invite')->where('invite_user_id='.$user_id)->find();
+        if($invite){
+            $invite_id=$invite['user_id'];//邀请人用户id
+        }else{
+            $invite_id=1;
+        }
+        Session::set('invite_id',$invite_id);
+        $shop=$this->model->table('district_shop')->fields('id,owner_id')->where('owner_id='.$invite_id)->find();
+        if($shop){
+            $district_id=$shop['owner_id'];
+        }else{
+            $district_id=1;
+        }
+
+        $shop_id=1;
+        
         $accept_name = Session::get('openname');
         $data['type']=8;
         $data['order_no'] = $order_no;
@@ -496,7 +513,7 @@ class PaymentController extends Controller {
         $data['voucher'] = serialize(array());
         $data['prom_id']=0;
         $data['admin_remark']="";
-        $data['shop_ids']=1;
+        $data['shop_ids']=$seller_id;
         $model = new Model('order');
         $order_id=$model->data($data)->insert();
         $extendDatas = Req::args();
@@ -601,6 +618,13 @@ class PaymentController extends Controller {
             $orders = $model->where("order_no='{$orderNo}'")->find();
             if($orders['type']==7){
              $result=Common::setIncomeByInviteShip1($orders);
+            }
+            if($order['type']==8){//线下分账
+             $seller_id=$order['shop_ids'];
+             $invite_id=Session::get('invite_id');
+             if($seller_id!=$invite_id){
+                Common::offlineBeneficial($orderNo,$invite_id);     
+             }
             }
             if (stripos($orderNo, 'promoter') !== false) {//如果是推广员入驻订单
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();

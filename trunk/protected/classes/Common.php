@@ -876,4 +876,39 @@ class Common {
             return $promoter_user_id;
         }
      }
+
+     static function offlineBeneficial($order_no,$invite_id=1){//线下分账
+         $order = $this->model->table('order')->where('order_no='.$order_no)->find();
+         $amount = $order['order_amount'];
+         $config = Config::getInstance()->get("district_set");
+         $base_balance = round($amount*$config['offline_base_rate']/100,2);
+         $balance1 = round($base_balance*$config['promoter_rate']/100,2);
+         $balance2 = round($base_balance*$config['district_rate']/100,2);
+         $balance3 = round($base_balance*$config['promoter2_rate']/100,2);
+         $balance4 = round($base_balance*$config['plat_rate']/100,2);
+         
+         $user_id = $order['user_id']; 
+         $promoter_id = self::getFirstPromoter($user_id);
+
+         $district = $this->model->table('district_shop')->where('owner_id='.$invite_id)->find();
+
+         $this->model->table('customer')->where('user_id='.$promoter_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级代理商提成
+         Log::balance($balance1, $promoter_id, $order_no,'线下消费上级代理商提成', 8);
+         
+         if($district){
+            $this->model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级经销商提成
+            Log::balance($balance2, $invite_id, $order_no,'线下消费上级经销商提成', 8);
+         }
+
+         $invite2 = $this->model->table('invite')->where("invite_user_id=".$promoter_id)->find();
+         if($invite2){
+            $this->model->table('customer')->where('user_id='.$invite2['user_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//代理商上级邀请人提成
+            Log::balance($balance3, $invite2['user_id'], $order_no,'线下消费代理商上级邀请人提成', 8);
+         }
+
+         if($invite_id!=1){
+            $this->model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance4})"))->update();//平台收益提成
+            Log::balance($balance4, 1, $order_no,'线下会员消费平台收益', 8);
+         }
+     }
 }

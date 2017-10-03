@@ -1829,6 +1829,7 @@ class IndexController extends Controller {
         }
         return;        
         $order_no=date('YmdHis').rand(1000,9999);
+        $this->assign('seller_id',$inviter_id);
         $this->assign('order_no',$order_no);
         $this->redirect();
     }
