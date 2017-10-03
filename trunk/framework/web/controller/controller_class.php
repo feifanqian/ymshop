@@ -433,7 +433,7 @@ class Controller extends Object {
             extract($__datas0123456789, EXTR_SKIP);
             unset($__datas0123456789, $__data0123456789); //防止干扰视图里的变量内容,同时防止无端过滤掉用户定义的变量（除非用户定义__data0123456789的变量）
         }
-        header("Content-type: text/html; charset=" . $this->encoding);
+        // header("Content-type: text/html; charset=" . $this->encoding);
         ob_start();
         include ($__runfile0123456789);
         $template_content = ob_get_clean();
