@@ -2334,6 +2334,8 @@ class UcenterController extends Controller {
             if ($result['status'] == 'success') {
                 $this->assign("flag", $result['flag']);
                 // var_dump($result['url']);die;
+                // $uid = $this->user['id'];
+                // $url=Url::fullUrlFormat("/index/productqr/pid/$goods_id/uid/" . $uid);
                 $this->assign("url", $result['url']);
             } else {
                 $this->redirect("/index/msg", false, array('type' => "info", "msg" => $result['msg']));
@@ -2351,6 +2353,7 @@ class UcenterController extends Controller {
             exit();
         }
     }
+
     
     //获取代理商邀请信息
     public function promoter_invite() {
