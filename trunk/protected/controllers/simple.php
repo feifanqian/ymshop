@@ -509,6 +509,7 @@ class SimpleController extends Controller {
                     }
                 }
                 if ($inviter) {
+                    var_dump(123);die;
                     Common::buildInviteShip($inviter,$last_id,"wechat");
                 }
                 // $this->redirect("/ucenter/firstbind");

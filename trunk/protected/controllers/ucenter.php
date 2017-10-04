@@ -2333,6 +2333,7 @@ class UcenterController extends Controller {
             $result = Common::getQrcodeFlag($goods_id, $this->user['id']);
             if ($result['status'] == 'success') {
                 $this->assign("flag", $result['flag']);
+                // var_dump($result['url']);die;
                 $this->assign("url", $result['url']);
             } else {
                 $this->redirect("/index/msg", false, array('type' => "info", "msg" => $result['msg']));
