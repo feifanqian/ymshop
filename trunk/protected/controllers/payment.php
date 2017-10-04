@@ -619,13 +619,6 @@ class PaymentController extends Controller {
             if($orders['type']==7){
              $result=Common::setIncomeByInviteShip1($orders);
             }
-            if($order['type']==8){//线下分账
-             $seller_id=$order['shop_ids'];
-             $invite_id=Session::get('invite_id');
-             if($seller_id!=$invite_id){
-                Common::offlineBeneficial($orderNo,$invite_id);     
-             }
-            }
             if (stripos($orderNo, 'promoter') !== false) {//如果是推广员入驻订单
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
                 if ($order) {
@@ -932,7 +925,13 @@ class PaymentController extends Controller {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
                     exit();
                 }
-                exit(111);
+                if($order['type']==8){//线下分账
+                 $seller_id=$order['shop_ids'];
+                 $invite_id=Session::get('invite_id');
+                 if($seller_id!=$invite_id){
+                    Common::offlineBeneficial($orderNo,$invite_id);     
+                 }
+                }
                 $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
                 $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
                 $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
