@@ -723,10 +723,10 @@ class IndexController extends Controller {
                if($qr_info){
                    Cookie::set("inviter", $qr_info['user_id']);
                    if(!$this->user){
-                       var_dump(123);die;  
+                       // var_dump(123);die;  
                         $this->noRight();
                    }else{
-                      var_dump(111);die;
+                      // var_dump(111);die;
                        Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
                        $this->model->query("update tiny_promote_qrcode set scan_times = scan_times + 1 where id = $flag");
                    }
