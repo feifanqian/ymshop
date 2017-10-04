@@ -614,7 +614,6 @@ class PaymentController extends Controller {
         $return = $paymentPlugin->callback($callbackData, $payment_id, $money, $message, $orderNo);
         //支付成功
         if ($return == 1) {
-            exxit(111);die;
             $model = new Model("order");
             $orders = $model->where("order_no='{$orderNo}'")->find();
             if($orders['type']==7){
@@ -623,7 +622,6 @@ class PaymentController extends Controller {
             if($order['type']==8){//线下分账
              $seller_id=$order['shop_ids'];
              $invite_id=Session::get('invite_id');
-             var_dump($invite_id);die;
              if($seller_id!=$invite_id){
                 Common::offlineBeneficial($orderNo,$invite_id);     
              }
@@ -757,7 +755,6 @@ class PaymentController extends Controller {
         $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         //支付成功
         if ($return == 1) {
-            var_dump(111);die;
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
                 if ($order) {
@@ -935,6 +932,7 @@ class PaymentController extends Controller {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
                     exit();
                 }
+                exit(111);
                 $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
                 $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
                 $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
