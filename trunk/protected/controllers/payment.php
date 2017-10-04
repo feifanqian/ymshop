@@ -614,6 +614,7 @@ class PaymentController extends Controller {
         $return = $paymentPlugin->callback($callbackData, $payment_id, $money, $message, $orderNo);
         //支付成功
         if ($return == 1) {
+            exxit(111);die;
             $model = new Model("order");
             $orders = $model->where("order_no='{$orderNo}'")->find();
             if($orders['type']==7){
