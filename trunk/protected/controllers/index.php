@@ -722,11 +722,9 @@ class IndexController extends Controller {
                $qr_info = $this->model->table("promote_qrcode")->where("id=$flag")->find();
                if($qr_info){
                    Cookie::set("inviter", $qr_info['user_id']);
-                   if(!$this->user){
-                       // var_dump(123);die;  
+                   if(!$this->user){ 
                         $this->noRight();
                    }else{
-                      // var_dump(111);die;
                        Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
                        $this->model->query("update tiny_promote_qrcode set scan_times = scan_times + 1 where id = $flag");
                    }
