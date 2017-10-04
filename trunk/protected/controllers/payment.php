@@ -931,7 +931,7 @@ class PaymentController extends Controller {
                  // if($seller_id!=$invite_id){
                  //    Common::offlineBeneficial($orderNo,$invite_id);     
                  // }
-                 $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '卖家id{$seller_id}', "content" => "邀请人信息{$invite_id}"));
+                 $this->redirect("/index/msg", false, array('type' => "fail", "msg" => "卖家id{$seller_id}", "content" => "邀请人信息{$invite_id}"));
                     exit();
                 }
                 $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
