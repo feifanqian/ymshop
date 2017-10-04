@@ -706,6 +706,7 @@ class IndexController extends Controller {
         $id = Filter::int(Req::args('id'));
         $flag =Req::args('flag');
         if($flag !='' && is_numeric($flag)){
+            Session::set("product_id",$id);
            $flag_in_cookie = Cookie::get("flag");
            if($flag_in_cookie==NULL){
                Cookie::set("flag",$flag,3600);
@@ -721,7 +722,7 @@ class IndexController extends Controller {
                $qr_info = $this->model->table("promote_qrcode")->where("id=$flag")->find();
                if($qr_info){
                    if(!$this->user){
-                    
+
                         Cookie::set("inviter", $qr_info['user_id']);
                         if (isset($this->user['id'])) {
                         Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");

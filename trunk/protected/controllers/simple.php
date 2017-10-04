@@ -513,10 +513,13 @@ class SimpleController extends Controller {
                 }
                 // $this->redirect("/ucenter/firstbind");
                 $demo = Session::get('demo');
+                $pid = Session::get('product_id');
                 if(strpos($str,'user')){
                     $this->redirect("/ucenter/index");
                 }elseif($demo!=null && $demo==1){
                     $this->redirect("/index/demo");
+                }elseif($pid!=null){
+                    $this->redirect("/index/product/id/{$pid}");
                 }elseif(strpos($str,'order')){
                     $this->redirect("/user/order");
                 }elseif(strpos($str,'district')){
