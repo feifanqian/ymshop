@@ -878,7 +878,8 @@ class Common {
      }
 
      static function offlineBeneficial($order_no,$invite_id=1){//线下分账
-         $order = $this->model->table('order')->where('order_no='.$order_no)->find();
+         $model = new Model();
+         $order = $model->table('order')->where('order_no='.$order_no)->find();
          $amount = $order['order_amount'];
          $config = Config::getInstance()->get("district_set");
          $base_balance = round($amount*$config['offline_base_rate']/100,2);
