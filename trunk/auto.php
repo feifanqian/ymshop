@@ -172,7 +172,22 @@ class LinuxCliTask{
     }
 
     public function autoUnlocked(){
-        
+        $config = Config::getInstance()->get("district_set");
+        $income=$this->model->table('promote_income_log')->where('frezze_income_change>0')->findAll();
+        if($income){
+           foreach ($income as $k => $v) {
+           $t1=strtotime($v['date']);
+           $t2=$t1+$config['income_lockdays']*24*60*60;
+           if(time()>$t2){
+            $ret=$this->model->table('promote_income_log')->data(array('valid_income_change'=>"`valid_income_change`+({$v['frezze_income_change']})",'frezze_income_change'=>0,'current_valid_income'=>"`current_valid_income`+({$v['frezze_income_change']})",'current_frezze_income'=>"`current_frezze_income`-({$v['frezze_income_change']})"))->where('id='.$v['id'])->update();
+            if($ret){
+               echo date("Y-m-d H:i:s").'自动解锁锁定收益';
+            }else{
+                echo date("Y-m-d H:i:s")."解锁失败";
+            }
+           }
+         }
+        }
     }
   
     private function doCurl($url,$post_data,$time_out =30){
