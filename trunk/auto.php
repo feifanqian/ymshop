@@ -170,6 +170,10 @@ class LinuxCliTask{
             }
         }
     }
+
+    public function autoUnlocked(){
+        
+    }
   
     private function doCurl($url,$post_data,$time_out =30){
         $post_data = is_array($post_data)?http_build_query($post_data):$post_data;

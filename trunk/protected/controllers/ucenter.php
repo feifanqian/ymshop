@@ -2485,6 +2485,10 @@ class UcenterController extends Controller {
             $this->redirect();
         }    
     }
+
+    public function beagent(){
+        $this->redirect();
+    }
     
     
 }
