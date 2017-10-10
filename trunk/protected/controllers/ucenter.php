@@ -1246,9 +1246,9 @@ class UcenterController extends Controller {
         $oauth=new WechatOAuth();
         $userinfo = $oauth->getUserInfo();
         $user=$this->model->table('user')->where('id='.$id)->find();
-        if($user['avatar']=='/0'){
-            $this->model->table('user')->data(array('avatar'=>$userinfo['head']))->update();
-        }
+        // if($user['avatar']=='/0'){
+        //     $this->model->table('user')->data(array('avatar'=>$userinfo['head']))->update();
+        // }
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
         $this->assign("sign_in_open",$sign_in_set['open']);
