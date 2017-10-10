@@ -181,7 +181,7 @@ class LinuxCliTask{
            if(time()>$t2){
             $ret=$this->model->table('promote_income_log')->data(array('valid_income_change'=>"`valid_income_change`+({$v['frezze_income_change']})",'frezze_income_change'=>0,'current_valid_income'=>"`current_valid_income`+({$v['frezze_income_change']})",'current_frezze_income'=>"`current_frezze_income`-({$v['frezze_income_change']})"))->where('id='.$v['id'])->update();
             if($ret){
-               echo date("Y-m-d H:i:s").'自动解锁锁定收益';
+               echo date("Y-m-d H:i:s")."自动解锁锁定收益\n";
             }else{
                 echo date("Y-m-d H:i:s")."解锁失败";
             }

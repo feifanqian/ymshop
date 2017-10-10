@@ -127,5 +127,7 @@ return array(
     "MdPayApi" => "payments/miaodao/MdPayApi.php",
     "ChinapayDf" => "payments/pay_unionpay/df/ChinapayDf.php",
     "netpayclient" => "payments/pay_unionpay/df/netpayclient.php",
+    "AopClient"=>"Alipay/aop/AopClient.php",
+    "AlipayFundTransToaccountTransferRequest"=>"Alipay/aop/request/AlipayFundTransToaccountTransferRequest.php"
 );
 ?>
