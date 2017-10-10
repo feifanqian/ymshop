@@ -1243,17 +1243,17 @@ class UcenterController extends Controller {
                 $this->model->table('customer')->data(array('financial_stock'=>"`financial_stock`-({$stock})"))->where('user_id='.$id)->update();
             }     
         }
-        $userinfo = Session::get('oauth_user_info');
+        // $userinfo = Session::get('oauth_user_info');
         // $oauth=new WechatOAuth();
         // $userinfo = $oauth->getUserInfo();
-        $user=$this->model->table('user')->where('id='.$id)->find();
-        if($userinfo){
-            var_dump(123);die;
-            if($user['avatar']=='/0'){
-            $this->model->table('user')->where('id='.$id)->data(array('avatar'=>$userinfo['head']))->update();
-            var_dump(111);die;
-          }
-        }
+        // $user=$this->model->table('user')->where('id='.$id)->find();
+        // if($userinfo){
+        //     var_dump(123);die;
+        //     if($user['avatar']=='/0'){
+        //     $this->model->table('user')->where('id='.$id)->data(array('avatar'=>$userinfo['head']))->update();
+        //     var_dump(111);die;
+        //   }
+        // }
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
         $this->assign("sign_in_open",$sign_in_set['open']);
