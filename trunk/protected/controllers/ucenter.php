@@ -1243,9 +1243,9 @@ class UcenterController extends Controller {
                 $this->model->table('customer')->data(array('financial_stock'=>"`financial_stock`-({$stock})"))->where('user_id='.$id)->update();
             }     
         }
-        $oauth=new WechatOAuth();
-        $userinfo = $oauth->getUserInfo();
-        $user=$this->model->table('user')->where('id='.$id)->find();
+        // $oauth=new WechatOAuth();
+        // $userinfo = $oauth->getUserInfo();
+        // $user=$this->model->table('user')->where('id='.$id)->find();
         // if($user['avatar']=='/0'){
         //     $this->model->table('user')->data(array('avatar'=>$userinfo['head']))->update();
         // }
