@@ -414,6 +414,7 @@ class SimpleController extends Controller {
      * @return void
      */
     function callback() {
+        var_dump(222);die;
         $type = Filter::sql(Req::args('type'));
         $code = Filter::sql(Req::args('code'));
         (empty($type) || empty($code)) && die('参数错误');
