@@ -929,7 +929,8 @@ class PaymentController extends Controller {
                  $seller_id=$order['shop_ids'];
                  $invite_id=Session::get('invite_id');
                  if($seller_id!=$invite_id){
-                    Common::offlineBeneficial($order_no,$invite_id);     
+                    // Common::offlineBeneficial($order_no,$invite_id);
+                    Common::testAlipay($order_no);     
                  }
                 }
                 $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
