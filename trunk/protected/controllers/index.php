@@ -726,7 +726,6 @@ class IndexController extends Controller {
                         $this->noRight();
                    }else{
                        $inviter_id=$qr_info['user_id'];
-                       var_dump($inviter_id);die;
                        Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
                        $this->model->query("update tiny_promote_qrcode set scan_times = scan_times + 1 where id = $flag");
                    }
