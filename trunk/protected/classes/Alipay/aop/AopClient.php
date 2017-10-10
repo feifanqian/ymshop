@@ -47,7 +47,7 @@ class AopClient {
 
 
 	//签名类型
-	public $signType = "RSA2";
+	public $signType = "RSA";
 
 
 	//加密密钥和类型

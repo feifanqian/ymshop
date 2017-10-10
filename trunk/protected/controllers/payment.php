@@ -938,7 +938,7 @@ class PaymentController extends Controller {
                     $aop->alipayrsaPublicKey='MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAscWm/XwJyMw538Cwfqcf+qhTqHHa2dJiJbfDgypVuAI2dpcA/KWRcRut25+E1kUpLqsZ3cgrgqCiUDZk4iLslkWq03YfB/uyzX+ktan9H9STDognRFd5XpjcHnHpwqJAjobsgVa+EKp7AUlCHGJKwmJEtghLcSQ858xErccCLe7bppfkNvurmCbRUQ2u0OzZ4VbNbUIyA6HlyvJo9zSvwzIh2Ggx7fAMKMpX7mfrq+sbea6G92Ci2npgNRezWq6iUueXOhgqqbNSFzK8x7QL+Ka0dBDl0xYOC8+HQh5GdyAS58fBXPlq628LjaQvkwfkScDEoq1t3wbcp+pF83qqjQIDAQAB';
                     $aop->gatewayUrl = 'https://openapi.alipay.com/gateway.do';
                     $aop->apiVersion = '1.0';
-                    $aop->signType = 'RSA2';
+                    $aop->signType = 'RSA';
                     $aop->postCharset='utf-8';
                     $aop->format='json';
                     $request = new AlipayFundTransToaccountTransferRequest();
