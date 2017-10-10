@@ -1248,6 +1248,7 @@ class UcenterController extends Controller {
         // $userinfo = $oauth->getUserInfo();
         $user=$this->model->table('user')->where('id='.$id)->find();
         if($userinfo){
+            var_dump(123);die;
             if($user['avatar']=='/0'){
             $this->model->table('user')->where('id='.$id)->data(array('avatar'=>$userinfo['head']))->update();
             var_dump(111);die;
