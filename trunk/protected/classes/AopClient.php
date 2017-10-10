@@ -1,5 +1,4 @@
 <?php
-namespace protected\classes;
 require_once 'AopEncrypt.php';
 require_once 'SignData.php';
 class AopClient {
