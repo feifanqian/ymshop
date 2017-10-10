@@ -705,7 +705,8 @@ class Tiny {
         'TString' => 'lib/util/string_class.php',
         'PHPMailer' => 'extend/phpmailer/class.phpmailer.php',
         'POP3' => 'extend/phpmailer/class.pop3.php',
-        'SMTP' => 'extend/phpmailer/class.smtp.php'
+        'SMTP' => 'extend/phpmailer/class.smtp.php',
+        'AOPCLIENT'=>'extend/alipay/aop/AopClient.php',
     );
 
 }
