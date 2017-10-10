@@ -1,5 +1,5 @@
 <?php
-namespace protected\controllers;
+
 class PaymentController extends Controller {
 
     public $layout = '';
