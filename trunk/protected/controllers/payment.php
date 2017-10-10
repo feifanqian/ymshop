@@ -940,7 +940,7 @@ class PaymentController extends Controller {
                     $aop->signType = 'RSA2';
                     $aop->postCharset='utf-8';
                     $aop->format='json';
-                    $request = new \Alipay\aop\AlipayFundTransToaccountTransferRequest();
+                    $request = new \Alipay\aop\request\AlipayFundTransToaccountTransferRequest();
                     $request->setBizContent("{" .
                     "\"out_biz_no\":\"{$order_no}\"," . 
                     "\"payee_type\":\"ALIPAY_LOGONID\"," .
