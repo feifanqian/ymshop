@@ -1246,10 +1246,11 @@ class UcenterController extends Controller {
         $userinfo = Session::get('oauth_user_info');
         // $oauth=new WechatOAuth();
         // $userinfo = $oauth->getUserInfo();
-        // $user=$this->model->table('user')->where('id='.$id)->find();
+        $user=$this->model->table('user')->where('id='.$id)->find();
         if($userinfo){
             if($user['avatar']=='/0'){
             $this->model->table('user')->where('id='.$id)->data(array('avatar'=>$userinfo['head']))->update();
+            var_dump(111);die;
           }
         }
         //签到
