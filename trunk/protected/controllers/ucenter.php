@@ -1249,7 +1249,7 @@ class UcenterController extends Controller {
         // $user=$this->model->table('user')->where('id='.$id)->find();
         if($userinfo){
             if($user['avatar']=='/0'){
-            $this->model->table('user')->data(array('avatar'=>$userinfo['head']))->update();
+            $this->model->table('user')->where('id='.$id)->data(array('avatar'=>$userinfo['head']))->update();
           }
         }
         //签到
