@@ -78,6 +78,7 @@ class Menu {
             '/customer/customer_list' => array('name' => '会员管理', 'parent' => 'customer'),
             '/customer/customer_edit' => array('name' => '添加会员', 'parent' => 'customer'),
             '/customer/customer_invite' => array('name' => '会员下线信息', 'parent' => 'customer', 'hidden'=>true),
+            '/customer/customer_invited' => array('name' => '会员上线信息', 'parent' => 'customer', 'hidden'=>true),
             '/customer/grade_list' => array('name' => '会员等级管理', 'parent' => 'customer'),
             '/customer/grade_edit' => array('name' => '添加会员等级', 'parent' => 'customer'),
             '/customer/withdraw_list' => array('name' => '提现申请', 'parent' => 'balance'),

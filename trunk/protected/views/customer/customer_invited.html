@@ -1,0 +1,51 @@
+<h1 class="page_title">查看上线</h1>
+<div id="obj_form" class="form2">
+    <dl class="lineD">
+      <dt><b class="red">*</b> 用户名：</dt>
+      <dd>     
+        <label>{$name}</label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b> 昵称：</dt>
+      <dd>     
+        <label>{$real_name}</label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b> 上级邀请人</dt>
+      {if:isset($inviter_name) }
+      <dd>     
+        <label>{$inviter_name}</label>
+      </dd>
+      {else:}
+      <dd>     
+        <label>无</label>
+      </dd>
+      {/if} 
+    </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b> 上级代理商</dt>
+      {if:isset($promoter_name) }
+      <dd>     
+        <label>{$promoter_name}</label>
+      </dd>
+      {else:}
+      <dd>     
+        <label>无</label>
+      </dd>
+      {/if}
+    </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b> 上级经销商</dt>
+      {if:isset($district_name) }
+      <dd>     
+        <label>{$district_name}</label>
+      </dd>
+      {else:}
+      <dd>     
+        <label>无</label>
+      </dd>
+      {/if}
+    </dl>
+</div>

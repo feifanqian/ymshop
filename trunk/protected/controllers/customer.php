@@ -515,6 +515,45 @@ class CustomerController extends Controller {
         $this->redirect();
     }
 
+    public function customer_invited() {
+        $id = Req::get("id");
+        if ($id) {
+            $model = new Model("customer as c");
+            $customer = $model->join("user as u on c.user_id = u.id")->where("c.user_id=" . $id)->find();
+            $name = $customer['name'];
+            $real_name = $customer['real_name'];
+            $this->assign("name", $name);
+            $this->assign("real_name", $real_name);
+            if ($customer) {
+                $model = new Model("invite");
+                $inviteinfo = $model->where("invite_user_id='{$id}'")->find();
+                if($inviteinfo){
+                    $model1=new Model('customer as c');
+                    $user=$model1->join("user as u on c.user_id = u.id")->fields('c.user_id,c.real_name,u.avatar')->where("c.user_id=" . $inviteinfo['user_id'])->find();
+                    $inviter_name=$user['real_name'];
+                    $avatar=$user['avatar'];
+                    $this->assign("inviter_name", $inviter_name);
+                    $this->assign("avatar", $avatar);
+                    $model2=new Model('district_promoter');
+                    $promoter=$model2->where('user_id='.$inviteinfo['user_id'])->find();
+                    if($promoter){
+                        $model3=new Model('customer');
+                        $promoter_user=$model3->fields('real_name')->where('user_id='.$promoter['user_id'])->find();
+                        $promoter_name=$promoter_user['real_name'];
+                        $this->assign("promoter_name", $promoter_name);
+                    }
+                    $model4=new Model('district_shop');
+                    $district=$model4->fields('name')->where('owner_id='.$inviteinfo['user_id'])->find();
+                    if($district){
+                        $district_name=$district['name'];
+                        $this->assign("district_name", $district_name);
+                    }
+                }
+            }
+        }
+        $this->redirect();
+    }
+
     function get_category($id) {
         $ids = is_array($id) ? $id : explode(',', $id);
         $list = $this->model->table("invite AS inv")->fields('inv.*,us.nickname AS name,us.avatar,cu.real_name AS realname')->where("inv.user_id IN (" . implode(',', $ids) . ")")
