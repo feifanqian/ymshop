@@ -707,6 +707,7 @@ class OrderController extends Controller {
     * 发起实际退款操作
     */
    public function doRefund($payment_id,$order_no,$refund_amount,$pay_time,$user_id,$refund_id){
+    var_dump(222);die;
         if($refund_amount==0||$refund_amount==0.00){
              $result = Order::refunded($refund_id);
                if($result){

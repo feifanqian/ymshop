@@ -64,7 +64,8 @@ class Log {
             "11"=>"收益提取",
             "12"=>"收益撤销",
             "13"=>"收益解锁",
-            "14"=>"下级会员升级奖励"
+            "14"=>"下级会员升级奖励",
+            "15"=>"退款收回收益"
         );
         $model = new model();
        
@@ -91,6 +92,19 @@ class Log {
             $data['valid_income_change'] =  abs($amount);
             $data['frezze_income_change'] = 0 - abs($amount);
             $data['settled_income_change'] =0.00;
+        }else if($type == 15){
+            $customer = $model->table("customer")->where("user_id={$role_id}")->fields("valid_income,frezze_income,settled_income")->find();
+            if($customer['frezze_income']>=abs($amount)){
+                $data['valid_income_change'] =  0.00;
+                $data['frezze_income_change'] = 0 - abs($amount);
+                $data['settled_income_change'] =0.00; 
+            }else{
+                $amount1=abs($amount)-$customer['frezze_income'];
+                $data['valid_income_change'] =  0 - $amount1;
+                $data['frezze_income_change'] = 0 - $customer['frezze_income'];
+                $data['settled_income_change'] =0.00;
+            }
+            
         }else{
             return false;
         }

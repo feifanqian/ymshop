@@ -106,6 +106,7 @@ class pay_wxpayjsapi extends PaymentPlugin {
      */
     //默认全额退款
     public function applyRefund($refundParams){
+        var_dump(123);die;
         WxPayConfig::setConfig($this->getClassConfig());
         $order_no=isset($refundParams['order_no'])?$refundParams['order_no']:"";
         $refund_amount=isset($refundParams['refund_amount'])?$refundParams['refund_amount']:"";
@@ -139,6 +140,10 @@ class pay_wxpayjsapi extends PaymentPlugin {
             if($queryResult!=false && $queryResult['return_code']=="SUCCESS" && $queryResult['result_code']=="SUCCESS"){
                 $refund_info = "钱款已经退至".$queryResult['refund_recv_accout_0'].",系统可能会有延迟，若超过三个工作日未收到请与客服联系";
                 $refund->data(array('bank_handle_time'=>date("Y-m-d H:i:s"),"refund_no"=>$refund_no,'refund_info'=>$refund_info))->where("id =$refund_id")->update();
+                $order_model = new Model("order")->fields('user_id,order_amount,id,')->where('order_no='.$order_no)->find();
+                if($order_model){
+                   Common::backIncomeByInviteShip($order_model); //收回收益
+                }
                 if(Order::refunded($refund_id)){
                        echo json_encode(array('status' => 'success', 'msg' => '退款操作成功，可能会有延迟哦'));
                        exit();

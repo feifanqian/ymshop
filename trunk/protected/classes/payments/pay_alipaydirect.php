@@ -254,6 +254,10 @@ class pay_alipaydirect extends PaymentPlugin {
 	   if(trim($alipay)=='T'){
                $refund = new Model('refund');
                $refund->data(array('bank_handle_time'=>date("Y-m-d H:i:s"),"refund_no"=>$refund_no))->where("id =$refund_id")->update();
+               $order_model = new Model("order")->fields('user_id,order_amount,id,')->where('order_no='.$order_no)->find();
+                if($order_model){
+                   Common::backIncomeByInviteShip($order_model);
+                }
                if(Order::refunded($refund_id)){
                        echo json_encode(array('status' => 'success', 'msg' => '退款操作成功，可能会有延迟哦'));
                        exit();
