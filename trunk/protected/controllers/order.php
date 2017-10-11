@@ -754,7 +754,6 @@ class OrderController extends Controller {
                 exit;
             }
         }else{
-            var_dump($paymentPlugin);die;
                 $refundResult = $paymentPlugin->applyRefund(array('order_no'=>$order_no,'pay_time'=>$pay_time,'refund_amount'=>$refund_amount,'refund_id'=>$refund_id));
                 return $refundResult;
         }
