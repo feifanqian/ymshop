@@ -882,7 +882,13 @@ class Common {
          $order = $model->table('order')->where('order_no='.$order_no)->find();
          $amount = $order['order_amount'];
          $config = Config::getInstance()->get("district_set");
-         $base_balance = round($amount*$config['offline_base_rate']/100,2);
+         // $base_balance = round($amount*$config['offline_base_rate']/100,2);
+         $promoter = $model->table('district_promoter')->fields('base_rate')->where('user_id='.$invite_id)->find();
+         if($promoter){
+            $base_balance = round($amount*$promoter['base_rate']/100,2); //每个商家都有自己的分账比例
+         }else{
+            $base_balance = round($amount*$config['offline_base_rate']/100,2);  //默认比例
+         }
          $balance1 = round($base_balance*$config['promoter_rate']/100,2);
          $balance2 = round($base_balance*$config['district_rate']/100,2);
          $balance3 = round($base_balance*$config['promoter2_rate']/100,2);
