@@ -707,7 +707,6 @@ class OrderController extends Controller {
     * 发起实际退款操作
     */
    public function doRefund($payment_id,$order_no,$refund_amount,$pay_time,$user_id,$refund_id){
-    var_dump(222);die;
         if($refund_amount==0||$refund_amount==0.00){
              $result = Order::refunded($refund_id);
                if($result){
@@ -739,6 +738,10 @@ class OrderController extends Controller {
                Log::balance($refund_amount, $user_id, $order_no, '管理员退款',4);
                $result = Order::refunded($refund_id);
                if($result){
+                   $order_model = new Model("order")->fields('user_id,order_amount,id,')->where('order_no='.$order_no)->find();
+                    if($order_model){
+                       Common::backIncomeByInviteShip($order_model); //收回收益
+                    } 
                    echo json_encode(array('status' => 'success', 'msg' => '已退款至余额'));
                    exit; 
                }else{
