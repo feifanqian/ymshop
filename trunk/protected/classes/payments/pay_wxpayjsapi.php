@@ -106,7 +106,6 @@ class pay_wxpayjsapi extends PaymentPlugin {
      */
     //默认全额退款
     public function applyRefund($refundParams){
-        var_dump(123);die;
         WxPayConfig::setConfig($this->getClassConfig());
         $order_no=isset($refundParams['order_no'])?$refundParams['order_no']:"";
         $refund_amount=isset($refundParams['refund_amount'])?$refundParams['refund_amount']:"";
