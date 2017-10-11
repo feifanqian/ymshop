@@ -1017,4 +1017,33 @@ class DistrictadminController extends Controller {
         $this->assign("wheres", $wheres);
         $this->redirect('radio_customer_selects');
     }
+
+    public function rate_edit(){
+        $id = Req::args("id");
+
+        $promoter = Req::args();
+        if ($id) {
+            $model = new Model("district_promoter as d");
+            $promoter = $model->join("customer as c on c.user_id = d.user_id")->fields('d.id,d.base_rate,c.real_name')->where("d.id=" . $id)->find();
+        }
+        $this->redirect('rate_edit', false, $promoter);
+    }
+
+    public function rate_save(){
+        $id = Req::args("id");
+        $base_rate = Req::args("base_rate");
+        $model = new Model("district_promoter");
+        if($id){
+            $promoter=$model->where('id='.$id)->find();
+            if($promoter){
+                if($base_rate){
+                    $model->data(array('base_rate'=>$base_rate))->where('id='.$id)->update();
+                    $user_model=new Model('customer');
+                    $user=$user_model->fields('real_name')->where('user_id='.$promoter['user_id'])->find();
+                    Log::op($this->manager['id'], "修改分账比例", "管理员[" . $this->manager['name'] . "]:修改了代理商 " . $user['real_name'] . " 的信息");
+                }
+            }
+        }
+        $this->redirect('list_promoter');
+    }
 }
