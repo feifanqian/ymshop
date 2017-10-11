@@ -738,7 +738,8 @@ class OrderController extends Controller {
                Log::balance($refund_amount, $user_id, $order_no, '管理员退款',4);
                $result = Order::refunded($refund_id);
                if($result){
-                   $order_model = new Model("order")->fields('user_id,order_amount,id')->where('order_no='.$order_no)->find();
+                  $ordermodel = new Model("order");
+                   $order_model = $ordermodel->fields('user_id,order_amount,id')->where('order_no='.$order_no)->find();
                     if($order_model){
                        Common::backIncomeByInviteShip($order_model); //收回收益
                     } 
