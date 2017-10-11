@@ -254,7 +254,7 @@ class pay_alipaydirect extends PaymentPlugin {
 	   if(trim($alipay)=='T'){
                $refund = new Model('refund');
                $refund->data(array('bank_handle_time'=>date("Y-m-d H:i:s"),"refund_no"=>$refund_no))->where("id =$refund_id")->update();
-               $order_model = new Model("order")->fields('user_id,order_amount,id,')->where('order_no='.$order_no)->find();
+               $order_model = new Model("order")->fields('user_id,order_amount,id')->where('order_no='.$order_no)->find();
                 if($order_model){
                    Common::backIncomeByInviteShip($order_model);
                 }
