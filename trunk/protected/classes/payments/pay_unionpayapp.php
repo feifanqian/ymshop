@@ -157,6 +157,11 @@ class pay_unionpayapp extends PaymentPlugin {
             return array('status'=>'fail','msg'=>$refundApplyResult['respMsg']);
         }else{
             $refund->data(array('bank_handle_time'=>date("Y-m-d H:i:s"),'refund_progress'=>2,'refund_no'=>'R'.$order_no))->where("id =$refund_id")->update();
+            $ordermodel = new Model("order");
+                $order_model = $ordermodel->fields('user_id,order_amount,id')->where('order_no='.$order_no)->find();
+                if($order_model){
+                   Common::backIncomeByInviteShip($order_model); //收回收益
+                }
             return array('status'=>'success','msg'=>'退款申请已经提交至银行处理');
         }     
     }
