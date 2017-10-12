@@ -552,7 +552,11 @@ class CustomerController extends Controller {
                     $district=$model4->fields('name')->where('id='.$inviteinfo['district_id'])->find();
                     if($district){
                         $district_name=$district['name'];
-                        $this->assign("district_name", $district_name);//上级邀请人同时也是经销商
+                        $this->assign("district_name", $district_name);//上级经销商
+                        $model3=new Model('customer');
+                        $district_user=$model3->fields('real_name')->where('user_id='.$district['owner_id'])->find();
+                        $district_realname=$district_user['real_name'];
+                        $this->assign("district_realname", $district_realname);//上级经销商真实名字
                     }
                 }
             }
