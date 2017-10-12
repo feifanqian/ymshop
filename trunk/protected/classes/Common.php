@@ -945,7 +945,7 @@ class Common {
             $exist=$model->table('customer')->where('user_id='.$district1['owner_id'])->find();
             if($exist){
                 $model->table('customer')->where('user_id='.$district1['owner_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成
-                Log::balance($balance3, $invite_id, $order_no,'线下消费上级经销商提成', 8);
+                Log::balance($balance3, $district1['owner_id'], $order_no,'线下消费上级经销商提成', 8);
             }  
          }
 
