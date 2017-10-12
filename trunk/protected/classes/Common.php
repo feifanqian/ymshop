@@ -932,6 +932,7 @@ class Common {
          Log::balance($balance1, $promoter_id, $order_no,'线下消费上级邀请人提成', 8);
          
          if($promoter_id){
+            var_dump(111);die;
             $model->table('customer')->where('user_id='.$promoter_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成
             Log::balance($balance2, $promoter_id, $order_no,'线下消费上级代理商提成', 8);
          }
