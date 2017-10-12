@@ -928,7 +928,7 @@ class Common {
 
          $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级邀请人提成
          Log::balance($balance1, $promoter_id, $order_no,'线下消费上级邀请人提成', 8);
-         
+         var_dump(111);die;
         $model->table('customer')->where('user_id='.$promoter_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成
         Log::balance($balance2, $promoter_id, $order_no,'线下消费上级代理商提成', 8);
          
@@ -940,7 +940,6 @@ class Common {
          // }
          
          if($district1){
-            var_dump(111);die;
             $exist=$model->table('customer')->where('user_id='.$district1['owner_id'])->find();
             if($exist){
                 $model->table('customer')->where('user_id='.$district1['owner_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成
