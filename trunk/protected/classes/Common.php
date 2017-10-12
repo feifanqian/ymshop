@@ -902,7 +902,7 @@ class Common {
      }
 
      static function offlineBeneficial($order_no,$invite_id){//线下分账
-         var_dump($invite_id);die;
+         // var_dump($invite_id);die;
          $model = new Model();
          $order = $model->table('order')->where('order_no='.$order_no)->find();
          $amount = $order['order_amount'];
@@ -940,6 +940,7 @@ class Common {
          // }
          
          if($district1){
+            var_dump(111);die;
             $exist=$model->table('customer')->where('user_id='.$district1['owner_id'])->find();
             if($exist){
                 $model->table('customer')->where('user_id='.$district1['owner_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成
