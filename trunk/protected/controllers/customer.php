@@ -532,7 +532,7 @@ class CustomerController extends Controller {
                     $user=$model1->join("user as u on c.user_id = u.id")->fields('c.user_id,c.real_name,u.avatar')->where("c.user_id=" . $inviteinfo['user_id'])->find();
                     $inviter_name=$user['real_name'];
                     $avatar=$user['avatar'];
-                    $this->assign("inviter_name", $inviter_name);
+                    $this->assign("inviter_name", $inviter_name);//上级邀请人
                     $this->assign("avatar", $avatar);
                     $model2=new Model('district_promoter');
                     $promoter=$model2->where('user_id='.$inviteinfo['user_id'])->find();
@@ -546,12 +546,13 @@ class CustomerController extends Controller {
                     $model3=new Model('customer');
                     $promoter_user=$model3->fields('real_name')->where('user_id='.$promoter_id)->find();
                     $promoter_name=$promoter_user['real_name'];
-                    $this->assign("promoter_name", $promoter_name);
+                    $this->assign("promoter_name", $promoter_name);//上级代理商
                     $model4=new Model('district_shop');
-                    $district=$model4->fields('name')->where('owner_id='.$inviteinfo['user_id'])->find();
+                    // $district=$model4->fields('name')->where('owner_id='.$inviteinfo['user_id'])->find();
+                    $district=$model4->fields('name')->where('id='.$inviteinfo['district_id'])->find();
                     if($district){
                         $district_name=$district['name'];
-                        $this->assign("district_name", $district_name);
+                        $this->assign("district_name", $district_name);//上级邀请人同时也是经销商
                     }
                 }
             }
