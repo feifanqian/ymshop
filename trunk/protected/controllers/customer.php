@@ -536,12 +536,17 @@ class CustomerController extends Controller {
                     $this->assign("avatar", $avatar);
                     $model2=new Model('district_promoter');
                     $promoter=$model2->where('user_id='.$inviteinfo['user_id'])->find();
-                    if($promoter){
-                        $model3=new Model('customer');
-                        $promoter_user=$model3->fields('real_name')->where('user_id='.$promoter['user_id'])->find();
-                        $promoter_name=$promoter_user['real_name'];
-                        $this->assign("promoter_name", $promoter_name);
-                    }
+                    // if($promoter){
+                    //     $model3=new Model('customer');
+                    //     $promoter_user=$model3->fields('real_name')->where('user_id='.$promoter['user_id'])->find();
+                    //     $promoter_name=$promoter_user['real_name'];
+                    //     $this->assign("promoter_name", $promoter_name);
+                    // }
+                    $promoter_id=Common::getFirstPromoter($id);
+                    $model3=new Model('customer');
+                    $promoter_user=$model3->fields('real_name')->where('user_id='.$promoter_id)->find();
+                    $promoter_name=$promoter_user['real_name'];
+                    $this->assign("promoter_name", $promoter_name);
                     $model4=new Model('district_shop');
                     $district=$model4->fields('name')->where('owner_id='.$inviteinfo['user_id'])->find();
                     if($district){
