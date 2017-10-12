@@ -921,11 +921,11 @@ class Common {
          
          $user_id = $order['user_id']; 
          $promoter_id = self::getFirstPromoter($user_id);
-         
+         var_dump(111);die;
          $district = $model->table('district_shop')->where('owner_id='.$invite_id)->find();
          $invite = $model->table('invite')->fields('district_id')->where("invite_user_id=".$user_id)->find();
          $district1 = $model->table('district_shop')->fields('owner_id')->where('id='.$invite['district_id'])->find();
-         var_dump(111);die;      
+               
          $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级邀请人提成
          Log::balance($balance1, $promoter_id, $order_no,'线下消费上级邀请人提成', 8);
          
