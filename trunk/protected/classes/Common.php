@@ -921,28 +921,41 @@ class Common {
          
          $user_id = $order['user_id']; 
          $promoter_id = self::getFirstPromoter($user_id);
-
-         $district = $model->table('district_shop')->where('owner_id='.$invite_id)->find();
-
-         $model->table('customer')->where('user_id='.$promoter_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级代理商提成
-         Log::balance($balance1, $promoter_id, $order_no,'线下消费上级代理商提成', 8);
          
-         //上级邀请人是经销商
-         if($district){
-            $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级经销商提成
-            Log::balance($balance2, $invite_id, $order_no,'线下消费上级经销商提成', 8);
+         $district = $model->table('district_shop')->where('owner_id='.$invite_id)->find();
+         $invite = $model->table('invite')->fields('district_id')->where("invite_user_id=".$user_id)->find();
+         $district1 = $model->table('district_shop')->fields('owner_id')->where('id='.$invite['district_id'])->find();
+
+         $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级邀请人提成
+         Log::balance($balance1, $promoter_id, $order_no,'线下消费上级邀请人提成', 8);
+         
+        $model->table('customer')->where('user_id='.$promoter_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成
+        Log::balance($balance2, $promoter_id, $order_no,'线下消费上级代理商提成', 8);
+         
+         
+         // //上级邀请人是经销商
+         // if($district){
+         //    $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级经销商提成
+         //    Log::balance($balance2, $invite_id, $order_no,'线下消费上级经销商提成', 8);
+         // }
+         
+         if($district1){
+            $exist=$model->table('customer')->where('user_id='.$district1['owner_id'])->find();
+            if($exist){
+                $model->table('customer')->where('user_id='.$district1['owner_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成
+                Log::balance($balance3, $invite_id, $order_no,'线下消费上级经销商提成', 8);
+            }  
          }
 
-         $invite2 = $model->table('invite')->where("invite_user_id=".$promoter_id)->find();
-         if($invite2){
-            $model->table('customer')->where('user_id='.$invite2['user_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//代理商上级邀请人提成
-            Log::balance($balance3, $invite2['user_id'], $order_no,'线下消费代理商上级邀请人提成', 8);
-         }
-
-         if($invite_id!=1){
+         // $invite2 = $model->table('invite')->where("invite_user_id=".$promoter_id)->find();
+         // if($invite2){
+         //    $model->table('customer')->where('user_id='.$invite2['user_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//代理商上级邀请人提成
+         //    Log::balance($balance3, $invite2['user_id'], $order_no,'线下消费代理商上级邀请人提成', 8);
+         // }
+         
             $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance4})"))->update();//平台收益提成
             Log::balance($balance4, 1, $order_no,'线下会员消费平台收益', 8);
-         }
+         
      }
 
      static function testAlipay($order_no){

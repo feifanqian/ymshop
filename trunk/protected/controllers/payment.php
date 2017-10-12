@@ -928,7 +928,9 @@ class PaymentController extends Controller {
                 if($order['type']==8){//线下分账
                  $seller_id=$order['shop_ids'];
                  $invite_id=Session::get('invite_id');
-                 if($seller_id!=$invite_id){
+                 //上级代理商是卖家的话不参与分账
+                 $promoter_id=Common::getFirstPromoter($order['user_id']);
+                 if($seller_id!=$promoter_id){
                     Common::offlineBeneficial($order_no,$invite_id);
                     // Common::testAlipay($order_no);
                     // $aopsdk = new AopSdk();
