@@ -925,15 +925,16 @@ class Common {
          $district = $model->table('district_shop')->where('owner_id='.$invite_id)->find();
 
          $invite = $model->table('invite')->fields('district_id')->where("invite_user_id=".$user_id)->find();
-         
+
          $district1 = $model->table('district_shop')->fields('owner_id')->where('id='.$invite['district_id'])->find();
                
          $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级邀请人提成
          Log::balance($balance1, $promoter_id, $order_no,'线下消费上级邀请人提成', 8);
          
-        $model->table('customer')->where('user_id='.$promoter_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成
-        Log::balance($balance2, $promoter_id, $order_no,'线下消费上级代理商提成', 8);
-        var_dump(111);die; 
+         if($promoter_id){
+            $model->table('customer')->where('user_id='.$promoter_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成
+            Log::balance($balance2, $promoter_id, $order_no,'线下消费上级代理商提成', 8);
+         }
          
          // //上级邀请人是经销商
          // if($district){
