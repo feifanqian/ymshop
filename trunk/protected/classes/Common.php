@@ -925,8 +925,9 @@ class Common {
          $district = $model->table('district_shop')->where('owner_id='.$invite_id)->find();
 
          $invite = $model->table('invite')->fields('district_id')->where("invite_user_id=".$user_id)->find();
-
-         $district1 = $model->table('district_shop')->fields('owner_id')->where('id='.$invite['district_id'])->find();      
+         if($invite){
+            $district1 = $model->table('district_shop')->fields('owner_id')->where('id='.$invite['district_id'])->find();
+         }         
          $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级邀请人提成
          Log::balance($balance1, $invite_id, $order_no,'线下消费上级邀请人提成', 8);
          
@@ -941,7 +942,7 @@ class Common {
          //    Log::balance($balance2, $invite_id, $order_no,'线下消费上级经销商提成', 8);
          // }
          
-         if($district1){
+         if(isset($district1) && $district1!=null){
             $exist=$model->table('customer')->where('user_id='.$district1['owner_id'])->find();
             if($exist){
                 $model->table('customer')->where('user_id='.$district1['owner_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成
