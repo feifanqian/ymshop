@@ -902,7 +902,7 @@ class Common {
      }
 
      static function offlineBeneficial($order_no,$invite_id){//线下分账
-         var_dump($invite_id);die;
+         // var_dump($invite_id);die;
          $model = new Model();
          $order = $model->table('order')->where('order_no='.$order_no)->find();
          $amount = $order['order_amount'];
