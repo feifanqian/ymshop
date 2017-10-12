@@ -549,7 +549,7 @@ class CustomerController extends Controller {
                     $this->assign("promoter_name", $promoter_name);//上级代理商
                     $model4=new Model('district_shop');
                     // $district=$model4->fields('name')->where('owner_id='.$inviteinfo['user_id'])->find();
-                    $district=$model4->fields('name')->where('id='.$inviteinfo['district_id'])->find();
+                    $district=$model4->fields('name,owner_id')->where('id='.$inviteinfo['district_id'])->find();
                     if($district){
                         $district_name=$district['name'];
                         $this->assign("district_name", $district_name);//上级经销商
