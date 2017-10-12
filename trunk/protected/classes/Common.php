@@ -923,8 +923,9 @@ class Common {
          $promoter_id = self::getFirstPromoter($user_id);
          
          $district = $model->table('district_shop')->where('owner_id='.$invite_id)->find();
-         var_dump(111);die;
+
          $invite = $model->table('invite')->fields('district_id')->where("invite_user_id=".$user_id)->find();
+         var_dump(111);die;
          $district1 = $model->table('district_shop')->fields('owner_id')->where('id='.$invite['district_id'])->find();
                
          $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级邀请人提成
