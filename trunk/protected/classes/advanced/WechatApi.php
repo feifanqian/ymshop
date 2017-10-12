@@ -185,7 +185,23 @@ class WechatApi extends Wechat {
                         }
                     } else {
                         $model->data(array('user_id' => $user_id, 'openid' => $tousername, 'invite_openid' => $fromusername, 'createtime' => time()))->insert();
+                        $oauth_model=new Model('oauth_user');
+                        $oauth=$oauth_model->fields('user_id')->where("open_id='{$fromusername}'")->find();
+                        if($oauth){
+                            $invite_model=new Model('invite');
+                            $invite_user=$invite_model->fields('user_id,district_id')->where('invite_user_id='.$user_id)->find();
+                            $exist=$invite_model->where('invite_user_id='.$oauth['user_id'])->find();
+                            if(empty($exist)){
+                                    if($invite_user){
+                                    $district_id=$invite_user['district_id'];
+                                }else{
+                                    $district_id=1;
+                                }
+                                $invite_model->data(array('user_id'=>$user_id,'invite_user_id'=>$oauth['user_id'],'from'=>'wechat','district_id'=>$district_id,'createtime'=>time()))->insert();
+                            }
+                         }
                     }
+                    
                 }
            }
         }
