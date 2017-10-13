@@ -446,7 +446,7 @@ class SimpleController extends Controller {
                            }
                            header("Location:$url");
                         }else{
-                           header("Location:/");
+                           header("Location:/index/index");
                         }
                         //header("Location:/user/firstbind");
                         }      
@@ -459,7 +459,7 @@ class SimpleController extends Controller {
                            }
                            header("Location:$url");
                         }else{
-                           header("Location:/");
+                           header("Location:/index/index");
                         }
                     }
                     exit;
@@ -481,7 +481,7 @@ class SimpleController extends Controller {
             $userinfo['oauth_type'] = $type;
             
             if ($type == 'wechat') {
-                var_dump(333);die;
+                // var_dump(333);die;
                 $str='http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 $passWord = CHash::random(6);
                 $nickname = $userinfo['open_name'];
