@@ -525,6 +525,7 @@ class SimpleController extends Controller {
                 }elseif(strpos($str,'district')){
                     $this->redirect("/district/login");
                 }else{
+                    var_dump(123);die;
                     $this->redirect("/index/index");
                 }       
                 exit;

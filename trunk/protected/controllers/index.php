@@ -1569,8 +1569,8 @@ class IndexController extends Controller {
             $url = $wechat->getRequestCodeURL();
             // var_dump($url);die;
             $this->redirect($url);
-            // exit;
-            $this->redirect("/index/index");
+            exit;
+            // $this->redirect("/index/index");
         }
         $this->redirect("/simple/login");
     }
