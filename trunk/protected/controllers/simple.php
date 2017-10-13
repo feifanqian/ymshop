@@ -444,7 +444,8 @@ class SimpleController extends Controller {
                            if(strpos($url, '/')!==0){
                                 $url = "/".$url;
                            }
-                           header("Location:$url");
+                           // header("Location:$url");
+                           header("Location:/index/index");
                         }else{
                            header("Location:/index/index");
                         }
