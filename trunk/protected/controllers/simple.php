@@ -427,7 +427,6 @@ class SimpleController extends Controller {
         $token = $oauth->getAccessToken($code, $extend);
         $userinfo = $oauth->getUserInfo();
         if (!empty($userinfo)) {
-            var_dump(111);die;
             $oauth_user = $this->model->table('oauth_user');
             $is_oauth = $oauth_user->fields('user_id')
                     ->where('open_id="' . $token['openid'] . '" and oauth_type="' . $type . '"')
@@ -482,6 +481,7 @@ class SimpleController extends Controller {
             $userinfo['oauth_type'] = $type;
             
             if ($type == 'wechat') {
+                var_dump(333);die;
                 $str='http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 $passWord = CHash::random(6);
                 $nickname = $userinfo['open_name'];
