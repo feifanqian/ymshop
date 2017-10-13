@@ -1570,6 +1570,7 @@ class IndexController extends Controller {
             // var_dump($url);die;
             $this->redirect($url);
             // exit;
+            $this->redirect("/index/index");
         }
         $this->redirect("/simple/login");
     }
