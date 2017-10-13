@@ -95,7 +95,6 @@ class Log {
         }else if($type == 15){
             $role_id=intval($role_id);
             $customer = $model->table("customer")->where("user_id={$role_id}")->fields("valid_income,frezze_income,settled_income")->find();
-            var_dump($customer);die;
             if($customer){
                 if($customer['frezze_income']>=abs($amount)){
                     $data['valid_income_change'] =  0.00;
