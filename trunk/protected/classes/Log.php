@@ -93,6 +93,7 @@ class Log {
             $data['frezze_income_change'] = 0 - abs($amount);
             $data['settled_income_change'] =0.00;
         }else if($type == 15){
+            var_dump($role_id);die;
             $customer = $model->table("customer")->where("user_id={$role_id}")->fields("valid_income,frezze_income,settled_income")->find();
             if($customer){
                 if($customer['frezze_income']>=abs($amount)){
@@ -105,6 +106,10 @@ class Log {
                     $data['frezze_income_change'] = 0 - $customer['frezze_income'];
                     $data['settled_income_change'] =0.00;
                 }
+            }else{
+                $data['valid_income_change'] =  0.00;
+                $data['frezze_income_change'] = 0.00;
+                $data['settled_income_change'] =0.00;
             }      
         }else{
             return false;
