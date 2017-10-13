@@ -514,6 +514,7 @@ class SimpleController extends Controller {
                 // $this->redirect("/ucenter/firstbind");
                 $demo = Session::get('demo');
                 $pid = Session::get('product_id');
+                var_dump($str);die;
                 if(strpos($str,'user')){
                     $this->redirect("/ucenter/index");
                 }elseif($demo!=null && $demo==1){
@@ -525,7 +526,7 @@ class SimpleController extends Controller {
                 }elseif(strpos($str,'district')){
                     $this->redirect("/district/login");
                 }else{
-                    var_dump(123);die;
+                    // var_dump(123);die;
                     $this->redirect("/index/index");
                 }       
                 exit;
