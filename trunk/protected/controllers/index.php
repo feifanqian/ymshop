@@ -1567,6 +1567,7 @@ class IndexController extends Controller {
             Cookie::set("url", Url::pathinfo());
             $wechat = new WechatOAuth();
             $url = $wechat->getRequestCodeURL();
+            var_dump($url);die;
             $this->redirect($url);
             exit;
         }
