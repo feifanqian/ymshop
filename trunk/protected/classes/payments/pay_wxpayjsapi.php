@@ -132,7 +132,7 @@ class pay_wxpayjsapi extends PaymentPlugin {
 	$result = WxPayApi::refund($input);
         $refund = new Model("refund");
         
-        if($result['return_code']=="SUCCESS" && $result['result_code']=="SUCCESS"){
+        if($result['return_code']=="SUCCESS"){
             //查询是退款到哪里
             $refund = new Model("refund");
             $queryResult = $this->Query(array('wx_refund_id'=>$result['refund_id']));
