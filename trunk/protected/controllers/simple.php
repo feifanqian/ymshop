@@ -414,6 +414,7 @@ class SimpleController extends Controller {
      * @return void
      */
     function callback() {
+        var_dump(222);die;
         $type = Filter::sql(Req::args('type'));
         $code = Filter::sql(Req::args('code'));
         (empty($type) || empty($code)) && die('参数错误');
@@ -427,6 +428,7 @@ class SimpleController extends Controller {
         $token = $oauth->getAccessToken($code, $extend);
         $userinfo = $oauth->getUserInfo();
         if (!empty($userinfo)) {
+            var_dump(111);die;
             $oauth_user = $this->model->table('oauth_user');
             $is_oauth = $oauth_user->fields('user_id')
                     ->where('open_id="' . $token['openid'] . '" and oauth_type="' . $type . '"')
@@ -514,7 +516,7 @@ class SimpleController extends Controller {
                 // $this->redirect("/ucenter/firstbind");
                 $demo = Session::get('demo');
                 $pid = Session::get('product_id');
-                var_dump($str);die;
+                // var_dump($str);die;
                 if(strpos($str,'user')){
                     $this->redirect("/ucenter/index");
                 }elseif($demo!=null && $demo==1){
