@@ -717,7 +717,7 @@ class UcenterController extends Controller {
                 ->fields("i.*,u.nickname,u.avatar,cu.real_name")
                 ->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")
                 ->where("i.user_id = " . $this->user['id'])
-                ->findPage($page,5);
+                ->findPage($page,10);
         $this->assign("invite", $invite);
         $this->assign("seo_title", "我的邀请");
         $this->redirect();
