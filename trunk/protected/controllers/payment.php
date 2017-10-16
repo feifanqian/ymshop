@@ -586,10 +586,10 @@ class PaymentController extends Controller {
         $params["cusid"] = AppConfig::CUSID;
         $params["appid"] = AppConfig::APPID;
         $params["version"] = AppConfig::APIVERSION;
-        $params["trxamt"] = "{order_amount}";
-        $params["reqsn"] = "{$order_no}";//订单号,自行生成
+        $params["trxamt"] = $order_amount;
+        $params["reqsn"] = $order_no;//订单号,自行生成
         $params["paytype"] = "W02";
-        $params["randomstr"] = "{$randomstr}";//
+        $params["randomstr"] = $randomstr;//
         $params["body"] = "商品名称";
         $params["remark"] = "备注信息";
         $params["acct"] = "openid";
