@@ -456,125 +456,198 @@ class PaymentController extends Controller {
         }
     }
 
-    public function dopays() { //线下支付方式
-        // 获得payment_id 获得相关参数
-        $payment_id = Filter::int(Req::args('payment_id'));
-        $order_no = Req::args('order_no');
-        $order_amount = Req::args('order_amount');
-        $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
-        // $oauth = new WechatOAuth();
-        // $userinfo = $oauth->getUserInfo();
-        $user_id = $this->user['id'];
-        $invite=$this->model->table('invite')->where('invite_user_id='.$user_id)->find();
-        if($invite){
-            $invite_id=$invite['user_id'];//邀请人用户id
-        }else{
-            $invite_id=1;
-        }
-        Session::set('invite_id',$invite_id);
-        $shop=$this->model->table('district_shop')->fields('id,owner_id')->where('owner_id='.$invite_id)->find();
-        if($shop){
-            $district_id=$shop['owner_id'];
-        }else{
-            $district_id=1;
-        }
+    // public function dopays() { //线下支付方式
+    //     // 获得payment_id 获得相关参数
+    //     $payment_id = Filter::int(Req::args('payment_id'));
+    //     $order_no = Req::args('order_no');
+    //     $order_amount = Req::args('order_amount');
+    //     $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
+    //     // $oauth = new WechatOAuth();
+    //     // $userinfo = $oauth->getUserInfo();
+    //     $user_id = $this->user['id'];
+    //     $invite=$this->model->table('invite')->where('invite_user_id='.$user_id)->find();
+    //     if($invite){
+    //         $invite_id=$invite['user_id'];//邀请人用户id
+    //     }else{
+    //         $invite_id=1;
+    //     }
+    //     Session::set('invite_id',$invite_id);
+    //     $shop=$this->model->table('district_shop')->fields('id,owner_id')->where('owner_id='.$invite_id)->find();
+    //     if($shop){
+    //         $district_id=$shop['owner_id'];
+    //     }else{
+    //         $district_id=1;
+    //     }
 
-        $shop_id=1;
+    //     $shop_id=1;
         
-        $accept_name = Session::get('openname');
-        $data['type']=8;
-        $data['order_no'] = $order_no;
-        $data['user_id'] = $user_id;
-        $data['payment'] = $payment_id;
-        $data['status'] = 2; 
-        $data['pay_status'] = 0;
-        $data['accept_name'] = $accept_name;
-        $data['phone'] = '';
-        $data['mobile'] = '';
-        $data['province'] = '';
-        $data['city'] = '';
-        $data['county'] = '';
-        $data['addr'] = '';
-        $data['zip'] = '';
-        $data['payable_amount'] = $order_amount;
-        $data['payable_freight'] = 0;
-        $data['real_freight'] = 0;
-        $data['create_time'] = date('Y-m-d H:i:s');
-        $data['pay_time'] = date("Y-m-d H:i:s");
-        $data['is_invoice'] = 0;
-        $data['handling_fee'] = 0;
-        $data['invoice_title'] = '';
-        $data['taxes'] = 0;
-        $data['discount_amount'] = 0;
-        $data['order_amount'] = $order_amount;
-        $data['real_amount'] = $order_amount;
-        $data['point'] = 0;
-        $data['voucher_id'] = 0;
-        $data['voucher'] = serialize(array());
-        $data['prom_id']=0;
-        $data['admin_remark']="";
-        $data['shop_ids']=$seller_id;
-        $model = new Model('order');
-        $order_id=$model->data($data)->insert();
-        $extendDatas = Req::args();
-        if ($payment_id) {
-            $payment = new Payment($payment_id);
-            $paymentPlugin = $payment->getPaymentPlugin();
-            if (!is_object($paymentPlugin)) {
-                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付方式不存在，或被禁用'));
-                exit();
-            }
-            $payment_info = $payment->getPayment();
-             if ($order_id != null) {
+    //     $accept_name = Session::get('openname');
+    //     $data['type']=8;
+    //     $data['order_no'] = $order_no;
+    //     $data['user_id'] = $user_id;
+    //     $data['payment'] = $payment_id;
+    //     $data['status'] = 2; 
+    //     $data['pay_status'] = 0;
+    //     $data['accept_name'] = $accept_name;
+    //     $data['phone'] = '';
+    //     $data['mobile'] = '';
+    //     $data['province'] = '';
+    //     $data['city'] = '';
+    //     $data['county'] = '';
+    //     $data['addr'] = '';
+    //     $data['zip'] = '';
+    //     $data['payable_amount'] = $order_amount;
+    //     $data['payable_freight'] = 0;
+    //     $data['real_freight'] = 0;
+    //     $data['create_time'] = date('Y-m-d H:i:s');
+    //     $data['pay_time'] = date("Y-m-d H:i:s");
+    //     $data['is_invoice'] = 0;
+    //     $data['handling_fee'] = 0;
+    //     $data['invoice_title'] = '';
+    //     $data['taxes'] = 0;
+    //     $data['discount_amount'] = 0;
+    //     $data['order_amount'] = $order_amount;
+    //     $data['real_amount'] = $order_amount;
+    //     $data['point'] = 0;
+    //     $data['voucher_id'] = 0;
+    //     $data['voucher'] = serialize(array());
+    //     $data['prom_id']=0;
+    //     $data['admin_remark']="";
+    //     $data['shop_ids']=$seller_id;
+    //     $model = new Model('order');
+    //     $order_id=$model->data($data)->insert();
+    //     $extendDatas = Req::args();
+    //     if ($payment_id) {
+    //         $payment = new Payment($payment_id);
+    //         $paymentPlugin = $payment->getPaymentPlugin();
+    //         if (!is_object($paymentPlugin)) {
+    //             $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付方式不存在，或被禁用'));
+    //             exit();
+    //         }
+    //         $payment_info = $payment->getPayment();
+    //          if ($order_id != null) {
                 
-                $order = $model->where('id=' . $order_id)->find();
-                if ($order['pay_status'] == '1') {
-                    $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '已付款订单，无法再次进行支付。'));
-                    exit();
-                }
-                if ($order) {
-                    if ($order['order_amount'] == 0 && $payment_info['class_name'] != 'balance') {
-                        $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '0元订单，仅限预付款支付，请选择预付款支付方式。'));
-                        exit();
-                    }
-                    //获取订单可能延时时长，0不限制
-                    $config = Config::getInstance();
-                    $config_other = $config->get('other');
-                    $order_delay = 0;
-                    $time = strtotime("-" . $order_delay . " Minute");
-                    $create_time = strtotime($order['create_time']);
-                    $packData = $payment->getPaymentInfo('order', $order_id);
-                    $packData = array_merge($extendDatas, $packData);
+    //             $order = $model->where('id=' . $order_id)->find();
+    //             if ($order['pay_status'] == '1') {
+    //                 $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '已付款订单，无法再次进行支付。'));
+    //                 exit();
+    //             }
+    //             if ($order) {
+    //                 if ($order['order_amount'] == 0 && $payment_info['class_name'] != 'balance') {
+    //                     $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '0元订单，仅限预付款支付，请选择预付款支付方式。'));
+    //                     exit();
+    //                 }
+    //                 //获取订单可能延时时长，0不限制
+    //                 $config = Config::getInstance();
+    //                 $config_other = $config->get('other');
+    //                 $order_delay = 0;
+    //                 $time = strtotime("-" . $order_delay . " Minute");
+    //                 $create_time = strtotime($order['create_time']);
+    //                 $packData = $payment->getPaymentInfo('order', $order_id);
+    //                 $packData = array_merge($extendDatas, $packData);
 
-                    $sendData = $paymentPlugin->packData($packData);
-                            if (!$paymentPlugin->isNeedSubmit()) {
-                                exit();
-                            }
+    //                 $sendData = $paymentPlugin->packData($packData);
+    //                         if (!$paymentPlugin->isNeedSubmit()) {
+    //                             exit();
+    //                         }
                          
                     
-                }
-            }
-            if (!empty($sendData)) {
-                $this->assign("paymentPlugin", $paymentPlugin);
-                $this->assign("sendData", $sendData);
-                if ($paymentPlugin instanceof pay_balance) {
-                    $model = new Model('user as us');
-                    $userInfo = $model->join('left join customer as cu on us.id = cu.user_id')->where('cu.user_id = ' . $this->user['id'])->find();
-                    if ($userInfo['pay_password_open'] == 1) {
-                        $this->assign('pay_balance', true);
-                        $this->assign('userInfo', $userInfo);
-                        $this->assign('order_id', $order_id);
-                        $this->assign('payment_id', $payment_id);
-                    }
-                }
-                $this->redirect('pay_form', false);
-            } else {
-                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '需要支付的订单已经不存在。'));
-                exit();
-            }
-        } else {
-            echo "fail";
+    //             }
+    //         }
+    //         if (!empty($sendData)) {
+    //             $this->assign("paymentPlugin", $paymentPlugin);
+    //             $this->assign("sendData", $sendData);
+    //             if ($paymentPlugin instanceof pay_balance) {
+    //                 $model = new Model('user as us');
+    //                 $userInfo = $model->join('left join customer as cu on us.id = cu.user_id')->where('cu.user_id = ' . $this->user['id'])->find();
+    //                 if ($userInfo['pay_password_open'] == 1) {
+    //                     $this->assign('pay_balance', true);
+    //                     $this->assign('userInfo', $userInfo);
+    //                     $this->assign('order_id', $order_id);
+    //                     $this->assign('payment_id', $payment_id);
+    //                 }
+    //             }
+    //             $this->redirect('pay_form', false);
+    //         } else {
+    //             $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '需要支付的订单已经不存在。'));
+    //             exit();
+    //         }
+    //     } else {
+    //         echo "fail";
+    //     }
+    // }
+
+    public function dopays(){
+        $order_no = Req::args('order_no');
+        $order_amount = Req::args('order_amount')*100;
+        $randomstr=rand(1000000000000,9999999999999);
+
+        $params = array();
+        $params["cusid"] = AppConfig::CUSID;
+        $params["appid"] = AppConfig::APPID;
+        $params["version"] = AppConfig::APIVERSION;
+        $params["trxamt"] = "{order_amount}";
+        $params["reqsn"] = "{$order_no}";//订单号,自行生成
+        $params["paytype"] = "W02";
+        $params["randomstr"] = "{$randomstr}";//
+        $params["body"] = "商品名称";
+        $params["remark"] = "备注信息";
+        $params["acct"] = "openid";
+        $params["limit_pay"] = "no_credit";
+        $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
+        $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
+        
+        $paramsStr = AppUtil::ToUrlParams($params);
+        $url = AppConfig::APIURL . "/pay";
+        $rsp = request($url, $paramsStr);
+        echo "请求返回:".$rsp;
+        echo "<br/>";
+        $rspArray = json_decode($rsp, true); 
+        if(validSign($rspArray)){
+            echo "验签正确,进行业务处理";die;
+        }else{
+            echo "error";die;
         }
+    }
+
+    //发送请求操作仅供参考,不为最佳实践
+    function request($url,$params){
+        $ch = curl_init();
+        $this_header = array("content-type: application/x-www-form-urlencoded;charset=UTF-8");
+        curl_setopt($ch,CURLOPT_HTTPHEADER,$this_header);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+         
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);//如果不加验证,就设false,商户自行处理
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+         
+        $output = curl_exec($ch);
+        curl_close($ch);
+        return  $output;
+    }
+
+    //验签
+    function validSign($array){
+        if("SUCCESS"==$array["retcode"]){
+            $signRsp = strtolower($array["sign"]);
+            $array["sign"] = "";
+            $sign =  strtolower(AppUtil::SignArray($array, AppConfig::APPKEY));
+            if($sign==$signRsp){
+                return TRUE;
+            }
+            else {
+                echo "验签失败:".$signRsp."--".$sign;
+            }
+        }
+        else{
+            echo $array["retmsg"];
+        }
+        
+        return FALSE;
     }
 
     public function notify() {
