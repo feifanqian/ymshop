@@ -599,11 +599,11 @@ class PaymentController extends Controller {
         
         $paramsStr = AppUtil::ToUrlParams($params);
         $url = AppConfig::APIURL . "/pay";
-        $rsp = Common::request($url, $paramsStr);
+        $rsp = AppUtil::Request($url, $paramsStr);
         echo "请求返回:".$rsp;
         echo "<br/>";
         $rspArray = json_decode($rsp, true); 
-        if(Common::validSign($rspArray)){
+        if(AppUtil::ValidSigns($rspArray)){
             echo "验签正确,进行业务处理";die;
         }else{
             echo "error";die;
