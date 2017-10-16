@@ -579,7 +579,7 @@ class PaymentController extends Controller {
 
     public function dopays(){
         $order_no = Req::args('order_no');
-        $order_amount = Req::args('order_amount')*100;
+        $order_amount = (Req::args('order_amount'))*100;
         $randomstr=rand(1000000000000,9999999999999);
 
         $params = array();
