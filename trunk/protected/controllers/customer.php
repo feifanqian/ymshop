@@ -421,6 +421,7 @@ class CustomerController extends Controller {
         $users = $model->table("user")->where("id $cond")->findAll();
         $model->table("customer")->where("user_id $cond")->delete();
         $model->table("user")->where("id $cond")->delete();
+        $model->table("oauth_user")->where("user_id $cond")->delete();
         if ($users) {
             $user_names = "";
             foreach ($users as $user) {
