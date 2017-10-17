@@ -882,7 +882,7 @@ class Common {
             //根据邀请关系找到上级第一个推广者（代理商）
             $is_break = false;
             $now_user_id = $user_id;
-            $promoter_user_id = NULL;
+            $promoter_user_id = 1;
             while(!$is_break){
                 $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
                 if($inviter_info){
