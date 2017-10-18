@@ -672,6 +672,10 @@ class PaymentController extends Controller {
             $packData = array_merge($extendDatas, $packData);
             $packData = array_merge($params, $packData);
             $sendData = $paymentPlugin->packData($packData);
+
+            $this->assign("paymentPlugin", $paymentPlugin);
+            $this->assign("sendData", $sendData);
+            
             $this->redirect('pay_form', false);
                  //上级代理商是卖家的话不参与分账
                  // $promoter_id=Common::getFirstPromoter($user_id);
