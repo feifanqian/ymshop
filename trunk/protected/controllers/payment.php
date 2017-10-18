@@ -664,7 +664,7 @@ class PaymentController extends Controller {
 
         $rspArray = json_decode($rsp, true); 
         if(AppUtil::ValidSigns($rspArray)){
-            // var_dump($rspArray);die;
+            var_dump($rspArray);die;
             // echo "验签正确,进行业务处理";
             // $extendDatas = Req::args();
             // $packData = $payment->getPaymentInfo('order', $order_id);
