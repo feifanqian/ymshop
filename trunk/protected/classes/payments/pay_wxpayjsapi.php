@@ -84,6 +84,22 @@ class pay_wxpayjsapi extends PaymentPlugin {
 
         return $return;
     }
+
+    //打包数据
+    public function packDatas($payment) {
+        WxPayConfig::setConfig($this->getClassConfig());
+        $return = array();
+        //基本参数
+        $return['return_url'] = $this->callbackUrl . "/out_trade_no/" . $payment['M_OrderNO'];
+        $return['notify_url'] = $payment['notify_url'];
+          
+        $return['subject'] = $payment['R_Name'];
+        $return['out_trade_no'] = substr(time(), 6) . "_" . $payment['M_OrderNO'];
+        $return['price'] = number_format($payment['M_Amount'], 2, '.', '');
+        $return['quantity'] = 1;
+
+        return $return;
+    }
     /*
      * Array ( [appid] => wx70ace2143fc5d154 
      * [cash_fee] => 1 

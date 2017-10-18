@@ -640,7 +640,7 @@ class PaymentController extends Controller {
 
         $payment = new Payment($payment_id);
         $paymentPlugin = $payment->getPaymentPlugin();
-        // $open=$this->model->table('oauth_user')->where('user_id='.$user_id)->find();
+        $open=$this->model->table('oauth_user')->where('user_id='.$user_id)->find();
     
         $params = array();
         $params["cusid"] = AppConfig::CUSID;
@@ -652,30 +652,35 @@ class PaymentController extends Controller {
         $params["randomstr"] = $randomstr;//
         $params["body"] = "商品名称";
         $params["remark"] = "备注信息";
-        $params["acct"] = "openid";
+        $params["acct"] = $open['open_id']
         $params["limit_pay"] = "no_credit";
         $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
         $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
-        // $params['openid'] = $open['open_id'];
-        // echo $params['openid'];
-        // echo "<br/>";
+        
         $paramsStr = AppUtil::ToUrlParams($params);
         $url = AppConfig::APIURL . "/pay";
         $rsp = AppUtil::Request($url, $paramsStr);
 
         $rspArray = json_decode($rsp, true); 
         if(AppUtil::ValidSigns($rspArray)){
-            // var_dump($rspArray);die;
+            var_dump($rspArray);die;
             // echo "验签正确,进行业务处理";
-            $extendDatas = Req::args();
-            $packData = $payment->getPaymentInfo('order', $order_id);
-            $packData = array_merge($extendDatas, $packData);
+            // $extendDatas = Req::args();
+            // $packData = $payment->getPaymentInfo('order', $order_id);
+            // $packData = array_merge($extendDatas, $packData);
+            // $packData = array_merge($params, $packData);
+            // $sendData = $paymentPlugin->packData($packData);
+            
+            $config = Config::getInstance();
+            $site_config = $config->get("globals");
+            $packData['M_OrderNO'] = $order_no;
+            $packData['M_Amount'] = $order_amount;
+            $packData ['R_Name'] = isset($site_config['site_name']) ? $site_config['site_name'] : '';
             $packData = array_merge($params, $packData);
-            $sendData = $paymentPlugin->packData($packData);
-
+            $sendData = $paymentPlugin->packDatas($packData);
             $this->assign("paymentPlugin", $paymentPlugin);
             $this->assign("sendData", $sendData);
-            
+
             $this->redirect('pay_form', false);
                  //上级代理商是卖家的话不参与分账
                  // $promoter_id=Common::getFirstPromoter($user_id);
