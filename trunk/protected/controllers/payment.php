@@ -580,7 +580,7 @@ class PaymentController extends Controller {
     public function dopays(){
         $payment_id = Filter::int(Req::args('payment_id'));
         $order_no = Req::args('order_no');
-        $order_amount = (Req::args('order_amount'))*100;
+        $order_amount = (Req::args('order_amount'));
         $randomstr=rand(1000000000000,9999999999999);
         $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
         // $oauth = new WechatOAuth();
@@ -640,13 +640,13 @@ class PaymentController extends Controller {
 
         $payment = new Payment($payment_id);
         $paymentPlugin = $payment->getPaymentPlugin();
-        $open=$this->model->table('oauth_user')->where('user_id='.$user_id)->find();
+        // $open=$this->model->table('oauth_user')->where('user_id='.$user_id)->find();
     
         $params = array();
         $params["cusid"] = AppConfig::CUSID;
         $params["appid"] = AppConfig::APPID;
         $params["version"] = AppConfig::APIVERSION;
-        $params["trxamt"] = $order_amount;
+        $params["trxamt"] = $order_amount*100;
         $params["reqsn"] = $order_no;//订单号,自行生成
         $params["paytype"] = "W02";
         $params["randomstr"] = $randomstr;//
@@ -656,9 +656,9 @@ class PaymentController extends Controller {
         $params["limit_pay"] = "no_credit";
         $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
         $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
-        $params['openid'] = $open['open_id'];
-        echo $params['openid'];
-        echo "<br/>";
+        // $params['openid'] = $open['open_id'];
+        // echo $params['openid'];
+        // echo "<br/>";
         $paramsStr = AppUtil::ToUrlParams($params);
         $url = AppConfig::APIURL . "/pay";
         $rsp = AppUtil::Request($url, $paramsStr);
