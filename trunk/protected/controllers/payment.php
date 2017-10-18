@@ -638,7 +638,10 @@ class PaymentController extends Controller {
         $model = new Model('order');
         $order_id=$model->data($data)->insert();
 
-
+        $payment = new Payment($payment_id);
+        $paymentPlugin = $payment->getPaymentPlugin();
+        $open=$this->model->table('oauth_user')->where('user_id='.$user_id)->find();
+    
         $params = array();
         $params["cusid"] = AppConfig::CUSID;
         $params["appid"] = AppConfig::APPID;
@@ -653,12 +656,12 @@ class PaymentController extends Controller {
         $params["limit_pay"] = "no_credit";
         $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
         $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
-        
+        $params['openid'] = $open['open_id'];
+
         $paramsStr = AppUtil::ToUrlParams($params);
         $url = AppConfig::APIURL . "/pay";
         $rsp = AppUtil::Request($url, $paramsStr);
-        echo "请求返回:".$rsp;
-        echo "<br/>";
+
         $rspArray = json_decode($rsp, true); 
         if(AppUtil::ValidSigns($rspArray)){
             var_dump($rspArray);die;
