@@ -737,7 +737,7 @@ class PaymentController extends Controller {
              $result=Common::setIncomeByInviteShip1($orders);
             }
             if($order['type']==8){
-                $model->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
+                $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
             }
             if (stripos($orderNo, 'promoter') !== false) {//如果是推广员入驻订单
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
