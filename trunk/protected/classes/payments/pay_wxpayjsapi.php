@@ -92,6 +92,7 @@ class pay_wxpayjsapi extends PaymentPlugin {
         //基本参数
         $return['return_url'] = $this->callbackUrl . "/out_trade_no/" . $payment['M_OrderNO'];
         $return['notify_url'] = $this->asyncCallbackUrl;
+        var_dump($return['notify_url']);die;
         // $return['notify_url'] = $payment['notify_url'];
           
         $return['subject'] = $payment['R_Name'];
