@@ -849,6 +849,7 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     function async_callback() {
+        var_dump(123);die;
         file_put_contents("aa.txt", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
@@ -952,7 +953,7 @@ class PaymentController extends Controller {
                     }
                 }
                 $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
-                var_dump($order_id);die;
+                // var_dump($order_id);die;
                 if ($order_id) {
                     $paymentPlugin->asyncStop();
                     exit;
