@@ -666,17 +666,18 @@ class PaymentController extends Controller {
         $rspArray = json_decode($rsp, true); 
         if(AppUtil::ValidSigns($rspArray)){
             // var_dump($rspArray);die;
-            echo "验签正确,进行业务处理";
+            // echo "验签正确,进行业务处理";
             $extendDatas = Req::args();
             $packData = $payment->getPaymentInfo('order', $order_id);
             $packData = array_merge($extendDatas, $packData);
             $packData = array_merge($params, $packData);
             $sendData = $paymentPlugin->packData($packData);
+            $this->redirect('pay_form', false);
                  //上级代理商是卖家的话不参与分账
-                 $promoter_id=Common::getFirstPromoter($user_id);
-                 if($seller_id!=$promoter_id){
-                    Common::offlineBeneficial($order_no,$invite_id);     
-                 }
+                 // $promoter_id=Common::getFirstPromoter($user_id);
+                 // if($seller_id!=$promoter_id){
+                 //    Common::offlineBeneficial($order_no,$invite_id);     
+                 // }
         }else{
             echo "error";die;
         }
