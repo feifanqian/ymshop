@@ -657,7 +657,8 @@ class PaymentController extends Controller {
         $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
         $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
         $params['openid'] = $open['open_id'];
-
+        echo $params['openid'];
+        echo "<br/>";
         $paramsStr = AppUtil::ToUrlParams($params);
         $url = AppConfig::APIURL . "/pay";
         $rsp = AppUtil::Request($url, $paramsStr);
