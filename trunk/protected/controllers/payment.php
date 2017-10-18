@@ -942,15 +942,15 @@ class PaymentController extends Controller {
                         file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
                         exit;
                     }
-                    if($order_info['type']==8){
-                         $seller_id=$order_info['shop_ids'];
-                         $invite_id=Session::get('invite_id');
-                         //上级代理商是卖家的话不参与分账
-                         $promoter_id=Common::getFirstPromoter($order_info['user_id']);
-                         if($seller_id!=$promoter_id){
-                            Common::offlineBeneficial($orderNo,$invite_id);
-                        }
-                    }
+                    // if($order_info['type']==8){
+                    //      $seller_id=$order_info['shop_ids'];
+                    //      $invite_id=Session::get('invite_id');
+                    //      //上级代理商是卖家的话不参与分账
+                    //      $promoter_id=Common::getFirstPromoter($order_info['user_id']);
+                    //      if($seller_id!=$promoter_id){
+                    //         Common::offlineBeneficial($orderNo,$invite_id);
+                    //     }
+                    // }
                 }
                 $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
                 // var_dump($order_id);die;
@@ -1060,12 +1060,12 @@ class PaymentController extends Controller {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
                     exit();
                 }
-                if($order['type']==8){//线下分账
-                 $seller_id=$order['shop_ids'];
-                 $invite_id=Session::get('invite_id');
+                // if($order['type']==8){//线下分账
+                 // $seller_id=$order['shop_ids'];
+                 // $invite_id=Session::get('invite_id');
                  //上级代理商是卖家的话不参与分账
-                 $promoter_id=Common::getFirstPromoter($order['user_id']);
-                 if($seller_id!=$promoter_id){
+                 // $promoter_id=Common::getFirstPromoter($order['user_id']);
+                 // if($seller_id!=$promoter_id){
                     // Common::offlineBeneficial($order_no,$invite_id);
                     // Common::testAlipay($order_no);
                     // $aopsdk = new AopSdk();
@@ -1088,8 +1088,8 @@ class PaymentController extends Controller {
                     // "}");
                     // $result = $aop->execute ($request); 
                     // var_dump($result);die;     
-                 }
-                }
+                 // }
+                // }
                 $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
                 $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
                 $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
