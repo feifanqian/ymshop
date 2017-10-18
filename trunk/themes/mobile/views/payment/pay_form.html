@@ -38,7 +38,7 @@
                     {list:items = $sendData}
                     <input type='hidden' name='{$key}' value='{$item}' />
                     {/list}
-                    {if:isset($payinfo)}
+                    {if:$payinfo!=null}
                         {list:items = $payinfo}
                         <input type='hidden' name='{$key}' value='{$item}' />
                         {/list}
