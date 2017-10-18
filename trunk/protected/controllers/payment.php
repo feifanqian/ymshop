@@ -952,6 +952,7 @@ class PaymentController extends Controller {
                     }
                 }
                 $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
+                var_dump($order_id);die;
                 if ($order_id) {
                     $paymentPlugin->asyncStop();
                     exit;
