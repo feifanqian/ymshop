@@ -38,6 +38,9 @@
                     {list:items = $sendData}
                     <input type='hidden' name='{$key}' value='{$item}' />
                     {/list}
+                    {list:items = $payinfo}
+                    <input type='hidden' name='{$key}' value='{$item}' />
+                    {/list}
                     <input type="hidden" name="order_id" value="{$order_id}">
                     <input type="hidden" name="payment_id" value="{$payment_id}">
                     <h1 class="weui_cells_title">{echo:$paymentPlugin->name}</h1>

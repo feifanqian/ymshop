@@ -671,7 +671,10 @@ class PaymentController extends Controller {
             // $packData = array_merge($extendDatas, $packData);
             // $packData = array_merge($params, $packData);
             // $sendData = $paymentPlugin->packData($packData);
-            
+            if(isset($rspArray['payinfo'])){
+                $this->assign('payinfo',$rspArray['payinfo']);
+                Session::set('payinfo',$rspArray['payinfo']);
+            }
             $config = Config::getInstance();
             $site_config = $config->get("globals");
             $packData['M_OrderNO'] = $order_no;
@@ -1010,6 +1013,7 @@ class PaymentController extends Controller {
             $return_url = Filter::sql($_POST['return_url']);
             //获取真实订单号 exp :5567_promoter2017050514260743
             $order_no = substr($out_trade_no, 5);
+            $order_model=$this->model->table("order")->where("order_no='{$order_no}'")->find();
             if (stripos($out_trade_no, 'promoter') !== false) {//推广员入驻订单
                 $order = $this->model->table("district_order")->where("order_no ='" . $order_no . "'")->find();
                 if (!$order) {
@@ -1103,7 +1107,13 @@ class PaymentController extends Controller {
             $order = WxPayApi::unifiedOrder($input);
             
             $jsApiParameters = $tools->GetJsApiParameters($order);
-            var_dump($jsApiParameters);die;
+            if($order_model['type']==8){
+                $payinfo=Session::get('payinfo');
+                if($payinfo){
+                    $jsApiParameters=json_encode($payinfo);
+                }  
+            }
+            // var_dump($jsApiParameters);die;
             //获取共享收货地址js函数参数
             $editAddress = $tools->GetEditAddressParameters();
 
