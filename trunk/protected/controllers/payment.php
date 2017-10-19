@@ -849,6 +849,8 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     public function async_callback() {
+        echo 1;
+        exit();
         file_put_contents("aa.txt", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
@@ -942,16 +944,16 @@ class PaymentController extends Controller {
                         file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
                         exit;
                     }
-                    if($order_info['type']==8){
-                         var_dump(123);die;
-                         $seller_id=$order_info['shop_ids'];
-                         $invite_id=Session::get('invite_id');
-                         //上级代理商是卖家的话不参与分账
-                         $promoter_id=Common::getFirstPromoter($order_info['user_id']);
-                         if($seller_id!=$promoter_id){
-                            Common::offlineBeneficial($orderNo,$invite_id);
-                        }
-                    }
+                    // if($order_info['type']==8){
+                    //      var_dump(123);die;
+                    //      $seller_id=$order_info['shop_ids'];
+                    //      $invite_id=Session::get('invite_id');
+                    //      //上级代理商是卖家的话不参与分账
+                    //      $promoter_id=Common::getFirstPromoter($order_info['user_id']);
+                    //      if($seller_id!=$promoter_id){
+                    //         Common::offlineBeneficial($orderNo,$invite_id);
+                    //     }
+                    // }
                 }
                 $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
                 // var_dump($order_id);die;
