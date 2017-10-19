@@ -1121,7 +1121,6 @@ class PaymentController extends Controller {
             
             $jsApiParameters = $tools->GetJsApiParameters($order);
             if($order_model['type']==8){
-                var_dump($_POST['notify_url']);die;
                 $payinfo=Session::get('payinfo');
                 if($payinfo!=null){
                     var_dump($payinfo);die;
