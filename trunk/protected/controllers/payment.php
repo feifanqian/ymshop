@@ -1061,6 +1061,9 @@ class PaymentController extends Controller {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
                     exit();
                 }
+                if($order['type']==8){
+                    var_dump(123);die;
+                }
                 // if($order['type']==8){//线下分账
                  // $seller_id=$order['shop_ids'];
                  // $invite_id=Session::get('invite_id');
