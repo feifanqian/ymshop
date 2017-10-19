@@ -849,7 +849,9 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     public function async_callback() {
-        file_put_contents("aa.txt", $GLOBALS['HTTP_RAW_POST_DATA']);
+        $xml = @file_get_contents('php://input');
+        file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
+        // file_put_contents("./aa.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
         // var_dump($payment_id);die;
