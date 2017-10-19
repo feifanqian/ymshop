@@ -849,8 +849,6 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     public function async_callback() {
-        echo 1;
-        exit();
         file_put_contents("aa.txt", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
