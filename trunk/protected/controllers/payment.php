@@ -1062,7 +1062,8 @@ class PaymentController extends Controller {
                     exit();
                 }
                 if($order['type']==8){
-                    var_dump(123);die;
+                    $this->model->table('order')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
+                    var_dump(222);die;
                 }
                 // if($order['type']==8){//线下分账
                  // $seller_id=$order['shop_ids'];
