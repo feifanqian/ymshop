@@ -848,7 +848,7 @@ class PaymentController extends Controller {
     }
 
     // 支付回调[异步]
-    function async_callback() {
+    public function async_callback() {
         file_put_contents("aa.txt", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
@@ -1120,14 +1120,14 @@ class PaymentController extends Controller {
             $order = WxPayApi::unifiedOrder($input);
             
             $jsApiParameters = $tools->GetJsApiParameters($order);
-            if($order_model['type']==8){
-                var_dump($_POST['notify_url']);die;
-                $payinfo=Session::get('payinfo');
-                if($payinfo!=null){
-                    var_dump($payinfo);die;
-                    $jsApiParameters=json_encode($payinfo);
-                }  
-            }
+            // if($order_model['type']==8){
+                // var_dump($_POST['notify_url']);die;
+                // $payinfo=Session::get('payinfo');
+                // if($payinfo!=null){
+                //     var_dump($payinfo);die;
+                //     $jsApiParameters=json_encode($payinfo);
+                // }  
+            // }
             // var_dump($jsApiParameters);die;
             //获取共享收货地址js函数参数
             $editAddress = $tools->GetEditAddressParameters();
