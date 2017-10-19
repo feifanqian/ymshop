@@ -952,6 +952,10 @@ class UcenterController extends Controller {
 
     public function order_detail() {
         $id = Filter::int(Req::args("id"));
+        $order_model=$this->model->table('order')->where("id=$id")->find();
+        if($order_model['type']==8){
+                $this->model->table('order')->where("id=$id")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
+            }
         $order = $this->model->table("order as od")->fields("od.*,pa.pay_name")->join("left join payment as pa on od.payment = pa.id")->where("od.id = $id and od.user_id=" . $this->user['id'])->find();
         if ($order) {
             $invoice = $this->model->table("doc_invoice as di")->fields("di.*,ec.code as ec_code,ec.name as ec_name,ec.alias as ec_alias")->join("left join express_company as ec on di.express_company_id = ec.id")->where("di.order_id=" . $id)->findAll();
