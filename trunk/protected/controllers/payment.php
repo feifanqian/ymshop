@@ -664,7 +664,7 @@ class PaymentController extends Controller {
 
         $rspArray = json_decode($rsp, true); 
         if(AppUtil::ValidSigns($rspArray)){
-            // var_dump($rspArray);die;
+            var_dump($rspArray);die;
             // echo "验签正确,进行业务处理";
             // $extendDatas = Req::args();
             // $packData = $payment->getPaymentInfo('order', $order_id);
@@ -1118,12 +1118,12 @@ class PaymentController extends Controller {
             $order = WxPayApi::unifiedOrder($input);
             
             $jsApiParameters = $tools->GetJsApiParameters($order);
-            // if($order_model['type']==8){
-            //     $payinfo=Session::get('payinfo');
-            //     if($payinfo){
-            //         $jsApiParameters=json_encode($payinfo);
-            //     }  
-            // }
+            if($order_model['type']==8){
+                $payinfo=Session::get('payinfo');
+                if($payinfo){
+                    $jsApiParameters=json_encode($payinfo);
+                }  
+            }
             // var_dump($jsApiParameters);die;
             //获取共享收货地址js函数参数
             $editAddress = $tools->GetEditAddressParameters();
