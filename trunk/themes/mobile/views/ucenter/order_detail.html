@@ -13,6 +13,9 @@
             {else:}
             <a href="{echo:Url::urlFormat("/simple/order_status/order_id/$order[id]")}">{echo:$status} </a>
             {/if}
+            {if:$order['type']==8}
+            {echo:$status}
+            {/if}
     </div>
 </div>
 <div class="weui_cell">
