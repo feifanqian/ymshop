@@ -1061,10 +1061,7 @@ class PaymentController extends Controller {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
                     exit();
                 }
-                if($order['type']==8){
-                    $this->model->table('order')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
-                    var_dump(222);die;
-                }
+                
                 // if($order['type']==8){//线下分账
                  // $seller_id=$order['shop_ids'];
                  // $invite_id=Session::get('invite_id');
@@ -1125,7 +1122,8 @@ class PaymentController extends Controller {
             $jsApiParameters = $tools->GetJsApiParameters($order);
             if($order_model['type']==8){
                 $payinfo=Session::get('payinfo');
-                if($payinfo){
+                if($payinfo!=null){
+                    var_dump($payinfo);die;
                     $jsApiParameters=json_encode($payinfo);
                 }  
             }
