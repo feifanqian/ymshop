@@ -877,6 +877,7 @@ class PaymentController extends Controller {
         if ($return == 1) {
             $order_model=$this->model->table("order")->where("order_no ='" . $orderNo . "'")->find();
             if($order_model['type']==8){
+                exit(111);
                 $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
                 $seller_id=$order_model['shop_ids'];
                 $invite_id=Session::get('invite_id');
