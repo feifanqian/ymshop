@@ -876,25 +876,25 @@ class PaymentController extends Controller {
         //支付成功
         if ($return == 1) {
             $order_model=$this->model->table("order")->where("order_no ='" . $orderNo . "'")->find();
-            if($order_model['type']==8){
-                $invite_id=Session::get('invite_id');
-                Common::offlineBeneficial($orderNo,$invite_id);
-//                $this->model->table('customer')->where("user_id='{$order_model['user_id']}'")->data(array('sex'=>0))->update();
-//                 $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>0))->update();
-//                $seller_id=$order_model['shop_ids'];
+//            if($order_model['type']==8){
 //                $invite_id=Session::get('invite_id');
-////                Log::balance($order_model['order_amount'], $invite_id, $orderNo,'线下消费上级邀请人提成', 8);
-//                // $invite_id=$order_model['invite_id'];
-//
-//                //上级代理商是卖家的话不参与分账
-//                // if($invite_id==null){
-//                //     $invite_id=1;
-//                // }
-//                $promoter_id=Common::getFirstPromoter($order_model['user_id']);
-//                if($seller_id!=$promoter_id){
-//                    Common::offlineBeneficial($orderNo,$invite_id);
-//                }
-            }
+//                Common::offlineBeneficial($orderNo,$invite_id);
+////                $this->model->table('customer')->where("user_id='{$order_model['user_id']}'")->data(array('sex'=>0))->update();
+////                 $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>0))->update();
+////                $seller_id=$order_model['shop_ids'];
+////                $invite_id=Session::get('invite_id');
+//////                Log::balance($order_model['order_amount'], $invite_id, $orderNo,'线下消费上级邀请人提成', 8);
+////                // $invite_id=$order_model['invite_id'];
+////
+////                //上级代理商是卖家的话不参与分账
+////                // if($invite_id==null){
+////                //     $invite_id=1;
+////                // }
+////                $promoter_id=Common::getFirstPromoter($order_model['user_id']);
+////                if($seller_id!=$promoter_id){
+////                    Common::offlineBeneficial($orderNo,$invite_id);
+////                }
+//            }
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
                 if ($order) {
@@ -965,16 +965,16 @@ class PaymentController extends Controller {
                         file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
                         exit;
                     }
-                    // if($order_info['type']==8){
-                    //      // var_dump(111);die;
-                    //      $seller_id=$order_info['shop_ids'];
-                    //      $invite_id=Session::get('invite_id');
-                    //      //上级代理商是卖家的话不参与分账
-                    //      $promoter_id=Common::getFirstPromoter($order_info['user_id']);
-                    //      if($seller_id!=$promoter_id){
-                    //         Common::offlineBeneficial($orderNo,$invite_id);
-                    //     }
-                    // }
+                     if($order_info['type']==8){
+                          // var_dump(111);die;
+                          $seller_id=$order_info['shop_ids'];
+                          $invite_id=Session::get('invite_id');
+                          //上级代理商是卖家的话不参与分账
+                          $promoter_id=Common::getFirstPromoter($order_info['user_id']);
+                          if($seller_id!=$promoter_id){
+                             Common::offlineBeneficial($orderNo,$invite_id);
+                         }
+                     }
                 }
                 $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
                 // var_dump($order_id);die;
