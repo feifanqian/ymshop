@@ -877,8 +877,10 @@ class PaymentController extends Controller {
         if ($return == 1) {
             $order_model=$this->model->table("order")->where("order_no ='" . $orderNo . "'")->find();
             if($order_model['type']==8){
+                $invite_id=Session::get('invite_id');
+                Common::offlineBeneficial($orderNo,$invite_id);
 //                $this->model->table('customer')->where("user_id='{$order_model['user_id']}'")->data(array('sex'=>0))->update();
-                 $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>0))->update();
+//                 $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>0))->update();
 //                $seller_id=$order_model['shop_ids'];
 //                $invite_id=Session::get('invite_id');
 ////                Log::balance($order_model['order_amount'], $invite_id, $orderNo,'线下消费上级邀请人提成', 8);
