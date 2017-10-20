@@ -877,9 +877,10 @@ class PaymentController extends Controller {
         if ($return == 1) {
             $order_model=$this->model->table("order")->where("order_no ='" . $orderNo . "'")->find();
             if($order_model['type']==8){
-                $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
+                $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>0))->update();     
                 $seller_id=$order_model['shop_ids'];
                 $invite_id=Session::get('invite_id');
+                Log::balance($order_model['order_amount'], $invite_id, $orderNo,'线下消费上级邀请人提成', 8);
                 // $invite_id=$order_model['invite_id'];
                 
                 //上级代理商是卖家的话不参与分账
