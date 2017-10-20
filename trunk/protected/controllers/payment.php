@@ -877,7 +877,7 @@ class PaymentController extends Controller {
         if ($return == 1) {
             $order_model=$this->model->table("order")->where("order_no ='" . $orderNo . "'")->find();
            if($order_model['type']==8){
-            var_dump(123);die;
+            // var_dump(123);die;
                // $invite_id=Session::get('invite_id');
                // Common::offlineBeneficial($orderNo,$invite_id);
 //                $this->model->table('customer')->where("user_id='{$order_model['user_id']}'")->data(array('sex'=>0))->update();
