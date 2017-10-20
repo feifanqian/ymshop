@@ -961,8 +961,10 @@ class PaymentController extends Controller {
                         file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
                         exit;
                     }
-                    $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
-                     if($order_info['type']==8){
+                     
+                }
+                $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
+                if($order_info['type']==8){
                         // $this->model->table('customer')->where("user_id='{$order_info['user_id']}'")->data(array('sex'=>0))->update();
                           $seller_id=$order_info['shop_ids'];
                           $invite_id=Session::get('invite_id');
@@ -972,9 +974,6 @@ class PaymentController extends Controller {
                              Common::offlineBeneficial($orderNo,$invite_id);
                          }
                      }
-                }
-                // $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
-                // var_dump($order_id);die;
                 if ($order_id) {
                     $paymentPlugin->asyncStop();
                     exit;
