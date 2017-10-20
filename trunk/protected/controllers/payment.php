@@ -637,6 +637,7 @@ class PaymentController extends Controller {
         $data['admin_remark']="";
         $data['shop_ids']=$seller_id;
         $date['invite_id']=$invite_id;
+        var_dump($date['invite_id']);die;
         $model = new Model('order');
         $order_id=$model->data($data)->insert();
 
