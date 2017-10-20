@@ -922,49 +922,198 @@ class Common {
          $user_id = $order['user_id']; 
          $promoter_id = self::getFirstPromoter($user_id);
          
-         $district = $model->table('district_shop')->where('owner_id='.$invite_id)->find();
+         // $district = $model->table('district_shop')->where('owner_id='.$invite_id)->find();
 
          $invite = $model->table('invite')->fields('district_id')->where("invite_user_id=".$user_id)->find();
          if($invite){
             $district1 = $model->table('district_shop')->fields('owner_id')->where('id='.$invite['district_id'])->find();
-         }         
-         $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级邀请人提成
-         Log::balance($balance1, $invite_id, $order_no,'线下消费上级邀请人提成', 8);
-         
-         if($promoter_id){
-            $model->table('customer')->where('user_id='.$promoter_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成
-            Log::balance($balance2, $promoter_id, $order_no,'线下消费上级代理商提成', 8);
-         }else{
-            $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成,默认为官方平台
-            Log::balance($balance2, 1, $order_no,'线下消费上级代理商提成', 8);
          }
+         if($district1){
+            $district_id = $district1['owner_id'];
+        }else{
+            $district_id = 1;
+        }
+                  
+         // $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级邀请人提成
+         // Log::balance($balance1, $invite_id, $order_no,'线下消费上级邀请人提成', 8);
          
-         // //上级邀请人是经销商
-         // if($district){
-         //    $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级经销商提成
-         //    Log::balance($balance2, $invite_id, $order_no,'线下消费上级经销商提成', 8);
+         // if($promoter_id){
+         //    $model->table('customer')->where('user_id='.$promoter_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成
+         //    Log::balance($balance2, $promoter_id, $order_no,'线下消费上级代理商提成', 8);
+         // }else{
+         //    $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成,默认为官方平台
+         //    Log::balance($balance2, 1, $order_no,'线下消费上级代理商提成', 8);
          // }
          
-         if(isset($district1) && $district1!=null){
-            $exist=$model->table('customer')->where('user_id='.$district1['owner_id'])->find();
-            if($exist){
-                $model->table('customer')->where('user_id='.$district1['owner_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成
-                Log::balance($balance3, $district1['owner_id'], $order_no,'线下消费上级经销商提成', 8);
-            }  
-         }else{
-                $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成,默认为官方平台
-                Log::balance($balance3, 1, $order_no,'线下消费上级经销商提成', 8);
-         }
+         
+         // if(isset($district1) && $district1!=null){
+         //    $exist=$model->table('customer')->where('user_id='.$district1['owner_id'])->find();
+         //    if($exist){
+         //        $model->table('customer')->where('user_id='.$district1['owner_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成
+         //        Log::balance($balance3, $district1['owner_id'], $order_no,'线下消费上级经销商提成', 8);
+         //    }  
+         // }else{
+         //        $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成,默认为官方平台
+         //        Log::balance($balance3, 1, $order_no,'线下消费上级经销商提成', 8);
+         // }
+         
+         //    $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance4})"))->update();//平台收益提成
+         //    Log::balance($balance4, 1, $order_no,'线下会员消费平台收益', 8);
+        
+                        $tools=new PhpTools();
+                        $account1 = $model->table("balance_withdraw")->where("user_id=".$invite_id)->find();
+                        $account2 = $model->table("balance_withdraw")->where("user_id=".$promoter_id)->find();
+                        $account3 = $model->table("balance_withdraw")->where("user_id=".$district_id)->find();
+                        $account4 = $model->table("balance_withdraw")->where("user_id=1")->find();  
 
-         // $invite2 = $model->table('invite')->where("invite_user_id=".$promoter_id)->find();
-         // if($invite2){
-         //    $model->table('customer')->where('user_id='.$invite2['user_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//代理商上级邀请人提成
-         //    Log::balance($balance3, $invite2['user_id'], $order_no,'线下消费代理商上级邀请人提成', 8);
-         // }
-         
-            $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance4})"))->update();//平台收益提成
-            Log::balance($balance4, 1, $order_no,'线下会员消费平台收益', 8);
-         
+                        // $ACCOUNT_NO = $account['card_no'];
+                        // $MOBILE = $account['mobile'];
+                        // $AMOUNT = $balance1;
+                        // $BATCHID = $account['mer_seq_id'];
+                        // // $SETTDAY = $_GET['SETTDAY'];
+                        // // $FINTIME = $_GET['FINTIME'];
+                        // $SUBMITTIME = date('YmdHis');
+                        // $SN = $account['id'];
+                        // $POUNDAGE = 0;
+                        // $USERCODE = $account['user_id'];
+                        // $SIGN = $_GET['SIGN'];//签名后的字符串
+
+                        // $orgstr=$ACCOUNT_NO."|".$MOBILE."|".$AMOUNT."|".$BATCHID."|".$SN."|".$POUNDAGE;
+                        // $signture=$SIGN;
+
+                        // $result=$tools->verifyStr($orgstr,$signture);
+                        
+                        $params = array(
+                            'INFO' => array(
+                                'TRX_CODE' => '100001',
+                                'VERSION' => '03',
+                                'DATA_TYPE' => '2',
+                                'LEVEL' => '6',
+                                'USER_NAME' => '20060400000044502',
+                                'USER_PASS' => '111111',
+                                'REQ_SN' => '200604000000445-dtdrtert452352543',
+                            ),
+                            'BODY' => array(
+                                'TRANS_SUM' => array(
+                                    'BUSINESS_CODE' => '10600',
+                                    'MERCHANT_ID' => '200604000000445',
+                                    'SUBMIT_TIME' => date('YmdHis'),
+                                    'TOTAL_ITEM' => '4',
+                                    'TOTAL_SUM' => $balance1+$balance2+$balance3+$balance4,
+                                    'SETTDAY' => '',
+                                 ),
+                                'TRANS_DETAILS'=> array(
+                                      'TRANS_DETAIL'=> array(
+                                            'SN' => $account1['id'],
+                                            'E_USER_CODE'=> $account1['id'],
+                                            'BANK_CODE'=> '',
+                                            'ACCOUNT_TYPE'=> '00',
+                                            'ACCOUNT_NO'=> $account1['card_no'],
+                                            'ACCOUNT_NAME'=> $account1['name'],
+                                            'PROVINCE'=> '',
+                                            'CITY'=> '',
+                                            'BANK_NAME'=> '',
+                                            'ACCOUNT_PROP'=> '0',
+                                            'AMOUNT'=> $balance1,
+                                            'CURRENCY'=> 'CNY',
+                                            'PROTOCOL'=> '',
+                                            'PROTOCOL_USERID'=> '',
+                                            'ID_TYPE'=> '',
+                                            'ID'=> '',
+                                            'TEL'=> $account1['mobile'],
+                                            'CUST_USERID'=> '用户自定义号',
+                                            'REMARK'=> '备注信息1',
+                                            'SETTACCT'=> '',
+                                            'SETTGROUPFLAG'=> '',
+                                            'SUMMARY'=> '',
+                                            'UNION_BANK'=> '010538987654',
+                                         ),
+                                      'TRANS_DETAIL2'=> array(
+                                            'SN' => $account2['id'],
+                                            'E_USER_CODE'=> $account2['id'],
+                                            'BANK_CODE'=> '',
+                                            'ACCOUNT_TYPE'=> '00',
+                                            'ACCOUNT_NO'=> $account2['card_no'],
+                                            'ACCOUNT_NAME'=> $account2['name'],
+                                            'PROVINCE'=> '',
+                                            'CITY'=> '',
+                                            'BANK_NAME'=> '',
+                                            'ACCOUNT_PROP'=> '0',
+                                            'AMOUNT'=> $balance2,
+                                            'CURRENCY'=> 'CNY',
+                                            'PROTOCOL'=> '',
+                                            'PROTOCOL_USERID'=> '',
+                                            'ID_TYPE'=> '',
+                                            'ID'=> '',
+                                            'TEL'=> $account2['mobile'],
+                                            'CUST_USERID'=> '用户自定义号',
+                                            'REMARK'=> '备注信息1',
+                                            'SETTACCT'=> '',
+                                            'SETTGROUPFLAG'=> '',
+                                            'SUMMARY'=> '',
+                                            'UNION_BANK'=> '010538987654',
+                                         ),
+                                      'TRANS_DETAIL2'=> array(
+                                            'SN' => $account3['id'],
+                                            'E_USER_CODE'=> $account3['id'],
+                                            'BANK_CODE'=> '',
+                                            'ACCOUNT_TYPE'=> '00',
+                                            'ACCOUNT_NO'=> $account3['card_no'],
+                                            'ACCOUNT_NAME'=> $account3['name'],
+                                            'PROVINCE'=> '',
+                                            'CITY'=> '',
+                                            'BANK_NAME'=> '',
+                                            'ACCOUNT_PROP'=> '0',
+                                            'AMOUNT'=> $balance3,
+                                            'CURRENCY'=> 'CNY',
+                                            'PROTOCOL'=> '',
+                                            'PROTOCOL_USERID'=> '',
+                                            'ID_TYPE'=> '',
+                                            'ID'=> '',
+                                            'TEL'=> $account3['mobile'],
+                                            'CUST_USERID'=> '用户自定义号',
+                                            'REMARK'=> '备注信息1',
+                                            'SETTACCT'=> '',
+                                            'SETTGROUPFLAG'=> '',
+                                            'SUMMARY'=> '',
+                                            'UNION_BANK'=> '010538987654',
+                                         ),
+                                      'TRANS_DETAIL2'=> array(
+                                            'SN' => $account4['id'],
+                                            'E_USER_CODE'=> $account4['id'],
+                                            'BANK_CODE'=> '',
+                                            'ACCOUNT_TYPE'=> '00',
+                                            'ACCOUNT_NO'=> $account4['card_no'],
+                                            'ACCOUNT_NAME'=> $account4['name'],
+                                            'PROVINCE'=> '',
+                                            'CITY'=> '',
+                                            'BANK_NAME'=> '',
+                                            'ACCOUNT_PROP'=> '0',
+                                            'AMOUNT'=> $balance4,
+                                            'CURRENCY'=> 'CNY',
+                                            'PROTOCOL'=> '',
+                                            'PROTOCOL_USERID'=> '',
+                                            'ID_TYPE'=> '',
+                                            'ID'=> '',
+                                            'TEL'=> $account4['mobile'],
+                                            'CUST_USERID'=> '用户自定义号',
+                                            'REMARK'=> '备注信息1',
+                                            'SETTACCT'=> '',
+                                            'SETTGROUPFLAG'=> '',
+                                            'SUMMARY'=> '',
+                                            'UNION_BANK'=> '010538987654',
+                                         )
+                                 )
+                            ),
+                        );
+                        //发起请求
+                        $result = $tools->send( $params);
+                        if($result!=FALSE){
+                            echo  '验签通过，请对返回信息进行处理';
+                            //下面商户自定义处理逻辑，此处返回一个数组
+                        }else{
+                                print_r("验签结果：验签失败，请检查通联公钥证书是否正确");
+                        } 
      }
 
      static function testAlipay($order_no){

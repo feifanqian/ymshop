@@ -131,6 +131,9 @@ return array(
     "AlipayFundTransToaccountTransferRequest"=>"Alipay/aop/request/AlipayFundTransToaccountTransferRequest.php",
     "AopSdk"=>"Alipay/AopSdk.php",
     "AppConfig"=>"allinpay/AppConfig.php",
-    "AppUtil"=>"allinpay/AppUtil.php"
+    "AppUtil"=>"allinpay/AppUtil.php",
+    "PhpTools"=>"allinpay/PhpTools.class.php",
+    "cURL"=>"allinpay/cURL.class.php",
+    "ArrayXml"=>"allinpay/ArrayXml.class.php"
 );
 ?>
