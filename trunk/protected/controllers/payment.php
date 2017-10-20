@@ -880,9 +880,9 @@ class PaymentController extends Controller {
                 $seller_id=$order_model['shop_ids'];
                 $invite_id=Session::get('invite_id');
                 //上级代理商是卖家的话不参与分账
-                if($invite_id==null){
-                    $invite_id=1;
-                }
+                // if($invite_id==null){
+                //     $invite_id=1;
+                // }
                 $promoter_id=Common::getFirstPromoter($order_model['user_id']);
                 if($seller_id!=$promoter_id){
                     Common::offlineBeneficial($orderNo,$invite_id);
