@@ -588,8 +588,7 @@ class PaymentController extends Controller {
         $user_id = $this->user['id'];
         $invite=$this->model->table('invite')->where('invite_user_id='.$user_id)->find();
         if($invite){
-            var_dump($invite['user_id']);die;
-            $invite_id=$invite['user_id'];//邀请人用户id
+            $invite_id=intval($invite['user_id']);//邀请人用户id
         }else{
             $invite_id=1;
         }
