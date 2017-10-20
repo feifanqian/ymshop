@@ -588,11 +588,11 @@ class PaymentController extends Controller {
         $user_id = $this->user['id'];
         $invite=$this->model->table('invite')->where('invite_user_id='.$user_id)->find();
         if($invite){
+            var_dump($invite['user_id']);die;
             $invite_id=$invite['user_id'];//邀请人用户id
+        }else{
+            $invite_id=1;
         }
-        // else{
-        //     $invite_id=1;
-        // }
         Session::set('invite_id',$invite_id);
         
         $shop=$this->model->table('district_shop')->fields('id,owner_id')->where('owner_id='.$invite_id)->find();
