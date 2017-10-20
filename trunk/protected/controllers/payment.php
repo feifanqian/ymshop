@@ -962,14 +962,14 @@ class PaymentController extends Controller {
                         exit;
                     }
                      if($order_info['type']==8){
-                        $this->model->table('customer')->where("user_id='{$order_info['user_id']}'")->data(array('sex'=>0))->update();
-                         //  $seller_id=$order_info['shop_ids'];
-                         //  $invite_id=Session::get('invite_id');
-                         //  //上级代理商是卖家的话不参与分账
-                         //  $promoter_id=Common::getFirstPromoter($order_info['user_id']);
-                         //  if($seller_id!=$promoter_id){
-                         //     Common::offlineBeneficial($orderNo,$invite_id);
-                         // }
+                        // $this->model->table('customer')->where("user_id='{$order_info['user_id']}'")->data(array('sex'=>0))->update();
+                          $seller_id=$order_info['shop_ids'];
+                          $invite_id=Session::get('invite_id');
+                          //上级代理商是卖家的话不参与分账
+                          $promoter_id=Common::getFirstPromoter($order_info['user_id']);
+                          if($seller_id!=$promoter_id){
+                             Common::offlineBeneficial($orderNo,$invite_id);
+                         }
                      }
                 }
                 $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
