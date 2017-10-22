@@ -870,7 +870,8 @@ class PaymentController extends Controller {
         $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         //支付成功
         if ($return == 1) {
-            // $order_model=$this->model->table("order")->where("order_no ='" . $orderNo . "'")->find();
+            $order_model=$this->model->table("order")->where("order_no ='" . $orderNo . "'")->find();
+            $this->model->table('customer')->where("user_id='{$order_model['user_id']}'")->data(array('sex'=>0))->update();
            // if($order_model['type']==8){
             // var_dump(123);die;
                // $invite_id=Session::get('invite_id');
@@ -980,6 +981,7 @@ class PaymentController extends Controller {
                     exit;
                 }
             }
+            echo 'success';
         }
     }
 
@@ -1148,7 +1150,7 @@ class PaymentController extends Controller {
                     $jsApiParameters=json_encode($payinfo);
                 }  
             }
-            var_dump($jsApiParameters);die;
+            // var_dump($jsApiParameters);die;
             //获取共享收货地址js函数参数
             $editAddress = $tools->GetEditAddressParameters();
 
