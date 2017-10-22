@@ -1142,14 +1142,15 @@ class PaymentController extends Controller {
             $order = WxPayApi::unifiedOrder($input);
             
             $jsApiParameters = $tools->GetJsApiParameters($order);
-            // if($order_model['type']==8){
-            //     // var_dump($_POST['notify_url']);die;
-            //     $payinfo=Session::get('payinfo');
-            //     if($payinfo!=null){
-            //         // var_dump($payinfo);die;
-            //         $jsApiParameters=json_encode($payinfo);
-            //     }  
-            // }
+            if($order_model['type']==8){
+                // var_dump($_POST['notify_url']);die;
+                $payinfo=Session::get('payinfo');
+                if($payinfo!=null){
+                    // var_dump($payinfo);die;
+                    // $jsApiParameters=json_encode($payinfo);
+                    $jsApiParameters=$payinfo;
+                }  
+            }
             var_dump($jsApiParameters);die;
             //获取共享收货地址js函数参数
             $editAddress = $tools->GetEditAddressParameters();
