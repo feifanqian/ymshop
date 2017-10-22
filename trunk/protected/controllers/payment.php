@@ -1151,7 +1151,7 @@ class PaymentController extends Controller {
                     $jsApiParameters=$payinfo;
                 }  
             }
-            var_dump($jsApiParameters);die;
+            // var_dump($jsApiParameters);die;
             //获取共享收货地址js函数参数
             $editAddress = $tools->GetEditAddressParameters();
 
