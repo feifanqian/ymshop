@@ -1147,8 +1147,8 @@ class PaymentController extends Controller {
                 $payinfo=Session::get('payinfo');
                 if($payinfo!=null){
                     // var_dump($payinfo);die;
-                    // $jsApiParameters=json_encode($payinfo);
-                    $jsApiParameters=$payinfo;
+                    $jsApiParameters=json_encode($payinfo);
+                    // $jsApiParameters=$payinfo;
                     var_dump($jsApiParameters);die;
                 }  
             }
