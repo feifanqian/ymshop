@@ -66,10 +66,10 @@
                                             location.href = "{$cancel_url}";
                                         });
                                 } else {
-                                    alert(res.err_msg);
-                                        // $.toast('支付失败!', 'forbidden', function () {
-                                        //     location.href = "{$error_url}";
-                                        // });
+                                    alert(res);
+                                        $.toast('支付失败!', 'forbidden', function () {
+                                            location.href = "{$error_url}";
+                                        });
                                 }
                             }
                     );
