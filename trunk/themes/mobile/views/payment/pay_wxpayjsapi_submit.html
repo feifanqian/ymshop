@@ -52,8 +52,6 @@
             <script type="text/javascript">
                 //调用微信JS api 支付
                 function jsApiCall() {
-                    alert($jsApiParameters);
-                    return false;
                     WeixinJSBridge.invoke(
                             'getBrandWCPayRequest',
                             {$jsApiParameters},
@@ -72,7 +70,7 @@
                                     // alert(payinfo);
                                     // alert($jsApiParameters);
                                     // alert(res.err_code+res.err_desc+res.err_msg);
-                                        $.toast('支付失败!', 'forbidden', function () {
+                                        $.toast('{$jsApiParameters}', 'forbidden', function () {
                                             location.href = "{$error_url}";
                                         });
                                 }
