@@ -848,7 +848,7 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     public function async_callback() {
-        // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>1))->update();
+        $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>1))->update();
         $xml = file_get_contents('php://input');
         $array=Common::xmlToArray($xml);
         file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
@@ -879,7 +879,7 @@ class PaymentController extends Controller {
         }
         //支付成功
         if ($return == 1 || $trxstatus==1) {
-            $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>1))->update();
+            // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>1))->update();
             $order_model=$this->model->table("order")->where("order_no ='" . $orderNo . "'")->find();
             // $this->model->table('customer')->where("user_id='{$order_model['user_id']}'")->data(array('sex'=>0))->update();
            // if($order_model['type']==8){
