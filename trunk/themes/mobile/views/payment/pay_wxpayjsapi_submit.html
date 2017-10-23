@@ -48,13 +48,46 @@
                         <a href="{$cancel_url}">查看详情</a>
                     </div>
             </div>
-            <input type="hidden" name='payinfo' value="{$jsApiParameters}">
             <script type="text/javascript">
                 //调用微信JS api 支付
+                // function jsApiCall() {
+                //     WeixinJSBridge.invoke(
+                //             'getBrandWCPayRequest',
+                //             {$jsApiParameters},
+                //             function (res) {
+                //                 if (res.err_msg == "get_brand_wcpay_request:ok") {
+                //                         $.toast('微信支付成功!', function () {
+                //                             location.href = "{$success_url}";
+                //                        });
+                                    
+                //                 } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                //                         $.toast('用户取消支付!', 'cancel', function () {
+                //                             location.href = "{$cancel_url}";
+                //                         });
+                //                 } else {
+                //                     alert({$jsApiParameters});
+                //                     return false;
+                //                     // alert(res.err_code+res.err_desc+res.err_msg);
+                //                         $.toast('支付失败!', 'forbidden', function () {
+                //                             location.href = "{$error_url}";
+                //                         });
+                //                 }
+                //             }
+                //     );
+                // }
+
                 function jsApiCall() {
+                    var jsapi=$jsApiParameters;
                     WeixinJSBridge.invoke(
                             'getBrandWCPayRequest',
-                            {$jsApiParameters},
+                            {
+                                 "appId":jsapi.appId,
+                                 "nonceStr":jsapi.nonceStr,
+                                 "package": jsapi.package,
+                                 "paySign": jsapi.paySign,
+                                 "signType": jsapi.signType,
+                                 "timeStamp": jsapi.timeStamp
+                             }
                             function (res) {
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
                                         $.toast('微信支付成功!', function () {
@@ -66,10 +99,8 @@
                                             location.href = "{$cancel_url}";
                                         });
                                 } else {
-                                    // var payinfo=$(input['name'=type]).val();
-                                    // alert(payinfo);
-                                    alert({$jsApiParameters});
-                                    return false;
+                                    // alert({$jsApiParameters});
+                                    // return false;
                                     // alert(res.err_code+res.err_desc+res.err_msg);
                                         $.toast('支付失败!', 'forbidden', function () {
                                             location.href = "{$error_url}";
