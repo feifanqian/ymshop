@@ -859,7 +859,7 @@ class PaymentController extends Controller {
             // $this->model->table('customer')->where("user_id=1777")->data(array('qq'=>0))->update();    
             $trxstatus=1;
         }
-        $this->model->table('customer')->where("user_id=1777")->data(array('addr'=>$orderNo))->update();
+
         // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
@@ -880,6 +880,7 @@ class PaymentController extends Controller {
         unset($callbackData['con']);
         unset($callbackData['act']);
         unset($callbackData['payment_id']);
+        $this->model->table('customer')->where("user_id=1777")->data(array('addr'=>$orderNo))->update();
         $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         
         
