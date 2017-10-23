@@ -857,7 +857,9 @@ class PaymentController extends Controller {
             // $this->model->table('customer')->where("user_id=1777")->data(array('qq'=>0))->update();    
             $trxstatus=1;
         }
-
+        if($trxstatus==1){
+            $this->model->table('customer')->where("user_id=1777")->data(array('qq'=>123))->update();
+        }
         // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = 6;
@@ -883,7 +885,9 @@ class PaymentController extends Controller {
 
         if($trxstatus==1){
             $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
-            echo "success";
+            echo "SUCCESS";
+        }else{
+            echo "FAIL";
         }
     }
 
