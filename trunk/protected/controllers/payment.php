@@ -657,7 +657,7 @@ class PaymentController extends Controller {
        $params["acct"] = $open['open_id'];
        $params["limit_pay"] = "no_credit";
        // $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
-       $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callback';
+       $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
        // $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback");
        // $params["notify_url"] = 'http://'.$_SERVER['HTTP_HOST'].'/payment/async_callback';
        $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
@@ -846,6 +846,47 @@ class PaymentController extends Controller {
         }
     }
 
+    public function async_callbacks(){
+        $xml = @file_get_contents('php://input');
+        // $array=Common::xmlToArray($xml);
+        file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
+        $str=substr(json_encode($xml),-5);
+        $strs=substr($str,0,4);
+        $trxstatus=0;  
+        if($strs=='0000'){
+            // $this->model->table('customer')->where("user_id=1777")->data(array('qq'=>0))->update();    
+            $trxstatus=1;
+        }
+
+        // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
+        //从URL中获取支付方式
+        $payment_id = 6;
+        // var_dump($payment_id);die;
+        $payment = new Payment($payment_id);
+        $paymentPlugin = $payment->getPaymentPlugin();
+        if (!is_object($paymentPlugin)) {
+            echo "fail";
+        }
+        
+        //初始化参数
+        $money = '';
+        $message = '支付失败';
+        $orderNo = '';
+
+        //执行接口回调函数
+        $callbackData = Req::args(); //array_merge($_POST,$_GET);
+        unset($callbackData['con']);
+        unset($callbackData['act']);
+        unset($callbackData['payment_id']);
+        
+        $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
+
+        if($trxstatus==1){
+            $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
+            echo "success";
+        }
+    }
+
     // 支付回调[异步]
     public function async_callback() {
         // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>0))->update();
@@ -880,11 +921,9 @@ class PaymentController extends Controller {
         unset($callbackData['con']);
         unset($callbackData['act']);
         unset($callbackData['payment_id']);
-        $this->model->table('customer')->where("user_id=1777")->data(array('addr'=>$orderNo))->update();
+        
         $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         
-        
-
         //支付成功
         if ($return == 1 ) {
             // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>1))->update();
