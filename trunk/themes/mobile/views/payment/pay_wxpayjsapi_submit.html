@@ -77,7 +77,10 @@
                 // }
 
                 function jsApiCall() {
-                    var jsapi=$jsApiParameters;
+                    var jsapi={$jsApiParameters};
+                    alert(jsapi);
+                    alert(jsapi.appId);
+                    return false;
                     WeixinJSBridge.invoke(
                             'getBrandWCPayRequest',
                             {
@@ -99,8 +102,8 @@
                                             location.href = "{$cancel_url}";
                                         });
                                 } else {
-                                    alert(jsapi.appId);
-                                    return false;
+                                    // alert(jsapi.appId);
+                                    // return false;
                                     // alert(res.err_code+res.err_desc+res.err_msg);
                                         $.toast('支付失败!', 'forbidden', function () {
                                             location.href = "{$error_url}";
