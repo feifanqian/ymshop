@@ -878,7 +878,8 @@ class PaymentController extends Controller {
         $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         $trxstatus=0;
         
-        if($strs=='0000'){    
+        if($strs=='0000'){
+            $this->model->table('customer')->where("user_id=1777")->data(array('qq'=>0))->update();    
             $trxstatus=1;
         }
         //支付成功
@@ -980,7 +981,7 @@ class PaymentController extends Controller {
                 }
                 $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
                 if($order_info!=null && $order_info['type']==8){
-                    $this->model->table('customer')->where("user_id=1777")->data(array('qq'=>0))->update();
+
                     $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
                         // $this->model->table('customer')->where("user_id='{$order_info['user_id']}'")->data(array('sex'=>1))->update();
                          //  $seller_id=$order_info['shop_ids'];
