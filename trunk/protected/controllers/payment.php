@@ -871,17 +871,18 @@ class PaymentController extends Controller {
 
         if($trxstatus==1){
             $order=$this->model->table('order')->where("order_no='{$order_no}'")->find();
-            $this->model->table('order')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>3))->update();
+            $this->model->table('order')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1))->update();
             $invite_id=Session::get('invite_id');
+            $this->model->table('customer')->where('user_id=1777')->data(array('qq'=>$invite_id))->update();
             $seller_id=$order['shop_ids'];             
-               //上级代理商是卖家的话不参与分账
-               if($invite_id==null){
-                   $invite_id=1;
-               }
-               $promoter_id=Common::getFirstPromoter($order['user_id']);
-               if($seller_id!=$promoter_id){
-                   Common::offlineBeneficial($order_no,$invite_id);
-               }
+            //上级代理商是卖家的话不参与分账
+            if($invite_id==null){
+                $invite_id=1;
+            }
+            $promoter_id=Common::getFirstPromoter($order['user_id']);
+            if($seller_id!=$promoter_id){
+                Common::offlineBeneficial($order_no,$invite_id);
+            }
             echo "SUCCESS";
         }else{
             echo "FAIL";
