@@ -1184,7 +1184,7 @@ class Common {
         return FALSE;
     }
 
-    public function xmlToArray($xml) {
+    static function xmlToArray($xml) {
 
     //禁止引用外部xml实体
     libxml_disable_entity_loader(true);
