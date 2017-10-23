@@ -1143,14 +1143,14 @@ class PaymentController extends Controller {
             $order = WxPayApi::unifiedOrder($input);
             
             $jsApiParameters = $tools->GetJsApiParameters($order);
+            $offline=0;
             if($order_model['type']==8){
                 // var_dump($_POST['notify_url']);die;
                 $payinfo=Session::get('payinfo');
                 if($payinfo!=null){
                     // var_dump($payinfo);die;
                     $jsApiParameters=json_encode($payinfo);
-                    // $jsApiParameters=$payinfo;
-                    // var_dump($jsApiParameters);die;
+                    $offline=1;
                 }  
             }
             // var_dump($jsApiParameters);die;
@@ -1159,6 +1159,7 @@ class PaymentController extends Controller {
 
             $this->assign("return_url", $return_url); //好像没用到
             $this->assign("jsApiParameters", $jsApiParameters);
+            $this->assign("offline",$offline);
             $this->assign("editAddress", $editAddress);
             $this->redirect();
         } else {
