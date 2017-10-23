@@ -850,7 +850,7 @@ class PaymentController extends Controller {
         // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>1))->update();
         $xml = @file_get_contents('php://input');
         $array=Common::xmlToArray($xml);
-        file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
+        file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
         // file_put_contents("./aa.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
@@ -878,7 +878,7 @@ class PaymentController extends Controller {
         }
         //支付成功
         if ($return == 1 || $trxstatus==1) {
-            $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>0))->update();
+            // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>0))->update();
             $order_model=$this->model->table("order")->where("order_no ='" . $orderNo . "'")->find();
             // $this->model->table('customer')->where("user_id='{$order_model['user_id']}'")->data(array('sex'=>0))->update();
            // if($order_model['type']==8){
