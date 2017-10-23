@@ -852,6 +852,8 @@ class PaymentController extends Controller {
         $xml = @file_get_contents('php://input');
         // $array=Common::xmlToArray($xml);
         file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
+        $str=substr(json_encode($xml),-4);
+        $this->model->table('customer')->where("user_id=1777")->data(array('addr'=>$str))->update();
         // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
@@ -874,9 +876,8 @@ class PaymentController extends Controller {
         unset($callbackData['payment_id']);
         $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         $trxstatus=0;
-        $str=substr(json_encode($xml),-4);
-        if($str=='0000'){
-            $this->model->table('customer')->where("user_id=1777")->data(array('addr'=>$str))->update();
+        
+        if($str=='0000'){    
             $trxstatus=1;
         }
         //支付成功
