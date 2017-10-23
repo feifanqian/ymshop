@@ -878,6 +878,7 @@ class PaymentController extends Controller {
         }
         //支付成功
         if ($return == 1 || $trxstatus==1) {
+            $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>0))->update();
             $order_model=$this->model->table("order")->where("order_no ='" . $orderNo . "'")->find();
             // $this->model->table('customer')->where("user_id='{$order_model['user_id']}'")->data(array('sex'=>0))->update();
            // if($order_model['type']==8){
