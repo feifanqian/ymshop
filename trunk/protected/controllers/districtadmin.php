@@ -703,8 +703,11 @@ class DistrictadminController extends Controller {
                     if (!$isset) {
                         exit(json_encode(array("status" => 'fail', 'msg' => "代理商不存在")));
                     }
-                    //添加邀请关系    
-                    $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'web','district_id'=>1,'createtime'=>time()))->insert();
+                    $inviter_exist=$model->table('invite')->where('invite_user_id='.$user_id)->find();
+                    if(!$inviter_exist){
+                        //添加邀请关系    
+                       $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'web','district_id'=>1,'createtime'=>time()))->insert();
+                    }  
                     
                     $data['user_id'] = $user_id;
                     $data['type'] = 3;
