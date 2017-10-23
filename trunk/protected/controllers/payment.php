@@ -859,8 +859,6 @@ class PaymentController extends Controller {
         $payinfo=explode('&',json_encode($xml));
         $orderarr=$payinfo[4];
         $order_no=substr($orderarr,-18);
-        // $orderNo=substr($order_no,0,18);
-        $this->model->table('customer')->where("user_id=1777")->data(array('addr'=>$order_no))->update();
         //从URL中获取支付方式
         $payment_id = 6;
         // var_dump($payment_id);die;
@@ -869,22 +867,9 @@ class PaymentController extends Controller {
         if (!is_object($paymentPlugin)) {
             echo "fail";
         }
-        
-        // //初始化参数
-        // $money = '';
-        // $message = '支付失败';
-        // $orderNo = '';
-
-        // //执行接口回调函数
-        // $callbackData = Req::args(); //array_merge($_POST,$_GET);
-        // unset($callbackData['con']);
-        // unset($callbackData['act']);
-        // unset($callbackData['payment_id']);
-        
-        // $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
 
         if($trxstatus==1){
-            $this->model->table('order')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
+            $this->model->table('order')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>3))->update();
             echo "SUCCESS";
         }else{
             echo "FAIL";
