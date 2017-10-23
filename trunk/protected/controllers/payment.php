@@ -658,7 +658,7 @@ class PaymentController extends Controller {
        $params["limit_pay"] = "no_credit";
        // $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
        // $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callback';
-       $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback");
+       $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback/");
        $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
 
        $paramsStr = AppUtil::ToUrlParams($params);
@@ -1147,7 +1147,7 @@ class PaymentController extends Controller {
             $jsApiParameters = $tools->GetJsApiParameters($order);
             $offline=0;
             if($order_model['type']==8){
-                var_dump($_POST['notify_url']);die;
+                // var_dump($_POST['notify_url']);die;
                 $payinfo=Session::get('payinfo');
                 if($payinfo!=null){
                     // var_dump($payinfo);die;
