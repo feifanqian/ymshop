@@ -78,8 +78,9 @@
 
                 function jsApiCall() {
                     var jsapi={$jsApiParameters};
-                    alert(jsapi);
-                    alert(jsapi.appId);
+                    jsonapi=JSON.parse(jsapi);
+                    alert(jsonapi);
+                    alert(jsonapi.appId);
                     return false;
                     WeixinJSBridge.invoke(
                             'getBrandWCPayRequest',
