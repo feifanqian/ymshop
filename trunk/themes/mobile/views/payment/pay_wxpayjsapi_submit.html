@@ -55,6 +55,7 @@
                     WeixinJSBridge.invoke(
                             'getBrandWCPayRequest',
                             {$jsApiParameters},
+                            alert($jsApiParameters),
                             function (res) {
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
                                         $.toast('微信支付成功!', function () {
@@ -66,7 +67,7 @@
                                             location.href = "{$cancel_url}";
                                         });
                                 } else {
-                                    alert($jsApiParameters);
+                                    // alert($jsApiParameters);
                                     // alert(res.err_code+res.err_desc+res.err_msg);
                                         $.toast('支付失败!', 'forbidden', function () {
                                             location.href = "{$error_url}";
