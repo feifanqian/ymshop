@@ -593,7 +593,7 @@ class PaymentController extends Controller {
            $invite_id=1;
        }
        Session::set('invite_id',$invite_id);
-
+       var_dump($invite_id);die;
        $shop=$this->model->table('district_shop')->fields('id,owner_id')->where('owner_id='.$invite_id)->find();
        if($shop){
            $district_id=$shop['owner_id'];
