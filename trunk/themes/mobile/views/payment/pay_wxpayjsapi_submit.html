@@ -79,18 +79,15 @@
                 function jsApiCall() {
                     var jsapi={$jsApiParameters};
                     jsonapi=JSON.parse(jsapi);
-                    alert(jsonapi);
-                    alert(jsonapi.appId);
-                    return false;
                     WeixinJSBridge.invoke(
                             'getBrandWCPayRequest',
                             {
-                                 "appId":jsapi.appId,
-                                 "nonceStr":jsapi.nonceStr,
-                                 "package": jsapi.package,
-                                 "paySign": jsapi.paySign,
-                                 "signType": jsapi.signType,
-                                 "timeStamp": jsapi.timeStamp
+                                 "appId":jsonapi.appId,
+                                 "nonceStr":jsonapi.nonceStr,
+                                 "package": jsonapi.package,
+                                 "paySign": jsonapi.paySign,
+                                 "signType": jsonapi.signType,
+                                 "timeStamp": jsonapi.timeStamp
                              },
                             function (res) {
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
