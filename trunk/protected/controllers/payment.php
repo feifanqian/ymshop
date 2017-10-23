@@ -849,10 +849,10 @@ class PaymentController extends Controller {
     // 支付回调[异步]
     public function async_callback() {
         // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>0))->update();
-        // $xml = @file_get_contents('php://input');
-        // $array=Common::xmlToArray($xml);
-        // file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
-        file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
+        $xml = @file_get_contents('php://input');
+        $array=Common::xmlToArray($xml);
+        file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
+        // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
         // var_dump($payment_id);die;
@@ -874,9 +874,9 @@ class PaymentController extends Controller {
         unset($callbackData['payment_id']);
         $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         $trxstatus=0;
-        if($array['trxstatus']=='0000'){
-            $trxstatus=1;
-        }
+        // if($array['trxstatus']=='0000'){
+        //     $trxstatus=1;
+        // }
         //支付成功
         if ($return == 1 || $trxstatus==1) {
             // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>1))->update();
