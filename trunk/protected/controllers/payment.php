@@ -593,7 +593,6 @@ class PaymentController extends Controller {
            $invite_id=1;
        }
        Session::set('invite_id',$invite_id);
-       var_dump($invite_id);die;
        $shop=$this->model->table('district_shop')->fields('id,owner_id')->where('owner_id='.$invite_id)->find();
        if($shop){
            $district_id=$shop['owner_id'];
@@ -633,7 +632,7 @@ class PaymentController extends Controller {
        $data['point'] = 0;
        $data['voucher_id'] = 0;
        $data['voucher'] = serialize(array());
-       $data['prom_id']=0;
+       $data['prom_id']=$invite_id;
        $data['admin_remark']="";
        $data['shop_ids']=$seller_id;
        $date['invite_id']=$invite_id;
@@ -872,7 +871,8 @@ class PaymentController extends Controller {
         if($trxstatus==1){
             $order=$this->model->table('order')->where("order_no='{$order_no}'")->find();
             $this->model->table('order')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1))->update();
-            $invite_id=Session::get('invite_id');
+            // $invite_id=Session::get('invite_id');
+            $invite_id=$order['prom_id'];
             $this->model->table('customer')->where('user_id=1777')->data(array('qq'=>$invite_id))->update();
             $seller_id=$order['shop_ids'];             
             //上级代理商是卖家的话不参与分账
