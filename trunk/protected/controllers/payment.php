@@ -850,7 +850,7 @@ class PaymentController extends Controller {
     public function async_callback() {
         // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>0))->update();
         $xml = @file_get_contents('php://input');
-        $array=$this->xmlToArray($xml);
+        $array=Common::xmlToArray($xml);
         file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
         // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
@@ -1652,11 +1652,4 @@ class PaymentController extends Controller {
         var_dump(Order::recharge($orderNo));
     }
 
-    public function xmlToArray($xml) {
-
-    //禁止引用外部xml实体
-    libxml_disable_entity_loader(true);
-    $values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
-    return $values;
-    }
 }
