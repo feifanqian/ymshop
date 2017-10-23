@@ -853,14 +853,14 @@ class PaymentController extends Controller {
         $str=substr(json_encode($xml),-5);
         $strs=substr($str,0,4);
         $trxstatus=0;  
-        if($strs=='0000'){
-            // $this->model->table('customer')->where("user_id=1777")->data(array('qq'=>0))->update();    
+        if($strs=='0000'){    
             $trxstatus=1;
         }
-        if($trxstatus==1){
-            $this->model->table('customer')->where("user_id=1777")->data(array('qq'=>123))->update();
-        }
-        // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
+        $payinfo=explode('&',json_encode($xml));
+        $orderarr=$payinfo[4];
+        $order_nos=substr($orderarr,-19);
+        $order_no=substr($order_nos,0,18);
+        $this->model->table('customer')->where("user_id=1777")->data(array('addr'=>$order_no))->update();
         //从URL中获取支付方式
         $payment_id = 6;
         // var_dump($payment_id);die;
