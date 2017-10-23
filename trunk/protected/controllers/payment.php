@@ -845,7 +845,8 @@ class PaymentController extends Controller {
             exit;
         }
     }
-
+    
+    //线下微信支付回调
     public function async_callbacks(){
         $xml = @file_get_contents('php://input');
         // $array=Common::xmlToArray($xml);
@@ -869,7 +870,18 @@ class PaymentController extends Controller {
         }
 
         if($trxstatus==1){
+            $order=$this->model->table('order')->where("order_no='{$order_no}'")->find();
             $this->model->table('order')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>3))->update();
+            $invite_id=Session::get('invite_id');
+            $seller_id=$order['shop_ids'];             
+               //上级代理商是卖家的话不参与分账
+               if($invite_id==null){
+                   $invite_id=1;
+               }
+               $promoter_id=Common::getFirstPromoter($order['user_id']);
+               if($seller_id!=$promoter_id){
+                   Common::offlineBeneficial($order_no,$invite_id);
+               }
             echo "SUCCESS";
         }else{
             echo "FAIL";
@@ -878,18 +890,9 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     public function async_callback() {
-        // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>0))->update();
         $xml = @file_get_contents('php://input');
         // $array=Common::xmlToArray($xml);
         file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
-        $str=substr(json_encode($xml),-5);
-        $strs=substr($str,0,4);
-        $trxstatus=0;  
-        if($strs=='0000'){
-            // $this->model->table('customer')->where("user_id=1777")->data(array('qq'=>0))->update();    
-            $trxstatus=1;
-        }
-
         // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
@@ -915,29 +918,6 @@ class PaymentController extends Controller {
         
         //支付成功
         if ($return == 1 ) {
-            // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>1))->update();
-            $order_model=$this->model->table("order")->where("order_no ='" . $orderNo . "'")->find();
-            // $this->model->table('customer')->where("user_id='{$order_model['user_id']}'")->data(array('sex'=>0))->update();
-           // if($order_model['type']==8){
-            // var_dump(123);die;
-               // $invite_id=Session::get('invite_id');
-               // Common::offlineBeneficial($orderNo,$invite_id);
-//                $this->model->table('customer')->where("user_id='{$order_model['user_id']}'")->data(array('sex'=>0))->update();
-//                 $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>0))->update();
-//                $seller_id=$order_model['shop_ids'];
-//                $invite_id=Session::get('invite_id');
-////                Log::balance($order_model['order_amount'], $invite_id, $orderNo,'线下消费上级邀请人提成', 8);
-//                // $invite_id=$order_model['invite_id'];
-//
-//                //上级代理商是卖家的话不参与分账
-//                // if($invite_id==null){
-//                //     $invite_id=1;
-//                // }
-//                $promoter_id=Common::getFirstPromoter($order_model['user_id']);
-//                if($seller_id!=$promoter_id){
-//                    Common::offlineBeneficial($orderNo,$invite_id);
-//                }
-           // }
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
                 if ($order) {
@@ -1011,19 +991,6 @@ class PaymentController extends Controller {
                      
                 }
                 $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
-                if($order_info!=null && $order_info['type']==8){
-
-                    $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
-                        // $this->model->table('customer')->where("user_id='{$order_info['user_id']}'")->data(array('sex'=>1))->update();
-                         //  $seller_id=$order_info['shop_ids'];
-                          // $invite_id=Session::get('invite_id');
-                         //  //上级代理商是卖家的话不参与分账
-                         //  $promoter_id=Common::getFirstPromoter($order_info['user_id']);
-                         //  if($seller_id!=$promoter_id){
-                         //     Common::offlineBeneficial($orderNo,$invite_id);
-                         // }
-                         
-                     }
                 if ($order_id) {
                     $paymentPlugin->asyncStop();
                     exit;
