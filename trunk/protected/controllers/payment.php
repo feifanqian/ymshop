@@ -874,9 +874,9 @@ class PaymentController extends Controller {
         unset($callbackData['payment_id']);
         $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         $trxstatus=0;
-        // if($array['trxstatus']=='0000'){
-        //     $trxstatus=1;
-        // }
+        if(substr(json_encode($xml),-4)=='0000'){
+            $trxstatus=1;
+        }
         //支付成功
         if ($return == 1 || $trxstatus==1) {
             // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>1))->update();
