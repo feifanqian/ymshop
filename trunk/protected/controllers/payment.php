@@ -854,7 +854,7 @@ class PaymentController extends Controller {
         file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
         $str=substr(json_encode($xml),-5);
         $strs=substr($str,0,4);
-        $this->model->table('customer')->where("user_id=1777")->data(array('addr'=>$strs))->update();
+        // $this->model->table('customer')->where("user_id=1777")->data(array('addr'=>$strs))->update();
         // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
@@ -980,6 +980,7 @@ class PaymentController extends Controller {
                 }
                 $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
                 if($order_info!=null && $order_info['type']==8){
+                    $this->model->table('order')->where("order_no='{$orderNo}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
                         // $this->model->table('customer')->where("user_id='{$order_info['user_id']}'")->data(array('sex'=>1))->update();
                          //  $seller_id=$order_info['shop_ids'];
                           // $invite_id=Session::get('invite_id');
