@@ -1153,15 +1153,15 @@ class PaymentController extends Controller {
             
             $jsApiParameters = $tools->GetJsApiParameters($order);
             $offline=0;
-            if($order_model['type']==8){
-                // var_dump($_POST['notify_url']);die;
-                $payinfo=Session::get('payinfo');
-                if($payinfo!=null){
-                    // var_dump($payinfo);die;
-                    $jsApiParameters=json_encode($payinfo);
-                    $offline=1;
-                }  
-            }
+            // if($order_model['type']==8){
+            //     // var_dump($_POST['notify_url']);die;
+            //     $payinfo=Session::get('payinfo');
+            //     if($payinfo!=null){
+            //         // var_dump($payinfo);die;
+            //         $jsApiParameters=json_encode($payinfo);
+            //         $offline=1;
+            //     }  
+            // }
             // var_dump($jsApiParameters);die;
             //获取共享收货地址js函数参数
             $editAddress = $tools->GetEditAddressParameters();
