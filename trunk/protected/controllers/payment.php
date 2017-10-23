@@ -848,10 +848,10 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     public function async_callback() {
-        $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>0))->update();
-        $xml = file_get_contents('php://input');
-        $array=Common::xmlToArray($xml);
-        file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
+        // $this->model->table('customer')->where("user_id=1777")->data(array('sex'=>0))->update();
+        $xml = @file_get_contents('php://input');
+        // $array=Common::xmlToArray($xml);
+        file_put_contents('./wxpay.php', json_decode($xml,true) . PHP_EOL, FILE_APPEND);
         // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
