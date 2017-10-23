@@ -854,9 +854,10 @@ class PaymentController extends Controller {
         file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
         $str=substr(json_encode($xml),-5);
         $strs=substr($str,0,4);
-        if(intval($strs)==0000){    
-            $this->model->table('customer')->where("user_id=1777")->data(array('qq'=>123))->update();
-        }
+        if($strs=='0000'){
+           $this->model->table('customer')->where("user_id=1777")->data(array('qq'=>1))->update(); 
+        }   
+        
         // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
