@@ -1150,7 +1150,7 @@ class PaymentController extends Controller {
                     // var_dump($payinfo);die;
                     $jsApiParameters=json_encode($payinfo);
                     // $jsApiParameters=$payinfo;
-                    var_dump($jsApiParameters);die;
+                    // var_dump($jsApiParameters);die;
                 }  
             }
             // var_dump($jsApiParameters);die;
