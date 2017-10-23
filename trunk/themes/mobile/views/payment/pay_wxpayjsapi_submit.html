@@ -99,8 +99,8 @@
                                             location.href = "{$cancel_url}";
                                         });
                                 } else {
-                                    // alert({$jsApiParameters});
-                                    // return false;
+                                    alert(jsapi.appId);
+                                    return false;
                                     // alert(res.err_code+res.err_desc+res.err_msg);
                                         $.toast('支付失败!', 'forbidden', function () {
                                             location.href = "{$error_url}";
