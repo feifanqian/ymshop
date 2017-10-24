@@ -581,6 +581,7 @@ class CustomerController extends Controller {
     }
 
     public function withdrawDf(){
+        header('Content-Type: text/html; Charset=UTF-8');
         $tools=new PhpTools();
         $merchantId=AppConfig::MERCHANT_ID;
         // 源数组
