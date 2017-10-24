@@ -134,6 +134,6 @@ return array(
     "AppUtil"=>"allinpay/AppUtil.php",
     "PhpTools"=>"allinpay/PhpTools.class.php",
     "cURL"=>"allinpay/cURL.class.php",
-    "ArrayXml"=>"allinpay/ArrayXml.class.php"
+    "ArrayAndXml"=>"allinpay/ArrayXml.class.php"
 );
 ?>
