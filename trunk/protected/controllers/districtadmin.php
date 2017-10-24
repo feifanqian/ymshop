@@ -1099,8 +1099,7 @@ class DistrictadminController extends Controller {
 
         // now we can directly output the qrcode
         header('Content-Type: ' . $qrCode->getContentType());
-        $result=$qrCode->render();
-        var_dump($result);die;
+        $qrCode->render();
         return;
     }
 }
