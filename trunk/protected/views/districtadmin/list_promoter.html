@@ -38,6 +38,8 @@
                        <li><a class="icon-eye" href="javascript:;" onclick="viewAchievement('{$item['nickname']|'unknow'}',{$item['user_id']});"> 查看销售业绩</a></li>
                        <li><a class="icon-user-2" href="javascript:;" onclick="sendMsg('{$item['nickname']|'unknow'}',{$item['user_id']});"> 发送微信消息</a></li>
                        <li><a class="icon-pencil" href="{url:/districtadmin/rate_edit/id/$item[id]}">设置分账比例</a></li>
+                       <!-- <li><a class="icon-eye" href="javascript:;" onclick="viewQrcode({$item['user_id']});"> 查看线下支付二维码</a></li> -->
+                       <li><a class="icon-eye" href="{url:/districtadmin/invitepay/user_id/$item[user_id]}"> 查看线下支付二维码</a></li>
                        <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/promoter_del/id/$item[id]}')"> 移出代理商</a></li>
                      </ul>
                    </div>
@@ -78,6 +80,19 @@ layer.open({
         content: '{url:/districtadmin/chart}/role_type/1/user_id/'+id ,
     });
 }
+
+// function viewQrcode(id){
+// layer.open({
+//         id: id,
+//         type: 2,
+//         title: '商家二维码',
+//         area: ['650px', '650px'],
+//         fixed: false, //不固定
+//         maxmin: false,
+//         content: '{url:/districtadmin/qrcode}/user_id/'+id ,
+//     });
+// }
+
 function IsURL(str_url){
         var strRegex = '^((https|http|ftp|rtsp|mms)?://)'
         + '?(([0-9a-z_!~*\'().&=+$%-]+: )?[0-9a-z_!~*\'().&=+$%-]+@)?' //ftp的user@

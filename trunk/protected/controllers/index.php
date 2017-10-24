@@ -1813,6 +1813,7 @@ class IndexController extends Controller {
 
     public function invitepay(){
         $id=$this->user['id'];
+        // $id = Req::args("user_id");
         $uid=Filter::int($id);
         // var_dump($uid);die;
         $this->assign('uid', $uid);

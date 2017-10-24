@@ -1,0 +1,19 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}?v=20170719" />
+<style>
+    .weui_dialog_visible{
+        top:10%;
+    }
+</style>
+<div class="invite_bg" style="visibility:visible;">
+    <div class="invite_main" style="padding-top: 50px;padding-left: 50px;">
+        <div class="invite_qr1"><img src="/user/buildinvitepay?uid={$uid|1}" width="400" height="400" /></div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.invite_bg').css('background-color','#fff');
+        $(".invite_main").height($(".invite_main").width() / 0.6344);
+        $(".invite_bg").css("visibility", "visible");
+        $(".invite_bg").height($(document).height() - 98);
+    });
+</script>

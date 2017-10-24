@@ -1049,4 +1049,58 @@ class DistrictadminController extends Controller {
         }
         $this->redirect('list_promoter');
     }
+
+    public function qrcode(){
+        $id = Req::args("user_id");
+        $uid=Filter::int($id);
+        $this->assign('uid', $uid);
+        $this->redirect();
+    }
+
+    public function invitepay(){
+        // $id=$this->user['id'];
+        $id = Req::args("user_id");
+        $uid=Filter::int($id);
+        // var_dump($uid);die;
+        $this->assign('uid', $uid);
+        $this->redirect();
+    }
+
+    //生成邀请支付码
+    public function buildinvitepay() {
+        $user_id = Filter::int(Req::args('uid'));
+        // if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+        //     $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+        //     $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+        //     $token = $wechat->getAccessToken();
+        //     $params = array(
+        //         "action_name" => "QR_LIMIT_STR_SCENE",
+        //         "action_info" => array("scene" => array("scene_str" => "invite-{$user_id}"))
+        //     );
+        //     $ret = Http::curlPost("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={$token}", json_encode($params));
+        //     $ret = json_decode($ret, TRUE);
+        //     if (isset($ret['ticket'])) {
+        //         $this->redirect("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={$ret['ticket']}");
+        //         exit;
+        //     }
+        // }
+        $url = Url::fullUrlFormat("/index/demo") . "?inviter_id=".$user_id;
+        $qrCode = new QrCode();
+        $qrCode
+                ->setText($url)
+                ->setSize(300)
+                ->setPadding(10)
+                ->setErrorCorrection('medium')
+                ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+                ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+                //->setLabel('扫描添加为好友')
+                ->setLabelFontSize(16)
+                ->setImageType(QrCode::IMAGE_TYPE_PNG);
+
+        // now we can directly output the qrcode
+        header('Content-Type: ' . $qrCode->getContentType());
+        $result=$qrCode->render();
+        var_dump($result);die;
+        return;
+    }
 }

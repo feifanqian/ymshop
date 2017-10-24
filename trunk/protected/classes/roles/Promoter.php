@@ -110,7 +110,7 @@ class Promoter extends Object {
         $record = $this->model->table("promote_sale_log as psl")
                 ->where("record_date>='$start' and record_date<='$end' and contributor_role=" . $this->role_type." and contributor_user_id=".$this->user_id)
                 ->fields('amount,record_date as time')
-                ->order('record_daet desc')
+                ->order('record_date desc')
                 ->findAll();
         if (date("Y-m-d", strtotime($start)) == date("Y-m-d", strtotime($end))) {
             Common::formatDataToShowInChart($start, $end, $record, 'hour');
