@@ -132,8 +132,8 @@ return array(
     "AopSdk"=>"Alipay/AopSdk.php",
     "AppConfig"=>"allinpay/AppConfig.php",
     "AppUtil"=>"allinpay/AppUtil.php",
-    "PhpTools"=>"allinpay/PhpTools.class.php",
-    "cURL"=>"allinpay/cURL.class.php",
-    "ArrayAndXml"=>"allinpay/ArrayXml.class.php"
+    "PhpTools"=>"allinpay/lib/PhpTools.class.php",
+    "cURL"=>"allinpay/lib/cURL.class.php",
+    "ArrayAndXml"=>"allinpay/lib/ArrayXml.class.php"
 );
 ?>
