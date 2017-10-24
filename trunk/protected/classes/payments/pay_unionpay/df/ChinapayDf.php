@@ -216,6 +216,7 @@ class ChinapayDf {
         curl_close($http); 
 	return $output;
     }
+
     function curl_redir_exec($ch, $url){
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, true);
@@ -250,4 +251,6 @@ class ChinapayDf {
               return false;
         }
     }
+
+    
 }

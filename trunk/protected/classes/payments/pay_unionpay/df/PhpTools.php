@@ -1,21 +1,20 @@
 <?php 
  
 class PhpTools{
-	 
-	echo  dirname(__FILE__);exit();
-	const certFile ="../data/allinpay-pds.pem";//通联公钥证书
-	const privateKeyFile = "../data/20060400000044502.pem";//商户私钥证书
-	// const privateKeyFile = '../data/test.php';
+	
+	const certFile ="allinpay-pds.pem";//通联公钥证书
+	const privateKeyFile = "20060400000044502.pem";//商户私钥证书
 	const password = '111111';//商户私钥密码以及用户密码
 //	const  apiUrl = 'http://172.16.1.11:8080/aipg/ProcessServlet';//通联系统对接请求地址（内网）
 	public $arrayXml ;
     const apiUrl = 'http://113.108.182.3:8083/aipg/ProcessServlet';//通联系统对接请求地址（外网,商户测试时使用）
 	// const apiUrl = 'https://tlt.allinpay.com/aipg/ProcessServlet';//（生产环境地址，上线时打开该注释）
 	
-	public function __construct()      
-    {      
+	 public function __construct() {
+        $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.pem";
+        $this->privateKeyFile=dirname(__FILE__)."/certs/20060400000044502.pem";
         $this->arrayXml = new ArrayAndXml();
-    }     
+    }   
 	
 	/**
 	 * PHP版本低于 5.4.1 的在通联返回的是 GBK编码环境使用
@@ -59,7 +58,7 @@ class PhpTools{
 		$xmlResponseSrc1 = mb_convert_encoding(str_replace('<','&lt;',$xmlResponseSrc), "UTF-8", "GBK");
 		print_r ('验签原文');
 		print_r ($xmlResponseSrc1);
-		$pubKeyId = openssl_get_publickey(file_get_contents(PhpTools::certFile));
+		$pubKeyId = openssl_get_publickey(file_get_contents($this->certFile));
 		$flag = (bool) openssl_verify($xmlResponseSrc, hex2bin($signature), $pubKeyId);
 		openssl_free_key($pubKeyId);
 	    //echo '<br/>'+$flag;
@@ -85,7 +84,7 @@ class PhpTools{
 	 */
 	public function verifyStr($orgStr,$signature){
 		echo '签名原文:'.$orgStr;
-		$pubKeyId = openssl_get_publickey(file_get_contents(PhpTools::certFile));
+		$pubKeyId = openssl_get_publickey(file_get_contents($this->certFile));
 		$flag = (bool) openssl_verify($orgStr, hex2bin($signature), $pubKeyId);
 		openssl_free_key($pubKeyId);
 		
@@ -106,7 +105,7 @@ class PhpTools{
 		$xmlSignSrc = $this->arrayXml->toXmlGBK($params, 'AIPG');
 		$xmlSignSrc=str_replace("TRANS_DETAIL2", "TRANS_DETAIL",$xmlSignSrc);
 //		echo ($xmlSignSrc);
-		$privateKey = file_get_contents(PhpTools::privateKeyFile);
+		$privateKey = file_get_contents($this->privateKeyFile);
 		
 		$pKeyId = openssl_pkey_get_private($privateKey, PhpTools::password);
 		openssl_sign($xmlSignSrc, $signature, $pKeyId);

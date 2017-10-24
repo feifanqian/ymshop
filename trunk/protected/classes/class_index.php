@@ -132,7 +132,7 @@ return array(
     "AopSdk"=>"Alipay/AopSdk.php",
     "AppConfig"=>"allinpay/AppConfig.php",
     "AppUtil"=>"allinpay/AppUtil.php",
-    "PhpTools"=>"allinpay/lib/PhpTools.class.php",
+    "PhpTools"=>"payments/pay_unionpay/df/PhpTools.php",
     "cURL"=>"allinpay/lib/cURL.class.php",
     "ArrayAndXml"=>"allinpay/lib/ArrayXml.class.php"
 );
