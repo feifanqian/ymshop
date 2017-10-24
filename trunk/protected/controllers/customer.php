@@ -209,6 +209,12 @@ class CustomerController extends Controller {
         exit(json_encode(array('status'=>'fail','msg'=>'信息错误')));
     }
 
+    public function withdraw_test(){
+        $ChinapayDf = new ChinapayDf();
+        $result = $ChinapayDf->allinpayDf();
+        var_dump($result);die;
+    }
+
     public function export_excel() {
         $this->layout = '';
         $condition = Req::args("condition");
