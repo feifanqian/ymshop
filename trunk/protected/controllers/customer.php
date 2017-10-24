@@ -210,8 +210,7 @@ class CustomerController extends Controller {
     }
 
     public function withdraw_test(){
-        $ChinapayDf = new ChinapayDf();
-        $result = $ChinapayDf->allinpayDf();
+        $result = Common::allinpayDf();
         var_dump($result);die;
     }
 
