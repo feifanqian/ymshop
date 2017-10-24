@@ -1,11 +1,10 @@
 <?php 
-
-
+ 
 class PhpTools{
 	 
-	
-	const certFile = dirname(__FILE__).'/../data/allinpay-pds.pem';//通联公钥证书
-	const privateKeyFile = dirname(__FILE__).'/../data/20060400000044502.pem';//商户私钥证书
+	echo  dirname(__FILE__);exit();
+	const certFile ="../data/allinpay-pds.pem";//通联公钥证书
+	const privateKeyFile = "../data/20060400000044502.pem";//商户私钥证书
 	// const privateKeyFile = '../data/test.php';
 	const password = '111111';//商户私钥密码以及用户密码
 //	const  apiUrl = 'http://172.16.1.11:8080/aipg/ProcessServlet';//通联系统对接请求地址（内网）
