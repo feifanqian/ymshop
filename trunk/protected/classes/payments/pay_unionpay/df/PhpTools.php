@@ -1,7 +1,7 @@
 <?php 
  
 class PhpTools{
-	
+
 	const certFile ="allinpay-pds.pem";//通联公钥证书
 	const privateKeyFile = "20060400000044502.pem";//商户私钥证书
 	const password = '111111';//商户私钥密码以及用户密码
@@ -56,8 +56,9 @@ class PhpTools{
 		
 		$xmlResponseSrc = preg_replace('/<SIGNED_MSG>.*<\/SIGNED_MSG>/i', '', $xmlResponse);
 		$xmlResponseSrc1 = mb_convert_encoding(str_replace('<','&lt;',$xmlResponseSrc), "UTF-8", "GBK");
+		$xmlResponseSrc2 = Common::xmlToArray($xmlResponseSrc1);
 		print_r ('验签原文');
-		print_r ($xmlResponseSrc1);
+		print_r ($xmlResponseSrc2);
 		$pubKeyId = openssl_get_publickey(file_get_contents($this->certFile));
 		$flag = (bool) openssl_verify($xmlResponseSrc, hex2bin($signature), $pubKeyId);
 		openssl_free_key($pubKeyId);
