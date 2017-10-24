@@ -4,13 +4,13 @@
 class PhpTools{
 	 
 	
-	const certFile = './allinpay-pds.pem';//通联公钥证书
-	const privateKeyFile = './20060400000044502.pem';//商户私钥证书
+	const certFile = 'allinpay-pds.pem';//通联公钥证书
+	const privateKeyFile = '20060400000044502.pem';//商户私钥证书
 	const password = '111111';//商户私钥密码以及用户密码
 //	const  apiUrl = 'http://172.16.1.11:8080/aipg/ProcessServlet';//通联系统对接请求地址（内网）
 	public $arrayXml ;
-    const apiUrl = 'http://113.108.182.3:8083/aipg/ProcessServlet';//通联系统对接请求地址（外网,商户测试时使用）
-//	const apiUrl = 'https://tlt.allinpay.com/aipg/ProcessServlet';//（生产环境地址，上线时打开该注释）
+    // const apiUrl = 'http://113.108.182.3:8083/aipg/ProcessServlet';//通联系统对接请求地址（外网,商户测试时使用）
+	const apiUrl = 'https://tlt.allinpay.com/aipg/ProcessServlet';//（生产环境地址，上线时打开该注释）
 	
 	public function __construct()      
     {      
