@@ -591,10 +591,8 @@ class CustomerController extends Controller {
                 'VERSION' => '03',
                 'DATA_TYPE' => '2',
                 'LEVEL' => '6',
-                // 'USER_NAME' => '20060400000044502',
-                // 'USER_PASS' => '`12qwe',
-                'USER_NAME' => '479584053115558',
-                'USER_PASS' => 'cong13480794861',
+                'USER_NAME' => '20060400000044502',
+                'USER_PASS' => '`12qwe',
                 'REQ_SN' => $merchantId.date('YmdHis').rand(1000,9999),
             ),
             'TRANS' => array(
