@@ -24,7 +24,7 @@
             {widget:name=sub_navs action=header}
 
             {if:!isset($userInfo)}
-            <form id="paysubmit" name="paysubmit" action="{echo:$paymentPlugin->submitUrl()}" method="{$paymentPlugin->method}">
+            <form id="paysubmit" name="paysubmit" action="{echo:$paymentPlugin->submitUrls()}" method="{$paymentPlugin->method}">
                 {list:items = $sendData}
                 <input type='hidden' name='{$key}' value='{$item}' />
                 {/list}
@@ -34,7 +34,7 @@
             </script>
             {else:}
             <div class="payform">
-                <form id="paysubmit" name="paysubmit" action="{echo:$paymentPlugin->submitUrls()}" method="{$paymentPlugin->method}">
+                <form id="paysubmit" name="paysubmit" action="{echo:$paymentPlugin->submitUrl()}" method="{$paymentPlugin->method}">
                     {list:items = $sendData}
                     <input type='hidden' name='{$key}' value='{$item}' />
                     {/list}
