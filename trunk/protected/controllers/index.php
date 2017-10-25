@@ -1821,20 +1821,21 @@ class IndexController extends Controller {
     }
 
     public function demo(){
+        $model = new Model();
        Session::set('demo', 1);
        $inviter_id = Filter::int(Req::args('inviter_id'));
        // var_dump($inviter_id);die;
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
-            $order_no=date('YmdHis').rand(1000,9999);
-            $this->assign('order_no',$order_no);
-            $this->redirect();
+            $shop=$model->table('customer')->fields('real_name')->where('user_id='.$this->user['id'])->find();
+            $this->assign('shop_name',$shop['real_name']);
         } else {
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
         }
         // return;        
         $order_no=date('YmdHis').rand(1000,9999);
+        $this->assign("seo_title","向商家付款");
         $this->assign('seller_id',$inviter_id);
         $this->assign('order_no',$order_no);
         $this->redirect();
