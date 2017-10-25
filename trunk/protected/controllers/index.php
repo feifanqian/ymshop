@@ -1823,24 +1823,26 @@ class IndexController extends Controller {
     public function demo(){
         $model = new Model();
        Session::set('demo', 1);
-       // var_dump($this->user['id']);die;
-       if($this->user['id']==null){
-          // Cookie::set("inviter", $inviter_id);
-            $this->noRight();
-       }
+       // if($this->user['id']==null){
+       //    Cookie::set("inviter", $inviter_id);
+       //      $this->noRight();
+       // }
        $inviter_id = intval(Req::args('inviter_id'));
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");      
+        } else {
+            Cookie::set("inviter", $inviter_id);
+            $this->noRight();
         }
-        var_dump($inviter_id);
+        // var_dump($inviter_id);
         $shop=$this->model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
-        var_dump($shop);die;
+        // var_dump($shop);die;
         if($shop){
             $this->assign('shop_name',$shop['real_name']);
         }else{
             $this->assign('shop_name','未知商家');
         }
-        Cookie::set("inviter", $inviter_id);        
+
         $order_no=date('YmdHis').rand(1000,9999);
         $this->assign("seo_title","向商家付款");
         $this->assign('seller_id',$inviter_id);
