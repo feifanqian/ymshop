@@ -446,6 +446,7 @@ class PaymentController extends Controller {
                         $this->assign('payment_id', $payment_id);
                     }
                 }
+                $this->assign('offline',0);
                 $this->redirect('pay_form', false);
             } else {
                 $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '需要支付的订单已经不存在。'));
@@ -687,8 +688,8 @@ class PaymentController extends Controller {
            $sendData = $paymentPlugin->packDatas($packData);
            $this->assign("paymentPlugin", $paymentPlugin);
            $this->assign("sendData", $sendData);
-
-           $this->redirect('pay_forms', false);
+           $this->assign("offline",1);
+           $this->redirect('pay_form', false);
        }else{
            echo "error";die;
        }
