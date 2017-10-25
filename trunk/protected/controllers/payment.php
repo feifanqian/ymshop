@@ -1171,7 +1171,7 @@ class PaymentController extends Controller {
             $order_no = substr($out_trade_no, 5);
             $order = $this->model->table("order_offline")->where("order_no='{$order_no}'")->find();
             if (!$order) {
-                $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
+                $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息了"));
                 exit();
             }
                 
