@@ -1203,7 +1203,7 @@ class Common {
     }
 
     //通联单笔代付
-    static function allinpayDf($params){
+    static function allinpayDf(){
         $tools=new PhpTools();
         $merchantId=AppConfig::MERCHANT_ID;
         // 源数组
