@@ -689,7 +689,7 @@ class PaymentController extends Controller {
            $this->assign("paymentPlugin", $paymentPlugin);
            $this->assign("sendData", $sendData);
            $this->assign("offline",1);
-           $this->redirect('pay_forms', false);
+           $this->redirect('pay_form', false);
        }else{
            echo "error";die;
        }
@@ -1064,7 +1064,7 @@ class PaymentController extends Controller {
             $return_url = Filter::sql($_POST['return_url']);
             //获取真实订单号 exp :5567_promoter2017050514260743
             $order_no = substr($out_trade_no, 5);
-            $order_model=$this->model->table("order")->where("order_no='{$order_no}'")->find();
+            $order_model=$this->model->table("order_offline")->where("order_no='{$order_no}'")->find();
             if (stripos($out_trade_no, 'promoter') !== false) {//推广员入驻订单
                 $order = $this->model->table("district_order")->where("order_no ='" . $order_no . "'")->find();
                 if (!$order) {
@@ -1096,14 +1096,15 @@ class PaymentController extends Controller {
                 $error_url = Url::urlFormat("/ucenter/recharge_center");
             } else {//商品订单
                 $order = $this->model->table("order")->where("order_no='{$order_no}'")->find();
-                if (!$order) {
+                $order_offline = $this->model->table("order_offline")->where("order_no='{$order_no}'")->find();
+                if (!$order && !$order_offline) {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息啦"));
                     exit();
                 }
                 
-                if($order['type']==8){//线下分账
+                if($order_offline){//线下分账
                    $success_url = Url::urlFormat("/ucenter/order_details/id/{$order['id']}");
-                }else{
+                }elseif($order){
                    $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
                 }
                 $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
@@ -1134,7 +1135,7 @@ class PaymentController extends Controller {
             
             $jsApiParameters = $tools->GetJsApiParameters($order);
             $offline=0;
-            if($order_model['type']==8){
+            if($order_model!=null){
                 // var_dump($_POST['notify_url']);die;
                 $payinfo=Session::get('payinfo');
                 if($payinfo!=null){
