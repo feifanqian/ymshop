@@ -16,6 +16,7 @@
 	const APPKEY = '111111';
     const APIURL = "https://vsp.allinpay.com/apiweb/unitorder";//生产环境
     const APIVERSION = '11';
-    const MERCHANT_ID = "200604000000445";
+    // const MERCHANT_ID = "200604000000445";
+    const MERCHANT_ID = '479584053115558';
  }
 ?>
