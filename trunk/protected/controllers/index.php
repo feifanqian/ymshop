@@ -1827,19 +1827,17 @@ class IndexController extends Controller {
        // var_dump($inviter_id);die;
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
-            // var_dump($inviter_id);die;
-            $shop=$model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
-            if($shop){
-                $this->assign('shop_name',$shop['real_name']);
-            }else{
-                $this->assign('shop_name','未知商家');
-            }
-            
+            // var_dump($inviter_id);die;      
         } else {
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
         }
-        // return;        
+        $shop=$model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
+        if($shop){
+            $this->assign('shop_name',$shop['real_name']);
+        }else{
+            $this->assign('shop_name','未知商家');
+        }        
         $order_no=date('YmdHis').rand(1000,9999);
         $this->assign("seo_title","向商家付款");
         $this->assign('seller_id',$inviter_id);
