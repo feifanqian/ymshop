@@ -1832,8 +1832,7 @@ class IndexController extends Controller {
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
         }
-        $shop=$model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
-        var_dump($shop);die;
+        $shop=$this->model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
         if($shop){
             $this->assign('shop_name',$shop['real_name']);
         }else{
