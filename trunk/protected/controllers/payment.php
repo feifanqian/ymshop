@@ -883,6 +883,9 @@ class PaymentController extends Controller {
             $promoter_id=Common::getFirstPromoter($order['user_id']);
             if($seller_id!=$promoter_id){
                 Common::offlineBeneficial($order_no,$invite_id);
+            }else{
+                $model->table('customer')->where('user_id='.$seller_id)->data(array("balance"=>"`balance`+({$order['order_amount']})"))->update();//平台收益提成
+                 Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益', 8);
             }
             echo "SUCCESS";
         }else{
