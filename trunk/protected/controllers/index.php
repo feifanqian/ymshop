@@ -1824,15 +1824,15 @@ class IndexController extends Controller {
         $model = new Model();
        Session::set('demo', 1);
        $inviter_id = intval(Req::args('inviter_id'));
-       // var_dump($inviter_id);die;
         if (isset($this->user['id'])) {
-            Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
-            // var_dump($inviter_id);die;      
+            Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");      
         } else {
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
         }
+        var_dump($inviter_id);
         $shop=$this->model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
+        var_dump($shop);die;
         if($shop){
             $this->assign('shop_name',$shop['real_name']);
         }else{
