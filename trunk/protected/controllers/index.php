@@ -1823,6 +1823,7 @@ class IndexController extends Controller {
     public function demo(){
         $model = new Model();
        Session::set('demo', 1);
+       var_dump($this->user['id']);die;
        $inviter_id = intval(Req::args('inviter_id'));
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");      
