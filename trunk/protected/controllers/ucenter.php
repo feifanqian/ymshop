@@ -780,7 +780,7 @@ class UcenterController extends Controller {
         $valid_time[5] = isset($config_other['other_order_delay_point']) ? intval($config_other['other_order_delay_point']) : 0;
         $valid_time[6] = isset($config_other['other_order_delay_pointflash']) ? intval($config_other['other_order_delay_pointflash']) : 0;
         $query = new Query('order');
-        $where = array("user_id = " . $this->user['id'], 'is_del = 0');
+        $where = array("user_id = " . $this->user['id'], 'is_del = 0','type !=8');
         switch ($status) {
             case "unpay":
                 $where[] = "status <= '2'";
