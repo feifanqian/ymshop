@@ -997,7 +997,7 @@ class UcenterController extends Controller {
 
     public function order_details() {
         $id = Filter::int(Req::args("id"));
-        $order = $this->model->table("order_offline")->where("id = $id and user_id=" . $this->user['id'])->find();
+        $order = $this->model->table("order_offline")->where("id = $id")->find();
         
         $shop = $this->model->table('customer')->fields('real_name')->where('user_id='.$order['shop_ids'])->find();
         $this->assign('shopname',$shop['real_name']);
