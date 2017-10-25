@@ -1828,8 +1828,12 @@ class IndexController extends Controller {
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
             $shop=$model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
-            // var_dump($inviter_id);die;
-            $this->assign('shop_name',$shop['real_name']);
+            if($shop){
+                $this->assign('shop_name',$shop['real_name']);
+            }else{
+                $this->assign('shop_name','未知商家');
+            }
+            
         } else {
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
