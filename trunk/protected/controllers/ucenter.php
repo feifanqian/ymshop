@@ -997,8 +997,12 @@ class UcenterController extends Controller {
 
     public function order_details() {
         $id = Filter::int(Req::args("id"));
+        var_dump($this->user['id']);die;
         $order = $this->model->table("order_offline")->where("id = $id")->find();
-        
+        if (!$order) {
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
+            exit();
+        }
         $shop = $this->model->table('customer')->fields('real_name')->where('user_id='.$order['shop_ids'])->find();
         $this->assign('shopname',$shop['real_name']);
         $this->assign("order", $order);
