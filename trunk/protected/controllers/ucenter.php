@@ -995,6 +995,17 @@ class UcenterController extends Controller {
         }
     }
 
+    public function order_details() {
+        $id = Filter::int(Req::args("id"));
+        $order = $this->model->table("order")->where("id = $id and user_id=" . $this->user['id'])->find();
+        
+        $shop = $this->model->table('customer')->fields('real_name')->where('user_id='.$order['user_id'])->find();
+        $this->assign('shopname',$shop['real_name']);
+        $this->assign("order", $order);
+        $this->redirect();
+        
+    }
+
     //订单签收
     public function order_sign() {
         $id = Filter::int(Req::args("id"));
