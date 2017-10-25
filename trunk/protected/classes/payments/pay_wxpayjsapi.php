@@ -15,6 +15,11 @@ class pay_wxpayjsapi extends PaymentPlugin {
         return '/payment/pay_wxpayjsapi_submit/';
     }
 
+    //线下提交地址
+    public function submitUrls() {
+        return '/payment/pay_wxpayjsapi_submits/';
+    }
+
     public function isNeedSubmit() {
         return true;
     }

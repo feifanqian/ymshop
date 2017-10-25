@@ -636,7 +636,7 @@ class PaymentController extends Controller {
        $data['admin_remark']="";
        $data['shop_ids']=$seller_id;
        $date['invite_id']=$invite_id;
-       $model = new Model('order');
+       $model = new Model('order_offline');
        $order_id=$model->data($data)->insert();
 
        $payment = new Payment($payment_id);
@@ -688,7 +688,7 @@ class PaymentController extends Controller {
            $this->assign("paymentPlugin", $paymentPlugin);
            $this->assign("sendData", $sendData);
 
-           $this->redirect('pay_form', false);
+           $this->redirect('pay_forms', false);
        }else{
            echo "error";die;
        }
@@ -869,8 +869,8 @@ class PaymentController extends Controller {
         }
 
         if($trxstatus==1){
-            $order=$this->model->table('order')->where("order_no='{$order_no}'")->find();
-            $this->model->table('order')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1))->update();
+            $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
+            $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1))->update();
             // $invite_id=Session::get('invite_id');
             $invite_id=$order['prom_id'];
             $this->model->table('customer')->where('user_id=1777')->data(array('qq'=>$invite_id))->update();
@@ -1142,6 +1142,51 @@ class PaymentController extends Controller {
                     $offline=1;
                 }  
             }
+            // var_dump($jsApiParameters);die;
+            //获取共享收货地址js函数参数
+            $editAddress = $tools->GetEditAddressParameters();
+
+            $this->assign("return_url", $return_url); //好像没用到
+            $this->assign("jsApiParameters", $jsApiParameters);
+            $this->assign("offline",$offline);
+            $this->assign("editAddress", $editAddress);
+            $this->redirect();
+        } else {
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "请在微信中发起支付"));
+            exit();
+            // $sendData = $_POST;
+            // unset($sendData['con'], $sendData['act']);
+            // $this->assign("sendData", $sendData);
+            // $this->redirect();
+        }
+    }
+
+    //线下微信jsapi提交处理
+    public function pay_wxpayjsapi_submits() {
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+            $out_trade_no = Filter::sql($_POST['out_trade_no']);
+            $return_url = Filter::sql($_POST['return_url']);
+            //获取真实订单号 exp :5567_promoter2017050514260743
+            $order_no = substr($out_trade_no, 5);
+            $order = $this->model->table("order_offline")->where("order_no='{$order_no}'")->find();
+            if (!$order) {
+                $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
+                exit();
+            }
+                
+            $success_url = Url::urlFormat("/ucenter/order_details/id/{$order['id']}");
+            
+            $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
+            $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
+            
+            $this->assign("success_url", $success_url);
+            $this->assign("cancel_url", $cancel_url);
+            $this->assign("error_url", $error_url);
+            //①、获取用户openid
+            $tools = new JsApiPay();
+            $payinfo=Session::get('payinfo');
+            $jsApiParameters=json_encode($payinfo);
+            $offline=1;
             // var_dump($jsApiParameters);die;
             //获取共享收货地址js函数参数
             $editAddress = $tools->GetEditAddressParameters();
