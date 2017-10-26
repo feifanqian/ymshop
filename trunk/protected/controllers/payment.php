@@ -874,7 +874,6 @@ class PaymentController extends Controller {
             $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1))->update();
             // $invite_id=Session::get('invite_id');
             $invite_id=$order['prom_id'];
-            $this->model->table('customer')->where('user_id=1777')->data(array('qq'=>$invite_id))->update();
             $seller_id=$order['shop_ids'];             
             //上级代理商是卖家的话不参与分账
             if($invite_id==null){
