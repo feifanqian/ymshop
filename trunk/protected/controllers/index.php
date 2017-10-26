@@ -1840,6 +1840,7 @@ class IndexController extends Controller {
         if($shop){
             $this->assign('shop_name',$shop['real_name']);
         }else{
+            var_dump($this->user['id']);die;
             $this->assign('shop_name','未知商家');
         }
 
