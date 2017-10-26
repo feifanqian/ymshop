@@ -1840,6 +1840,7 @@ class IndexController extends Controller {
         if($shop){
             $this->assign('shop_name',$shop['real_name']);
         }else{
+            var_dump($inviter_id);die;
             $invite=$this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
             $inviter_id=$invite['user_id'];
             $shop1=$this->model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
