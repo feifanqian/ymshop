@@ -26,7 +26,7 @@
         <th style="width:50px">订单状态</th>
         <th style="width:50px">打印</th>
     </tr>
-    {query:name=order as od fields=od.*,us.name as uname,us.status as ustatus,cu.real_name join= left join user as us on od.user_id eq us.id left join customer as cu on od.user_id eq cu.user_id where=$where id=$obj page=1 order= id desc }
+    {query:name=order_offline as od fields=od.*,us.name as uname,us.status as ustatus,cu.real_name join= left join user as us on od.user_id eq us.id left join customer as cu on od.user_id eq cu.user_id where=$where id=$obj page=1 order= id desc }
         <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"><i class="icon-order-{$item['type']}"></i></td>
             <td style="width:50px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
                 <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看</a></li>
