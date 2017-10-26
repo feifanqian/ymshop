@@ -22,8 +22,6 @@
     <body>
         <div class="viewport">
             {widget:name=sub_navs action=header}
-
-            {if:!isset($userInfo)}
             <form id="paysubmit" name="paysubmit" action="{echo:$paymentPlugin->submitUrls()}" method="{$paymentPlugin->method}">
                 {list:items = $sendData}
                 <input type='hidden' name='{$key}' value='{$item}' />
@@ -31,38 +29,7 @@
             </form>
             <script type='text/javascript'>
                 document.forms['paysubmit'].submit();
-            </script>
-            {else:}
-            <div class="payform">
-                <form id="paysubmit" name="paysubmit" action="{echo:$paymentPlugin->submitUrl()}" method="{$paymentPlugin->method}">
-                    {list:items = $sendData}
-                    <input type='hidden' name='{$key}' value='{$item}' />
-                    {/list}
-                    <input type="hidden" name="order_id" value="{$order_id}">
-                    <input type="hidden" name="payment_id" value="{$payment_id}">
-                    <h1 class="weui_cells_title">{echo:$paymentPlugin->name}</h1>
-                    <div class="weui_cells weui_cells_form">
-                        <div class="weui_cell">
-                            <div class="weui_cell_hd"><label class="weui_label">{if:isset($pay_balance)&&$pay_balance==true}账户余额{/if}</label></div>
-                            <div class="weui_cell_bd">
-                                <p>{if:isset($pay_balance)&&$pay_balance==true}{echo:$userInfo['balance']}{/if}</p>
-                            </div>
-                        </div>
-                        <div class="weui_cell">
-                            <div class="weui_cell_hd"><label for="" class="weui_label">支付密码</label></div>
-                            <div class="weui_cell_bd weui_cell_primary">
-                                <input type="password" class="weui_input" name="pay_password"> <label class="error">{$msg}</label>
-                            </div>
-                        </div>
-                        <div class="weui_cell">
-                            <div class="weui_cell_bd weui_cell_primary">
-                                <input type="submit" class="weui_btn weui_btn_primary" value="确定支付">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            {/if}
+            </script>       
         </div>
         {set:$curtab=isset($curtab)?$curtab:Req::args('con');}
         {widget:name=tabbar action=item cart=0 current=ucenter}
