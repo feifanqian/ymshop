@@ -1697,7 +1697,7 @@ class PaymentController extends Controller {
             $str="<xml>
                   <return_code><![CDATA[FAIL]]></return_code>
                   <return_msg><![CDATA[签名失败]]></return_msg>
-                </xml>"
+                </xml>";
           }
         echo $str;   
     }
