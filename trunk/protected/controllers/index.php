@@ -1840,14 +1840,15 @@ class IndexController extends Controller {
         if($shop){
             $this->assign('shop_name',$shop['real_name']);
         }else{
-            $invite=$this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
-            if($invite){
-                $inviter_id=$invite['user_id'];
-                $shop1=$this->model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
-                $this->assign('shop_name',$shop1['real_name']);
-            }else{
-                $this->assign('shop_name','未知商家');
-            }
+            // $invite=$this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
+            // if($invite){
+            //     $inviter_id=$invite['user_id'];
+            //     $shop1=$this->model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
+            //     $this->assign('shop_name',$shop1['real_name']);
+            // }else{
+            //     $this->assign('shop_name','未知商家');
+            // }
+            $this->assign('shop_name','未知商家');
         }
 
         $order_no=date('YmdHis').rand(1000,9999);
