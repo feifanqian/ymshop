@@ -9,7 +9,8 @@
 <table class="default" >
     <tr>
         <th style="width:30">序号</th>
-        <th style="width:140">时间</th>
+        <th style="width:120">订单号</th>
+        <th style="width:120">时间</th>
         <th style="width:80">金额</th>
         <th style="width:100">当前余额</th>
         <th style="width:100">用户</th>
@@ -18,6 +19,7 @@
     {query:name=balance_log as bl fields=bl.*,us.name join=left join user as us on bl.user_id eq us.id where= $where order= bl.id desc id=$obj page=1 desc }
         <tr class="{if:$key%2==1}odd{/if}">
         <td style="width:30px;">{$item['id']}、</td>
+        <td style="width:140px">{$item['order_no']}</td>
         <td style="width:140px">{$item['time']}</td><td style="width:80px">{$item['amount']}</td><td style="width:100px">{$item['amount_log']}</td><td style="width:100px">{$item['name']}</td><td >{$item['note']}</td>
         </tr>
     {/query}
