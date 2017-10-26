@@ -1567,7 +1567,7 @@ class IndexController extends Controller {
             Cookie::set("url", Url::pathinfo());
             $wechat = new WechatOAuth();
             $url = $wechat->getRequestCodeURL();
-            // var_dump($url);die;
+            var_dump($url);die;
             $this->redirect($url);
             exit;
             // $this->redirect("/index/index");
@@ -1840,11 +1840,14 @@ class IndexController extends Controller {
         if($shop){
             $this->assign('shop_name',$shop['real_name']);
         }else{
-            var_dump($inviter_id);die;
             $invite=$this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
-            $inviter_id=$invite['user_id'];
-            $shop1=$this->model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
-            $this->assign('shop_name',$shop1['real_name']);
+            if($invite){
+                $inviter_id=$invite['user_id'];
+                $shop1=$this->model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
+                $this->assign('shop_name',$shop1['real_name']);
+            }else{
+                $this->assign('shop_name','未知商家');
+            }
         }
 
         $order_no=date('YmdHis').rand(1000,9999);
