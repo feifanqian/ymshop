@@ -741,8 +741,8 @@ class PaymentController extends Controller {
                 $invite_id=1;
             }
             $promoter_id=Common::getFirstPromoter($order['user_id']);
-            $exist=$this->model->table('balance_log')->where("order_no='{$order_no}'")->find();
-            if(!$exist){
+            // $exist=$this->model->table('balance_log')->where("order_no='{$order_no}'")->find();
+            // if(!$exist){
                 if($seller_id!=$promoter_id){
                     $config = Config::getInstance()->get("district_set");
                     $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
@@ -753,21 +753,23 @@ class PaymentController extends Controller {
                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("balance"=>"`balance`+({$order['order_amount']})"))->update();//平台收益提成
                      Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
                 }
-            }                            
+            // }                            
         }
 
         if($trxstatus==1){
-            $str="<xml>
-                   <return_code><![CDATA[SUCCESS]]></return_code>
-                   <return_msg><![CDATA[OK]]></return_msg>
-                  </xml>";
+            echo 'success';
+            // $str="<xml>
+            //        <return_code><![CDATA[SUCCESS]]></return_code>
+            //        <return_msg><![CDATA[OK]]></return_msg>
+            //       </xml>";
         }else{
-            $str="<xml>
-                  <return_code><![CDATA[FAIL]]></return_code>
-                  <return_msg><![CDATA[签名失败]]></return_msg>
-                </xml>";
+            echo 'fail';
+            // $str="<xml>
+            //       <return_code><![CDATA[FAIL]]></return_code>
+            //       <return_msg><![CDATA[签名失败]]></return_msg>
+            //     </xml>";
         }       
-        echo $str;
+        // echo $str;
         // $this->returnStatus($trxstatus);
     }
 
