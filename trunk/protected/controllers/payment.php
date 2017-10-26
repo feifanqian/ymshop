@@ -851,55 +851,61 @@ class PaymentController extends Controller {
         $xml = @file_get_contents('php://input');
         // $array=Common::xmlToArray($xml);
         file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
-        // $str=substr(json_encode($xml),-5);
-        // $strs=substr($str,0,4);
-        // $trxstatus=0;  
-        // if($strs=='0000'){    
-        //     $trxstatus=1;
-        // }
-        // $payinfo=explode('&',json_encode($xml));
-        // $orderarr=$payinfo[4];
-        // $order_no=substr($orderarr,-18);
-        // //从URL中获取支付方式
-        // $payment_id = 6;
-        // // var_dump($payment_id);die;
-        // $payment = new Payment($payment_id);
-        // $paymentPlugin = $payment->getPaymentPlugin();
-        // if (!is_object($paymentPlugin)) {
-        //     echo "fail";
-        // }
+        $str=substr(json_encode($xml),-5);
+        $strs=substr($str,0,4);
+        $trxstatus=0;  
+        if($strs=='0000'){    
+            $trxstatus=1;
+        }
+        $payinfo=explode('&',json_encode($xml));
+        $orderarr=$payinfo[4];
+        $order_no=substr($orderarr,-18);
+        //从URL中获取支付方式
+        $payment_id = 6;
+        // var_dump($payment_id);die;
+        $payment = new Payment($payment_id);
+        $paymentPlugin = $payment->getPaymentPlugin();
+        if (!is_object($paymentPlugin)) {
+            echo "fail";
+        }
 
-        // if($trxstatus==1){
-        //     $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
-        //     $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1))->update();
-        //     // $invite_id=Session::get('invite_id');
-        //     $invite_id=$order['prom_id'];
-        //     $seller_id=$order['shop_ids'];             
-        //     //上级代理商是卖家的话不参与分账
-        //     if($invite_id==null){
-        //         $invite_id=1;
-        //     }
-        //     $promoter_id=Common::getFirstPromoter($order['user_id']);
-        //     $exist=$this->model->table('balance_log')->where("order_no='{$order_no}'")->find();
-        //     if(!$exist){
-        //         if($seller_id!=$promoter_id){
-        //             $config = Config::getInstance()->get("district_set");
-        //             $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
-        //             $this->model->table('customer')->where('user_id='.$seller_id)->data(array("balance"=>"`balance`+({$amount})"))->update();//平台收益提成
-        //             Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
-        //             Common::offlineBeneficial($order_no,$invite_id);
-        //         }else{
-        //             $this->model->table('customer')->where('user_id='.$seller_id)->data(array("balance"=>"`balance`+({$order['order_amount']})"))->update();//平台收益提成
-        //              Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
-        //         }
-        //     }                            
-        // }
+        if($trxstatus==1){
+            $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
+            $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1))->update();
+            // $invite_id=Session::get('invite_id');
+            $invite_id=$order['prom_id'];
+            $seller_id=$order['shop_ids'];             
+            //上级代理商是卖家的话不参与分账
+            if($invite_id==null){
+                $invite_id=1;
+            }
+            $promoter_id=Common::getFirstPromoter($order['user_id']);
+            $exist=$this->model->table('balance_log')->where("order_no='{$order_no}'")->find();
+            if(!$exist){
+                if($seller_id!=$promoter_id){
+                    $config = Config::getInstance()->get("district_set");
+                    $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
+                    $this->model->table('customer')->where('user_id='.$seller_id)->data(array("balance"=>"`balance`+({$amount})"))->update();//平台收益提成
+                    Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
+                    Common::offlineBeneficial($order_no,$invite_id);
+                }else{
+                    $this->model->table('customer')->where('user_id='.$seller_id)->data(array("balance"=>"`balance`+({$order['order_amount']})"))->update();//平台收益提成
+                     Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
+                }
+            }                            
+        }
 
-             $str="<xml>
+        if($trxstatus==1){
+            $str="<xml>
                    <return_code><![CDATA[SUCCESS]]></return_code>
                    <return_msg><![CDATA[OK]]></return_msg>
                   </xml>";
-        
+        }else{
+            $str="<xml>
+                  <return_code><![CDATA[FAIL]]></return_code>
+                  <return_msg><![CDATA[签名失败]]></return_msg>
+                </xml>";
+        }       
         echo $str;
         // $this->returnStatus($trxstatus);
     }
