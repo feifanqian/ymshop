@@ -893,10 +893,8 @@ class PaymentController extends Controller {
                      Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
                 }
             }
-            return "SUCCESS";
-        }else{
-            return "FAIL";
-        }  
+        }
+        $this->returnStatus($trxstatus);
     }
 
     // 支付回调[异步]
@@ -1686,6 +1684,22 @@ class PaymentController extends Controller {
     public function test(){
         $orderNo = Filter::str(Req::args('recharge_no'));
         var_dump(Order::recharge($orderNo));
+    }
+    
+    //返回状态给微信服务器
+    public function returnStatus($status){
+         if($status==1){
+            $str="<xml>
+                   <return_code><![CDATA[SUCCESS]]></return_code>
+                   <return_msg><![CDATA[OK]]></return_msg>
+                  </xml>";
+          }else{
+            $str="<xml>
+                  <return_code><![CDATA[FAIL]]></return_code>
+                  <return_msg><![CDATA[签名失败]]></return_msg>
+                </xml>"
+          }
+        echo $str;   
     }
 
 }
