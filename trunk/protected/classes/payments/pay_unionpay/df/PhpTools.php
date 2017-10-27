@@ -140,7 +140,7 @@ class PhpTools{
 			    <CUST_USERID>2901347</CUST_USERID>
 			  </TRANS>
 			</AIPG>";
-	   var_dump($xml);die;		
+	   echo($xml);die;		
 		$xmlSignPost = $this->arrayXml->toXmlGBK($params, 'AIPG');
 
 		return  $xmlSignPost;
