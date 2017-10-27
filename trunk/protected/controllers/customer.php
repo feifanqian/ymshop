@@ -389,14 +389,7 @@ class CustomerController extends Controller {
         return $info;
     }
 
-    function customer_list() {
-        $model=new  Model('customer as c');
-        $user=$model->fields('c.user_id')->join('invite as i on c.user_id=i.invite_user_id')->findAll();
-        foreach ($user as $key => $v) {
-                   $userid[$key] = $v['user_id'];
-                }
-            $ids=implode(',',$userid);
-            var_dump($ids);die;
+    function customer_list() 
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
         if ($condition_str)
