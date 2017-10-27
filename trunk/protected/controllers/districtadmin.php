@@ -786,7 +786,7 @@ class DistrictadminController extends Controller {
                 $owner=$model->table('district_shop')->fields('id,owner_id')->where('id='.$hirer_id)->find();
                 $invite=$model->table('invite')->where('invite_user_id='.$user_id)->find();
                 if(!$invite){
-                    $model->table('invite')->data(array('user_id'=>$owner['owner_id'],'invite_user_id'=>$user_id,'from'=>'web','district_id'=>$owner['id'],'createtime'=>time()))->insert();
+                    $model->table('invite')->data(array('user_id'=>$owner['owner_id'],'invite_user_id'=>$user_id,'from'=>'admin','district_id'=>$owner['id'],'createtime'=>time()))->insert();
                 }
                 
                 $datas['user_id'] = $user_id;
