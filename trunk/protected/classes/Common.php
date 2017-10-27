@@ -875,10 +875,8 @@ class Common {
 
      static function getFirstPromoter($user_id){
         $model = new Model();
-        $is_promoter = $model->table("district_promoter")->where("user_id=".$user_id)->find();
-        if($is_promoter){
-            return $user_id;
-        }else{
+        // $is_promoter = $model->table("district_promoter")->where("user_id=".$user_id)->find();
+        
             //根据邀请关系找到上级第一个推广者（代理商）
             $is_break = false;
             $now_user_id = $user_id;
@@ -898,7 +896,7 @@ class Common {
                 }
             }
             return $promoter_user_id;
-        }
+        
      }
 
      static function offlineBeneficial($order_no,$invite_id){//线下分账到余额
