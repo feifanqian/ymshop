@@ -124,7 +124,7 @@ class PhpTools{
 	 * 发送请求
 	 */
 	public function send($params){
-		var_dump($params);die;
+		exit(json_encode($params));
 		$xmlSignPost=$this->signXml($params);
 		$xmlSignPost=str_replace("TRANS_DETAIL2", "TRANS_DETAIL",$xmlSignPost);
 		$response = cURL::factory()->post(PhpTools::apiUrl, $xmlSignPost);
