@@ -73,7 +73,6 @@ class PhpTools{
 		    $xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
 
 		    $results = $this->arrayXml->parseString( $xmlResponse , TRUE);
-		    var_dump($results);die;
 		    echo "<br/><br/><font color=blue>-------------华丽丽的分割线--------------------</font><br/><br/>";
 //		    echo $results;
 		    return $results;
@@ -126,6 +125,9 @@ class PhpTools{
 	 */
 	public function send($params){
 		$xmlSignPost=$this->signXml($params);
+		$params['INFO']['SIGNED_MSG']=$xmlSignPost;
+		$xml=$this->arrayXml->toXml($params);
+		var_dump($xml);die;
 		$xmlSignPost=str_replace("TRANS_DETAIL2", "TRANS_DETAIL",$xmlSignPost);
 		$response = cURL::factory()->post(PhpTools::apiUrl, $xmlSignPost);
 	
