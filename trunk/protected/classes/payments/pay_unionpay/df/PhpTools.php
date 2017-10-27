@@ -11,8 +11,10 @@ class PhpTools{
 	const apiUrl = 'https://tlt.allinpay.com/aipg/ProcessServlet';//（生产环境地址，上线时打开该注释）
 	
 	 public function __construct() {
-        $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.pem";
-        $this->privateKeyFile=dirname(__FILE__)."/certs/20060400000044502.pem";
+        // $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.pem";
+        $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.cer";
+        // $this->privateKeyFile=dirname(__FILE__)."/certs/20060400000044502.pem";
+        $this->privateKeyFile=dirname(__FILE__)."/certs/20060400000044502.p12";
         $this->arrayXml = new ArrayAndXml();
     }   
 	
