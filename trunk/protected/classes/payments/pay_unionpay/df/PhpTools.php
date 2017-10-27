@@ -121,7 +121,6 @@ class PhpTools{
 			    <VERSION>03</VERSION>
 			    <DATA_TYPE>2</DATA_TYPE>
 			    <LEVEL>5</LEVEL>
-			    <MERCHANT_ID>{$params['INFO']['MERCHANT_ID']}</MERCHANT_ID>
 			    <USER_NAME>{$params['INFO']['USER_NAME']}</USER_NAME>
 			    <USER_PASS>{$params['INFO']['USER_PASS']}</USER_PASS>
 			    <REQ_SN>{$params['INFO']['REQ_SN']}</REQ_SN>
@@ -129,8 +128,8 @@ class PhpTools{
 			  </INFO>
 			  <TRANS>
 			    <BUSINESS_CODE>09400</BUSINESS_CODE>
-			    <MERCHANT_ID>{$params['INFO']['MERCHANT_ID']}</MERCHANT_ID>
-			    <SUBMIT_TIME>{$params['INFO']['SUBMIT_TIME']}</SUBMIT_TIME>
+			    <MERCHANT_ID>{$params['TRANS']['MERCHANT_ID']}</MERCHANT_ID>
+			    <SUBMIT_TIME>{$params['TRANS']['SUBMIT_TIME']}</SUBMIT_TIME>
 			    <BANK_CODE></BANK_CODE>
 			    <ACCOUNT_NO>6227002021490888887</ACCOUNT_NO>
 			    <ACCOUNT_NAME>潜非凡</ACCOUNT_NAME>
