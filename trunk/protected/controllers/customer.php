@@ -400,6 +400,52 @@ class CustomerController extends Controller {
         $this->redirect();
     }
 
+    public function customer_export(){
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if($condition_str){
+            $where = $condition_str;
+        }else{
+            $where = '1=1';
+        }
+        $model=new Model('customer as c');
+        $customer=$model->join('invite as i on c.user_id=i.inviter_user_id')->where($where)->fields('c.user_id,c.real_name,c.mobile')->findAll();
+        foreach($customer as $k => $v){
+            $customer[$k]['inviter_id']=Common::getInviterId($v['user_id']);
+            $customer[$k]['inviter_name']=Common::getInviterName($v['user_id']);
+            $customer[$k]['first_promoter']=Common::getFirstPromoterName($v['user_id']);
+            $customer[$k]['first_district']=Common::getFirstDistricter($v['user_id']);
+        }
+       $strTable = '<table width="500" border="1">';
+        $strTable .= '<tr>';
+        $strTable .= '<td style="text-align:center;font-size:20px;width:100px;">用户ID</td>';
+        $strTable .= '<td style="text-align:center;font-size:20px;width:100px;">用户昵称</td>';
+        $strTable .= '<td style="text-align:center;font-size:20px;" width="100px">联系电话</td>';
+        $strTable .= '<td style="text-align:center;font-size:20px;" width="100px">上级邀请人ID</td>';
+        $strTable .= '<td style="text-align:center;font-size:20px;" width="100px">上级邀请人</td>';
+        $strTable .= '<td style="text-align:center;font-size:20px;" width="100px">上级代理商</td>';
+        $strTable .= '<td style="text-align:center;font-size:20px;" width="100px">上级经销商</td>';  
+        $strTable .= '</tr>';
+
+        if (is_array($customer)) {
+            foreach ($customer as $k => $val) {
+                $strTable .= '<tr>';
+                $strTable .= '<td style="text-align:center;font-size:20px;">' . $val['user_id'] . '</td>';
+                $strTable .= '<td style="text-align:left;font-size:20px;">' . $val['real_name'] . ' </td>';
+                $strTable .= '<td style="text-align:left;font-size:20px;">' . $val['mobile'] . '</td>';
+                $strTable .= '<td style="text-align:left;font-size:20px;">' . $val['inviter_id'] . '</td>';
+                $strTable .= '<td style="text-align:left;font-size:20px;">' . $val['inviter_name'] . '</td>';
+                $strTable .= '<td style="text-align:left;font-size:20px;">' . $val['first_promoter'] . '</td>';
+                $strTable .= '<td style="text-align:left;font-size:20px;">' . $val['first_district'] . '</td>';
+                $strTable .= '</tr>';
+            }
+            unset($customer);
+        }
+        $strTable .= '</table>';
+        Common::downloadExcel($strTable, 'customer');
+        exit();
+    }
+
     public function customer_edit() {
         $id = Req::args("id");
 

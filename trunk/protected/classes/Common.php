@@ -899,6 +899,67 @@ class Common {
         
      }
 
+     static function getFirstPromoterName($user_id){
+        $model = new Model();
+        // $is_promoter = $model->table("district_promoter")->where("user_id=".$user_id)->find();
+        
+            //根据邀请关系找到上级第一个推广者（代理商）
+            $is_break = false;
+            $now_user_id = $user_id;
+            $promoter_user_id = 1;
+            while(!$is_break){
+                $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
+                if($inviter_info){
+                    $is_promoter = $model->table("district_promoter")->where("user_id=".$inviter_info['user_id'])->find();
+                    if(!empty($is_promoter)){
+                        $promoter_user_id = $inviter_info['user_id'];
+                        $is_break = true;
+                    }else{
+                        $now_user_id = $inviter_info['user_id'];
+                    }
+                }else{
+                    $is_break = true;
+                }
+            }
+           $promoter_user=$model->table('customer')->fields('real_name')->where('user_id='.$promoter_user_id)->find();
+           return $promoter_user['real_name'];
+     }
+
+     static function getInviterId($user_id){
+         $model=new Model();
+         $invite=$model->table('invite')->where('invite_user_id='.$user_id)->find();
+            if($invite){
+                $invite_id=$invite['user_id'];
+            }else{
+                $invite_id=1;
+            }
+        return $invite_id;  
+     }
+
+     static function getInviterName($user_id){
+        $model=new Model();
+        $invite=$model->table('invite')->where('invite_user_id='.$user_id)->find();
+            if($invite){
+                $invite_id=$invite['user_id'];
+            }else{
+                $invite_id=1;
+            }
+        $user=$model->table('customer')->fields('real_name')->where('user_id='.$invite_id)->find();
+        return $user['real_name'];
+     }
+
+     static function getFirstDistricter($user_id){
+        $model=new Model();
+        $invite=$model->table('invite')->where('invite_user_id='.$user_id)->find();
+        $district=$model->table('district_shop')->fields('name,owner_id')->where('id='.$inviteinfo['district_id'])->find();
+        if($district){
+            $district_name=$district['name'];
+        }else{
+            $district_name='圆梦商城';
+        }
+        return $district_name;
+     }
+
      static function offlineBeneficial($order_no,$invite_id){//线下分账到余额
          // var_dump($invite_id);die;
          $model = new Model();
@@ -1244,5 +1305,20 @@ class Common {
             return false;
                 print_r("验签结果：验签失败，请检查通联公钥证书是否正确");
         }
+    }
+
+    /**
+     * 导出excel
+     * @param $strTable 表格内容
+     * @param $filename 文件名
+     */
+    static function downloadExcel($strTable,$filename)
+    {
+        header("Content-type: application/vnd.ms-excel");
+        header("Content-Type: application/force-download");
+        header("Content-Disposition: attachment; filename=".$filename."_".date('Y-m-d').".xls");
+        header('Expires:0');
+        header('Pragma:public');
+        echo '<html><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'.$strTable.'</html>';
     }
 }

@@ -676,14 +676,20 @@ class DistrictadminController extends Controller {
             if ($promoter) {
                     exit(json_encode(array("status" => 'fail', 'msg' => "该用户已经有雇佣关系了")));               
             } else {
+                $inviter_exist=$model->table('invite')->where('invite_user_id='.$user_id)->find();
                 if(isset($hirer_id) && $hirer_id!='') {   //经销商推代理商
                     $isset = $model->table("district_shop")->where("id=$hirer_id")->find();
                     if (!$isset) {
                         exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
                     }
+                    if(!$inviter_exist){
+                        //添加邀请关系    
+                       $model->table('invite')->data(array('user_id'=>$isset['owner_id'],'invite_user_id'=>$user_id,'from'=>'admin','district_id'=>$isset['id'],'createtime'=>time()))->insert();
+                    }
                     $data['user_id'] = $user_id;
                     $data['type'] = 3;
                     $data['join_time'] = date("Y-m-d H:i:s");
+                    $data['invitor_id'] = $isset['owner_id'];
                     $data['hirer_id'] = $hirer_id;
                     $data['create_time'] = date('Y-m-d H:i:s');
                     $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
@@ -703,14 +709,19 @@ class DistrictadminController extends Controller {
                     if (!$isset) {
                         exit(json_encode(array("status" => 'fail', 'msg' => "代理商不存在")));
                     }
-                    $inviter_exist=$model->table('invite')->where('invite_user_id='.$user_id)->find();
+                    
+                    $district=$model->table('district_shop')->where('owner_id='.$ds_promoter)->find();
+                    if($district){
+                        $district_id=$district['id'];
+                    }else{
+                        $district_id=1;
+                    }
                     if(!$inviter_exist){
                         //添加邀请关系    
-                       $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'web','district_id'=>1,'createtime'=>time()))->insert();
-                    }  
-                    $invite=$model->table('invite')->where('invite_user_id='.$user_id)->find();
-                    if($invite){
-                        $invite_id=$invite['user_id'];
+                       $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'admin','district_id'=>$district_id,'createtime'=>time()))->insert();
+                    }          
+                    if($inviter_exist){
+                        $invite_id=$inviter_exist['user_id'];
                     }else{
                         $invite_id=$ds_promoter;
                     }
@@ -751,6 +762,10 @@ class DistrictadminController extends Controller {
             if (!$user_id || !$hirer_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
             }
+            $owner=$model->table('district_shop')->fields('id,owner_id')->where('id='.$hirer_id)->find();
+            if(!$owner){
+                exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
+            }
             // $promoter = Promoter::getPromoterInstance($user_id);
             $model = new Model();
             //赠送积分和分红点
@@ -764,10 +779,6 @@ class DistrictadminController extends Controller {
                 exit(json_encode(array("status" => 'fail', 'msg' => "该用户已经有雇佣关系了")));
             } else {
                 
-                $isset = $model->table("district_shop")->where("id=$hirer_id")->find();
-                if (!$isset) {
-                    exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
-                }
                 $customer=$model->table('customer as c')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$user_id)->fields('c.real_name,c.mobile,c.city,u.nickname')->find();
                 $data['name'] = $district_name;
                 $data['asset'] = 1000;
@@ -783,7 +794,7 @@ class DistrictadminController extends Controller {
                 $data['location'] = $customer['city'];
                 $result = $model->table("district_shop")->data($data)->insert();
                 
-                $owner=$model->table('district_shop')->fields('id,owner_id')->where('id='.$hirer_id)->find();
+                
                 $invite=$model->table('invite')->where('invite_user_id='.$user_id)->find();
                 if(!$invite){
                     $model->table('invite')->data(array('user_id'=>$owner['owner_id'],'invite_user_id'=>$user_id,'from'=>'admin','district_id'=>$owner['id'],'createtime'=>time()))->insert();
@@ -792,6 +803,7 @@ class DistrictadminController extends Controller {
                 $datas['user_id'] = $user_id;
                 $datas['type'] = 3;
                 $datas['join_time'] = date("Y-m-d H:i:s");
+                $datas['invitor_id'] = $owner['owner_id'];
                 $datas['hirer_id'] = $result;
                 $datas['create_time'] = date('Y-m-d H:i:s');
                 $datas['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
