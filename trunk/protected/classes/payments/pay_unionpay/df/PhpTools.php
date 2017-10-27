@@ -115,7 +115,8 @@ class PhpTools{
 		openssl_free_key($pKeyId);
 		
 		$params['INFO']['SIGNED_MSG'] = bin2hex($signature);
-		
+		$xml=$this->arrayXml->toXmlGBK($params);
+		print_r($xml);die;
 		$xmlSignPost = $this->arrayXml->toXmlGBK($params, 'AIPG');
 
 		return  $xmlSignPost;
@@ -125,9 +126,6 @@ class PhpTools{
 	 */
 	public function send($params){
 		$xmlSignPost=$this->signXml($params);
-		$params['INFO']['SIGNED_MSG']=$xmlSignPost;
-		$xml=$this->arrayXml->toXml($params);
-		var_dump($xml);die;
 		$xmlSignPost=str_replace("TRANS_DETAIL2", "TRANS_DETAIL",$xmlSignPost);
 		$response = cURL::factory()->post(PhpTools::apiUrl, $xmlSignPost);
 	
