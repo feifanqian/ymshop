@@ -708,11 +708,16 @@ class DistrictadminController extends Controller {
                         //添加邀请关系    
                        $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'web','district_id'=>1,'createtime'=>time()))->insert();
                     }  
-                    
+                    $invite=$model->table('invite')->where('invite_user_id='.$user_id)->find();
+                    if($invite){
+                        $invite_id=$invite['user_id'];
+                    }else{
+                        $invite_id=$ds_promoter;
+                    }
                     $data['user_id'] = $user_id;
                     $data['type'] = 3;
                     $data['join_time'] = date("Y-m-d H:i:s");
-                    $data['invitor_id'] = $ds_promoter;
+                    $data['invitor_id'] = $invite_id;
                     $data['create_time'] = date('Y-m-d H:i:s');
                     $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
                     $data['status'] = 1;
