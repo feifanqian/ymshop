@@ -114,33 +114,7 @@ class PhpTools{
 		openssl_sign($xmlSignSrc, $signature, $pKeyId);
 		openssl_free_key($pKeyId);
 		
-		$params['INFO']['SIGNED_MSG'] = bin2hex($signature);
-		$xml="<?xml version='1.0' encoding='GBK'?><AIPG>
-			  <INFO>
-			    <TRX_CODE>{$params['INFO']['TRX_CODE']}</TRX_CODE>
-			    <VERSION>03</VERSION>
-			    <DATA_TYPE>2</DATA_TYPE>
-			    <LEVEL>5</LEVEL>
-			    <USER_NAME>{$params['INFO']['USER_NAME']}</USER_NAME>
-			    <USER_PASS>{$params['INFO']['USER_PASS']}</USER_PASS>
-			    <REQ_SN>{$params['INFO']['REQ_SN']}</REQ_SN>
-			    <SIGNED_MSG>{$params['INFO']['SIGNED_MSG']}</SIGNED_MSG>
-			  </INFO>
-			  <TRANS>
-			    <BUSINESS_CODE>09400</BUSINESS_CODE>
-			    <MERCHANT_ID>{$params['TRANS']['MERCHANT_ID']}</MERCHANT_ID>
-			    <SUBMIT_TIME>{$params['TRANS']['SUBMIT_TIME']}</SUBMIT_TIME>
-			    <BANK_CODE></BANK_CODE>
-			    <ACCOUNT_NO>6227002021490888887</ACCOUNT_NO>
-			    <ACCOUNT_NAME>潜非凡</ACCOUNT_NAME>
-			    <ACCOUNT_PROP>0</ACCOUNT_PROP>
-			    <AMOUNT>1</AMOUNT>
-			    <CURRENCY>CNY</CURRENCY>
-			    <TEL>18070146273</TEL>
-			    <CUST_USERID>2901347</CUST_USERID>
-			  </TRANS>
-			</AIPG>";
-	   echo($xml);die;		
+		$params['INFO']['SIGNED_MSG'] = bin2hex($signature);		
 		$xmlSignPost = $this->arrayXml->toXmlGBK($params, 'AIPG');
 
 		return  $xmlSignPost;
