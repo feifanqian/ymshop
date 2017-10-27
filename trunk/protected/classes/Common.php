@@ -951,12 +951,16 @@ class Common {
      static function getFirstDistricter($user_id){
         $model=new Model();
         $invite=$model->table('invite')->where('invite_user_id='.$user_id)->find();
-        $district=$model->table('district_shop')->fields('name,owner_id')->where('id='.$invite['district_id'])->find();
-        if($district){
-            $district_name=$district['name'];
+        if($invite){
+            $district=$model->table('district_shop')->fields('name,owner_id')->where('id='.$invite['district_id'])->find();
+            if($district){
+                $district_name=$district['name'];
+            }else{
+                $district_name='圆梦商城';
+            }
         }else{
             $district_name='圆梦商城';
-        }
+        }  
         return $district_name;
      }
 
