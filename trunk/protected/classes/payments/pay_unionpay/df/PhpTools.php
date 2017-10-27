@@ -13,7 +13,7 @@ class PhpTools{
 	 public function __construct() {
         $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.pem";
         // $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.cer";
-        $this->privateKeyFile=dirname(__FILE__)."/certs/20060400000044502.pem";
+        $this->privateKeyFile=dirname(__FILE__)."/certs/20058400001550504.pem";
         // $this->privateKeyFile=dirname(__FILE__)."/certs/20060400000044502.p12";
         $this->arrayXml = new ArrayAndXml();
     }   
