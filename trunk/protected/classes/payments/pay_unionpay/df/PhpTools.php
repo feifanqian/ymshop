@@ -7,14 +7,14 @@ class PhpTools{
 	const password = '111111';//商户私钥密码以及用户密码
 //	const  apiUrl = 'http://172.16.1.11:8080/aipg/ProcessServlet';//通联系统对接请求地址（内网）
 	public $arrayXml ;
-    // const apiUrl = 'http://113.108.182.3:8083/aipg/ProcessServlet';//通联系统对接请求地址（外网,商户测试时使用）
-	const apiUrl = 'https://tlt.allinpay.com/aipg/ProcessServlet';//（生产环境地址，上线时打开该注释）
+    const apiUrl = 'http://113.108.182.3:8083/aipg/ProcessServlet';//通联系统对接请求地址（外网,商户测试时使用）
+	// const apiUrl = 'https://tlt.allinpay.com/aipg/ProcessServlet';//（生产环境地址，上线时打开该注释）
 	
 	 public function __construct() {
-        // $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.pem";
-        $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.cer";
-        // $this->privateKeyFile=dirname(__FILE__)."/certs/20060400000044502.pem";
-        $this->privateKeyFile=dirname(__FILE__)."/certs/20060400000044502.p12";
+        $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.pem";
+        // $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.cer";
+        $this->privateKeyFile=dirname(__FILE__)."/certs/20060400000044502.pem";
+        // $this->privateKeyFile=dirname(__FILE__)."/certs/20060400000044502.p12";
         $this->arrayXml = new ArrayAndXml();
     }   
 	
