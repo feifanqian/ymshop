@@ -12,9 +12,9 @@ class PhpTools{
 	
 	 public function __construct() {
         $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.pem";
-        // $this->certFile=dirname(__FILE__)."/certs/allinpay-pds.cer";
+        
         $this->privateKeyFile=dirname(__FILE__)."/certs/20058400001550504.pem";
-        // $this->privateKeyFile=dirname(__FILE__)."/certs/20060400000044502.p12";
+        
         $this->arrayXml = new ArrayAndXml();
     }   
 	
@@ -124,7 +124,6 @@ class PhpTools{
 	 * 发送请求
 	 */
 	public function send($params){
-		var_dump($params);die;
 		$xmlSignPost=$this->signXml($params);
 		$xmlSignPost=str_replace("TRANS_DETAIL2", "TRANS_DETAIL",$xmlSignPost);
 		$response = cURL::factory()->post(PhpTools::apiUrl, $xmlSignPost);
