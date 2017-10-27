@@ -73,6 +73,7 @@ class PhpTools{
 		    $xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
 
 		    $results = $this->arrayXml->parseString( $xmlResponse , TRUE);
+		    var_dump($results);die;
 		    echo "<br/><br/><font color=blue>-------------华丽丽的分割线--------------------</font><br/><br/>";
 //		    echo $results;
 		    return $results;
