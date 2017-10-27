@@ -409,7 +409,7 @@ class CustomerController extends Controller {
             $where = '1=1';
         }
         $model=new Model('customer as c');
-        $customer=$model->join('invite as i on c.user_id=i.inviter_user_id')->where($where)->fields('c.user_id,c.real_name,c.mobile')->findAll();
+        $customer=$model->join('invite as i on c.user_id=i.invite_user_id')->where($where)->fields('c.user_id,c.real_name,c.mobile')->findAll();
         foreach($customer as $k => $v){
             $customer[$k]['inviter_id']=Common::getInviterId($v['user_id']);
             $customer[$k]['inviter_name']=Common::getInviterName($v['user_id']);
