@@ -389,7 +389,7 @@ class CustomerController extends Controller {
         return $info;
     }
 
-    function customer_list() 
+    function customer_list() {
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
         if ($condition_str)
