@@ -115,7 +115,7 @@ class PhpTools{
 		openssl_free_key($pKeyId);
 		
 		$params['INFO']['SIGNED_MSG'] = bin2hex($signature);
-		$xml=$this->arrayXml->toXmlGBK($params);
+		$xml=$this->arrayXml->toXml($params);
 		print_r($xml);die;
 		$xmlSignPost = $this->arrayXml->toXmlGBK($params, 'AIPG');
 
