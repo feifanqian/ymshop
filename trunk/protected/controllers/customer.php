@@ -598,7 +598,7 @@ class CustomerController extends Controller {
                 'REQ_SN' => $merchantId.date('YmdHis').rand(1000,9999),
             ),
             'TRANS' => array(
-                'BUSINESS_CODE' => '09400',
+                'BUSINESS_CODE' => '09900',
                 'MERCHANT_ID' => $merchantId,
                 'SUBMIT_TIME' => date('YmdHis'),
                 'E_USER_CODE' => '10101328',
