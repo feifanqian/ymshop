@@ -125,6 +125,7 @@ class PhpTools{
 	public function send($params){
 		$xmlSignPost=$this->signXml($params);
 		$xmlSignPost=str_replace("TRANS_DETAIL2", "TRANS_DETAIL",$xmlSignPost);
+		var_dump($xmlSignPost);die;
 		$response = cURL::factory()->post(PhpTools::apiUrl, $xmlSignPost);
 	
 		if (! isset($response['body'])) {
