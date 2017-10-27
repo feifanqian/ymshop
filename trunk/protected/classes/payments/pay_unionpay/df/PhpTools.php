@@ -115,7 +115,7 @@ class PhpTools{
 		openssl_free_key($pKeyId);
 		
 		$params['INFO']['SIGNED_MSG'] = bin2hex($signature);
-		$xml="<?xml version="1.0" encoding="GBK"?><AIPG>
+		$xml="<?xml version='1.0' encoding='GBK'?><AIPG>
 			  <INFO>
 			    <TRX_CODE>{$params['INFO']['TRX_CODE']}</TRX_CODE>
 			    <VERSION>03</VERSION>
