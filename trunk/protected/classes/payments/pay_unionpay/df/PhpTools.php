@@ -58,9 +58,9 @@ class PhpTools{
 		
 		$xmlResponseSrc = preg_replace('/<SIGNED_MSG>.*<\/SIGNED_MSG>/i', '', $xmlResponse);
 		$xmlResponseSrc1 = mb_convert_encoding(str_replace('<','&lt;',$xmlResponseSrc), "UTF-8", "GBK");
-		$xmlResponseSrc2 = Common::xmlToArray($xmlResponseSrc1);
+		// $xmlResponseSrc2 = Common::xmlToArray($xmlResponseSrc1);
 		print_r ('验签原文');
-		print_r ($xmlResponseSrc2);
+		var_dump ($xmlResponseSrc1);
 		$pubKeyId = openssl_get_publickey(file_get_contents($this->certFile));
 		$flag = (bool) openssl_verify($xmlResponseSrc, hex2bin($signature), $pubKeyId);
 		openssl_free_key($pubKeyId);
