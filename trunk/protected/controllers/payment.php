@@ -510,7 +510,11 @@ class PaymentController extends Controller {
        $data['shop_ids']=$seller_id;
        // $date['invite_id']=$invite_id;
        $model = new Model('order_offline');
-       $order_id=$model->data($data)->insert();
+       $exist=$model->where('order_no='.$order_no)->find();
+       //防止重复生成同笔订单
+       if(!$exist){
+          $order_id=$model->data($data)->insert();
+       }
 
        $payment = new Payment($payment_id);
        $paymentPlugin = $payment->getPaymentPlugin();
