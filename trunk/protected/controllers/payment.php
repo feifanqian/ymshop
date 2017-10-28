@@ -473,7 +473,7 @@ class PaymentController extends Controller {
            $invite_id=1;
        }
        Session::set('invite_id',$invite_id);
-
+       $user=$this->model->table('customer')->fields('mobile')->where('user_id='.$user_id)->find();
        $accept_name = Session::get('openname');
        $data['type']=8;
        $data['order_no'] = $order_no;
@@ -482,32 +482,32 @@ class PaymentController extends Controller {
        $data['status'] = 2;
        $data['pay_status'] = 0;
        $data['accept_name'] = $accept_name;
-       $data['phone'] = '';
-       $data['mobile'] = '';
-       $data['province'] = '';
-       $data['city'] = '';
-       $data['county'] = '';
-       $data['addr'] = '';
-       $data['zip'] = '';
+       // $data['phone'] = '';
+       $data['mobile'] = $user['mobile'];
+       // $data['province'] = '';
+       // $data['city'] = '';
+       // $data['county'] = '';
+       // $data['addr'] = '';
+       // $data['zip'] = '';
        $data['payable_amount'] = $order_amount;
-       $data['payable_freight'] = 0;
-       $data['real_freight'] = 0;
+       // $data['payable_freight'] = 0;
+       // $data['real_freight'] = 0;
        $data['create_time'] = date('Y-m-d H:i:s');
        $data['pay_time'] = date("Y-m-d H:i:s");
-       $data['is_invoice'] = 0;
+       // $data['is_invoice'] = 0;
        $data['handling_fee'] = 0;
-       $data['invoice_title'] = '';
-       $data['taxes'] = 0;
-       $data['discount_amount'] = 0;
+       // $data['invoice_title'] = '';
+       // $data['taxes'] = 0;
+       // $data['discount_amount'] = 0;
        $data['order_amount'] = $order_amount;
        $data['real_amount'] = $order_amount;
        $data['point'] = 0;
        $data['voucher_id'] = 0;
-       $data['voucher'] = serialize(array());
+       // $data['voucher'] = serialize(array());
        $data['prom_id']=$invite_id;
-       $data['admin_remark']="";
+       // $data['admin_remark']="";
        $data['shop_ids']=$seller_id;
-       $date['invite_id']=$invite_id;
+       // $date['invite_id']=$invite_id;
        $model = new Model('order_offline');
        $order_id=$model->data($data)->insert();
 
@@ -732,7 +732,7 @@ class PaymentController extends Controller {
 
         if($trxstatus==1){
             $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
-            $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1))->update();
+            $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1,'pay_time'=>date('Y-m-d H:i:s')))->update();
             // $invite_id=Session::get('invite_id');
             $invite_id=$order['prom_id'];
             $seller_id=$order['shop_ids'];             
