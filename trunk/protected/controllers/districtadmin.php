@@ -1105,19 +1105,15 @@ class DistrictadminController extends Controller {
         ob_clean();
         $url = Url::fullUrlFormat("/index/demo/inviter_id/".$user_id);
         $qrCode = new QrCode();
-        $qrCode
-                ->setText($url)
+        $qrCode->setText($url)
                 ->setSize(300)
+                ->setLogo($logo)
                 ->setPadding(10)
                 ->setErrorCorrection('medium')
                 ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
                 ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
-                //->setLabel('扫描添加为好友')
                 ->setLabelFontSize(16)
-                ->setImageType(QrCode::IMAGE_TYPE_PNG)
-                ->setLogo($logo)
-                ->setLogoSize(50);
-
+                ->setImageType(QrCode::IMAGE_TYPE_PNG);
         // now we can directly output the qrcode
         header('Content-Type: ' . $qrCode->getContentType());
         $qrCode->render();
