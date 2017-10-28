@@ -83,7 +83,6 @@
 </div>
 <div class="apply_form"  style="display: none;font-size:15px;">    
 <div class="ma20 bg-white p20 ">
-     <p style="width: 100%;text-align: center;color:red;"><i class="fa fa-exclamation-circle red"></i>提现需缴纳{$withdraw_fee_rate}%的手续费，请知悉。</p>
             <div class="weui_panel_hd">提现信息</div>
             <div class="weui-cell">
                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">提现金额</label></div>
@@ -172,7 +171,7 @@
                     ,shadeClose: false
                      });
                     setTimeout(function(){
-                      $.post("{url:/ucenter/balance_withdraw}", {amount: amount, name: name, bank: bank, province: province,city:city,card_no:card_no}, function (result) {
+                      $.post("{url:/ucenter/offline_balance_withdraw}", {amount: amount, name: name, bank: bank, province: province,city:city,card_no:card_no}, function (result) {
                       layer.closeAll();
                       if(result.status=='success'){
                             $.toast("申请已提交",'success',function(){
