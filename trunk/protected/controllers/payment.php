@@ -475,6 +475,7 @@ class PaymentController extends Controller {
        Session::set('invite_id',$invite_id);
        $user=$this->model->table('customer')->fields('mobile')->where('user_id='.$user_id)->find();
        $accept_name = Session::get('openname');
+       $config = Config::getInstance()->get("district_set");
        $data['type']=8;
        $data['order_no'] = $order_no;
        $data['user_id'] = $user_id;
@@ -495,7 +496,7 @@ class PaymentController extends Controller {
        $data['create_time'] = date('Y-m-d H:i:s');
        $data['pay_time'] = date("Y-m-d H:i:s");
        // $data['is_invoice'] = 0;
-       $data['handling_fee'] = 0;
+       $data['handling_fee'] = round($order_amount*$config['handling_rate']/100,2);
        // $data['invoice_title'] = '';
        // $data['taxes'] = 0;
        // $data['discount_amount'] = 0;

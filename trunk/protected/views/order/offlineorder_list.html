@@ -23,7 +23,7 @@
         <th style="width:80px">支付方式</th>
         <th style="width:50px">支付状态</th>
         <th style="width:100px">支付时间</th>
-        <th style="width:50px">订单状态</th>
+        <th style="width:50px">手续费</th>
         <th style="width:50px">打印</th>
     </tr>
     {query:name=order_offline as od fields=od.*,us.name as uname,us.status as ustatus,cu.real_name join= left join user as us on od.user_id eq us.id left join customer as cu on od.user_id eq cu.user_id where=$where id=$obj page=1 order= id desc }
@@ -58,7 +58,7 @@
                     </a>
                 </td>
             <td style="width:100px">{$item['pay_time']}</td>
-        <td style="width:50px" id="status_{$item['id']}"><a href="?condition=and--od.status--eq--{$item['status']}">{$status[$item['status']]}</a></td>
+        <td style="width:50px" id="status_{$item['id']}"><a href="?condition=and--od.status--eq--{$item['status']}">{$item['handling_fee']}</a></td>
         <td style="width:50px" class="btn_min">
             <div class="operat hidden">
                 <a class="icon-print action bottom" href="javascript:;"> 打印</a>
