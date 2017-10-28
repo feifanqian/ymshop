@@ -108,6 +108,7 @@ class CustomerController extends Controller {
         if ($id) {
             $model = new Model('balance_withdraw as wd');
             $withdraw = $model->fields("wd.*,us.name as uname,cu.balance")->join("left join user as us on wd.user_id = us.id left join customer as cu on wd.user_id = cu.user_id")->where("wd.id=$id")->find();
+            $withdraw['balance']=$withdraw['balance']+$withdraw['offline_balance'];
             $this->assign("withdraw", $withdraw);
             $this->redirect();
         }

@@ -5,7 +5,7 @@
         <input type="hidden" name="id" value="{$withdraw['id']}">
         <table class="default mt10" style="border-left:0;border-right:0;">
             <tr>
-                <th style="width:100px">用户名：</th> <td>{$withdraw['uname']}</td> <th style="width:100px">总余额：</th> <td class="red"><span class="currency-symbol">{$currency_symbol}</span>{$withdraw['balance']+$withdraw['offline_balance']}</td>
+                <th style="width:100px">用户名：</th> <td>{$withdraw['uname']}</td> <th style="width:100px">总余额：</th> <td class="red"><span class="currency-symbol">{$currency_symbol}</span>{$withdraw['balance']}</td>
             </tr>
             <tr>
                 <th>提现金额：</th> <td>{$withdraw['amount']}</td> <th>开户名：</th> <td>{$withdraw['open_name']}</td>
