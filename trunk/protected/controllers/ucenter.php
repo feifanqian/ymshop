@@ -205,8 +205,54 @@ class UcenterController extends Controller {
         } else {
             $config = Config::getInstance();
             $other = $config->get("other");
-            $info = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
+            $info = $this->model->table("customer")->fields('balance')->where("user_id=" . $this->user['id'])->find();
             $this->assign("goldcoin", $info['balance']);
+            $this->assign("gold2silver", $other['gold2silver']);
+            $this->assign("withdraw_fee_rate", $other['withdraw_fee_rate']);
+            $this->assign('min_withdraw_amount', $other['min_withdraw_amount']);
+            $this->assign('seo_title', '余额提现');
+            $this->redirect();
+        }
+    }
+
+    //更新的提现操作(线下商家余额提现)
+    public function offline_balance_withdraw() {
+        if ($this->is_ajax_request()) {
+            Filter::form();
+            $open_name = Filter::str(Req::args('name'));
+            $open_bank = Filter::str(Req::args('bank'));
+            $prov = Filter::str(Req::args('province'));
+            $city = Filter::str(Req::args("city"));
+            $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
+            $amount = Filter::float(Req::args('amount'));
+            $amount = round($amount, 2);
+            $customer = $this->model->table("customer")->where("user_id =".$this->user['id'])->fields('balance')->find();
+            $can_withdraw_amount =$customer?$customer['balance']:0;
+            if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
+                exit(json_encode(array('status' => 'fail', 'msg' => '提现金额超出的账户可提现余额')));
+            }
+            $config = Config::getInstance();
+            $other = $config->get("other");
+            if ($amount < $other['min_withdraw_amount']) {
+                exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
+            }
+            $isset = $this->model->table("balance_withdraw")->where("user_id =" . $this->user['id'] . " and status =0")->find();
+            if ($isset) {
+                exit(json_encode(array('status' => 'fail', 'msg' => '申请失败，还有未处理完的提现申请')));
+            }
+            $withdraw_no = "BW" . date("YmdHis") . rand(100, 999);
+            $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0);
+            $result = $this->model->table('balance_withdraw')->data($data)->insert();
+            if ($result) {
+                exit(json_encode(array('status' => 'success', 'msg' => "申请提交成功")));
+            } else {
+                exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
+            }
+        } else {
+            $config = Config::getInstance();
+            $other = $config->get("other");
+            $info = $this->model->table("customer")->fields('offline_balance')->where("user_id=" . $this->user['id'])->find();
+            $this->assign("goldcoin", $info['offline_balance']);
             $this->assign("gold2silver", $other['gold2silver']);
             $this->assign("withdraw_fee_rate", $other['withdraw_fee_rate']);
             $this->assign('min_withdraw_amount', $other['min_withdraw_amount']);
@@ -1324,7 +1370,14 @@ class UcenterController extends Controller {
                 $this->model->query("update tiny_recharge_presentlog set status='-1' where user_id =" . $this->user['id']);
             }
         }
-        
+        //判断是否是商家
+        $shop=$this->model->table('district_promoter')->where('user_id='.$id)->find();
+        if($shop){
+            $is_shop=1;
+        }else{
+            $is_shop=0;
+        }
+        $this->assign('is_shop',$is_shop);
         $this->assign("order", $order);
         $this->assign("customer", $customer);
         $this->assign("seo_title", "钱袋");

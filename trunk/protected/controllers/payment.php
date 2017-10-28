@@ -747,11 +747,11 @@ class PaymentController extends Controller {
                 if($seller_id!=$invite_id){
                     $config = Config::getInstance()->get("district_set");
                     $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
-                    $this->model->table('customer')->where('user_id='.$seller_id)->data(array("balance"=>"`balance`+({$amount})"))->update();//平台收益提成
+                    $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`balance`+({$amount})"))->update();//平台收益提成
                     Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
                     Common::offlineBeneficial($order_no,$invite_id);
                 }else{
-                    $this->model->table('customer')->where('user_id='.$seller_id)->data(array("balance"=>"`balance`+({$order['order_amount']})"))->update();//平台收益提成
+                    $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`balance`+({$order['order_amount']})"))->update();//平台收益提成
                      Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
                 }
             }                            
