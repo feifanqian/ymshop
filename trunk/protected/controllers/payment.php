@@ -532,8 +532,7 @@ class PaymentController extends Controller {
        $params["body"] = "商品名称";
        $params["remark"] = "备注信息";
        $params["acct"] = $open['open_id'];
-       // $params["limit_pay"] = "no_credit";
-       $params["limit_pay"] = "";
+       $params["limit_pay"] = "no_credit";
        // $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
        $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
        // $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback");
