@@ -123,6 +123,7 @@ class PhpTools{
 	 * 发送请求
 	 */
 	public function send($params){
+		header('Content-Type: text/html; Charset=UTF-8');
 		$xmlSignPost=$this->signXml($params);
 		$xmlSignPost=str_replace("TRANS_DETAIL2", "TRANS_DETAIL",$xmlSignPost);
 		$response = cURL::factory()->post(PhpTools::apiUrl, $xmlSignPost);
