@@ -1333,6 +1333,7 @@ class QrCode {
             $dst_x = ($image_width - $this->logo_size) / 2;
             $dst_y = ($this->size + $this->padding * 2 - $this->logo_size) / 2;
             $successful = imagecopyresampled($output_image, $logo_image, $dst_x, $dst_y, 0, 0, $this->logo_size, $this->logo_size, $src_w, $src_h);
+            var_dump($successful);die;
             if (!$successful) {
                 throw new Exception('add logo [image' . $this->format . '] failed.');
             }
