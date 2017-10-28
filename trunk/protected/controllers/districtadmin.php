@@ -1114,7 +1114,8 @@ class DistrictadminController extends Controller {
                 //->setLabel('扫描添加为好友')
                 ->setLabelFontSize(16)
                 ->setImageType(QrCode::IMAGE_TYPE_PNG)
-                ->setLogo($logo);
+                ->setLogo($logo)
+                ->setLogoSize(50);
 
         // now we can directly output the qrcode
         header('Content-Type: ' . $qrCode->getContentType());
