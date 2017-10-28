@@ -754,7 +754,7 @@ class PaymentController extends Controller {
                     }     
                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
                     Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
-                    Common::offlineBeneficial($order_no,$invite_id);
+                    Common::offlineBeneficial($order_no,$invite_id,$seller_id);
                 }else{
                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
                      Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);

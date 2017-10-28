@@ -964,14 +964,14 @@ class Common {
         return $district_name;
      }
 
-     static function offlineBeneficial($order_no,$invite_id){//线下分账到余额
+     static function offlineBeneficial($order_no,$invite_id,$seller_id){//线下分账到余额
          // var_dump($invite_id);die;
          $model = new Model();
          $order = $model->table('order_offline')->where('order_no='.$order_no)->find();
          $amount = $order['order_amount'];
          $config = Config::getInstance()->get("district_set");
          // $base_balance = round($amount*$config['offline_base_rate']/100,2);
-         $promoter = $model->table('district_promoter')->fields('base_rate')->where('user_id='.$invite_id)->find();
+         $promoter = $model->table('district_promoter')->fields('base_rate')->where('user_id='.$seller_id)->find();
          if($promoter){
             $base_balance = round($amount*($promoter['base_rate']-$config['handling_rate'])/100,2); //每个商家都有自己的分账比例
          }else{
