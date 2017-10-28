@@ -736,14 +736,14 @@ class PaymentController extends Controller {
             // $invite_id=Session::get('invite_id');
             $invite_id=$order['prom_id'];
             $seller_id=$order['shop_ids'];             
-            //上级代理商是卖家的话不参与分账
             if($invite_id==null){
                 $invite_id=1;
             }
-            $promoter_id=Common::getFirstPromoter($order['user_id']);
+            // $promoter_id=Common::getFirstPromoter($order['user_id']);
             $exist=$this->model->table('balance_log')->where("order_no='{$order_no}'")->find();
             if(!$exist){
-                if($seller_id!=$promoter_id){
+                //如果卖家是邀请人的话不参与分账
+                if($seller_id!=$invite_id){
                     $config = Config::getInstance()->get("district_set");
                     $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("balance"=>"`balance`+({$amount})"))->update();//平台收益提成
