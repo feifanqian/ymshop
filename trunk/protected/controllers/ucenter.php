@@ -1346,6 +1346,7 @@ class UcenterController extends Controller {
     public function asset() {
         $id = $this->user['id'];
         $customer = $this->model->table("customer as cu")->fields("cu.*,gr.name as gname")->join("left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = $id")->find();
+        $customer['balance']=$customer['balance']+$customer['offline_balance'];
         
         //只记录余额支付的消费统计
         $orders = $this->model->table("order as o")->join("payment as p on o.payment = p.id ")->where("o.user_id = $id and p.plugin_id in(1,20)")->findAll();
