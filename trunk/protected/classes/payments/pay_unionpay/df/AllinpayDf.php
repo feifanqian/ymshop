@@ -11,7 +11,7 @@ class AllinpayDf{
                 'VERSION' => '03',
                 'DATA_TYPE' => '2',
                 'LEVEL' => '6',
-                'USER_NAME' => '20060400000044502',
+                'USER_NAME' => '20058400001550504',
                 'USER_PASS' => '111111',
                 'REQ_SN' => $merchantId.date('YmdHis').rand(1000,9999),
             ),
@@ -29,8 +29,8 @@ class AllinpayDf{
                 'CURRENCY' => 'CNY',
                 'ID_TYPE' => '0',
                 'CUST_USERID' => '2901347',
-                'SUMMARY' => '春风贷提现',
-                'REMARK' => '',
+                'SUMMARY' => '',
+                'REMARK' => $params['purpose'],
             ),
         );
 
