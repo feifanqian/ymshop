@@ -163,7 +163,12 @@ class CustomerController extends Controller {
         $model = new Model('balance_withdraw as wd');
         $obj = $model->fields("wd.*,cu.balance")->join("left join customer as cu on wd.user_id = cu.user_id")->where("wd.id=$id and wd.status=0")->find();
         if ($obj) {
-            $can_withdraw = Common::getCanWithdrawAmount4GoldCoin($obj['user_id']);
+            // $can_withdraw = Common::getCanWithdrawAmount4GoldCoin($obj['user_id']);
+            if($obj['type']==0){
+                $can_withdraw=$obj['balance'];  
+            }elseif($obj['type']==1){
+                $can_withdraw=$obj['offline_balance']; 
+            }
             if ($obj['amount'] <= $can_withdraw) {
                 if($status==1){
                     $config = Config::getInstance();
@@ -177,18 +182,27 @@ class CustomerController extends Controller {
                     $params["openBank"]=$obj['open_bank'];
                     $params["prov"]=$obj['province'];
                     $params["city"]=$obj['city'];
-                    $params["transAmt"]=round($obj['amount']*(100-$other['withdraw_fee_rate']));//转化成分，并减去手续费
+                    if($obj['type']==0){
+                      $params["transAmt"]=round($obj['amount']*(100-$other['withdraw_fee_rate']));//转化成分，并减去手续费
+                    }else{
+                      $params["transAmt"]=round($obj['amount']*100); //商家线下收益余额不扣手续费
+                    }      
                     if($params["transAmt"]<=0){
                          exit(json_encode(array('status'=>'fail','msg'=>'代付金额小于或等于0')));
                     }
                     $params['purpose']="用户{$obj['user_id']}提现";
-                    $result = $ChinapayDf->DfPay($params);
+                    // $result = $ChinapayDf->DfPay($params);
+                    $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口
                     if($result==true){
                         $date = date("Y-m-d H:i:s");
                         $real_amount = round($params['transAmt']/100,2);
                         $update = $model->query("update tiny_balance_withdraw set status=1,note='{$note}',real_amount={$real_amount},fee_rate={$other['withdraw_fee_rate']},mer_seq_id='{$params['merSeqId']}',submit_date='{$date}' where id = $id and status= 0");
                         if($update){
-                            $model->table('customer')->data(array('balance' => "`balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                            if($obj['type']==0){
+                                $model->table('customer')->data(array('balance' => "`balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                            }elseif($obj['type']==1){
+                                $model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                            }     
                             Log::balance(0 - $obj['amount'], $obj['user_id'],$obj['withdraw_no'],"余额提现", 3, $this->manager['id']);
                             Log::op($this->manager['id'], "通过提现申请", "管理员[" . $this->manager['name'] . "]:通过了提现申请 " . $obj['withdraw_no']);
                             exit(json_encode(array('status'=>'success','msg'=>'提现成功')));
