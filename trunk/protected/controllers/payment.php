@@ -217,6 +217,7 @@ class PaymentController extends Controller {
         $payment_id = Filter::int(Req::args('payment_id'));
         $order_id = Filter::int(Req::args('order_id'));
         $recharge = Req::args('recharge');
+        $rate = Req::args('base_rate');
         $extendDatas = Req::args();
         if ($payment_id) {
             $payment = new Payment($payment_id);
@@ -239,20 +240,20 @@ class PaymentController extends Controller {
                     $config = Config::getInstance();
                     $package_set = $config->get("recharge_package_set");
                     
-                    if($package==4){
-                        $address_id = Filter::int(Req::args('address_id'));
-                        $gift = Filter::int(Req::args("gift"));
-                        //判断礼物是否是套餐真实的
-                        $gift_arr = explode("|", $package_set[4]['gift']);
-                        if (!in_array($gift, $gift_arr)) {
-                            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '抱歉，您选择的套餐礼品不正确'));
-                            exit();
-                        }
-                        if (!$address_id) {
-                            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '信息错误,未选择地址'));
-                            exit();
-                        }
-                    }
+                    // if($package==4){
+                    //     $address_id = Filter::int(Req::args('address_id'));
+                    //     $gift = Filter::int(Req::args("gift"));
+                    //     //判断礼物是否是套餐真实的
+                    //     $gift_arr = explode("|", $package_set[4]['gift']);
+                    //     if (!in_array($gift, $gift_arr)) {
+                    //         $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '抱歉，您选择的套餐礼品不正确'));
+                    //         exit();
+                    //     }
+                    //     if (!$address_id) {
+                    //         $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '信息错误,未选择地址'));
+                    //         exit();
+                    //     }
+                    // }
                   
                     switch ($package) {
                         case 0 : $recharge = $recharge;
@@ -272,23 +273,23 @@ class PaymentController extends Controller {
                     $user = $safebox->get('user');
                     // $recharge = round($recharge, 2);
                     $paymentInfo = $payment->getPayment();
-                    $data = array('account' => $recharge, 'paymentName' => $paymentInfo['name'],'package' => $package);
+                    $data = array('account' => $recharge, 'paymentName' => $paymentInfo['name'],'package' => $package,'rate'=>$rate);
                     $packData = $payment->getPaymentInfo('recharge', $data);
                     $packData = array_merge($extendDatas, $packData);
                     $recharge_no = substr($packData['M_OrderNO'], 8);
-                    if ($package == 4) {
-                        $recharge_gift_model = new Model();
-//                      $recharge_count = $model->table('recharge')->where("package in (1,2,3,4) and status =1 and user_id=" . $user['id'])->count();
-                        $gift_data['user_id'] = $user['id'];
-                        $gift_data['recharge_no'] = $recharge_no;
-                        $gift_data['package'] = $package;
-                        $gift_data['address_id'] = $address_id;
-                        $gift_data['gift'] = $gift;
-//                      $gift_data['is_first'] = $recharge_count > 0 ? 2 : 1; //判断是否是首次充
-                        $gift_data['status'] = 0;
+//                     if ($package == 4) {
+//                         $recharge_gift_model = new Model();
+// //                      $recharge_count = $model->table('recharge')->where("package in (1,2,3,4) and status =1 and user_id=" . $user['id'])->count();
+//                         $gift_data['user_id'] = $user['id'];
+//                         $gift_data['recharge_no'] = $recharge_no;
+//                         $gift_data['package'] = $package;
+//                         $gift_data['address_id'] = $address_id;
+//                         $gift_data['gift'] = $gift;
+// //                      $gift_data['is_first'] = $recharge_count > 0 ? 2 : 1; //判断是否是首次充
+//                         $gift_data['status'] = 0;
                         
-                        $recharge_gift_model->table("recharge_gift")->data($gift_data)->insert();
-                    }
+//                         $recharge_gift_model->table("recharge_gift")->data($gift_data)->insert();
+//                     }
                     $sendData = $paymentPlugin->packData($packData);
                     if (!$paymentPlugin->isNeedSubmit()) {
                         exit();

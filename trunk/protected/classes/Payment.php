@@ -95,6 +95,7 @@ class Payment {
                 'time' => date('Y-m-d H:i:s'),
                 'payment_name' => $argument['paymentName'],
                 'status' => 0,
+                'rate' =>$argument['rate']
             );
             
             $r_id = $recharge->data($data)->insert();

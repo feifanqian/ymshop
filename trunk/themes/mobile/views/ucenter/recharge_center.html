@@ -126,7 +126,7 @@
             </div>
 </div>
 <div class="weui_cells weui_cells_access" id='gift_select_4' style='display:none;'>
-            <div class="weui_cell">
+            <!-- <div class="weui_cell">
                 <div class="weui_cell_bd weui_cell_primary">
                     <p><b>套餐礼品</b></p>
                 </div>
@@ -135,9 +135,19 @@
                 <div class="weui_cell_bd weui_cell_primary" id="current_select_4_gift">
                 </div>
                 <div class="weui_cell_ft"></div>
-                 </a>
- </div>
-<div class="weui_cells weui_cells_access" id='address_select' style='display:none;'>
+                 </a> -->
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p><b>充值为代理商</b></p>
+        </div>
+    </div>
+    <div class="weui_cell">    
+        <div class="weui_cell" data-target="#select_gift_package_4">
+          <p>成为代理商，获得销售提成，取得线下商家收款二维码</p>
+        </div>
+    </div>
+</div>
+<!-- <div class="weui_cells weui_cells_access" id='address_select' style='display:none;'>
             <div class="weui_cell">
                 <div class="weui_cell_bd weui_cell_primary">
                     <p><b>收货地址</b></p>
@@ -159,13 +169,23 @@
                 暂未添加地址,点击添加新地址
             </a>
             {/if}
- </div>
+ </div> -->
 <form id="recharge-form" action="{url:/payment/dopay}" method="post">
     <input id="address_id" type="hidden" name="address_id" value="{echo:$addressone?$addressone['id']:0}" />
     <input id="gift" type="hidden" name="gift" value="" />
     <input type="hidden" name="package" value="0" />
     <input type="hidden" name="payment_id" value="{echo:$paytypeone ? $paytypeone['id']: 0}" />
     <div class="weui_cells weui_cells_access" id="recharge-dialog">
+        <div class="weui_cell" style='display:none;' id='address_select' data-target="#selectaddress">
+          
+             <div class="weui_cell_bd weui_cell_primary">
+                <p><b>设置线下分账基础比例</b></p>
+            </div>
+            <div class="weui_cell_bd">
+                 <input type="text" name="base_rate" class="weui_input" placeholder="请输入分账比例(%)" style="text-align:right;">
+            </div>
+           
+        </div>
         <div class="weui_cell">
             <div class="weui_cell_bd weui_cell_primary">
                 <p><b>充值金额</b></p>
