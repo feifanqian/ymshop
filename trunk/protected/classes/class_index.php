@@ -134,6 +134,7 @@ return array(
     "AppUtil"=>"allinpay/AppUtil.php",
     "PhpTools"=>"payments/pay_unionpay/df/PhpTools.php",
     "cURL"=>"allinpay/lib/cURL.class.php",
-    "ArrayAndXml"=>"allinpay/lib/ArrayXml.class.php"
+    "ArrayAndXml"=>"allinpay/lib/ArrayXml.class.php",
+    "AllinpayDf"=>"payments/pay_unionpay/df/AllinpayDf.php"
 );
 ?>

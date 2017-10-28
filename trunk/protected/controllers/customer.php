@@ -175,7 +175,8 @@ class CustomerController extends Controller {
                     $config = Config::getInstance();
                     $other = $config->get("other");
                     
-                    $ChinapayDf = new ChinapayDf();
+                    // $ChinapayDf = new ChinapayDf();
+                    $ChinapayDf = new AllinpayDf();
                     $params["merDate"]=date("Ymd");
                     $params["merSeqId"]=date("YmdHis").rand(10,99);
                     $params["cardNo"]=$obj['card_no'];
