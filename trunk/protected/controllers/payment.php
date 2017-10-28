@@ -746,7 +746,7 @@ class PaymentController extends Controller {
                 //如果卖家是邀请人的话不参与分账
                 if($seller_id!=$invite_id){
                     $config = Config::getInstance()->get("district_set");
-                    $promoter = $model->table('district_promoter')->fields('base_rate')->where('user_id='.$seller_id)->find();
+                    $promoter = $this->model->table('district_promoter')->fields('base_rate')->where('user_id='.$seller_id)->find();
                     if($promoter){
                         $amount = round($order['order_amount']*(100-$promoter['base_rate'])/100,2);
                     }else{
