@@ -143,7 +143,7 @@
     </div>
     <div class="weui_cell">    
         <div class="weui_cell" data-target="#select_gift_package_4">
-          <p>成为代理商，获得销售提成，取得线下商家收款二维码</p>
+          <p>成为代理商，获得跨界让利收益，取得线下商家收款二维码</p>
         </div>
     </div>
 </div>
@@ -313,11 +313,13 @@
                 $("#gift_select_4").show();
                 $("#send_financial").show();
                 $("#charge_money").html('商家二维码技术服务费');
+                $("input[type='submit']").val('立即支付');
             }else{
                 $("#address_select").hide();
                 $("#gift_select_4").hide();
                 $("#send_financial").hide();
                 $("#charge_money").html('充值金额');
+                $("input[type='submit']").val('立即充值');
             }
         }
     });
