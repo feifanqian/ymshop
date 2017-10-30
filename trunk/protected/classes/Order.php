@@ -25,12 +25,10 @@ class Order {
                        'pay_status' => 0,
                        // 'otherpay_status'=>1,       
                         ); 
-                       if($order['huabipay_status']==1){
-                           $data['pay_status']=1;
-                           $data['status']=3;
-                       }else{
-                           $data['pay_status']=0;
-                       }
+                       
+                       
+                        $data['pay_status']=0;
+                       
                 }else{//新的华点订单
                     $data = array(
                        'status' => 3,
