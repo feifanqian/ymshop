@@ -822,7 +822,6 @@ class PaymentController extends Controller {
         $orderNo = $array['attach'];
         $money = round(intval($array['total_fee'])/100,2);
         if ($return == 1 ) {
-            $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>0))->update();
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
                 if ($order) {
@@ -873,8 +872,9 @@ class PaymentController extends Controller {
                 //         exit;
                 //     }
                 // }
-                $this->model->table('customer')->where('user_id=20942')->data(array('addr'=>$recharge_no))->update();
-                if (Order::recharge($recharge_no, $payment_id, $callbackData)) {
+                $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>$payment_id))->update();
+                $ret = Order::recharge($recharge_no, $payment_id, $callbackData); 
+                if ($ret) {
                     $paymentPlugin->asyncStop();
                     exit;
                 }
