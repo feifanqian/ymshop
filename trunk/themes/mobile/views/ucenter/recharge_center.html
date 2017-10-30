@@ -97,7 +97,7 @@
                                 <i></i>
                             </div>
                             <div class="weui-col-20" data-value="4" data-amount="{$package_set[4]['money']}" data-point="{$package_set[4]['point']}" data-financial="{$package_set[4]['financial_coin']}">
-                               <p>代理商<br>套餐</p>
+                               <p>商家二<br>维码</p>
                                 <i></i>
                             </div>
                         </div>
@@ -138,12 +138,12 @@
                  </a> -->
     <div class="weui_cell">
         <div class="weui_cell_bd weui_cell_primary">
-            <p><b>充值为代理商</b></p>
+            <p><b>购买商家二维码成为代理商</b></p>
         </div>
     </div>
     <div class="weui_cell">    
         <div class="weui_cell" data-target="#select_gift_package_4">
-          <p>成为代理商，获得销售提成，取得线下商家收款二维码</p>
+          <p>成为代理商，获得跨界让利收益，取得线下商家收款二维码</p>
         </div>
     </div>
 </div>
@@ -179,16 +179,16 @@
         <div class="weui_cell" style='display:none;' id='address_select' data-target="#selectaddress">
           
              <div class="weui_cell_bd weui_cell_primary">
-                <p><b>设置线下分账基础比例</b></p>
+                <p><b>商家让利比例</b></p>
             </div>
             <div class="weui_cell_bd">
-                 <input type="text" name="base_rate" class="weui_input" placeholder="请输入分账比例(%)" style="text-align:right;">
+                 <input type="text" name="base_rate" class="weui_input" placeholder="请输入让利比例(%)" style="text-align:right;">
             </div>
            
         </div>
         <div class="weui_cell">
             <div class="weui_cell_bd weui_cell_primary">
-                <p><b>充值金额</b></p>
+                <p><b id="charge_money">充值金额</b></p>
             </div>
             <div class="weui_cell_bd">
                  <input type="text" name="recharge" class="weui_input" placeholder="请输入充值金额" style="text-align:right;">
@@ -312,10 +312,14 @@
                 $("#address_select").show();
                 $("#gift_select_4").show();
                 $("#send_financial").show();
+                $("#charge_money").html('商家二维码技术服务费');
+                $("input[type='submit']").val('立即支付');
             }else{
                 $("#address_select").hide();
                 $("#gift_select_4").hide();
                 $("#send_financial").hide();
+                $("#charge_money").html('充值金额');
+                $("input[type='submit']").val('立即充值');
             }
         }
     });
