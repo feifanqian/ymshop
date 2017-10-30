@@ -787,8 +787,8 @@ class PaymentController extends Controller {
     // 支付回调[异步]
     public function async_callback() {
         $xml = @file_get_contents('php://input');
-        // $array=Common::xmlToArray($xml);
-        file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
+        $array=Common::xmlToArray($xml);
+        file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
         // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::args('payment_id'));
@@ -809,8 +809,14 @@ class PaymentController extends Controller {
         unset($callbackData['con']);
         unset($callbackData['act']);
         unset($callbackData['payment_id']);
-        
-        $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
+        $this->model->table('customer')->where('user_id=20942')->data(array('prop'=>$array))->update();
+        if($array['result_code']=='SUCCESS'){
+            $return=1;
+        }else{
+            $return=0;
+        }
+
+        // $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         // $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>0))->update();
         // $backData = Common::xmlToArray(json_encode($xml));
         // if($backData['result_code'] == 'SUCCESS'){
