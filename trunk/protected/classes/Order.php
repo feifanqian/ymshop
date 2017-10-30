@@ -614,7 +614,7 @@ class Order {
     }else if($status==-1){
             if($refund_info['refund_progress']==0){
                 $order = new Model("order");
-                $orderInfo = $order->where('id ='.$refund_info['order_id'])->fields('type,huabipay_status')->find();
+                $orderInfo = $order->where('id ='.$refund_info['order_id'])->fields('type')->find();
                 $result = NULL;
                 if($orderInfo['type']==4){//未完全支付的华币订单
                     $result = $order->data(array("pay_status"=>"0"))->where("id =".$refund_info['order_id']." and user_id=".$refund_info['user_id'])->update();
