@@ -810,13 +810,13 @@ class PaymentController extends Controller {
         unset($callbackData['act']);
         unset($callbackData['payment_id']);
         
-        // $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
-        $backData = Common::xmlToArray(json_encode($xml));
-        if($backData['result_code'] == 'SUCCESS'){
-            $return == 1;
-        }else{
-            $return == 0;
-        }
+        $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
+        // $backData = Common::xmlToArray(json_encode($xml));
+        // if($backData['result_code'] == 'SUCCESS'){
+        //     $return == 1;
+        // }else{
+        //     $return == 0;
+        // }
         $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>$return))->update();
         //支付成功
         if ($return == 1 ) {
