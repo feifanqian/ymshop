@@ -803,7 +803,7 @@ class PaymentController extends Controller {
         $money = '';
         $message = '支付失败';
         $orderNo = '';
-        $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>0))->update();
+        
         //执行接口回调函数
         $callbackData = Req::args(); //array_merge($_POST,$_GET);
         unset($callbackData['con']);
@@ -811,6 +811,7 @@ class PaymentController extends Controller {
         unset($callbackData['payment_id']);
         
         $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
+        $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>0))->update();
         // $backData = Common::xmlToArray(json_encode($xml));
         // if($backData['result_code'] == 'SUCCESS'){
         //     $return == 1;
