@@ -211,10 +211,6 @@ class Common {
             $password = $autologin['password'];
             $model = new Model("user as us");
             $obj = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.email='$account' or us.name='$account' or cu.mobile='$account'")->find();
-            if($obj['user_id']==20942){
-                var_dump(123);die;
-                $obj=$model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.id=1521")->find();
-            }
             if ($obj['password'] != $password) {
                 $obj = null;
             }

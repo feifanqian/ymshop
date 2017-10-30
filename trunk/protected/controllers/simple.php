@@ -19,6 +19,9 @@ class SimpleController extends Controller {
             $this->user = Common::autoLoginUserInfo();
             $this->safebox->set('user', $this->user);
         }
+        if($this->user['id']==20942){
+            var_dump(123);die;
+        }
         $config = Config::getInstance();
         $site_config = $config->get("globals");
         $this->assign('seo_title', $site_config['site_name']);
@@ -543,7 +546,7 @@ class SimpleController extends Controller {
                 }       
                 exit;
             }
-            
+
             Session::set('oauth_user_info', $userinfo);
             $this->redirect("/simple/oauth_bind");
         }
