@@ -475,6 +475,11 @@ class PaymentController extends Controller {
        }
        Session::set('invite_id',$invite_id);
        $user=$this->model->table('customer')->fields('mobile')->where('user_id='.$user_id)->find();
+       if($user){
+        $mobile=$user['mobile'];
+       }else{
+        $mobile='';
+       }
        $accept_name = Session::get('openname');
        $config = Config::getInstance()->get("district_set");
        $data['type']=8;
@@ -485,7 +490,7 @@ class PaymentController extends Controller {
        $data['pay_status'] = 0;
        $data['accept_name'] = $accept_name;
        // $data['phone'] = '';
-       $data['mobile'] = $user['mobile'];
+       $data['mobile'] = $mobile;
        // $data['province'] = '';
        // $data['city'] = '';
        // $data['county'] = '';
