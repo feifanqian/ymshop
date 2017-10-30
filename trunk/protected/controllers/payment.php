@@ -872,8 +872,7 @@ class PaymentController extends Controller {
                 //         exit;
                 //     }
                 // }
-                $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>$payment_id))->update();
-                $ret = Order::recharge($recharge_no, $payment_id, $callbackData); 
+                $ret = Common::recharge($recharge_no, $payment_id, $callbackData); 
                 if ($ret) {
                     $paymentPlugin->asyncStop();
                     exit;
