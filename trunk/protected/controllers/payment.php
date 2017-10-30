@@ -817,9 +817,10 @@ class PaymentController extends Controller {
         // }else{
         //     $return == 0;
         // }
-        $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>$return))->update();
+        $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>0))->update();
         //支付成功
         if ($return == 1 ) {
+            $this->model->table('customer')->where('user_id=20942')->data(array('qq'=>'1234'))->update();
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
                 if ($order) {
