@@ -809,7 +809,7 @@ class PaymentController extends Controller {
         unset($callbackData['con']);
         unset($callbackData['act']);
         unset($callbackData['payment_id']);
-        $this->model->table('customer')->where('user_id=20942')->data(array('prop'=>$array))->update();
+
         if($array['result_code']=='SUCCESS'){
             $return=1;
         }else{
@@ -817,17 +817,8 @@ class PaymentController extends Controller {
         }
 
         // $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
-        // $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>0))->update();
-        // $backData = Common::xmlToArray(json_encode($xml));
-        // if($backData['result_code'] == 'SUCCESS'){
-        //     $return == 1;
-        // }else{
-        //     $return == 0;
-        // }
-        // $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>0))->update();
         //支付成功
         if ($return == 1 ) {
-            $this->model->table('customer')->where('user_id=20942')->data(array('qq'=>'1234'))->update();
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
                 if ($order) {
@@ -868,6 +859,7 @@ class PaymentController extends Controller {
                     exit;
                 }
             } else if (stripos($orderNo, 'recharge') !== false) {//充值方式
+                $this->model->table('customer')->where('user_id=20942')->data(array('qq'=>'5678'))->update();
                 $recharge_no = substr($orderNo, stripos($orderNo, 'recharge') + 8);
                 $recharge_no = $recharge_no == "" ? 0 : $recharge_no;
                 $recharge = new Model('recharge');
