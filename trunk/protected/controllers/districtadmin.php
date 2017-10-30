@@ -762,12 +762,12 @@ class DistrictadminController extends Controller {
             if (!$user_id || !$hirer_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
             }
+            $model = new Model();
             $owner=$model->table('district_shop')->fields('id,owner_id')->where('id='.$hirer_id)->find();
             if(!$owner){
                 exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
             }
-            // $promoter = Promoter::getPromoterInstance($user_id);
-            $model = new Model();
+            // $promoter = Promoter::getPromoterInstance($user_id);   
             //赠送积分和分红点
             if($pointcoin>0 && $financialcoin>0){
                 $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})","financial_coin"=>"`financial_coin`+({$financialcoin})"))->update();
