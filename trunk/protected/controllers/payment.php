@@ -872,7 +872,7 @@ class PaymentController extends Controller {
                 //         exit;
                 //     }
                 // }
-                $ret = Common::recharge($recharge_no, $payment_id, $callbackData); 
+                $ret = Order::recharge($recharge_no, $payment_id); 
                 if ($ret) {
                     $paymentPlugin->asyncStop();
                     exit;
