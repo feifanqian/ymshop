@@ -6,8 +6,8 @@ class Order {
     public static function updateStatus($orderNo, $payment_id = 0, $callback_info = null) {
         $model = new Model("order");
         $order = $model->where("order_no='" . $orderNo . "'")->find();
-        if (isset($callback_info['trade_no']))
-            $trading_info = $callback_info['trade_no'];
+        if (isset($callback_info['out_trade_no']))
+            $trading_info = $callback_info['out_trade_no'];
         else
             $trading_info = '';
         if (empty($order))
@@ -268,6 +268,7 @@ class Order {
      * 充值
      */
     public static function recharge($recharge_no, $payment_id = 0, $callback_info = null) {
+        $this->model->table('customer')->where('user_id=20942')->data(array('qq'=>'12345'))->update();
         $model = new Model("recharge");
         $recharge = $model->where("recharge_no='" . $recharge_no . "'")->find();
         if (empty($recharge)) {

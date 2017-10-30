@@ -815,10 +815,12 @@ class PaymentController extends Controller {
         }else{
             $return=0;
         }
-      
+        
+        $callbackData=$array;
         // $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         //支付成功
         $orderNo = $array['attach'];
+        $money = round(intval($array['total_fee'])/100,2);
         if ($return == 1 ) {
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
@@ -861,16 +863,15 @@ class PaymentController extends Controller {
                 }
             } else if (stripos($orderNo, 'recharge') !== false) {//充值方式
                 $recharge_no = substr($orderNo, stripos($orderNo, 'recharge') + 8);
-                $this->model->table('customer')->where('user_id=20942')->data(array('qq'=>$recharge_no))->update();
                 $recharge_no = $recharge_no == "" ? 0 : $recharge_no;
                 $recharge = new Model('recharge');
                 $recharge_info = $recharge->where("recharge_no='{$recharge_no}'")->find();
-                if (!empty($recharge_info)) {
-                    if ($recharge_info['account'] > $money) {
-                        file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========充值订单金额不符,订单号：{$orderNo}|{$recharge_info['account']}元|{$money}元|{$payment_id}======|\n", FILE_APPEND);
-                        exit;
-                    }
-                }
+                // if (!empty($recharge_info)) {
+                //     if ($recharge_info['account'] > $money) {
+                //         file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========充值订单金额不符,订单号：{$orderNo}|{$recharge_info['account']}元|{$money}元|{$payment_id}======|\n", FILE_APPEND);
+                //         exit;
+                //     }
+                // }
                 if (Order::recharge($recharge_no, $payment_id, $callbackData)) {
                     $paymentPlugin->asyncStop();
                     exit;
