@@ -786,7 +786,6 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     public function async_callback() {
-        $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>0))->update();
         $xml = @file_get_contents('php://input');
         // $array=Common::xmlToArray($xml);
         file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
@@ -855,6 +854,7 @@ class PaymentController extends Controller {
                     exit;
                 }
             } else if (stripos($orderNo, 'recharge') !== false) {//充值方式
+                $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>0))->update();
                 $recharge_no = substr($orderNo, stripos($orderNo, 'recharge') + 8);
                 $recharge_no = $recharge_no == "" ? 0 : $recharge_no;
                 $recharge = new Model('recharge');
