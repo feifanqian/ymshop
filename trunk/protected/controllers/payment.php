@@ -652,7 +652,7 @@ class PaymentController extends Controller {
                         exit;
                     }
                 }
-                $recharge_id = Order::recharge($recharge_no, $payment_id, $callbackData);
+                $recharge_id = Order::recharge($recharge_no, $payment_id);
                 if ($recharge_id) {
                     //$this->redirect("/ucenter/account/$recharge_id");
                     $model = new Model('recharge');
@@ -871,9 +871,8 @@ class PaymentController extends Controller {
                 //         file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========充值订单金额不符,订单号：{$orderNo}|{$recharge_info['account']}元|{$money}元|{$payment_id}======|\n", FILE_APPEND);
                 //         exit;
                 //     }
-                // }
-                $ret = Order::recharge($recharge_no, $payment_id); 
-                if ($ret) {
+                // } 
+                if (Order::recharge($recharge_no, $payment_id)) {
                     $paymentPlugin->asyncStop();
                     exit;
                 }
