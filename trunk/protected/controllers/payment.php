@@ -860,8 +860,8 @@ class PaymentController extends Controller {
                     exit;
                 }
             } else if (stripos($orderNo, 'recharge') !== false) {//充值方式
-                $this->model->table('customer')->where('user_id=20942')->data(array('qq'=>'5678'))->update();
                 $recharge_no = substr($orderNo, stripos($orderNo, 'recharge') + 8);
+                $this->model->table('customer')->where('user_id=20942')->data(array('qq'=>$recharge_no))->update();
                 $recharge_no = $recharge_no == "" ? 0 : $recharge_no;
                 $recharge = new Model('recharge');
                 $recharge_info = $recharge->where("recharge_no='{$recharge_no}'")->find();
