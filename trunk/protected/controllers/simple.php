@@ -19,9 +19,6 @@ class SimpleController extends Controller {
             $this->user = Common::autoLoginUserInfo();
             $this->safebox->set('user', $this->user);
         }
-        if($this->user['id']==20942){
-            var_dump(123);die;
-        }
         $config = Config::getInstance();
         $site_config = $config->get("globals");
         $this->assign('seo_title', $site_config['site_name']);
@@ -437,6 +434,9 @@ class SimpleController extends Controller {
             if ($is_oauth) {
                 //已绑定用户
                 if ($is_oauth['user_id'] > 0) {
+                    if($is_oauth['user_id']==20942){
+                        var_dump(111);die;
+                    }
                     $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("us.id='{$is_oauth['user_id']}'")->find();
                     $this->safebox->set('user', $obj, $this->cookie_time);
                     // if ($obj!=null && isset($obj['mobile'])) {
