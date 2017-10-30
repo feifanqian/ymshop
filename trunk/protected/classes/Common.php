@@ -1325,4 +1325,14 @@ class Common {
         header('Pragma:public');
         echo '<html><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'.$strTable.'</html>';
     }
+
+    static function xml_parser($str){
+    $xml_parser = xml_parser_create();
+    if(!xml_parse($xml_parser,$str,true)){
+      xml_parser_free($xml_parser);
+      return false;
+    }else {
+      return (json_decode(json_encode(simplexml_load_string($str)),true));
+    }
+   }
 }
