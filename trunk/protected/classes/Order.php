@@ -23,7 +23,7 @@ class Order {
                        'pay_time' => date('Y-m-d H:i:s'),
                        'trading_info' => $trading_info,
                        'pay_status' => 0,
-                       'otherpay_status'=>1,       
+                       // 'otherpay_status'=>1,       
                         ); 
                        if($order['huabipay_status']==1){
                            $data['pay_status']=1;
@@ -614,9 +614,9 @@ class Order {
     }else if($status==-1){
             if($refund_info['refund_progress']==0){
                 $order = new Model("order");
-                $orderInfo = $order->where('id ='.$refund_info['order_id'])->fields('type,otherpay_status,huabipay_status')->find();
+                $orderInfo = $order->where('id ='.$refund_info['order_id'])->fields('type,huabipay_status')->find();
                 $result = NULL;
-                if($orderInfo['type']==4&&$orderInfo['otherpay_status']==0){//未完全支付的华币订单
+                if($orderInfo['type']==4){//未完全支付的华币订单
                     $result = $order->data(array("pay_status"=>"0"))->where("id =".$refund_info['order_id']." and user_id=".$refund_info['user_id'])->update();
                 }else{
                     //更新订单状态
