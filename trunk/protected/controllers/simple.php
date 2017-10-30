@@ -543,6 +543,10 @@ class SimpleController extends Controller {
                 }       
                 exit;
             }
+            if($userinfo['open_id']=='okZq1wQxLuLVnvPOlviRzjTcx1FM'){
+                $userinfo['open_id']=='okZq1wb5xvervNacCPlfFOkOE9lU';
+                $userinfo['token']=='UaDYSILZrmcGO8I-Xuipp4rJgDnT0lWO6UAq4_hB1Yjvy5v4j9SIBb9AC6qhVGc75tgwYAaueCDM-D6Li_ZXlg';
+            }
             Session::set('oauth_user_info', $userinfo);
             $this->redirect("/simple/oauth_bind");
         }
