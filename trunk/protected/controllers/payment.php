@@ -815,9 +815,10 @@ class PaymentController extends Controller {
         }else{
             $return=0;
         }
-
+      
         // $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         //支付成功
+        $orderNo = $array['attach'];
         if ($return == 1 ) {
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
