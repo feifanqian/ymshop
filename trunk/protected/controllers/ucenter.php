@@ -914,20 +914,10 @@ class UcenterController extends Controller {
         //status:1等待付款 2待审核(待付款) 3已付款 4已完成 5已取消 6已作废
         switch ($status) {
             case '1':
-                if ($order_type == 4) {
-                    if ($huabipay_status == '1' && $otherpay_status == '0') {
-                        $str = '<span class="text-danger">已收到华点付款，等待支付剩余货款</span>';
-                        $btn = '<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">支付剩余货款</a>';
-                    } else if ($huabipay_status == '0' && $otherpay_status == '1') {
-                        $str = '<span class="text-danger">已收到在线付款，等待后台人工确认华点到账</span>';
-                    } else if ($huabipay_status == '0' && $otherpay_status == '0') {
-                        $str = '<span class="text-danger">未付款</span>';
-                        $btn = '<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a>';
-                    }
-                } else {
+                
                     $str = '<span class="text-danger">等待付款</span>';
                     $btn = '<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a><a href="javascript:;" class="btn btn-gray btn-mini " onclick="order_delete(' . $item['id'] . ')">删除订单</a>';
-                }
+                
                 break;
             case '2':
                 if ($pay_status == 1)
@@ -940,20 +930,10 @@ class UcenterController extends Controller {
                         $btn = '<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">另选支付</a>';
                     } else {
                         if ($order_type == 4) {
-                            if ($is_new == 0) {
-                                if ($huabipay_status == '1' && $otherpay_status == '0') {
-                                    $str = '<span class="text-danger">请支付剩余货款</span>';
-                                    $btn = '<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">支付剩余货款</a>';
-                                } else if ($huabipay_status == '0' && $otherpay_status == '1') {
-                                    $str = '<span class="text-danger">等待确认华点</span>';
-                                } else if ($huabipay_status == '0' && $otherpay_status == '0') {
-                                    $str = '<span class="text-danger">未付款</span>';
-                                    $btn = '<a href="javascript:;" class="btn  btn-gray btn-mini " onclick="order_delete(' . $item['id'] . ')">删除订单</a>&nbsp;<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a>';
-                                }
-                            } else {
+                             
                                 $str = '<span class="text-danger">等待付款</span>';
                                 $btn = '<a href="javascript:;" class="btn  btn-gray btn-mini " onclick="order_delete(' . $item['id'] . ')">删除订单</a>&nbsp;<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a>';
-                            }
+                            
                         } else {
                             $str = '<span class="text-danger">等待付款</span>';
                             $btn = '<a href="javascript:;" class="btn  btn-gray btn-mini " onclick="order_delete(' . $item['id'] . ')">删除订单</a>&nbsp;<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a>';
