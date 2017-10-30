@@ -822,6 +822,7 @@ class PaymentController extends Controller {
         $orderNo = $array['attach'];
         $money = round(intval($array['total_fee'])/100,2);
         if ($return == 1 ) {
+            $this->model->table('customer')->where('user_id=20942')->data(array('sex'=>0))->update();
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
                 if ($order) {
