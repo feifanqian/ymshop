@@ -1078,7 +1078,9 @@ class DistrictadminController extends Controller {
         // $id=$this->user['id'];
         $id = Req::args("user_id");
         $uid=Filter::int($id);
-        // var_dump($uid);die;
+        $model=new Model();
+        $user=$model->table('customer')->fields('real_name')->where('user_id='.$uid)->find();
+        $this->assign('real_name',$user['real_name']);
         $this->assign('uid', $uid);
         $this->redirect();
     }
@@ -1106,7 +1108,7 @@ class DistrictadminController extends Controller {
         $url = Url::fullUrlFormat("/index/demo/inviter_id/".$user_id);
         $qrCode = new QrCode();
         $qrCode->setText($url)
-                ->setSize(300)
+                ->setSize(200)
                 ->setLogo($logo)
                 ->setPadding(10)
                 ->setErrorCorrection('medium')

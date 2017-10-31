@@ -161,7 +161,7 @@ class WechatApi extends Wechat {
                      $district_qrcodeinfo->data(array('visit_count'=>$result['visit_count']+1))->where('id='.$result['id'])->update();
                      $news = array();
                      if($is_first){
-                        $news[] = new NewsResponseItem("欢迎光临圆梦商城", "", "http://img.buy-d.cn/data/uploads/2016/09/07/b4f135e20157b7928bf8c892500f8f3c.png", "http://www.ymlypt.com/"); 
+                        $news[] = new NewsResponseItem("欢迎光临圆梦购销网", "", "http://img.buy-d.cn/data/uploads/2016/09/07/b4f135e20157b7928bf8c892500f8f3c.png", "http://www.ymlypt.com/"); 
                         $news[]=new NewsResponseItem($result['name'],$result['subtitle'],Url::fullUrlFormat('@' . Common::thumb($result['img'], 220, 220)),Url::fullUrlFormat('/index/product/id/' . $result['goods_id']."/flag/".$result['id']));
                      }else{
                          $news[]=new NewsResponseItem($result['name'],$result['subtitle'],Url::fullUrlFormat('@'.$result['img'])."!/both/360x200/force/true/fxfn/360x200",Url::fullUrlFormat('/index/product/id/' . $result['goods_id']."/flag/".$result['id']));
