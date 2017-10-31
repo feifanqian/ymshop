@@ -1108,7 +1108,7 @@ class DistrictadminController extends Controller {
         $url = Url::fullUrlFormat("/index/demo/inviter_id/".$user_id);
         $qrCode = new QrCode();
         $qrCode->setText($url)
-                ->setSize(200)
+                ->setSize(220)
                 ->setLogo($logo)
                 ->setPadding(10)
                 ->setErrorCorrection('medium')
