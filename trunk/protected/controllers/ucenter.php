@@ -233,9 +233,9 @@ class UcenterController extends Controller {
             }
             $config = Config::getInstance();
             $other = $config->get("other");
-            if ($amount < $other['min_withdraw_amount']) {
-                exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
-            }
+            // if ($amount < $other['min_withdraw_amount']) {
+            //     exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
+            // }
             $isset = $this->model->table("balance_withdraw")->where("user_id =" . $this->user['id'] . " and status =0")->find();
             if ($isset) {
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请失败，还有未处理完的提现申请')));
