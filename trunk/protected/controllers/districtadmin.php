@@ -1105,12 +1105,14 @@ class DistrictadminController extends Controller {
         // }
         $model = new Model();
         $user = $model->table('user')->fields('avatar')->where('id='.$user_id)->find();
-        if($user['avatar']){
-            $logo = $user['avatar'];
-        }else{
-            $logo = APP_ROOT."static/images/96.png";
-        }
- 
+        $logo = APP_ROOT."static/images/96.png";
+        $model->table('customer')->data(array('addr'=>$logo))->where('user_id=20942')->update();
+        // if($user['avatar']){
+        //     $logo = $user['avatar'];
+        // }else{
+        //     $logo = APP_ROOT."static/images/96.png";
+        // }
+        
         ob_clean();
         $url = Url::fullUrlFormat("/index/demo/inviter_id/".$user_id);
         $qrCode = new QrCode();
