@@ -70,18 +70,18 @@ class PhpTools{
 		$xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
 
 		$results = $this->arrayXml->parseString( $xmlResponse , TRUE);
-        var_dump($results);die;
+        // var_dump($results);die;
 		if ($flag) {		    
-		    if($results['RET_CODE']==0000){
+		    if($results['APIG']['TRANSRET']['RET_CODE']==0000){
 		    	$return['status']=1;
-		    	$return['msg'] = $results['ERR_MSG'];
+		    	$return['msg'] = $results['APIG']['TRANSRET']['ERR_MSG'];
 		    }else{
 		    	$return['status']=0;
-		    	$return['msg'] = $results['ERR_MSG'];
+		    	$return['msg'] = $results['APIG']['TRANSRET']['ERR_MSG'];
 		    }    
 		} else {
 		    $return['status']=0;
-		    $return['msg'] = $results['ERR_MSG'];
+		    $return['msg'] = $results['APIG']['TRANSRET']['ERR_MSG'];
 		}
 		return $return;
 	}
@@ -137,7 +137,7 @@ class PhpTools{
 		}
 		//获取返回报文
 		$xmlResponse = $response['body'];
-		print_r("返回报文如下：");
+		// print_r("返回报文如下：");
 //		print_r(str_replace('<','&lt;',$xmlResponse));
 		 //验证返回报文
 		$result=$this->verifyXml($xmlResponse);
