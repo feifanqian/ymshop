@@ -36,14 +36,7 @@ class AllinpayDf{
 
         //发起请求
         $result = $tools->send($data);
-        if($result!=FALSE){
-            echo  '验签通过，请对返回信息进行处理';
-            return true;
-            //下面商户自定义处理逻辑，此处返回一个数组
-        }else{
-            return false;
-                print_r("验签结果：验签失败，请检查通联公钥证书是否正确");
-        }
+        return $result;
     }
 }
 ?>

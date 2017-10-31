@@ -66,22 +66,24 @@ class PhpTools{
 		$flag = (bool) openssl_verify($xmlResponseSrc, hex2bin($signature), $pubKeyId);
 		openssl_free_key($pubKeyId);
 	    //echo '<br/>'+$flag;
-		if ($flag) {
-		    echo '<br/>Verified: <font color=green>Passed</font>.';
-		   
-		
-		    // 变成数组，做自己相关业务逻辑
-		    $xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
+	    // 变成数组，做自己相关业务逻辑
+		$xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
 
-		    $results = $this->arrayXml->parseString( $xmlResponse , TRUE);
-		    var_dump($results);
-		    echo "<br/><br/><font color=blue>-------------华丽丽的分割线--------------------</font><br/><br/>";
-//		    echo $results;
-		    return $results;
+		$results = $this->arrayXml->parseString( $xmlResponse , TRUE);
+
+		if ($flag) {		    
+		    if($results['RET_CODE']==0000){
+		    	$return['status']=1;
+		    	$return['msg'] = $results['ERR_MSG'];
+		    }else{
+		    	$return['status']=0;
+		    	$return['msg'] = $results['ERR_MSG'];
+		    }    
 		} else {
-		    echo '<br/>Verified: <font color=red>Failed</font>.';
-		    return FALSE;
+		    $return['status']=0;
+		    $return['msg'] = $results['ERR_MSG'];
 		}
+		return $return;
 	}
 	
 	/**
