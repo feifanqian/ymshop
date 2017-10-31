@@ -57,11 +57,11 @@ class PhpTools{
 		}
 		
 		$xmlResponseSrc = preg_replace('/<SIGNED_MSG>.*<\/SIGNED_MSG>/i', '', $xmlResponse);
-		// $xmlResponseSrc1 = mb_convert_encoding(str_replace('<','&lt;',$xmlResponseSrc), "UTF-8", "GBK");
-		$xmlResponseSrc1 = mb_convert_encoding($xmlResponseSrc, "UTF-8", "GBK");
-		$xmlResponseSrc2 = Common::xmlToArray($xmlResponseSrc1);
-		print_r ('验签原文');
-		var_dump ($xmlResponseSrc2);
+		$xmlResponseSrc1 = mb_convert_encoding(str_replace('<','&lt;',$xmlResponseSrc), "UTF-8", "GBK");
+		// $xmlResponseSrc1 = mb_convert_encoding($xmlResponseSrc, "UTF-8", "GBK");
+		// $xmlResponseSrc2 = Common::xmlToArray($xmlResponseSrc1);
+		// print_r ('验签原文');
+		// var_dump ($xmlResponseSrc2);
 		$pubKeyId = openssl_get_publickey(file_get_contents($this->certFile));
 		$flag = (bool) openssl_verify($xmlResponseSrc, hex2bin($signature), $pubKeyId);
 		openssl_free_key($pubKeyId);
@@ -74,6 +74,7 @@ class PhpTools{
 		    $xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
 
 		    $results = $this->arrayXml->parseString( $xmlResponse , TRUE);
+		    var_dump($results);
 		    echo "<br/><br/><font color=blue>-------------华丽丽的分割线--------------------</font><br/><br/>";
 //		    echo $results;
 		    return $results;
