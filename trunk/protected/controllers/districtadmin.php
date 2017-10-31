@@ -1105,8 +1105,8 @@ class DistrictadminController extends Controller {
         //         exit;
         //     }
         // }
-        $model = new Model();
-        $qrCode = new QrCode();
+        // $model = new Model();
+        
         // $user = $model->table('user')->fields('avatar')->where('id='.$user_id)->find();
 
         // if($user['avatar']){
@@ -1116,13 +1116,13 @@ class DistrictadminController extends Controller {
         // }else{
         //     $logo = APP_ROOT."static/images/96.png";
         // }
-        $logo = APP_ROOT."static/images/96.png";
         
-        ob_clean();
         $url = Url::fullUrlFormat("/index/demo/inviter_id/".$user_id);
-        
+        $qrCode = new QrCode();
+        $logo = APP_ROOT."static/images/96.png";
+        $qrCode = new QrCode();
         $qrCode->setText($url)
-                ->setSize(220)
+                ->setSize(200)
                 ->setLogo($logo)
                 ->setPadding(10)
                 ->setErrorCorrection('medium')
@@ -1130,9 +1130,7 @@ class DistrictadminController extends Controller {
                 ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
                 ->setLabelFontSize(16)
                 ->setImageType(QrCode::IMAGE_TYPE_PNG);
-        // now we can directly output the qrcode
         header('Content-Type: ' . $qrCode->getContentType());
         $qrCode->render();
-        return;
     }
 }
