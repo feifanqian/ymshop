@@ -70,7 +70,7 @@ class PhpTools{
 		$xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
 
 		$results = $this->arrayXml->parseString( $xmlResponse , TRUE);
-        var_dump($results);
+        print_r($results);die;
 		if ($flag) {		    
 		    if($results['APIG']['TRANSRET']['RET_CODE']==0000){
 		    	$return['status']=1;
