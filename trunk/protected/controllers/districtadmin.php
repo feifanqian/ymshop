@@ -1109,7 +1109,7 @@ class DistrictadminController extends Controller {
 
         if($user['avatar']){
             $avatar = $user['avatar'];
-            $path = $qrCode->downloadImage($avatar);
+            $path = $qrCode->getImage($avatar,'static/images');
             $logo = APP_ROOT.$path;
         }else{
             $logo = APP_ROOT."static/images/96.png";
