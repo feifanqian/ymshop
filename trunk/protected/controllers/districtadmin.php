@@ -1080,7 +1080,9 @@ class DistrictadminController extends Controller {
         $uid=Filter::int($id);
         $model=new Model();
         $user=$model->table('customer')->fields('real_name')->where('user_id='.$uid)->find();
+        $users=$model->table('user')->fields('avatar')->where('id='.$uid)->find();
         $this->assign('real_name',$user['real_name']);
+        $this->assign('avatar',$users['avatar']);
         $this->assign('uid', $uid);
         $this->redirect();
     }
@@ -1105,17 +1107,17 @@ class DistrictadminController extends Controller {
         // }
         $model = new Model();
         $qrCode = new QrCode();
-        $user = $model->table('user')->fields('avatar')->where('id='.$user_id)->find();
+        // $user = $model->table('user')->fields('avatar')->where('id='.$user_id)->find();
 
-        if($user['avatar']){
-            $avatar = $user['avatar'];
-            $path = $qrCode->getImage($avatar,'static/images');
-            $logo = APP_ROOT.$path;
-        }else{
-            $logo = APP_ROOT."static/images/96.png";
-        }
-        // $logo = APP_ROOT."static/images/96.png";
-        $model->table('customer')->data(array('addr'=>$logo))->where('user_id=20942')->update();
+        // if($user['avatar']){
+        //     $avatar = $user['avatar'];
+        //     $path = $qrCode->getImage($avatar,'static/images');
+        //     $logo = APP_ROOT.$path;
+        // }else{
+        //     $logo = APP_ROOT."static/images/96.png";
+        // }
+        $logo = APP_ROOT."static/images/96.png";
+        
         ob_clean();
         $url = Url::fullUrlFormat("/index/demo/inviter_id/".$user_id);
         
