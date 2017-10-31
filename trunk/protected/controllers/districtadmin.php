@@ -318,14 +318,14 @@ class DistrictadminController extends Controller {
                             $result = $model->table("customer")->where("user_id=" . $apply_info['user_id'])->data(array("point_coin" => "`point_coin`+" . round($set['join_fee'], 2)))->update();
                             if ($result) {
                                 Log::pointcoin_log(round($set['join_fee'], 2), $apply_info['user_id'], "", "经销商入驻赠送", 8);
-                                $model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$set['join_fee'] ))->where("user_id=" . $apply_info['user_id'])->update();
+                                // $model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$set['join_fee'] ))->where("user_id=" . $apply_info['user_id'])->update();
                             }
                             if($data['invite_shop_id'] != ""){
                                 //添加积分收益记录
                                 $uinfo=$model->table("district_shop")->where("id=" . $data['invite_shop_id'])->find();
                                 $uid=$uinfo['owner_id'];
                                 if($uid){
-                                    $model->table("customer")->data(array("point_coin"=>"`point_coin`+18000","financial_coin"=>"`financial_coin`+18000"))->where("user_id=" . $uid)->update();
+                                    $model->table("customer")->data(array("point_coin"=>"`point_coin`+18000"))->where("user_id=" . $uid)->update();
                                     Log::pointcoin_log(18000, $uid, "", "经销商邀请经销商收益", 8);
                                 }
                             }
@@ -659,7 +659,7 @@ class DistrictadminController extends Controller {
             $user_id = Req::args("user_id");
             $hirer_id = Req::args("hirer_id");
             $pointcoin = Req::args("pointcoin")!=null?Req::args("pointcoin"):0;
-            $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
+            // $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
             $ds_promoter = Req::args("ds_promoter");
             if (!$user_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
@@ -667,8 +667,8 @@ class DistrictadminController extends Controller {
             // $promoter = Promoter::getPromoterInstance($user_id);
             $model = new Model();
             //赠送积分和分红点
-            if($pointcoin>0 || $financialcoin>0){
-               $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})","financial_coin"=>"`financial_coin`+({$financialcoin})"))->update();
+            if($pointcoin>0){
+               $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})"))->update();
                Log::pointcoin_log($pointcoin,$user_id,"","代理商入驻赠送",5);
             }
             $promoter=$model->table('district_promoter')->where('status=1 and user_id='.$user_id)->find();
@@ -755,7 +755,7 @@ class DistrictadminController extends Controller {
             $user_id = Req::args("user_id");
             $hirer_id = Req::args("hirer_id");
             $pointcoin = Req::args("pointcoin")!=null?Req::args("pointcoin"):0;
-            $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
+            // $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
             $district_name = Req::args("district_name");
             $linkman = Req::args("linkman");
             $link_mobile = Req::args("link_mobile");
@@ -769,8 +769,8 @@ class DistrictadminController extends Controller {
             }
             // $promoter = Promoter::getPromoterInstance($user_id);   
             //赠送积分和分红点
-            if($pointcoin>0 && $financialcoin>0){
-                $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})","financial_coin"=>"`financial_coin`+({$financialcoin})"))->update();
+            if($pointcoin>0){
+                $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})"))->update();
                 Log::pointcoin_log($pointcoin,$user_id,"","经销商入驻赠送",8);
             }
             $promoter=$model->table('district_shop')->where('owner_id='.$user_id)->find();
@@ -846,7 +846,7 @@ class DistrictadminController extends Controller {
         $s_shop = Req::args("s_shop");
         $s_promote = Req::args("s_promote");
         $pointcoin = Req::args("pointcoin");
-        $financialcoin = Req::args("financialcoin");
+        // $financialcoin = Req::args("financialcoin");
         if($s_shop && $s_shop!=''){
             $where1="name like '%{$s_shop}%' ";
         }else{
@@ -860,7 +860,7 @@ class DistrictadminController extends Controller {
         $this->assign("s_shop", $s_shop);
         $this->assign("s_promote", $s_promote);
         $this->assign("pointcoin", $pointcoin);
-        $this->assign("financialcoin", $financialcoin);
+        // $this->assign("financialcoin", $financialcoin);
         $this->assign("s_type", $s_type);
         $this->assign("s_content", $s_content);
         $this->assign("hirer_id", $hirer_id);
@@ -891,7 +891,7 @@ class DistrictadminController extends Controller {
         $linkman = Req::args("linkman");
         $link_mobile = Req::args("link_mobile");
         $pointcoin = Req::args("pointcoin");
-        $financialcoin = Req::args("financialcoin");
+        // $financialcoin = Req::args("financialcoin");
         if($s_shop && $s_shop!=''){
             $wheres="name like '%{$s_shop}%' ";
         }else{
@@ -903,7 +903,7 @@ class DistrictadminController extends Controller {
         $this->assign("linkman", $linkman);
         $this->assign("link_mobile", $link_mobile);
         $this->assign("pointcoin", $pointcoin);
-        $this->assign("financialcoin", $financialcoin);
+        // $this->assign("financialcoin", $financialcoin);
         $this->assign("wheres", $wheres);
         $this->assign("s_type", $s_type);
         $this->assign("s_content", $s_content);

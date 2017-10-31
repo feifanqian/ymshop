@@ -173,10 +173,10 @@ function addPromoters(){
             content: '{url:/districtadmin/radio_customer_select}',
           });
 }
-function callback(hirer_id,user_id,pointcoin,financialcoin,ds_promoter){
+function callback(hirer_id,user_id,pointcoin,ds_promoter){
      var load = layer.load();
      console.log(hirer_id+"|"+user_id);
-     $.post('{url:/districtadmin/addPromoter}', {hirer_id:hirer_id,user_id:user_id,pointcoin:pointcoin,financialcoin:financialcoin,ds_promoter} , function(result){
+     $.post('{url:/districtadmin/addPromoter}', {hirer_id:hirer_id,user_id:user_id,pointcoin:pointcoin,ds_promoter:ds_promoter} , function(result){
             layer.close(load);
             if(result.status=='success'){
                layer.msg("添加成功",function(){

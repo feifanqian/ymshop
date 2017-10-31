@@ -405,7 +405,7 @@ class DistrictLogic {
         if ($role == 'user') {
             //加积分
             $result = $this->model->table("customer")->where("user_id=" . $role_id)->data(array("point_coin" => "`point_coin`+$amount"))->update();
-            $this->model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$amount ))->where("user_id=" .$role_id)->update();
+            // $this->model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$amount ))->where("user_id=" .$role_id)->update();
 
             if ($result) {
                 Log::pointcoin_log($amount, $role_id, $order_no, $type_info["$type"], $type);
@@ -418,7 +418,7 @@ class DistrictLogic {
             if ($promoter_info) {
                 //加积分
                 $result = $this->model->table("customer")->where("user_id=" . $promoter_info['user_id'])->data(array("point_coin" => "`point_coin`+$amount"))->update();
-                $this->model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$amount ))->where("user_id=" .$promoter_info['user_id'])->update();
+                // $this->model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$amount ))->where("user_id=" .$promoter_info['user_id'])->update();
                 if ($result) {
                     Log::pointcoin_log($amount, $promoter_info['user_id'], $order_no, $type_info["$type"], $type);
                     return true;
@@ -431,7 +431,7 @@ class DistrictLogic {
             if ($shop_info) {
                 //加积分
                 $result = $this->model->table("customer")->where("user_id=" . $shop_info['owner_id'])->data(array("point_coin" => "`point_coin`+$amount"))->update();
-                $this->model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$amount ))->where("user_id=" .$shop_info['owner_id'])->update();
+                // $this->model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$amount ))->where("user_id=" .$shop_info['owner_id'])->update();
                 if ($result) {
                     Log::pointcoin_log($amount, $shop_info['owner_id'], $order_no, $type_info["$type"], $type);
                     return true;

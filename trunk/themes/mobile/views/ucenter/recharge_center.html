@@ -119,10 +119,10 @@
                     <label class="weui-form-preview__label">另赠送积分</label>
                     <span class="weui-form-preview__value" id="package_point"></span>
                 </div>
-                <div class="weui-form-preview__item" id="send_financial" style='display:none;'>
+                <!-- <div class="weui-form-preview__item" id="send_financial" style='display:none;'>
                     <label class="weui-form-preview__label">赠分红点数</label>
                     <span class="weui-form-preview__value" id="package_financial_coin"></span>
-                </div>
+                </div> -->
             </div>
 </div>
 <div class="weui_cells weui_cells_access" id='gift_select_4' style='display:none;'>
@@ -298,7 +298,7 @@
         $("input[name='recharge']").val($(this).data('amount'));
         $("#package_money").html("¥"+$(this).data('amount'));
         $("#package_point").html($(this).data('point'));
-        $("#package_financial_coin").html($(this).data('financial'));
+        // $("#package_financial_coin").html($(this).data('financial'));
 
         if($(this).data('value')==0){
             $("input[name='recharge']").removeAttr("readonly");

@@ -142,33 +142,33 @@ class LinuxCliTask{
      }
 
     public function autoUpdateFinancial(){
-        $customer=$this->model->table('customer')->fields('user_id,real_name,financial_coin,financial_stock')->where('financial_coin>0')->findAll();
-        if($customer){
-            foreach($customer as $k => $v){
-                if($v['financial_coin']>=5000){
-                    $stock=intval($v['financial_coin']/5000);
-                    $data=array(
-                          'financial_coin'=>"`financial_coin`-5000*({$stock})",
-                          'financial_stock'=>"`financial_stock`+({$stock})",
-                        );
-                    $ret=$this->model->table('customer')->data($data)->where('user_id='.$v['user_id'])->update();//自动分配分红股
-                    if($ret){
-                        echo date("Y-m-d H:i:s")."=={$v['real_name']}==自动分配{$stock}个分红股成功==\n";
-                    }            
-                    $current_date = date('Y-m-d',time());
-                    ignore_user_abort();//关掉浏览器，PHP脚本也可以继续执行.
-                    set_time_limit(0);    
-                    if(time()>strtotime("$current_date + 360 days")){ //360天后自动清除该分红股
-                        $res=$this->model->table('customer')->data(array('financial_stock'=>"`financial_stock`-({$stock})"))->where('user_id='.$v['user_id'])->update();
-                        if($res){
-                            echo date("Y-m-d H:i:s")."success=={$v['real_name']}==360天后自动清除该分红股==\n";
-                        }else{
-                            echo date("Y-m-d H:i:s")."error";
-                        }
-                    }
-                }
-            }
-        }
+        // $customer=$this->model->table('customer')->fields('user_id,real_name,financial_coin,financial_stock')->where('financial_coin>0')->findAll();
+        // if($customer){
+        //     foreach($customer as $k => $v){
+        //         if($v['financial_coin']>=5000){
+        //             $stock=intval($v['financial_coin']/5000);
+        //             $data=array(
+        //                   'financial_coin'=>"`financial_coin`-5000*({$stock})",
+        //                   'financial_stock'=>"`financial_stock`+({$stock})",
+        //                 );
+        //             $ret=$this->model->table('customer')->data($data)->where('user_id='.$v['user_id'])->update();//自动分配分红股
+        //             if($ret){
+        //                 echo date("Y-m-d H:i:s")."=={$v['real_name']}==自动分配{$stock}个分红股成功==\n";
+        //             }            
+        //             $current_date = date('Y-m-d',time());
+        //             ignore_user_abort();//关掉浏览器，PHP脚本也可以继续执行.
+        //             set_time_limit(0);    
+        //             if(time()>strtotime("$current_date + 360 days")){ //360天后自动清除该分红股
+        //                 $res=$this->model->table('customer')->data(array('financial_stock'=>"`financial_stock`-({$stock})"))->where('user_id='.$v['user_id'])->update();
+        //                 if($res){
+        //                     echo date("Y-m-d H:i:s")."success=={$v['real_name']}==360天后自动清除该分红股==\n";
+        //                 }else{
+        //                     echo date("Y-m-d H:i:s")."error";
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     public function autoUnlocked(){

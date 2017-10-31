@@ -44,7 +44,7 @@
     <input type="text"  value="{$s_promote}" name="s_promote" style="width:80px;" placeholder="上级代理商"/><a href='javascript:;' onclick="tools_submit({action:'{url:/districtadmin/radio_customer_select}'})" class="fr icon-search" style="" ></a>
     </span>
     <span class="fr">
-      赠送积分<input name="pointcoin" value="{$pointcoin}" type="text" class="small" />赠送分红点<input type="text" name="financialcoin" value="{$financialcoin}" class="small">
+      赠送积分<input name="pointcoin" value="{$pointcoin}" type="text" class="small" />
     </span>
 </div>
 <table class="default" >
@@ -105,13 +105,12 @@ $('#ds_shop').change(function(){
             var user_id = $("input[name='user_id']:checked").val();
             var hirer_id=$('#ds_shop').val();
             var pointcoin=$("input[name='pointcoin']").val();
-            var financialcoin=$("input[name='financialcoin']").val();
             var ds_promoter=$('#ds_promoter').val();
             if(user_id==undefined){
                 alert("您还没有选择用户");
             }else{
                 
-                 window.parent.callback(hirer_id,user_id,pointcoin,financialcoin,ds_promoter);
+                 window.parent.callback(hirer_id,user_id,pointcoin,ds_promoter);
             }
         }else{
             alert("您还没有选择用户");

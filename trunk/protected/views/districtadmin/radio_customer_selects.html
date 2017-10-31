@@ -26,7 +26,7 @@
     <span class="fr">
     <input type="text"  value="{$s_shop}" name="s_shop" style="width:80px;" placeholder="上级经销商"/><a href='javascript:;' onclick="tools_submit({action:'{url:/districtadmin/radio_customer_selects}'})" class="fr icon-search" style="" ></a>
     </span>
-    <span class="fr">经销商名称<input name='district_name' value="{$district_name}" type="text" class="small" />联系人<input name='linkman' value="{$linkman}" type="text" class="small" />联系电话<input name='link_mobile' value="{$link_mobile}" type="text" class="small" />赠送积分<input name="pointcoin" value="{$pointcoin}" type="text"  style="width:50px;"/>赠送分红点<input type="text" name="financialcoin" value="{$financialcoin}"  style="width:50px;">
+    <span class="fr">经销商名称<input name='district_name' value="{$district_name}" type="text" class="small" />联系人<input name='linkman' value="{$linkman}" type="text" class="small" />联系电话<input name='link_mobile' value="{$link_mobile}" type="text" class="small" />赠送积分<input name="pointcoin" value="{$pointcoin}" type="text"  style="width:50px;"/>
     </span>
     
 
@@ -75,7 +75,6 @@
             var user_id = $("input[name='user_id']:checked").val();
             var hirer_id=$('#ds_shop').val();
             var pointcoin=$("input[name='pointcoin']").val();
-            var financialcoin=$("input[name='financialcoin']").val();
             var district_name=$("input[name='district_name']").val();
             var linkman=$("input[name='linkman']").val();
             var link_mobile=$("input[name='link_mobile']").val();
@@ -83,7 +82,7 @@
                 alert("您还没有选择用户");
             }else{
                 
-                 window.parent.callback(hirer_id,user_id,pointcoin,financialcoin,district_name,linkman,link_mobile);
+                 window.parent.callback(hirer_id,user_id,pointcoin,district_name,linkman,link_mobile);
             }
         }else{
             alert("您还没有选择用户");
