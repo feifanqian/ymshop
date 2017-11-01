@@ -18,3 +18,11 @@
     <div style="text-align:center"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
     </form>
 </div>
+<script type="text/javascript">
+$(".button").submit(function(){
+  if($("input[name=base_rate]").val()<2){
+    alert('比例最小2%');
+    return false;
+  }
+});
+</script>
