@@ -11,17 +11,21 @@
     <dl class="lineD">
       <dt><b class="red">*</b> 比例：</dt>
       <dd>
-        <input name="base_rate" type="text"  pattern="\w{2,}" value="{$base_rate}" alt="最大99">%      
+        <input name="base_rate" type="text" value="{$base_rate}" alt="最大99">%      
       </dd>
     </dl>
 
-    <div style="text-align:center"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
+    <div style="text-align:center"><input type="submit" value="提交" id="submit" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
     </form>
 </div>
 <script type="text/javascript">
-$(".button").submit(function(){
+$("#submit").submit(function(){
   if($("input[name=base_rate]").val()<2){
     alert('比例最小2%');
+    return false;
+  }
+  if($("input[name=base_rate]").val()>99){
+    alert('比例最大99%');
     return false;
   }
 });
