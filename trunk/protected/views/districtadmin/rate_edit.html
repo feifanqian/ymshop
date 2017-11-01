@@ -20,6 +20,7 @@
 </div>
 <script type="text/javascript">
 $("#submit").submit(function(){
+  console.log($("input[name=base_rate]").val());
   if($("input[name=base_rate]").val()<2){
     alert('比例最小2%');
     return false;
