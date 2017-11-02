@@ -7,7 +7,7 @@
 <div class="invite_bg1" style="visibility:visible;width:100%;background: url(/static/images/invite_bg.jpg);background-size:100%100%;position: relative;">
     <div style="width: 100%;height: 32px;color:#fff;text-align: center;line-height: 32px;font-size:22px;font-family: 'Microsoft YaHei';position: absolute;top:46px;">收款方</div>
     <div style="width: 100%;height: 32px;color:#fff;text-align: center;line-height: 32px;font-size:30px;font-family: 'Microsoft YaHei';position: absolute;top:80px;">{$real_name}</div>
-    <div class="invite_main1" style="position: absolute;top: 26%;left: 29%;">
+    <div class="invite_main1" style="position: absolute;top: 23%;">
         <div class="invite_qr1" style="width: 190px;height: 206px;">
            <img src="{$avatar}" style="position: absolute;top: 80px;left: 80px;border-radius: 5px;" width="40" height="40">
            <img src="/districtadmin/buildinvitepay?uid={$uid|1}" width="190" height="206" />
@@ -22,7 +22,9 @@
         // $(".invite_bg").height($(document).height() - 98);
         var W = $('.invite_bg1').width();
         var w = $('.invite_main1').width();
-        var left = (W-w)/2*W;
-        $(".invite_bg").left(left);
+        var left = (W-w)/(2*W)*100+'%';
+        $(".invite_main1").css("left",left);
+        // var top = ($(document).height() - 98)+'px';
+        // $(".invite_main1").css("top",top);
     });
 </script>

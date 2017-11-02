@@ -40,11 +40,11 @@
                        <li><a class="icon-pencil" href="{url:/districtadmin/rate_edit/id/$item[id]}">设置分账比例</a></li>
                        <!-- <li><a class="icon-eye" href="javascript:;" onclick="viewQrcode({$item['user_id']});"> 查看线下支付二维码</a></li> -->
                        <li><a class="icon-eye" href="{url:/districtadmin/invitepay/user_id/$item[user_id]}"> 查看线下支付二维码</a></li>
-                       {if:$item['unique_code']!=1}
+                       <!-- {if:$item['unique_code']!=1}
                        <li><a class="icon-eye" href="javascript:;" onclick="pass({$item['id']})"> 商家二维码可见</a></li>
                        {else:}
                        <li><a class="icon-key" href="javascript:;" onclick="cancel({$item['id']})"> 隐藏商家二维码</a></li>
-                       {/if}
+                       {/if} -->
                        <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/promoter_del/id/$item[id]}')"> 移出代理商</a></li>
                      </ul>
                    </div>
