@@ -256,6 +256,18 @@ class DistrictadminController extends Controller {
         $this->redirect();
     }
 
+    public function qrcode_join() {
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str) {
+            $this->assign("where", $condition_str);
+        } else {
+            $this->assign("where", "unique_code=0");
+        }
+        $this->assign("condition", $condition);
+        $this->redirect();
+    }
+
     public function updateApplyStatus() {
         $id = Filter::sql(Req::args("id"));
         $status = Filter::sql(Req::args("status"));
@@ -385,6 +397,20 @@ class DistrictadminController extends Controller {
             echo $json_encode(array('status' => 'fail', 'msg' => "操作失败，参数错误"));
             exit();
         }
+    }
+
+    public function updateQrcodeStatus(){
+         $id = Filter::sql(Req::args("id"));
+         $status = Filter::sql(Req::args("status"));
+         $model=new Model();
+         $ret = $model->table('district_promoter')->where('id='.$id)->data(array('unique_code'=>$status,'join_time'=>date('Y-m-d H:i:s')))->update();
+         if($ret){
+            echo json_encode(array("status" => 'success', 'msg' => '成功'));
+            exit();
+         }else{
+            echo json_encode(array("status" => 'fail', 'msg' => '数据库更新失败'));
+            exit();
+         }
     }
 
     public function updateWithdrawStatus() {

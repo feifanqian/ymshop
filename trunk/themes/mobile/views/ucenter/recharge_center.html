@@ -275,12 +275,12 @@
                 $.toast("请选择充值方式", "text");
                 return false;
             }
-            if($("input[name='package']").val()==4){
-                if($("#address_id").val()==""||$("#address_id").val()=="0"){
-                    $.toast("请选择地址信息", "text");
-                    return false;
-                }
-            }
+            // if($("input[name='package']").val()==4){
+            //     if($("#address_id").val()==""||$("#address_id").val()=="0"){
+            //         $.toast("请选择地址信息", "text");
+            //         return false;
+            //     }
+            // }
         });
         $("#paytype").select({
             title: "选择支付方式",

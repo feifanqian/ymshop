@@ -1355,10 +1355,17 @@ class UcenterController extends Controller {
         $shop=$this->model->table('district_promoter')->where('user_id='.$id)->find();
         if($shop){
             $is_shop=1;
+            if($shop['unique_code']==1){
+                $show_code=1;
+            }else{
+                $show_code=0;
+            }
         }else{
             $is_shop=0;
+            $show_code=0;
         }
         $this->assign('is_shop',$is_shop);
+        $this->assign('show_code',$show_code);
         $this->assign("order", $order);
         $this->assign("customer", $customer);
         $this->assign("seo_title", "钱袋");
