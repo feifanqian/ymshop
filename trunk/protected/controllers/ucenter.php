@@ -2551,7 +2551,7 @@ class UcenterController extends Controller {
     }
 
     public function beagent(){
-        $this->assign('seo_title',"圆梦购销网");
+        $this->assign('seo_title',"圆梦共享网");
         $this->redirect();
     }
     
