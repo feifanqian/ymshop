@@ -1815,6 +1815,9 @@ class IndexController extends Controller {
         // $id=$this->user['id'];
         $id = Req::args("user_id");
         $uid=Filter::int($id);
+        if($this->user['id']==20942){
+           var_dump($uid);die;
+        } 
         $model=new Model();
         $user=$model->table('customer')->fields('real_name')->where('user_id='.$uid)->find();
         $users=$model->table('user')->fields('avatar')->where('id='.$uid)->find();
