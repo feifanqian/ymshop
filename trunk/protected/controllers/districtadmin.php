@@ -262,7 +262,8 @@ class DistrictadminController extends Controller {
         if ($condition_str) {
             $this->assign("where", $condition_str);
         } else {
-            $this->assign("where", "da.unique_code=0");
+            // $this->assign("where", "da.unique_code=0");
+            $this->assign("where", "UNIX_TIMESTAMP(da.create_time)>".1509603047);
         }
         $this->assign("condition", $condition);
         $this->redirect();
