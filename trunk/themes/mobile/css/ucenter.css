@@ -126,17 +126,15 @@ table.attention td{padding: 4px 8px;}
     left:50%;
     margin-left:-18%;
 }
-.invite_qr img {
+/*.invite_qr img {
     width:100%;
     height:100%;
-}
+}*/
 .invite_qr1 {
-    width:60%;
-    height: 36%;
     position: absolute;
-    top:36%;
-    left:38%;
-    margin-left:-18%;
+    top:-2%;
+    left:-5%;
+    /*margin-left:-18%;*/
 }
 .invite_qr1 img {
     width:100%;
