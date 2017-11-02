@@ -334,7 +334,8 @@ class Order {
                         if($inviter_info){
                             $config = Config::getInstance()->get("district_set");
 
-                            $first_promoter_user_id = Common::getFirstPromoter($inviter_info['user_id']);
+                            // $first_promoter_user_id = Common::getFirstPromoter($inviter_info['user_id']);
+                            $first_promoter_user_id = Common::getFirstPromoter($recharge['user_id']);
                             if($first_promoter_user_id){
                                 Log::incomeLog($config['up_income1'], 2, $first_promoter_user_id, $recharge['id'], 14,"下级会员升级为代理商奖励");
                                 $result = $model->table("customer")->data(array("point_coin"=>"`point_coin`+".$config['up_point1']))->where("user_id=".$first_promoter_user_id)->update();
