@@ -1812,8 +1812,8 @@ class IndexController extends Controller {
     }
 
     public function invitepay(){
-        $id=$this->user['id'];
-        // $id = Req::args("user_id");
+        // $id=$this->user['id'];
+        $id = Req::args("user_id");
         $uid=Filter::int($id);
         $model=new Model();
         $user=$model->table('customer')->fields('real_name')->where('user_id='.$uid)->find();

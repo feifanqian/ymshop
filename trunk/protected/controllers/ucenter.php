@@ -1368,6 +1368,7 @@ class UcenterController extends Controller {
         $this->assign('show_code',$show_code);
         $this->assign("order", $order);
         $this->assign("customer", $customer);
+        $this->assign("id", $id);
         $this->assign("seo_title", "钱袋");
         $this->redirect();
     }
