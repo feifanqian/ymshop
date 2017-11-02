@@ -18,7 +18,7 @@
         <th style="width:140px">处理时间</th>
         <th style="width:120px">状态</th>
     </tr>
-    {query:name=district_promoter as da join=left join customer as u on da.user_id eq u.user_id left join district_shop as ds on da.hirer_id eq ds.id fields=da.*,u.real_name,u.mobile,ds.name as invite_shop_name where=$where id=$obj page=1 order= id desc}
+    {query:name=district_promoter as da join=left join customer as u on da.user_id eq u.user_id left join district_shop as ds on da.hirer_id eq ds.id fields=da.id,da.create_time,da.join_time,da.status,da.unique_code,u.real_name,u.mobile,ds.name as invite_shop_name where=$where id=$obj page=1 order= id desc}
         <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a>
