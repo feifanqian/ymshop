@@ -4,16 +4,19 @@
         top:10%;
     }
 </style>
-<div class="invite_bg" style="visibility:visible;">
-    <div class="invite_main">
-        <div class="invite_qr1"><img src="/user/buildinvitepay?uid={$uid|1}" /></div>
+<div class="invite_bg" style="visibility:visible;width:100%;background: url(/static/images/invite_bg.jpg);background-size:100%100%;position: relative;">
+    <div style="width: 240px;height: 32px;color:#fff;text-align: center;line-height: 32px;font-size:22px;font-family: 'Microsoft YaHei';position: absolute;top:46px;left: 124px;">收款方</div>
+    <div style="width: 240px;height: 32px;color:#fff;text-align: center;line-height: 32px;font-size:30px;font-family: 'Microsoft YaHei';position: absolute;top:80px;left: 124px;">{$real_name}</div>
+    <div class="invite_main" style="position: absolute;top: 160px;left: 130px;">
+        <div class="invite_qr1" style="width: 240px;height: 242px;">
+           <img src="{$avatar}" style="position: absolute;top: 90px;left: 100px;border-radius: 5px;" width="40" height="40">
+           <img src="/districtadmin/buildinvitepay?uid={$uid|1}" width="240" height="242" />
+        </div>
     </div>
 </div>
 <script>
     $(function () {
-        var color_list = {0:'brown',1:'chocolate',2:'darkorange',3:'lightcoral',4:'orchid',5:'maroon'};
-        var index = parseInt(5*Math.random());
-        $('.invite_bg').css('background-color',color_list[1]);
+        $('.invite_bg').css('background-color','#fff');
         $(".invite_main").height($(".invite_main").width() / 0.6344);
         $(".invite_bg").css("visibility", "visible");
         $(".invite_bg").height($(document).height() - 98);
