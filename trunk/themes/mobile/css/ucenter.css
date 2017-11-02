@@ -104,6 +104,13 @@ table.attention td{padding: 4px 8px;}
     position: relative;
     margin:0 auto;
 }
+.invite_main1 {
+    width:190px;
+    height:100%;
+    background-size: 100% 100%;
+    position: relative;
+    margin:0 auto;
+}
 .invite_avatar {
     position: absolute;
     top: 15.5%;
@@ -134,14 +141,14 @@ table.attention td{padding: 4px 8px;}
     left:50%;
     margin-left:-18%;
 }
-/*.invite_qr img {
+.invite_qr img {
     width:100%;
     height:100%;
-}*/
+}
 .invite_qr1 {
     position: absolute;
-    top:-4%;
-    left:-5%;
+    /*top:-4%;*/
+    /*left:-5%;*/
     /*margin-left:-18%;*/
 }
 /*.invite_qr1 img {
