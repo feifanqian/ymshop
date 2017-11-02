@@ -1108,6 +1108,11 @@ class DistrictadminController extends Controller {
         $model=new Model();
         $user=$model->table('customer')->fields('real_name')->where('user_id='.$uid)->find();
         $users=$model->table('user')->fields('avatar')->where('id='.$uid)->find();
+        if($users){
+            if($users['avatar']=='' || $users['avatar']=='/0'){
+                $users['avatar']='/static/images/96.png';
+            }
+        }
         $this->assign('real_name',$user['real_name']);
         $this->assign('avatar',$users['avatar']);
         $this->assign('uid', $uid);
