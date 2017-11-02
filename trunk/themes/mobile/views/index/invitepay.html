@@ -9,7 +9,7 @@
     <div style="width: 100%;height: 32px;color:#fff;text-align: center;line-height: 32px;font-size:30px;font-family: 'Microsoft YaHei';position: absolute;top:80px;">{$real_name}</div>
     <div class="invite_main1" style="position: absolute;top: 24%;">
         <div class="invite_qr1">
-           <img class="avatar" src="{$avatar}" style="position: absolute;top: 80px;border-radius: 5px;" width="40" height="40">
+           <img class="avatar" src="{$avatar}" style="position: absolute;border-radius: 5px;" width="40" height="40">
            <img class="qrcode" src="/ucenter/buildinvitepay?uid={$uid|1}"  />
         </div>
     </div>
@@ -35,7 +35,9 @@
         $('.qrcode').css("width",w);
         $('.qrcode').css("height",h);
         var l = (W-40)/(2*W)*100+'%';
+        var t = (h-40)/(2*h)*100+'%';
         $('.avatar').css("left",l);
+        $('.avatar').css("top",t);
         // var top = ($(document).height() - 98)+'px';
         // $(".invite_main1").css("top",top);
     });
