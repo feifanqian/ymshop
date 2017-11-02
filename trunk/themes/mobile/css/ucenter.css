@@ -94,7 +94,7 @@ table.attention td{padding: 4px 8px;}
     position: fixed;
     z-index: 1;
     width: 100%;
-    height: 100%;
+    height: 600px;
     left: 0;
 }
 .invite_main {
@@ -140,11 +140,11 @@ table.attention td{padding: 4px 8px;}
 }*/
 .invite_qr1 {
     position: absolute;
-    top:-2%;
+    top:-4%;
     left:-5%;
     /*margin-left:-18%;*/
 }
-.invite_qr1 img {
+/*.invite_qr1 img {
     width:100%;
     height:100%;
-}
+}*/

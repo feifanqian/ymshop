@@ -139,10 +139,10 @@ class Menu {
             '/districtadmin/list_promoter'=>array('name'=>'代理商','parent'=>'personnel'),
             '/districtadmin/apply_withdraw'=>array('name'=>'提现申请','parent'=>'apply'),
             '/districtadmin/apply_join'=>array('name'=>'入驻申请','parent'=>'apply'),
-            '/districtadmin/qrcode_join'=>array('name'=>'商家二维码申请','parent'=>'apply'),
+            // '/districtadmin/qrcode_join'=>array('name'=>'商家二维码申请','parent'=>'apply'),
             '/districtadmin/set'=>array('name'=>'专区设置','parent'=>'set'),
             '/districtadmin/rate_edit' => array('name' => '设置分账比例', 'parent' => 'personnel', 'hidden'=>true),
-            // '/districtadmin/invitepay' => array('name' => '商家二维码', 'parent' => 'personnel', 'hidden'=>true),
+            '/districtadmin/invitepay' => array('name' => '商家二维码', 'parent' => 'personnel', 'hidden'=>true),
             // '/districtadmin/payset'=>array('name'=>'秒到支付','parent'=>'set'),
         );
         //分组菜单
