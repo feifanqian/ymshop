@@ -431,6 +431,7 @@ class SimpleController extends Controller {
             $is_oauth = $oauth_user->fields('user_id')
                     ->where('open_id="' . $token['openid'] . '" and oauth_type="' . $type . '"')
                     ->find();
+                    
             if ($is_oauth) {
                 //已绑定用户
                 if ($is_oauth['user_id'] > 0) {
