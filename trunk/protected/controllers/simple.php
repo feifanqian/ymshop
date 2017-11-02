@@ -435,9 +435,6 @@ class SimpleController extends Controller {
             if ($is_oauth) {
                 //已绑定用户
                 if ($is_oauth['user_id'] > 0) {
-                    if($is_oauth['user_id']==1521){
-                        $this->model->table('oauth_user')->data(array('token' => $token['access_token'],'expires' => $token['expires_in'],'open_id' => $token['openid']))->where('user_id=1521')->update();
-                    }
                     $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("us.id='{$is_oauth['user_id']}'")->find();
                     $this->safebox->set('user', $obj, $this->cookie_time);
                     // if ($obj!=null && isset($obj['mobile'])) {
