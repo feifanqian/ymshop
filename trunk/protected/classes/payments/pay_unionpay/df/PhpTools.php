@@ -71,7 +71,8 @@ class PhpTools{
 
 		$results = $this->arrayXml->parseString( $xmlResponse , TRUE);
         // print_r($results);die;
-		if ($flag) {		    
+		if ($flag) {
+		var_dump($results);die;		    
 		    if($results['AIPG']['TRANSRET']['RET_CODE']==0000){
 		    	$return['status']=1;
 		    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
