@@ -2618,9 +2618,6 @@ class UcenterController extends Controller {
         }else{
             $this->assign('shop_name','未知商家');
         }
-        if($this->user['id']==20942){
-            var_dump(123);die;
-        }
         $order_no=date('YmdHis').rand(1000,9999);
         $this->assign("seo_title","向商家付款");
         $this->assign('seller_id',$inviter_id);
