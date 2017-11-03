@@ -453,38 +453,38 @@ class PaymentController extends Controller {
                 }
 
                 //*************使用通联支付************************
-                   $randomstr=rand(1000000000000,9999999999999);
-                   $open=$this->model->table('oauth_user')->where('user_id='.$this->user['id'])->find();
-                   $params = array();
-                   $params["cusid"] = AppConfig::CUSID;
-                   $params["appid"] = AppConfig::APPID;
-                   $params["version"] = AppConfig::APIVERSION;
-                   $params["trxamt"] = $order_amount*100;
-                   $params["reqsn"] = $order_no;//订单号,自行生成
-                   $params["paytype"] = "W02";
-                   $params["randomstr"] = $randomstr;//
-                   $params["body"] = "商品名称";
-                   $params["remark"] = "备注信息";
-                   $params["acct"] = $open['open_id'];
-                   // $params["limit_pay"] = "no_credit";
-                   // $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
-                   $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callback';
-                   // $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback");
-                   // $params["notify_url"] = 'http://'.$_SERVER['HTTP_HOST'].'/payment/async_callback';
-                   $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
+                   // $randomstr=rand(1000000000000,9999999999999);
+                   // $open=$this->model->table('oauth_user')->where('user_id='.$this->user['id'])->find();
+                   // $params = array();
+                   // $params["cusid"] = AppConfig::CUSID;
+                   // $params["appid"] = AppConfig::APPID;
+                   // $params["version"] = AppConfig::APIVERSION;
+                   // $params["trxamt"] = $order_amount*100;
+                   // $params["reqsn"] = $order_no;//订单号,自行生成
+                   // $params["paytype"] = "W02";
+                   // $params["randomstr"] = $randomstr;//
+                   // $params["body"] = "商品名称";
+                   // $params["remark"] = "备注信息";
+                   // $params["acct"] = $open['open_id'];
+                   // // $params["limit_pay"] = "no_credit";
+                   // // $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
+                   // $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callback';
+                   // // $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback");
+                   // // $params["notify_url"] = 'http://'.$_SERVER['HTTP_HOST'].'/payment/async_callback';
+                   // $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
 
-                   $paramsStr = AppUtil::ToUrlParams($params);
-                   $url = AppConfig::APIURL . "/pay";
-                   $rsp = AppUtil::Request($url, $paramsStr);
-                   $rspArray = json_decode($rsp, true);
-                   if(AppUtil::ValidSigns($rspArray)){
-                       if(isset($rspArray['payinfo'])){
-                           $this->assign('payinfo',$rspArray['payinfo']);
-                           Session::set('payinfo',$rspArray['payinfo']);
-                       }
-                    }else{
-                        echo "fail";
-                    }
+                   // $paramsStr = AppUtil::ToUrlParams($params);
+                   // $url = AppConfig::APIURL . "/pay";
+                   // $rsp = AppUtil::Request($url, $paramsStr);
+                   // $rspArray = json_decode($rsp, true);
+                   // if(AppUtil::ValidSigns($rspArray)){
+                   //     if(isset($rspArray['payinfo'])){
+                   //         $this->assign('payinfo',$rspArray['payinfo']);
+                   //         Session::set('payinfo',$rspArray['payinfo']);
+                   //     }
+                   //  }else{
+                   //      echo "fail";
+                   //  }
                   //*******************************************
                    
                 $this->assign('offline',0);
@@ -1083,10 +1083,10 @@ class PaymentController extends Controller {
             
             $jsApiParameters = $tools->GetJsApiParameters($order);
 
-            if($this->user['id']==20942){
-                $jsApiParameters = Session::get('payinfo');
-                // var_dump($jsApiParameters);die;
-            }
+            // if($this->user['id']==20942){
+            //     $jsApiParameters = Session::get('payinfo');
+            //     var_dump($jsApiParameters);die;
+            // }
             // $jsApiParameters = Session::get('payinfo');
             $offline=0;
             // var_dump($jsApiParameters);die;
