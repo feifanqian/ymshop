@@ -1081,8 +1081,8 @@ class PaymentController extends Controller {
 
             $order = WxPayApi::unifiedOrder($input);
             
-            // $jsApiParameters = $tools->GetJsApiParameters($order);
-            $jsApiParameters = Session::get('payinfo');
+            $jsApiParameters = $tools->GetJsApiParameters($order);
+            // $jsApiParameters = Session::get('payinfo');
             $offline=0;
             // var_dump($jsApiParameters);die;
             //获取共享收货地址js函数参数
