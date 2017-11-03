@@ -2601,6 +2601,9 @@ class UcenterController extends Controller {
        Session::set('demo', 1);
 
        $inviter_id = intval(Req::args('inviter_id'));
+       if(!$inviter_id){
+            $inviter_id = Session::get('seller_id');
+        }
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");      
         } else {
@@ -2615,13 +2618,13 @@ class UcenterController extends Controller {
         }else{
             $this->assign('shop_name','未知商家');
         }
-        if(!$inviter_id){
-            $inviter_id = $this->user['id'];
+        if($this->user['id']==20942){
+            var_dump(123);die;
         }
         $order_no=date('YmdHis').rand(1000,9999);
         $this->assign("seo_title","向商家付款");
         $this->assign('seller_id',$inviter_id);
-        $this->assign('seller_ids',$this->user['id']);
+        $this->assign('seller_ids',Session::get('seller_id'));
         $this->assign('order_no',$order_no);
         $this->redirect();
     }
