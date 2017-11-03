@@ -1819,13 +1819,21 @@ class IndexController extends Controller {
         $model=new Model();
         $user=$model->table('customer')->fields('real_name')->where('user_id='.$uid)->find();
         $users=$model->table('user')->fields('avatar')->where('id='.$uid)->find();
+        if($user){
+            $real_name = $user['real_name'];
+        }else{
+            $real_name = '未知商家';
+        }
         if($users){
             if($users['avatar']=='' || $users['avatar']=='/0'){
                 $users['avatar']='/static/images/96.png';
             }
+            $avatar = $users['avatar'];
+        }else{
+            $avatar = '';
         }
-        $this->assign('real_name',$user['real_name']);
-        $this->assign('avatar',$users['avatar']);
+        $this->assign('real_name',$real_name);
+        $this->assign('avatar',$avatar);
         $this->assign('uid', $uid);
         $this->redirect();
     }
