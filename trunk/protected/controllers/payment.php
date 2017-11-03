@@ -1085,7 +1085,7 @@ class PaymentController extends Controller {
 
             if($this->user['id']==20942){
                 $jsApiParameters = Session::get('payinfo');
-                var_dump($jsApiParameters);die;
+                // var_dump($jsApiParameters);die;
             }
             // $jsApiParameters = Session::get('payinfo');
             $offline=0;
