@@ -467,6 +467,9 @@ class PaymentController extends Controller {
        // $seller_id = Session::get('seller_id');
        // $oauth = new WechatOAuth();
        // $userinfo = $oauth->getUserInfo();
+       if(!$seller_id || $seller_id==0){
+         $seller_id = Filter::int(Req::args('seller_ids'));
+       }
        $user_id = $this->user['id'];
        $invite=$this->model->table('invite')->where('invite_user_id='.$user_id)->find();
        if($invite){

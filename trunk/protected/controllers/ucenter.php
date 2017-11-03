@@ -2616,6 +2616,7 @@ class UcenterController extends Controller {
         $order_no=date('YmdHis').rand(1000,9999);
         $this->assign("seo_title","向商家付款");
         $this->assign('seller_id',$inviter_id);
+        $this->assign('seller_ids',$this->user['id']);
         $this->assign('order_no',$order_no);
         $this->redirect();
     }

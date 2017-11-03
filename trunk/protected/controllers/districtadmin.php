@@ -1149,7 +1149,7 @@ class DistrictadminController extends Controller {
         //     $logo = APP_ROOT."static/images/96.png";
         // }
         
-        $url = Url::fullUrlFormat("/index/demo/inviter_id/".$user_id);
+        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
         $qrCode = new QrCode();
         $qrCode
                 ->setText($url)
