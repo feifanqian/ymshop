@@ -1235,7 +1235,6 @@ class IndexController extends Controller {
     }
 
     function index() {
-        $this->model->table('redbag')->data(array('amount'=>0.01,'user_id'=>20942,'status'=>0,'create_time'=>date('Y-m-d H:i:s')))->insert();
         if (!$this->user && Common::checkInWechat()) {
             $this->noRight();
         }
