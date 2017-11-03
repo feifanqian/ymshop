@@ -1031,7 +1031,7 @@ class Common {
          }   
          
          if($balance5>0){
-            $model->table('redbag')->data(array('amount'=>$balance5,'user_id'=>$user_id,'create_time'=>date('Y-m-d H:i:s')))->insert();
+            $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$user_id,'create_time'=>date('Y-m-d H:i:s')))->insert();
          }
      }
 
