@@ -1030,7 +1030,12 @@ class UcenterController extends Controller {
             exit();
         }
         $shop = $this->model->table('customer')->fields('real_name')->where('user_id='.$order['shop_ids'])->find();
-        $this->assign('shopname',$shop['real_name']);
+        if($shop){
+            $shopname = $shop['real_name'];
+        }else{
+            $shopname = '未知商家';
+        }
+        $this->assign('shopname',$shopname);
         $this->assign("order", $order);
         $this->redirect();
         
