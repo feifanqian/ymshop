@@ -464,6 +464,7 @@ class PaymentController extends Controller {
        $order_amount = (Req::args('order_amount'));
        $randomstr=rand(1000000000000,9999999999999);
        $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
+       // $seller_id = Session::get('seller_id');
        // $oauth = new WechatOAuth();
        // $userinfo = $oauth->getUserInfo();
        $user_id = $this->user['id'];

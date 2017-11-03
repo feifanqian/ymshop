@@ -1812,8 +1812,8 @@ class IndexController extends Controller {
     }
 
     public function invitepay(){
-        // $id=$this->user['id'];
-        $id = Req::args("user_id");
+        $id=$this->user['id'];
+        // $id = Req::args("user_id");
         $uid=Filter::int($id);
          
         $model=new Model();
@@ -1832,6 +1832,7 @@ class IndexController extends Controller {
         }else{
             $avatar = '';
         }
+        Session::set('seller_id',$uid);
         $this->assign('real_name',$real_name);
         $this->assign('avatar',$avatar);
         $this->assign('uid', $uid);

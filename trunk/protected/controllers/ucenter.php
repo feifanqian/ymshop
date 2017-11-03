@@ -150,7 +150,7 @@ class UcenterController extends Controller {
         //         exit;
         //     }
         // }
-        $url = Url::fullUrlFormat("/index/demo/inviter_id/".$user_id);
+        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
         $qrCode = new QrCode();
         $qrCode
                 ->setText($url)
@@ -2563,5 +2563,60 @@ class UcenterController extends Controller {
         $this->redirect();
     }
     
-    
+    public function invitepay(){
+        $id=$this->user['id'];
+        // $id = Req::args("user_id");
+        $uid=Filter::int($id);
+         
+        $model=new Model();
+        $user=$model->table('customer')->fields('real_name')->where('user_id='.$uid)->find();
+        $users=$model->table('user')->fields('avatar')->where('id='.$uid)->find();
+        if($user){
+            $real_name = $user['real_name'];
+        }else{
+            $real_name = '未知商家';
+        }
+        if($users){
+            if($users['avatar']=='' || $users['avatar']=='/0'){
+                $users['avatar']='/static/images/96.png';
+            }
+            $avatar = $users['avatar'];
+        }else{
+            $avatar = '';
+        }
+        Session::set('seller_id',$uid);
+        $this->assign('real_name',$real_name);
+        $this->assign('avatar',$avatar);
+        $this->assign('uid', $uid);
+        $this->redirect();
+    }
+
+    public function demo(){
+        $model = new Model();
+       Session::set('demo', 1);
+
+       $inviter_id = intval(Req::args('inviter_id'));
+        if (isset($this->user['id'])) {
+            Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");      
+        } else {
+            Cookie::set("inviter", $inviter_id);
+            $this->noRight();
+        }
+        
+        $shop=$this->model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
+        
+        if($shop){
+            $this->assign('shop_name',$shop['real_name']);
+        }else{
+            $this->assign('shop_name','未知商家');
+        }
+        if(!$inviter_id){
+            $inviter_id = $this->user['id'];
+        }
+        $order_no=date('YmdHis').rand(1000,9999);
+        $this->assign("seo_title","向商家付款");
+        $this->assign('seller_id',$inviter_id);
+        $this->assign('order_no',$order_no);
+        $this->redirect();
+    }
 }
