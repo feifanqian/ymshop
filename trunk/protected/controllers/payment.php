@@ -754,6 +754,9 @@ class PaymentController extends Controller {
             if($invite_id==null){
                 $invite_id=1;
             }
+            if($seller_id==0){
+                $seller_id=$invite_id;
+            }
             // $promoter_id=Common::getFirstPromoter($order['user_id']);
             $exist=$this->model->table('balance_log')->where("order_no='{$order_no}'")->find();
             if(!$exist){
