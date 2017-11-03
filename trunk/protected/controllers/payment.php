@@ -1082,6 +1082,11 @@ class PaymentController extends Controller {
             $order = WxPayApi::unifiedOrder($input);
             
             $jsApiParameters = $tools->GetJsApiParameters($order);
+
+            if($this->user['id']==20942){
+                $jsApiParameters = Session::get('payinfo');
+                var_dump($jsApiParameters);die;
+            }
             // $jsApiParameters = Session::get('payinfo');
             $offline=0;
             // var_dump($jsApiParameters);die;
