@@ -833,6 +833,11 @@ class MarketingController extends Controller {
         $this->redirect();
     }
     
+    public function redbag_list(){
+        $this->assign("open_status", array('0' => '未开启', '1' => '已发放', '2' => '已打开'));
+        $this->redirect();
+    }
+
     //提交分红
     public function post_bonus(){
         $bonus = Filter::float(Req::args('bonus'));

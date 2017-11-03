@@ -981,7 +981,7 @@ class Common {
          $balance2 = round($base_balance*$config['district_rate']/100,2);
          $balance3 = round($base_balance*$config['promoter2_rate']/100,2);
          $balance4 = round($base_balance*$config['plat_rate']/100,2);
-         
+         $balance5 = round($base_balance*$config['redbag_rate']/100,2); //红包金额
          $user_id = $order['user_id']; 
          $promoter_id = self::getFirstPromoter($user_id);
          
@@ -1030,6 +1030,9 @@ class Common {
             Log::balance($balance4, 1, $order_no,'线下会员消费平台收益', 8);
          }   
          
+         if($balance5>0){
+            $model->table('redbag')->data(array('amount'=>$balance5,'user_id'=>$user_id,'create_time'=>date('Y-m-d H:i:s')))->insert();
+         }
      }
 
      static function testWxpayPay(){
