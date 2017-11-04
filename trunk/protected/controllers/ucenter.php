@@ -264,8 +264,8 @@ class UcenterController extends Controller {
     public function offline_balance_convert(){
         if ($this->is_ajax_request()){
             $amount = Filter::float(Req::args('amounts'));
-            $amount = round($amount, 2);
-            $customer = $this->model->table("customer")->where("user_id =".$this->user['id'])->fields('offline_balance')->find();
+            // $amount = round($amount, 2);
+            $customer = $this->model->table("customer")->where("user_id =".$this->user['id'])->fields('balance,offline_balance')->find();
             $can_withdraw_amount =$customer?$customer['offline_balance']:0;
             if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
                 exit(json_encode(array('status' => 'fail', 'msg' => '提现金额超出的账户可提现余额')));
@@ -275,7 +275,12 @@ class UcenterController extends Controller {
             // if ($amount < $other['min_withdraw_amount']) {
             //     exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
             // }
-            $result = $this->model->table("customer")->data(array('balance'=>"`balance`+({$amount})","offline_balance"=>"`offline_balance`-({$amount})"))->where("user_id=".$this->user['id'])->update();
+            $user_id=$this->user['id'];
+            $user_id=intval($user_id);
+            $balance=$customer['balance']+$amount;
+            $offline_balance=$customer['offline_balance']-$amount;
+            var_dump($customer['offline_balance']);die;
+            $result = $this->model->table("customer")->data(array('balance'=>$balance,"offline_balance"=>$offline_balance))->where("user_id=".$user_id)->update();
             $withdraw_no = "OF" . date("YmdHis") . rand(100, 999);
             $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => '', "open_bank" => '', 'card_no' => '', 'apply_date' => date("Y-m-d H:i:s"),'note'=>'商家余额提现到可用余额', 'status' => 1,'type'=>2);
             $this->model->table('balance_withdraw')->data($data)->insert();
