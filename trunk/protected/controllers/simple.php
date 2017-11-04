@@ -527,10 +527,11 @@ class SimpleController extends Controller {
                 // $this->redirect("/ucenter/firstbind");
                 $demo = Session::get('demo');
                 $pid = Session::get('product_id');
+                $url = Cookie::get("url");
                 // var_dump($str);die;
                 if(strpos($str,'user')){
                     $this->redirect("/ucenter/index");
-                }elseif($demo!=null && $demo==1){
+                }elseif($demo!=null && $demo==2){
                     $this->redirect("/ucenter/demo");
                 }elseif($pid!=null){
                     $this->redirect("/index/product/id/{$pid}");
@@ -538,6 +539,8 @@ class SimpleController extends Controller {
                     $this->redirect("/user/order");
                 }elseif(strpos($str,'district')){
                     $this->redirect("/district/login");
+                }elseif($url){
+                    $this->redirect($url);
                 }else{
                     // var_dump(123);die;
                     $this->redirect("/index/index");

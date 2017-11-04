@@ -2629,7 +2629,7 @@ class UcenterController extends Controller {
 
     public function demo(){
         $model = new Model();
-       Session::set('demo', 1);
+       Session::set('demo', 2);
 
        $inviter_id = intval(Req::args('inviter_id'));
        if(!$inviter_id){
