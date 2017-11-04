@@ -53,10 +53,12 @@
                     <label class="weui-form-preview__label">提现单号</label>
                     <span class="weui-form-preview__value">{$item['withdraw_no']}</span>
                 </div>
+                {if:$item['card_no']}
                 <div class="weui-form-preview__item">
                     <label class="weui-form-preview__label">提现卡号</label>
                     <span class="weui-form-preview__value">{$item['card_no']}</span>
                 </div>
+                {/if}
                 <div class="weui-form-preview__item">
                     <label class="weui-form-preview__label">提现进度</label>
                     <span class="weui-form-preview__value">{$status[$item['status']]}</span>
@@ -119,7 +121,7 @@
             </div>
              </div>
     <div class="ma20 bg-white p20 ">
-        <a class="weui-btn weui-btn_primary" id="apply-submits">提交申请</a>
+        <a class="weui-btn weui-btn_primary" id="apply-submit">提交申请</a>
     <a href="javascript:changeShow();" class="weui-btn weui-btn_default">返回</a>
     </div>
 </div>
@@ -134,7 +136,7 @@
             </div>
 </div>
     <div class="ma20 bg-white p20 ">
-        <a class="weui-btn weui-btn_primary" id="apply-submit">提交申请</a>
+        <a class="weui-btn weui-btn_primary" id="apply-submits">提交申请</a>
     <a href="javascript:changeShow();" class="weui-btn weui-btn_default">返回</a>
     </div>
 </div>
