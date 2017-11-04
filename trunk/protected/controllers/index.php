@@ -71,6 +71,7 @@ class IndexController extends Controller {
     public function invite() {
         // var_dump(111);die;
         $inviter_id = Filter::int(Req::args('inviter_id'));
+        Session::set('jump_index',1);
         if (isset($this->user['id'])) {
             // var_dump(123);die;
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
