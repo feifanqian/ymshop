@@ -195,7 +195,7 @@ class LinuxCliTask{
        $order=$this->model->table('order')->where('pay_status=0 and status=2')->findAll();
        if($order){
           foreach($order as $k=>$v){
-             if((time()-strtotime($v['create_time']))>3*24*60*60){
+             if((time()-strtotime($v['create_time']))>1*24*60*60){
                 $this->model->table('order')->where('pay_status=0 and status=2 and id='.$v['id'])->delete();
              }
           }
@@ -204,7 +204,7 @@ class LinuxCliTask{
        $offline_order=$this->model->table('order_offline')->where('pay_status=0 and status=2')->findAll();
        if($offline_order){
           foreach($offline_order as $k=>$v){
-             if((time()-strtotime($v['create_time']))>3*24*60*60){
+             if((time()-strtotime($v['create_time']))>1*24*60*60){
                 $this->model->table('order_offline')->where('pay_status=0 and status=2 and id='.$v['id'])->delete();
              }
           }
