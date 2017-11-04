@@ -97,7 +97,7 @@ class CustomerController extends Controller {
         if ($condition_str)
             $this->assign("where", $condition_str);
         else
-            $this->assign("where", "1=1");
+            $this->assign("where", "type!=2");
         $this->assign("condition", $condition);
         $this->redirect();
     }
