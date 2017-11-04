@@ -442,7 +442,8 @@ class DistrictadminController extends Controller {
                     if ($withdraw_info['withdraw_type'] == 2) {//提现到银行卡
                         $config = Config::getInstance();
                         $district_set = $config->get("district_set");
-                        $ChinapayDf = new ChinapayDf();
+                        // $ChinapayDf = new ChinapayDf();
+                        $ChinapayDf = new AllinpayDf();
                         $obj = unserialize($withdraw_info['card_info']);
                         if (!is_array($obj)) {
                             echo json_encode(array("status" => 'fail', 'msg' => '银行卡信息错误'));
@@ -472,7 +473,8 @@ class DistrictadminController extends Controller {
                                     exit(json_encode(array('status' => 'fail', 'msg' => '代付金额小于或等于0')));
                                 }
                                 $params['purpose'] = "专区用户提现";
-                                $result = $ChinapayDf->DfPay($params);
+                                // $result = $ChinapayDf->DfPay($params);
+                                $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口
                                 if ($result) {
                                     $isOk = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到银行卡');
                                     if ($isOk) {
@@ -510,8 +512,8 @@ class DistrictadminController extends Controller {
                                     exit(json_encode(array('status' => 'fail', 'msg' => '代付金额小于或等于0')));
                                 }
                                 $params['purpose'] = "专区用户提现";
-                                $result = $ChinapayDf->DfPay($params);
-
+                                // $result = $ChinapayDf->DfPay($params);
+                                $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口 
                                 if ($result) {
                                     $isOk = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到银行卡');
                                     if ($isOk) {
