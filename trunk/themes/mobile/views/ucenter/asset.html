@@ -57,7 +57,10 @@
                                 <!-- <a href="javascript:void(0);"><i>{$order['todayamount']}</i>今日消费</a> -->
                             </div>
                             <div class="weui-col-25">
-                                <a href="{url:/ucenter/balance_log}"><i>{$customer['balance']}</i>我的余额</a>
+                                <a href="{url:/ucenter/balance_log}"><i>{$customer['balance']}</i>可用余额</a>
+                            </div>
+                            <div class="weui-col-25">
+                                <a href="{url:/ucenter/balance_log}"><i>{$customer['offline_balance']}</i>商家余额</a>
                             </div>
                             <div class="weui-col-25">
                                 <a href="{url:/ucenter/pointcoin_log}"><i>{$customer['point_coin']}</i>剩余积分</a>
