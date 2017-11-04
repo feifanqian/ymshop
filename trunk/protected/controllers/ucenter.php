@@ -150,7 +150,7 @@ class UcenterController extends Controller {
         //         exit;
         //     }
         // }
-        $url = Url::fullUrlFormat("/index/demo/inviter_id/".$user_id);
+        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
         $qrCode = new QrCode();
         $qrCode
                 ->setText($url)
@@ -2600,8 +2600,8 @@ class UcenterController extends Controller {
     }
     
     public function invitepay(){
-        $id=$this->user['id'];
-        // $id = Req::args("user_id");
+        // $id=$this->user['id'];
+        $id = Req::args("user_id");
         $uid=Filter::int($id);
          
         $model=new Model();
