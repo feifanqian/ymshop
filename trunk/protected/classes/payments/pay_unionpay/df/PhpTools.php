@@ -70,18 +70,33 @@ class PhpTools{
 		$xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
 
 		$results = $this->arrayXml->parseString( $xmlResponse , TRUE);
-        // print_r($results);die;
-		if ($flag) {		    
-		    if($results['AIPG']['TRANSRET']['RET_CODE']==0000){
-		    	$return['status']=1;
-		    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
-		    }else{
-		    	$return['status']=0;
-		    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
-		    }    
+        // var_dump($results);die;
+		if ($flag) {
+			if(isset($results['AIPG']['TRANSRET'])){
+				if($results['AIPG']['TRANSRET']['RET_CODE']==0000){
+			    	$return['status']=1;
+			    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
+			    }else{
+			    	$return['status']=0;
+			    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
+			    }
+			}else{
+				if($results['AIPG']['INFO']['RET_CODE']==0000){
+			    	$return['status']=1;
+			    	$return['msg'] = $results['AIPG']['INFO']['ERR_MSG'];
+			    }else{
+			    	$return['status']=0;
+			    	$return['msg'] = $results['AIPG']['INFO']['ERR_MSG'];
+			    }
+			}    	        
 		} else {
 		    $return['status']=0;
-		    $return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
+		    if(isset($results['AIPG']['TRANSRET'])){
+		    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
+		    }else{
+		    	$return['msg'] = $results['AIPG']['INFO']['ERR_MSG'];
+		    }
+		    
 		}
 		return $return;
 	}
@@ -130,6 +145,7 @@ class PhpTools{
 		header('Content-Type: text/html; Charset=UTF-8');
 		$xmlSignPost=$this->signXml($params);
 		$xmlSignPost=str_replace("TRANS_DETAIL2", "TRANS_DETAIL",$xmlSignPost);
+		// var_dump($xmlSignPost);die;
 		$response = cURL::factory()->post(PhpTools::apiUrl, $xmlSignPost);
 	
 		if (! isset($response['body'])) {
