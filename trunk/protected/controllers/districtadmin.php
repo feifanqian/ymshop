@@ -35,14 +35,6 @@ class DistrictadminController extends Controller {
     }
 
     public function record_sale() {
-        $this->model=new Model();
-        $list = $this->model->table('customer as a')->fields('a.user_id')->where("NOT EXISTS ( SELECT * FROM tiny_invite b WHERE a.user_id = b.invite_user_id )")->findAll();
-        foreach($list as $k => $v){
-            $exist=$this->model->table('invite')->where('invite_user_id='.$v['user_id'])->find();
-            if(!$exist){
-                $this->model->table('invite')->data(array('user_id'=>1,'invite_user_id'=>$v['user_id'],'from'=>'web','district_id'=>1,'createtime'=>time()))->insert();
-            }   
-        }
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
 
