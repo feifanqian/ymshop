@@ -279,7 +279,9 @@ class UcenterController extends Controller {
             $user_id=intval($user_id);
             $balance=$customer['balance']+$amount;
             $offline_balance=$customer['offline_balance']-$amount;
-            var_dump($customer['offline_balance']);die;
+            var_dump($customer['offline_balance']);
+            var_dump($amount);
+            var_dump($offline_balance);die;
             $result = $this->model->table("customer")->data(array('balance'=>$balance,"offline_balance"=>$offline_balance))->where("user_id=".$user_id)->update();
             $withdraw_no = "OF" . date("YmdHis") . rand(100, 999);
             $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => '', "open_bank" => '', 'card_no' => '', 'apply_date' => date("Y-m-d H:i:s"),'note'=>'商家余额提现到可用余额', 'status' => 1,'type'=>2);
