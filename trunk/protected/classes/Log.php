@@ -12,7 +12,7 @@ class Log {
 
     //余额日志变化写入
     public static function balance($amount, $user_id, $order_no='', $note = '', $type = 0, $admin_id = 0) {
-        //事件类型: 0:购物下单 1:用户充值 2:管理员充值 3:余额提现 4:管理员退款 5：佣金获取 6:推广收益 7：商城分红 8:下级会员线下消费提成
+        //事件类型: 0:购物下单 1:用户充值 2:管理员充值 3:余额提现 4:管理员退款 5：佣金获取 6:推广收益 7：商城分红 8:下级会员线下消费提成 9:商家余额转入 
         $model = new Model();
         $customer = $model->table('customer')->fields("balance,offline_balance")->where("user_id=" . $user_id)->find();
         if ($customer) {

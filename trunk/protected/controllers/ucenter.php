@@ -283,6 +283,7 @@ class UcenterController extends Controller {
             $withdraw_no = "OF" . date("YmdHis") . rand(100, 999);
             $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => '', "open_bank" => '', 'card_no' => '', 'apply_date' => date("Y-m-d H:i:s"),'note'=>'商家余额提现到可用余额', 'status' => 1,'type'=>2);
             $this->model->table('balance_withdraw')->data($data)->insert();
+            Log::balance($amount,$this->user['id'],'','商家余额转入',9,0);
             if ($result) {
                 exit(json_encode(array('status' => 'success', 'msg' => "提现成功")));
             } else {
