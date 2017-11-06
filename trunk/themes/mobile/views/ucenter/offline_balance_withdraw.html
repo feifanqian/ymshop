@@ -131,7 +131,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">提现金额</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" name="amounts" placeholder="  提现金额不小于{$min_withdraw_amount}的整数">
+                    <input class="weui-input" type="number" class="amounts" name="amounts" placeholder="  提现金额不小于{$min_withdraw_amount}的整数">
                 </div>
             </div>
 </div>
@@ -169,14 +169,19 @@
               ,btn: ['确定', '我再看看']
               ,yes: function(index){
                      var flag = true;
-                    $("input").each(function(){
-                        if($(this).val()==""||$(this).val()==undefined){
-                              flag=false;
-                              $(this).focus();
-                              notification("请完善提现信息");
-                              return false;
-                         }
-                    });
+                    // $("input:not('.amounts')").each(function(){
+                    //     if($(this).val()==""||$(this).val()==undefined){
+                    //           flag=false;
+                    //           $(this).focus();
+                    //           notification("请完善提现信息");
+                    //           return false;
+                    //      }
+                    // });
+                    if($("input[name='amount']").val()=='' || $("input[name='open_name']").val()=='' || $("input[name='open_bank']").val()=='' || $("input[name='province']").val()=='' || $("input[name='city']").val()=='' || $("input[name='card_no']").val()==''){
+                      flag=false;
+                      notification("请完善提现信息");
+                      return false;
+                    } 
                     if(flag==false){
                           return false;
                      }
