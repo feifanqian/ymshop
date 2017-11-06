@@ -1048,7 +1048,7 @@ class DistrictadminController extends Controller {
        if($exist){
           $msg = array('error', "移除失败，该代理商已有下级代理商" );  
        }else{
-         $model->table('district_promoter')->where('owner_id='.$promoter['owner_id'])->delete();
+         $model->table('district_promoter')->where('id='.$id)->delete();
          $msg = array('success', "成功移除代理商 " );
        }
        $this->redirect("list_promoter", false, array('msg' => $msg)); 
