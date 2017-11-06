@@ -816,6 +816,20 @@ class PaymentController extends Controller {
                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
                      Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
                 }
+                #*****************推送消息***************
+                $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+                $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+                $token = $wechat->getAccessToken();
+                $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$seller_id." and oauth_type='wechat'")->find();      
+                $params = array(
+                    'touser' => $oauth_info['open_id'],
+                    'msgtype' => 'text',
+                    "text" => array(
+                            'content' => "亲爱的商家:{$oauth_info['open_name']},您获取一条商家消费收益，请登录个人中心查看。"
+                            )
+                        );
+                $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
+                #****************************************
             }                            
         }
 

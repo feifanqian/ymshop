@@ -996,16 +996,42 @@ class Common {
         }else{
             $district_id = 1;
         }
+
+        $wechatcfg = $model->table("oauth")->where("class_name='WechatOAuth'")->find();
+        $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+        $token = $wechat->getAccessToken();
          
          if($balance1>0){
             $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级邀请人提成
             Log::balance($balance1, $invite_id, $order_no,'线下消费上级邀请人提成', 8);
+            #*****************推送消息***************
+            $oauth_info = $model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$invite_id." and oauth_type='wechat'")->find();
+            $params = array(
+                'touser' => $oauth_info['open_id'],
+                'msgtype' => 'text',
+                "text" => array(
+                        'content' => "亲爱的{$oauth_info['open_name']},您获取一条商家消费收益，请登录个人中心查看。"
+                        )
+                    );
+            $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
+            #****************************************
          }         
          
          if($balance2>0){
             if($promoter_id){
                 $model->table('customer')->where('user_id='.$promoter_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成
                 Log::balance($balance2, $promoter_id, $order_no,'线下消费上级代理商提成', 8);
+                #*****************推送消息***************
+                $oauth_info = $model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$promoter_id." and oauth_type='wechat'")->find();      
+                $params = array(
+                    'touser' => $oauth_info['open_id'],
+                    'msgtype' => 'text',
+                    "text" => array(
+                            'content' => "亲爱的代理商:{$oauth_info['open_name']},您获取一条商家消费收益，请登录个人中心查看。"
+                            )
+                        );
+                $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
+                #****************************************
              }else{
                 $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成,默认为官方平台
                 Log::balance($balance2, 1, $order_no,'线下消费上级代理商提成', 8);
@@ -1018,6 +1044,17 @@ class Common {
                 if($exist){
                     $model->table('customer')->where('user_id='.$district1['owner_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成
                     Log::balance($balance3, $district1['owner_id'], $order_no,'线下消费上级经销商提成', 8);
+                    #*****************推送消息***************
+                    $oauth_info = $model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$district1['owner_id']." and oauth_type='wechat'")->find();
+                    $params = array(
+                        'touser' => $oauth_info['open_id'],
+                        'msgtype' => 'text',
+                        "text" => array(
+                                'content' => "亲爱的经销商:{$oauth_info['open_name']},您获取一条商家消费收益，请登录个人中心查看。"
+                                )
+                            );
+                    $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
+                    #****************************************
                 }  
              }else{
                     $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成,默认为官方平台
