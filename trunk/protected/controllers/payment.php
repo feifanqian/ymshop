@@ -812,9 +812,11 @@ class PaymentController extends Controller {
                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
                     Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
                     Common::offlineBeneficial($order_no,$invite_id,$seller_id);
+                    $money = $amount;
                 }else{
                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
                      Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
+                     $money = $order['order_amount'];
                 }
                 #*****************推送消息***************
                 $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
@@ -825,7 +827,7 @@ class PaymentController extends Controller {
                     'touser' => $oauth_info['open_id'],
                     'msgtype' => 'text',
                     "text" => array(
-                            'content' => "亲爱的商家:{$oauth_info['open_name']},您获取一条商家消费收益，请登录个人中心查看。"
+                            'content' => "亲爱的商家:{$oauth_info['open_name']},您获得商家消费收益{$money}元，请登录个人中心查看。"
                             )
                         );
                 $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));

@@ -1010,7 +1010,7 @@ class Common {
                 'touser' => $oauth_info['open_id'],
                 'msgtype' => 'text',
                 "text" => array(
-                        'content' => "亲爱的{$oauth_info['open_name']},您获取一条商家消费收益，请登录个人中心查看。"
+                        'content' => "亲爱的{$oauth_info['open_name']},您获得商家消费收益{$balance1}元，请登录个人中心查看。"
                         )
                     );
             $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
@@ -1027,7 +1027,7 @@ class Common {
                     'touser' => $oauth_info['open_id'],
                     'msgtype' => 'text',
                     "text" => array(
-                            'content' => "亲爱的代理商:{$oauth_info['open_name']},您获取一条商家消费收益，请登录个人中心查看。"
+                            'content' => "亲爱的代理商:{$oauth_info['open_name']},您获得商家消费收益{$balance2}元，请登录个人中心查看。"
                             )
                         );
                 $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
@@ -1050,7 +1050,7 @@ class Common {
                         'touser' => $oauth_info['open_id'],
                         'msgtype' => 'text',
                         "text" => array(
-                                'content' => "亲爱的经销商:{$oauth_info['open_name']},您获取一条商家消费收益，请登录个人中心查看。"
+                                'content' => "亲爱的经销商:{$oauth_info['open_name']},您获得商家消费收益{$balance3}元，请登录个人中心查看。"
                                 )
                             );
                     $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
