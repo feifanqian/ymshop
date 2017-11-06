@@ -1,0 +1,90 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/product.css}" />
+<script type="text/javascript" charset="UTF-8" src="{url:#js/common.js}"></script>
+{set:$gid = intval(Req::args('gid'))}
+<div class="ma20 bg-white">
+    <!--S 商品评价-->
+    <div  class="comment-list">
+        <div class="comment tab" id="comment">
+            <ul class="tab-head">
+                <li>很好</li>
+                <li>较好</li>
+                <li>一般</li>
+            </ul>
+            <div class="tab-body p20">
+
+                <div id="comment-a">
+                    <div class="page-content list-nav">
+                        <div class="item mt20 comment-item clearfix">
+                            <div class="layout-2 line-b ">
+                                <div ><img src="{head_pic}" style="height:4em;width:4em;">
+                                </div>
+                                <div style="height:4.5em;">
+                                    <div><span class="score "><i style="width:{point}%"></i></span></div>
+                                    <div><span>{uname}</span> <span class="fr gray">{comment_time|今天}</span></div>
+                                </div>
+                            </div>
+                            <div class="p20">{content}</div>
+                        </div>
+                    </div>
+                    <div class="page-nav tc"></div>
+                </div>
+
+                <div id="comment-b">
+                    <div class="page-content">
+                        <div class="comment-item">
+                            <div class="consult-q">
+                                <div class="head">
+                                    <img src="{head_pic}" width="80" height="80">
+                                    <strong>{uname}</strong>
+                                    <i class="arrow"><b></b></i>
+                                </div>
+                                <div class="comment-content">
+                                    <p class="top"><span class="score "><i style="width:{point}%"></i></span><span class="fr">{comment_time|今天}</span></p>
+                                    <p >{content}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-nav tc"></div>
+                </div>
+
+                <div id="comment-c">
+                    <div class="page-content">
+                        <div class="comment-item">
+
+                            <div class="consult-q">
+                                <div class="head">
+                                    <img src="{head_pic}" width="80" height="80">
+                                    <strong>{uname}</strong>
+                                    <i class="arrow"><b></b></i>
+                                </div>
+                                <div class="comment-content">
+                                    <p class="top"><span class="score "><i style="width:{point}%"></i></span><span class="fr">{comment_time|今天}</span></p>
+                                    <p >{content}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-nav tc"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--E 商品评价-->
+</div>
+<script type="text/javascript">
+
+    $("#comment-a").Paging({
+    url:'{url:/index/get_review}',
+            params:{id:{$gid}, score:'a', pagetype:5}
+    });
+    $("#comment-b").Paging({
+    url:'{url:/index/get_review}',
+            params:{id:{$gid}, score:'b', pagetype:5}
+    });
+    $("#comment-c").Paging({
+    url:'{url:/index/get_review}',
+            params:{id:{$gid}, score:'c', pagetype:5}
+    });
+</script>

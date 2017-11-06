@@ -1,0 +1,82 @@
+
+{echo:JS::import('form')}
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<div class="ma20 bg-white p20 ">
+    <div >
+        <form  class="login-form" action="{url:/ucenter/refund_act}" method="post">
+
+            <dl style="margin-bottom:1.5em;">
+                <dd><label><input  type="radio" name="refund_type" value="0"   checked="checked">退款至账户余额 </label> 
+                    <label class="attr"><input  type="radio" name="refund_type" value="1"  >退款至银行卡</label> 
+                    <label class="attr"><input  type="radio" name="refund_type" value="2" >其它方式</label></dd>
+            </dl>
+            <dl class="clearfix">
+                <dd><input class="input" name="order_no" pattern="required" type="text" placeholder="订单编号" alt="订单编号不能为空！"><label></label></dd>
+            </dl>
+
+            <dl class="refund_radio refund_0 hidden clearfix">
+                <dd><input class="input" name="account_bank" type="text" pattern="required" alt="开户行/支付方式,不能为空！" placeholder="开户行/支付方式"></dd>
+            </dl>
+            <dl class="refund_radio refund_1 hidden clearfix">
+                <dd><input class="input" name="account_name" type="text" pattern="required" alt="开户名不能为空！"placeholder="开户名"></dd>
+            </dl>
+            <dl class="refund_radio refund_2 hidden clearfix">
+                <dd><input class="input" name="refund_account" type="text" pattern="required" alt="账号不能为空！"placeholder="账号"></dd>
+            </dl>
+            <dl class="clearfix">
+                <dd><textarea  class="textarea" name="content" minlen=5 pattern="required"  placeholder="申请退款原因" alt="退款原因不能少于5个字符！"></textarea></dd>
+            </dl>
+            <dl class="clearfix">
+                <dd><input type="submit" class="btn" value="申请退款"></dd>
+            </dl>
+            {token:}
+        </form>
+    </div>
+
+</div>
+{query:name=doc_refund where= user_id eq $user[id] id=$refund page=1/}
+{if:count($items)}
+<div id="voucher-n" class="mt10 box">
+    <ul class="list-nav">
+        {list:}
+        <li class="item">
+            <a href="{url:/ucenter/refund_detail/id/$item[id]}" class="more">
+                <ul class="m20">
+                    <li>订单编号：{$item['order_no']}</li>
+                    <li>退款方式：{if:$item['refund_type']==0}至账户余额{elseif:$item['refund_type']==1}至银行卡{else:}其它方式{/if}</li>
+                    <li>处理状态：{if:$item['pay_status']==0}等待处理{elseif:$item['pay_status']==1}不予退款{else:}退款成功{/if}</li>
+                </ul>
+            </a></li>
+        {/list}
+        <li class="item"><div class="page-nav tc m20">{echo:$refund->pageBar(5)}</div></li>
+    </ul>
+</div>
+{/if}
+
+<script type="text/javascript">
+    $(function () {
+        $("input[name='refund_type']").on("click", function () {
+            var val = $(this).val();
+            switch (val) {
+                case '0':
+                    $(".refund_0").addClass("hidden");
+                    $(".refund_1").addClass("hidden");
+                    $(".refund_2").addClass("hidden");
+                    break;
+                case '2':
+                    $(".refund_0").removeClass("hidden");
+                    $(".refund_1").addClass("hidden");
+                    $(".refund_2").removeClass("hidden");
+                    break;
+                case '1':
+                    $(".refund_0").removeClass("hidden");
+                    $(".refund_1").removeClass("hidden");
+                    $(".refund_2").removeClass("hidden");
+                    break;
+            }
+            $(".refund_radio input").css('display', '');
+            $(".hidden input").css('display', 'none');
+        })
+        $(".hidden input").css('display', 'none');
+    });
+</script>

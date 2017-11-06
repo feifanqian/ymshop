@@ -1,0 +1,144 @@
+<div class="shopping-cart  bg-white">
+    <div class="page-list">
+        <ul>
+            <li >共<span class="red">{echo:count($cart)}</span>件商品</li>
+            <li class="tr"><a href="{url:/index/index}" class="continue">继续购物&gt;&gt;</a> </li>
+        </ul>
+    </div>
+    {if:$cart}
+    {set:$total=0.00;}
+    <form id="cart-form" action="{url:/simple/order}" method="post">
+        <div class="weui_cells weui_cells_checkbox" id="cart-list">
+            {list:items=$cart}
+            {set:$total+=$item['amount'];}
+            <div class="weui_cell" data-id="{$item['id']}" id="cart-item{$item['id']}">
+                <label class="weui_cell_hd weui_check_label" for="s{$item['id']}">
+                    <input type="checkbox" class="weui_check selectids" name="selectids[]" id="s{$item['id']}" value="{$item['id']}" checked="checked">
+                    <i class="weui_icon_checked"></i>
+                </label>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <div class="weui_media_box weui_media_appmsg">
+                        <div class="weui_media_hd">
+                            <a href="{url:/index/product/id/$item[goods_id]}"><img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],100,100)}" alt=""></a>
+                        </div>
+                        <div class="weui_media_bd">
+                            <div class="weui_media_title">
+                                <a href="{url:/index/product/id/$item[goods_id]}">{echo:TString::msubstr($item['name'],0,15)} ({list:items=$item['spec'] item=$spec}
+                                    <span title="{$spec['name']}:{$spec['value'][2]}">{$spec['value'][2]}</span>;
+                                    {/list})</a></div>
+                            <p class="weui_media_desc">单价:{$item['price']}</p>
+                            <div class="buy-num-bar buy-num clearfix">
+                                <a class="btn-adddec weui_btn weui_btn_default weui_btn_mini" href="javascript:;">-</a>
+                                <input name="buy_num[{$item['id']}]" value="{$item['num']}" class="weui_input" type="text" size="2" maxlength=5 />
+                                <a class="btn-adddec weui_btn weui_btn_default weui_btn_mini" href="javascript:;">+</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui_cell_hd">
+                    <a href="javascript:;" class="cart-del"><i class="weui_icon_clear"></i></a>
+                </div>
+            </div>
+            {/list}
+        </div>
+
+
+        <div class="mt5 clearfix box-footer" style="padding:10px; background: #fff1e2;">
+            <span class="fr">商品总价(不含运费)：<span style="font-size: 24px;font-family: tahoma"><span class="currency-symbol">{$currency_symbol}</span><b class="cart-total red" >{echo:sprintf("%01.2f",$total)}</b></span></span></div>
+        <div class="btn-bar weui-row weui-no-gutter">
+            <div class="weui-col-50"><a class="btn btn-gray" href="{url:/index/index}">继续购物</a></div>
+            <div class="weui-col-50">
+                <input type="submit" class="btn" href="{url:/simple/order}" value="去结算" />
+            </div>
+        </div>
+    </form>
+    {else:}
+    <div class="mt20 mb20 p20">
+        <p class="cart-empty ie6png">购物车内暂时没有商品，<a  href="{url:/index/index}">去首页</a> 挑选喜欢的商品。</p>
+        <p class="weui-divider"> 猜你喜欢 </p>
+    </div>
+    <div class="ma20"><a class="btn btn-gray" href="{url:/index/index}"> <<继续购物</a></div>
+    {widget:name=tabbar action=item cart=$cart current=cart}
+    {/if}
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#cart-form").submit(function () {
+            if ($("input[name^='selectids']:checked").size() <= 0) {
+                $.toast("未选中任何商品", "text");
+                return false;
+            }
+        });
+    });
+    $(".btn-adddec").on("click", function () {
+        var cell = $(this).closest(".weui_cell");
+        var id = cell.attr("data-id");
+        var buyinput = cell.find("input[name='buy_num[" + id + "]']");
+        var num = buyinput.val();
+        var text = $(this).text();
+        if (text == '-') {
+            if (num > 1) {
+                num--;
+            } else {
+                num = 1;
+            }
+        } else {
+            num++;
+        }
+        if (buyinput.val() != num)
+            changeInfo(id, num);
+        buyinput.val(num);
+    });
+
+    $(".buy-num-bar input").on("change", function () {
+        var num = parseInt($(this).val());
+        var id = $(this).closest(".weui_cell").attr("data-id");
+        changeInfo(id, num);
+    });
+    $(".cart-del").on("click", function () {
+        $.post("{url:/index/cart_del}", {id: $(this).closest(".weui_cell").attr("data-id")}, function (data) {
+            if (data['status'] == 'success')
+                location.reload();
+        }, 'json');
+    });
+    //
+    $(document).on("change", "input[name^='selectids']", function () {
+        changeInfo(0, 0);
+    });
+
+    function changeInfo(id, num) {
+        $.post("{url:/index/cart_num}", {id: id, num: num}, function (data) {
+
+            var selectids = [];
+            $("input[name^='selectids']:checked").each(function (i) {
+                selectids.push($(this).val());
+            });
+            var total = 0.00;
+            for (var i in data) {
+                if ($.inArray(data[i]['id'], selectids) != -1) {
+                    total += parseFloat(data[i]['amount']);
+                }
+            }
+            if (id > 0) {
+                var cell = $(".weui_cell[data-id='" + id + "']");
+                var buyinput = cell.find("input[name='buy_num[" + id + "]']");
+                //$("#"+id).find(".amount").text(data[id]['amount']);
+                cell.find(".prom").text(data[id]['prom']);
+                var buyinputparent = buyinput.parent();
+                if (parseInt(buyinput.val()) > parseInt(data[id]['store_nums'])) {
+                    buyinput.val(data[id]['store_nums']);
+
+                    if (buyinputparent.find(".msg-simple-error").size() == 0)
+                        buyinputparent.append("<div class='msg-simple-error'>最多购买" + data[id]['store_nums'] + "件</div>");
+                } else {
+                    buyinput.val(data[id]['num']);
+                    buyinputparent.find(".msg-simple-error").remove();
+                }
+            }
+            $(".cart-total").text(total.toFixed(2));
+        }, "json");
+    }
+
+</script>

@@ -1,0 +1,179 @@
+{echo:JS::import('dialog?skin=tinysimple');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+<link type="text/css" rel="stylesheet" href="{url:#css/product.css}" />
+<style>
+    .tab-fixed{
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            width:1000px;
+            background-color: white;
+        }
+        .photos{
+            padding-left: 27px;
+        }
+        .photos img{
+            cursor:pointer;
+        }
+</style>
+<script type='text/javascript' src="{url:#js/jquery.enlarge.js}"></script>
+<div class="bread-crumb">
+    <ol class="container">
+        {list:items=$category_nav}
+        <li><a class="category-{$key}" href="{url:/index/category/cid/$item[id]}">{$item['name']} {if:$item!=end($category_nav)}{/if}</a></li>
+        {/list}
+    </ol>
+</div>
+<div class="container">
+    <!--S 产品展示-->
+    <div id="product-intro">
+        <div class="sub-1">
+            <div id="gallery">
+                <a class="turn-left ie6png"></a>
+                <div class="show-list">
+                    <div style="position: absolute;height:800px;">
+                        {list:items=unserialize($goods['imgs']) item=$img }
+                        {if:$key <5}
+                        <a class="small-img" href="javascript:;">
+                            <img src="{echo:Common::thumb($img,420,420,'fwfh')}"  source="{url:@$img}" width="60" height="60"></a>
+                        {/if}
+                        {/list}
+                    </div>
+                </div>
+                <a class="turn-right ie6png"></a>
+            </div>
+        </div>
+        <div class="sub-2">
+            <div id="preview" >
+                <div id="imgmini" style="width: 420px;height:420px;">
+                    <img class="big-pic" width="420" height='420' src="{echo:Common::thumb($goods['img'],420,420,'fwfh')}" source="{url:@$goods[img]}"></div>
+            </div>
+        </div>
+
+        <div class="sub-3">
+            <ul class="product-info">
+                <li class="product-title">{$goods['name']}</li>
+                <li class="product-littitle" style="font-size: 16px;color: #DD2727;">{$goods['subtitle']}</li>
+                <li class="product-no"><label>货号：</label><span id="pro-no">{$goods['goods_no']}</span></li>
+                <li class="referenceprice"><span class="gray">参考价：</span><span id="prom_price" class="price" formula="{$prom['parse']['minus']}">
+                        <s>{$goods['market_price']}</s> {$currency_unit}</span></li>
+                <li class="red">
+                </li>
+                <li class="product-price" style="padding-bottom: 20px;"><span class="gray">促销价：</span>
+                    <span id="sell_price" class="price">非卖品，充值套餐赠送</span></li>
+                {if:$goods['store_nums']>0}
+                 <li class="clearfix"><label></label><span>库存&nbsp;&nbsp;</span><span id="goods_nums">({$goods['store_nums']})</span></li> 
+                {else:}
+                <li class="clearfix"><label><b class="f16">无货</b></label><span>此商品暂时售完</span>  
+                {/if}
+            </ul>
+
+            <fieldset class="line-title">
+            </fieldset>
+            <div class="spec-info">
+                <div class="spec-close"></div>
+                <dl class="spec-item clearfix">
+                    <dd class="product-btns">
+                        <a href="{url:/ucenter/account/package/$package/pid/$pid}" id="buy-now" class="btn btn-warning"><i class="icon-basket-32 ie6png"></i><span>立即充值</span></a>&nbsp;&nbsp;
+                    </dd>
+                </dl>
+                <dl>
+                    <dd><a style="margin: 0 10px;">保障</a>
+                        <a style="margin: 0 10px;"><i class="iconfont icon-gou" style="color:#66A55B;padding:0 5px;"></i>正品保障</a>
+                        <a style="margin: 0 10px;"><i class="iconfont icon-gou" style="color:#66A55B;padding:0 5px;"></i>假一赔三</a>
+                        <a style="margin: 0 10px;"><i class="iconfont icon-gou" style="color:#66A55B;padding:0 5px;"></i>按时发货</a></dd>
+                </dl>
+                <dl>
+                    <dd style="padding-top: 20px;"><a style="margin: 0 10px;vertical-align: top">支付</a>
+                        <a style="">
+                        <img src="{url:@static/images/zhifubao.png}" style='height:20px;margin-left:13px;' title="支付宝支付">
+                       <img src="{url:@static/images/weixin.png}" style='height:20px;margin-left:2px;' title="微信支付">
+                       <img src="{url:@static/images/yinlian.png}" style='height:20px;' title="银联支付">
+                        {if:$goods['is_huabipay']}
+                       <img src="{url:@static/images/huabi.png}" style='height:20px;' title="华点支付">
+                        {/if}
+                        </a>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!--S 商品详情-->
+    <div class="clearfix">
+        <div class="sub-left mt20">
+            <fieldset class="line-title">
+                <legend align="center" class="txt">同类商品推荐</legend>
+            </fieldset>
+            <ul>
+            </ul>
+        </div>
+        <div class="sub-right">
+            <div class="goods-detail clearfix">
+                <div class="content">
+                    <div class="tab clearfix" initdisabled='1'>
+                        <div id="tab_select">
+                        <ul class="tab-head" id="maintab">
+                            <li class="current" rel="detail-list">商品详情<i></i></li>
+                        </ul>
+                        </div>
+                        <div class="tab-body" id="maintabbody" style="min-height: 200px;">
+                            <!--S 商品详情-->
+                            <div class=" clearfix" id='detail-list' style="">
+                                <div class="">
+                                    <ul class="attr-list ">
+                                        <li>商品名称：{$goods['name']}</li>
+                                        <li>商品编号：{$goods['pro_no']}</li>
+                                        <li>商品重量：{$goods['weight']}g</li>
+                                        <li>上架时间：{$goods['create_time']}</li>
+                                        {list:items=$goods_attrs}
+                                        <li>{$item['name']}：{$item['vname']}</li>
+                                        {/list}
+                                    </ul>
+                                </div>
+                                <div class="description  clearfix" >
+                                    {$goods['content']}
+                                </div>
+                                <div class="warmprompt">
+                                    <p>网站所售产品均为厂商正品，如有任何问题可与我们客服人员联系，我们会在第一时间跟您沟通处理。我们将争取以更具竞争力的价格、更优质的服务来满足您最大的需求。开箱验货；请根据本页面开箱验货标准进行验收。v如存在包装破损等影响签收的因素，请您可以拒收全部商品（包括赠品）；为了保护您的权益，建议您尽量不要委托他人代为签收；如由他人代为签收商品而没有在配送人员在场的情况下验货，则视为您所订购商品的包装无任何问题。</p>
+                                    <h2>温馨提示</h2>
+                                    <p>由于部分商品包装更换较为频繁，因此您收到的货品有可能与图片不完全一致，请您以收到的商品实物为准，同时我们会尽量做到及时更新，由此给您带来不便多多谅解，谢谢！</p>
+                                </div>
+                                <!--S ajax获取的商品评价-->
+                                <div id="productcomment"></div>
+
+                            </div>
+                            <!--E 商品详情-->
+                            <!--S 商品评价-->
+                            <!--E 商品评价-->
+                            <!--S 商品咨询-->
+                            <!--E 商品咨询-->
+                            <!--S 售后保障-->
+                            <div class="clearfix" id='protection-list' style="display:none;">
+                                {if:$goods['sale_protection']}
+                                <div class="mb20">
+                                    {$goods['sale_protection']}
+                                </div>
+                                {/if}
+                                <div >
+                                    {$sale_protection}
+                                </div>
+                            </div>
+                            <!--E 售后保障-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--E 商品详情-->
+    </div>
+</div>
+<script type="text/javascript" src='{url:#js/product.js}'></script>
+<script type="text/javascript">
+        var PRODUCT = {
+        };
+</script>
+<!--E 产品展示-->

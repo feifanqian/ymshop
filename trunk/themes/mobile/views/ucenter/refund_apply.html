@@ -1,0 +1,118 @@
+{echo:JS::import("form")}
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<form id="refundForm" action="">
+<div class="ma20 bg-white p20 ">
+    <input type="hidden" name="order_id" value="{$order_id}">
+    <div class="weui_cell" style="height:50px;">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p><b style="font-size:14px;">订单编号</b></p>
+                    </div>
+                    <div class="weui_cell_ft">
+                       <a href="{url:/ucenter/order_detail/id/$order_id}">{$order_no}</a><i class="iconfont icon-next" style="font-size:9px;"></i>
+                    </div>
+    </div>
+    <div class="weui_cell" style="height:50px;">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p><b style="font-size:14px;">退款金额</b></p>
+                        </div>
+                        <div class="weui_cell_ft">
+                            <span class="red">￥{$refund_amount}&nbsp;</span>
+                        </div>
+    </div>
+    <div class="weui_cell " style="height:50px;">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p><b style="font-size:14px;">退款原因</b></p>
+                    </div>
+                    <div class="weui_cell_ft">
+                        <input class="weui_input" id="reason" name='reason' type="text" value="我不喜欢了" data-values="" style='text-align: right;display:inline-block;width:auto;font-size:15px;' /><i class="iconfont icon-next" style="font-size:9px;"></i>
+                    </div>
+     </div>
+     <div class="weui-cells weui-cells_form" style="margin-top:0px;">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <textarea class="weui-textarea" maxlength="254" placeholder="有什么意见和建议可以和我们说说吗？" rows="3" style="height:210px;font-size:14px;text-indent:15px;" name="reason_desc"></textarea>
+                        <div class="weui-textarea-counter"><span id="count">0</span>/254</div> 
+                    </div>
+                </div>
+    </div>
+</div>
+</form>
+<div class="ma20 bg-white p20 ">
+    <a href="javascript:;" class="weui-btn weui-btn_primary" id="apply_submit">提交申请</a>
+    <a href="javascript:history.go(-1);" class="weui-btn weui-btn_default">返回</a>
+</div>
+<div class="js_dialog" id="comfirmDialog" style="opacity: 1;display:none;">
+            <div class="weui-mask"></div>
+            <div class="weui-dialog">
+                <div class="weui-dialog__hd"><strong class="weui-dialog__title">信息确认</strong></div>
+                <div class="weui-dialog__bd">请您确认申请信息，提交后无法更改，望知悉。</div>
+                <div class="weui-dialog__ft">
+                    <a href="javascript:CloseDialog();" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+                    <a href="javascript:SubmitApply();" class="weui-dialog__btn weui-dialog__btn_primary">确认</a>
+                </div>
+            </div>
+</div>
+<script type="text/javascript" charset="UTF-8" src="/themes/_default/js/jquery.iframe-post-form.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+<script>
+
+    function CloseDialog(){
+        $("#comfirmDialog").fadeOut(200);
+    }
+    function SubmitApply(){
+            $("#comfirmDialog").fadeOut(200);
+            var data = new FormData($("#refundForm")[0]);
+            $.showLoading();
+            $.ajax({
+                    url: "{url:/ucenter/refund_apply_submit}",
+                    type: 'POST',
+                    data: data,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (returndata) {
+                        $.hideLoading();
+                        var obj = JSON.parse(returndata);
+                        if (obj.status == 'success') {
+                           $.toast("申请成功！", "success");
+                           //location.replace("{url:/ucenter/order_detail/id/}{$order_goods['order_id']}");
+                           setTimeout(function(){
+                               window.location.href="{url:/ucenter/refund_progress/order_id/$order_id}";
+                           },2000);
+                        } else {
+                           $.toast(obj.msg, "forbidden");
+                        }  
+                    },
+                    error: function (e) {
+                       $.hideLoading();
+                       $.toast("出错了，请稍后再试！", "forbidden");
+                    },
+            });
+    }
+
+    $(function(){
+        $("#apply_submit").on("click",function(){
+            $("#comfirmDialog").fadeIn(200);
+        });
+        $("#reason").select({
+            title: "退款原因",
+            items: {echo: json_encode($reason);},
+            onChange: function () {  
+              
+            }  
+        });
+
+      
+        $('.weui-textarea').on("input",function(){
+           var count = $(this).val().length;
+           if(count>=254){
+              count = 254;
+           }
+           $("#count").text(count);
+       });
+    });
+      
+</script>
+    

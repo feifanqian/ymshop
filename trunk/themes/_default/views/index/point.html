@@ -1,0 +1,81 @@
+<script src="{url:#js/tinyslider.js}"></script>
+<script type="text/javascript" charset="UTF-8" src="{url:#js/pic.js}"></script>
+<style>
+.wrap {height:396px;position:relative;overflow:hidden;margin:0 auto;}
+.slidebox {width:100%;height:396px;}
+.slidebox .slideboxli {width:100%;height:396px;margin: 0 auto;padding: 0;background-position: 50% 0%; background-repeat: no-repeat;}
+.slidebox .slideboxli a {display: block;width: 100%;height: 100%;margin:0 auto}
+.dot {position:absolute;width:100%;height:30px;text-align:center;bottom:0;left:0;}
+.dot p {margin-right:10px;}
+.dot b {width:20px;height:5px;color:#333;display:inline-block;border:1px solid #fff;background:#fff;text-align:center;line-height:17px;margin:0 3px;margin-top:6px;cursor:pointer;font-weight:normal;}
+.dot .cur {background:#F63;color:#fff;border:1px solid #f63;}
+.name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center;
+    }
+</style>
+<SCRIPT type=text/javascript>
+$(function(){
+	//affect:4
+	$(".af4").slide({
+		affect:4,
+		time:5000,
+		speed:400,
+	});
+})
+
+</SCRIPT>
+<div class="bg-base">
+    <div class="banner ">
+        <div class="wrap af4" style="height: 396px;" config-data={ "direction": "left"} >
+            <ul class="slidebox cycle-slideshow">
+                {query:name=ad where=number eq 'qgiowmka-us4k-p0up-vs3c-blkqmtb7'}
+                {set:$lists = unserialize($item['content']);} 
+                {list:items=$lists item=$ad}
+            <li class="slideboxli"  style="background-image:url({url:@$ad[path]});background-color:{$ad['title']}; ">
+                <a href="{url:$ad[url]}" target="_blank"></a>
+            </li>
+            {/list}
+            {/query}
+            </ul>
+           
+        </div>
+
+    </div>
+
+    <div class="container">
+        <!--S 产品展示-->
+        <ol class="bread-crumb">
+            <li class="bold_producttit"><a href="#">积分购</a></li>
+            <li><a href="#">惊爆单品 诚意推荐</a></li>
+        </ol>
+        <ul class="groupproduct-list clearfix">
+            {query:name=point_sale as ps fields=*,ps.id as id join=left join goods as go on ps.goods_id eq go.id  where=ps.status eq 1  order=ps.listorder asc limit=12 pagesize=12 page=1 id=$point_sale}
+            <li class="item" style="text-align: center;">
+                <dl class="groupproduct" 
+                    style=" background: -webkit-linear-gradient(rgba(23, 22, 22, 0.07), rgba(229, 229, 229, 0)); /* Safari 5.1 - 6.0 */
+                            background: -o-linear-gradient(rgba(23, 22, 22, 0.07), rgba(229, 229, 229, 0)); /* Opera 11.1 - 12.0 */
+                            background: -moz-linear-gradient(rgba(23, 22, 22, 0.07), rgba(229, 229, 229, 0)); /* Firefox 3.6 - 15 */
+                            background: linear-gradient(rgba(23, 22, 22, 0.07), rgba(229, 229, 229, 0)); /* 标准的语法 */
+                            border-radius:15px;">
+                    <dt class="img"><a href="{url:/index/pointbuy/id/$item[id]}"><img  style="border-radius:15px;width:380px;height:280px;" src="{echo:Common::thumb($item['img'],380,280,'both')}" ></a></dt>
+                    
+                    <dd class="title"><a href="{url:/index/pointbuy/id/$item[id]}"><p class='name'>{$item['name']}</p></a></dd>
+                    <dd class="price">
+                         {set:$set = current(unserialize($item['price_set']));}
+                        <ul>
+                            <li class=""><span class="price fl">原价：<del class="tag-price">{$currency_symbol}{$item['sell_price']}</del></span></li>
+                            <li class="red" style="font-size: 20px; padding-top: 15px;"> ¥{$set['cash']}+{$set['point']}<span style='font-size:10px;'>积分</span></li>
+                            
+                        </ul>
+                    </dd>
+                </dl>
+            </li>
+            {/query}
+        </ul>
+        <div class=" mt10 page-nav">{echo:$point_sale->pageBar();}</div>
+        <!--E 产品展示-->
+    </div>
+</div>

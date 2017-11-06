@@ -1,0 +1,87 @@
+{echo:JS::import('dialog?skin=tinysimple');}
+{echo:JS::import('dialogtools');}
+{set:$config = Config::getInstance(); $other = $config->get('other'); $reg_way = isset($other['other_reg_way'])?$other['other_reg_way']:0;$reg_way = explode(',',$reg_way);$reg_way = array_flip($reg_way);}
+<div class="">
+    <div class="weui_cells">
+        <form action="{url:/simple/reg_act}" class="reg-box" method="post" callback="checkReadme">
+            <div class="weui_cell" style="margin-top:10px">
+                <input name="mobile" id="mobile"  class="input" pattern="mobi" placeholder="手机" alt="手机格式不正确!">
+            </div>
+            <div class="weui_cell">
+                <input name="name" id="name"  class="input" pattern="name" placeholder="用户名" alt="用户名不正确!">
+            </div>
+            <div class="weui_cell">
+                <input bind="repassword" minlen=6 maxlen=20 class="input" type="password" name="password" pattern="required" placeholder="密码" alt="6-20任意字符组合">
+            </div>
+            <div class="weui_cell">
+                <input bind="password" minlen=6 maxlen=20 class="input" type="password"  name="repassword" pattern="required" placeholder="确认密码" alt="6-20任意字符组合">
+            </div>
+            {if:isset($reg_way[1]) && class_exists('SMS') && SMS::getInstance()->getStatus()}
+            <div class="weui_cell">
+                <input type="text" class="input input-sm" name="mobile_code" pattern="\d{6}" placeholder="验证码" alt="6位短信验证码"><label></label><input id="sendSMS" type="button" class="btn btn-default btn-mini" value="获取短信验证码">
+            </div>
+            {else:}
+            <div class="weui_cell">
+                <input type="text" class="input input-sm" name="verifyCode" id="verifyCode"  pattern="\w{4}" maxlength="4" style="width: 80px;" alt="验证码不正确"><img id="captcha_img"  src="{url:/simple/captcha/h/40/w/120/bc/f1f1f1}"><label><a href="javascript:void(0)" class="red" onclick="document.getElementById('captcha_img').src = '{url:/simple/captcha/h/40/w/120/bc/f1f1f1/random/}' + Math.random()">换一张</a></label>
+            </div>
+            {/if}
+            <div class="weui_cells weui_cells_checkbox">
+                <label class="weui_cell weui_check_label" for="s11">
+                    <div class="weui_cell_hd">
+                        <input type="checkbox" class="weui_check" name="checkbox1" id="readme" checked="checked">
+                        <i class="weui_icon_checked"></i>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>我已阅读并同意《<a  href="javascript:;" class="open-popup" data-target="#license">{$site_title}用户注册协议</a>》</p>
+                    </div>
+                </label>
+            </div>
+            <div class="weui_cell">
+                
+                <button class="weui_btn weui_btn_primary">立即注册</button>
+            </div>
+            <div class="weui_cell">
+                <a href="{url:/simple/login}" class="weui_btn weui_btn_default weui_btn_block">立即登录</a>
+            </div>
+            {token:key=reg}
+        </form>
+    </div>
+</div>
+<div id="license" class="weui-popup-container popup-bottom">
+    <div class="weui-popup-modal" style="height:100% !important;">
+        <article class="weui_article">
+            <h1>同意用户注册协议</h1>
+            <section>
+                <p>
+                    {query:name=help where=id eq 14}
+                    {$item['content']}
+                    {/query}
+                </p>
+            </section>
+            <section>
+                <a href="javascript:;" class="weui_btn weui_btn_plain_primary close-popup">同意用户注册协议</a>
+            </section>
+        </article>
+    </div>
+</div>
+
+{echo:JS::import('form')}
+<script type="text/javascript">
+    var REG = {
+        invalid: {echo: isset($invalid) ? 1 : 0},
+        send_sms_url: "{url:/ajax/send_sms}",
+        ajax_email_chk_url: "{url:/ajax/email/email}",
+        ajax_mobile_chk_url: "{url:/ajax/mobile/mobile}",
+        ajax_valide_code_url: "{url:/ajax/verifyCode/verifyCode/}",
+    };
+</script>
+
+<script type="text/javascript" charset="UTF-8" src="{url:#js/reg.js}"></script>
+
+<script>
+    {if:isset($invalid)}
+    var form = new Form();
+    form.setValue('email', '{$email}');
+    autoValidate.showMsg({id: $("input[name='{$invalid['field']}']").get(0), error: true, msg: "{$invalid['msg']}"});
+    {/if}
+</script>

@@ -1,0 +1,19 @@
+
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+<!--S 产品展示-->
+{query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end asc,gb.id desc limit=12 page=1 pagesize=2 id=$flashbuy}
+<div class=" bg-white m_20 mt20">
+        <div class="img tc box-header mb20"><a href="{url:/index/flashbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],367,367)}" width="100%" ></a></div>
+        <div class="p20 ">
+            <ul class="list">
+                <li class=" item plr20"><a href="{url:/index/product/id/$item[id]}">{$item['name']}</a></li>
+                <li class="clearfix"><span class="price fl">抢购价：<b class="red">{$currency_symbol}{$item['price']}</b></span><span class="market_price fr">{$item['order_num']}人已购买</span></li>
+                <li class="tr">{if:$item['is_end']==0}<a href="{url:/index/flashbuy/id/$item[id]}" class="btn btn-mini">抢购</a>{else:}<span class="btn btn-mini btn-disable">已结束</span>{/if}</li>
+            </ul>
+        </div>
+</div>
+{/list} 
+<div class=" plr20 pb20 tc page-nav">{echo:$flashbuy->pageBar(5);}</div>
+<!--E 产品展示-->

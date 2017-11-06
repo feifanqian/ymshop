@@ -1,0 +1,102 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+<form action="" method="post">
+    <div class="tools_bar clearfix">
+        <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+        <a  class="icon-plus" href="javascript:;" onclick="add()"> 添加</a><a href="javascript:;" class="icon-loop-2"
+        onclick="tools_reload()"> 刷新</a></div>
+        <table class="default" >
+            <tr>
+                <th style="width:30px">选择</th>
+                <th style="width:70px">操作</th>
+                <th >活动名称</th>
+                <th style="width:70px">抢购总量</th>
+                <th style="width:70px">单人限购</th>
+                <th style="width:70px">商品数量</th>
+                <th style="width:70px">订单数量</th>
+                <th style="width:120px">开始时间</th>
+                <th style="width:120px">结束时间</th>
+                <th style="width:60px">状态</th>
+            </tr>
+                {query:name=pointflash_sale as ps fields=ps.* , go.name as name,go.store_nums join=left join goods as go on ps.goods_id eq go.id id=$obj page=1}
+                <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+                  <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                    <li><a class="icon-pencil" href="javascript:;" onclick="layer_open('{url:/marketing/pointflash_sale_set/type/edit/id/$item[id]}');"> 编辑</a></li>
+                    <li><a class="icon-close" href="javascript:;" onclick="confirm_action('{url:/marketing/pointflash_sale_del/id/$item[id]}')"> 删除</a></li>
+                </ul></div></div> </td>
+                <td >
+                    <a href="{url:/index/flashbuy/id/$item[id]}" target="_blank">{$item['title']}</a></td>
+                <td style="width:70px;">{$item['max_sell_count']}</td>
+                <td style="width:70px;">{$item['quota_count']}</td>
+                <td style="width:70px">{$item['store_nums']}</td>
+                <td style="width:70px">{$item['order_count']}</td>
+                <td style="width:120px">{echo:substr($item['start_date'],0,16)}</td>
+                <td style="width:120px">{echo:substr($item['end_date'],0,16)}</td>
+                <td style="width:60px">{if:$item['is_end']==1}<b class="gray">已结束</b>{else:}{if:time()>strtotime($item['start_date'])}<b class="red">进行中{else:}<b class="green">等待开始{/if}</b>{/if}</td>
+                </tr>
+                {/query}
+            </table>
+    </form>
+    <div class="page_nav">
+        {echo:$obj->pageBar()}
+    </div>
+    <div id='add' style="display:none;width:300px;height:60px;padding-top: 20px;padding-left: 20px;">
+          <input type="hidden" name="goods_id" id="goods_id" value="">
+          <input type="text"  id="goods_name" onclick="goods_select()" value="" alt="必需选择商品才能添加！" > 
+          <a href="javascript:;" onclick="goods_select()" class="button">选择商品 ...</a>
+    </div>
+    <script type="text/javascript">
+     var index;
+     function add(){
+        layer.open({
+        type: 1,
+        title: "选择商品", //不显示标题
+        btn:['确定','取消'],
+        zindex:1,
+        yes:function(){
+            var goods_id = $("#goods_id").val();
+            if(goods_id==""){
+                layer.msg("请选择积分购商品");
+                return false;
+            }
+            layer.closeAll();
+            layer.open({
+                type: 2,
+                title:"填写抢购参数",
+                area: ['880px', '520px'],
+                fixed: false, //不固定
+                maxmin: false,
+                zindex:2,
+                content: "{url:/marketing/pointflash_sale_set}"+"/type/add/id/"+goods_id
+            });
+        },
+        content: $('#add'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+      });
+    }
+     function goods_select(){
+       index = layer.open({
+            type: 2,
+            title:"选择商品",
+            area: ['880px', '520px'],
+            fixed: false, //不固定
+            maxmin: false,
+            zindex:2,
+            content: '{url:/marketing/radio_goods_select}',
+          });
+    }
+    $("#goods_name").change(function(){
+        layer.close(index);
+    });
+    function layer_open(url){
+        layer.open({
+            type: 2,
+            title:"编辑积分购设置",
+            area: ['880px', '500px'],
+            fixed: false, //不固定
+            maxmin: false,
+            content: url,
+          });
+    }
+</script>

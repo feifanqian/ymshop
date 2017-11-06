@@ -1,0 +1,40 @@
+<div class="bd">
+    <div class="weui_cells_title">{$title}</div>
+    <div class="weui_cells weui_cells_form">
+        <form id="profileit" action="" method="POST">
+            <input type="hidden" name="id" value="{$this->user['id']}" />
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">用户名</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" type="text" name="username" value="{$user['username']}" placeholder="请输入用户名" readonly />
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">旧密码</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" type="password" name="oldpassword" value="" placeholder="请输入旧密码" />
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">新密码</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" type="password" name="password" value="" placeholder="请输入新密码" />
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">确认新密码</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" type="password" name="repassword" value="" placeholder="请再次输入新密码" />
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input type="submit" value="保存" class="weui_btn weui_btn_primary">
+                </div>
+            </div>
+            <div class="weui_cell">
+                <button type="button" class="weui_btn weui_btn_default">重置</button>
+            </div>
+        </form>
+    </div>
+</div>

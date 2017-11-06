@@ -1,0 +1,64 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('validator');}
+<h2 class="page_title">{$node_index['name']}</h2>
+<div class="form2">
+    <form name="config_form" method="post" action="{url:/goods/personal_shop_set}">
+        <dl class="lineD">
+            <dt>是否允许开启个人店铺</dt>
+            <dd>
+                <select name="open">
+                    <option value="0">关闭</option>
+                    <option value="1">开启</option>
+                </select>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>开通个人店铺礼包选择</dt>
+            <dd>
+                <input id="goods_name"  name="goods_name"　type="text" readonly="readonly">
+                <input id="goods_id"  name="goods_id" type="hidden">
+                <span><a href="javascript:;" onclick="select()" class="button">选择礼品</a>（用户通过购买该商品自动开通个人店铺）</span>
+            </dd>
+        </dl>
+        
+        <div class="center">
+            <input type="submit" name="submit" class="button action fn" value="确 定">
+        </div>
+    </form>
+</div>
+ <div id='add' style="display:none;width:400px;height:60px;padding-top: 20px;padding-left: 20px;">
+          <input type="text"  id="product_ids" readonly value="" alt="必需选择商品才能添加！" > 
+          <a href="javascript:;" onclick="reset()" class="button">重置</a>
+          <a href="javascript:;" onclick="select()" class="button">选择商品 ...</a>
+          <p>可有多个可选项，用户选择一个</p>
+</div>
+<script>
+    {if:isset($message)}
+    art.dialog.tips('<p class="success">{$message}</p>');
+    {/if}
+    {if:isset($error)}
+    art.dialog.tips('<p class="error">{$error}</p>');
+    {/if}
+    var form = new Form('config_form');
+    {set:$config = Config::getInstance();}
+    var data = {echo:JSON::encode($config->get('personal_shop_set'))};
+    form.init(data);  
+     function select(){
+//        art.dialog.open('{url:/marketing/radio_goods_select}',{id:'goods_select',title:'选择商品：',width:900,height:500,padding: '10px'});
+       index =  layer.open({
+            id:"select",
+            type: 2,
+            title:"选择商品",
+            area: ['880px', '520px'],
+            fixed: false, //不固定
+            maxmin: false,
+            zindex:2,
+            content: '{url:/marketing/radio_goods_select}',
+          });
+    }
+    $("#goods_name").change(function(){
+        layer.closeAll();
+    });
+</script>

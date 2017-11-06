@@ -1,0 +1,111 @@
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<script src="/static/js/d3.v3.min.js" type="text/javascript"></script>
+<script src="/static/js/dagre-d3.min.js" type="text/javascript"></script>
+<h1 class="page_title">会员下线列表</h1>
+<style>
+    table.default tr td{
+    }
+</style>
+<!--<div id="obj_form" class="form2">
+    <table class="default" width='100%'>
+        <tr>
+            <th style="text-align:left;" width="10%">操作</th> 
+            <th style="text-align:left;" width="10%">ID</th> 
+            <th style="text-align:left;" width='30%'>昵称</th> 
+            <th style="text-align:left;" width="20%">来源</th> 
+            <th style="text-align:left;" width="30%">加入时间</th>
+        </tr>
+        {list:items=$sonlist}
+        <tr>
+            <td style="width:70px" class="btn_min">
+                <div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                            <li><a class="icon-cog-2" href="{url:/customer/customer_invite/id/$item[id]}"> 查看下线</a></li>
+                        </ul></div></div> </td>
+            <td>{$item['id']}</td>
+            <td>{$item['name']}</td> 
+            <td>{$item['from']}</td>
+            <td>{echo:date("Y-m-d H:i:s",$item['createtime'])}</td> 
+        </tr>
+        {/list}
+    </table>
+</div>-->
+
+<style id="css">
+    /* This sets the color for "TK" nodes to a light blue green. */
+    g.type-TK > rect {
+        fill: #00ffd0;
+    }
+
+    text {
+        font-weight: 300;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+        font-size: 14px;
+    }
+
+    .node rect {
+        stroke: #999;
+        fill: #fff;
+        stroke-width: 1.5px;
+    }
+
+    .edgePath path {
+        stroke: #333;
+        stroke-width: 1.5px;
+    }
+    .type-main {
+        text-align:center;
+    }
+</style>
+
+<svg id="svg-canvas" width=960 height=600></svg>
+
+<script id="js">
+    $(function () {
+        $("#svg-canvas").width($("#content").width());
+
+        // Create the input graph
+        var g = new dagreD3.graphlib.Graph()
+                .setGraph({})
+                .setDefaultEdgeLabel(function () {
+                    return {};
+                });
+
+        // Here we"re setting nodeclass, which is used by our custom drawNodes function
+        // below.
+        //g.setNode(0, {label: "TOP", class: "type-TOP"});
+        {list:items = $childlist}
+        g.setNode({$item['id']}, {labelType: "html", label: "<a href='{url:/customer/customer_invite/id/$item[id]}'><img src='{echo:Url::urlFormat("@".$item['avatar'])}' width='50' height='50' /><br />{$item['realname']}</a>", class: "type-main"});
+        {/list}
+
+                g.nodes().forEach(function (v) {
+            var node = g.node(v);
+            // Round the corners of the nodes
+            node.rx = node.ry = 5;
+        });
+
+        // Set up edges, no special attributes.
+        {list:items = $childlist}
+        {if:$item['user_id']}
+        g.setEdge({$item['user_id']}, {$item['id']});
+        {/if}
+        {/list}
+
+                // Create the renderer
+                var render = new dagreD3.render();
+
+        // Set up an SVG group so that we can translate the final graph.
+        var svg = d3.select("svg"),
+                svgGroup = svg.append("g");
+
+        // Run the renderer. This is what draws the final graph.
+        render(d3.select("svg g"), g);
+
+        // Center the graph
+        var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
+        svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
+        svg.attr("height", g.graph().height + 40);
+    });
+</script>

@@ -1,0 +1,55 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<style>
+    .shop-list-container{
+        background-color: white;
+        margin-top: 10px;
+    }
+    .shop-btn{
+        border:1px solid #fac532;
+        color:#fac532;
+        width:40px;
+        border-radius: 10px;
+        font-size: 16px;
+        padding:0px 10px;
+    }
+    .weui-media-box__title{
+        color:#333333 !important;
+        font-size: 16px !important;
+        font-weight: 300;
+    }
+    .weui-media-box__title img{
+        width: 20px;
+        margin-right: 10px;
+    }
+    .header-white h2{
+        font-size: 20px !important;
+        font-weight: 300;
+    }
+</style>
+ {set:$config = Config::getInstance()->get('personal_shop_set');}
+ {set:$goods_id = $config['goods_id'];}
+ {if:$config['open']==1}
+<div class="sign_tip" style="position: fixed;bottom:65px;right:11px;z-index:111;color:white;border:1px solid #fac532;border-radius: 5px;">
+<a href="{url:/index/product/id/$goods_id}" style="color:#fac532;font-size: 15px;">
+    &nbsp;我也要<br>开通店铺
+</a>
+</div>
+{/if}
+{query:name=personal_shop as ps join=left join customer as c on ps.user_id eq c.user_id left join user as u on ps.user_id eq u.id fields=ps.*,c.real_name,u.avatar,u.nickname order=ps.listorder asc limit=12 page=1 pagesize=3 id=$personal_shop_list }
+<div class='shop-list-container'>
+    <div href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+        <div class="weui-media-box__hd">
+            <img class="weui-media-box__thumb" src="{echo:Url::urlFormat("@".$item['avatar'])}">
+        </div>
+        <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title"><img src='{url:@static/images/personal-shop.png}'>{$item['real_name']|$item['nickname']}的个人店铺</h4>
+            {set:$personal_data = Common::getPersonalShopData($item['id'])}
+            <p class="weui-media-box__desc">销量{$personal_data['all_sell_num']} 共{$personal_data['all_goods_num']}件商品</p>
+        </div>
+        <div class="weui-media-box__ft">
+            <a class='shop-btn' href="{url:/index/personal_shop_index/id/$item[id]}">进店</a>
+        </div>
+    </div>
+</div>
+{/query}
+<div class=" plr20 pb20 tc page-nav">{echo:$personal_shop_list->pageBar(5);}</div>

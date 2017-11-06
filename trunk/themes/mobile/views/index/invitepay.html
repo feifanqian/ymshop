@@ -1,0 +1,44 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}?v=20170719" />
+<style>
+    .weui_dialog_visible{
+        top:10%;
+    }
+</style>
+<div class="invite_bg1" style="visibility:visible;width:100%;background: url(/static/images/invite_bg.jpg);background-size:100%100%;position: relative;">
+    <div style="width: 100%;height: 32px;color:#fff;text-align: center;line-height: 32px;font-size:22px;font-family: 'Microsoft YaHei';position: absolute;top:46px;">收款方</div>
+    <div style="width: 100%;height: 32px;color:#fff;text-align: center;line-height: 32px;font-size:30px;font-family: 'Microsoft YaHei';position: absolute;top:80px;">{$real_name}</div>
+    <div class="invite_main1" style="position: absolute;top: 24%;">
+        <div class="invite_qr1">
+           <img class="avatar" src="{$avatar}" style="position: absolute;border-radius: 5px;" width="40" height="40">
+           <img class="qrcode" src="/ucenter/buildinvitepay?uid={$uid|1}"  />
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        // $('.invite_bg').css('background-color','#fff');
+        // $(".invite_main").height($(".invite_main").width() / 0.6344);
+        // $(".invite_bg").css("visibility", "visible");
+        // $(".invite_bg").height($(document).height() - 98);
+        var W = $('.invite_bg1').width();
+        var w = W*0.46;
+        var h = W*0.5;
+        var left = (W-w)/(2*W)*100+'%';
+        $(".invite_main1").css("left",left);
+        $('.invite_qr1').width(w);
+        var width = W*0.42+'px';
+        var height = W*0.5+'px';
+        $('.invite_qr1').width(width);
+        $('.invite_qr1').height(height);
+        var H = W*1.52+'px';
+        $('.invite_bg1').height(H);
+        $('.qrcode').css("width",w);
+        $('.qrcode').css("height",h);
+        var l = (W-40)/(2*W)*100+'%';
+        var t = (h-40)/(2*h)*100+'%';
+        $('.avatar').css("left",l);
+        $('.avatar').css("top",t);
+        // var top = ($(document).height() - 98)+'px';
+        // $(".invite_main1").css("top",top);
+    });
+</script>

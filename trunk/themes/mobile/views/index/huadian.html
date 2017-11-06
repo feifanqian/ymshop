@@ -1,0 +1,22 @@
+
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+<!--S 产品展示-->
+{if:isset($data['data'])}
+{list:items=$data['data']}
+<div class=" bg-white m_20 mt20">
+        <div class="img tc box-header mb20"><a href="{url:/index/product/id/}{$item['id']}"><img src="{echo:Common::thumb($item['img'],367,367)}" width="100%" ></a></div>
+        <div class="p20 ">
+            <ul class="list">
+                <li class=" item plr20"><a href="{url:/index/product/id/}{$item['id']}">{$item['name']}</a></li>
+                <li class="clearfix"><span class="price fl">原价：<s><b class="red">{$currency_symbol}{$item['sell_price']}</b></s></span></li>
+                <li class="clearfix"><span class="price fl">华点购买价：<b class="red">{$currency_symbol}{$item['still_pay']}+{$item['huabipay_amount']}华点</b></span></li>
+                <li class="tr"><a href="{url:/index/product/id/}{$item['id']}" class="btn btn-mini">我要购买</a></li>
+            </ul>
+        </div>
+</div>
+{/list}
+{/if}
+<div class=" plr20 pb20 tc page-nav">{$data['html']}</div>
+<!--E 产品展示-->

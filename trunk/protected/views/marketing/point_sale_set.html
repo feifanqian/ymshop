@@ -1,0 +1,58 @@
+{echo:JS::import("form")}
+<style type="text/css">
+ tr:nth-child(even){
+     background:#f1f2f3;
+ }
+ tr{
+     height: 50px;
+ }
+ inpu{
+     color:rgb(117, 45, 45);
+ }
+</style>
+<div style="overflow: auto;width:850px;margin:auto;">
+    <div>
+    <form action="{url:/marketing/point_sale_save}" method="post" id='point_form'>
+        <input type="hidden" value="{$point_sale_info['id']}" name='id'>
+        <div style="text-align: center;min-height:130px;" >
+        <table align="center" width="100%" style="border-collapse: collapse;" >
+            <tr><th width="10%" style="text-align: center;">货号</th><th width="20%" style="text-align: center;">规格</th><th width="10%" style="text-align: center;">销售价</th><th style="text-align: center;">积分购买设置</th><th width="15%" style="text-align: center;">操作</th></tr>
+            
+         {list:items=$products item=$product}  
+         <tr style="border-top: 1px solid gray;border-bottom: 1px solid gray;">
+          <td>{$product['pro_no']}</td><td>{$product['spec']}</td><td>{$product['sell_price']}</td>
+          <td style="text-align: center;padding-left: 10px;">
+            <input type="text" class="cash" name="cash[{$product['id']}]"  value="{$point_sale_info['price_set'][$product['id']]['cash']}" style="width:50px;">RMB+<input type="text" name="point[{$product['id']}]" class="point" style="width:50px;" value="{$point_sale_info['price_set'][$product['id']]['point']}">积分
+          </td>
+          <td>
+            <input type="button" value="应用到其他" onclick="apply_all({$product['id']})" style="cursor:pointer;">
+          </td>
+         </tr>
+         {/list}
+        </table>
+        </div>
+        <div style="text-align: center;height: 66px;">
+            <input type="button" id="_submit" value="保存设置" style="margin-top:20px;cursor:pointer;background: rgba(35, 60, 89, 0);line-height: 20px;">
+        </div>
+    </form>
+    </div>
+</div>
+<script>
+    function apply_all(id){
+      var cash = $("input[name='cash["+id+"]']").val();
+      var point = $("input[name='point["+id+"]']").val();
+      $(".cash").val(cash);
+      $(".point").val(point);
+   }
+   $("#_submit").click(function(e){
+       e.preventDefault();
+       $.post("{url:/marketing/point_sale_save}", $("#point_form").serialize(),
+                function(data){
+                  if(data.status =="success"){
+                     window.parent.location.reload();
+                  }else{
+                      alert(data.msg);
+                  }
+           },'json');
+   });
+</script>

@@ -1,0 +1,66 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{
+	font-family:微软雅黑;
+	}
+body{
+	padding:0;
+	margin:0;
+	font-size:12px;
+	}
+a{text-decoration:none;}a:link,a:visited{text-decoration: none;}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,blockquote,p{padding:0; margin:0;}
+h1,h2,h3,h4,h5,h6{font-size:inherit; font-weight:normal;}
+address,cite,code,em,th,i{font-weight:normal; font-style:normal;}
+.clearfix{*zoom:1;}
+.clearfix:after{display:block; overflow:hidden; clear:both; height:0; visibility:hidden; content:"";}
+.clear{ clear: both;}
+/* float */
+.left{
+	float:left;
+}
+.right{
+	float:right;
+}
+.account-box{
+	background: #fff;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.24);
+}
+.account-title{
+	border-bottom: 1px dashed rgba(128, 128, 128, 0.34);
+	height: 50px;
+	line-height: 50px;
+	font-size: 16px;
+}
+.f-btn-fhby{height: 30px;line-height: 30px;color: #f77b10;border: 1px solid #f77b10;font-size: 14px;display: block;width: 85px;text-align: center;border-radius: 4px;cursor: pointer;margin-top: 10px;margin-left: 20px;}
+.f-btn-jian{height: 30px;line-height: 26px;margin-top:10px;text-align: center;width: 20px;color: #666;border-radius: 4px;position: relative;left: 2px;cursor: pointer;}
+.f-btn-jia{height: 30px;line-height: 26px;margin-top:10px;text-align: center;width: 20px;color: #666;border-radius: 4px;position: relative;left: -2px;cursor: pointer;}
+.f-riqi{width: 110px;padding: 0 10px; background: #fff;color: #666;font-size: 16px;text-align: center;height: 30px;line-height: 30px;margin-top: 10px;display: block;}
+.f-rili-table tbody td{background: #fff;position: relative;}
+.f-rili-table tbody tr{border-bottom: 1px dashed #ccc;}
+.f-rili-table .f-today{background-color: #faf1de;}
+.f-rili-table .f-on{background-color:cornflowerblue;color: #fff;}
+.f-number{cursor: pointer;}
+.f-rili-table{width: 100%;}
+.f-rili-th{float: left;width: 14.25%;text-align: center;line-height: 46px;height: 46px;color: #696969; font-weight:700;}
+.f-td{float: left;width: 14.25%;text-align: center;height:40px;line-height: 40px;position: relative;}
+.signed{position: absolute;width: 20px;height: 20px;top: 15px;left: 0;margin-left: 26px;}
+.f-table-msg{position: absolute;z-index: 2;top: 34px;left:50%;margin-left: -120px; width: 280px;background: url(../images/bg-msg.png) no-repeat bottom;line-height: 55px;height: 46px;text-align: center;display: none;color: #666;}
+.f-day{
+    font-size: 15px;
+    color:#919191;
+}
+.gou{
+    background: url(../images/gou.png) no-repeat center;
+    background-size: cover;
+}
+.cha{
+    width: 15px;
+    height: 15px;
+    background: url(../images/cha.png) no-repeat center;
+    background-size: cover;
+    top:20px;
+}
+
+

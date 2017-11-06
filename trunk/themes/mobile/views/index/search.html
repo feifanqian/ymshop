@@ -1,0 +1,33 @@
+<!-- Start 排序栏 -->
+<div class="tab-bar sort-bar clearfix">
+    <a href="{url:$url/sort/0}" {if:$sort==0}class="current"{/if}><span>默认</span></a>
+    <a href="{url:$url/sort/1}" {if:$sort==1}class="current"{/if}><span>销量</span></a>
+    <a href="{url:$url/sort/2}" {if:$sort==2}class="current"{/if}><span>评论数</span></a>
+    <a {if:$sort==4} href="{url:$url/sort/3}" class="current-2" {elseif:$sort==3}href="{url:$url/sort/4}" class="current"{else:} href="{url:$url/sort/4}" {/if}><span>价格</span></a>
+    <a href="{url:$url/sort/5}" {if:$sort==5}class="current"{/if}><span>最新</span></a>
+</div>
+<!-- End 排序栏 -->
+<!-- Start 商品列表展示-->
+<div class="weui_panel weui_panel_access product-list">
+    <div class="weui_panel_bd">
+        {if:isset($goods['data'])}
+        {set:$num=0;}
+        {list:items=$goods['data']}
+        {set:$num=$num+1;}
+        <a href="{url:/index/product/id/$item[id]}" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],100,100)}" alt="">
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">{$item['name']}</h4>
+                <p class="weui_media_desc" style="color:red;">{$currency_symbol}{$item['sell_price']}</p>
+                <p class="weui_media_desc">共{$item['review_count']}条评价<?php if($item['review_count']) {echo '(';echo $item['satisfaction_rate']*100; echo '%好评）';}?></p>
+            </div>
+        </a>
+        {/list}
+        {/if}
+
+    </div>
+</div>
+<!-- End 商品列表展示-->
+<div class="page-nav bg-white p20 tc" style="margin:0">{$topPageBar}</div>

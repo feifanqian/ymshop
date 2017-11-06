@@ -1,0 +1,95 @@
+<script src="{url:#js/tinyslider.js}"></script>
+<script type="text/javascript" charset="UTF-8" src="{url:#js/pic.js}"></script>
+<style>
+.wrap {height:396px;position:relative;overflow:hidden;margin:0 auto;}
+.slidebox {width:100%;height:396px;}
+.slidebox .slideboxli {width:100%;height:396px;margin: 0 auto;padding: 0;background-position: 50% 0%; background-repeat: no-repeat;}
+.slidebox .slideboxli a {display: block;width: 100%;height: 100%;margin:0 auto}
+.dot {position:absolute;width:100%;height:30px;text-align:center;bottom:0;left:0;}
+.dot p {margin-right:10px;}
+.dot b {width:20px;height:5px;color:#333;display:inline-block;border:1px solid #fff;background:#fff;text-align:center;line-height:17px;margin:0 3px;margin-top:6px;cursor:pointer;font-weight:normal;}
+.dot .cur {background:#F63;color:#fff;border:1px solid #f63;}
+
+</style>
+<SCRIPT type=text/javascript>
+$(function(){
+	//affect:4
+	$(".af4").slide({
+		affect:4,
+		time:3000,
+		speed:400,
+	});
+})
+
+</SCRIPT>
+<div class="bg-base">
+    <div class="banner ">
+        <div class="wrap af4" style="height: 396px;" config-data={ "direction": "left"} >
+            <ul class="slidebox cycle-slideshow">
+                {query:name=ad where=number eq 'qgiowmka-us4k-p0up-vs3c-blkqmtb7'}
+                {set:$lists = unserialize($item['content']);} 
+                {list:items=$lists item=$ad}
+            <li class="slideboxli"  style="background-image:url({url:@$ad[path]});background-color:{$ad['title']}; ">
+                <a href="{url:$ad[url]}" target="_blank"></a>
+            </li>
+            {/list}
+            {/query}
+            </ul>
+            <div class="groupsidebar">
+                <div class="groupsidebar-inner">
+                    <div class="groupsidebar-body">
+                        <div class="sidebar-title">
+                            <a href="javascript:;">今日必团</a>
+                        </div>
+                         {query:name=groupbuy as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id  order=end_time desc limit=1 id=$groupbuy }
+                        <div class="sidebar-notice-list">
+                            <p><a href="{url:/index/groupbuy/id/$item[id]}" target="_blank">{echo:TString::msubstr($item['title'],0,20)}</a></p>
+                            <p ><a class="bold_tit" href="{url:/index/groupbuy/id/$item[id]}" target="_blank">{echo:TString::msubstr($item['name'],0,25)}</a></p>
+                            
+                        </div>
+                        <ul class="sidebar-btn-list clearfix">
+                            <li><a href="/" rel="nofollow" >{$currency_symbol}{$item['price']}</a>{$currency_symbol}{$item['market_price']} <a href="/" rel="nofollow" >{$item['order_num']}</a>件已售</li>
+                            
+                        </ul>
+                        <div class="sidebar-bottom">
+                           <a href="{url:/index/groupbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],220,220,'fwfh')}" ></a>
+                        </div>
+                         {/query}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container">
+        <!--S 产品展示-->
+        <ol class="bread-crumb">
+            <li class="bold_producttit"><a href="#">今日爆款</a></li>
+            <li><a href="#">惊爆单品 诚意推荐</a></li>
+        </ol>
+        <ul class="groupproduct-list clearfix">
+            {query:name=groupbuy as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id  order=is_end , goods_num desc limit=12 page=1 id=$groupbuy}
+
+            <li class="item">
+                <dl class="groupproduct">
+                    <dt class="img"><a href="{url:/index/groupbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],400,280,'both')}" ></a></dt>
+                    
+                    <dd class="title"><a href="{url:/index/groupbuy/id/$item[id]}">{echo:TString::msubstr($item['title'],0,30)}</a></dd>
+                    <dd class="lit_title"><a href="{url:/index/groupbuy/id/$item[id]}">{echo:TString::msubstr($item['name'],0,30)}</a></dd>
+                    <dd class="price">
+                        <ul>
+                            <li class="red" style="font-size: 20px; padding-top: 15px;"> <span>{$currency_symbol}</span>{$item['price']}</li>
+                            <li><p><span>参考价</span></p><p style="font-weight: 500;">&yen;{$item['market_price']}</p></li>
+                            <li style="padding-top: 20px;"><?php echo( $item['satisfaction_rate']*100);?>%好评</li>
+                            <li style="padding-top: 20px;"><span class="red">{$item['order_num']}</span>件已售</li></ul>
+                    </dd>
+                </dl>
+            </li>
+            {/list}
+        </ul>
+        <div class=" mt10 page-nav">{echo:$groupbuy->pageBar();}</div>
+        <!--E 产品展示-->
+    </div>
+</div>

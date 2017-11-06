@@ -1,0 +1,66 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('validator');}
+<h2 class="page_title">{$node_index['name']}</h2>
+<div class="form2">
+    <form name="config_form" method="post" action="{url:/admin/config/group/upyun}">
+        <dl class="lineD">
+            <dt>CDN地址：</dt>
+            <dd>
+                <input name="upyun_cdnurl" type="text" value="" />
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>服务bucket：</dt>
+            <dd>
+                <input name="upyun_bucket" type="text" class="small" value="">
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>文件路径规则：</dt>
+            <dd>
+                <input name="upyun_save-key" type="text" value="">
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>表单密钥：</dt>
+            <dd>
+                <input name="upyun_formkey" type="text" value=""/>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>上传有效时长：</dt>
+            <dd>
+                <input name="upyun_expiration" type="text" class="small" value=""/>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>上传API地址：</dt>
+            <dd>
+                <input name="upyun_uploadurl" type="text" value=""/>
+                <span>  </span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>上传回调：</dt>
+            <dd>
+                <input name="upyun_notify-url" type="text" value=""/>
+                <span>  </span>
+            </dd>
+        </dl>
+        <div class="center">
+            <input type="submit" name="submit" class="button action fn" value="确 定">
+        </div>
+    </form>
+</div>
+
+<script>
+    {if:isset($message)}
+    art.dialog.tips('<p class="success">{$message}</p>');
+    {/if}
+    var form = new Form('config_form');
+    {set:$config = Config::getInstance();}
+    var data = {echo:JSON::encode($config->get('upyun'))};
+    form.init(data);
+</script>

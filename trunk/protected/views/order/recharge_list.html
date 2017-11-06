@@ -1,0 +1,60 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+    <a class="icon-delicious" href="{url:/order/recharge_list}"> 显示全部 </a>
+    
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    
+</div>
+<table class="default" >
+    <tr>
+        <th width="30">选择</th>
+        <th width="70">查看</th>
+        <th width="100">支付方式</th>
+        <th width="80">支付状态</th>
+        <th width="80">金额</th>
+        <th width="80">用户</th>
+        <th width="120">订单编号</th>
+        <th width="80">付款时间</th>
+        
+    </tr>
+    {query:name=doc_receiving as dr fields= dr.id,py.pay_name,dr.amount,us.name,dr.create_time,dr.payment_time,re.status,re.recharge_no join= left join user as us on dr.user_id eq us.id left join payment as py on dr.payment_id eq py.id left join recharge as re on dr.order_id eq re.id where=$where id=$obj page=1 order=dr.id desc}
+        <tr><td width="30"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td width="70"><a href="javascript:view({$item['id']})" class=" icon-eye"> 查看</a></td>
+            <td width="100">{$item['pay_name']}</td>
+            <td width="80">{$item['status']|'已支付'|'<span class="red">等待支付</span>'}</td>
+            <td width="80">{$item['amount']}</td>
+            <td width="80">{$item['name']}</td>
+            <td width="120">{$item['recharge_no']}</td>
+            <td width="80">{echo:substr($item['payment_time'],0,10)}</td>
+            </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<div id="status_dialog" style="display: none; position: relative;" class="form2">
+    <h3 id="order_title">备注信息：</h3>
+        <input type="hidden" name="id" id="order_id" value="">
+        <input type="hidden" name="status" id="order_status" value="">
+        <input type="hidden" name="op" id="order_op" value="">
+        <textarea id="order_remark" name="remark"></textarea>
+    <div class="tc"><button class="focus_button" onclick="submit_status()">保存</button></div>
+</div>
+<script type="text/javascript">
+    function view(id){
+        art.dialog.open("{url:/order/recharge_view/id/}"+id,{id:'view_dialog',title:'查看收款单',resize:false,width:900,height:320});
+    }
+   {set:$payment=""}
+    {query:name=payment}
+        {set:$payment.=$item['id'].':'."'".$item['pay_name']."',"}
+    {/query}
+    {set:$payment=trim($payment,',');}
+    $("#condition").on("click",function(){
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/order/recharge_list}',method:'get'});},data:{'re.recharge_no':{name:'充值订单编号'},'us.name':{name:'用户名'},'dr.amount':{name:'充值金额'},'re.status':{name:'支付状态',values:{0:'等待支付',1:'已支付'}},'dr.payment_id':{name:'支付方式',values:{{$payment}}}
+  }});
+})
+</script>

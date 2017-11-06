@@ -1,0 +1,56 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('validator');}
+<form action="" method="post">
+    <div class="tools_bar clearfix">
+        <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]', this)" title="全选" data="true"> 全选 </a>
+        <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action: '{url:/content/uploads_del}', method: 'get', msg: '删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>
+        <a href='javascript:uploadFile();' class="icon-plus" > 上传图片</a>
+    </div>
+    <table class="default" >
+        <tr>
+            <th style="width:30px">选择</th>
+            <th width="50%">URL</th>
+            <th>类型</th>
+            <th>文件类型</th>
+            <th >文件大小</th>
+            <th >上传时间</th>
+            <th >操作</th>
+        </tr>
+        {query:name=gallery id=$obj page=1 order=id desc }
+        <tr>
+            <td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td ><a href="{url:@$item[url]}" tar="_blank">{url:@$item[url]}</a></td>
+            <td >{$item['type']}</td>
+            <td >{$item['mimetype']}</td>
+            <td >{$item['size']}</td>
+            <td >{$item['createtime']}</td>
+            <td ><a class="icon-remove-2" href="javascript:confirm_action('{url:/content/uploads_del/id/$item[id]}')"> 删除</a></td>
+        </tr>
+        {/query}
+    </table>
+</form>
+<div class="page_nav">
+    {echo:$obj->pageBar()}
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $(".select_button").on("click", function () {
+            uploadFile();
+            return false;
+        });
+    });
+    function uploadFile() {
+        art.dialog.open('{url:/admin/photoshop?type=upload}', {id: 'upimg_dialog', lock: true, opacity: 0.1, title: '选择图片', width: 613, height: 380});
+    }
+    //回写选择图片
+    function setImg(value, needclose) {
+        needclose = needclose == undefined ? 1 : needclose;
+        if (needclose) {
+            art.dialog({id: 'upimg_dialog'}).close();
+            location.reload();
+        }
+    }
+</script>
+

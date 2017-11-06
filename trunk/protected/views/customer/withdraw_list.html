@@ -1,0 +1,117 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+    <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/customer/withdraw_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>
+    <a class="icon-delicious" href="{url:/customer/withdraw_list}"> 全部记录</a>
+    <a class="icon-eye" href="javascript:balanceQuery();"> 查询代付备用金</a>
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:30px">选择</th>
+        <th style="width:70px">操作</th>
+        <th style="width:180px">提现单号</th>
+        <th style="width:100px">用户</th>
+        <th style="width:100px">提现金额</th>
+        <th style="width:100px">实际转账</th>
+        <th style="width:100px">开户名</th>
+        <th style="width:200px">开户行</th>
+        <th style="width:180px">银行卡号</th>
+        <th style="width:180px">申请时间</th>
+        <th style="width:80px">类型</th>
+        <th style="width:60px">状态</th>    
+    </tr>
+    {set:$status=array("-1"=>"<span class='red'>申请被拒</span>","0"=>"<span class='green'>待处理</span>","1"=>"已转账")}
+    {set:$type=array("0"=>"可用余额提现","1"=>"商家余额提现")}
+    {query:name=balance_withdraw as wd fields=wd.*,us.name as uname join= left join user as us on wd.user_id eq us.id where= $where id=$obj page=1 order=wd.id desc }
+        <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+        <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                {if:$item['status']==0}
+                <li><a class="icon-pencil" href="javascript:withdrawAction({$item['id']});"> 审批</a></li>
+                {elseif:$item['status']==1}
+                <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
+                {/if}
+            </ul></div></div> </td>
+        <td >{$item['withdraw_no']}</td>
+        <td>{$item['uname']}</td>
+        <td>{$item['amount']}</td>
+        <td>{$item['real_amount']|" "}</td>
+        <td >{$item['open_name']}</td>
+        <td >{$item['open_bank']}（{$item['province']},{$item['city']}）</td>
+        <td >{$item['card_no']}</td>
+        <td >{$item['apply_date']}</td>
+        <td style="width:80px">{$type[$item['type']]}</td>
+        <td style="width:60px">{$status[$item['status']]}</td>
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<script type="text/javascript">
+    var refresh=false;
+    var form =  new Form();
+    $("#condition").on("click",function(){
+        $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/customer/withdraw_list}',method:'get'});},data:{'us.name':{name:'用户名'},'wd.open_name':{name:'开户名'},'wd.open_bank':{name:'开户行'},'wd.card_no':{name:'银行卡号'},'wd.amount':{name:'提现金额'},'wd.status':{name:'状态',values:{'-1':'拒绝',0:'待处理',1:'已转账'}}
+        }});
+    });
+    
+    function withdrawAction(id)
+    {
+        layer.open({
+            type: 2,
+            title:"审核提现请求",
+            area: ['700px', '400px'],
+            fixed: false, //不固定
+            maxmin: false,
+            content: '{url:/customer/withdraw_view/id/}'+id,
+            end:function(){
+                if(refresh){
+                    window.location.reload();
+                }
+            }
+          });
+    }
+    function close_dialog()
+    {
+        art.dialog({id:"withdraw-dialog"}).close();
+        tools_reload();
+    }
+    
+    function queryPayStatus(id){
+        var load = layer.load();
+        $.post("{url:/customer/withdraw_query}",{id:id},function(result){
+            layer.close(load);
+            if(result.status){
+                layer.confirm("代付状态："+result.pay_status, {
+                    btn: ['我知道啦'] //按钮
+                    ,title:"代付状态查询"
+                  }, function(){
+                      layer.closeAll();
+                  });
+            }else{
+                layer.msg(result.msg);
+            }
+        },'json');
+    }
+    function balanceQuery(){
+        var load =layer.load();
+        $.post("{url:/customer/df_balance_query}",{},function(result){
+            layer.close(load);
+            if(result.status){
+                layer.confirm("剩余备用金："+result.balance+"分<br>若备用金不足，请前往银联代付后台充值", {
+                    btn: ['我知道啦'] //按钮
+                    ,title:"备用金查询"
+                  }, function(){
+                      layer.closeAll();
+                  });
+            }else{
+                layer.msg(result.msg);
+            }
+        },'json');
+    }
+</script>

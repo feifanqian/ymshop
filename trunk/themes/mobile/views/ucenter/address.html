@@ -1,0 +1,33 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<div class="ma20">
+    <div class="m20"><a id="address_other" class="btn" href="{url:/ucenter/address_other}">添加新地址</a></div>
+    {list:items=$address}
+    <div class="weui_panel">
+        <div class="weui_panel_hd">{$item['accept_name']} {$item['mobile']}/{$item['phone']}</div>
+        <div class="weui_panel_bd">
+            <div class="weui_media_box weui_media_text">
+                <p class="weui_media_desc">{$parse_area[$item['province']]},{$parse_area[$item['city']]},{$parse_area[$item['county']]} {$item['addr']}</p>
+                <ul class="weui_media_info">
+                    <li class="weui_media_info_meta"><a href="javascript:;" class="weui_btn weui_btn_primary weui_btn_mini btn-modify" data-id="{$item['id']}">修改</a></li>
+                    <li class="weui_media_info_meta fr"><a href="javascript:;" class="weui_btn weui_btn_warn weui_btn_mini btn-delete" data-id="{$item['id']}">删除</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {/list}
+</div>
+<script type="text/javascript">
+    var delUrl = "{url:/ucenter/address_del/id/}";
+    var modifyUrl = "{url:/ucenter/address_other/id/}";
+    $(function () {
+        $(".btn-modify").click(function () {
+            location.href = modifyUrl + $(this).attr("data-id") + "?url={echo:urlencode(Req::args('url'))}";
+        });
+        $(".btn-delete").click(function () {
+            var that = this;
+            $.confirm("确认删除该地址?", function () {
+                location.href = delUrl + $(that).attr("data-id") + "?url={echo:urlencode(Req::args('url'))}";
+            });
+        });
+    });
+</script> 

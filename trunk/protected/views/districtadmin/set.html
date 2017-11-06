@@ -1,0 +1,289 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('validator');}
+<h2 class="page_title">{$node_index['name']}</h2>
+<div class="form2">
+    <form name="config_form" method="post" action="{url:/districtadmin/set}">
+<!--         <dl class="lineD">
+         <dt>专区功能</dt>
+                <dd>
+                <label><input type="radio" name="status" value="1" >开启</label>
+                <label><input type="radio" name="status" value="0">关闭</label>
+                <label>（关闭后，系统将冻结专区功能）</label>
+             </dd>
+        </dl>
+-->     
+        <dl class="lineD">
+            <dt>会员消费奖励：</dt>
+            <dd>
+                下级会员消费，上级会员获得账单金额<input name="income1" type="text" value="" class="small"/>%奖励，上级第一个代理商获得<input name="income2" type="text" value="" class="small"/>%奖励，会员所属经销商（专区主）<input name="income3" type="text" value="" class="small"/>%奖励，
+                会员所属经销商的邀请经销商获得<input name="income4" type="text" value="" class="small"/>%奖励，不存在不分配。
+        </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>会员升级奖励：</dt>
+            <dd>
+                下级会员升级为代理商，上级第一个代理商获得<input name="up_income1" type="text" value="" class="small"/>收益奖励和<input name="up_point1" type="text" value="" class="small"/>积分奖励和<input name="up_finance1" type="text" value="" class="small"/>分红点奖励，会员所属经销商（专区主）<input name="up_income2" type="text" value="" class="small"/>收益奖励和<input name="up_point2" type="text" value="" class="small"/>积分奖励和<input name="up_finance2" type="text" value="" class="small"/>分红点奖励，不存在不分配。
+        </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>①金额设置：</dt>
+            <dd>&nbsp;</dd>
+        </dl>
+        <dl class="lineD">
+            <dt>专区入驻加盟费：</dt>
+            <dd>
+                <input name="join_fee" type="text" value="" class="small"/>
+                <span>元</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>代理商入驻费：</dt>
+            <dd>
+                <input name="promoter_fee" type="text" value="" class="small" />
+                <span>元</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>最小提现金额：</dt>
+            <dd>
+                <input name="min_withdraw_amount" type="text" value="" class="small"/>
+                <span>元</span>
+            </dd>
+        </dl>
+<!--        <dl class="lineD">
+            <dt>专区代理商门槛：</dt>
+            <dd>
+                <input name="promoter_join_line" type="text" value="" class="small" pattern="int"/>
+                <span>元（需在商城消费多少元才能获得代理商资格）</span>
+            </dd>
+        </dl>-->
+        <dl class="lineD">
+            <dt>②代理商入驻奖励：</dt>
+            <dd>&nbsp;</dd>
+        </dl>
+        <dl class="lineD">
+            <dt>代理商入驻赠送：</dt>
+            <dd>
+                <input name="join_send_gift" readonly type="text" value="" class="small" onclick='add()'/>
+                <span><a href="javascript:;" onclick="add()" class="button">选择礼品</a></span>+
+                <input name="join_send_point" type="text" value="" class="small" />
+                <span>积分</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>代理商招募代理商：</dt>
+            <dd>
+                <input name="promoter_invite_promoter_money" type="text" value="" class="small" />
+                <span>元</span>+
+                <input name="promoter_invite_promoter_point" type="text" value="" class="small" />
+                <span>积分</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>经销商直推代理商：</dt>
+            <dd>
+                <input name="shop_invite_promoter_money" type="text" value="" class="small"/>
+                <span>元</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>经销商间推代理商：</dt>
+            <dd>
+                <input name="shop_invite_indirect_money" type="text" value="" class="small" />
+                <span>元</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>③比例设置：</dt>
+            <dd>&nbsp;</dd>
+        </dl>
+        <dl class="lineD">
+            <dt>提现手续费：</dt>
+            <dd>
+                <input name="withdraw_fee_rate" type="text" value="" class="small"/>
+                <span>%(提取收益到银行卡时的手续费)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>拓展展专区分成：</dt>
+            <dd>
+                <input name="percentage2join_fee" type="text" value="" class="small" pattern="int"/>
+                <span>%(拓展一个专区给推荐者的分成比例)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>普通用户分成：</dt>
+              <dd>
+                <input name="beneficiary_one" type="text" value="" class="small" pattern="int"/>
+                <span>%</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>代理商分成：</dt>
+              <dd>
+                <input name="beneficiary_two" type="text" value="" class="small" pattern="int"/>
+                <span>%(需大于普通用户分成)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>专区商户分成：</dt>
+            <dd>
+                <input name="beneficiary_three" type="text" value="" class="small" pattern="int"/>
+                <span>%</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>上级专区分成：</dt>
+            <dd>
+                <input name="beneficiary_four" type="text" value="" class="small" pattern="int"/>
+                <span>%</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>④线下分账比例设置：</dt>
+            <dd>&nbsp;</dd>
+        </dl>
+        <dl class="lineD">
+            <dt>基础分账比例：</dt>
+            <dd>
+                <input name="offline_base_rate" type="text" value="" class="small"/>
+                <span>%(提取线下商家收益基础提成比例)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>手续费比例：</dt>
+            <dd>
+                <input name="handling_rate" type="text" value="" class="small"/>
+                <span>%(基础收益手续费率)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>上级邀请人分成：</dt>
+            <dd>
+                <input name="promoter_rate" type="text" value="" class="small" pattern="int"/>
+                <span>%(上级邀请人分成比例)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>上级代理商分成：</dt>
+              <dd>
+                <input name="district_rate" type="text" value="" class="small" pattern="int"/>
+                <span>%(上级代理商分成比例)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>上级经销商分成：</dt>
+            <dd>
+                <input name="promoter2_rate" type="text" value="" class="small" pattern="int"/>
+                <span>%(上级经销商分成比例)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>平台收益分成：</dt>
+              <dd>
+                <input name="plat_rate" type="text" value="" class="small" pattern="int"/>
+                <span>%</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>红包收益分成：</dt>
+            <dd>
+                <input name="redbag_rate" type="text" value="" class="small" pattern="int"/>
+                <span>%</span>
+            </dd>
+        </dl>
+        
+        <dl class="lineD">
+            <dt>其他设置：</dt>
+            <dd>&nbsp;</dd>
+        </dl>
+        <dl class="lineD">
+            <dt>赠送经营代理：</dt>
+            <dd>
+                <input name="invite_promoter_num" type="text" value="" class="small" pattern="int"/>
+                <span>个(成功邀请多少个代理商，免费送经销商代理权)</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>专区自动审核:</dt>
+            <dd>
+                <label><input type="radio" name="auto_pass" value="1" >开启</label>
+                <label><input type="radio" name="auto_pass" value="0">关闭</label>
+                <span>（开启后，若支付了加盟费，则自动创建专区）</span>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>收益锁定时间：</dt>
+            <dd>
+                <input name="income_lockdays" type="text" value="" class="small" pattern="int"/>
+                <span>天（linux定时任务中解锁）</span>
+            </dd>
+        </dl>
+         
+        <div class="center">
+            <input type="submit" name="submit" class="button action fn" value="确 定">
+        </div>
+    </form>
+     <div id='add' style="display:none;width:400px;height:60px;padding-top: 20px;padding-left: 20px;">
+          <input type="text"  id="product_ids" readonly value="" alt="必需选择商品才能添加！" > 
+          <a href="javascript:;" onclick="reset()" class="button">重置</a>
+          <a href="javascript:;" onclick="select()" class="button">选择商品 ...</a>
+          <p>可有多个可选项，用户选择一个</p>
+     </div>
+</div>
+
+<script>
+    {if:isset($message)}
+    art.dialog.tips('<p class="success">{$message}</p>');
+    {/if}
+    {if:isset($error)}
+    art.dialog.tips('<p class="error">{$error}</p>');
+    {/if}
+    var form = new Form('config_form');
+    {set:$config = Config::getInstance();}
+    var data = {echo:JSON::encode($config->get('district_set'))};
+    form.init(data);
+    $("#product_ids").val($("input[name=join_send_gift]").val());
+    function add(){
+        layer.open({
+        type: 1,
+        area: ['420px', '200px'],
+        title: "选择赠送礼品（多选一）", //不显示标题
+        btn:['确定','取消'],
+        zindex:1,
+        yes:function(){
+            $("input[name=join_send_gift]").val($("#product_ids").val());
+            layer.closeAll();
+        },
+        content: $('#add'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+      });
+    }
+    function select(){
+//        art.dialog.open('{url:/marketing/radio_goods_select}',{id:'goods_select',title:'选择商品：',width:900,height:500,padding: '10px'});
+       index =  layer.open({
+            id:"select",
+            type: 2,
+            title:"选择商品",
+            area: ['880px', '520px'],
+            fixed: false, //不固定
+            maxmin: false,
+            zindex:2,
+            content: '{url:/marketing/multi_product_select}',
+          });
+    }
+    function reset(){
+        $("#product_ids").val("");
+    }
+    function callback(checked){
+        var v = $("#product_ids").val();
+        if(v==""){
+            $("#product_ids").val(checked.join("|"));
+        }else{
+            var arr = v.split("|");
+            var arr = $.unique($.merge(arr,checked));
+            $("#product_ids").val(arr.join("|"));
+        }
+    }
+</script>

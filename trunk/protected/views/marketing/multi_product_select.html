@@ -1,0 +1,81 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+<div style="padding:10px;margin-bottom: 40px;">
+<form action="" method="post" >
+    <input name="goods_id" type="hidden" value="{$goods_id}">
+<div class="tools_bar clearfix" >
+    <span class="fr"><input type="text"  value="{$s_content}" name="s_content" /><a href='javascript:;' onclick="tools_submit({action:'{url:/marketing/multi_product_select}'})" class="fr icon-search" style="" ></a></span>
+    <span class="fr"><select name="s_type"><option value="0">全部</option><option value="1">商品编号</option><option value="2">商品名</option></select></span>
+</div>
+<table class="default" >
+  <colgroup>
+    <col width="60"/>
+    <col />
+    <col width="100"/>
+    <col width="100"/>
+    <col width="100"/>
+  </colgroup>
+    <tr>
+        <th>选择</th>
+        <th>商品名称</th>
+        <th>规格</th>
+        <th>零售价</th>
+        <th>库存</th>
+    </tr>
+    </table>
+<div style="overflow: auto; height: 300px;">
+<table class="default" style="border-top: 0">
+  <colgroup>
+    <col width="60"/>
+    <col />
+    <col width="100"/>
+    <col width="100"/>
+    <col width="100"/>
+  </colgroup>
+     {if:$where=="1=1"}
+      {set:$page_size = 10;}
+    {else:}
+      {set:$page_size = 100;} 
+    {/if}
+    {query:name=products as p join=left join goods as g on p.goods_id eq g.id fields=p.id as product_id,p.store_nums,p.spec,p.sell_price,g.name  id=$obj where= $where page=1 pagesize=$page_size order=p.id desc }
+         {set:$spec = $item['spec']==""?array():unserialize($item['spec']);}
+         {set:$item['spec']="";}
+         {if:!empty($spec)}
+           {list:items=$spec item=$vv}
+               {set:$item['spec'].= $vv['name'].":".$vv['value'][1]." ";}
+           {/list}
+         {else:}
+            {set:$item['spec']="无";}
+         {/if}
+        <tr><td><input type="checkbox" name="product_id[]" value="{$item['product_id']}"></td><td>{$item['name']}</td><td>{$item['spec']}</td><td>{$item['sell_price']}</td><td>{$item['store_nums']}</td></tr>
+    {/query}
+</table>
+</div>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+</div>
+<div class="alone_footer tc"><button class="btn" onclick="add()">添加选定</button>&nbsp;&nbsp;<button class="btn" onclick="finish()">完成</button></div>
+
+<script type="text/javascript">
+    function add(){
+        if($("input[name='product_id[]']:checked").length>0){
+              var checked = new Array();
+              $("input[name='product_id[]']:checked").each(function(){
+                 checked.push($(this).val());  
+              });
+              window.parent.callback(checked);
+        }else{
+           parent.layer.msg("请至少选择一个");
+        }
+    }
+    function finish(){
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭   
+    }
+    var form =  new Form();
+    form.setValue('s_type','{$s_type}');
+    form.setValue('s_content','{$s_content}');
+</script>

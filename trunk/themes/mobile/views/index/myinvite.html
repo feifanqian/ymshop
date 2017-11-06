@@ -1,0 +1,27 @@
+
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}?v=20170719" />
+<style>
+    .weui_dialog_visible{
+        top:10%;
+    }
+</style>
+<div class="invite_bg" style="visibility:visible;">
+    <div class="invite_main">
+        {if:$user['avatar']==""}
+        {set:$user['avatar']="static/images/avatar.jpeg"}
+        {/if}
+        <div class="invite_avatar"><img src="{echo:Url::urlFormat('@'.$user['avatar'])}" /></div>
+        <h3 class="invite_name">{$user['real_name']|$user['nickname']}</h3>
+        <div class="invite_qr"><img src="/user/buildinvite?uid={$user['id']|0}" /></div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var color_list = {0:'brown',1:'chocolate',2:'darkorange',3:'lightcoral',4:'orchid',5:'maroon'};
+        var index = parseInt(5*Math.random());
+        $('.invite_bg').css('background-color',color_list[index]);
+        $(".invite_main").height($(".invite_main").width() / 0.6344);
+        $(".invite_bg").css("visibility", "visible");
+        $(".invite_bg").height($(document).height() - 98);
+    });
+</script>

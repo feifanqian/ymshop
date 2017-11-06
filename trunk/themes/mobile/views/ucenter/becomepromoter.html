@@ -1,0 +1,282 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<style>
+    .select-item p{
+        overflow: hidden;
+        text-overflow:ellipsis;   
+        whitewhite-space: nowrap;
+        width:300px;
+        height:50px;
+        line-height: 25px;
+        font-size:14px;
+    }
+    #current_select_1_gift p{
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        whitewhite-space: nowrap;
+        width:220px;
+        height:50px;
+        line-height: 20px;
+        font-size:14px;
+        float: right;
+    }
+    .tips span{
+        width: 200px;
+        float:right;
+    }
+</style>
+<div class="weui-msg" style="padding-top:5px;">
+    <div class="weui-msg__icon-area" style="margin-bottom:5px;">
+        <i class="weui-icon-info weui-icon_msg"></i>
+    </div>
+    <div class="weui-msg__text-area">
+        <p class="weui-msg__desc">请您确认信息</p>
+    </div>
+
+</div>
+<div class="weui-cells weui-cells_form">
+    <input type="hidden" name="reference" value="{$reference|''}">
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">专区名称</label></div>
+        <div class="weui-cell__bd">
+            <input name="name" class="weui-input" type="text" placeholder="请输入专区名称" value="{$data['name']}" readonly="true">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">具体位置</label></div>
+        <div class="weui-cell__bd">
+            <input name="location" class="weui-input" type="text"  placeholder="请输入具体的位置信息" value="{$data['location']}" readonly="true">
+        </div>
+    </div>
+    {if:isset($data['desc'])&&$data['desc']!=""}
+    <div class="weui-cell">
+        <p style='margin-top:5px;color: #888;text-align: left;font-size: 14px;'>{$data['desc']}</p>
+    </div>
+    {/if}
+</div>
+<div class="weui_cells weui_cells_access">
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__hd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">入驻费用</label>
+                <em class="weui-form-preview__value">¥{$config['promoter_fee']}&nbsp;&nbsp;&nbsp;</em>
+            </div>
+        </div>
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label" style="line-height:70px;">选择礼品</label>
+                <span class="weui-form-preview__value"> 
+                    <a class="weui_cell open-popup" id="gift_select_open_popup" data-target="#select_gift" href="javascript:;">
+                        <div class="weui_cell_bd weui_cell_primary" id="current_select_1_gift">
+                        </div>
+                        <div class="weui_cell_ft"></div>
+                    </a>
+                </span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label" style="line-height:70px;">收货地址</label>
+                <span class="weui-form-preview__value">
+                    {set:$addressone=reset($address)}
+                    {if:$addressone}
+                    {set:$item=$addressone}
+                    <a class="weui_cell open-popup" data-target="#selectaddress" href="javascript:;">
+                        <div class="weui_cell_bd weui_cell_primary" id='currentaddress'>
+                            <p>{$item['accept_name']} {$item['mobile']}</p>
+                            <p style="color:#999;">{$parse_area[$item['province']]} {$parse_area[$item['city']]} {$parse_area[$item['county']]} {$item['addr']}</p>
+                        </div>
+                        <div class="weui_cell_ft"></div>
+                    </a>
+                    {else:}
+                    <a class="weui_cell" href="{url:/ucenter/address_other}?url={echo:urlencode(Url::pathinfo())}">
+                        暂未添加地址,点击添加新地址
+                    </a>
+                    {/if}
+                </span>
+            </div>
+            {set:$paydict = array();}
+            {list:items=$paytypelist}
+            {set:$paydict[]=array('title'=>$item['pay_name'], 'value'=>$item['id']);}
+            {/list}
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label" style="line-height:70px;">支付方式</label>
+                <span class="weui-form-preview__value"> 
+                    <div class="weui_cell_ft" style="padding-top:20px;padding-right:18px;">
+                    <input class="weui_input" id="paytype" name='paytype' type="text" value="{$paydict[0]['title']}" data-values="{$paydict[0]['value']}" style='text-align: right;display:inline-block;width:auto;' />
+                   </div>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<label for="weuiAgree" class="weui-agree">
+    <input id="Agree" type="checkbox" class="weui-agree__checkbox">
+    <span class="weui-agree__text">
+        阅读并同意<a onclick="showItem();">《服务条款》</a>
+    </span>
+</label>
+<form id="pay-form" action="{url:/payment/pay_district}" method="post">
+    <input id="gift" type="hidden" name="gift" value="" />
+    <input id="address_id" type="hidden" name="address_id" value="" />
+    <input type="hidden" name="reference" value="{$reference}" />
+    <input type="hidden" name="invitor_role" value="{$invitor_role}" />
+    <input type="hidden" name="payment_id" value="{$paydict[0]['value']}">
+    <div class="weui-msg__opr-area">
+    <p class="weui-btn-area">
+        <input type="submit" value="下一步" class="weui_btn weui_btn_primary weui_btn_block" />
+        <br>
+        <a href="{url:/}" class="weui-btn weui-btn_default">放 弃</a>
+    </p>
+</div>
+</form>
+<div id="selectaddress" class="weui-popup-container popup-bottom">
+    <div class="weui-popup-modal">
+        <div class="toolbar">          
+            <div class="toolbar-inner">          
+                <a href="javascript:;" class="picker-button close-popup">完成</a>          
+                <h1 class="title"></h1>          
+            </div>          
+        </div>
+        <div class="modal-content">
+            <div class="weui_cells weui_cells_radio">
+                {set:$address_default=0;}
+                {list:items=$address}
+                <label class="weui_cell weui_check_label" for="x{$item['id']}">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>{$item['accept_name']} {$item['mobile']}</p>
+                        <p style="color:#999">{$parse_area[$item['province']]} {$parse_area[$item['city']]} {$item['addr']} </p>
+                    </div>
+                    <div class="weui_cell_ft">
+                        <input type="radio" class="weui_check" name="select_address_id" value="{$item['id']}" id="x{$item['id']}" {if:$item['is_default']==1}{set:$address_default=$item['id']}checked="checked"{/if} />
+                               <span class="weui_icon_checked"></span>
+                    </div>
+                </label>
+                {/list}
+            </div>
+        </div>
+    </div>
+</div>
+<div id="select_gift" class="weui-popup-container popup-bottom">
+    <div class="weui-popup-modal">
+        <div class="toolbar">          
+            <div class="toolbar-inner">          
+                <a href="javascript:;" class="picker-button close-popup">完成</a>          
+                <h1 class="title"></h1>          
+            </div>          
+        </div>
+        <div class="modal-content" style="max-height:400px;">
+            <div class="weui_cells weui_cells_radio">
+                {list:$items=$gift_list}
+                <label class="weui_cell weui_check_label" for="s1{$item['id']}">
+                    <div class="weui_cell_bd weui_cell_primary select-item">
+                        <p><img src="{url:@$item[img]}" style="height:50px;width:50px;border-radius:25px;">&nbsp;&nbsp;{$item['name']}</p> 
+                    </div>
+                    <div class="weui_cell_ft">
+                        <input type="radio" class="weui_check" name="select_gift_id" id="s1{$item['id']}" value="{$item['id']}" {if:$key==0}checked="checked"{/if}/>
+                               <span class="weui_icon_checked"></span>
+                    </div>
+                </label>
+                {/list}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#paytype").select({
+            title: "选择支付方式",
+            items: {echo: json_encode($paydict); },
+            onChange: function () {
+                    $("input[name='payment_id']").val($("#paytype").attr("data-values"));
+                }
+            }
+        );
+    });
+    $(function () {
+        //信息框
+        layer.open({
+            content: '成为代理商需要支付{$config['promoter_fee']}元入驻费用，入驻成功后系统将赠送给您所选商城产品一套，并享有推荐资格，享受推广收益。请在入驻界面选择礼品及收货地址，点击下一步发起支付。'
+            , style: 'background-color:#09C1FF; color:#fff; border:none;' //自定风格
+            , btn: '我知道了'
+        });
+    });
+    function notify(msg) {
+        layer.open({
+            content: msg
+            , skin: 'msg'
+            , time: 4 //4秒后自动关闭
+        });
+    }
+    function showItem() {
+        layer.open({
+            title: [
+                '服务条款',
+                'background-color:#8DCE16; color:#fff;'
+            ]
+            , anim: 'up'
+            , content: '<p style="text-align: left;">本网站及APP的各项内容和服务的所有权归本公司拥有。用户在接受本服务之前，请务必仔细阅读本条款。用户使用服务，或通过完成注册程序，表示用户接受所有服务条款。</p>'
+            , btn: ['同意', '取消']
+            , yes: function (index) {
+                $("#Agree").prop('checked', true);
+                layer.close(index);
+            }
+            , no: function (index) {
+                $("#Agree").prop('checked', false);
+                layer.close(index);
+            }
+        });
+    }
+    
+    $("input[name='select_address_id']").on("click", function () {
+        $("#address_id").val($(this).val());
+        $("#currentaddress").html($(this).closest(".weui_cell").find(".weui_cell_bd").html());
+        $(".address-list li").removeClass("selected");
+        $("input[name='address_id']").removeAttr("checked");
+        $("input[name='address_id']", this).attr("checked", "checked");
+        $(this).addClass("selected");
+        $("a.default").hide();
+        $("a.default", this).show();
+        $(".close-popup").trigger("click");
+    });
+    if($("input[name='select_address_id']:checked").length>0){
+         $("input[name='select_address_id']:checked").trigger("click");//有默认选默认
+    }else{
+         $("input[name='select_address_id']:first").trigger("click");//默认选第一个
+    }
+    
+    $("input[name='select_gift_id']").on("click", function () {
+        $("#gift").val($(this).val());
+        $("#current_select_1_gift").html($(this).closest(".weui_cell").find(".weui_cell_bd").html());
+        $(".close-popup").trigger("click");
+    });
+    $("input[name='select_gift_id']:checked").trigger("click");
+    $("#recharge-form").submit(function () {
+        if (!$("input[name=recharge]").val()) {
+            $.toast("请输入充值金额", "text");
+            return false;
+        }
+        if (!$("input[name=payment_id]").val()) {
+            $.toast("请选择充值方式", "text");
+            return false;
+        }
+        if ($("input[name='package']").val() != 0) {
+            if ($("#address_id").val() == "" || $("#address_id").val() == "0") {
+                $.toast("请选择地址信息", "text");
+                return false;
+            }
+        }
+        $("select[name='recharge_type']").removeAttr('disabled');
+    });
+    $("#pay-form").submit(function () {
+       if(!$("#Agree").is(":checked")){
+              notify("您还没有同意《服务条款》");
+              return false;
+        }
+        if (!$("input[name=gift]").val()) {
+            notify("请选择礼品");
+            return false;
+        }
+        if (!$("input[name=address_id]").val()) {
+            notify("请选择收货地址");
+            return false;
+        }
+    });
+</script>

@@ -1,0 +1,27 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style>
+    .weui_media_box .weui_media_desc {
+        line-height:25px;
+        color:#666;
+    }
+    .weui_media_box .weui_media_desc b {
+        margin-right:5px;
+        font-weight:normal;
+        color:#888;
+    }
+</style>
+{query:name=balance_log where=user_id eq $user[id] order=id desc page=1 id=$obj}
+<div class="weui_panel weui_panel_access">
+    <div class="weui_panel_hd"><i class="ymicon icon-time"></i> {$item['time']}</div>
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_text">
+            <p class="weui_media_desc"><b>{echo:$item['amount']>=0?'<i class="ymicon icon-balance-add"></i> 增加':'<i class="ymicon icon-balance-down"></i> 消耗'}余额:</b><span class="{echo:$item['amount']>=0?'green':'red'}">{$item['amount']}</span></p>
+            <p class="weui_media_desc"><b><i class="ymicon icon-banlance-remain"></i> 剩余余额:</b>{$item['amount_log']}</p>
+            <p class="weui_media_desc"><b><i class="ymicon icon-note"></i> 备注与说明:</b>{$item['note']}</p>
+        </div>
+    </div>
+</div>
+{/query}
+<div class="page-nav tc">{echo:$obj->pagebar(4)}</div>
+
+{set:$curtab='asset';}

@@ -1,0 +1,15 @@
+
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+{set:$help_category=array()}
+{query:name=help}
+{set:$help_category[$item['category_id']][]=$item}
+{/query}
+{query:name=help_category }
+    <ul class="box list-nav">
+        {if:isset($help_category[$item['id']])}
+        {list:items=$help_category[$item['id']]}
+        <li class="item"><a class="more"  href="{url:/index/help/id/$item[id]}"><div style="padding-left:0" class="un">{$item['title']}</div></a></li>
+        {/list}
+        {/if}
+    </ul>
+{/query}

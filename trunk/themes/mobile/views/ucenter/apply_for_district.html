@@ -1,0 +1,124 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<div class="weui-cells__title">请您填写相关信息</div>
+<div class="weui-cells weui-cells_form">
+    <input type="hidden" name="reference" value="{$reference|''}">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">专区名称</label></div>
+                <div class="weui-cell__bd">
+                    <input name="name" class="weui-input" type="text" placeholder="请输入专区名称">
+                </div>
+            </div>
+             <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">具体位置</label></div>
+                <div class="weui-cell__bd">
+                    <input name="location" class="weui-input" type="text"  placeholder="请输入具体的位置信息">
+                </div>
+            </div>
+     <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">联系人</label></div>
+                <div class="weui-cell__bd">
+                    <input name="linkman" class="weui-input" type="text"  placeholder="请输入联系人">
+                </div>
+            </div>
+     <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
+                <div class="weui-cell__bd">
+                    <input name="linkmobile" class="weui-input" type="number" placeholder="请输入联系电话">
+                </div>
+            </div>
+ </div>
+<label for="weuiAgree" class="weui-agree">
+            <input id="Agree" type="checkbox" class="weui-agree__checkbox">
+            <span class="weui-agree__text">
+                阅读并同意<a onclick="showItem();">《服务条款》</a>
+            </span>
+</label>
+<div class="weui-btn-area">
+            <a class="weui-btn weui-btn_primary" href="javascript:" id="submit">确定</a>
+</div>
+
+<script>
+  function showItem(){
+      layer.open({
+            title: [
+              '服务条款',
+              'background-color:#8DCE16; color:#fff;'
+            ]
+            ,anim: 'up'
+            ,content: '<p style="text-align: left;">本网站及APP的各项内容和服务的所有权归本公司拥有。用户在接受本服务之前，请务必仔细阅读本条款。用户使用服务，或通过完成注册程序，表示用户接受所有服务条款。</p>'
+            ,btn: ['同意', '取消']
+            ,yes: function(index){
+                $("#Agree").prop('checked',true);
+                layer.close(index);
+            }
+            ,no:function(index){
+                 $("#Agree").prop('checked',false);
+                layer.close(index);
+            }
+      });
+  }    
+  function notify(msg){
+       layer.open({
+        content: msg
+        ,skin: 'msg'
+        ,time: 4 //4秒后自动关闭
+      });
+  }
+  $("#submit").click(function(){
+      if(!$("#Agree").is(":checked")){
+          notify("您还没有同意《服务条款》");
+          return false;
+      } else{
+          $(".weui-input").each(function(){
+              if($(this).val()==""){
+                  notify("请您完善申请信息");
+                  $(this).focus();
+                  return;
+              } 
+          });
+          var index = layer.open({
+                 type: 2
+                ,content: '正在提交'
+          });
+          var name = $("input[name='name']").val();
+          var location = $("input[name='location']").val();
+          var linkman = $("input[name='linkman']").val();
+          var linkmobile = $("input[name='linkmobile']").val();
+          var reference = $("input[name='reference']").val();
+          $.post("{url:/ucenter/apply_for_district}",{name:name,location:location,linkman:linkman,linkmobile:linkmobile,reference:reference,free:{$free}},function(result){
+              layer.close(index);
+              if(result.status=='success'){
+                  {if:$free==1}
+                       layer.open({
+                        content: '申请已经提交，请等待后台审核！'
+                        ,btn: '我知道了'
+                        ,shadeClose:false
+                        ,yes:function(){
+                             window.location.href="{url:/index/index}";
+                        }
+                      });
+                  {else:}
+                        layer.open({
+                            content: '申请已经提交！请和客服人员洽谈合作事宜'
+                            ,btn: '完成'
+                            ,shadeClose:false
+                            ,yes:function(){
+                                 window.location.href="{url:/index/index}";
+                            }
+                      });
+//                      layer.open({
+//                        content: '申请已经提交，您还需要支付加盟费用，点击下一步，即可发起支付！'
+//                        ,btn: '下一步'
+//                        ,shadeClose:false
+//                        ,yes:function(){
+//                            window.location.href="{url:/ucenter/district_pay/id/}"+result.id;
+//                        }
+//                      });
+                  {/if}
+              }else{
+                  notify(result.msg);
+              }
+          },'json');
+      }
+  });
+</script>

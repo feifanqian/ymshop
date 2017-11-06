@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <link rel="stylesheet" href="{url:#css/weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/jquery.weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/iconfont.css}">
+        <link rel="stylesheet" href="{url:#css/common.css}?v=20170718">
+        <link rel="stylesheet" href="{url:#css/font-awesome.min.css}">
+        <link rel="stylesheet" href="//at.alicdn.com/t/font_cudhf587rx561or.css">
+        <script type="text/javascript" src="{url:#js/layer_mobile/layer.js}"></script>
+        {echo:JS::import('jquery');}
+        {set:$title = isset($seo_title)?$seo_title:(isset($site_title)?$site_title:'圆梦共享网');$title=TString::msubstr($title,0,12);}
+        <title>{$title}</title>
+    </head>
+    <body>
+        <div class="viewport">
+            {widget:name=sub_navs action=header title=$title}
+            {if:isset($msg) && is_array($msg)}
+            <div class="ma20">
+                <div class="message_{$msg[0]}">{$msg[1]}</div>
+            </div>
+            {/if}
+            {__viewcontents}
+
+            {set:$curtab=isset($curtab)?$curtab:Req::args('con');}
+            {widget:name=tabbar action=item cart=$cart current=$curtab}
+        </div>
+        <script type="text/javascript" src="{url:#js/jquery.weui.min.js}"></script>
+        <script type="text/javascript" src="{url:#js/common.js}"></script>
+    </body>
+</html>

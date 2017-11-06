@@ -1,0 +1,140 @@
+{echo:JS::import("form")}
+<div style="overflow: auto;width:700px;height:400px;">
+    <style type="text/css">
+ #box{position: relative; width: 400px; height: 50px; border: 1px solid #eee; margin:  50px auto 0;}
+ #bg{height: 10px; margin-top: 19px; border: 1px solid #ddd; border-radius: 5px; overflow: hidden;}
+ #bgcolor{background: #ccc; width: 0; height: 10px; border-radius: 5px;}
+ #bt{width: 34px; height: 34px; border-radius: 17px; overflow: hidden; position: absolute; left: 0px; margin-left: -17px; top: 8px; cursor: pointer; 
+     background-image: url(../../../static/images/icons.png);
+    display: inline-block;
+    vertical-align: middle; 
+    background-position: -163px -83px;
+ }
+ #text{width: 200px; margin: 0 auto; font-size: 16px; line-height: 2em;}
+ tr:nth-child(even){
+     background:#f1f2f3;
+ }
+ td{
+   text-align: center;
+   height: 35px;  
+ }
+</style>
+ <div id="box">
+  <div id="bg">
+   <div id="bgcolor"></div>
+  </div>
+     <div id="bt"></div>
+ </div>
+ <div id="text">{if:$rate!=""}支付比例：{$rate}%{else:}&nbsp;{/if}</div>
+        <div>
+        <table align="center" width="100%" style="border-collapse: collapse;" >
+                   <tr><th width="10%" style="text-align: center;">货号</th><th width="20%" style="text-align: center;">规格</th><th width="10%" style="text-align: center;">销售价</th><th width="20%" style="text-align: center;">需支付华点价值（RMB）</th><th width="20%" style="text-align: center;">需支付华点<br/>（RMB:华点=1:{$rmb2huabi}）</th><th width="20%" style="text-align: center;">还需支付人民币</th>
+                   </tr>
+                {list:items=$products item=$product}  
+                <tr class="area" style="border-top: 1px solid gray;border-bottom: 1px solid gray;">
+                 <td>{$product['pro_no']}</td><td>{$product['spec']}</td><td style="text-align: center;" class="price">{$product['sell_price']}</td>
+                 <td class="huabi_value" style="text-align: center;">{if:isset($rate)}{echo:round($product['sell_price']*$rate/100,2)}{/if}</td>
+                 <td class="huabi_amount"  style="text-align: center;">
+                     {if:isset($rate)&&$rmb2huabi!="?"}{echo: round(round($product['sell_price']*$rate/100,2)*$rmb2huabi) }{/if}
+                 </td>
+                 <td class="still_pay" style="text-align: center;">
+                     {if:isset($rate)}{echo:($product['sell_price']-round($product['sell_price']*$rate/100,2))}{/if}
+                 </td>
+                </tr>
+                {/list}
+               </table>
+
+      </div> 
+      <div style="text-align: center;">
+            <form action="{url:/goods/save_huabipay_set}" method="post" id="payset">
+                <input type="hidden" value="{$rate}" id="rate" name="rate">
+                <input type="hidden" value="{$gid}" name="gid">
+                <input type="button" value="保存设置" id="_submit" style="cursor: pointer;">
+            </form>
+      </div>
+</div>
+ <script type="text/javascript">
+ (function($){
+  var $box = $('#box');
+  var $bg = $('#bg');
+  var $bgcolor = $('#bgcolor');
+  var $btn = $('#bt');
+  var $text = $('#text');
+  var $rate = $('#rate');
+  var statu = false;
+  var ox = 0;
+  var lx = 0;
+  var left = 0;
+  var bgleft = 0;
+  if($rate.val()>0){
+      left = $rate.val()*4;
+     $btn.css('left',left);
+     $bgcolor.width(left);
+  }
+   $btn.mousedown(function(e){
+    lx = $btn.offset().left;
+    ox = e.pageX - left;
+    statu = true;
+   });
+   $(document).mouseup(function(){
+    statu = false;
+   });
+   $box.mousemove(function(e){
+    if(statu){
+     left = e.pageX - ox;
+     if(left < 0){
+      left = 0;
+     }
+     if(left > 400){
+      left = 400;
+     }
+     $btn.css('left',left);
+     $bgcolor.width(left);
+     $rate.val(parseInt(left/4));
+     $text.html('支付比例:' + parseInt(left/4) + '%');
+     calculate(parseInt(left/4));
+    }
+   });
+   $bg.click(function(e){
+    if(!statu){
+     bgleft = $bg.offset().left;
+     left = e.pageX - bgleft;
+     if(left < 0){
+      left = 0;
+     }
+     if(left > 400){
+      left = 400;
+     }
+     $btn.css('left',left);
+     $bgcolor.stop().animate({width:left},400);
+     $rate.val(parseInt(left/4));
+     $text.html('支付比例:' + parseInt(left/4) + '%');
+     calculate(parseInt(left/4));
+    }
+   });
+   $("#_submit").click(function(){
+        $.post("{url:/goods/save_huabipay_set}", $("#payset").serialize(),
+                function(data){
+                  if(data['status'] =="success"){
+                        window.parent.location.reload();
+                  }else{
+                      alert('操作失败了，请重试');
+                  }
+           },'json');
+   });
+   function calculate(rate){
+       var rmb2huabi = {$rmb2huabi};
+       $(".area").each(function(){
+          var price = $(this).children(".price").text();
+          var huabi_value = (price*rate/100).toFixed(2);
+          $(this).children(".huabi_value").text(huabi_value);
+          $(this).children(".still_pay").text((price-huabi_value).toFixed(2));
+          if(rmb2huabi=="?"){
+              $(this).children(".huabi_amount").text("????");
+          }else{
+              $(this).children(".huabi_amount").text(Math.round(huabi_value*rmb2huabi));
+          }
+       });
+   }
+ })(jQuery);
+ </script>

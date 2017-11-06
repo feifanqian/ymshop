@@ -1,0 +1,126 @@
+<script type="text/javascript" src="{url:@static/js/layer/layer.js}"></script>
+<script src="{url:@static/js/echarts.common.min.js}"></script>
+<div>  
+<div>
+    <div style="width:100px;height: 15px;margin-top: 18px;margin-left: 88px;">
+    <select  name="period" style="padding-right:0px;">
+        <option value="1">今天</option>
+        <option value="2">昨天</option>
+        <option value="3">最近7天</option>
+        <option value="4">最近30天</option>
+    </select>
+    </div>
+    <div id='achievement' style="width:100%;min-height:450px;">
+    </div>
+</div>
+<script>
+var option = {
+    tooltip : {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['推广销量']
+    },
+    toolbox: {
+        show : true,
+        orient: 'vertical',      // 布局方式，默认为水平布局，可选为：
+                                   // 'horizontal' ¦ 'vertical'
+        x: 'right',                // 水平安放位置，默认为全图右对齐，可选为：
+                                   // 'center' ¦ 'left' ¦ 'right'
+                                   // ¦ {number}（x坐标，单位px）
+        y: 'center',                  // 垂直安放位置，默认为全图顶端，可选为：
+                                   // 'top' ¦ 'bottom' ¦ 'center'
+                                   // ¦ {number}（y坐标，单位px）
+        color : ['#1e90ff','#22bb22','#4b0082','#d2691e'],
+        backgroundColor: 'rgba(0,0,0,0)', // 工具箱背景颜色
+        borderColor: '#ccc',       // 工具箱边框颜色
+        borderWidth: 0,            // 工具箱边框线宽，单位px，默认为0（无边框）
+        padding: 5,                // 工具箱内边距，单位px，默认各方向内边距为5，
+        showTitle: false,
+        feature : {
+            magicType: {
+                show : true,
+                title : {
+                    line : '动态类型切换-折线图',
+                    bar : '动态类型切换-柱形图',
+                },
+                type : ['line', 'bar']
+            },
+            restore : {
+                show : true,
+                title : '还原',
+                color : 'black'
+            },
+            saveAsImage : {
+                show : true,
+                title : '保存为图片',
+                type : 'jpeg',
+                lang : ['点击本地保存'] 
+            },
+           mark : {show: true},
+        }
+    },
+    calculable : true,
+    dataZoom : {
+        show : true,
+        realtime : true,
+        start : 0,
+        end : 100
+    },
+    xAxis : [
+        {
+            type : 'category',
+            boundaryGap : false,
+            data : {echo:json_encode($data['x'])}
+            
+        }
+    ],
+    yAxis : [
+        {   
+            name : '销售额',
+            type : 'value'
+        }
+    ],
+    series : [
+        {
+            name:'推广销量',
+            type:'line',
+            data:{echo:json_encode($data['y'])},
+             markPoint : {
+                data : [
+                    {type : 'max', name: '最大值'},
+                    {type : 'min', name: '最小值'}
+                ]
+            },
+            markLine : {
+                data : [
+                    {type : 'average', name: '平均值'}
+                ]
+            }
+        },
+    ]
+};
+$(function(){
+    $("select[name='period']").change(function(){
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        var period = $(this).val();
+        setTimeout(function(){
+        $.get('{url:/districtadmin/chart/role_type/$role_type/user_id/$user_id}/period/'+period,{},function(result){
+            layer.close(index);
+            if(result.status=='success'){
+                option.xAxis[0].data=result.data.x;
+                option.series[0].data=result.data.y;
+                var myChart = echarts.init(document.getElementById('achievement'));
+                myChart.setOption(option);
+            }else{
+                layer.msg(result.msg);
+            }
+        },'json');
+   
+    },1500);
+     });
+    var myChart = echarts.init(document.getElementById('achievement'));
+     myChart.setOption(option);
+});
+</script>
+

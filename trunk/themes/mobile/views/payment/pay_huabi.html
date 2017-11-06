@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        <meta name="author" content=""/>
+        <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <link rel="stylesheet" href="{url:#css/weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/jquery.weui.min.css}">
+        <link rel="stylesheet" href="//at.alicdn.com/t/font_1467108026_4748666.css">
+        <link rel="stylesheet" href="{url:#css/common.css}">
+        {echo:JS::import('jquery');}
+
+        <!--<script src="{url:#js/jquery.mobile-1.4.3.min.js}"></script>-->
+        <script type="text/javascript" src="{url:#js/jquery.weui.min.js}"></script>
+        <script type="text/javascript" src="{url:#js/common.js}"></script>
+        {set:$title = "充值成功";}
+        <title>充值成功</title>
+    </head>
+    <body>
+        <div class="viewport">
+            {widget:name=sub_navs action=header}
+            <div id="step1">
+                <div class="weui_panel">
+                    <div class="weui_panel_hd">
+                        虚拟币剩余数量
+                        <div class="color-orange fr">9999个</div>
+                    </div>
+                    <div class="weui_panel_bd">
+                        <div class="weui_media_box weui_media_text">
+                            <h4 class="weui_media_title">
+                                {$_POST['total_fee']}金点
+                                <div class="red fr">消耗{$_POST['total_fee']}个</div>
+                            </h4>
+                            <p class="weui_media_desc">买多点商城兑换{$_POST['total_fee']}金点</p>
+                            <ul class="weui_media_info">
+                                <li class="weui_media_info_meta">买多点有限公司</li>
+                                <li class="weui_media_info_meta weui_media_info_meta_extra">时间 {echo:date('m-d H:i')}</li>
+                                <li class="weui_media_info_meta weui_media_info_meta_extra">备注信息</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui_cells_title">账号信息</div>
+                <div class="weui_cells">
+                    <div class="weui_cell">
+                        <input name="account" id="account"  class="input" placeholder="请输入你的账号" />
+                    </div>
+                    <div class="weui_cell">
+                        <input class="input" name="password" id="password" type="password" placeholder="请输入您的密码" />
+                    </div>
+                    <div class="weui_cell">
+                        <button class="weui_btn weui_btn_primary" id="exchangenow">立即兑换</button>
+                    </div>
+                    <div class="weui_cell">
+                        <a href="javascript:;" class="weui_btn weui_btn_default weui_btn_block">忘记密码</a>
+                    </div>
+                    <div class="weui_cell">
+                        <a href="javascript:;" class="" style="color:#999;">需要帮助? 请点击这里</a>
+                    </div>
+                </div>
+            </div>
+            <div class="weui_msg hidden" id="step2">
+                <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+                <div class="weui_text_area">
+                    <h2 class="weui_msg_title">充值成功</h2>
+                    <p class="weui_msg_desc">你可以在金点记录中心查看充值和消费详情</p>
+                </div>
+                <div class="weui_opr_area">
+                    <p class="weui_btn_area">
+                        <a href="{url:/}" class="weui_btn weui_btn_primary">商城首页</a>
+                        <a href="{url:/ucenter/index}" class="weui_btn weui_btn_default">会员中心</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {set:$curtab='huabi';}
+        {set:$curtab=isset($curtab)?$curtab:Req::args('con');}
+        {widget:name=tabbar action=item cart=0 current=ucenter}
+        <script>
+            $(function () {
+                $("#exchangenow").click(function () {
+                    if (!$("#account").val() || !$("#password").val()) {
+                        $.toast("账户或密码错误", "text");
+                        return false;
+                    }
+                    $.confirm("确认兑换?", function () {
+                        $.noti({
+                            title: "<span class='color-yellow'>消费通知！</span>",
+                            text: "你的虚拟币账户已经扣除个货币！如有疑问请与客服联系",
+                            media: "<i class='iconfont icon-lights'></i>",
+                            time: 50000,
+                        });
+                        $("#step1").hide();
+                        $("#step2").show();
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

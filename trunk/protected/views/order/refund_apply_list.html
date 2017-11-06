@@ -1,0 +1,124 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{set:$status=array("-1"=>"<span class='red icon-close'>已拒绝</span>","0"=>"<span class='green icon-notification'>待处理</span>","1"=>"<span class='green icon-credit'>请求通过,请退款</span>","2"=>"<span class='blue icon-busy'>银行受理，退款中</span>","3"=>"<span class='gray icon-coin'>已退款</span>");}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+    <a class="icon-delicious" href="{url:/order/refund_apply_list}"> 显示全部 </a>
+    
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    
+</div>
+<table class="default" >
+    <tr>
+        <th width="30">选择</th>
+        <th style="width:70px">操作</th>
+        <th >订单编号</th>
+        <th >申请时间</th>
+        <th >处理时间</th>
+        <th >退款金额</th>
+        <th >支付方式</th>
+        <th >退款原因</th>
+        <th >处理进度</th> 
+    </tr>
+    {query:name=refund as r join=left join payment as p on r.payment eq p.id fields=r.*,p.pay_name,plugin_id where=$where id=$obj order=id desc,finish_time desc page=1}
+        <tr><td width="30"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                <li><a href="javascript:view({$item['order_id']})" class=" icon-eye"> 查看订单</a></li>
+                {if:$item['refund_progress']==0}
+                <li><a href="javascript:updateStatus({$item['id']},1)" class=" icon-enter"> 同意申请</a></li> 
+                <li><a href="javascript:updateStatus({$item['id']},-1)" class=" icon-close"> 拒绝申请</a></li> 
+                {elseif:$item['refund_progress']==1}
+                <li><a href="javascript:updateStatus({$item['id']},2)" class=" icon-credit"> 退款</a></li> 
+                {/if}
+            </ul></div></div> </td>
+            <td >{$item['order_no']}</td>
+            <td >{$item['apply_time']}</td>
+            <td >{$item['admin_handle_time']}</td>
+            <td >{$item['refund_amount']}</td>
+            <td ><a href="?condition=and--r.payment--eq--{$item['payment']}">{$item['pay_name']}</a></td>
+            <td ><p>{$item['apply_reason']}</p></td>
+            <td ><p><a href="?condition=and--r.refund_progress--eq--{$item['refund_progress']}">{$status[$item['refund_progress']]}</a>{if:$item['refund_progress']==-1}[拒绝理由：{echo:$item['admin_note']=="" ? "未知":$item['admin_note']}]{/if}</p></td>
+            </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<div id="statusDialog" style="display: none; position: relative;float:top;" class="form2">
+    <h3 id="dialog_title"></h3>
+        <input type="hidden" name="stauts" id="status">
+        <input type="hidden" name="refund_id" id="refund_id" value="">
+        <p id="notice" class="icon-notification" style="text-indent:20px;font-size: 15px;"></p>
+        <textarea id="admin_note" name="admin_note"></textarea>
+    <div class="tc" style="margin-top: 20px;"><button class="focus_button icon-undo" onclick="close_dialog()">放弃</button>&nbsp;&nbsp;&nbsp;<button class="focus_button icon-fire" onclick="submit_form()">确定</button></div>
+</div>
+
+<script type="text/javascript">
+
+function view(id){
+     art.dialog.open("{url:/order/order_view/id/}"+id,{id:'view_dialog',title:'查看订单',resize:false,width:900,height:450});
+}
+function close_dialog(){
+    art.dialog({id:'statusDialog'}).close();
+}
+function updateStatus(id,status){
+      $("#refund_id").val(id);
+      $("#status").val(status);
+      var title = "";
+      if(status==-1){
+          $("#admin_note").show();
+          $("#notice").hide();
+          title = '拒绝申请';
+          $("#dialog_title").text("拒绝原因");
+           art.dialog({id:'statusDialog',title:title,resize:false,width:500,height:200,padding:'0 5px',content:document.getElementById('statusDialog')});
+      }else if(status==1){
+         $("#admin_note").hide();
+         $("#notice").show();
+          title = '同意申请';
+         $("#notice").text(" 确定要通过退款请求吗？通过请求后，还需继续点击退款，向银行系统发起退款操作。");
+         $("#dialog_title").text("操作提示");
+          art.dialog({id:'statusDialog',title:title,resize:false,width:300,height:120,padding:'0',content:document.getElementById('statusDialog')});
+      }else if(status==2){
+         $("#admin_note").hide();
+         $("#notice").text(" 确定要退款吗？确定后系统将向支付提供方发起退款操作，钱款将原路返回给客户。");
+         $("#dialog_title").text("操作提示");
+         art.dialog({id:'statusDialog',title:title,resize:false,width:300,height:120,padding:'0',content:document.getElementById('statusDialog')});
+      }
+     
+}
+
+function submit_form(){
+    var refund_id = $("#refund_id").val();
+    var admin_note = $("#admin_note").val();
+    var status = $("#status").val();
+    if(status==-1 && admin_note==""){
+        art.dialog.tips("<p class='warning'>信息不能为空!</p>");
+    }else{
+        art.dialog({id:'statusDialog'}).close();
+        var index = layer.load();
+        $.post('{url:/order/update_apply_status}',{id:refund_id,admin_note:admin_note,status:status},function(data){
+            layer.closeAll('loading');
+           if(data['status']=='success'){
+                art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"</p>");
+            }else{
+                art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"</p>");
+            }
+             setTimeout("tools_reload()",2000);
+            },'json');
+     }
+}
+{set:$payment=""}
+    {query:name=payment where=plugin_id ne 19}
+        {set:$payment.=$item['id'].':'."'".$item['pay_name']."',"}
+    {/query}
+{set:$payment=trim($payment,',');}
+$("#condition").on("click",function(){
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/order/refund_apply_list}',method:'get'});},data:{'r.order_no':{name:'订单编号'},'r.refund_amount':{name:'退款金额'},'r.payment':{name:'支付方式',values:{{$payment}}},'r.refund_progress':{name:'处理进度',values:{'-1':'申请被拒绝',0:'未处理',1:'申请通过',2:'银行退款中',3:'已退款'}}
+}});
+})
+
+
+</script>

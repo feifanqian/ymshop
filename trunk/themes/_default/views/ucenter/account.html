@@ -1,0 +1,427 @@
+{echo:JS::import("form")}
+{echo:JS::import('dialog?skin=tinysimple');}
+{echo:JS::import('dialogtools');}
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style>
+    .package{
+        cursor: pointer;
+        color: #666666;
+        font-size: 14px;
+        display: inline-block;
+        padding: 0 10px;
+        font-style: normal;
+        border: 2px dotted #c8c6c6;
+        line-height: 34px;
+        height: 34px;
+    }
+    .package-selected{
+        line-height: 32px;
+        border: 2px solid #e9630a;
+        position: relative;
+        color: red;
+    }
+    
+    .package-selected i{
+        display: block;
+        width: 15px;
+        height: 14px;
+        right: -1px;
+        bottom: -1px;
+        position: absolute;
+        background: url({url:#images/righbt.png}) no-repeat 0 0;
+    }
+    #recharge-dialog{
+        background-color: rgba(255, 0, 0, 0.09);
+    }
+    .recharge-btn{
+        display: inline-block;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;
+        background: #fff;
+        border: 1px solid #bfcbd9;
+        color: #1f2d3d;
+        -webkit-appearance: none;
+        text-align: center;
+        box-sizing: border-box;
+        outline: none;
+        margin-left: 257px;
+        margin-top:20px;
+        margin-bottom: 10px;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        padding: 10px 15px;
+        font-size: 14px;
+        border-radius: 4px;
+    }
+    .recharge-btn:hover{
+        color: #fff;
+        background-color: red;
+        border-color: red;
+       
+    }
+    .dialog .layui-layer-btn0{
+        color: #fff;
+        background-color: red;
+        border-color: red;
+    }
+    .dialog .layui-layer-input{
+        border:none;
+        border-bottom: solid 1px red;
+        font-size: 15px;
+    }
+    .dialog .layui-layer-title{
+        color: #fff;
+        background-color: rgba(217, 25, 25, 0.97);
+        border-color: red;
+    }
+    .address-list li {
+        position: relative;
+        display: block;
+        padding: 13px 15px;
+        width: 207px;
+        height: 80px;
+        float: left;
+        background-image: url({url:#images/address.png});
+        margin-right: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+    .address-list li .icon-selected-32 {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        display: none;
+    }
+    .address-list li.selected{
+        background-image: url({url:#images/address-selected.png});
+    }
+    li.selected .icon-selected-32{
+        display:block;
+    }
+    .select_option{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width:300px;
+        height:60px;
+        line-height: 60px;
+        margin-top:2px;
+        cursor: pointer;
+        color: #666666;
+        font-size: 14px;
+        display: inline-block;
+        padding: 0 10px;
+        font-style: normal;
+        border: 2px dotted #c8c6c6;
+    }
+    .gift_selected{
+        border: 2px solid #e9630a;
+        position: relative;
+        color: red;
+    }
+    .gift_selected i{
+        display: block;
+        width: 15px;
+        height: 14px;
+        right: -1px;
+        bottom: -1px;
+        position: absolute;
+        background: url({url:#images/righbt.png}) no-repeat 0 0;
+    }
+}
+</style>
+<div class="container clearfix">
+    {widget:name=sub_navs action=ucsidebar sidebar=$sidebar act=$actionId}
+    <div class="content clearfix uc-content">
+        <h1 class="title"><span>账户金额管理：</span></h1>
+        <div class="box p15 mt10 clearfix">账户余额：<b class="red f18">¥{$customer['balance']|'0.00'}</b>&nbsp;积分余额：<b class="red f18">{$customer['point_coin']|'0.00'}</b>&nbsp;<i class="fa fa-question-circle" style='cursor: pointer;padding-left:15px;'></i><span class="fr" style="    float: right;">　<a href="javascript:;" id="recharge-btn" class="btn btn-main btn-mini"  style="font-size: 16px;padding:0 5px;">在线充值</a> <a href="javascript:;" id="withdraw-btn" class="btn btn-main btn-mini" style="font-size: 16px;padding:0 5px;">余额提现</a></span></div>
+        <div class="mt10 tab">
+            <ul class="tab-head">
+                <li>余额记录<i></i></li>
+                <li>提现申请记录<i></i></li>
+            </ul>
+            <div class="tab-body">
+                <div>
+                    <table class="simple simplelist">
+                        <tr>
+                            <th width="160">时间</th> <th width="120">存入 / 取出</th><th width="120">余额</th> <th >备注</th>
+                        </tr>
+                        {query:name=balance_log where=user_id eq $user[id] order=id desc page=1 id=$obj}
+                        <tr class="{if:$key%2==1}odd{else:}even{/if}">
+                            <td>{$item['time']}</td> <td>{$item['amount']}</td><td>{$currency_symbol}{$item['amount_log']}</td><td>{$item['note']}</td>
+                        </tr>
+                        {/query}
+                    </table>
+                    <div class="page-nav">{echo:$obj->pagebar()}</div>
+                </div>
+                <div>
+                    <table class="simple simplelist">
+                        <tr>
+                            <th width="140">时间</th> <th width="120">提现金额</th><th width="120">开户行</th> <th >卡号</th> <th style="width:80px">状态</th>
+                        </tr>
+                        {set:$status=array("-1"=>"<span class='red refuse'>申请被拒</span><i class='fa fa-exclamation-triangle'></i>","0"=>"<span class='green'>正在处理中</span>","1"=>"已转账")}
+                        {query:name=balance_withdraw where=user_id eq $user[id] page=1 id=$withdraw}
+                        <tr class="{if:$key%2==1}odd{else:}even{/if} {if:$item['status']==2}noborder{/if}">
+                            <td width="140">{$item['apply_date']}</td> <td width="120">{$currency_symbol}{$item['amount']}</td><td width="120">{$item['open_bank']}</td> <td >{$item['card_no']}</td> <td style="width:80px">{$status[$item['status']]}{if:$item['status']=="-1"}<p style="display: none;">{$item['note']}</p>{/if}</td>
+                        </tr>
+                        {/query}
+                    </table>
+                    <div class="page-nav">{echo:$withdraw->pagebar()}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="recharge-dialog" class="hidden">
+    <form action="{url:/payment/dopay}" method="post" callback="close_dialog" style="min-height:600px;margin-bottom:20px;">
+        <table class="form">
+            <tr>
+                <td class="label">充值套餐：</td>
+                <td class="recharge-package">
+                    <em class="package package-selected" data-value="0" data-amount="">自定义<i></i></em>
+                    <em class="package" data-value="1" data-amount="{$package_set[1]['money']}" id="package1">套餐一<i></i></em> 
+                    <em class="package" data-value="2" data-amount="{$package_set[2]['money']}" id="package2">套餐二<i></i></em> 
+                    <em class="package" data-value="3" data-amount="{$package_set[3]['money']}">套餐三<i></i></em> 
+                    <em class="package" data-value="4" data-amount="{$package_set[4]['money']}">代理商套餐<i></i></em>
+                    <input type="hidden" name="package" value="0">
+                </td>
+            </tr>
+            <tr>
+                <td class="label">充值金额：</td>
+                <td><input type="text" name="recharge"  pattern="float" min="0.01" alt="最小金额不小于0.01" placeholder="请输入充值金额" style="width:126px; "> <label></label></td>
+            </tr>
+            <tr>
+                <td class="label">支付方式：</td>
+                <td><select name="payment_id">
+                        {list:$items=$paytypelist}
+                        <option value="{$item['id']}">{$item['pay_name']}</option>
+                        {/list}
+                    </select>
+                </td>
+            </tr>
+             <tr class="select_gift" style="display:none;">
+                <td class="label">套餐礼品：</td>
+                <td>
+                     <div class="select4">
+                     {list:$items=$select4}
+                    <label for="s2{$item['id']}">
+                        <p class="select_option"><input type="radio" name="gift" value="{$item['id']}" id="s2{$item['id']}"><img src="{url:@$item[img]}" style="width:50px;height:50px;border-radius:25px;">{$item['name']}<i></i></p>
+                    <label> 
+                    {/list}
+                    </div>
+                </td>
+            </tr>  
+        </table>
+        <div class="clearfix address" style="margin-left:56px;margin-top:6px;display:none;" >
+                    <h2><b class="fl">收货地址：</b><a class="btn btn-main btn-mini" style="margin-left:10px;" href="{url:/ucenter/address}" target="_blank">管理地址</a></h2>
+                    <ul class="address-list clearfix">
+                        {set:$address_default=0;}
+                        {list:items=$address}
+                        <li>
+                            <div class="address-info " >
+                                <input type="radio" name="address_id" value="{$item['id']}" {if:$item['is_default']==1}{set:$address_default=$item['id']}checked="checked"{/if}>
+                                       <label>{$parse_area[$item['province']]} <strong>{$parse_area[$item['city']]}</strong>（{$item['accept_name']} 收）</label>
+                                <p>
+                                    {$parse_area[$item['county']]} {$item['addr']} {$item['mobile']}
+                                </p>
+                            </div>
+                            <i class="icon-selected-32 ie6png"></i>
+                        </li>
+                        {/list}
+                        {if:count($address)==0}
+                            <p style="margin-left:80px;color: rgba(69, 73, 76, 0.5);">暂无收货地址，请先添加地址。</p>
+                        {/if}
+                    </ul>
+         </div>
+         <input type="submit" class="recharge-btn" value="立刻充值">
+    </form>
+</div>
+<div  id="withdraw-dialog" class="hidden">
+    <form id="withdraw_form">
+        <table class="form" style="width:400px;">
+            <tr>
+                <td class="label">账户余额：</td>
+                <td> <label class="f18 red">{$currency_symbol}{$customer['balance']}</label></td>
+            </tr>
+            <tr>
+                <td class="label">提现金额：</td>
+                <td><input type="text" name="amount" class="small"  pattern="float" min="{$min_withdraw_amount}" max="{$customer['balance']}" alt="" placeholder="提现金额不小于{$min_withdraw_amount}"> <label></label></td>
+            </tr>
+            <tr>
+                <td class="label">开户名：</td>
+                <td><input type="text" name="open_name"  pattern="required" alt="" placeholder="请输入银行开户名"> <label></label></td>
+            </tr>
+            <tr>
+                <td class="label">开户行：</td>
+                <td><input type="text" name="open_bank"  pattern="required" alt="" placeholder="请输入银行名称，如‘工商银行’"> <label></label></td>
+            </tr>
+            <tr>
+                <td class="label">开户行所在地：</td>
+                <td><input type="text" name="province" placeholder="请输入省" style="width:82px;">&nbsp;—&nbsp;<input type="text" name="city" class="small" placeholder="请输入市" style="width:82px;"> <label></label></td>
+            </tr>
+            <tr>
+                <td class="label">银行卡号：</td>
+                <td><input type="text"  name="card_no"  pattern="required" alt="" placeholder="请输入银行卡号"> <label></label></td>
+            </tr>
+            <tr>
+            </tr>
+        </table>
+        <p style="width: 100%;text-align: center;color:red;"><i class="fa fa-exclamation-circle red"></i>提现需缴纳{$withdraw_fee_rate}%的手续费，请知悉。</p>
+    </form>
+</div>
+<script type="text/javascript">
+    $(".recharge-btn").click(function(){
+        if($("input[name='recharge']").val()==""){
+            layer.msg('请填写充值金额');
+            return false;
+        }
+        if($("input[name='package']").val()!=0 &&($("input[name='address_id']").val()==""||$("input[name='address_id']").val()== undefined)){
+            layer.msg('非自定义充值时，请选择套餐赠品收货地址');
+            return false;
+        }
+        
+        return true;
+    });
+    $(".recharge-package em").click(function(){
+        $(this).addClass("package-selected").siblings().removeClass("package-selected");
+        $("input[name='package']").val($(this).data('value'));
+        $("input[name='recharge']").val($(this).data('amount'));
+        if($(this).data('value')==0){
+            $(".address,.recommend-info").hide();
+            $("select[name='recharge_type']").removeAttr('disabled');
+            $(".select_gift").hide();
+        }else{
+            if($(this).data('value')==4){
+                $(".select4 input:first").trigger("click");
+                $(".select_gift").show();
+                 $(".address").show();
+            }else{
+                $(".select_gift").hide();
+                $(".address").hide();
+            }
+            //$("select[name='recharge_type']").val(1).attr('disabled','disabled');
+            $("input[name='recharge']").attr("readonly","readonly");  
+        }
+    });
+    $("input[name='card_no']").bind('input',function(){
+       this.value = this.value.replace(/[\s]/g, '').replace(/(\d{4})(?=\d)/g, "$1 ");
+    });
+    $("#recharge-btn").on("click", function () {
+        //art.dialog({id: 'recharge-dialog', title: '在线充值', content: document.getElementById('recharge-dialog'), lock: true});
+        layer.open({
+            type: 1,
+           area: ['700px', '640px'],
+           scrollbar: false,
+            title: false, //不显示标题
+            content: $('#recharge-dialog'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            cancel: function(){
+            }
+          });
+    });
+    $("#withdraw-btn").on("click", function () {
+        layer.open({
+        skin:'dialog',
+        type: 1,
+        title:'请您填写提现信息',
+        content: $("#withdraw-dialog"), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+        area:['420px','400px'],
+        btn:['确定','取消'],
+        yes:function(){
+          var flag = true;
+          $("#withdraw_form input").each(function(){
+              if($(this).val()==""){
+                  layer.msg("请完善提现信息");
+                  $(this).focus();
+                  flag = false;
+                  return false;
+              }
+          });
+          if(flag==false){
+              return false;
+          }
+          layer.confirm('您确定信息无误吗？<br/>错误的信息可能会导致转账错误', {
+                btn: ['我确定','我再看看'] //按钮
+              }, function(){
+                    layer.closeAll();
+                    var load = layer.load();
+                    var amount = $("input[name='amount']").val();
+                    var name = $("input[name='open_name']").val();
+                    var bank = $("input[name='open_bank']").val();
+                    var province = $("input[name='province']").val();
+                    var city = $("input[name='city']").val();
+                    var card_no = $("input[name='card_no']").val();
+                    $.post("{url:/ucenter/balance_withdraw}", {amount: amount, name: name, bank: bank, province: province,city:city,card_no:card_no}, function (data) {
+                        layer.close(load);
+                        if (data.status == 'success') {
+                             layer.msg("申请提交成功",{icon:6},function(){
+                                window.location.href = "{url:/ucenter/account/rand/}" + Math.random() + "#tab-2";
+                            });
+                        } else {
+                           layer.msg(data.msg,{icon:5});
+                        }
+                    }, 'json');
+              }, function(){
+                  
+              });
+        },
+        no:function(){
+            
+        }
+      });
+    });
+    function close_dialog(e) {
+        if (!e)
+            art.dialog({id: 'recharge-dialog'}).close();
+    }
+    function submit_withdraw(e) {
+        if (!e) {
+            
+        }
+        return false;
+    }
+    $(".refuse").mouseenter(function(){
+        var refuse_info = $(this).next().next().text();
+        var that = this;
+        layer.tips(refuse_info, that, {
+            tips: [1, '#c91313'], //还可配置颜色
+            time: 99999
+        });
+    });
+    $(".refuse").mouseout(function(){
+       layer.closeAll('tips');
+    });
+    $(".fa-question-circle").mouseenter(function(){
+        layer.tips('分红点数是用于商城分红的凭证，余额和积分是您在商城的可用资产，可以用于商城的购买活动。', ".fa-question-circle", {
+            tips: [1, '#c91313'], //还可配置颜色
+            time: 99999
+        });
+    });
+    $(".fa-question-circle").mouseout(function(){
+       layer.closeAll('tips');
+    });
+    $(function(){
+        $(".address-list li").each(function () {
+            $(this).has("input[name='address_id']:checked").addClass("selected");
+            $(this).on("click", function () {
+                $(".address-list li").removeClass("selected");
+                $("input[name='address_id']").removeProp("checked");
+                $("input[name='address_id']", this).prop("checked", "checked");
+                $(this).addClass("selected");
+                $("a.default").hide();
+                $("a.default", this).show();
+            });
+        });
+        $("input[name='gift']").change(function(){
+            $(".select_gift p").removeClass("gift_selected");
+            $("input[name='gift']:checked").parent("p").addClass("gift_selected");
+        });
+        FireEvent($(".address-list input[name='address_id']:checked").get(0), "click");
+        {if:isset($package)&&isset($pid)}
+        $("#recharge-btn").trigger('click');
+        $("#package{$package}").trigger('click');
+        $("#s{$package}{$pid}").trigger('click');
+        {/if}
+    })
+</script>

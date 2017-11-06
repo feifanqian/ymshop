@@ -1,0 +1,122 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+<div style="padding:10px;margin-bottom: 40px;">
+<form action="" method="post" >
+<div class="tools_bar clearfix" >
+    <input type="hidden" name="hirer_id" value="{$hirer_id}">
+    <span class="fr" >
+    <select name="s_type"><option value="0">用户ID</option><option value="1">用户手机号</option><option value="2">用户姓名</option></select>
+    <input type="text"  value="{$s_content}" name="s_content" /><a href='javascript:;' onclick="tools_submit({action:'{url:/districtadmin/radio_customer_select}'})" class="fr icon-search" style="" ></a>
+    </span>
+    <span class="fr">
+    <select name="ds_shop" id="ds_shop">
+       <option value="">选择经销商</option>
+       {if:isset($where1)}
+       {query:name=district_shop fields=id,name where=$where1 order=id desc}
+       <option value="{$item['id']}">{$item['name']}</option>
+       {/query}
+       {else:}
+       {query:name=district_shop fields=id,name order=id desc}
+       <option value="{$item['id']}">{$item['name']}</option>
+       {/query}
+       {/if}
+    </select>
+    </span>
+    <span  class="fr">
+      <input type="text"  value="{$s_shop}" name="s_shop" style="width:80px;" placeholder="上级经销商"/><a href='javascript:;' onclick="tools_submit({action:'{url:/districtadmin/radio_customer_select}'})" class="fr icon-search" style="" ></a>
+    </span>
+    <span class="fr">
+    <select name="ds_promoter" id="ds_promoter">
+       <option value="">选择代理商</option>
+       {if:isset($where2)}
+       {query:name=district_promoter as dp join=left join customer as c on dp.user_id eq c.user_id left join user as u on dp.user_id eq u.id fields=dp.user_id,c.real_name,u.nickname where=$where2 order=dp.id desc}
+       <option value="{$item['user_id']}">{$item['real_name']|$item['nickname']}</option>
+       {/query}
+       {else:}
+       {query:name=district_promoter as dp join=left join customer as c on dp.user_id eq c.user_id left join user as u on dp.user_id eq u.id fields=dp.user_id,c.real_name,u.nickname order=dp.id desc}
+       <option value="{$item['user_id']}">{$item['real_name']|$item['nickname']}</option>
+       {/query} 
+       {/if}
+    </select>
+    </span>
+    <span class="fr">
+    <input type="text"  value="{$s_promote}" name="s_promote" style="width:80px;" placeholder="上级代理商"/><a href='javascript:;' onclick="tools_submit({action:'{url:/districtadmin/radio_customer_select}'})" class="fr icon-search" style="" ></a>
+    </span>
+    <span class="fr">
+      赠送积分<input name="pointcoin" value="{$pointcoin}" type="text" class="small" />
+    </span>
+</div>
+<table class="default" >
+  <colgroup>
+    <col width="60"/>
+    <col width="60"/>
+    <col width="100"/>
+    <col width="100"/>
+  </colgroup>
+    <tr>
+        <th>选择</th>
+        <th>用户ID</th>
+        <th>真实姓名</th>
+        <th>联系电话</th>
+    </tr>
+    </table>
+<div style="overflow: auto; height: 300px;">
+<table class="default" style="border-top: 0">
+  <colgroup>
+    <col width="60"/>
+    <col width="60"/>
+    <col width="100"/>
+    <col width="100"/>
+  </colgroup>
+    {if:$where=="1=1"}
+      {set:$page_size = 10;}
+    {else:}
+      {set:$page_size = 100;} 
+    {/if}
+    {query:name=customer id=$obj where=$where page=1 pagesize=$page_size order=user_id desc }
+        <tr><td><input type="radio" name="user_id" value="{$item['user_id']}"></td><td>{$item['user_id']}</td><td>{$item['real_name']}</td><td>{$item['mobile']}</td></tr>
+    {/query}
+</table>
+</div>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+</div>
+<div class="alone_footer tc"><button class="btn" onclick="selected()">确定</button></div>
+<script type="text/javascript">
+$('#ds_promoter').change(function(){
+    if($('#ds_promoter').val()!=''){
+     $('#ds_shop').attr("disabled","disabled");
+    }else{
+       $('#ds_shop').attr("disabled",false); 
+    }
+});
+$('#ds_shop').change(function(){
+   if($('#ds_shop').val()!=''){ 
+    $('#ds_promoter').attr("disabled","disabled");
+   }else{
+       $('#ds_promoter').attr("disabled",false); 
+    } 
+});
+    function selected(){
+        if($("input[name='user_id']:checked").size()>0){
+            var user_id = $("input[name='user_id']:checked").val();
+            var hirer_id=$('#ds_shop').val();
+            var pointcoin=$("input[name='pointcoin']").val();
+            var ds_promoter=$('#ds_promoter').val();
+            if(user_id==undefined){
+                alert("您还没有选择用户");
+            }else{
+                
+                 window.parent.callback(hirer_id,user_id,pointcoin,ds_promoter);
+            }
+        }else{
+            alert("您还没有选择用户");
+        }
+    }
+    var form =  new Form();
+    form.setValue('s_type','{$s_type}');
+    form.setValue('s_content','{$s_content}');
+</script>

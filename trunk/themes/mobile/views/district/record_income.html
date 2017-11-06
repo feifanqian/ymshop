@@ -1,0 +1,288 @@
+ <link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<style type="text/css">
+    .weui-icon_msg{
+        font-size:25px;
+        margin-right:10px;
+        margin-left:20px;
+    }
+    .income{
+        font-weight: 900;
+        font-size:20px;
+        color:green;
+    }
+    .expend{
+        font-weight: 900;
+        font-size:20px;
+        color:red;
+    }
+    .record-time{
+        width:15%;
+        padding-top: 10px;
+        padding-left:10px;
+        color:gray;
+        font-size:10px;
+     }
+    .record-status-icon{
+        text-align: center;
+        width:20%;
+        line-height: 50px;
+    }
+    .record-info{
+        padding-left: 10px;
+        width:35%;
+    }
+    .record-info .note{
+        font-size:12px;
+        color:rgba(26, 26, 26, 0.86);
+    }
+    .record-status{
+        width: 20%;
+        line-height: 50px;
+    }
+    .record-status p{
+        font-size:15px;
+        color:rgba(26, 26, 26, 0.27);
+    }
+    
+    
+   .spinner {
+    margin: 10px auto;
+    width: 100%;
+    text-align: center;
+   }
+ 
+.spinner > div {
+  width: 20px;
+  height: 20px;
+  background-color: #67CF22;
+ 
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+  animation: bouncedelay 1.4s infinite ease-in-out;
+  /* Prevent first frame from flickering when animation starts */
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+ 
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+ 
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+ 
+@-webkit-keyframes bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0.0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+ 
+@keyframes bouncedelay {
+  0%, 80%, 100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 40% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
+
+.weui-media-box__ft{
+    width:20px;
+    font-size:16px;
+    line-height:15px;
+    border-radius:5px;
+    padding:2px 0px;
+    padding-bottom: 4px;
+    background-color:green;
+    color:white;
+    text-align: center;
+}
+.weui-media-box__time{
+    text-align: center;
+    color:gray;
+}
+.time-show{
+    color:gray;
+    background-color: white;
+    border-radius: 5px;
+}
+.item-title{
+    font-size: 14px;
+    color:gray;
+    text-align: left;
+}
+.increase{
+    color:red;
+}
+.decrease{
+    color:green;
+}
+.increase::before {
+    content: "↑";
+    position: relative;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    color: red;
+}
+.decrease::before {
+    content: "↓";
+    position: relative;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    color: green;
+}
+.maintain::before {
+    content: "-";
+    position: relative;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    color: gray;
+}
+.maintain{
+    color:gray;
+}
+</style>
+<div id="record-container">
+    {set:$icon=array("0"=>"shouyi","1"=>"shouyi","2"=>"shouyi","3"=>"shouyi","4"=>"shouyi","5"=>"shouyi","6"=>"shouyi","7"=>"qaoqing","8"=>"qaoqing","9"=>"qaoqing","10"=>"qaoqing","11"=>"tixian","12"=>"chexiao"
+   ,"13"=>"jiesuo","14"=>"shouyi");}
+  {if:!isset($data['data'])||count($data['data'])==0}
+   {else:}
+   {list:items=$data['data']}
+   <div class="weui-panel weui-panel_access">
+            <div class="weui-panel__hd">{$item['date']}</div>
+            <div class="weui-panel__bd">
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd">
+                        <i class="ymicon icon-{$icon[$item['type']]}" style="color:rgba(77, 74, 74, 0.32);font-size: 50px;"></i>
+                    </div>
+                    <div class="weui-media-box__bd">
+                        <div class="weui-media-box__title">
+                        <div class="weui-flex">
+                            <div class="weui-flex__item">
+                                <p class="item-title">可用收益</p>
+                                <p class="{echo:$item['valid_income_change']>0?'increase':($item['valid_income_change']<0?'decrease':'maintain')}">{$item['valid_income_change']}</p>
+                            </div>
+                            <div class="weui-flex__item">
+                                <p class="item-title">待解锁收益</p>
+                                <p class="{echo:$item['frezze_income_change']>0?'increase':($item['frezze_income_change']<0?'decrease':'maintain')}">{$item['frezze_income_change']}</p>
+                            </div>
+                            <div class="weui-flex__item">
+                                <p class="item-title">已提取收益</p>
+                                <p class="{echo:$item['settled_income_change']>0?'increase':($item['settled_income_change']<0?'decrease':'maintain')}">{$item['settled_income_change']}</p>
+                            </div>
+                        </div>
+                        </div>
+                        <p class="weui-media-box__desc">{$item['note']}</p>
+                    </div>
+                </a>
+            </div>
+    </div>
+   {/list}
+   {/if}
+</div>
+{if:!isset($data['data'])||count($data['data'])==0}
+<div class="weui-loadmore weui-loadmore_line page_end">
+            <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">暂无数据</span> 
+</div>
+{elseif:count($data['data'])<10}
+<div class="weui-loadmore weui-loadmore_line">
+            <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">end</span>
+</div>
+{else:}
+<div class="weui-loadmore weui-loadmore_line page_end" style="display:none;">
+            <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">暂无更多数据</span>
+</div>
+<div class="spinner" style="display: none;">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+</div>
+<script>
+    var current = 1;
+    var lock=false;
+    var page_count = {$data['page']['totalPage']};
+    var icon ={echo:json_encode($icon);};
+    function doLoadPage(page){
+       lock = true;
+       setTimeout(function(){
+       $.post('{url:/ucenter/promoter_income}',{p:page},function(result){
+           if(result.status=='success'){
+                $(".spinner").hide();
+                for(var i in result.data){
+                    var o = result.data[i];
+                    var html = '<div class="weui-panel weui-panel_access">'+
+                        '<div class="weui-panel__hd">'+o.date+'</div>'+
+                        '<div class="weui-panel__bd">'+
+                            '<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">'+
+                                '<div class="weui-media-box__hd">'+
+                                    '<i class="ymicon icon-'+icon[o.type]+'" style="color:rgba(77, 74, 74, 0.32);font-size: 50px;"></i>'+
+                                '</div>'+
+                                '<div class="weui-media-box__bd">'+
+                                   ' <div class="weui-media-box__title">'+
+                                    '<div class="weui-flex">'+
+                                        '<div class="weui-flex__item">'+
+                                            '<p class="item-title">可用收益</p>'+
+                                            '<p class="'+
+                                            (o.valid_income_change>0?'increase':(o.valid_income_change<0?'decrease':'maintain'))+'">'+o.valid_income_change+'</p>'+
+                                       '</div>'+
+                                       ' <div class="weui-flex__item">'+
+                                            '<p class="item-title">待解锁收益</p>'+
+                                            '<p class="'+
+                                            (o.frezze_income_change>0?'increase':(o.frezze_income_change<0?'decrease':'maintain'))+'">'+o.frezze_income_change+'</p>'+
+                                        '</div>'+
+                                        '<div class="weui-flex__item">'+
+                                            '<p class="item-title">已提取收益</p>'+
+                                            '<p class="'+
+                                            (o.settled_income_change>0?'increase':(o.settled_income_change<0?'decrease':'maintain'))+'">'+o.settled_income_change+'</p>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '</div>'+
+                                    '<p class="weui-media-box__desc">'+o.note+'</p>'+
+                                '</div>'+
+                            '</a>'+
+                        '</div>'+
+                '</div>';
+        console.log(html);
+                     $("#record-container").append(html);
+             }
+            lock = false;
+           }else if(result.status=='fail'){
+               $(".page_end").show();
+           }
+       },'json');
+    },1500);
+    }
+    $(function(){
+       $(document).scroll(function(){
+           if(lock){
+               return false;
+           }
+           var h1 = $(this).scrollTop();//滚动条高度
+           var h2 = $(this).height();//页面高度
+           var h3 = document.documentElement.clientHeight;//可视高度
+           if(((h1+h3)/h2)>0.95){
+              if(current<page_count){
+                  $(".spinner").show();
+                  doLoadPage(++current);
+              }else{
+                  $(".page_end").show();
+              }
+           }
+     });
+ });
+</script>
+{/if}
+<script>
+      function viewDetail(){
+    }
+</script>

@@ -1,0 +1,49 @@
+<!--<div class="weui_tabbar" id="main-tabbar">
+    <a href="{url:/districtcenter/district}" class="weui_tabbar_item {echo:!$current || $current=='district'?'weui_bar_item_on':''}">
+        <div class="weui_tabbar_icon">
+            <i class="iconfont icon-home"></i>
+        </div>
+        <p class="weui_tabbar_label">专区</p>
+    </a>
+    <a href="{url:/districtcenter/income}" class="weui_tabbar_item {echo:$current=='income'?'weui_bar_item_on':''}">
+        <div class="weui_tabbar_icon">
+            <span class="cart-num tip"></span>
+            <i class="iconfont icon-qiandai"></i>
+        </div>
+        <p class="weui_tabbar_label">收益</p>
+    </a>
+    <a href="{url:/districtcenter/history}" class="weui_tabbar_item {echo:$current=='history'?'weui_bar_item_on':''}">
+        <div class="weui_tabbar_icon">
+            <i class="fa fa-history fa-2x"></i>
+        </div>
+        <p class="weui_tabbar_label">记录</p>
+    </a>
+</div>-->
+<div class="weui_tabbar" id="main-tabbar" style="max-width:99999px;">
+    <div class="weui-row" style="width:100%;text-align: center;margin-top:3px;">
+        <div class="weui-col-33">
+            <a href="{url:/district/district}">
+                <div>
+                      <i class="fa fa-building fa-3x {echo:$current=='district'?'green':'gray'}"></i>
+                </div>
+                <p style="font-size:10px;color:rgba(128, 128, 128, 0.5);">专区</p>
+            </a>
+        </div>
+        <div class="weui-col-33">
+            <a href="{url:/district/income}">
+                <div>
+                      <i class="fa fa-trophy fa-3x {echo:$current=='income'?'green':'gray'}"></i>
+                </div>
+                <p style="font-size:10px;color:rgba(128, 128, 128, 0.5);">收益</p>
+            </a>
+        </div>
+        <div class="weui-col-33">
+            <a href="{url:/district/record}">
+                 <div>
+                      <i class="fa fa-reorder fa-3x {echo:$current=='record'?'green':'gray'}"></i>
+                </div>
+                <p style="font-size:10px;color:rgba(128, 128, 128, 0.5);">记录</p>
+            </a>
+         </div>
+    </div>
+</div>

@@ -1,0 +1,235 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{set:$status=array("1"=>'正常','0'=>'禁用');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+   <!-- <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>!-->
+    <a class="icon-delicious" href="{url:/districtadmin/record_income}"> 查看全部</a>
+    <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方代理商</a>
+<!--    <a class="icon-eye-blocked" href="{url:/order/order_list/status/2}"> 未审核</a>
+    <a class="icon-cogs" href="{url:/order/order_list/status/3}"> 执行中</a>-->
+
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:10px">选择</th>
+        <th style="width:30px">操作</th>
+        <th style="width:50px">代理商</th>
+        <th style="width:50px">联系电话</th>
+        <th style="width:50px">邀请人</th>
+        <th style="width:50px">类型</th>
+        <th style="width:60px">所属专区</th>
+        <th style="width:60px">收益情况</th>
+        <th style="width:60px">加入时间</th>
+        <th style="width:40px">状态</th>
+        <th style="width:40px">基础分账比例</th>
+    </tr>
+    {set:$type=array("1"=>"经销商直推","2"=>"代理商推荐","3"=>"系统生成","4"=>"官方代理商","5"=>"自升级");}
+    {query:name=district_promoter as dp fields=dp.id,dp.hirer_id,dp.type,dp.user_id,dp.status,dp.join_time,dp.base_rate,dp.unique_code,c.user_id,c.real_name,c.mobile,c.valid_income,c.frezze_income,c.settled_income,u.avatar,u.nickname,ds.name as shop_name,i.user_id as uid join=left join user as u on u.id eq dp.user_id left join customer as c on dp.user_id eq c.user_id left join district_shop as ds on dp.hirer_id eq ds.id left join invite as i on dp.user_id eq i.invite_user_id where=$where id=$obj page=1 order= dp.id desc}
+    <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:65px" class="btn_min">
+                <div class="operat hidden">
+                    <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                     <ul>
+                       <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=and--pil.role_id--eq--{$item['user_id']}__and--pil.role_type--lt--3"> 查看收益记录</a></li>
+                       <li><a class="icon-eye" href="javascript:;" onclick="viewAchievement('{$item['nickname']|'unknow'}',{$item['user_id']});"> 查看销售业绩</a></li>
+                       <li><a class="icon-user-2" href="javascript:;" onclick="sendMsg('{$item['nickname']|'unknow'}',{$item['user_id']});"> 发送微信消息</a></li>
+                       <li><a class="icon-pencil" href="{url:/districtadmin/rate_edit/id/$item[id]}">设置分账比例</a></li>
+                       <!-- <li><a class="icon-eye" href="javascript:;" onclick="viewQrcode({$item['user_id']});"> 查看线下支付二维码</a></li> -->
+                       <li><a class="icon-eye" href="{url:/districtadmin/invitepay/user_id/$item[user_id]}"> 查看线下支付二维码</a></li>
+                       <!-- {if:$item['unique_code']!=1}
+                       <li><a class="icon-eye" href="javascript:;" onclick="pass({$item['id']})"> 商家二维码可见</a></li>
+                       {else:}
+                       <li><a class="icon-key" href="javascript:;" onclick="cancel({$item['id']})"> 隐藏商家二维码</a></li>
+                       {/if} -->
+                       <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/promoter_del/id/$item[id]}')"> 移出代理商</a></li>
+                     </ul>
+                   </div>
+                </div>
+            </td>
+            <td style="width:60px">{$item['real_name']|$item['nickname']}</td>
+            <td style="width:140px">{$item['mobile']}</td>
+            {set:$user_id=$item['uid'];}
+            {if:isset($user_id)}
+            {query:name=customer as c join=left join user as u on c.user_id eq u.id fields=c.real_name,u.nickname where=c.user_id eq $user_id item=$customer}
+                <td style="width:60px">{echo:$customer['real_name']==""?$customer['nickname']:$customer['real_name']}</td>
+            {/query}
+            {else:}
+                <td style="width:60px"></td>
+            {/if}
+            <td style="width:60px">{$type[$item["type"]]}</td>
+            <td style="width:140px">{$item['shop_name']}</td>
+            <td style="width:140px">待解锁：{$item['frezze_income']} 可用：{$item['valid_income']} 已结算：{$item['settled_income']}</td>
+            <td style="width:160px">{$item['join_time']}</td>
+            <td style="width:40px">{$status[$item['status']]}</td>
+            <td style="width:40px">{$item['base_rate']}%</td>
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<script type="text/javascript">
+function viewAchievement(name,id){
+layer.open({
+        id: id,
+        type: 2,
+        title: name,
+        shadeClose: true,
+        shade: false,
+        area: ['893px', '600px'],
+        content: '{url:/districtadmin/chart}/role_type/1/user_id/'+id ,
+    });
+}
+
+// function viewQrcode(id){
+// layer.open({
+//         id: id,
+//         type: 2,
+//         title: '商家二维码',
+//         area: ['650px', '650px'],
+//         fixed: false, //不固定
+//         maxmin: false,
+//         content: '{url:/districtadmin/qrcode}/user_id/'+id ,
+//     });
+// }
+
+function IsURL(str_url){
+        var strRegex = '^((https|http|ftp|rtsp|mms)?://)'
+        + '?(([0-9a-z_!~*\'().&=+$%-]+: )?[0-9a-z_!~*\'().&=+$%-]+@)?' //ftp的user@
+        + '(([0-9]{1,3}.){3}[0-9]{1,3}' // IP形式的URL- 199.194.52.184
+        + '|' // 允许IP和DOMAIN（域名）
+        + '([0-9a-z_!~*\'()-]+.)*' // 域名- www.
+        + '([0-9a-z][0-9a-z-]{0,61})?[0-9a-z].' // 二级域名
+        + '[a-z]{2,6})' // first level domain- .com or .museum
+        + '(:[0-9]{1,4})?' // 端口- :80
+        + '((/?)|' // a slash isn't required if there is no file name
+        + '(/[0-9a-z_!~*\'().;?:@&=+$,%#-]+)+/?)$';
+        var re=new RegExp(strRegex);
+        //re.test()
+        if (re.test(str_url)){
+            return (true);
+        }else{
+            return (false);
+        }
+}
+function sendMsg(name,id){
+    layer.open({
+        id: id,
+        type: 1,
+        title: "发送消息给"+name,
+        shadeClose: true,
+        shade: false,
+        area: ['400px', '350px'],
+        content:    '<div style="margin-left:20px;">'
+                    +'*消息内容：<br>'
+                    +'<textarea name="content" style="width:90%;height:150px;"></textarea>'
+                    +'<br>跳转链接：<br>'
+                    +'<input type="text" name="url" style="width:90%;height:25px;" value="https://www.buy-d.cn/district/district">'
+                    +'</div>' ,
+        btn:['确定','取消'],
+        success: function(layero, index){
+            $("textarea[name=content]").val("亲爱的"+name+"恭喜您，有新的代理商加入您的团队，您获得了1300金点奖励！");
+        },
+        yes: function(index, layero){
+          var content = $("textarea[name=content]").val();
+          var url = $("input[name=url]").val();
+          if(content==""){
+              layer.msg("消息内容不能为空");
+              return false;
+          }
+          if(url&&!IsURL(url)){
+              layer.msg("填写的URL格式错误");
+              return false;
+          }
+          layer.load();
+          $.post("{url:/districtadmin/sendMsg}",{content:content,url:url,user_id:id},function(data){
+              layer.closeAll('loading');
+              if(data.status=='success'){
+                  layer.msg("发送成功",function(){
+                     layer.closeAll(); 
+                  });
+              }else{
+                  layer.msg(data.msg);
+              }
+          },'json');
+        },
+        btn2: function(index, layero){
+        }
+    });
+}
+$("#condition").on("click",function(){
+    
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_promoter}',method:'get'});},data:{'c.real_name':{name:'代理商'},'ds.name':{'name':'所属专区'}}});
+})
+function addPromoters(){
+     index =  layer.open({
+            id:"select",
+            type: 2,
+            title:"选择用户",
+            area: ['85%', '520px'],
+            fixed: false, //不固定
+            maxmin: false,
+            zindex:2,
+            content: '{url:/districtadmin/radio_customer_select}',
+          });
+}
+function callback(hirer_id,user_id,pointcoin,ds_promoter){
+     var load = layer.load();
+     console.log(hirer_id+"|"+user_id);
+     $.post('{url:/districtadmin/addPromoter}', {hirer_id:hirer_id,user_id:user_id,pointcoin:pointcoin,ds_promoter:ds_promoter} , function(result){
+            layer.close(load);
+            if(result.status=='success'){
+               layer.msg("添加成功",function(){
+                  layer.closeAll(); 
+               });
+            }else{
+                layer.msg(result.msg);
+            }
+        },'json');
+}
+function cancel(id){
+     layer.confirm('您确定要隐藏吗？', {
+        btn: ['确定','取消'] //按钮
+      }, function(index){
+        layer.close(index);
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $.post("{url:/districtadmin/updateQrcodeStatus}",{id:id,status:-1},function(data){
+             layer.close(index);
+            if(data.status=='success'){
+            layer.msg('操作成功', {icon: 6},function(){
+                tools_reload();
+            }); 
+          }else{
+            layer.msg(data.msg, {icon: 5}); 
+          }
+        },'json');
+      }, function(){
+          layer.msg("您取消了操作"); 
+        });
+}
+function pass(id){
+    layer.confirm('您确定要通过吗？', {
+        btn: ['确定','取消'] //按钮
+      }, function(index){
+        layer.close(index);
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $.post("{url:/districtadmin/updateQrcodeStatus}",{id:id,status:1},function(data){
+             layer.close(index);
+            if(data.status=='success'){
+            layer.msg('操作成功', {icon: 6},function(){
+                tools_reload();
+            }); 
+          }else{
+            layer.msg(data.msg, {icon: 5}); 
+          }
+        },'json');
+      }, function(){
+          layer.msg("您取消了操作"); 
+        });
+}
+</script>

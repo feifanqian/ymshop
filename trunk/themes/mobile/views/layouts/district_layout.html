@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <link rel="stylesheet" href="{url:#css/weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/jquery.weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/iconfont.css}">
+        <link rel="stylesheet" href="{url:#css/common.css}">
+        <link rel="stylesheet" href="{url:#css/font-awesome.min.css}">
+        <link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+        <link rel="stylesheet" href="//at.alicdn.com/t/font_cudhf587rx561or.css">
+        {echo:JS::import('jquery');}
+        <script type="text/javascript" src="{url:#js/layer_mobile/layer.js}"></script>
+        {set:$title = isset($seo_title)?$seo_title:(isset($site_title)?$site_title:'圆梦共享网');$title=TString::msubstr($title,0,12);}
+        <title>{$title}</title> 
+    </head>
+    <style type="text/css">
+        .weui_panel:before{
+            width: 0px;
+            height:0px;
+        }
+    </style>
+    <body style="padding-top: 0px;">
+        {if:!isset($district_name)}
+        {set:$district_name="";}
+        {/if}
+        {widget:name=sub_navs action=district_header title=$title district_name=$district_name}
+        {set:$act=Req::args('act');}
+        <div class="viewport" style="width:100%;max-width:9999px;{if:!in_array($act,array('district','record','income'))}padding-top:50px;{/if}">
+            {if:isset($msg) && is_array($msg)}
+            <div class="ma20">
+                <div class="message_{$msg[0]}">{$msg[1]}</div>
+            </div>
+            {/if}
+            {__viewcontents}
+
+            {widget:name=tabbar action=district_tab  current=$current}
+        </div>
+        <script type="text/javascript" src="{url:#js/jquery.weui.min.js}"></script>
+        <script type="text/javascript" src="{url:#js/common.js}"></script>
+    </body>
+</html>

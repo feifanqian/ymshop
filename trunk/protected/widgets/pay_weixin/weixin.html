@@ -1,0 +1,68 @@
+
+{if:class_exists('pay_wxpayqrcode')}
+{set: $payment = new Payment('wxpayqrcode');$payment_info = $payment->getPayment();$payment_weixin = $payment->getPaymentPlugin();}
+{if:$payment_info['status'] == 0 && $payment_weixin}
+<div id="weixin-code" style="text-align:center;margin-top:20px;">
+    {set:
+    WxPayConfig::setConfig($payment_weixin->getClassConfig());
+    $weixin = new WxPayDataBase();
+    $notify = new NativePay();
+    $input = new WxPayUnifiedOrder();
+    $input->SetBody($order_name);
+    //$input->SetAttach("test");
+    $input->SetOut_trade_no('code_'.substr(time(),4).'_'.$order_no);
+    $input->SetTotal_fee($order_amount*100);
+    $input->SetTime_start(date("YmdHis"));
+    $input->SetTime_expire(date("YmdHis", time() + 600));
+    //$input->SetGoods_tag("test");
+    $input->SetNotify_url($payment_weixin->asyncCallbackUrl);
+    $input->SetTrade_type("NATIVE");
+    $input->SetProduct_id($order_no);
+    $result = $notify->GetPayUrl($input);
+    $url2 = isset($result["code_url"])?$result["code_url"]:"";
+    $url2 = urlencode($url2);
+    }
+    <img alt="微信二维码扫码支付" id="weixin_code" src="" style="width:150px;height:150px;"/>
+    <h1>微信扫码支付</h1>
+</div>
+<script>
+
+
+$(function(){
+var checkedPayment ;
+function isOrderPayment()
+    {
+        $.post("{url:/ajax/isOrderPayment/order_no/$order_no}",function(data){
+            if(data['status']=='success') window.location.reload(true);
+        },'json');
+    };
+　　$("input[name=payment_id]").change(function(){
+    var payment_class = $(this).attr('id');
+        if(payment_class == 'wxpayqrcode') {
+            $("#weixin_code").attr("src","{url:/simple/qrcode}?&data={$url2}");
+            $("#widget_pay_weixin").show();
+            $("input[type='submit']").hide();
+            checkedPayment = setInterval(isOrderPayment,2000);
+        }
+        else {
+            $("#widget_pay_weixin").hide();
+            $("input[type='submit']").show();
+            if(checkedPayment) clearInterval(checkedPayment);
+        }
+    });
+    if($("input[name=payment_id]:checked").attr('id')=='wxpayqrcode'){
+        $("#weixin_code").attr("src","{url:/simple/qrcode}?&data={$url2}");
+        $("#widget_pay_weixin").show();
+        $("input[type='submit']").hide();
+        checkedPayment = setInterval(isOrderPayment,2000);
+    }
+    else {
+        $("#widget_pay_weixin").hide();
+        $("input[type='submit']").show();
+        if(checkedPayment) clearInterval(checkedPayment);
+    }
+});
+
+</script>
+{/if}
+{/if}

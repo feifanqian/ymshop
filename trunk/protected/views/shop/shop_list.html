@@ -1,0 +1,70 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+    <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/shop/shop_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>
+    <a href='{url:/shop/shop_edit}'  class="icon-plus" > 添加</a>
+    <a class="icon-delicious" href="{url:/shop/shop_list}"> 全部商家</a>
+    <select name="categorylist" id="categorylist">
+        <option value="0">选择分类</option>
+        {set:$shop_category = Common::treeArray($categorylist)}
+        {list:items=$shop_category}
+        {if:!isset($path) || strpos($item['path'],$path)===false}
+        {set:$num = count(explode(',',$item['path']))-3;}
+              <option value="{$item['id']}">{if:$num>0}├{/if}{echo:str_repeat('──',$num)}{$item['name']}</option>
+              {/if}
+        {/list}
+    </select>
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:30px;">选择</th>
+        <th style="width:70px;">操作</th>
+        <th >商家名称</th>
+        <th style="width:100px;">所属分类</th>
+        <th style="width:60px;">排序</th>
+    </tr>
+    {query:name=shop_category /}
+    {set:$category_name=array();$category="";}
+    {list:}
+        {set:$category_name[$item['id']]=$item['name']}
+        {set:$category.=$item['id'].':'."'".$item['name']."',"}
+    {/list}
+    {set:$category=trim($category,',');}
+    {list:$items=$shoplist['data']}
+        <tr ><td style="width:30px;"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+        <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                <li><a class="icon-pencil" href="{url:/shop/shop_edit/id/$item[id]}"> 编辑</a></li>
+                <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/shop/shop_del/id/$item[id]}')"> 删除</a></li>
+               </ul></div></div></td>
+        <td><a href="{url:/index/product/id/$item[id]}" target="_blank">{echo:TString::msubstr($item['name'],0,24)}</a></td>
+        <td style="width:100px;"><a href="?category_id={$item['category_id']}">{$item['category_name']}</a></td>
+        <td style="width:60px;">{$item['sort']}</td>
+        </tr>
+    {/list}
+</table>
+</form>
+<div class="page_nav">
+{$shoplist['html']}
+</div>
+{set:$category="";}
+{list:$items=$categorylist}
+    {set:$category.=$item['id'].':'."'".$item['name']."',"}
+{/list}
+{set:$category=trim($category,',');}
+<script type="text/javascript">
+    $(function(){
+        $("#categorylist").on("change",function(){
+            location.href="?category_id="+$(this).val();
+        }); 
+       var form =  new Form();
+        form.setValue('categorylist','{$category_id}');
+        $("#condition").on("click",function(){
+            $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/shop/shop_list}',method:'get'});},data:{name:{name:'商家名称'},'category_id':{name:'商家分类',values:{{$category}}}
+        }});
+    });
+});
+</script>

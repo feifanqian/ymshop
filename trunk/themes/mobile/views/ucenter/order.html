@@ -1,0 +1,65 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style>
+    .weui_media_desc img {
+        width:60px;
+        height:60px;
+    }
+</style>
+{list:items=$orderlist}
+{set:list($status, $btn) = $this->order_status($item);}
+<div class="weui_panel weui_panel_access">
+    <a href="{url:/ucenter/order_detail/id/}{$item['id']}" class="">
+    <div class="weui_panel_hd"><i class="icon-order-{$item['type']}"></i>订单号:{$item['order_no']} <span class="fr">{echo:$status}</span></div>
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_text">
+            <p class="weui_media_desc">
+                {list:items=$item['goodslist'] item=$pic}
+                <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($pic['img'],100,100);}" alt="">
+                {/list}
+            </p>
+            <ul class="weui_media_info">
+                <li class="weui_media_info_meta">{$item['create_time']}</li>
+                <li class="weui_media_info_meta weui_media_info_meta_extra">{$currency_symbol}{$item['order_amount']}</li>
+            </ul>
+        </div>
+    </div>
+    </a>
+    {if:$btn}
+    <div class="weui_panel_bd weui_panel_btn">{echo:$btn}</div>
+    {/if}
+</div>
+{/list}
+<div class="page-nav p20 tc">{$pagelist}</div>
+<script type="text/javascript">
+    function order_sign(id) {
+        $.confirm("你是否已经收到该订单商品?", "温馨提示", function () {
+            $.post("{url:/ucenter/order_sign}", {id: id}, function (data) {
+                if (data['status'] == 'success') {
+                   $.toast("确认收货成功","success",function () {
+                        location.reload();
+                    });
+                } else {
+                    $.toast("操作失败", "forbidden");
+                }
+            }, 'json');
+        }, function () {
+            //点击取消后的回调函数
+        });
+    }
+    
+    function order_delete(id){
+        $.confirm("你确定要删除该订单吗?", "温馨提示", function () {
+            $.post("{url:/ucenter/order_delete}", {id: id}, function (data) {
+                if (data['status'] == 'success') {
+                     $.toast("删除成功", "success",function () {
+                        location.reload();
+                    });
+                } else {
+                    $.toast("操作失败", "forbidden");
+                }
+            }, 'json');
+        }, function () {
+            //点击取消后的回调函数
+        });
+    }
+</script>

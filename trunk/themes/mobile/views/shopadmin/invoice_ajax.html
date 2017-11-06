@@ -1,0 +1,25 @@
+{if:$invoicelist}
+{list:$items=$invoicelist}
+ <div  class="weui_media_box weui_media_appmsg">
+           
+                <div class="weui_media_hd">
+                    <img class="weui_media_appmsg_thumb weui_media_text_img" src="{echo:Common::thumb($item['img'],100,100);}" />
+                </div>
+                 <a href="{url:/shopadmin/order_detail/id/$item[order_id]}" >
+                <div class="weui_media_bd">
+                    <h4 class="weui_media_title">收件人：{$item['accept_name']}</h4>
+                    <p class="weui_media_desc">商品数量: {$item['total']}</p>
+                    <p class="weui_media_desc express_name">物流公司: {echo:isset($expresslist[$item['express_company_id']])?$expresslist[$item['express_company_id']]['name']:'未知';}</p>
+                    <p class="weui_media_desc">物流单号: {$item['express_no']}</p>
+                    <p  class="weui_media_desc">时间：{$item['express_time']}</p>
+                   
+                </div>
+                </a>
+                <div class="weui_timetips">
+                   <lable class="rewriteexpress" style="height:30px;" data-orderid="{$item['order_id']}" data-oldexpressid="{$item['express_company_id']}" data-oldexpressname="{$expresslist[$item['express_company_id']]['name']}" data-oldexpressno="{$item['express_no']}"><i class="fa fa-cog"></i>修改物流</lable>
+                </div>
+</div>
+{/list}
+{else:}
+<div class="no-more-record">暂无更多记录</div>
+{/if}

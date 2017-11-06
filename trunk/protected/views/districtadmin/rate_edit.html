@@ -1,0 +1,33 @@
+<h1 class="page_title">比例编辑</h1>
+<div id="obj_form" class="form2">
+    <form action="{url:/districtadmin/rate_save}" method="post" >
+        {if:isset($id)}<input type="hidden" name="id" id="objId" value="{$id}">{/if}
+    <dl class="lineD">
+      <dt><b class="red">*</b> 用户名：</dt>
+      <dd>
+        <label>{$real_name}</label>      
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b> 比例：</dt>
+      <dd>
+        <input name="base_rate" type="text" value="{$base_rate}" alt="最大99">%      
+      </dd>
+    </dl>
+
+    <div style="text-align:center"><input type="submit" value="提交" id="submit" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
+    </form>
+</div>
+<script type="text/javascript">
+$("#submit").submit(function(){
+  console.log($("input[name=base_rate]").val());
+  if($("input[name=base_rate]").val()<2){
+    alert('比例最小2%');
+    return false;
+  }
+  if($("input[name=base_rate]").val()>99){
+    alert('比例最大99%');
+    return false;
+  }
+});
+</script>

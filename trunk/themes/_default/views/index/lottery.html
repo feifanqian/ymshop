@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>问鼎世纪抽奖活动</title>
+<script type="text/javascript" src="{url:@static/Lottery/js/jquery-1.7.2-min.js}"></script>
+<script type="text/javascript" src="{url:@static/Lottery/js/easing.js}"></script>
+<script type="text/javascript" src="{url:#js/layer/layer.js}"></script>
+<style>
+html,body{margin:0;padding:0;overflow:hidden;}
+.main_bg{background:url({url:@static/Lottery/images/main_bg.jpg}) top center no-repeat;height:1000px;}
+.main{width:1600px;height:1000px;position:relative;margin:0 auto;}
+.num_mask{background:url({url:@static/Lottery/images/num_mask.png}) 0px 0px no-repeat;height:184px;width:1565px;position:absolute;left:10px;top:375px;z-index:9;}
+.num_box{height:450px;width:1600px;position:absolute;left:0px;top:400px;z-index:8;overflow:hidden;text-align:center;}
+.num{background:url({url:@static/Lottery/images/num.png}) top center repeat-y;width:130px;height:265px;float:left;margin-left:13px;}
+.btn{background:url({url:@static/Lottery/images/btn_start.png});background-size: 100% 100%;background-repeat: no-repeat;width:264px;height:140px;position:absolute;left:50%;bottom:40px;margin-left:-132px;cursor:pointer;clear:both;}
+.result{position:absolute;left:-2px;top:810px;z-index:8;overflow:hidden;font-size:30px;color:white;}
+</style>
+</head>
+<body>
+<div class="main_bg">
+  <div class="main">
+    <div id="res" style="text-align:center;color:#fff;padding-top:15px;"></div>
+    <!--<div class="num_mask"></div>-->
+    <div class="num_box">
+      <div class="num" style="background-position-y: 525px;"></div>
+      <div class="num" style="background-position-y: 525px;"></div>
+      <div class="num" style="background-position-y: 525px;"></div>
+      <div class="num" style="background-position-y: 525px;"></div>
+	  <div class="num" style="background-position-y: 525px;"></div>
+	  <div class="num" style="background-position-y: 525px;"></div>
+	  <div class="num" style="background-position-y: 525px;"></div>
+	  <div class="num" style="background-position-y: 525px;"></div>
+	  <div class="num" style="background-position-y: 525px;"></div>
+	  <div class="num" style="background-position-y: 525px;"></div>
+	  <div class="num" style="background-position-y: 525px;"></div>
+      <div class="btn"></div>
+    </div>
+	<div class="result"></div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+var isBegin = false;
+$(function(){
+	var u = 265;
+	$('.btn').click(function(){
+		if(isBegin) return false;
+		isBegin = true;
+		$(".num").css('backgroundPositionY',525);
+		layer.load();
+                $.post("lottery",{},function(data){
+                    layer.closeAll();
+                    if(data.status=='success'){
+                        console.log(data.mobile);
+                        var num_arr = data.mobile+''.split('');
+                        $(".num").each(function(index){
+                                var _num = $(this);
+				_num.animate({ 
+					backgroundPositionY: (u*60) - (u*num_arr[index])
+				},{
+					duration: 4000+index*550,
+					easing: "easeInOutCirc",
+					complete: function(){
+						if(index==10){
+							isBegin = false;
+							if($(".result span").length>0 && $(".result span").length%9==0){
+							   $(".result").append("<br/>");
+							}
+							$(".result").append("<span style='margin-left:10px;'>"+data.mobile+"</span>");
+						}
+					}
+				});
+			
+                        });
+                    }else{
+                        isBegin = false;
+                        layer.msg(data.msg);
+                    }
+                },'json');
+	});	
+});
+</script>

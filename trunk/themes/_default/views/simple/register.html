@@ -1,0 +1,67 @@
+{echo:JS::import('dialog?skin=tinysimple');}
+{echo:JS::import('dialogtools');}
+{set:$config = Config::getInstance(); $other = $config->get('other'); $reg_way = isset($other['other_reg_way'])?$other['other_reg_way']:0;$reg_way = explode(',',$reg_way);$reg_way = array_flip($reg_way);}
+<style>
+    .myform .input {
+        border-color:#cccdcf !important;
+    }
+</style>
+<div class="regBg magic-bg" >
+    <div class="simple-box regCenter "  style="width:950px;height:610px;left:20%;background-color: #fff">
+        <div class="simpleboxTitle title">
+            <div class="sub-1 regtype" data-type="mobile"><h1 class="registeredselect"><span style="font-weight: 500;">手机注册</span></h1></div>
+            <div class="sub-2"><i class="iconfont icon-home"></i>
+                <a class="regtit-right" style="padding:5px;" href="{url:/index/index}">首页</a>
+                <a class="regtit-right" style="padding:5px" href="{url:/simple/login}">登录</a>
+            </div>
+        </div>
+        <p>贴心提示：请您定期更换密码，防止不法分子窃取你的账户信息，<span>谨防诈骗</span>!</p>
+        <form action="{url:/simple/register_act}" class="myRegBox reg-box" method="post" callback="checkReadme">
+            <input type="hidden" name="reg_type" value="mobile" />
+            <input type="hidden" name="redirectURL" value="{$redirectURL|$this->perPage()}">
+            <ul class="myform form  ">
+                <li><span class=" fa">手机号码</span><input autoCheck="false" type="text" id="mobile" class="input" name="mobile" pattern="mobi" placeholder="手机号码" value="{$mobile}" alt="正确的手机号码"><label></label></li>
+                <li>
+                    <span class=" fa">真实姓名</span><input name="realname" id="realname" class="input"  value="{$realname}" placeholder="请输入您的姓名" alt="姓名必填"><label></label>
+                </li>
+
+                <li><span class="fa">登录密码</span><input bind="repassword" minlen=6 maxlen=20 class="input" type="password" value="{$password}" name="password" pattern="required" placeholder="密码" alt="6-20任意字符组合"><label></label></li>
+
+                <li><span class=" fa">确认密码</span><input bind="password" minlen=6 maxlen=20 class="input" type="password"  value="{$repassword}" name="repassword" pattern="required" placeholder="确认密码" alt="6-20任意字符组合"><label></label></li>
+
+
+                <li id="t_mobilecode">
+                    <span class=" fa">手机验证码</span><input type="text" class="input-sm" name="mobile_code" id="mobile_code" pattern="\d{6}" alt="6位短信验证码" placeholder="短信验证码">
+                    <input id="sendSMS" type="button" class="btn btn-default" style="height:36px;" value="获取短信验证码"><label></label></dd>
+                </li>
+
+                <li>
+                    <span class="fa"></span><input id="readme" type="checkbox" alt="同意后才可注册"><label></label><label for="readme"> 我已阅读并同意《<a class="blue" id="user-license" href="javascript:;">{$site_title}用户注册协议</a>》</label>
+                </li>
+                <li><button class="btn btn-main " style="padding:5px 40px;margin-left: 120px;border-radius: 50px;">立即注册</button></li>
+                {token:key=reg}
+            </ul>
+
+        </form>
+    </div>
+</div>
+<div id="license-content" style="display:none;">
+    {query:name=help where=id eq 14}
+    {$item['content']}
+    {/query}
+</div>
+
+{echo:JS::import('form')}
+<script type="text/javascript">
+    var REG = {
+        invalid: {echo: json_encode(isset($invalid) ? $invalid : null)},
+        send_sms_url: "{url:/ajax/send_sms}",
+        ajax_email_chk_url: "{url:/ajax/email/email}",
+        ajax_name_chk_url: "{url:/ajax/name/name}",
+        ajax_mobile_chk_url: "{url:/ajax/mobile/mobile}",
+        ajax_valide_code_url: "{url:/ajax/verifyCode/verifyCode/}",
+        regtype: "{$regtype|'mobile'}"
+    };
+</script>
+
+<script type="text/javascript" charset="UTF-8" src="{url:#js/reg.js}"></script>

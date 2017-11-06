@@ -1,0 +1,160 @@
+<style>
+    .weui_panel_hd::after{
+        border:none;
+    }
+    .weui-form-preview::before{
+        border: none;
+    }
+    .weui-form-preview::after{
+        border: none;
+    }
+    .weui-form-preview__value{
+        padding-left: 50px;
+    }
+    .time{
+        margin: 0 auto;
+        height: 10px;
+    }
+</style>  
+<div class="weui_panel_hd">专区功能</div>
+<div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+                {if:empty($district)}
+                <a class="weui_cell" href="{url:/district/district/test/1}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="fa fa-eye icon-stack-1x icon-inverse" style="line-height: 1.5em;font-size: 1.2em;"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>进入专区</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                {/if}
+              <a class="weui_cell" href="{url:/district_introduce.html}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="fa fa-question icon-stack-1x icon-inverse" style="line-height: 1.5em;font-size: 1.2em;"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>了解专区详情</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                <a class="weui_cell" href="{url:/ucenter/apply_for_district}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="fa fa-envelope-o icon-stack-1x icon-inverse" style="line-height: 1.5em;font-size: 1.2em;"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>申请专区入驻</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+<div class="weui_panel_hd">选择专区</div>
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+                {if:empty($district)}
+                <div class="weui-loadmore weui-loadmore_line page_end">
+                    <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">暂无入驻专区</span>
+                </div>
+                {else:}
+               {list:$items=$district}
+                  <a class="weui_cell" href="{url:/district/login_act/id/}{$item['id']}">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-home1 icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>{$item['name']}</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+               {/list}
+               {/if}
+            </div>
+        </div>
+    </div>
+    <div class="weui_panel_hd">待处理专区</div>
+    <div class="weui_panel_bd">
+                {if:empty($apply_info)}
+                <div class="bg-white p20" style="height:90px;">
+                <div class="weui-loadmore weui-loadmore_line page_end">
+                    <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">暂无</span>
+                </div>
+                </div>
+                {else:}
+               {list:$items=$apply_info}
+                 <div class="ma20 bg-white p20 ">
+                    <div class="weui-form-preview">
+                            <div class="weui-form-preview__hd">
+                                <div class="weui-form-preview__item">
+                                    <label class="weui-form-preview__label">专区名称</label>
+                                    <em class="weui-form-preview__value">{$item['name']}</em>
+                                </div>
+                            </div>
+                            <div class="weui-form-preview__bd">
+                                <div class="weui-form-preview__item">
+                                    <label class="weui-form-preview__label">申请时间</label>
+                                    <span class="weui-form-preview__value">{$item['apply_time']}</span>
+                                </div>
+                                <div class="weui-form-preview__item">
+                                    <label class="weui-form-preview__label">地理位置</label>
+                                    <span class="weui-form-preview__value">{$item['location']}</span>
+                                </div>
+                                <div class="weui-form-preview__item">
+                                    <label class="weui-form-preview__label">联系人</label>
+                                    <span class="weui-form-preview__value">{$item['linkman']}</span>
+                                </div>
+                                <div class="weui-form-preview__item">
+                                    <label class="weui-form-preview__label">支付状态</label>
+                                    <span class="weui-form-preview__value">{if:$item['pay_status']==1}已支付{else:}未支付{/if}</span>
+                                </div>
+                                {if:$item['refuse_reason']!=""}
+                                <div class="weui-form-preview__item">
+                                    <label class="weui-form-preview__label">备注说明</label>
+                                    <span class="weui-form-preview__value">{$item['refuse_reason']}</span>
+                                </div>
+                                {/if}
+                            </div>
+                    </div>
+                    <div class="weui-loadmore weui-loadmore_line page_end time">
+                            <span class="weui-loadmore__tips" >
+                                {if:$item['status']==0&&$item['pay_status']==0}
+                                <a href="{url:/ucenter/district_pay/id/$item[id]}" class="weui-btn weui-btn_mini weui-btn_primary">马上支付</a>
+                                {else:}
+                                等待审核
+                                {/if}
+                            </span>
+                    </div>
+                </div>
+               {/list}
+               {/if}
+            </div>
+<script>
+    $(function(){
+        $("#main-tabbar a").click(function(e){
+             e.preventDefault();
+                  //提示
+            layer.open({
+              content: '请选择进入专区'
+              ,skin: 'msg'
+              ,time: 4 //2秒后自动关闭
+            });
+            return false;
+        });
+    })
+</script>

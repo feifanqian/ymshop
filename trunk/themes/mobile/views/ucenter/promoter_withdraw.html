@@ -1,0 +1,147 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<script type="text/javascript" src="{url:#js/city-picker.js}" charset="utf-8"></script>
+<style type="text/css">
+        .weui_panel{
+            font-size: 14px;
+        }
+        .weui_panel:before{
+            width: 0px;
+            height:0px;
+        }
+</style>
+<div class="ma20 bg-white p20 ">
+<div class="weui_panel">
+        <div class="weui_panel_hd">申请信息</div>
+        <div class="weui_panel_bd">
+            <div class="weui-cell weui-cell_select weui-cell_select-after">
+                    <div class="weui-cell__hd" style="width:47%">
+                        <label class="weui-label">提现至</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <select class="weui-select" name="select2" id='settle-type' style="text-align: center;">
+                            <option value="2">银行卡</option> 
+                            <option value="1">账户余额</option>          
+                        </select>
+                    </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd" style="width:50%"><label class="weui-label">提现金额</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" name="withdraw_amount" placeholder="提现金额不少于{$min_withdraw_amount}">
+                </div>
+            </div>
+            <div id="card-info" style="display: none;">
+            <div class="weui_panel_hd">银行卡信息</div>
+             <div class="weui_panel_bd">
+            <div class="weui-cell">
+                <div class="weui-cell__hd" style="width:50%"><label class="weui-label">银行名称</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="bank_name" placeholder="名称">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd" style="width:50%"><label class="weui-label">银行卡号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" name="card_number" placeholder="卡号"/>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd" style="width:50%"><label class="weui-label">开户名</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="bank_account_name" placeholder="开户名">
+                </div>
+            </div>
+             <div class="weui-cell">
+            <div class="weui-cell__hd" style="width:50%"><label class="weui-label">开户所在地</label></div>
+            <div class="weui-cell__bd">
+                    <input class="weui-input" name="address" placeholder="选择省市" />
+                    <input type="hidden" name="province" />
+                    <input type="hidden" name="city" />
+            </div>
+            </div>
+             </div>
+            <p style="width: 100%;text-align: center;color:red;font-size:12px;"><i class="fa fa-exclamation-circle red"></i>提现需缴纳{$withdraw_fee_rate}%的手续费，请知悉。</p>
+            </div>
+    </div>
+</div>
+</div>
+        
+<div class="ma20 bg-white p20 ">
+    <a href="javascript:;" class="weui-btn weui-btn_primary" id="apply-submit">提交申请</a>
+    <a href="javascript:history.go(-1);" class="weui-btn weui-btn_default">返回</a>
+</div>
+
+<script>
+    $("#settle-type").change(function(){
+        if($(this).val()==1){
+            $("#card-info").slideUp(300);
+        }else if($(this).val()==2){
+            $("#card-info").slideDown(400);
+        }
+    });
+    function notification(msg){
+           layer.open({
+                    content: msg
+                    ,skin: 'msg'
+                    ,time: 4 
+                });
+    }
+    $("#apply-submit").click(function(){
+        var withdraw_type = $("#settle-type").val();
+        var withdraw_amount = $("input[name='withdraw_amount']").val();
+        if(withdraw_type==1){
+            if(withdraw_amount==''||withdraw_amount<1){
+                notification("提现金额不少于1");
+                return false;
+            }else{
+                var formdata={type:1,amount:withdraw_amount};
+            }
+            
+        }else if(withdraw_type==2){
+            if(withdraw_amount==''||withdraw_amount<1){
+                notification("提现金额不少于1");
+                return false;
+            }
+            var bank_name = $("input[name='bank_name']").val();
+            var card_number = $("input[name='card_number']").val();
+            var bank_account_name = $("input[name='bank_account_name']").val();
+            var province = $("input[name='province']").val();
+            var city = $("input[name='city']").val();
+            if(bank_name==''||card_number==''||bank_account_name==''||province==''||city==""){
+                notification("请完善银行卡信息");
+                return false;
+            }else{
+               var formdata={type:2,amount:withdraw_amount,bank_name:bank_name,card_number:card_number,bank_account_name:bank_account_name,province:province,city:city};
+            }
+        }
+        layer.open({
+         type: 2
+        ,content: '正在提交中'
+        ,shadeClose: false
+         });
+         setTimeout(function(){
+           $.post('{url:/ucenter/promoter_withdraw_submit}',formdata,function(result){
+           layer.closeAll();
+           if(result.status=='success'){
+                 $.toast("申请已提交",'success',function(){
+                    window.location.href="{url:/ucenter/promoter_withdraw_list}";
+                });
+              }else{
+                 notification(result.msg);
+          }
+          },'json');
+      },1000);
+    });
+     $(function(){
+        $("input[name=address]").cityPicker({
+        title: "开户行所在地"
+        ,showDistrict: false});
+    
+        $("input[name=address]").change(function(){
+           var val = $(this).val();
+           var address = val.split(" ");
+           $("input[name=province]").val(address[0]);
+           $("input[name=city]").val(address[1]);
+        });
+    })
+</script>

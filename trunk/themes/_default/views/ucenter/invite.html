@@ -1,0 +1,38 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<div class="container clearfix">
+    {widget:name=sub_navs action=ucsidebar sidebar=$sidebar act=$actionId}
+    <div class="content clearfix uc-content">
+        <h1 class="title"><span>我的邀请：</span></h1>
+        <div class="mt20 tr"><a id="invitenow" class="btn btn-main" href="javascript:;">邀请加入</a></div>
+        <table class="simple attention">
+            <tr>
+                <th width="80"></th> 
+                <th style="text-align:left;">昵称</th> 
+                <th style="text-align:left;" width="140">来源</th> 
+                <th style="text-align:center;" width="140">加入时间</th>
+            </tr>
+            {list:items=$invite['data']}
+            <tr {if:$key%2==1}class="odd"{/if}>
+                <td><img src="{$item['avatar']}" width="50" height="50" /></td> 
+                <td>{$item['nickname']}</td> 
+                <td>{$item['from']}</td>
+                <td>{echo:date("Y-m-d H:i:s",$item['createtime'])}</td> 
+            </tr>
+            {/list}
+        </table>
+        <div class="page-nav">{$invite['html']}</div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(document).on("click", "#invitenow", function () {
+            layer.open({
+                type: 1,
+                title: "邀请加入",
+                shadeClose: true,
+                area: ['320px', '450px'], //宽高
+                content: '<img src="/user/buildinvite" alt="" /><div style="margin:0 15px;">把二维码分享给你的好友,邀请TA加入,<br/>邀请链接:<br /><input type="text" value="{echo:Url::fullUrlFormat("/index/invite")}?uid={$user['id']|0}" onFocus="this.select();" style="width:100%;"/></div>'
+            });
+        });
+    });
+</script>

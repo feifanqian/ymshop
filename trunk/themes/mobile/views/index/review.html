@@ -1,0 +1,307 @@
+{echo:JS::import("form")}
+<link type="text/css" rel="stylesheet" href="{url:@static/css/fontawesome-stars.css}" />
+<style type="text/css">
+    #reviewForm{
+        font-size: 15px;
+    }
+    .refund-num a, .refund-num input{
+        border: 1px solid #ddd;
+        margin-right: 1px;
+        color: #5e5e5e;
+        float: left;
+        height: 30px;
+        width: 30px;
+        line-height: 30px;
+        padding: 0 0.3em;
+        overflow: hidden;
+        text-align: center;
+        vertical-align: middle;
+    }
+    .weui-cells__title {
+        margin-top: .77em;
+        margin-bottom: .3em;
+        padding-left: 15px;
+        padding-right: 15px;
+        color: #999999;
+        font-size: 14px;
+    }
+    .weui-cells {
+        margin-top: 1.17647059em;
+        background-color: #FFFFFF;
+        line-height: 1.41176471;
+        font-size: 17px;
+        overflow: hidden;
+        position: relative;
+    }
+    .weui-cells:before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 1px;
+        border-top: 1px solid #d9d9d9;
+        color: #d9d9d9;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: scaleY(.5);
+        transform: scaleY(.5);
+        left: 15px;
+    }
+    .weui-textarea {
+        display: block;
+        border: 0;
+        resize: none;
+        width: 100%;
+        color: inherit;
+        font-size: 1em;
+        line-height: inherit;
+        outline: 0;
+    }
+    .weui_panel_hd:after {
+        border:none;
+    }
+    #reason:after{
+        content: " ";
+        display: inline-block;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+        height: 6px;
+        width: 6px;
+        border-width: 2px 2px 0 0;
+        border-color: #c8c8cd;
+        border-style: solid;
+        position: relative;
+        top: -2px;
+        top: -1px;
+        margin-left: .3em;
+    }
+    .weui_cell_textarea:before{
+        border:none;
+    }
+    .no_line:after{
+        border:none !important;
+    }
+</style>
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<form id="reviewForm" action="">
+    <input type="hidden" name="id" value="{$review['id']}">
+    <input type="hidden" name="gid" value="{$review['gid']}">
+    <div class="ma20 bg-white p20 ">
+        <div class="weui_panel_hd">商品信息</div>
+        <a href="{url:/index/product/id/}{$review['goods_id']}" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($review['img'],100)}" alt="">
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">{echo:TString::msubstr($review['name'],0,30)}</h4>
+                <p class="weui_media_desc">价格:
+                    <span class="red">¥{$review['sell_price']}</span>
+                </p>
+            </div> 
+        </a>
+    </div>
+    <div class="ma20 bg-white p20 ">
+        <div class="weui_panel_hd">我的评论</div>
+        <div class="weui_cell" style="height:50px;">
+            <select id="rate" name="point">
+                <option value="1">非常不满意</option>
+                <option value="2">不满意</option>
+                <option value="3">一般</option>
+                <option value="4">满意</option>
+                <option value="5" selected="selected">非常满意</option>
+            </select>   
+        </div>
+        <div class="weui_cell weui_cell_textarea">
+            <textarea name="content" maxlength="200" class="weui-textarea" style="font-size:15px;" placeholder="在这里写下您的感受吧~" rows="4"></textarea>
+        </div>
+        <div class="page__bd">
+            <div class="weui-gallery" id="gallery">
+                <span class="weui-gallery__img" id="galleryImg"></span>
+                <div class="weui-gallery__opr">
+                    <a href="javascript:" class="weui-gallery__del" id="gallery_delete">
+                        <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="weui-cells weui-cells_form no_line" style="margin-top:0px;">
+                <div class="weui-cell no_line">
+                    <div class="weui-cell__bd no_line">
+                        <div class="weui-uploader">
+                            <div class="weui-uploader__hd">
+                                <p class="weui-uploader__title"><b style="font-size:14px;">我要晒图(4M以内)</b></p>
+                                <div class="weui-uploader__info"><span id="imgnum">0</span>/4</div>
+                            </div>
+                            <div class="weui-uploader__bd">
+                                <ul class="weui-uploader__files" id="uploaderFiles">
+
+                                </ul>
+                                <div class="weui-uploader__input-box">
+                                    <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="ma20 bg-white p20 ">
+    <a href="javascript:;" class="weui-btn weui-btn_primary" id="review_submit">提交评论</a>
+    <a href="javascript:history.go(-1);" class="weui-btn weui-btn_disabled weui-btn_primary">返回</a>
+</div>
+<div class="js_dialog" id="comfirmDialog" style="opacity: 1;display:none;">
+    <div class="weui-mask"></div>
+    <div class="weui-dialog">
+        <div class="weui-dialog__hd"><strong class="weui-dialog__title">信息确认</strong></div>
+        <div class="weui-dialog__bd">是否马上发布？</div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:CloseDialog();" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+            <a href="javascript:SubmitReview();" class="weui-dialog__btn weui-dialog__btn_primary">确认</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" charset="UTF-8" src="/themes/_default/js/jquery.iframe-post-form.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+<script type='text/javascript' src="{url:@static/js/jquery.barrating.js}"></script>
+<script>
+    $(function () {
+        $('#rate').barrating({
+            theme: 'fontawesome-stars',
+        });
+    });
+</script>
+<script>
+    var tmpl = '<li class="weui-uploader__file weui-uploader__file_status" style="background-image:url(#url#)"> <div class="weui-uploader__file-content"><div class="weui-loading"></div></div><input type="hidden" name="review_img[]"></li>';
+    $gallery = $("#gallery");
+    $galleryImg = $("#galleryImg");
+    $galleryDelete = $("#gallery_delete");
+    $uploaderInput = $("#uploaderInput");
+    $uploaderFiles = $("#uploaderFiles");
+    
+    var File;
+    var posturl = "{echo:$options['action']}";
+    var policy = "{echo:$options['policy']}";
+    var signature = "{echo:$options['signature']}";
+    var img_host = "{echo:$options['img_host']}";
+    function CloseDialog() {
+        $("#comfirmDialog").fadeOut(200);
+    }
+    function SubmitReview() {
+        $("#comfirmDialog").fadeOut(200);
+        if ($(".weui-loading").length > 0) {
+            $.toast("请等待图片上传完成", 'text');
+            return false;
+        }
+        var data = new FormData($("#reviewForm")[0]);
+        $.showLoading();
+        $.ajax({
+            url: "{url:/index/review_act}",
+            type: 'POST',
+            data: data,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (returndata) {
+                $.hideLoading();
+                var obj = JSON.parse(returndata);
+                if (obj.status == 'success') {
+                    $.toast("评论成功！", "success",function(){
+                        location.href="{url:/ucenter/review}";
+                    });
+                } else {
+                    $.toast(obj.msg, "forbidden");
+                }
+            },
+            error: function (e) {
+                $.hideLoading();
+                $.toast("出错了，请稍后再试！", "forbidden");
+            },
+        });
+    }
+
+    $(function () {
+        $("#review_submit").on("click", function () {
+            $("#comfirmDialog").fadeIn(200);
+        });
+        //upload
+        $uploaderInput.on("click", function () {
+            if ($("#uploaderFiles li").length >= 4) {
+                $.toast("最多可上传4张图片", 'text');
+                return false;
+            } else {
+                return true;
+            }
+
+        })
+        $uploaderInput.on("change", function (e) {
+            var src, url = window.URL || window.webkitURL || window.mozURL || window;
+            var files = e.target.files;
+            File = files[0];
+            if (url) {
+                src = url.createObjectURL(files[0]);
+            } else {
+                src = e.target.result;
+            }
+            $uploaderFiles.append($(tmpl.replace('#url#', src).replace('#id#', "pic" + $("#uploaderFiles li").length+1)));
+            $("#imgnum").text($("#uploaderFiles li").length);
+            $.showLoading("图片上传中...");
+            setTimeout(function(){
+                UploadAjax(File,$("#uploaderFiles li").length-1);
+            },1000);
+        });
+        $uploaderFiles.on("click", "li", function () {
+            var index = $(this).index();
+            $galleryImg.attr("style", this.getAttribute("style"));
+            $gallery.fadeIn(100);
+            $galleryDelete.unbind('click').on("click", function () {
+                $gallery.fadeOut(100);
+                $("#uploaderFiles li:eq(" + index + ")").remove();
+                $("#imgnum").text($("#uploaderFiles li").length);
+            });
+        });
+        $gallery.on("click", function () {
+            $gallery.fadeOut(100);
+        });
+    });
+
+
+    function UploadAjax(file, index) {
+        var data = new FormData();
+        data.append('policy', policy);
+        data.append('signature', signature);
+        data.append('file', file);
+        
+        $.ajax({
+            url: posturl,
+            type: 'POST',
+            data: data,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (returndata) {
+                $.hideLoading();
+                var obj = JSON.parse(returndata);
+                if (obj.message == 'ok') {
+                    console.log(111);
+                    $("#uploaderFiles li:eq(" + index + ") input").val(obj.url);
+                    $("#uploaderFiles li:eq(" + index + ")").removeClass("weui-uploader__file_status");
+                    $("#uploaderFiles li:eq(" + index + ") div").remove();
+                } else {
+                    $("#uploaderFiles li:eq(" + index + ") div").html('<i class="weui-icon-warn"></i>');
+                    $("#uploaderFiles li:eq(" + index + ") input").remove();
+                }
+            },
+            error: function (e) {
+                $.hideLoading();
+                $("#uploaderFiles li:eq(" + index + ") div").html('<i class="weui-icon-warn"></i>');
+                $("#uploaderFiles li:eq(" + index + ") input").remove();
+            },
+        });
+    }
+</script>

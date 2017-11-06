@@ -1,0 +1,48 @@
+{set:$colorarr=array('yellow', 'violetred', 'slateblue', 'orange');}
+{set:$current_category_ids='';$parent_category='';}
+{set:$i=0;}
+{list:items=$category item=$categ}
+{set:$idx=$i%4;}
+{set:$i++;}
+{if:$categ['id']!=1}
+<div class="weui_panel category-list">
+    <div class="weui_cells_title">
+        <a href="{url:/index/category/cid/$categ[id]}" class="more">
+            <div style="padding-left:0;" class="color-{echo:$colorarr[$idx]}"><b>{$categ['title']}</b></div></a>
+    </div>
+    <div class="weui_panel_bd category-sonlist">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+
+                {list:items=$categ['child'] item=$child}
+                <a class="weui_cell" href="{url:/index/category/cid/$child[id]}">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>{if:isset($child['id'])}
+                            {set:$current_category_ids.=$child['id'].',';}
+                            {/if}
+                        <div >{$child['title']}</div></p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                {if:isset($child['child'])}
+                {list:items=$child['child'] item=$grandson}
+                <a class="weui_cell" href="{url:/index/category/cid/$grandson[id]}">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>{if:isset($grandson['id'])}
+                            {set:$current_category_ids.=$grandson['id'].',';}{/if}
+                        <div>{$grandson['title']}</div></p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+
+                {/list}
+                {/if}
+
+                {/list}
+
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
+{/list}

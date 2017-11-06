@@ -1,0 +1,29 @@
+<link type="text/css" rel="stylesheet" href="{url:@static/css/ucenter.css}" />
+<div class="mt10 clearfix" style="position: relative;">
+    {widget:name=sub_navs action=ucsidebar sidebar=$sidebar act=$actionId}
+    <div class="content clearfix uc-content">
+        <div class="box p10">
+            <h1 class="title"><span>我的邀请：</span></h1>
+            <div class="mt10">
+                <table class="simple attention">
+                    <tr>
+                        <th width="80"></th> 
+                        <th style="text-align:left;">昵称</th> 
+                        <th style="text-align:left;" width="140">来源</th> 
+                        <th style="text-align:center;" width="140">加入时间</th>
+                    </tr>
+                    {list:items=$invite['data']}
+                    <tr {if:$key%2==1}class="odd"{/if}>
+                        <td><img src="{$item['avatar']}" width="50" height="50" /></td> 
+                        <td>{$item['nickname']}</td> 
+                        <td>{$item['from']}</td>
+                        <td>{echo:date("Y-m-d H:i:s",$item['createtime'])}</td> 
+                    </tr>
+                    {/list}
+                </table>
+                <div class="page-nav">{$invite['html']}</div>
+            </div>
+
+        </div>
+    </div>
+</div>

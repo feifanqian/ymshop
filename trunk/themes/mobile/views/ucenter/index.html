@@ -1,0 +1,261 @@
+{echo:JS::import("form")}
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style>
+    body {
+        padding-top:0;
+    }
+    .header {
+        display:none;
+    }
+    .weui-badge {
+        display: inline-block;
+        padding: .15em .4em;
+        min-width: 8px;
+        border-radius: 18px;
+        background-color: #F43530;
+        color: #FFFFFF;
+        line-height: 1.2;
+        text-align: center;
+        font-size: 12px;
+        vertical-align: middle;
+    }
+    .js_show .js_category{
+        font-size: 14px;
+        color: gray;
+    }
+    .js_category{
+        font-size: 14px;
+        color: black;
+    }
+    .js_category p{
+        width: 20px;
+        float: right;
+    }
+    .js_show .js_categoryInner{
+        display: block;
+    }
+    .js_categoryInner{
+        display: none;
+    }
+</style>
+<!--<div class=" p20 bg-title-2">
+    <table width="100%" class="user-info  ">
+        <tr>
+            <td width="60%"></td>
+            <td width="40%"></td>
+        </tr>
+        <tr>
+            <td>积分：{$customer['point']}</td>
+            <td>级别：{$customer['gname']|'普通会员'}</td>
+        </tr>
+    </table>
+</div>-->
+<div class="sign_tip" style="position: absolute;top:55px;right:30px;z-index:111;color:white;border:1px solid white;border-radius: 5px;">
+<a href="/user/sign_in" style="color:white;font-size: 14px;">
+    <span><i class="ymicon icon-qiandao icon-stack-1x icon-inverse" style="font-size: 1.2em;color:white;text-align: left;"></i></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签到送积分&nbsp;</span>
+</a>
+</div>
+<div id="ucenter-top">
+    {if:$user['avatar']==""}
+    {set:$user['avatar']="static/images/avatar.jpeg"}
+    {/if}
+    <div id="ucenter-avatar"><img src='{echo:Url::urlFormat("@".$user['avatar'])}' alt=""></div>
+    <div id="ucenter-account">
+        <p>昵称：{$user['nickname']}</p>
+        <p>级别：{echo:$is_hirer?"经销商":($is_promoter?"代理商":'普通会员')}</p>
+        {if:$is_hirer==false && $is_promoter==false}
+        <p id="ucenter-beagent" style="width:122px;height:25px;border: 1px solid white;border-radius: 5px;text-align: center;"><a href="/user/beagent" style="color:white;">如何成为代理商</a></p>
+        {/if}
+    </div>
+    <!-- <div id="ucenter-beagent" style="position: absolute;top: 100px;left: 100px;color: #fff;">
+        <p>如何成为代理商</p>
+    </div> -->
+</div>
+<div class="content-padded" id="orderstatus">
+    <div class="weui-row">
+        <div class="weui-col-20">
+            <a href="{url:/ucenter/order/}"><i class="iconfont icon-allorder"></i>全部订单</a>
+        </div>
+        <div class="weui-col-20">
+            <a href="{url:/ucenter/order/status/unpay}">
+                {if:$order['pending']}<span class="cart-num tip">{$order['pending']}</span>{/if}
+                <i class="iconfont icon-unpay"></i>待付款</a>
+        </div>
+        <div class="weui-col-20">
+            <a href="{url:/ucenter/order/status/undelivery}">
+                {if:$order['undelivery']}<span class="cart-num tip">{$order['undelivery']}</span>{/if}
+                <i class="iconfont icon-undelivery"></i>待发货</a>
+        </div>
+        <div class="weui-col-20">
+            <a href="{url:/ucenter/order/status/unreceived}">
+                {if:$order['unreceived']}<span class="cart-num tip">{$order['unreceived']}</span>{/if}
+                <i class="iconfont icon-deliveried"></i>已发货</a>
+        </div>
+        <div class="weui-col-20">
+            <a href="{url:/ucenter/review}">
+            <!-- <a href="{url:/index/demo}"></a> -->
+                {if:$comment['num']}<span class="cart-num tip">{$comment['num']}</span>{/if}
+                <i class="iconfont icon-uncomment"></i>待评价</a>
+        </div>
+    </div>
+</div>
+<div style='margin-top:10px;'>
+{if:$is_hirer==true}
+<div class="weui_panel js_show">
+    <div class="weui_panel_hd js_category">我的专区<p><i class="ymicon icon-navicon"></i><p></div>
+    <div class="weui_panel_bd js_categoryInner">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+                <a class="weui_cell" href="/district/district">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-home icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>进入专区</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
+ <div class="weui_panel js_show">
+    <div class="weui_panel_hd js_category">推广中心{if:Req::args("first")==1}<span class="weui-badge" style="margin-left: 5px;margin-bottom:2px;">NEW</span>{/if}<p><i class="ymicon icon-navicon"></i><p></div>
+    <div class="weui_panel_bd js_categoryInner">
+        <div class="weui_media_box weui_media_small_appmsg">
+            <div class="weui_cells weui_cells_access">
+                <a class="weui_cell" href="/user/invite">
+                        <div class="weui_cell_hd">
+                            <span class="icon-stack icon-lg">
+                                <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                                <i class="iconfont icon-my2 icon-stack-1x icon-inverse"></i>
+                            </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>我的邀请</p>
+                        </div>
+                        <span class="weui_cell_ft"></span>
+                </a>
+               <!--  <a class="weui_cell" href="/ucenter/promoter_invite">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-tuan icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>邀请入驻</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a> -->
+                <a class="weui_cell" href="/ucenter/promoter_home">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-qiandai icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>我的收益</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                 <a class="weui_cell" href="/ucenter/promoter_income">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-qiandai icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>收益记录</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                 <a class="weui_cell" href="/ucenter/promoter_withdraw_list">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-jifenjilu icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>提现记录</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
+                <!-- <a class="weui_cell" href="/index/invitepay">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-jifenjilu icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>线下收款</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a> -->
+<!--                  <a class="weui_cell" href="/ucenter/promoter_sale">
+                    <div class="weui_cell_hd">
+                        <span class="icon-stack icon-lg">
+                            <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                            <i class="iconfont icon-allorder icon-stack-1x icon-inverse"></i>
+                        </span>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>产品销售记录</p>
+                    </div>
+                    <span class="weui_cell_ft"></span>
+                </a>-->
+            </div>
+        </div>
+    </div>
+</div>
+{widget:name=sub_navs action=ucsidebar sidebar=$sidebar act=$actionId}
+</div>
+{if:!Common::checkInWechat()}
+<div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/simple/logout}" class="weui_btn weui_btn_primary">安全退出</a></div></div>
+{else:}
+    {if:isset($open_change)&&$open_change==true}
+    <!--<div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_account}" class="weui_btn weui_btn_primary">切换微信绑定账号</a></div></div>-->
+    {elseif:isset($open_bind)&&$open_bind==true}
+    <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_account}" class="weui_btn weui_btn_primary">绑定已有账号</a></div></div>
+    {/if}
+{/if}
+{if:$sign_in_open==1}
+<!--<div id='sign_in' style="width:80px;height:50px;background-color: white;position:fixed;right:0px;bottom:80px;">
+    <a href='{url:/ucenter/sign_in}'>
+        <i class="ymicon icon-qiandao" style="line-height: 1.3em;font-size: 3.5em;color:red;"> </i> 
+    </a>
+</div>-->
+{/if}
+<script>
+    $(function(){
+        $('.js_category').on('click', function(){
+            if($(this).parent().hasClass("js_show")){
+                 $(this).next(".js_categoryInner").slideUp();
+                 $(this).parent().removeClass("js_show");
+            }else{
+                 $(this).next(".js_categoryInner").slideDown();
+                 $(this).parent().addClass("js_show");
+            }
+        });
+    //     $("#ucenter-beagent").click(function(){
+    //    layer.open({
+    //         type: 3,
+    //         title: '成为代理商',
+    //         shade: true,
+    //         maxmin: true, //开启最大化最小化按钮
+    //         area: ['100%', 'auto'],
+    //         content: '<p style="text-align:justify;text-justify:inter-ideograph">分红点数是用于商城分红的凭证，分红点数是5000：1股分红。余额和积分是您在商城的可用资产，可以用于商城的购买活动，此处的消费统计只针对余额支付的订单。</p>'
+    //         ,skin: 'header'
+    //     })
+    // });
+
+    });
+</script>

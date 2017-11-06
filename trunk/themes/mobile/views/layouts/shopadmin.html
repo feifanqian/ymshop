@@ -1,0 +1,89 @@
+{if:$this->is_ajax_request()}
+{__viewcontents}
+{else:}
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" id="html">
+    <head>
+        <title>{$title}</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <base href="{url:#shopadmin/}" />
+        <link type="text/css" href="assets/css/font-awesome.min.css?ver={$version}" rel="stylesheet" />
+        <link type="text/css" href="assets/css/weui.min.css?ver={$version}" rel="stylesheet" />
+        <link type="text/css" href="assets/css/jquery.weui.min.css?ver={$version}" rel="stylesheet" />
+        <link type="text/css" href="assets/css/common.css?ver={$version}" rel="stylesheet" />
+        <script type="text/javascript" src="assets/js/jquery.min.js?ver={$version}"></script>
+        <script type="text/javascript" src="assets/js/jquery.weui.min.js?ver={$version}"></script>
+        <script type="text/javascript" src="assets/js/common.js?ver={$version}"></script>
+    </head>
+    <body>
+        <div class="header header-white">
+            <div class="header-l">
+                <a  href="javascript:history.go(-1);"><i class="fa fa-arrow-left"></i></a>
+            </div>
+            <div class="header-c">
+                <h2>{$title}</h2>
+            </div>
+            <div class="header-r">
+                <a href="javascript:;" class="searchbtn"><i class="fa fa-search"></i></a>
+            </div>
+        </div>
+        <div class="weui_search_bar" id="searchbar">
+            <form class="weui_search_outer" method="get" action="">
+                <div class="weui_search_inner">
+                    <i class="weui_icon_search"></i>
+                    <input type="search" name="keyword" class="weui_search_input" id="search_input" value="" placeholder="搜索" required/>
+                    <a href="javascript:" class="weui_icon_clear" id="search_clear"></a>
+                </div>
+                <label for="search_input" class="weui_search_text" id="search_text">
+                    <i class="weui_icon_search"></i>
+                    <span>搜索</span>
+                </label>
+            </form>
+            <!--<a href="javascript:" class="weui_search_cancel" id="search_cancel">取消</a>-->
+        </div>
+        {if:isset($tips)&&$tips}
+        
+        <div class="weui_msg" style="padding-top:5px;">
+            
+            <div class="">
+                <div class="tips tips-{$tips['status']} icon_sp_area"><i class="weui_icon_{$tips['status']}"></i> {$tips['msg']}</div>
+            </div>
+        </div>
+        {/if}
+        {__viewcontents}
+        <div class="weui_tabbar" id="main-tabbar">
+            <a href="{url:/shopadmin/index}" class="weui_tabbar_item {echo:$act=='index'?'weui_bar_item_on':''}">
+                <div class="weui_tabbar_icon">
+                    <i class="fa fa-home"></i>
+                </div>
+                <p class="weui_tabbar_label">首页</p>
+            </a>
+            <a href="{url:/shopadmin/order}" class="weui_tabbar_item {echo:$act=='order'?'weui_bar_item_on':''}">
+                <div class="weui_tabbar_icon">
+                    {if:$undeliverynums}
+                    <span class="cart-num tip">{$undeliverynums}</span>
+                    {/if}
+                    <i class="fa fa-print"></i>
+                </div>
+                <p class="weui_tabbar_label">订单</p>
+            </a>
+            <a href="{url:/shopadmin/invoice}" class="weui_tabbar_item {echo:$act=='invoice'?'weui_bar_item_on':''}">
+                <div class="weui_tabbar_icon">
+                    <i class="fa fa-credit-card"></i>
+                </div>
+                <p class="weui_tabbar_label">发货单</p>
+            </a>
+            <a href="{url:/shopadmin/profile}" class="weui_tabbar_item {echo:$act=='profile'?'weui_bar_item_on':''}">
+                <div class="weui_tabbar_icon">
+                    <i class="fa fa-briefcase"></i>
+                </div>
+                <p class="weui_tabbar_label">安全</p>
+            </a>
+        </div>
+    </body>
+</html>
+{/if}

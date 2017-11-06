@@ -1,0 +1,86 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<!-- S 面包屑导航 -->
+<div class="bg-base">
+    <ol class="bread-crumb container">
+        <li><a  href="{url:/index/index}">首页</a></li>
+        <li><a  href="{url:/index/help_index}">帮助中心 </a></li>
+    </ol>
+</div>
+<!-- E 面包屑导航 -->
+<div class="container">
+    <div class="mt10 clearfix" style="position: relative;">
+        <div class="sidebar fl" style="width:200px;">
+            <!--<h2 class="header">帮助中心</h2>-->
+            <div class="box mt20">
+                {set:$help_category=array()}
+                {query:name=help}
+                {set:$help_category[$item['category_id']][]=$item}
+                {/query}
+                {query:name=help_category}
+                <h2>{$item['name']}</h2>
+                <ul class="menu-list">
+                    {if:isset($help_category[$item['id']])}
+                    {list:items=$help_category[$item['id']]}
+                    <li><a  href="{url:/index/help/id/$item[id]}">{$item['title']}<span class="l-triangle"></span></a></li>
+                    {/list}
+                    {/if}
+                </ul>
+                {/query}
+            </div>
+        </div>
+        <div class="content" style="margin-left: 255px;">
+            <div class=" help-content p20">
+                <!--<h1 class="title"><span class="f16">帮助中心 - 帮助导航</span></h1>-->
+                <h2><span>自助服务</span></h2>
+                <ul>
+                    <li><a href="{url:/ucenter/order}"><i class="iconfont icon-dingdanchaxun"></i><span>查询订单</span></a></li>
+                    <li><a href="{url:/ucenter/refund}"><i class="iconfont icon-icon01"></i><span>返修/退货</span></a></li>
+                    <li><a href="{url:/ucenter/refund}"><i class="iconfont icon-tuihuoshenqing"></i><span>退款申请</span></a></li>
+                    <li><a href="{url:/ucenter/order}"><i class="iconfont icon-cnwuliugenzong"></i><span>物流跟踪</span></a></li>
+                    <li><a href="{url:/help-9.html}"><i class="iconfont icon-tuibaoshuoming"></i><span>退货说明</span></a></li>
+                    <li><a href="{url:/ucenter/check_identity/obj/password}"><i class="iconfont icon-xiugaimima"></i><span>修改密码</span></a></li>
+                    <li><a href="{url:/ucenter/order/status/undelivery/}"><i class="iconfont icon-yimaidaoshangpin"></i><span>查询已购商品</span></a></li>
+                    <li><a href="{url:/ucenter/voucher}"><i class="iconfont icon-wodeyouhuijuan"></i><span>查询优惠券</span></a></li>
+                    <li><a href="{url:/ucenter/voucher}"><i class="iconfont icon-iconfontgouwuqiaquan"></i><span>查询购物卡</span></a></li>
+                    <li><a href="{url:/help-12.html}"><i class="iconfont icon-changjianwenti"></i><span>常见问题</span></a></li>                 
+                </ul>
+            </div>
+            <div class=" help-shopping p20">
+                <!--<h1 class="title"><span class="f16">帮助中心 - 帮助导航</span></h1>-->
+                <h2><span>购物流程</span></h2>
+                <ul class="helpshoppingphoto">
+                    <li>
+                        <ul >
+                            <li><a href="{url:/simple/reg}"><i class="iconfont icon-jiantou">简单注册</i></a></li>
+                            <li><a href="{url:/simple/login}"><i class="iconfont icon-jiantou">使用邮箱登录</i></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <ul >
+                            <li><a href="{url:/index/category}"><i class="iconfont icon-jiantou">按分类浏览</i></a></li>
+                            <li><a href="{url:/index/search}"><i class="iconfont icon-jiantou">搜索商品</i></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <ul >
+                            <li><a href="{url:/index/index}"><i class="iconfont icon-jiantou">继续购物</i></a></li>
+                            <li><a href="{url:/help-8.html}"><i class="iconfont icon-jiantou">选择支付方式</i></a></li>
+                            <li><a href="{url:/ucenter/address}"><i class="iconfont icon-jiantou">填写收货信息</i></a></li>
+                        </ul>
+                    </li>
+                    <li> 
+                        <ul>
+                            <li></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <ul >
+                            <li><a href="{url:/ucenter/order/status/undelivery}"><i class="iconfont icon-jiantou">准备收货</i></a></li>                           
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+    </div>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7, IE=9" />
+        <style>
+            * {
+                font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+                ox-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; 
+            }
+            body{background:#3f4657;border:0;margin:0; position: relative;font-size:14px;}
+            #login {
+                border-
+                z-index:999;
+                width:460px;
+                position:absolute;
+                left:50%;
+                margin-left:-230px;
+                top:200px;
+                background:#fff;
+                border-radius: 2px;
+                box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+            }
+            #login-main {
+                height:100%; width:100%;text-align:center;
+                padding:15px;
+            }
+            #login-main ul li{line-height:35px;margin-top:10px;list-style: none;}
+            #login-main ul li input{line-height:25px;}
+            input,img,label{vertical-align:middle;}
+            label.caption{width:100px;display:inline-block;text-align:right;}
+            .message{
+                argin-top:20px;
+                width: 100%;
+                padding: 15px;
+                margin-bottom: 20px;
+                border: 1px solid #faebcc;
+                color: #8a6d3b;
+                background-color: #fcf8e3;
+            }
+            a{color:#FFF;text-decoration:none;}
+            .bg-img {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                opacity: .55;
+                height:100vh;
+                z-index:0;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
+                background:url('/static/images/admin/bg-img.jpg') no-repeat;
+            }
+            .button{padding:0 22px;width:180px;height:29px;line-height:29px;border:1px solid #58606e;border-bottom:none;border-radius:2px 2px 0 0;color:#fff;text-decoration:none;background-color:#565f6e;background:-moz-linear-gradient(#606a79,#4a5260);background:-ms-linear-gradient(#606a79,#4a5260);background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#606a79),color-stop(100%,#4a5260));background:-webkit-linear-gradient(#606a79,#4a5260);background:-o-linear-gradient(#606a79,#4a5260);background:linear-gradient(#606a79,#4a5260);}
+            .button:hover{border-color:#6f7a8b;background-color:#6b7484;background:-moz-linear-gradient(#778191,#576070);background:-ms-linear-gradient(#778191,#576070);background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#778191),color-stop(100%,#576070));background:-webkit-linear-gradient(#778191,#576070);background:-o-linear-gradient(#778191,#576070);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#778191',endColorstr='#576070');-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#778191',endColorstr='#576070')";background:linear-gradient(#778191,#576070);}
+
+        </style>
+        <title></title>
+        <meta name="Keywords" content="" />
+        <meta name="Description" content="" />
+        {echo:JS::import('jquery');}
+        <script type="text/javascript" src="{url:@static/js/layer/layer.js}"></script>
+    </head>
+    <body>
+        <div class="bg-img"></div>
+        <div id="login">
+            <div id="login-main">
+                {if:isset($msg)}
+                <div  class="message">{$msg}</div>
+                {/if}
+                <h2>管理中心</h2>
+                <form action="{url:/admin/check}" method="post">
+                    <ul style="text-align:left">
+                        <li><label class='caption'>用户名：</label><input name="name" /></li>
+                        <li><label class='caption'>密&nbsp;&nbsp;码：</label><input type="password" name="password" /></li>
+                        <li><label class='caption'>验证码：</label><input name="verifyCode" style="width:70px;"/><button style="margin-left:7px;cursor:pointer;line-height: 25px;" id="getCode">获取验证码</button></li>
+                        <li><label class='caption'></label><input class='button' type="submit" style="width:auto;" value='登 录'/> <input type="reset" class='button'  style="width:auto;" value='重 置'/></li>
+                    </ul>
+
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript">
+            if (top != self) {
+                if (top.location != self.location)
+                    top.location = self.location;
+            }
+            $("input[type='submit']").click(function(){
+                if($("input[name='name']").val()==""||$("input[name='password']").val()==""||$("input[name='verifyCode']").val()==""){
+                    layer.msg('请填写完整登录信息',{icon:7});
+                    return false;
+                }
+            });
+            $("#getCode").click(function(){
+                 var name = $("input[name='name']").val();
+                 if(name==""){
+                     layer.msg('请先填写用户名，谢谢',{icon:7});
+                     return false;
+                 }
+                 layer.msg('短信发送中', {
+                    icon: 16
+                    ,shade: 0.01
+                    ,time:99999999
+                  });
+                  $.post("{url:/ajax/getSmsCode}",{name:name},function(result){
+                      layer.closeAll();
+                      if(result.status=="success"){
+                          layer.msg('验证码已发送至绑定手机号，请查收',{icon:1});
+                      }else{
+                          layer.msg(result.msg,{icon:5});
+                      }
+                  },'json');
+                return false;
+            });
+        </script>
+    </body>
+</html>

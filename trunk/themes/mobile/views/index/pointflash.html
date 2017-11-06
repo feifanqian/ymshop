@@ -1,0 +1,200 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/product.css}" />
+<script type="text/javascript" charset="UTF-8" src="{url:#js/common.js}"></script>
+<script type="text/javascript" src="{url:#js/city-picker.js}" charset="utf-8"></script>
+<script src="{url:#js/swiper.min.js}"></script>
+<div class="swiper-container" id="swiper-product">
+    <div class="swiper-wrapper">
+        {list:items=unserialize($goods['imgs']) item=$img }
+        <div class="swiper-slide"><a class="small-img" href="javascript:;"><img src="{echo:Common::thumb($img,367)}"  source="{url:@$img}"></a></div>
+        {/list}
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+<div class="bg-white">
+    <div class="product-title" style="margin-bottom:0;padding-bottom:10px;">
+        {$goods['name']}
+        <div class="red">{$goods['subtitle']}</div>
+    </div>
+</div>
+
+<div class="bg-white weui_cells" style="margin-top:0;">
+    <div class="weui-row weui-no-gutter product-flashbuy-price">
+        <div class="weui-col-50"><em>抢购价</em> <span class="red">{$currency_symbol}{$price['cash']}+{$price['point']}积分</span></div>
+        <div class="weui-col-50"><em>原价</em> <del class="del">{$currency_symbol}{$goods['sell_price']}</del></div>
+    </div>
+    <div class="info line-1" style="margin:0 10px">
+        {if:$goods['is_end']==1 }
+        <p><i class="iconfont icon-home"></i>很遗憾，来晚了一步，抢购已结束！</p>
+
+        <p><i class="iconfont icon-my1"></i><span class="f18"> 共有<b class="red">{$goods['order_count']}</b></span>人购买</p>
+        {elseif:time()>strtotime($goods['start_date'])}
+        <p><i class="iconfont icon-my1"></i> <span class="red f16"><b>{$goods['order_count']}</b></span>人已购买</p>
+        <p><i class="iconfont icon-favourite"></i> 抢购数量有限,下单要快哟!</p>
+        <span class="f14"> <i class="iconfont icon-clock"></i> 剩余时间：</span><strong class="f14"><span id="countdown1"  style="color:#666; "></span></strong>
+        <script type="text/javascript">
+            $("#countdown1").countdown({remainseconds:"{echo:(strtotime($goods['end_date'])-time())*1000}", callback:function(){
+            location.reload();
+            }});
+        </script>
+        {else:}
+        <p><i class="iconfont icon-remind"></i> 抢购还没开始，请耐心等待...</p>
+        <span class="f14"> <i class="iconfont icon-clock"></i> 距开始：</span><strong class="f14"><span id="countdown2"  style="color:#666; "></span></strong>
+        <script type="text/javascript">
+            $("#countdown2").countdown({remainseconds:"{echo:(strtotime($goods['start_date'])-time())*1000}", callback:function(){
+            location.reload();
+            }});
+        </script>
+        {/if}
+    </div>
+
+    <div class="weui_cells weui_cells_form">
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label for="name" class="weui_label">送至</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input class="weui_input" id="start" type="text" value="湖北 武汉 武昌区">
+            </div>
+        </div>
+        <a class="weui_cell open-popup" data-target="#selectid" href="javascript:;">
+            <div class="weui_cell_hd"><label for="date" class="weui_label">规格</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p id="attr-text">选择</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="weui_tab" style="margin-top:10px;border-top: 1px solid #E5E5E5;">
+        <div class="weui_navbar" id="product-navbar">
+            <a class="weui_navbar_item weui_bar_item_on" href="#product-detail">
+                商品详情
+            </a>
+            <a class="weui_navbar_item" href="#product-attr">
+                商品参数
+            </a>
+            <a class="weui_navbar_item" href="#product-protection">
+                售后保障
+            </a>
+        </div>
+        <div class="weui_tab_bd content-padded">
+            <div id="product-detail" class="weui_tab_bd_item weui_tab_bd_item_active">
+                <!--S 商品详情-->
+                <div class="clearfix" >
+                    {$goods['content']}
+                </div>
+                <!--E 商品详情-->
+            </div>
+            <div id="product-attr" class="weui_tab_bd_item">
+                <ul class="attr-list ">
+                    <li><div class="attr-name">商品名称：</div><div class="attr-value">{$goods['name']}</div></li>
+                    <li><div class="attr-name">商品编号：</div><div class="attr-value">{$goods['pro_no']}</div></li>
+                    <li><div class="attr-name">商品重量：</div><div class="attr-value">{$goods['weight']}g</div></li>
+                    <li><div class="attr-name">上架时间：</div><div class="attr-value">{$goods['create_time']}</div></li>
+                    {list:items=$goods_attrs}
+                    <li><div class="attr-name">{$item['name']}：</div><div class="attr-value">{$item['vname']}</div></li>
+                    {/list}
+                </ul>
+            </div>
+
+            <div id="product-protection" class="weui_tab_bd_item">
+                <!--S 售后保障-->
+                <div class="clearfix">
+                    {if:$goods['sale_protection']}
+                    <div class="mb20">
+                        {$goods['sale_protection']}
+                    </div>
+                    {/if}
+                    <div>
+                        {$sale_protection}
+                    </div>
+                </div>
+                <!--E 售后保障-->
+            </div>
+        </div>
+    </div>
+</div>
+<div id="selectid" class="weui-popup-container popup-bottom fourth-cover">
+
+    <div class="weui-popup-modal">
+        <div class="toolbar">       
+            <div class="toolbar-inner">          
+                <a href="javascript:;" class="picker-button close-popup"><i class="iconfont icon-close"></i></a>           
+                <div class="cover-head">
+                    <div class="img-box lazybox">
+                        <img id="proImg" src="{echo:Common::thumb($goods['img'],65)}" />
+                    </div>
+                    <div class="product">
+                        <div class="price">
+                            <i>{$currency_symbol}</i><em>{$price['cash']}+{$price['point']}积分</em>
+                        </div>
+                        <div class="remainnums hidden">库存:<em id="store_nums" class="red">{$goods['store_nums']}</em></div>
+                        <div class="choice">选择:<em id="choiceattr"></em></div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+        <div class="modal-content">
+            <div class="weui_cells">
+                {list:items=unserialize($goods['specs']) item=$spec}
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary spec-values">
+                        <div class="attr-name">{$spec['name']}：</div>
+                        <div class="attr-item">
+                            {list:items=$spec['value'] item=$value}
+                            {if:$value['img']==''||true}
+                            <a href='javascript:;' data-value="{$spec['id']}:{$value['id']}"><span>{$value['name']}</span></a>
+                            {else:}
+                            <a href='javascript:;' class='withimg' data-value="{$spec['id']}:{$value['id']}"><img src="{echo:Common::thumb($value['img'],100)}"  width="32" height="32"><label>{$value['name']}</label></a>
+                            {/if}
+                            {/list}
+                        </div>
+                    </div>
+                </div>
+                {/list}
+                <input id="buy-num" name="buy_num" value="1"  type="hidden"  maxlength=5>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="btn-bar ">
+    <div class="weui-row weui-no-gutter">
+        <div class="weui-col-20" style="text-align: center;">
+            <a href="{url:/simple/cart}" id="view-cart">
+                <div class="product-cart">
+                    <span class="cart-num tip">{echo:count($cart)}</span>
+                    <i class="iconfont icon-cart"></i>
+                </div>
+            </a>
+        </div>
+        <div class="weui-col-80">
+            {if:$goods['is_end']==1}
+            <a href="javascript:;" class="btn btn-gray"><i class="iconfont icon-next"></i>抢购已结束</a>
+            {elseif:time()< strtotime($goods['start_date'])}
+            <a href="javascript:;" class="btn btn-warning"><i class="iconfont icon-next"></i>等待开始...</a>
+            {else:}
+            <a href="javascript:;" class="btn btn-red buy-now" data-type="pointflash">立即抢购 <i class="iconfont icon-next"></i></a>
+            {/if}
+        </div>
+    </div>
+</div>
+<div class="message-lay"> </div>
+<div class="message-box">
+    <div class="tips">商品已添加到购物车！</div>
+    <div class="btns">
+        <input type="button" value="再逛会 " class="btn_in" id="btn_continue">
+        <input type="button" value="去结算 " class="btn_in" id="btn_check">
+    </div>
+</div>
+
+<script>
+    var Product = {
+    skuMap : {echo:JSON::encode($skumap)},
+            cartUrl : "{url:/simple/cart}",
+            attentionUrl : "{url:/index/attention}",
+            addCartUrl : "{url:/index/cart_add}",
+            addGoodsCartUrl : "{url:/index/goods_add}",
+            goodsOrderUrl : "{url:/simple/order/cart_type/goods}",
+            directUrl : "{url:/simple/order_info/type/direct}",
+            pointflashUrl : "{url:/simple/order_info/type/pointflash/id/$id/pid/}",
+            id : "{$id}",
+            currency : "{$currency_symbol}",
+    };</script>
+<script type="text/javascript" src="{url:#js/product.js}" charset="utf-8"></script>

@@ -1,0 +1,126 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('validator');}
+<style type="text/css">
+    .form2 table{
+        text-align: center;
+        width:700px;
+    }
+    .form2{
+        width:700px;
+    }
+    .form2 th,td{
+        text-align: center;
+    }
+    .form2 tr{
+        height:50px;
+    }
+    
+    .form2 th{
+          background:#f1f2f3;
+          font-weight:bold;
+    }
+    .form2 td{
+        padding:5px;
+    }
+    .form2 tr:nth-child(odd){
+        background:#f1f2f3;
+    }
+    .form2 table input{
+        width:50px;
+        margin-top:-5px;
+    }
+    
+</style>
+<h2 class="page_title">{$node_index['name']}</h2>
+<div class="form2">
+    <form name="config_form" method="post" action="{url:/marketing/recharge_package_set}">
+        <table>
+            <tr><th>套 餐</th><th>金 额</th><th>赠送积分</th><th>赠送理财金币</th><th>赠送商品</th></tr>
+            <tr><td>1</td><td><input type="number" name="package[1][money]" value="{$package[1]['money']}"></td><td><input type="number" name="package[1][point]" value="{$package[1]['point']}"></td><td><input type="number" name="package[1][financial_coin]" value="{$package[1]['financial_coin']}"  ></td><td></td></tr>
+            <tr><td>2</td><td><input type="number" name="package[2][money]" value="{$package[2]['money']}"></td><td><input type="number" name="package[2][point]" value="{$package[2]['point']}"></td><td><input type="number" name="package[2][financial_coin]" value="{$package[2]['financial_coin']}" ></td><td></td></tr>
+            <tr><td>3</td><td><input type="number" name="package[3][money]" value="{$package[3]['money']}"></td><td><input type="number" name="package[3][point]" value="{$package[3]['point']}"></td><td><input type="number" name="package[3][financial_coin]" value="{$package[3]['financial_coin']}" ></td><td></td></tr>
+            <tr><td>4</td><td><input type="text" name="package[4][money]" value="{$package[4]['money']}" onkeyup="if(/^d+$/.test(this.value)){alert('只能整数');this.value='';}" style="width:58px;"></td><td><input type="number" name="package[4][point]" value="{$package[4]['point']}"></td><td><input type="number" name="package[4][financial_coin]" value="{$package[4]['financial_coin']}" ></td><td><input type="text" name="package[4][gift]" value="{$package[4]['gift']}" readonly id="package4" placeholder="没有可不选"></td></tr>
+        </table>
+           
+        <div class="center">
+            <input type="submit" name="submit" class="button action fn" value="确 定">
+        </div>
+        <div id='add' style="display:none;width:400px;height:60px;padding-top: 20px;padding-left: 20px;">
+          <input type="text"  id="product_ids" readonly value="" alt="必需选择商品才能添加！" > 
+          <a href="javascript:;" onclick="reset()" class="button">重置</a>
+          <a href="javascript:;" onclick="select()" class="button">选择商品 ...</a>
+          <p>可有多个可选项，用户选择一个</p>
+     </div>
+    </form>
+</div>
+
+<script>
+    {if:isset($message)}
+    art.dialog.tips('<p class="success">{$message}</p>');
+    {/if}
+     function add(that){
+        layer.open({
+        type: 1,
+        area: ['420px', '200px'],
+        title: "选择赠送礼品（多选一）", //不显示标题
+        btn:['确定','取消'],
+        zindex:1,
+        yes:function(){
+            $(that).val($("#product_ids").val());
+            layer.closeAll();
+        },
+        content: $('#add'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+      });
+    }
+    $(function(){
+        $("#package1,#package2,#package3,#package4").click(function(){
+            $("#product_ids").val($(this).val());
+            add(this);
+        });
+    })
+    function select(){
+       index =  layer.open({
+            id:"select",
+            type: 2,
+            title:"选择商品",
+            area: ['880px', '520px'],
+            fixed: false, //不固定
+            maxmin: false,
+            zindex:2,
+            content: '{url:/marketing/multi_product_select}',
+          });
+    }
+    function reset(){
+        $("#product_ids").val("");
+    }
+    Array.prototype.unique = function (isStrict) {
+      if (this.length < 2)
+          return [this[0]] || [];
+      var tempObj = {}, newArr = [];
+      for (var i = 0; i < this.length; i++) {
+          var v = this[i];
+          var condition = isStrict ? (typeof tempObj[v] != typeof v) : false;
+          if ((typeof tempObj[v] == "undefined") || condition) {
+              tempObj[v] = v;
+             newArr.push(v);
+         }
+     }
+     return newArr;
+    }
+    
+    function callback(checked){
+        var v = $("#product_ids").val();
+        if(v==""){
+            $("#product_ids").val(checked.join("|"));
+        }else{
+            var arr = v.split("|");
+             arr = $.merge(checked,arr);
+             arr = $.unique(arr);
+             arr = arr.reverse();
+            $("#product_ids").val(arr.join("|"));
+        }
+    }
+    
+</script>

@@ -1,0 +1,95 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style type="text/css">
+    .weui_panel_ft::before {
+        border-top:none;
+    }
+    .weui_media_hd .iconfont {font-size:34px;color:#888;}
+    .checked .weui_media_hd .iconfont {color:#A0C53B;}
+</style>
+<div class="weui_panel weui_panel_access">
+    <div class="weui_panel_bd">
+        <a href="{url:/ucenter/check_identity/obj/password}" class="weui_media_box weui_media_appmsg checked">
+            <div class="weui_media_hd">
+                <i class="iconfont icon-password"></i>
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">登录密码</h4>
+                <p class="weui_media_desc">互联网账号存在被盗风险，建议您定期更改密码以保护账户安全。</p>
+            </div>
+            <div class="weui_panel_ft"></div>
+        </a>
+
+        {if:isset($userInfo['email_verified']) && $userInfo['email_verified']==1}
+<!--        <a href="{url:/ucenter/check_identity/obj/email}" class="weui_media_box weui_media_appmsg checked">
+            <div class="weui_media_hd">
+                <i class="iconfont icon-email"></i>
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">邮箱验证</h4>
+                <p class="weui_media_desc">您验证的邮箱： {$userInfo['email']}</p>
+            </div>
+            <div class="weui_panel_ft"></div>-->
+        </a>
+
+        {else:}
+<!--        <a href="{url:/ucenter/activate_obj/obj/email}" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <i class="iconfont icon-email"></i>
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">邮箱验证</h4>
+                <p class="weui_media_desc">开启邮箱验证，更好的保护账户安全。</p>
+            </div>
+            <div class="weui_panel_ft"></div>
+        </a>-->
+        {/if}
+
+        {if:isset($userInfo['mobile_verified']) && $userInfo['mobile_verified']==1}
+        <a href="{url:/ucenter/check_identity/obj/mobile}" class="weui_media_box weui_media_appmsg checked">
+            <div class="weui_media_hd">
+                <i class="iconfont icon-mobile"></i>
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">手机验证</h4>
+                <p class="weui_media_desc">您验证的手机： {$userInfo['mobile']} 若已丢失或停用，请立即更换，避免账户被盗</p>
+            </div>
+            <div class="weui_panel_ft"></div>
+        </a>
+        {else:}
+        <a href="{url:/ucenter/activate_obj/obj/mobile}" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <i class="iconfont icon-mobile"></i>
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">手机验证</h4>
+                <p class="weui_media_desc">开启手机验证，更好的保护账户安全。</p>
+            </div>
+            <div class="weui_panel_ft"></div>
+        </a>
+        {/if}
+
+        {if:isset($userInfo['pay_password_open']) && $userInfo['pay_password_open'] == 1}
+        <a href="{url:/ucenter/check_identity/obj/paypwd}" class="weui_media_box weui_media_appmsg checked">
+            <div class="weui_media_hd">
+                <i class="iconfont icon-paypassword"></i>
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">支付密码</h4>
+                <p class="weui_media_desc">您购买商品使用余额支付时，所需要的支付密码，提高资金的安全性。</p>
+            </div>
+            <div class="weui_panel_ft"></div>
+        </a>
+        {else:}
+        <a href="{url:/ucenter/activate_obj/obj/paypwd}" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <i class="iconfont icon-paypassword"></i>
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">支付密码</h4>
+                <p class="weui_media_desc">您购买商品使用余额支付时，所需要的支付密码，提高资金的安全性。</p>
+            </div>
+            <div class="weui_panel_ft"></div>
+        </a>
+        {/if}
+    </div>
+</div>

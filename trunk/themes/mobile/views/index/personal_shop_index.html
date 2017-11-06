@@ -1,0 +1,222 @@
+<html>
+    <head>
+        <title>个人店铺专区</title>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <link rel="stylesheet" href="{url:#css/weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/jquery.weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/iconfont.css}">
+        <link rel="stylesheet" href="{url:#css/common.css}">
+        <link rel="stylesheet" href="//at.alicdn.com/t/font_8sl1crgaw8a4te29.css">
+        <link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+
+        <script type="text/javascript" src="{url:#js/layer_mobile/layer.js}"></script>
+
+        <style>
+            body{
+                padding-top:0px;
+            }
+            .shop-header{
+                padding-top: 35px;
+                width:100%;
+                height:120px;
+                background: url("{url:#images/shop-index-bg.png}") no-repeat;
+                background-size: cover;
+            }
+            .shop-header .header{
+                background-color: transparent;
+                border-bottom: transparent 1px solid;
+                box-shadow: none;
+                position: absolute;
+            }
+            .weui_icon_search{
+                top: 9px !important;
+            }
+            .header .weui_search_bar{
+                background-color: transparent;
+            }
+            .shop-show-container .shop-btn{
+                font-size: 15px;
+                padding:4px 20px;
+                border-radius: 10px;
+                background-color: #fac532;
+            }
+            .shop-show-container .weui-media-box__title{
+                font-size: 18px;
+                color:white;
+            }
+            .shop-show-container .weui-media-box__title img{
+                width:20px;
+                margin-right:5px;
+                margin-top: -4px;
+            }
+            .shop-show-container .weui-media-box__desc{
+                padding-top:4px;
+                font-size: 14px;
+                color:#ffffff;
+            }
+            .shop-goods-tab{
+                padding-top:10px;
+                height:50px;
+                width:100%;
+            }
+            .shop-goods-tab .left-tab {
+                width:50%;
+                float:left;
+                text-align: center;
+            }
+            .shop-goods-tab .right-tab {
+                width:50%;
+                float:right;
+                text-align: center;
+            }
+            .shop-goods-tab a{
+                font-size:16px;
+                padding:10px auto;
+            }
+            a.active{
+                border-bottom: 2px solid #fac532;
+            }
+            .shop-goods-show .goods-area{
+                width:50%;
+                float: left;
+            }
+            .goods-area-inner {
+                background-color: white;
+                margin: 10px;
+                padding-bottom:10px;
+            }
+            .goods-area .title p{
+        /*        overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;*/
+                text-align: left;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                color:#333333;
+                height: 35px;
+                font-size:13px;
+            }
+            .thumbs img{
+                width:165px;
+                height:175px;
+            }
+            .thumbs{
+                width:165px;
+                height:175px;
+            }
+            .price-show{
+                padding-top: 4px;
+            }
+            .header-r a,.header-l a{
+                color: white !important;
+            }
+            .weui-media-box__ft a{
+                color: #333333;
+            }
+            .shop-goods-tab a{
+                color: #333333;
+            }
+            p{
+                color:#333333;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='viewport'>
+            <div class='shop-header'>
+                <div id="widget_sub_navs">
+                    <div class="header header-white">
+                        <div class="header-l">
+                            <a href="javascript:history.go(-1);"><i class="iconfont icon-prev"></i></a>
+                        </div>
+                        <div class="weui_search_bar header-c" id="search_bar">
+                            <form id="search-form" class="weui_search_outer" action="{url:/}" method="get">
+                                <input type="hidden" name="con" value="index">
+                                <input type="hidden" name="act" value="search">
+                                {token:}
+                                <div class="weui_search_inner">
+                                    <i class="weui_icon_search"></i>
+                                    <input type="search" class="weui_search_input" name="keyword" id="search-keyword" value="{$keyword}" placeholder="搜索" required/>
+                                    <a href="javascript:" class="weui_icon_clear" id="search_clear"></a>
+                                </div>
+                            </form>
+                            <a href="javascript:" class="weui_search_cancel" id="search_text">搜索</a>
+                        </div>
+                        <div class="header-r">
+                            <a href="/"><i class="iconfont icon-home"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                {query:name=personal_shop as ps join=left join customer as c on ps.user_id eq c.user_id left join user as u on ps.user_id eq u.id fields=ps.*,c.real_name,u.avatar,u.nickname where=ps.id eq $id }
+                    <div class='shop-show-container'>
+                        <div href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                            <div class="weui-media-box__hd">
+                                <img class="weui-media-box__thumb" src="{echo:Url::urlFormat("@".$item['avatar'])}">
+                            </div>
+                            <div class="weui-media-box__bd">
+                                <h4 class="weui-media-box__title"><img src='{url:@static/images/personal-shop.png}'>{$item['real_name']|$item['nickname']}的个人店铺</h4>
+                                <p class="weui-media-box__desc">销量{$all_sell_num}&nbsp;共{$all_goods_num}件商品</p>
+                            </div>
+                            <div class="weui-media-box__ft">
+                                <a class='shop-btn' href="{url:/index/personal_shop_index/id/$item[id]}">收藏</a>
+                            </div>
+                        </div>
+                    </div>
+                    {/query}
+            </div>
+            <div class="shop-goods-tab">
+                <div class="left-tab">
+                    <a {if:$list_type==1}class="active"{/if} href="{url:/index/personal_shop_index?id=$id&list_type=1}"> 店铺首页 </a>
+                </div>
+                <div class="right-tab">
+                    <a {if:$list_type==2}class="active"{/if} href="{url:/index/personal_shop_index?id=$id&list_type=2}"> 最新商品 </a>
+                </div>
+            </div>
+            <div class="shop-goods-show">
+                {if:$list_type==1}
+                {set:$fields="g.*,SUM(IF( o.status =4 || o.status =3, og.goods_nums, 0 )) as sell_num"}
+                    {query:name=goods as g join=left join order_goods as og on g.id eq og.goods_id left join order as o on og.order_id eq o.id  where=g.personal_shop_id eq $id and g.is_online eq 0 group=g.id fields=$fields  item=$goods order=sell_num desc limit=10}
+                       <div class="goods-area">
+                           <div class="goods-area-inner">
+                               <a href="{url:/index/product/id/$goods[id]}">
+                                   <div class="thumbs"><img src="{echo:Common::thumb($goods['img'],400,400);}" alt=""></div>
+                                   <div class="title"><p>{$goods['name']}</p></div>
+                                   <div class="price-show">
+                                       <span  class="red" style="width:50px;">¥<span style="font-size:16px;">{$goods['sell_price']}</span></span>
+                                       <span class="gray">已有{$goods['sell_num']|0}人购买</span>
+                                   </div>
+                               </a>
+                           </div>
+                       </div>
+                    {/query}
+                {else:}
+                    {query:name=goods as g where=g.personal_shop_id eq $id and g.is_online eq 0  order=create_time asc item=$goods page=1 pagesize=10 id=$personal_shop_goods}
+                    <div class="goods-area">
+                        <div class="goods-area-inner">
+                            <a href="{url:/index/product/id/$goods[id]}">
+                                <div class="thumbs"><img src="{echo:Common::thumb($goods['img'],400,400);}" alt=""></div>
+                                <div class="title"><p>{$goods['name']}</p></div>
+                                <div class="price-show">
+                                    <span  class="red" style="width:50px;">¥<span style="font-size:16px;">{$goods['sell_price']}</span></span>
+                                    {set:$goods_id_now = $goods['id']}
+                                    {query:name=order_goods as og join=left join order as o on og.order_id eq o.id where=og.goods_id eq $goods_id_now and o.status in (3,4) fields=SUM(og.goods_nums) as sell_num item=$sell}
+                                    <span class="gray">已有{$sell['sell_num']|0}人购买</span>
+                                    {/query}
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                   {/query}
+                   <div class=" plr20 pb20 tc page-nav" style="width:100%;">{echo:$personal_shop_goods->pageBar(5);}</div>
+                {/if}
+            </div>
+        </div>
+    </body>
+</html>

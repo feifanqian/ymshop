@@ -1,0 +1,43 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<link type="text/css" rel="stylesheet" href="{url:#css/simple.css}" />
+{set:$objInfo=array('password'=>'登录密码','email'=>'邮箱','mobile'=>'手机号码','paypwd'=>'支付密码');$obj=Req::args('obj');}
+{set:$items=array("验证身份","修改".$objInfo[$obj],"完成");}
+<div class="weui_cells weui_cells_form">
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>修改{$objInfo[$obj]}</p>
+        </div>
+        <div class="weui_cell_ft">
+        </div>
+    </div>
+</div>
+
+<div class="weui_msg">
+    <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+    <div class="weui_text_area">
+        <h2 class="weui_msg_title">操作成功</h2>
+        <p class="weui_msg_desc">修改{$objInfo[$obj]}成功！</p>
+    </div>
+    <div class="weui_opr_area">
+        <p class="weui_btn_area">
+            <a href="{url:/ucenter/safety}" class="weui_btn weui_btn_primary">确定</a>
+            <!--<a href="javascript:;" class="weui_btn weui_btn_default">取消</a>-->
+        </p>
+    </div>
+    <div class="weui_extra_area">
+        <!--<a href="">查看详情</a>-->
+    </div>
+</div>
+
+
+<div class="weui_panel weui_panel_access">
+    <div class="weui_panel_hd">安全提示:</div>
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_text">
+            <p class="weui_media_desc">1. {$objInfo[$obj]}修改成功，请保管好您的{$objInfo[$obj]}。</p>
+        </div>
+        <div class="weui_media_box weui_media_text">
+            <p class="weui_media_desc">2. 不定期更新密码，可更好的保护您的账户安全性。</p>
+        </div>
+    </div>
+</div>

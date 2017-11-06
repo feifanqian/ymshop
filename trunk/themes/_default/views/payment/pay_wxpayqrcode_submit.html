@@ -1,0 +1,46 @@
+<div class="container">
+    <form action="{url:/payment/dopay}" method="post" target="_blank">
+        <input type="hidden" name="order_id" value="{$order['id']}">
+        <!--        <div class="status-bar">
+                    <span><i class="icon-success-48"></i>订单已成功提交！</span>
+                </div>-->
+        <div class="mt20">
+            <div class="ordersucceed" style="text-align: center">
+                <p style='margin-top:10px;color:red;'>{if:$isRecharge==true}充值金额：{else:}订单金额：{/if}{$order['price']}元</p>
+                <p style='margin-top:10px;color:red;'>请使用微信扫描下方二维码进行支付</p>
+                <div id="qrcode">
+                    <img src="{url:/simple/qrcode/}?data={echo:urlencode($order['payurl']);}" alt="" />
+                </div>
+               {if:$isRecharge!=true}
+                <p style='margin-top:10px;color:red;'>重要提醒：请您在提交订单后24小时内完成支付，逾期订单将会自动取消。</p>
+                <div class="youalsocan">
+                    <p><a href="{url:/ucenter/order_detail/id/$order[id]}" target="_blank"> 查看订单详情 </a></p>
+                </div>
+                {/if}
+            </div>
+        </div>
+
+    </form>
+
+
+</div>
+<script>
+    $(function () {
+        var checkedPayment;
+        function isOrderPayment()
+        {
+            $.post("{url:/ajax/isOrderPayment/order_no/$order_no}", function (data) {
+                if (data['status'] == 'success') {
+                    clearInterval(checkedPayment);
+                    {if:$isRecharge==true}
+                    window.location.href = "{url:/ucenter/account}";
+                    {else:}
+                    window.location.href = "{url:/ucenter/order}";
+                    {/if}
+                }
+            }, 'json');
+        }
+        checkedPayment = setInterval(isOrderPayment, 5000);
+    });
+
+</script>

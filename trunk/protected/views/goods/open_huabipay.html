@@ -1,0 +1,141 @@
+{echo:JS::import("form")}
+<script type="text/javascript" src="{url:@static/js/layer/layer.js}"></script>
+<div style="overflow: auto;width:700px;height:400px;">
+    <style type="text/css">
+ tr:nth-child(even){
+     background:#f1f2f3;
+ }
+ td{
+   text-align: center;
+   height: 35px;  
+ }
+</style>
+        <div>
+        <table align="center" width="100%" style="border-collapse: collapse;" >
+                   <tr style="height:50px;"><th width="10%" style="text-align: center;">货号</th>
+                       <th width="20%" style="text-align: center;">规格</th>
+                       <th width="10%" style="text-align: center;">销售价</th>
+                       <th width="20%" style="text-align: center;">配置方案</th>
+                       <th width="10%" style="text-align: center;">需支付华点</th>
+                       <th width="10%" style="text-align: center;">需付人民币</th>
+                       <th width="15%" style="text-align: center;">操作</th>
+                   </tr>
+                {list:items=$products item=$product}  
+                <tr style="border-top: 1px solid gray;border-bottom: 1px solid gray;">
+                 <td>{$product['pro_no']}</td><td>{$product['spec']}</td>
+                 <td style="text-align: center;" class="price{$product['id']}">{$product['sell_price']}</td>
+                 <td class="" style="text-align: center;">
+                     <select name="type{$product['id']}" style="height:27px;width:80px;" data-id="{$product['id']}">
+                            <option value="rate" {if:isset($pay_set)&&$pay_set[$product['id']]['type']=='rate'}selected="selected"{/if}>支付比例</option>
+                            <option value="fixed"{if:isset($pay_set)&&$pay_set[$product['id']]['type']=='fixed'}selected="selected"{/if}>固定值</option>
+                       </select>
+                        {if:!isset($pay_set)}
+                        <input type="range" name="rate{$product['id']}" min="0" max="100" value="0" data-id="{$product['id']}" />
+                       {elseif:isset($pay_set)&&$pay_set[$product['id']]['type']=='rate'}
+                       <input type="range" name="rate{$product['id']}" min="0" max="100" value="{$pay_set[$product['id']]['value']}" data-id="{$product['id']}"/>
+                      {else:}
+                       <input type="range" name="rate{$product['id']}" min="0" max="100" value="0" data-id="{$product['id']}" style="display:none;"/>
+                      {/if}
+                 </td>
+                 <td style="text-align: center;">
+                     {if:isset($pay_set)&&$pay_set[$product['id']]['type']=='rate'}
+                     <input name="huabi{$product['id']}" type='number' value="{echo:round($pay_set[$product['id']]['value']*$product['sell_price']*$rmb2huabi/100)}" style='width:60px;' disabled>
+                     {else:}
+                     <input name="huabi{$product['id']}" type='number' value="{$pay_set[$product['id']]['value']['huadian']|0}" style='width:60px;'>
+                     {/if}
+                 </td>
+                 <td style="text-align: center;">
+                     {if:!isset($pay_set)}
+                     <input name="rmb{$product['id']}" type='number' value="{$product['sell_price']}" style='width:60px;'>
+                     {elseif:isset($pay_set)&&$pay_set[$product['id']]['type']=='rate'}
+                     <input name="rmb{$product['id']}" type="number" value="{echo:round((100-$pay_set[$product['id']]['value'])*$product['sell_price']/100,2)}" style='width:60px;' disabled>
+                     {else:}
+                     <input name="rmb{$product['id']}" type='number' value="{$pay_set[$product['id']]['value']['rmb']|0}" style='width:60px;'>
+                     {/if}
+                 </td>
+                 <td>
+                      <input type="button" value="应用到其他" onclick="apply_all({$product['id']})" style="cursor:pointer;">
+                 </td>
+                </tr>
+                {/list}
+               </table>
+
+      </div> 
+      <div style="text-align: center;">
+                <input type="button" value="保存设置" id="_submit" style="cursor: pointer;">
+      </div>
+</div>
+<script>
+   $("select").change(function(){
+       var id=$(this).data('id');
+       if($(this).val()=='rate'){
+           var total = new Number($(".price"+id).text());
+           $(this).next('input').show();
+           $("input[name=huabi"+id+"]").prop("disabled",true).val(0);
+           $("input[name=rmb"+id+"]").prop("disabled",true).val(total);
+       }else if($(this).val()=='fixed'){
+           $("input[name=huabi"+id+"]").prop("disabled",false);
+           $("input[name=rmb"+id+"]").prop("disabled",false);
+           $(this).next('input').hide();
+           $(this).next('input').val(0);
+       }
+   });
+   $("input[type=range]").change(function(){
+       var id=$(this).data('id');
+       var total = new Number($(".price"+id).text());
+       var rate = new Number($(this).val());
+       var huabi = Math.round(rate*total/100*{$rmb2huabi});
+       var rmb = total - (rate*total/100);
+       $("input[name=huabi"+id+"]").val(huabi);
+       $("input[name=rmb"+id+"]").val(rmb.toFixed(2));
+   })
+   function apply_all(rid){
+       var select_value = $("select[name=type"+rid+"]").val();
+       if(select_value=='rate'){
+           $("input[name^='huabi']").prop('disabled',true);
+           $("input[name^='rmb']").prop('disabled',true);
+           $("input[type=range]").show();
+       }else{
+           $("input[name^='huabi']").prop('disabled',false);
+           $("input[name^='rmb']").prop('disabled',false);
+           $("input[type=range]").hide();
+       }
+       var range_value = $("select[name=type"+rid+"]").next('input').val();
+       var huabi_value = $("input[name=huabi"+rid+"]").val();
+       var rmb_value =  $("input[name=rmb"+rid+"]").val();
+       $("input[type=range]").val(range_value);
+       $("select[name^='type']").val(select_value);
+       $("input[name^='huabi']").val(huabi_value);
+       $("input[name^='rmb']").val(rmb_value);
+   }
+   $("#_submit").click(function(){
+     var id = {$gid};
+     var formdata = getFormData();
+     console.log(formdata);
+     $.post("{url:/goods/save_huabipay_set}",{data:formdata,id:id},function(result){
+          if(result.status=='success'){
+              layer.msg('设置成功', {icon: 6,time:1500},function(){
+                  window.parent.location.reload();
+              }); 
+          }else{
+              layer.msg(result.msg, {icon: 5}); 
+          }
+     },'json');
+      return false;
+   });
+   function getFormData(){
+       var data = new Array();
+       $("select").each(function(i){
+           var id = $(this).data('id');
+           if($(this).val()=='rate'){
+               var rate_value = $(this).next('input').val();
+               data[i]={product_id:id,type:'rate',value:rate_value};
+           }else if($(this).val()=='fixed'){
+               var huabi_value= $("input[name=huabi"+id+"]").val();
+               var rmb_value= $("input[name=rmb"+id+"]").val();
+               data[i]={product_id:id,type:'fixed',value:{huadian:huabi_value,rmb:rmb_value}};
+           }
+       });
+       return data;
+   }
+</script>

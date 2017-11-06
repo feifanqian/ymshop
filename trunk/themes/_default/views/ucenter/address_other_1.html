@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh">
+    <head>
+        <meta charset="UTF-8">
+        <title>fastshop商城</title>
+        <link type="text/css" rel="stylesheet" href="{url:#css/common.css}" />
+        <link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+        {echo:JS::import('jquery');}
+        <script type='text/javascript' src="{url:#js/common.js}"></script>
+    </head>
+    <body>
+        {echo:JS::import('form');}
+        {echo:JS::import('dialog?skin=brief');}
+        {echo:JS::import('dialogtools');}
+         <div class=" p10" style="    height: 650px; width: 1240px; margin: 0 auto;" >
+        <div class="sidebar fl" style="width:200px;">
+    <div class="box"> 
+        <h2>交易中心</h2>        
+        <ul class="menu-list">         
+            <li><a  href="{url:/ucenter/order}">我的订单<span class="l-triangle"></span></a></li>
+            <li><a  href="{url:/ucenter/review}">我的评价<span class="l-triangle"></span></a></li>
+            <li><a href="{url:/ucenter/consult}">商品咨询<span class="l-triangle"></span></a></li>     
+        </ul>
+        <h2>资产中心</h2>
+        <ul class="menu-list">         
+            <li style="height: 40px;"><a href="{url:/ucenter/voucher}">我的优惠券<span class="l-triangle"></span></a>
+                <ul>
+                    <li><a  style="padding-left: 50px;" href="{url:/ucenter/vouchers}">抵用券（0）<span class="l-triangle"></span></a></li>
+                </ul>
+            </li>
+
+            <li><a href="{url:/ucenter/vouchers}">我的购物卡<span class="l-triangle"></span></a></li>     
+            <li><a href="{url:/ucenter/account}">账户余额<span class="l-triangle"></span></a></li>     
+            <li class="mypoints" style="height: 80px;"><a href="{url:/ucenter/points}">我的积分<span class="l-triangle"></span></a>
+                <ul>
+                    <li><a  style="padding-left: 50px;" href="{url:/ucenter/points}">积分充值<span class="l-triangle"></span></a></li>
+                    <li><a  style="padding-left: 50px;"  href="{url:/ucenter/points}">积分兑换<span class="l-triangle"></span></a></li>
+                    <li><a  style="padding-left: 50px;"  href="{url:/ucenter/points}">积分明细<span class="l-triangle"></span></a></li>
+                </ul>
+            </li>     
+        </ul>
+        <h2>关注中心</h2>
+        <ul class="menu-list">                 
+            <li><a  href="{url:/ucenter/attention}">我的收藏<span class="l-triangle"></span></a></li>     
+            <li><a  href="{url:/ucenter/attention}">曾经购买<span class="l-triangle"></span></a></li>     
+            <li><a  href="{url:/ucenter/attention}">我的足迹<span class="l-triangle"></span></a></li>     
+        </ul>
+        <h2>个人中心</h2>
+        <ul class="menu-list">                 
+            <li><a  href="{url:/ucenter/info}">个人信息<span class="l-triangle"></span></a></li>     
+            <li><a  href="{url:/simple/address_other}">地址管理<span class="l-triangle"></span></a></li>     
+            <li><a  href="{url:/ucenter/safety}">安全设置<span class="l-triangle"></span></a></li>     
+        </ul>
+        <h2>服务中心</h2>
+        <ul class="menu-list">                 
+            <li><a  href="{url:/ucenter/message}">我的发票<span class="l-triangle"></span></a></li>     
+            <li><a  href="{url:/ucenter/message}">我的消息<span class="l-triangle"></span></a></li>     
+            <li><a href="{url:/ucenter/message}">退货管理<span class="l-triangle"></span></a></li>     
+        </ul>
+    </div>
+</div>
+       
+             <h1 style="font-size: 16px;border-bottom: 2px solid #EEEEEE;margin-left: 20px;float: left;width: 82%;height: 50px;line-height: 50px;">地址管理</h1>
+            {if:isset($msg)}
+            <div class="message_{$msg[0]} ie6png ">{$msg[1]}</div>
+            {elseif:isset($validator)}
+            <div class="message_warning ie6png ">{$validator['msg']}</div>
+            {/if}
+            <form id="address-form" class="simple fl" action="{url:/ucenter/address_save}" method="post" style="height: 650px;width: 70%;border: 0;padding: 20px;margin-left: 20px;">
+                {if:isset($id)}<input type="hidden" name="id" value="{$id}">{/if}
+                <h2 style="text-align: left;">增加新地址</h2>
+    <input type="hidden" name="url" id="url" value="{$url}" />
+                <table class="form" style="text-algin:left;width:70%;color: #3F3F3F;font-weight: 500;">
+                     <tr>
+                        <td class="label" colspan="2" style="text-align: left;width: 110px; height: 20px;">收货人姓名：<input type="text" style="height: 20px;width: 110px;" placeholder="收货人" pattern="required" name="accept_name" maxlen="10" value="{$accept_name}" alt="不为空，且长度不得超过10个字"> <label></label></td>
+                    </tr>
+                    <tr><td class="label" colspan="2" style="text-align: left;">所在地区：<select id="province"  name="province" style=" height: 23px; width: 120px; line-height: 23px;" >
+                                <option value="0">请选择</option>
+                            </select>
+                            <select id="city" name="city" style=" height: 23px; width: 120px; line-height: 23px;"><option value="0">请选择</option></select>
+                            <select id="county" name="county" style=" height: 23px; width: 120px; line-height: 23px;"><option value="0">请选择</option></select><input pattern="^\d+,\d+,\d+$" id="test" type="text" style="visibility:hidden;width:0;" value="{$province|0|int},{$city|0|int},{$county|0|int}" alt="请选择完整地区信息！"><label></label></td></tr>
+                    <tr>
+                        <td class="label" colspan="2" style="text-align: left;"><span style=" float: left;line-height:28px;">详细地址：</span><textarea placeholder="详细地址" name="addr" style="    line-height: 20px;width: 380px; height: 20px;" pattern="required" minlen="1" maxlen="120" alt="不需要重复填写省市区，必须大于5个字符，小于120个字符">{$addr}</textarea> <label>&nbsp;</label></td>
+                    </tr>
+                     <tr>
+                        <td class="label" colspan="2" style="text-align: left;">手机号码：<input type="text"  placeholder="手机号码"  style="width: 110px;height: 20px;" pattern="mobi" name="mobile" value="{$mobile}" alt="手机号码格式错误"><label></label></td>
+                    </tr>
+<!--                    <tr>
+                        <td class="label">邮政编码：</td><td><input  type="text" name="zip" pattern="zip" value="{$zip}" alt="邮政编码错误"></td>
+                    </tr>-->               
+<!--                    <tr>
+                        <td class="label">电话号码：</td><td><input type="text" name="phone"  value="{$phone}" empty pattern="phone" alt="电话号码格式错误"><label></label></td>
+                    </tr>-->
+                    <tr>
+                        <td width="5px"></td><td class="label" style="text-align: left;"><input type="checkbox" name="is_default" value="1"><label>设置为默认收货地址</label></td>
+                    </tr>
+                    <tr>
+                        <td width="6px"></td> <td class="tc" style='text-align: left;'><input type="submit" class="" value="保存" style=' border: 0;padding: 5px 25px; background: #C60033; color: #fff;'></td>
+                    </tr>
+                </table>
+                <div style="height: 300px; ">
+                    <table class='simple' style="    height: 40px;background: #F1F1F1;border: 1px solid #DDDDDD;">
+                        <tr>
+                            <td>收货人</td> <td>收货地址</td> <td>联系电话</td> <td>操作</td>
+                        </tr>  
+                    </table>
+                    <table class="simple" style="    height: 80px;border: 1px solid #F1F1F1;">
+                        <tr>
+                            <td width="20%">刘生</td> 
+                            <td  width="35%"><span style="padding: 0 5px;">广东</span><span style="padding: 0 5px;">深圳市</span><span style="padding: 0 5px;">罗湖区</span><span style="padding: 0 5px;">笋岗1村</span></td>
+                            <td  width="25%">15*********84</td>
+                            <td  width="20%"><a href="" style="color: #0065CA;margin: 0 5px;">修改</a><a href="" style="color: #0065CA;margin: 0 5px;">删除</a></td>
+                        </tr>  
+                    </table>
+                </div>    
+            </form>
+        </div>
+        <script type="text/javascript">
+            var form = new Form('address-form');
+            form.setValue('is_default', '{$is_default}');
+            $("#areas").Linkage({ url:"{url:/ajax/area_data}", selected:[{$province|0|int}, {$city|0|int}, {$county|0|int}], callback:function(data){
+            var text = new Array();
+            var value = new Array();
+            for (i in data[0]){
+            if (data[0][i] != 0){
+            text.push(data[1][i]);
+            value.push(data[0][i]);
+            }
+            }
+            $("#test").val(value.join(','));
+            FireEvent(document.getElementById("test"), "change");
+            }});
+            {if :isset($invalid)}
+            autoValidate.showMsg({id:$("input[name='{$invalid['name']}']").get(0), error:true, msg:'{$invalid['msg']}'});
+            {/if}
+        </script>
+    </body>
+</html>
+

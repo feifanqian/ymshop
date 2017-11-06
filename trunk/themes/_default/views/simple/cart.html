@@ -1,0 +1,138 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/simple.css}" />
+
+{set:$items=array("购物车","确认订单信息","选择支付","订购完成");}
+{widget:name=sub_navs action=crumbs items=$items step=4 current=1}
+<div class="  container" style="background:#fff;">
+    <?php if(empty($_SESSION['Tiny_user'])){?>
+    <div class="loginprompt" style>
+        <p><span class="fl">您还没有<a href="{url:/simple/login}">登录</a>呢,登录后的购物车商品将保存到您的账号中。</span> <span class="fr"><a href="{url:/index/index}">继续购物&gt;&gt;</a></span></p>
+    </div>
+    <?php }?>
+
+    {if:$cart}
+    <div id='cart_all'>
+        <table width="100%" class="cartsimple simple" style="border: 0;font-size: 14px;height:30px;line-height: 30px;">
+            <tr>
+                <th style="width:60px;font-size: 14px;font-weight: 500;text-align: left;background: #FAFAFA;">
+                    <input type="checkbox" name="productshopping" value="productshopping" class="check-all check" id="checkalltop" checked  /><label for="checkalltop">选中</label></th>
+                <th style="width:500px;font-size: 14px;font-weight: 500;background: #FAFAFA;text-align: center">商品名称</th>
+                <th style="width:160px;font-size: 14px;font-weight: 500;background: #FAFAFA;text-align: center;">规格</th>
+                <th style="width:100px;font-size: 14px;font-weight: 500;background: #FAFAFA;text-align: center;">单价(元)</th>
+                <th style="width:120px;font-size: 14px;font-weight: 500;background: #FAFAFA;text-align: center;">数量</th>
+                <th style="width:100px;font-size: 14px;font-weight: 500;background: #FAFAFA;text-align: center;">优惠</th>
+                <th style="width:100px;font-size: 14px;font-weight: 500;background: #FAFAFA;text-align: center;">小计(元)</th>
+                <th style="width:90px;font-size: 14px;font-weight: 500;background: #FAFAFA;text-align: center;">操作</th>
+            </tr>
+        </table>
+        <div>
+            <form id="cart-form" action="{url:/simple/order}" method="post">
+                <table width="100%" class="cartsimple simple carttable" style="font-size: 14px;margin-bottom: 0">
+
+                    {set:$total=0.00;$trNum=0;$weight=0;$nums=0;}
+                    {list:items=$cart}
+                    {set:$total+=$item['amount'];}
+                    {set:$weight+=$item['weight']*$item['num'];}
+                    {set:$nums+=$item['num'];}
+                    <tr class="{if:$trNum%2==1}odd{else:}even{/if} carttr" style="height: 80px;" data-id="{$item['id']}" id="cart-item{$item['id']}">
+                        <td width="60px" style="text-align: left;"><input type="checkbox" class="check-one check" name="selectids[]" id="s{$item['id']}"  value="{$item['id']}" checked /></td>
+                        <td width="100px"><a href="{url:/index/product/id/$item[goods_id]}" target="_blank"><img src="{echo:Common::thumb($item['img'],100,100)}" width="50" height="50"></a></td>
+                        <td width="400px"><a href="{url:/index/product/id/$item[goods_id]}" target="_blank">{echo:TString::msubstr($item['name'],0,36)}</a></td>
+                        <td width="160px">{list:items=$item['spec'] item=$spec}<p title="{$spec['name']}:{$spec['value'][2]}">{$spec['name']}：{$spec['value'][2]}</p> {/list}</td> 
+                        <td width="100px">{$item['price']}</td> 
+                        <td  width="120px"><div  class="buy-num-bar buy-num clearfix">
+                                <a class="btn-dec btn-adddec" style="height: 24px;line-height: 24px" data-act="-" href="javascript:;"><span class="icon-minus-16"></span></a>
+                                <input name="buy_num[{$item['id']}]" value="{$item['num']}"  maxlength=5>
+                                <a class="btn-add btn-adddec" style="height: 24px;line-height: 24px" data-act="+" href="javascript:;"><span class="icon-plus-16"></span></a></div></td> 
+                        <td width="100px" class="prom">{$item['prom']}</td>
+                        <td width="100px" class="amount red">{$item['amount']}</td> 
+                        <td width="90px" class="tc">
+                            <p><a href="javascript:;" class="movetoattention" ><span>移入收藏夹</span></a></p>
+                            <p class="cancelcart">
+                                <a href="javascript:;" class="cart-del"><span class='icon-close-16'></span>删除</a>
+                            </p>
+                        </td>
+                    </tr>
+                    {set:$trNum++;}
+                    {/list}
+                </table>
+            </form>
+        </div>
+        <div class="cart-static mt10 clearfix">
+            <span class="fl" style="margin-left:10px;">
+                <input type="checkbox" name="productshopping" id="checkallbottom" value="productshopping"  name="buy_pro" value="{$item['num']}" class="check-all check" checked  /><label for="checkallbottom">选中</label>
+                <span><a class="deblue" id="cartdel"  href="javascript:;">删除选中的商品</a></span>
+                <span><a class="deblue" id="cartclear" href="javascript:;">清空购物车</a></span>
+            </span>
+            <span class="fr"> 
+                <span>件数：<em class="cart-nums" id="selectedTotal">{$nums}</em>件</span>
+                <span>商品总重：<em class="cart-weight">{echo:round($weight/1000,2);}</em>kg</span>
+                <span>商品总金额(不含运费)：
+                    <em class="currency-symbol red">{$currency_symbol}</em><b class="cart-total red" >{echo:sprintf("%01.2f",$total)}</b>
+                </span>
+                {if:$item['prom']}
+                <span>已优惠：<span class="red">{$item['prom']}</span></span>
+                {/if}
+                <a class="deblue" href="javascript:;">运费说明</a>
+                <a class="btn btn-main" id="cart-order" href="javascript:;">立即结算</a>
+            </span>
+        </div>
+        <div>
+
+            <div class=" recommended clearfix" style="font-size: 14px;">
+                <div class="ucbtngroup"  style="text-align: right;"><span >为您推荐</span>
+                  
+                </div>
+                <ul class="cartproduct-list clearfix">
+                     {query:name=tiny_flash_sale as gb  fields=gb.title,go.img,gb.price,gb.id as id  join=left join tiny_goods as go on gb.goods_id eq go.id limit=10 }
+                    <li class="cartitem" >
+                        <dl class=" cartproduct">
+
+                            <dt class="img"><a href="{url:/index/flashbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],100,100,'fwfh')}" ></a></dt>
+                            <dd class="title"><a href="{url:/index/flashbuy/id/$item[id]}">{echo:TString::msubstr($item['title'],0,15)}</a></dd>
+                            <dd class="price"><s><span>{$currency_symbol}</span>79</s><span>{$currency_symbol}</span>{$item['price']}</dd>
+                            <dd class="status"><a class="btn btn-main" href="{url:/index/flashbuy/id/$item[id]}">加入购物车</a></dd>
+                        </dl>
+                    </li>
+                    {/query}
+                </ul>
+            </div>
+            <div class="cartguessyoulike" style="font-size: 14px;">
+                <div class="ucbtngroup"  style="text-align: right;"><span >猜你喜欢</span>
+                  
+                </div>
+
+                <ul class="cproduct-list clearfix">
+                      {query:name=tiny_goods as gb  fields=gb.name,gb.img,gb.sell_price,gb.id as id  join=left join tiny_user as go on gb.id eq go.id limit=5 order=rand() }
+                    <li class="citem" >
+                        <dl class=" cproduct">
+                            <dt class="img"><a href="{url:/index/flashbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],235,235,'fwfh')}" ></a></dt>
+                            <dd class="title"><a href="{url:/index/flashbuy/id/$item[id]}">{echo:TString::msubstr($item['name'],0,30)}</a></dd>
+                            <dd class="price"><span>{$currency_symbol}</span>{$item['sell_price']}</dd>
+                        </dl>
+                    </li>
+                    {/query}
+                </ul>
+            </div>  
+        </div>
+
+        {else:}
+        <div class="mt20 mb20 p20 box">
+            <p class="cart-empty ie6png">购物车内暂时没有商品，<a  href="{url:/index/index}">去首页</a> 挑选喜欢的商品。</p>
+
+        </div>
+        <div class="mt10 clearfix">
+            <p class="fr"><a class="btn btn-main" href="{url:/index/index}"> < 继续购物</a></p>
+        </div>
+        {/if}
+
+        <script type="text/javascript" src='{url:#js/cart.js}'></script>
+        <script type="text/javascript">
+            var CART = {
+                truncate_url: "{url:/index/cart_truncate}",
+                delete_url: "{url:/index/cart_del}",
+                delete_multi_url: "{url:/index/cart_multi}",
+                movetoattention_url: "{url:/index/attention}",
+                changeinfo_url: "{url:/index/cart_num/cart_type/$cart_type}",
+                cart_order_url: "{url:/simple/order/cart_type/$cart_type}",
+            };
+        </script>

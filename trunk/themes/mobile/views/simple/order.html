@@ -1,0 +1,321 @@
+
+{echo:JS::import("form")}
+{echo:JS::import('dialog?skin=simple');}
+{echo:JS::import('dialogtools');}
+
+<script type="text/javascript" charset="UTF-8" src="{url:#js/order.js}"></script>
+<link type="text/css" rel="stylesheet" href="{url:#css/simple.css}" />
+<style>
+    .weui-select-modal{
+        min-height: 250px;
+    }
+</style>
+<form action="{url:/simple/order_act}" method="post">
+    {set:$addressone=reset($address)}
+    <input id="address_id" class="radio" type="hidden" name="address_id" value="{echo:$addressone?$addressone['id']:0}" />
+    <input id="payment_id" class="radio" type="hidden" name="payment_id" value="{echo:$paytypeone?$paytypeone['id']:0}" />
+    <input id="cart_type" class="radio" type="hidden" name="cart_type" value="{$cart_type}" />
+    <div class="order-info ">
+        <div class="weui_cells weui_cells_access">
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p><b>收货地址</b></p>
+                </div>
+                <div class="weui_cell_bd"><a href="{url:/ucenter/address_other}?url={echo:urlencode(Url::pathinfo())}">使用新地址</a></div>
+            </div>
+
+            {if:$addressone}
+            {set:$item=$addressone}
+            <a class="weui_cell open-popup" data-target="#selectaddress" href="javascript:;">
+                <div class="weui_cell_bd weui_cell_primary" id='currentaddress'>
+                    <p>{$item['accept_name']} {$item['mobile']}</p>
+                    <p style="color:#999;">{$parse_area[$item['province']]} {$parse_area[$item['city']]} {$parse_area[$item['county']]} {$item['addr']}</p>
+                </div>
+                <div class="weui_cell_ft"></div>
+            </a>
+            {else:}
+            <a class="weui_cell" href="{url:/ucenter/address_other}?url={echo:urlencode(Url::pathinfo())}">
+                暂未添加地址,点击添加新地址
+            </a>
+            {/if}
+        </div>
+
+        <div class="weui_cells weui_cells_access">
+            <div class="weui_cell ">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p><b>支付方式</b></p>
+                </div>
+                <div class="weui_cell_ft">
+                    {if:$paytypeone}
+                    <input class="weui_input" id="paytype" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" style='text-align: right;display:inline-block;width:auto;' />
+                    {/if}
+                </div>
+            </div>
+        </div>
+        <div class="weui_panel weui_panel_access" id='goods-list'>
+            <div class="weui_panel_hd">商品清单</div>
+            <div class="weui_panel_bd">
+                {list:items=$cart}
+                <input type="hidden" name="selectids[]" value="{$item['id']}" />
+                <input type="hidden" name="buynums[{$item['id']}]" value="{$item['num']}" />
+                <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg" data-id="{$item['id']}" data-nums="{$item['num']}">
+                    <div class="weui_media_hd">
+                        <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],100,100)}" alt="">
+                    </div>
+                    <div class="weui_media_bd">
+                        <h4 class="weui_media_title">{echo:TString::msubstr($item['name'],0,30)}</h4>
+                        {if:$item['spec']}
+                        <p class="weui_media_desc">规格:
+                            ({list:items=$item['spec'] item=$spec}
+                            <span title="{$spec['name']}:{$spec['value'][2]}">{$spec['value'][2]}</span>
+                            {/list})
+                        </p>
+                        {/if}
+                        <p class="weui_media_desc">数量: {$item['num']}</p>
+                        <p class="weui_media_desc">价格:
+                            <span class="red">{$item['price']} {if:$item['prom']}<em class="prom">{$item['prom']}</em>{/if}</span>
+                        </p>
+                    </div>
+                </a>
+                {/list}
+            </div>
+        </div>
+        {set:$prom = new Prom($totalamount);$proms = $prom->meetProms();}
+        {set:$fare = new Fare($totalweight);}
+
+        <div class="weui_cells weui_cells_form">
+            {if:isset($huadian)}
+            <div id="huabipay_info" style="display:none;">
+            <div class="weui_panel_hd">华点支付信息</div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">华点账号</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" name="huabi_account" type="text" placeholder="华点账号">
+                    <input type="hidden" name="pay_type">
+                </div>
+            </div>
+            </div>
+            {/if}
+            <div class="weui_panel_hd">其它信息</div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">备注信息</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" name="user_remark" type="text" placeholder="备注信息">
+                </div>
+            </div>
+            {if:$open_invoice}
+            <div class="weui_cell weui_cell_switch">
+                <div class="weui_cell_hd "><label for="" class="weui_label">发票</label></div>
+                <div class="weui_cell_bd weui_cell_primary">{$tax}% 税：+ <b class="taxes" data-value="{$tax}">0</b></div>
+                <div class="weui_cell_ft">
+                    <input class="weui_switch" name="is_invoice" id="is_invoice" value="1" data-value="{$tax}" type="checkbox">
+                </div>
+            </div>
+            <div id="invoice" style="display: none;">
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label for="" class="weui_label">
+                            发票类型
+                        </label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <select class="weui_select" style='padding-left:0;margin:-15px 0;' name="invoice_type"><option value="0">个人</option><option value="1">公司</option></select>
+                    </div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label for="" class="weui_label">
+                            发票抬头
+                        </label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input class="weui_input" type="text" name="invoice_title" value="" placeholder="请输入发票抬头">
+                    </div>
+                </div>
+            </div>
+            {/if}
+            <div class="weui_cell weui_cell_switch">
+                <div class="weui_cell_hd weui_cell_primary"><label for="" class="weui_label">使用代金券</label></div>
+                <div class="weui_cell_ft">
+                    <input class="weui_switch" id="voucher-btn" type="checkbox">
+                </div>
+            </div>
+            <div class="p20 bg-white" id="voucher-n" style="display: none">
+                <div class="weui-row">
+                    <div class="weui-col-66" style="font-size:12px;">提示：一个订单最多能使用一张代金券(<b class="red">注：代金券仅能抵扣商品金额,多出商品的部分忽略不计</b>)</div>
+                    <div class="weui-col-33"><a id="voucher-cancel" class="fr weui_btn weui_btn_primary weui_btn_mini " >不使用代金券</a></div>
+                </div>
+                <table class="voucher-list mt10" >
+                    <tr style="background: #fff5cc;color: #000;height:20px;"><td>名称</td>
+                        <td>编号</td>
+                        <td>有效期</td></tr>
+                    <tbody class="page-content">
+                    <label for="voc{id}">
+                        <tr>
+                            <td><input name="voucher" type="radio" value="{id}" id='voc{id}' data-value="{value}"> {name}</td>
+                            <td>{account}</td>
+                            <td>{end_time}</td>
+                        </tr>
+                    </label>
+                    </tbody>
+                </table>
+
+            </div>
+            {if:!empty($proms)}
+            <div class="weui_cell weui_cell_select">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <select name="prom_id" id="prom_order" class="weui_select">
+                        {list:items=$proms}
+                        {set:$parse_prom = $prom->parsePorm($item);}
+                        <option value="{$item['id']}" data-type="{$item['type']}" data-value="{$parse_prom['value']}">&nbsp;&nbsp;{$parse_prom['note']}&nbsp;&nbsp;</option>
+                        {/list}
+                    </select>
+                </div>
+            </div>
+            {/if}
+        </div>
+
+        <div class="p20 bg-white">
+            <h2 class="f14">汇总清单：</h2>
+            <table >
+                <tr> <td class="tr" width="200px;">购物车商品合计：</td> <td width="140"><div class="mb10 mt10" style=" background: #f0f0f0;"><span class="fr"><span style=""><span class="currency-symbol f18">{$currency_symbol}</span><b class="cart-total red f18" id="total-amount" total="{$totalamount}">{echo:sprintf("%01.2f",$totalamount)} </b></span></span></div>
+                    </td></tr>
+                <tr>
+                    <td class="tr">
+                        <p class="fr">订单优惠：</p>
+                    </td>
+                    <td class="tr">- <b id="prom_order_text">0.00</b></td>
+                </tr>
+                <tr>
+                    <td class="tr">税：</td>
+                    <td>
+                        <p class="fr">+ <b class="taxes" data-value="{$tax}">0.00</b></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tr">运费：</td>
+                    <td>
+                        <p class="fr">+ <b id="fare" data-weight="{$totalweight}">{$totalfare}</b></p>
+                    </td>
+                </tr>
+                <!--                <tr>
+                                    <td class="tr orange">送积分：</td>
+                                    <td>
+                                        <p class="fr orange"><b id="point" data-point="{$totalpoint}">{$totalpoint}</b></p>
+                                    </td>
+                                </tr>-->
+                <tr>
+                    <td class="tr">代金券抵扣：</td>
+                    <td class="tr">- <b id="voucher">0.00</b></td>
+                </tr>
+            </table>
+        </div>
+
+        {token:key=order}
+    </div>
+    <div class="order-bar clearfix">
+        <div class="weui-row">
+            {if:isset($huadian)}
+            <div class="weui-row" style="width: 60%;">
+                <div class="weui-col-100">应付总额：<span class="currency-symbol">{$currency_symbol}</span><b class="cart-total red" id="real-total">{echo:sprintf("%01.2f",$totalamount+$totalfare)}</b></div>
+                 <div class="weui-col-100" style="display:none;" id="huabi_info">应付<b class="red">{echo:sprintf("%01.0f",$huadian)}</b>华点+<span class="currency-symbol">{$currency_symbol}</span><b class="red" id="still_pay">{echo:sprintf("%01.2f",$rmb)}</b>RMB</div>
+            </div>
+            <div class="weui-row" style="width: 40%;">
+                <div class="weui-col-100">
+                <input type="button" class="btn"  value="提交订单" id="_submit" style="height:48px;">
+                </div>
+            </div>
+            {else:}
+            <div class="weui-col-60">应付总额：<span class="currency-symbol">{$currency_symbol}</span><b class="cart-total red" id="real-total">{echo:sprintf("%01.2f",$totalamount+$totalfare)}</b></div>
+            <div class="weui-col-40">
+               <input type="submit" class="btn"  value="提交订单" >
+            </div>
+            {/if}
+        </div>
+    </div>
+</form>
+
+<div id="selectaddress" class="weui-popup-container popup-bottom">
+    <div class="weui-popup-modal">
+        <div class="toolbar">          
+            <div class="toolbar-inner">          
+                <a href="javascript:;" class="picker-button close-popup">完成</a>          
+                <h1 class="title"></h1>          
+            </div>          
+        </div>
+        <div class="modal-content">
+            <div class="weui_cells weui_cells_radio">
+                {set:$address_default=0;}
+                {list:items=$address}
+                <label class="weui_cell weui_check_label" for="x{$item['id']}">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>{$item['accept_name']} {$item['mobile']}</p>
+                        <p style="color:#999">{$parse_area[$item['province']]} {$parse_area[$item['city']]} {$item['addr']} </p>
+                    </div>
+                    <div class="weui_cell_ft">
+                        <input type="radio" class="weui_check" name="select_address_id" value="{$item['id']}" id="x{$item['id']}" {if:$item['is_default']==1}{set:$address_default=$item['id']}checked="checked"{/if} />
+                               <span class="weui_icon_checked"></span>
+                    </div>
+                </label>
+                {/list}
+            </div>
+        </div>
+    </div>
+</div>
+{set:$paydict = array();}
+{list:items=$paytypelist}
+{set:$paydict[]=array('title'=>$item['pay_name'], 'value'=>$item['id']);}
+{/list}
+
+<script type="text/javascript">
+    var Order = {
+    otheraddressurl:"{url:/simple/address_other}",
+            getvoucherurl:"{url:/simple/get_voucher}",
+            calculatefareurl:"{url:/ajax/calculate_fare}",
+            total:{$totalamount},
+            tax:{$tax},
+            wechataddress:{$wechataddress},
+            paytypelist:{echo: json_encode($paydict); }
+    };
+</script>
+
+<script type="text/javascript">
+        {if:isset($huadian)}
+         $("input[name='payment_id']").change(function(){
+             if($(this).val() == 24|| $(this).val() == 25 || $(this).val().indexOf("华点")!=-1 ){
+                 $("#huabi_info").show();
+                 $("#huabipay_info").show();
+                 $("input[name='pay_type']").val("huabipay");
+             }else{
+                 $("#huabi_info").hide();
+                 $("#huabipay_info").hide();
+                 $("input[name='pay_type']").val("");
+             }
+         });
+ 
+        function changeStillPay(_old,_new){
+            if(_old<=0&&_new<=0){
+                return false;
+            }
+             var value = Number($("#still_pay").text());
+             var old = Number(_old);
+             $("#still_pay").text((value+_new-old).toFixed(2));
+         }
+         
+     $("#_submit").click(function(){
+         var flag = false;
+         if($("input[name='address_id']").val()=='0'){
+             $.toast("请选择收货地址",'text');
+              return false;
+         }
+         {if:isset($huadian)}
+         if( $("input[name='pay_type']").val()=='huabipay' &&  $("input[name='huabi_account']").val()==""){
+              $.toast("请填写华点支付账号",'text');
+              $("input[name='huabi_account']").focus();
+             return false;
+         }
+         if( $("input[name='pay_type']").val()=='huabipay' &&  $("input[name='voucher']:checked").length>0){
+              $.toast("抱歉，华点订单不支持使用优惠券",'forbidden');
+              return false;
+         }
+         {/if}
+         $("form").submit();
+     });
+      {/if}
+</script>
