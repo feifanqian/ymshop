@@ -798,7 +798,7 @@ class OrderController extends Controller {
                 foreach ($items as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $val) {
-                        $str .= "<td>" . iconv("UTF-8", "GBK//ignore", $item[$val]) . "</td>";
+                        $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$val]) . "</td>";
                     }
                     $str .= "</tr>";
                 }
