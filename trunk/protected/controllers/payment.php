@@ -533,32 +533,17 @@ class PaymentController extends Controller {
        $data['status'] = 2;
        $data['pay_status'] = 0;
        $data['accept_name'] = $accept_name;
-       // $data['phone'] = '';
        $data['mobile'] = $mobile;
-       // $data['province'] = '';
-       // $data['city'] = '';
-       // $data['county'] = '';
-       // $data['addr'] = '';
-       // $data['zip'] = '';
        $data['payable_amount'] = $order_amount;
-       // $data['payable_freight'] = 0;
-       // $data['real_freight'] = 0;
        $data['create_time'] = date('Y-m-d H:i:s');
        $data['pay_time'] = date("Y-m-d H:i:s");
-       // $data['is_invoice'] = 0;
        $data['handling_fee'] = round($order_amount*$config['handling_rate']/100,2);
-       // $data['invoice_title'] = '';
-       // $data['taxes'] = 0;
-       // $data['discount_amount'] = 0;
        $data['order_amount'] = $order_amount;
        $data['real_amount'] = $order_amount;
        $data['point'] = 0;
        $data['voucher_id'] = 0;
-       // $data['voucher'] = serialize(array());
        $data['prom_id']=$invite_id;
-       // $data['admin_remark']="";
        $data['shop_ids']=$seller_id;
-       // $date['invite_id']=$invite_id;
        $model = new Model('order_offline');
        $exist=$model->where('order_no='.$order_no)->find();
        //防止重复生成同笔订单
@@ -837,16 +822,8 @@ class PaymentController extends Controller {
 
         if($trxstatus==1){
             echo 'success';
-            // $str="<xml>
-            //        <return_code><![CDATA[SUCCESS]]></return_code>
-            //        <return_msg><![CDATA[OK]]></return_msg>
-            //       </xml>";
         }else{
             echo 'fail';
-            // $str="<xml>
-            //       <return_code><![CDATA[FAIL]]></return_code>
-            //       <return_msg><![CDATA[签名失败]]></return_msg>
-            //     </xml>";
         }       
         // echo $str;
         // $this->returnStatus($trxstatus);
