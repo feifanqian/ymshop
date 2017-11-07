@@ -1091,17 +1091,20 @@ class UcenterController extends Controller {
 
     //地址列表
     public function address() {
-        if($this->user['id']==31988){
-            $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
-            $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
-            $token = $wechat->getAccessToken();
-            $oauth = $this->model->table('oauth_user')->fields('open_id')->where('user_id='.$this->user['id'])->find();
-            $openid = $oauth['open_id'];
-            $subscribe_msg = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$token&openid=$openid";
-            $subscribe = json_decode(file_get_contents($subscribe_msg));
-            $gzxx = $subscribe->subscribe;
-            var_dump($gzxx);die;
-        }
+        // if($this->user['id']==31988){
+        //     $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+        //     $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+        //     $token = $wechat->getAccessToken();
+        //     $oauth = $this->model->table('oauth_user')->fields('open_id')->where('user_id='.$this->user['id'])->find();
+        //     $openid = $oauth['open_id'];
+        //     $subscribe_msg = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$token&openid=$openid";
+        //     $subscribe = json_decode(file_get_contents($subscribe_msg));
+        //     $gzxx = $subscribe->subscribe;
+        //     if($gzxx==1){
+        //         var_dump($gzxx);die;
+        //     }
+            
+        // }
         $model = new Model("address");
         $address = $model->where("user_id=" . $this->user['id'])->order("id desc")->findAll();
         $area_ids = array();
