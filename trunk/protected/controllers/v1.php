@@ -106,9 +106,9 @@ class V1Controller extends Controller {
         'refund_apply_info' => array('ucenter/refund_apply_info', 1,1),
         'refund_apply_submit' => array('ucenter/refund_apply_submit', 1,1),
         'refund_progress' => array('ucenter/refund_progress', 1,1),
-        'silver_coin_log' => array("ucenter/silver_coin_log", 1,1), //银点记录接口
-        'gold_to_silver' => array("ucenter/gold_to_silver", 1,1), //金点兑换银点接口
-        'get_recharge_package_gift' => array("ucenter/get_recharge_package_gift", 0,1), //获取套餐充值礼品
+        'silver_coin_log' => array("ucenter/silver_coin_log", 1,1), //银点记录接口 去掉
+        'gold_to_silver' => array("ucenter/gold_to_silver", 1,1), //金点兑换银点接口 去掉
+        'get_recharge_package_gift' => array("ucenter/get_recharge_package_gift", 0,1), //获取套餐充值礼品 //去掉
         'balance_withdraw' => array("ucenter/balance_withdraw", 1,1),
         //小区相关接口
         'apply_for_district' => array("district/applyForDistrict", 1,1), //申请小区
@@ -132,7 +132,7 @@ class V1Controller extends Controller {
         'get_promoter_settled_record' => array("ucenter/getPromoterSettledRecord", 1,1),//获取推广员提现记录
         'promoter_do_settle' => array("ucenter/promoterDoSettle", 1,1),//申请提现
         'get_qrcode_flag_by_goods_id' => array("ucenter/getQrcodeFlagByGoodsId", 1,1),
-        'get_my_balance_withdraw_record'=>array("ucenter/getMyGoldWithdrawRecord",1,1),
+        'get_my_balance_withdraw_record'=>array("ucenter/getMyGoldWithdrawRecord",1,1), //获取我的余额提现记录
         'get_my_invite_promoter'=>array("ucenter/getMyInvitePromoter",1,1),//获取我邀请的推广员列表
         "point_sale"=>array("product/point_sale",0,1),//获取积分购列表
         "pointbuy"=>array("product/pointbuy",0,1),//获取积分购列表
