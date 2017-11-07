@@ -535,8 +535,8 @@ class KefuResponse extends WechatResponse {
         $this->content = $content;
         $this->template = <<<XML
 <xml>
-<ToUserName><![CDATA[touser]]></ToUserName>
-<FromUserName><![CDATA[fromuser]]></FromUserName>
+<ToUserName><![CDATA[%s]]></ToUserName>
+<FromUserName><![CDATA[%s]]></FromUserName>
 <CreateTime>%s</CreateTime>
 <MsgType><![CDATA[transfer_customer_service]]></MsgType>
 </xml>
