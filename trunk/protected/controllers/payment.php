@@ -533,32 +533,17 @@ class PaymentController extends Controller {
        $data['status'] = 2;
        $data['pay_status'] = 0;
        $data['accept_name'] = $accept_name;
-       // $data['phone'] = '';
        $data['mobile'] = $mobile;
-       // $data['province'] = '';
-       // $data['city'] = '';
-       // $data['county'] = '';
-       // $data['addr'] = '';
-       // $data['zip'] = '';
        $data['payable_amount'] = $order_amount;
-       // $data['payable_freight'] = 0;
-       // $data['real_freight'] = 0;
        $data['create_time'] = date('Y-m-d H:i:s');
        $data['pay_time'] = date("Y-m-d H:i:s");
-       // $data['is_invoice'] = 0;
        $data['handling_fee'] = round($order_amount*$config['handling_rate']/100,2);
-       // $data['invoice_title'] = '';
-       // $data['taxes'] = 0;
-       // $data['discount_amount'] = 0;
        $data['order_amount'] = $order_amount;
        $data['real_amount'] = $order_amount;
        $data['point'] = 0;
        $data['voucher_id'] = 0;
-       // $data['voucher'] = serialize(array());
        $data['prom_id']=$invite_id;
-       // $data['admin_remark']="";
        $data['shop_ids']=$seller_id;
-       // $date['invite_id']=$invite_id;
        $model = new Model('order_offline');
        $exist=$model->where('order_no='.$order_no)->find();
        //防止重复生成同笔订单
@@ -812,6 +797,7 @@ class PaymentController extends Controller {
                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
                     Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
                     Common::offlineBeneficial($order_no,$invite_id,$seller_id);
+                    $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('payable_amount'=>$amount))->update();
                     $money = $amount;
                 }else{
                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
@@ -837,16 +823,8 @@ class PaymentController extends Controller {
 
         if($trxstatus==1){
             echo 'success';
-            // $str="<xml>
-            //        <return_code><![CDATA[SUCCESS]]></return_code>
-            //        <return_msg><![CDATA[OK]]></return_msg>
-            //       </xml>";
         }else{
             echo 'fail';
-            // $str="<xml>
-            //       <return_code><![CDATA[FAIL]]></return_code>
-            //       <return_msg><![CDATA[签名失败]]></return_msg>
-            //     </xml>";
         }       
         // echo $str;
         // $this->returnStatus($trxstatus);
@@ -1139,8 +1117,8 @@ class PaymentController extends Controller {
                 
             $success_url = Url::urlFormat("/ucenter/order_details/id/{$order['id']}");
             
-            $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
-            $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
+            $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order['id']}");
+            $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order['id']}");
             
             $this->assign("success_url", $success_url);
             $this->assign("cancel_url", $cancel_url);

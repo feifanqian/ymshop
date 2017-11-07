@@ -1757,6 +1757,58 @@ class SimpleController extends Controller {
             $this->noRight();
         }
     }
+    
+    public function offline_order_status() {
+        if ($this->checkOnline()) {
+            $order_id = Filter::int(Req::get("order_id"));
+            if ($order_id) {
+                $order = $this->model->table("order_offline as od")->join("left join payment as pa on od.payment= pa.id")->fields("od.id,od.order_no,od.payment,od.pay_status,od.order_amount,pa.pay_name as payname,od.type,od.status")->where("od.id=$order_id and od.status<4 and od.user_id = " . $this->user['id'])->find();
+                if ($order) {
+                    if ($order['pay_status'] == 0) {
+                        $payment_plugin = Common::getPaymentInfo($order['payment']);
+                        if ($payment_plugin != null && $payment_plugin['class_name'] == 'received' && $order['status'] == 3) {
+                            $this->redirect("/simple/order_completed/order_id/$order_id");
+                            exit();
+                        }
+                        
+                        $client_type = Chips::clientType();
+                        $client_type = ($client_type == "desktop") ? 0 : ($client_type == "wechat" ? 2 : 1);
+                        $model = new Model("payment as pa");
+                        if($order['type']!=0){
+                            $paytypelist = $model->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
+                                        ->where("pa.status = 0 and pa.plugin_id not in(12,19) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
+                        }
+                        //防止跨平台支付方式错乱
+                        $in = false;
+                        foreach ($paytypelist as $key => $value) {
+                            if($value['id']==$order['payment']){
+                                $in = true;
+                                break;
+                            }
+                        }
+                        if(!$in){
+                            $order['payment'] = $paytypelist[0]['id'];
+                            $order['payname'] = $paytypelist[0]['pay_name'];
+                        }
+                        $paytypeone = reset($paytypelist);
+                        $this->assign("paytypeone", $paytypeone);
+                        $this->assign("paytypelist", $paytypelist);
+                        $this->assign("order", $order);
+                        $this->assign("user", $this->user);
+                        $this->redirect();
+                    } else if ($order['pay_status'] == 1) {
+                        $this->redirect("/ucenter/order_details/id/{$order_id}");
+                    }
+                } else {
+                    Tiny::Msg($this, 404);
+                }
+            } else {
+                Tiny::Msg($this, 404);
+            }
+        } else {
+            $this->noRight();
+        }
+    }
 
     public function order_completed() {
         if ($this->checkOnline()) {
