@@ -19,7 +19,7 @@
         <th style="width:50px">会员账号</th>
         <th style="width:50px">会员昵称</th>
         <th style="width:50px">商家名称</th>
-        <th style="width:50px">收货人电话</th>     
+        <!-- <th style="width:50px">收货人电话</th>      -->
         <th style="width:50px">支付方式</th>
         <th style="width:50px">支付状态</th>
         <th style="width:100px">支付时间</th>
@@ -62,7 +62,7 @@
                 {else:}
                 <td style="width:50px"><a href="?condition=and--real_name--eq--{$item['real_name']}">未知商家</a></td>
                 {/if}
-                <td style="width:50px"><a href="?condition=and--mobile--eq--{$item['mobile']}">{$item['mobile'] | '--'}</a></td>  
+                <!-- <td style="width:50px"><a href="?condition=and--mobile--eq--{$item['mobile']}">{$item['mobile'] | '--'}</a></td>   -->
                 <td style="width:50px">{$payment[$item['payment']]}</td>
                 <td style="width:50px"><a href="?condition=and--pay_status--eq--{$item['pay_status']}">
                         {echo:$pay_status[$item['pay_status']]}
