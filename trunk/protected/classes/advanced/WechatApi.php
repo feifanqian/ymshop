@@ -72,7 +72,7 @@ class WechatApi extends Wechat {
             // $this->responseText("正在为您联系客服，请稍后。。。");
             $result = $this->responseKefu($keyword);
         } else {
-            $result = $this->responseText("未找到与「{$keyword}」相关的商品，若有需要可回复是为您联系客服帮助");
+            $result = $this->responseText("未找到与「{$keyword}」相关的商品，若有需要可回复‘客服’为您联系客服帮助");
             // $result = $this->responseKefu($keyword);
         }
         return $result;

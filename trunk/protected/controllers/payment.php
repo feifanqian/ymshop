@@ -1139,8 +1139,8 @@ class PaymentController extends Controller {
                 
             $success_url = Url::urlFormat("/ucenter/order_details/id/{$order['id']}");
             
-            $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
-            $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
+            $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order['id']}");
+            $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order['id']}");
             
             $this->assign("success_url", $success_url);
             $this->assign("cancel_url", $cancel_url);
