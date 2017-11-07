@@ -1091,24 +1091,6 @@ class UcenterController extends Controller {
 
     //地址列表
     public function address() {
-        // if($this->user['id']==31988){
-        //     $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
-        //     $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
-        //     $token = $wechat->getAccessToken();
-        //     $user_model = new Model();
-        //     $oauth_user = $user_model->table('oauth_user')->where('user_id='.$this->user['id'])->find();
-        //     $openid = $oauth_user['open_id'];
-        //     $subscribe_msg = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$token&openid=$openid";
-        //     $subscribe = json_decode(file_get_contents($subscribe_msg));
-        //     $gzxx = $subscribe->subscribe;
-        //     //
-        //     if($gzxx === 1){
-        //      echo "已关注";die;
-        //     }else{
-        //     echo "未关注";die;
-        //      
-        //  }
-        // }
         $model = new Model("address");
         $address = $model->where("user_id=" . $this->user['id'])->order("id desc")->findAll();
         $area_ids = array();
