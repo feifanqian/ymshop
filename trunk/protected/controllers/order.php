@@ -792,13 +792,13 @@ class OrderController extends Controller {
                 $fields_array = array('order_no' => '订单号', 'real_name' => '商家名称', 'order_amount' => '商品总额','base_rate'=>'让利(利润)','payable_amount'=>'商家收款', 'pay_time' => '支付时间');
                 $str = "<table border=1><tr>";
                 foreach ($fields as $value) {
-                    $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
+                    $str .= "<th>" . $fields_array[$value] . "</th>";
                 }
                 $str .= "</tr>";
                 foreach ($items as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $val) {
-                        $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$val]) . "</td>";
+                        $str .= "<td>" .$item[$val] . "</td>";
                     }
                     $str .= "</tr>";
                 }
