@@ -1040,12 +1040,12 @@ class Common {
          
          if($balance3>0){
             if(isset($district1) && $district1!=null){
-                $exist=$model->table('customer')->where('user_id='.$district1['owner_id'])->find();
+                $exist=$model->table('customer')->where('user_id='.$district_id)->find();
                 if($exist){
-                    $model->table('customer')->where('user_id='.$district1['owner_id'])->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成
-                    Log::balance($balance3, $district1['owner_id'], $order_no,'线下消费上级经销商提成', 8);
+                    $model->table('customer')->where('user_id='.$district_id)->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成
+                    Log::balance($balance3, $district_id, $order_no,'线下消费上级经销商提成', 8);
                     #*****************推送消息***************
-                    // $oauth_info = $model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$district1['owner_id']." and oauth_type='wechat'")->find();
+                    // $oauth_info = $model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$district_id." and oauth_type='wechat'")->find();
                     // $params = array(
                     //     'touser' => $oauth_info['open_id'],
                     //     'msgtype' => 'text',
