@@ -69,11 +69,11 @@ class WechatApi extends Wechat {
         if ($list) {
             $result = $this->responseNews($list);
         }elseif(strstr($keyword, "您好") || strstr($keyword, "你好") || strstr($keyword, "在吗") || strstr($keyword, "有人吗") || strstr($keyword,"是") || strstr($keyword,"客服")){
-            $this->responseText("正在为您联系客服，请稍后。。。");
+            // $this->responseText("正在为您联系客服，请稍后。。。");
             $result = $this->responseKefu($keyword);
         } else {
-            $this->responseText("未找到与「{$keyword}」相关的商品，若有需要可回复是为您联系客服帮助");
-            $result = $this->responseKefu($keyword);
+            $result = $this->responseText("未找到与「{$keyword}」相关的商品，若有需要可回复是为您联系客服帮助");
+            // $result = $this->responseKefu($keyword);
         }
         return $result;
     }
