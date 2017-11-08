@@ -785,7 +785,7 @@ class OrderController extends Controller {
         }else{
             $condition .= " and pay_status=1";
         }
-        $items = $order_model->fields("o.order_no as order_no,c.real_name as real_name,o.order_amount,o.pay_time,dis.base_rate,o.payable_amount")->join("left join customer as c on o.shop_ids = c.user_id left join district_promoter as dis on o.shop_ids=dis.user_id")->where($condition)->findAll();
+        $items = $order_model->fields("o.order_no as order_no,c.real_name as real_name,o.order_amount,o.pay_time,dis.base_rate,o.payable_amount")->join("left join customer as c on o.shop_ids = c.user_id left join district_promoter as dis on o.shop_ids=dis.user_id")->where($condition)->order("o.id desc")->findAll();
             if ($items) {
                 header("Content-type:application/vnd.ms-excel");
                 header("Content-Disposition:filename=.线下订单.xls");
