@@ -266,7 +266,7 @@ class Promoter extends Object {
      */
     public function getMyInviteList($page=1){
         $record = $this->model->table('invite as do')
-                ->join('left join user as u on do.user_id = u.id')
+                ->join('left join user as u on do.invite_user_id = u.id')
                 ->fields('u.avatar,u.nickname,do.createtime')
                 ->where("do.user_id=".$this->promoter_id)
                 ->order("do.id desc")
