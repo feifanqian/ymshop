@@ -28,6 +28,8 @@
         onclick="tools_reload()"> 刷新</a></div>
         <table class="default" >
             <tr>
+                <th style="width:30px">选择</th>
+                <th style="width:50px">操作</th>
                 <th>创建者</th>
                 <th>红包金额</th>
                 <th>位置</th>
@@ -38,6 +40,21 @@
             </tr>
                 {query:name=redbag as b join=left join customer as c on b.user_id eq c.user_id fields=b.*,c.real_name order=b.id desc id=$obj page=1}
             <tr>
+                <td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+                <td style="width:50px" class="btn_min">
+                <div class="operat hidden">
+                   <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                   <div class="menu_select">
+                     <ul>
+                      <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看</a></li>
+                      <li><a class="icon-pencil" href="javascript:;" onclick="edit({$item['id']})"> 编辑</a></li>        
+                      <li><a class="icon-switch"  href="javascript:;" onclick="change_status({$item['id']},4,null)"> 完成</a></li>               
+                      <li><a class="icon-remove" href="javascript:;" onclick="change_status({$item['id']},6,null)"> 作废</a></li>            
+                      <li><a class="icon-attachment"  href="javascript:;" onclick="change_status({$item['id']},null,'note')"> 备注</a></li>
+                    </ul>
+                  </div>
+                </div> 
+                </td>
                 <td>{$item['real_name']}</td>
                 <td>{$item['amount']}</td>
                 <td>{$item['location']|'未知'}</td>
