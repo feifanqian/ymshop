@@ -265,11 +265,11 @@ class Promoter extends Object {
      * 获取我的邀请列表
      */
     public function getMyInviteList($page=1){
-        $record = $this->model->table('district_order as do')
+        $record = $this->model->table('invite as do')
                 ->join('left join user as u on do.user_id = u.id')
-                ->fields('u.avatar,u.nickname,do.create_date')
-                ->where("do.pay_status =1 and do.invitor_role = 'promoter' and do.invitor_id=".$this->promoter_id)
-                ->order("do.pay_date desc")
+                ->fields('u.avatar,u.nickname,do.createtime')
+                ->where("do.user_id=".$this->promoter_id)
+                ->order("do.id desc")
                 ->findPage($page, 10);
         if (empty($record)) {
             return array();
