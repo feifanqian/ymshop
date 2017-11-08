@@ -787,8 +787,8 @@ class OrderController extends Controller {
         }
         $items = $order_model->fields("o.order_no as order_no,c.real_name as real_name,o.order_amount,o.pay_time,dis.base_rate,o.payable_amount")->join("left join customer as c on o.shop_ids = c.user_id left join district_promoter as dis on o.shop_ids=dis.user_id")->where($condition)->order("o.id desc")->findAll();
         foreach ($items as $key => $value) {
-            $items[$key]['base_rate'] = $value['order_amount'] - $value['payable_amount'];
-            $items[$key]['order_no'] = 'OF'.$value['order_no'];
+            $value['base_rate'] = $value['order_amount'] - $value['payable_amount'];
+            // $items[$key]['order_no'] = 'OF'.$value['order_no'];
         }
             if ($items) {
                 header("Content-type:application/vnd.ms-excel");
