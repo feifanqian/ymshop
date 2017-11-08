@@ -168,7 +168,7 @@ class CustomerController extends Controller {
             if($obj['type']==0){
                 $can_withdraw=$obj['balance'];  
             }elseif($obj['type']==1){
-                $can_withdraw=$obj['offline_balance']; 
+                $can_withdraw=$obj['offline_balance']+$obj['balance']; 
             }
             if ($obj['amount'] <= $can_withdraw) {
                 if($status==1){
@@ -203,7 +203,12 @@ class CustomerController extends Controller {
                             if($obj['type']==0){
                                 $model->table('customer')->data(array('balance' => "`balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
                             }elseif($obj['type']==1){
-                                $model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                                if($obj['offline_balance']>=$obj['amount']){
+                                    $model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                                }else{
+                                    $submoney=$obj['amount']-$obj['offline_balance'];
+                                    $model->table('customer')->data(array('offline_balance' =>0.00,'balance'=>"`balance`-".$submoney))->where('user_id=' . $obj['user_id'])->update();
+                                }  
                             }     
                             Log::balance(0 - $obj['amount'], $obj['user_id'],$obj['withdraw_no'],"余额提现", 3, $this->manager['id']);
                             Log::op($this->manager['id'], "通过提现申请", "管理员[" . $this->manager['name'] . "]:通过了提现申请 " . $obj['withdraw_no']);
@@ -220,7 +225,7 @@ class CustomerController extends Controller {
                     }
                 }
             } else {
-               exit(json_encode(array('status'=>'fail','msg'=>'提现金额大于可提现余额余额')));
+               exit(json_encode(array('status'=>'fail','msg'=>'提现金额大于可提现余额')));
             }
             //扣除账户里的余额
         }

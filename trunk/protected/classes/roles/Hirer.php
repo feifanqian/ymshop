@@ -56,6 +56,7 @@ class Hirer extends Object{
     }
    
     public function getMyPrmoter($page=1){//查看我的推广者
+      var_dump(123);die;
         $promoter_list = $this->model->table("district_promoter as dp")
                 ->join("left join user as u on dp.user_id = u.id left join customer as c on dp.user_id = c.user_id")
                 ->fields("dp.id,dp.user_id,dp.join_time,u.avatar,u.nickname,c.real_name,c.sex")

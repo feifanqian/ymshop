@@ -120,6 +120,7 @@ class V1Controller extends Controller {
         'apply_do_settle' => array("district/applyDoSettle", 1,1), //申请提现
         'pay_district' => array("payment/pay_district", 1,1), //小区加盟费支付
         'get_promoter_list' => array("district/getPromoterList", 1,1), //获取推广员列表
+        // 'get_promoter_list' => array("ucenter/getPromoterList", 1,1), //获取推广员列表
         'get_subordinate' => array("district/getSubordinate", 1,1), //获取我的拓展小区
         'district_achievement' => array("district/districtAchievement", 1,1), //获取小区业绩数据
         //推广员相关
