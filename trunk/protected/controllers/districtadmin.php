@@ -1178,4 +1178,51 @@ class DistrictadminController extends Controller {
         $qrCode->render();
         return;
     }
+
+    //显示经销商专区的名称
+    public function hirer_edit()
+    {
+        $id = Req::args("id");
+        $uid = Filter::int($id);
+        $model = new Model();
+        $list = $model->table('district_shop')->fields('id,name')->where('id='.$uid)->find();
+        $this->assign('list',$list);
+        $this->redirect('hirer_edit');
+    }
+
+    //编辑经销商专区名称
+    public function hirer_save()
+    {
+            $id = Req::args('id');
+            $model = new Model();
+            $name = Req::args('name');
+            if ($name) {
+                $model->table('district_shop')->data(array('name'=>$name))->where("id=$id")->update();
+            }
+        $this->redirect("list_hirer");
+    }
+
+      //显示代理商专区的名称
+    public function promoter_edit()
+    {
+        $id = Req::args("id");
+        $uid = Filter::int($id);
+        $model = new Model();
+        $user_id = $model->table('district_promoter')->fields('user_id')->where('id='.$uid)->find();
+        $list = $model->table('customer')->fields('user_id,real_name')->where('user_id='.$user_id['user_id'])->find();
+        $this->assign('list',$list);
+        $this->redirect('promoter_edit');
+    }
+
+    //编辑代理商专区名称
+    public function promoter_save()
+    {
+            $id = Req::args('user_id');
+            $model = new Model();
+            $name = Req::args('real_name');
+            if ($name) {
+                $model->table('customer')->data(array('real_name'=>$name))->where("user_id=$id")->update();
+            }
+        $this->redirect("list_promoter");
+    }
 }
