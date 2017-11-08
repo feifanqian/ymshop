@@ -786,10 +786,17 @@ class OrderController extends Controller {
             $condition .= " and pay_status=1";
         }
         $items = $order_model->fields("o.order_no as order_no,c.real_name as real_name,o.order_amount,o.pay_time,dis.base_rate,o.payable_amount")->join("left join customer as c on o.shop_ids = c.user_id left join district_promoter as dis on o.shop_ids=dis.user_id")->where($condition)->findAll();
+        foreach ($items as $key => $value) {
+            $items[$key]['base_rate'] = $value['base_rate']/100;
+            $items[$key]['payable_amount'] = $value['order_amount'] - $items[$key]['base_rate'];
+        }
+        // echo "<pre>";
+        // print_r($items);
+        // die;
             if ($items) {
                 header("Content-type:application/vnd.ms-excel");
                 header("Content-Disposition:filename=.线下订单.xls");
-                $fields_array = array('order_no' => '订单号', 'real_name' => '商家名称', 'order_amount' => '商品总额','base_rate'=>'让利(利润)','payable_amount'=>'商家收款', 'pay_time' => '支付时间');
+                $fields_array = array('order_no' => '订单号', 'real_name' => '商家名称', 'order_amount' => '商品总额','base_rate'=>'让利','payable_amount'=>'商家收款', 'pay_time' => '支付时间');
                 $str = "<table border=1><tr>";
                 foreach ($fields as $value) {
                     $str .= "<th>" . $fields_array[$value] . "</th>";
