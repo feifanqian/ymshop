@@ -117,4 +117,15 @@ class AddressAction extends Controller {
         );
     }
 
+    public function redbagList(){
+        $page = Filter::int(Req::args('page'));
+        if(!$page){
+            $page = 1; 
+        }
+        $model = new Model();
+        $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->order('r.id desc')->findPage($page,10);
+        $this->code = 0;
+        $this->content = $list;
+    }
+
 }

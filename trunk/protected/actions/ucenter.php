@@ -2001,7 +2001,7 @@ class UcenterAction extends Controller {
     public function getPromoterLists(){   
         $page = Filter::int(Req::args('page'));
         // var_dump($this->user['id']);die;
-        $promoter_list = $this->model->table("district_promoter as dp")->fields("dp.id,dp.user_id,dp.join_time,u.avatar,u.nickname,c.real_name,c.sex")->join("left join user as u on dp.user_id = u.id left join customer as c on dp.user_id = c.user_id")->where('dp.user_id ='.$this->user['id'])->findPage($page, 10);
+        $promoter_list = $this->model->table("district_promoter as dp")->fields("dp.id,dp.user_id,dp.join_time,u.avatar,u.nickname,c.real_name,c.sex")->join("left join user as u on dp.user_id = u.id left join customer as c on dp.user_id = c.user_id")->where('dp.user_id ='.$this->user['id'])->order('dp.id desc')->findPage($page, 10);
         // var_dump($promoter_list);die;
         
         // if(empty($promoter_list)){
