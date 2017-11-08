@@ -34,6 +34,7 @@
                 <th style="width:100px">红包金额</th>
                 <th style="width:200px">位置</th>
                 <th style="width:200px">信息</th>
+                <th style="width:100px">距离</th>
                 <th style="width:100px">创建时间</th>
                 <th style="width:100px">打开时间</th>
                 <th style="width:60px">状态</th>   
@@ -47,7 +48,7 @@
                    <div class="menu_select">
                      <ul>
                       <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看</a></li>
-                      <li><a class="icon-pencil" href="javascript:;" onclick="edit({$item['id']})"> 编辑</a></li>        
+                      <li><a class="icon-pencil" href="{url:/marketing/redbag_edit/id/$item[id]}"> 编辑</a></li>        
                       <li><a class="icon-switch"  href="javascript:;" onclick="change_status({$item['id']},4,null)"> 完成</a></li>               
                       <li><a class="icon-remove" href="javascript:;" onclick="change_status({$item['id']},6,null)"> 作废</a></li>            
                       <li><a class="icon-attachment"  href="javascript:;" onclick="change_status({$item['id']},null,'note')"> 备注</a></li>
@@ -59,6 +60,7 @@
                 <td>{$item['amount']}</td>
                 <td>{$item['location']|'未知'}</td>
                 <td>{$item['info']}</td>
+                <td>{$item['distance']}</td>
                 <td>{$item['create_time']}</td>
                 <td>{$item['open_time']}</td>
                 <td>{$open_status[$item['status']]}</td>

@@ -900,4 +900,34 @@ class MarketingController extends Controller {
             exit(json_encode(array('status'=>'success','beneficiary_num'=>$beneficiary_num,'count'=>(int)$financial_coin_count,'max'=>$financial_coin_max,'min'=>$financial_coin_min)));
         }
     }
+
+    public function redbag_edit(){
+         $id = Req::args("id");
+
+        $promoter = Req::args();
+        if ($id) {
+            $model = new Model("redbag as d");
+            $redbag = $model->join("customer as c on c.user_id = d.user_id")->fields('d.*,c.real_name')->where("d.id=" . $id)->find();
+        }
+        $this->assign('redbag',$redbag);
+        $this->redirect();
+    }
+
+    public function redbag_save(){
+        $id = Req::args("id");
+        $location = Req::args("location");
+        $info = Req::args("info");
+        $distance = Req::args("distance");
+        $model = new Model("redbag");
+        if($id){
+            $redbag=$model->where('id='.$id)->find();
+            if($redbag){
+                
+                    $model->data(array('location'=>$location,'info'=>$info,'distance'=>$distance))->where('id='.$id)->update();
+                    Log::op($this->manager['id'], "修改红包", "管理员[" . $this->manager['name'] . "]:修改了红包[id] " . $id . " 的信息");
+                
+            }
+        }
+        $this->redirect('redbag_list');
+    }
 }

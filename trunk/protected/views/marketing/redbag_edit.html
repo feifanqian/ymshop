@@ -1,0 +1,32 @@
+<h1 class="page_title">红包编辑</h1>
+<div id="obj_form" class="form2">
+    <form action="{url:/marketing/redbag_save}" method="post" >
+        {if:isset($redbag['id'])}<input type="hidden" name="id" id="objId" value="{$redbag['id']}">{/if}
+    <dl class="lineD">
+      <dt><b class="red">*</b> 发放者：</dt>
+      <dd>
+        <label>{$redbag['real_name']}</label>      
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b> 位置：</dt>
+      <dd>
+        <input name="location" type="text" value="{$redbag['location']}" alt="最大99">%      
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b> 信息：</dt>
+      <dd>
+        <input name="info" type="text" value="{$redbag['info']}" alt="最大99">%      
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b> 距离：</dt>
+      <dd>
+        <input name="distance" type="text" value="{$redbag['distance']}" alt="最大99">%      
+      </dd>
+    </dl>
+
+    <div style="text-align:center"><input type="submit" value="提交" id="submit" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
+    </form>
+</div>

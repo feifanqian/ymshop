@@ -73,7 +73,7 @@
                                             $.toast('用户取消支付!', 'cancel', function () {
                                                 location.href = "{$cancel_url}";
                                             });
-                                    } else {
+                                    } else if (res.err_msg == "get_brand_wcpay_request:fail"){
                                             $.toast('支付失败!', 'forbidden', function () {
                                                 location.href = "{$error_url}";
                                             });
