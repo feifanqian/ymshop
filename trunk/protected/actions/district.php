@@ -6,19 +6,19 @@ class DistrictAction extends Controller {
     public $user = null;
     public $code = 1000;
     public $content = NULL;
-    public $hirer = NULL;
+    // public $hirer = NULL;
 
     public function __construct() {
         $this->model = new Model();
     }
     //调用需要实例化hirer的方法时
     //需要调用实例化hirer的方法需要设置为protected
-    public function __call($name, $args = null) {
-        if($this->setHirer()){
-            return call_user_func_array([$this, $name], $args);
-        }
-        return false;
-    }
+    // public function __call($name, $args = null) {
+    //     if($this->setHirer()){
+    //         return call_user_func_array([$this, $name], $args);
+    //     }
+    //     return false;
+    // }
     /*
      * 实例化并设置hirer
      */
