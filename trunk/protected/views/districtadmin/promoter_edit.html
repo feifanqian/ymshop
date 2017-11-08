@@ -1,0 +1,18 @@
+{echo:JS::import('form');}
+{echo:JS::import('editor');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<div id="obj_form" class="form2 tab">
+    <h1 class="page_title">编辑专区名称</h1>
+    <form action="{url:/districtadmin/promoter_save}" method="post" >
+        {if:isset($list['user_id'])}<input type="hidden" name="user_id" value="{$list['user_id']}">{/if}
+        <dl class="lineD">
+            <dt>专区名称：</dt>
+            <dd>
+                <input name="real_name" type="text" pattern="required" value="{$list['real_name']}">
+                <label>专区名称</label>
+            </dd>
+        </dl>
+        <div style="text-align:left;margin-left:13%;"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
+    </form>
+</div>

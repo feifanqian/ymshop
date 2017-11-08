@@ -1,0 +1,18 @@
+{echo:JS::import('form');}
+{echo:JS::import('editor');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<div id="obj_form" class="form2 tab">
+    <h1 class="page_title">编辑专区名称</h1>
+    <form action="{url:/districtadmin/hirer_save}" method="post" >
+        {if:isset($list['id'])}<input type="hidden" name="id" value="{$list['id']}">{/if}
+        <dl class="lineD">
+            <dt>专区名称：</dt>
+            <dd>
+                <input name="name" type="text" pattern="required" value="{$list['name']}">
+                <label>专区名称</label>
+            </dd>
+        </dl>
+        <div style="text-align:left;margin-left:13%;"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
+    </form>
+</div>
