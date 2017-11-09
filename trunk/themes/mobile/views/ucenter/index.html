@@ -59,7 +59,9 @@
     {if:$user['avatar']==""}
     {set:$user['avatar']="static/images/avatar.jpeg"}
     {/if}
-    <div id="ucenter-avatar"><img src='{echo:Url::urlFormat("@".$user['avatar'])}' alt=""></div>
+    <div id="ucenter-avatar">
+       <img src="{$user['avatar']}" alt="">
+    </div>
     <div id="ucenter-account">
         <p>昵称：{$user['nickname']}</p>
         <p>级别：{echo:$is_hirer?"经销商":($is_promoter?"代理商":'普通会员')}</p>
