@@ -563,7 +563,6 @@ class CustomerController extends Controller {
     }
 
     public function customer_invite() {
-        // ini_set("memory_limit","80M");
         $id = Req::get("id");
         if ($id) {
             $model = new Model("customer as c");
