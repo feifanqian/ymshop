@@ -4,7 +4,6 @@ class AppUtil{
 	 * 将参数数组签名
 	 */
 	public static function SignArray(array $array,$appkey){
-		var_dump(111);die;
 		$array['key'] = $appkey;// 将key放到数组中一起进行排序和组装
 		ksort($array);
 		$blankStr = AppUtil::ToUrlParams($array);
@@ -41,6 +40,7 @@ class AppUtil{
 
 	//发送请求操作仅供参考,不为最佳实践
     public static function Request($url,$params){
+    	var_dump(222);die;
         $ch = curl_init();
         $this_header = array("content-type: application/x-www-form-urlencoded;charset=UTF-8");
         curl_setopt($ch,CURLOPT_HTTPHEADER,$this_header);
