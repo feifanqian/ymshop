@@ -1127,6 +1127,7 @@ class PaymentController extends Controller {
             $tools = new JsApiPay();
             $payinfo=Session::get('payinfo');
             $jsApiParameters=json_encode($payinfo);
+            var_dump($jsApiParameters);die;
             $offline=1;
             // var_dump($jsApiParameters);die;
             //获取共享收货地址js函数参数
