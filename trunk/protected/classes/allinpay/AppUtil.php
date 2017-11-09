@@ -35,12 +35,12 @@ class AppUtil{
 		unset($array['sign']);
 		$array['key'] = $appkey;
 		$mySign = AppUtil::SignArray($array, $appkey);
+		var_dump($mySign);die;
 		return strtolower($sign) == strtolower($mySign);
 	}
 
 	//发送请求操作仅供参考,不为最佳实践
     public static function Request($url,$params){
-    	var_dump(222);die;
         $ch = curl_init();
         $this_header = array("content-type: application/x-www-form-urlencoded;charset=UTF-8");
         curl_setopt($ch,CURLOPT_HTTPHEADER,$this_header);
