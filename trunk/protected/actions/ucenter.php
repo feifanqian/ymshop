@@ -1983,11 +1983,12 @@ class UcenterAction extends Controller {
             $image->suffix = '';
             $image->thumb(APP_ROOT . $image_url, 100, 100);
             $model = new Model('user');
-            $model->data(array('avatar' => $image_url))->where("id=" . $this->user['id'])->update();
+            $avatar = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
+            $model->data(array('avatar' => $avatar))->where("id=" . $this->user['id'])->update();
 
             $safebox = Safebox::getInstance();
             $user = $this->user;
-            $user['avatar'] = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
+            $user['avatar'] = $avatar;
             $safebox->set('user', $user);
             $this->code = 0;
         } else {
