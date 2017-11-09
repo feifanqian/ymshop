@@ -35,7 +35,6 @@ class AppUtil{
 		unset($array['sign']);
 		$array['key'] = $appkey;
 		$mySign = AppUtil::SignArray($array, $appkey);
-		var_dump($mySign);die;
 		return strtolower($sign) == strtolower($mySign);
 	}
 
@@ -56,6 +55,7 @@ class AppUtil{
          
         $output = curl_exec($ch);
         curl_close($ch);
+        var_dump($ch);die;
         return  $output;
     }
 
