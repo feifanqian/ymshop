@@ -60,7 +60,8 @@
     {set:$user['avatar']="static/images/avatar.jpeg"}
     {/if}
     <div id="ucenter-avatar">
-       <img src="{$user['avatar']}" alt="">
+       <img src='{echo:Url::urlFormat("@".$user['avatar'])}' alt="">
+       <!-- <img src="{$user['avatar']}" alt=""> -->
     </div>
     <div id="ucenter-account">
         <p>昵称：{$user['nickname']}</p>
