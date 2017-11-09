@@ -294,7 +294,7 @@ class PaymentAction extends Controller {
        $data['status'] = 2;
        $data['pay_status'] = 0;
        $data['accept_name'] = $user['real_name'];
-       $data['mobile'] = $$user['mobile'];
+       $data['mobile'] = $user['mobile'];
        $data['payable_amount'] = $order_amount;
        $data['create_time'] = date('Y-m-d H:i:s');
        $data['pay_time'] = date("Y-m-d H:i:s");
