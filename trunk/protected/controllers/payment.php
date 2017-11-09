@@ -579,6 +579,7 @@ class PaymentController extends Controller {
 
        $rspArray = json_decode($rsp, true);
        if(AppUtil::ValidSigns($rspArray)){
+        var_dump(111);die;
            if(isset($rspArray['payinfo'])){
                $this->assign('payinfo',$rspArray['payinfo']);
                Session::set('payinfo',$rspArray['payinfo']);
