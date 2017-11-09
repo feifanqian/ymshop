@@ -593,8 +593,7 @@ class PaymentController extends Controller {
            $this->assign("paymentPlugin", $paymentPlugin);
            $this->assign("sendData", $sendData);
            $this->assign("offline",1);
-           // $this->redirect('pay_forms', false);
-           $this->redirect('pay_wxpayjsapi_submits', false);
+           $this->redirect('pay_forms', false);
        }else{
            echo "error";die;
        }
