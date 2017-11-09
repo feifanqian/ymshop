@@ -128,4 +128,27 @@ class AddressAction extends Controller {
         $this->content = $list;
     }
 
+    public function promoterList(){
+        $page = Filter::int(Req::args('page'));
+        if(!$page){
+            $page = 1; 
+        }
+        $model = new Model();
+        $list = $model->table('district_promoter as d')->join('left join customer as c on d.user_id = c.user_id')->fields('d.*,c.real_name')->order('d.id desc')->findPage($page,10);
+        $this->code = 0;
+        $this->content = $list;
+    }
+
+    public function promoterInfo(){
+        $id = Filter::int(Req::args('id'));
+        if(!$id){
+            $this->code=1000;
+            return; 
+        }
+        $model = new Model();
+        $list = $model->table('district_promoter as d')->join('left join customer as c on d.user_id = c.user_id')->fields('d.*,c.real_name')->where('id='.$id)->find();
+        $this->code = 0;
+        $this->content = $list;
+    }
+
 }

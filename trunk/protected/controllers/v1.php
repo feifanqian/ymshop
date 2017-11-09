@@ -153,6 +153,9 @@ class V1Controller extends Controller {
         "shop_goods_list_by_time"=>array("personalShop/shopGoodsListByTime",0,1),
         //红包
         "redbag_list"=>array("address/redbagList",0,1),
+        //商家
+        "seller_list"=>array("address/promoterList",0,1),
+        "seller_info"=>array("address/promoterInfo",0,1),
     );
 
     //分析请求的action,将请求分发到不同的action中去
