@@ -257,6 +257,118 @@ class PaymentAction extends Controller {
         }
     }
 
+    //线下
+    public function dopays(){
+       $payment_id = Filter::int(Req::args('payment_id'));
+       $order_no = date('YmdHis').rand(1000,9999);
+       $order_amount = (Req::args('order_amount'));
+       $randomstr=rand(1000000000000,9999999999999);
+       $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
+       if(!$seller_id){
+        $this->code = 1158;
+       }
+       if(!$seller_id || $seller_id==0){
+         $seller_id = Filter::int(Req::args('seller_ids'));
+       }
+       if(!$payment_id){
+         $this->code = 1157;
+       }
+       $user_id = $this->user['id'];
+       $invite=$this->model->table('invite')->where('invite_user_id='.$user_id)->find();
+       if($invite){
+           $invite_id=intval($invite['user_id']);//邀请人用户id
+       }else{
+           $invite_id=1;
+       }
+       
+       $user=$this->model->table('customer')->fields('mobile,real_name')->where('user_id='.$user_id)->find();
+       if(!$user){
+        $this->code = 1159;
+       }
+       $accept_name = Session::get('openname');
+       $config = Config::getInstance()->get("district_set");
+       $data['type']=8;
+       $data['order_no'] = $order_no;
+       $data['user_id'] = $user_id;
+       $data['payment'] = $payment_id;
+       $data['status'] = 2;
+       $data['pay_status'] = 0;
+       $data['accept_name'] = $user['real_name'];
+       $data['mobile'] = $$user['mobile'];
+       $data['payable_amount'] = $order_amount;
+       $data['create_time'] = date('Y-m-d H:i:s');
+       $data['pay_time'] = date("Y-m-d H:i:s");
+       $data['handling_fee'] = round($order_amount*$config['handling_rate']/100,2);
+       $data['order_amount'] = $order_amount;
+       $data['real_amount'] = $order_amount;
+       $data['point'] = 0;
+       $data['voucher_id'] = 0;
+       $data['prom_id']=$invite_id;
+       $data['shop_ids']=$seller_id;
+       $model = new Model('order_offline');
+       $exist=$model->where('order_no='.$order_no)->find();
+       //防止重复生成同笔订单
+       if(!$exist){
+          $order_id=$model->data($data)->insert();
+       }
+
+       $payment = new Payment($payment_id);
+       $paymentPlugin = $payment->getPaymentPlugin();
+       if(!is_object($paymentPlugin)){
+                $this->code =1113;
+                exit();
+       }
+       $open=$this->model->table('oauth_user')->where('user_id='.$user_id)->find();
+       if(!$open){
+          $this->code = 1160;
+       } 
+       $params = array();
+       $params["cusid"] = AppConfig::CUSID;
+       $params["appid"] = AppConfig::APPID;
+       $params["version"] = AppConfig::APIVERSION;
+       $params["trxamt"] = $order_amount*100;
+       $params["reqsn"] = $order_no;//订单号,自行生成
+       $params["paytype"] = "W02";
+       $params["randomstr"] = $randomstr;//
+       $params["body"] = "商品名称";
+       $params["remark"] = "备注信息";
+       $params["acct"] = $open['open_id'];
+       // $params["limit_pay"] = "no_credit";
+       // $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
+       $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
+       // $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback");
+       // $params["notify_url"] = 'http://'.$_SERVER['HTTP_HOST'].'/payment/async_callback';
+       $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
+
+       $paramsStr = AppUtil::ToUrlParams($params);
+       $url = AppConfig::APIURL . "/pay";
+       $rsp = AppUtil::Request($url, $paramsStr);
+
+       $rspArray = json_decode($rsp, true);
+       if(AppUtil::ValidSigns($rspArray)){
+           if(isset($rspArray['payinfo'])){
+               $payinfo = $rspArray['payinfo']
+           }else{
+             $this->code = 1000;
+           }
+           // $config = Config::getInstance();
+           // $site_config = $config->get("globals");
+           // $packData['M_OrderNO'] = $order_no;
+           // $packData['M_Amount'] = $order_amount;
+           // $packData ['R_Name'] = isset($site_config['site_name']) ? $site_config['site_name'] : '';
+           // $packData = array_merge($params, $packData);
+           // $sendData = $paymentPlugin->packDatas($packData);
+           $this->code = 0;
+           $this->content = array(
+                    'order_id' => $order_id,
+                    'payment_id' => $payment_id,
+                    'senddata' => $payinfo,
+                );
+       }else{
+           $this->code = 1065;
+       }
+   }
+
     //余额支付
     public function pay_balance() {
         $this->model = new Model('user as us');

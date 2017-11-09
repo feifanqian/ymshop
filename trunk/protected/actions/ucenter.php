@@ -432,6 +432,7 @@ class UcenterAction extends Controller {
                     $this->code = 0;
                 }
             } else if ($type == 'mobile') {
+                // var_dump($this->user['mobile']);die;
                 $sms = SMS::getInstance();
                 if ($sms->getStatus()) {
                     $result = $sms->sendCode($this->user['mobile'], $code);

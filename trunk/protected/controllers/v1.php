@@ -156,6 +156,7 @@ class V1Controller extends Controller {
         //商家
         "seller_list"=>array("address/promoterList",0,1),
         "seller_info"=>array("address/promoterInfo",0,1),
+        "promoter_edit"=>array('address/promoterEdit',1,1),
     );
 
     //分析请求的action,将请求分发到不同的action中去

@@ -151,4 +151,54 @@ class AddressAction extends Controller {
         $this->content = $list;
     }
 
+    public function promoterEdit(){
+        $model = new Model();
+        $is_promoter = $model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+        if(!$is_promoter){
+            $this->code = 1133;
+        }
+        $name = Filter::str(Req::args('name'));
+        $describe = Filter::text(Req::args('describe'));
+        $location = Filter::text(Req::args('location'));
+        $lng = Filter::sql(Req::args('lng'));
+        $lat = Filter::sql(Req::args('lat'));
+
+        $upfile_path = Tiny::getPath("uploads") . "/head/";
+        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
+        //$upfile_url = strtr(Tiny::getPath("uploads_url")."head/",APP_URL,'');
+        $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile->save();
+        $info = $upfile->getInfo();
+        
+        if ($info[0]['status'] == 1){
+            $image_url = $upfile_url . $info[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url, 100, 100);
+            $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
+            $result = $model->table('district_promoter')->data(array('picture' => $picture))->where("user_id=" . $this->user['id'])->update();
+        }
+        if($name){
+           $result = $model->table('customer')->data(array('real_name' => $name))->where("user_id=" . $this->user['id'])->update();
+        }
+        if($describe){
+            $result = $model->table('district_promoter')->data(array('describe' => $describe))->where("user_id=" . $this->user['id'])->update();
+        }
+        if($location){
+            $result = $model->table('district_promoter')->data(array('location' => $location))->where("user_id=" . $this->user['id'])->update();
+        }
+        if($lng){
+            $result = $model->table('district_promoter')->data(array('lng' => $lng))->where("user_id=" . $this->user['id'])->update();
+        }
+        if($lat){
+            $result = $model->table('district_promoter')->data(array('lat' => $lat))->where("user_id=" . $this->user['id'])->update();
+        }
+
+        if($result){
+            $this->code = 0;
+        }else{
+            $this->code = 1099;
+        }
+    }
+
 }
