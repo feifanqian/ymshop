@@ -347,7 +347,7 @@ class PaymentAction extends Controller {
        $rspArray = json_decode($rsp, true);
        if(AppUtil::ValidSigns($rspArray)){
            if(isset($rspArray['payinfo'])){
-               $payinfo = $rspArray['payinfo']
+               $payinfo = $rspArray['payinfo'];
            }else{
              $this->code = 1000;
            }
