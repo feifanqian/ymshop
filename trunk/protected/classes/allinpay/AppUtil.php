@@ -4,6 +4,7 @@ class AppUtil{
 	 * 将参数数组签名
 	 */
 	public static function SignArray(array $array,$appkey){
+		var_dump(111);die;
 		$array['key'] = $appkey;// 将key放到数组中一起进行排序和组装
 		ksort($array);
 		$blankStr = AppUtil::ToUrlParams($array);
