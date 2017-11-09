@@ -579,7 +579,6 @@ class PaymentController extends Controller {
 
        $rspArray = json_decode($rsp, true);
        if(AppUtil::ValidSigns($rspArray)){
-        var_dump(111);die;
            if(isset($rspArray['payinfo'])){
                $this->assign('payinfo',$rspArray['payinfo']);
                Session::set('payinfo',$rspArray['payinfo']);
@@ -1128,7 +1127,6 @@ class PaymentController extends Controller {
             $tools = new JsApiPay();
             $payinfo=Session::get('payinfo');
             $jsApiParameters=json_encode($payinfo);
-            var_dump($jsApiParameters);die;
             $offline=1;
             // var_dump($jsApiParameters);die;
             //获取共享收货地址js函数参数
