@@ -38,25 +38,39 @@ class AppUtil{
 		return strtolower($sign) == strtolower($mySign);
 	}
 
-	//发送请求操作仅供参考,不为最佳实践
-    public static function Request($url,$params){
-        $ch = curl_init();
-        $this_header = array("content-type: application/x-www-form-urlencoded;charset=UTF-8");
-        curl_setopt($ch,CURLOPT_HTTPHEADER,$this_header);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+	// //发送请求操作仅供参考,不为最佳实践
+ //    public static function Request($url,$params){
+ //        $ch = curl_init();
+ //        $this_header = array("content-type: application/x-www-form-urlencoded;charset=UTF-8");
+ //        curl_setopt($ch,CURLOPT_HTTPHEADER,$this_header);
+ //        curl_setopt($ch, CURLOPT_URL, $url);
+ //        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+ //        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
+ //        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
          
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);//如果不加验证,就设false,商户自行处理
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+ //        curl_setopt($ch, CURLOPT_POST, 1);
+ //        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+ //        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);//如果不加验证,就设false,商户自行处理
+ //        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
          
-        $output = curl_exec($ch);
-        curl_close($ch);
-        var_dump($ch);die;
-        return  $output;
+ //        $output = curl_exec($ch);
+ //        curl_close($ch);
+ //        return  $output;
+ //    }
+
+    public function Request($url, $data = null) {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        if (!empty($data)) {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($curl);
+        curl_close($curl);
+        return $output;
     }
 
     //验签
