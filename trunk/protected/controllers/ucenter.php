@@ -2667,6 +2667,8 @@ class UcenterController extends Controller {
             $this->assign('shop_name','未知商家');
         }
         $order_no=date('YmdHis').rand(1000,9999);
+        $jsApiParameters = Session::get('payinfo');
+        $this->assign("jsApiParameters",$jsApiParameters);
         $this->assign("seo_title","向商家付款");
         $this->assign('seller_id',$inviter_id);
         $this->assign('seller_ids',Session::get('seller_id'));
