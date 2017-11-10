@@ -53,7 +53,8 @@ class WeixinOAuth extends OAuth2 {
                 $params['appid'] = $obj->getAppID();
                 $this->appKey = $obj->getAppID();
                 $this->requestCodeURL = 'https://open.weixin.qq.com/connect/oauth2/authorize';
-                $this->authorize = 'scope=snsapi_userinfo';
+                // $this->authorize = 'scope=snsapi_userinfo';
+                $this->authorize = 'scope=snsapi_base';
             }
         }
 
@@ -169,6 +170,23 @@ class WeixinOAuth extends OAuth2 {
         } else {
             throw_exception("获取微信用户信息失败：{$data['msg']}");
         }
+    }
+
+    public function getUserInfos($access_token,$openid){
+      $userinfo = array();  
+      $url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";
+      $result = json_decode(file_get_contents($url),true);
+      
+      if($result){
+        $userinfo['open_name']=$result['nickname']; 
+        $userinfo['head']=$result['headimgurl']; 
+        $userinfo['type'] = 'Weixin';
+        $userinfo['name'] = $userinfo['open_name'];
+        return $userinfo;
+      }else {
+            throw_exception("获取微信用户信息失败!");
+        }
+        
     }
 
 }

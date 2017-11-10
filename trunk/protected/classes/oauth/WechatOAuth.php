@@ -53,7 +53,8 @@ class WechatOAuth extends OAuth2 {
             $params['appid'] = $this->appKey;
             $this->appKey = $this->appKey;
             $this->requestCodeURL = 'https://open.weixin.qq.com/connect/oauth2/authorize';
-            $this->authorize = 'scope=snsapi_userinfo';
+            // $this->authorize = 'scope=snsapi_userinfo';
+            $this->authorize = 'scope=snsapi_base';
         }
 
         //获取额外参数

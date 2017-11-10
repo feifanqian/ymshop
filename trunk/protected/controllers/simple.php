@@ -425,24 +425,9 @@ class SimpleController extends Controller {
         }
         $type = str_replace('oauth', '', strtolower($type));
         $token = $oauth->getAccessToken($code, $extend);
-        $userinfo = $oauth->getUserInfo();
+        // $userinfo = $oauth->getUserInfo();
+        $userinfo = $oauth->getUserInfos($token['access_token'],$token['openid']);
         if (!empty($userinfo)) {
-            $url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$token['access_token']."&openid=".$token['openid']."&lang=zh_CN";
-            $result = json_decode(file_get_contents($url),true);
-            if(!$userinfo['open_name']){
-                if(isset($result['nickname'])){
-                   $userinfo['open_name']=$result['nickname']; 
-               }else{
-                $userinfo['open_name']='';
-               }      
-            }
-            if(!$userinfo['head']){
-                if(isset($result['headimgurl'])){
-                   $userinfo['head']=$result['headimgurl']; 
-               }else{
-                $userinfo['head']='';
-               }
-            }
             $oauth_user = $this->model->table('oauth_user');
             $is_oauth = $oauth_user->fields('user_id')
                     ->where('open_id="' . $token['openid'] . '" and oauth_type="' . $type . '"')
