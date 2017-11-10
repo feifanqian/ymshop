@@ -2643,7 +2643,7 @@ class UcenterController extends Controller {
 
     public function demo(){
         if($this->user['id']==42608){
-            $dopay=Session::get('dopay');
+            $dopay=Req::args('dopay');
             if($dopay==1){
                 var_dump(123);die;
             }
