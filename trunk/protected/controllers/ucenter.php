@@ -2642,15 +2642,12 @@ class UcenterController extends Controller {
     }
 
     public function demo(){
-        if($this->user['id']==42608){
-            $dopay=Req::args('dopay');
-            if($dopay==1){
-                var_dump(123);die;
-            }
-        }
         $model = new Model();
        Session::set('demo', 2);
-
+       $dopay = intval(Req::args('dopay'));
+       if(!$dopay){
+        $dopay=0;
+       }
        $inviter_id = intval(Req::args('inviter_id'));
        if(!$inviter_id){
             $inviter_id = Session::get('seller_id');
@@ -2674,6 +2671,7 @@ class UcenterController extends Controller {
         $this->assign('seller_id',$inviter_id);
         $this->assign('seller_ids',Session::get('seller_id'));
         $this->assign('order_no',$order_no);
+        $this->assign('dopay',$dopay);
         $this->redirect();
     }
 }

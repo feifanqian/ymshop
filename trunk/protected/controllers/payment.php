@@ -593,7 +593,7 @@ class PaymentController extends Controller {
            $this->assign("sendData", $sendData);
            $this->assign("offline",1);
            if($user_id==42608){
-            $this->redirect('ucenter/demo?dopay=1',true);
+            $this->redirect('ucenter/demo?dopay=1&inviter_id='.$seller_id,true);
         }else{
            $this->redirect('pay_forms', false);
         }
