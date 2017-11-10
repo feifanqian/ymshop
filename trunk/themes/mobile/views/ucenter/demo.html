@@ -303,7 +303,10 @@
                     }
                 }
                 window.onload = function () {
-                    callpay();
+                    var dopay = {$dopay};
+                    if(dopay==1){
+                        callpay();
+                    } 
                 }
             </script>
 </body>
