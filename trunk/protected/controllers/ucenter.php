@@ -2668,6 +2668,7 @@ class UcenterController extends Controller {
         $this->assign('seller_id',$inviter_id);
         $this->assign('seller_ids',Session::get('seller_id'));
         $this->assign('order_no',$order_no);
+        $this->assign('dopay',0);
         $this->redirect();
     }
 }

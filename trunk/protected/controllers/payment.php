@@ -593,7 +593,9 @@ class PaymentController extends Controller {
            $this->assign("paymentPlugin", $paymentPlugin);
            $this->assign("sendData", $sendData);
            $this->assign("offline",1);
-           $this->redirect('pay_forms', false);
+           $this->assign("jsApiParameters",json_encode($rspArray['payinfo']));
+           $this->assign('dopay',1);
+           $this->redirect('ucenter/demo');
        }else{
            echo "error";die;
        }
