@@ -53,8 +53,8 @@ class WeixinOAuth extends OAuth2 {
                 $params['appid'] = $obj->getAppID();
                 $this->appKey = $obj->getAppID();
                 $this->requestCodeURL = 'https://open.weixin.qq.com/connect/oauth2/authorize';
-                // $this->authorize = 'scope=snsapi_userinfo';
-                $this->authorize = 'scope=snsapi_base';
+                $this->authorize = 'scope=snsapi_userinfo';
+                // $this->authorize = 'scope=snsapi_base';
             }
         }
 

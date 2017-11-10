@@ -425,8 +425,8 @@ class SimpleController extends Controller {
         }
         $type = str_replace('oauth', '', strtolower($type));
         $token = $oauth->getAccessToken($code, $extend);
-        // $userinfo = $oauth->getUserInfo();
-        $userinfo = $oauth->getUserInfos($token['access_token'],$token['openid']);
+        $userinfo = $oauth->getUserInfo();
+        // $userinfo = $oauth->getUserInfos($token['access_token'],$token['openid']);
         if (!empty($userinfo)) {
             $oauth_user = $this->model->table('oauth_user');
             $is_oauth = $oauth_user->fields('user_id')
