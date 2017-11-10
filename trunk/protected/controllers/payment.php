@@ -592,11 +592,12 @@ class PaymentController extends Controller {
            $this->assign("paymentPlugin", $paymentPlugin);
            $this->assign("sendData", $sendData);
            $this->assign("offline",1);
-           if($user_id==42608){
-            $this->redirect('ucenter/demo?dopay=1&inviter_id='.$seller_id,true);
-        }else{
-           $this->redirect('pay_forms', false);
-        }
+        //    if($user_id==42608){
+        //     $this->redirect('ucenter/demo?dopay=1&inviter_id='.$seller_id,true);
+        // }else{
+        //    $this->redirect('pay_forms', false);
+        // }
+        $this->redirect('pay_forms', false);
        }else{
            echo "error";die;
        }

@@ -2645,9 +2645,9 @@ class UcenterController extends Controller {
         $model = new Model();
        Session::set('demo', 2);
        $dopay = intval(Req::args('dopay'));
-       if(!$dopay){
-        $dopay=0;
-       }
+       // if(!$dopay){
+       //  $dopay=0;
+       // }
        $inviter_id = intval(Req::args('inviter_id'));
        if(!$inviter_id){
             $inviter_id = Session::get('seller_id');
@@ -2667,13 +2667,13 @@ class UcenterController extends Controller {
             $this->assign('shop_name','未知商家');
         }
         $order_no=date('YmdHis').rand(1000,9999);
-        $jsApiParameters = Session::get('payinfo');
-        $this->assign("jsApiParameters",$jsApiParameters);
+        // $jsApiParameters = Session::get('payinfo');
+        // $this->assign("jsApiParameters",$jsApiParameters);
         $this->assign("seo_title","向商家付款");
         $this->assign('seller_id',$inviter_id);
         $this->assign('seller_ids',Session::get('seller_id'));
         $this->assign('order_no',$order_no);
-        $this->assign('dopay',$dopay);
+        // $this->assign('dopay',$dopay);
         $this->redirect();
     }
 }
