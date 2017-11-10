@@ -596,7 +596,7 @@ class PaymentController extends Controller {
            // $this->assign("jsApiParameters",json_encode($rspArray['payinfo']));
            // $this->assign('dopay',1);
            // $this->redirect('ucenter/demo');
-           $this->assign('pay_forms'); 
+           $this->assign('pay_forms',false); 
        }else{
            echo "error";die;
        }
