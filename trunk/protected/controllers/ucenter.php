@@ -2648,6 +2648,11 @@ class UcenterController extends Controller {
        if(!$dopay){
         $dopay=0;
        }
+       if($this->user['id']==42608){
+        if($dopay==1){
+            var_dump($dopay);die;
+        } 
+       }
        $inviter_id = intval(Req::args('inviter_id'));
        if(!$inviter_id){
             $inviter_id = Session::get('seller_id');
