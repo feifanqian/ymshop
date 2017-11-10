@@ -2642,6 +2642,12 @@ class UcenterController extends Controller {
     }
 
     public function demo(){
+        if($this->user['id']==42608){
+            $dopay=Session::get('dopay');
+            if($dopay==1){
+                var_dump(123);die;
+            }
+        }
         $model = new Model();
        Session::set('demo', 2);
 
