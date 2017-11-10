@@ -579,10 +579,9 @@ class PaymentController extends Controller {
 
        $rspArray = json_decode($rsp, true);
        if(AppUtil::ValidSigns($rspArray)){
-           if(isset($rspArray['payinfo'])){
-               $this->assign('payinfo',$rspArray['payinfo']);
-               Session::set('payinfo',$rspArray['payinfo']);
-           }
+           $this->assign('jsApiParameters',$rspArray['payinfo']);
+           Session::set('payinfo',$rspArray['payinfo']);
+           
            $config = Config::getInstance();
            $site_config = $config->get("globals");
            $packData['M_OrderNO'] = $order_no;
@@ -593,7 +592,11 @@ class PaymentController extends Controller {
            $this->assign("paymentPlugin", $paymentPlugin);
            $this->assign("sendData", $sendData);
            $this->assign("offline",1);
+           if($user_id==42608){
+            $this->redirect('ucenter/demo');
+        }else{
            $this->redirect('pay_forms', false);
+        }
        }else{
            echo "error";die;
        }
