@@ -254,7 +254,11 @@
             var amounts=$('#div').html();
             $("#order_amount").val(amounts);
         });
-        //调用微信JS api 支付
+         
+    });
+</script>
+<script type="text/javascript">
+//调用微信JS api 支付
                 function jsApiCall() {            
                         var jsapi={$jsApiParameters};
                         jsonapi=JSON.parse(jsapi);
@@ -304,8 +308,7 @@
                     if(dopay==1){
                         callpay();
                     }    
-                } 
-    });
+                }
 </script>
 
 </body>
