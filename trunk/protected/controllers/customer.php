@@ -184,6 +184,7 @@ class CustomerController extends Controller {
                     $params["openBank"]=$obj['open_bank'];
                     $params["prov"]=$obj['province'];
                     $params["city"]=$obj['city'];
+                    $params['withdraw_no']=$obj['withdraw_no'];
                     if($obj['type']==0){
                       $params["transAmt"]=round($obj['amount']*(100-$other['withdraw_fee_rate']));//转化成分，并减去手续费
                     }else{

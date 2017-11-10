@@ -473,6 +473,7 @@ class DistrictadminController extends Controller {
                                     exit(json_encode(array('status' => 'fail', 'msg' => '代付金额小于或等于0')));
                                 }
                                 $params['purpose'] = "专区用户提现";
+                                $params["withdraw_no"] = $withdraw_info['withdraw_no'];
                                 // $result = $ChinapayDf->DfPay($params);
                                 $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口
                                 if ($result) {
@@ -512,6 +513,7 @@ class DistrictadminController extends Controller {
                                     exit(json_encode(array('status' => 'fail', 'msg' => '代付金额小于或等于0')));
                                 }
                                 $params['purpose'] = "专区用户提现";
+                                $params["withdraw_no"] = $withdraw_info['withdraw_no'];
                                 // $result = $ChinapayDf->DfPay($params);
                                 $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口 
                                 if ($result) {
