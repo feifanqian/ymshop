@@ -440,7 +440,6 @@ class SimpleController extends Controller {
                     $this->safebox->set('user', $obj, $this->cookie_time);
                     
                     $url = Cookie::get("url");//登录之前访问的页面不论有没有手机号
-                    header("Location:/user/notice");
                         if($url){
                            Cookie::clear("url");
                            if(strpos($url, '/')!==0){
