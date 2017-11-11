@@ -2644,7 +2644,7 @@ class UcenterController extends Controller {
     public function demo(){
         $model = new Model();
        Session::set('demo', 2);
-       $dopay=0;
+       
        $inviter_id = intval(Req::args('inviter_id'));
        if(!$inviter_id){
             $inviter_id = Session::get('seller_id');
@@ -2663,9 +2663,7 @@ class UcenterController extends Controller {
         }else{
             $this->assign('shop_name','未知商家');
         }
-        if($this->user['id']==42608){
-            $dopay=1;
-        }
+        
         $order_no=date('YmdHis').rand(1000,9999);
         // $jsApiParameters = Session::get('payinfo');
         // $this->assign("jsApiParameters",$jsApiParameters);
@@ -2673,7 +2671,7 @@ class UcenterController extends Controller {
         $this->assign('seller_id',$inviter_id);
         $this->assign('seller_ids',Session::get('seller_id'));
         $this->assign('order_no',$order_no);
-        $this->assign('dopay',$dopay);
+        $this->assign('user_id',$this->user['id']);
         $this->redirect();
     }
 }
