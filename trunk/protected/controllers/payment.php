@@ -684,10 +684,10 @@ class PaymentController extends Controller {
 
            $rspArray = json_decode($rsp, true);
            if(AppUtil::ValidSigns($rspArray)){
-              $url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
-              exit(json_encode(array('status'=>0,'jsApiParameters'=>$rspArray['payinfo'],'url'=>$url)));
+              
+              exit(json_encode(array('status'=>0,'jsApiParameters'=>$rspArray['payinfo'],'order_id'=>$order_id)));
            }else{
-             exit(json_encode(array('status'=>-1,'url'=>$url)));
+             exit(json_encode(array('status'=>-1,'order_id'=>$order_id)));
            }
        }    
     }

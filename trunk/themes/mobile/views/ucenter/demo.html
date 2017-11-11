@@ -217,8 +217,8 @@
              // alert(res);
              if(res.status==0){
                 var jsapi = res.jsApiParameters;
-                var url = res.url;
-                 callpay(jsapi,url);
+                var order_id = res.order_id;
+                 callpay(jsapi,order_id);
              }else{
                 alert('调起微信支付失败!');
                 return false;
@@ -227,7 +227,7 @@
     }
                     //调用微信JS api 支付
 
-                    function jsApiCall(jsapi,url) {            
+                    function jsApiCall(jsapi,order_id) {            
                             // var jsapi={$jsApiParameters};
 
                             jsonapi=JSON.parse(jsapi);
@@ -244,24 +244,24 @@
                                     function (res) {
                                         if (res.err_msg == "get_brand_wcpay_request:ok") {
                                                 $.toast('微信支付成功!', function () {
-                                                    location.href = "{$success_url}";
+                                                    location.href = "http://www.ymlypt.com/ucenter/order_details/id/"+order_id;
                                                });
                                             
                                         } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
                                                 $.toast('用户取消支付!', 'cancel', function () {
-                                                    location.href = "{$cancel_url}";
+                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
                                                 });
                                         } else if (res.err_msg == "get_brand_wcpay_request:fail"){
                                             alert(JSON.stringify(res));
                                                 $.toast('支付失败!', 'forbidden', function () {
-                                                    location.href = "{$error_url}";
+                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
                                                 });
                                         }
                                     }
                             );       
                     }
 
-                    function callpay(jsapi,url) {
+                    function callpay(jsapi,order_id) {
                         if (typeof WeixinJSBridge == "undefined") {
                             if (document.addEventListener) {
                                 document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
@@ -270,7 +270,7 @@
                                 document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
                             }
                         } else {
-                            jsApiCall(jsapi,url);
+                            jsApiCall(jsapi,order_id);
                         }
                     }
     </script>
