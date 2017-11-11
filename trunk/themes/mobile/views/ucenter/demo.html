@@ -213,7 +213,7 @@
         var payment_id = $('input[name=payment_id]').val();
         var seller_id = $('input[name=seller_id]').val();
         var order_amount = $('input[name=order_amount]').val();
-        $.post('{url:/payment/dopayss}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(res){
+        $.post('{url:/payment/dopays}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(res){
              if(res.status==0){
                 var jsapi = res.jsApiParameters;
                  callpay(jsapi);
