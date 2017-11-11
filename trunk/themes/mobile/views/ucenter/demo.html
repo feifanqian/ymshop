@@ -250,6 +250,7 @@
                                                     location.href = "{$cancel_url}";
                                                 });
                                         } else if (res.err_msg == "get_brand_wcpay_request:fail"){
+                                            alert(JSON.stringify(res));
                                                 $.toast('支付失败!', 'forbidden', function () {
                                                     location.href = "{$error_url}";
                                                 });
