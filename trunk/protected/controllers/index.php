@@ -1236,6 +1236,8 @@ class IndexController extends Controller {
     }
 
     function index() {
+        $notice=Session::get('notice');
+        Session::clear('notice');
         if (!$this->user && Common::checkInWechat()) {
             $this->noRight();
         }
@@ -1288,6 +1290,7 @@ class IndexController extends Controller {
             Cookie::set('index',$index);
         }
         $this->assign('index',$index);
+        $this->assign('notice',$notice);
         $this->redirect();
     }
 

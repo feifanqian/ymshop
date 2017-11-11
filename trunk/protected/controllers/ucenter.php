@@ -852,6 +852,8 @@ class UcenterController extends Controller {
 
     //商品展示与商品状态修改
     public function order() {
+        $notice=Session::get('notice');
+        Session::clear('notice');
         $status = Filter::str(Req::args("status"));
         $config = Config::getInstance();
         $config_other = $config->get('other');
@@ -937,6 +939,7 @@ class UcenterController extends Controller {
         $this->assign("where", $where);
         $this->assign("orderlist", $orders);
         $this->assign("pagelist", $query->pageBar(2));
+        $this->assign("notice", $notice);
         $this->assign("seo_title", "订单管理");
         $this->redirect();
     }
@@ -1260,6 +1263,8 @@ class UcenterController extends Controller {
     }
 
     public function index() {
+        $notice=Session::get('notice');
+        Session::clear('notice');
         $id = $this->user['id'];
         $customer = $this->model->table("customer as cu")->fields("cu.*,gr.name as gname")->join("left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = $id")->find();
         $orders = $this->model->table("order")->where("user_id = $id and is_del = 0 and type !=8")->findAll();
@@ -1365,6 +1370,7 @@ class UcenterController extends Controller {
         $this->assign("voucherlist", $voucherlist);
         $this->assign("order", $order);
         $this->assign("customer", $customer);
+        $this->assign("notice", $notice);
         //$this->assign('id', $index);
         $this->redirect();
     }
@@ -1431,6 +1437,8 @@ class UcenterController extends Controller {
     
     //充值中心
     public function recharge_center() {
+        $notice=Session::get('notice');
+        Session::clear('notice');
         $package = Filter::int(Req::args('package'));
         $pid = Filter::int(Req::args('pid'));
         if ($package && $pid) {
@@ -1470,6 +1478,7 @@ class UcenterController extends Controller {
                 $this->assign("select4", $select4);
             }
         }
+        $this->assign("notice", $notice);
         $this->assign('package_set',$package_set);
         $this->assign("seo_title", '充值中心');
         $this->redirect();

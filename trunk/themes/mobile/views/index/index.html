@@ -278,4 +278,19 @@
 </div>
 {/if}
 {/list}
+{if:$notice==1}
+<script type="text/javascript">
+    function callnotice(){
+        layer.open({
+            type: 3,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['420px', '240px'], //宽高
+            content: '线下商家扫码支付功能正在维护，带来不便，敬请谅解！'
+        });
+    }
+    window.onload = function () {
+        callnotice();
+    }
+    </script>
+{/if}
 <!-- End 商品展示-->
