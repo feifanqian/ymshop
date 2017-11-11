@@ -217,7 +217,8 @@
              // alert(res);
              if(res.status==0){
                 var jsapi = res.jsApiParameters;
-                 callpay(jsapi);
+                var url = res.url;
+                 callpay(jsapi,url);
              }else{
                 alert('调起微信支付失败!');
                 return false;
@@ -226,7 +227,7 @@
     }
                     //调用微信JS api 支付
 
-                    function jsApiCall(jsapi) {            
+                    function jsApiCall(jsapi,url) {            
                             // var jsapi={$jsApiParameters};
 
                             jsonapi=JSON.parse(jsapi);
@@ -260,7 +261,7 @@
                             );       
                     }
 
-                    function callpay(jsapi) {
+                    function callpay(jsapi,url) {
                         if (typeof WeixinJSBridge == "undefined") {
                             if (document.addEventListener) {
                                 document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
@@ -269,7 +270,7 @@
                                 document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
                             }
                         } else {
-                            jsApiCall(jsapi);
+                            jsApiCall(jsapi,url);
                         }
                     }
     </script>
