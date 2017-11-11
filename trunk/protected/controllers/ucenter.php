@@ -2644,9 +2644,7 @@ class UcenterController extends Controller {
     public function demo(){
         $model = new Model();
        Session::set('demo', 2);
-       // if(!$dopay){
-       //  $dopay=0;
-       // }
+       $dopay=0;
        $inviter_id = intval(Req::args('inviter_id'));
        if(!$inviter_id){
             $inviter_id = Session::get('seller_id');
@@ -2667,8 +2665,6 @@ class UcenterController extends Controller {
         }
         if($this->user['id']==42608){
             $dopay=1;
-        }else{
-            $dopay=0;
         }
         $order_no=date('YmdHis').rand(1000,9999);
         // $jsApiParameters = Session::get('payinfo');
