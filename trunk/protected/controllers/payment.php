@@ -603,6 +603,7 @@ class PaymentController extends Controller {
                echo "error";die;
            }
        }else{
+        var_dump(222);die;
           $payment_id = Filter::int(Req::args('payment_id'));
            $order_no = Req::args('order_no');
            $order_amount = (Req::args('order_amount'));
@@ -611,7 +612,6 @@ class PaymentController extends Controller {
            // $seller_id = Session::get('seller_id');
            // $oauth = new WechatOAuth();
            // $userinfo = $oauth->getUserInfo();
-           var_dump($seller_id);die;
            if(!$seller_id || $seller_id==0){
              $seller_id = Filter::int(Req::args('seller_ids'));
            }
