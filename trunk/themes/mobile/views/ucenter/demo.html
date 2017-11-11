@@ -186,7 +186,7 @@
         <input type="submit" value="确认支付" class="submit" />
     </form>
     {else:}
-      <form action="" method="post" id="payform">
+      <form id="payform" callback="dopay">
         <input type="hidden" name="order_no" value="{$order_no}">
         <input type="hidden" name="payment_id" value="6">
         <input type="hidden" name="seller_id" value="{$seller_id}">
@@ -208,7 +208,7 @@
         <input type="submit" value="确认支付" class="submit" />
     </form>
     <script type="text/javascript">
-    $('.submit').click(function(){
+    function dopay(){
         var order_no = $('input[name=order_no]').val();
         var payment_id = $('input[name=payment_id]').val();
         var seller_id = $('input[name=seller_id]').val();
@@ -222,7 +222,7 @@
                 return false;
              }
         },'json');
-    });
+    }
                     //调用微信JS api 支付
 
                     function jsApiCall(jsapi) {            
