@@ -2655,7 +2655,7 @@ class UcenterController extends Controller {
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
         }
-        
+        $user_id = $this->user['id'];
         $shop=$this->model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
         
         if($shop){
@@ -2671,7 +2671,7 @@ class UcenterController extends Controller {
         $this->assign('seller_id',$inviter_id);
         $this->assign('seller_ids',Session::get('seller_id'));
         $this->assign('order_no',$order_no);
-        $this->assign('user_id',$this->user['id']);
+        $this->assign('user_id',$user_id);
         $this->redirect();
     }
 }
