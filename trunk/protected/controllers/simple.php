@@ -440,6 +440,9 @@ class SimpleController extends Controller {
                     $this->safebox->set('user', $obj, $this->cookie_time);
                     
                     $url = Cookie::get("url");//登录之前访问的页面不论有没有手机号
+                    if($is_oauth['user_id']==42608){
+                         var_dump($url);die;
+                     }
                         if($url){
                            Cookie::clear("url");
                            if(strpos($url, '/')!==0){
