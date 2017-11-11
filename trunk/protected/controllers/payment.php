@@ -603,7 +603,6 @@ class PaymentController extends Controller {
                echo "error";die;
            }
        }else{
-          var_dump(123);die;
           $payment_id = Filter::int(Req::args('payment_id'));
            $order_no = Req::args('order_no');
            $order_amount = (Req::args('order_amount'));
@@ -649,6 +648,7 @@ class PaymentController extends Controller {
            $data['voucher_id'] = 0;
            $data['prom_id']=$invite_id;
            $data['shop_ids']=$seller_id;
+           var_dump($data);die;
            $model = new Model('order_offline');
            $exist=$model->where('order_no='.$order_no)->find();
            //防止重复生成同笔订单
