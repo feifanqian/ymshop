@@ -611,6 +611,7 @@ class PaymentController extends Controller {
            // $seller_id = Session::get('seller_id');
            // $oauth = new WechatOAuth();
            // $userinfo = $oauth->getUserInfo();
+           var_dump($seller_id);die;
            if(!$seller_id || $seller_id==0){
              $seller_id = Filter::int(Req::args('seller_ids'));
            }
@@ -648,7 +649,7 @@ class PaymentController extends Controller {
            $data['voucher_id'] = 0;
            $data['prom_id']=$invite_id;
            $data['shop_ids']=$seller_id;
-           var_dump($data);die;
+
            $model = new Model('order_offline');
            $exist=$model->where('order_no='.$order_no)->find();
            //防止重复生成同笔订单
