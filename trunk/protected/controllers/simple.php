@@ -470,6 +470,7 @@ class SimpleController extends Controller {
                 ))->insert();
             }
             Session::set('openname', $userinfo['open_name']);
+            Session::set('notice',1);
             $oauth_info = $oauth->getConfig();
             $userinfo['type_name'] = $oauth_info['name'];
             $userinfo['open_id'] = $token['openid'];

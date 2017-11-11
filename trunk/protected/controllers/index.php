@@ -1236,11 +1236,19 @@ class IndexController extends Controller {
     }
 
     function index() {
-        $notice=Session::get('notice');
-        Session::clear('notice');
         if (!$this->user && Common::checkInWechat()) {
             $this->noRight();
         }
+        $notice=Session::get('notice');
+        Session::clear('notice');
+        if($this->user){
+              if(isset($this->user['id'])){
+                if($this->user['id']==42608){
+                    var_dump($notice);die;
+              }
+            }
+        }
+        
         if(Common::checkInWechat()){
             $page_size = 10;
             $poin_sale_page_size = 20;
