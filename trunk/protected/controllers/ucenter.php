@@ -694,14 +694,14 @@ class UcenterController extends Controller {
     public function firstbind() {
         $info = $this->model->table("customer as cu ")->fields("cu.*,us.email,us.name,us.nickname,us.avatar,gr.name as gname")->join("left join user as us on cu.user_id = us.id left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = " . $this->user['id'])->find();
         if ($info) {
-            if($info['mobile']!=''){
-                $user = $this->user;
-                $user['mobile']=$info['mobile'];
-                $user['real_name']=$info['real_name'];
-                $this->safebox->set('user', $user);
-                $this->redirect("index");
-                exit();
-            }
+            // if($info['mobile']!=''){
+            //     $user = $this->user;
+            //     $user['mobile']=$info['mobile'];
+            //     $user['real_name']=$info['real_name'];
+            //     $this->safebox->set('user', $user);
+            //     $this->redirect("index");
+            //     exit();
+            // }
             $this->assign("info", $info);
             $info = array_merge($info, Req::args());
             if ($this->is_ajax_request()) {
@@ -786,6 +786,12 @@ class UcenterController extends Controller {
         } else {
             Tiny::Msg($this, 404);
         }
+    }
+
+    public function notice(){
+        $url = Cookie::get("url");
+        $this->assign("seo_title", "紧急公告");
+        $this->redirect();
     }
 
     public function invite() {

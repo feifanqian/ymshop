@@ -438,34 +438,9 @@ class SimpleController extends Controller {
                 if ($is_oauth['user_id'] > 0) {
                     $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("us.id='{$is_oauth['user_id']}'")->find();
                     $this->safebox->set('user', $obj, $this->cookie_time);
-                    // if ($obj!=null && isset($obj['mobile'])) {
-                    //     if(!$obj['mobile']){
-                    //         $url = Cookie::get("url");//登录之前访问的页面
-                    //     if($url){
-                    //        Cookie::clear("url");
-                    //        if(strpos($url, '/')!==0){
-                    //             $url = "/".$url;
-                    //        }
-                    //        // header("Location:$url");
-                    //        header("Location:/index/index");
-                    //     }else{
-                    //        header("Location:/index/index");
-                    //     }
-                    //     //header("Location:/user/firstbind");
-                    //     }      
-                    // } else {
-                    //     $url = Cookie::get("url");//登录之前访问的页面
-                    //     if($url){
-                    //        Cookie::clear("url");
-                    //        if(strpos($url, '/')!==0){
-                    //             $url = "/".$url;
-                    //        }
-                    //        header("Location:$url");
-                    //     }else{
-                    //        header("Location:/index/index");
-                    //     }
-                    // }
+                    
                     $url = Cookie::get("url");//登录之前访问的页面不论有没有手机号
+                    header("Location:/user/notice");
                         if($url){
                            Cookie::clear("url");
                            if(strpos($url, '/')!==0){
