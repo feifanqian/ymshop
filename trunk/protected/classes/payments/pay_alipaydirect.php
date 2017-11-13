@@ -106,7 +106,7 @@ class pay_alipaydirect extends PaymentPlugin {
         $return['payment_type'] = 1;
         $return['return_url'] = $this->callbackUrl;
         $return['notify_url'] = $this->asyncCallbackUrl;
-        var_dump($return['notify_url']);die;
+        
         //业务参数
         //$return['enable_paymethod'] = 'directPay^bankPay';
         $return['subject'] = $payment['R_Name'];

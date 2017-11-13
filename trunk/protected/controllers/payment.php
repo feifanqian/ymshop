@@ -1039,12 +1039,16 @@ class PaymentController extends Controller {
         unset($callbackData['con']);
         unset($callbackData['act']);
         unset($callbackData['payment_id']);
-
-        if($array['result_code']=='SUCCESS'){
-            $return=1;
+        
+        if($payment_id==6){
+            if($array['result_code']=='SUCCESS'){
+                $return=1;
+            }else{
+                $return=0;
+            }
         }else{
-            $return=0;
-        }
+           $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
+        }   
         
         $callbackData=$array;
         // $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
@@ -1131,6 +1135,8 @@ class PaymentController extends Controller {
                 }
             }
             echo 'success';
+        }else{
+            echo 'fail';
         }
     }
 
