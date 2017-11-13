@@ -35,7 +35,7 @@ class Pay_tonglian{
 
         
       $bizUserId='666688912'; //分配的系统编号
-      $source=1;  //访问终端类型 1表示手机 2表示PC
+      $source=2;  //访问终端类型 1表示手机 2表示PC
       $memberType=2; //会员类型 2是企业人员 3表示个人会员
  
       
