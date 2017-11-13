@@ -54,7 +54,7 @@ class UcenterAction extends Controller {
 
     //app端注册
     public function app_signup() {
-        $code = Filter::sql(Req::args('code'));
+        $code = Filter::sql(Req::args('mobile_code'));
         $mobile = Filter::sql(Req::args('mobile'));
         $zone = Filter::int(Req::args('zone'));
         $password = Filter::str(Req::args('password'));

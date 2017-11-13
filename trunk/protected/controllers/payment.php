@@ -1017,26 +1017,24 @@ class PaymentController extends Controller {
     // 支付回调[异步]
     public function async_callback() {
         $payment_id = Filter::int(Req::args('payment_id'));
-        $this->model->table("customer")->where("user_id=42608")->data(array('sex'=>$payment_id))->update();
-        $xml = @file_get_contents('php://input');
-        $array=Common::xmlToArray($xml);
-        file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
-        // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
-        //从URL中获取支付方式
-        // var_dump($payment_id);die;
-        $payment = new Payment($payment_id);
-        $paymentPlugin = $payment->getPaymentPlugin();
-        if (!is_object($paymentPlugin)) {
-            echo "fail";
-        }
-        
-        //初始化参数
-        $money = '';
-        $message = '支付失败';
-        $orderNo = '';
-        
-        
         if($payment_id==6){
+            $xml = @file_get_contents('php://input');
+            $array=Common::xmlToArray($xml);
+            file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
+            // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
+            //从URL中获取支付方式
+            // var_dump($payment_id);die;
+            $payment = new Payment($payment_id);
+            $paymentPlugin = $payment->getPaymentPlugin();
+            if (!is_object($paymentPlugin)) {
+                echo "fail";
+            }
+
+            //初始化参数
+            $money = '';
+            $message = '支付失败';
+            $orderNo = '';
+            
             $callbackData=$array;
             $orderNo = $array['attach'];
             $money = round(intval($array['total_fee'])/100,2);
@@ -1045,21 +1043,30 @@ class PaymentController extends Controller {
             }else{
                 $return=0;
             }
-        }else{
 
-           //执行接口回调函数
+        }else{
+            $payment = new Payment($payment_id);
+            $paymentPlugin = $payment->getPaymentPlugin();
+            if (!is_object($paymentPlugin)) {
+                echo "fail";
+            }
+
+            //初始化参数
+            $money = '';
+            $message = '支付失败';
+            $orderNo = '';
+
+            //执行接口回调函数
             $callbackData = Req::args(); //array_merge($_POST,$_GET);
             unset($callbackData['con']);
             unset($callbackData['act']);
             unset($callbackData['payment_id']);
             $orderNo = $callbackData['out_trade_no'];
             $money = $callbackData['total_fee'];
-           $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
-        }   
+            $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
+        }
         
-        // $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
-        //支付成功  
-        
+        //支付成功        
         if ($return == 1 ) {
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();

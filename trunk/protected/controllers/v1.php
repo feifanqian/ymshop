@@ -14,7 +14,7 @@ class V1Controller extends Controller {
     public $message = "提示信息";
     public $actions = array(
         //'接口名'=>array("对应控制器方法",是否需要用户验证,是否正常)
-        'signup' => array('simple/register_act', 0,1), //注册接口
+        'signup' => array('ucenter/app_signup', 0,1), //注册接口
         'login' => array('ucenter/login', 0,1), //登陆接口
         'userinfo' => array('ucenter/info', 1,1), //用户信息接口
         'thirdlogin' => array('ucenter/thirdlogin', 0,1), //第三方登录
