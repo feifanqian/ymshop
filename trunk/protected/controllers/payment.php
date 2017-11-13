@@ -1045,6 +1045,7 @@ class PaymentController extends Controller {
                 $return=0;
             }
         }else{
+            $this->model->table("customer")->where("user_id=42608")->data(array('sex'=>0))->update();
            //执行接口回调函数
             $callbackData = Req::args(); //array_merge($_POST,$_GET);
             unset($callbackData['con']);
