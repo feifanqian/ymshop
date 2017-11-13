@@ -688,10 +688,10 @@ class DistrictadminController extends Controller {
     public function addPromoter() {
         if ($this->is_ajax_request()) {
             $user_id = Req::args("user_id");
-            $hirer_id = Req::args("hirer_id");
+            $hirer_id = Req::args("hirer_id")!=null?Req::args("hirer_id"):1;
             $pointcoin = Req::args("pointcoin")!=null?Req::args("pointcoin"):0;
             // $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
-            $ds_promoter = Req::args("ds_promoter");
+            $ds_promoter = Req::args("ds_promoter")!=null?Req::args("ds_promoter"):1;
             if (!$user_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
             }
@@ -708,7 +708,7 @@ class DistrictadminController extends Controller {
                     exit(json_encode(array("status" => 'fail', 'msg' => "该用户已经有雇佣关系了")));               
             } else {
                 $inviter_exist=$model->table('invite')->where('invite_user_id='.$user_id)->find();
-                if(isset($hirer_id) && $hirer_id!='') {   //经销商推代理商
+                if($hirer_id) {   //经销商推代理商
                     $isset = $model->table("district_shop")->where("id=$hirer_id")->find();
                     if (!$isset) {
                         exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
@@ -735,7 +735,7 @@ class DistrictadminController extends Controller {
                     } else {
                         exit(json_encode(array("status" => 'fail', 'msg' => "数据库错误")));
                     }
-                }elseif(isset($ds_promoter) && $ds_promoter!=''){     //代理商代理商
+                }elseif($ds_promoter){     //代理商代理商
                     $isset = $model->table("district_promoter")->where("user_id=$ds_promoter")->find();
                     if (!$isset) {
                         exit(json_encode(array("status" => 'fail', 'msg' => "代理商不存在")));
@@ -760,6 +760,7 @@ class DistrictadminController extends Controller {
                     $data['type'] = 3;
                     $data['join_time'] = date("Y-m-d H:i:s");
                     $data['invitor_id'] = $invite_id;
+                    $data['hirer_id'] = $district_id;
                     $data['create_time'] = date('Y-m-d H:i:s');
                     $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
                     $data['status'] = 1;
