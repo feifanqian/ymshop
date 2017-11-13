@@ -23,19 +23,14 @@ class PaytonglianAction extends Controller{
     public $code = 1000;
     public $content = NULL;
 
-    public function __construct() {
+    public function __construct($id,$module=null) {
         $this->model = new Model();
+        $this->date=date("Y-m-d H:i:s");
     }
 
     public $date='';
     public $version='1.0';
     public $bizUserId='666688912';
-
-     public function __construct($id,$module=null)
-    {
-        $this->date=date("Y-m-d H:i:s");
-        
-    }
     
 	/**
 	 * 创建会员 
