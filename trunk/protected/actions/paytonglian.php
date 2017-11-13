@@ -25,6 +25,7 @@ class PaytonglianAction extends Controller{
 
     public function __construct() {
         $this->model = new Model();
+        $this->arrayXml = new ArrayAndXml();
     }
 
     public $date='';
@@ -56,6 +57,8 @@ class PaytonglianAction extends Controller{
            'service' => urlencode('MemberService'), //服务对象
            'method' => urlencode('createMember')    //调用方法
        );
+      var_dump($this->arrayXml->toXmlGBK($req,'AIPG'));
+      die();
 
       $result=$this->sendgate($req);
       echo $result;
