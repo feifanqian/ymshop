@@ -1034,27 +1034,30 @@ class PaymentController extends Controller {
         $message = '支付失败';
         $orderNo = '';
         
-        //执行接口回调函数
-        $callbackData = Req::args(); //array_merge($_POST,$_GET);
-        unset($callbackData['con']);
-        unset($callbackData['act']);
-        unset($callbackData['payment_id']);
         
         if($payment_id==6){
+            $callbackData=$array;
+            $orderNo = $array['attach'];
+            $money = round(intval($array['total_fee'])/100,2);
             if($array['result_code']=='SUCCESS'){
                 $return=1;
             }else{
                 $return=0;
             }
         }else{
+           //执行接口回调函数
+            $callbackData = Req::args(); //array_merge($_POST,$_GET);
+            unset($callbackData['con']);
+            unset($callbackData['act']);
+            unset($callbackData['payment_id']);
+            $orderNo = $callbackData['out_trade_no'];
+            $money = $callbackData['total_fee'];
            $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         }   
         
-        $callbackData=$array;
         // $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
-        //支付成功
-        $orderNo = $array['attach'];
-        $money = round(intval($array['total_fee'])/100,2);
+        //支付成功  
+        
         if ($return == 1 ) {
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
