@@ -1064,13 +1064,10 @@ class PaymentController extends Controller {
             $orderNo = $callbackData['out_trade_no'];
             $money = $callbackData['total_fee'];
             $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
-            $this->model->table('customer')->data(array('addr'=>$return))->where('user_id=42608')->update();
         }
         
-        //支付成功  
-        
+        //支付成功        
         if ($return == 1 ) {
-            $this->model->table('customer')->data(array('qq'=>'893645913'))->where('user_id=42608')->update();
             if (stripos($orderNo, 'promoter') !== false) {
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
                 if ($order) {
