@@ -59,8 +59,9 @@ class PaytonglianAction extends Controller{
        );
 
       $result=$this->sendgate($req);
-      echo $result;
-        
+      $result = json_encode($result);
+      $result = $this->arrayXml->toXmlGBK($result,'AIPG');
+      var_dump($result);die; 
     }
     /**
      * 发送短信验证码 
@@ -1527,15 +1528,15 @@ class PaytonglianAction extends Controller{
         $sign = $this->sign($params_str);
         
         $paramer='sysid='.urlencode(ICLOD_USERID).'&sign='.urlencode($sign).'&timestamp='.urlencode(date('Y-m-d H:i:s')).'&v='.urlencode($this->version).'&req='.urlencode(json_encode($req));
-        $array=array(
-             'sysid'=>urlencode(ICLOD_USERID),
-             'sign'=>urlencode($sign),
-             'timestamp'=>date('Y-m-d H:i:s'),
-             'v'=>urlencode($this->version),
-             'req'=>$req
-            );
-        var_dump($this->arrayXml->toXmlGBK($array,'AIPG'));
-        die(); 
+        // $array=array(
+        //      'sysid'=>urlencode(ICLOD_USERID),
+        //      'sign'=>urlencode($sign),
+        //      'timestamp'=>date('Y-m-d H:i:s'),
+        //      'v'=>urlencode($this->version),
+        //      'req'=>$req
+        //     );
+        // var_dump($this->arrayXml->toXmlGBK($array,'AIPG'));
+        // die(); 
         $obj=$this->curl_post($paramer);
         return $obj;
     }
