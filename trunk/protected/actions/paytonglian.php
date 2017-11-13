@@ -1527,7 +1527,14 @@ class PaytonglianAction extends Controller{
         $sign = $this->sign($params_str);
         
         $paramer='sysid='.urlencode(ICLOD_USERID).'&sign='.urlencode($sign).'&timestamp='.urlencode(date('Y-m-d H:i:s')).'&v='.urlencode($this->version).'&req='.urlencode(json_encode($req));
-        var_dump($this->arrayXml->toXmlGBK($paramer,'AIPG'));
+        $array=array(
+             'sysid'=>urlencode(ICLOD_USERID),
+             'sign'=>urlencode($sign),
+             'timestamp'=>urlencode(date('Y-m-d H:i:s')),
+             'v'=>urlencode($this->version),
+             'req'=>urlencode(json_encode($req))
+            );
+        var_dump($this->arrayXml->toXmlGBK($array,'AIPG'));
         die(); 
         $obj=$this->curl_post($paramer);
         return $obj;
