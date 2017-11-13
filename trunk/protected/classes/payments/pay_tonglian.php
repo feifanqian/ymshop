@@ -1,7 +1,9 @@
 <?php
 header("Content-type: text/html; charset=utf-8");
 define('ICLOD_USERID','100009001000');//商户id 分配系统的编号
-define('ICLOD_CERT_PATH',dirname(__FILE__).'/100009001000_private_rsa.pem' ); //私钥文件
+// define('ICLOD_CERT_PATH',dirname(__FILE__).'/100009001000_private_rsa.pem' ); //私钥文件
+// define('ICLOD_CERT_PATH',dirname(__FILE__).'/private_rsa.pem' ); //私钥文件
+define('ICLOD_CERT_PATH',dirname(__FILE__).'/100009001000.pem' ); //私钥文件
 define('ICLOD_CERT_PUBLIC_PATH',dirname(__FILE__).'/100009001000_public_rsa.pem' );//公钥文件
 define('ICLOD_Server_URL','http://122.227.225.142:23661/service/soa');  //接口网关
 

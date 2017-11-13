@@ -1893,6 +1893,5 @@ class IndexController extends Controller {
         $demo = new Pay_tonglian();
         $result = $demo->actionCreateMember();
         return $result;
-        $this->redirect();
     }
 }
