@@ -18,6 +18,14 @@ define('BACKURL','http://122.227.225.142:23661/service/soa');//后台通知地�
  * @author    gyfbao 
  */
 class PaytonglianAction extends Controller{
+    public $model = null;
+    public $user = null;
+    public $code = 1000;
+    public $content = NULL;
+
+    public function __construct() {
+        $this->model = new Model();
+    }
 
     public $date='';
     public $version='1.0';
