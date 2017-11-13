@@ -13,7 +13,7 @@ class AllinpayDf{
                 'LEVEL' => '6',
                 'USER_NAME' => '20058400001550504',
                 'USER_PASS' => '111111',
-                'REQ_SN' => $merchantId.substr($params['withdraw_no'],2),
+                'REQ_SN' => $merchantId.$params['withdraw_no'],
             ),
             'TRANS' => array(
                 'BUSINESS_CODE' => '09900',
