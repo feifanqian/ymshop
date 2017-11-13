@@ -19,7 +19,7 @@ define('BACKURL','http://122.227.225.142:23661/service/soa');//后台通知地�
  * @subpackage  Net
  * @author    gyfbao 
  */
-class Pay_tonglian{
+class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';

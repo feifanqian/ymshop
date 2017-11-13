@@ -160,7 +160,7 @@ class V1Controller extends Controller {
         "promoter_edit"=>array('address/promoterEdit',1,1),
 
         //通联支付接口的APP
-        "createMember"=>array('pay_tonglian/actionCreateMember',1,1),
+        "createMember"=>array('paytonglian/actionCreateMember',1,1),
     );
 
     //分析请求的action,将请求分发到不同的action中去
