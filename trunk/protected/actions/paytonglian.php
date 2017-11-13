@@ -1,9 +1,7 @@
 <?php
 header("Content-type: text/html; charset=utf-8");
-define('ICLOD_USERID','100009001000');//商户id 分配系统的编号
-// define('ICLOD_CERT_PATH',dirname(__FILE__).'/100009001000_private_rsa.pem' ); //私钥文件
+define('ICLOD_USERID','100009001000');//商户id 
 define('ICLOD_CERT_PATH',dirname(__FILE__).'/private_rsa.pem' ); //私钥文件
-// define('ICLOD_CERT_PUBLIC_PATH',dirname(__FILE__).'/100009001000_public_rsa.pem' );//公钥文件
 define('ICLOD_CERT_PUBLIC_PATH',dirname(__FILE__).'/public_rsa.pem' );//公钥文件
 define('ICLOD_Server_URL','http://122.227.225.142:23661/service/soa');  //接口网关
 
@@ -32,6 +30,12 @@ class PaytonglianAction extends Controller{
     public $date='';
     public $version='1.0';
     public $bizUserId='666688912';
+
+     public function __construct($id,$module=null)
+    {
+        $this->date=date("Y-m-d H:i:s");
+        
+    }
     
 	/**
 	 * 创建会员 
@@ -1524,10 +1528,10 @@ class PaytonglianAction extends Controller{
       
         
         if (!$req)  return   false;
-        $params_str =ICLOD_USERID.json_encode($req).date("Y-m-d H:i:s");
+        $params_str =ICLOD_USERID.json_encode($req).$this->date;
         $sign = $this->sign($params_str);
         
-        $paramer='sysid='.urlencode(ICLOD_USERID).'&sign='.urlencode($sign).'&timestamp='.urlencode(date("Y-m-d H:i:s")).'&v='.urlencode($this->version).'&req='.urlencode(json_encode($req));
+        $paramer='sysid='.urlencode(ICLOD_USERID).'&sign='.urlencode($sign).'&timestamp='.urlencode($this->date).'&v='.urlencode($this->version).'&req='.urlencode(json_encode($req));
          
         $obj=$this->curl_post($paramer);
         return $obj;
