@@ -80,7 +80,7 @@ class pay_alipay extends PaymentPlugin {
         $return['payment_type'] = 1;
         $return['return_url'] = $this->callbackUrl;
         $return['notify_url'] = $this->asyncCallbackUrl;
-
+        var_dump($return['notify_url']);die; 
         $return['subject'] = $payment['R_Name'];
         $return['out_trade_no'] = $payment['M_OrderNO'];
         $return['price'] = number_format($payment['M_Amount'], 2, '.', '');
