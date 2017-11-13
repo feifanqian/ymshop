@@ -57,8 +57,6 @@ class PaytonglianAction extends Controller{
            'service' => urlencode('MemberService'), //服务对象
            'method' => urlencode('createMember')    //调用方法
        );
-      var_dump($this->arrayXml->toXmlGBK($req,'AIPG'));
-      die();
 
       $result=$this->sendgate($req);
       echo $result;
@@ -1529,7 +1527,8 @@ class PaytonglianAction extends Controller{
         $sign = $this->sign($params_str);
         
         $paramer='sysid='.urlencode(ICLOD_USERID).'&sign='.urlencode($sign).'&timestamp='.urlencode(date('Y-m-d H:i:s')).'&v='.urlencode($this->version).'&req='.urlencode(json_encode($req));
-         
+        var_dump($this->arrayXml->toXmlGBK($paramer,'AIPG'));
+        die(); 
         $obj=$this->curl_post($paramer);
         return $obj;
     }
