@@ -793,7 +793,7 @@ class PaymentController extends Controller {
     //同步回调
     public function callback() {
         if($this->user['id']==42608){
-           $this->model->table('customer')->data(array('sex'=>0))->where('user_id'=>42608)->update();
+           $this->model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
            var_dump(123);die;
         }
         //从URL中获取支付方式
