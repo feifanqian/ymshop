@@ -135,6 +135,7 @@ return array(
     "PhpTools"=>"payments/pay_unionpay/df/PhpTools.php",
     "cURL"=>"allinpay/lib/cURL.class.php",
     "ArrayAndXml"=>"allinpay/lib/ArrayXml.class.php",
-    "AllinpayDf"=>"payments/pay_unionpay/df/AllinpayDf.php"
+    "AllinpayDf"=>"payments/pay_unionpay/df/AllinpayDf.php",
+    "Pay_tonglian" =>"payments/pay_tonglian.php"
 );
 ?>

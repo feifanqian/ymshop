@@ -1888,4 +1888,11 @@ class IndexController extends Controller {
         $this->assign('order_no',$order_no);
         $this->redirect();
     }
+    public function test()
+    {
+        $demo = new Pay_tonglian();
+        $result = $demo->actionCreateMember();
+        return $result;
+        $this->redirect();
+    }
 }
