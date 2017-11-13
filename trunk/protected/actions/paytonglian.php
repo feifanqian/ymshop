@@ -60,6 +60,7 @@ class PaytonglianAction extends Controller{
 
       $result=$this->sendgate($req);
       $result = json_decode($result,true);
+      var_dump($result);die;
       $result = $this->arrayXml->toXmlGBK($result,'AIPG');
       var_dump($result);die; 
     }
