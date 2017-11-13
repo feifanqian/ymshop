@@ -1,8 +1,10 @@
 <?php
 header("Content-type: text/html; charset=utf-8");
 define('ICLOD_USERID','100009001000');//商户id 分配系统的编号
-define('ICLOD_CERT_PATH',dirname(__FILE__).'/100009001000_private_rsa.pem' ); //私钥文件
-define('ICLOD_CERT_PUBLIC_PATH',dirname(__FILE__).'/100009001000_public_rsa.pem' );//公钥文件
+// define('ICLOD_CERT_PATH',dirname(__FILE__).'/100009001000_private_rsa.pem' ); //私钥文件
+define('ICLOD_CERT_PATH',dirname(__FILE__).'/private_rsa.pem' ); //私钥文件
+// define('ICLOD_CERT_PUBLIC_PATH',dirname(__FILE__).'/100009001000_public_rsa.pem' );//公钥文件
+define('ICLOD_CERT_PUBLIC_PATH',dirname(__FILE__).'/public_rsa.pem' );//公钥文件
 define('ICLOD_Server_URL','http://122.227.225.142:23661/service/soa');  //接口网关
 
 define('NOTICE_URL','http://122.227.225.142:23661/service/soa'); //前台通知地址
@@ -35,7 +37,7 @@ class Pay_tonglian{
 
         
       $bizUserId='666688912'; //分配的系统编号
-      $source=1;  //访问终端类型 1表示手机 2表示PC
+      $source=2;  //访问终端类型 1表示手机 2表示PC
       $memberType=2; //会员类型 2是企业人员 3表示个人会员
  
       
