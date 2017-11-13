@@ -23,9 +23,8 @@ class PaytonglianAction extends Controller{
     public $code = 1000;
     public $content = NULL;
 
-    public function __construct($id,$module=null) {
+    public function __construct() {
         $this->model = new Model();
-        $this->date=date("Y-m-d H:i:s");
     }
 
     public $date='';
@@ -1523,10 +1522,10 @@ class PaytonglianAction extends Controller{
       
         
         if (!$req)  return   false;
-        $params_str =ICLOD_USERID.json_encode($req).$this->date;
+        $params_str =ICLOD_USERID.json_encode($req).date('Y-m-d H:i:s');
         $sign = $this->sign($params_str);
         
-        $paramer='sysid='.urlencode(ICLOD_USERID).'&sign='.urlencode($sign).'&timestamp='.urlencode($this->date).'&v='.urlencode($this->version).'&req='.urlencode(json_encode($req));
+        $paramer='sysid='.urlencode(ICLOD_USERID).'&sign='.urlencode($sign).'&timestamp='.urlencode(date('Y-m-d H:i:s')).'&v='.urlencode($this->version).'&req='.urlencode(json_encode($req));
          
         $obj=$this->curl_post($paramer);
         return $obj;
