@@ -204,8 +204,8 @@ class PaytonglianAction extends Controller{
         $client->setSignMethod($signMethod);
         $param["bizUserId"] = "jiandan";    //商户系统用户标识，商户系统中唯一编号
         $param["isAuth"] = true; 
-        $param["name"] = "016120"; 
-        $param["identityType"] ="";
+        $param["name"] = "jiannni"; 
+        $param["identityType"] ="1";
         $param["identityNo"] = $this->rsa('330227198805284412');
         $result = $client->request("MemberService", "setRealName", $param);
         print_r($result);
