@@ -44,7 +44,7 @@ class SOAClient {
 		$res = openssl_get_privatekey($priKey);
 		print_r($res);
 		
-		($res) or die('您使用的公钥格式错误，请检查公钥配置');
+		($res) or die('您使用的私钥格式错误，请检查私钥配置');
 		
 		openssl_sign("errorCode=SOA.NoSuchMethod&errorMessage=找不到相应的服务:aaa.createMember", $sign, $res);
 		
