@@ -511,10 +511,7 @@ class DistrictadminController extends Controller {
                                 echo json_encode(array("status" => 'fail', 'msg' => '商户不存在'));
                                 exit();
                             }
-                            if ($hirer['valid_income'] < $withdraw_info['withdraw_amount']) {
-                                echo json_encode(array("status" => 'fail', 'msg' => '提现金额超出账户可用余额'));
-                                exit();
-                            } else {
+                            
                                 $params["merDate"] = date("Ymd");
                                 $params["merSeqId"] = date("YmdHis") . rand(10, 99);
                                 $params["cardNo"] = $obj['card_number'];
@@ -543,7 +540,7 @@ class DistrictadminController extends Controller {
                                     echo json_encode(array("status" => 'fail', 'msg' => '代付失败'));
                                     exit();
                                 }
-                            }
+                            
                         }
                     } else if ($withdraw_info['withdraw_type'] == 1) {//提现到余额
                         if ($withdraw_info['role_type'] == 1 || $withdraw_info['role_type'] == 2) {
@@ -575,10 +572,7 @@ class DistrictadminController extends Controller {
                                 echo json_encode(array("status" => 'fail', 'msg' => '商户不存在'));
                                 exit();
                             }
-                            if ($hirer['valid_income'] < $withdraw_info['withdraw_amount']) {
-                                echo json_encode(array("status" => 'fail', 'msg' => '提现金额超出账户可用余额'));
-                                exit();
-                            } else {
+                            
                                 // $isOk1 = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到账户余额');
                                 $isOk2 = $withdraw->query("update tiny_customer set balance = balance + {$withdraw_info['withdraw_amount']} where user_id =" . $hirer['owner_id']);
 
@@ -590,7 +584,7 @@ class DistrictadminController extends Controller {
                                         exit();
                                     }
                                 }
-                            }
+                            
                         }
                     }
                 }
