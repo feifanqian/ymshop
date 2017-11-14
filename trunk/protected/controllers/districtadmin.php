@@ -419,6 +419,7 @@ class DistrictadminController extends Controller {
         $status = Filter::sql(Req::args("status"));
         $reason = Filter::sql(Req::args("reason"));
         $withdraw = new Model("district_withdraw");
+        $model = new Model();
         if ($status == 1 || $status == -1) {
             $withdraw_info = $withdraw->where("id = $id and status= 0")->find();
             if (empty($withdraw_info)) {
@@ -427,7 +428,20 @@ class DistrictadminController extends Controller {
                 if ($status == -1) {//如果是作废提现请求时
                     if (trim($reason) != "") {//作废理由不能为空
                         $result = $withdraw->query("update tiny_district_withdraw set status = -1,admin_handle_time='" . date("Y-m-d H:i:s") . "',admin_remark ='$reason' where id = $id");
+                        
                         if ($result) {
+                            $customer = $model->table('district_shop')->fields("valid_income,frezze_income,settled_income")->where('id='.$withdraw_info['role_id'])->find();
+                            $model->table('district_shop')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})",'settled_income'=>"`settled_income`-({$withdraw_info['withdraw_amount']})"))->where('id='.$withdraw_info['role_id'])->update();
+                            $data['role_id']=$withdraw_info['role_id'];
+                            $data['role_type']=$withdraw_info['role_type'];
+                            $data['type']=12;
+                            $data['record_id']=$withdraw_info['id'];
+                            $data['current_valid_income']=$customer['valid_income']+$withdraw_info['withdraw_amount'];
+                            $data['current_frezze_income']=$customer['frezze_income'];
+                            $data['current_settled_income']=$customer['settled_income']-$withdraw_info['withdraw_amount'];
+                            $data['date']=date("Y-m-d H:i:s");
+                            $data['note']="提现拒绝收益撤回";
+                            $model->table("promote_income_log")->data($data)->insert();
                             echo json_encode(array("status" => 'success', 'msg' => '成功'));
                             exit();
                         } else {
@@ -477,14 +491,14 @@ class DistrictadminController extends Controller {
                                 // $result = $ChinapayDf->DfPay($params);
                                 $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口
                                 if ($result) {
-                                    $isOk = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到银行卡');
-                                    if ($isOk) {
+                                    // $isOk = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到银行卡');
+                                    
                                         $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
                                         if ($result) {
                                             echo json_encode(array("status" => 'success', 'msg' => '成功'));
                                             exit();
                                         }
-                                    }
+                                    
                                 } else {
                                     echo json_encode(array("status" => 'fail', 'msg' => '代付失败'));
                                     exit();
@@ -517,14 +531,14 @@ class DistrictadminController extends Controller {
                                 // $result = $ChinapayDf->DfPay($params);
                                 $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口 
                                 if ($result) {
-                                    $isOk = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到银行卡');
-                                    if ($isOk) {
+                                    // $isOk = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到银行卡');
+                                    
                                         $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
                                         if ($result) {
                                             echo json_encode(array("status" => 'success', 'msg' => '成功'));
                                             exit();
                                         }
-                                    }
+                                    
                                 } else {
                                     echo json_encode(array("status" => 'fail', 'msg' => '代付失败'));
                                     exit();
@@ -543,8 +557,8 @@ class DistrictadminController extends Controller {
                                 echo json_encode(array("status" => 'fail', 'msg' => '提现金额超出账户可用余额'));
                                 exit();
                             } else {
-                                $isOk1 = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到账户余额');
-                                if ($isOk1) {
+                                // $isOk1 = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到账户余额');
+                                
                                     $isOk2 = $withdraw->query("update tiny_customer set balance = balance + {$withdraw_info['withdraw_amount']} where user_id =" . $promoter['user_id']);
                                     Log::balance($withdraw_info['withdraw_amount'], $promoter['user_id'], $withdraw_info['withdraw_no'], '推广收益', 6);
                                     $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
@@ -552,10 +566,7 @@ class DistrictadminController extends Controller {
                                         echo json_encode(array("status" => 'success', 'msg' => '成功'));
                                         exit();
                                     }
-                                }else{
-                                     echo json_encode(array("status" => 'fail', 'msg' => '收益日志记录失败'));
-                                     exit();
-                                }
+                                
                             }
                         } else if ($withdraw_info['role_type'] == 3) {
                             //查询可用收益，防止溢出
@@ -568,10 +579,10 @@ class DistrictadminController extends Controller {
                                 echo json_encode(array("status" => 'fail', 'msg' => '提现金额超出账户可用余额'));
                                 exit();
                             } else {
-                                $isOk1 = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到账户余额');
+                                // $isOk1 = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到账户余额');
                                 $isOk2 = $withdraw->query("update tiny_customer set balance = balance + {$withdraw_info['withdraw_amount']} where user_id =" . $hirer['owner_id']);
 
-                                if ($isOk1 && $isOk2) {
+                                if ($isOk2) {
                                     Log::balance($withdraw_info['withdraw_amount'], $hirer['owner_id'], $withdraw_info['withdraw_no'], '推广收益', 6);
                                     $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
                                     if ($result) {

@@ -249,6 +249,12 @@ class Hirer extends Object{
         $sql_data['status']=0;
         $id = $this->model->table('district_withdraw')->data($sql_data)->insert();
         if($id){
+           if($data['type']==1){
+              Log::incomeLog($data['amount'], 3, $this->id, $id, 11, '提取收益到账户余额');
+           }elseif($data['type']==2){
+              Log::incomeLog($data['amount'], 3, $this->id, $id, 11, '提取收益到银行卡');
+           }
+            // $this->model->table('district_shop')->data(array('valid_income'=>"`valid_income`-({$$data['amount']})"))->where('owner_id='.$this->id) ->update();
             return array('status'=>'success','msg'=>'成功');
         }else{
             return array('status'=>'fail','msg'=>'数据库错误','msg_code'=>1005);
