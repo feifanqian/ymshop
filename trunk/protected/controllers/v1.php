@@ -162,6 +162,7 @@ class V1Controller extends Controller {
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "send_verification_code"=>array('paytonglian/actionSendVerificationCode',1,1), //发送短信验证码接口
+        "check_verification_code"=>array('paytonglian/actionCheckVerificationCode',1,1),//验证短信验证码接口
         "bind_phone"=>array('paytonglian/actionBindPhone',1,1),//绑定手机接口
     );
 
