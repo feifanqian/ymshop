@@ -195,6 +195,8 @@ class PaytonglianAction extends Controller{
         //证书密码
         $pwd = "900724";
         $signMethod = "SHA1WithRSA";
+        $rsautil = new RSAUtil ();
+
         $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
         $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
         $client->setServerAddress($serverAddress);
@@ -206,7 +208,7 @@ class PaytonglianAction extends Controller{
         $param["isAuth"] = true; 
         $param["name"] = "jiannni"; 
         $param["identityType"] ="1";
-        $param["identityNo"] = $this->rsa('330227198805284412');
+        $param["identityNo"] = $rsautil->encrypt('330227198805284412');
         $result = $client->request("MemberService", "setRealName", $param);
         print_r($result);
     }
