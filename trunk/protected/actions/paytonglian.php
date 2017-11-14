@@ -61,7 +61,7 @@ class PaytonglianAction extends Controller{
 
       // $result=$this->sendgate($req);
       // var_dump($result);die;
-      
+
         $client = new SOAClient();
         //服务地址
         $serverAddress = "http://122.227.225.142:23661/service/soa";
@@ -86,7 +86,7 @@ class PaytonglianAction extends Controller{
         $param["memberType"] = "3";    //会员类型
         $param["source"] = "2";        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
-        print_r($result); 
+        var_dump($this->arrayXml->toXmlGBK($result,'AIPG'));die; 
     }
 
     //创建会员
