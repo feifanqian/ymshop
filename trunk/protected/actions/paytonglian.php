@@ -86,7 +86,7 @@ class PaytonglianAction extends Controller{
         $param["memberType"] = "3";    //会员类型
         $param["source"] = "2";        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
-        var_dump($this->arrayXml->toXmlGBK($result,'AIPG'));die; 
+        var_dump($result);die; 
     }
 
     //创建会员
