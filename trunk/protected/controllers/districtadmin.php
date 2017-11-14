@@ -574,10 +574,7 @@ class DistrictadminController extends Controller {
                                 echo json_encode(array("status" => 'fail', 'msg' => '推广者不存在'));
                                 exit();
                             }
-                            if ($promoter['valid_income'] < $withdraw_info['withdraw_amount']) {
-                                echo json_encode(array("status" => 'fail', 'msg' => '提现金额超出账户可用余额'));
-                                exit();
-                            } else {
+                            
                                 // $isOk1 = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到账户余额');
                                    
                                     $isOk2 = $withdraw->query("update tiny_customer set balance = balance + {$withdraw_info['withdraw_amount']} where user_id =" . $promoter['user_id']);
@@ -588,7 +585,7 @@ class DistrictadminController extends Controller {
                                         exit();
                                     }
                                 
-                            }
+                            
                         } else if ($withdraw_info['role_type'] == 3) {
                             //查询可用收益，防止溢出
                             $hirer = $withdraw->table("district_shop")->where('id=' . $withdraw_info['role_id'])->find();
