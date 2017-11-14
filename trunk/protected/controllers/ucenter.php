@@ -198,7 +198,7 @@ class UcenterController extends Controller {
             $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0,'type'=>0);
             $result = $this->model->table('balance_withdraw')->data($data)->insert();
             if ($result) {
-                $model->table('customer')->data(array('balance' => "`balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
+                $this->model->table('customer')->data(array('balance' => "`balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
                 Log::balance(0-$amount, $this->user['id'],$withdraw_no,"余额提现申请", 3, 1);
                 exit(json_encode(array('status' => 'success', 'msg' => "申请提交成功")));
             } else {
@@ -246,7 +246,7 @@ class UcenterController extends Controller {
             $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0,'type'=>1);
             $result = $this->model->table('balance_withdraw')->data($data)->insert();
             if ($result) {
-                $model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
+                $this->model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
                 Log::balance(0-$amount, $this->user['id'],$withdraw_no,"余额提现申请", 3, 1);
                 exit(json_encode(array('status' => 'success', 'msg' => "申请提交成功")));
             } else {
