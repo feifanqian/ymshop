@@ -82,7 +82,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "jianqian";      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = "jiandan";      //商户系统用户标识，商户系统中唯一编号
         $param["memberType"] = "3";    //会员类型
         $param["source"] = "2";        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
@@ -150,9 +150,9 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "jianqian";      //商户系统用户标识，商户系统中唯一编号
-        $param["phone"] = "3";    //会员类型
-        $param["verificationCodeType"] = "9";        //访问终端类型
+        $param["bizUserId"] = "jiandan";      //商户系统用户标识，商户系统中唯一编号
+        $param["phone"] = "13590144405";    //手机号码
+        $param["verificationCodeType"] = "9";        //绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
         print_r($result);
     
