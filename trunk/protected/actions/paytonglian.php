@@ -88,7 +88,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "666688912";      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = "ymtest";      //商户系统用户标识，商户系统中唯一编号
         $param["memberType"] = "3";    //会员类型
         $param["source"] = "2";        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
