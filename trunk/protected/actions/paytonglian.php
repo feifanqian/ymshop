@@ -154,7 +154,7 @@ class PaytonglianAction extends Controller{
         $param["phone"] = "13590144405";    //手机号码
         $param["verificationCodeType"] = "9";        //绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        print_r($result);
+        echo $result;
     
     }
     
@@ -168,24 +168,30 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionCheckVerificationCode(){
-    
-     
-        $phone='15522151235';
-        $verificationCodeType=9;
-        $verificationCode='719521';
-        $req=array(
-            'param' =>array(
-                'bizUserId' => $this->bizUserId,
-                'phone' =>$phone,
-                'verificationCodeType' =>$verificationCodeType,//手机 1 整型      PC 2 整型
-                'verificationCode' => $verificationCode,
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('checkVerificationCode')    //调用方法
-        );
-    
-    
-        $result=$this->sendgate($req);
+        $client = new SOAClient();
+        //服务地址
+        $serverAddress = "http://122.227.225.142:23661/service/soa";
+        //商户号
+        $sysid = "100009001000";
+        //证书名称
+        $alias = "100009001000";
+        //证书地址
+        $path = ICLOD_PATH;
+        //证书密码
+        $pwd = "900724";
+        $signMethod = "SHA1WithRSA";
+        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $client->setServerAddress($serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($sysid);
+        $client->setSignMethod($signMethod);
+        $param["bizUserId"] = "jiandan";      //商户系统用户标识，商户系统中唯一编号
+        $param["phone"] = "13590144405";    //手机号码
+        $param["verificationCodeType"] = "9";        //绑定手机
+        $param["verificationCode"] = "016120"; //短信验证码
+        $result = $client->request("MemberService", "checkVerificationCode", $param);
         echo $result;
     
     }
