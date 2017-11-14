@@ -136,6 +136,8 @@ return array(
     "cURL"=>"allinpay/lib/cURL.class.php",
     "ArrayAndXml"=>"allinpay/lib/ArrayXml.class.php",
     "AllinpayDf"=>"payments/pay_unionpay/df/AllinpayDf.php",
-    "Pay_tonglian" =>"payments/pay_tonglian.php"
+    "Pay_tonglian" =>"payments/pay_tonglian.php",
+    "SOAClient"=>"allinpay/SOAClient.php",
+    "RSAUtil"=>"allinpay/RSAUtil.php"
 );
 ?>
