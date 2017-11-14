@@ -192,7 +192,7 @@ class PaytonglianAction extends Controller{
         $param["verificationCodeType"] = "9";        //绑定手机
         $param["verificationCode"] = "016120"; //短信验证码
         $result = $client->request("MemberService", "checkVerificationCode", $param);
-        echo $result;
+        print_r($result);
     
     }
     
