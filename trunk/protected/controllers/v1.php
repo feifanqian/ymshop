@@ -159,8 +159,9 @@ class V1Controller extends Controller {
         "seller_info"=>array("address/promoterInfo",0,1),
         "promoter_edit"=>array('address/promoterEdit',1,1),
 
-        //通联支付接口的APP
-        "createMember"=>array('paytonglian/actionCreateMember',1,1),
+        //通联支付接口
+        "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
+        "bind_phone"=>array('paytonglian/actionBindPhone',1,1),//绑定手机接口
     );
 
     //分析请求的action,将请求分发到不同的action中去
