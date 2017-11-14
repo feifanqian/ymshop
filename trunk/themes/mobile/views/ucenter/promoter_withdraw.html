@@ -89,10 +89,10 @@
     $("#apply-submit").click(function(){
         var withdraw_type = $("#settle-type").val();
         var withdraw_amount = $("input[name='withdraw_amount']").val();
-        // if(withdraw_amount==''||withdraw_amount<1){
-        //         notification("提现金额不少于1");
-        //         return false;
-        // }
+        if(withdraw_amount==''||withdraw_amount<1){
+                notification("提现金额不少于1");
+                return false;
+        }
         if(withdraw_type==1){
             var formdata={type:1,amount:withdraw_amount}; 
         }else if(withdraw_type==2){
