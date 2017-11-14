@@ -500,6 +500,18 @@ class DistrictadminController extends Controller {
                                         }
                                     
                                 } else {
+                                    $customer = $model->table('customer')->fields("valid_income,frezze_income,settled_income")->where('id='.$withdraw_info['role_id'])->find();
+                                    $model->table('customer')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})",'settled_income'=>"`settled_income`-({$withdraw_info['withdraw_amount']})"))->where('id='.$withdraw_info['role_id'])->update();
+                                    $data['role_id']=$withdraw_info['role_id'];
+                                    $data['role_type']=$withdraw_info['role_type'];
+                                    $data['type']=12;
+                                    $data['record_id']=$withdraw_info['id'];
+                                    $data['current_valid_income']=$customer['valid_income']+$withdraw_info['withdraw_amount'];
+                                    $data['current_frezze_income']=$customer['frezze_income'];
+                                    $data['current_settled_income']=$customer['settled_income']-$withdraw_info['withdraw_amount'];
+                                    $data['date']=date("Y-m-d H:i:s");
+                                    $data['note']="提现失败收益撤回";
+                                    $model->table("promote_income_log")->data($data)->insert();
                                     echo json_encode(array("status" => 'fail', 'msg' => '代付失败'));
                                     exit();
                                 }
@@ -537,6 +549,18 @@ class DistrictadminController extends Controller {
                                         }
                                     
                                 } else {
+                                    $customer = $model->table('district_shop')->fields("valid_income,frezze_income,settled_income")->where('id='.$withdraw_info['role_id'])->find();
+                                    $model->table('district_shop')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})",'settled_income'=>"`settled_income`-({$withdraw_info['withdraw_amount']})"))->where('id='.$withdraw_info['role_id'])->update();
+                                    $data['role_id']=$withdraw_info['role_id'];
+                                    $data['role_type']=$withdraw_info['role_type'];
+                                    $data['type']=12;
+                                    $data['record_id']=$withdraw_info['id'];
+                                    $data['current_valid_income']=$customer['valid_income']+$withdraw_info['withdraw_amount'];
+                                    $data['current_frezze_income']=$customer['frezze_income'];
+                                    $data['current_settled_income']=$customer['settled_income']-$withdraw_info['withdraw_amount'];
+                                    $data['date']=date("Y-m-d H:i:s");
+                                    $data['note']="提现失败收益撤回";
+                                    $model->table("promote_income_log")->data($data)->insert();
                                     echo json_encode(array("status" => 'fail', 'msg' => '代付失败'));
                                     exit();
                                 }
