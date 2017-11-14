@@ -187,9 +187,9 @@ class UcenterController extends Controller {
             }
             $config = Config::getInstance();
             $other = $config->get("other");
-            if ($amount < $other['min_withdraw_amount']) {
-                exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
-            }
+            // if ($amount < $other['min_withdraw_amount']) {
+            //     exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
+            // }
             $isset = $this->model->table("balance_withdraw")->where("user_id =" . $this->user['id'] . " and status =0")->find();
             if ($isset) {
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请失败，还有未处理完的提现申请')));
@@ -198,6 +198,8 @@ class UcenterController extends Controller {
             $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0,'type'=>0);
             $result = $this->model->table('balance_withdraw')->data($data)->insert();
             if ($result) {
+                $this->model->table('customer')->data(array('balance' => "`balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
+                Log::balance(0-$amount, $this->user['id'],$withdraw_no,"余额提现申请", 3, 1);
                 exit(json_encode(array('status' => 'success', 'msg' => "申请提交成功")));
             } else {
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
@@ -233,9 +235,9 @@ class UcenterController extends Controller {
             }
             $config = Config::getInstance();
             $other = $config->get("other");
-            if ($amount < $other['min_withdraw_amount']) {
-                exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
-            }
+            // if ($amount < $other['min_withdraw_amount']) {
+            //     exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
+            // }
             $isset = $this->model->table("balance_withdraw")->where("user_id =" . $this->user['id'] . " and status =0")->find();
             if ($isset) {
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请失败，还有未处理完的提现申请')));
@@ -244,6 +246,8 @@ class UcenterController extends Controller {
             $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0,'type'=>1);
             $result = $this->model->table('balance_withdraw')->data($data)->insert();
             if ($result) {
+                $this->model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
+                Log::balance(0-$amount, $this->user['id'],$withdraw_no,"余额提现申请", 3, 1);
                 exit(json_encode(array('status' => 'success', 'msg' => "申请提交成功")));
             } else {
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
