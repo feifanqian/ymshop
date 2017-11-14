@@ -67,7 +67,7 @@ class PaytonglianAction extends Controller{
     }
 
     //创建会员
-    public function createMember() {
+    public function actionTestCreateMember() {
         $client = new SOAClient();
         //服务地址
         $serverAddress = "http://122.227.225.142:23661/service/soa";
