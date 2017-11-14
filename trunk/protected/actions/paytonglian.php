@@ -1,7 +1,7 @@
 <?php
 header("Content-type: text/html; charset=utf-8");
 define('ICLOD_USERID','100009001000');//商户id 
-// define('ICLOD_PATH',dirname(__FILE__).'/100009001000.pem' );
+define('ICLOD_PATH',dirname(__FILE__).'/100009001000.pem' );
 define('ICLOD_CERT_PATH',dirname(__FILE__).'/private_rsa.pem' ); //私钥文件
 define('ICLOD_CERT_PUBLIC_PATH',dirname(__FILE__).'/public_rsa.pem' );//公钥文件
 define('ICLOD_Server_URL','http://122.227.225.142:23661/service/soa');  //接口网关
@@ -64,13 +64,13 @@ class PaytonglianAction extends Controller{
 
         $client = new SOAClient();
         //服务地址
-        $serverAddress = "http://122.227.225.142:23661/service/soa";
+        $serverAddress = ICLOD_Server_URL;
         //商户号
         $sysid = "100009001000";
         //证书名称
         $alias = "100009001000";
         //证书地址
-        $path = dirname(__FILE__).'/100009001000.pem';
+        $path = ICLOD_PATH;
         //证书密码
         $pwd = "900724";
         $signMethod = "SHA1WithRSA";
@@ -82,11 +82,11 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "ymshoptest";      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = "qianfeifan";      //商户系统用户标识，商户系统中唯一编号
         $param["memberType"] = "3";    //会员类型
         $param["source"] = "2";        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
-        var_dump($this->arrayXml->toXmlGBK($result,'AIPG'));die; 
+        var_dump($result);die; 
     }
 
     //创建会员
