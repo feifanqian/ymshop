@@ -44,8 +44,14 @@
                 </div>
             </td>
             <td>{$role[$item['role_type']]}</td>
-            
+            {if:$item['role_type']!=3}
             <td>{echo:$item['real_name']==""?($item['nickname']==""?$item['shopname']:$item['nickname']):$item['real_name']}</td>
+            {else:}
+            {set: $id=$item['role_id']}
+            {query:name=district_shop fields=name where = id eq $id item=$shop}
+                <td>{$shop['name'] | '匿名'}</td>
+            {/query} 
+            {/if}
             <td>{$item['note']}</td>
             <td>{echo:$item['valid_income_change']>=0?"+".$item['valid_income_change']:$item['valid_income_change']}</td>
             <td>{echo:$item['frezze_income_change']>=0?"+".$item['frezze_income_change']:$item['frezze_income_change']}</td>
