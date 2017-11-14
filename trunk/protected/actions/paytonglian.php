@@ -44,55 +44,48 @@ class PaytonglianAction extends Controller{
    public function actionCreateMember (){
 
         
-      // $bizUserId='666688912'; //分配的系统编号
-      // $source=2;  //访问终端类型 1表示手机 2表示PC
-      // $memberType=2; //会员类型 2是企业人员 3表示个人会员
+      $bizUserId='ymshoptest'; //分配的系统编号
+      $source=2;  //访问终端类型 1表示手机 2表示PC
+      $memberType=3; //会员类型 2是企业人员 3表示个人会员
  
       
-      // $req=array(
-      //      'param' =>array(
-      //          'bizUserId' => $bizUserId,
-      //          'memberType' =>$memberType,//企业会员 2 整型          个人会员 3 整型
-      //          'source' =>$source,//手机 1 整型      PC 2 整型 
-      //      ),
-      //      'service' => urlencode('MemberService'), //服务对象
-      //      'method' => urlencode('createMember')    //调用方法
-      //  );
+      $req=array(
+           'param' =>array(
+               'bizUserId' => $bizUserId,
+               'memberType' =>$memberType,//企业会员 2 整型          个人会员 3 整型
+               'source' =>$source,//手机 1 整型      PC 2 整型 
+           ),
+           'service' => urlencode('MemberService'), //服务对象
+           'method' => urlencode('createMember')    //调用方法
+       );
 
-      // $result=$this->sendgate($req);
-      // $result = json_decode($result,true);
-      // var_dump($result);die;
-      // $result = $this->arrayXml->toXmlGBK($result,'AIPG');
-      // var_dump($result);die;
-        $client = new SOAClient();
-        //服务地址
-        $serverAddress = "http://122.227.225.142:23661/service/soa";
-        //商户号
-        $sysid = "100009001000";
-        //证书名称
-        $alias = "100009001000";
-        //证书地址
-        $path = dirname(__FILE__).'/100009001000.pem';
-        //证书密码
-        $pwd = "900724";
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-        /*
-        echo '<br>'.$sss = rsaEncrypt("a", $publicKey, $privateKey);
-        echo '<br>'.rsaDecrypt($sss, $publicKey, $privateKey);
-        */
+      $result=$this->sendgate($req);
+      var_dump($result);die;
+        // $client = new SOAClient();
+        // //服务地址
+        // $serverAddress = "http://122.227.225.142:23661/service/soa";
+        // //商户号
+        // $sysid = "100009001000";
+        // //证书名称
+        // $alias = "100009001000";
+        // //证书地址
+        // $path = dirname(__FILE__).'/100009001000.pem';
+        // //证书密码
+        // $pwd = "900724";
+        // $signMethod = "SHA1WithRSA";
+        // $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        // $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
 
-        $client->setServerAddress($serverAddress);
-        $client->setSignKey($privateKey);
-        $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "ymtest";      //商户系统用户标识，商户系统中唯一编号
-        $param["memberType"] = "3";    //会员类型
-        $param["source"] = "2";        //访问终端类型
-        $result = $client->request("MemberService", "createMember", $param);
-        print_r($result); 
+        // $client->setServerAddress($serverAddress);
+        // $client->setSignKey($privateKey);
+        // $client->setPublicKey($publicKey);
+        // $client->setSysId($sysid);
+        // $client->setSignMethod($signMethod);
+        // $param["bizUserId"] = "ymtest";      //商户系统用户标识，商户系统中唯一编号
+        // $param["memberType"] = "3";    //会员类型
+        // $param["source"] = "2";        //访问终端类型
+        // $result = $client->request("MemberService", "createMember", $param);
+        // print_r($result); 
     }
 
     //创建会员
