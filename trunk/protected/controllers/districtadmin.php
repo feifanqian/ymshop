@@ -430,7 +430,11 @@ class DistrictadminController extends Controller {
                         $result = $withdraw->query("update tiny_district_withdraw set status = -1,admin_handle_time='" . date("Y-m-d H:i:s") . "',admin_remark ='$reason' where id = $id");
                         
                         if ($result) {
-                            $customer = $model->table('district_shop')->fields("valid_income,frezze_income,settled_income")->where('id='.$withdraw_info['role_id'])->find();
+                            if ($withdraw_info['role_type'] == 1 || $withdraw_info['role_type'] == 2){
+                                $customer = $model->table('customer')->fields("valid_income,frezze_income,settled_income")->where('user_id='.$withdraw_info['role_id'])->find();
+                            }else{
+                                $customer = $model->table('district_shop')->fields("valid_income,frezze_income,settled_income")->where('id='.$withdraw_info['role_id'])->find();
+                            }
                             $model->table('district_shop')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})"))->where('id='.$withdraw_info['role_id'])->update();
                             $data['role_id']=$withdraw_info['role_id'];
                             $data['role_type']=$withdraw_info['role_type'];
