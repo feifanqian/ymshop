@@ -206,7 +206,7 @@ class PaytonglianAction extends Controller{
         $param["isAuth"] = true; 
         $param["name"] = "jiannni"; 
         $param["identityType"] ="1";
-        $param["identityNo"] = $this->encrypt('330227198805284412');
+        $param["identityNo"] = $this->rsa('330227198805284412');
         $result = $client->request("MemberService", "setRealName", $param);
         print_r($result);
     }
@@ -1704,57 +1704,6 @@ class PaytonglianAction extends Controller{
 
       return $result;
     }
-
-    public function encrypt($str) {
-        $blocks = self::splitCN($str, 0, 30, 'utf-8');
-        $chrtext  = null;
-        $encodes  = array();
-        foreach ($blocks as $n => $block) {
-            if (!openssl_private_encrypt($block, $chrtext, $this->privateKey)) {
-                echo "<br/>" . openssl_error_string() . "<br/>";
-            }
-            $encodes[] = $chrtext;
-        }
-        $chrtext = base64_encode(implode(",", $encodes));
-        return $chrtext;
-    }
-
-    static function splitCN($cont, $n = 0, $subnum, $charset) {
-        //$len = strlen($cont) / 3;
-        $arrr = array();
-        for ($i = $n; $i < strlen($cont); $i += $subnum) {
-            $res = self::subCNchar($cont, $i, $subnum, $charset);
-            if (!empty ($res)) {
-                $arrr[] = $res;
-            }
-        }
-        return $arrr;
-    }
-
-    public function decrypt($str) {
-        $decodes = explode(',', base64_decode($str));
-        $strnull = "";
-        $dcyCont = "";
-        if (!openssl_public_decrypt(base64_decode($str), $dcyCont, $this->publicKey)) {
-            echo "<br/>" . openssl_error_string() . "<br/>";
-        }
-        $strnull .= $dcyCont;
-        return $strnull;
-    }
-
-    static function subCNchar($str, $start = 0, $length, $charset = "utf-8") {
-        if (strlen($str) <= $length) {
-            return $str;
-        }
-        $re['utf-8'] = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
-        $re['gb2312'] = "/[\x01-\x7f]|[\xb0-\xf7][\xa0-\xfe]/";
-        $re['gbk'] = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
-        $re['big5'] = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
-        preg_match_all($re[$charset], $str, $match);
-        $slice = join("", array_slice($match[0], $start, $length));
-        return $slice;
-    }
-	
 	
 
    
