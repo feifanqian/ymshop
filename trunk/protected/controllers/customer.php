@@ -165,12 +165,12 @@ class CustomerController extends Controller {
         $obj = $model->fields("wd.*,cu.balance,cu.offline_balance")->join("left join customer as cu on wd.user_id = cu.user_id")->where("wd.id=$id and wd.status=0")->find();
         if ($obj) {
             // $can_withdraw = Common::getCanWithdrawAmount4GoldCoin($obj['user_id']);
-            if($obj['type']==0){
-                $can_withdraw=$obj['balance'];  
-            }elseif($obj['type']==1){
-                $can_withdraw=$obj['offline_balance']+$obj['balance']; 
-            }
-            if ($obj['amount'] <= $can_withdraw) {
+            // if($obj['type']==0){
+            //     $can_withdraw=$obj['balance'];  
+            // }elseif($obj['type']==1){
+            //     $can_withdraw=$obj['offline_balance']; 
+            // }
+            
                 if($status==1){
                     $config = Config::getInstance();
                     $other = $config->get("other");
@@ -201,33 +201,35 @@ class CustomerController extends Controller {
                         $real_amount = round($params['transAmt']/100,2);
                         $update = $model->query("update tiny_balance_withdraw set status=1,note='{$note}',real_amount={$real_amount},fee_rate={$other['withdraw_fee_rate']},mer_seq_id='{$params['merSeqId']}',submit_date='{$date}' where id = $id and status= 0");
                         if($update){
-                            if($obj['type']==0){
-                                $model->table('customer')->data(array('balance' => "`balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
-                            }elseif($obj['type']==1){
-                                if($obj['offline_balance']>=$obj['amount']){
-                                    $model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
-                                }else{
-                                    $submoney=$obj['amount']-$obj['offline_balance'];
-                                    $model->table('customer')->data(array('offline_balance' =>0.00,'balance'=>"`balance`-".$submoney))->where('user_id=' . $obj['user_id'])->update();
-                                }  
-                            }     
-                            Log::balance(0 - $obj['amount'], $obj['user_id'],$obj['withdraw_no'],"余额提现", 3, $this->manager['id']);
+                            // if($obj['type']==0){
+                            //     $model->table('customer')->data(array('balance' => "`balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                            // }elseif($obj['type']==1){
+                            //     if($obj['offline_balance']>=$obj['amount']){
+                            //         $model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                            //     }else{
+                            //         $submoney=$obj['amount']-$obj['offline_balance'];
+                            //         $model->table('customer')->data(array('offline_balance' =>0.00,'balance'=>"`balance`-".$submoney))->where('user_id=' . $obj['user_id'])->update();
+                            //     }  
+                            // }     
+                            // Log::balance(0 - $obj['amount'], $obj['user_id'],$obj['withdraw_no'],"余额提现", 3, $this->manager['id']);
                             Log::op($this->manager['id'], "通过提现申请", "管理员[" . $this->manager['name'] . "]:通过了提现申请 " . $obj['withdraw_no']);
                             exit(json_encode(array('status'=>'success','msg'=>'提现成功')));
                         }
                     }else{
+                        $model->table('customer')->data(array('offline_balance' => "`offline_balance`+" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                        Log::balance($obj['amount'], $obj['user_id'],$obj['withdraw_no'],"余额提现失败退回", 3, $this->manager['id']);
                         exit(json_encode(array('status'=>'fail','msg'=>$result['msg'])));
                     }
                 }else if($status=="-1"){
                     $result = $model->query("update tiny_balance_withdraw set status='-1',note='$note' where id = $id and status= 0");
+                    $model->table('customer')->data(array('offline_balance' => "`offline_balance`+" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                    Log::balance($obj['amount'], $obj['user_id'],$obj['withdraw_no'],"拒绝提现申请回退", 3, $this->manager['id']);
                     Log::op($this->manager['id'], "拒绝提现申请", "管理员[" . $this->manager['name'] . "]:拒绝了提现申请 " . $obj['withdraw_no']);
                     if($result){
                         exit(json_encode(array('status'=>'success','msg'=>'拒绝申请成功')));
                     }
                 }
-            } else {
-               exit(json_encode(array('status'=>'fail','msg'=>'提现金额大于可提现余额')));
-            }
+            
             //扣除账户里的余额
         }
         exit(json_encode(array('status'=>'fail','msg'=>'信息错误')));
