@@ -72,7 +72,7 @@ class PaytonglianAction extends Controller{
         //证书名称
         $alias = "100009001000";
         //证书地址
-        $path = ICLOD_PATH;
+        $path = "100009001000.pem";
         //证书密码
         $pwd = "900724";
         $signMethod = "SHA1WithRSA";
