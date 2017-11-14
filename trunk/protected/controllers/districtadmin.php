@@ -477,10 +477,7 @@ class DistrictadminController extends Controller {
                                 echo json_encode(array("status" => 'fail', 'msg' => '推广者不存在'));
                                 exit();
                             }
-                            if ($promoter['valid_income'] < $withdraw_info['withdraw_amount']) {
-                                echo json_encode(array("status" => 'fail', 'msg' => '提现金额超出账户可用余额'));
-                                exit();
-                            } else {
+                            
                                 $params["merDate"] = date("Ymd");
                                 $params["merSeqId"] = date("YmdHis") . rand(10, 99);
                                 $params["cardNo"] = $obj['card_number'];
@@ -522,7 +519,7 @@ class DistrictadminController extends Controller {
                                     echo json_encode(array("status" => 'fail', 'msg' => '代付失败'));
                                     exit();
                                 }
-                            }
+                            
                         } else if ($withdraw_info['role_type'] == 3) {
                             //查询可用收益，防止溢出
                             $hirer = $withdraw->table("district_shop")->where('id=' . $withdraw_info['role_id'])->find();
