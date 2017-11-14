@@ -43,25 +43,6 @@ class PaytonglianAction extends Controller{
 
    public function actionCreateMember (){
 
-        
-      // $bizUserId='ymshoptest'; //分配的系统编号
-      // $source=2;  //访问终端类型 1表示手机 2表示PC
-      // $memberType=3; //会员类型 2是企业人员 3表示个人会员
- 
-      
-      // $req=array(
-      //      'param' =>array(
-      //          'bizUserId' => $bizUserId,
-      //          'memberType' =>$memberType,//企业会员 2 整型          个人会员 3 整型
-      //          'source' =>$source,//手机 1 整型      PC 2 整型 
-      //      ),
-      //      'service' => urlencode('MemberService'), //服务对象
-      //      'method' => urlencode('createMember')    //调用方法
-      //  );
-
-      // $result=$this->sendgate($req);
-      // var_dump($result);die;
-
         $client = new SOAClient();
         //服务地址
         $serverAddress = ICLOD_Server_URL;
@@ -105,11 +86,7 @@ class PaytonglianAction extends Controller{
         $signMethod = "SHA1WithRSA";
         $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
         $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-        /*
-        echo '<br>'.$sss = rsaEncrypt("a", $publicKey, $privateKey);
-        echo '<br>'.rsaDecrypt($sss, $publicKey, $privateKey);
-        */
-
+     
         $client->setServerAddress($serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
@@ -154,7 +131,7 @@ class PaytonglianAction extends Controller{
         $param["phone"] = "13590144405";    //手机号码
         $param["verificationCodeType"] = "9";        //绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        echo $result;
+        echo($result);
     
     }
     
@@ -206,28 +183,32 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionSetRealName(){
-    
-      
-        
-        $name="郑飞";
-        $identityType=1;
-        $identityNo=$this->rsa('330227198805284412');
-        $req=array(
-            'param' =>array(
-                'bizUserId' => $this->bizUserId,
-                'isAuth' =>true,//默认为true  目前必须通过云账户认证
-                'name' =>$name,
-                'identityType' =>$identityType,//只能为整型
-                'identityNo' =>$identityNo
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('setRealName')    //调用方法
-        );
-    
-    
-        $result=$this->sendgate($req);
-         
-        echo $result;
+        $client = new SOAClient();
+        //服务地址
+        $serverAddress = "http://122.227.225.142:23661/service/soa";
+        //商户号
+        $sysid = "100009001000";
+        //证书名称
+        $alias = "100009001000";
+        //证书地址
+        $path = ICLOD_PATH;
+        //证书密码
+        $pwd = "900724";
+        $signMethod = "SHA1WithRSA";
+        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $client->setServerAddress($serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($sysid);
+        $client->setSignMethod($signMethod);
+        $param["bizUserId"] = "jiandan";    //商户系统用户标识，商户系统中唯一编号
+        $param["isAuth"] = true; 
+        $param["name"] = "016120"; 
+        $param["identityType"] ="";
+        $param["identityNo"] = $this->rsa('330227198805284412');
+        $result = $client->request("MemberService", "setRealName", $param);
+        print_r($result);
     }
     
     
@@ -239,24 +220,30 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionBindPhone(){
-    
-       
-        $phone='15821953549';
-        $verificationCode='1234';
-
-        $req=array(
-            'param' =>array(
-                'bizUserId' => $this->bizUserId,
-                'phone' =>$phone,
-                'verificationCode' =>$verificationCode,
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('bindPhone')    //调用方法
-        );
-    
-    
-        $result=$this->sendgate($req);
-        echo $result;
+        $client = new SOAClient();
+        //服务地址
+        $serverAddress = "http://122.227.225.142:23661/service/soa";
+        //商户号
+        $sysid = "100009001000";
+        //证书名称
+        $alias = "100009001000";
+        //证书地址
+        $path = ICLOD_PATH;
+        //证书密码
+        $pwd = "900724";
+        $signMethod = "SHA1WithRSA";
+        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $client->setServerAddress($serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($sysid);
+        $client->setSignMethod($signMethod);
+        $param["bizUserId"] = "jiandan";      //商户系统用户标识，商户系统中唯一编号
+        $param["phone"] = "13590144405";    //手机号码
+        $param["verificationCode"] = "016120"; //短信验证码
+        $result = $client->request("MemberService", "bindPhone", $param);
+        print_r($result);
     
     }
     
