@@ -47,9 +47,9 @@
             {if:$item['role_type']!=3}
             <td>{echo:$item['real_name']==""?($item['nickname']==""?$item['shopname']:$item['nickname']):$item['real_name']}</td>
             {else:}
-            {set: $uid=$item['role_id']}
-            {query:name=customer fields=real_name where = user_id eq $uid item=$customer}
-                <td style="width:50px"><a href="?condition=and--shop_ids--eq--{$item['shop_ids']}">{$customer['real_name'] | '匿名'}</a></td>
+            {set: $id=$item['role_id']}
+            {query:name=district_shop fields=name where = id eq $id item=$shop}
+                <td>{$shop['name'] | '匿名'}</td>
             {/query} 
             {/if}
             <td>{$item['note']}</td>
