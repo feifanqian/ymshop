@@ -65,7 +65,8 @@ class Log {
             "12"=>"收益撤销",
             "13"=>"收益解锁",
             "14"=>"下级会员升级奖励",
-            "15"=>"退款收回收益"
+            "15"=>"退款收回收益",
+            "16"=>"收益提现申请"
         );
         $model = new model();
        
@@ -111,6 +112,10 @@ class Log {
                 $data['frezze_income_change'] = 0.00;
                 $data['settled_income_change'] =0.00;
             }      
+        }elseif($type==16){
+            $data['valid_income_change'] =0 - abs($amount);
+            $data['frezze_income_change'] = 0.00;
+            $data['settled_income_change'] = 0.00;
         }else{
             return false;
         }

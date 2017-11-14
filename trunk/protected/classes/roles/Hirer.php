@@ -250,9 +250,9 @@ class Hirer extends Object{
         $id = $this->model->table('district_withdraw')->data($sql_data)->insert();
         if($id){
            if($data['type']==1){
-              Log::incomeLog($data['amount'], 3, $this->id, $id, 11, '提取收益到账户余额');
+              Log::incomeLog($data['amount'], 3, $this->id, $id, 16, '提取收益到账户余额');
            }elseif($data['type']==2){
-              Log::incomeLog($data['amount'], 3, $this->id, $id, 11, '提取收益到银行卡');
+              Log::incomeLog($data['amount'], 3, $this->id, $id, 16, '提取收益到银行卡');
            }
             // $this->model->table('district_shop')->data(array('valid_income'=>"`valid_income`-({$$data['amount']})"))->where('owner_id='.$this->id) ->update();
             return array('status'=>'success','msg'=>'成功');
