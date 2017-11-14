@@ -82,7 +82,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "qianfeifan";      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = "jianqian";      //商户系统用户标识，商户系统中唯一编号
         $param["memberType"] = "3";    //会员类型
         $param["source"] = "2";        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
@@ -131,27 +131,30 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionSendVerificationCode(){
-    
-        
-        $phone='15821953549';
-        $verificationCodeType=9;
-        $extendParam=new stdClass();
-        $extendParam->msg='22号';//如果没有参数，去掉
-      
-        $req=array(
-            'param' =>array(
-                'bizUserId' => $this->bizUserId,
-                'phone' =>$phone,//
-                'verificationCodeType' =>$verificationCodeType,  //只能为整型
-                'extendParam' => $extendParam,//有疑问
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('sendVerificationCode')    //调用方法
-        );
-    
-    
-        $result=$this->sendgate($req);
-        echo $result;
+        $client = new SOAClient();
+        //服务地址
+        $serverAddress = "http://122.227.225.142:23661/service/soa";
+        //商户号
+        $sysid = "100009001000";
+        //证书名称
+        $alias = "100009001000";
+        //证书地址
+        $path = ICLOD_PATH;
+        //证书密码
+        $pwd = "900724";
+        $signMethod = "SHA1WithRSA";
+        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $client->setServerAddress($serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($sysid);
+        $client->setSignMethod($signMethod);
+        $param["bizUserId"] = "jianqian";      //商户系统用户标识，商户系统中唯一编号
+        $param["phone"] = "3";    //会员类型
+        $param["verificationCodeType"] = "9";        //访问终端类型
+        $result = $client->request("MemberService", "sendVerificationCode", $param);
+        print_r($result);
     
     }
     
