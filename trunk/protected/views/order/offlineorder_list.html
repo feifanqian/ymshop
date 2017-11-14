@@ -65,10 +65,10 @@
                 {set:$seller_id=$item['shop_ids']}
                 {if:$seller_id!=0}
                 {query:name=customer fields=real_name where = user_id eq $seller_id item=$seller}
-                <td style="width:50px"><a href="?condition=and--real_name--eq--{$seller['real_name']}">{$seller['real_name'] | '匿名'}</a></td>
+                <td style="width:50px"><a href="?condition=and--shop_ids--eq--{$item['shop_ids']}">{$seller['real_name'] | '匿名'}</a></td>
                 {/query}
                 {else:}
-                <td style="width:50px"><a href="?condition=and--real_name--eq--{$seller['real_name']}">未知商家</a></td>
+                <td style="width:50px"><a href="?condition=and--shop_ids--eq--{$item['shop_ids']}">未知商家</a></td>
                 {/if}
                 <!-- <td style="width:50px"><a href="?condition=and--mobile--eq--{$item['mobile']}">{$item['mobile'] | '--'}</a></td>   -->
                 <td style="width:50px">{$payment[$item['payment']]}</td>
