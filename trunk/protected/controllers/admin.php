@@ -81,7 +81,6 @@ class AdminController extends Controller {
 
     //登录验证
     public function check() {
-        var_dump(123);die;
         $this->safebox = Safebox::getInstance();
         $this->title = '后台登录';
         $verifyCode = Req::args("verifyCode");
@@ -94,7 +93,6 @@ class AdminController extends Controller {
             $this->redirect('login', false);
         }
         $ret = SMS::getInstance()->checkCode($mobile['mobile'], $verifyCode);
-        var_dump($ret);die;
         // $ret['status'] = 'success';
         if($ret['status'] != 'success'){  
         //        $code = $this->safebox->get($this->captchaKey);
