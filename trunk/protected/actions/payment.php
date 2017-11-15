@@ -349,6 +349,7 @@ class PaymentAction extends Controller {
            if(!isset($rspArray['payinfo'])){
                $this->code = 1000;
            }
+           var_dump($rspArray);die;
            // $config = Config::getInstance();
            // $site_config = $config->get("globals");
            // $packData['M_OrderNO'] = $order_no;
