@@ -346,10 +346,8 @@ class PaymentAction extends Controller {
 
        $rspArray = json_decode($rsp, true);
        if(AppUtil::ValidSigns($rspArray)){
-           if(isset($rspArray['payinfo'])){
-               $payinfo = $rspArray['payinfo'];
-           }else{
-             $this->code = 1000;
+           if(!isset($rspArray['payinfo'])){
+               $this->code = 1000;
            }
            // $config = Config::getInstance();
            // $site_config = $config->get("globals");
@@ -362,7 +360,7 @@ class PaymentAction extends Controller {
            $this->content = array(
                     'order_id' => $order_id,
                     'payment_id' => $payment_id,
-                    'senddata' => $payinfo,
+                    'senddata' => $rspArray['payinfo'],
                 );
        }else{
            $this->code = 1065;
