@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='forme';
+    public $bizUserId='570428';
     
 	/**
 	 * 创建会员 
@@ -385,7 +385,7 @@ class PaytonglianAction extends Controller{
         $phone = '13590144405';
         $name = 'jiandan';
         $cardType = 1;  //卡类型   储蓄卡 1 整型         信用卡 2 整型
-        $bankCode = '01080000';//上一部获取的  GetBankCardBin返回 bankCode
+        $bankCode = '01030000';//上一部获取的  GetBankCardBin返回 bankCode
         $identityType = 1;          //证件类型 1是身份证 目前只支持身份证
         $identityNo = $this->rsaEncrypt('330227198805284412',$publicKey,$privateKey);//必须rsa加密
         $validate = '';
