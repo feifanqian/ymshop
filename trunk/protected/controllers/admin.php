@@ -81,6 +81,7 @@ class AdminController extends Controller {
 
     //登录验证
     public function check() {
+        var_dump(123);die;
         $this->safebox = Safebox::getInstance();
         $this->title = '后台登录';
         $verifyCode = Req::args("verifyCode");
