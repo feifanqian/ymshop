@@ -166,6 +166,7 @@ class V1Controller extends Controller {
         "bind_phone"=>array('paytonglian/actionBindPhone',1,1),//绑定手机接口
         "set_realname"=>array('paytonglian/actionSetRealName',1,1),//实名认证接口
         "apply_bind_bankcard"=>array('paytonglian/actionApplyBindBankCard',1,1),//请求绑定银行卡接口
+        "get_bankcardbin"=>array('paytonglian/actionGetBankCardBin',1,1),//查询银行卡bin
     );
 
     //分析请求的action,将请求分发到不同的action中去
