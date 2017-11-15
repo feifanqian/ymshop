@@ -383,48 +383,49 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionApplyBindBankCard(){
-    
-     
-        $cardNo=$this->rsa('6228480318051081101');//必须rsa加密
-        $phone='15821953549';
-        $name='白鸽';
-        $cardType=1;  //卡类型   储蓄卡 1 整型         信用卡 2 整型
-        $bankCode='01030000';//上一部获取的  GetBankCardBin返回 bankCode
-        $identityType=1;          //只能为整型
-        $identityNo=$this->rsa('330227198805284412');//必须rsa加密
-        $validate='';
-        $cvv2='';
-        $isSafeCard=false;  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
         
-        $req=array(
-            'param' =>array(
-                'bizUserId' => $this->bizUserId,
-                'cardNo' => $cardNo,
-                'phone' => $phone,
-                'name' => $name,
-                'cardType' => $cardType,
-                'bankCode' => $bankCode,
-                'identityType' => $identityType, //只能为整型
-                'identityNo' => $identityNo,
-             
-                'isSafeCard' => $isSafeCard,
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('applyBindBankCard')    //调用方法
-        );
-        
-        
+        $cardNo = $this->rsaEncrypt('6228480318051081101',$privateKey,$privateKey);//必须rsa加密
+        $phone = '15821953549';
+        $name = '白鸽';
+        $cardType = 1;  //卡类型   储蓄卡 1 整型         信用卡 2 整型
+        $bankCode = '01030000';//上一部获取的  GetBankCardBin返回 bankCode
+        $identityType = 1;          //只能为整型
+        $identityNo = $this->rsaEncrypt('330227198805284412',$privateKey,$privateKey);//必须rsa加密
+        $validate = '';
+        $cvv2 = '';
+        $isSafeCard = false;  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
+       
+        $client = new SOAClient();
+        $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
+        $sysid = "100009001000";//商户号
+        $alias = "100009001000";//证书名称
+        $path = ICLOD_PATH; //证书地址
+        $pwd = "900724";//证书密码
+        $signMethod = "SHA1WithRSA";
+        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $client->setServerAddress($serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($sysid);
+        $client->setSignMethod($signMethod);
         if ($cardType==2){
             // 信用卡    有下面的参数
-            $req['param']['validate']=$validate;
-            $req['param']['cvv2']=$cvv2;
+            $param['validate']=$validate;
+            $param['cvv2']=$cvv2;
         }else{
-          
-           $req['param']['isSafeCard']=$isSafeCard;
+           $param['isSafeCard']=$isSafeCard;
         }
-       
-        $result=$this->sendgate($req);
-        echo $result;
+        $param["bizUserId"] = "zhongguo";    //商户系统用户标识，商户系统中唯一编号
+        $param["cardNo"] = $cardNo;  //银行卡号
+        $param["phone"] = $phone;  //银行预留的手机卡号
+        $param["name"] = $name; //用户的姓名
+        $param["cardCheck"] = $cardCheck; //绑卡方式
+        $param["identityType"] = $identityNo;
+        $param["identityNo"] = $identityNo;
+        $param["unionBank"] = $unionBank;
+        $result = $client->request("MemberService", "applyBindBankCard", $param);
+        return $result;
     }
     
     
@@ -867,16 +868,7 @@ class PaytonglianAction extends Controller{
         $tradeCode='321552';
         $amount=370;    //只能为整型
         $fee=20;    //只能为整型
-//         $frontUrl='';
-//         $backUrl='';
         $showUrl='';
-//         $ordErexpireDatetime='';
-
- /*        $payMethodb=new stdClass();
-        $payMethodb->bankCardNo=$this->rsa('6228480318051081871');
-        $payMethodb->amount=100;
-        $payMethod=new  stdClass();
-        $payMethod->QUICKPAY=$payMethodb; */
 
        
 
@@ -1616,37 +1608,6 @@ class PaytonglianAction extends Controller{
         return $sign;
        
     }
-    /*
-     *rsa加密数据：
-     *data：原文，
-     *返回：加密后数据
-     */
-    function rsa($data)
-    {
-        $encryptData="";
-        $priKey = file_get_contents(ICLOD_CERT_PATH);
-        $res=openssl_get_privatekey($priKey);
-        $result =openssl_private_encrypt($data, $encryptData, $res,OPENSSL_PKCS1_PADDING);
-        openssl_free_key($res);
-        return base64_encode($encryptData);
-    
-    }
-    /*
-     *解密RSA数据：
-     *data：加密后数据，
-     *返回：原文
-     */
-    function decryptRSA($data){
-        $decryptData ='';
-        $publickey =file_get_contents(C('ICLOD_CERT_PATH'));
-        $res=openssl_get_publickey($publickey);
-        $result=openssl_public_decrypt(base64_decode($data), $decryptData, $res);
-        openssl_free_key($res);
-        return $decryptData;
-    
-    }
-    
-	
 	/* 
      *curl请求： 
      *data：utf-8编码的请求参数 
