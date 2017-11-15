@@ -67,6 +67,7 @@ class RSAUtil {
 		return $result;
 	}
 	
+	//加密
 	public function encrypt($str) {
 		$blocks = self::splitCN($str, 0, 30, 'utf-8');
 		$chrtext  = null;
@@ -81,6 +82,7 @@ class RSAUtil {
 		return $chrtext;
 	}
 
+    //解密
 	public function decrypt($str) {
 		$decodes = explode(',', base64_decode($str));
 		$strnull = "";
