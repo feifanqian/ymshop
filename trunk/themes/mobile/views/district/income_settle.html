@@ -80,16 +80,16 @@
         var withdraw_amount = $("input[name='withdraw_amount']").val();
         if(withdraw_type==1){
             var formdata={type:1,amount:withdraw_amount};
-            // if(withdraw_amount==''||withdraw_amount<1){
-            //     notification("提现金额不少于1");
-            //     return false;
-            // }
+            if(withdraw_amount==''||withdraw_amount<1){
+                notification("提现金额不少于1");
+                return false;
+            }
             
         }else if(withdraw_type==2){
-            // if(withdraw_amount==''||withdraw_amount<1){
-            //     notification("提现金额不少于1");
-            //     return false;
-            // }
+            if(withdraw_amount==''||withdraw_amount<1){
+                notification("提现金额不少于1");
+                return false;
+            }
             var bank_name = $("input[name='bank_name']").val();
             var card_number = $("input[name='card_number']").val();
             var bank_account_name = $("input[name='bank_account_name']").val();

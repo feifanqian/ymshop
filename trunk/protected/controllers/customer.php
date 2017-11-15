@@ -222,7 +222,12 @@ class CustomerController extends Controller {
                     }
                 }else if($status=="-1"){
                     $result = $model->query("update tiny_balance_withdraw set status='-1',note='$note' where id = $id and status= 0");
-                    $model->table('customer')->data(array('offline_balance' => "`offline_balance`+" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                    if($obj['type']==0){
+                        $model->table('customer')->data(array('balance' => "`balance`+" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                    }elseif($obj['type']==1){
+                        $model->table('customer')->data(array('offline_balance' => "`offline_balance`+" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                    }
+                    
                     Log::balance($obj['amount'], $obj['user_id'],$obj['withdraw_no'],"拒绝提现申请回退", 3, $this->manager['id']);
                     Log::op($this->manager['id'], "拒绝提现申请", "管理员[" . $this->manager['name'] . "]:拒绝了提现申请 " . $obj['withdraw_no']);
                     if($result){
