@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='again';
+    public $bizUserId='studying';
     
 	/**
 	 * 创建会员 
@@ -344,9 +344,6 @@ class PaytonglianAction extends Controller{
         $client->setSignMethod($signMethod);
         $param["cardNo"] = $this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey); //银行卡号
         $result = $client->request("MemberService", "getBankCardBin", $param);
-        $this->content = array(
-            'bankCode'=>$result['bankCode']
-        );
         echo $result;
     }
     
