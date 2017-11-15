@@ -346,22 +346,16 @@ class PaymentAction extends Controller {
 
        $rspArray = json_decode($rsp, true);
        if(AppUtil::ValidSigns($rspArray)){
-           if(!isset($rspArray['payinfo'])){
-               $this->code = 1000;
-           }
-           // $config = Config::getInstance();
-           // $site_config = $config->get("globals");
-           // $packData['M_OrderNO'] = $order_no;
-           // $packData['M_Amount'] = $order_amount;
-           // $packData ['R_Name'] = isset($site_config['site_name']) ? $site_config['site_name'] : '';
-           // $packData = array_merge($params, $packData);
-           // $sendData = $paymentPlugin->packDatas($packData);
-           $this->code = 0;
-           $this->content = array(
-                    'order_id' => $order_id,
-                    'payment_id' => $payment_id,
-                    'senddata' => $rspArray['payinfo'],
-                );
+           if(isset($rspArray['payinfo'])){
+               $this->code = 0;
+               $this->content = array(
+                        'order_id' => $order_id,
+                        'payment_id' => $payment_id,
+                        'senddata' => $rspArray['payinfo'],
+                    );
+           }else{
+             $this->code = 1000;
+           }       
        }else{
            $this->code = 1065;
        }
