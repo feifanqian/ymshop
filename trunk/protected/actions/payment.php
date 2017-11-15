@@ -332,7 +332,7 @@ class PaymentAction extends Controller {
        $params["randomstr"] = $randomstr;//
        $params["body"] = "商品名称";
        $params["remark"] = "备注信息";
-       // $params["acct"] = $open['open_id'];
+       $params["acct"] = $open['open_id'];
        // $params["limit_pay"] = "no_credit";
        // $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
        $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
@@ -349,7 +349,6 @@ class PaymentAction extends Controller {
            if(!isset($rspArray['payinfo'])){
                $this->code = 1000;
            }
-           var_dump($rspArray);die;
            // $config = Config::getInstance();
            // $site_config = $config->get("globals");
            // $packData['M_OrderNO'] = $order_no;
