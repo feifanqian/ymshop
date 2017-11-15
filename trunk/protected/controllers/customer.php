@@ -201,17 +201,6 @@ class CustomerController extends Controller {
                         $real_amount = round($params['transAmt']/100,2);
                         $update = $model->query("update tiny_balance_withdraw set status=1,note='{$note}',real_amount={$real_amount},fee_rate={$other['withdraw_fee_rate']},mer_seq_id='{$params['merSeqId']}',submit_date='{$date}' where id = $id and status= 0");
                         if($update){
-                            // if($obj['type']==0){
-                            //     $model->table('customer')->data(array('balance' => "`balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
-                            // }elseif($obj['type']==1){
-                            //     if($obj['offline_balance']>=$obj['amount']){
-                            //         $model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
-                            //     }else{
-                            //         $submoney=$obj['amount']-$obj['offline_balance'];
-                            //         $model->table('customer')->data(array('offline_balance' =>0.00,'balance'=>"`balance`-".$submoney))->where('user_id=' . $obj['user_id'])->update();
-                            //     }  
-                            // }     
-                            // Log::balance(0 - $obj['amount'], $obj['user_id'],$obj['withdraw_no'],"余额提现", 3, $this->manager['id']);
                             Log::op($this->manager['id'], "通过提现申请", "管理员[" . $this->manager['name'] . "]:通过了提现申请 " . $obj['withdraw_no']);
                             exit(json_encode(array('status'=>'success','msg'=>'提现成功')));
                         }
