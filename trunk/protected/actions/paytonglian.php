@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='company';
+    public $bizUserId='forme';
     
 	/**
 	 * 创建会员 
@@ -67,7 +67,7 @@ class PaytonglianAction extends Controller{
         $param["memberType"] = "3";    //会员类型
         $param["source"] = "2";        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
-        return $result;
+        print_r($result);die;
     }
 
     /**
@@ -102,7 +102,7 @@ class PaytonglianAction extends Controller{
         $param["phone"] = "13590144405";    //手机号码
         $param["verificationCodeType"] = "9";        //绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        return $result;
+        print_r($result);die;
     
     }
     
@@ -140,7 +140,7 @@ class PaytonglianAction extends Controller{
         $param["verificationCodeType"] = "9";        //绑定手机
         $param["verificationCode"] = "016120"; //短信验证码
         $result = $client->request("MemberService", "checkVerificationCode", $param);
-        return $result;
+        print_r($result);die;
     
     }
     
@@ -179,7 +179,7 @@ class PaytonglianAction extends Controller{
         $param["identityType"] ="1";
         $param["identityNo"] = $this->rsaEncrypt("330227198805284412", $publicKey, $privateKey);
         $result = $client->request("MemberService", "setRealName", $param);
-        return $result;
+        print_r($result);die;
     }
     
     
@@ -214,7 +214,7 @@ class PaytonglianAction extends Controller{
         $param["phone"] = "13590144405";    //手机号码
         $param["verificationCode"] = "016120"; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
-        return $result;
+        print_r($result);die;
     
     }
     
@@ -344,7 +344,7 @@ class PaytonglianAction extends Controller{
         $client->setSignMethod($signMethod);
         $param["cardNo"] = $this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey); //银行卡号
         $result = $client->request("MemberService", "getBankCardBin", $param);
-        echo $result;
+        print_r($result);die;
     }
     
     
@@ -410,7 +410,7 @@ class PaytonglianAction extends Controller{
         $param["identityNo"] = $identityNo;
         $param["unionBank"] = $unionBank;
         $result = $client->request("MemberService", "applyBindBankCard", $param);
-        return $result;
+        print_r($result);die;
     }
     
     
