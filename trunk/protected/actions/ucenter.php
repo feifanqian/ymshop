@@ -56,7 +56,8 @@ class UcenterAction extends Controller {
     public function app_signup() {
         $code = Filter::sql(Req::args('mobile_code'));
         $mobile = Filter::sql(Req::args('mobile'));
-        $zone = Filter::int(Req::args('zone'));
+        // $zone = Filter::int(Req::args('zone'));
+        $zone = "86";
         $password = Filter::str(Req::args('password'));
         $inviter_id = Filter::int(Req::args('inviter_id'));
         $realname = Filter::str(Req::args('realname'));
