@@ -67,7 +67,7 @@ class PaytonglianAction extends Controller{
         $param["memberType"] = "3";    //会员类型
         $param["source"] = "2";        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
-        var_dump($result);die; 
+        return $result;
     }
 
     /**
@@ -102,7 +102,7 @@ class PaytonglianAction extends Controller{
         $param["phone"] = "13590144405";    //手机号码
         $param["verificationCodeType"] = "9";        //绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        echo($result);
+        return $result;
     
     }
     
@@ -140,7 +140,7 @@ class PaytonglianAction extends Controller{
         $param["verificationCodeType"] = "9";        //绑定手机
         $param["verificationCode"] = "016120"; //短信验证码
         $result = $client->request("MemberService", "checkVerificationCode", $param);
-        print_r($result);
+        return $result;
     
     }
     
@@ -179,7 +179,7 @@ class PaytonglianAction extends Controller{
         $param["identityType"] ="1";
         $param["identityNo"] = $this->rsaEncrypt("330227198805284412", $publicKey, $privateKey);
         $result = $client->request("MemberService", "setRealName", $param);
-        print_r($result);
+        return $result;
     }
     
     
@@ -214,7 +214,7 @@ class PaytonglianAction extends Controller{
         $param["phone"] = "13590144405";    //手机号码
         $param["verificationCode"] = "016120"; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
-        print_r($result);
+        return $result;
     
     }
     
@@ -323,17 +323,30 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionGetBankCardBin(){
-    
-        $cardNo=$this->rsa('6228480318051081101');  //银行卡rsa加密之后传递过来
-        $req=array(
-            'param' =>array(
-                'cardNo' => $cardNo,
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('getBankCardBin')    //调用方法
+        $client = new SOAClient();
+        //服务地址
+        $serverAddress = "http://122.227.225.142:23661/service/soa";
+        //商户号
+        $sysid = "100009001000";
+        //证书名称
+        $alias = "100009001000";
+        //证书地址
+        $path = ICLOD_PATH;
+        //证书密码
+        $pwd = "900724";
+        $signMethod = "SHA1WithRSA";
+        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $client->setServerAddress($serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($sysid);
+        $client->setSignMethod($signMethod);
+        $param["cardNo"] = $this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey); //银行卡号
+        $result = $client->request("MemberService", "getBankCardBin", $param);
+        $this->content = array(
+            'bankCode'=>$result['bankCode']
         );
-        $result=$this->sendgate($req);
-        
         echo $result;
     }
     
