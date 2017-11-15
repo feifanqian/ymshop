@@ -70,35 +70,6 @@ class PaytonglianAction extends Controller{
         var_dump($result);die; 
     }
 
-    //创建会员
-    public function actionTestCreateMember() {
-        $client = new SOAClient();
-        //服务地址
-        $serverAddress = "http://122.227.225.142:23661/service/soa";
-        //商户号
-        $sysid = "100009001000";
-        //证书名称
-        $alias = "100009001000";
-        //证书地址
-        $path = ICLOD_PATH;
-        //证书密码
-        $pwd = "900724";
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-     
-        $client->setServerAddress($serverAddress);
-        $client->setSignKey($privateKey);
-        $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "666688912";      //商户系统用户标识，商户系统中唯一编号
-        $param["memberType"] = "3";    //会员类型
-        $param["source"] = "2";        //访问终端类型
-        $result = $client->request("MemberService", "createMember", $param);
-        print_r($result);
-    }
-
     /**
      * 发送短信验证码 
      * @param $bizUserId 商户系统用户标识，商户 系统中唯一编号
@@ -202,11 +173,11 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "zhongguo";    //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = "believe";    //商户系统用户标识，商户系统中唯一编号
         $param["isAuth"] = true; 
         $param["name"] = "jiandan"; 
         $param["identityType"] ="1";
-        $param["identityNo"] = $this->rsaEncrypt("330227198805284412", $privateKey, $privateKey);
+        $param["identityNo"] = $this->rsaEncrypt("330227198805284412", $publicKey, $privateKey);
         $result = $client->request("MemberService", "setRealName", $param);
         print_r($result);
     }
@@ -239,7 +210,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "jiandan";      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = "believe";      //商户系统用户标识，商户系统中唯一编号
         $param["phone"] = "13590144405";    //手机号码
         $param["verificationCode"] = "016120"; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
@@ -399,13 +370,13 @@ class PaytonglianAction extends Controller{
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
 
-        $cardNo = $this->rsaEncrypt('6228480318051081101',$privateKey,$privateKey);//必须rsa加密
-        $phone = '15821953549';
-        $name = '白鸽';
+        $cardNo = $this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
+        $phone = '13590144405';
+        $name = 'jiandan';
         $cardType = 1;  //卡类型   储蓄卡 1 整型         信用卡 2 整型
         $bankCode = '01030000';//上一部获取的  GetBankCardBin返回 bankCode
         $identityType = 1;          //只能为整型
-        $identityNo = $this->rsaEncrypt('330227198805284412',$privateKey,$privateKey);//必须rsa加密
+        $identityNo = $this->rsaEncrypt('330227198805284412',$publicKey,$privateKey);//必须rsa加密
         $validate = '';
         $cvv2 = '';
         $isSafeCard = false;  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
@@ -418,7 +389,7 @@ class PaytonglianAction extends Controller{
             $param['validate']=$validate;
             $param['cvv2']=$cvv2;
         }else{
-           $param['isSafeCard']=$isSafeCard;
+            $param['isSafeCard']=$isSafeCard;
         }
         $param["bizUserId"] = "believe";    //商户系统用户标识，商户系统中唯一编号
         $param["cardNo"] = $cardNo;  //银行卡号
