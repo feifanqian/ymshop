@@ -63,7 +63,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "zhongguo";      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = "believe";      //商户系统用户标识，商户系统中唯一编号
         $param["memberType"] = "3";    //会员类型
         $param["source"] = "2";        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
@@ -409,6 +409,8 @@ class PaytonglianAction extends Controller{
         $validate = '';
         $cvv2 = '';
         $isSafeCard = false;  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
+        $cardCheck = ''; //绑卡方式
+        $unionBank = '';
        
        
         if ($cardType==2){
@@ -418,7 +420,7 @@ class PaytonglianAction extends Controller{
         }else{
            $param['isSafeCard']=$isSafeCard;
         }
-        $param["bizUserId"] = "zhongguo";    //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = "believe";    //商户系统用户标识，商户系统中唯一编号
         $param["cardNo"] = $cardNo;  //银行卡号
         $param["phone"] = $phone;  //银行预留的手机卡号
         $param["name"] = $name; //用户的姓名
