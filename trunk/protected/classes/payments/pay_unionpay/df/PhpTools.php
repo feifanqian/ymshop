@@ -70,7 +70,8 @@ class PhpTools{
 		$xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
 
 		$results = $this->arrayXml->parseString( $xmlResponse , TRUE);
-        // var_dump($results);die;
+		// var_dump($flag);
+  //       var_dump($results);die;
 		if ($flag) {
 			if(isset($results['AIPG']['TRANSRET'])){
 				if($results['AIPG']['TRANSRET']['RET_CODE']==0000){
@@ -93,8 +94,10 @@ class PhpTools{
 		    $return['status']=0;
 		    if(isset($results['AIPG']['TRANSRET'])){
 		    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
-		    }else{
+		    }elseif(isset($results['AIPG']['INFO'])){
 		    	$return['msg'] = $results['AIPG']['INFO']['ERR_MSG'];
+		    }else{
+		    	$return['msg'] = '未知错误';
 		    }
 		    
 		}
