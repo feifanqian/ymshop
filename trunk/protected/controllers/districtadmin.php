@@ -719,12 +719,15 @@ class DistrictadminController extends Controller {
     public function addPromoter() {
         if ($this->is_ajax_request()) {
             $user_id = Req::args("user_id");
-            $hirer_id = Req::args("hirer_id")!=null?Req::args("hirer_id"):1;
+            $hirer_id = Req::args("hirer_id");
             $pointcoin = Req::args("pointcoin")!=null?Req::args("pointcoin"):0;
             // $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
-            $ds_promoter = Req::args("ds_promoter")!=null?Req::args("ds_promoter"):1;
+            $ds_promoter = Req::args("ds_promoter");
             if (!$user_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
+            }
+            if(!$hirer_id && !$ds_promoter){
+                exit(json_encode(array("status" => 'fail', 'msg' => "缺少上级经销商或代理商")));
             }
             // $promoter = Promoter::getPromoterInstance($user_id);
             $model = new Model();
