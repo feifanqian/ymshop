@@ -63,7 +63,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = $bizUserId;      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $this->bizUserId;      //商户系统用户标识，商户系统中唯一编号
         $param["memberType"] = "3";    //会员类型
         $param["source"] = "2";        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
@@ -98,7 +98,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = $bizUserId;      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $this->bizUserId;      //商户系统用户标识，商户系统中唯一编号
         $param["phone"] = "13590144405";    //手机号码
         $param["verificationCodeType"] = "9";        //绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
@@ -135,7 +135,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = $bizUserId;      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $this->bizUserId;      //商户系统用户标识，商户系统中唯一编号
         $param["phone"] = "13590144405";    //手机号码
         $param["verificationCodeType"] = "9";        //绑定手机
         $param["verificationCode"] = "016120"; //短信验证码
@@ -173,7 +173,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $this->bizUserId;    //商户系统用户标识，商户系统中唯一编号
         $param["isAuth"] = true; 
         $param["name"] = "jiandan"; 
         $param["identityType"] ="1";
@@ -210,7 +210,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = $bizUserId;      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $this->bizUserId;      //商户系统用户标识，商户系统中唯一编号
         $param["phone"] = "13590144405";    //手机号码
         $param["verificationCode"] = "016120"; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
@@ -391,7 +391,7 @@ class PaytonglianAction extends Controller{
         }else{
             $param['isSafeCard']=$isSafeCard;
         }
-        $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $this->bizUserId;    //商户系统用户标识，商户系统中唯一编号
         $param["cardNo"] = $cardNo;  //银行卡号
         $param["phone"] = $phone;  //银行预留的手机卡号
         $param["name"] = $name; //用户的姓名
