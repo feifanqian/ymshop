@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='studying';
+    public $bizUserId='company';
     
 	/**
 	 * 创建会员 
