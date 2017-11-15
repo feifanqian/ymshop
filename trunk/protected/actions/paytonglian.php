@@ -383,18 +383,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionApplyBindBankCard(){
-        
-        $cardNo = $this->rsaEncrypt('6228480318051081101',$privateKey,$privateKey);//必须rsa加密
-        $phone = '15821953549';
-        $name = '白鸽';
-        $cardType = 1;  //卡类型   储蓄卡 1 整型         信用卡 2 整型
-        $bankCode = '01030000';//上一部获取的  GetBankCardBin返回 bankCode
-        $identityType = 1;          //只能为整型
-        $identityNo = $this->rsaEncrypt('330227198805284412',$privateKey,$privateKey);//必须rsa加密
-        $validate = '';
-        $cvv2 = '';
-        $isSafeCard = false;  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
-       
+
         $client = new SOAClient();
         $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
         $sysid = "100009001000";//商户号
@@ -409,6 +398,19 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
+
+        $cardNo = $this->rsaEncrypt('6228480318051081101',$privateKey,$privateKey);//必须rsa加密
+        $phone = '15821953549';
+        $name = '白鸽';
+        $cardType = 1;  //卡类型   储蓄卡 1 整型         信用卡 2 整型
+        $bankCode = '01030000';//上一部获取的  GetBankCardBin返回 bankCode
+        $identityType = 1;          //只能为整型
+        $identityNo = $this->rsaEncrypt('330227198805284412',$privateKey,$privateKey);//必须rsa加密
+        $validate = '';
+        $cvv2 = '';
+        $isSafeCard = false;  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
+       
+       
         if ($cardType==2){
             // 信用卡    有下面的参数
             $param['validate']=$validate;
