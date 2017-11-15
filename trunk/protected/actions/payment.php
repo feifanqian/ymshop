@@ -318,7 +318,7 @@ class PaymentAction extends Controller {
                 $this->code =1113;
                 exit();
        }
-       $open=$this->model->table('oauth_user')->where('user_id='.$user_id)->find();
+       $open=$this->model->table('oauth_user')->where("oauth_type = 'weixin' and user_id=".$user_id)->find();
        if(!$open){
           $this->code = 1160;
        } 
