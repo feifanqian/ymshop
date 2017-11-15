@@ -38,5 +38,24 @@ class AllinpayDf{
         $result = $tools->send($data);
         return $result;
     }
+
+    public function DFquery(){
+        header('Content-Type: text/html; Charset=UTF-8');
+        $params = array();
+        $params["cusid"] = AppConfig::CUSID;
+        $params["appid"] = AppConfig::APPID;
+        $params["version"] = AppConfig::APIVERSION;
+        $params["reqsn"] = "123456";
+        $params["randomstr"] = "1450432107647";//
+        $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
+        $paramsStr = AppUtil::ToUrlParams($params);
+        $url = AppConfig::APIURL . "/query";
+        $rsp = request($url, $paramsStr);
+        $rspArray = json_decode($rsp, true); 
+        if(validSign($rspArray)){
+            
+            echo "验签正确,进行业务处理";
+        }
+    }
 }
 ?>
