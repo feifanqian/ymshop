@@ -62,16 +62,9 @@
                 <td style="width:50px">{$item['order_amount']}{if:$item['type']==5||$item['type']==6}<br>{$item['pay_point']}积分{/if}</td>
                 <td style="width:50px"><a href="?condition=and--user_id--eq--{$item['user_id']}">{$item['uname']}</a></td>
                 <td style="width:50px"><a href="?condition=and--real_name--eq--{$item['real_name']}">{$item['real_name'] | '匿名'}</a></td>
-                <!-- {set:$seller_id=$item['shop_ids']}
-                {if:$seller_id!=0}
-                {query:name=customer fields=real_name where = user_id eq $seller_id item=$seller}
-                <td style="width:50px"><a href="?condition=and--shop_ids--eq--{$item['shop_ids']}">{$seller['real_name'] | '匿名'}</a></td>
-                {/query}
-                {else:}
-                <td style="width:50px"><a href="?condition=and--shop_ids--eq--{$item['shop_ids']}">未知商家</a></td>
-                {/if} -->
+               
                 <td style="width:50px"><a href="?condition=and--shop_ids--eq--{$item['shop_ids']}">{$item['shop_name'] | '匿名'}</a></td>
-                <!-- <td style="width:50px"><a href="?condition=and--mobile--eq--{$item['mobile']}">{$item['mobile'] | '--'}</a></td>   -->
+                
                 <td style="width:50px">{$payment[$item['payment']]}</td>
                 <td style="width:50px"><a href="?condition=and--pay_status--eq--{$item['pay_status']}">
                         {echo:$pay_status[$item['pay_status']]}
