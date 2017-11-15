@@ -70,37 +70,24 @@ class PhpTools{
 		$xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
 
 		$results = $this->arrayXml->parseString( $xmlResponse , TRUE);
-		// var_dump($flag);
-  //       var_dump($results);die;
-		if ($flag) {
+		
 			if(isset($results['AIPG']['TRANSRET'])){
 				if($results['AIPG']['TRANSRET']['RET_CODE']==0000){
-			    	$return['status']=1;
+			    	$return['status']=1; //成功
 			    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
 			    }else{
-			    	$return['status']=0;
+			    	$return['status']=0; //失败
 			    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
 			    }
 			}else{
-				if($results['AIPG']['INFO']['RET_CODE']==0000){
-			    	$return['status']=1;
-			    	$return['msg'] = $results['AIPG']['INFO']['ERR_MSG'];
-			    }else{
-			    	$return['status']=0;
-			    	$return['msg'] = $results['AIPG']['INFO']['ERR_MSG'];
-			    }
+				$return['status']=0;  //失败
+				if(isset($results['AIPG']['INFO'])){
+					$return['msg'] = $results['AIPG']['INFO']['ERR_MSG'];
+				}else{
+					$return['msg'] = '未知错误';
+				}
 			}    	        
-		} else {
-		    $return['status']=0;
-		    if(isset($results['AIPG']['TRANSRET'])){
-		    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
-		    }elseif(isset($results['AIPG']['INFO'])){
-		    	$return['msg'] = $results['AIPG']['INFO']['ERR_MSG'];
-		    }else{
-		    	$return['msg'] = '未知错误';
-		    }
-		    
-		}
+		
 		return $return;
 	}
 	
