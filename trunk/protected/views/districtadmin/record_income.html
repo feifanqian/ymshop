@@ -21,6 +21,7 @@
         <th>可用收益</th>
         <th>锁定收益</th>
         <th>已结算收益</th>
+        <th>日期</th>
     </tr>
     {list:$items=$list['data']}
     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
@@ -56,6 +57,7 @@
             <td>{echo:$item['valid_income_change']>=0?"+".$item['valid_income_change']:$item['valid_income_change']}</td>
             <td>{echo:$item['frezze_income_change']>=0?"+".$item['frezze_income_change']:$item['frezze_income_change']}</td>
             <td>{echo:$item['settled_income_change']>=0?"+".$item['settled_income_change']:$item['settled_income_change']}</td>
+            <td>{$item['date']}</td>
         </tr>
     {/list}
 </table>
