@@ -87,8 +87,13 @@ class AdminController extends Controller {
         $name = Req::args('name');
         $modle = new Model('manager');
         $mobile = $modle->where("name='$name'")->fields("name,mobile")->find();
-        // $ret = SMS::getInstance()->checkCode($mobile['mobile'], $verifyCode);
-        $ret['status'] = 'success';
+        if(!$mobile){
+            $this->msg = '账号不存在！';
+            $this->layout = "";
+            $this->redirect('login', false);
+        }
+        $ret = SMS::getInstance()->checkCode($mobile['mobile'], $verifyCode);
+        // $ret['status'] = 'success';
         if($ret['status'] != 'success'){  
         //        $code = $this->safebox->get($this->captchaKey);
         //if ($code != strtolower(Req::args($this->captchaKey))) {

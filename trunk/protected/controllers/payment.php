@@ -554,7 +554,7 @@ class PaymentController extends Controller {
 
            $payment = new Payment($payment_id);
            $paymentPlugin = $payment->getPaymentPlugin();
-           $open=$this->model->table('oauth_user')->where('user_id='.$user_id)->find();
+           $open=$this->model->table('oauth_user')->where("oauth_type = 'wechat' and user_id=".$user_id)->find();
 
            $params = array();
            $params["cusid"] = AppConfig::CUSID;
@@ -658,7 +658,7 @@ class PaymentController extends Controller {
 
            $payment = new Payment($payment_id);
            $paymentPlugin = $payment->getPaymentPlugin();
-           $open=$this->model->table('oauth_user')->where('user_id='.$user_id)->find();
+           $open=$this->model->table('oauth_user')->where("oauth_type = 'wechat' and user_id=".$user_id)->find();
 
            $params = array();
            $params["cusid"] = AppConfig::CUSID;
