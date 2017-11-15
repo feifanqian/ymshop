@@ -375,7 +375,7 @@ class PaytonglianAction extends Controller{
         $name = 'jiandan';
         $cardType = 1;  //卡类型   储蓄卡 1 整型         信用卡 2 整型
         $bankCode = '01030000';//上一部获取的  GetBankCardBin返回 bankCode
-        $identityType = 1;          //只能为整型
+        $identityType = 1;          //证件类型 1是身份证 目前只支持身份证
         $identityNo = $this->rsaEncrypt('330227198805284412',$publicKey,$privateKey);//必须rsa加密
         $validate = '';
         $cvv2 = '';
@@ -396,7 +396,7 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;  //银行预留的手机卡号
         $param["name"] = $name; //用户的姓名
         $param["cardCheck"] = $cardCheck; //绑卡方式
-        $param["identityType"] = $identityNo;
+        $param["identityType"] = $identityType;
         $param["identityNo"] = $identityNo;
         $param["unionBank"] = $unionBank;
         $result = $client->request("MemberService", "applyBindBankCard", $param);
