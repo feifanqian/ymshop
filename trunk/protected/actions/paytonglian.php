@@ -63,7 +63,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "jiandan";      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = "zhongguo";      //商户系统用户标识，商户系统中唯一编号
         $param["memberType"] = "3";    //会员类型
         $param["source"] = "2";        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
@@ -202,11 +202,11 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $param["bizUserId"] = "jiandan";    //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = "zhongguo";    //商户系统用户标识，商户系统中唯一编号
         $param["isAuth"] = true; 
-        $param["name"] = "jiannni"; 
+        $param["name"] = "jiandan"; 
         $param["identityType"] ="1";
-        $param["identityNo"] = $this->rsa('330227198805284412');
+        $param["identityNo"] = $this->rsaEncrypt("330227198805284412", $privateKey, $privateKey);
         $result = $client->request("MemberService", "setRealName", $param);
         print_r($result);
     }
@@ -1703,6 +1703,20 @@ class PaytonglianAction extends Controller{
       openssl_free_key($res);
 
       return $result;
+    }
+
+    //加密
+    function rsaEncrypt($str, $publicKey, $privateKey) {
+        $rsaUtil = new RSAUtil($publicKey, $privateKey);
+        $encryptStr = $rsaUtil->encrypt($str);
+        return $encryptStr;
+    }
+    
+    //解密
+    function rsaDecrypt($str, $publicKey, $privateKey) {
+        $rsaUtil = new RSAUtil($publicKey, $privateKey);
+        $encryptStr = $rsaUtil->decrypt($str);
+        return $encryptStr;
     }
 	
 
