@@ -12,7 +12,6 @@ define('BACKURL','http://122.227.225.142:23661/service/soa');//后台通知地�
     
 /**
  * Iclod 云账户对接类
- * 
  * @category   ORG
  * @package  ORG
  * @subpackage  Net
@@ -23,16 +22,28 @@ class PaytonglianAction extends Controller{
     public $user = null;
     public $code = 1000;
     public $content = NULL;
+    public $date='';
+    public $version='1.0';
+    public $bizUserId = time('ymdhis');
+    /*
+     @param $serverAddress 服务地址
+     @param $sysid 商户号
+     @param $alias 证书名称
+     @param $path 证书路径
+     @param $pwd 证书密码
+     @param $signMethod 签名验证方式
+     */
+    public $serverAddress = ICLOD_Server_URL;
+    public $sysid = "100009001000"; 
+    public $alias = "100009001000";
+    public $path = ICLOD_PATH;
+    public $pwd = "900724";
+    public $signMethod = "SHA1WithRSA";
 
     public function __construct() {
         $this->model = new Model();
         $this->arrayXml = new ArrayAndXml();
     }
-
-    public $date='';
-    public $version='1.0';
-    public $bizUserId='cute';
-    
 	/**
 	 * 创建会员 
 	 * @param $bizUserId 商户系统用户标识，商户 系统中唯一编号
@@ -43,29 +54,20 @@ class PaytonglianAction extends Controller{
 
    public function actionCreateMember (){
 
+        $memberType = Filter::int(Req::args('memberType'));
+        $source = Filter::int(Req::args('source'));
         $client = new SOAClient();
-        //服务地址
-        $serverAddress = ICLOD_Server_URL;
-        //商户号
-        $sysid = "100009001000";
-        //证书名称
-        $alias = "100009001000";
-        //证书地址
-        $path = ICLOD_PATH;
-        //证书密码
-        $pwd = "900724";
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
 
-        $client->setServerAddress($serverAddress);
+        $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
-        $param["bizUserId"] = $this->bizUserId;      //商户系统用户标识，商户系统中唯一编号
-        $param["memberType"] = "3";    //会员类型
-        $param["source"] = "2";        //访问终端类型
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        $param["bizUserId"] = $this->bizUserId;
+        $param["memberType"] = $memberType;    //会员类型
+        $param["source"] = $source;        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
         print_r($result);die;
     }
@@ -740,6 +742,7 @@ class PaytonglianAction extends Controller{
         $bankCardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);
         $bankCardPro=0;        //只能为整型
         $withdrawType='T0';
+        $backUrl = BACKURL;
         $param["bizOrderNo"] = $bizOrderNo;
         $param["bizUserId"] = $this->bizUserId;
         $param["accountSetNo"] = $accountSetNo;
