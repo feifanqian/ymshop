@@ -139,8 +139,13 @@ class PhpTools{
 		$response = cURL::factory()->post(PhpTools::apiUrl, $xmlSignPost);
 	
 		if (! isset($response['body'])) {
+			if(isset($response['header'])){
+				$msg = 'Bad Request:'.$response['header'];
+			}else{
+				$msg = 'Error: HTTPS REQUEST Bad.';
+			}
 			$result['status']=0;
-			$result['msg']='Error: HTTPS REQUEST Bad.';
+			$result['msg'] = $msg;
 			return $result;
 		}
 		//获取返回报文
