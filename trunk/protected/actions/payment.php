@@ -321,6 +321,9 @@ class PaymentAction extends Controller {
        $open=$this->model->table('oauth_user')->where("oauth_type = 'wechat' and user_id=".$user_id)->find();
        if(!$open){
           $this->code = 1160;
+       }
+       if(!$open['open_id']){
+         $this->code = 1162;
        } 
        $params = array();
        $params["cusid"] = AppConfig::CUSID;
