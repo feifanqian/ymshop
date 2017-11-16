@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='computer';
+    public $bizUserId='cute';
     
 	/**
 	 * 创建会员 
@@ -712,47 +712,50 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionWithdrawApply(){
+
+        $client = new SOAClient();
+        $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
+        $sysid = "100009001000";//商户号
+        $alias = "100009001000";//证书名称
+        $path = ICLOD_PATH;//证书地址
+        $pwd = "900724"; //证书密码
+        $signMethod = "SHA1WithRSA";
+        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $client->setServerAddress($serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($sysid);
+        $client->setSignMethod($signMethod);
     
         $bizOrderNo='201605160001';
-       
-   
-        $accountSetNo='200019';
+        $accountSetNo='12985739202038';
         $amount=100;    //只能为整型
         $fee=2;    //只能为整型
         $industryCode='1010';
         $industryName='保险代理';
         $source=1;      //只能为整型
         $summary='测试摘要';
-        $extendInfo='扩展测试';
-       // $ordErexpireDatetime='';
-        $bankCardNo=$this->rsa('6228480318051081101');
+        $extendInfo='提现申请测试';
+        $bankCardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);
         $bankCardPro=0;        //只能为整型
         $withdrawType='T0';
-       
-        
-        $req=array(
-            'param' =>array(
-                'bizOrderNo' => $bizOrderNo,
-                'bizUserId' => $this->bizUserId,
-                'accountSetNo' => $accountSetNo,
-                'amount' => $amount,
-                'fee' => $fee,
-                'backUrl' => BACKURL,
-               // 'ordErexpireDatetime' => $ordErexpireDatetime,
-                'bankCardNo' => $bankCardNo,
-                'bankCardPro' => $bankCardPro,
-                'withdrawType' => $withdrawType,
-                'industryCode' => $industryCode,
-                'industryName' => $industryName,
-                'source' => $source,          //手机 1 整型              PC 2 整型
-                'summary' => $summary,
-                'extendInfo' => $extendInfo
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('withdrawApply')    //调用方法
-        );
-        $result=$this->sendgate($req);
-        echo $result;
+        $param["bizOrderNo"] = $bizOrderNo;
+        $param["bizUserId"] = $this->bizUserId;
+        $param["accountSetNo"] = $accountSetNo;
+        $param["amount"] = $amount;
+        $param["fee"] = $fee;
+        $param["backUrl"] = $backUrl;
+        $param["bankCardNo"] = $bankCardNo;
+        $param["bankCardPro"] = $bankCardPro;
+        $param["withdrawType"] = $withdrawType;
+        $param["industryCode"] = $industryCode;
+        $param["industryName"] = $industryName;
+        $param["source"] = $source;
+        $param["summary"] = $summary;
+        $param["extendInfo"] = $extendInfo;
+        $result = $client->request("OrderService", "withdrawApply", $param);
+        print_r($result);die;
     }
     
     
