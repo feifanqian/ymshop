@@ -98,7 +98,7 @@ class PaytonglianAction extends Controller{
         $client->setSignMethod($this->signMethod);
         $param["bizUserId"] = $this->bizUserId;    //商户系统用户标识，商户系统中唯一编号
         $param["phone"] = $phone;    //手机号码
-        $param["verificationCodeType"] = $verificationCodeType;        //绑定手机
+        $param["verificationCodeType"] = $verificationCodeType;//绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
         print_r($result);die;
     
