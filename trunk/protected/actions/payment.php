@@ -354,7 +354,7 @@ class PaymentAction extends Controller {
                $this->content = array(
                         'order_id' => $order_id,
                         'payment_id' => $payment_id,
-                        'senddata' => $rspArray['payinfo'],
+                        'senddata' => json_decode($rspArray['payinfo'],true),
                     );
            }else{
              $this->code = 1161;
