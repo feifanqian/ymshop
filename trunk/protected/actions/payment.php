@@ -331,18 +331,19 @@ class PaymentAction extends Controller {
        $params["version"] = AppConfig::APIVERSION;
        $params["trxamt"] = $order_amount*100;
        $params["reqsn"] = $order_no;//订单号,自行生成
-       $params["paytype"] = "W02";
+       $params["paytype"] = "0";
        $params["randomstr"] = $randomstr;//
        $params["body"] = "商品名称";
        $params["remark"] = "备注信息";
-       $params["acct"] = $open['open_id'];
+       // $params["acct"] = $open['open_id'];
+       $params["open_id"] = '';
        // $params["limit_pay"] = "no_credit";
        // $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
        $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
        // $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback");
        // $params["notify_url"] = 'http://'.$_SERVER['HTTP_HOST'].'/payment/async_callback';
        $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
-
+       
        $paramsStr = AppUtil::ToUrlParams($params);
        $url = AppConfig::APIURL . "/pay";
        $rsp = AppUtil::Request($url, $paramsStr);
