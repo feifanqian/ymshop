@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='icando';
+    public $bizUserId='never';
     
 	/**
 	 * 创建会员 
@@ -427,10 +427,10 @@ class PaytonglianAction extends Controller{
     public function actionBindBankCard(){
     
        
-        $tranceNum='D2017111634886';//上一接口返回tranceNum 流水号
+        $tranceNum='D2017111634888';//上一接口返回tranceNum 流水号
         $transDate='20171116';//上一接口返回transDate 申请时间
         $phone='13590144405';  
-        $verificationCode='820714';
+        $verificationCode='721893';
         $client = new SOAClient();
         //服务地址
         $serverAddress = "http://122.227.225.142:23661/service/soa";
