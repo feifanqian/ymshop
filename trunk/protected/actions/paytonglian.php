@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='tomorrow';
+    public $bizUserId='yesterday';
     
 	/**
 	 * 创建会员 
@@ -663,7 +663,7 @@ class PaytonglianAction extends Controller{
         $payMethodb =new  stdClass();
         //网关
         $payMethodb =new  stdClass();
-        $payMethodb->bankCode='cmb';
+        $payMethodb->bankCode='abc';
         $payMethodb->payType=1;
         $payMethodb->bankCardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);
         $payMethodb->amount=100 ;//快捷支付（需要先绑定银行 卡）
@@ -684,6 +684,7 @@ class PaytonglianAction extends Controller{
         $param["backUrl"] = BACKURL;
         $param["payMethod"] = $payMethod;
         $param["industryCode"] = $industryCode;
+        $param["industryName"] = $industryName;
         $param["source"] = $source;
         $param["summary"] = $summary;
         $param["extendInfo"] = $extendInfo;
