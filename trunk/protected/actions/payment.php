@@ -342,7 +342,7 @@ class PaymentAction extends Controller {
        $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
        // $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback");
        // $params["notify_url"] = 'http://'.$_SERVER['HTTP_HOST'].'/payment/async_callback';
-       $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
+       $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEYS);//签名
        
        $paramsStr = AppUtil::ToUrlParams($params);
        $url = AppConfig::APIURL . "/pay";
