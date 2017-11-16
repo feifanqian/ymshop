@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='570428';
+    public $bizUserId='yaojianni';
     
 	/**
 	 * 创建会员 
@@ -391,7 +391,7 @@ class PaytonglianAction extends Controller{
         $validate = '';
         $cvv2 = '';
         $isSafeCard = false;  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
-        $cardCheck = ''; //绑卡方式
+        $cardCheck = 2; //绑卡方式
         $unionBank = '';
        
        
