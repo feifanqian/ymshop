@@ -155,6 +155,7 @@ class PaytonglianAction extends Controller{
         $name = Req::args('name');
         $identityType = Req::args('identityType');
         $identityNo = Req::args('identityNo');
+        $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
         $client->setServerAddress($this->serverAddress);
