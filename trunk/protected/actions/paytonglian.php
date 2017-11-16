@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='justdoit';
+    public $bizUserId='icando';
     
 	/**
 	 * 创建会员 
@@ -427,7 +427,7 @@ class PaytonglianAction extends Controller{
     public function actionBindBankCard(){
     
        
-        $tranceNum='D2017111634885';//上一接口返回tranceNum 流水号
+        $tranceNum='D2017111634886';//上一接口返回tranceNum 流水号
         $transDate='20171116';//上一接口返回transDate 申请时间
         $phone='13590144405';  
         $verificationCode='820714';
@@ -470,7 +470,6 @@ class PaytonglianAction extends Controller{
     
     public function actionSetSafeCard(){
     
-        $cardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
         $setSafeCard=true;
         $client = new SOAClient();
         $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
@@ -486,6 +485,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
+        $cardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
         $param["bizUserId"] = $this->bizUserId;
         $param["cardNo"] = $cardNo;
         $param["setSafeCard"] = $setSafeCard; //是否设置为安全卡
@@ -500,7 +500,6 @@ class PaytonglianAction extends Controller{
     
     public function actionQueryBankCard(){
 
-        $cardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
         $client = new SOAClient();
         $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
         $sysid = "100009001000";//商户号
@@ -515,6 +514,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
+        $cardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
         $param["bizUserId"] = $this->bizUserId;
         $param["cardNo"] = $cardNo;
         $result = $client->request("MemberService", "queryBankCard", $param);
