@@ -427,7 +427,7 @@ class PaytonglianAction extends Controller{
     public function actionBindBankCard(){
     
        
-        $tranceNum='D2017111634950';//上一接口返回tranceNum 流水号
+        $tranceNum='D2017111634885';//上一接口返回tranceNum 流水号
         $transDate='20171116';//上一接口返回transDate 申请时间
         $phone='13590144405';  
         $verificationCode='820714';
