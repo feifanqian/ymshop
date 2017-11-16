@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='justme';
+    public $bizUserId='tomorrow';
     
 	/**
 	 * 创建会员 
@@ -639,27 +639,6 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionDepositApply(){
-    
-        $bizOrderNo='201605160001';
-        $accountSetNo='12985739202038';
-        $amount=100;  //必须整形
-        $fee=2;//必须整形
-        $payMethod =new  stdClass();
-        $payMethodb =new  stdClass();
-        //网关
-        $payMethodb =new  stdClass();
-        $payMethodb->bankCode='cmb';
-        $payMethodb->payType=1;
-        $payMethodb->bankCardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);
-        $payMethodb->amount=100 ;//快捷支付（需要先绑定银行 卡）
-        $payMethod->GATEWAY =$payMethodb;
-        
-        
-        $industryCode='1010';
-        $industryName='保险代理';
-        $source=2;    //只能为整型
-        $summary='测试摘要';
-        $extendInfo='扩展测试';
 
         $client = new SOAClient();
         $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
@@ -675,7 +654,27 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
-        $cardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
+    
+        $bizOrderNo='201605160001';
+        $accountSetNo='12985739202038';
+        $amount=100;  //必须整形
+        $fee=2;//必须整形
+        $payMethod =new  stdClass();
+        $payMethodb =new  stdClass();
+        //网关
+        $payMethodb =new  stdClass();
+        $payMethodb->bankCode='cmb';
+        $payMethodb->payType=1;
+        $payMethodb->bankCardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);
+        $payMethodb->amount=100 ;//快捷支付（需要先绑定银行 卡）
+        $payMethod->GATEWAY =$payMethodb;
+        
+        $industryCode='1010';
+        $industryName='保险代理';
+        $source=2;    //只能为整型
+        $summary='测试摘要';
+        $extendInfo='扩展测试';
+
         $param["bizUserId"] = $this->bizUserId;
         $param["bizOrderNo"] = $bizOrderNo;
         $param["accountSetNo"] = $accountSetNo;
