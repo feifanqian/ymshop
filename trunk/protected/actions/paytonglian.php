@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='test';
+    public $bizUserId='justdoit';
     
 	/**
 	 * 创建会员 
@@ -470,20 +470,27 @@ class PaytonglianAction extends Controller{
     
     public function actionSetSafeCard(){
     
-        
-        $cardNo=$this->rsa('6228480318051081101');//必须rsa加密
+        $cardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
         $setSafeCard=true;
-        $req=array(
-            'param' =>array(
-                'bizUserId' => $this->bizUserId,
-                'cardNo' => $cardNo,
-                'setSafeCard' => $setSafeCard,
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('setSafeCard')    //调用方法
-        );
-        $result=$this->sendgate($req);
-        echo $result;
+        $client = new SOAClient();
+        $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
+        $sysid = "100009001000";//商户号
+        $alias = "100009001000";//证书名称
+        $path = ICLOD_PATH;//证书地址
+        $pwd = "900724"; //证书密码
+        $signMethod = "SHA1WithRSA";
+        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $client->setServerAddress($serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($sysid);
+        $client->setSignMethod($signMethod);
+        $param["bizUserId"] = $this->bizUserId;
+        $param["cardNo"] = $cardNo;
+        $param["setSafeCard"] = $setSafeCard; //是否设置为安全卡
+        $result = $client->request("MemberService", "setSafeCard", $param);
+        print_r($result);die;
     }
     /**
      * 查询绑定银行卡
@@ -492,19 +499,26 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionQueryBankCard(){
-    
-      
-        $cardNo=$this->rsa('6228480318051081101');//必须rsa加密
-        $req=array(
-            'param' =>array(
-                'bizUserId' => $this->bizUserId,
-                'cardNo' => $cardNo
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('queryBankCard')    //调用方法
-        );
-        $result=$this->sendgate($req);
-        echo $result;
+
+        $cardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
+        $client = new SOAClient();
+        $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
+        $sysid = "100009001000";//商户号
+        $alias = "100009001000";//证书名称
+        $path = ICLOD_PATH;//证书地址
+        $pwd = "900724"; //证书密码
+        $signMethod = "SHA1WithRSA";
+        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $client->setServerAddress($serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($sysid);
+        $client->setSignMethod($signMethod);
+        $param["bizUserId"] = $this->bizUserId;
+        $param["cardNo"] = $cardNo;
+        $result = $client->request("MemberService", "queryBankCard", $param);
+        print_r($result);die;
     }
     
     /**
