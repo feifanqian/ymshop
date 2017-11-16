@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='yesterday';
+    public $bizUserId='computer';
     
 	/**
 	 * 创建会员 
@@ -212,7 +212,7 @@ class PaytonglianAction extends Controller{
         $client->setSignMethod($signMethod);
         $param["bizUserId"] = $this->bizUserId;      //商户系统用户标识，商户系统中唯一编号
         $param["phone"] = "13590144405";    //手机号码
-        $param["verificationCode"] = "146169"; //短信验证码
+        $param["verificationCode"] = "952733"; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
         print_r($result);die;
     
