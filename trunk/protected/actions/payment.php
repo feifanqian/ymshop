@@ -354,7 +354,7 @@ class PaymentAction extends Controller {
                         'senddata' => $rspArray['payinfo'],
                     );
            }else{
-             $this->code = 1000;
+             $this->code = 1161;
            }       
        }else{
            $this->code = 1065;
