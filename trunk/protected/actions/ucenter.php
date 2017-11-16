@@ -352,7 +352,7 @@ class UcenterAction extends Controller {
                     $this->code= 1005;
                 }
             }
-            $token = CHash::random(32, 'char');
+            // $token = CHash::random(32, 'char');
             $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $last_id)->update();
             $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $last_id)->update();
             $openname = $nickname?$nickname:$mobile;
