@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='never';
+    public $bizUserId='justme';
     
 	/**
 	 * 创建会员 
@@ -212,7 +212,7 @@ class PaytonglianAction extends Controller{
         $client->setSignMethod($signMethod);
         $param["bizUserId"] = $this->bizUserId;      //商户系统用户标识，商户系统中唯一编号
         $param["phone"] = "13590144405";    //手机号码
-        $param["verificationCode"] = "016120"; //短信验证码
+        $param["verificationCode"] = "146169"; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
         print_r($result);die;
     
@@ -528,7 +528,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionUnbindBankCard(){
-        
+
         $client = new SOAClient();
         $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
         $sysid = "100009001000";//商户号
@@ -629,7 +629,7 @@ class PaytonglianAction extends Controller{
      * @param $fee 手续费          内扣，如果不存在，则填0。单位：分。如amount为100，fee为2，则实际到账为98。
      * @param $frontUrl 前台通知地址             前台交易时必填
      * @param $backUrl 后台通知地址
-     * @param $ordErexpireDatetime 订单过期时间                       yyyy-MM-dd HH:mm:ss订单最长时效为24小时。默认为最长时效。只在第一次提交订单时有效。
+     * @param $ordErexpireDatetime 订单过期时间  yyyy-MM-dd HH:mm:ss订单最长时效为24小时。默认为最长时效。只在第一次提交订单时有效。
      * @param $payMethod 支付方式
      * @param $industryCode 行业代码
      * @param $industryName 行业名称
@@ -641,59 +641,55 @@ class PaytonglianAction extends Controller{
     public function actionDepositApply(){
     
         $bizOrderNo='201605160001';
-       
-        $accountSetNo='200001';
+        $accountSetNo='12985739202038';
         $amount=100;  //必须整形
         $fee=2;//必须整形
-      
-       // $ordErexpireDatetime='';
         $payMethod =new  stdClass();
-       // $payMethod->BALANCE=array('accountSetNo'=>'','amount'=>100);//账户余额
         $payMethodb =new  stdClass();
-       
-     /*    //快捷
-        $payMethodb->bankCardNo=$this->rsa('6228480318051081871');
-        $payMethodb->amount=100;
-        $payMethod->QUICKPAY=$payMethodb; //快捷支付（需要先绑定银行 卡） 
-         */
         //网关
         $payMethodb =new  stdClass();
         $payMethodb->bankCode='cmb';
         $payMethodb->payType=1;
-        $payMethodb->bankCardNo=$this->rsa('6228480318051081101');
+        $payMethodb->bankCardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);
         $payMethodb->amount=100 ;//快捷支付（需要先绑定银行 卡）
         $payMethod->GATEWAY =$payMethodb;
         
         
-      
         $industryCode='1010';
         $industryName='保险代理';
-        $source=1;    //只能为整型
+        $source=2;    //只能为整型
         $summary='测试摘要';
         $extendInfo='扩展测试';
-        $req=array(
-            'param' =>array(
-                'bizOrderNo' => $bizOrderNo,
-                'bizUserId' => $this->bizUserId,
-                'accountSetNo' => $accountSetNo,
-                'amount' => $amount,
-                'fee' => $fee,
-                'frontUrl' => NOTICE_URL,
-                'backUrl' => BACKURL,
-                //'ordErexpireDatetime' => $ordErexpireDatetime,
-                'payMethod' => $payMethod,
-                'industryCode' => $industryCode,
-                'industryName' => $industryName,
-                'source' => $source,
-                'summary' => $summary,
-                'extendInfo' => $extendInfo
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('depositApply')    //调用方法
-        );
-       
-        $result=$this->sendgate($req);
-        echo $result;
+
+        $client = new SOAClient();
+        $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
+        $sysid = "100009001000";//商户号
+        $alias = "100009001000";//证书名称
+        $path = ICLOD_PATH;//证书地址
+        $pwd = "900724"; //证书密码
+        $signMethod = "SHA1WithRSA";
+        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $client->setServerAddress($serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($sysid);
+        $client->setSignMethod($signMethod);
+        $cardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
+        $param["bizUserId"] = $this->bizUserId;
+        $param["bizOrderNo"] = $bizOrderNo;
+        $param["accountSetNo"] = $accountSetNo;
+        $param["amount"] = $amount;
+        $param["fee"] = $fee;
+        $param["frontUrl"] = NOTICE_URL;
+        $param["backUrl"] = BACKURL;
+        $param["payMethod"] = $payMethod;
+        $param["industryCode"] = $industryCode;
+        $param["source"] = $source;
+        $param["summary"] = $summary;
+        $param["extendInfo"] = $extendInfo;
+        $result = $client->request("OrderService", "depositApply", $param);
+        print_r($result);die;
     }
     
     /**

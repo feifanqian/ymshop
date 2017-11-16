@@ -171,6 +171,7 @@ class V1Controller extends Controller {
         "set_safecard"=>array('paytonglian/actionSetSafeCard',1,1),//设置安全卡
         "query_bankcard"=>array('paytonglian/actionQueryBankCard',1,1),//查询银行卡
         "unbind_bankcard"=>array('paytonglian/actionUnbindBankCard',1,1),//解除绑定银行卡
+        "deposit_apply"=>array('paytonglian/actionDepositApply',1,1),//充值申请
     );
 
     //分析请求的action,将请求分发到不同的action中去
