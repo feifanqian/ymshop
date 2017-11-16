@@ -167,6 +167,7 @@ class V1Controller extends Controller {
         "set_realname"=>array('paytonglian/actionSetRealName',1,1),//实名认证接口
         "apply_bind_bankcard"=>array('paytonglian/actionApplyBindBankCard',1,1),//请求绑定银行卡接口
         "get_bankcardbin"=>array('paytonglian/actionGetBankCardBin',1,1),//查询银行卡bin
+        "bind_bankcard"=>array('paytonglian/actionBindBankCard',1,1),//确认 绑定银行卡信息，四要素+短信验证时，才需要调用这个接口
     );
 
     //分析请求的action,将请求分发到不同的action中去

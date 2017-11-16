@@ -31,7 +31,7 @@ class PaytonglianAction extends Controller{
 
     public $date='';
     public $version='1.0';
-    public $bizUserId='yaojianni';
+    public $bizUserId='iwill';
     
 	/**
 	 * 创建会员 
@@ -427,23 +427,36 @@ class PaytonglianAction extends Controller{
     public function actionBindBankCard(){
     
        
-        $tranceNum='D201605194156';//上一接口返回tranceNum 
-        $transDate='20160519';//上一接口返回transDate 
-        $phone='15821953549';  
-        $verificationCode='1234';
-        $req=array(
-            'param' =>array(
-                'bizUserId' => $this->bizUserId,
-                'tranceNum' => $tranceNum,
-                'transDate' => $transDate,
-                'phone' => $phone,
-                'verificationCode' => $verificationCode,
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('bindBankCard')    //调用方法
-        );
-        $result=$this->sendgate($req);
-        echo $result;
+        $tranceNum='D2017111634874';//上一接口返回tranceNum 流水号
+        $transDate='20171116';//上一接口返回transDate 申请时间
+        $phone='13590144405';  
+        $verificationCode='820714';
+        $client = new SOAClient();
+        //服务地址
+        $serverAddress = "http://122.227.225.142:23661/service/soa";
+        //商户号
+        $sysid = "100009001000";
+        //证书名称
+        $alias = "100009001000";
+        //证书地址
+        $path = ICLOD_PATH;
+        //证书密码
+        $pwd = "900724";
+        $signMethod = "SHA1WithRSA";
+        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
+        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
+        $client->setServerAddress($serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($sysid);
+        $client->setSignMethod($signMethod);
+        $param["bizUserId"] = $this->bizUserId;
+        $param["tranceNum"] = $tranceNum;
+        $param["transDate"] = $transDate;
+        $param["phone"] = $phone;
+        $param["verificationCode"] = $verificationCode;
+        $result = $client->request("MemberService", "bindBankCard", $param);
+        print_r($result);die;
     }
     
     
