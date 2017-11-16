@@ -24,7 +24,7 @@ class PaytonglianAction extends Controller{
     public $content = NULL;
     public $date='';
     public $version='1.0';
-    public $bizUserId = date('ymdhis');
+    public $bizUserId = '';
     /*
      @param $serverAddress 服务地址
      @param $sysid 商户号
@@ -43,6 +43,7 @@ class PaytonglianAction extends Controller{
     public function __construct() {
         $this->model = new Model();
         $this->arrayXml = new ArrayAndXml();
+        $this->bizUserId = date('ymdhis');
     }
 	/**
 	 * 创建会员 
