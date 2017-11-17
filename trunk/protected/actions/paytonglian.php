@@ -24,7 +24,7 @@ class PaytonglianAction extends Controller{
     public $content = NULL;
     public $date = '';
     public $version ='1.0';
-    public $bizUserId = 'spring';
+    public $bizUserId = CHash::random(8);
     /*
      @param $serverAddress 服务地址
      @param $sysid 商户号
@@ -200,11 +200,7 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;    //手机号码
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
-        if ($result['status']=='OK') {
-             $this->code = 0;
-        } else {
-            $this->code = 1000;
-        }
+        print_r($result);die;
     
     }
     
@@ -327,7 +323,7 @@ class PaytonglianAction extends Controller{
         $result = $client->request("MemberService", "getBankCardBin", $param);
         if ($result['status']=='OK') {
              $this->code = 0;
-             $this->content['bankCode'] = $result['signedValue']['bankCode'];//['cardBinInfo']
+             $this->content['bankCode'] = $result['bankCode'];//['cardBinInfo']
         } else {
              $this->code = 1000;
         }
@@ -393,8 +389,8 @@ class PaytonglianAction extends Controller{
         $result = $client->request("MemberService", "applyBindBankCard", $param);
         if ($result['status']=='OK') {
                 $this->code = 0;
-                $this->content['transDate'] = $result['signedValue']['transDate'];
-                $this->content['tranceNum'] = $result['signedValue']['tranceNum'];
+                $this->content['transDate'] = $result['transDate'];
+                $this->content['tranceNum'] = $result['tranceNum'];
         } else {
             $this->code = 1000;
         }
