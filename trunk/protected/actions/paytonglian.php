@@ -22,9 +22,9 @@ class PaytonglianAction extends Controller{
     public $user = null;
     public $code = 1000;
     public $content = NULL;
-    public $date='';
-    public $version='1.0';
-    public $bizUserId = rand();
+    public $date = '';
+    public $version ='1.0';
+    public $bizUserId = Req::post('user_id');
     /*
      @param $serverAddress 服务地址
      @param $sysid 商户号
@@ -69,7 +69,6 @@ class PaytonglianAction extends Controller{
         $param["memberType"] = $memberType;    //会员类型
         $param["source"] = $source;        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
-        print_r($this->bizUserId);die();
         if ($result['status']=='OK') {
             $this->code = 0;
         }else{
@@ -101,15 +100,14 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;    //手机号码
         $param["verificationCodeType"] = $verificationCodeType;//绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        print_r($this->bizUserId); die;
-        // if ($result['status']=='OK') {
-        //      $this->code = 0;
-        //      $this->content = array(
-        //             'phone'=>$result['phone']
-        //         );
-        // } else {
-        //     $this->code = 1000;
-        // }
+        if ($result['status']=='OK') {
+             $this->code = 0;
+             $this->content = array(
+                    'phone'=>$result['phone']
+                );
+        } else {
+            $this->code = 1000;
+        }
         
     
     }
