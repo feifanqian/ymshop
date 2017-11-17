@@ -205,8 +205,9 @@ class CustomerController extends Controller {
                             exit(json_encode(array('status'=>'success','msg'=>'提现成功')));
                         }
                     }else{
-                        // $model->table('customer')->data(array('offline_balance' => "`offline_balance`+" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
-                        // Log::balance($obj['amount'], $obj['user_id'],$obj['withdraw_no'],"余额提现失败退回", 3, $this->manager['id']);
+                        $model->query("update tiny_balance_withdraw set status='2' where id = $id and status= 0");
+                        $model->table('customer')->data(array('offline_balance' => "`offline_balance`+" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
+                        Log::balance($obj['amount'], $obj['user_id'],$obj['withdraw_no'],"余额提现失败退回", 3, $this->manager['id']);
                         exit(json_encode(array('status'=>'fail','msg'=>$result['msg'])));
                     }
                 }else if($status=="-1"){
