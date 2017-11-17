@@ -4,6 +4,7 @@ class AllinpayDf{
 	header('Content-Type: text/html; Charset=UTF-8');
      $tools=new PhpTools();
         $merchantId=AppConfig::MERCHANT_ID;
+        $req_sn = $merchantId.$params['withdraw_no'];
         // 源数组
         $data = array(
             'INFO' => array(
@@ -13,7 +14,7 @@ class AllinpayDf{
                 'LEVEL' => '6',
                 'USER_NAME' => '20058400001550504',
                 'USER_PASS' => '111111',
-                'REQ_SN' => $merchantId.$params['withdraw_no'],
+                'REQ_SN' => $req_sn,
             ),
             'TRANS' => array(
                 'BUSINESS_CODE' => '09900',
@@ -35,27 +36,36 @@ class AllinpayDf{
         );
 
         //发起请求
-        $result = $tools->send($data);
+        $result = $tools->send($data,$req_sn);
         return $result;
     }
 
-    public function DFquery(){
+    public function DFquery($req_sn){
         header('Content-Type: text/html; Charset=UTF-8');
-        $params = array();
-        $params["cusid"] = AppConfig::CUSID;
-        $params["appid"] = AppConfig::APPID;
-        $params["version"] = AppConfig::APIVERSION;
-        $params["reqsn"] = "123456";
-        $params["randomstr"] = "1450432107647";//
-        $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
-        $paramsStr = AppUtil::ToUrlParams($params);
-        $url = AppConfig::APIURL . "/query";
-        $rsp = request($url, $paramsStr);
-        $rspArray = json_decode($rsp, true); 
-        if(validSign($rspArray)){
-            
-            echo "验签正确,进行业务处理";
-        }
+        $tools=new PhpTools();
+        $merchantId=AppConfig::MERCHANT_ID; 
+        // 源数组
+        $params = array(
+            'INFO' => array(
+                'TRX_CODE' => '200004',
+                'VERSION' => '03',
+                'DATA_TYPE' => '2',
+                'LEVEL' => '6',
+                'USER_NAME' => '20058400001550504',
+                'USER_PASS' => '111111',
+                'REQ_SN' => $req_sn,
+            ),
+            'QTRANSREQ' => array(
+                'QUERY_SN' => $req_sn,
+                'MERCHANT_ID' => $merchantId,
+                'STATUS' => '2',
+                'TYPE' => '1',
+                'START_DAY' => '',
+                'END_DAY' => ''
+            ),
+        );
+        //发起请求
+        $result = $tools->sends( $params);
     }
 }
 ?>
