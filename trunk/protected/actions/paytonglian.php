@@ -101,7 +101,7 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;    //手机号码
         $param["verificationCodeType"] = $verificationCodeType;//绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        print_r($phone); die;
+        print_r($this->bizUserId); die;
         // if ($result['status']=='OK') {
         //      $this->code = 0;
         //      $this->content = array(
