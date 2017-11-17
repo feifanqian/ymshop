@@ -750,11 +750,14 @@ class DistrictadminController extends Controller {
                     if(!$inviter_exist){
                         //添加邀请关系    
                        $model->table('invite')->data(array('user_id'=>$isset['owner_id'],'invite_user_id'=>$user_id,'from'=>'admin','district_id'=>$isset['id'],'createtime'=>time()))->insert();
+                       $invite_id = $isset['owner_id'];
+                    }else{
+                        $invite_id = $inviter_exist['user_id'];
                     }
                     $data['user_id'] = $user_id;
                     $data['type'] = 3;
                     $data['join_time'] = date("Y-m-d H:i:s");
-                    $data['invitor_id'] = $isset['owner_id'];
+                    $data['invitor_id'] = $invite_id;
                     $data['hirer_id'] = $hirer_id;
                     $data['create_time'] = date('Y-m-d H:i:s');
                     $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
@@ -776,20 +779,21 @@ class DistrictadminController extends Controller {
                     }
                     
                     $district=$model->table('district_shop')->where('owner_id='.$ds_promoter)->find();
-                    if($district){
-                        $district_id=$district['id'];
-                    }else{
-                        $district_id=1;
-                    }
-                    if(!$inviter_exist){
-                        //添加邀请关系    
-                       $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'admin','district_id'=>$district_id,'createtime'=>time()))->insert();
-                    }          
+                    
                     if($inviter_exist){
                         $invite_id=$inviter_exist['user_id'];
+                        $district_id=$inviter_exist['district_id'];
                     }else{
-                        $invite_id=$ds_promoter;
-                    }
+                        if($district){
+                            $district_id=$district['id'];
+                        }else{
+                            $district_id=1;
+                        }
+                        //添加邀请关系    
+                       $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'admin','district_id'=>$district_id,'createtime'=>time()))->insert();
+                        $invite_id=$ds_promoter;  
+                    }          
+                    
                     $data['user_id'] = $user_id;
                     $data['type'] = 3;
                     $data['join_time'] = date("Y-m-d H:i:s");
