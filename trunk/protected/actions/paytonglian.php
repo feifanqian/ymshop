@@ -43,7 +43,7 @@ class PaytonglianAction extends Controller{
     public function __construct() {
         $this->model = new Model();
         $this->arrayXml = new ArrayAndXml();
-        $this->bizUserId = date('YmdHis');
+        $this->bizUserId = date('YmdHi');
     }
 	/**
 	 * 创建会员 
@@ -91,7 +91,7 @@ class PaytonglianAction extends Controller{
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
-        
+
         $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
