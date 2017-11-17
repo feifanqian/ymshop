@@ -86,11 +86,12 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionSendVerificationCode(){
-        $phone = Filter::int(Req::args('phone'));
-        $verificationCodeType = Filter::int(Req::args('verificationCodeType'));
+        $phone = '1578885025';
+        $verificationCodeType = '9';
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        
         $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
