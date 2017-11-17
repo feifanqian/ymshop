@@ -43,7 +43,7 @@ class PaytonglianAction extends Controller{
     public function __construct() {
         $this->model = new Model();
         $this->arrayXml = new ArrayAndXml();
-        $this->bizUserId = 'justtest';
+        $this->bizUserId = rand();
     }
 	/**
 	 * 创建会员 
@@ -70,6 +70,7 @@ class PaytonglianAction extends Controller{
         $param["memberType"] = $memberType;    //会员类型
         $param["source"] = $source;        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
+        print_r($this->bizUserId);
         if ($result['status']=='OK') {
             $this->code = 0;
         }else{
