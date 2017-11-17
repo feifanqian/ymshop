@@ -787,12 +787,13 @@ class DistrictadminController extends Controller {
                         if($district){
                             $district_id=$district['id'];
                         }else{
-                            $invite = $model->table('invite')->where('invite_user_id='.$ds_promoter)->find();
-                            if($invite){
-                                $district_id = $invite['district_id'];
-                            }else{
-                                $district_id=1;
-                            }
+                            $district_id = $isset[' hirer_id'];
+                            // $invite = $model->table('invite')->where('invite_user_id='.$ds_promoter)->find();
+                            // if($invite){
+                            //     $district_id = $invite['district_id'];
+                            // }else{
+                            //     $district_id=1;
+                            // }
                         }
                         //添加邀请关系    
                        $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'admin','district_id'=>$district_id,'createtime'=>time()))->insert();
