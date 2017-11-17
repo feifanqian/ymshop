@@ -86,8 +86,8 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionSendVerificationCode(){
-        $phone = Filter::int(Req::args('phone'));
-        $verificationCodeType = Filter::int(Req::args('sendVerificationCode'));
+        $phone = Req::args('phone');
+        $verificationCodeType = Req::args('sendVerificationCode');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -100,7 +100,15 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;    //手机号码
         $param["verificationCodeType"] = $verificationCodeType;//绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        print_r($result);die;
+        if ($result['status']=='OK') {
+             $this->code = 0;
+             $this->content = array(
+                    'phone'=>$result['phone']
+                );
+        } else {
+            $this->code = 1000;
+        }
+        
     
     }
     
@@ -114,29 +122,21 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionCheckVerificationCode(){
+        $phone = Req::args('phone');
+        $verificationCodeType = Reg::args('verificationCodeType');
+        $verificationCode = Req::args('verificationCode');
         $client = new SOAClient();
-        //服务地址
-        $serverAddress = "http://122.227.225.142:23661/service/soa";
-        //商户号
-        $sysid = "100009001000";
-        //证书名称
-        $alias = "100009001000";
-        //证书地址
-        $path = ICLOD_PATH;
-        //证书密码
-        $pwd = "900724";
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-        $client->setServerAddress($serverAddress);
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
         $param["bizUserId"] = $this->bizUserId;      //商户系统用户标识，商户系统中唯一编号
-        $param["phone"] = "13590144405";    //手机号码
-        $param["verificationCodeType"] = "9";        //绑定手机
-        $param["verificationCode"] = "016120"; //短信验证码
+        $param["phone"] = $phone;    //手机号码
+        $param["verificationCodeType"] = $verificationCodeType;        //绑定手机
+        $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "checkVerificationCode", $param);
         print_r($result);die;
     
@@ -181,8 +181,8 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionBindPhone(){
-        $phone = Filter::int(Req::args('phone'));
-        $verificationCode = Filter::int(Req::args('verificationCode'));
+        $phone = Req::args('phone');
+        $verificationCode = Req::args('verificationCode');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -304,27 +304,17 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionGetBankCardBin(){
+        $cardNo = Req::args('cardNo');
         $client = new SOAClient();
-        //服务地址
-        $serverAddress = "http://122.227.225.142:23661/service/soa";
-        //商户号
-        $sysid = "100009001000";
-        //证书名称
-        $alias = "100009001000";
-        //证书地址
-        $path = ICLOD_PATH;
-        //证书密码
-        $pwd = "900724";
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-        $client->setServerAddress($serverAddress);
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
         $param["bizUserId"] = $this->bizUserId;
-        $param["cardNo"] = $this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey); //银行卡号
+        $param["cardNo"] = $this->rsaEncrypt($cardNo,$publicKey,$privateKey); //银行卡号
         $result = $client->request("MemberService", "getBankCardBin", $param);
         print_r($result);die;
     }
@@ -348,32 +338,26 @@ class PaytonglianAction extends Controller{
     public function actionApplyBindBankCard(){
 
         $client = new SOAClient();
-        $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
-        $sysid = "100009001000";//商户号
-        $alias = "100009001000";//证书名称
-        $path = ICLOD_PATH; //证书地址
-        $pwd = "900724";//证书密码
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-        $client->setServerAddress($serverAddress);
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
 
-        $cardNo = $this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
-        $phone = '13590144405';
-        $name = 'jiandan';
-        $cardType = 1;  //卡类型   储蓄卡 1 整型         信用卡 2 整型
-        $bankCode = '01030000';//上一部获取的  GetBankCardBin返回 bankCode
-        $identityType = 1;          //证件类型 1是身份证 目前只支持身份证
-        $identityNo = $this->rsaEncrypt('330227198805284412',$publicKey,$privateKey);//必须rsa加密
-        $validate = '';
-        $cvv2 = '';
-        $isSafeCard = false;  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
-        $cardCheck = 2; //绑卡方式
-        $unionBank = '';
+        $cardNo = $this->rsaEncrypt(Req::args('cardNo'),$publicKey,$privateKey);//必须rsa加密
+        $phone = Req::args('phone');
+        $name = Req::args('name');
+        $cardType = Req::args('cardType');  //卡类型   储蓄卡 1 整型         信用卡 2 整型
+        $bankCode = Req::args('bankCode');//上一部获取的  GetBankCardBin返回 bankCode  01030000
+        $identityType = Req::args('identityType');          //证件类型 1是身份证 目前只支持身份证
+        $identityNo = $this->rsaEncrypt(Req::args('identityNo'),$publicKey,$privateKey);//必须rsa加密 330227198805284412
+        $validate = Req::args('validate');
+        $cvv2 = Req::args('cvv2');
+        $isSafeCard = Req::args('isSafeCard');  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
+        $cardCheck = Req::args('cardCheck'); //绑卡方式
+        $unionBank = Req::args('unionBank');
        
        
         if ($cardType==2){
@@ -408,29 +392,18 @@ class PaytonglianAction extends Controller{
     public function actionBindBankCard(){
     
        
-        $tranceNum='D2017111634888';//上一接口返回tranceNum 流水号
-        $transDate='20171116';//上一接口返回transDate 申请时间
-        $phone='13590144405';  
-        $verificationCode='721893';
+        $tranceNum = Req::args('tranceNum');//上一接口返回tranceNum 流水号 D2017111634888
+        $transDate = Req::args('transDate');//上一接口返回transDate 申请时间 20171116
+        $phone = Req::args('phone');  
+        $verificationCode = Req::args('verificationCode');
         $client = new SOAClient();
-        //服务地址
-        $serverAddress = "http://122.227.225.142:23661/service/soa";
-        //商户号
-        $sysid = "100009001000";
-        //证书名称
-        $alias = "100009001000";
-        //证书地址
-        $path = ICLOD_PATH;
-        //证书密码
-        $pwd = "900724";
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-        $client->setServerAddress($serverAddress);
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
         $param["bizUserId"] = $this->bizUserId;
         $param["tranceNum"] = $tranceNum;
         $param["transDate"] = $transDate;
@@ -451,22 +424,16 @@ class PaytonglianAction extends Controller{
     
     public function actionSetSafeCard(){
     
-        $setSafeCard=true;
+        $setSafeCard = Req::args('setSafeCard');
         $client = new SOAClient();
-        $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
-        $sysid = "100009001000";//商户号
-        $alias = "100009001000";//证书名称
-        $path = ICLOD_PATH;//证书地址
-        $pwd = "900724"; //证书密码
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-        $client->setServerAddress($serverAddress);
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
-        $cardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        $cardNo = $this->rsaEncrypt(Req::args('cardNo'),$publicKey,$privateKey);//必须rsa加密
         $param["bizUserId"] = $this->bizUserId;
         $param["cardNo"] = $cardNo;
         $param["setSafeCard"] = $setSafeCard; //是否设置为安全卡
@@ -482,20 +449,14 @@ class PaytonglianAction extends Controller{
     public function actionQueryBankCard(){
 
         $client = new SOAClient();
-        $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
-        $sysid = "100009001000";//商户号
-        $alias = "100009001000";//证书名称
-        $path = ICLOD_PATH;//证书地址
-        $pwd = "900724"; //证书密码
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-        $client->setServerAddress($serverAddress);
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
-        $cardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        $cardNo = $this->rsaEncrypt(Reg::args('cardNo'),$publicKey,$privateKey);//必须rsa加密
         $param["bizUserId"] = $this->bizUserId;
         $param["cardNo"] = $cardNo;
         $result = $client->request("MemberService", "queryBankCard", $param);
@@ -511,20 +472,14 @@ class PaytonglianAction extends Controller{
     public function actionUnbindBankCard(){
 
         $client = new SOAClient();
-        $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
-        $sysid = "100009001000";//商户号
-        $alias = "100009001000";//证书名称
-        $path = ICLOD_PATH;//证书地址
-        $pwd = "900724"; //证书密码
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-        $client->setServerAddress($serverAddress);
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
-        $cardNo=$this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);//必须rsa加密
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        $cardNo = $this->rsaEncrypt(Req::args('cardNo'),$publicKey,$privateKey);//必须rsa加密
         $param["bizUserId"] = $this->bizUserId;
         $param["cardNo"] = $cardNo;
         $result = $client->request("MemberService", "unbindBankCard", $param);
@@ -622,19 +577,13 @@ class PaytonglianAction extends Controller{
     public function actionDepositApply(){
 
         $client = new SOAClient();
-        $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
-        $sysid = "100009001000";//商户号
-        $alias = "100009001000";//证书名称
-        $path = ICLOD_PATH;//证书地址
-        $pwd = "900724"; //证书密码
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-        $client->setServerAddress($serverAddress);
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
     
         $bizOrderNo='201605160001';
         $accountSetNo='12985739202038';
