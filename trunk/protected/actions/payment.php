@@ -318,31 +318,28 @@ class PaymentAction extends Controller {
                 $this->code =1113;
                 exit();
        }
-       $open=$this->model->table('oauth_user')->where("oauth_type = 'wechat' and user_id=".$user_id)->find();
-       if(!$open){
-          $this->code = 1160;
-       }
-       if(!$open['open_id']){
-         $this->code = 1162;
-       } 
+       // $open=$this->model->table('oauth_user')->where("oauth_type = 'wechat' and user_id=".$user_id)->find();
+       // if(!$open){
+       //    $this->code = 1160;
+       // }
+       // if(!$open['open_id']){
+       //   $this->code = 1162;
+       // } 
        $params = array();
-       $params["cusid"] = AppConfig::CUSIDS;
-       $params["appid"] = AppConfig::APPIDS;
+       $params["cusid"] = AppConfig::CUSID;
+       $params["appid"] = AppConfig::APPID;
        $params["version"] = AppConfig::APIVERSION;
        $params["trxamt"] = $order_amount*100;
        $params["reqsn"] = $order_no;//订单号,自行生成
-       $params["paytype"] = "0";
+       $params["paytype"] = "2";
        $params["randomstr"] = $randomstr;//
        $params["body"] = "商品名称";
        $params["remark"] = "备注信息";
        // $params["acct"] = $open['open_id'];
        $params["open_id"] = '';
        // $params["limit_pay"] = "no_credit";
-       // $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
        $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
-       // $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback");
-       // $params["notify_url"] = 'http://'.$_SERVER['HTTP_HOST'].'/payment/async_callback';
-       $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEYS);//签名
+       $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
        
        $paramsStr = AppUtil::ToUrlParams($params);
        $url = AppConfig::APIURL . "/pay";
