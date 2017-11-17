@@ -77,7 +77,7 @@ class PhpTools{
 			    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
 			    }else{
 			    	$return['status']=0; //失败
-			    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
+			    	$return['msg'] = 'CODE:'.$results['AIPG']['TRANSRET']['RET_CODE'].$results['AIPG']['TRANSRET']['ERR_MSG'];
 			    }
 			}else{
 				$return['status']=0;  //失败
