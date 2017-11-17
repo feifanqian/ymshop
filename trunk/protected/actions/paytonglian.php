@@ -24,7 +24,7 @@ class PaytonglianAction extends Controller{
     public $content = NULL;
     public $date = '';
     public $version ='1.0';
-    public $bizUserId = date('YmdH');
+    public $bizUserId = 'beautiful';
     /*
      @param $serverAddress 服务地址
      @param $sysid 商户号
@@ -170,7 +170,11 @@ class PaytonglianAction extends Controller{
         $param["identityType"] = $identityType;
         $param["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);
         $result = $client->request("MemberService", "setRealName", $param);
-        print_r($result);die;
+         if ($result['status']=='OK') {
+             $this->code = 0;
+        } else {
+            $this->code = 1000;
+        }
     }
     
     
@@ -196,7 +200,11 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;    //手机号码
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
-        print_r($result);die;
+        if ($result['status']=='OK') {
+             $this->code = 0;
+        } else {
+            $this->code = 1000;
+        }
     
     }
     
@@ -379,10 +387,10 @@ class PaytonglianAction extends Controller{
         $result = $client->request("MemberService", "applyBindBankCard", $param);
         if ($result['status']=='OK') {
             $this->code = 0;
-            $this->content = array(
-                    'transDate'=>$result['transDate'],
-                    'tranceNum'=>$result['tranceNum']
-            );
+            // $this->content = array(
+            //         'transDate'=>$result['transDate'],
+            //         'tranceNum'=>$result['tranceNum']
+            // );
         } else {
             $this->code = 1000;
         }
