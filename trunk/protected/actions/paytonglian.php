@@ -43,7 +43,7 @@ class PaytonglianAction extends Controller{
     public function __construct() {
         $this->model = new Model();
         $this->arrayXml = new ArrayAndXml();
-        $this->bizUserId = 'mylife';
+        $this->bizUserId = rand();
     }
 	/**
 	 * 创建会员 
@@ -86,8 +86,8 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionSendVerificationCode(){
-        $phone = '15788885025';
-        $verificationCodeType = '9';
+        $phone = Req::args('phone');
+        $verificationCodeType = Req::args('verificationCodeType');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -101,7 +101,7 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;    //手机号码
         $param["verificationCodeType"] = $verificationCodeType;//绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        print_r($result);die;
+        print_r($phone) die;
         // if ($result['status']=='OK') {
         //      $this->code = 0;
         //      $this->content = array(
@@ -124,9 +124,9 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionCheckVerificationCode(){
-        $phone = Filter::int(Req::args('phone'));
-        $verificationCodeType = Filter::int(Req::args('verificationCodeType'));
-        $verificationCode = Filter::int(Req::args('verificationCode'));
+        $phone = Req::args('phone');
+        $verificationCodeType = Req::args('verificationCodeType');
+        $verificationCode = Req::args('verificationCode');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -378,7 +378,16 @@ class PaytonglianAction extends Controller{
         $param["identityNo"] = $identityNo;
         $param["unionBank"] = $unionBank;
         $result = $client->request("MemberService", "applyBindBankCard", $param);
-        print_r($result);die;
+        if ($result['status']=='OK') {
+            $this->code = 0;
+            $this->content = array(
+                    'transDate'=>$result['transDate'],
+                    'tranceNum'=>$result['tranceNum']
+            );
+        } else {
+            $this->code = 1000;
+        }
+        
     }
     
     
