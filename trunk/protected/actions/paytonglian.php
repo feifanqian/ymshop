@@ -325,8 +325,8 @@ class PaytonglianAction extends Controller{
         $result = $client->request("MemberService", "getBankCardBin", $param);
         if ($result['status']=='OK') {
              $this->code = 0;
-             // $this->content['bankCodes'] = $result['bankCode'];//['cardBinInfo']
-             print_r($result);die();
+             $signedValue = json_decode($result['signedValue'],true);
+             print_r($signedValue);die();
         } else {
              $this->code = 1000;
         }
