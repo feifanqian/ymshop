@@ -43,7 +43,7 @@ class PaytonglianAction extends Controller{
     public function __construct() {
         $this->model = new Model();
         $this->arrayXml = new ArrayAndXml();
-        $this->bizUserId = 'betterwill';
+        $this->bizUserId = date('YmdHi');
     }
 	/**
 	 * 创建会员 
@@ -86,8 +86,8 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionSendVerificationCode(){
-        $phone = Req::args('phone');
-        $verificationCodeType = Req::args('sendVerificationCode');
+        $phone = Filter::int(Req::args('phone'));
+        $verificationCodeType = Filter::int(Req::args('verificationCodeType'));
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -447,7 +447,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionQueryBankCard(){
-
+        $cardNo = Req::args('cardNo');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -456,9 +456,8 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
-        $cardNo = $this->rsaEncrypt(Reg::args('cardNo'),$publicKey,$privateKey);//必须rsa加密
         $param["bizUserId"] = $this->bizUserId;
-        $param["cardNo"] = $cardNo;
+        $param["cardNo"] = $this->rsaEncrypt($cardNo,$publicKey,$privateKey);
         $result = $client->request("MemberService", "queryBankCard", $param);
         print_r($result);die;
     }
