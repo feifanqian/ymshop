@@ -24,7 +24,7 @@ class PaytonglianAction extends Controller{
     public $content = NULL;
     public $date = '';
     public $version ='1.0';
-    public $bizUserId = 'summer';
+    public $bizUserId = 'winner';
     /*
      @param $serverAddress 服务地址
      @param $sysid 商户号
@@ -393,9 +393,8 @@ class PaytonglianAction extends Controller{
         $result = $client->request("MemberService", "applyBindBankCard", $param);
         if ($result['status']=='OK') {
                 $this->code = 0;
-                $this->content['transDate'] = $result['transDate'];
-                $this->content['tranceNum'] = $result['tranceNum'];
-            );
+                $this->content['transDate'] = $result['signedValue']['transDate'];
+                $this->content['tranceNum'] = $result['signedValue']['tranceNum'];
         } else {
             $this->code = 1000;
         }
