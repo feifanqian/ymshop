@@ -24,7 +24,7 @@ class PaytonglianAction extends Controller{
     public $content = NULL;
     public $date = '';
     public $version ='1.0';
-    public $bizUserId = 'beautiful';
+    public $bizUserId = 'summer';
     /*
      @param $serverAddress 服务地址
      @param $sysid 商户号
@@ -325,7 +325,13 @@ class PaytonglianAction extends Controller{
         $param["bizUserId"] = $this->bizUserId;
         $param["cardNo"] = $this->rsaEncrypt($cardNo,$publicKey,$privateKey); //银行卡号
         $result = $client->request("MemberService", "getBankCardBin", $param);
-        print_r($result);die;
+        if ($result['status']=='OK') {
+             $this->code = 0;
+             $this->content['bankCode'] = $result['signedValue']['cardBinInfo']['bankCode'];
+        } else {
+             $this->code = 1000;
+        }
+        
     }
     
     
@@ -386,11 +392,10 @@ class PaytonglianAction extends Controller{
         $param["unionBank"] = $unionBank;
         $result = $client->request("MemberService", "applyBindBankCard", $param);
         if ($result['status']=='OK') {
-            $this->code = 0;
-            // $this->content = array(
-            //         'transDate'=>$result['transDate'],
-            //         'tranceNum'=>$result['tranceNum']
-            // );
+                $this->code = 0;
+                $this->content['transDate'] = $result['transDate'];
+                $this->content['tranceNum'] = $result['tranceNum'];
+            );
         } else {
             $this->code = 1000;
         }
@@ -409,7 +414,6 @@ class PaytonglianAction extends Controller{
     
     public function actionBindBankCard(){
     
-       
         $tranceNum = Req::args('tranceNum');//上一接口返回tranceNum 流水号 D2017111634888
         $transDate = Req::args('transDate');//上一接口返回transDate 申请时间 20171116
         $phone = Req::args('phone');  
@@ -428,7 +432,12 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;
         $param["verificationCode"] = $verificationCode;
         $result = $client->request("MemberService", "bindBankCard", $param);
-        print_r($result);die;
+        if ($result['status']=='OK') {
+            $this->code = 0;
+        } else {
+            $this->code = 1000;
+        }
+        
     }
     
     
@@ -456,7 +465,12 @@ class PaytonglianAction extends Controller{
         $param["cardNo"] = $cardNo;
         $param["setSafeCard"] = $setSafeCard; //是否设置为安全卡
         $result = $client->request("MemberService", "setSafeCard", $param);
-        print_r($result);die;
+        if ($result['status']=='OK') {
+            $this->code = 0;
+        } else {
+            $this->code = 1000;
+        }
+        
     }
     /**
      * 查询绑定银行卡
@@ -477,7 +491,12 @@ class PaytonglianAction extends Controller{
         $param["bizUserId"] = $this->bizUserId;
         $param["cardNo"] = $this->rsaEncrypt($cardNo,$publicKey,$privateKey);
         $result = $client->request("MemberService", "queryBankCard", $param);
-        print_r($result);die;
+        if ($result['status']=='OK') {
+             $this->code = 0;
+        } else {
+            $this->code = 1000;
+        }
+        
     }
     
     /**
@@ -500,7 +519,13 @@ class PaytonglianAction extends Controller{
         $param["bizUserId"] = $this->bizUserId;
         $param["cardNo"] = $cardNo;
         $result = $client->request("MemberService", "unbindBankCard", $param);
-        print_r($result);die;
+        if ($result['status']=='OK') {
+            $this->code = 0;
+            $this->content['success'] = '解除绑定银行卡成功';
+        } else {
+            $this->code = 1000;
+        }
+        
     }
     
     
