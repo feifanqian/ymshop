@@ -43,7 +43,7 @@ class PaytonglianAction extends Controller{
     public function __construct() {
         $this->model = new Model();
         $this->arrayXml = new ArrayAndXml();
-        $this->bizUserId = date('YmdHi');
+        $this->bizUserId = date('YmdHis');
     }
 	/**
 	 * 创建会员 
@@ -100,14 +100,15 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;    //手机号码
         $param["verificationCodeType"] = $verificationCodeType;//绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        if ($result['status']=='OK') {
-             $this->code = 0;
-             $this->content = array(
-                    'phone'=>$result['phone']
-                );
-        } else {
-            $this->code = 1000;
-        }
+        print_r($result);die;
+        // if ($result['status']=='OK') {
+        //      $this->code = 0;
+        //      $this->content = array(
+        //             'phone'=>$result['phone']
+        //         );
+        // } else {
+        //     $this->code = 1000;
+        // }
         
     
     }
