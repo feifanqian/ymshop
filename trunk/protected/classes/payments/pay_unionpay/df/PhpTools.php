@@ -94,10 +94,29 @@ class PhpTools{
 			    	}	
 			    }
 			}else{
-				$return['status']=0;  //失败
 				if(isset($results['AIPG']['INFO'])){
-					$return['msg'] = 'CODE:'.$results['AIPG']['INFO']['RET_CODE'].$results['AIPG']['INFO']['ERR_MSG'];
+					$code = $results['AIPG']['INFO']['RET_CODE'];
+					$code_arr = array('2000','2001','2003','2005','2007','2008'); //中间状态码
+					if($code==0000){
+						$return['status']=1;  //成功
+                        $return['msg']=$results['AIPG']['INFO']['ERR_MSG'];
+					}elseif(in_array($code,$code_arr)){
+                        #需要调用查询接口返回最终结果
+			    		$ret = $ChinapayDf->DFquery($req_sn);
+			    		if($ret['code']==1){
+			    			$return['status']=1;
+			    			$return['msg']='处理成功';
+			    		}else{
+			    			$return['status']=0; //失败
+			    			$return['msg']=$ret['msg'];
+			    		}
+					}else{
+						$return['status']=0; //失败
+						$return['msg'] = 'CODE:'.$code.$results['AIPG']['INFO']['ERR_MSG'];
+					}
+					
 				}else{
+					$return['status']=0; //失败
 					$return['msg'] = '未知错误';
 				}
 			}    	        
