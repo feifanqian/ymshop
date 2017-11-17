@@ -43,7 +43,7 @@ class PaytonglianAction extends Controller{
     public function __construct() {
         $this->model = new Model();
         $this->arrayXml = new ArrayAndXml();
-        $this->bizUserId = date('YmdHi');
+        $this->bizUserId = date('YmdH');
     }
 	/**
 	 * 创建会员 
