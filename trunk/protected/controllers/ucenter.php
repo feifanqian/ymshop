@@ -1367,7 +1367,7 @@ class UcenterController extends Controller {
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
         $this->assign("sign_in_open",$sign_in_set['open']);
-        
+        $this->assign("random",rand(1000,9999));
         $this->assign('is_hirer', $is_hirer);
         $this->assign('is_promoter', $is_promoter);
         $this->assign("option", $options);
