@@ -2628,6 +2628,7 @@ class UcenterController extends Controller {
     }
 
     public function beagent(){
+        $this->assign('random',rand(1000,9999));
         $this->assign('seo_title',"圆梦共享网");
         $this->redirect();
     }
