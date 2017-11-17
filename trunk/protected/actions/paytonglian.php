@@ -24,7 +24,7 @@ class PaytonglianAction extends Controller{
     public $content = NULL;
     public $date = '';
     public $version ='1.0';
-    public $bizUserId = '';
+    public $bizUserId = 'jianjian';
     /*
      @param $serverAddress 服务地址
      @param $sysid 商户号
@@ -43,7 +43,6 @@ class PaytonglianAction extends Controller{
     public function __construct() {
         $this->model = new Model();
         $this->arrayXml = new ArrayAndXml();
-        $this->bizUserId = CHash::random(8);
     }
 	/**
 	 * 创建会员 
@@ -197,7 +196,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
-        $param["bizUserId"] = $this->bizUserId;      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $this->bizUserId;     //商户系统用户标识，商户系统中唯一编号
         $param["phone"] = $phone;    //手机号码
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
