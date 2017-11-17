@@ -48,8 +48,8 @@ class PhpTools{
 	/**
 	 * 验签
 	 */
-	public function verifyXml($xmlResponse){
-			
+	public function verifyXml($xmlResponse , $req_sn){
+		$ChinapayDf = new AllinpayDf();	
 		// 本地反馈结果验证签名开始
 		$signature = '';
 		if (preg_match('/<SIGNED_MSG>(.*)<\/SIGNED_MSG>/i', $xmlResponse, $matches)) {
@@ -76,8 +76,22 @@ class PhpTools{
 			    	$return['status']=1; //成功
 			    	$return['msg'] = $results['AIPG']['TRANSRET']['ERR_MSG'];
 			    }else{
-			    	$return['status']=0; //失败
-			    	$return['msg'] = 'CODE:'.$results['AIPG']['TRANSRET']['RET_CODE'].$results['AIPG']['TRANSRET']['ERR_MSG'];
+			    	$code = $results['AIPG']['TRANSRET']['RET_CODE'];
+			    	$code_arr = array('2000','2001','2003','2005','2007','2008'); //中间状态码
+			    	if(in_array($code,$code_arr)){
+			    		#需要调用查询接口返回最终结果
+			    		$ret = $ChinapayDf->DFquery($req_sn);
+			    		if($ret['code']==1){
+			    			$return['status']=1;
+			    			$return['msg']='处理成功';
+			    		}else{
+			    			$return['status']=0;
+			    			$return['msg']=$ret['msg'];
+			    		}
+			    	}else{
+			    		$return['status']=0; //失败
+			    	    $return['msg'] = 'CODE:'.$code.$results['AIPG']['TRANSRET']['ERR_MSG'];
+			    	}	
 			    }
 			}else{
 				$return['status']=0;  //失败
@@ -87,6 +101,49 @@ class PhpTools{
 					$return['msg'] = '未知错误';
 				}
 			}    	        
+		
+		return $return;
+	}
+
+	/**
+	 * 验签
+	 */
+	public function verifyXmls($xmlResponse , $req_sn){
+		$ChinapayDf = new AllinpayDf();	
+		// 本地反馈结果验证签名开始
+		$signature = '';
+		if (preg_match('/<SIGNED_MSG>(.*)<\/SIGNED_MSG>/i', $xmlResponse, $matches)) {
+		    $signature = $matches[1];
+		}
+		
+		$xmlResponseSrc = preg_replace('/<SIGNED_MSG>.*<\/SIGNED_MSG>/i', '', $xmlResponse);
+		$xmlResponseSrc1 = mb_convert_encoding(str_replace('<','&lt;',$xmlResponseSrc), "UTF-8", "GBK");
+		// $xmlResponseSrc1 = mb_convert_encoding($xmlResponseSrc, "UTF-8", "GBK");
+		// $xmlResponseSrc2 = Common::xmlToArray($xmlResponseSrc1);
+		// print_r ('验签原文');
+		// var_dump ($xmlResponseSrc2);
+		$pubKeyId = openssl_get_publickey(file_get_contents($this->certFile));
+		$flag = (bool) openssl_verify($xmlResponseSrc, hex2bin($signature), $pubKeyId);
+		openssl_free_key($pubKeyId);
+	    //echo '<br/>'+$flag;
+	    // 变成数组，做自己相关业务逻辑
+		$xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
+
+		$results = $this->arrayXml->parseString( $xmlResponse , TRUE);
+		
+		if(isset($results['AIPG']['QTRANSRSP'])){
+			if($results['AIPG']['QTRANSRSP']['QTDETAIL']['RET_CODE']==0000){
+				$return['code']=1;
+				$return['msg']=$results['AIPG']['QTRANSRSP']['QTDETAIL']['ERR_MSG'];
+			}else{
+				$return['code']=0;
+				$return['msg']=$results['AIPG']['QTRANSRSP']['QTDETAIL']['ERR_MSG'];
+			}
+		}else{
+			$return['code']=0;
+			$return['msg']='未知错误';
+		}
+			    	        
 		
 		return $return;
 	}
@@ -131,7 +188,7 @@ class PhpTools{
 	/**
 	 * 发送请求
 	 */
-	public function send($params){
+	public function send($params , $req_sn=''){
 		header('Content-Type: text/html; Charset=UTF-8');
 		$xmlSignPost=$this->signXml($params);
 		$xmlSignPost=str_replace("TRANS_DETAIL2", "TRANS_DETAIL",$xmlSignPost);
@@ -150,10 +207,37 @@ class PhpTools{
 		}
 		//获取返回报文
 		$xmlResponse = $response['body'];
-		// print_r("返回报文如下：");
-//		print_r(str_replace('<','&lt;',$xmlResponse));
+
 		 //验证返回报文
-		$result=$this->verifyXml($xmlResponse);
+		$result=$this->verifyXml($xmlResponse,$req_sn);
+		return $result;
+	}
+
+	/**
+	 * 发送请求
+	 */
+	public function sends($params){
+		header('Content-Type: text/html; Charset=UTF-8');
+		$xmlSignPost=$this->signXml($params);
+		$xmlSignPost=str_replace("TRANS_DETAIL2", "TRANS_DETAIL",$xmlSignPost);
+		// var_dump($xmlSignPost);die;
+		$response = cURL::factory()->post(PhpTools::apiUrl, $xmlSignPost);
+	
+		if (! isset($response['body'])) {
+			if(isset($response['header'])){
+				$msg = 'Bad Request:'.$response['header'];
+			}else{
+				$msg = 'Error: HTTPS REQUEST Bad.';
+			}
+			$result['status']=0;
+			$result['msg'] = $msg;
+			return $result;
+		}
+		//获取返回报文
+		$xmlResponse = $response['body'];
+
+		 //验证返回报文
+		$result=$this->verifyXmls($xmlResponse);
 		return $result;
 	}
 }
