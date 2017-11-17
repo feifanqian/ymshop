@@ -24,7 +24,7 @@ class PaytonglianAction extends Controller{
     public $content = NULL;
     public $date = '';
     public $version ='1.0';
-    public $bizUserId = 'winner';
+    public $bizUserId = 'spring';
     /*
      @param $serverAddress 服务地址
      @param $sysid 商户号
@@ -186,8 +186,8 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionBindPhone(){
-        $phone = Req::args('phone');
-        $verificationCode = Req::args('verificationCode');
+        $phone = Filter::int(Req::args('phone'));
+        $verificationCode = Filter::int(Req::args('verificationCode'));
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -327,7 +327,7 @@ class PaytonglianAction extends Controller{
         $result = $client->request("MemberService", "getBankCardBin", $param);
         if ($result['status']=='OK') {
              $this->code = 0;
-             $this->content['bankCode'] = $result['signedValue']['cardBinInfo']['bankCode'];
+             $this->content['bankCode'] = $result['signedValue']['bankCode'];//['cardBinInfo']
         } else {
              $this->code = 1000;
         }
