@@ -43,7 +43,7 @@ class PaytonglianAction extends Controller{
     public function __construct() {
         $this->model = new Model();
         $this->arrayXml = new ArrayAndXml();
-        $this->bizUserId = date('YmdH');
+        $this->bizUserId = 'mylife';
     }
 	/**
 	 * 创建会员 
@@ -86,7 +86,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionSendVerificationCode(){
-        $phone = '1578885025';
+        $phone = '15788885025';
         $verificationCodeType = '9';
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
