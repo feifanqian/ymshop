@@ -82,7 +82,7 @@ class PhpTools{
 			}else{
 				$return['status']=0;  //失败
 				if(isset($results['AIPG']['INFO'])){
-					$return['msg'] = $results['AIPG']['INFO']['ERR_MSG'];
+					$return['msg'] = 'CODE:'.$results['AIPG']['INFO']['RET_CODE'].$results['AIPG']['INFO']['ERR_MSG'];
 				}else{
 					$return['msg'] = '未知错误';
 				}
