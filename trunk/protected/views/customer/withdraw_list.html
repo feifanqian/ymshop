@@ -102,12 +102,12 @@
     }
     function balanceBack(id){
        $.post("{url:/customer/withdraw_back}",{id:id},function(res){
-           if(res.status==1){
+           if(res.status=='success'){
                  layer.msg("操作成功",{icon:6},function(){
                       window.location.reload();
                  });
            }else{
-            layer.msg(res.msg,{icon:5});
+            layer.msg("退回失败");
            }
        })
     }

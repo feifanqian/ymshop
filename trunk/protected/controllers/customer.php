@@ -163,9 +163,9 @@ class CustomerController extends Controller {
         }
         Log::balance($withdraw['amount'], $withdraw['user_id'],$withdraw['withdraw_no'],"余额提现失败退回", 3, $this->manager['id']);
         if($res1 && $res2){
-            exit(json_encode(array('status'=>1,'msg'=>'退回成功')));
+            exit(json_encode(array('status'=>'success','msg'=>'退回成功')));
         }else{
-            exit(json_encode(array('status'=>0,'msg'=>'退回失败')));
+            exit(json_encode(array('status'=>'fail','msg'=>'退回失败')));
         }
     }
     public function df_balance_query(){
