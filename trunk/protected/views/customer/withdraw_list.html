@@ -24,7 +24,7 @@
         <th style="width:80px">类型</th>
         <th style="width:60px">状态</th>    
     </tr>
-    {set:$status=array("-1"=>"<span class='red'>申请被拒</span>","0"=>"<span class='green'>待处理</span>","1"=>"已转账","2"=>"<span class='red'>提现失败</span>")}
+    {set:$status=array("-1"=>"<span class='red'>申请被拒</span>","0"=>"<span class='green'>待处理</span>","1"=>"已转账","2"=>"<span class='red'>提现失败</span>","3"=>"已废弃")}
     {set:$type=array("0"=>"可用余额提现","1"=>"商家余额提现")}
     {query:name=balance_withdraw as wd fields=wd.*,us.name as uname join= left join user as us on wd.user_id eq us.id where= $where id=$obj page=1 order=wd.id desc }
         <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
@@ -33,6 +33,8 @@
                 <li><a class="icon-pencil" href="javascript:withdrawAction({$item['id']});"> 审批</a></li>
                 {elseif:$item['status']==1}
                 <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
+                {elseif:$item['status']==2}
+                <li><a class="icon-credit" href="javascript:balanceBack({$item['id']});"> 余额退回</a></li>
                 {/if}
             </ul></div></div> </td>
         <td >{$item['withdraw_no']}</td>
@@ -97,6 +99,17 @@
                 layer.msg(result.msg);
             }
         },'json');
+    }
+    function balanceBack(id){
+       $.post("{url:/customer/withdraw_back}",{id:id},function(res){
+           if(res.status==1){
+                 layer.msg("操作成功",{icon:6},function(){
+                      window.location.reload();
+                 });
+           }else{
+            layer.msg(res.msg,{icon:5});
+           }
+       })
     }
     function balanceQuery(){
         var load =layer.load();

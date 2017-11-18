@@ -150,6 +150,24 @@ class CustomerController extends Controller {
             }
         }
     }
+
+    public function withdraw_back(){
+        $id = Filter::int(Req::args('id'));
+        $model = new Model();
+        $withdraw = $model->table('balance_withdraw')->where('id=$id and status=2')->find();
+        $res1 = $model->table('balance_withdraw')->data(array('status'=>3))->where('id=$id and status=2')->update();
+        if($withdraw['type']==0){
+            $res2 = $model->table('customer')->data(array('balance' => "`balance`+" . $withdraw['amount']))->where('user_id=' . $withdraw['user_id'])->update();
+        }elseif($withdraw['type']==1){
+            $res2 = $model->table('customer')->data(array('offline_balance' => "`offline_balance`+" . $withdraw['amount']))->where('user_id=' . $withdraw['user_id'])->update();
+        }
+        Log::balance($withdraw['amount'], $withdraw['user_id'],$withdraw['withdraw_no'],"余额提现失败退回", 3, $this->manager['id']);
+        if($res1 && $res2){
+            exit(json_encode(array('status'=>1,'msg'=>'退回成功')));
+        }else{
+            exit(json_encode(array('status'=>0,'msg'=>'退回失败')));
+        }
+    }
     public function df_balance_query(){
         if($this->is_ajax_request()){
            $ChinapayDf = new ChinapayDf();
