@@ -154,8 +154,8 @@ class CustomerController extends Controller {
     public function withdraw_back(){
         $id = Filter::int(Req::args('id'));
         $model = new Model();
-        $withdraw = $model->table('balance_withdraw')->where('id={$id} and status=2')->find();
-        $res1 = $model->table('balance_withdraw')->data(array('status'=>3))->where('id=$id and status=2')->update();
+        $withdraw = $model->table('balance_withdraw')->where('status=2 and id='.$id)->find();
+        $res1 = $model->table('balance_withdraw')->data(array('status'=>3))->where('status=2 and id='.$id)->update();
         if($withdraw['type']==0){
             $res2 = $model->table('customer')->data(array('balance' => "`balance`+" . $withdraw['amount']))->where('user_id=' . $withdraw['user_id'])->update();
         }elseif($withdraw['type']==1){
