@@ -111,7 +111,6 @@ class SOAClient {
 	 * @throws Exception
 	 */
 	public function request($service, $method, $param) {
-		var_dump(123);die();
 		$request["service"] = $service;
 		$request["method"] = $method;
 		$request["param"] = $param;
@@ -128,6 +127,7 @@ class SOAClient {
 			$req['v'] = $this->version;
 		}
 		$result = $this->request2($req);
+		print_r($result);die();
 		return $this->checkResult($result);
 	}
 	
