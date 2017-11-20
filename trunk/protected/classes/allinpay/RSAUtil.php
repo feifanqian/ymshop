@@ -78,6 +78,9 @@ class RSAUtil {
 			}
 			$encodes[] = $chrtext;
 		}
+		print_r($encodes);
+		print_r(implode(",", $encodes));
+		die;
 		$chrtext = base64_encode(implode(",", $encodes));
 		return $chrtext;
 	}
