@@ -153,9 +153,9 @@ class PhpTools{
 		$xmlResponse = mb_convert_encoding(str_replace('<?xml version="1.0" encoding="GBK"?>', '<?xml version="1.0" encoding="UTF-8"?>', $xmlResponseSrc), 'UTF-8', 'GBK');
 
 		$results = $this->arrayXml->parseString( $xmlResponse , TRUE);
-		// var_dump($results);die;
+		// var_dump($results);
 		if(isset($results['AIPG']['QTRANSRSP'])){
-			if($results['AIPG']['QTRANSRSP']['QTDETAIL']['RET_CODE']==0000){
+			if($results['AIPG']['QTRANSRSP']['QTDETAIL']['RET_CODE']=="0000"){
 				$return['code']=1;
 				$return['msg']=$results['AIPG']['QTRANSRSP']['QTDETAIL']['ERR_MSG'];
 			}else{
@@ -167,7 +167,6 @@ class PhpTools{
 			$return['msg']='未知错误';
 		}
 			    	        
-		
 		return $return;
 	}
 	

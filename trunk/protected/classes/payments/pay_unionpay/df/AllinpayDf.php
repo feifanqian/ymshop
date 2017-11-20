@@ -66,6 +66,7 @@ class AllinpayDf{
         );
         //发起请求
         $result = $tools->sends( $params);
+        return $result;
     }
 }
 ?>
