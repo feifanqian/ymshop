@@ -147,9 +147,9 @@ class CustomerController extends Controller {
                     $merchantId=AppConfig::MERCHANT_ID;
                     $req_sn = $merchantId.$obj['withdraw_no'];
                     $result = $ChinapayDf->DfQuery($req_sn);
-                    
+
                     if($result['code']==1){
-                        if($obj['status']==4){
+                        if($obj['status']==4 || $obj['status']==0){
                             $model->data(array('status'=>1))->where("wd.id=$id")->update();
                         }
                         exit(json_encode(array('status'=>'success','msg'=>$result['msg'])));
