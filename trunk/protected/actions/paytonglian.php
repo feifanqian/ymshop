@@ -53,7 +53,7 @@ class PaytonglianAction extends Controller{
 
    public function actionCreateMember (){
 
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = '123';
         $memberType = Filter::int(Req::args('memberType'));
         $source = Filter::int(Req::args('source'));
         $client = new SOAClient();
