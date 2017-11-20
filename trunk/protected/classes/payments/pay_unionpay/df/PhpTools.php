@@ -131,7 +131,7 @@ class PhpTools{
 	/**
 	 * 验签
 	 */
-	public function verifyXmls($xmlResponse , $req_sn){
+	public function verifyXmls($xmlResponse){
 		$ChinapayDf = new AllinpayDf();	
 		// 本地反馈结果验证签名开始
 		$signature = '';
