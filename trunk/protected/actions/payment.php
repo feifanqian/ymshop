@@ -325,9 +325,9 @@ class PaymentAction extends Controller {
        // if(!$open['open_id']){
        //   $this->code = 1162;
        // } 
-       if($payment_id==7){
+       if($payment_id==7 || $payment_id==18){
          $paytype = "W01";
-       }elseif($payment_id==7){
+       }elseif($payment_id==16 || $payment_id==17){
          $paytype = "A01";
        }else{
          $paytype = "0";
