@@ -333,7 +333,7 @@ class PaymentAction extends Controller {
        $params["version"] = AppConfig::APIVERSION;
        $params["trxamt"] = $order_amount*100;
        $params["reqsn"] = $order_no;//订单号,自行生成
-       $params["paytype"] = "2";
+       $params["paytype"] = "0";
        $params["randomstr"] = $randomstr;//
        $params["body"] = "商品名称";
        $params["remark"] = "备注信息";
