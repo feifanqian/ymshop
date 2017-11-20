@@ -156,7 +156,6 @@ class PhpTools{
 		// var_dump($results);
 		if(isset($results['AIPG']['QTRANSRSP'])){
 			if($results['AIPG']['QTRANSRSP']['QTDETAIL']['RET_CODE']=="0000"){
-				var_dump(123);die;
 				$return['code']=1;
 				$return['msg']=$results['AIPG']['QTRANSRSP']['QTDETAIL']['ERR_MSG'];
 			}else{
