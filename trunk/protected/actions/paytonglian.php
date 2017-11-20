@@ -412,15 +412,14 @@ class PaytonglianAction extends Controller{
         $param["identityNo"] = $identityNo;
         $param["unionBank"] = $unionBank;
         $result = $client->request("MemberService", "applyBindBankCard", $param);
-        print_r($result);die;
-        // if ($result['status']=='OK') {
-        //         $this->code = 0;
-        //         $signedValue = json_decode($result['signedValue'],true);
-        //         $this->content['transDate'] = $signedValue['transDate'];
-        //         $this->content['tranceNum'] = $signedValue['tranceNum'];
-        // } else {
-        //     $this->code = 1000;
-        // }
+        if ($result['status']=='OK') {
+                $this->code = 0;
+                $signedValue = json_decode($result['signedValue'],true);
+                $this->content['transDate'] = $signedValue['transDate'];
+                $this->content['tranceNum'] = $signedValue['tranceNum'];
+        } else {
+            $this->code = 1000;
+        }
         
     }
     
