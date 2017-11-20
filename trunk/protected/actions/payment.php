@@ -326,8 +326,10 @@ class PaymentAction extends Controller {
        //   $this->code = 1162;
        // } 
        $params = array();
-       $params["cusid"] = AppConfig::CUSID;
-       $params["appid"] = AppConfig::APPID;
+       // $params["cusid"] = AppConfig::CUSID;
+       $params["cusid"] = "1486189412";
+       // $params["appid"] = AppConfig::APPID;
+       $params["appid"] = "wx167f2c4da1f798b0";
        $params["version"] = AppConfig::APIVERSION;
        $params["trxamt"] = $order_amount*100;
        $params["reqsn"] = $order_no;//订单号,自行生成
