@@ -164,7 +164,7 @@ class PhpTools{
 			}
 		}else{
 			$return['code']=0;
-			$return['msg']='未知错误';
+			$return['msg']='未处理';
 		}
 			    	        
 		return $return;
