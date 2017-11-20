@@ -53,9 +53,9 @@ class PaytonglianAction extends Controller{
 
    public function actionCreateMember (){
 
-        $bizUserId = 'onetwo';
-        $memberType = Filter::int(Req::args('memberType'));
-        $source = Filter::int(Req::args('source'));
+        $bizUserId = Req::args('bizUserId');
+        $memberType = Req::args('memberType');
+        $source = Req::args('source');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -86,7 +86,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionSendVerificationCode(){
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $phone = Req::args('phone');
         $verificationCodeType = Req::args('verificationCodeType');
         $client = new SOAClient();
@@ -124,7 +124,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionCheckVerificationCode(){
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $phone = Req::args('phone');
         $verificationCodeType = Req::args('verificationCodeType');
         $verificationCode = Req::args('verificationCode');
@@ -159,7 +159,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionSetRealName(){
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $name = Req::args('name');
         $identityType = Req::args('identityType');
         $identityNo = Req::args('identityNo');
@@ -194,7 +194,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionBindPhone(){
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $phone = Filter::int(Req::args('phone'));
         $verificationCode = Filter::int(Req::args('verificationCode'));
         $client = new SOAClient();
@@ -319,7 +319,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionGetBankCardBin(){
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $cardNo = Req::args('cardNo');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
@@ -370,7 +370,7 @@ class PaytonglianAction extends Controller{
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $cardNo = $this->rsaEncrypt(Req::args('cardNo'),$publicKey,$privateKey);//必须rsa加密
         $phone = Req::args('phone');
         $name = Req::args('name');
@@ -423,7 +423,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionBindBankCard(){
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $content = $this->actionApplyBindBankCard();
         $tranceNum = $content['tranceNum'];//上一接口返回tranceNum 流水号 D2017111634888
         $transDate = $content['transDate'];//上一接口返回transDate 申请时间 20171116
@@ -462,7 +462,7 @@ class PaytonglianAction extends Controller{
     
     public function actionSetSafeCard(){
     
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $setSafeCard = Req::args('setSafeCard');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
@@ -491,7 +491,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionQueryBankCard(){
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $cardNo = Req::args('cardNo');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
@@ -519,7 +519,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionUnbindBankCard(){
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -660,7 +660,7 @@ class PaytonglianAction extends Controller{
         $summary='测试摘要';
         $extendInfo='扩展测试';
 
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $param["bizUserId"] = $bizUserId;
         $param["bizOrderNo"] = $bizOrderNo;
         $param["accountSetNo"] = $accountSetNo;
@@ -714,7 +714,7 @@ class PaytonglianAction extends Controller{
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
     
-        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $bizUserId = Req::args('bizUserId');
         $bizOrderNo='201605160001';
         $accountSetNo='12985739202038';
         $amount=100;    //只能为整型
