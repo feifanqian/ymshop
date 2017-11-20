@@ -167,7 +167,6 @@ class PhpTools{
 			$return['msg']='未知错误';
 		}
 			    	        
-		var_dump($return);die;
 		return $return;
 	}
 	
@@ -261,6 +260,7 @@ class PhpTools{
 
 		 //验证返回报文
 		$result=$this->verifyXmls($xmlResponse);
+		var_dump($result);die;
 		return $result;
 	}
 }
