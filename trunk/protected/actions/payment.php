@@ -325,6 +325,14 @@ class PaymentAction extends Controller {
        // if(!$open['open_id']){
        //   $this->code = 1162;
        // } 
+       if($payment_id==7){
+         $paytype = "W01";
+       }elseif($payment_id==7){
+         $paytype = "A01";
+       }else{
+         $paytype = "0";
+       }
+       
        $params = array();
        $params["cusid"] = AppConfig::CUSIDS;
        // $params["cusid"] = "1486189412";
@@ -333,11 +341,11 @@ class PaymentAction extends Controller {
        $params["version"] = AppConfig::APIVERSION;
        $params["trxamt"] = $order_amount*100;
        $params["reqsn"] = $order_no;//订单号,自行生成
-       $params["paytype"] = "0";
+       $params["paytype"] = $paytype;
        $params["randomstr"] = $randomstr;//
        $params["body"] = "商品名称";
        $params["remark"] = "备注信息";
-       // $params["acct"] = $open['open_id'];
+       $params["acct"] = '';
        $params["open_id"] = '';
        // $params["limit_pay"] = "no_credit";
        $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
