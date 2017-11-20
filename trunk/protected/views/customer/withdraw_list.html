@@ -31,7 +31,7 @@
         <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
                 {if:$item['status']==0}
                 <li><a class="icon-pencil" href="javascript:withdrawAction({$item['id']});"> 审批</a></li>
-                {elseif:$item['status']==1 or $item['status']==4}
+                {elseif:$item['status']==0 or $item['status']==1 or $item['status']==4}
                 <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
                 {elseif:$item['status']==2}
                 <li><a class="icon-credit" href="javascript:balanceBack({$item['id']});"> 余额退回</a></li>
