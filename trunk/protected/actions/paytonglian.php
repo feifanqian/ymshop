@@ -437,8 +437,8 @@ class PaytonglianAction extends Controller{
     public function actionBindBankCard(){
         $bizUserId = Req::args('bizUserId');
         $content = $this->actionApplyBindBankCard();
-        $tranceNum = $content['tranceNum'];//上一接口返回tranceNum 流水号 D2017111634888
-        $transDate = $content['transDate'];//上一接口返回transDate 申请时间 20171116
+        $tranceNum = Req::args('tranceNum');//上一接口返回tranceNum 流水号 D2017111634888
+        $transDate = Req::args('transDate');//上一接口返回transDate 申请时间 20171116
         $phone = Req::args('phone');  
         $verificationCode = Req::args('verificationCode');
         $client = new SOAClient();
@@ -455,13 +455,11 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;
         $param["verificationCode"] = $verificationCode;
         $result = $client->request("MemberService", "bindBankCard", $param);
-        print_r($content);die();
-        
-        // if ($result['status']=='OK') {
-        //     $this->code = 0;
-        // } else {
-        //     $this->code = 1000;
-        // }
+        if ($result['status']=='OK') {
+            $this->code = 0;
+        } else {
+            $this->code = 1000;
+        }
         
     }
     
