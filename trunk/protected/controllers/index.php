@@ -1888,4 +1888,28 @@ class IndexController extends Controller {
         $this->assign('order_no',$order_no);
         $this->redirect();
     }
+
+    public function download(){
+       $this->assign("seo_title","圆梦共享网APP");
+       $this->redirect(); 
+    }
+
+    public function downloadapp(){
+        $url = "http://www.ymlypt.com/static/upload/app/app-release.apk";
+        $logo = APP_ROOT."static/images/logo1.png";
+        ob_clean();
+        $qrCode = new QrCode();
+        $qrCode->setText($url)
+                ->setSize(200)
+                ->setLogo($logo)
+                ->setPadding(10)
+                ->setErrorCorrection('medium')
+                ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+                ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+                ->setLabelFontSize(16)
+                ->setImageType(QrCode::IMAGE_TYPE_PNG);
+        header('Content-Type: ' . $qrCode->getContentType());
+        $qrCode->render();
+        return;
+    }
 }
