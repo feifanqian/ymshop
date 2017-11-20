@@ -137,14 +137,23 @@ class CustomerController extends Controller {
         if($this->is_ajax_request()){
             $id = Filter::int(Req::args('id'));
             $model = new Model('balance_withdraw as wd');
-            $obj = $model->where("wd.id=$id and wd.status=1")->find();
+            $obj = $model->where("wd.id=$id")->find();
             if($obj){
-                if($obj['mer_seq_id']!=""){
-                    $ChinapayDf = new ChinapayDf();
+                
+                    // $ChinapayDf = new ChinapayDf();
+                    $ChinapayDf = new AllinpayDf();
                     $params['merSeqId']=$obj['mer_seq_id'];
                     $params['merDate']= substr( $params['merSeqId'],0,8);
-                    $ChinapayDf->DfQuery($params);
-                }
+                    $merchantId=AppConfig::MERCHANT_ID;
+                    $req_sn = $merchantId.$obj['withdraw_no'];
+                    $result = $ChinapayDf->DfQuery($req_sn);
+                    if($result['code']==1){
+                        $model->data(array('status'=>1))->where("wd.id=$id")->update();
+                        exit(json_encode(array('status'=>'success','msg'=>'成功')));
+                    }else{
+                        exit(json_encode(array('status'=>'fail','msg'=>$result['msg'])));
+                    }
+                
             }else{
                 exit(json_encode(array('status'=>'fail','msg'=>'信息错误')));
             }
@@ -222,6 +231,9 @@ class CustomerController extends Controller {
                             Log::op($this->manager['id'], "通过提现申请", "管理员[" . $this->manager['name'] . "]:通过了提现申请 " . $obj['withdraw_no']);
                             exit(json_encode(array('status'=>'success','msg'=>'提现成功')));
                         }
+                    }elseif($result['status']==4){
+                        $model->query("update tiny_balance_withdraw set status='4' where id = $id and status= 0");
+                        exit(json_encode(array('status'=>'fail','msg'=>$result['msg'])));
                     }else{
                         $model->query("update tiny_balance_withdraw set status='2' where id = $id and status= 0");
                         // $model->table('customer')->data(array('offline_balance' => "`offline_balance`+" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
