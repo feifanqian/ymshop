@@ -101,8 +101,10 @@
         },'json');
     }
     function balanceBack(id){
+       var load =layer.load();
        $.post("{url:/customer/withdraw_back}",{id:id},function(res){
-           if(res.status=='success'){
+           layer.close(load);
+           if(res.status){
                  layer.msg("操作成功",{icon:6},function(){
                       window.location.reload();
                  });
