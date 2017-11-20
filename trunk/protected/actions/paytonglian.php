@@ -405,12 +405,14 @@ class PaytonglianAction extends Controller{
         $param["cardNo"] = $cardNo;  //银行卡号
         $param["phone"] = $phone;  //银行预留的手机卡号
         $param["name"] = $name; //用户的姓名
+        $param["cardType"] = $cardType; 
+        $param['bankCode'] = $bankCode['bankCode'];
         $param["cardCheck"] = $cardCheck; //绑卡方式
         $param["identityType"] = $identityType;
         $param["identityNo"] = $identityNo;
         $param["unionBank"] = $unionBank;
         $result = $client->request("MemberService", "applyBindBankCard", $param);
-        print_r($bankCode);die;
+        print_r($result);die;
         // if ($result['status']=='OK') {
         //         $this->code = 0;
         //         $signedValue = json_decode($result['signedValue'],true);
