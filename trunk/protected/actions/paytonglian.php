@@ -53,7 +53,7 @@ class PaytonglianAction extends Controller{
 
    public function actionCreateMember (){
 
-        $bizUserId = '123';
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $memberType = Filter::int(Req::args('memberType'));
         $source = Filter::int(Req::args('source'));
         $client = new SOAClient();
@@ -102,12 +102,14 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;    //手机号码
         $param["verificationCodeType"] = $verificationCodeType;//绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        if ($result['status']=='OK') {
-             $this->code = 0;
-             $this->content = '发送短信验证码成功';
-        } else {
-            $this->code = 1000;
-        }
+        print_r($result);die;
+        // if ($result['status']=='OK') {
+        //      $this->code = 0;
+        //      $this->content = '发送短信验证码成功';
+        // } else if($result['code']=='3000'){
+        //     $this->code = 3000;
+        //     $this->message = '所属应用下已经存在此用户';
+        // }
         
     
     }
