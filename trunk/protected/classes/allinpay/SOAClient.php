@@ -28,8 +28,6 @@ class SOAClient {
 		return $this->serverAddress;
 	}
 	public function setServerAddress($serverAddress) {
-		var_dump('1212');
-		die();
 		$this->serverAddress = $serverAddress;
 		$this->serverUrl = $serverAddress ;
 	}
@@ -113,8 +111,6 @@ class SOAClient {
 	 * @throws Exception
 	 */
 	public function request($service, $method, $param) {
-		var_dump('1212121');
-		die();
 		$request["service"] = $service;
 		$request["method"] = $method;
 		$request["param"] = $param;
