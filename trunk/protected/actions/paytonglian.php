@@ -417,6 +417,7 @@ class PaytonglianAction extends Controller{
                 $signedValue = json_decode($result['signedValue'],true);
                 $this->content['transDate'] = $signedValue['transDate'];
                 $this->content['tranceNum'] = $signedValue['tranceNum'];
+                return;
         } else {
             $this->code = 1000;
         }
