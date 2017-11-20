@@ -127,7 +127,6 @@ class SOAClient {
 			$req['v'] = $this->version;
 		}
 		$result = $this->request2($req);
-		print_r($result);die();
 		return $this->checkResult($result);
 	}
 	
