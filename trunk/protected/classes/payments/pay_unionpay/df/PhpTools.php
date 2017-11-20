@@ -260,7 +260,6 @@ class PhpTools{
 
 		 //验证返回报文
 		$result=$this->verifyXmls($xmlResponse);
-		var_dump($result);die;
 		return $result;
 	}
 }
