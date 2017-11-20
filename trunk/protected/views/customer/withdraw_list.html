@@ -102,7 +102,7 @@
     }
     function balanceBack(id){
        $.post("{url:/customer/withdraw_back}",{id:id},function(res){
-           if(res.status=='success'){
+           if(res.status){
                  layer.msg("操作成功",{icon:6},function(){
                       window.location.reload();
                  });
