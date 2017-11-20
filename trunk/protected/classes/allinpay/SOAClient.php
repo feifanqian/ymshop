@@ -28,6 +28,8 @@ class SOAClient {
 		return $this->serverAddress;
 	}
 	public function setServerAddress($serverAddress) {
+		var_dump('1212');
+		die();
 		$this->serverAddress = $serverAddress;
 		$this->serverUrl = $serverAddress ;
 	}
