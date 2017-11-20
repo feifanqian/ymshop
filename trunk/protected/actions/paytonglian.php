@@ -69,12 +69,12 @@ class PaytonglianAction extends Controller{
         $param["memberType"] = $memberType;    //会员类型
         $param["source"] = $source;        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
-        print_r($result);die;
-        // if ($result['status']=='OK') {
-        //     $this->code = 0;
-        // }else{
-        //     $this->code = 1000;
-        // }
+        if ($result['status']=='OK') {
+            $this->code = 0;
+            $this->content = '创建会员成功';
+        }else{
+            $this->code = 1000;
+        }
     }
 
     /**
@@ -102,14 +102,16 @@ class PaytonglianAction extends Controller{
         $param["phone"] = $phone;    //手机号码
         $param["verificationCodeType"] = $verificationCodeType;//绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        print_r($result);die;
-        // if ($result['status']=='OK') {
-        //      $this->code = 0;
-        //      $this->content = '发送短信验证码成功';
-        // } else if($result['code']=='3000'){
-        //     $this->code = 3000;
-        //     $this->message = '所属应用下已经存在此用户';
-        // }
+        if ($result['status']=='OK') {
+             $this->code = 0;
+             $this->content = '发送短信验证码成功';
+        } else if($result['code']=='3000'){
+            $this->code = 3000;
+            $this->message = '所属应用下已经存在此用户';
+        }else{
+            $this->code = 1000;
+            
+        }
         
     
     }
@@ -195,8 +197,8 @@ class PaytonglianAction extends Controller{
     
     public function actionBindPhone(){
         $bizUserId = Req::args('bizUserId');
-        $phone = Filter::int(Req::args('phone'));
-        $verificationCode = Filter::int(Req::args('verificationCode'));
+        $phone = Req::args('phone');
+        $verificationCode = Req::args('verificationCode');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
