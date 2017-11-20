@@ -89,7 +89,7 @@
         $.post("{url:/customer/withdraw_query}",{id:id},function(result){
             layer.close(load);
             if(result.status){
-                layer.confirm("代付状态："+result.pay_status, {
+                layer.confirm("代付状态："+result.msg, {
                     btn: ['我知道啦'] //按钮
                     ,title:"代付状态查询"
                   }, function(){
