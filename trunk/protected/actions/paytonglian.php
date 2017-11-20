@@ -24,7 +24,6 @@ class PaytonglianAction extends Controller{
     public $content = NULL;
     public $date = '';
     public $version ='1.0';
-    public $bizUserId = 'jianjianss';
     /*
      @param $serverAddress 服务地址
      @param $sysid 商户号
@@ -54,6 +53,7 @@ class PaytonglianAction extends Controller{
 
    public function actionCreateMember (){
 
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $memberType = Filter::int(Req::args('memberType'));
         $source = Filter::int(Req::args('source'));
         $client = new SOAClient();
@@ -65,7 +65,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
-        $param["bizUserId"] = $this->bizUserId;
+        $param["bizUserId"] = $bizUserId;
         $param["memberType"] = $memberType;    //会员类型
         $param["source"] = $source;        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
@@ -85,6 +85,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionSendVerificationCode(){
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $phone = Req::args('phone');
         $verificationCodeType = Req::args('verificationCodeType');
         $client = new SOAClient();
@@ -96,7 +97,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
-        $param["bizUserId"] = $this->bizUserId;    //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
         $param["phone"] = $phone;    //手机号码
         $param["verificationCodeType"] = $verificationCodeType;//绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
@@ -119,6 +120,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionCheckVerificationCode(){
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $phone = Req::args('phone');
         $verificationCodeType = Req::args('verificationCodeType');
         $verificationCode = Req::args('verificationCode');
@@ -130,7 +132,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
-        $param["bizUserId"] = $this->bizUserId;      //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $bizUserId;      //商户系统用户标识，商户系统中唯一编号
         $param["phone"] = $phone;    //手机号码
         $param["verificationCodeType"] = $verificationCodeType;        //绑定手机
         $param["verificationCode"] = $verificationCode; //短信验证码
@@ -153,6 +155,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionSetRealName(){
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $name = Req::args('name');
         $identityType = Req::args('identityType');
         $identityNo = Req::args('identityNo');
@@ -165,7 +168,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
-        $param["bizUserId"] = $this->bizUserId;    //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
         $param["isAuth"] = true; 
         $param["name"] = $name; 
         $param["identityType"] = $identityType;
@@ -187,6 +190,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionBindPhone(){
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $phone = Filter::int(Req::args('phone'));
         $verificationCode = Filter::int(Req::args('verificationCode'));
         $client = new SOAClient();
@@ -198,7 +202,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
-        $param["bizUserId"] = $this->bizUserId;     //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $bizUserId;     //商户系统用户标识，商户系统中唯一编号
         $param["phone"] = $phone;    //手机号码
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
@@ -311,6 +315,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionGetBankCardBin(){
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $cardNo = Req::args('cardNo');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
@@ -320,13 +325,14 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
-        $param["bizUserId"] = $this->bizUserId;
+        $param["bizUserId"] = $bizUserId;
         $param["cardNo"] = $this->rsaEncrypt($cardNo,$publicKey,$privateKey); //银行卡号
         $result = $client->request("MemberService", "getBankCardBin", $param);
         if ($result['status']=='OK') {
              $this->code = 0;
              $signedValue = json_decode($result['signedValue'],true);
              $this->content['bankCode'] = $signedValue['cardBinInfo']['bankCode'];
+             return;
         } else {
              $this->code = 1000;
         }
@@ -360,11 +366,12 @@ class PaytonglianAction extends Controller{
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $cardNo = $this->rsaEncrypt(Req::args('cardNo'),$publicKey,$privateKey);//必须rsa加密
         $phone = Req::args('phone');
         $name = Req::args('name');
         $cardType = Req::args('cardType');  //卡类型   储蓄卡 1 整型         信用卡 2 整型
-        $bankCode = Req::args('bankCode');//上一部获取的  GetBankCardBin返回 bankCode  01030000
+        $bankCode = $this->actionGetBankCardBin();//上一部获取的  GetBankCardBin返回 bankCode  01030000
         $identityType = Req::args('identityType');          //证件类型 1是身份证 目前只支持身份证
         $identityNo = $this->rsaEncrypt(Req::args('identityNo'),$publicKey,$privateKey);//必须rsa加密 330227198805284412
         $validate = Req::args('validate');
@@ -381,7 +388,7 @@ class PaytonglianAction extends Controller{
         }else{
             $param['isSafeCard']=$isSafeCard;
         }
-        $param["bizUserId"] = $this->bizUserId;    //商户系统用户标识，商户系统中唯一编号
+        $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
         $param["cardNo"] = $cardNo;  //银行卡号
         $param["phone"] = $phone;  //银行预留的手机卡号
         $param["name"] = $name; //用户的姓名
@@ -412,9 +419,10 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionBindBankCard(){
-    
-        $tranceNum = Req::args('tranceNum');//上一接口返回tranceNum 流水号 D2017111634888
-        $transDate = Req::args('transDate');//上一接口返回transDate 申请时间 20171116
+        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $content = $this->actionApplyBindBankCard();
+        $tranceNum = $content['tranceNum'];//上一接口返回tranceNum 流水号 D2017111634888
+        $transDate = $content['transDate'];//上一接口返回transDate 申请时间 20171116
         $phone = Req::args('phone');  
         $verificationCode = Req::args('verificationCode');
         $client = new SOAClient();
@@ -425,7 +433,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
-        $param["bizUserId"] = $this->bizUserId;
+        $param["bizUserId"] = $bizUserId;
         $param["tranceNum"] = $tranceNum;
         $param["transDate"] = $transDate;
         $param["phone"] = $phone;
@@ -450,6 +458,7 @@ class PaytonglianAction extends Controller{
     
     public function actionSetSafeCard(){
     
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $setSafeCard = Req::args('setSafeCard');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
@@ -460,7 +469,7 @@ class PaytonglianAction extends Controller{
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         $cardNo = $this->rsaEncrypt(Req::args('cardNo'),$publicKey,$privateKey);//必须rsa加密
-        $param["bizUserId"] = $this->bizUserId;
+        $param["bizUserId"] = $bizUserId;
         $param["cardNo"] = $cardNo;
         $param["setSafeCard"] = $setSafeCard; //是否设置为安全卡
         $result = $client->request("MemberService", "setSafeCard", $param);
@@ -478,6 +487,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionQueryBankCard(){
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $cardNo = Req::args('cardNo');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
@@ -487,7 +497,7 @@ class PaytonglianAction extends Controller{
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
-        $param["bizUserId"] = $this->bizUserId;
+        $param["bizUserId"] = $bizUserId;
         $param["cardNo"] = $this->rsaEncrypt($cardNo,$publicKey,$privateKey);
         $result = $client->request("MemberService", "queryBankCard", $param);
         if ($result['status']=='OK') {
@@ -505,7 +515,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionUnbindBankCard(){
-
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -515,7 +525,7 @@ class PaytonglianAction extends Controller{
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         $cardNo = $this->rsaEncrypt(Req::args('cardNo'),$publicKey,$privateKey);//必须rsa加密
-        $param["bizUserId"] = $this->bizUserId;
+        $param["bizUserId"] = $bizUserId;
         $param["cardNo"] = $cardNo;
         $result = $client->request("MemberService", "unbindBankCard", $param);
         if ($result['status']=='OK') {
@@ -646,7 +656,8 @@ class PaytonglianAction extends Controller{
         $summary='测试摘要';
         $extendInfo='扩展测试';
 
-        $param["bizUserId"] = $this->bizUserId;
+        $bizUserId = Filter::int(Req::args('bizUserId'));
+        $param["bizUserId"] = $bizUserId;
         $param["bizOrderNo"] = $bizOrderNo;
         $param["accountSetNo"] = $accountSetNo;
         $param["amount"] = $amount;
@@ -699,6 +710,7 @@ class PaytonglianAction extends Controller{
         $client->setSysId($sysid);
         $client->setSignMethod($signMethod);
     
+        $bizUserId = Filter::int(Req::args('bizUserId'));
         $bizOrderNo='201605160001';
         $accountSetNo='12985739202038';
         $amount=100;    //只能为整型
@@ -713,7 +725,7 @@ class PaytonglianAction extends Controller{
         $withdrawType='T0';
         $backUrl = BACKURL;
         $param["bizOrderNo"] = $bizOrderNo;
-        $param["bizUserId"] = $this->bizUserId;
+        $param["bizUserId"] = $bizUserId;
         $param["accountSetNo"] = $accountSetNo;
         $param["amount"] = $amount;
         $param["fee"] = $fee;
