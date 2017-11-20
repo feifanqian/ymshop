@@ -167,7 +167,7 @@ class PhpTools{
 			$return['msg']='未知错误';
 		}
 			    	        
-		
+		var_dump($return);die;
 		return $return;
 	}
 	
