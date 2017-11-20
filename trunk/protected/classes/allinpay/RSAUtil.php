@@ -72,7 +72,7 @@ class RSAUtil {
 		$blocks = self::splitCN($str, 0, 30, 'utf-8');
 		$chrtext  = null;
 		$encodes  = array();
-		print_r($blocks);
+		print_r($str);        
 		die();
 		foreach ($blocks as $n => $block) {
 			if (!openssl_private_encrypt($block, $chrtext, $this->privateKey)) {
