@@ -24,7 +24,7 @@
         <th style="width:80px">类型</th>
         <th style="width:60px">状态</th>    
     </tr>
-    {set:$status=array("-1"=>"<span class='red'>申请被拒</span>","0"=>"<span class='green'>待处理</span>","1"=>"已转账","2"=>"<span class='red'>提现失败</span>","3"=>"已废弃","4"=>"<span class='red'>代付中</span>")}
+    {set:$status=array("-1"=>"<span class='red'>申请被拒</span>","0"=>"<span class='green'>待处理</span>","1"=>"已转账","2"=>"<span class='red'>提现失败</span>","3"=>"<span class='red'>已废弃</span>","4"=>"<span class='red'>代付中</span>")}
     {set:$type=array("0"=>"可用余额提现","1"=>"商家余额提现")}
     {query:name=balance_withdraw as wd fields=wd.*,us.name as uname join= left join user as us on wd.user_id eq us.id where= $where id=$obj page=1 order=wd.id desc }
         <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
