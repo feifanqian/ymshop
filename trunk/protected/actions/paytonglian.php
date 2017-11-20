@@ -105,12 +105,12 @@ class PaytonglianAction extends Controller{
         if ($result['status']=='OK') {
              $this->code = 0;
              $this->content = '发送短信验证码成功';
-        } else if($result['code']=='3000'){
+        } else if($result['errorCode']=='3000'){
             $this->code = 3000;
-            $this->message = '所属应用下已经存在此用户';
+            $this->content = '所属应用下已经存在此用户';
         }else{
             $this->code = 1000;
-            
+
         }
         
     
@@ -213,6 +213,13 @@ class PaytonglianAction extends Controller{
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
         print_r($result);die;
+        if ($result['errorCode']=='50001') {
+             $this->code = '50001';
+             $this->content = '验证码错误';
+        } else {
+            # code...
+        }
+        
     
     }
     
