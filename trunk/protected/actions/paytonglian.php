@@ -281,8 +281,6 @@ class PaytonglianAction extends Controller{
     
     public function actionSetMemberInfo(){
 
-   
-
         $userInfo=new stdClass();
         $userInfo->name='白鸽';
         $userInfo->country='中国';
@@ -435,11 +433,9 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionBindBankCard(){
-        print_r(123456);die;
         $bizUserId = Req::args('bizUserId');
-        $contents = $this->actionApplyBindBankCard();
-        $tranceNum = $contents['tranceNum'];//上一接口返回tranceNum 流水号 D2017111634888
-        $transDate = $contents['transDate'];//上一接口返回transDate 申请时间 20171116
+        $tranceNum = Req::args('tranceNum');//上一接口返回tranceNum 流水号 D2017111634888
+        $transDate = '20171121';//上一接口返回transDate 申请时间 20171116
         $phone = Req::args('phone');  
         $verificationCode = Req::args('verificationCode');
         $client = new SOAClient();
