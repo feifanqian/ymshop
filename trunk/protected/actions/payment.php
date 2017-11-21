@@ -334,9 +334,9 @@ class PaymentAction extends Controller {
        }
        
        $params = array();
-       $params["cusid"] = AppConfig::CUSIDS;
+       $params["cusid"] = AppConfig::CUSID;
        // $params["cusid"] = "1486189412";
-       $params["appid"] = AppConfig::APPIDS;
+       $params["appid"] = AppConfig::APPID;
        // $params["appid"] = "wx167f2c4da1f798b0";
        $params["version"] = AppConfig::APIVERSION;
        $params["trxamt"] = $order_amount*100;
@@ -349,7 +349,7 @@ class PaymentAction extends Controller {
        $params["open_id"] = '';
        // $params["limit_pay"] = "no_credit";
        $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
-       $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEYS);//签名
+       $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
        
        $paramsStr = AppUtil::ToUrlParams($params);
        $url = AppConfig::APIURL . "/pay";
