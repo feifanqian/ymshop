@@ -1,9 +1,10 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}"/>
 
-<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
-
-        <ul class="box list-nav">
-            {query:name=article where=$where order=id desc page=1 id=$article}
-            <li class="item"><a class="more" href="{url:/index/article/id/$item[id]}"><div style="padding-left:0" class="un">{$item['title']}</div></a></li>
-            {/query}
-        </ul>
+<ul class="box list-nav">
+    {query:name=article where=$where order=id desc page=1 id=$article}
+    <li class="item"><a class="more" href="{url:/index/article/id/$item[id]}">
+        <div style="padding-left:0" class="un">{$item['title']}</div>
+    </a></li>
+    {/query}
+</ul>
 <div class="ma20 page-nav">{echo:$article->pageBar(2)}</div>

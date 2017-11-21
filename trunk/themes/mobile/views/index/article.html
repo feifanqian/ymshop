@@ -1,15 +1,15 @@
-
-<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}"/>
 <div class="line-2">
     {set:$rand_num = rand(0,3);}
     {query:name=article where=id eq $id}
-    <div class="p20 line-b bg-title-{$rand_num}" >
-	<h1 class="title tc pt20"><span class="fz36">{$item['title']}</span></h1>
-    <div class="clearfix"><span class="fr">
+    <div class="p20 line-b bg-title-{$rand_num}">
+        <h1 class="title tc pt20"><span class="fz36">{$item['title']}</span></h1>
+        <div class="clearfix"><span class="fr">
     
-    {$item['publish_time']}</span></div></div>
-	<div class="p20 bg-white description">
+    {$item['publish_time']}</span></div>
+    </div>
+    <div class="p20 bg-white description">
         {$item['content']}
-	</div>
+    </div>
     {/query}
 </div>
