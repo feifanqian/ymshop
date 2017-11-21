@@ -435,6 +435,7 @@ class PaytonglianAction extends Controller{
      */
     
     public function actionBindBankCard(){
+        print_r(123456);die;
         $bizUserId = Req::args('bizUserId');
         $contents = $this->actionApplyBindBankCard();
         $tranceNum = $contents['tranceNum'];//上一接口返回tranceNum 流水号 D2017111634888
@@ -444,7 +445,7 @@ class PaytonglianAction extends Controller{
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
-        print_r($publicKey);die;
+
         $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
