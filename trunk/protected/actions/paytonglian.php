@@ -401,14 +401,14 @@ class PaytonglianAction extends Controller{
             $param['isSafeCard']=$isSafeCard;
         }
         $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
-        $param["cardNo"] = $cardNos;  //银行卡号
+        $param["cardNo"] = $cardNo;  //银行卡号
         $param["phone"] = $phone;  //银行预留的手机卡号
         $param["name"] = $name; //用户的姓名
         $param["cardType"] = $cardType;
         $param['bankCode'] = $bankCode['bankCode'];
         $param["cardCheck"] = $cardCheck; //绑卡方式
         $param["identityType"] = $identityType;
-        $param["identityNo"] = $identityNos;
+        $param["identityNo"] = $identityNo;
         $param["unionBank"] = $unionBank;
         $result = $client->request("MemberService", "applyBindBankCard", $param);
         if ($result['status']=='OK') {
