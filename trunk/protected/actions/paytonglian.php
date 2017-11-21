@@ -449,7 +449,10 @@ class PaytonglianAction extends Controller
     {
         $user_id = Req::args('user_id');
         $model = $this->model->table("bankcard");
-        $obj = $model->fields("tranceNum,transDate")->where("user_id='$user_id'")->find();
+        $obj = $model->fields("tranceNum,transDate")->where("user_id='$user_id'")->order('id DESC')->find();
+        $bizUserId = Req::args('$bizUserId');
+        $phone = Req::args('phone');
+        $verificationCode = Req::args('verificationCode');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -459,12 +462,12 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         $param["bizUserId"] = $bizUserId;
-        $param["tranceNum"] = $tranceNum;
-        $param["transDate"] = $transDate;
+        $param["tranceNum"] = $obj['tranceNum'];
+        $param["transDate"] = $obj['transDate'];
         $param["phone"] = $phone;
         $param["verificationCode"] = $verificationCode;
         $result = $client->request("MemberService", "bindBankCard", $param);
-        print_r($obj['tranceNum']);die();
+        print_r($result);die();
         if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
