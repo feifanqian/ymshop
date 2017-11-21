@@ -365,8 +365,9 @@ class PaytonglianAction extends Controller{
      * @param $cvv2    CVV2   信用卡必填。RSA加密。
      * @param $isSafeCard 是否安全卡   信用卡时不能填写：  true:设置为安全卡，false:不设置。默认为false
      */
-    
-    public function actionApplyBindBankCard($bizUserId,$cardNo,$phone,$name,$cardType,$bankCode,$identityType,$identityNo,$validate,$cvv2,$isSafeCard,$cardCheck,$unionBank){
+
+    //获取短信验证码
+    public function actionApplyBindBankCard(){
 
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
@@ -377,21 +378,63 @@ class PaytonglianAction extends Controller{
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
-//        $bizUserId = Req::args('bizUserId');
-//        $cardNo = $this->rsaEncrypt(Req::args('cardNo'),$publicKey,$privateKey);//必须rsa加密
-//        $phone = Req::args('phone');
-//        $name = Req::args('name');
-//        $cardType = Req::args('cardType');  //卡类型   储蓄卡 1 整型         信用卡 2 整型
-//        $bankCode = $this->actionGetBankCardBin();//上一部获取的  GetBankCardBin返回 bankCode  01030000
-//        $identityType = Req::args('identityType');          //证件类型 1是身份证 目前只支持身份证
-//        $identityNo = $this->rsaEncrypt(Req::args('identityNo'),$publicKey,$privateKey);//必须rsa加密 330227198805284412
-//        $validate = Req::args('validate');
-//        $cvv2 = Req::args('cvv2');
-//        $isSafeCard = Req::args('isSafeCard');  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
-//        $cardCheck = Req::args('cardCheck'); //绑卡方式
-//        $unionBank = Req::args('unionBank');
-          $cardNos = $this->rsaEncrypt($cardNo,$publicKey,$privateKey);
-          $identityNos = $this->rsaEncrypt($identityNo,$publicKey,$privateKey);
+        $bizUserId = Req::args('bizUserId');
+        $cardNo = $this->rsaEncrypt(Req::args('cardNo'),$publicKey,$privateKey);//必须rsa加密
+        $phone = Req::args('phone');
+        $name = Req::args('name');
+        $cardType = Req::args('cardType');  //卡类型   储蓄卡 1 整型         信用卡 2 整型
+        $bankCode = $this->actionGetBankCardBin();//上一部获取的  GetBankCardBin返回 bankCode  01030000
+        $identityType = Req::args('identityType');          //证件类型 1是身份证 目前只支持身份证
+        $identityNo = $this->rsaEncrypt(Req::args('identityNo'),$publicKey,$privateKey);//必须rsa加密 330227198805284412
+        $validate = Req::args('validate');
+        $cvv2 = Req::args('cvv2');
+        $isSafeCard = Req::args('isSafeCard');  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
+        $cardCheck = Req::args('cardCheck'); //绑卡方式
+        $unionBank = Req::args('unionBank');
+
+
+        if ($cardType==2){
+            // 信用卡    有下面的参数
+            $param['validate']=$validate;
+            $param['cvv2']=$cvv2;
+        }else{
+            $param['isSafeCard']=$isSafeCard;
+        }
+        $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
+        $param["cardNo"] = $cardNos;  //银行卡号
+        $param["phone"] = $phone;  //银行预留的手机卡号
+        $param["name"] = $name; //用户的姓名
+        $param["cardType"] = $cardType;
+        $param['bankCode'] = $bankCode['bankCode'];
+        $param["cardCheck"] = $cardCheck; //绑卡方式
+        $param["identityType"] = $identityType;
+        $param["identityNo"] = $identityNos;
+        $param["unionBank"] = $unionBank;
+        $result = $client->request("MemberService", "applyBindBankCard", $param);
+        if ($result['status']=='OK') {
+            $this->code = 0;
+            $signedValue = json_decode($result['signedValue'],true);
+            $this->content['transDate'] = $signedValue['transDate'];
+            $this->content['tranceNum'] = $signedValue['tranceNum'];
+            return ;
+        } else {
+            $this->code = 1000;
+        }
+
+    }
+    
+    public function actionApplyBindBankCards($bizUserId,$cardNo,$phone,$name,$cardType,$bankCode,$identityType,$identityNo,$validate,$cvv2,$isSafeCard,$cardCheck,$unionBank){
+
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        $cardNos = $this->rsaEncrypt($cardNo,$publicKey,$privateKey);
+        $identityNos = $this->rsaEncrypt($identityNo,$publicKey,$privateKey);
        
        
         if ($cardType==2){
@@ -452,7 +495,7 @@ class PaytonglianAction extends Controller{
         $isSafeCard = Req::args('isSafeCard');  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
         $cardCheck = Req::args('cardCheck'); //绑卡方式
         $unionBank = Req::args('unionBank');
-        $contents = $this->actionApplyBindBankCard($bizUserId,$cardNo,$phone,$name,$cardType,$bankCode,$identityType,$identityNo,$validate,$cvv2,$isSafeCard,$cardCheck,$unionBank);
+        $contents = $this->actionApplyBindBankCards($bizUserId,$cardNo,$phone,$name,$cardType,$bankCode,$identityType,$identityNo,$validate,$cvv2,$isSafeCard,$cardCheck,$unionBank);
         $tranceNum = $contents['tranceNum'];//上一接口返回tranceNum 流水号 D2017111634888
         $transDate = $contents['transDate'];//上一接口返回transDate 申请时间 20171116
         $verificationCode = Req::args('verificationCode');
