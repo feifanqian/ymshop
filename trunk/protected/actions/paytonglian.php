@@ -467,8 +467,8 @@ class PaytonglianAction extends Controller
         $client->setSignMethod($this->signMethod);
         $param["bizUserId"] = $bizUserId;
         print_r($obj);die();
-        $param["tranceNum"] = $tranceNum;
-        $param["transDate"] = $transDate;
+//        $param["tranceNum"] = $tranceNum;
+//        $param["transDate"] = $transDate;
         $param["phone"] = $phone;
         $param["verificationCode"] = $verificationCode;
         $result = $client->request("MemberService", "bindBankCard", $param);
