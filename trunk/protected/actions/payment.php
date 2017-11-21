@@ -326,7 +326,7 @@ class PaymentAction extends Controller {
        //   $this->code = 1162;
        // } 
        if($payment_id==7 || $payment_id==18){ //app微信支付
-         $paytype = "W01";
+         $paytype = "2";
          $acct = "";
        }elseif($payment_id==16 || $payment_id==17){ //app支付宝支付
          $paytype = "A01";
