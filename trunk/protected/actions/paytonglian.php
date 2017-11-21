@@ -466,13 +466,13 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         $param["bizUserId"] = $bizUserId;
-
+        print_r($obj);die();
         $param["tranceNum"] = $tranceNum;
         $param["transDate"] = $transDate;
         $param["phone"] = $phone;
         $param["verificationCode"] = $verificationCode;
         $result = $client->request("MemberService", "bindBankCard", $param);
-        print_r($obj);die();
+
         if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
