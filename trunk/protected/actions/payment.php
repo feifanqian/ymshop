@@ -326,7 +326,7 @@ class PaymentAction extends Controller {
        //   $this->code = 1162;
        // } 
        if($payment_id==7 || $payment_id==18){ //app微信支付
-         $paytype = "2";
+         $paytype = "W01";
          $acct = "";
        }elseif($payment_id==16 || $payment_id==17){ //app支付宝支付
          $paytype = "A01";
@@ -361,12 +361,12 @@ class PaymentAction extends Controller {
        $rspArray = json_decode($rsp, true);
        if(AppUtil::ValidSigns($rspArray)){
            if(isset($rspArray['payinfo'])){
-            var_dump($rspArray);die;
+            // var_dump($rspArray);die;
                $this->code = 0;
                $this->content = array(
                         'order_id' => $order_id,
                         'payment_id' => $payment_id,
-                        'senddata' => json_decode($rspArray['payinfo'],true),
+                        'senddata' => $rspArray['payinfo'],
                     );
            }else{
              $this->code = 1161;
