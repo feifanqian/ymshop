@@ -358,6 +358,7 @@ class PaymentAction extends Controller {
        $rspArray = json_decode($rsp, true);
        if(AppUtil::ValidSigns($rspArray)){
            if(isset($rspArray['payinfo'])){
+            var_dump($rspArray);die;
                $this->code = 0;
                $this->content = array(
                         'order_id' => $order_id,
