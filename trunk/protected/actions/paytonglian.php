@@ -378,7 +378,6 @@ class PaytonglianAction extends Controller
      * @param $isSafeCard 是否安全卡   信用卡时不能填写：  true:设置为安全卡，false:不设置。默认为false
      */
 
-    //获取短信验证码
     public function actionApplyBindBankCard()
     {
 
@@ -391,6 +390,7 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
+        $user_id = Req::args('user_id');
         $bizUserId = Req::args('bizUserId');
         $cardNo = $this->rsaEncrypt(Req::args('cardNo'), $publicKey, $privateKey);//必须rsa加密
         $phone = Req::args('phone');
@@ -430,8 +430,7 @@ class PaytonglianAction extends Controller
             $signedValue = json_decode($result['signedValue'], true);
             $transDate = $signedValue['transDate'];
             $tranceNum = $signedValue['tranceNum'];
-            $results = $this->actionBindBankCard($bizUserId,$tranceNum,$transDate,$phone,$verificationCode);
-            print_r($results);die();
+            $this->model->table("bankcard")->data(array('user_id' => $user_id, 'tranceNum' => $tranceNum, 'transDate' => $transDate, 'bankType' =>$bankCode))->insert();
         } else {
             $this->code = 1000;
         }
@@ -446,8 +445,11 @@ class PaytonglianAction extends Controller
      * @param $verificationCode 短信验证码
      */
 
-    public function actionBindBankCard($bizUserId,$tranceNum,$transDate,$phone,$verificationCode)
+    public function actionBindBankCard()
     {
+        $user_id = Req::args('user_id');
+        $model = $this->model->table("bankcard");
+        $obj = $model->fields("tranceNum,transDate")->where("user_id='$user_id'")->find();
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -462,7 +464,7 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;
         $param["verificationCode"] = $verificationCode;
         $result = $client->request("MemberService", "bindBankCard", $param);
-        print_r($result);die();
+        print_r($obj['tranceNum']);die();
         if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
