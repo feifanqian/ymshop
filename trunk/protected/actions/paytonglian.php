@@ -448,7 +448,10 @@ class PaytonglianAction extends Controller
 
     public function actionBindBankCard()
     {
-        $cardNo = Req::args('cardNo');
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $cardNo = $this->rsaEncrypt(Req::args('cardNo'),$publicKey,$privateKey);
         $user_id = Req::args('user_id');
         $model = new Model();
         $models = $this->model->table("bankcard");
@@ -456,9 +459,7 @@ class PaytonglianAction extends Controller
         $bizUserId = Req::args('$bizUserId');
         $phone = Req::args('phone');
         $verificationCode = Req::args('verificationCode');
-        $client = new SOAClient();
-        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
-        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+
         $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
