@@ -417,7 +417,7 @@ class PaytonglianAction extends Controller{
                 $signedValue = json_decode($result['signedValue'],true);
                 $this->content['transDate'] = $signedValue['transDate'];
                 $this->content['tranceNum'] = $signedValue['tranceNum'];
-                return;
+                return ;
         } else {
             $this->code = 1000;
         }
@@ -444,6 +444,7 @@ class PaytonglianAction extends Controller{
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        print_r($publicKey);die;
         $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
