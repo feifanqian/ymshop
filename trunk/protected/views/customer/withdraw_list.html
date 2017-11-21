@@ -34,10 +34,13 @@
                 <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
                 {elseif:$item['status']==1}
                 <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
-                {elseif:$item['status']==4}
-                <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
                 {elseif:$item['status']==2}
                 <li><a class="icon-credit" href="javascript:balanceBack({$item['id']});"> 余额退回</a></li>
+                <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
+                {elseif:$item['status']==3}
+                <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
+                {elseif:$item['status']==4}
+                <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
                 {/if}
             </ul></div></div> </td>
         <td >{$item['withdraw_no']}</td>
@@ -107,13 +110,15 @@
        var load =layer.load();
        $.post("{url:/customer/withdraw_back}",{id:id},function(res){
            layer.close(load);
-           if(res.status){
-                 layer.msg("操作成功",{icon:6},function(){
-                      window.location.reload();
-                 });
-           }else{
-            layer.msg("退回失败");
-           }
+           layer.msg("操作成功");
+           window.location.reload();
+           // if(res.status){
+           //       layer.msg("操作成功",{icon:6},function(){
+           //            window.location.reload();
+           //       });
+           // }else{
+           //  layer.msg("退回失败");
+           // }
        })
     }
     function balanceQuery(){

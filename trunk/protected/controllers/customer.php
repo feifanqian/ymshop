@@ -150,7 +150,14 @@ class CustomerController extends Controller {
 
                     if($result['code']==1){
                         if($obj['status']==4 || $obj['status']==0){
-                            $model->data(array('status'=>1))->where("wd.id=$id")->update();
+                            if($obj['type']==0){
+                                $config = Config::getInstance();
+                                $other = $config->get("other");
+                                $real_amount = round($obj['amount']*(100-$other['withdraw_fee_rate'])/100);
+                            }else{
+                                $real_amount = $obj['amount'];
+                            }
+                            $model->data(array('status'=>1,'real_amount'=>$real_amount))->where("wd.id=$id")->update();
                         }
                         exit(json_encode(array('status'=>'success','msg'=>$result['msg'])));
                     }else{
@@ -174,11 +181,7 @@ class CustomerController extends Controller {
             $res2 = $model->table('customer')->data(array('offline_balance' => "`offline_balance`+" . $withdraw['amount']))->where('user_id=' . $withdraw['user_id'])->update();
         }
         Log::balance($withdraw['amount'], $withdraw['user_id'],$withdraw['withdraw_no'],"余额提现失败退回", 3, $this->manager['id']);
-        if($res1 && $res2){
-            exit(json_encode(array('status'=>'success','msg'=>'退回成功')));
-        }else{
-            exit(json_encode(array('status'=>'fail','msg'=>'退回失败')));
-        }
+        exit(json_encode(array('status'=>'success','msg'=>'退回成功')));   
     }
     public function df_balance_query(){
         if($this->is_ajax_request()){
