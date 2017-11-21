@@ -325,12 +325,15 @@ class PaymentAction extends Controller {
        // if(!$open['open_id']){
        //   $this->code = 1162;
        // } 
-       if($payment_id==7 || $payment_id==18){
+       if($payment_id==7 || $payment_id==18){ //app微信支付
          $paytype = "W01";
-       }elseif($payment_id==16 || $payment_id==17){
+         $acct = "";
+       }elseif($payment_id==16 || $payment_id==17){ //app支付宝支付
          $paytype = "A01";
+         $acct = "2088721513415607";
        }else{
          $paytype = "0";
+         $acct = "";
        }
        
        $params = array();
@@ -345,7 +348,7 @@ class PaymentAction extends Controller {
        $params["randomstr"] = $randomstr;//
        $params["body"] = "商品名称";
        $params["remark"] = "备注信息";
-       $params["acct"] = '';
+       $params["acct"] = $acct;
        $params["open_id"] = '';
        // $params["limit_pay"] = "no_credit";
        $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
