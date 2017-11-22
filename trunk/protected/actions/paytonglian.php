@@ -682,9 +682,9 @@ class PaytonglianAction extends Controller
         $payMethod = new  stdClass();
         //网关
         $payMethodb = new  stdClass();
-        $payMethodb->bankCode = 'abc';
+        $payMethodb->bankCode = '01030000';
         $payMethodb->payType = 1;
-        $payMethodb->bankCardNo = $this->rsaEncrypt('6228480318051081101', $publicKey, $privateKey);
+        $payMethodb->bankCardNo = $this->rsaEncrypt('6228480318051081123', $publicKey, $privateKey);
         $payMethodb->amount = 100;//快捷支付（需要先绑定银行 卡）
         $payMethod->GATEWAY = $payMethodb;
 
