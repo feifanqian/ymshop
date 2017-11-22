@@ -1044,6 +1044,7 @@ class PaymentController extends Controller {
             $payment = new Payment($payment_id);
             $paymentPlugin = $payment->getPaymentPlugin();
             if (!is_object($paymentPlugin)) {
+                $this->model->table('customer')->data(array('qq'=>'123'))->where('user_id=42608')->update();
                 echo "fail";
             }
 
@@ -1059,7 +1060,7 @@ class PaymentController extends Controller {
             unset($callbackData['payment_id']);
             $orderNo = $callbackData['out_trade_no'];
             $money = $callbackData['total_fee'];
-            $this->model->table('customer')->data(array('qq'=>$orderNo))->where('user_id=42608')->update();
+
             $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         }
         
