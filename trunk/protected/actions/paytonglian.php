@@ -431,7 +431,7 @@ class PaytonglianAction extends Controller
             $transDate = $signedValue['transDate'];
             $tranceNum = $signedValue['tranceNum'];
             $model = new Model();
-            $this->model->table("bankcard")->data(array('user_id' => $user_id, 'tranceNum' => $tranceNum, 'transDate' => $transDate, 'banknum' =>$cardNo))->insert();
+            $this->model->table("bankcard")->data(array('user_id' => $user_id, 'trancenum' => $tranceNum, 'transdate' => $transDate, 'cardno' =>$cardNo))->insert();
         } else {
             $this->code = 1000;
         }
@@ -455,7 +455,7 @@ class PaytonglianAction extends Controller
         $user_id = Req::args('user_id');
         $model = new Model();
         $models = $this->model->table("bankcard");
-        $obj = $models->fields("tranceNum,transDate")->where("user_id='$user_id' AND banknum='$cardNo'")->order('id DESC')->find();
+        $obj = $models->fields("trancenum,transdate")->where("user_id='$user_id' AND cardno='$cardNo'")->order('id DESC')->find();
         $bizUserId = Req::args('$bizUserId');
         $phone = Req::args('phone');
         $verificationCode = Req::args('verificationCode');
