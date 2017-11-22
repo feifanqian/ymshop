@@ -1013,7 +1013,7 @@ class PaymentController extends Controller {
     // 支付回调[异步]
     public function async_callback() {
         $payment_id = Filter::int(Req::args('payment_id')); 
-        if($payment_id==6){
+        if($payment_id==6 || $payment_id==7 || $payment_id==18){
             $xml = @file_get_contents('php://input');
             $array=Common::xmlToArray($xml);
             file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
@@ -1033,6 +1033,7 @@ class PaymentController extends Controller {
             
             $callbackData=$array;
             $orderNo = $array['attach'];
+            
             $money = round(intval($array['total_fee'])/100,2);
             if($array['result_code']=='SUCCESS'){
                 $return=1;
@@ -1041,13 +1042,11 @@ class PaymentController extends Controller {
             }
 
         }else{
-            $this->model->table('customer')->data(array('qq'=>'123'))->where('user_id=42608')->update();
             $payment = new Payment($payment_id);
             $paymentPlugin = $payment->getPaymentPlugin();
             if (!is_object($paymentPlugin)) {
                 echo "fail";
             }
-            $this->model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
             //初始化参数
             $money = '';
             $message = '支付失败';
@@ -1055,12 +1054,16 @@ class PaymentController extends Controller {
 
             //执行接口回调函数
             $callbackData = Req::args(); //array_merge($_POST,$_GET);
+            
             unset($callbackData['con']);
             unset($callbackData['act']);
             unset($callbackData['payment_id']);
-            $orderNo = $callbackData['out_trade_no'];
-            $money = $callbackData['total_fee'];
-
+            if(isset($callbackData['out_trade_no'])){
+                $orderNo = $callbackData['out_trade_no'];
+            }
+            if(isset($callbackData['total_fee'])){
+                $money = $callbackData['total_fee'];
+            }       
             $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         }
         
