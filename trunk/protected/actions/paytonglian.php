@@ -677,8 +677,8 @@ class PaytonglianAction extends Controller
         $bizUserId = Req::args('bizUserId');
         $bizOrderNo = Req::args('bizOrderNo');
         $accountSetNo = Req::args('accountSetNo');
-        $amount = Req::args('amount');  //必须整形
-        $fee = Req::args('fee');//必须整形
+        $amount = Filter::int(Req::args('amount'));  //必须整形
+        $fee = Filter::int(Req::args('fee'));//必须整形
         $payMethod = new  stdClass();
         //网关
         $payMethodb = new  stdClass();
@@ -775,9 +775,9 @@ class PaytonglianAction extends Controller
         $param["summary"] = $summary;
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "withdrawApply", $param);
-        if ($result['status']=='OK'){
-                $this->code = 0;
-        }else{
+        if ($result['status'] == 'OK') {
+            $this->code = 0;
+        } else {
             print_r($result);
         }
 
