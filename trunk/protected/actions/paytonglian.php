@@ -431,7 +431,7 @@ class PaytonglianAction extends Controller
             $transDate = $signedValue['transDate'];
             $tranceNum = $signedValue['tranceNum'];
             $model = new Model();
-            $this->model->table("bankcard")->data(array('user_id' => $user_id, 'trancenum' => $tranceNum, 'transdate' => $transDate, 'cardno' =>$cardNo))->insert();
+            $this->model->table("bankcard")->data(array('user_id' => $user_id, 'trancenum' => $tranceNum, 'transdate' => $transDate, 'cardno' =>Req::args('cardNo')))->insert();
         } else {
             $this->code = 1000;
         }
@@ -451,7 +451,7 @@ class PaytonglianAction extends Controller
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
-        $cardNo = $this->rsaEncrypt(Req::args('cardNo'),$publicKey,$privateKey);
+        $cardNo = Req::args('cardNo');
         $user_id = Req::args('user_id');
         $model = new Model();
         $models = $this->model->table("bankcard");
