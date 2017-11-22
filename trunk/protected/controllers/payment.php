@@ -1053,12 +1053,17 @@ class PaymentController extends Controller {
 
             //执行接口回调函数
             $callbackData = Req::args(); //array_merge($_POST,$_GET);
+            $this->model->table('customer')->data(array('sex'=>1))->where('user_id=42608')->update();
             unset($callbackData['con']);
             unset($callbackData['act']);
             unset($callbackData['payment_id']);
-            $orderNo = $callbackData['out_trade_no'];
-            $money = $callbackData['total_fee'];
-            $this->model->table('customer')->data(array('qq'=>$orderNo))->where('user_id=42608')->update();
+            if(isset($callbackData['out_trade_no'])){
+                $orderNo = $callbackData['out_trade_no'];
+            }
+            if(isset($callbackData['total_fee'])){
+                $money = $callbackData['total_fee'];
+            }       
+            // $this->model->table('customer')->data(array('qq'=>$orderNo))->where('user_id=42608')->update();
             $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         }
         
