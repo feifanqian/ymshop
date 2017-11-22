@@ -373,7 +373,7 @@ class PaymentAction extends Controller {
              } 
 
        }elseif($payment_id==16 || $payment_id==17){ //app支付宝支付
-         $packData = $payment->getPaymentInfo('order', $order_id);
+         $packData = $payment->getPaymentInfo('offline_order', $order_id);
          $packData = array_merge($extendDatas, $packData);
          $sendData = $paymentPlugin->packData($packData);
          $this->code = 0;
