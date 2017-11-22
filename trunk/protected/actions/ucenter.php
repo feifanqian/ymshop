@@ -1216,6 +1216,7 @@ class UcenterAction extends Controller {
         $this->content['delivery'] = (int) $this->getDeliveryOrderCount();
         $this->content['review'] = (int) $this->getUnreviewCount();
         $this->content['cart'] = (int) $this->getCartCount();
+        $this->content['undelivery'] = (int) $this->getUndeliveryOrderCount();//待发货
     }
 
     private function getMessageCount() {
@@ -1245,6 +1246,11 @@ class UcenterAction extends Controller {
 
     private function getDeliveryOrderCount() {
         $data = $this->model->query("select count(id) as count from tiny_order where is_del = 0 and delivery_status = 1 and status = 3 and user_id=" . $this->user['id']);
+        return isset($data[0]['count']) ? $data[0]['count'] : 0;
+    }
+
+    private function getUndeliveryOrderCount() {
+        $data = $this->model->query("select count(id) as count from tiny_order where is_del = 0 and delivery_status = 0 and status = 3 and user_id=" . $this->user['id']);
         return isset($data[0]['count']) ? $data[0]['count'] : 0;
     }
 
