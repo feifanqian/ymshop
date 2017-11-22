@@ -1041,6 +1041,9 @@ class PaymentController extends Controller {
             }
 
         }else{
+            if($this->user['id']==50421){
+               $this->model->table('customer')->data(array('qq'=>$payment_id))->where('user_id=50421')->update(); 
+            }
             $payment = new Payment($payment_id);
             $paymentPlugin = $payment->getPaymentPlugin();
             if (!is_object($paymentPlugin)) {
