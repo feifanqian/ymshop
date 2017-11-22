@@ -456,9 +456,6 @@ class PaytonglianAction extends Controller
         $model = new Model();
         $models = $this->model->table("bankcard");
         $obj = $models->fields("trancenum,transdate")->where("user_id='$user_id' AND cardno='$cardNo'")->order('id DESC')->find();
-        print_r($obj);
-        print_r($obj['transdate']);
-        print_r($obj['trancenum']);die();
         $bizUserId = Req::args('bizUserId');
         $phone = Req::args('phone');
         $verificationCode = Req::args('verificationCode');
