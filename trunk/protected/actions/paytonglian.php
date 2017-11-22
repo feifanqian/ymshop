@@ -220,7 +220,7 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;    //手机号码
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
-        if ($result['status'] == "OK") {
+        if ($result['status'] == 'OK') {
             $this->code = 0;
         } else if ($result['errorCode'] == '50001') {
             $this->code = '50001';
