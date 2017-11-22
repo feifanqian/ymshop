@@ -56,11 +56,11 @@ class Payment {
         $paymentObj = $this->getPayment();
         $payment['M_PartnerId'] = isset($this->_config['partner_id']) ? $this->_config['partner_id'] : '';
         $payment['M_PartnerKey'] = isset($this->_config['partner_key']) ? $this->_config['partner_key'] : '';
-        $model = new Model("order");
+        $model = new Model();
         if ($type == 'order') {
             $order_id = $argument;
             //获取订单信息
-            $order = $model->where('id = ' . $order_id . ' and status = 2')->find();
+            $order = $model->table('order')->where('id = ' . $order_id . ' and status = 2')->find();
             if (empty($order)) {
                 $msg = array('type' => 'fail', 'msg' => '订单信息不正确，不能进行支付！');
                 $controller->redirect('/index/msg', false, $msg);
@@ -76,6 +76,26 @@ class Payment {
             $payment ['P_PostCode'] = $order['zip'];
             $payment ['P_Telephone'] = $order['phone'];
             $payment ['P_Address'] = $order['addr'];
+            $payment ['P_Email'] = '';
+        }elseif($type == 'offline_order'){
+            $order_id = $argument;
+            //获取订单信息
+            $order = $model->table('order_offline')->where('id = ' . $order_id . ' and status = 2')->find();
+            if (empty($order)) {
+                $msg = array('type' => 'fail', 'msg' => '订单信息不正确，不能进行支付！');
+                $controller->redirect('/index/msg', false, $msg);
+                exit;
+            }
+            $payment ['M_Remark'] = '';
+            $payment ['M_OrderId'] = $order['id'];
+            $payment ['M_OrderNO'] = $order['order_no'];
+            $payment ['M_Amount'] = $order['order_amount'];
+            //用户信息
+            $payment ['P_Mobile'] = $order['mobile'];
+            $payment ['P_Name'] = $order['accept_name'];
+            $payment ['P_PostCode'] = '';
+            $payment ['P_Telephone'] = $order['mobile'];
+            $payment ['P_Address'] = "测试街道测试地址";
             $payment ['P_Email'] = '';
         } else if ($type == 'recharge') {
             if (!isset($argument['account']) || $argument['account'] <= 0) {
