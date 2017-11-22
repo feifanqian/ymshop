@@ -1013,7 +1013,7 @@ class PaymentController extends Controller {
     // 支付回调[异步]
     public function async_callback() {
         $payment_id = Filter::int(Req::args('payment_id')); 
-        if($payment_id==6 || $payment_id==7){
+        if($payment_id==6 || $payment_id==7 || $payment_id==18){
             $xml = @file_get_contents('php://input');
             $array=Common::xmlToArray($xml);
             file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
@@ -1033,7 +1033,7 @@ class PaymentController extends Controller {
             
             $callbackData=$array;
             $orderNo = $array['attach'];
-            $this->model->table('customer')->data(array('qq'=>$orderNo))->where('user_id=42608')->update();
+            
             $money = round(intval($array['total_fee'])/100,2);
             if($array['result_code']=='SUCCESS'){
                 $return=1;
