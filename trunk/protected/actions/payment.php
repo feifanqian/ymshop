@@ -618,5 +618,24 @@ class PaymentAction extends Controller {
             }
         }
     }
-
+    
+    public function seller_name(){
+      $user_id = Filter::int(Req::args('seller_id'));
+      if(!$user_id){
+        $this->code = 1158;
+        return;
+      }
+      $seller = $this->model->table('customer')->fields('real_name')->where('user_id='.$user_id)->find();
+      if(!$seller){
+        $this->code = 1159;
+        return;
+      }
+      $shop_name = $seller['real_name'];
+      if($seller['real_name']==''){
+        $shop_name = "匿名商家";
+      }
+      $this->code = 0;
+      $this->content['shop_name'] = $shop_name;
+      return;
+    }
 }
