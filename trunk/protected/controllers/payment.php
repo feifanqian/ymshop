@@ -1041,13 +1041,11 @@ class PaymentController extends Controller {
             }
 
         }else{
-            $this->model->table('customer')->data(array('qq'=>'123'))->where('user_id=42608')->update();
             $payment = new Payment($payment_id);
             $paymentPlugin = $payment->getPaymentPlugin();
             if (!is_object($paymentPlugin)) {
                 echo "fail";
             }
-            $this->model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
             //初始化参数
             $money = '';
             $message = '支付失败';
@@ -1060,7 +1058,7 @@ class PaymentController extends Controller {
             unset($callbackData['payment_id']);
             $orderNo = $callbackData['out_trade_no'];
             $money = $callbackData['total_fee'];
-
+            $this->model->table('customer')->data(array('qq'=>$orderNo))->where('user_id=42608')->update();
             $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         }
         
