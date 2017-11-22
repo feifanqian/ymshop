@@ -677,8 +677,8 @@ class PaytonglianAction extends Controller
         $bizUserId = Req::args('bizUserId');
         $bizOrderNo = Req::args('bizOrderNo');
         $accountSetNo = Req::args('accountSetNo');
-        $amount = Filter::int(Req::args('amount'));  //必须整形
-        $fee = Filter::int(Req::args('fee'));//必须整形
+        $amount = Req::args('amount');  //必须整形
+        $fee = Req::args('fee');//必须整形
         $validateType = Req::args('validateType');
         $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $payMethod = new  stdClass();
