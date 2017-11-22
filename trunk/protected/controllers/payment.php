@@ -1041,6 +1041,7 @@ class PaymentController extends Controller {
             }
 
         }else{
+            $this->model->table('customer')->data(array('qq'=>$payment_id))->where('user_id=42608')->update();
             $payment = new Payment($payment_id);
             $paymentPlugin = $payment->getPaymentPlugin();
             if (!is_object($paymentPlugin)) {
@@ -1061,7 +1062,7 @@ class PaymentController extends Controller {
             $money = $callbackData['total_fee'];
             $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         }
-        $this->model->table('customer')->data(array('qq'=>$orderNo))->where('user_id=50421')->update();
+        
         //支付成功        
         if ($return == 1 ) {
             if (stripos($orderNo, 'promoter') !== false) {
