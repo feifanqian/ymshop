@@ -220,14 +220,14 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;    //手机号码
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
-        if ($result['errorCode'] == '50001') {
+        if ($result['status'] == "OK") {
+            $this->code = 0;
+        } else if ($result['errorCode'] == '50001') {
             $this->code = '50001';
             $this->content = '验证码错误';
         } else {
             print_r($result);
         }
-
-
     }
 
 
@@ -685,7 +685,7 @@ class PaytonglianAction extends Controller
         $payMethodb = new  stdClass();
 
         //快捷
-        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'),$publicKey,$privateKey);
+        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
         $payMethodb->amount = 100;
         $payMethod->QUICKPAY = $payMethodb; //快捷支付（需要先绑定银行 卡）
 
