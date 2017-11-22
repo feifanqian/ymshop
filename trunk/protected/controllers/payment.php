@@ -1041,13 +1041,13 @@ class PaymentController extends Controller {
             }
 
         }else{
+            $this->model->table('customer')->data(array('qq'=>'123'))->where('user_id=42608')->update();
             $payment = new Payment($payment_id);
             $paymentPlugin = $payment->getPaymentPlugin();
             if (!is_object($paymentPlugin)) {
-                $this->model->table('customer')->data(array('qq'=>'123'))->where('user_id=42608')->update();
                 echo "fail";
             }
-
+            $this->model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
             //初始化参数
             $money = '';
             $message = '支付失败';
