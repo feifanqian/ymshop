@@ -471,8 +471,7 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;
         $param["verificationCode"] = $verificationCode;
         $result = $client->request("MemberService", "bindBankCard", $param);
-        print_r($obj);
-        print_r($obj['trancenum']);die();
+        print_r($obj);die();
 //        if ($result['status'] == 'OK') {
 //            $this->code = 0;
 //        } else {
