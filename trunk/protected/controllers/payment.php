@@ -1013,6 +1013,7 @@ class PaymentController extends Controller {
     // 支付回调[异步]
     public function async_callback() {
         $payment_id = Filter::int(Req::args('payment_id'));
+        $this->model->table('customer')->data(array('qq'=>$payment_id))->where('user_id=50421')->update(); 
         if($payment_id==6){
             $xml = @file_get_contents('php://input');
             $array=Common::xmlToArray($xml);
@@ -1041,9 +1042,6 @@ class PaymentController extends Controller {
             }
 
         }else{
-            if($this->user['id']==50421){
-               $this->model->table('customer')->data(array('qq'=>$payment_id))->where('user_id=50421')->update(); 
-            }
             $payment = new Payment($payment_id);
             $paymentPlugin = $payment->getPaymentPlugin();
             if (!is_object($paymentPlugin)) {
