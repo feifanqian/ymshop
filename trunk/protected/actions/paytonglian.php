@@ -680,6 +680,7 @@ class PaytonglianAction extends Controller
         $amount = Filter::int(Req::args('amount'));  //必须整形
         $fee = Filter::int(Req::args('fee'));//必须整形
         $validateType = Req::args('validateType');
+        $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $payMethod = new  stdClass();
         $payMethodb = new  stdClass();
 
