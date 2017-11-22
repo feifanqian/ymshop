@@ -77,7 +77,7 @@ class PaytonglianAction extends Controller
             $this->code = 0;
             $this->content = '创建会员成功';
         } else {
-            $this->code = 1000;
+            print_r($result);
         }
     }
 
@@ -114,7 +114,7 @@ class PaytonglianAction extends Controller
             $this->code = 3000;
             $this->content = '所属应用下已经存在此用户';
         } else {
-            $this->code = 1000;
+            print_r($result);
 
         }
 
@@ -152,7 +152,7 @@ class PaytonglianAction extends Controller
         if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
-            $this->code = 1000;
+            print_r($result);
         }
 
     }
@@ -190,7 +190,7 @@ class PaytonglianAction extends Controller
         if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
-            $this->code = 1000;
+            print_r($result);
         }
     }
 
@@ -220,13 +220,11 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;    //手机号码
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
-        print_r($result);
-        die;
         if ($result['errorCode'] == '50001') {
             $this->code = '50001';
             $this->content = '验证码错误';
         } else {
-            # code...
+            print_r($result);
         }
 
 
@@ -357,7 +355,7 @@ class PaytonglianAction extends Controller
             $this->content['bankCode'] = $signedValue['cardBinInfo']['bankCode'];
             return;
         } else {
-            $this->code = 1000;
+            print_r($result);
         }
 
     }
@@ -431,12 +429,13 @@ class PaytonglianAction extends Controller
             $transDate = $signedValue['transDate'];
             $tranceNum = $signedValue['tranceNum'];
             $model = new Model();
-            $this->model->table("bankcard")->data(array('user_id' => $user_id, 'trancenum' => $tranceNum, 'transdate' => $transDate, 'cardno' =>Req::args('cardNo')))->insert();
+            $this->model->table("bankcard")->data(array('user_id' => $user_id, 'trancenum' => $tranceNum, 'transdate' => $transDate, 'cardno' => Req::args('cardNo')))->insert();
         } else {
-            $this->code = 1000;
+            print_r($result);
         }
 
     }
+
     /**
      * 确认绑定银行卡
      * @param $bizUserId 商户系统用户标识，商户 系统中唯一编号
@@ -471,12 +470,11 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;
         $param["verificationCode"] = $verificationCode;
         $result = $client->request("MemberService", "bindBankCard", $param);
-        print_r($result);die();
-//        if ($result['status'] == 'OK') {
-//            $this->code = 0;
-//        } else {
-//            $this->code = 1000;
-//        }
+        if ($result['status'] == 'OK') {
+            $this->code = 0;
+        } else {
+            print_r($result);
+        }
 
     }
 
@@ -538,7 +536,7 @@ class PaytonglianAction extends Controller
         if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
-            $this->code = 1000;
+            print_r($result);
         }
 
     }
@@ -568,7 +566,7 @@ class PaytonglianAction extends Controller
             $this->code = 0;
             $this->content['success'] = '解除绑定银行卡成功';
         } else {
-            $this->code = 1000;
+            print_r($result);
         }
 
     }
@@ -676,10 +674,11 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
-        $bizOrderNo = '201605160001';
-        $accountSetNo = '12985739202038';
-        $amount = 100;  //必须整形
-        $fee = 2;//必须整形
+        $bizUserId = Req::args('bizUserId');
+        $bizOrderNo = Req::args('bizOrderNo');
+        $accountSetNo = Req::args('accountSetNo');
+        $amount = Req::args('amount');  //必须整形
+        $fee = Req::args('fee');//必须整形
         $payMethod = new  stdClass();
         //网关
         $payMethodb = new  stdClass();
@@ -689,13 +688,12 @@ class PaytonglianAction extends Controller
         $payMethodb->amount = 100;//快捷支付（需要先绑定银行 卡）
         $payMethod->GATEWAY = $payMethodb;
 
-        $industryCode = '1010';
-        $industryName = '保险代理';
-        $source = 2;    //只能为整型
-        $summary = '测试摘要';
-        $extendInfo = '扩展测试';
+        $industryCode = Req::args('industryCode');
+        $industryName = Req::args('industryName');
+        $source = Req::args('source');    //只能为整型
+        $summary = Req::args('summary');
+        $extendInfo = Req::args('extendInfo');
 
-        $bizUserId = Req::args('bizUserId');
         $param["bizUserId"] = $bizUserId;
         $param["bizOrderNo"] = $bizOrderNo;
         $param["accountSetNo"] = $accountSetNo;
@@ -710,8 +708,11 @@ class PaytonglianAction extends Controller
         $param["summary"] = $summary;
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "depositApply", $param);
-        print_r($result);
-        die;
+        if ($result['status'] == 'OK') {
+            $this->code = 0;
+        } else {
+            print_r($result);
+        }
     }
 
     /**
@@ -737,33 +738,27 @@ class PaytonglianAction extends Controller
     {
 
         $client = new SOAClient();
-        $serverAddress = "http://122.227.225.142:23661/service/soa";//服务地址
-        $sysid = "100009001000";//商户号
-        $alias = "100009001000";//证书名称
-        $path = ICLOD_PATH;//证书地址
-        $pwd = "900724"; //证书密码
-        $signMethod = "SHA1WithRSA";
-        $privateKey = RSAUtil::loadPrivateKey($alias, $path, $pwd);
-        $publicKey = RSAUtil::loadPublicKey($alias, $path, $pwd);
-        $client->setServerAddress($serverAddress);
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
-        $client->setSysId($sysid);
-        $client->setSignMethod($signMethod);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
 
         $bizUserId = Req::args('bizUserId');
-        $bizOrderNo = '201605160001';
-        $accountSetNo = '12985739202038';
-        $amount = 100;    //只能为整型
-        $fee = 2;    //只能为整型
-        $industryCode = '1010';
-        $industryName = '保险代理';
-        $source = 1;      //只能为整型
-        $summary = '测试摘要';
-        $extendInfo = '提现申请测试';
+        $bizOrderNo = Req::args('bizOrderNo');
+        $accountSetNo = Req::args('accountSetNo');
+        $amount = Req::args('amount');    //只能为整型
+        $fee = Req::args('fee');    //只能为整型
+        $industryCode = Req::args('industryCode');
+        $industryName = Req::args('industryName');
+        $source = Req::args('source');      //只能为整型
+        $summary = Req::args('summary');
+        $extendInfo = Req::args('extendInfo');
         $bankCardNo = $this->rsaEncrypt('6228480318051081101', $publicKey, $privateKey);
-        $bankCardPro = 0;        //只能为整型
-        $withdrawType = 'T0';
+        $bankCardPro = Req::args('bankCardPro');        //只能为整型
+        $withdrawType = Req::args('withdrawType');
         $backUrl = BACKURL;
         $param["bizOrderNo"] = $bizOrderNo;
         $param["bizUserId"] = $bizUserId;
@@ -780,8 +775,12 @@ class PaytonglianAction extends Controller
         $param["summary"] = $summary;
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "withdrawApply", $param);
-        print_r($result);
-        die;
+        if ($result['status']=='OK'){
+                $this->code = 0;
+        }else{
+            print_r($result);
+        }
+
     }
 
 
