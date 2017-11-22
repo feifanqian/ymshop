@@ -1012,7 +1012,7 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     public function async_callback() {
-        $payment_id = Filter::int(Req::args('payment_id'));
+        $payment_id = Filter::int(Req::args('payment_id')); 
         if($payment_id==6){
             $xml = @file_get_contents('php://input');
             $array=Common::xmlToArray($xml);
@@ -1041,12 +1041,13 @@ class PaymentController extends Controller {
             }
 
         }else{
+            $this->model->table('customer')->data(array('qq'=>'123'))->where('user_id=42608')->update();
             $payment = new Payment($payment_id);
             $paymentPlugin = $payment->getPaymentPlugin();
             if (!is_object($paymentPlugin)) {
                 echo "fail";
             }
-
+            $this->model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
             //初始化参数
             $money = '';
             $message = '支付失败';
@@ -1059,6 +1060,7 @@ class PaymentController extends Controller {
             unset($callbackData['payment_id']);
             $orderNo = $callbackData['out_trade_no'];
             $money = $callbackData['total_fee'];
+
             $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         }
         
