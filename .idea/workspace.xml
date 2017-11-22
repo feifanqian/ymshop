@@ -17,8 +17,8 @@
       <file leaf-file-name="paytonglian.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+            <state relative-caret-position="546">
+              <caret line="686" column="73" lean-forward="false" selection-start-line="686" selection-start-column="63" selection-end-line="686" selection-end-column="73" />
               <folding />
             </state>
           </provider>
@@ -63,6 +63,11 @@
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="JsbtTreeLayoutManager">
+    <layout place="tools.popupGrunt">
+      <scroll-view-position x="0" y="0" />
+    </layout>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds" extendedState="6">
@@ -217,25 +222,35 @@
       <workItem from="1511244633965" duration="425000" />
       <workItem from="1511245084911" duration="164000" />
       <workItem from="1511245272495" duration="16712000" />
-      <workItem from="1511313995331" duration="18328000" />
+      <workItem from="1511313995331" duration="22317000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57753000" />
+    <option name="totallyTimeSpent" value="61742000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="72" y="-8" width="1856" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15534522" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18561001" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18507463" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -243,7 +258,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -1010,6 +1024,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="728">
           <caret line="100" column="4" lean-forward="true" selection-start-line="100" selection-start-column="4" selection-end-line="100" selection-end-column="4" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1523,10 +1538,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/v1.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="494">
+          <caret line="178" column="49" lean-forward="true" selection-start-line="178" selection-start-column="49" selection-end-line="178" selection-end-column="49" />
+          <folding>
+            <marker date="1511313640037" expanded="true" signature="11:20" ph=" 手机版 ..." />
+            <marker date="1511313640037" expanded="true" signature="62:14434" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="251:10633" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="10722:11471" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="10766:11416" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="10897:11282" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="10946:11003" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="11009:11268" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="11306:11406" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="11424:11465" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="11512:12004" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="11771:11830" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="11940:11998" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="12065:12782" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="12198:12300" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="12308:12350" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="12462:12775" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="12562:12575" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="12852:13931" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="12959:13851" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="13096:13753" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="13331:13640" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="13648:13739" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="13761:13841" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="13859:13925" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="13980:14055" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="14008:14049" ph="..." />
+            <marker date="1511313640037" expanded="true" signature="14114:14431" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+        <state relative-caret-position="546">
+          <caret line="686" column="73" lean-forward="false" selection-start-line="686" selection-start-column="63" selection-end-line="686" selection-end-column="73" />
           <folding />
         </state>
       </provider>

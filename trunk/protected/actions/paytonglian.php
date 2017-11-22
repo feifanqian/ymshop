@@ -679,14 +679,21 @@ class PaytonglianAction extends Controller
         $accountSetNo = Req::args('accountSetNo');
         $amount = Filter::int(Req::args('amount'));  //必须整形
         $fee = Filter::int(Req::args('fee'));//必须整形
+        $validateType = Req::args('validateType');
         $payMethod = new  stdClass();
-        //网关
         $payMethodb = new  stdClass();
-        $payMethodb->bankCode = 'abc'; //银行机构代码
-        $payMethodb->payType = 1; //网关支付关系 B2C 个人网银（借记卡） 1  B2C 个人网银（信用卡） 11  B2B 企业网银 4
-        $payMethodb->bankCardNo = $this->rsaEncrypt('6228480318051081123', $publicKey, $privateKey);
-        $payMethodb->amount = 100;//快捷支付（需要先绑定银行 卡）
-        $payMethod->GATEWAY = $payMethodb;
+
+        //快捷
+        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'),$publicKey,$privateKey);
+        $payMethodb->amount = 100;
+        $payMethod->QUICKPAY = $payMethodb; //快捷支付（需要先绑定银行 卡）
+
+        //网关
+//        $payMethodb->bankCode = Req::args('bankCode'); //银行机构代码
+//        $payMethodb->payType = Req::args('payType'); //网关支付关系 B2C 个人网银（借记卡） 1  B2C 个人网银（信用卡） 11  B2B 企业网银 4
+//        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
+//        $payMethodb->amount = Req::args('amount');//快捷支付（需要先绑定银行 卡）
+//        $payMethod->GATEWAY = $payMethodb;
 
         $industryCode = Req::args('industryCode');
         $industryName = Req::args('industryName');
@@ -699,8 +706,10 @@ class PaytonglianAction extends Controller
         $param["accountSetNo"] = $accountSetNo;
         $param["amount"] = $amount;
         $param["fee"] = $fee;
+        $param["validateType"] = $validateType;
         $param["frontUrl"] = NOTICE_URL;
         $param["backUrl"] = BACKURL;
+        $param["ordErexpireDatetime"] = $ordErexpireDatetime;
         $param["payMethod"] = $payMethod;
         $param["industryCode"] = $industryCode;
         $param["industryName"] = $industryName;
