@@ -466,7 +466,6 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         $param["bizUserId"] = $bizUserId;
-        print_r($obj);die();
         $param["tranceNum"] = $trancenum;
         $param["transDate"] = $transdate;
         $param["phone"] = $phone;
