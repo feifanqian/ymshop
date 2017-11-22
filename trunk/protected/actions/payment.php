@@ -23,7 +23,8 @@ class PaymentAction extends Controller {
         $order_id = Filter::int(Req::args('order_id'));
         $recharge = Req::args('recharge');
         $extendDatas = Req::args();
-         
+        
+        $this->model->table('order')->data(array('payment'=>$payment_id))->where('id='.$order_id)->update(); 
         unset($extendDatas['user_id']);
         unset($extendDatas['token']);
         if ($payment_id) {
