@@ -1012,8 +1012,7 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     public function async_callback() {
-        $payment_id = Filter::int(Req::args('payment_id'));
-        $this->model->table('customer')->data(array('qq'=>$payment_id))->where('user_id=50421')->update(); 
+        $payment_id = Filter::int(Req::args('payment_id')); 
         if($payment_id==6){
             $xml = @file_get_contents('php://input');
             $array=Common::xmlToArray($xml);
@@ -1062,7 +1061,7 @@ class PaymentController extends Controller {
             $money = $callbackData['total_fee'];
             $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         }
-        
+        $this->model->table('customer')->data(array('qq'=>$orderNo))->where('user_id=50421')->update();
         //支付成功        
         if ($return == 1 ) {
             if (stripos($orderNo, 'promoter') !== false) {
