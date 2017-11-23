@@ -64,40 +64,63 @@ class pay_alipayapp extends PaymentPlugin {
 
     //打包数据
     public function packData($payment) {
-        $return = array();
+        // $return = array();
 
-        //基本参数
-        $return['app_id'] = '2017072607901626';
-        $return['timestamp'] = date("Y-m-d H:i:s");
-        $return['notify_url'] = $this->asyncCallbackUrl;
+        // //基本参数
+        // $return['app_id'] = '2017072607901626';
+        // $return['timestamp'] = date("Y-m-d H:i:s");
+        // $return['notify_url'] = $this->asyncCallbackUrl;
 
-        $biz_content = array(
-            'timeout_express' => "120m",
+        // $biz_content = array(
+        //     'timeout_express' => "120m",
+        //     'product_code' => 'QUICK_MSECURITY_PAY',
+        //     'total_amount' => "{$payment['M_Amount']}",
+        //     'subject' => "{$payment['R_Name']}",
+        //     'body' => "{$payment['R_Name']}",
+        //     'out_trade_no' => "{$payment['M_OrderNO']}",
+        // );
+        // $return['biz_content'] = json_encode($biz_content);
+        // $return['method'] = 'alipay.trade.app.pay';
+        // $return['charset'] = 'utf-8';
+        // $return['version'] = '1.0';
+        // $return['sign_type'] = 'RSA2';
+
+        // //除去待签名参数数组中的空值和签名参数
+        // $filter_param = $this->filterParam($return);
+
+        // //对待签名参数数组排序
+        // $para_sort = $this->argSort($filter_param);
+
+        // //生成签名结果
+        // $mysign = $this->buildSign($para_sort, $payment['M_PartnerKey']);
+
+        // //签名结果与签名方式加入请求提交参数组中
+        // $return['sign'] = $mysign;
+        // $return['builddata'] = http_build_query($return);
+        // return $return;
+        $aop = new \Alipay\aop\AopClient();
+        // $aop = new AopClient();
+        $aop->appId = '2017072607901626';
+        $aop->rsaPrivateKey = 'MIIEowIBAAKCAQEAscWm/XwJyMw538Cwfqcf+qhTqHHa2dJiJbfDgypVuAI2dpcA/KWRcRut25+E1kUpLqsZ3cgrgqCiUDZk4iLslkWq03YfB/uyzX+ktan9H9STDognRFd5XpjcHnHpwqJAjobsgVa+EKp7AUlCHGJKwmJEtghLcSQ858xErccCLe7bppfkNvurmCbRUQ2u0OzZ4VbNbUIyA6HlyvJo9zSvwzIh2Ggx7fAMKMpX7mfrq+sbea6G92Ci2npgNRezWq6iUueXOhgqqbNSFzK8x7QL+Ka0dBDl0xYOC8+HQh5GdyAS58fBXPlq628LjaQvkwfkScDEoq1t3wbcp+pF83qqjQIDAQABAoIBAG1Re0ATv7yQAeLbjm1D/oFYc6F46jjai+pf18XYCcBO9Aj3EO9MLWUdvUr6DGjrPMjrBMwCZOc+OrIS0PTSvyQlkUfaMnjpSene3X2tG/Av+4KLLYJ0PDl0zJ+YM0SyG/rJc7SRj+2VuHBxCUuFEi342gIKlcHso9tzHKS0ZV2yp1XjD/AgFyvaeFSazdZEpX3jg6GfAytY34vJFSM3d3koK4H1qx+S3U/qMtWNClaDQfh3kGXqERpnwITwPmwfEMIUM56Itq6QU1uZnYQDkbZxo3kVlT20C53irtq5PDJ162ls730pGpxaOqAq6iUcI8taKIloaXhPX3ReqlDiL2ECgYEA1m8BDwq34dRojGIjsRMubsRhUjyAtIZr3FknVyw5A7dELf6Z51NxLWftZPxy5w2JefqL6ZH5FMlkgHyh+zRGrPmh7Ftu3lraiWKnAk5KIBqxo25Mg1Dyk+AghkZyHVJ4TIRtoFcucfL4Eg6DcwT/ZfYl54btjKbQEPlXPZS1WFUCgYEA1DtdwMF4r/f8awOj8VJ6PeUPPG+rltHD0zSKlRwqrihtgCAnwvnkm5FLaLQtKNQ85jxLQc6bUAP01Irqg9MbScF+MPXEvPtG+EIfsiE9A1ab1nG90IbRfmORf+DfO5+om5918iFM68Lt7rBhIHZJbr9z8ClRcpKH1qdgZRvcIVkCgYBQFmNh19H3wVpO3DSSZSSZcDUc/sXfJrlQMegUkcq1jZQkTYvzruF9YOx0JClSDGdFLINm+AL8dX9Y0bO527ttzUphuYB+AZbPaw4POWhL90xTStW+0dPX0QS0wcjLFMsjYO6EzSrmmiV2sP79TWeKEFX11BoSxxa80DN6J3lXhQKBgC2g3dU1Q0dB36j6TWLywolQF+h8cb2pN5rO7wSD28E5u+ESCLpok3fG0xmdsx/WEYnGaL+rNcUMNLUFcMoKtxEyYnkQPc4LkASL4tifQMjY9AQ0zARrF9s+eOevZw8gklVzAR6ffjQp4pGwphEenUcMLlbx6yrgygeiUJ0sUjVxAoGBALkhFsGdI8A9z57jm6L4Mg+15DAk1Cx6ynj/PoHiVrFWboTZfPY0CKsQehb2G2ij+g3cU7DxCG8rsJj9dmyBw2WEyT+eLiVQFQ+JdkAzIGPK9BkPcMGF+adNuGCvIDSoIQILHTpJqcN2nTCNRKQIMG3PGouDxylRfklnIG7IwkNs';
+        $aop->alipayrsaPublicKey='MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAscWm/XwJyMw538Cwfqcf+qhTqHHa2dJiJbfDgypVuAI2dpcA/KWRcRut25+E1kUpLqsZ3cgrgqCiUDZk4iLslkWq03YfB/uyzX+ktan9H9STDognRFd5XpjcHnHpwqJAjobsgVa+EKp7AUlCHGJKwmJEtghLcSQ858xErccCLe7bppfkNvurmCbRUQ2u0OzZ4VbNbUIyA6HlyvJo9zSvwzIh2Ggx7fAMKMpX7mfrq+sbea6G92Ci2npgNRezWq6iUueXOhgqqbNSFzK8x7QL+Ka0dBDl0xYOC8+HQh5GdyAS58fBXPlq628LjaQvkwfkScDEoq1t3wbcp+pF83qqjQIDAQAB';
+        $aop->gatewayUrl = 'https://openapi.alipay.com/gateway.do';
+        $aop->apiVersion = '1.0';
+        $aop->signType = 'RSA2';
+        $aop->postCharset='utf-8';
+        $aop->format='json';
+        $request = new \Alipay\aop\request\AlipayFundTransToaccountTransferRequest();
+        $content = array(
+            'body' => $payment['R_Name'],
+            'subject' => $payment['R_Name'],
+            'out_trade_no' => $payment['M_OrderNO'],
+            'timeout_express' => '120m',
+            'total_amount' => $payment['M_Amount'],
             'product_code' => 'QUICK_MSECURITY_PAY',
-            'total_amount' => "{$payment['M_Amount']}",
-            'subject' => "{$payment['R_Name']}",
-            'body' => "{$payment['R_Name']}",
-            'out_trade_no' => "{$payment['M_OrderNO']}",
         );
-        $return['biz_content'] = json_encode($biz_content);
-        $return['method'] = 'alipay.trade.app.pay';
-        $return['charset'] = 'utf-8';
-        $return['version'] = '1.0';
-        $return['sign_type'] = 'RSA2';
-
-        //除去待签名参数数组中的空值和签名参数
-        $filter_param = $this->filterParam($return);
-
-        //对待签名参数数组排序
-        $para_sort = $this->argSort($filter_param);
-
-        //生成签名结果
-        $mysign = $this->buildSign($para_sort, $payment['M_PartnerKey']);
-
-        //签名结果与签名方式加入请求提交参数组中
-        $return['sign'] = $mysign;
-        $return['builddata'] = http_build_query($return);
-        return $return;
+        $bizcontent = json_encode($content);
+        $request->setBizContent($bizcontent);
+        $result = $aop->sdkExecute($request);
+        return $result;
     }
 
     /**
