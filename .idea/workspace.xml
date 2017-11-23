@@ -17,8 +17,8 @@
       <file leaf-file-name="paytonglian.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="647">
-              <caret line="401" column="119" lean-forward="false" selection-start-line="401" selection-start-column="119" selection-end-line="401" selection-end-column="119" />
+            <state relative-caret-position="413">
+              <caret line="692" column="37" lean-forward="false" selection-start-line="692" selection-start-column="37" selection-end-line="692" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -223,12 +223,12 @@
       <workItem from="1511245084911" duration="164000" />
       <workItem from="1511245272495" duration="16712000" />
       <workItem from="1511313995331" duration="25650000" />
-      <workItem from="1511400067348" duration="4685000" />
+      <workItem from="1511400067348" duration="6729000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="69760000" />
+    <option name="totallyTimeSpent" value="71804000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1557,8 +1557,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="647">
-          <caret line="401" column="119" lean-forward="false" selection-start-line="401" selection-start-column="119" selection-end-line="401" selection-end-column="119" />
+        <state relative-caret-position="413">
+          <caret line="692" column="37" lean-forward="false" selection-start-line="692" selection-start-column="37" selection-end-line="692" selection-end-column="37" />
           <folding />
         </state>
       </provider>

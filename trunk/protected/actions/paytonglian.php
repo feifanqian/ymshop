@@ -681,8 +681,8 @@ class PaytonglianAction extends Controller
         $bizUserId = Req::args('bizUserId');
         $bizOrderNo = Req::args('bizOrderNo');
         $accountSetNo = Req::args('accountSetNo');
-        $amount = Filter::int(Req::args('amount'));  //必须整形
-        $fee = Filter::int(Req::args('fee'));//必须整形
+        $amount = (round(Req::args('amount'),2))*100;
+        $fee = Req::args('fee');//必须整形
         $validateType = Req::args('validateType');
         $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $payMethod = new  stdClass();
@@ -690,7 +690,7 @@ class PaytonglianAction extends Controller
 
         //快捷
         $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
-        $payMethodb->amount = 100;
+        $payMethodb->amount = $amount;
         $payMethod->QUICKPAY = $payMethodb; //快捷支付（需要先绑定银行 卡）
 
         //网关
@@ -722,12 +722,14 @@ class PaytonglianAction extends Controller
         $param["summary"] = $summary;
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "depositApply", $param);
+        echo "<pre>";
         print_r($amount);
-        if ($result['status'] == 'OK') {
-            $this->code = 0;
-        } else {
-            print_r($result);
-        }
+        die();
+//        if ($result['status'] == 'OK') {
+//            $this->code = 0;
+//        } else {
+//            print_r($result);
+//        }
     }
 
     /**
