@@ -4,6 +4,7 @@
     <list default="true" id="5e7286e1-8ea1-416a-afb0-c86e85802771" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/protected/actions/paytonglian.php" afterPath="$PROJECT_DIR$/trunk/protected/actions/paytonglian.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/protected/controllers/v1.php" afterPath="$PROJECT_DIR$/trunk/protected/controllers/v1.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,8 +18,8 @@
       <file leaf-file-name="paytonglian.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="940" column="37" lean-forward="true" selection-start-line="940" selection-start-column="37" selection-end-line="940" selection-end-column="37" />
+            <state relative-caret-position="364">
+              <caret line="1011" column="0" lean-forward="true" selection-start-line="1011" selection-start-column="0" selection-end-line="1011" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -195,12 +196,12 @@
       <workItem from="1511313995331" duration="25650000" />
       <workItem from="1511400067348" duration="9688000" />
       <workItem from="1511420965705" duration="1981000" />
-      <workItem from="1511425179655" duration="4886000" />
+      <workItem from="1511425179655" duration="9530000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="81630000" />
+    <option name="totallyTimeSpent" value="86274000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1532,45 +1533,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/v1.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="177" column="22" lean-forward="false" selection-start-line="177" selection-start-column="9" selection-end-line="177" selection-end-column="22" />
+        <state relative-caret-position="250">
+          <caret line="169" column="4" lean-forward="true" selection-start-line="169" selection-start-column="4" selection-end-line="169" selection-end-column="4" />
           <folding>
-            <marker date="1511427319991" expanded="true" signature="11:20" ph=" 手机版 ..." />
-            <marker date="1511427319991" expanded="true" signature="62:14652" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="251:10851" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="10940:11689" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="10984:11634" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="11115:11500" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="11164:11221" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="11227:11486" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="11524:11624" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="11642:11683" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="11730:12222" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="11989:12048" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="12158:12216" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="12283:13000" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="12416:12518" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="12526:12568" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="12680:12993" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="12780:12793" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="13070:14149" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="13177:14069" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="13314:13971" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="13549:13858" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="13866:13957" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="13979:14059" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="14077:14143" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="14198:14273" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="14226:14267" ph="..." />
-            <marker date="1511427319991" expanded="true" signature="14332:14649" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="11:20" ph=" 手机版 ..." />
+            <marker date="1511438413985" expanded="true" signature="62:14737" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="251:10936" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="11025:11774" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="11069:11719" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="11200:11585" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="11249:11306" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="11312:11571" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="11609:11709" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="11727:11768" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="11815:12307" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="12074:12133" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="12243:12301" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="12368:13085" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="12501:12603" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="12611:12653" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="12765:13078" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="12865:12878" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="13155:14234" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="13262:14154" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="13399:14056" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="13634:13943" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="13951:14042" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="14064:14144" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="14162:14228" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="14283:14358" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="14311:14352" ph="..." />
+            <marker date="1511438413985" expanded="true" signature="14417:14734" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="940" column="37" lean-forward="true" selection-start-line="940" selection-start-column="37" selection-end-line="940" selection-end-column="37" />
+        <state relative-caret-position="364">
+          <caret line="1011" column="0" lean-forward="true" selection-start-line="1011" selection-start-column="0" selection-end-line="1011" selection-end-column="0" />
           <folding />
         </state>
       </provider>

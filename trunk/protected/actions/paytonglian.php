@@ -923,19 +923,27 @@ class PaytonglianAction extends Controller
 
     public function actionAgentCollectApply()
     {
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
 
-        $bizOrderNo = '201608041702';
-        $payerId = '230561';
+        $bizOrderNo = Req::args('bizOrderNo');
+        $payerId = Req::args('payerId');
         $reciever1 = new stdClass();
         $reciever1->bizUserId = '201582';
         $reciever1->amount = 350;
 
-        $goodsType = 0;   //只能为整型
-        $goodsNo = '';
-        $tradeCode = '321552';
-        $amount = 370;    //只能为整型
-        $fee = 20;    //只能为整型
-        $showUrl = '';
+        $goodsType = Req::args('goodsType');   //只能为整型
+        $goodsNo = Req::args('goodsNo');
+        $tradeCode = Req::args('tradeCode');
+        $amount = Req::args('amount');    //只能为整型
+        $fee = Req::args('fee');    //只能为整型
+        $showUrl = Req::args('showUrl');
 
 
         $payMethod = new  stdClass();
@@ -943,24 +951,20 @@ class PaytonglianAction extends Controller
 
 
         $payMethodb->amount = 100;
-        $payMethodb->bankCardNo = $this->rsa('6228480318051081871');
+        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo',$privateKey,$publicKey));
         $payMethod->QUICKPAY = $payMethodb;
 
-        $goodsName = '维达';
-        $goodsDesc = '4层纸巾';
-        $industryCode = '54646461';
-        $industryName = '纸';
-        $source = 1;  //只能为整型
-        $summary = '纸';
-        $extendInfo = '。';
-        $req = array(
-            'param' => array(
+        $goodsName = Req::args('goodsName');
+        $goodsDesc = Req::args('goodsDesc');
+        $industryCode = Req::args('industryCode');
+        $industryName = Req::args('industryName');
+        $source = Req::args('source');  //只能为整型
+        $summary = Req::args('summary');
+        $extendInfo = Req::args('extendInfo');
+        $param = array(
                 'bizOrderNo' => $bizOrderNo,
                 'payerId' => $payerId,
-
                 'recieverList' => array($recieverList),
-
-
                 'goodsType' => $goodsType,
                 'goodsNo' => $goodsNo,
                 'tradeCode' => $tradeCode,
@@ -968,16 +972,12 @@ class PaytonglianAction extends Controller
                 'fee' => $fee,
                 'frontUrl' => NOTICE_URL,
                 'backUrl' => BACKURL,
-
-//                 'frontUrl' => $frontUrl,
-//                 'backUrl' => $backUrl,
+                //'frontUrl' => $frontUrl,
+                //'backUrl' => $backUrl,
 
                 'showUrl' => $showUrl,
-//                 'ordErexpireDatetime' => $ordErexpireDatetime,
-
+                //'ordErexpireDatetime' => $ordErexpireDatetime,
                 'payMethod' => $payMethod,
-
-
                 'goodsName' => $goodsName,
                 'goodsDesc' => $goodsDesc,
                 'industryCode' => $industryCode,
@@ -985,13 +985,9 @@ class PaytonglianAction extends Controller
                 'source' => $source,
                 'summary' => $summary,
                 'extendInfo' => $extendInfo,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('agentCollectApply')    //调用方法
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService','agentCollectApply',$param);
+        print_r($result);die();
 
     }
 
