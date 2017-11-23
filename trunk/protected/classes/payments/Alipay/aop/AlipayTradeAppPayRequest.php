@@ -1,5 +1,5 @@
 <?php
-namespace Alipay\aop\request;
+namespace Alipay\aop;
 /**
  * ALIPAY API: alipay.trade.app.pay request
  *
