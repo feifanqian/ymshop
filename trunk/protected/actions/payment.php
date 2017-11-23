@@ -642,4 +642,23 @@ class PaymentAction extends Controller {
       $this->content['shop_name'] = $shop_name;
       return;
     }
+
+    public function pay_success(){
+       $order_id = Filter::int(Req::args('order_id'));
+       $order = $this->model->table('order_offline')->fields('shop_ids,order_no')->where('id='.$order_id)->find();
+       if(!$order){
+        $this->code = 1096;
+        return;
+       }
+       $seller_id = $order['shop_ids'];
+       $seller = $this->model->table('customer')->fields('real_name')->where('user_id='.$seller_id)->find();
+       if(!$seller){
+        $this->code = 1159;
+        return;
+       }
+       $this->code = 0;
+       $this->content['shop_name'] = $seller['real_name'];
+       $this->content['order_no'] = $order['order_no'];
+       $this->content['date'] = date("Y-m-d H:i:s");
+    }
 }
