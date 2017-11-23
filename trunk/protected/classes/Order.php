@@ -280,12 +280,15 @@ class Order {
             $user_id = $recharge['user_id'];
             //给用户充值
             $result = "";
-            if($recharge['package']==0){//普通充值
+            if($recharge['package']!=4){
                 //增加余额
-                $result = $model->table("customer")->where("user_id = $user_id")->data(array("balance"=>"`balance`+$account"))->update();
+                $result = $model->table("customer")->where("user_id =".$user_id)->data(array("balance"=>"`balance`+".$account))->update();
                 if($result){
                     Log::balance($account, $user_id, $recharge['recharge_no'], "用户充值", 1);
                 }
+            }
+            
+            if($recharge['package']==0){//普通充值
                 $result = $model->table("customer")->data(array('point_coin' => "`point_coin`+" . $account))->where("user_id=" . $user_id)->update();
                 if($result){
                     Log::pointcoin_log($account, $user_id, $recharge_no,"充值送积分", 1);
