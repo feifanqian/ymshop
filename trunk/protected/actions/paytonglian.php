@@ -393,12 +393,13 @@ class PaytonglianAction extends Controller
 
         $user_id = Req::args('user_id');
         $bizUserId = Req::args('bizUserId');
+        $cardNos = Req::args('cardNo');
         $cardNo = $this->rsaEncrypt(Req::args('cardNo'), $publicKey, $privateKey);//必须rsa加密
         $phone = Req::args('phone');
         $name = Req::args('name');
         $cardType = Req::args('cardType');  //卡类型   储蓄卡 1 整型         信用卡 2 整型
         $model = new Model();
-        $bankCode = $this->model->table("bankcode")->fields("bankcode")->where("user_id='$user_id' AND cardno=Req::args('cardNo')")->order('id DESC')->find();
+        $bankCode = $this->model->table("bankcode")->fields("bankcode")->where("user_id='$user_id' AND cardno='$cardNos'")->order('id DESC')->find();
         $identityType = Req::args('identityType');          //证件类型 1是身份证 目前只支持身份证
         $identityNo = $this->rsaEncrypt(Req::args('identityNo'), $publicKey, $privateKey);//必须rsa加密 330227198805284412
         $validate = Req::args('validate');
