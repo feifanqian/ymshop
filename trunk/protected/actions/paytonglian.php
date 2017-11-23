@@ -336,6 +336,7 @@ class PaytonglianAction extends Controller
 
     public function actionGetBankCardBin()
     {
+        $user_id = Req::args('user_id');
         $bizUserId = Req::args('bizUserId');
         $cardNo = Req::args('cardNo');
         $client = new SOAClient();
