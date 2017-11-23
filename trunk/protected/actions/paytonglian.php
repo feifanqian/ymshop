@@ -690,7 +690,7 @@ class PaytonglianAction extends Controller
 
         //快捷
         $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
-        $payMethodb->amount = 100;
+        $payMethodb->amount = $amount;
         $payMethod->QUICKPAY = $payMethodb; //快捷支付（需要先绑定银行 卡）
 
         //网关
@@ -722,12 +722,14 @@ class PaytonglianAction extends Controller
         $param["summary"] = $summary;
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "depositApply", $param);
+        echo "<pre>";
         print_r($amount);
-        if ($result['status'] == 'OK') {
-            $this->code = 0;
-        } else {
-            print_r($result);
-        }
+        die();
+//        if ($result['status'] == 'OK') {
+//            $this->code = 0;
+//        } else {
+//            print_r($result);
+//        }
     }
 
     /**
