@@ -109,7 +109,7 @@ class pay_alipayapp extends PaymentPlugin {
         $aop->signType = 'RSA2';
         $aop->postCharset='utf-8';
         $aop->format='json';
-        // $request = new AlipayTradeAppPayRequest();
+        $request = new AlipayTradeAppPayRequest();
         $content = array(
             'body' => $payment['R_Name'],
             'subject' => $payment['R_Name'],
