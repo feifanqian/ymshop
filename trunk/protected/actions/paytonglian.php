@@ -681,7 +681,7 @@ class PaytonglianAction extends Controller
         $bizUserId = Req::args('bizUserId');
         $bizOrderNo = Req::args('bizOrderNo');
         $accountSetNo = Req::args('accountSetNo');
-        $amount = (round(Req::args('amount'),2))*100;
+        $amount = (round(Req::args('amount'),2))*100; //充值金额以分为单位
         $fee = Req::args('fee');//必须整形
         $validateType = Req::args('validateType');
         $ordErexpireDatetime = Req::args('ordErexpireDatetime');
@@ -823,16 +823,24 @@ class PaytonglianAction extends Controller
 
     public function actionConsumeApply()
     {
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
 
-        $payerId = '288888888';
-        $recieverId = '28888888';
-        $bizOrderNo = '201605260002';
-        $amount = 2; //只能为整型
-        $fee = 1;  //只能为整型
-        $splitRule = '';
+        $payerId = Req::args('payerId');
+        $recieverId = Req::args('recieverId');
+        $bizOrderNo = Req::args('bizOrderNo');
+        $amount = (round(Req::args('amount'),2))*100; //只能为整型
+        $fee = (round(Req::args('fee'),2))*100;  //只能为整型
+        $splitRule = Req::args('splitRule');
 
-        $showUrl = '';
-        $ordErexpireDatetime = '';
+        $showUrl = Req::args('showUrl');
+        $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $payMethod = new  stdClass();
 
 
@@ -850,25 +858,23 @@ class PaytonglianAction extends Controller
         $payMethodb = new  stdClass();
         $payMethodb->bankCode = 'cmb';
         $payMethodb->payType = 1;
-        $payMethodb->bankCardNo = $this->rsa('6228480318051081101');
+        $payMethodb->bankCardNo = $this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);
         $payMethodb->amount = 100;//快捷支付（需要先绑定银行 卡）
         $payMethod->GATEWAY = $payMethodb;
 
-        $goodsName = '保养优惠产品';
-        $goodsDesc = '保养优惠产品介绍';
-        $industryCode = '1010';
-        $industryName = '保险代理';
-        $source = 1;
-        $summary = '测试摘要';
-        $extendInfo = '扩展测试';
-        $req = array(
-            'param' => array(
+        $goodsName = Req::args('goodsName');
+        $goodsDesc = Req::args('goodsDesc');
+        $industryCode = Req::args('industryCode');
+        $industryName = Req::args('industryName');
+        $source = Req::args('source');
+        $summary = Req::args('summary');
+        $extendInfo = Req::args('extendInfo');
+        $param = array(
                 'payerId' => $payerId,
                 'recieverId' => $recieverId,
                 'bizOrderNo' => $bizOrderNo,
                 'amount' => $amount,
                 'fee' => $fee,
-
                 'frontUrl' => NOTICE_URL,
                 'backUrl' => BACKURL,
                 // 'showUrl' => $showUrl,
@@ -882,12 +888,13 @@ class PaytonglianAction extends Controller
                 'summary' => $summary,
                 'extendInfo' => $extendInfo,
 
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('consumeApply')    //调用方法
-        );
-        $result = $this->sendgate($req);
-        echo $result;
+            );
+        $result = $client->request("OrderService", "consumeApply", $param);
+        if ($result['status']=='OK'){
+                $this->code = 0;
+        }else{
+            print_r($result);
+        }
     }
 
     /**
