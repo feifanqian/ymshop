@@ -107,10 +107,10 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;    //手机号码
         $param["verificationCodeType"] = $verificationCodeType;//绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        if ($result['status'] == 'OK') {
+        if ($result['status'] =='OK') {
             $this->code = 0;
             $this->content = '发送短信验证码成功';
-        } else if ($result['errorCode'] == '3000') {
+        } else if ($result['errorCode'] =='3000') {
             $this->code = 3000;
             $this->content = '所属应用下已经存在此用户';
         } else {
@@ -149,7 +149,7 @@ class PaytonglianAction extends Controller
         $param["verificationCodeType"] = $verificationCodeType;        //绑定手机
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "checkVerificationCode", $param);
-        if ($result['status'] == 'OK') {
+        if ($result['status'] =='OK') {
             $this->code = 0;
         } else {
             print_r($result);
@@ -187,7 +187,7 @@ class PaytonglianAction extends Controller
         $param["identityType"] = $identityType;
         $param["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);
         $result = $client->request("MemberService", "setRealName", $param);
-        if ($result['status'] == 'OK') {
+        if ($result['status'] =='OK') {
             $this->code = 0;
         } else {
             print_r($result);
@@ -220,7 +220,7 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;    //手机号码
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
-        if ($result['status'] == 'OK') {
+        if ($result['status'] =='OK') {
             $this->code = 0;
         } else if ($result['errorCode'] == '50001') {
             $this->code = '50001';
@@ -349,11 +349,13 @@ class PaytonglianAction extends Controller
         $param["bizUserId"] = $bizUserId;
         $param["cardNo"] = $this->rsaEncrypt($cardNo, $publicKey, $privateKey); //银行卡号
         $result = $client->request("MemberService", "getBankCardBin", $param);
-        if ($result['status'] == 'OK') {
+        if ($result['status'] =='OK') {
             $this->code = 0;
             $signedValue = json_decode($result['signedValue'], true);
-            $this->content['bankCode'] = $signedValue['cardBinInfo']['bankCode'];
-            return;
+            $bankCode = $signedValue['cardBinInfo']['bankCode'];
+            $model = new Model();
+            $this->model->table("bankcode")->data(array('user_id' => $user_id, 'cardno' => $cardNo, 'bankcode' => $bankCode))->insert();
+
         } else {
             print_r($result);
         }
@@ -394,7 +396,8 @@ class PaytonglianAction extends Controller
         $phone = Req::args('phone');
         $name = Req::args('name');
         $cardType = Req::args('cardType');  //卡类型   储蓄卡 1 整型         信用卡 2 整型
-        $bankCode = $this->actionGetBankCardBin();//上一部获取的  GetBankCardBin返回 bankCode  01030000
+        $model = new Model();
+        $bankCode = $this->model->table("bankcode")->fields("bankcode")->where("user_id='$user_id' AND cardno=Req::args('cardNo')")->order('id DESC')->find();
         $identityType = Req::args('identityType');          //证件类型 1是身份证 目前只支持身份证
         $identityNo = $this->rsaEncrypt(Req::args('identityNo'), $publicKey, $privateKey);//必须rsa加密 330227198805284412
         $validate = Req::args('validate');
@@ -417,13 +420,13 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;  //银行预留的手机卡号
         $param["name"] = $name; //用户的姓名
         $param["cardType"] = $cardType;
-        $param['bankCode'] = $bankCode['bankCode'];
+        $param['bankCode'] = $bankCode['bankcode'];
         $param["cardCheck"] = $cardCheck; //绑卡方式
         $param["identityType"] = $identityType;
         $param["identityNo"] = $identityNo;
         $param["unionBank"] = $unionBank;
         $result = $client->request("MemberService", "applyBindBankCard", $param);
-        if ($result['status'] == 'OK') {
+        if ($result['status'] =='OK') {
             $this->code = 0;
             $signedValue = json_decode($result['signedValue'], true);
             $transDate = $signedValue['transDate'];
@@ -453,8 +456,7 @@ class PaytonglianAction extends Controller
         $cardNo = Req::args('cardNo');
         $user_id = Req::args('user_id');
         $model = new Model();
-        $models = $this->model->table("bankcard");
-        $obj = $models->fields("trancenum,transdate")->where("user_id='$user_id' AND cardno='$cardNo'")->order('id DESC')->find();
+        $obj = $this->model->table("bankcard")->fields("trancenum,transdate")->where("user_id='$user_id' AND cardno='$cardNo'")->order('id DESC')->find();
         $bizUserId = Req::args('bizUserId');
         $phone = Req::args('phone');
         $verificationCode = Req::args('verificationCode');
@@ -470,7 +472,7 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;
         $param["verificationCode"] = $verificationCode;
         $result = $client->request("MemberService", "bindBankCard", $param);
-        if ($result['status'] == 'OK') {
+        if ($result['status'] =='OK') {
             $this->code = 0;
         } else {
             print_r($result);
@@ -533,7 +535,7 @@ class PaytonglianAction extends Controller
         $param["bizUserId"] = $bizUserId;
         $param["cardNo"] = $this->rsaEncrypt($cardNo, $publicKey, $privateKey);
         $result = $client->request("MemberService", "queryBankCard", $param);
-        if ($result['status'] == 'OK') {
+        if ($result['status'] =='OK') {
             $this->code = 0;
         } else {
             print_r($result);
@@ -562,7 +564,7 @@ class PaytonglianAction extends Controller
         $param["bizUserId"] = $bizUserId;
         $param["cardNo"] = $cardNo;
         $result = $client->request("MemberService", "unbindBankCard", $param);
-        if ($result['status'] == 'OK') {
+        if ($result['status'] =='OK') {
             $this->code = 0;
             $this->content['success'] = '解除绑定银行卡成功';
         } else {
