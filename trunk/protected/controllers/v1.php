@@ -62,6 +62,7 @@ class V1Controller extends Controller {
         "dopay" => array("payment/dopay", 1,1), //发起支付
         "dopays" => array("payment/dopays", 1,1), //发起线下扫码支付
         "seller_name" => array("payment/seller_name",1,1), //线下扫码卖家信息
+        "pay_success" => array("payment/pay_success",1,1), //线下扫码支付成功页面
         "pay_balance" => array("payment/pay_balance", 1,1), //通过余额支付
         "paytype_list" => array("payment/paytype_list", 1,1), //支付方式
         "set_avatar" => array("ucenter/set_avatar", 1,1), //设置头像

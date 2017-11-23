@@ -642,4 +642,9 @@ class PaymentAction extends Controller {
       $this->content['shop_name'] = $shop_name;
       return;
     }
+
+    public function pay_success(){
+       $order_id = Filter::int(Req::args('order_id'));
+        
+    }
 }
