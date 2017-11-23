@@ -67,7 +67,7 @@ class pay_alipayapp extends PaymentPlugin {
         $return = array();
 
         //基本参数
-        $return['app_id'] = '2017080107981760';
+        $return['app_id'] = '2017072607901626';
         $return['timestamp'] = date("Y-m-d H:i:s");
         $return['notify_url'] = $this->asyncCallbackUrl;
 
