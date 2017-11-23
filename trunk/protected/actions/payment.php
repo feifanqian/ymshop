@@ -645,7 +645,7 @@ class PaymentAction extends Controller {
 
     public function pay_success(){
        $order_id = Filter::int(Req::args('order_id'));
-       $order = $this->model->table('order_offline,,order_no')->fields('shop_ids')->where('id='.$order_id)->find();
+       $order = $this->model->table('order_offline')->fields('shop_ids,order_no')->where('id='.$order_id)->find();
        if(!$order){
         $this->code = 1096;
         return;
