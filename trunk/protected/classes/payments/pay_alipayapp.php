@@ -83,7 +83,7 @@ class pay_alipayapp extends PaymentPlugin {
         $return['method'] = 'alipay.trade.app.pay';
         $return['charset'] = 'utf-8';
         $return['version'] = '1.0';
-        $return['sign_type'] = 'RSA';
+        $return['sign_type'] = 'RSA2';
 
         //除去待签名参数数组中的空值和签名参数
         $filter_param = $this->filterParam($return);
