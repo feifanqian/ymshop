@@ -108,7 +108,7 @@ class pay_alipayapp extends PaymentPlugin {
         $aop->signType = 'RSA2';
         $aop->postCharset='utf-8';
         $aop->format='json';
-        $request = new \Alipay\aop\request\AlipayFundTransToaccountTransferRequest();
+        $request = new AlipayTradeAppPayRequest();
         $content = array(
             'body' => $payment['R_Name'],
             'subject' => $payment['R_Name'],
@@ -118,6 +118,7 @@ class pay_alipayapp extends PaymentPlugin {
             'product_code' => 'QUICK_MSECURITY_PAY',
         );
         $bizcontent = json_encode($content);
+        $request->setNotifyUrl($this->asyncCallbackUrl);
         $request->setBizContent($bizcontent);
         $result = $aop->sdkExecute($request);
         return $result;
