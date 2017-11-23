@@ -128,7 +128,7 @@ return array(
     "ChinapayDf" => "payments/pay_unionpay/df/ChinapayDf.php",
     "netpayclient" => "payments/pay_unionpay/df/netpayclient.php",
     "AopClient"=>"Alipay/aop/AopClient.php",
-    "AlipayTradeAppPayRequest"=>"payments/Alipay/aop/AlipayTradeAppPayRequest.php",
+    // "AlipayTradeAppPayRequest"=>"payments/Alipay/aop/AlipayTradeAppPayRequest.php",
     "AlipayFundTransToaccountTransferRequest"=>"Alipay/aop/request/AlipayFundTransToaccountTransferRequest.php",
     "AopSdk"=>"Alipay/AopSdk.php",
     "AppConfig"=>"allinpay/AppConfig.php",
