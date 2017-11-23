@@ -1127,8 +1127,9 @@ class PaymentController extends Controller {
                 $orderarr = explode('_', $orderNo);
                 $orderNo = end($orderarr);
                 //如果是订单支付的话
-                $order = new Model("order");
-                $order_info = $order->where("order_no='{$orderNo}'")->find();
+                $model = new Model();
+                $order_info = $model->table('order')->where("order_no='{$orderNo}'")->find();
+                $order_offline = $model->table('order_offline')->where("order_no='{$orderNo}'")->find();
                 if (!empty($order_info)) {
                     if ($order_info['type'] == 4 && $order_info['is_new'] == 0) {
                         if ($order_info['otherpay_amount'] > $money) {
@@ -1139,13 +1140,63 @@ class PaymentController extends Controller {
                         file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
                         exit;
                     }
-                     
+                    $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
+                    if ($order_id) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    } 
+                }elseif(!empty($order_offline)){
+                    $order_no = $orderNo;
+                     $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
+                        $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1,'pay_time'=>date('Y-m-d H:i:s')))->update();
+                        // $invite_id=Session::get('invite_id');
+                        $invite_id=$order['prom_id'];
+                        $seller_id=$order['shop_ids'];             
+                        if($invite_id==null){
+                            $invite_id=1;
+                        }
+                        if($seller_id==0){
+                            $seller_id=$invite_id;
+                        }
+                        // $promoter_id=Common::getFirstPromoter($order['user_id']);
+                        $exist=$this->model->table('balance_log')->where("order_no='{$order_no}'")->find();
+                        if(!$exist){
+                            //如果卖家是邀请人的话不参与分账
+                            if($seller_id!=$invite_id){
+                                $config = Config::getInstance()->get("district_set");
+                                $promoter = $this->model->table('district_promoter')->fields('base_rate')->where('user_id='.$seller_id)->find();
+                                if($promoter){
+                                    $amount = round($order['order_amount']*(100-$promoter['base_rate'])/100,2);
+                                }else{
+                                    $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
+                                }     
+                                $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
+                                Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
+                                Common::offlineBeneficial($order_no,$invite_id,$seller_id);
+                                $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('payable_amount'=>$amount))->update();
+                                $money = $amount;
+                            }else{
+                                $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
+                                 Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
+                                 $money = $order['order_amount'];
+                            }
+                            #*****************推送消息***************
+                            $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+                            $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+                            $token = $wechat->getAccessToken();
+                            $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$seller_id." and oauth_type='wechat'")->find();      
+                            $params = array(
+                                'touser' => $oauth_info['open_id'],
+                                'msgtype' => 'text',
+                                "text" => array(
+                                        'content' => "亲爱的商家:{$oauth_info['open_name']},您获得商家消费收益{$money}元，请登录个人中心查看。"
+                                        )
+                                    );
+                            $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
+                            #****************************************
+                        }
                 }
-                $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
-                if ($order_id) {
-                    $paymentPlugin->asyncStop();
-                    exit;
-                }
+                
             }
             echo 'success';
         }else{
