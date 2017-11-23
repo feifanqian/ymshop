@@ -988,15 +988,17 @@ class PaymentController extends Controller {
                 $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
                 $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
                 $token = $wechat->getAccessToken();
-                $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$seller_id." and oauth_type='wechat'")->find();      
-                $params = array(
+                $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$seller_id." and oauth_type='wechat'")->find();
+                if($oauth_info){
+                    $params = array(
                     'touser' => $oauth_info['open_id'],
                     'msgtype' => 'text',
                     "text" => array(
                             'content' => "亲爱的商家:{$oauth_info['open_name']},您获得商家消费收益{$money}元，请登录个人中心查看。"
                             )
                         );
-                $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
+                    $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
+                }        
                 #****************************************
             }                            
         }
@@ -1184,15 +1186,17 @@ class PaymentController extends Controller {
                             $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
                             $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
                             $token = $wechat->getAccessToken();
-                            $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$seller_id." and oauth_type='wechat'")->find();      
-                            $params = array(
+                            $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$seller_id." and oauth_type='wechat'")->find();
+                            if($oauth_info){
+                                $params = array(
                                 'touser' => $oauth_info['open_id'],
                                 'msgtype' => 'text',
                                 "text" => array(
                                         'content' => "亲爱的商家:{$oauth_info['open_name']},您获得商家消费收益{$money}元，请登录个人中心查看。"
                                         )
                                     );
-                            $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
+                                $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
+                            }      
                             #****************************************
                         }
                 }
