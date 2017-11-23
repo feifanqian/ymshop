@@ -64,7 +64,6 @@ class pay_alipayapp extends PaymentPlugin {
 
     //打包数据
     public function packData($payment) {
-        include(__DIR__ . '/Alipay/aop/AlipayTradeAppPayRequest.php');
         // $return = array();
 
         // //基本参数
@@ -109,7 +108,7 @@ class pay_alipayapp extends PaymentPlugin {
         $aop->signType = 'RSA2';
         $aop->postCharset='utf-8';
         $aop->format='json';
-        // $request = new AlipayTradeAppPayRequest();
+        $request = new AlipayTradeAppPayRequest();
         $content = array(
             'body' => $payment['R_Name'],
             'subject' => $payment['R_Name'],
