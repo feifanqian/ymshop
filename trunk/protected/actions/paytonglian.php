@@ -677,8 +677,8 @@ class PaytonglianAction extends Controller
         $bizUserId = Req::args('bizUserId');
         $bizOrderNo = Req::args('bizOrderNo');
         $accountSetNo = Req::args('accountSetNo');
-        $amount = Req::args('amount');  //必须整形
-        $fee = Req::args('fee');//必须整形
+        $amount = Filter::int(Req::args('amount'));  //必须整形
+        $fee = Filter::int(Req::args('fee'));//必须整形
         $validateType = Req::args('validateType');
         $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $payMethod = new  stdClass();
@@ -718,6 +718,7 @@ class PaytonglianAction extends Controller
         $param["summary"] = $summary;
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "depositApply", $param);
+        print_r($amount);
         if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
