@@ -793,7 +793,7 @@ class PaytonglianAction extends Controller
         if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
-            print_r($result);
+            print_r($result);die();
         }
 
     }
@@ -893,7 +893,7 @@ class PaytonglianAction extends Controller
         if ($result['status']=='OK'){
                 $this->code = 0;
         }else{
-            print_r($result);
+            print_r($result);die();
         }
     }
 
