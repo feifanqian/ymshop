@@ -17,8 +17,8 @@
       <file leaf-file-name="paytonglian.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="680" column="31" lean-forward="true" selection-start-line="680" selection-start-column="31" selection-end-line="680" selection-end-column="31" />
+            <state relative-caret-position="702">
+              <caret line="720" column="25" lean-forward="false" selection-start-line="720" selection-start-column="25" selection-end-line="720" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -222,12 +222,13 @@
       <workItem from="1511244633965" duration="425000" />
       <workItem from="1511245084911" duration="164000" />
       <workItem from="1511245272495" duration="16712000" />
-      <workItem from="1511313995331" duration="24860000" />
+      <workItem from="1511313995331" duration="25650000" />
+      <workItem from="1511400067348" duration="1445000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="64285000" />
+    <option name="totallyTimeSpent" value="66520000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -242,22 +243,22 @@
     <frame x="72" y="-8" width="1856" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15534522" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1548913" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23184079" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23184079" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -291,6 +292,14 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18044">
+          <caret line="694" column="104" lean-forward="true" selection-start-line="694" selection-start-column="104" selection-end-line="694" selection-end-column="104" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="12220">
@@ -1024,7 +1033,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="728">
           <caret line="100" column="4" lean-forward="true" selection-start-line="100" selection-start-column="4" selection-end-line="100" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1542,43 +1550,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="494">
           <caret line="178" column="49" lean-forward="true" selection-start-line="178" selection-start-column="49" selection-end-line="178" selection-end-column="49" />
-          <folding>
-            <marker date="1511348699133" expanded="true" signature="11:20" ph=" 手机版 ..." />
-            <marker date="1511348699133" expanded="true" signature="62:14504" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="251:10703" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="10792:11541" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="10836:11486" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="10967:11352" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="11016:11073" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="11079:11338" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="11376:11476" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="11494:11535" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="11582:12074" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="11841:11900" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="12010:12068" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="12135:12852" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="12268:12370" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="12378:12420" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="12532:12845" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="12632:12645" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="12922:14001" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="13029:13921" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="13166:13823" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="13401:13710" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="13718:13809" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="13831:13911" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="13929:13995" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="14050:14125" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="14078:14119" ph="..." />
-            <marker date="1511348699133" expanded="true" signature="14184:14501" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="680" column="31" lean-forward="true" selection-start-line="680" selection-start-column="31" selection-end-line="680" selection-end-column="31" />
+        <state relative-caret-position="702">
+          <caret line="720" column="25" lean-forward="false" selection-start-line="720" selection-start-column="25" selection-end-line="720" selection-end-column="25" />
           <folding />
         </state>
       </provider>
