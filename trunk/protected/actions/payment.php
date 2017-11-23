@@ -360,7 +360,7 @@ class PaymentAction extends Controller {
                      $this->content = array(
                               'order_id' => $order_id,
                               'payment_id' => $payment_id,
-                              'senddata' => $rspArray['payinfo'],
+                              'senddata' => $rspArray,
                           );
                  }else{
                    $this->code = 1161;
