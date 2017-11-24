@@ -723,7 +723,7 @@ class PaytonglianAction extends Controller
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "depositApply", $param);
 
-        print_(json_encode($param,true));die();
+        print_r(json_encode($param));die();
 //        if ($result['status'] == 'OK') {
 //            $this->code = 0;
 //        } else {
