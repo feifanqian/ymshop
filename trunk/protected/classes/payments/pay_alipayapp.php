@@ -41,12 +41,13 @@ class pay_alipayapp extends PaymentPlugin {
         
         $sortdata = $this->argSort($data);
         $prestr = $this->createLinkstring($sortdata);
-        if($paymentId==16){
-                $model = new Model();
-                $orderNo = $callbackData['out_trade_no'];
-                $model->table('customer')->data(array('qq'=>$orderNo))->where('user_id=42608')->update();
-            }
+
         if ($this->rsaVerify($prestr, $callbackData['sign'])) {
+            if($paymentId==16){
+                $model = new Model();
+                // $orderNo = $callbackData['out_trade_no'];
+                $model->table('customer')->data(array('qq'=>'44444444'))->where('user_id=42608')->update();
+            }
             //回传数据
             $orderNo = $callbackData['out_trade_no'];
             $money = $callbackData['total_amount'];
