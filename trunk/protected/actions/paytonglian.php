@@ -688,18 +688,20 @@ class PaytonglianAction extends Controller
         $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $payMethod = new  stdClass();
         $payMethodb = new  stdClass();
-        //快捷
-//        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
-//        $payMethodb->amount = $amount;
-//        $payMethod->QUICKPAY = $payMethodb; //快捷支付（需要先绑定银行 卡）
 
-        //网关
-        $payMethodb->bankCode = Req::args('bankCode'); //银行机构代码
-        $payMethodb->payType = Req::args('payType'); //网关支付关系 B2C 个人网银（借记卡） 1  B2C 个人网银（信用卡） 11  B2B 企业网银 4
-//        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
-        $payMethodb->amount = Req::args('amount');//快捷支付（需要先绑定银行 卡）
-        $payMethod->GATEWAY = $payMethodb;
-
+        if (Req::args('payMethod')=='1')
+        {
+            //快捷
+            $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
+            $payMethodb->amount = $amount;
+            $payMethod->QUICKPAY = $payMethodb; //快捷支付（需要先绑定银行 卡）
+        }elseif(Req::args('payMethod')=='2'){
+            //网关
+            $payMethodb->bankCode = Req::args('bankCode'); //银行机构代码
+            $payMethodb->payType = Req::args('payType'); //网关支付关系 B2C 个人网银（借记卡） 1  B2C 个人网银（信用卡） 11  B2B 企业网银 4
+            $payMethodb->amount = Req::args('amount');//快捷支付（需要先绑定银行 卡）
+            $payMethod->GATEWAY = $payMethodb;
+        }
         $industryCode = Req::args('industryCode');
         $industryName = Req::args('industryName');
         $source = Req::args('source');    //只能为整型
@@ -722,14 +724,13 @@ class PaytonglianAction extends Controller
         $param["summary"] = $summary;
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "depositApply", $param);
-        print_r($result);
-        print_r(json_encode($param));die();
-
-//        if ($result['status'] == 'OK') {
-//            $this->code = 0;
-//        } else {
-//            print_r($result);
-//        }
+//        print_r($result);
+//        print_r(json_encode($param));die();
+        if ($result['status'] == 'OK') {
+            $this->code = 0;
+        } else {
+            print_r($result);
+        }
     }
 
     /**
