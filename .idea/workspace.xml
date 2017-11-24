@@ -17,8 +17,8 @@
       <file leaf-file-name="paytonglian.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="452">
-              <caret line="894" column="37" lean-forward="false" selection-start-line="894" selection-start-column="37" selection-end-line="894" selection-end-column="37" />
+            <state relative-caret-position="842">
+              <caret line="903" column="9" lean-forward="false" selection-start-line="903" selection-start-column="9" selection-end-line="903" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -215,12 +215,12 @@
       <workItem from="1511400067348" duration="9688000" />
       <workItem from="1511420965705" duration="1981000" />
       <workItem from="1511425179655" duration="9530000" />
-      <workItem from="1511487256502" duration="21681000" />
+      <workItem from="1511487256502" duration="22319000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="107955000" />
+    <option name="totallyTimeSpent" value="108593000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -242,7 +242,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3655706" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3655706" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -715,8 +715,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="452">
-          <caret line="894" column="37" lean-forward="false" selection-start-line="894" selection-start-column="37" selection-end-line="894" selection-end-column="37" />
+        <state relative-caret-position="842">
+          <caret line="903" column="9" lean-forward="false" selection-start-line="903" selection-start-column="9" selection-end-line="903" selection-end-column="9" />
           <folding />
         </state>
       </provider>

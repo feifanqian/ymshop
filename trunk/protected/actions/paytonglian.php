@@ -892,9 +892,16 @@ class PaytonglianAction extends Controller
 
         );
         $result = $client->request("OrderService", "consumeApply", $param);
-        print_r(json_encode($param));
-        print_r($result);die();
-
+        if ($result['status']=='OK'){
+            $signedValue = json_decode($result['signedValue'], true);//把json格式的数据转换成数组
+            $tradeNo = $signedValue['tradeNo'];//交易编号 仅当快捷支付时有效
+            if (!empty($tradeNo)) {
+                $model = new Model();
+                $this->model->table('tradeno')->data(array('user_id' => $user_id, 'biz_orderno' => $bizOrderNo, 'trade_no' => $tradeNo))->insert();
+            }
+        }else{
+            print_r($result);die();
+        }
     }
 
     /**
