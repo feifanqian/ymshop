@@ -678,6 +678,7 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
+        $user_id = Req::args('user_id');
         $bizUserId = Req::args('bizUserId');
         $bizOrderNo = Req::args('bizOrderNo');
         $accountSetNo = Req::args('accountSetNo');
