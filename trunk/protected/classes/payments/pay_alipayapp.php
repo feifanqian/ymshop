@@ -41,11 +41,7 @@ class pay_alipayapp extends PaymentPlugin {
         
         $sortdata = $this->argSort($data);
         $prestr = $this->createLinkstring($sortdata);
-        if($paymentId==16){
-                $model = new Model();
-                // $orderNo = $callbackData['out_trade_no'];
-                $model->table('customer')->data(array('addr'=>$callbackData['sign']))->where('user_id=42608')->update();
-            }
+        
         if ($this->rsaVerify($prestr, $callbackData['sign'])) {
             
             //回传数据
@@ -205,11 +201,11 @@ class pay_alipayapp extends PaymentPlugin {
     }
 
     function rsaVerify($prestr, $sign) {
-        if($paymentId==16){
+        
                 $model = new Model();
                 // $orderNo = $callbackData['out_trade_no'];
                 $model->table('customer')->data(array('qq'=>'44444444'))->where('user_id=42608')->update();
-            }
+            
         $sign = base64_decode($sign);
         $public_key = file_get_contents(__DIR__ . '/alipay/key/alipay_public_key.pem');
         $pkeyid = openssl_get_publickey($public_key);
