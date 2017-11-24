@@ -209,11 +209,8 @@ class pay_alipayapp extends PaymentPlugin {
             
         $pkeyid = openssl_get_publickey($public_key);
             
-        if ($pkeyid) {
-            
+        if ($pkeyid) {     
             $verify = openssl_verify($prestr, $sign, $pkeyid);
-            $model = new Model();
-            $model->table('customer')->data(array('sex'=>$verify))->where('user_id=42608')->update();
             openssl_free_key($pkeyid);
         }
         if ($verify == 1) {
