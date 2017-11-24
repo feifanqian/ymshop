@@ -23,7 +23,7 @@ class PaymentAction extends Controller {
         $order_id = Filter::int(Req::args('order_id'));
         $recharge = Req::args('recharge');
         $extendDatas = Req::args();
-        
+        $rate = Req::args('base_rate');
         $this->model->table('order')->data(array('payment'=>$payment_id))->where('id='.$order_id)->update(); 
         unset($extendDatas['user_id']);
         unset($extendDatas['token']);
@@ -44,26 +44,26 @@ class PaymentAction extends Controller {
                     $config = Config::getInstance();
                     $package_set = $config->get("recharge_package_set");
                     
-                     if($package==4){
-                        $address_id = Filter::int(Req::args('address_id'));
-                        $gift = Filter::int(Req::args("gift"));
-                        //判断礼物是否是套餐真实的
-                        $gift_arr = explode("|", $package_set[4]['gift']);
-                        if (!in_array($gift, $gift_arr)) {
-                            $this->code  = 1122;
-                            return;
-                        }
-                        if(!$address_id){
-                            $this->code = 1124;
-                            return;
-                        }else{
-                            $address_isset = $this->model->table("address")->where("user_id =".$this->user['id']." and id =".$address_id)->count();
-                            if($address_isset==0){
-                                 $this->code = 1124;
-                                 return;
-                            }
-                        }
-                    }
+                    //  if($package==4){
+                    //     $address_id = Filter::int(Req::args('address_id'));
+                    //     $gift = Filter::int(Req::args("gift"));
+                    //     //判断礼物是否是套餐真实的
+                    //     $gift_arr = explode("|", $package_set[4]['gift']);
+                    //     if (!in_array($gift, $gift_arr)) {
+                    //         $this->code  = 1122;
+                    //         return;
+                    //     }
+                    //     if(!$address_id){
+                    //         $this->code = 1124;
+                    //         return;
+                    //     }else{
+                    //         $address_isset = $this->model->table("address")->where("user_id =".$this->user['id']." and id =".$address_id)->count();
+                    //         if($address_isset==0){
+                    //              $this->code = 1124;
+                    //              return;
+                    //         }
+                    //     }
+                    // }
                     switch ($package) {
                         case 0 : $recharge = $recharge;
                             break;
@@ -81,23 +81,23 @@ class PaymentAction extends Controller {
                     $user['id']=$this->user['id'];
                     $recharge = round($recharge,2);
                     $paymentInfo = $payment->getPayment();
-                    $data = array('account' => $recharge, 'paymentName' => $paymentInfo['name'],'package' => $package);
+                    $data = array('account' => $recharge, 'paymentName' => $paymentInfo['name'],'package' => $package,'rate'=>$rate);
                     $packData = $payment->getPaymentInfo('recharge', $data);
                     $packData = array_merge($extendDatas, $packData);
                     $recharge_no = substr($packData['M_OrderNO'], 8);
-                    if ($package == 4) {
-                        $recharge_gift_model = new Model();
-//                      $recharge_count = $model->table('recharge')->where("package in (1,2,3,4) and status =1 and user_id=" . $user['id'])->count();
-                        $gift_data['user_id'] = $user['id'];
-                        $gift_data['recharge_no'] = $recharge_no;
-                        $gift_data['package'] = $package;
-                        $gift_data['address_id'] = $address_id;
-                        $gift_data['gift'] = $gift;
-//                      $gift_data['is_first'] = $recharge_count > 0 ? 2 : 1; //判断是否是首次充
-                        $gift_data['status'] = 0;
+//                     if ($package == 4) {
+//                         $recharge_gift_model = new Model();
+// //                      $recharge_count = $model->table('recharge')->where("package in (1,2,3,4) and status =1 and user_id=" . $user['id'])->count();
+//                         $gift_data['user_id'] = $user['id'];
+//                         $gift_data['recharge_no'] = $recharge_no;
+//                         $gift_data['package'] = $package;
+//                         $gift_data['address_id'] = $address_id;
+//                         $gift_data['gift'] = $gift;
+// //                      $gift_data['is_first'] = $recharge_count > 0 ? 2 : 1; //判断是否是首次充
+//                         $gift_data['status'] = 0;
                         
-                        $recharge_gift_model->table("recharge_gift")->data($gift_data)->insert();
-                    }
+//                         $recharge_gift_model->table("recharge_gift")->data($gift_data)->insert();
+//                     }
                     $sendData = $paymentPlugin->packData($packData);
                     if (!$paymentPlugin->isNeedSubmit()) {
                          if(isset($sendData['tn'])){
