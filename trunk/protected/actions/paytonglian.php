@@ -107,10 +107,10 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;    //手机号码
         $param["verificationCodeType"] = $verificationCodeType;//绑定手机
         $result = $client->request("MemberService", "sendVerificationCode", $param);
-        if ($result['status'] =='OK') {
+        if ($result['status'] == 'OK') {
             $this->code = 0;
             $this->content = '发送短信验证码成功';
-        } else if ($result['errorCode'] =='3000') {
+        } else if ($result['errorCode'] == '3000') {
             $this->code = 3000;
             $this->content = '所属应用下已经存在此用户';
         } else {
@@ -149,7 +149,7 @@ class PaytonglianAction extends Controller
         $param["verificationCodeType"] = $verificationCodeType;        //绑定手机
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "checkVerificationCode", $param);
-        if ($result['status'] =='OK') {
+        if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
             print_r($result);
@@ -187,7 +187,7 @@ class PaytonglianAction extends Controller
         $param["identityType"] = $identityType;
         $param["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);
         $result = $client->request("MemberService", "setRealName", $param);
-        if ($result['status'] =='OK') {
+        if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
             print_r($result);
@@ -220,7 +220,7 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;    //手机号码
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
-        if ($result['status'] =='OK') {
+        if ($result['status'] == 'OK') {
             $this->code = 0;
         } else if ($result['errorCode'] == '50001') {
             $this->code = '50001';
@@ -350,7 +350,7 @@ class PaytonglianAction extends Controller
         $param["bizUserId"] = $bizUserId;
         $param["cardNo"] = $this->rsaEncrypt($cardNo, $publicKey, $privateKey); //银行卡号
         $result = $client->request("MemberService", "getBankCardBin", $param);
-        if ($result['status'] =='OK') {
+        if ($result['status'] == 'OK') {
             $this->code = 0;
             $signedValue = json_decode($result['signedValue'], true);
             $bankCode = $signedValue['cardBinInfo']['bankCode'];
@@ -428,7 +428,7 @@ class PaytonglianAction extends Controller
         $param["identityNo"] = $identityNo;
         $param["unionBank"] = $unionBank;
         $result = $client->request("MemberService", "applyBindBankCard", $param);
-        if ($result['status'] =='OK') {
+        if ($result['status'] == 'OK') {
             $this->code = 0;
             $signedValue = json_decode($result['signedValue'], true);
             $transDate = $signedValue['transDate'];
@@ -474,7 +474,7 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;
         $param["verificationCode"] = $verificationCode;
         $result = $client->request("MemberService", "bindBankCard", $param);
-        if ($result['status'] =='OK') {
+        if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
             print_r($result);
@@ -537,7 +537,7 @@ class PaytonglianAction extends Controller
         $param["bizUserId"] = $bizUserId;
         $param["cardNo"] = $this->rsaEncrypt($cardNo, $publicKey, $privateKey);
         $result = $client->request("MemberService", "queryBankCard", $param);
-        if ($result['status'] =='OK') {
+        if ($result['status'] == 'OK') {
             $this->code = 0;
         } else {
             print_r($result);
@@ -566,7 +566,7 @@ class PaytonglianAction extends Controller
         $param["bizUserId"] = $bizUserId;
         $param["cardNo"] = $cardNo;
         $result = $client->request("MemberService", "unbindBankCard", $param);
-        if ($result['status'] =='OK') {
+        if ($result['status'] == 'OK') {
             $this->code = 0;
             $this->content['success'] = '解除绑定银行卡成功';
         } else {
@@ -690,13 +690,12 @@ class PaytonglianAction extends Controller
         $payMethod = new  stdClass();
         $payMethodb = new  stdClass();
 
-        if (Req::args('payMethod')=='1')
-        {
+        if (Req::args('payMethod') == '1') {
             //快捷
             $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
             $payMethodb->amount = $amount;
             $payMethod->QUICKPAY = $payMethodb; //快捷支付（需要先绑定银行 卡）
-        }elseif(Req::args('payMethod')=='2'){
+        } elseif (Req::args('payMethod') == '2') {
             //网关
             $payMethodb->bankCode = Req::args('bankCode'); //银行机构代码
             $payMethodb->payType = Req::args('payType'); //网关支付关系 B2C 个人网银（借记卡） 1  B2C 个人网银（信用卡） 11  B2B 企业网银 4
@@ -726,11 +725,11 @@ class PaytonglianAction extends Controller
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "depositApply", $param);
         if ($result['status'] == 'OK') {
-            $signedValue = json_decode($result['signedValue'],true);//把json格式的数据转换成数组
+            $signedValue = json_decode($result['signedValue'], true);//把json格式的数据转换成数组
             $tradeNo = $signedValue['tradeNo'];//交易编号 仅当快捷支付时有效
-            if (!empty($tradeNo)){
+            if (!empty($tradeNo)) {
                 $model = new Model();
-                $this->model->table('tradeno')->data(array('user_id'=>$user_id,'biz_orderno'=>$bizOrderNo,'trade_no'=>$tradeNo))->insert();
+                $this->model->table('tradeno')->data(array('user_id' => $user_id, 'biz_orderno' => $bizOrderNo, 'trade_no' => $tradeNo))->insert();
             }
             print_r($result);
         } else {
@@ -799,16 +798,10 @@ class PaytonglianAction extends Controller
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "withdrawApply", $param);
         if ($result['status'] == 'OK') {
-            $signedValue = json_decode($result['signedValue'],true);//把json格式的数据转换成数组
-
-//            if (!empty($tradeNo)){
-//                $tradeNo = $signedValue['tradeNo'];//交易编号 仅当快捷支付时有效
-//                $model = new Model();
-//                $this->model->table('tradeno')->data(array('user_id'=>$user_id,'biz_orderno'=>$bizOrderNo,'trade_no'=>$tradeNo))->insert();
-//            }
             print_r($result);
         } else {
-            print_r($result);die();
+            print_r($result);
+            die();
         }
 
     }
@@ -850,28 +843,27 @@ class PaytonglianAction extends Controller
         $payerId = Req::args('payerId');
         $recieverId = Req::args('recieverId');
         $bizOrderNo = Req::args('bizOrderNo');
-        $amount = (round(Req::args('amount'),2))*100; //只能为整型
-        $fee = (round(Req::args('fee'),2))*100;  //只能为整型
+        $amount = Req::args('amount'); //只能为整型
+        $fee = Req::args('fee');  //只能为整型
         $splitRule = Req::args('splitRule');
-
         $showUrl = Req::args('showUrl');
         $ordErexpireDatetime = Req::args('ordErexpireDatetime');
+
         $payMethod = new  stdClass();
         $payMethodb = new  stdClass();
 
-        /*    //快捷
-           $payMethodb->bankCardNo=$this->rsa('6228480318051081871');
-           $payMethodb->amount=100;
-           $payMethod->QUICKPAY=$payMethodb; //快捷支付（需要先绑定银行 卡）
-            */
-        //网关
-        $payMethodb = new  stdClass();
-        $payMethodb->bankCode = 'cmb';
-        $payMethodb->payType = 1;
-        $payMethodb->bankCardNo = $this->rsaEncrypt('6228480318051081101',$publicKey,$privateKey);
-        $payMethodb->amount = 100;//快捷支付（需要先绑定银行 卡）
-        $payMethod->GATEWAY = $payMethodb;
-
+        //快捷
+        if (Req::args('payMethod') == '1') {
+            $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'),$publicKey,$privateKey);
+            $payMethodb->amount = $amount;
+            $payMethod->QUICKPAY = $payMethodb; //快捷支付（需要先绑定银行 卡）
+        } elseif (Req::args('payMethod') == '2') {
+            //网关
+            $payMethodb->bankCode = Req::args('bankCode');
+            $payMethodb->payType = Req::args('payType');
+            $payMethodb->amount = $amount;//快捷支付（需要先绑定银行 卡）
+            $payMethod->GATEWAY = $payMethodb;
+        }
         $goodsName = Req::args('goodsName');
         $goodsDesc = Req::args('goodsDesc');
         $industryCode = Req::args('industryCode');
@@ -880,30 +872,31 @@ class PaytonglianAction extends Controller
         $summary = Req::args('summary');
         $extendInfo = Req::args('extendInfo');
         $param = array(
-                'payerId' => $payerId,
-                'recieverId' => $recieverId,
-                'bizOrderNo' => $bizOrderNo,
-                'amount' => $amount,
-                'fee' => $fee,
-                'frontUrl' => NOTICE_URL,
-                'backUrl' => BACKURL,
-                // 'showUrl' => $showUrl,
-                // 'ordErexpireDatetime' => $ordErexpireDatetime,
-                'payMethod' => $payMethod,
-                'goodsName' => $goodsName,
-                'goodsDesc' => $goodsDesc,
-                'industryCode' => $industryCode,
-                'industryName' => $industryName,
-                'source' => $source,
-                'summary' => $summary,
-                'extendInfo' => $extendInfo,
+            'payerId' => $payerId,
+            'recieverId' => $recieverId,
+            'bizOrderNo' => $bizOrderNo,
+            'amount' => $amount,
+            'fee' => $fee,
+            'frontUrl' => NOTICE_URL,
+            'backUrl' => BACKURL,
+            'showUrl' => $showUrl,
+            'ordErexpireDatetime' => $ordErexpireDatetime,
+            'payMethod' => $payMethod,
+            'goodsName' => $goodsName,
+            'goodsDesc' => $goodsDesc,
+            'industryCode' => $industryCode,
+            'industryName' => $industryName,
+            'source' => $source,
+            'summary' => $summary,
+            'extendInfo' => $extendInfo,
 
-            );
+        );
         $result = $client->request("OrderService", "consumeApply", $param);
-        if ($result['status']=='OK'){
-                print_r($result);
-        }else{
-            print_r($result);die();
+        if ($result['status'] == 'OK') {
+            print_r($result);
+        } else {
+            print_r($result);
+            die();
         }
     }
 
@@ -961,7 +954,7 @@ class PaytonglianAction extends Controller
 
 
         $payMethodb->amount = 100;
-        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo',$privateKey,$publicKey));
+        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo', $privateKey, $publicKey));
         $payMethod->QUICKPAY = $payMethodb;
 
         $goodsName = Req::args('goodsName');
@@ -972,32 +965,33 @@ class PaytonglianAction extends Controller
         $summary = Req::args('summary');
         $extendInfo = Req::args('extendInfo');
         $param = array(
-                'bizOrderNo' => $bizOrderNo,
-                'payerId' => $payerId,
-                'recieverList' => array($recieverList),
-                'goodsType' => $goodsType,
-                'goodsNo' => $goodsNo,
-                'tradeCode' => $tradeCode,
-                'amount' => $amount,
-                'fee' => $fee,
-                'frontUrl' => NOTICE_URL,
-                'backUrl' => BACKURL,
-                //'frontUrl' => $frontUrl,
-                //'backUrl' => $backUrl,
+            'bizOrderNo' => $bizOrderNo,
+            'payerId' => $payerId,
+            'recieverList' => array($recieverList),
+            'goodsType' => $goodsType,
+            'goodsNo' => $goodsNo,
+            'tradeCode' => $tradeCode,
+            'amount' => $amount,
+            'fee' => $fee,
+            'frontUrl' => NOTICE_URL,
+            'backUrl' => BACKURL,
+            //'frontUrl' => $frontUrl,
+            //'backUrl' => $backUrl,
 
-                'showUrl' => $showUrl,
-                //'ordErexpireDatetime' => $ordErexpireDatetime,
-                'payMethod' => $payMethod,
-                'goodsName' => $goodsName,
-                'goodsDesc' => $goodsDesc,
-                'industryCode' => $industryCode,
-                'industryName' => $industryName,
-                'source' => $source,
-                'summary' => $summary,
-                'extendInfo' => $extendInfo,
+            'showUrl' => $showUrl,
+            //'ordErexpireDatetime' => $ordErexpireDatetime,
+            'payMethod' => $payMethod,
+            'goodsName' => $goodsName,
+            'goodsDesc' => $goodsDesc,
+            'industryCode' => $industryCode,
+            'industryName' => $industryName,
+            'source' => $source,
+            'summary' => $summary,
+            'extendInfo' => $extendInfo,
         );
-        $result = $client->request('OrderService','agentCollectApply',$param);
-        print_r($result);die();
+        $result = $client->request('OrderService', 'agentCollectApply', $param);
+        print_r($result);
+        die();
 
     }
 
@@ -1220,22 +1214,23 @@ class PaytonglianAction extends Controller
         $bizOrderNo = Req::args('bizOrderNo');
         $model = new Model();
         $obj = $this->model->table('tradeno')->fields('trade_no,biz_orderno')->where("user_id='$user_id'AND biz_orderno='$bizOrderNo'")->find();
-        if (!empty($obj)){
+        if (!empty($obj)) {
             $tradeNo = $obj['trade_no'];
-        }else{
+        } else {
             $tradeNo = '';
         }
         $verificationCode = Req::args('verificationCode');
         $consumerIp = Req::args('consumerIp');
         $param = array(
-                'bizUserId' => $bizUserId,
-                'bizOrderNo' => $bizOrderNo,
-                'tradeNo' => $tradeNo,
-                'verificationCode' => $verificationCode,
-                'consumerIp' => $consumerIp,
-            );
-        $result = $client->request('OrderService','pay',$param);
-        print_r($result);die();
+            'bizUserId' => $bizUserId,
+            'bizOrderNo' => $bizOrderNo,
+            'tradeNo' => $tradeNo,
+            'verificationCode' => $verificationCode,
+            'consumerIp' => $consumerIp,
+        );
+        $result = $client->request('OrderService', 'pay', $param);
+        print_r($result);
+        die();
 
     }
 
