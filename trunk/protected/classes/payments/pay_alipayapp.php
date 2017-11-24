@@ -210,7 +210,7 @@ class pay_alipayapp extends PaymentPlugin {
         $pkeyid = openssl_get_publickey($public_key);
             
         if ($pkeyid) {     
-            $verify = openssl_verify($prestr, $sign, $pkeyid);
+            $verify = openssl_verify($prestr, $sign, $pkeyid, OPENSSL_ALGO_SHA256);
             openssl_free_key($pkeyid);
         }
         if ($verify == 1) {
