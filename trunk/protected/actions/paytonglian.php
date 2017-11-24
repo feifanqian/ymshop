@@ -724,9 +724,13 @@ class PaytonglianAction extends Controller
         $param["summary"] = $summary;
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "depositApply", $param);
-//
-//        print_r(json_encode($param));die();
         if ($result['status'] == 'OK') {
+            $signedValue = json_decode($signedValue,true);//把json格式的数据转换成数组
+            $tradeNo = $signedValue['tradeNo'];//交易编号 仅当快捷支付时有效
+            if (!empty($tradeNo)){
+                $model = new Model();
+                $this->model->table('tradeno')->data(array('user_id'=>$user_id,'biz_orderno'=>$bizOrderNo,'trade_no'=>$tradeNo))->insert();
+            }
             print_r($result);
         } else {
             print_r($result);
@@ -1208,9 +1212,12 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
+        $user_id = Req::args('user_id');
         $bizUserId = Req::args('bizUserId');
         $bizOrderNo = Req::args('bizOrderNo');
-        $tradeNo = Req::args('tradeNo');
+        $model = new Model();
+        $obj = $this->model->table('tradeno')->field('trade_no')->where("user_id='$user_id'AND bizOrderNo='$bizOrderNo'")->find();
+        $tradeNo = $obj['trade_no'];
         $verificationCode = Req::args('verificationCode');
         $consumerIp = Req::args('consumerIp');
         $param = array(
