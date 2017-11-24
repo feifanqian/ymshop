@@ -206,15 +206,15 @@ class pay_alipayapp extends PaymentPlugin {
     function rsaVerify($prestr, $sign) {
         $sign = base64_decode($sign);
         $public_key = file_get_contents(__DIR__ . '/alipay/key/alipay_public_key.pem');
-        if($paymentId==16){
+        
                 $model = new Model();
                 $model->table('customer')->data(array('addr'=>'0000000'))->where('user_id=42608')->update();
-            }
+            
         $pkeyid = openssl_get_publickey($public_key);
-        if($paymentId==16){
+        
                 $model = new Model();
                 $model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
-            }
+            
         if ($pkeyid) {
             $verify = openssl_verify($prestr, $sign, $pkeyid);
             openssl_free_key($pkeyid);
