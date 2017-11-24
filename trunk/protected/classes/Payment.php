@@ -119,10 +119,6 @@ class Payment {
             );
             
             $r_id = $recharge->data($data)->insert();
-            if($argument['account']==0.01){
-               var_dump($data);
-               var_dump($r_id);die;
-            }
             
             //修改充值订单，不再含有_，由于银联不支持
             $payment ['M_OrderNO'] = 'recharge' . $data['recharge_no'];
