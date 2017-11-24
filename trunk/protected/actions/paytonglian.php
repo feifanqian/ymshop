@@ -687,7 +687,6 @@ class PaytonglianAction extends Controller
         $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $payMethod = new  stdClass();
         $payMethodb = new  stdClass();
-
         //快捷
 //        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
 //        $payMethodb->amount = $amount;
@@ -722,8 +721,9 @@ class PaytonglianAction extends Controller
         $param["summary"] = $summary;
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "depositApply", $param);
-
+        print_r($result);
         print_r(json_encode($param));die();
+
 //        if ($result['status'] == 'OK') {
 //            $this->code = 0;
 //        } else {
