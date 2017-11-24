@@ -23,9 +23,10 @@ class pay_alipayapp extends PaymentPlugin {
 
     //异步处理
     public function asyncCallback($callbackData, &$paymentId, &$money, &$message, &$orderNo) {
-        
-                $this->model->table('customer')->data(array('qq'=>'11111111'))->where('user_id=42608')->update();
-            
+        if($payment_id==16){
+            $model = new Model();
+                $model->table('customer')->data(array('qq'=>'11111111'))->where('user_id=42608')->update();
+            }
         //除去待签名参数数组中的空值和签名参数
         $filter_param = $this->filterParam($callbackData);
 
