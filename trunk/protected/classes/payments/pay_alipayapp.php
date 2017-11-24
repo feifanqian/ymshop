@@ -122,7 +122,7 @@ class pay_alipayapp extends PaymentPlugin {
         $request->setNotifyUrl($this->asyncCallbackUrl);
         $request->setBizContent($bizcontent);
         $result = $aop->sdkExecute($request);
-        $return = http_build_query($result);
+        $return = parse_str($result);
         $return['builddata'] = $result;
         return $return;
     }
