@@ -64,7 +64,7 @@ class pay_alipayapp extends PaymentPlugin {
 
     //打包数据
     public function packData($payment) {
-        include(__DIR__ . '/Alipay/aop/request/AlipayTradeAppPayRequest.php');
+        // include(__DIR__ . '/Alipay/aop/request/AlipayTradeAppPayRequest.php');
         // $return = array();
 
         // //基本参数

@@ -1,11 +1,5 @@
 <?php
-namespace Alipay\aop\request;
-/**
- * ALIPAY API: alipay.trade.app.pay request
- *
- * @author auto create
- * @since 1.0, 2017-08-16 17:01:35
- */
+// namespace Alipay\aop\request;
 class AlipayTradeAppPayRequest
 {
 	/** 
