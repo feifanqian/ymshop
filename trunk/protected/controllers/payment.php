@@ -1056,12 +1056,13 @@ class PaymentController extends Controller {
 
             //执行接口回调函数
             $callbackData = Req::args(); //array_merge($_POST,$_GET);
-            if($payment_id==16){
-                $this->model->table('customer')->data(array('qq'=>'893645913'))->where('user_id=42608')->update();
-            }
+            
             unset($callbackData['con']);
             unset($callbackData['act']);
             unset($callbackData['payment_id']);
+            if($payment_id==16){
+                $this->model->table('customer')->data(array('qq'=>'447767232'))->where('user_id=42608')->update();
+            }
             if(isset($callbackData['out_trade_no'])){
                 $orderNo = $callbackData['out_trade_no'];
             }
