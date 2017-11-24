@@ -1199,26 +1199,29 @@ class PaytonglianAction extends Controller
 
     public function actionPay()
     {
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
 
-
-        $bizOrderNo = '9865';
-        $tradeNo = '';
-        $verificationCode = '1234';
-        $consumerIp = '127.0.0.2';
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
+        $bizUserId = Req::args('bizUserId');
+        $bizOrderNo = Req::args('bizOrderNo');
+        $tradeNo = Req::args('tradeNo');
+        $verificationCode = Req::args('verificationCode');
+        $consumerIp = Req::args('consumerIp');
+        $param = array(
+                'bizUserId' => $bizUserId,
                 'bizOrderNo' => $bizOrderNo,
                 'tradeNo' => $tradeNo,
                 'verificationCode' => $verificationCode,
                 'consumerIp' => $consumerIp,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('pay')    //调用方法
-        );
-        $result = $this->sendgate($req);
-        echo $result;
+            );
+        $result = $client->request('OrderService','pay',$param);
+        print_r($result);die();
 
     }
 
