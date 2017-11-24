@@ -47,10 +47,6 @@ class pay_alipayapp extends PaymentPlugin {
         $flag = $aop->rsaCheckV1($callbackData, NULL, "RSA2");
 
         if ($flag) {
-            if($paymentId==16){
-                $model = new Model();
-                $model->table('customer')->data(array('qq'=>'555555'))->where('user_id=42608')->update();
-            }
             //回传数据
             $orderNo = $callbackData['out_trade_no'];
             $money = $callbackData['total_amount'];

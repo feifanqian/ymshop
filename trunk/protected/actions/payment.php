@@ -81,6 +81,9 @@ class PaymentAction extends Controller {
                     $user['id']=$this->user['id'];
                     $recharge = round($recharge,2);
                     $paymentInfo = $payment->getPayment();
+                    if(!$rate){
+                        $rate = 0;
+                    }
                     $data = array('account' => $recharge, 'paymentName' => $paymentInfo['name'],'package' => $package,'rate'=>$rate);
                     $packData = $payment->getPaymentInfo('recharge', $data);
                     $packData = array_merge($extendDatas, $packData);
