@@ -1220,7 +1220,11 @@ class PaytonglianAction extends Controller
         $bizOrderNo = Req::args('bizOrderNo');
         $model = new Model();
         $obj = $this->model->table('tradeno')->fields('trade_no,biz_orderno')->where("user_id='$user_id'AND biz_orderno='$bizOrderNo'")->find();
-        $tradeNo = $obj['trade_no'];
+        if (!empty($obj)){
+            $tradeNo = $obj['trade_no'];
+        }else{
+            $tradeNo = '';
+        }
         $verificationCode = Req::args('verificationCode');
         $consumerIp = Req::args('consumerIp');
         $param = array(
