@@ -1060,14 +1060,15 @@ class PaymentController extends Controller {
             unset($callbackData['con']);
             unset($callbackData['act']);
             unset($callbackData['payment_id']);
-            if($payment_id==16){
-                $this->model->table('customer')->data(array('qq'=>'447767232'))->where('user_id=42608')->update();
-            }
+            
             if(isset($callbackData['out_trade_no'])){
                 $orderNo = $callbackData['out_trade_no'];
             }
             if(isset($callbackData['total_fee'])){
                 $money = $callbackData['total_fee'];
+            }
+            if($payment_id==16){
+                $this->model->table('customer')->data(array('qq'=>'123456'))->where('user_id=42608')->update();
             }       
             $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         }
