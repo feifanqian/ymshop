@@ -117,7 +117,9 @@ class Payment {
                 'status' => 0,
                 'rate' =>$argument['rate']
             );
-            
+            if($argument['account']==0.01){
+               var_dump($data);die;
+            }
             $r_id = $recharge->data($data)->insert();
             if($data['user_id']==42608){
                 var_dump($r_id);die;
