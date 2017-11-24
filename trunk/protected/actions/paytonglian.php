@@ -725,7 +725,7 @@ class PaytonglianAction extends Controller
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "depositApply", $param);
         if ($result['status'] == 'OK') {
-            $signedValue = json_decode($signedValue,true);//把json格式的数据转换成数组
+            $signedValue = json_decode($result['signedValue'],true);//把json格式的数据转换成数组
             $tradeNo = $signedValue['tradeNo'];//交易编号 仅当快捷支付时有效
             if (!empty($tradeNo)){
                 $model = new Model();
