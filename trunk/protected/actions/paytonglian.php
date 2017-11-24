@@ -799,7 +799,13 @@ class PaytonglianAction extends Controller
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "withdrawApply", $param);
         if ($result['status'] == 'OK') {
-            $this->code = 0;
+            $signedValue = json_decode($result['signedValue'],true);//把json格式的数据转换成数组
+            $tradeNo = $signedValue['tradeNo'];//交易编号 仅当快捷支付时有效
+            if (!empty($tradeNo)){
+                $model = new Model();
+                $this->model->table('tradeno')->data(array('user_id'=>$user_id,'biz_orderno'=>$bizOrderNo,'trade_no'=>$tradeNo))->insert();
+            }
+            print_r($result);
         } else {
             print_r($result);die();
         }
@@ -850,11 +856,6 @@ class PaytonglianAction extends Controller
         $showUrl = Req::args('showUrl');
         $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $payMethod = new  stdClass();
-
-
-        // $ordErexpireDatetime='';
-        $payMethod = new  stdClass();
-
         $payMethodb = new  stdClass();
 
         /*    //快捷
@@ -899,7 +900,7 @@ class PaytonglianAction extends Controller
             );
         $result = $client->request("OrderService", "consumeApply", $param);
         if ($result['status']=='OK'){
-                $this->code = 0;
+                print_r($result);
         }else{
             print_r($result);die();
         }
