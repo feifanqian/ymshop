@@ -17,8 +17,8 @@
       <file leaf-file-name="paytonglian.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="697" column="42" lean-forward="false" selection-start-line="697" selection-start-column="42" selection-end-line="697" selection-end-column="42" />
+            <state relative-caret-position="0">
+              <caret line="776" column="61" lean-forward="false" selection-start-line="776" selection-start-column="61" selection-end-line="776" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -215,12 +215,12 @@
       <workItem from="1511400067348" duration="9688000" />
       <workItem from="1511420965705" duration="1981000" />
       <workItem from="1511425179655" duration="9530000" />
-      <workItem from="1511487256502" duration="7396000" />
+      <workItem from="1511487256502" duration="8629000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="93670000" />
+    <option name="totallyTimeSpent" value="94903000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -686,8 +686,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="697" column="42" lean-forward="false" selection-start-line="697" selection-start-column="42" selection-end-line="697" selection-end-column="42" />
+        <state relative-caret-position="0">
+          <caret line="776" column="61" lean-forward="false" selection-start-line="776" selection-start-column="61" selection-end-line="776" selection-end-column="61" />
           <folding />
         </state>
       </provider>
