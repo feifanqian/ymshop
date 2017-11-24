@@ -39,10 +39,10 @@ class SOAClient {
 	}
 	//验签
 	function loadPublicKey($alias, $path, $pwd) {
-		echo $path.'---'.$pwd;
+//		echo $path.'---'.$pwd;
 		$priKey = file_get_contents($path);
 		$res = openssl_get_privatekey($priKey);
-		print_r($res);
+//		print_r($res);
 		
 		($res) or die('您使用的私钥格式错误，请检查私钥配置');
 		
@@ -52,7 +52,7 @@ class SOAClient {
 		
 		$sign=base64_encode($sign);
 		
-		echo '<br>'.$sign.'<br>';
+//		echo '<br>'.$sign.'<br>';
 
 		//调用openssl内置方法验签，返回bool值
 		return $res;

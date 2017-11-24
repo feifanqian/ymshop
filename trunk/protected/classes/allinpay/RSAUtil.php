@@ -17,7 +17,7 @@ class RSAUtil {
 	 * @throws Exception
 	 */
 	static function loadPrivateKey($alias, $path, $pwd) {
-		print_r($alias);
+//		print_r($alias);
 		$priKey = file_get_contents($path);
 		$res = openssl_get_privatekey($priKey, $pwd);
 		($res) or die('您使用的私钥格式错误，请检查私钥配置');
