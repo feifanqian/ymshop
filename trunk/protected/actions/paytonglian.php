@@ -892,12 +892,8 @@ class PaytonglianAction extends Controller
 
         );
         $result = $client->request("OrderService", "consumeApply", $param);
-        if ($result['status'] == 'OK') {
-            print_r($result);
-        } else {
-            print_r($result);
-            die();
-        }
+        print_r($result);die();
+
     }
 
     /**
