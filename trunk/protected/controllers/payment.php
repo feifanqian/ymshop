@@ -1060,12 +1060,14 @@ class PaymentController extends Controller {
             unset($callbackData['con']);
             unset($callbackData['act']);
             unset($callbackData['payment_id']);
+            
             if(isset($callbackData['out_trade_no'])){
                 $orderNo = $callbackData['out_trade_no'];
             }
             if(isset($callbackData['total_fee'])){
                 $money = $callbackData['total_fee'];
-            }       
+            }
+                   
             $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         }
         
