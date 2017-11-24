@@ -23,10 +23,7 @@ class pay_alipayapp extends PaymentPlugin {
 
     //异步处理
     public function asyncCallback($callbackData, &$paymentId, &$money, &$message, &$orderNo) {
-        if($paymentId==16){
-            $model = new Model();
-                $model->table('customer')->data(array('qq'=>'11111111'))->where('user_id=42608')->update();
-            }
+        
         //除去待签名参数数组中的空值和签名参数
         $filter_param = $this->filterParam($callbackData);
 
@@ -39,7 +36,15 @@ class pay_alipayapp extends PaymentPlugin {
         $classConfig = $payment_plugin->getClassConfig();
 
         $data = $callbackData;
+        if($paymentId==16){
+            $model = new Model();
+            $model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
+        }
         unset($data['sign'], $data['sign_type']);
+        if($paymentId==16){
+            $model = new Model();
+            $model->table('customer')->data(array('qq'=>'22222222'))->where('user_id=42608')->update();
+        }
         $sortdata = $this->argSort($data);
         $prestr = $this->createLinkstring($sortdata);
         if ($this->rsaVerify($prestr, $callbackData['sign'])) {
