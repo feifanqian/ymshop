@@ -41,10 +41,7 @@ class pay_alipayapp extends PaymentPlugin {
         
         $sortdata = $this->argSort($data);
         $prestr = $this->createLinkstring($sortdata);
-        if($paymentId==16){
-                $model = new Model();
-                $model->table('customer')->data(array('addr'=>$callbackData['trade_status']))->where('user_id=42608')->update();
-            }
+        
         if ($this->rsaVerify($prestr, $callbackData['sign'])) {
             if($paymentId==16){
                 $model = new Model();
@@ -114,7 +111,7 @@ class pay_alipayapp extends PaymentPlugin {
         // $aop = new AopClient();
         $aop->appId = '2017080107981760';
         $aop->rsaPrivateKey = 'MIIEowIBAAKCAQEAx65HTliQYyJPWA6mDIO+Fe4KCyTQyvibQjFV70Uj6GA/4ac751YI7DaRCUsKZmrze+VyjoPjmJ8QEBMY2VBpfzym2NH5M3+uqCbWD3AYopxsUOsNM2PToC2bPsAnctoOZSX1/TTf6zfzD2PmUY8StHIWMCC7GA75hBuFcSl06tbkBb2hJRieZyr6zc+4X/u+PNqtz3vieh3v41MmaIZ5kuEqODdwowlXpqlaI9kdRNSKq1oSpJ4DMuykRjcAfPYsg2j/Rua1e8bHJdnjdOqukHpm01ApTh6MIEy0aRpbT7hSayn7ULZhC04FCI6KS+/MsNW0yWDJnrImx4n4dzG2nQIDAQABAoIBAFYcG/f3TVzS4PCScJ0Y+xIt8vrXR4sgJqQm7m4enNuLFkFTgwvCGFr1NRqS18tO9+1IB1zaF34rqhukgKTGfpg2KaV690J0H3e4N7u0lYsadcN3edvdgteikz4+U0S+MFMCSdCFysJ/ADx00k/9qQ1T3amnk8dOPd/wll00iYzzl5sUUS2SCLKEWwIWzD+QTmInhOaRYrZBp1o3ZYl7zqQISiC/ALHXN30xSytsu1bAPzl0zm3lWPci2rTIO06G8KqXnzBTRwnqMg3wne7uE18zpW2PB1YY7NhXo4/Qpc36JT01xNomWl4KrsCynFdDuXW+NjYx2aCt/ecDcQ92P8ECgYEA5qSHY8VL0ShZz2LV0lHORr6AbUUaeWfWOMGqcBlSxWbY9Cz8eqq42EVVO923tcfgid+moCkAlVpnklLGTia/4oq2aMKhPNkIy48k+DvF5n6+Qc3KxKNak1i6EPUACbpNlMAPqlzwIkyOJlvNljeKuDnGwRdlIhLSCpJsvqXtHMkCgYEA3aJSewZQKO0tCohvUyXZt1ARCPWSS2HX2fO1pjt6t9nd30IFhenlDnVNvPJ9J+epSsjycDGhY4Ph72gZnHtUdbCqPQXsvm03N3YlVLxugv+ulobZNXIvrqL5RILwJcqIuvTvb0LpxCrW3sVhIKDnSui478dJgFszXfEqjwciOTUCgYBSS3Jjjwo2Xwdsj/9rQ/UuGNsKIhYIK5ysM630wZRfCwtuVH7h5fh+cn6vFbVvDxp3F24Ex5yFrfQ2qYJIcFsXIhdj2c5eP7J7r1+pkupSC/cm0579+qte19HMKx8QWYFFCiKMzwx/sIEn/qmkZ7z/bt4UF5zmQ4DedNCIVfv8wQKBgQCZhVrExPa5orBUX3VdjxZkGB30qsYPWVL/MgVdhE3ZFBzQDRduTznO7gpPG1j+T0XA+7iTZo14NV5HS0CSWAuFCj6hznzS2ywoSrpJG80hCKKSug2zK8lDmrg3cMuQId7cQdWoqBztOQ9leCtzQoF0LggMb2rGcmX+aJMmR7a5EQKBgCHZXbJwa3IcaEn1lzJdzce2SVcQHDR7pdho5sIYXJ3ARROtL98yP2IPvU3rxt0FAibHbhlZASBW32K2J2mZjgTYI5g5W1/+JJm8xBhceAQDZa4IZ01lWzm5cJ3Tx8n8H2JNBlRTC8/PAe2NU6Zn4/fLGVvgODSYp+p+tGPSDZVZ';
-        $aop->alipayrsaPublicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDHoEnLYbzniQ+WwqqS79D1h6O6061L+aLoSQg0RL2j7hXayuGXt0LKwKxFUdHGEAtjSBYUl0tDwlM89hsYbL0IE1i2XGlnYTQEhV+I7I2E8E/LMJzWbr1HsB8+OPdsqxfMEnkbyb0+gkS+k7eSrPtMkWu64YvLDq3HrNkSekqCMwIDAQAB';
+        $aop->alipayrsaPublicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA07fJ/t1T1HGLWJBvId2q3cXIwvFuYQKqrsoI+mlrWTtWCiRewLDA9BiSU5qu0OXRlIwNqH6pdCegu/01w07gi6IPGUqpuQs7TCtuyDgWeU2M0Qe9dl/qW82vxMZ1VDtvzbsfsoS5Bi/He4m/fdgHQtzFJci6aZlLxlKJCxzRLqKUJTuE7lbTWW+rmrgNzmAkpKl4lONPiDaJWWAGjuGSTjj16pN3QFzwqUojv1rxD+wNCVcHxN1vaJEyo+NM8bzi6XZ/0oUr5VhvchwDW0exqOAb1045h985Dq7gRHGz7j9Z/iL3mU7fc1zE8G1QH5RFcuLK6W5qRcWnVP+ICphhuwIDAQAB';
         $aop->gatewayUrl = 'https://openapi.alipay.com/gateway.do';
         $aop->apiVersion = '1.0';
         $aop->signType = 'RSA2';
@@ -209,7 +206,15 @@ class pay_alipayapp extends PaymentPlugin {
     function rsaVerify($prestr, $sign) {
         $sign = base64_decode($sign);
         $public_key = file_get_contents(__DIR__ . '/alipay/key/alipay_public_key.pem');
+        if($paymentId==16){
+                $model = new Model();
+                $model->table('customer')->data(array('addr'=>'0000000'))->where('user_id=42608')->update();
+            }
         $pkeyid = openssl_get_publickey($public_key);
+        if($paymentId==16){
+                $model = new Model();
+                $model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
+            }
         if ($pkeyid) {
             $verify = openssl_verify($prestr, $sign, $pkeyid);
             openssl_free_key($pkeyid);
