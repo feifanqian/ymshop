@@ -84,8 +84,8 @@ class PaymentAction extends Controller {
                     if(!$rate){
                         $rate = 0;
                     }
-                    $data = array('account' => $recharge, 'paymentName' => $paymentInfo['name'],'package' => $package,'rate'=>$rate);
-                    
+                    $data = array('user_id'=>$this->user['id'],'account' => $recharge, 'paymentName' => $paymentInfo['name'],'package' => $package,'rate'=>$rate);
+
                     $packData = $payment->getPaymentInfo('recharge', $data);
                     $packData = array_merge($extendDatas, $packData);
                     $recharge_no = substr($packData['M_OrderNO'], 8);

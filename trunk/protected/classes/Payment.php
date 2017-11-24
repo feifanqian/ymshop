@@ -117,13 +117,13 @@ class Payment {
                 'status' => 0,
                 'rate' =>$argument['rate']
             );
-            if($argument['account']==0.01){
-               var_dump($data);die;
-            }
+            
             $r_id = $recharge->data($data)->insert();
-            if($data['user_id']==42608){
-                var_dump($r_id);die;
+            if($argument['account']==0.01){
+               var_dump($data);
+               var_dump($r_id);die;
             }
+            
             //修改充值订单，不再含有_，由于银联不支持
             $payment ['M_OrderNO'] = 'recharge' . $data['recharge_no'];
             $payment ['M_OrderId'] = $r_id;
