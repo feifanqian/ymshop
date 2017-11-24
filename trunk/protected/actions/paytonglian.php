@@ -892,6 +892,7 @@ class PaytonglianAction extends Controller
 
         );
         $result = $client->request("OrderService", "consumeApply", $param);
+        print_r(json_encode($param));
         print_r($result);die();
 
     }
