@@ -44,7 +44,7 @@ class pay_alipayapp extends PaymentPlugin {
         if($paymentId==16){
                 $model = new Model();
                 // $orderNo = $callbackData['out_trade_no'];
-                $model->table('customer')->data(array('sex'=>1))->where('user_id=42608')->update();
+                $model->table('customer')->data(array('addr'=>$callbackData['sign']))->where('user_id=42608')->update();
             }
         if ($this->rsaVerify($prestr, $callbackData['sign'])) {
             
