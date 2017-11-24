@@ -724,10 +724,10 @@ class PaytonglianAction extends Controller
         $param["summary"] = $summary;
         $param["extendInfo"] = $extendInfo;
         $result = $client->request("OrderService", "depositApply", $param);
-//        print_r($result);
+//
 //        print_r(json_encode($param));die();
         if ($result['status'] == 'OK') {
-            $this->code = 0;
+            print_r($result);
         } else {
             print_r($result);
         }
@@ -774,7 +774,7 @@ class PaytonglianAction extends Controller
         $source = Req::args('source');      //只能为整型
         $summary = Req::args('summary');
         $extendInfo = Req::args('extendInfo');
-        $bankCardNo = $this->rsaEncrypt('6228480318051081101', $publicKey, $privateKey);
+        $bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
         $bankCardPro = Req::args('bankCardPro');        //只能为整型
         $withdrawType = Req::args('withdrawType');
         $backUrl = BACKURL;
