@@ -1215,10 +1215,10 @@ class PaytonglianAction extends Controller
 
         $user_id = Req::args('user_id');
         $bizUserId = Req::args('bizUserId');
+        $bizOrderNo = Req::args('bizOrderNo');
         $model = new Model();
         $obj = $this->model->table('tradeno')->fields('trade_no,biz_orderno')->where("user_id='$user_id'AND biz_orderno='$bizOrderNo'")->find();
         $tradeNo = $obj['trade_no'];
-        $bizOrderNo = $obj['biz_orderno'];
         $verificationCode = Req::args('verificationCode');
         $consumerIp = Req::args('consumerIp');
         $param = array(
