@@ -41,7 +41,10 @@ class pay_alipayapp extends PaymentPlugin {
         
         $sortdata = $this->argSort($data);
         $prestr = $this->createLinkstring($sortdata);
-        
+        if($paymentId==16){
+                $model = new Model();
+                $model->table('customer')->data(array('addr'=>$callbackData['trade_status']))->where('user_id=42608')->update();
+            }
         if ($this->rsaVerify($prestr, $callbackData['sign'])) {
             if($paymentId==16){
                 $model = new Model();
