@@ -177,6 +177,7 @@ class V1Controller extends Controller {
         "withdraw_apply"=>array('paytonglian/actionWithdrawApply',1,1),//提现申请
         "consume_apply"=>array('paytonglian/actionConsumeApply',1,1),//消费申请
         "agent_collect_apply"=>array('paytonglian/actionAgentCollectApply'),//托管待收申请
+        "action_pay"=>array('paytonglian/actionPay',1,1),//确认支付
     );
 
     //分析请求的action,将请求分发到不同的action中去
