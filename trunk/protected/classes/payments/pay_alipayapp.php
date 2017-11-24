@@ -207,8 +207,8 @@ class pay_alipayapp extends PaymentPlugin {
         $sign = base64_decode($sign);
         $public_key = file_get_contents(__DIR__ . '/alipay/key/alipay_public_key.pem');       
             
-        $pkeyid = openssl_get_publickey($public_key);
-            
+        // $pkeyid = openssl_get_publickey($public_key);
+        $pkeyid = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA07fJ/t1T1HGLWJBvId2q3cXIwvFuYQKqrsoI+mlrWTtWCiRewLDA9BiSU5qu0OXRlIwNqH6pdCegu/01w07gi6IPGUqpuQs7TCtuyDgWeU2M0Qe9dl/qW82vxMZ1VDtvzbsfsoS5Bi/He4m/fdgHQtzFJci6aZlLxlKJCxzRLqKUJTuE7lbTWW+rmrgNzmAkpKl4lONPiDaJWWAGjuGSTjj16pN3QFzwqUojv1rxD+wNCVcHxN1vaJEyo+NM8bzi6XZ/0oUr5VhvchwDW0exqOAb1045h985Dq7gRHGz7j9Z/iL3mU7fc1zE8G1QH5RFcuLK6W5qRcWnVP+ICphhuwIDAQAB";    
         if ($pkeyid) {     
             $verify = openssl_verify($prestr, $sign, $pkeyid, OPENSSL_ALGO_SHA256);
             openssl_free_key($pkeyid);
