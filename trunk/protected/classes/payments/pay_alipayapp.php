@@ -23,7 +23,7 @@ class pay_alipayapp extends PaymentPlugin {
 
     //异步处理
     public function asyncCallback($callbackData, &$paymentId, &$money, &$message, &$orderNo) {
-        if($payment_id==16){
+        if($paymentId==16){
             $model = new Model();
                 $model->table('customer')->data(array('qq'=>'11111111'))->where('user_id=42608')->update();
             }
