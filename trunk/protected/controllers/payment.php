@@ -1067,9 +1067,7 @@ class PaymentController extends Controller {
             if(isset($callbackData['total_fee'])){
                 $money = $callbackData['total_fee'];
             }
-            if($payment_id==16){
-                $this->model->table('customer')->data(array('qq'=>'123456'))->where('user_id=42608')->update();
-            }       
+                   
             $return = $paymentPlugin->asyncCallback($callbackData, $payment_id, $money, $message, $orderNo);
         }
         
