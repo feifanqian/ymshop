@@ -176,7 +176,8 @@ class V1Controller extends Controller {
         "deposit_apply"=>array('paytonglian/actionDepositApply',1,1),//充值申请
         "withdraw_apply"=>array('paytonglian/actionWithdrawApply',1,1),//提现申请
         "consume_apply"=>array('paytonglian/actionConsumeApply',1,1),//消费申请
-        "agent_collect_apply"=>array('paytonglian/actionAgentCollectApply'),//托管待收申请
+        "agent_collect_apply"=>array('paytonglian/actionAgentCollectApply',1,1),//托管待收申请
+        "signal_agent_pay"=>array('paytonglian/actionSignalAgentPay',1,1),//单笔代付
         "action_pay"=>array('paytonglian/actionPay',1,1),//确认支付
     );
 
