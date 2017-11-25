@@ -27,6 +27,7 @@ class V1Controller extends Controller {
         'category' => array('product/category', 0,1),
         'search' => array('product/category', 0,1), //搜索接口    
         'flash' => array('product/flash', 0,1), //秒杀专区接口
+        'weishang' => array('product/wei',0,1), //微商专区接口
         'group' => array('product/group', 0,1),
         'get_review' => array('product/get_review', 0,1),//取得评价
         'get_ask' => array('product/get_ask', 0,1),//取得咨询
