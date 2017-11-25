@@ -1641,7 +1641,7 @@ class UcenterAction extends Controller {
     //=================================申请退款相关接口end=========================
     
     //余额提现接口
-    function balance_withdraw() {
+    public function balance_withdraw() {
         Filter::form();
         $open_name = Filter::str(Req::args('name'));
         $open_bank = Filter::str(Req::args('bank'));
