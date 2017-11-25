@@ -1046,15 +1046,14 @@ class PaytonglianAction extends Controller
         $collectPay = new stdClass();
         $collectPay->bizOrderNo = Req::args('bizOrderNo');
         $collectPay->amount = Req::args('amount');
-
+        $payToBankCardInfo = new stdClass();
         // 托管代付到银行账户信息
-        if (Req::args() == '1') {
-            $payToBankCardInfo = new stdClass();
+        if (Req::args('payToBankCardInfos') == '1') {
             $payToBankCardInfo->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
             $payToBankCardInfo->amount = Req::args('amount');
             $payToBankCardInfo->backUrl = BACKURL;
         } else {
-            $payToBankCardInfo = '';
+            $payToBankCardInfo;
         }
 
         if (Req::args('splitRuleList') == '1') {
