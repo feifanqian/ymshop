@@ -855,7 +855,7 @@ class PaytonglianAction extends Controller
 
         //快捷
         if (Req::args('payMethod') == '1') {
-            $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'),$publicKey,$privateKey);
+            $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
             $payMethodb->amount = $amount;
             $payMethod->QUICKPAY = $payMethodb; //快捷支付（需要先绑定银行 卡）
         } elseif (Req::args('payMethod') == '2') {
@@ -893,15 +893,17 @@ class PaytonglianAction extends Controller
 
         );
         $result = $client->request("OrderService", "consumeApply", $param);
-        if ($result['status']=='OK'){
+        if ($result['status'] == 'OK') {
             $signedValue = json_decode($result['signedValue'], true);//把json格式的数据转换成数组
             $tradeNo = $signedValue['tradeNo'];//交易编号 仅当快捷支付时有效
             if (!empty($tradeNo)) {
                 $model = new Model();
                 $this->model->table('tradeno')->data(array('user_id' => $user_id, 'biz_orderno' => $bizOrderNo, 'trade_no' => $tradeNo))->insert();
+                print_r($result);
             }
-        }else{
-            print_r($result);die();
+        } else {
+            print_r($result);
+            die();
         }
     }
 
@@ -942,23 +944,20 @@ class PaytonglianAction extends Controller
 
         $bizOrderNo = Req::args('bizOrderNo');
         $payerId = Req::args('payerId');
-        $reciever1 = new stdClass();
-        $reciever1->bizUserId = '201582';
-        $reciever1->amount = 350;
-
         $goodsType = Req::args('goodsType');   //只能为整型
         $goodsNo = Req::args('goodsNo');
         $tradeCode = Req::args('tradeCode');
         $amount = Req::args('amount');    //只能为整型
         $fee = Req::args('fee');    //只能为整型
         $showUrl = Req::args('showUrl');
-
+        $recieverList = new stdClass();
+        $recieverList->bizUserId = Req::args('payerId');
+        $recieverList->amount = $amount;
 
         $payMethod = new  stdClass();
         $payMethodb = new  stdClass();
 
-
-        $payMethodb->amount = 100;
+        $payMethodb->amount = $amount;
         $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo', $privateKey, $publicKey));
         $payMethod->QUICKPAY = $payMethodb;
 
@@ -980,11 +979,8 @@ class PaytonglianAction extends Controller
             'fee' => $fee,
             'frontUrl' => NOTICE_URL,
             'backUrl' => BACKURL,
-            //'frontUrl' => $frontUrl,
-            //'backUrl' => $backUrl,
-
             'showUrl' => $showUrl,
-            //'ordErexpireDatetime' => $ordErexpireDatetime,
+            'ordErexpireDatetime' => $ordErexpireDatetime,
             'payMethod' => $payMethod,
             'goodsName' => $goodsName,
             'goodsDesc' => $goodsDesc,
@@ -994,7 +990,8 @@ class PaytonglianAction extends Controller
             'summary' => $summary,
             'extendInfo' => $extendInfo,
         );
-        $result = $client->request('OrderService', 'agentCollectApply', $param);
+        $result = $client->request('OrderService', 'agentCollectApplySimplify', $param);
+        print_r(json_encode($param));//将数据格式的数据转换成json格式的数据
         print_r($result);
         die();
 
@@ -1021,40 +1018,45 @@ class PaytonglianAction extends Controller
 
     public function actionSignalAgentPay()
     {
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        $bizUserId = Req::args('bizUserId');
+        $bizOrderNo = Req::args('bizOrderNo');
 
-        $bizOrderNo = '080415804';
         $collectPay = new stdClass();
-        $collectPay->bizOrderNo = '080415804';
-        $collectPay->amount = 350;
+        $collectPay->bizOrderNo = Req::args('bizOrderNo');
+        $collectPay->amount = Req::args('amount');
 
-
-        $accountSetNo = '86441';
-//         $backUrl='';
+        $accountSetNo = Req::args('accountSetNo');
         $payToBankCardInfo = new stdClass();
-        $payToBankCardInfo->bankCardNo = $this->rsa('6228480318051081871');
-        $payToBankCardInfo->amount = 321;
+        $payToBankCardInfo->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'),$publicKey,$privateKey);
+        $payToBankCardInfo->amount = Req::args('amount');
         $payToBankCardInfo->backUrl = BACKURL;
 
-        $amount = 321;    //只能为整型
-        $fee = 1; //只能为整型
+        $amount = Req::args('amount');    //只能为整型
+        $fee = Req::args('fee'); //只能为整型
 
         $splistRule1 = new stdClass();
-
         $splistRule1->bizUserId = "#yunBizUserId_application#";
         $splistRule1->accountSetNo = "3000001";
-        $splistRule1->amount = 50;
-        $splistRule1->fee = 0;
-        $splistRule1->remark = "aaaa";
-        $goodsType = 0;       //只能为整型
-        $goodsNo = '';
-        $tradeCode = '5415414';
-        $summary = '';
-        $extendInfo = '';
+        $splistRule1->amount = Req::args('amount');
+        $splistRule1->fee = Req::args('fee');
+        $splistRule1->remark = Req::args('remark');
+        $goodsType = Req::args('goodsType');       //只能为整型
+        $goodsNo = Req::args('goodsNo');
+        $tradeCode = Req::args('tradeCode');
+        $summary = Req::args('summary');
+        $extendInfo = Req::args('extendInfo');
         $req = array(
-            'param' => array(
                 'bizOrderNo' => $bizOrderNo,
                 'collectPayList' => array($collectPay),
-                'bizUserId' => $this->bizUserId,
+                'bizUserId' => $bizUserId,
                 'accountSetNo' => $accountSetNo,
                 'backUrl' => BACKURL,
                 'payToBankCardInfo' => $payToBankCardInfo,
@@ -1066,13 +1068,10 @@ class PaytonglianAction extends Controller
                 'tradeCode' => $tradeCode,
                 'summary' => $summary,
                 'extendInfo' => $extendInfo,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('signalAgentPay')    //调用方法
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService','signalAgentPay',$req);
+        print_r(json_encode($req));
+        print_r($result);die();
 
     }
 
