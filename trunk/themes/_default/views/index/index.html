@@ -129,7 +129,7 @@
 
 </div>
 <div class="top-show container">
-
+    {if:$flash_count>0}
     <div class="tab">
         <ul class="tab-head clearfix">
             <li><div>抢购活动</div><i></i></li>
@@ -169,7 +169,7 @@
                             </dd>
                         </dl>
                     </li>
-                    {/list}
+                    {/query}
                 </ul>
 
             </div>
@@ -185,12 +185,13 @@
                             </dd>
                         </dl>
                     </li>
-                    {/list}
+                    {/query}
                 </ul>
 
             </div>
         </div>
     </div>
+    {/if}
 </div>
 <div class="container">
 
