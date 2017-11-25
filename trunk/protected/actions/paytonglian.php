@@ -1278,6 +1278,7 @@ class PaytonglianAction extends Controller
         $goodsName = Req::args('goodsName');
         $goodsDetail = Req::args('goodsDetail');
         $showUrl = Req::args('showUrl');
+        $extendInfo = Req::args('extendInfo');
         //商品参数必填
         $goodsParams = new stdClass();
         $goodsParams->amount = Req::args('amount');
@@ -1304,17 +1305,19 @@ class PaytonglianAction extends Controller
         $client->setSignMethod($this->signMethod);
 
         $param = array(
-                'bizUserId' => $bizUserId,
-                'goodsType' => $goodsType,
-                'bizGoodsNo' => $bizGoodsNo,
-                'goodsName' => $goodsName,
-                'goodsDetail' => $goodsDetail,
-                'goodsParams' => array($goodsParams),
-                'showUrl' => $showUrl,
+            'bizUserId' => $bizUserId,
+            'goodsType' => $goodsType,
+            'bizGoodsNo' => $bizGoodsNo,
+            'goodsName' => $goodsName,
+            'goodsDetail' => $goodsDetail,
+            'goodsParams' => array($goodsParams),
+            'showUrl' => $showUrl,
+            'extendInfo' => $extendInfo,
         );
-        $result = $client->request('OrderService','entryGoods',$param);
+        $result = $client->request('OrderService', 'entryGoods', $param);
         print_r(json_encode($param));
-        print_r($result);die();
+        print_r($result);
+        die();
 
     }
 
