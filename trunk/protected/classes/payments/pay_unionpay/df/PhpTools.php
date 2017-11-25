@@ -155,13 +155,18 @@ class PhpTools{
 		$results = $this->arrayXml->parseString( $xmlResponse , TRUE);
 		// var_dump($results);
 		if(isset($results['AIPG']['QTRANSRSP'])){
-			if($results['AIPG']['QTRANSRSP']['QTDETAIL']['RET_CODE']=="0000"){
-				$return['code']=1;
-				$return['msg']=$results['AIPG']['QTRANSRSP']['QTDETAIL']['ERR_MSG'];
+			if(isset($results['AIPG']['QTRANSRSP']['QTDETAIL'])){
+				if($results['AIPG']['QTRANSRSP']['QTDETAIL']['RET_CODE']=="0000"){
+					$return['code']=1;
+					$return['msg']=$results['AIPG']['QTRANSRSP']['QTDETAIL']['ERR_MSG'];
+				}else{
+					$return['code']=0;
+					$return['msg']=$results['AIPG']['QTRANSRSP']['QTDETAIL']['ERR_MSG'];
+				}
 			}else{
 				$return['code']=0;
-				$return['msg']=$results['AIPG']['QTRANSRSP']['QTDETAIL']['ERR_MSG'];
-			}
+				$return['msg']='网络繁忙，请稍后再试';
+			}	
 		}else{
 			$return['code']=0;
 			$return['msg']='未处理';
