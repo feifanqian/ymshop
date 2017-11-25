@@ -950,6 +950,7 @@ class PaytonglianAction extends Controller
         $amount = Req::args('amount');    //只能为整型
         $fee = Req::args('fee');    //只能为整型
         $showUrl = Req::args('showUrl');
+        $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $recieverList = new stdClass();
         $recieverList->bizUserId = Req::args('payerId');
         $recieverList->amount = $amount;
@@ -957,9 +958,19 @@ class PaytonglianAction extends Controller
         $payMethod = new  stdClass();
         $payMethodb = new  stdClass();
 
-        $payMethodb->amount = $amount;
-        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
-        $payMethod->QUICKPAY = $payMethodb;
+        //快捷支付
+        if (Req::args('payMethod') == '1') {
+            $payMethodb->amount = $amount;
+            $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
+            $payMethod->QUICKPAY = $payMethodb;
+        }
+        //网关支付
+        if (Req::args('payMethod') == '2') {
+            $payMethodb->bankCode = Req::args('bankCode');
+            $payMethodb->payType = Req::args('payType');
+            $payMethodb->amount = $amount;//快捷支付（需要先绑定银行 卡）
+            $payMethod->GATEWAY = $payMethodb;
+        }
 
         $goodsName = Req::args('goodsName');
         $goodsDesc = Req::args('goodsDesc');
@@ -1035,7 +1046,7 @@ class PaytonglianAction extends Controller
 
         $accountSetNo = Req::args('accountSetNo');
         $payToBankCardInfo = new stdClass();
-        $payToBankCardInfo->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'),$publicKey,$privateKey);
+        $payToBankCardInfo->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
         $payToBankCardInfo->amount = Req::args('amount');
         $payToBankCardInfo->backUrl = BACKURL;
 
@@ -1054,24 +1065,25 @@ class PaytonglianAction extends Controller
         $summary = Req::args('summary');
         $extendInfo = Req::args('extendInfo');
         $req = array(
-                'bizOrderNo' => $bizOrderNo,
-                'collectPayList' => array($collectPay),
-                'bizUserId' => $bizUserId,
-                'accountSetNo' => $accountSetNo,
-                'backUrl' => BACKURL,
-                'payToBankCardInfo' => $payToBankCardInfo,
-                'amount' => $amount,
-                'fee' => $fee,
-                'splitRuleList' => array($splistRule1),
-                'goodsType' => $goodsType,
-                'goodsNo' => $goodsNo,
-                'tradeCode' => $tradeCode,
-                'summary' => $summary,
-                'extendInfo' => $extendInfo,
+            'bizOrderNo' => $bizOrderNo,
+            'collectPayList' => array($collectPay),
+            'bizUserId' => $bizUserId,
+            'accountSetNo' => $accountSetNo,
+            'backUrl' => BACKURL,
+            'payToBankCardInfo' => $payToBankCardInfo,
+            'amount' => $amount,
+            'fee' => $fee,
+            'splitRuleList' => array($splistRule1),
+            'goodsType' => $goodsType,
+            'goodsNo' => $goodsNo,
+            'tradeCode' => $tradeCode,
+            'summary' => $summary,
+            'extendInfo' => $extendInfo,
         );
-        $result = $client->request('OrderService','signalAgentPay',$req);
+        $result = $client->request('OrderService', 'signalAgentPay', $req);
         print_r(json_encode($req));
-        print_r($result);die();
+        print_r($result);
+        die();
 
     }
 
