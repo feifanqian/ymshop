@@ -488,18 +488,16 @@ class ProductAction extends Controller {
         $page = $page < 0 ? 1 : $page;
         $page_size = 10;
         
-        $list = $this->model->table("pointwei_sale as ps")->fields("ps.*,go.name,go.img,go.imgs,go.sell_price")->join("left join goods as go on ps.goods_id = go.id")->where("go.is_online = 0 and go.is_weishang = 1 and ps.status = 1 and go.store_nums > 0")->order("ps.listorder asc")->findPage($page, $page_size);
+        $list = $this->model->table("pointwei_sale as ps")->fields("ps.*,go.name,go.img,go.imgs,go.sell_price,go.subtitle")->join("left join goods as go on ps.goods_id = go.id")->where("go.is_online = 0 and go.is_weishang = 1 and ps.status = 1 and go.store_nums > 0")->order("ps.listorder asc")->findPage($page, $page_size);
         unset($list['html']);
         if ($list['data']) {
             foreach ($list['data'] as $k => &$v) {
                 $v['imgs'] = array_values(unserialize($v['imgs']));
-                // unset($v['specs'], $v['attrs'], $v['content']);
+                $v['price_set']=  array_values(unserialize($v['price_set']));
             }
         }
         $this->code = 0;
-        $this->content = array(
-            'weilist' => $list,
-            );
+        $this->content = $list;
         
     }
 
