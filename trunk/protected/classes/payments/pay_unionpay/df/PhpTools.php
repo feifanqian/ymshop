@@ -155,6 +155,7 @@ class PhpTools{
 		$results = $this->arrayXml->parseString( $xmlResponse , TRUE);
 		// var_dump($results);
 		if(isset($results['AIPG']['QTRANSRSP'])){
+			var_dump($results['AIPG']['QTRANSRSP']);die;
 			if($results['AIPG']['QTRANSRSP']['QTDETAIL']['RET_CODE']=="0000"){
 				$return['code']=1;
 				$return['msg']=$results['AIPG']['QTRANSRSP']['QTDETAIL']['ERR_MSG'];
