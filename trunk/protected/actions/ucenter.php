@@ -1661,7 +1661,7 @@ class UcenterAction extends Controller {
         }
         $config = Config::getInstance();
         $other = $config->get("other");
-        
+        $withdraw_fee_rate = $other['withdraw_fee_rate'];
         if ($amount < $other['min_withdraw_amount']) {
             $this->code = 1135;
             $this->content['min_withdraw_amount'] = $other['min_withdraw_amount'];
@@ -1687,6 +1687,10 @@ class UcenterAction extends Controller {
             $this->code = 0;
             $this->content['id'] = $result;
             $this->content['hand_fee'] = $other['withdraw_fee_rate']*$amount /100;
+            $this->content['bankname'] = $open_bank;
+            $this->content['card_no'] = $card_no;
+            $this->content['amount'] = $amount;
+            $this->content['withdraw_fee_rate'] = round($amount*($withdraw_fee_rate/100),2);
             // exit(json_encode(array('status' => 'success', 'msg' => "申请提交成功")));
         } else {
             $this->code = 1005;
