@@ -149,11 +149,11 @@ class CustomerController extends Controller {
                     $result = $ChinapayDf->DfQuery($req_sn);
 
                     if($result['code']==1){
-                        if($obj['status']==4 || $obj['status']==0){
+                        if($obj['status']==4 || $obj['status']==0 || $obj['status']==2){
                             if($obj['type']==0){
                                 $config = Config::getInstance();
                                 $other = $config->get("other");
-                                $real_amount = round($obj['amount']*(100-$other['withdraw_fee_rate'])/100);
+                                $real_amount = round($obj['amount']*(100-$other['withdraw_fee_rate'])/100,2);
                             }else{
                                 $real_amount = $obj['amount'];
                             }
