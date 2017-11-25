@@ -1039,27 +1039,35 @@ class PaytonglianAction extends Controller
         $client->setSignMethod($this->signMethod);
         $bizUserId = Req::args('bizUserId');
         $bizOrderNo = Req::args('bizOrderNo');
+        $accountSetNo = Req::args('accountSetNo');
+        $amount = Req::args('amount');    //只能为整型
+        $fee = Req::args('fee'); //只能为整型
 
         $collectPay = new stdClass();
         $collectPay->bizOrderNo = Req::args('bizOrderNo');
         $collectPay->amount = Req::args('amount');
 
-        $accountSetNo = Req::args('accountSetNo');
-        $payToBankCardInfo = new stdClass();
-        $payToBankCardInfo->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
-        $payToBankCardInfo->amount = Req::args('amount');
-        $payToBankCardInfo->backUrl = BACKURL;
+        // 托管代付到银行账户信息
+        if (Req::args() == '1') {
+            $payToBankCardInfo = new stdClass();
+            $payToBankCardInfo->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
+            $payToBankCardInfo->amount = Req::args('amount');
+            $payToBankCardInfo->backUrl = BACKURL;
+        } else {
+            $payToBankCardInfo = '';
+        }
 
-        $amount = Req::args('amount');    //只能为整型
-        $fee = Req::args('fee'); //只能为整型
-
-        $splistRule1 = new stdClass();
-        $splistRule1->bizUserId = "#yunBizUserId_application#";
-        $splistRule1->accountSetNo = "3000001";
-        $splistRule1->amount = Req::args('amount');
-        $splistRule1->fee = Req::args('fee');
-        $splistRule1->remark = Req::args('remark');
-        $goodsType = Req::args('goodsType');       //只能为整型
+        if (Req::args('splitRuleList') == '1') {
+            $splistRule1 = new stdClass();
+            $splistRule1->bizUserId = Req::args('bizUserIds');
+            $splistRule1->accountSetNo = Req::args('accountSetNos');
+            $splistRule1->amount = Req::args('amount');
+            $splistRule1->fee = Req::args('fee');
+            $splistRule1->remark = Req::args('remark');
+        }else{
+            $splistRule1 = '';
+        }
+        $goodsType = Req::args('goodsType'); //只能为整型
         $goodsNo = Req::args('goodsNo');
         $tradeCode = Req::args('tradeCode');
         $summary = Req::args('summary');
