@@ -1272,6 +1272,16 @@ class PaytonglianAction extends Controller
 
     public function actionEntryGoods()
     {
+        //配置参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //请求数据
         $bizUserId = Req::args('bizUserId');
         $goodsType = Req::args('goodsType');   //只能为整型
         $bizGoodsNo = Req::args('bizGoodsNo');
@@ -1294,23 +1304,13 @@ class PaytonglianAction extends Controller
         $goodsParams->repayPeriodNumber = Req::args('repayPeriodNumber');
         $goodsParams->minimumAmountInvestment = Req::args('minimumAmountInvestment');
 
-        //配置参数
-        $client = new SOAClient();
-        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
-        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
-        $client->setServerAddress($this->serverAddress);
-        $client->setSignKey($privateKey);
-        $client->setPublicKey($publicKey);
-        $client->setSysId($this->sysid);
-        $client->setSignMethod($this->signMethod);
-
         $param = array(
             'bizUserId' => $bizUserId,
             'goodsType' => $goodsType,
             'bizGoodsNo' => $bizGoodsNo,
             'goodsName' => $goodsName,
             'goodsDetail' => $goodsDetail,
-            'goodsParams' => array($goodsParams),
+            'goodsParams' => json_encode($goodsParams),
             'showUrl' => $showUrl,
             'extendInfo' => $extendInfo,
         );
