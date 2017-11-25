@@ -1310,7 +1310,7 @@ class PaytonglianAction extends Controller
             'bizGoodsNo' => $bizGoodsNo,
             'goodsName' => $goodsName,
             'goodsDetail' => $goodsDetail,
-            'goodsParams' => json_encode($goodsParams),
+            'goodsParams' => array($goodsParams),
             'showUrl' => $showUrl,
             'extendInfo' => $extendInfo,
         );
