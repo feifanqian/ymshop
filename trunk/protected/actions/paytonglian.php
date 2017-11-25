@@ -1063,7 +1063,7 @@ class PaytonglianAction extends Controller
             $splistRule1->amount = Req::args('amount');
             $splistRule1->fee = Req::args('fee');
             $splistRule1->remark = Req::args('remark');
-        }else{
+        } else {
             $splistRule1 = '';
         }
         $goodsType = Req::args('goodsType'); //只能为整型
@@ -1089,7 +1089,8 @@ class PaytonglianAction extends Controller
         );
         $result = $client->request('OrderService', 'signalAgentPaySimplify', $req);
         print_r(json_encode($req));
-        print_r($result); die();
+        print_r($result);
+        die();
 
 
     }
@@ -1271,46 +1272,48 @@ class PaytonglianAction extends Controller
 
     public function actionEntryGoods()
     {
-
-
-        $goodsType = 3;   //只能为整型
-
-        $bizGoodsNo = '54521';
-        $goodsName = '百事';
-        $goodsDetail = '可乐';
-
+        $bizUserId = Req::args('bizUserId');
+        $goodsType = Req::args('goodsType');   //只能为整型
+        $bizGoodsNo = Req::args('bizGoodsNo');
+        $goodsName = Req::args('goodsName');
+        $goodsDetail = Req::args('goodsDetail');
+        $showUrl = Req::args('showUrl');
+        //商品参数必填
         $goodsParams = new stdClass();
-//         $goodsParams->amount=10;
-        $goodsParams->totalAmount = 1000;
-//         $goodsParams->highestAmount=1000;
-        $goodsParams->annualYield = 0.1;
-        $goodsParams->investmentHorizon = 12;
-//         $goodsParams->investmentHorizonScale=2;
-        $goodsParams->beginDate = "2015-11-16";
-        $goodsParams->endDate = "2015-11-17";
-        $goodsParams->repayType = 3;
-        $goodsParams->guaranteeType = 5;
-        $goodsParams->repayPeriodNumber = 12;
+        $goodsParams->amount = Req::args('amount');
+        $goodsParams->totalAmount = Req::args('totalAmount');
+        $goodsParams->highestAmount = Req::args('highestAmount');
+        $goodsParams->annualYield = Req::args('annualYield');
+        $goodsParams->investmentHorizon = Req::args('investmentHorizon');
+        $goodsParams->investmentHorizonScale = Req::args('investmentHorizonScale');
+        $goodsParams->beginDate = Req::args('beginDate');
+        $goodsParams->endDate = Req::args('endDate');
+        $goodsParams->repayType = Req::args('repayType');
+        $goodsParams->guaranteeType = Req::args('guaranteeType');
+        $goodsParams->repayPeriodNumber = Req::args('repayPeriodNumber');
 
-        $showUrl = '';
-        $extendInfo = '';
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
+        //配置参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+
+        $param = array(
+                'bizUserId' => $bizUserId,
                 'goodsType' => $goodsType,
                 'bizGoodsNo' => $bizGoodsNo,
                 'goodsName' => $goodsName,
                 'goodsDetail' => $goodsDetail,
                 'goodsParams' => $goodsParams,
                 'showUrl' => $showUrl,
-                'extendInfo' => $extendInfo,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('entryGoods')    //调用方法
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService','entryGoods',$param);
+        print_r(json_encode($param));
+        print_r($result);die();
 
     }
 

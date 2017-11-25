@@ -180,6 +180,7 @@ class V1Controller extends Controller {
         "agent_collect_apply"=>array('paytonglian/actionAgentCollectApply',1,1),//托管待收申请
         "signal_agent_pay"=>array('paytonglian/actionSignalAgentPay',1,1),//单笔代付
         "action_pay"=>array('paytonglian/actionPay',1,1),//确认支付
+        "action_entry_goods"=>array('paytonglian/actionEntryGoods',1,1),//商品录入
     );
 
     //分析请求的action,将请求分发到不同的action中去
