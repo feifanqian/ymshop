@@ -128,8 +128,9 @@
     </div>
 
 </div>
+{if:$flash_count>0}
 <div class="top-show container">
-
+    
     <div class="tab">
         <ul class="tab-head clearfix">
             <li><div>抢购活动</div><i></i></li>
@@ -169,7 +170,7 @@
                             </dd>
                         </dl>
                     </li>
-                    {/list}
+                    {/query}
                 </ul>
 
             </div>
@@ -185,13 +186,15 @@
                             </dd>
                         </dl>
                     </li>
-                    {/list}
+                    {/query}
                 </ul>
 
             </div>
         </div>
     </div>
+    
 </div>
+{/if}
 <div class="container">
 
     {query:name=ad where=number eq '6yzli2kk-iuff-belh-mbx4-oehcdt3x'} 
