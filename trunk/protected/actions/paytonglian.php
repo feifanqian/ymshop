@@ -1090,8 +1090,8 @@ class PaytonglianAction extends Controller
         );
         $result = $client->request('OrderService', 'signalAgentPaySimplify', $req);
         print_r(json_encode($req));
-        print_r($result);
-        die();
+        print_r($result); die();
+
 
     }
 
