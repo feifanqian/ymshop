@@ -1308,7 +1308,7 @@ class PaytonglianAction extends Controller
                 'bizGoodsNo' => $bizGoodsNo,
                 'goodsName' => $goodsName,
                 'goodsDetail' => $goodsDetail,
-                'goodsParams' => $goodsParams,
+                'goodsParams' => array($goodsParams),
                 'showUrl' => $showUrl,
         );
         $result = $client->request('OrderService','entryGoods',$param);
