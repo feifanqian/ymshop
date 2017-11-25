@@ -1291,6 +1291,7 @@ class PaytonglianAction extends Controller
         $goodsParams->repayType = Req::args('repayType');
         $goodsParams->guaranteeType = Req::args('guaranteeType');
         $goodsParams->repayPeriodNumber = Req::args('repayPeriodNumber');
+        $goodsParams->minimumAmountInvestment = Req::args('minimumAmountInvestment');
 
         //配置参数
         $client = new SOAClient();
