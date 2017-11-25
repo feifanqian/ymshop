@@ -958,7 +958,7 @@ class PaytonglianAction extends Controller
         $payMethodb = new  stdClass();
 
         $payMethodb->amount = $amount;
-        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo', $publicKey, $privateKey));
+        $payMethodb->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
         $payMethod->QUICKPAY = $payMethodb;
 
         $goodsName = Req::args('goodsName');
