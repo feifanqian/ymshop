@@ -62,6 +62,7 @@ class V1Controller extends Controller {
         "balance_log" => array("ucenter/balance_log", 1,1), //余额的使用记录
         "dopay" => array("payment/dopay", 1,1), //发起支付
         "dopays" => array("payment/dopays", 1,1), //发起线下扫码支付
+        "pay_qrcode" => array("payment/pay_qrcode",1,1), //收款二维码
         "seller_name" => array("payment/seller_name",1,1), //线下扫码卖家信息
         "pay_success" => array("payment/pay_success",1,1), //线下扫码支付成功页面
         "pay_balance" => array("payment/pay_balance", 1,1), //通过余额支付

@@ -388,6 +388,13 @@ class PaymentAction extends Controller {
        }   
    }
 
+   public function pay_qrcode(){
+    $user_id = $this->user['id'];
+    $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
+    $this->code = 0;
+    $this->content['url'] = $url;
+   }
+
     //余额支付
     public function pay_balance() {
         $this->model = new Model('user as us');
