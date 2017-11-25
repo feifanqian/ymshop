@@ -187,6 +187,7 @@
         </div>
         </div>-->
 </div>
+{if:$pointflash_count>0 or $flash_count>0}
 <div class="swiper-container swiper-init" id="swiper-qiang" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 0,'freeMode': true,'pagination': '','slidesPerColumn':'1'}">
     <div class="swiper-title"> <div class="logo">秒杀专区</div> 
         <div class="tag">还剩</div> 
@@ -194,6 +195,7 @@
         <a class="more" href="{url:/index/flash}"><span>抢购专区</span><i class="iconfont icon-next"></i></a> 
     </div>
     <div class="swiper-wrapper">
+        {if:$pointflash_count>0}
         {query:name=pointflash_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id order=ps.is_end asc,ps.id desc limit=12}
         <div class="swiper-slide">
             <a href="{url:/index/pointflash/id/$item[id]}">
@@ -207,6 +209,8 @@
             </a>
         </div>
         {/query}
+        {/if}
+        {if:$flash_count>0}
         {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end asc,gb.id desc limit=12}
         <div class="swiper-slide">
             <a href="{url:/index/flashbuy/id/$item[id]}">
@@ -220,9 +224,10 @@
             </a>
         </div>
         {/query}
-        
+        {/if}
     </div>
 </div>
+{/if}
 <div class="swiper-container swiper-init" id="swiper-qiang" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 0,'freeMode': true,'pagination': '','slidesPerColumn':'1'}">
     <div class="swiper-title"> <div class="logo">微商专区</div> 
         <a class="more" href="{url:/index/wei}"><span>微商专区</span><i class="iconfont icon-next"></i></a> 

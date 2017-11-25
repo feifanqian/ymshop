@@ -1650,7 +1650,9 @@ class UcenterAction extends Controller {
         $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
         $amount = Filter::float(Req::args('amount'));
         $amount = round($amount, 2);
-        $can_withdraw_amount = Common::getCanWithdrawAmount4GoldCoin($this->user['id']);
+        $customer = $this->model->table('customer')->fields('balance,offline_balance')->where('user_id='.$this->user['id'])->find();
+        // $can_withdraw_amount = Common::getCanWithdrawAmount4GoldCoin($this->user['id']);
+        $can_withdraw_amount = $customer['balance'];
         if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
             $this->code = 1134;
             $this->content['can_withdraw_amount'] = $can_withdraw_amount;
@@ -1676,6 +1678,8 @@ class UcenterAction extends Controller {
         $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0);
         $result = $this->model->table('balance_withdraw')->data($data)->insert();
         if ($result) {
+            $this->model->table('customer')->data(array('balance' => "`balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
+            Log::balance(0-$amount, $this->user['id'],$withdraw_no,"余额提现申请", 3, 1);
             $this->code = 0;
             $this->content['id'] = $result;
             $this->content['hand_fee'] = $other['withdraw_fee_rate']*$amount /100;

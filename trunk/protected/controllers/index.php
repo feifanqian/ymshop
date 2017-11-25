@@ -1297,6 +1297,12 @@ class IndexController extends Controller {
             }
             Cookie::set('index',$index);
         }
+        $pointflash = $this->model->table('pointflash_sale as ps')->join('left join goods as go on ps.goods_id=go.id')->fields('ps.*,go.name')->findAll();
+        $pointflash_count = count($pointflash);
+        $flash = $this->model->table('flash_sale as fs')->join('left join goods as go on fs.goods_id=go.id')->fields('fs.*,go.name')->findAll();
+        $flash_count = count($flash);
+        $this->assign('pointflash_count',$pointflash_count);
+        $this->assign('flash_count',$flash_count);
         $this->assign('index',$index);
         $this->assign('notice',$notice);
         $this->redirect();
