@@ -1737,7 +1737,7 @@ class UcenterAction extends Controller {
             $promoter_id = $pay_promoter['id'];
         }else{
             $role_type = 1;
-            $promoter_id = NULL;
+            $promoter_id = 1;
         }
          $this->code = 0;
          $this->content['is_promoter'] = 1;
