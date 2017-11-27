@@ -1064,8 +1064,8 @@ class PaytonglianAction extends Controller
         if (Req::args('splitRuleLists') == '1') {
             $splistRule1->bizUserId = Req::args('bizUserIds');
             $splistRule1->accountSetNo = Req::args('accountSetNos');
-            $splistRule1->amount = Filter::int(Req::args('amount'));
-            $splistRule1->fee = Filter::int(Req::args('fee'));
+            $splistRule1->amount = Filter::int(Req::args('amounts'));
+            $splistRule1->fee = Filter::int(Req::args('fees'));
             $splistRule1->remark = Req::args('remark');
         } else {
             $splistRule1->bizUserId = Req::args('bizUserIds');
