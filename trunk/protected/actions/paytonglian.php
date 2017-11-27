@@ -944,11 +944,12 @@ class PaytonglianAction extends Controller
 
         $bizOrderNo = Req::args('bizOrderNo');
         $payerId = Req::args('payerId');
-        $goodsType = Req::args('goodsType');   //只能为整型
+        $goodsType = Filter::int(Req::args('goodsType'));   //只能为整型
         $goodsNo = Req::args('goodsNo');
         $tradeCode = Req::args('tradeCode');
-        $amount = Req::args('amount');    //只能为整型
-        $fee = Req::args('fee');    //只能为整型
+        $amount = Filter::int(Req::args('amount'));    //只能为整型
+        $fee = Filter::int(Req::args('fee'));    //只能为整型
+        $validateType = Filter::int(Req::args('validateType')); //只能为整型
         $showUrl = Req::args('showUrl');
         $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $recieverList = new stdClass();
@@ -976,7 +977,7 @@ class PaytonglianAction extends Controller
         $goodsDesc = Req::args('goodsDesc');
         $industryCode = Req::args('industryCode');
         $industryName = Req::args('industryName');
-        $source = Req::args('source');  //只能为整型
+        $source = Filter::int(Req::args('source'));  //只能为整型
         $summary = Req::args('summary');
         $extendInfo = Req::args('extendInfo');
         $param = array(
