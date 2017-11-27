@@ -2076,4 +2076,17 @@ class UcenterAction extends Controller {
         $this->code = 0;
         $this->content = $promoter_list;
     }
+
+    /*
+     * 判断用户是否实名认证过
+     */
+    public function name_verified(){
+        $user = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
+        if(!$user){
+            $this->code = 1159;
+            return;
+        }
+        $this->code = 0;
+        $this->content = $user['realname_verified'];
+    }
 }

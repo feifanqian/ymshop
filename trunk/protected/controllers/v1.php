@@ -115,6 +115,7 @@ class V1Controller extends Controller {
         'gold_to_silver' => array("ucenter/gold_to_silver", 1,1), //金点兑换银点接口 去掉
         'get_recharge_package_gift' => array("ucenter/get_recharge_package_gift", 0,1), //获取套餐充值礼品 //去掉
         'balance_withdraw' => array("ucenter/balance_withdraw", 1,1),
+        "name_verified" =>array("ucenter/name_verified",1,1),
         //小区相关接口
         'apply_for_district' => array("district/applyForDistrict", 1,1), //申请小区
         'get_district_list' => array("district/getDistrictList", 1,1), //获取小区列表
