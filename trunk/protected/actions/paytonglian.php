@@ -1343,6 +1343,7 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //请求参数
+        $bizUserId = Req::args('bizUserId');
         $bizGoodsNo = Req::args('bizGoodsNo');
         $goodsType = Filter::int(Req::args('goodsType'));   //只能为整型
         $beginDate = Req::args('beginDate');
