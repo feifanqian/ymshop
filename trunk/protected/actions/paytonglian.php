@@ -1038,11 +1038,13 @@ class PaytonglianAction extends Controller
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
+
+        //请求参数
         $bizUserId = Req::args('bizUserId');
         $bizOrderNo = Req::args('bizOrderNo');
         $accountSetNo = Req::args('accountSetNo');
-        $amount = Req::args('amount');    //只能为整型
-        $fee = Req::args('fee'); //只能为整型
+        $amount = Filter::int(Req::args('amount'));    //只能为整型
+        $fee = Filter::int(Req::args('fee')); //只能为整型
 
         $collectPay = new stdClass();
         $collectPay->bizOrderNo = Req::args('bizOrderNo');
@@ -1057,17 +1059,18 @@ class PaytonglianAction extends Controller
             $payToBankCardInfo;
         }
 
+        //分账规则
+        $splistRule1 = new stdClass();
         if (Req::args('splitRuleList') == '1') {
-            $splistRule1 = new stdClass();
             $splistRule1->bizUserId = Req::args('bizUserIds');
             $splistRule1->accountSetNo = Req::args('accountSetNos');
-            $splistRule1->amount = Req::args('amount');
-            $splistRule1->fee = Req::args('fee');
+            $splistRule1->amount = Filter::int(Req::args('amount'));
+            $splistRule1->fee = Filter::int(Req::args('fee'));
             $splistRule1->remark = Req::args('remark');
         } else {
-            $splistRule1 = '';
+            $splistRule1;
         }
-        $goodsType = Req::args('goodsType'); //只能为整型
+        $goodsType = Filter::int(Req::args('goodsType')); //只能为整型
         $goodsNo = Req::args('goodsNo');
         $tradeCode = Req::args('tradeCode');
         $summary = Req::args('summary');
@@ -1315,7 +1318,8 @@ class PaytonglianAction extends Controller
         );
         $result = $client->request('OrderService', 'entryGoods', $param);
         print_r(json_encode($param));
-        print_r($result);die();
+        print_r($result);
+        die();
 
 
     }
