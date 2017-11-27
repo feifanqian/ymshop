@@ -191,6 +191,77 @@ class PaytonglianAction extends Controller
             $this->code = 0;
         } else {
             print_r($result);
+            $this->code = 1163;
+        }
+    }
+
+    /**
+     * 个人创建会员+实名认证
+     * @param $bizUserId 商户系统用户标识，商户 系统中唯一编号
+     * @param $isAuth  是否由云账户进行认证  true/false  默认为true   目前必须通过云账户认证
+     * @param $name   姓名
+     * @param $identityType 证件类型     身份证 1  护照 2   港澳通行证 3    目前只支持身份证。
+     * @param $identityNo 证件号码      RSA加密
+     */
+
+    public function realNameVerify()
+    {
+        $user = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
+        if(!$user){
+            $this->code = 1159;
+            return;
+        }
+        if($user['realname_verified']==1){
+           $this->code = 1164;
+           return;
+        }
+        
+        $name = Req::args('name');
+        $bizUserId = date('YmdHis').$this->user['id'];
+
+        $identityType = Req::args('identityType');
+        $identityNo = Req::args('identityNo');
+        
+        $memberType = 3;
+        $source = 1;
+
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        $param["bizUserId"] = $bizUserId;
+        $param["memberType"] = $memberType;    //会员类型
+        $param["source"] = $source;        //访问终端类型
+        $result1 = $client->request("MemberService", "createMember", $param);      
+        
+        // $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        // $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+
+        // $client->setServerAddress($this->serverAddress);
+        // $client->setSignKey($privateKey);
+        // $client->setPublicKey($publicKey);
+        // $client->setSysId($this->sysid);
+        // $client->setSignMethod($this->signMethod);
+        $params["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
+        $params["isAuth"] = true;
+        $params["name"] = $name;
+        $params["identityType"] = $identityType;
+        $params["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);
+        $result2 = $client->request("MemberService", "setRealName", $params);
+        if ($result1['status'] == 'OK' && $result2['status'] == 'OK') {
+            $this->model->table('customer')->data(array('realname_verified'=>1))->where('user_id='.$this->user['id'])->update();
+            $this->code = 0;
+            $this->content['verified'] = 1;
+            $this->content['bizUserId'] = $bizUserId;
+            $this->content['extends'] = array_merge($result1,$result2);
+        } else {
+            print_r($result);
+            $this->code = 1163;
         }
     }
 

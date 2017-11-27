@@ -187,7 +187,11 @@ class V1Controller extends Controller {
         "action_freeze_money"=>array('paytonglian/actionFreezeMoney',1,1),//冻结金额
         "action_unfreeze_money"=>array('paytonglian/actionUnfreezeMoney',1,1),//解冻金额
         "action_refund"=>array('paytonglian/actionRefund',1,1),//退款申请
+<<<<<<< HEAD
         "action_failure_bid_refund"=>array('paytonglian/actionFailureBidRefund',1,1),//流标专用退款
+=======
+        "realNameVerify"=>array("paytonglian/realNameVerify",1,1), //创建会员、实名认证的合并
+>>>>>>> c485fb84d35a8a9a5970573f0f553e55708e91ca
     );
 
     //分析请求的action,将请求分发到不同的action中去
