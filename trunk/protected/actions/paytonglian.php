@@ -245,6 +245,9 @@ class PaytonglianAction extends Controller
         $result2 = $client->request("MemberService", "setRealName", $params);
         if ($result1['status'] == 'OK' && $result2['status'] == 'OK') {
             $this->code = 0;
+            $this->content['verified'] = 1;
+            $this->content['bizUserId'] = $bizUserId;
+            $this->content['extends'] = array_merge($result1,$result2);
         } else {
             print_r($result);
             $this->code = 1163;
