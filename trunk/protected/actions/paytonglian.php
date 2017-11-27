@@ -1115,55 +1115,48 @@ class PaytonglianAction extends Controller
 
     public function actionBatchAgentPay()
     {
+        //接入前的准备工作
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
 
-        $bizBatchNo = '6565';
-
-
+        $bizBatchNo = Req::args('bizBatchNo');
         $collectPay11 = new stdClass();
-        $collectPay11->bizOrderNo = "1464183807844ds";
-        $collectPay11->amount = 1;
+        $collectPay11->bizOrderNo = Req::args('bizOrderNo');
+        $collectPay11->amount = Filter::int(Req::args('amount'));
 
-
+        //批量托管代付列表
         $batchPay1 = new stdClass();
-        $batchPay1->bizOrderNo = '1212132';
+        $batchPay1->bizOrderNo = Req::args('bizOrderNo');
         $batchPay1->collectPayList = array($collectPay11);
-        $batchPay1->bizUserId = '5345';
-        $batchPay1->accountSetNo = '121';
+        $batchPay1->bizUserId = Req::args('bizUserId');
+        $batchPay1->accountSetNo = Req::args('accountSetNo');
         $batchPay1->backUrl = BACKURL;
-        $batchPay1->amount = 1;
-        $batchPay1->fee = 0;
-        $batchPay1->summary = '单笔代付1';
-        $batchPay1->extendInfo = '扩展信息';
+        $batchPay1->amount = Filter::int(Req::args('amount'));
+        $batchPay1->fee = Filter::int(Req::args('fee'));
+        $batchPay1->summary = Req::args('summary');
+        $batchPay1->extendInfo = Req::args('extendInfo');
 
-        $batchPay2 = new stdClass();
-        $batchPay2->bizOrderNo = '1212132';
-        $batchPay2->collectPayList = array($collectPay11);
-        $batchPay2->bizUserId = '5345';
-        $batchPay2->accountSetNo = '121';
-        $batchPay2->backUrl = BACKURL;
-        $batchPay2->amount = 1;    //只能为整型
-        $batchPay2->fee = 0;   //只能为整型
-        $batchPay2->summary = '单笔代付1';
-        $batchPay2->extendInfo = '扩展信息';
-        $goodsType = 1;
-        $goodsNo = '商品';
-        $tradeCode = '2001';
+        //参数
+        $goodsType = Filter::int(Req::args('goodsType'));
+        $goodsNo = Req::args('goodsNo');
+        $tradeCode = Req::args('tradeCode');
 
-
-        $req = array(
-            'param' => array(
-                'bizBatchNo' => $bizBatchNo,
-                'batchPayList' => array($batchPay1, $batchPay2),
-                'goodsType' => $goodsType,
-                'goodsNo' => $goodsNo,
-                'tradeCode' => $tradeCode,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('batchAgentPay')    //调用方法
+        $param = array(
+            'bizBatchNo' => $bizBatchNo,
+            'batchPayList' => array($batchPay1),
+            'goodsType' => $goodsType,
+            'goodsNo' => $goodsNo,
+            'tradeCode' => $tradeCode,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService', 'batchAgentPaySimplify', $param);
+        print_r(json_encode($result));
+        print_r($result);die();
 
     }
 
