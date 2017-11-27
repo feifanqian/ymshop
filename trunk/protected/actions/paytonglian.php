@@ -1314,8 +1314,8 @@ class PaytonglianAction extends Controller
         );
         $result = $client->request('OrderService', 'entryGoods', $param);
         print_r(json_encode($param));
-        print_r($result);
-        die();
+        print_r($result);die();
+
 
     }
 
