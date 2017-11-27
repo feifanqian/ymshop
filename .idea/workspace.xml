@@ -18,8 +18,8 @@
       <file leaf-file-name="paytonglian.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="1434" column="8" lean-forward="false" selection-start-line="1434" selection-start-column="8" selection-end-line="1434" selection-end-column="8" />
+            <state relative-caret-position="713">
+              <caret line="1478" column="33" lean-forward="false" selection-start-line="1478" selection-start-column="33" selection-end-line="1478" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -137,7 +137,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.appearance" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="settings.editor.splitter.proportion" value="0.26542604" />
     <property name="SearchEverywhereHistoryKey" value="Termin&#9;ACTION&#9;ActivateTerminalToolWindow&#10;Ter&#9;ACTION&#9;ActivateTerminalToolWindow&#10;ter&#9;ACTION&#9;ActivateTerminalToolWindow" />
@@ -183,12 +183,12 @@
       <workItem from="1511425179655" duration="9530000" />
       <workItem from="1511487256502" duration="22764000" />
       <workItem from="1511574755634" duration="15037000" />
-      <workItem from="1511748852140" duration="17266000" />
+      <workItem from="1511748852140" duration="19628000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="141341000" />
+    <option name="totallyTimeSpent" value="143703000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -210,7 +210,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35976788" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35976788" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -613,45 +613,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/v1.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="187" column="83" lean-forward="false" selection-start-line="187" selection-start-column="83" selection-end-line="187" selection-end-column="83" />
+        <state relative-caret-position="510">
+          <caret line="188" column="22" lean-forward="false" selection-start-line="188" selection-start-column="9" selection-end-line="188" selection-end-column="22" />
           <folding>
-            <marker date="1511774158245" expanded="true" signature="11:20" ph=" 手机版 ..." />
-            <marker date="1511774158245" expanded="true" signature="62:15428" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="251:11627" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="11716:12465" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="11760:12410" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="11891:12276" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="11940:11997" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="12003:12262" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="12300:12400" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="12418:12459" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="12506:12998" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="12765:12824" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="12934:12992" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="13059:13776" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="13192:13294" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="13302:13344" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="13456:13769" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="13556:13569" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="13846:14925" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="13953:14845" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="14090:14747" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="14325:14634" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="14642:14733" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="14755:14835" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="14853:14919" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="14974:15049" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="15002:15043" ph="..." />
-            <marker date="1511774158245" expanded="true" signature="15108:15425" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="11:20" ph=" 手机版 ..." />
+            <marker date="1511775162394" expanded="true" signature="62:15499" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="251:11698" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="11787:12536" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="11831:12481" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="11962:12347" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="12011:12068" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="12074:12333" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="12371:12471" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="12489:12530" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="12577:13069" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="12836:12895" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="13005:13063" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="13130:13847" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="13263:13365" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="13373:13415" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="13527:13840" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="13627:13640" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="13917:14996" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="14024:14916" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="14161:14818" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="14396:14705" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="14713:14804" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="14826:14906" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="14924:14990" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="15045:15120" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="15073:15114" ph="..." />
+            <marker date="1511775162394" expanded="true" signature="15179:15496" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="1434" column="8" lean-forward="false" selection-start-line="1434" selection-start-column="8" selection-end-line="1434" selection-end-column="8" />
+        <state relative-caret-position="713">
+          <caret line="1478" column="33" lean-forward="false" selection-start-line="1478" selection-start-column="33" selection-end-line="1478" selection-end-column="33" />
           <folding />
         </state>
       </provider>
