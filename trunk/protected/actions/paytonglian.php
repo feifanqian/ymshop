@@ -1048,12 +1048,12 @@ class PaytonglianAction extends Controller
 
         $collectPay = new stdClass();
         $collectPay->bizOrderNo = Req::args('bizOrderNo');
-        $collectPay->amount = Req::args('amount');
+        $collectPay->amount = Filter::int(Req::args('amount'));
         $payToBankCardInfo = new stdClass();
         // 托管代付到银行账户信息
         if (Req::args('payToBankCardInfos') == '1') {
             $payToBankCardInfo->bankCardNo = $this->rsaEncrypt(Req::args('bankCardNo'), $publicKey, $privateKey);
-            $payToBankCardInfo->amount = Req::args('amount');
+            $payToBankCardInfo->amount = Filter::int(Req::args('amount'));
             $payToBankCardInfo->backUrl = BACKURL;
         } else {
             $payToBankCardInfo;
@@ -1061,7 +1061,7 @@ class PaytonglianAction extends Controller
 
         //分账规则
         $splistRule1 = new stdClass();
-        if (Req::args('splitRuleList') == '1') {
+        if (Req::args('splitRuleLists') == '1') {
             $splistRule1->bizUserId = Req::args('bizUserIds');
             $splistRule1->accountSetNo = Req::args('accountSetNos');
             $splistRule1->amount = Filter::int(Req::args('amount'));
