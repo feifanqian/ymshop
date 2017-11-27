@@ -187,6 +187,7 @@ class V1Controller extends Controller {
         "action_freeze_money"=>array('paytonglian/actionFreezeMoney',1,1),//冻结金额
         "action_unfreeze_money"=>array('paytonglian/actionUnfreezeMoney',1,1),//解冻金额
         "action_refund"=>array('paytonglian/actionRefund',1,1),//退款申请
+        "realNameVerify"=>array("paytonglian/realNameVerify",1,1), //创建会员、实名认证的合并
     );
 
     //分析请求的action,将请求分发到不同的action中去
