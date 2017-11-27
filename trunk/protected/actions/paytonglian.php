@@ -1506,40 +1506,43 @@ class PaytonglianAction extends Controller
 
     public function actionRefund()
     {
-
-        $bizOrderNo = '5656';
-        $oriBizOrderNo = '5154';
+        //配置参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //参数
+        $bizOrderNo = Req::args('bizOrderNo');
+        $oriBizOrderNo = Req::args('oriBizOrderNo');
+        $bizUserId = Req::args('bizUserId');
+        $amount = Filter::int(Req::args('amount'));    //只能为整型
+        $couponAmount = Filter::int(Req::args('couponAmount'));;    //只能为整型
+        $feeAmount = Filter::int(Req::args('feeAmount'));;   //只能为整型
+        $extendInfo = Req::args('extendInfo');
 
         $refund1 = new stdClass();
-        $refund1->bizUserId = '12552';
-        $refund1->amount = 320;
+        $refund1->bizUserId = Req::args('bizUserId');
+        $refund1->amount = Filter::int(Req::args('amount'));
 
-
-        $refund2 = new stdClass();
-        $refund2->bizUserId = '12552';
-        $refund2->amount = 320;
-
-
-        $amount = 320;    //只能为整型
-        $couponAmount = 0;    //只能为整型
-        $feeAmount = 0;   //只能为整型
-
-        $req = array(
-            'param' => array(
-                'bizOrderNo' => $bizOrderNo,
-                'oriBizOrderNo' => $oriBizOrderNo,
-                'bizUserId' => $this->bizUserId,
-                'refundList' => array($refund2, $refund1),
-                'amount' => $amount,
-                'couponAmount' => $couponAmount,
-                'feeAmount' => $feeAmount,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('refund')    //调用方法
+        $param = array(
+            'bizOrderNo' => $bizOrderNo,
+            'oriBizOrderNo' => $oriBizOrderNo,
+            'bizUserId' => $bizUserId,
+            'refundList' => array($refund1),
+            'backUrl' => BACKURL,
+            'amount' => $amount,
+            'couponAmount' => $couponAmount,
+            'feeAmount' => $feeAmount,
+            'extendInfo' => $extendInfo,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService', 'refund', $param);
+        print_r(json_encode($param));
+        print_r($result);
+        die();
 
     }
 
