@@ -180,6 +180,7 @@ class V1Controller extends Controller {
         "consume_apply"=>array('paytonglian/actionConsumeApply',1,1),//消费申请
         "agent_collect_apply"=>array('paytonglian/actionAgentCollectApply',1,1),//托管待收申请
         "signal_agent_pay"=>array('paytonglian/actionSignalAgentPay',1,1),//单笔代付
+        "batch_agent_pay"=>array('paytonglian/actionBatchAgentPay',1,1),//批量托管代付
         "action_pay"=>array('paytonglian/actionPay',1,1),//确认支付
         "action_entry_goods"=>array('paytonglian/actionEntryGoods',1,1),//商品录入
     );
