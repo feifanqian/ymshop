@@ -1870,6 +1870,11 @@ class UcenterAction extends Controller {
             return;
         }else{
             $data = Req::args();
+            if($data['type']==0){
+                $data['type']=1;
+            }elseif($data['type']==1){
+                $data['type']=2;
+            }
             unset($data['user_id']);
             unset($data['token']);
             $result = $promoter->applyDoSettle($data);
