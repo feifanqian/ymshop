@@ -1156,7 +1156,8 @@ class PaytonglianAction extends Controller
         );
         $result = $client->request('OrderService', 'batchAgentPaySimplify', $param);
         print_r(json_encode($result));
-        print_r($result);die();
+        print_r($result);
+        die();
 
     }
 
@@ -1332,26 +1333,30 @@ class PaytonglianAction extends Controller
 
     public function actionQueryModifyGoods()
     {
-
-
-        $bizGoodsNo = '45654';
-        $goodsType = 3;   //只能为整型
-        $beginDate = '';
-        $endDate = '';
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-                'bizGoodsNo' => $bizGoodsNo,
-                'goodsType' => $goodsType,
-                'beginDate' => $beginDate,
-                'endDate' => $endDate,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('queryModifyGoods')    //调用方法
+        //配置参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //请求参数
+        $bizGoodsNo = Req::args('bizGoodsNo');
+        $goodsType = Filter::int(Req::args('goodsType'));   //只能为整型
+        $beginDate = Req::args('beginDate');
+        $endDate = Req::args('endDate');
+        $param = array(
+            'bizUserId' => $bizUserId,
+            'bizGoodsNo' => $bizGoodsNo,
+            'goodsType' => $goodsType,
+            'beginDate' => $beginDate,
+            'endDate' => $endDate,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService','queryModifyGoods',$param);
+        print_r(json_encode($result));
+        print_r($result);die();
 
     }
 
