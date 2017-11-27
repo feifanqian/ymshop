@@ -1293,7 +1293,7 @@ class PaytonglianAction extends Controller
         $goodsParams->amount = Filter::int(Req::args('amount'));
         $goodsParams->totalAmount = Filter::int(Req::args('totalAmount'));
         $goodsParams->highestAmount = Filter::int(Req::args('highestAmount'));
-        $goodsParams->annualYield = Req::args('annualYield');
+        $goodsParams->annualYield = Filter::float(Req::args('annualYield'));
         $goodsParams->investmentHorizon = Filter::int(Req::args('investmentHorizon'));
         $goodsParams->investmentHorizonScale = Filter::int(Req::args('investmentHorizonScale'));
         $goodsParams->beginDate = Req::args('beginDate');
