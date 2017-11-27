@@ -432,10 +432,10 @@ class DistrictadminController extends Controller {
                         if ($result) {
                             if ($withdraw_info['role_type'] == 1 || $withdraw_info['role_type'] == 2){
                                 $customer = $model->table('customer')->fields("valid_income,frezze_income,settled_income")->where('user_id='.$withdraw_info['role_id'])->find();
-                                $model->table('customer')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})","settled_income"=>"`settled_income`-({$withdraw_info['withdraw_amount']})"))->where('user_id='.$withdraw_info['role_id'])->update();
+                                $model->table('customer')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})"))->where('user_id='.$withdraw_info['role_id'])->update();
                             }else{
                                 $customer = $model->table('district_shop')->fields("valid_income,frezze_income,settled_income")->where('id='.$withdraw_info['role_id'])->find();
-                                $model->table('district_shop')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})","settled_income"=>"`settled_income`-({$withdraw_info['withdraw_amount']})"))->where('id='.$withdraw_info['role_id'])->update();
+                                $model->table('district_shop')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})"))->where('id='.$withdraw_info['role_id'])->update();
                             }
                             
                             $data['role_id']=$withdraw_info['role_id'];
@@ -444,10 +444,10 @@ class DistrictadminController extends Controller {
                             $data['record_id']=$withdraw_info['id'];
                             $data['valid_income_change'] = $withdraw_info['withdraw_amount'];
                             $data['frezze_income_change'] = 0;
-                            $data['settled_income_change'] = 0-$withdraw_info['withdraw_amount'];
+                            $data['settled_income_change'] = 0;
                             $data['current_valid_income']=$customer['valid_income']+$withdraw_info['withdraw_amount'];
                             $data['current_frezze_income']=$customer['frezze_income'];
-                            $data['current_settled_income']=$customer['settled_income']-$withdraw_info['withdraw_amount'];
+                            $data['current_settled_income']=$customer['settled_income'];
                             $data['date']=date("Y-m-d H:i:s");
                             $data['note']="提现拒绝收益撤回";
                             $model->table("promote_income_log")->data($data)->insert();
