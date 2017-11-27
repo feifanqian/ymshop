@@ -1288,7 +1288,6 @@ class PaytonglianAction extends Controller
         $goodsName = Req::args('goodsName');
         $goodsDetail = Req::args('goodsDetail');
         $showUrl = Req::args('showUrl');
-        $extendInfo = Req::args('extendInfo');
         //商品参数必填
         $goodsParams = new stdClass();
         $goodsParams->amount = Req::args('amount');
@@ -1312,7 +1311,6 @@ class PaytonglianAction extends Controller
             'goodsDetail' => $goodsDetail,
             'goodsParams' => array($goodsParams),
             'showUrl' => $showUrl,
-            'extendInfo' => $extendInfo,
         );
         $result = $client->request('OrderService', 'entryGoods', $param);
         print_r(json_encode($param));
