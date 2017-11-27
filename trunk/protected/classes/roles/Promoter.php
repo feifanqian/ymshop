@@ -48,7 +48,7 @@ class Promoter extends Object {
     }
 
      public function getMyIncomeRecord($page=1){
-        $log = $this->model->table("promote_income_log")->where("role_id=".$this->user_id." and role_type in (1,2)")->findPage($page,10);
+        $log = $this->model->table("promote_income_log")->where("role_id=".$this->user_id." and role_type in (1,2)")->order('id desc')->findPage($page,10);
         if(isset($log['html'])){
             unset($log['html']);
         }
