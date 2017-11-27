@@ -1068,7 +1068,11 @@ class PaytonglianAction extends Controller
             $splistRule1->fee = Filter::int(Req::args('fee'));
             $splistRule1->remark = Req::args('remark');
         } else {
-            $splistRule1;
+            $splistRule1->bizUserId = Req::args('bizUserIds');
+            $splistRule1->accountSetNo = Req::args('accountSetNos');
+            $splistRule1->amount = Filter::int('0');
+            $splistRule1->fee = Filter::int('0');
+            $splistRule1->remark = Req::args('remark');
         }
         $goodsType = Filter::int(Req::args('goodsType')); //只能为整型
         $goodsNo = Req::args('goodsNo');
