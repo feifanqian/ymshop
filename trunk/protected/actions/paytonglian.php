@@ -1500,43 +1500,39 @@ class PaytonglianAction extends Controller
     public function actionFailureBidRefund()
     {
 
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
 
         $batchRefund1 = new stdClass();
+        $batchRefund1->bizOrderNo = Req::args('bizOrderNo');
+        $batchRefund1->oriBizOrderNo = Req::args('oriBizOrderNo');
+        $batchRefund1->summary = Req::args('summary');
+        $batchRefund1->extendInfo = Req::args('extendInfo');
 
-        $batchRefund1->bizOrderNo = '2016051602';
-        $batchRefund1->oriBizOrderNo = '1457682253913ds';
-        $batchRefund1->summary = "aaaa";
-
-        $batchRefund2 = new stdClass();
-
-        $batchRefund2->bizOrderNo = "2016051603";
-        $batchRefund2->oriBizOrderNo = "1451273070827ds";
-
-        $batchRefund2->summary = "bbbb";
-
-        $bizBatchNo = '54112';
-        $goodsType = 3;   //只能为整型
-        $goodsNo = 'fadf';
-
+        $bizBatchNo = Req::args('bizBatchNo');
+        $goodsType = Filter::int(Req::args('goodsType'));   //只能为整型
+        $goodsNo = Req::args('goodsNo');
 
         $batchRefundList = new stdClass();
-        $batchRefundList->bizOrderNo = array('12345');
-        $batchRefundList->oriBizOrderNo = array('123456');
+        $batchRefundList->bizOrderNo = array(Req::args('bizOrderNo'));
+        $batchRefundList->oriBizOrderNo = array(Req::args('oriBizOrderNo'));
 
-
-        $req = array(
-            'param' => array(
-                'bizBatchNo' => $bizBatchNo,
-                'goodsType' => $goodsType,
-                'goodsNo' => $goodsNo,
-                'batchRefundList' => array($batchRefund1, $batchRefund2),
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('failureBidRefund')    //调用方法
+        $param = array(
+            'bizBatchNo' => $bizBatchNo,
+            'goodsType' => $goodsType,
+            'goodsNo' => $goodsNo,
+            'batchRefundList' => array($batchRefund1),
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService', 'failureBidRefund', $param);
+        print_r(json_encode($param));
+        print_r($result);
+        die();
 
     }
 

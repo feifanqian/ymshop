@@ -187,6 +187,7 @@ class V1Controller extends Controller {
         "action_freeze_money"=>array('paytonglian/actionFreezeMoney',1,1),//冻结金额
         "action_unfreeze_money"=>array('paytonglian/actionUnfreezeMoney',1,1),//解冻金额
         "action_refund"=>array('paytonglian/actionRefund',1,1),//退款申请
+        "action_failure_bid_refund"=>array('paytonglian/actionFailureBidRefund',1,1),//流标专用退款
     );
 
     //分析请求的action,将请求分发到不同的action中去
