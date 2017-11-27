@@ -1290,18 +1290,18 @@ class PaytonglianAction extends Controller
         $showUrl = Req::args('showUrl');
         //商品参数必填
         $goodsParams = new stdClass();
-        $goodsParams->amount = Req::args('amount');
-        $goodsParams->totalAmount = Req::args('totalAmount');
-        $goodsParams->highestAmount = Req::args('highestAmount');
+        $goodsParams->amount = Filter::int(Req::args('amount'));
+        $goodsParams->totalAmount = Filter::int(Req::args('totalAmount'));
+        $goodsParams->highestAmount = Filter::int(Req::args('highestAmount'));
         $goodsParams->annualYield = Req::args('annualYield');
-        $goodsParams->investmentHorizon = Req::args('investmentHorizon');
-        $goodsParams->investmentHorizonScale = Req::args('investmentHorizonScale');
+        $goodsParams->investmentHorizon = Filter::int(Req::args('investmentHorizon'));
+        $goodsParams->investmentHorizonScale = Filter::int(Req::args('investmentHorizonScale'));
         $goodsParams->beginDate = Req::args('beginDate');
         $goodsParams->endDate = Req::args('endDate');
-        $goodsParams->repayType = Req::args('repayType');
-        $goodsParams->guaranteeType = Req::args('guaranteeType');
-        $goodsParams->repayPeriodNumber = Req::args('repayPeriodNumber');
-        $goodsParams->minimumAmountInvestment = Req::args('minimumAmountInvestment');
+        $goodsParams->repayType = Filter::int(Req::args('repayType'));
+        $goodsParams->guaranteeType = Filter::int(Req::args('guaranteeType'));
+        $goodsParams->repayPeriodNumber = Filter::int(Req::args('repayPeriodNumber'));
+        $goodsParams->minimumAmountInvestment = Filter::int(Req::args('minimumAmountInvestment'));
 
         $param = array(
             'bizUserId' => $bizUserId,
