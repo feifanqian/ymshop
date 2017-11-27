@@ -183,6 +183,7 @@ class V1Controller extends Controller {
         "batch_agent_pay"=>array('paytonglian/actionBatchAgentPay',1,1),//批量托管代付
         "action_pay"=>array('paytonglian/actionPay',1,1),//确认支付
         "action_entry_goods"=>array('paytonglian/actionEntryGoods',1,1),//商品录入
+        "action_query_modify_goods"=>array('paytonglian/actionQueryModifyGoods',1,1),//查询、修改商品
     );
 
     //分析请求的action,将请求分发到不同的action中去
