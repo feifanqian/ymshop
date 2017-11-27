@@ -278,7 +278,7 @@ class Promoter extends Object {
         $record = $this->model->table('invite as do')
                 ->join('left join user as u on do.invite_user_id = u.id')
                 ->fields('u.avatar,u.nickname,do.createtime')
-                ->where("do.user_id=".$this->promoter_id)
+                ->where("do.user_id=".$this->user_id)
                 ->order("do.id desc")
                 ->findPage($page, 10);
         if (empty($record)) {
