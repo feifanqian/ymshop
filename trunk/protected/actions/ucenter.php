@@ -1718,15 +1718,31 @@ class UcenterAction extends Controller {
     //================================小区相关接口start==============================
     //判断是否是小区推广员
     public function isDistrictPromoter() {
-        $promoter = Promoter::getPromoterInstance($this->user['id']);
-        if (is_object($promoter)) {
-            $this->content['is_promoter'] = 1;
-            $this->content['promoter_role']=$promoter->role_type;
-            $this->content['promoter_id'] =$promoter->role_type==1?NULL:$promoter->promoter_id;
-        } else {
-            $this->content['is_promoter'] = 0;
+        // $promoter = Promoter::getPromoterInstance($this->user['id']);
+        // if (is_object($promoter)) {
+        //     $this->content['is_promoter'] = 1;
+        //     $this->content['promoter_role']=$promoter->role_type;
+        //     $this->content['promoter_id'] =$promoter->role_type==1?NULL:$promoter->promoter_id;
+        // } else {
+        //     $this->content['is_promoter'] = 0;
+        // }
+        // $this->code = 0;
+        $base_info = $this->model->table("customer")->fields('user_id,valid_income,frezze_income,settled_income')->where("user_id=".$this->user['id'])->find();
+        if(!$base_info){
+            $this->code = 1159;
         }
-        $this->code = 0;
+        $pay_promoter   = $this->model->table('district_promoter')->where("user_id=".$this->user['id'])->fields("id,hirer_id,type")->find();
+        if($pay_promoter){
+            $role_type = 2;
+            $promoter_id = $pay_promoter['id'];
+        }else{
+            $role_type = 1;
+            $promoter_id = NULL;
+        }
+         $this->code = 0;
+         $this->content['is_promoter'] = 1;
+         $this->content['promoter_role']=$role_type;
+         $this->content['promoter_id'] =$promoter_id;
     }
     
     //根据id获取小区信息
