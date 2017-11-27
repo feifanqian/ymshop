@@ -1355,9 +1355,10 @@ class PaytonglianAction extends Controller
             'beginDate' => $beginDate,
             'endDate' => $endDate,
         );
-        $result = $client->request('OrderService','queryModifyGoods',$param);
+        $result = $client->request('OrderService', 'queryModifyGoods', $param);
         print_r(json_encode($result));
-        print_r($result);die();
+        print_r($result);
+        die();
 
     }
 
@@ -1371,24 +1372,30 @@ class PaytonglianAction extends Controller
 
     public function actionFreezeMoney()
     {
-
-
-        $bizFreezenNo = '5646';
-        $accountSetNo = '544561';
-        $amount = 360;    //只能为整型
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-                'bizFreezenNo' => $bizFreezenNo,
-                'accountSetNo' => $accountSetNo,
-                'amount' => $amount,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('freezeMoney')    //调用方法
+        //配置参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //参数
+        $bizUserId = Req::args('bizUserId');
+        $bizFreezenNo = Req::args('bizFreezenNo');
+        $accountSetNo = Req::args('accountSetNo');
+        $amount = Filter::int(Req::args('amount'));    //只能为整型
+        $param = array(
+            'bizUserId' => $bizUserId,
+            'bizFreezenNo' => $bizFreezenNo,
+            'accountSetNo' => $accountSetNo,
+            'amount' => $amount,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService', 'freezeMoney', $param);
+        print_r(json_encode($result));
+        print_r($result);
+        die();
 
     }
 
@@ -1402,24 +1409,29 @@ class PaytonglianAction extends Controller
 
     public function actionUnfreezeMoney()
     {
-
-
-        $bizFreezenNo = '5646';
-        $accountSetNo = '544561';
-        $amount = 360;    //只能为整型
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-                'bizFreezenNo' => $bizFreezenNo,
-                'accountSetNo' => $accountSetNo,
-                'amount' => $amount,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('unfreezeMoney')    //调用方法
+        //配置参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //参数
+        $bizUserId = Req::args('bizUserId');
+        $bizFreezenNo = Req::args('bizFreezenNo');
+        $accountSetNo = Req::args('accountSetNo');
+        $amount = Filter::int(Req::args('amount'));//只能为整型
+        $param = array(
+            'bizUserId' => $bizUserId,
+            'bizFreezenNo' => $bizFreezenNo,
+            'accountSetNo' => $accountSetNo,
+            'amount' => $amount,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService', 'unfreezeMoney', $param);
+        print_r(json_encode($param));
+        print_r($result);die();
 
     }
 
