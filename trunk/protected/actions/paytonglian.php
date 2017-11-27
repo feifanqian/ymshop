@@ -1431,7 +1431,8 @@ class PaytonglianAction extends Controller
         );
         $result = $client->request('OrderService', 'unfreezeMoney', $param);
         print_r(json_encode($param));
-        print_r($result);die();
+        print_r($result);
+        die();
 
     }
 

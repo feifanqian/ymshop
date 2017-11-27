@@ -184,6 +184,8 @@ class V1Controller extends Controller {
         "action_pay"=>array('paytonglian/actionPay',1,1),//确认支付
         "action_entry_goods"=>array('paytonglian/actionEntryGoods',1,1),//商品录入
         "action_query_modify_goods"=>array('paytonglian/actionQueryModifyGoods',1,1),//查询、修改商品
+        "action_freeze_money"=>array('paytonglian/actionFreezeMoney',1,1),//冻结金额
+        "action_unfreeze_money"=>array('paytonglian/actionUnfreezeMoney',1,1)//解冻金额
     );
 
     //分析请求的action,将请求分发到不同的action中去
