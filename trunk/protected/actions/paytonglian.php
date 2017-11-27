@@ -206,6 +206,16 @@ class PaytonglianAction extends Controller
 
     public function realNameVerify()
     {
+        $user = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
+        if(!$user){
+            $this->code = 1159;
+            return;
+        }
+        if($user['realname_verified']==1){
+           $this->code = 1164;
+           return;
+        }
+        
         $name = Req::args('name');
         $bizUserId = date('YmdHis').$this->user['id'];
 
@@ -244,6 +254,7 @@ class PaytonglianAction extends Controller
         $params["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);
         $result2 = $client->request("MemberService", "setRealName", $params);
         if ($result1['status'] == 'OK' && $result2['status'] == 'OK') {
+            $this->model->table('customer')->data(array('realname_verified'=>1))->where('user_id='.$this->user['id'])->update();
             $this->code = 0;
             $this->content['verified'] = 1;
             $this->content['bizUserId'] = $bizUserId;
