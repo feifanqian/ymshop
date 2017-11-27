@@ -173,7 +173,7 @@ class Promoter extends Object {
         $line_data = array('id' => 1, 'weekday' => '周一', 'month' => '12-03', 'status' => 'success', 'amount' => '1.22', 'settle_type' => '提现到金点账号', 'status_tips' => '已转账');
         $status = array('-1' => "info", '0' => 'waiting', '1' => 'success');
         $status_tips = array('-1' => '未通过', '0' => '待处理', '1' => '已转账');
-        $type = array('1' => '提现至账户余额', '2' => '提现到银行卡');
+        // $type = array('1' => '提现至账户余额', '2' => '提现到银行卡');
         foreach ($history['data'] as $k => $v) {
             $line_data = array();
             $line_data['id'] = $v['id'];
@@ -181,7 +181,12 @@ class Promoter extends Object {
             $line_data['month'] = date('m-d', strtotime($v['apply_time']));
             $line_data['status_icon'] = $status["{$v['status']}"];
             $line_data['amount'] = $v['withdraw_amount'];
-            $line_data['settle_type'] = $type["{$v['withdraw_type']}"];
+            if($v['withdraw_type']==1){
+                $type = '提现至账户余额';
+            }elseif($v['withdraw_type']==2){
+                $type = '提现到银行卡';
+            }
+            $line_data['settle_type'] = $type;
             $line_data['settle_type_id'] = $v['withdraw_type'];
             $line_data['status_tips'] = $status_tips["{$v['status']}"];
             $line_data['status'] = $v['status'];
