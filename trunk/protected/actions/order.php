@@ -721,7 +721,21 @@ class OrderAction extends Controller {
     }
 
     public function offlineorder_list(){
-        $this->model->table('order_offline')->where('user_id='.$uid)->findAll();
+        $type = Filter::int(Req::args('type'));
+        if(!$type){
+            $type = 1;
+        }
+        $page = Filter::int(Req::args('page'));
+        if(!$page){
+            $page = 1;
+        }
+        if($type==1){
+            $list = $this->model->table('order_offline')->where('user_id='.$this->user['id'])->order('id desc')->findPage($page,10);
+        }elseif($type==2){
+            $list = $this->model->table('order_offline')->where('shop_ids='.$this->user['id'])->order('id desc')->findPage($page,10);
+        }
+        $this->code = 0;
+        $this->content['list'] = $list;
     }
 
 }
