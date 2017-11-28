@@ -658,25 +658,29 @@ class PaytonglianAction extends Controller
 
     public function actionChangeBindPhone()
     {
-
-
-        $oldPhone = '15821953549';
-        $oldVerificationCode = '1234';
-        $newPhone = '15821953599';
-        $newVerificationCode = '1234';
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-                'oldPhone' => $oldPhone,
-                'oldVerificationCode' => $oldVerificationCode,
-                'newPhone' => $newPhone,
-                'newVerificationCode' => $newVerificationCode
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('changeBindPhone')    //调用方法
+        //配置信息
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //请求参数
+        $bizUserId = Req::args('bizUserId');
+        $oldPhone = Req::args('oldPhone');
+        $newPhone = Req::args('newPhone');
+        $newVerificationCode = Req::args('newVerificationCode');
+        $param = array(
+            'bizUserId' => $bizUserId,
+            'oldPhone' => $oldPhone,
+            'newPhone' => $newPhone,
+            'newVerificationCode' => $newVerificationCode,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('MemberService', 'changeBindPhone', $param);
+        print_r($result);
+        die();
     }
 
     /**
