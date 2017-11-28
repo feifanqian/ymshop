@@ -707,17 +707,23 @@ class PaytonglianAction extends Controller
 
     public function actionLockMember()
     {
-
-
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('lockMember')    //调用方法
+        //配置信息
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //请求参数
+        $bizUserId = Req::args('bizUserId');
+        $param = array(
+            'bizUserId' => $bizUserId,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('MemberService', 'lockMember', $param);
+        print_r($result);
+        die();
     }
 
     /**
@@ -727,17 +733,23 @@ class PaytonglianAction extends Controller
 
     public function actionUnlockMember()
     {
-
-
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('unlockMember')    //调用方法
+        //配置信息
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //请求参数
+        $bizUserId = Req::args('bizUserId');
+        $param = array(
+            'bizUserId' => $bizUserId,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('MemberService', 'unlockMember', $param);
+        print_r($result);
+        die();
     }
 
     /**
