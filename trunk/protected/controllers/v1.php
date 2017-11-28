@@ -194,6 +194,8 @@ class V1Controller extends Controller {
         "query_balance"=>array('paytonglian/actionQueryBalance',1,1),//查询余额接口
         "get_order_detail"=>array('paytonglian/actionGetOrderDetail',1,1),//查询订单状态接口
         "Query_inexp_detail"=>array('paytonglian/actionQueryInExpDetail',1,1),//查询账户明细
+        "tl_search"=>array('paytonglian/actionTlSearch',1,1),//通联通头寸查询
+        "platform_download"=>array('paytonglian/platformDownload',1,1),//平台集合对账下载
     );
 
     //分析请求的action,将请求分发到不同的action中去
