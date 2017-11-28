@@ -730,13 +730,17 @@ class OrderAction extends Controller {
             $page = 1;
         }
         if($type==1){
-            $list = $this->model->table('order_offline')->where('user_id='.$this->user['id'])->order('id desc')->findPage($page,10);
+            $list = $this->model->table('order_offline')->where('pay_status=1 and user_id='.$this->user['id'])->order('id desc')->findPage($page,10);
         }elseif($type==2){
-            $list = $this->model->table('order_offline')->where('shop_ids='.$this->user['id'])->order('id desc')->findPage($page,10);
+            $list = $this->model->table('order_offline')->where('pay_status=1 and shop_ids='.$this->user['id'])->order('id desc')->findPage($page,10);
         }
         if($list){
             foreach($list['data'] as $k => $v){
-                $user = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.nickname')->where('c.user_id='.$v['shop_ids'])->find();
+                if($type==1){
+                   $user = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.nickname')->where('c.user_id='.$v['shop_ids'])->find(); 
+                }else{
+                   $user = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.nickname')->where('c.user_id='.$v['user_id'])->find();  
+                }
                 $list['data'][$k]['shop_name'] = $user['real_name']!=''?$user['real_name']:$user['nickname'];
                 if($v['payment']==7 || $v['payment']==18){
                     $list['data'][$k]['payment_name'] = '微信支付';
