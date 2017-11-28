@@ -579,8 +579,8 @@ class PaymentController extends Controller {
            $url = AppConfig::APIURL . "/pay";
            
            if($user_id==42608){
-                // $xmlSignSrc = $this->arrayXml->toXmlGBK($paramsStr, 'AIPG');
-                var_dump(json_decode($paramsStr));die;
+                $xmlSignSrc = $this->arrayXml->toXmlGBK($params, 'AIPG');
+                var_dump($xmlSignSrc);die;
            }
            $rsp = AppUtil::Request($url, $paramsStr);
            
