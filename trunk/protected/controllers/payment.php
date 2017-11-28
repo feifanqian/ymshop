@@ -10,6 +10,7 @@ class PaymentController extends Controller {
     public function init() {
         header("Content-type: text/html; charset=" . $this->encoding);
         $this->model = new Model();
+        $this->arrayXml = new ArrayAndXml();
         $safebox = Safebox::getInstance();
         $this->user = $safebox->get('user');
     }
@@ -576,10 +577,13 @@ class PaymentController extends Controller {
 
            $paramsStr = AppUtil::ToUrlParams($params);
            $url = AppConfig::APIURL . "/pay";
-           $rsp = AppUtil::Request($url, $paramsStr);
+           
            if($user_id==42608){
-             var_dump($rsp);die;
+                $xmlSignSrc = $this->arrayXml->toXmlGBK($paramsStr, 'AIPG');
+                var_dump($xmlSignSrc);die;
            }
+           $rsp = AppUtil::Request($url, $paramsStr);
+           
            $rspArray = json_decode($rsp, true);
            if(AppUtil::ValidSigns($rspArray)){
                $this->assign('jsApiParameters',$rspArray['payinfo']);
