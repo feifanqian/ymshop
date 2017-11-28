@@ -737,7 +737,12 @@ class OrderAction extends Controller {
         if($list){
             foreach($list['data'] as $k => $v){
                 $user = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.nickname')->where('c.user_id='.$v['shop_ids'])->find();
-                $v['shop_name'] = $user['real_name']!=''?$user['real_name']:$user['nickname'];
+                $list['data'][$k]['shop_name'] = $user['real_name']!=''?$user['real_name']:$user['nickname'];
+                if($v['payment']==7 || $v['payment']==18){
+                    $list['data'][$k]['payment_name'] = '微信支付';
+                }else{
+                    $list['data'][$k]['payment_name'] = '支付宝支付';
+                }
             }
             unset($list['html']);
         }
