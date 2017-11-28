@@ -18,152 +18,10 @@
       <file leaf-file-name="paytonglian.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="713">
-              <caret line="1599" column="34" lean-forward="true" selection-start-line="1599" selection-start-column="34" selection-end-line="1599" selection-end-column="34" />
+            <state relative-caret-position="409">
+              <caret line="1775" column="36" lean-forward="false" selection-start-line="1775" selection-start-column="36" selection-end-line="1775" selection-end-column="36" />
               <folding>
-                <marker date="1511779642386" expanded="true" signature="5714:9693" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="6722:6760" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="6768:9686" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="9703:9831" ph=" 绑定手机 ..." />
-                <marker date="1511779642386" expanded="true" signature="9872:10968" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="10749:10787" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="10832:10914" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="10922:10961" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="10978:11487" ph=" 设置企业会员信息 ..." />
-                <marker date="1511779642386" expanded="true" signature="11533:12965" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="12550:12891" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="12580:12758" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="12975:13139" ph=" 设置个人会员信息 ..." />
-                <marker date="1511779642386" expanded="true" signature="13184:13761" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="13423:13690" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="13453:13558" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="13770:13842" ph=" 获取会员信息（个人和企业） ..." />
-                <marker date="1511779642386" expanded="true" signature="13887:14212" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="13917:14141" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="13947:14009" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="14222:14277" ph=" 查询卡bin ..." />
-                <marker date="1511779642386" expanded="true" signature="14323:15542" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="15142:15487" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="15495:15534" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="15552:16062" ph=" 请求绑定银行卡 ..." />
-                <marker date="1511779642386" expanded="true" signature="16111:18924" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="17666:17784" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="17792:17849" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="18445:18869" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="18877:18916" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="18933:19167" ph=" 确认绑定银行卡 ..." />
-                <marker date="1511779642386" expanded="true" signature="19211:20504" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="20411:20449" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="20457:20496" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="20514:20683" ph=" 设置安全卡 ..." />
-                <marker date="1511779642386" expanded="true" signature="20726:21705" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="21610:21648" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="21656:21697" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="21714:21832" ph=" 查询绑定银行卡 ..." />
-                <marker date="1511779642386" expanded="true" signature="21877:22740" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="22647:22685" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="22693:22732" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="22749:22849" ph=" 解绑绑定银行卡 ..." />
-                <marker date="1511779642386" expanded="true" signature="22895:23821" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="23675:23766" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="23774:23813" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="23831:24040" ph=" 更改绑定手机 ..." />
-                <marker date="1511779642386" expanded="true" signature="24087:24769" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="24265:24698" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="24295:24564" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="24778:24841" ph=" 锁定用户 ..." />
-                <marker date="1511779642386" expanded="true" signature="24883:25205" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="24913:25134" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="24943:25005" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="25214:25277" ph=" 解锁用户 ..." />
-                <marker date="1511779642386" expanded="true" signature="25321:25645" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="25351:25574" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="25381:25443" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="25654:26352" ph=" 充值申请 ..." />
-                <marker date="1511779642386" expanded="true" signature="26396:29504" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="27412:27654" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="27696:28021" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="29024:29450" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="29211:29410" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="29458:29497" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="29513:30380" ph=" 提现申请 ..." />
-                <marker date="1511779642386" expanded="true" signature="30425:32406" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="32293:32332" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="32340:32398" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="32416:33113" ph=" 消费申请 ..." />
-                <marker date="1511779642386" expanded="true" signature="33157:36307" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="34156:34381" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="34423:34672" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="35016:35685" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="35804:36234" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="35991:36224" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="36242:36300" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="36316:37305" ph=" 代收申请 ..." />
-                <marker date="1511779642386" expanded="true" signature="37354:40475" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="38617:38824" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="38885:39117" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="39484:40276" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="40485:41204" ph=" 单笔代付 ..." />
-                <marker date="1511779642386" expanded="true" signature="41250:44308" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="42255:42504" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="42512:42553" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="42659:42990" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="42998:43298" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="43561:44137" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="44317:44619" ph=" 批量代付 ..." />
-                <marker date="1511779642386" expanded="true" signature="44665:46474" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="46088:46300" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="46483:46996" ph=" 强实名认证 ..." />
-                <marker date="1511779642386" expanded="true" signature="47047:48117" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="47363:48045" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="47393:47908" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="48127:48397" ph=" 确认支付（后台支付&amp;前台支付） ..." />
-                <marker date="1511779642386" expanded="true" signature="48432:49774" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="49214:49264" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="49272:49308" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="49439:49657" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="49783:50173" ph=" 商品录入 ..." />
-                <marker date="1511779642386" expanded="true" signature="50215:52445" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="51994:52282" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="52454:52824" ph=" 查询、修改商品 ..." />
-                <marker date="1511779642386" expanded="true" signature="52872:53988" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="53617:53819" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="53997:54160" ph=" 冻结金额 ..." />
-                <marker date="1511779642386" expanded="true" signature="54203:55245" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="54910:55081" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="55254:55439" ph=" 解冻金额 ..." />
-                <marker date="1511779642386" expanded="true" signature="55484:56523" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="56187:56358" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="56532:57085" ph=" 退款 ..." />
-                <marker date="1511779642386" expanded="true" signature="57123:58703" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="58172:58545" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="58712:58970" ph=" 流标专用退款 ..." />
-                <marker date="1511779642386" expanded="true" signature="59018:60470" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="60123:60302" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="60479:60764" ph=" 平台转账 ..." />
-                <marker date="1511779642386" expanded="true" signature="60815:61683" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="61083:61611" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="61113:61474" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="61692:61791" ph=" 查询余额 ..." />
-                <marker date="1511779642386" expanded="true" signature="61835:62243" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="61899:62171" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="61929:62041" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="62252:62350" ph=" 查询订单状态 ..." />
-                <marker date="1511779642386" expanded="true" signature="62396:62798" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="62456:62726" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="62486:62594" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="62807:62908" ph=" 查询订单支付详情 ..." />
-                <marker date="1511779642386" expanded="true" signature="62959:63364" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="63017:63292" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="63047:63155" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="63374:63770" ph=" 查询账户收支明细 ..." />
-                <marker date="1511779642386" expanded="true" signature="63818:64563" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="64041:64491" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="64071:64357" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="64598:65384" ph="{...}" />
-                <marker date="1511779642386" expanded="true" signature="64980:65314" ph="//..." />
-                <marker date="1511779642386" expanded="true" signature="65393:65459" ph="..." />
-                <marker date="1511779642386" expanded="true" signature="65486:65757" ph="{...}" />
+                <marker date="1511855762678" expanded="true" signature="5714:9680" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -258,7 +116,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -276,6 +133,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -328,11 +186,12 @@
       <workItem from="1511487256502" duration="22764000" />
       <workItem from="1511574755634" duration="15037000" />
       <workItem from="1511748852140" duration="21759000" />
+      <workItem from="1511848416314" duration="3987000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="145834000" />
+    <option name="totallyTimeSpent" value="149821000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -345,24 +204,25 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="72" y="-8" width="1856" height="1096" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.08913043" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11141305" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35976788" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35976788" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -399,152 +259,20 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="41574">
+          <caret line="1599" column="34" lean-forward="true" selection-start-line="1599" selection-start-column="34" selection-end-line="1599" selection-end-column="34" />
+          <folding>
+            <marker date="1511855762678" expanded="true" signature="5714:9680" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="32734">
           <caret line="1259" column="0" lean-forward="true" selection-start-line="1259" selection-start-column="0" selection-end-line="1259" selection-end-column="0" />
           <folding>
-            <marker date="1511779642386" expanded="true" signature="5714:9693" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="6722:6760" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="6768:9686" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="9703:9831" ph=" 绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="9872:10968" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="10749:10787" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10832:10914" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10922:10961" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10978:11487" ph=" 设置企业会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="11533:12965" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="12550:12891" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12580:12758" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12975:13139" ph=" 设置个人会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="13184:13761" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13423:13690" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13453:13558" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13770:13842" ph=" 获取会员信息（个人和企业） ..." />
-            <marker date="1511779642386" expanded="true" signature="13887:14212" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13917:14141" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13947:14009" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="14222:14277" ph=" 查询卡bin ..." />
-            <marker date="1511779642386" expanded="true" signature="14323:15542" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="15142:15487" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15495:15534" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15552:16062" ph=" 请求绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="16111:18924" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="17666:17784" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="17792:17849" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18445:18869" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18877:18916" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18933:19167" ph=" 确认绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="19211:20504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="20411:20449" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20457:20496" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20514:20683" ph=" 设置安全卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="20726:21705" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="21610:21648" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21656:21697" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21714:21832" ph=" 查询绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="21877:22740" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="22647:22685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22693:22732" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22749:22849" ph=" 解绑绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="22895:23821" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="23675:23766" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23774:23813" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23831:24040" ph=" 更改绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="24087:24769" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24265:24698" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24295:24564" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24778:24841" ph=" 锁定用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="24883:25205" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24913:25134" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24943:25005" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25214:25277" ph=" 解锁用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="25321:25645" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="25351:25574" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25381:25443" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25654:26352" ph=" 充值申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="26396:29504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="27412:27654" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="27696:28021" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29024:29450" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29211:29410" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29458:29497" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29513:30380" ph=" 提现申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="30425:32406" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="32293:32332" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32340:32398" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32416:33113" ph=" 消费申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="33157:36307" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="34156:34381" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="34423:34672" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35016:35685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35804:36234" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35991:36224" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36242:36300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36316:37305" ph=" 代收申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="37354:40475" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="38617:38824" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="38885:39117" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="39484:40276" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="40485:41204" ph=" 单笔代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="41250:44308" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="42255:42504" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42512:42553" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42659:42990" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42998:43298" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="43561:44137" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="44317:44619" ph=" 批量代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="44665:46474" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="46088:46300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="46483:46996" ph=" 强实名认证 ..." />
-            <marker date="1511779642386" expanded="true" signature="47047:48117" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="47363:48045" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="47393:47908" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="48127:48397" ph=" 确认支付（后台支付&amp;前台支付） ..." />
-            <marker date="1511779642386" expanded="true" signature="48432:49774" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="49214:49264" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49272:49308" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49439:49657" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49783:50173" ph=" 商品录入 ..." />
-            <marker date="1511779642386" expanded="true" signature="50215:52445" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="51994:52282" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="52454:52824" ph=" 查询、修改商品 ..." />
-            <marker date="1511779642386" expanded="true" signature="52872:53988" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="53617:53819" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="53997:54160" ph=" 冻结金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="54203:55245" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="54910:55081" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="55254:55439" ph=" 解冻金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="55484:56523" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="56187:56358" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="56532:57085" ph=" 退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="57123:58703" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="58172:58545" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="58712:58970" ph=" 流标专用退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="59018:60470" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="60123:60302" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="60479:60764" ph=" 平台转账 ..." />
-            <marker date="1511779642386" expanded="true" signature="60815:61683" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61083:61611" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61113:61474" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61692:61791" ph=" 查询余额 ..." />
-            <marker date="1511779642386" expanded="true" signature="61835:62243" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61899:62171" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61929:62041" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62252:62350" ph=" 查询订单状态 ..." />
-            <marker date="1511779642386" expanded="true" signature="62396:62798" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="62456:62726" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62486:62594" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62807:62908" ph=" 查询订单支付详情 ..." />
-            <marker date="1511779642386" expanded="true" signature="62959:63364" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="63017:63292" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63047:63155" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63374:63770" ph=" 查询账户收支明细 ..." />
-            <marker date="1511779642386" expanded="true" signature="63818:64563" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64041:64491" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64071:64357" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64598:65384" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64980:65314" ph="//..." />
-            <marker date="1511779642386" expanded="true" signature="65393:65459" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="65486:65757" ph="{...}" />
+            <marker date="1511855762678" expanded="true" signature="5714:9680" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -554,149 +282,7 @@
         <state relative-caret-position="21918">
           <caret line="843" column="40" lean-forward="true" selection-start-line="843" selection-start-column="40" selection-end-line="843" selection-end-column="40" />
           <folding>
-            <marker date="1511779642386" expanded="true" signature="5714:9693" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="6722:6760" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="6768:9686" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="9703:9831" ph=" 绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="9872:10968" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="10749:10787" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10832:10914" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10922:10961" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10978:11487" ph=" 设置企业会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="11533:12965" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="12550:12891" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12580:12758" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12975:13139" ph=" 设置个人会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="13184:13761" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13423:13690" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13453:13558" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13770:13842" ph=" 获取会员信息（个人和企业） ..." />
-            <marker date="1511779642386" expanded="true" signature="13887:14212" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13917:14141" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13947:14009" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="14222:14277" ph=" 查询卡bin ..." />
-            <marker date="1511779642386" expanded="true" signature="14323:15542" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="15142:15487" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15495:15534" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15552:16062" ph=" 请求绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="16111:18924" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="17666:17784" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="17792:17849" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18445:18869" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18877:18916" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18933:19167" ph=" 确认绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="19211:20504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="20411:20449" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20457:20496" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20514:20683" ph=" 设置安全卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="20726:21705" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="21610:21648" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21656:21697" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21714:21832" ph=" 查询绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="21877:22740" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="22647:22685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22693:22732" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22749:22849" ph=" 解绑绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="22895:23821" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="23675:23766" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23774:23813" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23831:24040" ph=" 更改绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="24087:24769" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24265:24698" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24295:24564" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24778:24841" ph=" 锁定用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="24883:25205" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24913:25134" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24943:25005" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25214:25277" ph=" 解锁用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="25321:25645" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="25351:25574" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25381:25443" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25654:26352" ph=" 充值申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="26396:29504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="27412:27654" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="27696:28021" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29024:29450" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29211:29410" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29458:29497" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29513:30380" ph=" 提现申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="30425:32406" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="32293:32332" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32340:32398" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32416:33113" ph=" 消费申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="33157:36307" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="34156:34381" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="34423:34672" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35016:35685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35804:36234" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35991:36224" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36242:36300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36316:37305" ph=" 代收申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="37354:40475" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="38617:38824" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="38885:39117" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="39484:40276" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="40485:41204" ph=" 单笔代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="41250:44308" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="42255:42504" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42512:42553" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42659:42990" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42998:43298" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="43561:44137" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="44317:44619" ph=" 批量代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="44665:46474" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="46088:46300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="46483:46996" ph=" 强实名认证 ..." />
-            <marker date="1511779642386" expanded="true" signature="47047:48117" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="47363:48045" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="47393:47908" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="48127:48397" ph=" 确认支付（后台支付&amp;前台支付） ..." />
-            <marker date="1511779642386" expanded="true" signature="48432:49774" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="49214:49264" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49272:49308" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49439:49657" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49783:50173" ph=" 商品录入 ..." />
-            <marker date="1511779642386" expanded="true" signature="50215:52445" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="51994:52282" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="52454:52824" ph=" 查询、修改商品 ..." />
-            <marker date="1511779642386" expanded="true" signature="52872:53988" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="53617:53819" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="53997:54160" ph=" 冻结金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="54203:55245" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="54910:55081" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="55254:55439" ph=" 解冻金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="55484:56523" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="56187:56358" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="56532:57085" ph=" 退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="57123:58703" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="58172:58545" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="58712:58970" ph=" 流标专用退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="59018:60470" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="60123:60302" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="60479:60764" ph=" 平台转账 ..." />
-            <marker date="1511779642386" expanded="true" signature="60815:61683" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61083:61611" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61113:61474" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61692:61791" ph=" 查询余额 ..." />
-            <marker date="1511779642386" expanded="true" signature="61835:62243" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61899:62171" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61929:62041" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62252:62350" ph=" 查询订单状态 ..." />
-            <marker date="1511779642386" expanded="true" signature="62396:62798" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="62456:62726" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62486:62594" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62807:62908" ph=" 查询订单支付详情 ..." />
-            <marker date="1511779642386" expanded="true" signature="62959:63364" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="63017:63292" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63047:63155" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63374:63770" ph=" 查询账户收支明细 ..." />
-            <marker date="1511779642386" expanded="true" signature="63818:64563" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64041:64491" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64071:64357" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64598:65384" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64980:65314" ph="//..." />
-            <marker date="1511779642386" expanded="true" signature="65393:65459" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="65486:65757" ph="{...}" />
+            <marker date="1511855762678" expanded="true" signature="5714:9680" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -706,149 +292,7 @@
         <state relative-caret-position="26286">
           <caret line="1011" column="0" lean-forward="true" selection-start-line="1011" selection-start-column="0" selection-end-line="1011" selection-end-column="0" />
           <folding>
-            <marker date="1511779642386" expanded="true" signature="5714:9693" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="6722:6760" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="6768:9686" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="9703:9831" ph=" 绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="9872:10968" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="10749:10787" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10832:10914" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10922:10961" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10978:11487" ph=" 设置企业会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="11533:12965" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="12550:12891" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12580:12758" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12975:13139" ph=" 设置个人会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="13184:13761" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13423:13690" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13453:13558" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13770:13842" ph=" 获取会员信息（个人和企业） ..." />
-            <marker date="1511779642386" expanded="true" signature="13887:14212" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13917:14141" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13947:14009" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="14222:14277" ph=" 查询卡bin ..." />
-            <marker date="1511779642386" expanded="true" signature="14323:15542" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="15142:15487" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15495:15534" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15552:16062" ph=" 请求绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="16111:18924" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="17666:17784" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="17792:17849" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18445:18869" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18877:18916" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18933:19167" ph=" 确认绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="19211:20504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="20411:20449" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20457:20496" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20514:20683" ph=" 设置安全卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="20726:21705" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="21610:21648" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21656:21697" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21714:21832" ph=" 查询绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="21877:22740" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="22647:22685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22693:22732" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22749:22849" ph=" 解绑绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="22895:23821" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="23675:23766" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23774:23813" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23831:24040" ph=" 更改绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="24087:24769" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24265:24698" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24295:24564" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24778:24841" ph=" 锁定用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="24883:25205" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24913:25134" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24943:25005" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25214:25277" ph=" 解锁用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="25321:25645" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="25351:25574" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25381:25443" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25654:26352" ph=" 充值申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="26396:29504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="27412:27654" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="27696:28021" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29024:29450" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29211:29410" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29458:29497" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29513:30380" ph=" 提现申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="30425:32406" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="32293:32332" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32340:32398" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32416:33113" ph=" 消费申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="33157:36307" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="34156:34381" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="34423:34672" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35016:35685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35804:36234" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35991:36224" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36242:36300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36316:37305" ph=" 代收申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="37354:40475" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="38617:38824" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="38885:39117" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="39484:40276" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="40485:41204" ph=" 单笔代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="41250:44308" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="42255:42504" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42512:42553" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42659:42990" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42998:43298" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="43561:44137" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="44317:44619" ph=" 批量代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="44665:46474" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="46088:46300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="46483:46996" ph=" 强实名认证 ..." />
-            <marker date="1511779642386" expanded="true" signature="47047:48117" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="47363:48045" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="47393:47908" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="48127:48397" ph=" 确认支付（后台支付&amp;前台支付） ..." />
-            <marker date="1511779642386" expanded="true" signature="48432:49774" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="49214:49264" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49272:49308" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49439:49657" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49783:50173" ph=" 商品录入 ..." />
-            <marker date="1511779642386" expanded="true" signature="50215:52445" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="51994:52282" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="52454:52824" ph=" 查询、修改商品 ..." />
-            <marker date="1511779642386" expanded="true" signature="52872:53988" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="53617:53819" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="53997:54160" ph=" 冻结金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="54203:55245" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="54910:55081" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="55254:55439" ph=" 解冻金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="55484:56523" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="56187:56358" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="56532:57085" ph=" 退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="57123:58703" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="58172:58545" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="58712:58970" ph=" 流标专用退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="59018:60470" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="60123:60302" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="60479:60764" ph=" 平台转账 ..." />
-            <marker date="1511779642386" expanded="true" signature="60815:61683" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61083:61611" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61113:61474" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61692:61791" ph=" 查询余额 ..." />
-            <marker date="1511779642386" expanded="true" signature="61835:62243" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61899:62171" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61929:62041" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62252:62350" ph=" 查询订单状态 ..." />
-            <marker date="1511779642386" expanded="true" signature="62396:62798" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="62456:62726" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62486:62594" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62807:62908" ph=" 查询订单支付详情 ..." />
-            <marker date="1511779642386" expanded="true" signature="62959:63364" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="63017:63292" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63047:63155" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63374:63770" ph=" 查询账户收支明细 ..." />
-            <marker date="1511779642386" expanded="true" signature="63818:64563" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64041:64491" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64071:64357" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64598:65384" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64980:65314" ph="//..." />
-            <marker date="1511779642386" expanded="true" signature="65393:65459" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="65486:65757" ph="{...}" />
+            <marker date="1511855762678" expanded="true" signature="5714:9680" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -858,149 +302,7 @@
         <state relative-caret-position="2938">
           <caret line="113" column="31" lean-forward="true" selection-start-line="113" selection-start-column="31" selection-end-line="113" selection-end-column="31" />
           <folding>
-            <marker date="1511779642386" expanded="true" signature="5714:9693" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="6722:6760" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="6768:9686" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="9703:9831" ph=" 绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="9872:10968" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="10749:10787" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10832:10914" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10922:10961" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10978:11487" ph=" 设置企业会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="11533:12965" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="12550:12891" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12580:12758" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12975:13139" ph=" 设置个人会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="13184:13761" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13423:13690" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13453:13558" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13770:13842" ph=" 获取会员信息（个人和企业） ..." />
-            <marker date="1511779642386" expanded="true" signature="13887:14212" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13917:14141" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13947:14009" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="14222:14277" ph=" 查询卡bin ..." />
-            <marker date="1511779642386" expanded="true" signature="14323:15542" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="15142:15487" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15495:15534" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15552:16062" ph=" 请求绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="16111:18924" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="17666:17784" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="17792:17849" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18445:18869" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18877:18916" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18933:19167" ph=" 确认绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="19211:20504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="20411:20449" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20457:20496" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20514:20683" ph=" 设置安全卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="20726:21705" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="21610:21648" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21656:21697" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21714:21832" ph=" 查询绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="21877:22740" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="22647:22685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22693:22732" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22749:22849" ph=" 解绑绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="22895:23821" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="23675:23766" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23774:23813" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23831:24040" ph=" 更改绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="24087:24769" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24265:24698" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24295:24564" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24778:24841" ph=" 锁定用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="24883:25205" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24913:25134" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24943:25005" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25214:25277" ph=" 解锁用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="25321:25645" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="25351:25574" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25381:25443" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25654:26352" ph=" 充值申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="26396:29504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="27412:27654" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="27696:28021" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29024:29450" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29211:29410" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29458:29497" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29513:30380" ph=" 提现申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="30425:32406" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="32293:32332" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32340:32398" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32416:33113" ph=" 消费申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="33157:36307" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="34156:34381" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="34423:34672" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35016:35685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35804:36234" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35991:36224" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36242:36300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36316:37305" ph=" 代收申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="37354:40475" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="38617:38824" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="38885:39117" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="39484:40276" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="40485:41204" ph=" 单笔代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="41250:44308" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="42255:42504" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42512:42553" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42659:42990" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42998:43298" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="43561:44137" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="44317:44619" ph=" 批量代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="44665:46474" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="46088:46300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="46483:46996" ph=" 强实名认证 ..." />
-            <marker date="1511779642386" expanded="true" signature="47047:48117" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="47363:48045" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="47393:47908" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="48127:48397" ph=" 确认支付（后台支付&amp;前台支付） ..." />
-            <marker date="1511779642386" expanded="true" signature="48432:49774" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="49214:49264" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49272:49308" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49439:49657" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49783:50173" ph=" 商品录入 ..." />
-            <marker date="1511779642386" expanded="true" signature="50215:52445" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="51994:52282" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="52454:52824" ph=" 查询、修改商品 ..." />
-            <marker date="1511779642386" expanded="true" signature="52872:53988" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="53617:53819" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="53997:54160" ph=" 冻结金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="54203:55245" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="54910:55081" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="55254:55439" ph=" 解冻金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="55484:56523" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="56187:56358" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="56532:57085" ph=" 退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="57123:58703" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="58172:58545" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="58712:58970" ph=" 流标专用退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="59018:60470" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="60123:60302" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="60479:60764" ph=" 平台转账 ..." />
-            <marker date="1511779642386" expanded="true" signature="60815:61683" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61083:61611" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61113:61474" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61692:61791" ph=" 查询余额 ..." />
-            <marker date="1511779642386" expanded="true" signature="61835:62243" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61899:62171" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61929:62041" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62252:62350" ph=" 查询订单状态 ..." />
-            <marker date="1511779642386" expanded="true" signature="62396:62798" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="62456:62726" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62486:62594" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62807:62908" ph=" 查询订单支付详情 ..." />
-            <marker date="1511779642386" expanded="true" signature="62959:63364" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="63017:63292" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63047:63155" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63374:63770" ph=" 查询账户收支明细 ..." />
-            <marker date="1511779642386" expanded="true" signature="63818:64563" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64041:64491" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64071:64357" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64598:65384" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64980:65314" ph="//..." />
-            <marker date="1511779642386" expanded="true" signature="65393:65459" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="65486:65757" ph="{...}" />
+            <marker date="1511855762678" expanded="true" signature="5714:9680" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1010,149 +312,7 @@
         <state relative-caret-position="17758">
           <caret line="683" column="65" lean-forward="false" selection-start-line="683" selection-start-column="65" selection-end-line="683" selection-end-column="65" />
           <folding>
-            <marker date="1511779642386" expanded="true" signature="5714:9693" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="6722:6760" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="6768:9686" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="9703:9831" ph=" 绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="9872:10968" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="10749:10787" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10832:10914" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10922:10961" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10978:11487" ph=" 设置企业会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="11533:12965" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="12550:12891" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12580:12758" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12975:13139" ph=" 设置个人会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="13184:13761" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13423:13690" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13453:13558" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13770:13842" ph=" 获取会员信息（个人和企业） ..." />
-            <marker date="1511779642386" expanded="true" signature="13887:14212" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13917:14141" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13947:14009" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="14222:14277" ph=" 查询卡bin ..." />
-            <marker date="1511779642386" expanded="true" signature="14323:15542" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="15142:15487" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15495:15534" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15552:16062" ph=" 请求绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="16111:18924" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="17666:17784" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="17792:17849" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18445:18869" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18877:18916" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18933:19167" ph=" 确认绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="19211:20504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="20411:20449" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20457:20496" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20514:20683" ph=" 设置安全卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="20726:21705" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="21610:21648" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21656:21697" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21714:21832" ph=" 查询绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="21877:22740" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="22647:22685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22693:22732" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22749:22849" ph=" 解绑绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="22895:23821" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="23675:23766" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23774:23813" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23831:24040" ph=" 更改绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="24087:24769" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24265:24698" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24295:24564" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24778:24841" ph=" 锁定用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="24883:25205" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24913:25134" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24943:25005" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25214:25277" ph=" 解锁用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="25321:25645" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="25351:25574" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25381:25443" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25654:26352" ph=" 充值申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="26396:29504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="27412:27654" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="27696:28021" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29024:29450" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29211:29410" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29458:29497" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29513:30380" ph=" 提现申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="30425:32406" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="32293:32332" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32340:32398" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32416:33113" ph=" 消费申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="33157:36307" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="34156:34381" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="34423:34672" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35016:35685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35804:36234" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35991:36224" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36242:36300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36316:37305" ph=" 代收申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="37354:40475" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="38617:38824" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="38885:39117" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="39484:40276" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="40485:41204" ph=" 单笔代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="41250:44308" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="42255:42504" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42512:42553" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42659:42990" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42998:43298" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="43561:44137" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="44317:44619" ph=" 批量代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="44665:46474" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="46088:46300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="46483:46996" ph=" 强实名认证 ..." />
-            <marker date="1511779642386" expanded="true" signature="47047:48117" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="47363:48045" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="47393:47908" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="48127:48397" ph=" 确认支付（后台支付&amp;前台支付） ..." />
-            <marker date="1511779642386" expanded="true" signature="48432:49774" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="49214:49264" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49272:49308" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49439:49657" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49783:50173" ph=" 商品录入 ..." />
-            <marker date="1511779642386" expanded="true" signature="50215:52445" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="51994:52282" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="52454:52824" ph=" 查询、修改商品 ..." />
-            <marker date="1511779642386" expanded="true" signature="52872:53988" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="53617:53819" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="53997:54160" ph=" 冻结金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="54203:55245" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="54910:55081" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="55254:55439" ph=" 解冻金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="55484:56523" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="56187:56358" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="56532:57085" ph=" 退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="57123:58703" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="58172:58545" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="58712:58970" ph=" 流标专用退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="59018:60470" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="60123:60302" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="60479:60764" ph=" 平台转账 ..." />
-            <marker date="1511779642386" expanded="true" signature="60815:61683" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61083:61611" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61113:61474" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61692:61791" ph=" 查询余额 ..." />
-            <marker date="1511779642386" expanded="true" signature="61835:62243" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61899:62171" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61929:62041" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62252:62350" ph=" 查询订单状态 ..." />
-            <marker date="1511779642386" expanded="true" signature="62396:62798" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="62456:62726" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62486:62594" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62807:62908" ph=" 查询订单支付详情 ..." />
-            <marker date="1511779642386" expanded="true" signature="62959:63364" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="63017:63292" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63047:63155" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63374:63770" ph=" 查询账户收支明细 ..." />
-            <marker date="1511779642386" expanded="true" signature="63818:64563" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64041:64491" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64071:64357" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64598:65384" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64980:65314" ph="//..." />
-            <marker date="1511779642386" expanded="true" signature="65393:65459" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="65486:65757" ph="{...}" />
+            <marker date="1511855762678" expanded="true" signature="5714:9680" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1162,149 +322,7 @@
         <state relative-caret-position="18044">
           <caret line="694" column="104" lean-forward="true" selection-start-line="694" selection-start-column="104" selection-end-line="694" selection-end-column="104" />
           <folding>
-            <marker date="1511779642386" expanded="true" signature="5714:9693" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="6722:6760" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="6768:9686" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="9703:9831" ph=" 绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="9872:10968" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="10749:10787" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10832:10914" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10922:10961" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10978:11487" ph=" 设置企业会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="11533:12965" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="12550:12891" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12580:12758" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12975:13139" ph=" 设置个人会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="13184:13761" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13423:13690" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13453:13558" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13770:13842" ph=" 获取会员信息（个人和企业） ..." />
-            <marker date="1511779642386" expanded="true" signature="13887:14212" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13917:14141" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13947:14009" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="14222:14277" ph=" 查询卡bin ..." />
-            <marker date="1511779642386" expanded="true" signature="14323:15542" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="15142:15487" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15495:15534" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15552:16062" ph=" 请求绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="16111:18924" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="17666:17784" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="17792:17849" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18445:18869" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18877:18916" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18933:19167" ph=" 确认绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="19211:20504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="20411:20449" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20457:20496" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20514:20683" ph=" 设置安全卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="20726:21705" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="21610:21648" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21656:21697" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21714:21832" ph=" 查询绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="21877:22740" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="22647:22685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22693:22732" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22749:22849" ph=" 解绑绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="22895:23821" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="23675:23766" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23774:23813" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23831:24040" ph=" 更改绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="24087:24769" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24265:24698" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24295:24564" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24778:24841" ph=" 锁定用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="24883:25205" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24913:25134" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24943:25005" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25214:25277" ph=" 解锁用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="25321:25645" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="25351:25574" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25381:25443" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25654:26352" ph=" 充值申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="26396:29504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="27412:27654" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="27696:28021" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29024:29450" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29211:29410" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29458:29497" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29513:30380" ph=" 提现申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="30425:32406" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="32293:32332" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32340:32398" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32416:33113" ph=" 消费申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="33157:36307" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="34156:34381" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="34423:34672" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35016:35685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35804:36234" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35991:36224" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36242:36300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36316:37305" ph=" 代收申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="37354:40475" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="38617:38824" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="38885:39117" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="39484:40276" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="40485:41204" ph=" 单笔代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="41250:44308" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="42255:42504" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42512:42553" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42659:42990" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42998:43298" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="43561:44137" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="44317:44619" ph=" 批量代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="44665:46474" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="46088:46300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="46483:46996" ph=" 强实名认证 ..." />
-            <marker date="1511779642386" expanded="true" signature="47047:48117" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="47363:48045" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="47393:47908" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="48127:48397" ph=" 确认支付（后台支付&amp;前台支付） ..." />
-            <marker date="1511779642386" expanded="true" signature="48432:49774" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="49214:49264" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49272:49308" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49439:49657" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49783:50173" ph=" 商品录入 ..." />
-            <marker date="1511779642386" expanded="true" signature="50215:52445" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="51994:52282" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="52454:52824" ph=" 查询、修改商品 ..." />
-            <marker date="1511779642386" expanded="true" signature="52872:53988" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="53617:53819" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="53997:54160" ph=" 冻结金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="54203:55245" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="54910:55081" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="55254:55439" ph=" 解冻金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="55484:56523" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="56187:56358" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="56532:57085" ph=" 退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="57123:58703" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="58172:58545" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="58712:58970" ph=" 流标专用退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="59018:60470" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="60123:60302" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="60479:60764" ph=" 平台转账 ..." />
-            <marker date="1511779642386" expanded="true" signature="60815:61683" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61083:61611" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61113:61474" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61692:61791" ph=" 查询余额 ..." />
-            <marker date="1511779642386" expanded="true" signature="61835:62243" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61899:62171" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61929:62041" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62252:62350" ph=" 查询订单状态 ..." />
-            <marker date="1511779642386" expanded="true" signature="62396:62798" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="62456:62726" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62486:62594" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62807:62908" ph=" 查询订单支付详情 ..." />
-            <marker date="1511779642386" expanded="true" signature="62959:63364" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="63017:63292" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63047:63155" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63374:63770" ph=" 查询账户收支明细 ..." />
-            <marker date="1511779642386" expanded="true" signature="63818:64563" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64041:64491" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64071:64357" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64598:65384" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64980:65314" ph="//..." />
-            <marker date="1511779642386" expanded="true" signature="65393:65459" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="65486:65757" ph="{...}" />
+            <marker date="1511855762678" expanded="true" signature="5714:9680" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1314,149 +332,7 @@
         <state relative-caret-position="12220">
           <caret line="470" column="43" lean-forward="true" selection-start-line="469" selection-start-column="7" selection-end-line="470" selection-end-column="43" />
           <folding>
-            <marker date="1511779642386" expanded="true" signature="5714:9693" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="6722:6760" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="6768:9686" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="9703:9831" ph=" 绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="9872:10968" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="10749:10787" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10832:10914" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10922:10961" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10978:11487" ph=" 设置企业会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="11533:12965" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="12550:12891" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12580:12758" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12975:13139" ph=" 设置个人会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="13184:13761" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13423:13690" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13453:13558" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13770:13842" ph=" 获取会员信息（个人和企业） ..." />
-            <marker date="1511779642386" expanded="true" signature="13887:14212" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13917:14141" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13947:14009" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="14222:14277" ph=" 查询卡bin ..." />
-            <marker date="1511779642386" expanded="true" signature="14323:15542" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="15142:15487" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15495:15534" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15552:16062" ph=" 请求绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="16111:18924" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="17666:17784" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="17792:17849" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18445:18869" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18877:18916" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18933:19167" ph=" 确认绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="19211:20504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="20411:20449" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20457:20496" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20514:20683" ph=" 设置安全卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="20726:21705" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="21610:21648" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21656:21697" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21714:21832" ph=" 查询绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="21877:22740" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="22647:22685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22693:22732" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22749:22849" ph=" 解绑绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="22895:23821" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="23675:23766" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23774:23813" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23831:24040" ph=" 更改绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="24087:24769" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24265:24698" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24295:24564" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24778:24841" ph=" 锁定用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="24883:25205" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24913:25134" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24943:25005" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25214:25277" ph=" 解锁用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="25321:25645" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="25351:25574" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25381:25443" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25654:26352" ph=" 充值申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="26396:29504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="27412:27654" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="27696:28021" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29024:29450" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29211:29410" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29458:29497" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29513:30380" ph=" 提现申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="30425:32406" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="32293:32332" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32340:32398" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32416:33113" ph=" 消费申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="33157:36307" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="34156:34381" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="34423:34672" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35016:35685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35804:36234" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35991:36224" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36242:36300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36316:37305" ph=" 代收申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="37354:40475" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="38617:38824" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="38885:39117" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="39484:40276" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="40485:41204" ph=" 单笔代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="41250:44308" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="42255:42504" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42512:42553" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42659:42990" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42998:43298" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="43561:44137" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="44317:44619" ph=" 批量代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="44665:46474" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="46088:46300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="46483:46996" ph=" 强实名认证 ..." />
-            <marker date="1511779642386" expanded="true" signature="47047:48117" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="47363:48045" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="47393:47908" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="48127:48397" ph=" 确认支付（后台支付&amp;前台支付） ..." />
-            <marker date="1511779642386" expanded="true" signature="48432:49774" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="49214:49264" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49272:49308" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49439:49657" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49783:50173" ph=" 商品录入 ..." />
-            <marker date="1511779642386" expanded="true" signature="50215:52445" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="51994:52282" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="52454:52824" ph=" 查询、修改商品 ..." />
-            <marker date="1511779642386" expanded="true" signature="52872:53988" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="53617:53819" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="53997:54160" ph=" 冻结金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="54203:55245" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="54910:55081" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="55254:55439" ph=" 解冻金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="55484:56523" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="56187:56358" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="56532:57085" ph=" 退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="57123:58703" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="58172:58545" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="58712:58970" ph=" 流标专用退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="59018:60470" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="60123:60302" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="60479:60764" ph=" 平台转账 ..." />
-            <marker date="1511779642386" expanded="true" signature="60815:61683" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61083:61611" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61113:61474" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61692:61791" ph=" 查询余额 ..." />
-            <marker date="1511779642386" expanded="true" signature="61835:62243" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61899:62171" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61929:62041" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62252:62350" ph=" 查询订单状态 ..." />
-            <marker date="1511779642386" expanded="true" signature="62396:62798" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="62456:62726" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62486:62594" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62807:62908" ph=" 查询订单支付详情 ..." />
-            <marker date="1511779642386" expanded="true" signature="62959:63364" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="63017:63292" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63047:63155" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63374:63770" ph=" 查询账户收支明细 ..." />
-            <marker date="1511779642386" expanded="true" signature="63818:64563" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64041:64491" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64071:64357" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64598:65384" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64980:65314" ph="//..." />
-            <marker date="1511779642386" expanded="true" signature="65393:65459" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="65486:65757" ph="{...}" />
+            <marker date="1511855762678" expanded="true" signature="5714:9680" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1465,7 +341,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="561">
           <caret line="33" column="5" lean-forward="false" selection-start-line="33" selection-start-column="5" selection-end-line="33" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1473,7 +348,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="858">
           <caret line="33" column="5" lean-forward="true" selection-start-line="33" selection-start-column="5" selection-end-line="33" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1481,7 +355,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1636,7 +509,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="130">
           <caret line="5" column="24" lean-forward="true" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1644,7 +516,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-546">
           <caret line="6" column="24" lean-forward="true" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1659,7 +530,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="130">
           <caret line="5" column="24" lean-forward="false" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1667,7 +537,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="416">
           <caret line="43" column="11" lean-forward="true" selection-start-line="43" selection-start-column="11" selection-end-line="43" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1675,7 +544,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-53">
           <caret line="9" column="35" lean-forward="true" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1690,7 +558,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-57">
           <caret line="33" column="5" lean-forward="false" selection-start-line="33" selection-start-column="5" selection-end-line="33" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1698,7 +565,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-910">
           <caret line="13" column="14" lean-forward="false" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1706,7 +572,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="546">
           <caret line="25" column="9" lean-forward="true" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1742,7 +607,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-10686">
           <caret line="108" column="8" lean-forward="true" selection-start-line="108" selection-start-column="8" selection-end-line="108" selection-end-column="51" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1764,189 +628,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/v1.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="189" column="34" lean-forward="false" selection-start-line="189" selection-start-column="9" selection-end-line="189" selection-end-column="34" />
+        <state relative-caret-position="848">
+          <caret line="195" column="27" lean-forward="false" selection-start-line="195" selection-start-column="9" selection-end-line="195" selection-end-column="27" />
           <folding>
-            <marker date="1511779642379" expanded="true" signature="11:20" ph=" 手机版 ..." />
-            <marker date="1511779642379" expanded="true" signature="62:15745" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="251:11944" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="12033:12782" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="12077:12727" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="12208:12593" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="12257:12314" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="12320:12579" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="12617:12717" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="12735:12776" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="12823:13315" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="13082:13141" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="13251:13309" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="13376:14093" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="13509:13611" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="13619:13661" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="13773:14086" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="13873:13886" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="14163:15242" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="14270:15162" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="14407:15064" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="14642:14951" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="14959:15050" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="15072:15152" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="15170:15236" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="15291:15366" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="15319:15360" ph="..." />
-            <marker date="1511779642379" expanded="true" signature="15425:15742" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="11:20" ph=" 手机版 ..." />
+            <marker date="1511855406740" expanded="true" signature="62:16079" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="251:12278" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="12367:13116" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="12411:13061" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="12542:12927" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="12591:12648" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="12654:12913" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="12951:13051" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="13069:13110" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="13157:13649" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="13416:13475" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="13585:13643" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="13710:14427" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="13843:13945" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="13953:13995" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="14107:14420" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="14207:14220" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="14497:15576" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="14604:15496" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="14741:15398" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="14976:15285" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="15293:15384" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="15406:15486" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="15504:15570" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="15625:15700" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="15653:15694" ph="..." />
+            <marker date="1511855406740" expanded="true" signature="15759:16076" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="713">
-          <caret line="1599" column="34" lean-forward="true" selection-start-line="1599" selection-start-column="34" selection-end-line="1599" selection-end-column="34" />
+        <state relative-caret-position="409">
+          <caret line="1775" column="36" lean-forward="false" selection-start-line="1775" selection-start-column="36" selection-end-line="1775" selection-end-column="36" />
           <folding>
-            <marker date="1511779642386" expanded="true" signature="5714:9693" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="6722:6760" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="6768:9686" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="9703:9831" ph=" 绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="9872:10968" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="10749:10787" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10832:10914" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10922:10961" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="10978:11487" ph=" 设置企业会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="11533:12965" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="12550:12891" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12580:12758" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="12975:13139" ph=" 设置个人会员信息 ..." />
-            <marker date="1511779642386" expanded="true" signature="13184:13761" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13423:13690" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13453:13558" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13770:13842" ph=" 获取会员信息（个人和企业） ..." />
-            <marker date="1511779642386" expanded="true" signature="13887:14212" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="13917:14141" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="13947:14009" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="14222:14277" ph=" 查询卡bin ..." />
-            <marker date="1511779642386" expanded="true" signature="14323:15542" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="15142:15487" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15495:15534" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="15552:16062" ph=" 请求绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="16111:18924" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="17666:17784" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="17792:17849" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18445:18869" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18877:18916" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="18933:19167" ph=" 确认绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="19211:20504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="20411:20449" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20457:20496" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="20514:20683" ph=" 设置安全卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="20726:21705" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="21610:21648" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21656:21697" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="21714:21832" ph=" 查询绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="21877:22740" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="22647:22685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22693:22732" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="22749:22849" ph=" 解绑绑定银行卡 ..." />
-            <marker date="1511779642386" expanded="true" signature="22895:23821" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="23675:23766" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23774:23813" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="23831:24040" ph=" 更改绑定手机 ..." />
-            <marker date="1511779642386" expanded="true" signature="24087:24769" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24265:24698" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24295:24564" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24778:24841" ph=" 锁定用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="24883:25205" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="24913:25134" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="24943:25005" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25214:25277" ph=" 解锁用户 ..." />
-            <marker date="1511779642386" expanded="true" signature="25321:25645" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="25351:25574" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25381:25443" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="25654:26352" ph=" 充值申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="26396:29504" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="27412:27654" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="27696:28021" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29024:29450" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29211:29410" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29458:29497" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="29513:30380" ph=" 提现申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="30425:32406" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="32293:32332" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32340:32398" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="32416:33113" ph=" 消费申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="33157:36307" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="34156:34381" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="34423:34672" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35016:35685" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35804:36234" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="35991:36224" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36242:36300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="36316:37305" ph=" 代收申请 ..." />
-            <marker date="1511779642386" expanded="true" signature="37354:40475" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="38617:38824" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="38885:39117" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="39484:40276" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="40485:41204" ph=" 单笔代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="41250:44308" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="42255:42504" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42512:42553" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42659:42990" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="42998:43298" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="43561:44137" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="44317:44619" ph=" 批量代付 ..." />
-            <marker date="1511779642386" expanded="true" signature="44665:46474" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="46088:46300" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="46483:46996" ph=" 强实名认证 ..." />
-            <marker date="1511779642386" expanded="true" signature="47047:48117" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="47363:48045" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="47393:47908" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="48127:48397" ph=" 确认支付（后台支付&amp;前台支付） ..." />
-            <marker date="1511779642386" expanded="true" signature="48432:49774" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="49214:49264" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49272:49308" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49439:49657" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="49783:50173" ph=" 商品录入 ..." />
-            <marker date="1511779642386" expanded="true" signature="50215:52445" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="51994:52282" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="52454:52824" ph=" 查询、修改商品 ..." />
-            <marker date="1511779642386" expanded="true" signature="52872:53988" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="53617:53819" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="53997:54160" ph=" 冻结金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="54203:55245" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="54910:55081" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="55254:55439" ph=" 解冻金额 ..." />
-            <marker date="1511779642386" expanded="true" signature="55484:56523" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="56187:56358" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="56532:57085" ph=" 退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="57123:58703" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="58172:58545" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="58712:58970" ph=" 流标专用退款 ..." />
-            <marker date="1511779642386" expanded="true" signature="59018:60470" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="60123:60302" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="60479:60764" ph=" 平台转账 ..." />
-            <marker date="1511779642386" expanded="true" signature="60815:61683" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61083:61611" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61113:61474" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61692:61791" ph=" 查询余额 ..." />
-            <marker date="1511779642386" expanded="true" signature="61835:62243" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="61899:62171" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="61929:62041" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62252:62350" ph=" 查询订单状态 ..." />
-            <marker date="1511779642386" expanded="true" signature="62396:62798" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="62456:62726" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62486:62594" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="62807:62908" ph=" 查询订单支付详情 ..." />
-            <marker date="1511779642386" expanded="true" signature="62959:63364" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="63017:63292" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63047:63155" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="63374:63770" ph=" 查询账户收支明细 ..." />
-            <marker date="1511779642386" expanded="true" signature="63818:64563" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64041:64491" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64071:64357" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="64598:65384" ph="{...}" />
-            <marker date="1511779642386" expanded="true" signature="64980:65314" ph="//..." />
-            <marker date="1511779642386" expanded="true" signature="65393:65459" ph="..." />
-            <marker date="1511779642386" expanded="true" signature="65486:65757" ph="{...}" />
+            <marker date="1511855762678" expanded="true" signature="5714:9680" ph="{...}" />
           </folding>
         </state>
       </provider>
