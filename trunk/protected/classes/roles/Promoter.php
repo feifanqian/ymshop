@@ -198,7 +198,7 @@ class Promoter extends Object {
     public function applyDoSettle($data) {//提交结算申请
         $count = $this->model->table('district_withdraw')->where('role_id=' . $this->user_id . " and status=0 and role_type in (1,2)")->count();
         if ($count > 0) {
-            return array('status' => 'fail', 'msg' => '抱歉！您还有未处理完的提现请求，请等待系统处理完成后再提交', 'msg_code' => 1137);
+            return array('status' => 'fail', 'msg' => '抱歉！您还有未处理完的提现请求，请等待系统处理完成后再提交', 'msg_code' => 1165);
         }
         if(!$this->can_withdraw){
              return array('status' => 'fail', 'msg' => '抱歉！您是官方推广员，不能申请提现哦', 'msg_code' => 1152);
