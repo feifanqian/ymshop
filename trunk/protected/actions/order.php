@@ -720,4 +720,8 @@ class OrderAction extends Controller {
       }
     }
 
+    public function offlineorder_list(){
+        $this->model->table('order_offline')->where('user_id='.$uid)->findAll();
+    }
+
 }
