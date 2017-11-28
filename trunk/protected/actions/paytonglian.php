@@ -306,47 +306,52 @@ class PaytonglianAction extends Controller
      * 设置企业会员信息
      * @param $bizUserId 商户系统用户标识，商户 系统中唯一编号
      * @param $companyBasicInfo  企业基本信息   companyName企业名称      companyAddress企业地址      businessLicense营业执照号       organizationCode组织机构代码
-     *                                    telephone联系电话      legalName法人姓名       identityType法人证件类型        legalIds法人证件号码(RSA加密)
-     *                                    legalPhone法人手机号码           accountNo企业对公账户账号(RSA加密)       parentBankName开户银行名称
+     * telephone联系电话      legalName法人姓名       identityType法人证件类型        legalIds法人证件号码(RSA加密)
+     *  legalPhone法人手机号码           accountNo企业对公账户账号(RSA加密)       parentBankName开户银行名称
      * @param $companyExtendInfo   企业扩展信息       目前不需要传
      */
 
     public function actionSetCompanyInfo()
     {
+        //签名时间戳
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
 
-
+        //请求的参数
         $companyBasicInfo = new stdClass();
-        $companyBasicInfo->companyName = '龙头企业';//企业名称
-        $companyBasicInfo->companyAddress = '龙头企业地址';//企业地址
-        $companyBasicInfo->businessLicense = '24561CXv315';//营业执照号
-        $companyBasicInfo->organizationCode = '32121132';//组织机构代码
-        $companyBasicInfo->telephone = '15821953549';//联系电话
-        $companyBasicInfo->legalName = '白鸽';//法人姓名
-        $companyBasicInfo->identityType = 1;//法人证件类型
-        $companyBasicInfo->legalIds = $this->rsa('330227198805284412');//法人证件号码(RSA加密)
+        $companyBasicInfo->companyName = Req::args('companyName');//企业名称
+        $companyBasicInfo->companyAddress = Req::args('companyAddress');//企业地址
+        $companyBasicInfo->businessLicense = Req::args('businessLicense');//营业执照号
+        $companyBasicInfo->organizationCode = Req::args('organizationCode');//组织机构代码
+        $companyBasicInfo->telephone = Req::args('telephone');//联系电话
+        $companyBasicInfo->legalName = Req::args('legalName');//法人姓名
+        $companyBasicInfo->identityType = Filter::int(Req::args('identityType'));//法人证件类型
+        $companyBasicInfo->legalIds = $this->rsaEncrypt(Req::args('legalIds'), $publicKey, $privateKey);//法人证件号码(RSA加密)
+        $companyBasicInfo->legalPhone = Req::args('legalPhone');//法人手机号码
+        $companyBasicInfo->accountNo = $this->rsaEncrypt(Req::args('accountNo'), $publicKey, $privateKey);//企业对公账户账号(RSA加密)
+        $companyBasicInfo->parentBankName = Req::args('parentBankName');//'开户银行名称';
+        $companyBasicInfo->bankCityNo = Req::args('bankCityNo');//'开户银行名称'
+        $companyBasicInfo->bankName = Req::args('bankName');//'开户银行名称'
+        $companyBasicInfo->parentBankName = Req::args('parentBankName');//'开户银行名称'
 
-        $companyBasicInfo->legalPhone = '15821953549';//法人手机号码
-        $companyBasicInfo->accountNo = $this->rsa('330227198805284412');//企业对公账户账号(RSA加密)
-        $companyBasicInfo->parentBankName = '中国银行';//'开户银行名称';
-        $companyBasicInfo->bankCityNo = '777777';//'开户银行名称'
-        $companyBasicInfo->bankName = '宁波支行';//'开户银行名称'
-        $companyBasicInfo->parentBankName = '龙头企业银行';//'开户银行名称'
-
-
-        $companyExtendInfo = new stdClass();
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-                'companyBasicInfo' => $companyBasicInfo,
-                'companyExtendInfo' => $companyExtendInfo,
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('setCompanyInfo')    //调用方法
+        $bizUserId = Req::args('bizUserId');
+        $backUrl = Req::args('backUrl');
+        $companyExtendInfo = new stdClass(); //扩展参数
+        $param = array(
+            'bizUserId' => $bizUserId,
+            'backUrl' => $backUrl,
+            'companyBasicInfo' => $companyBasicInfo,
+            'companyExtendInfo' => $companyExtendInfo,
         );
-
-
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('MemberService', 'setCompanyInfo', $param);
+        print_r($result);
+        die();
 
     }
 
@@ -359,24 +364,30 @@ class PaytonglianAction extends Controller
 
     public function actionSetMemberInfo()
     {
-
+        //签名时间戳
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //参数
         $userInfo = new stdClass();
-        $userInfo->name = '白鸽';
-        $userInfo->country = '中国';
-        $userInfo->province = '江苏省';
-        $userInfo->area = '南京市';
-        $userInfo->address = '解放路';
-
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-                'userInfo' => $userInfo,//
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('setMemberInfo')    //调用方法
+        $userInfo->name = Req::args('name');
+        $userInfo->country = Req::args('country');
+        $userInfo->province = Req::args('province');
+        $userInfo->area = Req::args('area');
+        $userInfo->address = Req::args('address');
+        $bizUserId = Req::args('bizUserId');
+        $param = array(
+            'bizUserId' => $bizUserId,
+            'userInfo' => $userInfo,//个人基本信息
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('MemberService', 'setMemberInfo', $param);
+        print_r($result);
+        die();
     }
 
     /**
@@ -386,17 +397,23 @@ class PaytonglianAction extends Controller
 
     public function actionGetMemberInfo()
     {
-
-
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-            ),
-            'service' => urlencode('MemberService'), //服务对象
-            'method' => urlencode('getMemberInfo')    //调用方法
+        //签名时间戳
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //请求参数
+        $bizUserId = Req::args('bizUserId');
+        $param = array(
+            'bizUserId' => $bizUserId,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('MemberService', 'getMemberInfo', $param);
+        print_r($result);
+        die();
     }
 
 
