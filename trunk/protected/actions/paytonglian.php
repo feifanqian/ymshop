@@ -1782,6 +1782,58 @@ class PaytonglianAction extends Controller
 
     }
 
+    /* 其他辅助类接口
+     * 通联通头寸查询
+     * @param sysid 分配的系统编号 String
+     * */
+    public function actionTlSearch()
+    {
+        //验证参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //请求参数
+        $sysid = Req::args('sysid');
+        $param = array(
+            'sysid' => $sysid,
+        );
+        $result = $client->request('MerchantService', 'queryReserveFundBalance', $param);
+        print_r(json_encode($param));
+        print_r($result);
+        die();
+    }
+
+    /*
+     * 平台集合对账下载
+     * @param date 对账文件日期 String yyyyMMdd
+     * */
+    public function platformDownload()
+    {
+        //验证参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //请求参数
+        $date = Req::args('date');
+        $param = array(
+            'date' => $date,
+        );
+        $result = $client->request('MerchantService', 'getCheckAccountFile', $param);
+        print_r(json_encode($param));
+        print_r($result);
+        die();
+    }
+
 
     function sendgate($req = '')
     {
@@ -1813,17 +1865,13 @@ class PaytonglianAction extends Controller
      */
     function sign($data)
     {
-
-
         $priKey = file_get_contents(ICLOD_CERT_PATH);
         $res = openssl_get_privatekey($priKey);
         openssl_sign($data, $sign, $res);
         openssl_free_key($res);
         //base64编码
         $sign = base64_encode($sign);
-
         return $sign;
-
     }
 
     /*
@@ -1835,7 +1883,6 @@ class PaytonglianAction extends Controller
     function curl_post($data = null)
     {
         //Log::write("allinpay".$data);
-
         file_put_contents(dirname(__FILE__) . '/log' . date('ymd') . '.txt', $data . "#\r\n", FILE_APPEND);;
         $ch = curl_init();// 启动一个CURL会话
         curl_setopt($ch, CURLOPT_URL, ICLOD_Server_URL);// 要访问的地址
@@ -1879,7 +1926,6 @@ class PaytonglianAction extends Controller
         $res = openssl_get_publickey($publickey);
         $result = (bool)openssl_verify($data['signedValue'], base64_decode($data['sign']), $res);
         openssl_free_key($res);
-
         return $result;
     }
 
