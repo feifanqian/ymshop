@@ -734,6 +734,13 @@ class OrderAction extends Controller {
         }elseif($type==2){
             $list = $this->model->table('order_offline')->where('shop_ids='.$this->user['id'])->order('id desc')->findPage($page,10);
         }
+        if($list){
+            foreach($list['data'] as $k => $v){
+                $user = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.nickname')->where('c.user_id='.$v['shop_ids'])->find();
+                $v['shop_name'] = $user['real_name']!=''?$user['real_name']:$user['nickname'];
+            }
+            unset($list['html']);
+        }
         $this->code = 0;
         $this->content = $list;
     }
