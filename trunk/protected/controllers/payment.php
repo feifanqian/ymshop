@@ -579,7 +579,22 @@ class PaymentController extends Controller {
            $url = AppConfig::APIURL . "/pay";
            
            if($user_id==42608){
-                var_dump($params);die;
+                $array=array(
+                 'cusid'=>AppConfig::CUSID,
+                 'appid'=>AppConfig::APPID,
+                 'version'=>AppConfig::APIVERSION,
+                 'trxamt'=>$order_amount*100,
+                 'reqsn'=>$order_no,
+                 'paytype'=>"W02",
+                 'randomstr'=>$randomstr,
+                 'body'=>"商品名称",
+                 'remark'=>"备注信息",
+                 'acct'=>$open['open_id'],
+                 'notify_url'=>'http://www.ymlypt.com/payment/async_callbacks',
+                 'sign'=>$params["sign"]
+                );
+            var_dump($this->arrayXml->toXmlGBK($array,'AIPG'));
+            die();
            }
            $rsp = AppUtil::Request($url, $paramsStr);
            
