@@ -283,7 +283,24 @@ class PaymentAction extends Controller {
        if($invite){
            $invite_id=intval($invite['user_id']);//邀请人用户id
        }else{
-           $invite_id=1;
+           if($payment_id==7 || $payment_id==16){
+            $from = 'android';
+           }else{
+            $from = 'IOS';
+           }
+           $district = $this->model->table('invite')->where('invite_user_id='.$seller_id)->find();
+           if($district){
+                $district_id = $district['district_id'];
+            }else{
+                $district_id = 1;
+            }
+           //添加邀请关系
+           $data['user_id'] = $seller_id;
+           $data['invite_user_id'] = $user_id;
+           $data['from'] = $from;
+           $data['district_id'] = $district_id;
+           $this->model->table('invite')->data($data)->insert();
+           $invite_id=$seller_id;
        }
        
        $user=$this->model->table('customer')->fields('mobile,real_name')->where('user_id='.$user_id)->find();
