@@ -177,10 +177,11 @@ class CustomerController extends Controller {
         $res1 = $model->table('balance_withdraw')->data(array('status'=>3))->where('id='.$id)->update();
         if($withdraw['type']==0){
             $res2 = $model->table('customer')->data(array('balance' => "`balance`+" . $withdraw['amount']))->where('user_id=' . $withdraw['user_id'])->update();
+            Log::balance($withdraw['amount'], $withdraw['user_id'],$withdraw['withdraw_no'],"余额提现失败退回", 12, $this->manager['id']);
         }elseif($withdraw['type']==1){
             $res2 = $model->table('customer')->data(array('offline_balance' => "`offline_balance`+" . $withdraw['amount']))->where('user_id=' . $withdraw['user_id'])->update();
+            Log::balance($withdraw['amount'], $withdraw['user_id'],$withdraw['withdraw_no'],"商家余额提现失败退回", 13, $this->manager['id']);
         }
-        Log::balance($withdraw['amount'], $withdraw['user_id'],$withdraw['withdraw_no'],"余额提现失败退回", 3, $this->manager['id']);
         exit(json_encode(array('status'=>'success','msg'=>'退回成功')));   
     }
     public function df_balance_query(){
