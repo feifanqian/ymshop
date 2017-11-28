@@ -134,10 +134,16 @@ class UcenterAction extends Controller {
 
     //读取个人信息
     public function info() {
+        $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+        $shop = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
+        if($promoter || $shop){
+            $is_business = 1;
+        }else{
+            $is_business = 0;
+        }
         $this->code = 0;
-        $this->content = array(
-            'userinfo' => $this->user
-        );
+        $this->content['userinfo'] = $this->user;
+        $this->content['userinfo']['is_business'] = $is_business;
     }
 
     //设置昵称
