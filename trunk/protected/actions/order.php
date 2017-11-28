@@ -720,4 +720,29 @@ class OrderAction extends Controller {
       }
     }
 
+    public function offlineorder_list(){
+        $type = Filter::int(Req::args('type'));
+        if(!$type){
+            $type = 1;
+        }
+        $page = Filter::int(Req::args('page'));
+        if(!$page){
+            $page = 1;
+        }
+        if($type==1){
+            $list = $this->model->table('order_offline')->where('user_id='.$this->user['id'])->order('id desc')->findPage($page,10);
+        }elseif($type==2){
+            $list = $this->model->table('order_offline')->where('shop_ids='.$this->user['id'])->order('id desc')->findPage($page,10);
+        }
+        if($list){
+            foreach($list['data'] as $k => $v){
+                $user = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.nickname')->where('c.user_id='.$v['shop_ids'])->find();
+                $v['shop_name'] = $user['real_name']!=''?$user['real_name']:$user['nickname'];
+            }
+            unset($list['html']);
+        }
+        $this->code = 0;
+        $this->content = $list;
+    }
+
 }

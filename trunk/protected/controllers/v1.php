@@ -48,6 +48,7 @@ class V1Controller extends Controller {
         'goods_add' => array('goods/add', 1,1), //直接购买
         //TODO tian
         "order" => array("ucenter/order", 1,1), //查询订单
+        "offline_order" => array("order/offlineorder_list",1,1), //线下订单
         "order_detail" => array("ucenter/order_detail", 1,1), //查询单个订单的详情 
         "order_sign" => array("ucenter/order_sign", 1,1), //签收订单
         "order_express_detail" => array("ucenter/order_express_detail", 1,1), //查询订单分包
