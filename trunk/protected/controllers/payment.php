@@ -577,7 +577,9 @@ class PaymentController extends Controller {
            $paramsStr = AppUtil::ToUrlParams($params);
            $url = AppConfig::APIURL . "/pay";
            $rsp = AppUtil::Request($url, $paramsStr);
-
+           if($user_id==50421){
+             var_dump($rsp);die;
+           }
            $rspArray = json_decode($rsp, true);
            if(AppUtil::ValidSigns($rspArray)){
                $this->assign('jsApiParameters',$rspArray['payinfo']);
