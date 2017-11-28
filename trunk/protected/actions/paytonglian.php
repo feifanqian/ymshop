@@ -206,22 +206,22 @@ class PaytonglianAction extends Controller
 
     public function realNameVerify()
     {
-        $user = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
-        if(!$user){
+        $user = $this->model->table('customer')->fields('realname_verified')->where('user_id=' . $this->user['id'])->find();
+        if (!$user) {
             $this->code = 1159;
             return;
         }
-        if($user['realname_verified']==1){
-           $this->code = 1164;
-           return;
+        if ($user['realname_verified'] == 1) {
+            $this->code = 1164;
+            return;
         }
-        
+
         $name = Req::args('name');
-        $bizUserId = date('YmdHis').$this->user['id'];
+        $bizUserId = date('YmdHis') . $this->user['id'];
 
         $identityType = Req::args('identityType');
         $identityNo = Req::args('identityNo');
-        
+
         $memberType = 3;
         $source = 1;
 
@@ -237,8 +237,8 @@ class PaytonglianAction extends Controller
         $param["bizUserId"] = $bizUserId;
         $param["memberType"] = $memberType;    //会员类型
         $param["source"] = $source;        //访问终端类型
-        $result1 = $client->request("MemberService", "createMember", $param);      
-        
+        $result1 = $client->request("MemberService", "createMember", $param);
+
         // $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         // $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
 
@@ -254,11 +254,11 @@ class PaytonglianAction extends Controller
         $params["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);
         $result2 = $client->request("MemberService", "setRealName", $params);
         if ($result1['status'] == 'OK' && $result2['status'] == 'OK') {
-            $this->model->table('customer')->data(array('realname_verified'=>1))->where('user_id='.$this->user['id'])->update();
+            $this->model->table('customer')->data(array('realname_verified' => 1))->where('user_id=' . $this->user['id'])->update();
             $this->code = 0;
             $this->content['verified'] = 1;
             $this->content['bizUserId'] = $bizUserId;
-            $this->content['extends'] = array_merge($result1,$result2);
+            $this->content['extends'] = array_merge($result1, $result2);
         } else {
             print_r($result);
             $this->code = 1163;
@@ -1620,30 +1620,35 @@ class PaytonglianAction extends Controller
 
     public function actionApplicationTransfer()
     {
+        //验证参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
 
-        $bizTransferNo = '35154451';
-        $sourceAccountSetNo = '2000000';
-        $targetBizUserId = '3000001';
-        $targetAccountSetNo = '5000001';
-        $amount = 350;    //只能为整型
-        $remark = '';
-        $extendInfo = '';
-        $req = array(
-            'param' => array(
-                'bizTransferNo' => $bizTransferNo,
-                'sourceAccountSetNo' => $sourceAccountSetNo,
-                'targetBizUserId' => $targetBizUserId,
-                'targetAccountSetNo' => $targetAccountSetNo,
-                'amount' => $amount,
-                'remark' => $remark,
-                'extendInfo' => $extendInfo,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('applicationTransfer')    //调用方法
+        //传递的参数
+        $bizTransferNo = Req::args('bizTransferNo');
+        $sourceAccountSetNo = Req::args('sourceAccountSetNo');
+        $targetBizUserId = Req::args('targetBizUserId');
+        $targetAccountSetNo = Req::args('targetAccountSetNo');
+        $amount = Filter::int(Req::args('amount'));//只能为整型
+        $remark = Req::args('remark');
+        $param = array(
+            'bizTransferNo' => $bizTransferNo,
+            'sourceAccountSetNo' => $sourceAccountSetNo,
+            'targetBizUserId' => $targetBizUserId,
+            'targetAccountSetNo' => $targetAccountSetNo,
+            'amount' => $amount,
+            'remark' => $remark,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService', 'applicationTransfer', $param);
+        print_r(json_encode($param));
+        print_r($result);
+        die();
 
     }
 
@@ -1655,21 +1660,26 @@ class PaytonglianAction extends Controller
 
     public function actionQueryBalance()
     {
-
-
-        $accountSetNo = '322236';
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-                'accountSetNo' => $accountSetNo,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('queryBalance')    //调用方法
+        //验证参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //参数
+        $bizUserId = Req::args('bizUserId');
+        $accountSetNo = Req::args('accountSetNo');
+        $param = array(
+            'bizUserId' => $bizUserId,
+            'accountSetNo' => $accountSetNo,
         );
-        $result = $this->sendgate($req);
-        echo $result;
-
+        $result = $client->request('OrderService', 'queryBalance', $param);
+        print_r(json_encode($param));
+        print_r($result);
+        die();
     }
 
     /**
@@ -1680,20 +1690,26 @@ class PaytonglianAction extends Controller
 
     public function actionGetOrderDetail()
     {
-
-
-        $bizOrderNo = '2331';
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-                'bizOrderNo' => $bizOrderNo,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('getOrderDetail')    //调用方法
+        //验证参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //参数
+        $bizUserId = Req::args('bizUserId');
+        $bizOrderNo = Req::args('bizOrderNo');
+        $param = array(
+            'bizUserId' => $bizUserId,
+            'bizOrderNo' => $bizOrderNo,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService', 'getOrderDetail', $param);
+        print_r(json_encode($param));
+        print_r($result);
+        die();
 
     }
 
@@ -1735,28 +1751,34 @@ class PaytonglianAction extends Controller
 
     public function actionQueryInExpDetail()
     {
-
-
-        $accountSetNo = '6533515';
-        $dateStart = '2015-12-04 14:08:09';
-        $dateEnd = '2015-12-05 14:08:09';
-        $startPosition = 15;  //只能为整型
-        $queryNum = 20;   //只能为整型
-        $req = array(
-            'param' => array(
-                'bizUserId' => $this->bizUserId,
-                'accountSetNo' => $accountSetNo,
-                'dateStart' => $dateStart,
-                'dateEnd' => $dateEnd,
-                'startPosition' => $startPosition,
-                'queryNum' => $queryNum,
-
-            ),
-            'service' => urlencode('OrderService'), //服务对象
-            'method' => urlencode('queryInExpDetail')    //调用方法
+        //验证参数
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        //请求参数
+        $bizUserId = Req::args('bizUserId');
+        $accountSetNo = Req::args('accountSetNo');
+        $dateStart = Req::args('dateStart');
+        $dateEnd = Req::args('dateEnd');
+        $startPosition = Filter::int(Req::args('startPosition'));  //只能为整型
+        $queryNum = Filter::int(Req::args('queryNum'));   //只能为整型
+        $param = array(
+            'bizUserId' => $bizUserId,
+            'accountSetNo' => $accountSetNo,
+            'dateStart' => $dateStart,
+            'dateEnd' => $dateEnd,
+            'startPosition' => $startPosition,
+            'queryNum' => $queryNum,
         );
-        $result = $this->sendgate($req);
-        echo $result;
+        $result = $client->request('OrderService', 'queryInExpDetail', $param);
+        print_r(json_encode($param));
+        print_r($result);
+        die();
 
     }
 
