@@ -578,7 +578,7 @@ class PaymentController extends Controller {
            $paramsStr = AppUtil::ToUrlParams($params);
            $url = AppConfig::APIURL . "/pay";
            if($user_id==42608){
-            var_dump($paramsStr);die;
+            print_r($params);die;
            }
            $rsp = AppUtil::Request($url, $paramsStr);
            
