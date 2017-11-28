@@ -735,7 +735,7 @@ class OrderAction extends Controller {
             $list = $this->model->table('order_offline')->where('shop_ids='.$this->user['id'])->order('id desc')->findPage($page,10);
         }
         $this->code = 0;
-        $this->content['list'] = $list;
+        $this->content = $list;
     }
 
 }
