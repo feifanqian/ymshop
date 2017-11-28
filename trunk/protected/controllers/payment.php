@@ -499,7 +499,7 @@ class PaymentController extends Controller {
     }
 
     public function dopays(){
-       if($this->user['id']!=1776){
+       if($this->user['id']!=80000){
            $payment_id = Filter::int(Req::args('payment_id'));
            $order_no = Req::args('order_no');
            $order_amount = (Req::args('order_amount'));
