@@ -61,6 +61,7 @@ class V1Controller extends Controller {
         "save_info" => array("ucenter/save_info", 1,1), //用户信息保存修改接口
         "huabi" => array("ucenter/huabi", 1,1), //华点信息接口
         "balance_log" => array("ucenter/balance_log", 1,1), //余额的使用记录
+        "offline_balance_log" => array("ucenter/offlinebalance_log", 1,1), //商家余额的使用记录
         "dopay" => array("payment/dopay", 1,1), //发起支付
         "dopays" => array("payment/dopays", 1,1), //发起线下扫码支付
         "pay_qrcode" => array("payment/pay_qrcode",1,1), //收款二维码

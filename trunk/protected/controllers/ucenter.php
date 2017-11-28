@@ -247,7 +247,7 @@ class UcenterController extends Controller {
             $result = $this->model->table('balance_withdraw')->data($data)->insert();
             if ($result) {
                 $this->model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
-                Log::balance(0-$amount, $this->user['id'],$withdraw_no,"余额提现申请", 3, 1);
+                Log::balance(0-$amount, $this->user['id'],$withdraw_no,"商家余额提现申请", 11, 1);
                 exit(json_encode(array('status' => 'success', 'msg' => "申请提交成功")));
             } else {
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));

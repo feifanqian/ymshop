@@ -903,12 +903,56 @@ class UcenterAction extends Controller {
         $where = '';
         switch ($type) {
             case 'in':
-                $where = ' and type in(1,2,4,5,6,7,8)';
+                $where = ' and type in(1,2,4,5,6,7,8,9,10)';
                 break;
             case 'out':
                 $where = ' and type in(0,3)';
                 break;
             case 'all':
+                break;
+            default:
+                break;
+        }
+        //$customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
+        $count = $this->model->query('select count(id) as count from tiny_balance_log where user_id = ' . $this->user['id'] . $where);
+        $page_count = ceil($count[0]['count'] / 10);
+        if ($page_count == 0) {
+            $this->code = 0;
+            $this->content = null;
+            return;
+        }
+
+        $offset = ($page - 1) * 10;
+        if ($offset < 0) {
+            $this->code = 0;
+            $this->content = null;
+            return;
+        }
+        $log = $this->model->query('select * from tiny_balance_log where user_id =' . $this->user['id'] . $where . " order by id desc limit $offset,10");
+        if ($log) {
+            foreach ($log as $k => $v) {
+                $log[$k]['amount'] = $log[$k]['amount'] > 0 ? "+" . $log[$k]['amount'] : $log[$k]['amount'];
+            }
+        }
+
+        $this->code = 0;
+        $this->content = empty($log) ? null : $log;
+    }
+
+    //余额记录
+    public function offlinebalance_log() {
+        $page = Filter::int(Req::args('page'));
+        $type = Filter::str(Req::args('type'));
+        $where = '';
+        switch ($type) {
+            case 'in':
+                $where = ' and type = 8';
+                break;
+            case 'out':
+                $where = ' and type = 11';
+                break;
+            case 'all':
+                $where = ' and type in(8,11)';
                 break;
             default:
                 break;
@@ -1703,11 +1747,60 @@ class UcenterAction extends Controller {
             // exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
         }
     }
+
+    public function offline_balance_withdraw() {
+            Filter::form();
+            $open_name = Filter::str(Req::args('name'));
+            $open_bank = Filter::str(Req::args('bank'));
+            $prov = Filter::str(Req::args('province'));
+            $city = Filter::str(Req::args("city"));
+            $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
+            $amount = Filter::float(Req::args('amount'));
+            $amount = round($amount, 2);
+            $customer = $this->model->table("customer")->where("user_id =".$this->user['id'])->fields('offline_balance')->find();
+            $can_withdraw_amount =$customer?$customer['offline_balance']:0;
+            if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
+                exit(json_encode(array('status' => 'fail', 'msg' => '提现金额超出的账户可提现余额')));
+            }
+            $config = Config::getInstance();
+            $other = $config->get("other");
+            $withdraw_fee_rate = $other['withdraw_fee_rate'];
+            if ($amount < $other['min_withdraw_amount']) {
+                exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
+            }
+            // $isset = $this->model->table("balance_withdraw")->where("user_id =" . $this->user['id'] . " and status =0")->find();
+            // if ($isset) {
+            //     exit(json_encode(array('status' => 'fail', 'msg' => '申请失败，还有未处理完的提现申请')));
+            // }
+            $withdraw_no = "BW" . date("YmdHis") . rand(100, 999);
+            $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0,'type'=>1);
+            $result = $this->model->table('balance_withdraw')->data($data)->insert();
+            if ($result) {
+                $this->model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
+                Log::balance(0-$amount, $this->user['id'],$withdraw_no,"商家余额提现申请", 11, 1);
+                $this->code = 0;
+                $this->content['id'] = $result;
+                $this->content['hand_fee'] = $other['withdraw_fee_rate']*$amount /100;
+                $this->content['bankname'] = $open_bank;
+                $this->content['card_no'] = $card_no;
+                $this->content['amount'] = $amount;
+                $this->content['withdraw_fee_rate'] = round($amount*($withdraw_fee_rate/100),2);
+            } else {
+                $this->code = 1005;
+            }
+        
+    }
     
     //获取我的余额提现记录
     public function getMyGoldWithdrawRecord(){
+        $type = Filter::int(Req::args('page'));
         $page = Filter::int(Req::args('page'));
-        $withdraw_list = $this->model->table("balance_withdraw")->where("user_id = ".$this->user['id'])->order("id desc")->findPage($page,10);
+        if(!$type){
+          $withdraw_list = $this->model->table("balance_withdraw")->where("user_id = ".$this->user['id'])->order("id desc")->findPage($page,10);
+        }else{
+            $withdraw_list = $this->model->table("balance_withdraw")->where("type!=0 and user_id = ".$this->user['id'])->order("id desc")->findPage($page,10);
+        }
+        
         if(isset($withdraw_list['html'])){
             unset($withdraw_list['html']);
         }
