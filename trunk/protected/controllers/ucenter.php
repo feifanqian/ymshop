@@ -1,5 +1,12 @@
 <?php
-
+header("Content-type: text/html; charset=utf-8");
+define('ICLOD_USERID', '100009001000');//商户id
+define('ICLOD_PATH', dirname(__FILE__) . '/100009001000.pem');
+define('ICLOD_CERT_PATH', dirname(__FILE__) . '/private_rsa.pem'); //私钥文件
+define('ICLOD_CERT_PUBLIC_PATH', dirname(__FILE__) . '/public_rsa.pem');//公钥文件
+define('ICLOD_Server_URL', 'http://122.227.225.142:23661/service/soa');  //接口网关
+define('NOTICE_URL', 'http://122.227.225.142:23661/service/soa'); //前台通知地址
+define('BACKURL', 'http://122.227.225.142:23661/service/soa');//后台通知地址
 class UcenterController extends Controller
 {
 
@@ -28,6 +35,25 @@ class UcenterController extends Controller
 //            '我的积分' => 'point',
         )
     );
+    public $user = null;
+    public $code = 1000;
+    public $content = NULL;
+    public $date = '';
+    public $version = '1.0';
+    /*
+     @param $serverAddress 服务地址
+     @param $sysid 商户号
+     @param $alias 证书名称
+     @param $path 证书路径
+     @param $pwd 证书密码
+     @param $signMethod 签名验证方式
+     */
+    public $serverAddress = ICLOD_Server_URL;
+    public $sysid = "100009001000";
+    public $alias = "100009001000";
+    public $path = ICLOD_PATH;
+    public $pwd = "900724";
+    public $signMethod = "SHA1WithRSA";
 
 
     public function init()
@@ -2783,6 +2809,7 @@ class UcenterController extends Controller
         $this->assign('user_id', $user_id);
         $this->redirect();
     }
+
     //实名认证
     public function set_realname()
     {
@@ -2848,7 +2875,7 @@ class UcenterController extends Controller
         $params["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);
         $result2 = $client->request("MemberService", "setRealName", $params);
         if ($result1['status'] == 'OK' && $result2['status'] == 'OK') {
-            $this->model->table('customer')->data(array('realname_verified' => 1,'bizuserid'=>$bizUserId))->where('user_id=' . $this->user['id'])->update();
+            $this->model->table('customer')->data(array('realname_verified' => 1, 'bizuserid' => $bizUserId))->where('user_id=' . $this->user['id'])->update();
             $this->code = 0;
             $this->content['verified'] = 1;
             $this->content['bizUserId'] = $bizUserId;
