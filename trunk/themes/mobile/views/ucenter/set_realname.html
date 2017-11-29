@@ -32,49 +32,36 @@
     </form>
 </div>
 <script>
-    function notification(msg){
+    function notification(msg) {
         layer.open({
             content: msg
-            ,skin: 'msg'
-            ,time: 4
+            , skin: 'msg'
+            , time: 4
         });
     }
-    $("#apply-submit").click(function(){
-        //询问框
-        layer.open({
-            content: '您确定信息无误吗，<br>一旦提交将无法更改'
-            ,btn: ['确定', '我再看看']
-            ,yes: function(index){
+    $('#apply-submit').on('click', function () {
+        var data = $("#form").serializeArray();
+        $.ajax({
+            url: '/ucenter/realNameVerify',
+            type: 'post',
+            data: data,
+            beforeSend: function () {
                 var flag = true;
-                if($("input[name='name']").val()=='' || $("input[name='identityNo']").val()=='' ){
-                    flag=false;
+                if ($("input[name='name']").val() == '' || $("input[name='identityNo']").val() == '') {
+                    flag = false;
                     notification("请完善身份认证信息");
                     return false;
                 }
-                if(flag==false){
-                    return false;
+            },
+            success: function (result) {
+                if (result.status == 'success') {
+                    $.toast("实名认证已提交", 'success', function () {
+                        notification(result.msg);
+                    });
+                } else {
+                    notification(result.msg);
                 }
-                var name = $("input[name='name']").val();
-                var identityNo = $("input[name='identityNo']").val();
-                var identityType = $("#identityType option:selected").val();
-                layer.open({
-                    type: 2
-                    ,content: '正在提交中'
-                    ,shadeClose: false
-                });
-                setTimeout(function(){
-                    $.post("{url:/ucenter/realNameVerify}", { name: name, identityType: identityType, identityNo: identityNo}, function (result) {
-                        layer.closeAll();
-                        if(result.status=='success'){
-                            $.toast("实名认证已提交",'success',function(){
-                                notification(result.msg);
-                            });
-                        }else{
-                            notification(result.msg);
-                        }
-                    },'json');
-                },1000);
             }
-        });
+        }, 'json');
     });
 </script>
