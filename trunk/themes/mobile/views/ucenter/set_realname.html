@@ -5,24 +5,24 @@
 <div class="ma20 bg-white p20">
     <form  action="{url:/ucenter/info_save}" method="post">
         <dl>
-            <!--<dd class="input gray">{$gname|'默认分组'}</dd>-->
-            <dd class="input gray">用户名: {$name}</dd>
-            <dd><input  class="input" type="text" pattern="required" name="nickname" maxlen="20" value="{$nickname}" placeholder="昵称" alt="昵称不能为空"></dd>
+            <dd class="input gray">姓名: </dd>
+            <dd><input  class="input" type="text" pattern="required" name="nickname" maxlen="20" value="{$nickname}" placeholder="姓名" alt="姓名不能为空"></dd>
             <dd><input class="input" type="text" pattern="required" name="real_name" maxlen="20" value="{$real_name}"  placeholder="真实姓名"></dd>
-            <dd>性别：</td><td><input name="sex" type="radio" value="0" checked="checked"> <label> 女</label>&nbsp;&nbsp;<input name="sex" type="radio" {if:isset($sex) && $sex==1}checked="checked"{/if} value="1"> <label> 男</label></dd>
-            <dd><input class="input" name="birthday" type="text" onfocus="WdatePicker()" class="Wdate"  value="{$birthday}" placeholder="生日" alt="出生日期"></dd>
-            {if:$mobile==''}
-            <dd class="input gray">手机号码：未绑定</dd>
-            {else:}
-            <dd class="input gray">手机号码：{$mobile}</dd>
-            {/if}
             <dd id="areas" class="h-box" >
                 <div class="flex_1">
                     <div class="select">
                         <div class="option"></div>
-                        <input  id="areas_hidden" type="text" class="input" style="visibility:hidden;width:0;" value="{$province},{$city},{$county}" alt="请选择完整地区信息！">
+                        <input  id="areas_hidden" type="text" class="input" style="visibility:hidden;width:0;" value="" alt="证件类型">
                         <select id="province" name="province" >
-                            <option value="0">省份/直辖市</option>
+                            <option value="1">身份证 </option>
+                            <option value="2">护照 </option>
+                            <option value="3">军官证 </option>
+                            <option value="4">回乡证 </option>
+                            <option value="5">台胞证 </option>
+                            <option value="6">警官证 </option>
+                            <option value="6">警官证 </option>
+                            <option value="7">士兵证  </option>
+                            <option value="99">其它证件 </option>
                         </select>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                     <div class="option"></div>
                     <select id="county" name="county"><option value="0">县/区</option></select></div>
             </dd>
-            <dd ><textarea class="textarea" name="addr" pattern="required" minlen="5" maxlen="120" placeholder="路名或街道地址，门牌号。" alt="路名或街道地址，门牌号，5-120字">{$addr}</textarea></dd>
+            <dd><input  class="input" type="text" pattern="required" name="nickname" maxlen="20" value="{$nickname}" placeholder="证件号码" alt="证件号码不能为空"></dd>
             <dd>
                 <input class="btn" type="submit" value="保存">
             </dd>
