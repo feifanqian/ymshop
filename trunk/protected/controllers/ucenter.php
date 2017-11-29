@@ -2827,64 +2827,58 @@ class UcenterController extends Controller
 
     public function realNameVerify()
     {
-        $user = $this->model->table('customer')->fields('realname_verified')->where('user_id=' . $this->user['id'])->find();
-        if (!$user) {
-            $this->code = 1159;
-            return;
-        }
-        if ($user['realname_verified'] == 1) {
-            $this->code = 1164;
-            return;
-        }
+        if ($this->is_ajax_request()) {
+            $user = $this->model->table('customer')->fields('realname_verified')->where('user_id=' . $this->user['id'])->find();
+            if (!$user) {
+                $this->code = 1159;
+                return;
+            }
+            if ($user['realname_verified'] == 1) {
+                $this->code = 1164;
+                return;
+            }
+            $name = Req::args('name');
+            $bizUserId = date('YmdHis') . $this->user['id'];
+            $identityType = Filter::int(Req::args('identityType'));
+            $identityNo = Req::args('identityNo');
+            $memberType = 3;
+            $source = 1;
 
-        $name = Req::args('name');
-        $bizUserId = date('YmdHis') . $this->user['id'];
-
-        $identityType = Req::args('identityType');
-        $identityNo = Req::args('identityNo');
-
-        $memberType = 3;
-        $source = 1;
-
-        $client = new SOAClient();
-        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
-        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
-
-        $client->setServerAddress($this->serverAddress);
-        $client->setSignKey($privateKey);
-        $client->setPublicKey($publicKey);
-        $client->setSysId($this->sysid);
-        $client->setSignMethod($this->signMethod);
-        $param["bizUserId"] = $bizUserId;
-        $param["memberType"] = $memberType;    //会员类型
-        $param["source"] = $source;        //访问终端类型
-        $result1 = $client->request("MemberService", "createMember", $param);
-
-        // $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
-        // $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
-
-        // $client->setServerAddress($this->serverAddress);
-        // $client->setSignKey($privateKey);
-        // $client->setPublicKey($publicKey);
-        // $client->setSysId($this->sysid);
-        // $client->setSignMethod($this->signMethod);
-        $params["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
-        $params["isAuth"] = true;
-        $params["name"] = $name;
-        $params["identityType"] = $identityType;
-        $params["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);
-        $result2 = $client->request("MemberService", "setRealName", $params);
-        if ($result1['status'] == 'OK' && $result2['status'] == 'OK') {
-            $this->model->table('customer')->data(array('realname_verified' => 1, 'bizuserid' => $bizUserId))->where('user_id=' . $this->user['id'])->update();
-            $this->code = 0;
-            $this->content['verified'] = 1;
-            $this->content['bizUserId'] = $bizUserId;
-            $this->content['extends'] = array_merge($result1, $result2);
+            $client = new SOAClient();
+            $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+            $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+            $client->setServerAddress($this->serverAddress);
+            $client->setSignKey($privateKey);
+            $client->setPublicKey($publicKey);
+            $client->setSysId($this->sysid);
+            $client->setSignMethod($this->signMethod);
+            $param["bizUserId"] = $bizUserId;
+            $param["memberType"] = $memberType;    //会员类型
+            $param["source"] = $source;        //访问终端类型
+            $result1 = $client->request("MemberService", "createMember", $param);
+            $params["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
+            $params["isAuth"] = true;
+            $params["name"] = $name;
+            $params["identityType"] = $identityType;
+            $params["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);
+            $result2 = $client->request("MemberService", "setRealName", $params);
+            if ($result1['status'] == 'OK' && $result2['status'] == 'OK') {
+                $this->model->table('customer')->data(array('realname_verified' => 1, 'bizuserid' => $bizUserId))->where('user_id=' . $this->user['id'])->update();
+                $this->code = 0;
+                $this->content['verified'] = 1;
+                $this->content['bizUserId'] = $bizUserId;
+                $this->content['extends'] = array_merge($result1, $result2);
+                exit(json_encode(array('status' => 'success', 'msg' => '实名认证成功')));
+            } else {
+                print_r($result1);
+                print_r($result2);
+                $this->code = 1163;
+                exit(json_encode(array('status'=>'fail','msg'=>'实名认证失败，请核对信息是否准确无误！')));
+            }
         } else {
-            print_r($result1);
-            print_r($result2);
-            $this->code = 1163;
+            exit(json_encode(array('status' => 'fail', 'msg' => '非法操作')));
         }
+
     }
 
     //加密
