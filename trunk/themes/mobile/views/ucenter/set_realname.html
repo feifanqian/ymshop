@@ -57,17 +57,12 @@
             },
             success: function (result) {
                 var ret = JSON.parse(result);
-                var res = JSON.stringify(ret);
-                console.log(ret);
-                console.log(res);
-                console.log(ret.status);
-                console.log(ret.msg);
-                if (result.status == 'success') {
+                if (ret.status == 'success') {
                     $.toast("实名认证已提交", 'success', function () {
-                        notification(result.msg);
+                        notification(ret.msg);
                     });
                 } else {
-                    notification(result.msg);
+                    notification(ret.msg);
                 }
             }
         }, 'json');
