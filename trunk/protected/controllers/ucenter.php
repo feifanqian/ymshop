@@ -2827,7 +2827,6 @@ class UcenterController extends Controller
 
     public function realNameVerify()
     {
-        if ($this->is_ajax_request()) {
             if($this->user['id']==42608){
                 var_dump(123);die;
             }
@@ -2872,9 +2871,6 @@ class UcenterController extends Controller
             } else {
                 exit(json_encode(array('status' => 'fail', 'msg' => '实名认证失败，请核对信息是否准确无误！')));
             }
-        } else {
-            exit(json_encode(array('status' => 'fail', 'msg' => '非法操作')));
-        }
 
     }
 
