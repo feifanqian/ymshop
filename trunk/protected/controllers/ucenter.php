@@ -2885,4 +2885,20 @@ class UcenterController extends Controller
             $this->code = 1163;
         }
     }
+
+    //加密
+    function rsaEncrypt($str, $publicKey, $privateKey)
+    {
+        $rsaUtil = new RSAUtil($publicKey, $privateKey);
+        $encryptStr = $rsaUtil->encrypt($str);
+        return $encryptStr;
+    }
+
+    //解密
+    function rsaDecrypt($str, $publicKey, $privateKey)
+    {
+        $rsaUtil = new RSAUtil($publicKey, $privateKey);
+        $encryptStr = $rsaUtil->decrypt($str);
+        return $encryptStr;
+    }
 }
