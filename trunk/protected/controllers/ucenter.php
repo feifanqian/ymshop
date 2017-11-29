@@ -2831,10 +2831,12 @@ class UcenterController extends Controller
             $user = $this->model->table('customer')->fields('realname_verified')->where('user_id=' . $this->user['id'])->find();
             if (!$user) {
                 $this->code = 1159;
+                return(json_encode(array('status'=>'fail','msg'=>'用户不存在')));
                 return;
             }
             if ($user['realname_verified'] == 1) {
                 $this->code = 1164;
+                return(json_encode(array('status'=>'fail','msg'=>'您已经通过实名认证了')));
                 return;
             }
             $name = Req::args('name');
