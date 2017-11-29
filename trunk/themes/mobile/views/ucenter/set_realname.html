@@ -2,7 +2,7 @@
 {echo:JS::import('form');}
 {echo:JS::import('date');}
 <div class="ma20 bg-white p20">
-    <form action="{url:/paytonglian/set_realname}" method="post">
+    <form action="{url:/ucenter/realNameVerify}" method="post">
         <dl>
             <dd>
                 <input class="input" type="text" pattern="required" name="name" maxlen="5" value=""
@@ -10,7 +10,6 @@
             </dd>
             <dd>
                 <div class="select">
-                    <div class="option"></div>
                     <select id="identityType" name="identityType">
                         <option value="1">身份证</option>
                         <option value="2">护照</option>
@@ -25,7 +24,7 @@
                 </div>
             </dd>
             <dd>
-                <input class="input" type="text" pattern="required" name="identityNo" maxlen="20" value="{$nickname}"
+                <input class="input" type="text" pattern="required" name="identityNo" maxlen="20" value=""
                        placeholder="证件号码" alt="证件号码不能为空">
             </dd>
             <dd>
@@ -35,43 +34,4 @@
     </form>
 </div>
 <script type="text/javascript">
-    $(function () {
-        var selected = [{$province | 0
-    },
-        {
-            $city | 0
-        }
-    ,
-        {
-            $county | 0
-        }
-    ]
-        ;
-        $("#areas").Linkage({
-            url: "{url:/ajax/area_data}", selected: selected, initRunCallBack: true, callback: function (data) {
-                var text = new Array();
-                var value = new Array();
-                for (i in data[0]) {
-                    if (data[0][i] != 0) {
-                        text.push(data[1][i]);
-                        value.push(data[0][i]);
-                    }
-                }
-
-                $("#province").parent().find(".option").text(data[1][0]);
-                $("#city").parent().find(".option").text(data[1][1]);
-                $("#county").parent().find(".option").text(data[1][2]);
-                $("#areas_hidden").val(value.join(','));
-                FireEvent(document.getElementById("areas_hidden"), "change");
-            }
-        });
-        {
-            if:
-            isset($invalid)
-        }
-        autoValidate.showMsg({id: $("input[name='{$invalid['name']}']").get(0), error: true, msg: '{$invalid['msg']}'});
-        {
-            /if}
-        }
-    );
 </script> 
