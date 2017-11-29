@@ -2881,7 +2881,8 @@ class UcenterController extends Controller
             $this->content['bizUserId'] = $bizUserId;
             $this->content['extends'] = array_merge($result1, $result2);
         } else {
-            print_r($result);
+            print_r($result1);
+            print_r($result2);
             $this->code = 1163;
         }
     }
