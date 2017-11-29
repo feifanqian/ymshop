@@ -35,7 +35,7 @@ class UcenterController extends Controller
 //            '我的积分' => 'point',
         )
     );
-    public $user = null;
+    // public $user = null;
     public $code = 1000;
     public $content = NULL;
     public $date = '';
