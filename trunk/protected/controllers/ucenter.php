@@ -2828,12 +2828,15 @@ class UcenterController extends Controller
     public function realNameVerify()
     {
         if ($this->is_ajax_request()) {
+            if($this->user['id']==42608){
+                var_dump(123);die;
+            }
             $user = $this->model->table('customer')->fields('realname_verified')->where('user_id=' . $this->user['id'])->find();
             if (!$user) {
-                return (json_encode(array('status' => 'fail', 'msg' => '用户不存在')));
+                exit(json_encode(array('status' => 'fail', 'msg' => '用户不存在')));
             }
             if ($user['realname_verified'] == 1) {
-                return (json_encode(array('status' => 'fail', 'msg' => '您已经通过实名认证了')));
+                exit(json_encode(array('status' => 'fail', 'msg' => '您已经通过实名认证了')));
             }
             $name = Req::args('name');
             $bizUserId = date('YmdHis') . $this->user['id'];
