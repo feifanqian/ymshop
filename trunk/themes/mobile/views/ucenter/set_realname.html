@@ -56,7 +56,7 @@
                 }
             },
             success: function (result) {
-                console.log(result);
+                console.log(result.msg);
                 if (result.status == 'success') {
                     $.toast("实名认证已提交", 'success', function () {
                         notification(result.msg);
