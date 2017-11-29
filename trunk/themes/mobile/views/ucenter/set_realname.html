@@ -40,11 +40,13 @@
         });
     }
     $('#apply-submit').on('click', function () {
-        var data = $("#form").serializeArray();
+        var name = $("input[name='name']").val();
+        var identityType = $("#identityType option:selected").val();
+        var identityNo = $("input[name='identityNo']").val();
         $.ajax({
             url: '/ucenter/realNameVerify',
             type: 'post',
-            data: data,
+            data: {'name':name,'identityType':identityType,'identityNo':identityNo},
             beforeSend: function () {
                 var flag = true;
                 if ($("input[name='name']").val() == '' || $("input[name='identityNo']").val() == '') {
