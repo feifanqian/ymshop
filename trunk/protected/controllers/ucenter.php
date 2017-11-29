@@ -2827,9 +2827,6 @@ class UcenterController extends Controller
 
     public function realNameVerify()
     {
-            if($this->user['id']==42608){
-                var_dump(123);die;
-            }
             $user = $this->model->table('customer')->fields('realname_verified')->where('user_id=' . $this->user['id'])->find();
             if (!$user) {
                 exit(json_encode(array('status' => 'fail', 'msg' => '用户不存在')));
