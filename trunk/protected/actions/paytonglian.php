@@ -254,14 +254,14 @@ class PaytonglianAction extends Controller
         $params["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);
         $result2 = $client->request("MemberService", "setRealName", $params);
         if ($result1['status'] == 'OK' && $result2['status'] == 'OK') {
-            $this->model->table('customer')->data(array('realname_verified' => 1,'bizuserid'=>$bizUserId))->where('user_id=' . $this->user['id'])->update();
+            $this->model->table('customer')->data(array('realname_verified' => 1,'bizuserid'=>$bizUserId,'realname'=>$name,'id_no'=>$identityNo))->where('user_id=' . $this->user['id'])->update();
             $this->code = 0;
             $this->content['verified'] = 1;
             $this->content['bizUserId'] = $bizUserId;
             $this->content['extends'] = array_merge($result1, $result2);
         } else {
-            print_r($result);
-            $this->code = 1163;
+            $this->code = 0;
+            $this->content['verified'] = 0;
         }
     }
 

@@ -136,6 +136,7 @@ class UcenterAction extends Controller {
     public function info() {
         $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
         $shop = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
+        $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
         if($promoter || $shop){
             $is_business = 1;
         }else{
@@ -144,6 +145,7 @@ class UcenterAction extends Controller {
         $this->code = 0;
         $this->content['userinfo'] = $this->user;
         $this->content['userinfo']['is_business'] = $is_business;
+        $this->content['userinfo']['verified'] = $customer['verified'];
     }
 
     //设置昵称
@@ -2180,12 +2182,14 @@ class UcenterAction extends Controller {
      * 判断用户是否实名认证过
      */
     public function name_verified(){
-        $user = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
+        $user = $this->model->table('customer')->fields('realname_verified,realname,id_no')->where('user_id='.$this->user['id'])->find();
         if(!$user){
             $this->code = 1159;
             return;
         }
         $this->code = 0;
-        $this->content = $user['realname_verified'];
+        $this->content['verified'] = $user['realname_verified'];
+        $this->content['realname'] = $user['realname'];
+        $this->content['id_no'] = $user['id_no'];
     }
 }
