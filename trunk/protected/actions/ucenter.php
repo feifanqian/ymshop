@@ -145,7 +145,7 @@ class UcenterAction extends Controller {
         $this->code = 0;
         $this->content['userinfo'] = $this->user;
         $this->content['userinfo']['is_business'] = $is_business;
-        $this->content['userinfo']['verified'] = $customer['verified'];
+        $this->content['userinfo']['verified'] = $customer['realname_verified'];
     }
 
     //设置昵称
