@@ -1,6 +1,7 @@
 <?php
 
-class UcenterController extends Controller {
+class UcenterController extends Controller
+{
 
     public $layout = 'index';
     public $safebox = null;
@@ -27,9 +28,10 @@ class UcenterController extends Controller {
 //            '我的积分' => 'point',
         )
     );
-    
 
-    public function init() {
+
+    public function init()
+    {
         header("Content-type: text/html; charset=" . $this->encoding);
         $this->model = new Model();
         $this->safebox = Safebox::getInstance();
@@ -67,22 +69,24 @@ class UcenterController extends Controller {
         $this->assign("seo_title", "用户中心");
     }
 
-    public function checkRight($actionId) {
-        if($actionId=='buildinvite'){
-                return true;
+    public function checkRight($actionId)
+    {
+        if ($actionId == 'buildinvite') {
+            return true;
         }
-        if (isset($this->user['name']) && $this->user['name'] != null){
+        if (isset($this->user['name']) && $this->user['name'] != null) {
 //            if($this->user['mobile']==""&&$actionId!='firstbind'){
 //                $this->redirect('firstbind');
 //                exit();
 //            }
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function noRight() {
+    public function noRight()
+    {
         Cookie::set("url", Url::requestUri());
         if (Common::checkInWechat()) {
             $wechat = new WechatOAuth();
@@ -94,7 +98,8 @@ class UcenterController extends Controller {
     }
 
     //生成邀请码
-    public function buildinvite() {
+    public function buildinvite()
+    {
         $user_id = Filter::int(Req::args('uid'));
         // var_dump($user_id);die;
         // if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
@@ -116,15 +121,15 @@ class UcenterController extends Controller {
         $url = Url::fullUrlFormat("/index/invite") . "?inviter_id=" . $user_id;
         $qrCode = new QrCode();
         $qrCode
-                ->setText($url)
-                ->setSize(300)
-                ->setPadding(10)
-                ->setErrorCorrection('medium')
-                ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
-                ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
-                //->setLabel('扫描添加为好友')
-                ->setLabelFontSize(16)
-                ->setImageType(QrCode::IMAGE_TYPE_PNG);
+            ->setText($url)
+            ->setSize(300)
+            ->setPadding(10)
+            ->setErrorCorrection('medium')
+            ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+            ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+            //->setLabel('扫描添加为好友')
+            ->setLabelFontSize(16)
+            ->setImageType(QrCode::IMAGE_TYPE_PNG);
 
         // now we can directly output the qrcode
         header('Content-Type: ' . $qrCode->getContentType());
@@ -132,8 +137,9 @@ class UcenterController extends Controller {
         return;
     }
 
-     //生成邀请支付码
-    public function buildinvitepay() {
+    //生成邀请支付码
+    public function buildinvitepay()
+    {
         $user_id = Filter::int(Req::args('uid'));
         // if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
         //     $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
@@ -150,18 +156,18 @@ class UcenterController extends Controller {
         //         exit;
         //     }
         // }
-        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
+        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/" . $user_id);
         $qrCode = new QrCode();
         $qrCode
-                ->setText($url)
-                ->setSize(300)
-                ->setPadding(10)
-                ->setErrorCorrection('medium')
-                ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
-                ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
-                //->setLabel('扫描添加为好友')
-                ->setLabelFontSize(16)
-                ->setImageType(QrCode::IMAGE_TYPE_PNG);
+            ->setText($url)
+            ->setSize(300)
+            ->setPadding(10)
+            ->setErrorCorrection('medium')
+            ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+            ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+            //->setLabel('扫描添加为好友')
+            ->setLabelFontSize(16)
+            ->setImageType(QrCode::IMAGE_TYPE_PNG);
 
         // now we can directly output the qrcode
         header('Content-Type: ' . $qrCode->getContentType());
@@ -170,7 +176,8 @@ class UcenterController extends Controller {
     }
 
     //新的提现操作
-    public function balance_withdraw() {
+    public function balance_withdraw()
+    {
         if ($this->is_ajax_request()) {
             Filter::form();
             $open_name = Filter::str(Req::args('name'));
@@ -180,8 +187,8 @@ class UcenterController extends Controller {
             $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
             $amount = Filter::float(Req::args('amount'));
             $amount = round($amount, 2);
-            $customer = $this->model->table("customer")->where("user_id =".$this->user['id'])->fields('balance')->find();
-            $can_withdraw_amount =$customer?$customer['balance']:0;
+            $customer = $this->model->table("customer")->where("user_id =" . $this->user['id'])->fields('balance')->find();
+            $can_withdraw_amount = $customer ? $customer['balance'] : 0;
             if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
                 exit(json_encode(array('status' => 'fail', 'msg' => '提现金额超出的账户可提现余额')));
             }
@@ -195,11 +202,11 @@ class UcenterController extends Controller {
             //     exit(json_encode(array('status' => 'fail', 'msg' => '申请失败，还有未处理完的提现申请')));
             // }
             $withdraw_no = "BW" . date("YmdHis") . rand(100, 999);
-            $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0,'type'=>0);
+            $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0, 'type' => 0);
             $result = $this->model->table('balance_withdraw')->data($data)->insert();
             if ($result) {
                 $this->model->table('customer')->data(array('balance' => "`balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
-                Log::balance(0-$amount, $this->user['id'],$withdraw_no,"余额提现申请", 3, 1);
+                Log::balance(0 - $amount, $this->user['id'], $withdraw_no, "余额提现申请", 3, 1);
                 exit(json_encode(array('status' => 'success', 'msg' => "申请提交成功")));
             } else {
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
@@ -218,7 +225,8 @@ class UcenterController extends Controller {
     }
 
     //更新的提现操作(线下商家余额提现)
-    public function offline_balance_withdraw() {
+    public function offline_balance_withdraw()
+    {
         if ($this->is_ajax_request()) {
             Filter::form();
             $open_name = Filter::str(Req::args('name'));
@@ -228,8 +236,8 @@ class UcenterController extends Controller {
             $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
             $amount = Filter::float(Req::args('amount'));
             $amount = round($amount, 2);
-            $customer = $this->model->table("customer")->where("user_id =".$this->user['id'])->fields('offline_balance')->find();
-            $can_withdraw_amount =$customer?$customer['offline_balance']:0;
+            $customer = $this->model->table("customer")->where("user_id =" . $this->user['id'])->fields('offline_balance')->find();
+            $can_withdraw_amount = $customer ? $customer['offline_balance'] : 0;
             if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
                 exit(json_encode(array('status' => 'fail', 'msg' => '提现金额超出的账户可提现余额')));
             }
@@ -243,11 +251,11 @@ class UcenterController extends Controller {
             //     exit(json_encode(array('status' => 'fail', 'msg' => '申请失败，还有未处理完的提现申请')));
             // }
             $withdraw_no = "BW" . date("YmdHis") . rand(100, 999);
-            $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0,'type'=>1);
+            $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0, 'type' => 1);
             $result = $this->model->table('balance_withdraw')->data($data)->insert();
             if ($result) {
                 $this->model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
-                Log::balance(0-$amount, $this->user['id'],$withdraw_no,"商家余额提现申请", 11, 1);
+                Log::balance(0 - $amount, $this->user['id'], $withdraw_no, "商家余额提现申请", 11, 1);
                 exit(json_encode(array('status' => 'success', 'msg' => "申请提交成功")));
             } else {
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
@@ -265,12 +273,13 @@ class UcenterController extends Controller {
         }
     }
 
-    public function offline_balance_convert(){
-        if ($this->is_ajax_request()){
+    public function offline_balance_convert()
+    {
+        if ($this->is_ajax_request()) {
             $amount = Req::args('amount');
             $amount = round($amount, 2);
-            $customer = $this->model->table("customer")->where("user_id =".$this->user['id'])->fields('balance,offline_balance')->find();
-            $can_withdraw_amount =$customer?$customer['offline_balance']:0;
+            $customer = $this->model->table("customer")->where("user_id =" . $this->user['id'])->fields('balance,offline_balance')->find();
+            $can_withdraw_amount = $customer ? $customer['offline_balance'] : 0;
             if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
                 exit(json_encode(array('status' => 'fail', 'msg' => '提现金额超出的账户可提现余额')));
             }
@@ -279,15 +288,15 @@ class UcenterController extends Controller {
             if ($amount < $other['min_withdraw_amount']) {
                 exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
             }
-            $user_id=$this->user['id'];
-            $user_id=intval($user_id);
-            $balance=$customer['balance']+$amount;
-            $offline_balance=$customer['offline_balance']-$amount;
-            $result = $this->model->table("customer")->data(array('balance'=>$balance,"offline_balance"=>$offline_balance))->where("user_id=".$user_id)->update();
+            $user_id = $this->user['id'];
+            $user_id = intval($user_id);
+            $balance = $customer['balance'] + $amount;
+            $offline_balance = $customer['offline_balance'] - $amount;
+            $result = $this->model->table("customer")->data(array('balance' => $balance, "offline_balance" => $offline_balance))->where("user_id=" . $user_id)->update();
             $withdraw_no = "OF" . date("YmdHis") . rand(100, 999);
-            $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => '', "open_bank" => '', 'card_no' => '', 'apply_date' => date("Y-m-d H:i:s"),'note'=>'商家余额提现到可用余额', 'status' => 1,'type'=>2);
+            $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => '', "open_bank" => '', 'card_no' => '', 'apply_date' => date("Y-m-d H:i:s"), 'note' => '商家余额提现到可用余额', 'status' => 1, 'type' => 2);
             $this->model->table('balance_withdraw')->data($data)->insert();
-            Log::balance($amount,$this->user['id'],'','商家余额转入',9,0);
+            Log::balance($amount, $this->user['id'], '', '商家余额转入', 9, 0);
             if ($result) {
                 exit(json_encode(array('status' => 'success', 'msg' => "提现成功")));
             } else {
@@ -296,13 +305,15 @@ class UcenterController extends Controller {
         }
     }
 
-    public function point() {
+    public function point()
+    {
         $customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
         $this->assign("customer", $customer);
         $this->redirect();
     }
 
-    public function point_exchange() {
+    public function point_exchange()
+    {
         $id = Filter::int(Req::args('id'));
         $voucher = $this->model->table("voucher_template")->where("id=$id")->find();
         if ($voucher) {
@@ -321,7 +332,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function upload_head() {
+    public function upload_head()
+    {
         $upfile_path = Tiny::getPath("uploads") . "head/";
         $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
         echo $upfile_path . "+" . $upfile_url;
@@ -350,14 +362,15 @@ class UcenterController extends Controller {
         echo JSON::encode($result);
     }
 
-    public function account() {
+    public function account()
+    {
         $customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
         $this->assign("customer", $customer);
         $client_type = Chips::clientType();
         $client_type = ($client_type == "desktop") ? 0 : ($client_type == "wechat" ? 2 : 1);
         $model = new Model("payment as pa");
         $paytypelist = $model->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
-                        ->where("pa.status = 0 and pa.plugin_id not in(1,12,19,20) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
+            ->where("pa.status = 0 and pa.plugin_id not in(1,12,19,20) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
         $paytypeone = reset($paytypelist);
         $this->assign("paytypelist", $paytypelist);
         //充值套餐的地址
@@ -382,7 +395,7 @@ class UcenterController extends Controller {
         $other = $config->get("other");
         $package_set = $config->get("recharge_package_set");
         if (is_array($package_set)) {
-            if(isset($package_set[4]['gift'])&&$package_set[4]['gift']!=''){
+            if (isset($package_set[4]['gift']) && $package_set[4]['gift'] != '') {
                 $where = implode(',', array_reverse(explode("|", $package_set[4]['gift'])));
                 $select4 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name")->order("field(p.id,$where)")->findAll();
                 $this->assign("select4", $select4);
@@ -393,7 +406,7 @@ class UcenterController extends Controller {
         $package = Filter::int(Req::args('package'));
         //套餐充值
         $pid = Filter::int(Req::args('pid'));
-        $this->assign('package_set',$package_set);
+        $this->assign('package_set', $package_set);
         if ($package && $pid) {
             $this->assign("package", $package);
             $this->assign("pid", $pid);
@@ -401,7 +414,8 @@ class UcenterController extends Controller {
         $this->redirect();
     }
 
-    public function refund_act() {
+    public function refund_act()
+    {
         $order_no = Filter::sql(Req::args('order_no'));
         $order = $this->model->table("order")->where("order_no='$order_no' and user_id = " . $this->user['id'])->find();
         if ($order) {
@@ -434,7 +448,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function refund_detail() {
+    public function refund_detail()
+    {
         $id = Filter::int(Req::args('id'));
         $refund = $this->model->table("doc_refund")->where("id=$id and user_id=" . $this->user['id'])->find();
         if ($refund) {
@@ -445,13 +460,15 @@ class UcenterController extends Controller {
         }
     }
 
-    public function refund_del() {
+    public function refund_del()
+    {
         $order_no = Filter::sql(Req::args('order_no'));
         $obj = $this->model->table("doc_refund")->where("order_no='$order_no' and  pay_status=0 and user_id = " . $this->user['id'])->delete();
         $this->redirect("refund");
     }
 
-    public function voucher_activated() {
+    public function voucher_activated()
+    {
         if (!Tiny::app()->checkToken())
             $this->redirect("voucher");
         $rules = array('account:required:账号不能为空!', 'password:required:密码不能为空！');
@@ -482,7 +499,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function get_consult() {
+    public function get_consult()
+    {
         $page = Filter::int(Req::args("page"));
         $type = Filter::int(Req::args("type"));
         $status = Req::args("status");
@@ -506,7 +524,8 @@ class UcenterController extends Controller {
     }
 
     //获取商品评价
-    public function get_review() {
+    public function get_review()
+    {
         $page = Filter::int(Req::args("page"));
         $type = Filter::int(Req::args("type"));
         $status = Req::args("status");
@@ -538,7 +557,8 @@ class UcenterController extends Controller {
     }
 
     //获取商品评价
-    public function get_message() {
+    public function get_message()
+    {
         $page = Filter::int(Req::args("page"));
         $type = Filter::int(Req::args("type"));
         $status = Req::args("status");
@@ -569,7 +589,8 @@ class UcenterController extends Controller {
         echo JSON::encode($message);
     }
 
-    public function message_read() {
+    public function message_read()
+    {
         $id = Filter::int(Req::args("id"));
         $customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
         $message_ids = ',' . $customer['message_ids'] . ',';
@@ -579,7 +600,8 @@ class UcenterController extends Controller {
         echo JSON::encode(array("status" => 'success'));
     }
 
-    public function message_del() {
+    public function message_del()
+    {
         $id = Filter::int(Req::args("id"));
         $customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
         $message_ids = ',' . $customer['message_ids'] . ',';
@@ -589,7 +611,8 @@ class UcenterController extends Controller {
         echo JSON::encode(array("status" => 'success'));
     }
 
-    public function get_voucher() {
+    public function get_voucher()
+    {
         $page = Filter::int(Req::args("page"));
         $pagetype = Filter::int(Req::args("pagetype"));
         $status = Req::args("status");
@@ -619,7 +642,8 @@ class UcenterController extends Controller {
         echo JSON::encode($voucher);
     }
 
-    public function get_express_info() {
+    public function get_express_info()
+    {
         $id = Filter::int(Req::args("id"));
         $number = Req::args("number");
         $ret = array('status' => "fail", 'data' => NULL);
@@ -636,7 +660,8 @@ class UcenterController extends Controller {
         echo json_encode($ret);
     }
 
-    public function info() {
+    public function info()
+    {
         $info = $this->model->table("customer as cu ")->fields("cu.*,us.email,us.name,us.nickname,us.avatar,gr.name as gname")->join("left join user as us on cu.user_id = us.id left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = " . $this->user['id'])->find();
         if ($info) {
             $this->assign("info", $info);
@@ -646,7 +671,8 @@ class UcenterController extends Controller {
             Tiny::Msg($this, 404);
     }
 
-    public function info_save() {
+    public function info_save()
+    {
         $rules = array('nickname:required:昵称不能为空!', 'real_name:required:真实姓名不能为空!', 'sex:int:性别必需选择！', 'birthday:date:生日日期格式不正确！', 'province:[1-9]\d*:选择地区必需完成', 'city:[1-9]\d*:选择地区必需完成', 'county:[1-9]\d*:选择地区必需完成');
         $info = Validator::check($rules);
         if (is_array($info)) {
@@ -695,7 +721,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function firstbind() {
+    public function firstbind()
+    {
         $info = $this->model->table("customer as cu ")->fields("cu.*,us.email,us.name,us.nickname,us.avatar,gr.name as gname")->join("left join user as us on cu.user_id = us.id left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = " . $this->user['id'])->find();
         if ($info) {
             // if($info['mobile']!=''){
@@ -712,28 +739,28 @@ class UcenterController extends Controller {
                 $realname = Filter::sql(Req::post('realname'));
                 $mobile = Filter::sql(Req::post('mobile'));
                 $validatecode = Filter::sql(Req::post('validatecode'));
-                if($realname && $mobile && $validatecode){
+                if ($realname && $mobile && $validatecode) {
                     $exist = $this->model->table("customer")->where("mobile='{$mobile}'")->find();
                     if (!$exist) {
                         $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
                         if ($ret['status'] == 'success') {
                             $data = array(
                                 'mobile' => $mobile,
-                                'real_name'=>$realname,
-                                'mobile_verified'=>1,
-                                'point_coin'=>200
+                                'real_name' => $realname,
+                                'mobile_verified' => 1,
+                                'point_coin' => 200
                             );
                             $this->model->table("customer")->data($data)->where("user_id={$this->user['id']}")->update();
                             Log::pointcoin_log(200, $this->user['id'], '', '微信新用户积分奖励', 10);
                             //默认密码
                             $passWord = $mobile;
                             $validcode = CHash::random(8);
-                            $this->model->table('user')->data(array('password' => CHash::md5($passWord, $validcode),'validcode' => $validcode))->where("id={$this->user['id']}")->update();
-                
+                            $this->model->table('user')->data(array('password' => CHash::md5($passWord, $validcode), 'validcode' => $validcode))->where("id={$this->user['id']}")->update();
+
                             SMS::getInstance()->flushCode($mobile);
                             $user = $this->user;
-                            $user['mobile']=$mobile;
-                            $user['real_name']=$realname;
+                            $user['mobile'] = $mobile;
+                            $user['real_name'] = $realname;
                             $this->safebox->set('user', $user);
                             // Common::sendPointCoinToNewComsumer($this->user['id']);
                             $ret['status'] = "success";
@@ -744,41 +771,41 @@ class UcenterController extends Controller {
                             $ret['message'] = "验证码不正确";
                         }
                     } else {
-                        if(Common::checkInWechat()){
+                        if (Common::checkInWechat()) {
                             $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
-                            if($ret['status']=='success'){
+                            if ($ret['status'] == 'success') {
                                 SMS::getInstance()->flushCode($mobile);
-                                $is_bind = $this->model->table("oauth_user")->where("user_id=".$exist['user_id'])->find();
-                                if($is_bind){
+                                $is_bind = $this->model->table("oauth_user")->where("user_id=" . $exist['user_id'])->find();
+                                if ($is_bind) {
                                     $ret['status'] = "fail";
                                     $ret['message'] = "该手机号已经绑定过了";
-                                }else{
-                                    $result = $this->model->table("oauth_user")->where("user_id=".$this->user['id'])->data(array("user_id"=>$exist['user_id']))->update();
-                                    if($result){
+                                } else {
+                                    $result = $this->model->table("oauth_user")->where("user_id=" . $this->user['id'])->data(array("user_id" => $exist['user_id']))->update();
+                                    if ($result) {
                                         $user = $this->user;
-                                        $user['id']=$exist['user_id'];
-                                        $user['mobile']=$mobile;
-                                        $user['real_name']=$realname;
+                                        $user['id'] = $exist['user_id'];
+                                        $user['mobile'] = $mobile;
+                                        $user['real_name'] = $realname;
                                         $this->safebox->set('user', $user);
                                         $ret['status'] = "success";
                                         $ret["message"] = "微信绑定成功";
                                         $ret['show_point'] = 0;
-                                    }else{
+                                    } else {
                                         $ret['status'] = "fail";
                                         $ret["message"] = "微信绑定失败";
                                     }
                                 }
-                            }else{
+                            } else {
                                 $ret['status'] = "fail";
                                 $ret['message'] = "验证码不正确";
                             }
-                            
-                        }else{
+
+                        } else {
                             $ret['status'] = "fail";
                             $ret['message'] = "该手机号已经绑定过了";
                         }
                     }
-                }else{
+                } else {
                     $ret['status'] = "fail";
                     $ret['message'] = "参数错误";
                 }
@@ -792,25 +819,28 @@ class UcenterController extends Controller {
         }
     }
 
-    public function notice(){
+    public function notice()
+    {
         $url = Cookie::get("url");
         $this->assign("seo_title", "紧急公告");
         $this->redirect();
     }
 
-    public function invite() {
+    public function invite()
+    {
         $page = Filter::int(Req::args('p'));
         $invite = $this->model->table("invite as i")
-                ->fields("i.*,u.nickname,u.avatar,cu.real_name")
-                ->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")
-                ->where("i.user_id = " . $this->user['id'])
-                ->findPage($page,10);
+            ->fields("i.*,u.nickname,u.avatar,cu.real_name")
+            ->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")
+            ->where("i.user_id = " . $this->user['id'])
+            ->findPage($page, 10);
         $this->assign("invite", $invite);
         $this->assign("seo_title", "我的邀请");
         $this->redirect();
     }
 
-    public function attention() {
+    public function attention()
+    {
         $page = Filter::int(Req::args('p'));
         $attention = $this->model->table("attention as at")->fields("at.*,go.name,go.store_nums,go.img,go.sell_price,go.id as gid")->join("left join goods as go on at.goods_id = go.id")->where("at.user_id = " . $this->user['id'])->findPage($page);
         $this->assign("attention", $attention);
@@ -818,7 +848,8 @@ class UcenterController extends Controller {
         $this->redirect();
     }
 
-    public function attention_del() {
+    public function attention_del()
+    {
         $id = Filter::int(Req::args("id"));
         if (is_array($id)) {
             $ids = implode(",", $id);
@@ -829,7 +860,8 @@ class UcenterController extends Controller {
         $this->redirect("attention");
     }
 
-    public function attention_addcart() {
+    public function attention_addcart()
+    {
         $ids = Req::args("ids");
         $ids = array_filter(explode(',', $ids));
         if ($ids) {
@@ -843,7 +875,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function attention_cancelattention() {
+    public function attention_cancelattention()
+    {
         $ids = Req::args("ids");
         $ids = array_filter(explode(',', $ids));
         if ($ids) {
@@ -855,8 +888,9 @@ class UcenterController extends Controller {
     }
 
     //商品展示与商品状态修改
-    public function order() {
-        $notice=Session::get('notice');
+    public function order()
+    {
+        $notice = Session::get('notice');
         Session::clear('notice');
         $status = Filter::str(Req::args("status"));
         $config = Config::getInstance();
@@ -869,7 +903,7 @@ class UcenterController extends Controller {
         $valid_time[5] = isset($config_other['other_order_delay_point']) ? intval($config_other['other_order_delay_point']) : 0;
         $valid_time[6] = isset($config_other['other_order_delay_pointflash']) ? intval($config_other['other_order_delay_pointflash']) : 0;
         $query = new Query('order');
-        $where = array("user_id = " . $this->user['id'], 'is_del = 0','type !=8');
+        $where = array("user_id = " . $this->user['id'], 'is_del = 0', 'type !=8');
         switch ($status) {
             case "unpay":
                 $where[] = "status <= '2'";
@@ -910,10 +944,10 @@ class UcenterController extends Controller {
         $goodslist = array();
         if ($ids) {
             $list = $this->model->table("order_goods AS og")
-                    ->fields("og.product_id,og.spec,og.order_id,og.goods_id,og.goods_nums,go.img,go.imgs,go.name")
-                    ->join("goods AS go ON og.goods_id=go.id")
-                    ->where("order_id IN (" . implode(',', $ids) . ")")
-                    ->findAll();
+                ->fields("og.product_id,og.spec,og.order_id,og.goods_id,og.goods_nums,go.img,go.imgs,go.name")
+                ->join("goods AS go ON og.goods_id=go.id")
+                ->where("order_id IN (" . implode(',', $ids) . ")")
+                ->findAll();
             foreach ($list as $k => $v) {
                 $v['speclist'] = implode(' / ', Common::spec($v['spec']));
                 $goodslist[$v['order_id']][] = $v;
@@ -930,9 +964,9 @@ class UcenterController extends Controller {
             $data = array("status" => 6);
             $order_model->where("id in (" . $ids . ")")->data($data)->update();
             $point_order = $order_model->where("id in (" . $ids . ") and type in (5,6)")->findAll();
-            if($point_order){
-                foreach ($point_order as $v){
-                    if($v['pay_point']>0){
+            if ($point_order) {
+                foreach ($point_order as $v) {
+                    if ($v['pay_point'] > 0) {
                         $this->model->table("customer")->where("user_id=" . $v['user_id'])->data(array("point_coin" => "`point_coin`+" . $v['pay_point']))->update();
                         Log::pointcoin_log($v['pay_point'], $v['user_id'], $v['order_no'], "取消订单，退回积分", 2);
                     }
@@ -948,7 +982,8 @@ class UcenterController extends Controller {
         $this->redirect();
     }
 
-    protected function order_status($item) {
+    protected function order_status($item)
+    {
         $status = $item['status'];
         $pay_status = $item['pay_status'];
         $delivery_status = $item['delivery_status'];
@@ -958,10 +993,10 @@ class UcenterController extends Controller {
         //status:1等待付款 2待审核(待付款) 3已付款 4已完成 5已取消 6已作废
         switch ($status) {
             case '1':
-                
-                    $str = '<span class="text-danger">等待付款</span>';
-                    $btn = '<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a><a href="javascript:;" class="btn btn-gray btn-mini " onclick="order_delete(' . $item['id'] . ')">删除订单</a>';
-                
+
+                $str = '<span class="text-danger">等待付款</span>';
+                $btn = '<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a><a href="javascript:;" class="btn btn-gray btn-mini " onclick="order_delete(' . $item['id'] . ')">删除订单</a>';
+
                 break;
             case '2':
                 if ($pay_status == 1)
@@ -974,10 +1009,10 @@ class UcenterController extends Controller {
                         $btn = '<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">另选支付</a>';
                     } else {
                         if ($order_type == 4) {
-                             
-                                $str = '<span class="text-danger">等待付款</span>';
-                                $btn = '<a href="javascript:;" class="btn  btn-gray btn-mini " onclick="order_delete(' . $item['id'] . ')">删除订单</a>&nbsp;<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a>';
-                            
+
+                            $str = '<span class="text-danger">等待付款</span>';
+                            $btn = '<a href="javascript:;" class="btn  btn-gray btn-mini " onclick="order_delete(' . $item['id'] . ')">删除订单</a>&nbsp;<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a>';
+
                         } else {
                             $str = '<span class="text-danger">等待付款</span>';
                             $btn = '<a href="javascript:;" class="btn  btn-gray btn-mini " onclick="order_delete(' . $item['id'] . ')">删除订单</a>&nbsp;<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a>';
@@ -986,10 +1021,10 @@ class UcenterController extends Controller {
                 }
                 break;
             case '3':
-                if ($delivery_status == 0 && $order_type!=8) {
+                if ($delivery_status == 0 && $order_type != 8) {
                     $str = '<span class="text-info">等待发货</span>';
-                }else if($delivery_status == 0 && $order_type==8){
-                    $this->model->table('order')->data(array('delivery_status'=>2))->where('id='.$item['id'])->update();
+                } else if ($delivery_status == 0 && $order_type == 8) {
+                    $this->model->table('order')->data(array('delivery_status' => 2))->where('id=' . $item['id'])->update();
                     $str = '<span class="text-info">线下订单已成功支付</span>';
                 } else if ($delivery_status == 1) {
                     $str = '<span class="text-info">已发货</span>';
@@ -1020,9 +1055,10 @@ class UcenterController extends Controller {
         return array($str, $btn);
     }
 
-    public function order_detail() {
+    public function order_detail()
+    {
         $id = Filter::int(Req::args("id"));
-        $order_model=$this->model->table('order')->where("id=$id")->find();
+        $order_model = $this->model->table('order')->where("id=$id")->find();
         // if($order_model['type']==8){
         //         $this->model->table('order')->where("id=$id")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>2))->update();
         //     }
@@ -1065,7 +1101,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function order_details() {
+    public function order_details()
+    {
         $id = Filter::int(Req::args("id"));
         $user_id = Filter::int($this->user['id']);
         $order = $this->model->table("order_offline")->where("id = $id and user_id= $user_id")->find();
@@ -1073,20 +1110,21 @@ class UcenterController extends Controller {
             $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
             exit();
         }
-        $shop = $this->model->table('customer')->fields('real_name')->where('user_id='.$order['shop_ids'])->find();
-        if($shop){
+        $shop = $this->model->table('customer')->fields('real_name')->where('user_id=' . $order['shop_ids'])->find();
+        if ($shop) {
             $shopname = $shop['real_name'];
-        }else{
+        } else {
             $shopname = '未知商家';
         }
-        $this->assign('shopname',$shopname);
+        $this->assign('shopname', $shopname);
         $this->assign("order", $order);
         $this->redirect();
-        
+
     }
 
     //订单签收
-    public function order_sign() {
+    public function order_sign()
+    {
         $id = Filter::int(Req::args("id"));
         $info = array('status' => 'fail');
         $result = $this->model->table('order')->where("id=$id and user_id=" . $this->user['id'] . " and status=3 and pay_status=1 and delivery_status=1")->data(array('delivery_status' => 2, 'status' => 4, 'completion_time' => date('Y-m-d H:i:s')))->update();
@@ -1103,7 +1141,8 @@ class UcenterController extends Controller {
     }
 
     //地址列表
-    public function address() {
+    public function address()
+    {
         // if($this->user['id']==31988){
         //     $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
         //     $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
@@ -1116,7 +1155,7 @@ class UcenterController extends Controller {
         //     if($gzxx==1){
         //         var_dump($gzxx);die;
         //     }
-            
+
         // }
         $model = new Model("address");
         $address = $model->where("user_id=" . $this->user['id'])->order("id desc")->findAll();
@@ -1141,7 +1180,8 @@ class UcenterController extends Controller {
     }
 
     //编辑地址
-    public function address_other() {
+    public function address_other()
+    {
         Session::set("order_status", Req::args());
         $id = Filter::int(Req::args("id"));
         $url = Req::args("url");
@@ -1163,8 +1203,9 @@ class UcenterController extends Controller {
     }
 
     //保存地址
-    public function address_save() {
-        $rules = array('addr:required:内容不能为空！', 'accept_name:required:收货人姓名不能为空!,mobile:mobi:手机格式不正确!','province:[1-9]\d*:选择地区必需完成', 'city:[1-9]\d*:选择地区必需完成', 'county:[1-9]\d*:选择地区必需完成');
+    public function address_save()
+    {
+        $rules = array('addr:required:内容不能为空！', 'accept_name:required:收货人姓名不能为空!,mobile:mobi:手机格式不正确!', 'province:[1-9]\d*:选择地区必需完成', 'city:[1-9]\d*:选择地区必需完成', 'county:[1-9]\d*:选择地区必需完成');
         $info = Validator::check($rules);
 
         if (!is_array($info) && $info == true) {
@@ -1205,7 +1246,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function address_del() {
+    public function address_del()
+    {
         $id = Filter::int(Req::args("id"));
         $this->model->table("address")->where("id=$id and user_id=" . $this->user['id'])->delete();
         $url = Req::args("url");
@@ -1214,7 +1256,8 @@ class UcenterController extends Controller {
         $this->redirect("address");
     }
 
-    public function address_wechat() {
+    public function address_wechat()
+    {
         $code = -1;
         $content = NULL;
         $one = $this->model->table("address")->where("user_id=" . $this->user['id'])->find();
@@ -1239,9 +1282,9 @@ class UcenterController extends Controller {
             // }
 
             $area_info = $this->model->table("area as a1")
-                            ->join("left join area as a2 on a1.id = a2.parent_id left join area as a3 on a2.id=a3.parent_id")
-                            ->where("a1.name like '{$province}%' and a1.parent_id = 0 and a2.name = '{$city}' and a3.name = '{$county}'")
-                            ->fields("a1.id as province,a2.id as city,a3.id as county")->find();
+                ->join("left join area as a2 on a1.id = a2.parent_id left join area as a3 on a2.id=a3.parent_id")
+                ->where("a1.name like '{$province}%' and a1.parent_id = 0 and a2.name = '{$city}' and a3.name = '{$county}'")
+                ->fields("a1.id as province,a2.id as city,a3.id as county")->find();
 
             if ($area_info) {
                 $data = array(
@@ -1266,15 +1309,16 @@ class UcenterController extends Controller {
         exit;
     }
 
-    public function index() {
-        $notice=Session::get('notice');
+    public function index()
+    {
+        $notice = Session::get('notice');
         Session::clear('notice');
         $id = $this->user['id'];
         $customer = $this->model->table("customer as cu")->fields("cu.*,gr.name as gname")->join("left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = $id")->find();
         $orders = $this->model->table("order")->where("user_id = $id and is_del = 0 and type !=8")->findAll();
         $order = array('amount' => 0, 'todayamount' => 0, 'pending' => 0, 'undelivery' => 0, 'unreceived' => 0, 'uncomment' => 0);
         foreach ($orders as $obj) {
-            if ($obj['status'] < 5 && ($obj['payment'] == 1 || $obj['payment'] == 12 || $obj['payment'] == 13 || $obj['payment'] == 15 )) {
+            if ($obj['status'] < 5 && ($obj['payment'] == 1 || $obj['payment'] == 12 || $obj['payment'] == 13 || $obj['payment'] == 15)) {
                 if ($obj['type'] == 4) {
                     $obj['order_amount'] = $obj['otherpay_amount'];
                 }
@@ -1284,14 +1328,14 @@ class UcenterController extends Controller {
                 }
             }
             if ($obj['status'] == 4) {
-                
+
             } else if ($obj['status'] < 3) {
-                $order['pending'] ++;
+                $order['pending']++;
             } else if ($obj['status'] == 3) {
                 if ($obj['delivery_status'] == 0) {
-                    $order['undelivery'] ++;
+                    $order['undelivery']++;
                 } else if ($obj['delivery_status'] == 1) {
-                    $order['unreceived'] ++;
+                    $order['unreceived']++;
                 }
             }
         }
@@ -1319,10 +1363,10 @@ class UcenterController extends Controller {
         $options['action'] = $upyun['upyun_uploadurl'];
         $options['img_host'] = $upyun['upyun_cdnurl'];
 
-        $change_info = $this->model->table("customer as c")->join("left join oauth_user as o on c.user_id = o.user_id")->fields("c.user_id,c.mobile,o.other_user_id")->where("o.oauth_type='wechat' and c.user_id=" .$this->user['id'])->find();
-        if(empty($change_info)){
-            
-        }else if ($change_info['mobile'] && $change_info['other_user_id']) {
+        $change_info = $this->model->table("customer as c")->join("left join oauth_user as o on c.user_id = o.user_id")->fields("c.user_id,c.mobile,o.other_user_id")->where("o.oauth_type='wechat' and c.user_id=" . $this->user['id'])->find();
+        if (empty($change_info)) {
+
+        } else if ($change_info['mobile'] && $change_info['other_user_id']) {
             $this->assign("open_change", true);
         } else if (!$change_info['mobile'] && $change_info['other_user_id']) {
             $this->assign("open_change", true);
@@ -1331,7 +1375,7 @@ class UcenterController extends Controller {
         }
         $is_promoter = false;
         $promoter = Promoter::getPromoterInstance($this->user['id']);
-        if (is_object($promoter)&&$promoter->role_type==2) {
+        if (is_object($promoter) && $promoter->role_type == 2) {
             $is_promoter = true;
         }
         $is_hirer = false;
@@ -1366,8 +1410,8 @@ class UcenterController extends Controller {
         // }
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
-        $this->assign("sign_in_open",$sign_in_set['open']);
-        $this->assign("random",rand(1000,9999));
+        $this->assign("sign_in_open", $sign_in_set['open']);
+        $this->assign("random", rand(1000, 9999));
         $this->assign('is_hirer', $is_hirer);
         $this->assign('is_promoter', $is_promoter);
         $this->assign("option", $options);
@@ -1379,7 +1423,8 @@ class UcenterController extends Controller {
         $this->redirect();
     }
 
-    public function refreshinfo() {
+    public function refreshinfo()
+    {
         $id = $this->user['id'];
         $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id=$id")->find();
         $this->safebox->set('user', $obj, $this->cookie_time);
@@ -1389,11 +1434,12 @@ class UcenterController extends Controller {
     }
 
     //移动端的钱袋页
-    public function asset() {
+    public function asset()
+    {
         $id = $this->user['id'];
         $customer = $this->model->table("customer as cu")->fields("cu.*,gr.name as gname")->join("left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = $id")->find();
         // $customer['balance']=$customer['balance']+$customer['offline_balance'];
-        
+
         //只记录余额支付的消费统计
         $orders = $this->model->table("order as o")->join("payment as p on o.payment = p.id ")->where("o.user_id = $id and p.plugin_id in(1,20)")->findAll();
         $order = array('amount' => 0, 'todayamount' => 0, 'pending' => 0, 'undelivery' => 0, 'unreceived' => 0, 'uncomment' => 0);
@@ -1405,7 +1451,7 @@ class UcenterController extends Controller {
                 }
             }
         }
-        
+
         //充值礼品判断
         $info = $this->model->table("recharge_presentlog")->where("user_id =" . $this->user['id'] . " and status=0")->find();
         if ($info) {
@@ -1418,30 +1464,31 @@ class UcenterController extends Controller {
             }
         }
         //判断是否是商家
-        $shop=$this->model->table('district_promoter')->where('user_id='.$id)->find();
-        if($shop){
-            $is_shop=1;
-            if($shop['unique_code']==1){
-                $show_code=1;
-            }else{
-                $show_code=0;
+        $shop = $this->model->table('district_promoter')->where('user_id=' . $id)->find();
+        if ($shop) {
+            $is_shop = 1;
+            if ($shop['unique_code'] == 1) {
+                $show_code = 1;
+            } else {
+                $show_code = 0;
             }
-        }else{
-            $is_shop=0;
-            $show_code=0;
+        } else {
+            $is_shop = 0;
+            $show_code = 0;
         }
-        $this->assign('is_shop',$is_shop);
-        $this->assign('show_code',$show_code);
+        $this->assign('is_shop', $is_shop);
+        $this->assign('show_code', $show_code);
         $this->assign("order", $order);
         $this->assign("customer", $customer);
         $this->assign("id", $id);
         $this->assign("seo_title", "钱袋");
         $this->redirect();
     }
-    
+
     //充值中心
-    public function recharge_center() {
-        $notice=Session::get('notice');
+    public function recharge_center()
+    {
+        $notice = Session::get('notice');
         Session::clear('notice');
         $package = Filter::int(Req::args('package'));
         $pid = Filter::int(Req::args('pid'));
@@ -1472,36 +1519,39 @@ class UcenterController extends Controller {
         $paytypeone = reset($paytypelist);
         $this->assign("paytypeone", $paytypeone);
         $this->assign("paytypelist", $paytypelist);
-        
+
         $config = Config::getInstance();
         $package_set = $config->get("recharge_package_set");
         if (is_array($package_set)) {
-            if(isset($package_set[4]['gift'])&&$package_set[4]['gift']!=''){
+            if (isset($package_set[4]['gift']) && $package_set[4]['gift'] != '') {
                 $where = implode(',', array_reverse(explode("|", $package_set[4]['gift'])));
                 $select4 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name,g.id as goods_id")->order("field(p.id,$where)")->findAll();
                 $this->assign("select4", $select4);
             }
         }
         $this->assign("notice", $notice);
-        $this->assign('package_set',$package_set);
+        $this->assign('package_set', $package_set);
         $this->assign("seo_title", '充值中心');
         $this->redirect();
     }
-    
+
     //余额记录
-    public function balance_log() {
+    public function balance_log()
+    {
         $customer = $this->model->table("customer")->where("user_id=" . $this->user['id'])->find();
         $this->assign("customer", $customer);
         $this->assign('seo_title', '余额记录');
         $this->redirect();
     }
 
-    public function check_identity() {
+    public function check_identity()
+    {
         $verified = $this->verifiedType();
         $this->redirect();
     }
 
-    public function verified() {
+    public function verified()
+    {
         $code = Req::args('code');
         $type = Req::args('type');
         $obj = Req::args('obj');
@@ -1529,7 +1579,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function update_obj() {
+    public function update_obj()
+    {
         $r = Req::args('r');
         $verifiedInfo = Session::get("verifiedInfo");
 
@@ -1541,7 +1592,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function activate_obj() {
+    public function activate_obj()
+    {
         $obj = Req::args('obj');
         $obj = $this->updateObj($obj);
         $model = new Model('user as us');
@@ -1562,7 +1614,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function update_obj_act() {
+    public function update_obj_act()
+    {
         $verifiedInfo = Session::get("verifiedInfo");
         $obj = $verifiedInfo['obj'];
         $info = array();
@@ -1624,7 +1677,8 @@ class UcenterController extends Controller {
         $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random'], true, array('invalid' => $info, 'account' => $account));
     }
 
-    public function update_obj_success() {
+    public function update_obj_success()
+    {
         $obj = Req::args('obj');
         if ($obj != null) {
             $this->redirect();
@@ -1633,7 +1687,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function send_objcode() {
+    public function send_objcode()
+    {
         $account = Req::args('account');
         $activateObj = Session::get('activateObj');
         $sendAble = true;
@@ -1683,7 +1738,8 @@ class UcenterController extends Controller {
         echo JSON::encode($info);
     }
 
-    public function send_code() {
+    public function send_code()
+    {
         $info = array('status' => 'fail', 'msg' => '');
         $type = Req::args('type');
         $code = CHash::random(6, 'int');
@@ -1737,12 +1793,14 @@ class UcenterController extends Controller {
         echo JSON::encode($info);
     }
 
-    public function safety() {
+    public function safety()
+    {
         $verified = $this->verifiedType();
         $this->redirect();
     }
 
-    private function verifiedType() {
+    private function verifiedType()
+    {
         $verified_type = array(
             'mobile' => "已验证手机",
             'email' => "已验证邮箱",
@@ -1786,7 +1844,8 @@ class UcenterController extends Controller {
         $this->assign("type", $type);
     }
 
-    private function updateObj($obj) {
+    private function updateObj($obj)
+    {
         $objs = array('email' => true, 'mobile' => true, 'password' => true, 'paypwd' => true);
         if (!isset($objs[$obj])) {
             $obj = 'password';
@@ -1795,14 +1854,16 @@ class UcenterController extends Controller {
     }
 
     //检测用户是否在线
-    private function checkOnline() {
+    private function checkOnline()
+    {
         if (isset($this->user) && $this->user['name'] != null)
             return true;
         else
             return false;
     }
 
-    public function commission() {
+    public function commission()
+    {
         $uid = $this->user['id'];
         $commission = $this->model->table("commission")->where('user_id=' . $uid)->find();
         if (empty($commission)) {
@@ -1813,7 +1874,7 @@ class UcenterController extends Controller {
             //更新可用状态
             $commission_set = Config::getInstance()->get("commission_set");
             $lockdays = $commission_set['commission_locktime'];
-            $lockdays = is_int($lockdays) ? $lockdays : (int) $lockdays;
+            $lockdays = is_int($lockdays) ? $lockdays : (int)$lockdays;
             $available_time = date('Y-m-d H:i:s', strtotime("-$lockdays days"));
             $result = $this->model->table('commission_log')->where("user_id = $uid and status = 0 and time < '$available_time'")->data(array('status' => 1))->update();
             if ($result > 0) {
@@ -1827,14 +1888,16 @@ class UcenterController extends Controller {
         $this->redirect();
     }
 
-    public function commission_log() {
+    public function commission_log()
+    {
         $uid = $this->user['id'];
         $this->assign('uid', $uid);
         $this->assign("seo_title", "佣金记录");
         $this->redirect();
     }
 
-    public function change_account() {
+    public function change_account()
+    {
         $mobile = Filter::sql(Req::args('mobile'));
         $validatecode = Filter::sql(Req::args('validatecode'));
         if ($mobile != "" && $validatecode != "") {
@@ -1949,7 +2012,8 @@ class UcenterController extends Controller {
         }
     }
 
-    private function _isCanApplyRefund($order_id) {
+    private function _isCanApplyRefund($order_id)
+    {
         $isset = $this->model->table("refund")->where("order_id =$order_id and user_id =" . $this->user['id'])->find();
         if ($isset) {
             return false;
@@ -2003,7 +2067,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function refund_apply() {
+    public function refund_apply()
+    {
         $order_id = Filter::int(Req::args("order_id"));
         $info = $this->_isCanApplyRefund($order_id);
         if ($info == false || empty($info)) {
@@ -2026,7 +2091,8 @@ class UcenterController extends Controller {
         $this->redirect();
     }
 
-    public function refund_apply_submit() {
+    public function refund_apply_submit()
+    {
         $order_id = Filter::int(Req::args("order_id"));
         $reason = Filter::sql(Req::args("reason"));
         $reason_desc = Filter::sql(Req::args("reason_desc"));
@@ -2069,13 +2135,14 @@ class UcenterController extends Controller {
         }
     }
 
-    public function refund_progress() {
+    public function refund_progress()
+    {
         $order_id = Filter::sql(Req::args("order_id"));
         $refund_info = $this->model->table("refund as r")
-                ->join("left join payment as p on r.payment = p.id")
-                ->fields("r.*,p.pay_name,plugin_id")
-                ->where("order_id = $order_id and user_id = " . $this->user['id'])
-                ->find();
+            ->join("left join payment as p on r.payment = p.id")
+            ->fields("r.*,p.pay_name,plugin_id")
+            ->where("order_id = $order_id and user_id = " . $this->user['id'])
+            ->find();
         if ($refund_info) {
             $this->assign("refund", $refund_info);
             $this->redirect();
@@ -2084,12 +2151,16 @@ class UcenterController extends Controller {
             exit();
         }
     }
-    public function pointcoin_log(){
-        $this->assign("user_id",$this->user['id']);
-        $this->assign("seo_title",'积分记录');
+
+    public function pointcoin_log()
+    {
+        $this->assign("user_id", $this->user['id']);
+        $this->assign("seo_title", '积分记录');
         $this->redirect();
     }
-    public function order_delete() {
+
+    public function order_delete()
+    {
         $id = Filter::int(Req::args('id'));
         $isset = $this->model->table("order")->where("id=$id and user_id =" . $this->user['id'] . " and status in(1,2,5,6)")->find();
         if (empty($isset)) {
@@ -2098,8 +2169,8 @@ class UcenterController extends Controller {
         }
         $result = $this->model->table("order")->where("id = $id and user_id = " . $this->user['id'] . ' and status in (1,2,5,6)')->data(array('is_del' => '1'))->update();
         if ($result) {
-            if($isset['status']!=6){
-                if (($isset['type'] == 5||$isset['type']==6) && $isset['pay_point'] > 0) {
+            if ($isset['status'] != 6) {
+                if (($isset['type'] == 5 || $isset['type'] == 6) && $isset['pay_point'] > 0) {
                     $this->model->table("customer")->where("user_id=" . $this->user['id'])->data(array("point_coin" => "`point_coin`+" . $isset['pay_point']))->update();
                     Log::pointcoin_log($isset['pay_point'], $this->user['id'], $isset['order_no'], "取消订单，退回积分", 2);
                 }
@@ -2112,20 +2183,22 @@ class UcenterController extends Controller {
         }
     }
 
-    public function promoter_home() {
+    public function promoter_home()
+    {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
             exit();
         }
         $data = $promoter->getIncomeStatistics();
-        $customer=$this->model->table('customer')->fields('financial_stock')->where('user_id='.$this->user['id'])->find();
+        $customer = $this->model->table('customer')->fields('financial_stock')->where('user_id=' . $this->user['id'])->find();
         $this->assign('data', $data);
         $this->assign('financial_stock', $customer['financial_stock']);
         $this->assign('seo_title', '我的收益');
         $this->redirect();
     }
-    
-    public function promoter_income() {
+
+    public function promoter_income()
+    {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
             $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
@@ -2147,7 +2220,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function promoter_sale() {
+    public function promoter_sale()
+    {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
             $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
@@ -2169,7 +2243,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function promoter_withdraw() {
+    public function promoter_withdraw()
+    {
         $config = Config::getInstance();
         $other = $config->get("district_set");
         $withdraw_fee_rate = isset($other['withdraw_fee_rate']) ? $other['withdraw_fee_rate'] : 0.5;
@@ -2180,7 +2255,8 @@ class UcenterController extends Controller {
         $this->redirect();
     }
 
-    public function promoter_withdraw_submit() {
+    public function promoter_withdraw_submit()
+    {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
             exit();
@@ -2195,7 +2271,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function promoter_withdraw_list() {
+    public function promoter_withdraw_list()
+    {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
             $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
@@ -2217,7 +2294,8 @@ class UcenterController extends Controller {
         }
     }
 
-    public function promoter_getqrcode() {
+    public function promoter_getqrcode()
+    {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (!is_object($promoter)) {
             $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您还不是推广者"));
@@ -2227,9 +2305,10 @@ class UcenterController extends Controller {
         $goods_id = substr($goods_id, 0, strpos($goods_id, '.png'));
         $promoter->getQrcodeByGoodsId($goods_id);
     }
-    
+
     //申请创建专区
-    public function apply_for_district() {
+    public function apply_for_district()
+    {
         if ($this->is_ajax_request()) {
             $data = Filter::inputFilter(Req::args());
             if ($data['name'] == NULL || $data['location'] == NULL || $data['linkman'] == NULL || $data['linkmobile'] == NULL) {
@@ -2248,19 +2327,19 @@ class UcenterController extends Controller {
                         $invite_count = $this->model->table("district_order")->where("pay_status=1 and invitor_role='promoter' and invitor_id=$promoter->id")->count();
                         $config = Config::getInstance()->get("district_set");
                         if ($invite_count < $config['invite_promoter_num']) {
-                            exit(json_encode(array('status'=>'fail',"msg"=>"您没有免费申请权限")));
+                            exit(json_encode(array('status' => 'fail', "msg" => "您没有免费申请权限")));
                         }
                         $hirer = $this->model->table("district_shop")->where("owner_id =" . $this->user['id'])->find();
                         if ($hirer) {
-                            exit(json_encode(array('status'=>'fail',"msg"=>"您已经拥有专区了")));
+                            exit(json_encode(array('status' => 'fail', "msg" => "您已经拥有专区了")));
                         }
-                        $apply = $this->model->table("district_apply")->where("free = 1 and status = 0 and user_id = ".$this->user['id'])->find();
-                        if($apply){
-                             exit(json_encode(array('status'=>'fail',"msg"=>"已经申请过了，请勿重复申请")));
+                        $apply = $this->model->table("district_apply")->where("free = 1 and status = 0 and user_id = " . $this->user['id'])->find();
+                        if ($apply) {
+                            exit(json_encode(array('status' => 'fail', "msg" => "已经申请过了，请勿重复申请")));
                         }
-                        $data['pay_status']=1; //将免费入驻标记为已经支付
+                        $data['pay_status'] = 1; //将免费入驻标记为已经支付
                     } else {
-                         exit(json_encode(array('status'=>'fail',"msg"=>"您不是代理商")));;
+                        exit(json_encode(array('status' => 'fail', "msg" => "您不是代理商")));;
                     }
                 } else {
                     unset($data['free']);
@@ -2316,7 +2395,8 @@ class UcenterController extends Controller {
     }
 
     //成为专区推广者
-    public function becomepromoter() {
+    public function becomepromoter()
+    {
         if ($this->is_ajax_request()) {
             echo json_encode(array('status' => 'fail', 'msg' => '抱歉，接口关闭了'));
             exit();
@@ -2326,7 +2406,7 @@ class UcenterController extends Controller {
             $invitor_role = $invitor_role == NULL ? "shop" : $invitor_role; //默认是shop
 
             $promoter = Promoter::getPromoterInstance($this->user['id']);
-            if (is_object($promoter)&&$promoter->role_type==2) {
+            if (is_object($promoter) && $promoter->role_type == 2) {
                 $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '操作失败', "content" => "抱歉，您已经有雇佣关系了，暂时不能加入其他专区"));
                 exit();
             }
@@ -2338,9 +2418,9 @@ class UcenterController extends Controller {
                     $district_info = $this->model->table("district_shop")->where("id = $reference")->find();
                 } else if ($invitor_role == 'promoter') {
                     $district_info = $this->model
-                            ->table("district_promoter as dp")->join("left join district_shop as ds on dp.hirer_id = ds.id")
-                            ->where("dp.id = $reference")
-                            ->find();
+                        ->table("district_promoter as dp")->join("left join district_shop as ds on dp.hirer_id = ds.id")
+                        ->where("dp.id = $reference")
+                        ->find();
                 } else {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '抱歉', "content" => "role信息错误"));
                     exit();
@@ -2382,7 +2462,7 @@ class UcenterController extends Controller {
                 $client_type = Chips::clientType();
                 $client_type = ($client_type == "desktop") ? 0 : ($client_type == "wechat" ? 2 : 1);
                 $paytypelist = $this->model->table("payment as pa")->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
-                                ->where("pa.status = 0 and pa.plugin_id not in(1,12,19,20) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
+                    ->where("pa.status = 0 and pa.plugin_id not in(1,12,19,20) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
                 $this->assign("config", $config);
                 $this->assign('paytypelist', $paytypelist);
                 $this->assign('data', $district_info);
@@ -2395,7 +2475,8 @@ class UcenterController extends Controller {
     }
 
     //领取充值活动奖励 
-    public function accept_present() {
+    public function accept_present()
+    {
         $activity = $this->model->table("recharge_activity")->where("id = 1")->fields("accept_end_time")->find();
         if ($this->is_ajax_request()) {
             $user_id = $this->user['id'];
@@ -2434,7 +2515,8 @@ class UcenterController extends Controller {
     }
 
 
-    public function district_pay() {
+    public function district_pay()
+    {
         $id = Filter::int(Req::args('id'));
         $model = new Model();
         $district_info = $model->table("district_apply")->where("id={$id}")->find();
@@ -2452,7 +2534,7 @@ class UcenterController extends Controller {
                 $client_type = Chips::clientType();
                 $client_type = ($client_type == "desktop") ? 0 : ($client_type == "wechat" ? 2 : 1);
                 $paytypelist = $model->table("payment as pa")->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
-                                ->where("pa.status = 0 and pa.plugin_id not in(1,4,12,19,20) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
+                    ->where("pa.status = 0 and pa.plugin_id not in(1,4,12,19,20) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
                 $this->assign('paytypelist', $paytypelist);
                 $this->assign("district", $district_info);
                 $this->redirect();
@@ -2465,11 +2547,12 @@ class UcenterController extends Controller {
             exit();
         }
     }
-    
+
     //推广商品二维码页
-    public function showQR() {
+    public function showQR()
+    {
         $goods_id = Filter::int(Req::args("goods_id"));
-        $goods_info = $this->model->table("goods")->where("id = ".$goods_id)->find();
+        $goods_info = $this->model->table("goods")->where("id = " . $goods_id)->find();
         if ($goods_info) {
             $result = Common::getQrcodeFlag($goods_id, $this->user['id']);
             if ($result['status'] == 'success') {
@@ -2489,20 +2572,21 @@ class UcenterController extends Controller {
             $this->assign("goods_subtitle", $goods_info['subtitle']);
             $this->redirect();
             exit();
-        }else{
+        } else {
             $this->redirect("/index/msg", false, array('type' => "info", "msg" => "商品信息未找到"));
             exit();
         }
     }
 
-    
+
     //获取代理商邀请信息
-    public function promoter_invite() {
+    public function promoter_invite()
+    {
         if ($this->is_ajax_request()) {
             $page = Filter::int(Req::args('page'));
             $promoter = Promoter::getPromoterInstance($this->user['id']);
             if (is_object($promoter)) {
-                if($promoter->role_type==1){
+                if ($promoter->role_type == 1) {
                     echo json_encode(array('status' => 'fail', 'msg' => "你还不是付费代理商"));
                     exit();
                 }
@@ -2520,7 +2604,7 @@ class UcenterController extends Controller {
             $this->assign("seo_title", "邀请入驻");
             $promoter = Promoter::getPromoterInstance($this->user['id']);
             if (is_object($promoter)) {
-                if($promoter->role_type==1){
+                if ($promoter->role_type == 1) {
                     $this->redirect("/index/msg", false, array('type' => "info", "msg" => '抱歉', "content" => "您还不是付费代理商，暂时没有邀请权限"));
                     exit();
                 }
@@ -2543,9 +2627,10 @@ class UcenterController extends Controller {
             $this->redirect();
         }
     }
-    
+
     //获取代理商推荐二维码
-    public function getPromoterInviteQR() {
+    public function getPromoterInviteQR()
+    {
         $promoter = Promoter::getPromoterInstance($this->user['id']);
         if (is_object($promoter)) {
             $promoter->getInviteQR4Promoter();
@@ -2553,145 +2638,154 @@ class UcenterController extends Controller {
             exit("您还不是代理商");
         }
     }
-    
+
     //签到
-    public function sign_in(){
-        if($this->is_ajax_request()){
+    public function sign_in()
+    {
+        if ($this->is_ajax_request()) {
             $action = Filter::str(Req::args('action'));
-            if($action=='sign'){
+            if ($action == 'sign') {
                 $config = Config::getInstance();
                 $set = $config->get('sign_in_set');
-                if($set['open']==0){
-                     exit(json_encode(array('status'=>'fail','msg'=>"系统关闭了签到功能"))); 
+                if ($set['open'] == 0) {
+                    exit(json_encode(array('status' => 'fail', 'msg' => "系统关闭了签到功能")));
                 }
                 //判断今天是否签到过
                 $date = date("Y-m-d");
-                $is_signed = $this->model->table("sign_in")->where("date='{$date}' and user_id=".$this->user['id'])->find();
-                if($is_signed){
-                    exit(json_encode(array('status'=>'fail','msg'=>"今天已经签到过了")));
-                }else{
-                    $last_sign = $this->model->table("sign_in")->order('date desc')->where("user_id=".$this->user['id'])->find();
-                    if($last_sign){
-                            //判断上次签到和这次签到中间是否有缺
-                            $yesterday = date("Y-m-d",strtotime("-1 day"));
-                            if($yesterday==$last_sign['date']){
-                                $data['serial_day']=$last_sign['serial_day']+1;
-                                $data['sign_in_count']=$last_sign['sign_in_count']+1;
-                            }else{
-                                $data['serial_day']=1;
-                                $data['sign_in_count']=$last_sign['sign_in_count']+1;
-                            }
-                    }else{
-                         $data['serial_day']=1;
-                         $data['sign_in_count']=1;
+                $is_signed = $this->model->table("sign_in")->where("date='{$date}' and user_id=" . $this->user['id'])->find();
+                if ($is_signed) {
+                    exit(json_encode(array('status' => 'fail', 'msg' => "今天已经签到过了")));
+                } else {
+                    $last_sign = $this->model->table("sign_in")->order('date desc')->where("user_id=" . $this->user['id'])->find();
+                    if ($last_sign) {
+                        //判断上次签到和这次签到中间是否有缺
+                        $yesterday = date("Y-m-d", strtotime("-1 day"));
+                        if ($yesterday == $last_sign['date']) {
+                            $data['serial_day'] = $last_sign['serial_day'] + 1;
+                            $data['sign_in_count'] = $last_sign['sign_in_count'] + 1;
+                        } else {
+                            $data['serial_day'] = 1;
+                            $data['sign_in_count'] = $last_sign['sign_in_count'] + 1;
+                        }
+                    } else {
+                        $data['serial_day'] = 1;
+                        $data['sign_in_count'] = 1;
                     }
-                    $data['date']=$date;
-                    $data['user_id']=$this->user['id'];
+                    $data['date'] = $date;
+                    $data['user_id'] = $this->user['id'];
                     //读取签到送积分规则
-                    $data['send_point']=Common::getSignInSendPointAmount($data['serial_day']);
+                    $data['send_point'] = Common::getSignInSendPointAmount($data['serial_day']);
                     $result = $this->model->table("sign_in")->data($data)->insert();
-                    if($result){
-                       $this->model->table("customer")->data(array('point_coin'=>"`point_coin`+".$data['send_point']))->where("user_id=".$this->user['id'])->update();
-                       Log::pointcoin_log($data['send_point'], $this->user['id'], "", "每日签到赠送", 10);
-                       exit(json_encode(array('status'=>'success','msg'=>"签到成功",'send_point'=>$data['send_point'])));
-                    }else{
-                       exit(json_encode(array('status'=>'fail','msg'=>"签到失败了"))); 
+                    if ($result) {
+                        $this->model->table("customer")->data(array('point_coin' => "`point_coin`+" . $data['send_point']))->where("user_id=" . $this->user['id'])->update();
+                        Log::pointcoin_log($data['send_point'], $this->user['id'], "", "每日签到赠送", 10);
+                        exit(json_encode(array('status' => 'success', 'msg' => "签到成功", 'send_point' => $data['send_point'])));
+                    } else {
+                        exit(json_encode(array('status' => 'fail', 'msg' => "签到失败了")));
                     }
                 }
-            }else if($action=='data'){
+            } else if ($action == 'data') {
                 $year = Filter::int(Req::args("year"));
                 $month = Filter::int(Req::args("month"));
-                exit(json_encode(array("status"=>'success','data'=>  Common::getSignInDataByUserID($year, $month, $this->user['id']))));
+                exit(json_encode(array("status" => 'success', 'data' => Common::getSignInDataByUserID($year, $month, $this->user['id']))));
             }
-        }else{
-            $today = $this->model->table("sign_in")->where("date='".date("Y-m-d")."' and user_id=".$this->user['id'])->find();
-            if($today){
-                $this->assign('serial_day',$today['serial_day']);
-                $this->assign("is_signed",true);
-            }else{
-                $yesterday = $this->model->table("sign_in")->where("date='".date("Y-m-d",strtotime("-1 day"))."' and user_id=".$this->user['id'])->find();
-                if($yesterday){
-                    $this->assign('serial_day',$yesterday['serial_day']);
-                }else{
-                    $this->assign('serial_day',0);
+        } else {
+            $today = $this->model->table("sign_in")->where("date='" . date("Y-m-d") . "' and user_id=" . $this->user['id'])->find();
+            if ($today) {
+                $this->assign('serial_day', $today['serial_day']);
+                $this->assign("is_signed", true);
+            } else {
+                $yesterday = $this->model->table("sign_in")->where("date='" . date("Y-m-d", strtotime("-1 day")) . "' and user_id=" . $this->user['id'])->find();
+                if ($yesterday) {
+                    $this->assign('serial_day', $yesterday['serial_day']);
+                } else {
+                    $this->assign('serial_day', 0);
                 }
-                $this->assign("is_signed",false);
+                $this->assign("is_signed", false);
             }
             $config = Config::getInstance();
             $this->assign('sign_in_set', $config->get('sign_in_set'));
-            $this->assign('sign_data',Common::getSignInDataByUserID(date("Y"),date("m"),$this->user['id']));
-            $this->assign('year',date("Y"));
-            $this->assign("month",date("m"));
-            $this->assign('seo_title',"每日签到");
+            $this->assign('sign_data', Common::getSignInDataByUserID(date("Y"), date("m"), $this->user['id']));
+            $this->assign('year', date("Y"));
+            $this->assign("month", date("m"));
+            $this->assign('seo_title', "每日签到");
             $this->redirect();
-        }    
+        }
     }
 
-    public function beagent(){
-        $this->assign('random',rand(1000,9999));
-        $this->assign('seo_title',"圆梦共享网");
+    public function beagent()
+    {
+        $this->assign('random', rand(1000, 9999));
+        $this->assign('seo_title', "圆梦共享网");
         $this->redirect();
     }
-    
-    public function invitepay(){
+
+    public function invitepay()
+    {
         // $id=$this->user['id'];
         $id = Req::args("user_id");
-        $uid=Filter::int($id);
-         
-        $model=new Model();
-        $user=$model->table('customer')->fields('real_name')->where('user_id='.$uid)->find();
-        $users=$model->table('user')->fields('avatar')->where('id='.$uid)->find();
-        if($user){
+        $uid = Filter::int($id);
+
+        $model = new Model();
+        $user = $model->table('customer')->fields('real_name')->where('user_id=' . $uid)->find();
+        $users = $model->table('user')->fields('avatar')->where('id=' . $uid)->find();
+        if ($user) {
             $real_name = $user['real_name'];
-        }else{
+        } else {
             $real_name = '未知商家';
         }
-        if($users){
-            if($users['avatar']=='' || $users['avatar']=='/0'){
-                $users['avatar']='/static/images/96.png';
+        if ($users) {
+            if ($users['avatar'] == '' || $users['avatar'] == '/0') {
+                $users['avatar'] = '/static/images/96.png';
             }
             $avatar = $users['avatar'];
-        }else{
+        } else {
             $avatar = '';
         }
-        Session::set('seller_id',$uid);
-        $this->assign('real_name',$real_name);
-        $this->assign('avatar',$avatar);
+        Session::set('seller_id', $uid);
+        $this->assign('real_name', $real_name);
+        $this->assign('avatar', $avatar);
         $this->assign('uid', $uid);
         $this->redirect();
     }
 
-    public function demo(){
+    public function demo()
+    {
         $model = new Model();
-       Session::set('demo', 2);
-       
-       $inviter_id = intval(Req::args('inviter_id'));
-       if(!$inviter_id){
+        Session::set('demo', 2);
+
+        $inviter_id = intval(Req::args('inviter_id'));
+        if (!$inviter_id) {
             $inviter_id = Session::get('seller_id');
         }
         if (isset($this->user['id'])) {
-            Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");      
+            Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
         } else {
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
         }
         $user_id = $this->user['id'];
-        $shop=$this->model->table('customer')->fields('real_name')->where('user_id='.$inviter_id)->find();
-        
-        if($shop){
-            $this->assign('shop_name',$shop['real_name']);
-        }else{
-            $this->assign('shop_name','未知商家');
+        $shop = $this->model->table('customer')->fields('real_name')->where('user_id=' . $inviter_id)->find();
+
+        if ($shop) {
+            $this->assign('shop_name', $shop['real_name']);
+        } else {
+            $this->assign('shop_name', '未知商家');
         }
-        
-        $order_no=date('YmdHis').rand(1000,9999);
+
+        $order_no = date('YmdHis') . rand(1000, 9999);
         // $jsApiParameters = Session::get('payinfo');
         // $this->assign("jsApiParameters",$jsApiParameters);
-        $this->assign("seo_title","向商家付款");
-        $this->assign('seller_id',$inviter_id);
-        $this->assign('seller_ids',Session::get('seller_id'));
-        $this->assign('order_no',$order_no);
-        $this->assign('user_id',$user_id);
+        $this->assign("seo_title", "向商家付款");
+        $this->assign('seller_id', $inviter_id);
+        $this->assign('seller_ids', Session::get('seller_id'));
+        $this->assign('order_no', $order_no);
+        $this->assign('user_id', $user_id);
+        $this->redirect();
+    }
+    //实名认证
+    public function set_realname()
+    {
         $this->redirect();
     }
 }

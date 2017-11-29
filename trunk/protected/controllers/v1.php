@@ -205,6 +205,7 @@ class V1Controller extends Controller {
         "platform_download"=>array('paytonglian/platformDownload',1,1),//平台集合对账下载
         "lock_member"=>array('paytonglian/actionLockMember',1,1),//锁定会员
         "unlock_member"=>array('paytonglian/actionUnlockMember',1,1),//解锁会员
+
     );
 
     //分析请求的action,将请求分发到不同的action中去
