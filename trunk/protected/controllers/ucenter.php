@@ -2830,12 +2830,9 @@ class UcenterController extends Controller
         if ($this->is_ajax_request()) {
             $user = $this->model->table('customer')->fields('realname_verified')->where('user_id=' . $this->user['id'])->find();
             if (!$user) {
-//                $this->code = 1159;
                 return (json_encode(array('status' => 'fail', 'msg' => '用户不存在')));
-
             }
             if ($user['realname_verified'] == 1) {
-//                $this->code = 1164;
                 return (json_encode(array('status' => 'fail', 'msg' => '您已经通过实名认证了')));
             }
             $name = Req::args('name');
@@ -2864,17 +2861,13 @@ class UcenterController extends Controller
             $params["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);
             $result2 = $client->request("MemberService", "setRealName", $params);
             if ($result1['status'] == 'OK' && $result2['status'] == 'OK') {
-                $this->model->table('customer')->data(array('realname_verified' => 1, 'bizuserid' => $bizUserId))->where('user_id=' . $this->user['id'])->update();
-                $this->code = 0;
-                $this->content['verified'] = 1;
-                $this->content['bizUserId'] = $bizUserId;
-                $this->content['extends'] = array_merge($result1, $result2);
+                $this->model->table('customer')->data(array('realname_verified' => 1, 'bizuserid' => $bizUserId, 'realname' => $name, 'id_no' => $identityNo))->where('user_id=' . $this->user['id'])->update();
                 exit(json_encode(array('status' => 'success', 'msg' => '实名认证成功')));
+            } elseif ($result1['status'] == 'OK' && $result2['status'] != 'OK') {
+                $this->model->table('customer')->data(array('realname_verified' => -1, 'bizuserid' => $bizUserId))->where('user_id=' . $this->user['id'])->update();
+                exit(json_encode(array('status' => 'fail', 'msg' => '未通过验证')));
             } else {
                 exit(json_encode(array('status' => 'fail', 'msg' => '实名认证失败，请核对信息是否准确无误！')));
-                print_r($result1);
-                print_r($result2);
-                $this->code = 1163;
             }
         } else {
             exit(json_encode(array('status' => 'fail', 'msg' => '非法操作')));

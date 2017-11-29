@@ -4,7 +4,6 @@
     <list default="true" id="5e7286e1-8ea1-416a-afb0-c86e85802771" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/protected/controllers/ucenter.php" afterPath="$PROJECT_DIR$/trunk/protected/controllers/ucenter.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/set_realname.html" afterPath="$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/set_realname.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,12 +17,12 @@
       <file leaf-file-name="ucenter.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/ucenter.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="658">
-              <caret line="2872" column="20" lean-forward="false" selection-start-line="2872" selection-start-column="20" selection-end-line="2872" selection-end-column="20" />
+            <state relative-caret-position="376">
+              <caret line="2832" column="82" lean-forward="false" selection-start-line="2832" selection-start-column="82" selection-end-line="2832" selection-end-column="82" />
               <folding>
-                <marker date="1511950392533" expanded="true" signature="69810:69873" ph="update tiny_... " />
-                <marker date="1511950392533" expanded="true" signature="87548:87641" ph="select SUM(c... " />
-                <marker date="1511950392533" expanded="true" signature="117408:117472" ph="update tiny_... " />
+                <marker date="1511951597282" expanded="true" signature="69810:69873" ph="update tiny_... " />
+                <marker date="1511951597282" expanded="true" signature="87548:87641" ph="select SUM(c... " />
+                <marker date="1511951597282" expanded="true" signature="117408:117472" ph="update tiny_... " />
               </folding>
             </state>
           </provider>
@@ -91,9 +90,9 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1053" />
-    <option name="y" value="93" />
-    <option name="width" value="810" />
+    <option name="x" value="499" />
+    <option name="y" value="412" />
+    <option name="width" value="1236" />
     <option name="height" value="876" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -127,6 +126,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -211,7 +211,6 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -273,11 +272,12 @@
       <workItem from="1511925262002" duration="6413000" />
       <workItem from="1511938809741" duration="9377000" />
       <workItem from="1511950304776" duration="88000" />
+      <workItem from="1511950933721" duration="661000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="179378000" />
+    <option name="totallyTimeSpent" value="180039000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -292,7 +292,7 @@
     <frame x="72" y="-8" width="1856" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14836957" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3438287" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -691,39 +691,39 @@
         <state relative-caret-position="502">
           <caret line="44" column="61" lean-forward="false" selection-start-line="44" selection-start-column="61" selection-end-line="44" selection-end-column="61" />
           <folding>
-            <marker date="1511949016378" expanded="true" signature="155:1367" ph="..." />
-            <marker date="1511949016378" expanded="true" signature="200:1360" ph="..." />
-            <marker date="1511949016378" expanded="true" signature="213:1348" ph="..." />
-            <marker date="1511949016378" expanded="true" signature="230:402" ph="..." />
-            <marker date="1511949016378" expanded="true" signature="331:384" ph="..." />
-            <marker date="1511949016378" expanded="true" signature="419:1020" ph="..." />
-            <marker date="1511949016378" expanded="true" signature="496:1002" ph="..." />
-            <marker date="1511949016378" expanded="true" signature="1037:1220" ph="..." />
-            <marker date="1511949016378" expanded="true" signature="1145:1202" ph="..." />
-            <marker date="1511949016378" expanded="true" signature="1237:1334" ph="..." />
-            <marker date="1511949016378" expanded="true" signature="1376:2616" ph="..." />
-            <marker date="1511949016378" expanded="true" signature="1409:1522" ph="{...}" />
-            <marker date="1511949016378" expanded="true" signature="1430:1514" ph="{&quot;content&quot;: msg...}" />
-            <marker date="1511949016378" expanded="true" signature="1570:2605" ph="{...}" />
-            <marker date="1511949016378" expanded="true" signature="1768:2589" ph="{&quot;url&quot;: '/ucenter/realNameVerify'...}" />
-            <marker date="1511949016378" expanded="true" signature="1961:2246" ph="{...}" />
-            <marker date="1511949016378" expanded="true" signature="2098:2232" ph="{...}" />
-            <marker date="1511949016378" expanded="true" signature="2287:2579" ph="{...}" />
-            <marker date="1511949016378" expanded="true" signature="2337:2494" ph="{...}" />
-            <marker date="1511949016378" expanded="true" signature="2401:2474" ph="{...}" />
-            <marker date="1511949016378" expanded="true" signature="2500:2565" ph="{...}" />
+            <marker date="1511950908799" expanded="true" signature="155:1367" ph="..." />
+            <marker date="1511950908799" expanded="true" signature="200:1360" ph="..." />
+            <marker date="1511950908799" expanded="true" signature="213:1348" ph="..." />
+            <marker date="1511950908799" expanded="true" signature="230:402" ph="..." />
+            <marker date="1511950908799" expanded="true" signature="331:384" ph="..." />
+            <marker date="1511950908799" expanded="true" signature="419:1020" ph="..." />
+            <marker date="1511950908799" expanded="true" signature="496:1002" ph="..." />
+            <marker date="1511950908799" expanded="true" signature="1037:1220" ph="..." />
+            <marker date="1511950908799" expanded="true" signature="1145:1202" ph="..." />
+            <marker date="1511950908799" expanded="true" signature="1237:1334" ph="..." />
+            <marker date="1511950908799" expanded="true" signature="1376:2616" ph="..." />
+            <marker date="1511950908799" expanded="true" signature="1409:1522" ph="{...}" />
+            <marker date="1511950908799" expanded="true" signature="1430:1514" ph="{&quot;content&quot;: msg...}" />
+            <marker date="1511950908799" expanded="true" signature="1570:2605" ph="{...}" />
+            <marker date="1511950908799" expanded="true" signature="1768:2589" ph="{&quot;url&quot;: '/ucenter/realNameVerify'...}" />
+            <marker date="1511950908799" expanded="true" signature="1961:2246" ph="{...}" />
+            <marker date="1511950908799" expanded="true" signature="2098:2232" ph="{...}" />
+            <marker date="1511950908799" expanded="true" signature="2287:2579" ph="{...}" />
+            <marker date="1511950908799" expanded="true" signature="2337:2494" ph="{...}" />
+            <marker date="1511950908799" expanded="true" signature="2401:2474" ph="{...}" />
+            <marker date="1511950908799" expanded="true" signature="2500:2565" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/ucenter.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="658">
-          <caret line="2872" column="20" lean-forward="false" selection-start-line="2872" selection-start-column="20" selection-end-line="2872" selection-end-column="20" />
+        <state relative-caret-position="376">
+          <caret line="2832" column="82" lean-forward="false" selection-start-line="2832" selection-start-column="82" selection-end-line="2832" selection-end-column="82" />
           <folding>
-            <marker date="1511950392533" expanded="true" signature="69810:69873" ph="update tiny_... " />
-            <marker date="1511950392533" expanded="true" signature="87548:87641" ph="select SUM(c... " />
-            <marker date="1511950392533" expanded="true" signature="117408:117472" ph="update tiny_... " />
+            <marker date="1511951597282" expanded="true" signature="69810:69873" ph="update tiny_... " />
+            <marker date="1511951597282" expanded="true" signature="87548:87641" ph="select SUM(c... " />
+            <marker date="1511951597282" expanded="true" signature="117408:117472" ph="update tiny_... " />
           </folding>
         </state>
       </provider>
