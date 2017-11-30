@@ -164,7 +164,7 @@ class SOAClient {
 	private function checkResult($result){
 		global $log;
 		$arr = json_decode($result, true);
-		print_r($arr);die;
+		// print_r($arr);die;
 		$sign = $arr['sign'];
 		$signedValue = $arr['signedValue'];
 		if($sign != null){
