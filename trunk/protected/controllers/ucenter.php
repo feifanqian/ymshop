@@ -1745,9 +1745,9 @@ class UcenterController extends Controller
                 }
             } else if (Validator::mobi($account)) {
                 $sms = SMS::getInstance();
-                if ($sms->getStatus()) {
-                    $result = $sms->sendCode($account, $code);
-                    // $result = $sms->actionSendVerificationCode($account, $this->user['id']); //使用云账户接口
+                // if ($sms->getStatus()) {
+                    // $result = $sms->sendCode($account, $code);
+                    $result = $sms->actionSendVerificationCode($account, $this->user['id']); //使用云账户接口
                     if ($result['status'] == 'success') {
                         $info = array('status' => 'success', 'msg' => $result['message']);
                         $activateObj = array('time' => time(), 'code' => $code, 'obj' => $account);
@@ -1756,9 +1756,9 @@ class UcenterController extends Controller
                     } else {
                         $info = array('status' => 'fail', 'msg' => $result['message']);
                     }
-                } else {
-                    $info = array('status' => 'fail', 'msg' => '系统没有开启手机验证功能!');
-                }
+                // } else {
+                //     $info = array('status' => 'fail', 'msg' => '系统没有开启手机验证功能!');
+                // }
             } else {
                 $info = array('status' => 'fail', 'msg' => '除邮箱及手机号外，不支持发送!');
             }
