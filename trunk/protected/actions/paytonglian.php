@@ -91,7 +91,8 @@ class PaytonglianAction extends Controller
 
     public function actionSendVerificationCode()
     {
-        $bizUserId = Req::args('bizUserId');
+        $bizUserId = date('YmdHis').$this->user['id'];
+        $this->model->table('customer')->data(array('bizuserid'=>$bizUserId))->where('user_id='.$this->user['id'])->update();
         $phone = Req::args('phone');
         $verificationCodeType = Req::args('verificationCodeType');
         $client = new SOAClient();
@@ -279,7 +280,8 @@ class PaytonglianAction extends Controller
 
     public function actionBindPhone()
     {
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $phone = Req::args('phone');
         $verificationCode = Req::args('verificationCode');
         $client = new SOAClient();
