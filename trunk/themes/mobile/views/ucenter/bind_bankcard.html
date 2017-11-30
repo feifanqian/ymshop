@@ -33,7 +33,7 @@
 
     $('#apply-submit').on('click', function () {
         var name = $("input[name='name']").val();
-        var phone = $("#identityType option:selected").val();
+        var phone = $("input[name='phone']").val();
         var cardNo = $("input[name='cardNo']").val();
         $.ajax({
             url: '/ucenter/bindbancard_do',
