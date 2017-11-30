@@ -84,7 +84,6 @@ class UcenterController extends Controller
                 $action = 'safety';
                 break;
         }
-        $user = $this->model->table('customer')->fields('mobile_verified,realname_verified')->where('user_id=' . $this->user['id'])->find();
         $config = Config::getInstance();
         $site_config = $config->get("globals");
         $this->assign('site_title', $site_config['site_name']);
@@ -94,8 +93,7 @@ class UcenterController extends Controller
         $this->assign("category", $this->category);
         $this->assign("url_index", '');
         $this->assign("seo_title", "用户中心");
-        $this->assign('user_id',$user['mobile_verified']);
-        $this->assign('name',$user['realname_verified']);
+        
     }
 
     public function checkRight($actionId)
@@ -1439,6 +1437,9 @@ class UcenterController extends Controller
         // }
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
+        $user = $this->model->table('customer')->fields('mobile_verified,realname_verified')->where('user_id=' . $this->user['id'])->find();
+        $this->assign('name',$user['realname_verified']);
+        $this->assign('user_id',$user['mobile_verified']);
         $this->assign("sign_in_open", $sign_in_set['open']);
         $this->assign("random", rand(1000, 9999));
         $this->assign('is_hirer', $is_hirer);
