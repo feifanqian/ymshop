@@ -5,7 +5,8 @@
 </style>
 <div id="widget_sub_navs ">
     <div class="weui_panel " style="margin-top:10px;">
-        <div class="weui_panel_hd js_category">客户服务<p><i class="ymicon icon-navicon"></i><p></div>
+        <div class="weui_panel_hd js_category">客户服务<p><i class="ymicon icon-navicon"></i>
+            <p></div>
         <div class="weui_panel_bd js_categoryInner">
             <div class="weui_media_box weui_media_small_appmsg">
                 <div class="weui_cells weui_cells_access">
@@ -13,7 +14,8 @@
                         <div class="weui_cell_hd">
                             <span class="icon-stack icon-lg">
                                 <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
-                                <i class="ymicon icon-qiandao icon-stack-1x icon-inverse" style="font-size: 1.2em;color:white;"></i>
+                                <i class="ymicon icon-qiandao icon-stack-1x icon-inverse"
+                                   style="font-size: 1.2em;color:white;"></i>
                             </span>
                         </div>
                         <div class="weui_cell_bd weui_cell_primary">
@@ -50,7 +52,8 @@
         </div>
     </div>
     <div class="weui_panel">
-        <div class="weui_panel_hd js_category">账户管理<p><i class="ymicon icon-navicon"></i><p></div>
+        <div class="weui_panel_hd js_category">账户管理<p><i class="ymicon icon-navicon"></i>
+            <p></div>
         <div class="weui_panel_bd js_categoryInner">
             <div class="weui_media_box weui_media_small_appmsg">
                 <div class="weui_cells weui_cells_access">
@@ -102,7 +105,7 @@
                         </div>
                         <span class="weui_cell_ft"></span>
                     </a>
-                    <a class="weui_cell" href="/ucenter/set_realname">
+                    <a class="weui_cell" href="javascript:void(0);" id="name_check">
                         <div class="weui_cell_hd">
                             <span class="icon-stack icon-lg">
                                 <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
@@ -114,7 +117,7 @@
                         </div>
                         <span class="weui_cell_ft"></span>
                     </a>
-                    <a class="weui_cell" href="/ucenter/bind_bankcard">
+                    <a class="weui_cell" href="javascript:void(0);" id="bind_bankcard">
                         <div class="weui_cell_hd">
                             <span class="icon-stack icon-lg">
                                 <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
@@ -154,3 +157,24 @@
     </div>
 </div>
 {/list}	-->
+<script>
+    //实名认证，判断用户是否已绑定手机
+    $("#name_check").click(function () {
+        var e = "{$user_id}";
+        if (e) {
+            window.location.href = '/ucenter/set_realname';
+        } else {
+            $.toast('请先绑定手机', 'loading');
+        }
+    });
+
+    //绑定银行卡，判断用户是否已实名认证
+    $("#bind_bankcard").click(function () {
+        var e = "{$name}";
+        if (e) {
+            window.location.href = '/ucenter/bind_bankcard';
+        } else {
+            $.toast('请先实名认证', 'loading');
+        }
+    });
+</script>

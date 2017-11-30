@@ -36,7 +36,7 @@
         var phone = $("input[name='phone']").val();
         var cardNo = $("input[name='cardNo']").val();
         $.ajax({
-            url: '/ucenter/bindbancard_do',
+            url: 'http://localhost/ymshop/trunk/ucenter/bindbancard_do',
             type: 'post',
             data: {'name': name, 'phone': phone, 'cardNo': cardNo},
             beforeSend: function () {
@@ -50,12 +50,13 @@
                 }
             },
             success: function (result) {
-                var ret = JSON.parse(result);
-                if (ret.status == 'success') {
-                    notification(ret.msg);
-                } else {
-                    notification(ret.msg);
-                }
+                console.log(result);
+//                var ret = JSON.parse(result);
+//                if (ret.status == 'success') {
+//                    notification(ret.msg);
+//                } else {
+//                    notification(ret.msg);
+//                }
             }
         }, 'json');
     });
