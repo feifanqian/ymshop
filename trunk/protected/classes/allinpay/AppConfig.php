@@ -16,7 +16,8 @@
 
     const ALIAS = "100009001000";
     const PWD = "900724";
-    const ICLOD_URL = 'https://yun.allinpay.com/service/soa';
+    // const ICLOD_URL = 'https://yun.allinpay.com/service/soa';
+    const ICLOD_URL = 'http://122.227.225.142:23661/service/soa';
     const SYSID = "100009001000";
     const SIGN_METHOD = "SHA1WithRSA";
  }
