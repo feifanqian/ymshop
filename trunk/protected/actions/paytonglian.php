@@ -57,9 +57,9 @@ class PaytonglianAction extends Controller
     public function actionCreateMember()
     {
 
-        $bizUserId = Req::args('bizUserId');
-        $memberType = Req::args('memberType');
-        $source = Req::args('source');
+        $bizUserId = date('YmdHis').$this->user['id'];
+        $memberType = 3;
+        $source = 1;
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -74,10 +74,12 @@ class PaytonglianAction extends Controller
         $param["source"] = $source;        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
         if ($result['status'] == 'OK') {
-            $this->code = 0;
-            $this->content = '创建会员成功';
+            // $this->code = 0;
+            // $this->content = '创建会员成功';
+            $this->model->table('customer')->data(array('bizuserid'=>$bizUserId))->where('user_id='.$this->user['id'])->update();
+            return true;
         } else {
-            print_r($result);
+            return false;
         }
     }
 
@@ -91,29 +93,34 @@ class PaytonglianAction extends Controller
 
     public function actionSendVerificationCode()
     {
-        $bizUserId = date('YmdHis').$this->user['id'];
-        $this->model->table('customer')->data(array('bizuserid'=>$bizUserId))->where('user_id='.$this->user['id'])->update();
-        $phone = Req::args('phone');
-        $verificationCodeType = Req::args('verificationCodeType');
-        $client = new SOAClient();
-        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
-        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $result1 = $this->actionCreateMember();
+        if($result1){
+            $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+            $bizUserId = $customer['bizuserid'];
+            $phone = Req::args('phone');
+            $verificationCodeType = Req::args('verificationCodeType');
+            $client = new SOAClient();
+            $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+            $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
 
-        $client->setServerAddress($this->serverAddress);
-        $client->setSignKey($privateKey);
-        $client->setPublicKey($publicKey);
-        $client->setSysId($this->sysid);
-        $client->setSignMethod($this->signMethod);
-        $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
-        $param["phone"] = $phone;    //手机号码
-        $param["verificationCodeType"] = $verificationCodeType;//绑定手机
-        $result = $client->request("MemberService", "sendVerificationCode", $param);
-        if ($result['status'] == 'OK') {
-            $this->code = 0;
-            $this->content = '发送短信验证码成功';
-        }else {
-            $this->code = $result['errorCode'];
-            $this->content = $result['message'];
+            $client->setServerAddress($this->serverAddress);
+            $client->setSignKey($privateKey);
+            $client->setPublicKey($publicKey);
+            $client->setSysId($this->sysid);
+            $client->setSignMethod($this->signMethod);
+            $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
+            $param["phone"] = $phone;    //手机号码
+            $param["verificationCodeType"] = $verificationCodeType;//绑定手机
+            $result = $client->request("MemberService", "sendVerificationCode", $param);
+            if ($result['status'] == 'OK') {
+                $this->code = 0;
+                $this->content = '发送短信验证码成功';
+            }else {
+                $this->code = $result['errorCode'];
+                $this->content = $result['message'];
+            }
+        }else{
+            $this->code = 1032;
         }
     }
 
