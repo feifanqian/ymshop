@@ -164,7 +164,7 @@ class SMS extends ClassConfig {
         if($result1){
             $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$user_id)->find();
             $bizUserId = $customer['bizuserid'];
-            $verificationCodeType = Req::args('verificationCodeType');
+            $verificationCodeType = 9;
             $client = new SOAClient();
             $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
             $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
