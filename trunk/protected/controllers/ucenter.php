@@ -1703,6 +1703,41 @@ class UcenterController extends Controller
             } else {
                 $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
             }
+            
+            // if($obj == 'mobile' && Validator::mobi($account)){
+            //      $sms = SMS::getInstance();
+            //      $return = $sms->actionBindPhone($account,$code,$this->user['id']);
+            //      if($return['status']=='success'){
+            //         $result = $this->model->table('customer')->where("mobile ='" . $account . "'" . '  and user_id!=' . $this->user['id'])->find();
+            //         if (!$result) {
+            //             $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1))->where('user_id=' . $this->user['id'])->update();
+            //             Session::clear('verifiedInfo');
+            //             Session::clear('activateObj');
+            //             $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
+            //             exit;
+            //         } else {
+            //             $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
+            //         }
+            //      }else{
+            //         $info = array('field' => 'account', 'msg' => $return['message']);
+            //     }
+            // }elseif($obj == 'email' && Validator::email($account)){
+            //     if ($code == $newCode && $account == $newAccount){
+            //         $result = $this->model->table('user')->where("email='" . $account . "' and id != " . $this->user['id'])->find();
+            //         if (!$result) {
+            //             $this->model->table('user')->data(array('email' => $account))->where('id=' . $this->user['id'])->update();
+            //             $this->model->table('customer')->data(array('email_verified' => 1))->where('user_id=' . $this->user['id'])->update();
+            //             Session::clear('verifiedInfo');
+            //             Session::clear('activateObj');
+            //             $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
+            //             exit;
+            //         } else {
+            //             $info = array('field' => 'account', 'msg' => '此邮箱已被其它用户占用，无法修改为此邮箱。');
+            //         }
+            //     }else{
+            //         $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
+            //     }
+            // }
         }
         $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random'], true, array('invalid' => $info, 'account' => $account));
     }
@@ -1746,8 +1781,8 @@ class UcenterController extends Controller
             } else if (Validator::mobi($account)) {
                 $sms = SMS::getInstance();
                 // if ($sms->getStatus()) {
-                    // $result = $sms->sendCode($account, $code);
-                    $result = $sms->actionSendVerificationCode($account, $this->user['id']); //使用云账户接口
+                    $result = $sms->sendCode($account, $code);
+                    // $result = $sms->actionSendVerificationCode($account, $this->user['id']); //使用云账户接口
                     if ($result['status'] == 'success') {
                         $info = array('status' => 'success', 'msg' => $result['message']);
                         $activateObj = array('time' => time(), 'code' => $code, 'obj' => $account);
