@@ -1745,7 +1745,8 @@ class UcenterController extends Controller
             } else if (Validator::mobi($account)) {
                 $sms = SMS::getInstance();
                 if ($sms->getStatus()) {
-                    $result = $sms->sendCode($account, $code);
+                    // $result = $sms->sendCode($account, $code);
+                    $result = $sms->actionSendVerificationCode($account, $this->user['id']); //使用云账户接口
                     if ($result['status'] == 'success') {
                         $info = array('status' => 'success', 'msg' => $result['message']);
                         $activateObj = array('time' => time(), 'code' => $code, 'obj' => $account);

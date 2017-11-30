@@ -131,6 +131,7 @@ class SOAClient {
 	}
 	
 	private function request2($args){
+		print_r($args);die;
 		global $log;
 		$ch = curl_init () ;
 		curl_setopt($ch, CURLOPT_URL, $this->serverUrl);
@@ -163,6 +164,7 @@ class SOAClient {
 	private function checkResult($result){
 		global $log;
 		$arr = json_decode($result, true);
+		print_r($arr);die;
 		$sign = $arr['sign'];
 		$signedValue = $arr['signedValue'];
 		if($sign != null){

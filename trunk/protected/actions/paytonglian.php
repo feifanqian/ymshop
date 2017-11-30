@@ -4,8 +4,8 @@ define('ICLOD_USERID', '100009001000');//商户id
 define('ICLOD_PATH', dirname(__FILE__) . '/100009001000.pem');
 define('ICLOD_CERT_PATH', dirname(__FILE__) . '/private_rsa.pem'); //私钥文件
 define('ICLOD_CERT_PUBLIC_PATH', dirname(__FILE__) . '/public_rsa.pem');//公钥文件
-define('ICLOD_Server_URL', 'http://122.227.225.142:23661/service/soa');  //接口网关 测试环境
-// define('ICLOD_Server_URL', 'https://yun.allinpay.com/service/soa');  //接口网关 生产环境
+// define('ICLOD_Server_URL', 'http://122.227.225.142:23661/service/soa');  //接口网关 测试环境
+define('ICLOD_Server_URL', 'https://yun.allinpay.com/service/soa');  //接口网关 生产环境
 
 // define('NOTICE_URL', 'http://122.227.225.142:23661/service/soa'); //前台通知地址
 define('NOTICE_URL', 'https://yun.allinpay.com/service/soaa'); //前台通知地址
@@ -308,7 +308,8 @@ class PaytonglianAction extends Controller
             $this->code = '50001';
             $this->content = '验证码错误';
         } else {
-            print_r($result);
+             $this->code = $result['errorCode'];
+             $this->content = $result['message'];
         }
     }
 

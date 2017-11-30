@@ -13,5 +13,12 @@
     const APIURLS = "http://113.108.182.3:10080/apiweb/weixin";
     const APIVERSION = '11';
     const MERCHANT_ID = '200584000015505';
+
+    const ALIAS = "100009001000";
+    const PATH = dirname(__FILE__) . '/100009001000.pem';
+    const PWD = "900724";
+    const ICLOD_URL = 'https://yun.allinpay.com/service/soa';
+    const SYSID = "100009001000";
+    const SIGN_METHOD = "SHA1WithRSA";
  }
 ?>
