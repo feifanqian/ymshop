@@ -111,15 +111,10 @@ class PaytonglianAction extends Controller
         if ($result['status'] == 'OK') {
             $this->code = 0;
             $this->content = '发送短信验证码成功';
-        } else if ($result['errorCode'] == '3000') {
-            $this->code = 3000;
-            $this->content = '所属应用下已经存在此用户';
-        } else {
-            print_r($result);
-
+        }else {
+            $this->code = $result['errorCode'];
+            $this->content = $result['message'];
         }
-
-
     }
 
 
