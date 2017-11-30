@@ -11,7 +11,7 @@ class UcenterController extends Controller
 {
 
     public $layout = 'index';
-    public $safebox = null;
+    // public $safebox = null;
     private $model = null;
     private $category = array();
     private $cookie_time = 31622400;
