@@ -490,8 +490,6 @@ class PaytonglianAction extends Controller
         $phone = Req::args('phone');
         $name = Req::args('name');
         $cardType = Req::args('cardType');  //卡类型   储蓄卡 1 整型         信用卡 2 整型
-        $model = new Model();
-//        $bankCode = $this->model->table("bankcode")->fields("bankcode")->where("user_id='$user_id' AND cardno='$cardNos'")->order('id DESC')->find();
         $identityType = Req::args('identityType');          //证件类型 1是身份证 目前只支持身份证
         $identityNo = $this->rsaEncrypt(Req::args('identityNo'), $publicKey, $privateKey);//必须rsa加密 330227198805284412
         $validate = Req::args('validate');
@@ -514,7 +512,6 @@ class PaytonglianAction extends Controller
         $param["phone"] = $phone;  //银行预留的手机卡号
         $param["name"] = $name; //用户的姓名
         $param["cardType"] = $cardType;
-//        $param['bankCode'] = $bankCode['bankcode'];
         $param["cardCheck"] = $cardCheck; //绑卡方式
         $param["identityType"] = $identityType;
         $param["identityNo"] = $identityNo;
@@ -522,11 +519,7 @@ class PaytonglianAction extends Controller
         $result = $client->request("MemberService", "applyBindBankCard", $param);
         if ($result['status'] == 'OK') {
             $this->code = 0;
-            $signedValue = json_decode($result['signedValue'], true);
-            $transDate = $signedValue['transDate'];
-            $tranceNum = $signedValue['tranceNum'];
-            $model = new Model();
-            $this->model->table("bankcard")->data(array('user_id' => $user_id, 'trancenum' => $tranceNum, 'transdate' => $transDate, 'cardno' => Req::args('cardNo')))->insert();
+            print_r($result);
         } else {
             print_r($result);
         }

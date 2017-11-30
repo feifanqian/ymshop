@@ -17,8 +17,8 @@
       <file leaf-file-name="paytonglian.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="784">
-              <caret line="517" column="10" lean-forward="false" selection-start-line="517" selection-start-column="10" selection-end-line="517" selection-end-column="10" />
+            <state relative-caret-position="316">
+              <caret line="491" column="77" lean-forward="false" selection-start-line="491" selection-start-column="77" selection-end-line="491" selection-end-column="77" />
               <folding />
             </state>
           </provider>
@@ -269,12 +269,12 @@
       <workItem from="1511938809741" duration="9377000" />
       <workItem from="1511950304776" duration="88000" />
       <workItem from="1511950933721" duration="1534000" />
-      <workItem from="1512012261675" duration="149000" />
+      <workItem from="1512012261675" duration="730000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="181061000" />
+    <option name="totallyTimeSpent" value="181642000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -715,8 +715,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/paytonglian.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="784">
-          <caret line="517" column="10" lean-forward="false" selection-start-line="517" selection-start-column="10" selection-end-line="517" selection-end-column="10" />
+        <state relative-caret-position="316">
+          <caret line="491" column="77" lean-forward="false" selection-start-line="491" selection-start-column="77" selection-end-line="491" selection-end-column="77" />
           <folding />
         </state>
       </provider>
