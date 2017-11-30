@@ -38,7 +38,7 @@
         $.ajax({
             url: '/ucenter/bindbancard_do',
             type: 'post',
-            data: {'name': name, 'phone': phone, 'bankcard': bankcard},
+            data: {'name': name, 'phone': phone, 'cardNo': cardNo},
             beforeSend: function () {
                 var flag = true;
                 if ($("input[name='name']").val() == '' || $("input[name='phone']").val() == '' || $("input[name='cardNo']").val() == '') {
