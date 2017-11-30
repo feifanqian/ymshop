@@ -136,8 +136,8 @@ class SMS extends ClassConfig {
         $memberType = 3;
         $source = 1;
         $client = new SOAClient();
-        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd));
-        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd));
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
 
         $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
