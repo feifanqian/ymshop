@@ -1,0 +1,62 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}"/>
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+<div class="ma20 bg-white p20">
+    <form action="" method="post" id="form">
+        <dl>
+            <dd>
+                <input class="input" type="text" pattern="required" name="name" maxlen="5" value=""
+                       placeholder="姓名" alt="姓名不能为空">
+            </dd>
+            <dd>
+                <input class="input" type="text" pattern="required" name="phone" maxlength="11" value=""
+                       placeholder="手机号码">
+            </dd>
+            <dd>
+                <input class="input" type="text" pattern="required" name="cardNo" maxlen="19" value=""
+                       placeholder="银行卡号" alt="银行卡号不能为空">
+            </dd>
+            <dd>
+                <input class="btn" type="button" id="apply-submit" value="保存">
+            </dd>
+        </dl>
+    </form>
+</div>
+<script>
+    function notification(msg) {
+        layer.open({
+            content: msg
+            , skin: 'msg'
+            , time: 4
+        });
+    }
+
+    $('#apply-submit').on('click', function () {
+        var name = $("input[name='name']").val();
+        var phone = $("#identityType option:selected").val();
+        var cardNo = $("input[name='cardNo']").val();
+        $.ajax({
+            url: '/ucenter/bindbancard_do',
+            type: 'post',
+            data: {'name': name, 'phone': phone, 'bankcard': bankcard},
+            beforeSend: function () {
+                var flag = true;
+                if ($("input[name='name']").val() == '' || $("input[name='phone']").val() == '' || $("input[name='cardNo']").val() == '') {
+                    flag = false;
+                    notification("请完善绑卡信息");
+                    return false;
+                } else {
+                    $.toast("绑卡信息已提交", 'success');
+                }
+            },
+            success: function (result) {
+                var ret = JSON.parse(result);
+                if (ret.status == 'success') {
+                    notification(ret.msg);
+                } else {
+                    notification(ret.msg);
+                }
+            }
+        }, 'json');
+    });
+</script>
