@@ -6,6 +6,18 @@ class SMS extends ClassConfig {
      *
      * @var SMS 
      */
+    public $alias = AppConfig::ALIAS;
+    public $path = AppConfig::PATH;
+    public $pwd = AppConfig::PWD;
+    public $serverAddress = AppConfig::ICLOD_URL;
+    public $sysid = AppConfig::SYSID;
+    public $signMethod = AppConfig::SIGN_METHOD;
+
+    public function __construct()
+    {
+        $this->model = new Model();
+    }
+
     private static $ins = null;
     public $errordict = array(
         '405' => '请求参数中的appkey为空',
@@ -115,6 +127,89 @@ class SMS extends ClassConfig {
         // 不要忘记释放资源
         curl_close($ch);
         return $response;
+    }
+
+    public function actionCreateMember($user_id)
+    {
+
+        $bizUserId = date('YmdHis').$user_id;
+        $memberType = 3;
+        $source = 1;
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd));
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd));
+
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        $param["bizUserId"] = $bizUserId;
+        $param["memberType"] = $memberType;    //会员类型
+        $param["source"] = $source;        //访问终端类型
+        $result = $client->request("MemberService", "createMember", $param);
+        if ($result['status'] == 'OK') {
+            // $this->code = 0;
+            // $this->content = '创建会员成功';
+            $this->model->table('customer')->data(array('bizuserid'=>$bizUserId))->where('user_id='.$user_id)->update();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function actionSendVerificationCode($phone,$user_id)
+    {
+        $result1 = $this->actionCreateMember($user_id);
+        if($result1){
+            $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$user_id)->find();
+            $bizUserId = $customer['bizuserid'];
+            $verificationCodeType = Req::args('verificationCodeType');
+            $client = new SOAClient();
+            $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+            $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+
+            $client->setServerAddress($this->serverAddress);
+            $client->setSignKey($privateKey);
+            $client->setPublicKey($publicKey);
+            $client->setSysId($this->sysid);
+            $client->setSignMethod($this->signMethod);
+            $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
+            $param["phone"] = $phone;    //手机号码
+            $param["verificationCodeType"] = $verificationCodeType;//绑定手机
+            $result = $client->request("MemberService", "sendVerificationCode", $param);
+            if ($result['status'] == 'OK') {
+                return array('status' => 'success', 'message' => '发送成功');
+            }else {
+                return array('status' => 'fail', 'message' => $result['message']);
+            }
+        }else{
+            return array('status' => 'fail', 'message' => '发送失败');
+        }
+    }
+
+    public function actionBindPhone($phone,$verificationCode,$user_id)
+    {
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$user_id)->find();
+        $bizUserId = $customer['bizuserid'];
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+        $param["bizUserId"] = $bizUserId;     //商户系统用户标识，商户系统中唯一编号
+        $param["phone"] = $phone;    //手机号码
+        $param["verificationCode"] = $verificationCode; //短信验证码
+        $result = $client->request("MemberService", "bindPhone", $param);
+        if ($result['status'] == 'OK') {
+            return array('status' => 'success', 'message' => '绑定成功');
+        } else {
+             return array('status' => 'fail', 'message' => $result['message']);
+        }
     }
 
 }

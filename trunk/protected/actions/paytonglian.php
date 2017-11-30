@@ -308,7 +308,8 @@ class PaytonglianAction extends Controller
             $this->code = '50001';
             $this->content = '验证码错误';
         } else {
-            print_r($result);
+             $this->code = $result['errorCode'];
+             $this->content = $result['message'];
         }
     }
 
