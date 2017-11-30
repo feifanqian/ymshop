@@ -100,7 +100,7 @@ class AjaxController extends Controller {
                 $info = array('status' => 'fail', 'msg' => '120秒内仅能获取一次短信验证码,请稍后重试!');
             } else {
                 $sms = SMS::getInstance();
-                if ($sms->getStatus()) {
+                // if ($sms->getStatus()) {
                     $code = CHash::random('6', 'int');
                     $result = $sms->sendCode($mobile, $code);
                     if ($result['status'] == 'success') {
@@ -109,9 +109,9 @@ class AjaxController extends Controller {
                     } else {
                         $info = array('status' => 'fail', 'msg' => $result['message']);
                     }
-                } else {
-                    $info = array('status' => 'fail', 'msg' => '请开启手机验证功能!');
-                }
+                // } else {
+                //     $info = array('status' => 'fail', 'msg' => '请开启手机验证功能!');
+                // }
             }
         }
         echo JSON::encode($info);
@@ -133,7 +133,7 @@ class AjaxController extends Controller {
                     $info = array('status' => 'fail', 'msg' => '120秒内仅能获取一次短信验证码,请稍后重试!');
                 } else {
                     $sms = SMS::getInstance();
-                    if ($sms->getStatus()) {
+                    // if ($sms->getStatus()) {
                         $code = CHash::random('6', 'int');
                         $result = $sms->sendCode($mobile_info['mobile'], $code);
                         if ($result['status'] == 'success') {
@@ -142,9 +142,9 @@ class AjaxController extends Controller {
                         } else {
                             $info = array('status' => 'fail', 'msg' => $result['message']);
                         }
-                    } else {
-                        $info = array('status' => 'fail', 'msg' => '请开启手机验证功能!');
-                    }
+                    // } else {
+                    //     $info = array('status' => 'fail', 'msg' => '请开启手机验证功能!');
+                    // }
                 }
             }
         }
