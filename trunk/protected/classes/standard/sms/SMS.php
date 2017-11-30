@@ -7,7 +7,7 @@ class SMS extends ClassConfig {
      * @var SMS 
      */
     public $alias = AppConfig::ALIAS;
-    public $path = AppConfig::PATH;
+    // public $path = AppConfig::PATH;
     public $pwd = AppConfig::PWD;
     public $serverAddress = AppConfig::ICLOD_URL;
     public $sysid = AppConfig::SYSID;
