@@ -131,6 +131,8 @@ class SOAClient {
 	}
 	
 	private function request2($args){
+		var_dump($args);
+		print_r($args);die;
 		global $log;
 		$ch = curl_init () ;
 		curl_setopt($ch, CURLOPT_URL, $this->serverUrl);
