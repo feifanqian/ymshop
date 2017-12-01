@@ -1,13 +1,15 @@
 <?php
 
-class DistrictadminController extends Controller {
+class DistrictadminController extends Controller
+{
 
     public $layout = 'admin';
     private $top = null;
     private $manager = null;
     public $needRightActions = array('*' => true);
 
-    public function init() {
+    public function init()
+    {
         $menu = new Menu();
         $this->assign('mainMenu', $menu->getMenu());
         $menu_index = $menu->current_menu();
@@ -29,12 +31,14 @@ class DistrictadminController extends Controller {
             $this->assign('admin_title', $currentNode['name']);
     }
 
-    public function noRight() {
+    public function noRight()
+    {
         $this->layout = '';
         $this->redirect("admin/noright");
     }
 
-    public function record_sale() {
+    public function record_sale()
+    {
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
 
@@ -47,8 +51,9 @@ class DistrictadminController extends Controller {
         $this->redirect();
     }
 
-    public function record_income() {
-        $this->model=new Model();
+    public function record_income()
+    {
+        $this->model = new Model();
         $page = intval(Req::args("p"));
         $page_size = 10;
         $condition = Req::args("condition");
@@ -65,21 +70,22 @@ class DistrictadminController extends Controller {
         // var_dump($where);die;
         // $where="c.real_name='练聪'";
         $list = $this->model->table('promote_income_log as p')->join('left join user as u on p.role_id=u.id left join customer as c on p.role_id=c.user_id left join district_shop as d on p.role_id=d.id')->fields("p.*,u.nickname,c.real_name,d.name as shopname")->where($where)->order("id desc")->findPage($page, $page_size);
-        
+
         // var_dump($list);die;
         $this->assign("list", $list);
         $this->redirect();
     }
 
-    public function list_hirer() {
-        $this->model=new Model();
+    public function list_hirer()
+    {
+        $this->model = new Model();
         $page = intval(Req::args("p"));
         $page_size = 10;
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
 
         if ($condition_str) {
-            $where = 'ds.status=1 and '.$condition_str;
+            $where = 'ds.status=1 and ' . $condition_str;
             $this->assign("where", $condition_str);
         } else {
             $where = "ds.status=1";
@@ -91,22 +97,27 @@ class DistrictadminController extends Controller {
         $this->redirect();
     }
 
-    public function view_achievement() {
+    public function view_achievement()
+    {
         if ($this->is_ajax_request()) {
             $role_type = Filter::int(Req::args('role_type'));
             $role_id = Filter::int(Req::args('role_id'));
             $period = Filter::int(Req::args('period'));
             switch ($period) {
-                case 1:$start_time = date("Y-m-d 00:00:00");
+                case 1:
+                    $start_time = date("Y-m-d 00:00:00");
                     $end_time = date("Y-m-d 23:59:59");
                     break;
-                case 2:$start_time = date("Y-m-d 00:00:00", strtotime("-1 days"));
+                case 2:
+                    $start_time = date("Y-m-d 00:00:00", strtotime("-1 days"));
                     $end_time = date("Y-m-d 23:59:59", strtotime("-1 days"));
                     break;
-                case 3:$start_time = date("Y-m-d 00:00:00", strtotime("-6 days"));
+                case 3:
+                    $start_time = date("Y-m-d 00:00:00", strtotime("-6 days"));
                     $end_time = date("Y-m-d 23:59:59");
                     break;
-                case 4:$start_time = date("Y-m-d 00:00:00", strtotime("-29 days"));
+                case 4:
+                    $start_time = date("Y-m-d 00:00:00", strtotime("-29 days"));
                     $end_time = date("Y-m-d 23:59:59");
                     break;
                 default :
@@ -135,7 +146,8 @@ class DistrictadminController extends Controller {
         }
     }
 
-    public function chart() {
+    public function chart()
+    {
         $this->layout = 'blank';
         if ($this->is_ajax_request()) {
             $role_type = Filter::int(Req::args('role_type'));
@@ -143,16 +155,20 @@ class DistrictadminController extends Controller {
             $period = Filter::int(Req::args('period'));
             $district_id = Filter::int(Req::args("district_id"));
             switch ($period) {
-                case 1:$start_time = date("Y-m-d 00:00:00");
+                case 1:
+                    $start_time = date("Y-m-d 00:00:00");
                     $end_time = date("Y-m-d 23:59:59");
                     break;
-                case 2:$start_time = date("Y-m-d 00:00:00", strtotime("-1 days"));
+                case 2:
+                    $start_time = date("Y-m-d 00:00:00", strtotime("-1 days"));
                     $end_time = date("Y-m-d 23:59:59", strtotime("-1 days"));
                     break;
-                case 3:$start_time = date("Y-m-d 00:00:00", strtotime("-6 days"));
+                case 3:
+                    $start_time = date("Y-m-d 00:00:00", strtotime("-6 days"));
                     $end_time = date("Y-m-d 23:59:59");
                     break;
-                case 4:$start_time = date("Y-m-d 00:00:00", strtotime("-29 days"));
+                case 4:
+                    $start_time = date("Y-m-d 00:00:00", strtotime("-29 days"));
                     $end_time = date("Y-m-d 23:59:59");
                     break;
                 default :
@@ -182,16 +198,20 @@ class DistrictadminController extends Controller {
             $district_id = Filter::int(Req::args("district_id"));
             $period = 1;
             switch ($period) {
-                case 1:$start_time = date("Y-m-d 00:00:00");
+                case 1:
+                    $start_time = date("Y-m-d 00:00:00");
                     $end_time = date("Y-m-d 23:59:59");
                     break;
-                case 2:$start_time = date("Y-m-d 00:00:00", strtotime("-1 days"));
+                case 2:
+                    $start_time = date("Y-m-d 00:00:00", strtotime("-1 days"));
                     $end_time = date("Y-m-d 23:59:59", strtotime("-1 days"));
                     break;
-                case 3:$start_time = date("Y-m-d 00:00:00", strtotime("-6 days"));
+                case 3:
+                    $start_time = date("Y-m-d 00:00:00", strtotime("-6 days"));
                     $end_time = date("Y-m-d 23:59:59");
                     break;
-                case 4:$start_time = date("Y-m-d 00:00:00", strtotime("-29 days"));
+                case 4:
+                    $start_time = date("Y-m-d 00:00:00", strtotime("-29 days"));
                     $end_time = date("Y-m-d 23:59:59");
                     break;
                 default :
@@ -217,13 +237,14 @@ class DistrictadminController extends Controller {
         }
     }
 
-    public function list_promoter() {
+    public function list_promoter()
+    {
 
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
 
         if ($condition_str) {
-            $where='dp.status=1 and '.$condition_str;
+            $where = 'dp.status=1 and ' . $condition_str;
             $this->assign("where", $where);
         } else {
             $this->assign("where", "dp.status=1");
@@ -232,7 +253,8 @@ class DistrictadminController extends Controller {
         $this->redirect();
     }
 
-    public function apply_withdraw() {
+    public function apply_withdraw()
+    {
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
         if ($condition_str) {
@@ -244,7 +266,8 @@ class DistrictadminController extends Controller {
         $this->redirect();
     }
 
-    public function apply_join() {
+    public function apply_join()
+    {
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
         if ($condition_str) {
@@ -256,7 +279,8 @@ class DistrictadminController extends Controller {
         $this->redirect();
     }
 
-    public function qrcode_join() {
+    public function qrcode_join()
+    {
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
         if ($condition_str) {
@@ -269,7 +293,8 @@ class DistrictadminController extends Controller {
         $this->redirect();
     }
 
-    public function updateApplyStatus() {
+    public function updateApplyStatus()
+    {
         $id = Filter::sql(Req::args("id"));
         $status = Filter::sql(Req::args("status"));
         $reason = Filter::sql(Req::args("reason"));
@@ -333,12 +358,12 @@ class DistrictadminController extends Controller {
                                 Log::pointcoin_log(round($set['join_fee'], 2), $apply_info['user_id'], "", "经销商入驻赠送", 8);
                                 // $model->table("customer")->data(array('financial_coin' => "`financial_coin`+" .$set['join_fee'] ))->where("user_id=" . $apply_info['user_id'])->update();
                             }
-                            if($data['invite_shop_id'] != ""){
+                            if ($data['invite_shop_id'] != "") {
                                 //添加积分收益记录
-                                $uinfo=$model->table("district_shop")->where("id=" . $data['invite_shop_id'])->find();
-                                $uid=$uinfo['owner_id'];
-                                if($uid){
-                                    $model->table("customer")->data(array("point_coin"=>"`point_coin`+18000"))->where("user_id=" . $uid)->update();
+                                $uinfo = $model->table("district_shop")->where("id=" . $data['invite_shop_id'])->find();
+                                $uid = $uinfo['owner_id'];
+                                if ($uid) {
+                                    $model->table("customer")->data(array("point_coin" => "`point_coin`+18000"))->where("user_id=" . $uid)->update();
                                     Log::pointcoin_log(18000, $uid, "", "经销商邀请经销商收益", 8);
                                 }
                             }
@@ -400,21 +425,23 @@ class DistrictadminController extends Controller {
         }
     }
 
-    public function updateQrcodeStatus(){
-         $id = Filter::sql(Req::args("id"));
-         $status = Filter::sql(Req::args("status"));
-         $model=new Model();
-         $ret = $model->table('district_promoter')->where('id='.$id)->data(array('unique_code'=>$status,'join_time'=>date('Y-m-d H:i:s')))->update();
-         if($ret){
+    public function updateQrcodeStatus()
+    {
+        $id = Filter::sql(Req::args("id"));
+        $status = Filter::sql(Req::args("status"));
+        $model = new Model();
+        $ret = $model->table('district_promoter')->where('id=' . $id)->data(array('unique_code' => $status, 'join_time' => date('Y-m-d H:i:s')))->update();
+        if ($ret) {
             echo json_encode(array("status" => 'success', 'msg' => '成功'));
             exit();
-         }else{
+        } else {
             echo json_encode(array("status" => 'fail', 'msg' => '数据库更新失败'));
             exit();
-         }
+        }
     }
 
-    public function updateWithdrawStatus() {
+    public function updateWithdrawStatus()
+    {
         $id = Filter::sql(Req::args("id"));
         $status = Filter::sql(Req::args("status"));
         $reason = Filter::sql(Req::args("reason"));
@@ -428,28 +455,28 @@ class DistrictadminController extends Controller {
                 if ($status == -1) {//如果是作废提现请求时
                     if (trim($reason) != "") {//作废理由不能为空
                         $result = $withdraw->query("update tiny_district_withdraw set status = -1,admin_handle_time='" . date("Y-m-d H:i:s") . "',admin_remark ='$reason' where id = $id");
-                        
+
                         if ($result) {
-                            if ($withdraw_info['role_type'] == 1 || $withdraw_info['role_type'] == 2){
-                                $customer = $model->table('customer')->fields("valid_income,frezze_income,settled_income")->where('user_id='.$withdraw_info['role_id'])->find();
-                                $model->table('customer')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})"))->where('user_id='.$withdraw_info['role_id'])->update();
-                            }else{
-                                $customer = $model->table('district_shop')->fields("valid_income,frezze_income,settled_income")->where('id='.$withdraw_info['role_id'])->find();
-                                $model->table('district_shop')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})"))->where('id='.$withdraw_info['role_id'])->update();
+                            if ($withdraw_info['role_type'] == 1 || $withdraw_info['role_type'] == 2) {
+                                $customer = $model->table('customer')->fields("valid_income,frezze_income,settled_income")->where('user_id=' . $withdraw_info['role_id'])->find();
+                                $model->table('customer')->data(array('valid_income' => "`valid_income`+({$withdraw_info['withdraw_amount']})"))->where('user_id=' . $withdraw_info['role_id'])->update();
+                            } else {
+                                $customer = $model->table('district_shop')->fields("valid_income,frezze_income,settled_income")->where('id=' . $withdraw_info['role_id'])->find();
+                                $model->table('district_shop')->data(array('valid_income' => "`valid_income`+({$withdraw_info['withdraw_amount']})"))->where('id=' . $withdraw_info['role_id'])->update();
                             }
-                            
-                            $data['role_id']=$withdraw_info['role_id'];
-                            $data['role_type']=$withdraw_info['role_type'];
-                            $data['type']=12;
-                            $data['record_id']=$withdraw_info['id'];
+
+                            $data['role_id'] = $withdraw_info['role_id'];
+                            $data['role_type'] = $withdraw_info['role_type'];
+                            $data['type'] = 12;
+                            $data['record_id'] = $withdraw_info['id'];
                             $data['valid_income_change'] = $withdraw_info['withdraw_amount'];
                             $data['frezze_income_change'] = 0;
                             $data['settled_income_change'] = 0;
-                            $data['current_valid_income']=$customer['valid_income']+$withdraw_info['withdraw_amount'];
-                            $data['current_frezze_income']=$customer['frezze_income'];
-                            $data['current_settled_income']=$customer['settled_income'];
-                            $data['date']=date("Y-m-d H:i:s");
-                            $data['note']="提现拒绝收益撤回";
+                            $data['current_valid_income'] = $customer['valid_income'] + $withdraw_info['withdraw_amount'];
+                            $data['current_frezze_income'] = $customer['frezze_income'];
+                            $data['current_settled_income'] = $customer['settled_income'];
+                            $data['date'] = date("Y-m-d H:i:s");
+                            $data['note'] = "提现拒绝收益撤回";
                             $model->table("promote_income_log")->data($data)->insert();
                             echo json_encode(array("status" => 'success', 'msg' => '成功'));
                             exit();
@@ -480,49 +507,49 @@ class DistrictadminController extends Controller {
                                 echo json_encode(array("status" => 'fail', 'msg' => '推广者不存在'));
                                 exit();
                             }
-                            
-                                $params["merDate"] = date("Ymd");
-                                $params["merSeqId"] = date("YmdHis") . rand(10, 99);
-                                $params["cardNo"] = $obj['card_number'];
-                                $params["usrName"] = $obj['bank_account_name'];
-                                $params["openBank"] = $obj['bank_name'];
-                                $params["prov"] = $obj['province'];
-                                $params["city"] = $obj['city'];
-                                $params["transAmt"] = round($withdraw_info['withdraw_amount'] * (100 - $district_set['withdraw_fee_rate'])); //转化成分，并减去手续费
-                                if ($params["transAmt"] <= 0) {
-                                    exit(json_encode(array('status' => 'fail', 'msg' => '代付金额小于或等于0')));
-                                }
-                                $params['purpose'] = "专区用户提现";
-                                $params["withdraw_no"] = $withdraw_info['withdraw_no'];
-                                // $result = $ChinapayDf->DfPay($params);
-                                $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口
-                                if ($result) {
-                                    // $isOk = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到银行卡');
-                                    $model->table('customer')->data(array('settled_income'=>"`settled_income`+({$withdraw_info['withdraw_amount']})"))->where('user_id='.$withdraw_info['role_id'])->update();
-                                    $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
-                                        if ($result) {
 
-                                            echo json_encode(array("status" => 'success', 'msg' => '成功'));
-                                            exit();
-                                        }
-                                    
-                                } else {
-                                    // $customer = $model->table('customer')->fields("valid_income,frezze_income,settled_income")->where('user_id='.$withdraw_info['role_id'])->find();
-                                    // $model->table('customer')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})"))->where('user_id='.$withdraw_info['role_id'])->update();
-                                    // $data['role_id']=$withdraw_info['role_id'];
-                                    // $data['role_type']=$withdraw_info['role_type'];
-                                    // $data['type']=12;
-                                    // $data['record_id']=$withdraw_info['id'];
-                                    // $data['current_valid_income']=$customer['valid_income']+$withdraw_info['withdraw_amount'];
-                                    // $data['current_frezze_income']=$customer['frezze_income'];
-                                    // $data['current_settled_income']=$customer['settled_income']-$withdraw_info['withdraw_amount'];
-                                    // $data['date']=date("Y-m-d H:i:s");
-                                    // $data['note']="提现失败收益撤回";
-                                    // $model->table("promote_income_log")->data($data)->insert();
-                                    echo json_encode(array("status" => 'fail', 'msg' => '代付失败'));
+                            $params["merDate"] = date("Ymd");
+                            $params["merSeqId"] = date("YmdHis") . rand(10, 99);
+                            $params["cardNo"] = $obj['card_number'];
+                            $params["usrName"] = $obj['bank_account_name'];
+                            $params["openBank"] = $obj['bank_name'];
+                            $params["prov"] = $obj['province'];
+                            $params["city"] = $obj['city'];
+                            $params["transAmt"] = round($withdraw_info['withdraw_amount'] * (100 - $district_set['withdraw_fee_rate'])); //转化成分，并减去手续费
+                            if ($params["transAmt"] <= 0) {
+                                exit(json_encode(array('status' => 'fail', 'msg' => '代付金额小于或等于0')));
+                            }
+                            $params['purpose'] = "专区用户提现";
+                            $params["withdraw_no"] = $withdraw_info['withdraw_no'];
+                            // $result = $ChinapayDf->DfPay($params);
+                            $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口
+                            if ($result) {
+                                // $isOk = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到银行卡');
+                                $model->table('customer')->data(array('settled_income' => "`settled_income`+({$withdraw_info['withdraw_amount']})"))->where('user_id=' . $withdraw_info['role_id'])->update();
+                                $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
+                                if ($result) {
+
+                                    echo json_encode(array("status" => 'success', 'msg' => '成功'));
                                     exit();
                                 }
-                            
+
+                            } else {
+                                // $customer = $model->table('customer')->fields("valid_income,frezze_income,settled_income")->where('user_id='.$withdraw_info['role_id'])->find();
+                                // $model->table('customer')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})"))->where('user_id='.$withdraw_info['role_id'])->update();
+                                // $data['role_id']=$withdraw_info['role_id'];
+                                // $data['role_type']=$withdraw_info['role_type'];
+                                // $data['type']=12;
+                                // $data['record_id']=$withdraw_info['id'];
+                                // $data['current_valid_income']=$customer['valid_income']+$withdraw_info['withdraw_amount'];
+                                // $data['current_frezze_income']=$customer['frezze_income'];
+                                // $data['current_settled_income']=$customer['settled_income']-$withdraw_info['withdraw_amount'];
+                                // $data['date']=date("Y-m-d H:i:s");
+                                // $data['note']="提现失败收益撤回";
+                                // $model->table("promote_income_log")->data($data)->insert();
+                                echo json_encode(array("status" => 'fail', 'msg' => '代付失败'));
+                                exit();
+                            }
+
                         } else if ($withdraw_info['role_type'] == 3) {
                             //查询可用收益，防止溢出
                             $hirer = $withdraw->table("district_shop")->where('id=' . $withdraw_info['role_id'])->find();
@@ -530,48 +557,48 @@ class DistrictadminController extends Controller {
                                 echo json_encode(array("status" => 'fail', 'msg' => '商户不存在'));
                                 exit();
                             }
-                            
-                                $params["merDate"] = date("Ymd");
-                                $params["merSeqId"] = date("YmdHis") . rand(10, 99);
-                                $params["cardNo"] = $obj['card_number'];
-                                $params["usrName"] = $obj['bank_account_name'];
-                                $params["openBank"] = $obj['bank_name'];
-                                $params["prov"] = $obj['province'];
-                                $params["city"] = $obj['city'];
-                                $params["transAmt"] = round($withdraw_info['withdraw_amount'] * (100 - $district_set['withdraw_fee_rate'])); //转化成分，并减去手续费
-                                if ($params["transAmt"] <= 0) {
-                                    exit(json_encode(array('status' => 'fail', 'msg' => '代付金额小于或等于0')));
-                                }
-                                $params['purpose'] = "专区用户提现";
-                                $params["withdraw_no"] = $withdraw_info['withdraw_no'];
-                                // $result = $ChinapayDf->DfPay($params);
-                                $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口 
+
+                            $params["merDate"] = date("Ymd");
+                            $params["merSeqId"] = date("YmdHis") . rand(10, 99);
+                            $params["cardNo"] = $obj['card_number'];
+                            $params["usrName"] = $obj['bank_account_name'];
+                            $params["openBank"] = $obj['bank_name'];
+                            $params["prov"] = $obj['province'];
+                            $params["city"] = $obj['city'];
+                            $params["transAmt"] = round($withdraw_info['withdraw_amount'] * (100 - $district_set['withdraw_fee_rate'])); //转化成分，并减去手续费
+                            if ($params["transAmt"] <= 0) {
+                                exit(json_encode(array('status' => 'fail', 'msg' => '代付金额小于或等于0')));
+                            }
+                            $params['purpose'] = "专区用户提现";
+                            $params["withdraw_no"] = $withdraw_info['withdraw_no'];
+                            // $result = $ChinapayDf->DfPay($params);
+                            $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口
+                            if ($result) {
+                                // $isOk = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到银行卡');
+                                $model->table('district_shop')->data(array('settled_income' => "`settled_income`+({$withdraw_info['withdraw_amount']})"))->where('id=' . $withdraw_info['role_id'])->update();
+                                $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
                                 if ($result) {
-                                    // $isOk = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到银行卡');
-                                        $model->table('district_shop')->data(array('settled_income'=>"`settled_income`+({$withdraw_info['withdraw_amount']})"))->where('id='.$withdraw_info['role_id'])->update();
-                                        $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
-                                        if ($result) {
-                                            echo json_encode(array("status" => 'success', 'msg' => '成功'));
-                                            exit();
-                                        }
-                                    
-                                } else {
-                                    // $customer = $model->table('district_shop')->fields("valid_income,frezze_income,settled_income")->where('id='.$withdraw_info['role_id'])->find();
-                                    // $model->table('district_shop')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})"))->where('id='.$withdraw_info['role_id'])->update();
-                                    // $data['role_id']=$withdraw_info['role_id'];
-                                    // $data['role_type']=$withdraw_info['role_type'];
-                                    // $data['type']=12;
-                                    // $data['record_id']=$withdraw_info['id'];
-                                    // $data['current_valid_income']=$customer['valid_income']+$withdraw_info['withdraw_amount'];
-                                    // $data['current_frezze_income']=$customer['frezze_income'];
-                                    // $data['current_settled_income']=$customer['settled_income']-$withdraw_info['withdraw_amount'];
-                                    // $data['date']=date("Y-m-d H:i:s");
-                                    // $data['note']="提现失败收益撤回";
-                                    // $model->table("promote_income_log")->data($data)->insert();
-                                    echo json_encode(array("status" => 'fail', 'msg' => '代付失败'));
+                                    echo json_encode(array("status" => 'success', 'msg' => '成功'));
                                     exit();
                                 }
-                            
+
+                            } else {
+                                // $customer = $model->table('district_shop')->fields("valid_income,frezze_income,settled_income")->where('id='.$withdraw_info['role_id'])->find();
+                                // $model->table('district_shop')->data(array('valid_income'=>"`valid_income`+({$withdraw_info['withdraw_amount']})"))->where('id='.$withdraw_info['role_id'])->update();
+                                // $data['role_id']=$withdraw_info['role_id'];
+                                // $data['role_type']=$withdraw_info['role_type'];
+                                // $data['type']=12;
+                                // $data['record_id']=$withdraw_info['id'];
+                                // $data['current_valid_income']=$customer['valid_income']+$withdraw_info['withdraw_amount'];
+                                // $data['current_frezze_income']=$customer['frezze_income'];
+                                // $data['current_settled_income']=$customer['settled_income']-$withdraw_info['withdraw_amount'];
+                                // $data['date']=date("Y-m-d H:i:s");
+                                // $data['note']="提现失败收益撤回";
+                                // $model->table("promote_income_log")->data($data)->insert();
+                                echo json_encode(array("status" => 'fail', 'msg' => '代付失败'));
+                                exit();
+                            }
+
                         }
                     } else if ($withdraw_info['withdraw_type'] == 1) {//提现到余额
                         if ($withdraw_info['role_type'] == 1 || $withdraw_info['role_type'] == 2) {
@@ -581,18 +608,18 @@ class DistrictadminController extends Controller {
                                 echo json_encode(array("status" => 'fail', 'msg' => '推广者不存在'));
                                 exit();
                             }
-                            
-                                // $isOk1 = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到账户余额');
-                                    $ret = $model->table('customer')->data(array('settled_income'=>"`settled_income`+({$withdraw_info['withdraw_amount']})"))->where('user_id='.$withdraw_info['role_id'])->update();
-                                    $isOk2 = $withdraw->query("update tiny_customer set balance = balance + {$withdraw_info['withdraw_amount']} where user_id =" . $promoter['user_id']);
-                                    Log::balance($withdraw_info['withdraw_amount'], $promoter['user_id'], $withdraw_info['withdraw_no'], '推广收益提现到余额', 6);
-                                    $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
-                                    if ($result && $ret) {
-                                        echo json_encode(array("status" => 'success', 'msg' => '成功'));
-                                        exit();
-                                    }
-                                
-                            
+
+                            // $isOk1 = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到账户余额');
+                            $ret = $model->table('customer')->data(array('settled_income' => "`settled_income`+({$withdraw_info['withdraw_amount']})"))->where('user_id=' . $withdraw_info['role_id'])->update();
+                            $isOk2 = $withdraw->query("update tiny_customer set balance = balance + {$withdraw_info['withdraw_amount']} where user_id =" . $promoter['user_id']);
+                            Log::balance($withdraw_info['withdraw_amount'], $promoter['user_id'], $withdraw_info['withdraw_no'], '推广收益提现到余额', 6);
+                            $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
+                            if ($result && $ret) {
+                                echo json_encode(array("status" => 'success', 'msg' => '成功'));
+                                exit();
+                            }
+
+
                         } else if ($withdraw_info['role_type'] == 3) {
                             //查询可用收益，防止溢出
                             $hirer = $withdraw->table("district_shop")->where('id=' . $withdraw_info['role_id'])->find();
@@ -600,20 +627,20 @@ class DistrictadminController extends Controller {
                                 echo json_encode(array("status" => 'fail', 'msg' => '商户不存在'));
                                 exit();
                             }
-                            
-                                // $isOk1 = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到账户余额');
-                                $model->table('district_shop')->data(array('settled_income'=>"`settled_income`+({$withdraw_info['withdraw_amount']})"))->where('id='.$withdraw_info['role_id'])->update();
-                                $isOk2 = $withdraw->query("update tiny_customer set balance = balance + {$withdraw_info['withdraw_amount']} where user_id =" . $hirer['owner_id']);
 
-                                if ($isOk2) {
-                                    Log::balance($withdraw_info['withdraw_amount'], $hirer['owner_id'], $withdraw_info['withdraw_no'], '推广收益提现到余额', 6);
-                                    $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
-                                    if ($result) {
-                                        echo json_encode(array("status" => 'success', 'msg' => '成功'));
-                                        exit();
-                                    }
+                            // $isOk1 = Log::incomeLog($withdraw_info['withdraw_amount'], $withdraw_info['role_type'], $withdraw_info['role_id'], $withdraw_info['id'], 11, '提取收益到账户余额');
+                            $model->table('district_shop')->data(array('settled_income' => "`settled_income`+({$withdraw_info['withdraw_amount']})"))->where('id=' . $withdraw_info['role_id'])->update();
+                            $isOk2 = $withdraw->query("update tiny_customer set balance = balance + {$withdraw_info['withdraw_amount']} where user_id =" . $hirer['owner_id']);
+
+                            if ($isOk2) {
+                                Log::balance($withdraw_info['withdraw_amount'], $hirer['owner_id'], $withdraw_info['withdraw_no'], '推广收益提现到余额', 6);
+                                $result = $withdraw->table("district_withdraw")->data(array("status" => 1, "admin_handle_time" => date("Y-m-d H:i:s")))->where("id = $id")->update();
+                                if ($result) {
+                                    echo json_encode(array("status" => 'success', 'msg' => '成功'));
+                                    exit();
                                 }
-                            
+                            }
+
                         }
                     }
                 }
@@ -625,7 +652,8 @@ class DistrictadminController extends Controller {
         exit();
     }
 
-    public function set() {
+    public function set()
+    {
         $group = "district_set";
         $config = Config::getInstance();
         if (Req::args('submit') != null) {
@@ -652,14 +680,16 @@ class DistrictadminController extends Controller {
         $this->redirect();
     }
 
-    public function payset() {
+    public function payset()
+    {
         $model = new Model();
         $params = $model->table("mdpay_params")->where("id =1")->find();
         $this->assign('params', $params);
         $this->redirect();
     }
 
-    public function payset_save() {
+    public function payset_save()
+    {
         $data = Req::args();
         $model = new Model();
         $result = $model->table("mdpay_params")->data($data)->where("id=1")->update();
@@ -676,7 +706,8 @@ class DistrictadminController extends Controller {
      * 秒到支付报件
      */
 
-    public function quote() {
+    public function quote()
+    {
         $data = Req::args();
         unset($data['con']);
         unset($data['act']);
@@ -719,42 +750,43 @@ class DistrictadminController extends Controller {
      * 添加官方推广员
      */
 
-    public function addPromoter() {
+    public function addPromoter()
+    {
         if ($this->is_ajax_request()) {
             $user_id = Req::args("user_id");
             $hirer_id = Req::args("hirer_id");
-            $pointcoin = Req::args("pointcoin")!=null?Req::args("pointcoin"):0;
+            $pointcoin = Req::args("pointcoin") != null ? Req::args("pointcoin") : 0;
             // $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
             $ds_promoter = Req::args("ds_promoter");
             if (!$user_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
             }
-            if(!$hirer_id && !$ds_promoter){
+            if (!$hirer_id && !$ds_promoter) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "缺少上级经销商或代理商")));
             }
             // $promoter = Promoter::getPromoterInstance($user_id);
             $model = new Model();
             //赠送积分和分红点
-            if($pointcoin>0){
-               $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})"))->update();
-               Log::pointcoin_log($pointcoin,$user_id,"","代理商入驻赠送",5);
+            if ($pointcoin > 0) {
+                $model->table('customer')->where('user_id=' . $user_id)->data(array('point_coin' => "`point_coin`+({$pointcoin})"))->update();
+                Log::pointcoin_log($pointcoin, $user_id, "", "代理商入驻赠送", 5);
             }
-            $promoter=$model->table('district_promoter')->where('status=1 and user_id='.$user_id)->find();
+            $promoter = $model->table('district_promoter')->where('status=1 and user_id=' . $user_id)->find();
             // var_dump($promoter);die;
             if ($promoter) {
-                    exit(json_encode(array("status" => 'fail', 'msg' => "该用户已经有雇佣关系了")));               
+                exit(json_encode(array("status" => 'fail', 'msg' => "该用户已经有雇佣关系了")));
             } else {
-                $inviter_exist=$model->table('invite')->where('invite_user_id='.$user_id)->find();
-                if($hirer_id) {   //经销商推代理商
+                $inviter_exist = $model->table('invite')->where('invite_user_id=' . $user_id)->find();
+                if ($hirer_id) {   //经销商推代理商
                     $isset = $model->table("district_shop")->where("id=$hirer_id")->find();
                     if (!$isset) {
                         exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
                     }
-                    if(!$inviter_exist){
+                    if (!$inviter_exist) {
                         //添加邀请关系    
-                       $model->table('invite')->data(array('user_id'=>$isset['owner_id'],'invite_user_id'=>$user_id,'from'=>'admin','district_id'=>$isset['id'],'createtime'=>time()))->insert();
-                       $invite_id = $isset['owner_id'];
-                    }else{
+                        $model->table('invite')->data(array('user_id' => $isset['owner_id'], 'invite_user_id' => $user_id, 'from' => 'admin', 'district_id' => $isset['id'], 'createtime' => time()))->insert();
+                        $invite_id = $isset['owner_id'];
+                    } else {
                         $invite_id = $inviter_exist['user_id'];
                     }
                     $data['user_id'] = $user_id;
@@ -775,21 +807,21 @@ class DistrictadminController extends Controller {
                     } else {
                         exit(json_encode(array("status" => 'fail', 'msg' => "数据库错误")));
                     }
-                }elseif($ds_promoter){     //代理商代理商
+                } elseif ($ds_promoter) {     //代理商代理商
                     $isset = $model->table("district_promoter")->where("user_id=$ds_promoter")->find();
                     if (!$isset) {
                         exit(json_encode(array("status" => 'fail', 'msg' => "代理商不存在")));
                     }
-                    
-                    $district=$model->table('district_shop')->where('owner_id='.$ds_promoter)->find();
-                    
-                    if($inviter_exist){
-                        $invite_id=$inviter_exist['user_id'];
-                        $district_id=$inviter_exist['district_id'];
-                    }else{
-                        if($district){
-                            $district_id=$district['id'];
-                        }else{
+
+                    $district = $model->table('district_shop')->where('owner_id=' . $ds_promoter)->find();
+
+                    if ($inviter_exist) {
+                        $invite_id = $inviter_exist['user_id'];
+                        $district_id = $inviter_exist['district_id'];
+                    } else {
+                        if ($district) {
+                            $district_id = $district['id'];
+                        } else {
                             $district_id = $isset[' hirer_id'];
                             // $invite = $model->table('invite')->where('invite_user_id='.$ds_promoter)->find();
                             // if($invite){
@@ -799,10 +831,10 @@ class DistrictadminController extends Controller {
                             // }
                         }
                         //添加邀请关系    
-                       $model->table('invite')->data(array('user_id'=>$ds_promoter,'invite_user_id'=>$user_id,'from'=>'admin','district_id'=>$district_id,'createtime'=>time()))->insert();
-                        $invite_id=$ds_promoter;  
-                    }          
-                    
+                        $model->table('invite')->data(array('user_id' => $ds_promoter, 'invite_user_id' => $user_id, 'from' => 'admin', 'district_id' => $district_id, 'createtime' => time()))->insert();
+                        $invite_id = $ds_promoter;
+                    }
+
                     $data['user_id'] = $user_id;
                     $data['type'] = 3;
                     $data['join_time'] = date("Y-m-d H:i:s");
@@ -813,27 +845,28 @@ class DistrictadminController extends Controller {
                     $data['status'] = 1;
                     $result = $model->table("district_promoter")->data($data)->insert();
                     if ($result) {
-                    $logic = DistrictLogic::getInstance();
-                    $customer=$model->table('customer as c')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$ds_promoter)->fields('c.real_name,u.nickname')->find();
-                    $name=$customer['real_name']!=''?$customer['real_name']:$customer['nickname'];
-                    if (strip_tags(Url::getHost(), 'ymlypt')) {
-                        $this->sendMessage($user_id, "恭喜您，成为代理商【{$name}】下的官方代理商，快来看看吧>>>", "https://www.ymlypt.com/ucenter/index?first=1", "promoter_join_success");
+                        $logic = DistrictLogic::getInstance();
+                        $customer = $model->table('customer as c')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $ds_promoter)->fields('c.real_name,u.nickname')->find();
+                        $name = $customer['real_name'] != '' ? $customer['real_name'] : $customer['nickname'];
+                        if (strip_tags(Url::getHost(), 'ymlypt')) {
+                            $this->sendMessage($user_id, "恭喜您，成为代理商【{$name}】下的官方代理商，快来看看吧>>>", "https://www.ymlypt.com/ucenter/index?first=1", "promoter_join_success");
+                        }
+                        exit(json_encode(array("status" => 'success', 'msg' => "成功")));
+                    } else {
+                        exit(json_encode(array("status" => 'fail', 'msg' => "数据库错误")));
                     }
-                    exit(json_encode(array("status" => 'success', 'msg' => "成功")));
-                } else {
-                    exit(json_encode(array("status" => 'fail', 'msg' => "数据库错误")));
                 }
-              }
             }
-            
+
         }
     }
 
-    public function addPromoters() {
+    public function addPromoters()
+    {
         if ($this->is_ajax_request()) {
             $user_id = Req::args("user_id");
             $hirer_id = Req::args("hirer_id");
-            $pointcoin = Req::args("pointcoin")!=null?Req::args("pointcoin"):0;
+            $pointcoin = Req::args("pointcoin") != null ? Req::args("pointcoin") : 0;
             // $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
             $district_name = Req::args("district_name");
             $linkman = Req::args("linkman");
@@ -842,23 +875,23 @@ class DistrictadminController extends Controller {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
             }
             $model = new Model();
-            $owner=$model->table('district_shop')->fields('id,owner_id')->where('id='.$hirer_id)->find();
-            if(!$owner){
+            $owner = $model->table('district_shop')->fields('id,owner_id')->where('id=' . $hirer_id)->find();
+            if (!$owner) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "经销商不存在")));
             }
             // $promoter = Promoter::getPromoterInstance($user_id);   
             //赠送积分和分红点
-            if($pointcoin>0){
-                $model->table('customer')->where('user_id='.$user_id)->data(array('point_coin'=>"`point_coin`+({$pointcoin})"))->update();
-                Log::pointcoin_log($pointcoin,$user_id,"","经销商入驻赠送",8);
+            if ($pointcoin > 0) {
+                $model->table('customer')->where('user_id=' . $user_id)->data(array('point_coin' => "`point_coin`+({$pointcoin})"))->update();
+                Log::pointcoin_log($pointcoin, $user_id, "", "经销商入驻赠送", 8);
             }
-            $promoter=$model->table('district_shop')->where('owner_id='.$user_id)->find();
-            
+            $promoter = $model->table('district_shop')->where('owner_id=' . $user_id)->find();
+
             if ($promoter) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "该用户已经有雇佣关系了")));
             } else {
-                
-                $customer=$model->table('customer as c')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$user_id)->fields('c.real_name,c.mobile,c.city,u.nickname')->find();
+
+                $customer = $model->table('customer as c')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $user_id)->fields('c.real_name,c.mobile,c.city,u.nickname')->find();
                 $data['name'] = $district_name;
                 $data['asset'] = 1000;
                 $data['founder_id'] = $user_id;
@@ -872,13 +905,13 @@ class DistrictadminController extends Controller {
                 $data['link_mobile'] = $link_mobile;
                 $data['location'] = $customer['city'];
                 $result = $model->table("district_shop")->data($data)->insert();
-                
-                
-                $invite=$model->table('invite')->where('invite_user_id='.$user_id)->find();
-                if(!$invite){
-                    $model->table('invite')->data(array('user_id'=>$owner['owner_id'],'invite_user_id'=>$user_id,'from'=>'admin','district_id'=>$owner['id'],'createtime'=>time()))->insert();
+
+
+                $invite = $model->table('invite')->where('invite_user_id=' . $user_id)->find();
+                if (!$invite) {
+                    $model->table('invite')->data(array('user_id' => $owner['owner_id'], 'invite_user_id' => $user_id, 'from' => 'admin', 'district_id' => $owner['id'], 'createtime' => time()))->insert();
                 }
-                
+
                 $datas['user_id'] = $user_id;
                 $datas['type'] = 3;
                 $datas['join_time'] = date("Y-m-d H:i:s");
@@ -898,7 +931,7 @@ class DistrictadminController extends Controller {
                     exit(json_encode(array("status" => 'fail', 'msg' => "数据库错误")));
                 }
             }
-            
+
         }
     }
 
@@ -906,7 +939,8 @@ class DistrictadminController extends Controller {
      * 获取用户列表
      */
 
-    public function radio_customer_select() {
+    public function radio_customer_select()
+    {
         $this->layout = "blank";
         $s_type = Req::args("s_type");
         $s_content = Req::args("s_content");
@@ -926,15 +960,15 @@ class DistrictadminController extends Controller {
         $s_promote = Req::args("s_promote");
         $pointcoin = Req::args("pointcoin");
         // $financialcoin = Req::args("financialcoin");
-        if($s_shop && $s_shop!=''){
-            $where1="name like '%{$s_shop}%' ";
-        }else{
-            $where1="1=1";
+        if ($s_shop && $s_shop != '') {
+            $where1 = "name like '%{$s_shop}%' ";
+        } else {
+            $where1 = "1=1";
         }
-        if($s_promote && $s_promote!=''){
-            $where2="c.real_name like '%{$s_promote}%' or u.nickname like '%{$s_promote}%'";
-        }else{
-            $where2="1=1";
+        if ($s_promote && $s_promote != '') {
+            $where2 = "c.real_name like '%{$s_promote}%' or u.nickname like '%{$s_promote}%'";
+        } else {
+            $where2 = "1=1";
         }
         $this->assign("s_shop", $s_shop);
         $this->assign("s_promote", $s_promote);
@@ -949,7 +983,8 @@ class DistrictadminController extends Controller {
         $this->redirect();
     }
 
-    public function radio_customer_selects() {
+    public function radio_customer_selects()
+    {
         $this->layout = "blank";
         $s_type = Req::args("s_type");
         $s_content = Req::args("s_content");
@@ -971,10 +1006,10 @@ class DistrictadminController extends Controller {
         $link_mobile = Req::args("link_mobile");
         $pointcoin = Req::args("pointcoin");
         // $financialcoin = Req::args("financialcoin");
-        if($s_shop && $s_shop!=''){
-            $wheres="name like '%{$s_shop}%' ";
-        }else{
-            $wheres="1=1";
+        if ($s_shop && $s_shop != '') {
+            $wheres = "name like '%{$s_shop}%' ";
+        } else {
+            $wheres = "1=1";
         }
 
         $this->assign("s_shop", $s_shop);
@@ -992,7 +1027,8 @@ class DistrictadminController extends Controller {
         $this->redirect();
     }
 
-    public function sendMsg() {
+    public function sendMsg()
+    {
         $user_id = Filter::int(Req::args("user_id"));
         $content = Filter::str(Req::args("content"));
         $url = Filter::str(Req::args("url"));
@@ -1031,93 +1067,98 @@ class DistrictadminController extends Controller {
      * 发送微信通知
      * @params 
      */
-    public function sendMessage($user_id,$content,$url,$type){
+    public function sendMessage($user_id, $content, $url, $type)
+    {
         $need_weixin = true;
         $need_jpush = true;
-        if($type=="promoter_join_success"){
-            if(!$this->client_type||$this->client_type=='unknow'){
+        if ($type == "promoter_join_success") {
+            if (!$this->client_type || $this->client_type == 'unknow') {
                 return false;
             }
-            if($this->client_type=='ios'||$this->client_type=='android'){
+            if ($this->client_type == 'ios' || $this->client_type == 'android') {
                 $need_weixin = false;
-            }else if($this->client_type=='weixin'){
+            } else if ($this->client_type == 'weixin') {
                 $need_jpush = false;
-            }else{
+            } else {
                 return false;
             }
         }
-        if($need_weixin){
-            if($this->token==NULL){
+        if ($need_weixin) {
+            if ($this->token == NULL) {
                 $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
                 $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
                 $this->token = $wechat->getAccessToken();
             }
-            $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$user_id." and oauth_type='wechat'")->find();
-            if(!empty($oauth_info)){
-                $oauth_info['open_name'] = $oauth_info['open_name']==""?"圆梦用户":$oauth_info['open_name'];
+            $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=" . $user_id . " and oauth_type='wechat'")->find();
+            if (!empty($oauth_info)) {
+                $oauth_info['open_name'] = $oauth_info['open_name'] == "" ? "圆梦用户" : $oauth_info['open_name'];
                 $params = array(
-                    'touser'=>$oauth_info['open_id'],
-                    'msgtype'=>'text',
-                    "text"=>array(
-                        'content'=>"<a href=\"$url\">亲爱的{$oauth_info['open_name']},$content</a>"
+                    'touser' => $oauth_info['open_id'],
+                    'msgtype' => 'text',
+                    "text" => array(
+                        'content' => "<a href=\"$url\">亲爱的{$oauth_info['open_name']},$content</a>"
                     )
                 );
-                Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=".$this->token, json_encode($params,JSON_UNESCAPED_UNICODE));
+                Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" . $this->token, json_encode($params, JSON_UNESCAPED_UNICODE));
             }
         }
-        if($need_jpush){
-            if(!$this->jpush){
+        if ($need_jpush) {
+            if (!$this->jpush) {
                 $NoticeService = new NoticeService();
                 $this->jpush = $NoticeService->getNotice('jpush');
             }
-            $audience['alias']=array($user_id);
+            $audience['alias'] = array($user_id);
             $this->jpush->setPushData('all', $audience, $content, $type, "");
             $this->jpush->push();
         }
     }
 
-    public function hirer_del(){
-       $hirer_id = Req::args("hirer_id");
-       $model=new Model();
-       $exist=$model->table('district_shop')->where('invite_shop_id='.$hirer_id)->find();
-       if($exist){
-         $msg = array('error', "移除失败，该经销商已有下级经销商" );
-       }else{
-       $model->table('district_shop')->where('id='.$hirer_id)->delete();
-       $model->table('district_promoter')->where('hirer_id='.$hirer_id)->delete();
-       $msg = array('success', "成功移除经销商 " );
-       }
-       $this->redirect("list_hirer", false, array('msg' => $msg)); 
-    }
-    
-    public function promoter_del(){
-       $id = Req::args("id");
-       $model=new Model();
-       $promoter=$model->table('district_promoter')->fields('user_id')->where('id='.$id)->find();
-       $exist=$model->table('district_promoter')->where('invitor_id='.$promoter['user_id'])->find();
-       if($exist){
-          $msg = array('error', "移除失败，该代理商已有下级代理商" );  
-       }else{
-         $model->table('district_promoter')->where('id='.$id)->delete();
-         $msg = array('success', "成功移除代理商 " );
-       }
-       $this->redirect("list_promoter", false, array('msg' => $msg)); 
+    public function hirer_del()
+    {
+        $hirer_id = Req::args("hirer_id");
+        $model = new Model();
+        $exist = $model->table('district_shop')->where('invite_shop_id=' . $hirer_id)->find();
+        if ($exist) {
+            $msg = array('error', "移除失败，该经销商已有下级经销商");
+        } else {
+            $model->table('district_shop')->where('id=' . $hirer_id)->delete();
+            $model->table('district_promoter')->where('hirer_id=' . $hirer_id)->delete();
+            $msg = array('success', "成功移除经销商 ");
+        }
+        $this->redirect("list_hirer", false, array('msg' => $msg));
     }
 
-    public function selectShop(){
-        $shop = Req::args("shop");
-        if($shop && $shop!=''){
-            $wheres="name like '%{$shop}%' ";
-        }else{
-            $wheres="1=1";
+    public function promoter_del()
+    {
+        $id = Req::args("id");
+        $model = new Model();
+        $promoter = $model->table('district_promoter')->fields('user_id')->where('id=' . $id)->find();
+        $exist = $model->table('district_promoter')->where('invitor_id=' . $promoter['user_id'])->find();
+        if ($exist) {
+            $msg = array('error', "移除失败，该代理商已有下级代理商");
+        } else {
+            $model->table('district_promoter')->where('id=' . $id)->delete();
+            $msg = array('success', "成功移除代理商 ");
         }
-        $model=new Model();
-        $shop=$model->table('district_shop')->where($wheres)->findAll();
+        $this->redirect("list_promoter", false, array('msg' => $msg));
+    }
+
+    public function selectShop()
+    {
+        $shop = Req::args("shop");
+        if ($shop && $shop != '') {
+            $wheres = "name like '%{$shop}%' ";
+        } else {
+            $wheres = "1=1";
+        }
+        $model = new Model();
+        $shop = $model->table('district_shop')->where($wheres)->findAll();
         $this->assign("wheres", $wheres);
         $this->redirect('radio_customer_selects');
     }
 
-    public function rate_edit(){
+    public function rate_edit()
+    {
         $id = Req::args("id");
 
         $promoter = Req::args();
@@ -1128,17 +1169,18 @@ class DistrictadminController extends Controller {
         $this->redirect('rate_edit', false, $promoter);
     }
 
-    public function rate_save(){
+    public function rate_save()
+    {
         $id = Req::args("id");
         $base_rate = Req::args("base_rate");
         $model = new Model("district_promoter");
-        if($id){
-            $promoter=$model->where('id='.$id)->find();
-            if($promoter){
-                if($base_rate){
-                    $model->data(array('base_rate'=>$base_rate))->where('id='.$id)->update();
-                    $user_model=new Model('customer');
-                    $user=$user_model->fields('real_name')->where('user_id='.$promoter['user_id'])->find();
+        if ($id) {
+            $promoter = $model->where('id=' . $id)->find();
+            if ($promoter) {
+                if ($base_rate) {
+                    $model->data(array('base_rate' => $base_rate))->where('id=' . $id)->update();
+                    $user_model = new Model('customer');
+                    $user = $user_model->fields('real_name')->where('user_id=' . $promoter['user_id'])->find();
                     Log::op($this->manager['id'], "修改分账比例", "管理员[" . $this->manager['name'] . "]:修改了代理商 " . $user['real_name'] . " 的信息");
                 }
             }
@@ -1146,42 +1188,45 @@ class DistrictadminController extends Controller {
         $this->redirect('list_promoter');
     }
 
-    public function qrcode(){
+    public function qrcode()
+    {
         $id = Req::args("user_id");
-        $uid=Filter::int($id);
+        $uid = Filter::int($id);
         $this->assign('uid', $uid);
         $this->redirect();
     }
 
-    public function invitepay(){
+    public function invitepay()
+    {
         // $id=$this->user['id'];
         $id = Req::args("user_id");
-        $uid=Filter::int($id);
-        $model=new Model();
-        $user=$model->table('customer')->fields('real_name')->where('user_id='.$uid)->find();
-        $users=$model->table('user')->fields('avatar')->where('id='.$uid)->find();
-        if($user){
+        $uid = Filter::int($id);
+        $model = new Model();
+        $user = $model->table('customer')->fields('real_name')->where('user_id=' . $uid)->find();
+        $users = $model->table('user')->fields('avatar')->where('id=' . $uid)->find();
+        if ($user) {
             $real_name = $user['real_name'];
-        }else{
+        } else {
             $real_name = '未知商家';
         }
-        if($users){
-            if($users['avatar']=='' || $users['avatar']=='/0'){
-                $users['avatar']='/static/images/96.png';
+        if ($users) {
+            if ($users['avatar'] == '' || $users['avatar'] == '/0') {
+                $users['avatar'] = '/static/images/96.png';
             }
             $avatar = $users['avatar'];
-        }else{
+        } else {
             $avatar = '';
         }
-        Session::set('seller_id',$uid);
-        $this->assign('real_name',$real_name);
-        $this->assign('avatar',$avatar);
+        Session::set('seller_id', $uid);
+        $this->assign('real_name', $real_name);
+        $this->assign('avatar', $avatar);
         $this->assign('uid', $uid);
         $this->redirect();
     }
 
     //生成邀请支付码
-    public function buildinvitepay() {
+    public function buildinvitepay()
+    {
         $user_id = Filter::int(Req::args('uid'));
         // if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
         //     $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
@@ -1199,7 +1244,7 @@ class DistrictadminController extends Controller {
         //     }
         // }
         // $model = new Model();
-        
+
         // $user = $model->table('user')->fields('avatar')->where('id='.$user_id)->find();
 
         // if($user['avatar']){
@@ -1209,19 +1254,19 @@ class DistrictadminController extends Controller {
         // }else{
         //     $logo = APP_ROOT."static/images/96.png";
         // }
-        
-        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
+
+        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/" . $user_id);
         $qrCode = new QrCode();
         $qrCode
-                ->setText($url)
-                ->setSize(300)
-                ->setPadding(10)
-                ->setErrorCorrection('medium')
-                ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
-                ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
-                //->setLabel('扫描添加为好友')
-                ->setLabelFontSize(16)
-                ->setImageType(QrCode::IMAGE_TYPE_PNG);
+            ->setText($url)
+            ->setSize(300)
+            ->setPadding(10)
+            ->setErrorCorrection('medium')
+            ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+            ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+            //->setLabel('扫描添加为好友')
+            ->setLabelFontSize(16)
+            ->setImageType(QrCode::IMAGE_TYPE_PNG);
 
         // now we can directly output the qrcode
         header('Content-Type: ' . $qrCode->getContentType());
@@ -1235,44 +1280,52 @@ class DistrictadminController extends Controller {
         $id = Req::args("id");
         $uid = Filter::int($id);
         $model = new Model();
-        $list = $model->table('district_shop')->fields('id,name')->where('id='.$uid)->find();
-        $this->assign('list',$list);
+        $list = $model->table('district_shop')->fields('id,name')->where('id=' . $uid)->find();
+        $this->assign('list', $list);
         $this->redirect('hirer_edit');
     }
 
     //编辑经销商专区名称
     public function hirer_save()
     {
-            $id = Req::args('id');
-            $model = new Model();
-            $name = Req::args('name');
-            if ($name) {
-                $model->table('district_shop')->data(array('name'=>$name))->where("id=$id")->update();
-            }
+        $id = Req::args('id');
+        $model = new Model();
+        $name = Req::args('name');
+        if ($name) {
+            $model->table('district_shop')->data(array('name' => $name))->where("id=$id")->update();
+        }
         $this->redirect("list_hirer");
     }
 
-      //显示代理商专区的名称
+    //显示代理商专区的名称
     public function promoter_edit()
     {
         $id = Req::args("id");
-        $uid = Filter::int($id);
+        $uid = Filter::int($id); //
         $model = new Model();
-        $user_id = $model->table('district_promoter')->fields('user_id')->where('id='.$uid)->find();
-        $list = $model->table('customer')->fields('user_id,real_name')->where('user_id='.$user_id['user_id'])->find();
-        $this->assign('list',$list);
+        $user_id = $model->table('district_promoter')->fields('user_id,lng,lat')->where('id=' . $uid)->find();
+        $list = $model->table('customer')->fields('user_id,real_name')->where('user_id=' . $user_id['user_id'])->find();
+        $this->assign('list', $list);
+        $this->assign('user_id',$user_id);
         $this->redirect('promoter_edit');
     }
 
     //编辑代理商专区名称
     public function promoter_save()
     {
-            $id = Req::args('user_id');
-            $model = new Model();
-            $name = Req::args('real_name');
-            if ($name) {
-                $model->table('customer')->data(array('real_name'=>$name))->where("user_id=$id")->update();
+        $id = Req::args('user_id');
+        $model = new Model();
+        $name = Req::args('real_name');
+        $lng = Req::args('lng'); //经度
+        $lat = Req::args('lat'); //纬度
+        if ($name) {
+            $model->table('customer')->data(array('real_name' => $name))->where("user_id=$id")->update();
+            if ($lng && $lat) {
+                    $id = $model->table('district_promoter')->fields('id')->where('user_id=' . $id)->find();
+                    $model->table('district_promoter')->data(array('lng'=>$lng,'lat'=>$lat))->where('id='.$id['id'])->update();
             }
+        }
+
         $this->redirect("list_promoter");
     }
 }
