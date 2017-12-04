@@ -73,6 +73,7 @@ class SMS extends ClassConfig {
 
         $ret = $this->postRequest('https://webapi.sms.mob.com/custom/msg', $params);
         $json = json_decode($ret, TRUE);
+        var_dump($json);die;
         if (isset($json['status']) && $json['status'] == 200) {
             $time = time();
             $mobile_model = new Model('mobile_code');
