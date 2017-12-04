@@ -63,17 +63,19 @@ class SMS extends ClassConfig {
      */
     public function sendCode($mobile, $code) {
         $params = array(
-            'appKey' => $this->config['appKey'],
-            'templateCode' => $this->config['templateCode'],
+            // 'appKey' => $this->config['appKey'],
+            'appKey' => '1f4d2d20dd266',
+            // 'templateCode' => $this->config['templateCode'],
+            'templateCode' => '9161448',
             'zone' => '86',
             'phone' => $mobile,
             'AppName'=>"圆梦购物网",
             'code' => $code,
         );
-        var_dump($this->config['appKey']);die;
+        // var_dump($this->config['appKey']);die;
         $ret = $this->postRequest('https://webapi.sms.mob.com/custom/msg', $params);
         $json = json_decode($ret, TRUE);
-        var_dump($json);die;
+        // var_dump($json);die;
         if (isset($json['status']) && $json['status'] == 200) {
             $time = time();
             $mobile_model = new Model('mobile_code');
