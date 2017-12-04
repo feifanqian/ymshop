@@ -132,7 +132,7 @@
     lockSendButton($("#sendSMS"), 120);
     } else {
     art.dialog.tips("<p class='fail'>" + result['msg'] + "</p>");
-    lockSendButton($("#sendSMS"), data['haveTime']);
+    lockSendButton($("#sendSMS"), result['haveTime']);
     }
     }, 'json');
     });
