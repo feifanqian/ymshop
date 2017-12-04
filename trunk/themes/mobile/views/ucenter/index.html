@@ -67,7 +67,7 @@
 </a>
 </div>
 <div id="ucenter-top">
-    {if:$user['avatar']==""}
+    {if:$user['avatar']=="" || $user['avatar']=="/0"}
     {set:$user['avatar']="static/images/avatar.jpeg"}
     {/if}
     <div id="ucenter-avatar">
