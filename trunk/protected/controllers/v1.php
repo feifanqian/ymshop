@@ -162,6 +162,7 @@ class V1Controller extends Controller {
         "shop_goods_list_by_time"=>array("personalShop/shopGoodsListByTime",0,1),
         //红包
         "redbag_list"=>array("address/redbagList",0,1),
+        "map"=>array("map/getMap",0,1),//地图功能
         //商家
         "seller_list"=>array("address/promoterList",0,1),
         "seller_info"=>array("address/promoterInfo",0,1),
