@@ -1410,31 +1410,6 @@ class UcenterController extends Controller
         if ($hirer > 0) {
             $is_hirer = true;
         }
-        // if(isset($customer['financial_coin']) && $customer['financial_coin']>=5000){
-        //     $stock=intval($customer['financial_coin']/5000);
-        //     $data=array(
-        //           'financial_coin'=>"`financial_coin`-5000*({$stock})",
-        //           'financial_stock'=>"`financial_stock`+({$stock})",
-        //         );
-        //     $this->model->table('customer')->data($data)->where('user_id='.$id)->update();//自动分配分红股
-        //     $current_date = date('Y-m-d',time());
-        //     ignore_user_abort();//关掉浏览器，PHP脚本也可以继续执行.
-        //     set_time_limit(0);    
-        //     if(time()>strtotime("$current_date + 360 days")){ //360天后自动清除该分红股
-        //         $this->model->table('customer')->data(array('financial_stock'=>"`financial_stock`-({$stock})"))->where('user_id='.$id)->update();
-        //     }     
-        // }
-        // $userinfo = Session::get('oauth_user_info');
-        // $oauth=new WechatOAuth();
-        // $userinfo = $oauth->getUserInfo();
-        // $user=$this->model->table('user')->where('id='.$id)->find();
-        // if($userinfo){
-        //     var_dump(123);die;
-        //     if($user['avatar']=='/0'){
-        //     $this->model->table('user')->where('id='.$id)->data(array('avatar'=>$userinfo['head']))->update();
-        //     var_dump(111);die;
-        //   }
-        // }
         // if($this->user['id']==42608){
         //     $oauth_user = $this->model->table('oauth_user')->where('user_id='.$this->user['id'])->find();
         //     $token = $oauth_user['token'];
