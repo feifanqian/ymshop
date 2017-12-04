@@ -221,6 +221,7 @@ class AddressAction extends Controller {
         );
 
         $info_sql = $this->model->query("select id,location,lat,lng,picture,describe from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}");
+        var_dump($info_sql);die;
         $this->code= 0;
         $this->content = $info_sql;
     }
