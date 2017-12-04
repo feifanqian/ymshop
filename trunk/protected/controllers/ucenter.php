@@ -1415,7 +1415,7 @@ class UcenterController extends Controller
             // $token = $oauth_user['token'];
             // $openid = $oauth_user['open_id'];
             $oauth=new WechatOAuth();
-            $userinfo = $oauth->getUserInfos();
+            $userinfo = $oauth->getUserInfo();
             var_dump($userinfo);die;
           //   $user=$this->model->table('user')->fields('avatar')->where('id='.$this->user['id'])->find();
           //   if($user['avatar']=='/0'){

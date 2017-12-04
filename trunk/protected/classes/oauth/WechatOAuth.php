@@ -170,20 +170,20 @@ class WechatOAuth extends OAuth2 {
         }
     }
 
-    public function getUserInfos($access_token,$openid){
-      $userinfo = array();  
-      $url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";
-      $result = json_decode(file_get_contents($url),true);
+    // public function getUserInfos($access_token,$openid){
+    //   $userinfo = array();  
+    //   $url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";
+    //   $result = json_decode(file_get_contents($url),true);
       
-      if($result){
-        $userinfo['open_name']=$result['nickname']; 
-        $userinfo['head']=$result['headimgurl']; 
-        $userinfo['type'] = 'Weixin';
-        $userinfo['name'] = $userinfo['open_name'];
-        return $userinfo;
-      }else {
-            throw_exception("获取微信用户信息失败!");
-        }    
-    }
+    //   if($result){
+    //     $userinfo['open_name']=$result['nickname']; 
+    //     $userinfo['head']=$result['headimgurl']; 
+    //     $userinfo['type'] = 'Weixin';
+    //     $userinfo['name'] = $userinfo['open_name'];
+    //     return $userinfo;
+    //   }else {
+    //         throw_exception("获取微信用户信息失败!");
+    //     }    
+    // }
 
 }
