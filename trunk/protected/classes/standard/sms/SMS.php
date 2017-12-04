@@ -70,7 +70,7 @@ class SMS extends ClassConfig {
             'AppName'=>"圆梦购物网",
             'code' => $code,
         );
-
+        var_dump($this->config['appKey']);die;
         $ret = $this->postRequest('https://webapi.sms.mob.com/custom/msg', $params);
         $json = json_decode($ret, TRUE);
         var_dump($json);die;
