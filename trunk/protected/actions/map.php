@@ -50,7 +50,7 @@ class MapAction extends Controller
         $lat = Req::args('lat');//纬度
         $distance = Req::args('distance');
         $squares = $this->returnSquarePoint($lng, $lat,$distance);
-        $info_sql = $this->model()->query("select id,location,lat,lng,picture,describe from 'tiny_district_promoter' where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}");
+        $info_sql = $this->model->query("select id,location,lat,lng,picture,describe from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}");
         $this->code= 0;
         $this->content = $info_sql;
     }
