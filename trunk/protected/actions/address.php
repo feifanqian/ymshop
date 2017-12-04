@@ -203,7 +203,6 @@ class AddressAction extends Controller {
 
     public function getMap()
     {
-        var_dump(123);die;
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
         $distance = Req::args('distance');
