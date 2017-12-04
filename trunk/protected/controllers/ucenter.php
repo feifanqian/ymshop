@@ -1838,7 +1838,7 @@ class UcenterController extends Controller
                 }
             } else if ($type == 'mobile') {
                 $sms = SMS::getInstance();
-                if ($sms->getStatus()) {
+                // if ($sms->getStatus()) {
                     $result = $sms->sendCode($this->user['mobile'], $code);
                     if ($result['status'] == 'success') {
                         $info = array('status' => 'success', 'msg' => $result['message']);
@@ -1847,9 +1847,9 @@ class UcenterController extends Controller
                     } else {
                         $info = array('status' => 'fail', 'msg' => $result['message']);
                     }
-                } else {
-                    $info = array('status' => 'fail', 'msg' => '系统没有开启手机验证功能!');
-                }
+                // } else {
+                //     $info = array('status' => 'fail', 'msg' => '系统没有开启手机验证功能!');
+                // }
             }
         } else {
             $info = array('status' => 'fail', 'msg' => '还有' . (120 - $haveTime) . '秒后可发送！');
