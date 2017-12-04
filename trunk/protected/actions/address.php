@@ -201,4 +201,28 @@ class AddressAction extends Controller {
         }
     }
 
+    public function getMap()
+    {
+        $lng = Req::args('lng');//经度
+        $lat = Req::args('lat');//纬度
+        $distance = Req::args('distance');
+
+        $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
+        $dlng = rad2deg($dlng);//转成弧度
+
+        $dlat = $distance / 6371;
+        $dlat = rad2deg($dlat);//转成弧度
+
+        $squares =  array(
+            'left-top' => array('lat' => $lat + $dlat, 'lng' => $lng - $dlng),
+            'right-top' => array('lat' => $lat + $dlat, 'lng' => $lng + $dlng),
+            'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
+            'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
+        );
+
+        $info_sql = $this->model->query("select id,location,lat,lng,picture,describe from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}");
+        $this->code= 0;
+        $this->content = $info_sql;
+    }
+
 }
