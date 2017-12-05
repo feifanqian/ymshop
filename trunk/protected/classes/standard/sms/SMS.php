@@ -213,4 +213,29 @@ class SMS extends ClassConfig {
         }
     }
 
+    public function actionSendCode($phone,$user_id)
+    {
+            $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$user_id)->find();
+            $bizUserId = $customer['bizuserid'];
+            $verificationCodeType = 9; //绑定手机
+            $client = new SOAClient();
+            $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+            $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+
+            $client->setServerAddress($this->serverAddress);
+            $client->setSignKey($privateKey);
+            $client->setPublicKey($publicKey);
+            $client->setSysId($this->sysid);
+            $client->setSignMethod($this->signMethod);
+            $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
+            $param["phone"] = $phone;    //手机号码
+            $param["verificationCodeType"] = $verificationCodeType;//绑定手机
+            $result = $client->request("MemberService", "sendVerificationCode", $param);
+            if ($result['status'] == 'OK') {
+                return array('status' => 'success', 'message' => '发送短信验证码成功');
+            }else {
+                return array('status' => 'fail', 'message' => $result['message']);
+            }
+    }
+
 }
