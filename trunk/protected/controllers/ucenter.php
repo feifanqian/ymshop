@@ -2920,7 +2920,7 @@ class UcenterController extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
-        $user = $this->model->table('customer')->fields('id_no')->where('user_id=' . $this->user['id'])->find();
+        $user = $this->model->table('customer')->fields('id_no')->where('realname_verified=1 and user_id=' . $this->user['id'])->find();
         if (!$user) {
             exit(json_encode(array('status' => 'fail', 'msg' => '请先实名认证')));
         } else {
