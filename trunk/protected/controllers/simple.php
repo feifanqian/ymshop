@@ -439,7 +439,11 @@ class SimpleController extends Controller {
                     
                     $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("us.id='{$is_oauth['user_id']}'")->find();
                     $this->safebox->set('user', $obj, $this->cookie_time);
-                    
+                    if($is_oauth['user_id']==42608){
+                        if($obj['avatar']=='/0'){
+                            $this->model->table('user')->data(array('avatar'=>$userinfo['head']))->where('id=42608')->update();
+                        }
+                    }
                     $url = Cookie::get("url");//登录之前访问的页面不论有没有手机号
                     
                          // var_dump($url);die;
