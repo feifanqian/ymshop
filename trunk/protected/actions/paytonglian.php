@@ -1363,6 +1363,7 @@ class PaytonglianAction extends Controller
             'tradeNo' => $tradeNo,
             'verificationCode' => $verificationCode,
             'consumerIp' => $consumerIp,
+            'jumpUrl' => 'http://www.ymlypt.com/payment/async_callbacks',
         );
         $result = $client->request('OrderService', 'pay', $param);
         print_r($result);
