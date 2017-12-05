@@ -1343,9 +1343,10 @@ class PaytonglianAction extends Controller
         $client->setPublicKey($publicKey);
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
-
-        $user_id = Req::args('user_id');
-        $bizUserId = Req::args('bizUserId');
+    
+        $user_id = $this->user['id'];
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$user_id)->find();  
+        $bizUserId = $customer['bizuserid'];
         $bizOrderNo = Req::args('bizOrderNo');
         $model = new Model();
         $obj = $this->model->table('tradeno')->fields('trade_no,biz_orderno')->where("user_id='$user_id'AND biz_orderno='$bizOrderNo'")->find();
@@ -1355,7 +1356,7 @@ class PaytonglianAction extends Controller
             $tradeNo = '';
         }
         $verificationCode = Req::args('verificationCode');
-        $consumerIp = Req::args('consumerIp');
+        $consumerIp = $_SERVER['REMOTE_ADDR'];
         $param = array(
             'bizUserId' => $bizUserId,
             'bizOrderNo' => $bizOrderNo,
