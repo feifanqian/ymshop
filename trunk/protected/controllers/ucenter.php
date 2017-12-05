@@ -862,7 +862,17 @@ class UcenterController extends Controller
             ->where("i.user_id = " . $this->user['id'])
             ->findPage($page, 10);
         $this->assign("invite", $invite);
+        $this->assign('uid',$this->user['id']);
         $this->assign("seo_title", "我的邀请");
+        $this->redirect();
+    }
+
+    public function myinvite() {
+        $model = new Model();
+        $model = new Model("user as us");
+        $user = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.id=".$this->user['id'])->find();
+        $this->assign('user', $user);
+        $this->assign('uid',$this->user['id']);
         $this->redirect();
     }
 
@@ -2868,7 +2878,7 @@ class UcenterController extends Controller
         $param["memberType"] = $memberType;    //会员类型
         $param["source"] = $source;        //访问终端类型
         $result1 = $client->request("MemberService", "createMember", $param);
-        
+
         $params["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
         $params["isAuth"] = true;
         $params["name"] = $name;
