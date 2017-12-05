@@ -1413,8 +1413,8 @@ class UcenterController extends Controller
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
         $user = $this->model->table('customer')->fields('mobile_verified,realname_verified')->where('user_id=' . $this->user['id'])->find();
-        $this->assign('name',$user['realname_verified']);
-        $this->assign('user_id',$user['mobile_verified']);
+        $this->assign('realname_verified',$user['realname_verified']);
+        $this->assign('mobile_verified',$user['mobile_verified']);
         $this->assign("sign_in_open", $sign_in_set['open']);
         $this->assign("random", rand(1000, 9999));
         $this->assign('is_hirer', $is_hirer);
@@ -2868,6 +2868,7 @@ class UcenterController extends Controller
         $param["memberType"] = $memberType;    //会员类型
         $param["source"] = $source;        //访问终端类型
         $result1 = $client->request("MemberService", "createMember", $param);
+        
         $params["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
         $params["isAuth"] = true;
         $params["name"] = $name;
@@ -2887,7 +2888,7 @@ class UcenterController extends Controller
     }
 
     //加密
-    function rsaEncrypt($str, $publicKey, $privateKey)
+    public function rsaEncrypt($str, $publicKey, $privateKey)
     {
         $rsaUtil = new RSAUtil($publicKey, $privateKey);
         $encryptStr = $rsaUtil->encrypt($str);
@@ -2895,7 +2896,7 @@ class UcenterController extends Controller
     }
 
     //解密
-    function rsaDecrypt($str, $publicKey, $privateKey)
+    public function rsaDecrypt($str, $publicKey, $privateKey)
     {
         $rsaUtil = new RSAUtil($publicKey, $privateKey);
         $encryptStr = $rsaUtil->decrypt($str);

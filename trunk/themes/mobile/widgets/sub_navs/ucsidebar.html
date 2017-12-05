@@ -160,7 +160,7 @@
 <script>
     //实名认证，判断用户是否已绑定手机
     $("#name_check").click(function () {
-        var e = "{$user_id}";
+        var e = "{$mobile_verified}";
         if (e) {
             window.location.href = '/ucenter/set_realname';
         } else {
@@ -170,7 +170,7 @@
 
     //绑定银行卡，判断用户是否已实名认证
     $("#bind_bankcard").click(function () {
-        var e = "{$name}";
+        var e = "{$realname_verified}";
         if (e) {
             window.location.href = '/ucenter/bind_bankcard';
         } else {
