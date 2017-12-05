@@ -1410,18 +1410,6 @@ class UcenterController extends Controller
         if ($hirer > 0) {
             $is_hirer = true;
         }
-        // if($this->user['id']==42608){
-            // $oauth_user = $this->model->table('oauth_user')->where('user_id='.$this->user['id'])->find();
-            // $token = $oauth_user['token'];
-            // $openid = $oauth_user['open_id'];
-            // $oauth=new WechatOAuth();
-            // $userinfo = $oauth->getUserInfo();
-            // var_dump($userinfo);die;
-          //   $user=$this->model->table('user')->fields('avatar')->where('id='.$this->user['id'])->find();
-          //   if($user['avatar']=='/0'){
-          //    $this->model->table('user')->where('id='.$this->user['id'])->data(array('avatar'=>$userinfo['head']))->update();
-          // }
-        // }
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
         $user = $this->model->table('customer')->fields('mobile_verified,realname_verified')->where('user_id=' . $this->user['id'])->find();
