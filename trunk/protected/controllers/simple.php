@@ -449,6 +449,14 @@ class SimpleController extends Controller {
                             } 
                         }
                     }
+                    // 云账号同步
+                    // $customer = $this->model->table('customer')->fields('bizuserid')->find();
+                    // if($customer){
+                    //     if($customer['bizuserid']==NULL){
+                    //         $sms = SMS::getInstance();
+                    //         $sms->actionCreateMember($is_oauth['user_id']);
+                    //     }
+                    // }
                     $url = Cookie::get("url");//登录之前访问的页面不论有没有手机号
                     
                          // var_dump($url);die;

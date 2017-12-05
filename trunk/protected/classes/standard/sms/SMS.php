@@ -152,8 +152,6 @@ class SMS extends ClassConfig {
         $param["source"] = $source;        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
         if ($result['status'] == 'OK') {
-            // $this->code = 0;
-            // $this->content = '创建会员成功';
             $this->model->table('customer')->data(array('bizuserid'=>$bizUserId))->where('user_id='.$user_id)->update();
             return true;
         } else {
