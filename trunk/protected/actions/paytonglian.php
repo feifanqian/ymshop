@@ -304,9 +304,6 @@ class PaytonglianAction extends Controller
         $result = $client->request("MemberService", "bindPhone", $param);
         if ($result['status'] == 'OK') {
             $this->code = 0;
-        } else if ($result['errorCode'] == '50001') {
-            $this->code = '50001';
-            $this->content = '验证码错误';
         } else {
              $this->code = $result['errorCode'];
              $this->content = $result['message'];
