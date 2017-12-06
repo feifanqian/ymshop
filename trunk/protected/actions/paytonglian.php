@@ -792,7 +792,7 @@ class PaytonglianAction extends Controller
         $amount = (round(Req::args('amount'),2))*100; //充值金额以分为单位
         // $amount = Req::args('amount');
         $fee = 0;//必须整形
-        $validateType = 0;
+        $validateType = Req::args('validateType');
         $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $payMethod = new  stdClass();
         $payMethodb = new  stdClass();
