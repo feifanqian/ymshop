@@ -489,8 +489,11 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
-        $user_id = Req::args('user_id');
-        $bizUserId = Req::args('bizUserId');
+        $user_id = $this->user['id'];
+        
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$user_id)->find();
+        $bizUserId = $customer['bizuserid'];
+
         $cardNos = Req::args('cardNo');
         $cardNo = $this->rsaEncrypt(Req::args('cardNo'), $publicKey, $privateKey);//必须rsa加密
         $phone = Req::args('phone');
@@ -551,13 +554,16 @@ class PaytonglianAction extends Controller
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
         $cardNo = Req::args('cardNo');
-        $user_id = Req::args('user_id');
+        $user_id = $this->user['id'];
         $model = new Model();
         $obj = $this->model->table("bankcard")->fields("trancenum,transdate")->where("user_id='$user_id' AND cardno='$cardNo'")->order('id DESC')->find();
-        $bizUserId = Req::args('bizUserId');
+
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$user_id)->find();
+        $bizUserId = $customer['bizuserid'];
+
         $phone = Req::args('phone');
         $verificationCode = Req::args('verificationCode');
-
+        
         $client->setServerAddress($this->serverAddress);
         $client->setSignKey($privateKey);
         $client->setPublicKey($publicKey);
