@@ -862,7 +862,17 @@ class UcenterController extends Controller
             ->where("i.user_id = " . $this->user['id'])
             ->findPage($page, 10);
         $this->assign("invite", $invite);
+        $this->assign('uid',$this->user['id']);
         $this->assign("seo_title", "我的邀请");
+        $this->redirect();
+    }
+
+    public function myinvite() {
+        $model = new Model();
+        $model = new Model("user as us");
+        $user = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.id=".$this->user['id'])->find();
+        $this->assign('user', $user);
+        $this->assign('uid',$this->user['id']);
         $this->redirect();
     }
 
@@ -1410,23 +1420,11 @@ class UcenterController extends Controller
         if ($hirer > 0) {
             $is_hirer = true;
         }
-        // if($this->user['id']==42608){
-            // $oauth_user = $this->model->table('oauth_user')->where('user_id='.$this->user['id'])->find();
-            // $token = $oauth_user['token'];
-            // $openid = $oauth_user['open_id'];
-            // $oauth=new WechatOAuth();
-            // $userinfo = $oauth->getUserInfo();
-            // var_dump($userinfo);die;
-          //   $user=$this->model->table('user')->fields('avatar')->where('id='.$this->user['id'])->find();
-          //   if($user['avatar']=='/0'){
-          //    $this->model->table('user')->where('id='.$this->user['id'])->data(array('avatar'=>$userinfo['head']))->update();
-          // }
-        // }
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
         $user = $this->model->table('customer')->fields('mobile_verified,realname_verified')->where('user_id=' . $this->user['id'])->find();
-        $this->assign('name',$user['realname_verified']);
-        $this->assign('user_id',$user['mobile_verified']);
+        $this->assign('realname_verified',$user['realname_verified']);
+        $this->assign('mobile_verified',$user['mobile_verified']);
         $this->assign("sign_in_open", $sign_in_set['open']);
         $this->assign("random", rand(1000, 9999));
         $this->assign('is_hirer', $is_hirer);
@@ -2880,6 +2878,7 @@ class UcenterController extends Controller
         $param["memberType"] = $memberType;    //会员类型
         $param["source"] = $source;        //访问终端类型
         $result1 = $client->request("MemberService", "createMember", $param);
+
         $params["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
         $params["isAuth"] = true;
         $params["name"] = $name;
@@ -2899,7 +2898,7 @@ class UcenterController extends Controller
     }
 
     //加密
-    function rsaEncrypt($str, $publicKey, $privateKey)
+    public function rsaEncrypt($str, $publicKey, $privateKey)
     {
         $rsaUtil = new RSAUtil($publicKey, $privateKey);
         $encryptStr = $rsaUtil->encrypt($str);
@@ -2907,7 +2906,7 @@ class UcenterController extends Controller
     }
 
     //解密
-    function rsaDecrypt($str, $publicKey, $privateKey)
+    public function rsaDecrypt($str, $publicKey, $privateKey)
     {
         $rsaUtil = new RSAUtil($publicKey, $privateKey);
         $encryptStr = $rsaUtil->decrypt($str);
@@ -2932,7 +2931,7 @@ class UcenterController extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
-        $user = $this->model->table('customer')->fields('id_no')->where('user_id=' . $this->user['id'])->find();
+        $user = $this->model->table('customer')->fields('id_no')->where('realname_verified=1 and user_id=' . $this->user['id'])->find();
         if (!$user) {
             exit(json_encode(array('status' => 'fail', 'msg' => '请先实名认证')));
         } else {

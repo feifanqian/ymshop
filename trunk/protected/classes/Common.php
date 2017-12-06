@@ -823,6 +823,28 @@ class Common {
          }
      }
 
+     static function setIncomeByInviteShipEachGoods($order){
+         $model = new Model();
+         //通过订单id获取商品id
+         $order_goods = $model->table('order_goods')->fields('goods_id')->where('order_id='.$order['id'])->find();
+         $goods = $model->table('goods')->fields('inviter_rate,promoter_rate,districter_rate')->where('id='.$order_goods['goods_id'])->find();
+
+         $inviter_info = $model->table("invite")->where("invite_user_id=".$order['user_id'])->find();
+         if($inviter_info){
+                $income1 = round($order['order_amount']*$goods['inviter_rate']/100,2);
+             Log::incomeLog($income1, 1, $inviter_info['user_id'], $order['id'], 0,"下级消费分成(上级邀请者)");
+             $first_promoter_user_id = self::getFirstPromoter($inviter_info['user_id']);
+             if($first_promoter_user_id){
+                $income2 = round($order['order_amount']*$goods['promoter_rate']/100,2);
+                Log::incomeLog($income2, 2, $first_promoter_user_id, $order['id'], 0,"下级消费分成(上级第一个代理商)");
+             }
+             $income3 = round($order['order_amount']*$goods['districter_rate']/100,2);
+             Log::incomeLog($income3, 3, $inviter_info['district_id'], $order['id'], 0,"下级消费分成(所属专区)");
+         }else{
+             return false;
+         }
+     }
+
      static function backIncomeByInviteShip($order){ //退款收回收益
          $model = new Model();
          $inviter_info = $model->table("invite")->where("invite_user_id=".$order['user_id'])->find();

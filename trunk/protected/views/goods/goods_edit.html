@@ -15,6 +15,7 @@
       <li>描述信息</li>
       <li>SEO信息</li>
       <li>售后保障</li>
+      <li>分成比例</li>
     </ul>
     <!-- tab 头 end -->
     <!-- tab body start -->
@@ -384,6 +385,7 @@
       </div>
     </div>
   </div>
+  <!-- 基本信息 end -->
   <!-- 描述信息 start -->
   <div>
     <h2>详细介绍：</h2>
@@ -393,7 +395,6 @@
     </div>
   </div>
   <!-- 描述信息 end -->
-  <!-- 基本信息 end -->
   <!-- SEO 信息 start -->
   <div>
     <dl class="lineD">
@@ -428,6 +429,31 @@
     </div>
   </div>
   <!-- 售后保障 end -->
+  <!-- 分成比例 start -->
+  <div>
+    <dl class="lineD">
+      <dt>上级邀请人获得奖励：</dt>
+      <dd>
+        <input name="inviter_rate" type="text" value="{$inviter_rate}">
+        <label>%</label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt>上级第一个代理商获得奖励：</dt>
+      <dd>
+        <input name="promoter_rate" type="text" value="{$promoter_rate}">
+        <label>%</label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt>会员所属经销商获得奖励：</dt>
+      <dd>
+        <input name="districter_rate" type="text" value="{$districter_rate}">
+        <label>%</label>
+      </dd>
+    </dl>
+  </div>
+  <!-- 分成比例 end -->
 </div>
 <!-- tab 头 end -->
 <div style="text-align:center;margin-top:20px;">

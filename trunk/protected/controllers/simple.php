@@ -439,11 +439,24 @@ class SimpleController extends Controller {
                     
                     $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("us.id='{$is_oauth['user_id']}'")->find();
                     $this->safebox->set('user', $obj, $this->cookie_time);
-                    if($is_oauth['user_id']==42608){
+                    // 用户头像bug修复
+                    if($obj){
                         if($obj['avatar']=='/0'){
-                            $this->model->table('user')->data(array('avatar'=>$userinfo['head']))->where('id=42608')->update();
+                            if($userinfo){
+                                if(isset($userinfo['head'])){
+                                    $this->model->table('user')->data(array('avatar'=>$userinfo['head']))->where('id='.$is_oauth['user_id'])->update();
+                                }
+                            } 
                         }
                     }
+                    // 云账号同步
+                    // $customer = $this->model->table('customer')->fields('bizuserid')->find();
+                    // if($customer){
+                    //     if($customer['bizuserid']==NULL){
+                    //         $sms = SMS::getInstance();
+                    //         $sms->actionCreateMember($is_oauth['user_id']);
+                    //     }
+                    // }
                     $url = Cookie::get("url");//登录之前访问的页面不论有没有手机号
                     
                          // var_dump($url);die;

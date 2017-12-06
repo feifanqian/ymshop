@@ -152,8 +152,6 @@ class SMS extends ClassConfig {
         $param["source"] = $source;        //访问终端类型
         $result = $client->request("MemberService", "createMember", $param);
         if ($result['status'] == 'OK') {
-            // $this->code = 0;
-            // $this->content = '创建会员成功';
             $this->model->table('customer')->data(array('bizuserid'=>$bizUserId))->where('user_id='.$user_id)->update();
             return true;
         } else {
@@ -209,10 +207,87 @@ class SMS extends ClassConfig {
         $param["verificationCode"] = $verificationCode; //短信验证码
         $result = $client->request("MemberService", "bindPhone", $param);
         if ($result['status'] == 'OK') {
+            $this->model->table('customer')->data(array('mobile'=>$phone))->where('user_id='.$user_id)->update();
             return array('status' => 'success', 'message' => '绑定成功');
         } else {
              return array('status' => 'fail', 'message' => $result['message']);
         }
+    }
+
+    public function actionSendCode($phone,$user_id)
+    {
+            $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$user_id)->find();
+            $bizUserId = $customer['bizuserid'];
+            $verificationCodeType = 9; //绑定手机
+            $client = new SOAClient();
+            $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+            $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+
+            $client->setServerAddress($this->serverAddress);
+            $client->setSignKey($privateKey);
+            $client->setPublicKey($publicKey);
+            $client->setSysId($this->sysid);
+            $client->setSignMethod($this->signMethod);
+            $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
+            $param["phone"] = $phone;    //手机号码
+            $param["verificationCodeType"] = $verificationCodeType;//绑定手机
+            $result = $client->request("MemberService", "sendVerificationCode", $param);
+            if ($result['status'] == 'OK') {
+                return array('status' => 'success', 'message' => '发送短信验证码成功');
+            }else {
+                return array('status' => 'fail', 'message' => $result['message']);
+            }
+    }
+
+    public function actionApplyBindBankCard($name,$cardNos,$user_id)
+    {
+
+        $client = new SOAClient();
+        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+        $client->setServerAddress($this->serverAddress);
+        $client->setSignKey($privateKey);
+        $client->setPublicKey($publicKey);
+        $client->setSysId($this->sysid);
+        $client->setSignMethod($this->signMethod);
+
+        $customer = $this->model->table('customer')->fields('bizuserid,mobile,id_no')->where('user_id='.$user_id)->find();
+        $bizUserId = $customer['bizuserid'];
+        $cardNo = $this->rsaEncrypt($cardNos, $publicKey, $privateKey);//必须rsa加密
+        $phone = $customer['mobile'];
+        $cardType = 1;  //卡类型   储蓄卡 1 整型         信用卡 2 整型
+        $identityType = 1;          //证件类型 1是身份证 目前只支持身份证
+        $identityNo = $this->rsaEncrypt($customer['id_no'], $publicKey, $privateKey);//必须rsa加密 330227198805284412
+        $validate = '';
+        $cvv2 = '';
+        $isSafeCard = false;  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
+        $cardCheck = 2; //绑卡方式
+        $unionBank = '';
+
+
+        if ($cardType == 2) {
+            // 信用卡    有下面的参数
+            $param['validate'] = $validate;
+            $param['cvv2'] = $cvv2;
+        } else {
+            $param['isSafeCard'] = $isSafeCard;
+        }
+        $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
+        $param["cardNo"] = $cardNo;  //银行卡号
+        $param["phone"] = $phone;  //银行预留的手机卡号
+        $param["name"] = $name; //用户的姓名
+        $param["cardType"] = $cardType;
+        $param["cardCheck"] = $cardCheck; //绑卡方式
+        $param["identityType"] = $identityType;
+        $param["identityNo"] = $identityNo;
+        $param["unionBank"] = $unionBank;
+        $result = $client->request("MemberService", "applyBindBankCard", $param);
+        if ($result['status'] == 'OK') {
+            return array('status' => 'success', 'message' => '绑定成功');
+        } else {
+            return array('status' => 'fail', 'message' => $result['message']);
+        }
+
     }
 
 }
