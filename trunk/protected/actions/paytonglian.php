@@ -784,14 +784,15 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
-        $user_id = Req::args('user_id');
-        $bizUserId = Req::args('bizUserId');
+        $user_id = $this->user['id'];
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$user_id)->find();
+        $bizUserId = $customer['bizuserid'];
         $bizOrderNo = Req::args('bizOrderNo');
-        $accountSetNo = Req::args('accountSetNo');
-//        $amount = (round(Req::args('amount'),2))*100; //充值金额以分为单位
-        $amount = Req::args('amount');
-        $fee = Req::args('fee');//必须整形
-        $validateType = Req::args('validateType');
+        $accountSetNo = '12985739202038';
+        $amount = (round(Req::args('amount'),2))*100; //充值金额以分为单位
+        // $amount = Req::args('amount');
+        $fee = 0;//必须整形
+        $validateType = 0;
         $ordErexpireDatetime = Req::args('ordErexpireDatetime');
         $payMethod = new  stdClass();
         $payMethodb = new  stdClass();
@@ -808,11 +809,11 @@ class PaytonglianAction extends Controller
             $payMethodb->amount = Req::args('amount');//快捷支付（需要先绑定银行 卡）
             $payMethod->GATEWAY = $payMethodb;
         }
-        $industryCode = Req::args('industryCode');
-        $industryName = Req::args('industryName');
-        $source = Req::args('source');    //只能为整型
-        $summary = Req::args('summary');
-        $extendInfo = Req::args('extendInfo');
+        $industryCode = '1910';
+        $industryName = '其他';
+        $source = 2;    //只能为整型
+        $summary = '';
+        $extendInfo = '';
 
         $param["bizUserId"] = $bizUserId;
         $param["bizOrderNo"] = $bizOrderNo;
@@ -820,8 +821,8 @@ class PaytonglianAction extends Controller
         $param["amount"] = $amount;
         $param["fee"] = $fee;
         $param["validateType"] = $validateType;
-        $param["frontUrl"] = NOTICE_URL;
-        $param["backUrl"] = BACKURL;
+        $param["frontUrl"] = '';
+        $param["backUrl"] = 'http://www.ymlypt.com/payment/async_callbacks';
         $param["ordErexpireDatetime"] = $ordErexpireDatetime;
         $param["payMethod"] = $payMethod;
         $param["industryCode"] = $industryCode;
