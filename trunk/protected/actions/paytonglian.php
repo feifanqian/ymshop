@@ -433,8 +433,9 @@ class PaytonglianAction extends Controller
 
     public function actionGetBankCardBin()
     {
-        $user_id = Req::args('user_id');
-        $bizUserId = Req::args('bizUserId');
+        $user_id = $this->user['id'];
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$user_id)->find();
+        $bizUserId = $customer['bizuserid'];
         $cardNo = Req::args('cardNo');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
