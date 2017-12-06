@@ -178,7 +178,8 @@ function callback(hirer_id,user_id,pointcoin,ds_promoter,classify_id,region_id){
             layer.close(load);
             if(result.status=='success'){
                layer.msg("添加成功",function(){
-                  layer.closeAll(); 
+                  layer.closeAll();
+                  window.location.reload();//强制刷新页面，从服务器重新请求数据
                });
             }else{
                 layer.msg(result.msg);
