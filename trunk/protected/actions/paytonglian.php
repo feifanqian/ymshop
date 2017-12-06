@@ -532,9 +532,9 @@ class PaytonglianAction extends Controller
             $trancenum = $signedValue['tranceNum'];
             $transdate = $signedValue['transDate'];
             $exist = $this->model->table('bankcard')->where('user_id='.$this->user['id'].' and cardno='.$cardNos)->find();
-            if(!$exist){
-                $this->model->table('bankcard')->data(array('user_id'=>$this->user['id'],'trancenum'=>$trancenum,'transdate'=>$transdate,'cardno'=>$cardNos))->insert();
-            }
+            
+            $this->model->table('bankcard')->data(array('user_id'=>$this->user['id'],'trancenum'=>$trancenum,'transdate'=>$transdate,'cardno'=>$cardNos))->insert();
+            
             print_r($result);
         } else {
             print_r($result);
