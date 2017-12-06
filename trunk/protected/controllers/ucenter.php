@@ -2958,4 +2958,44 @@ class UcenterController extends Controller
         }
     }
 
+    public function code_input(){
+        $this->redirect();
+    }
+
+    public function toBePromoter(){
+        $code = Filter::str(Req::args('code'));
+        $rules = array('code:required:激活码不能为空!');
+        $info = Validator::check($rules);
+        if (is_array($info)) {
+            $this->redirect("info", false, array('msg' => array("info", $info['msg'])));
+        }else{
+            $exist = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+            if($exist){
+                $this->redirect("info", false, array('msg' => array("info", '您已经是代理了')));
+                exit;
+            }
+            $promoter_code = $this->model->table('promoter_code')->where("code ='{$code}'")->find();
+            if(!$promoter_code){
+                $this->redirect("info", false, array('msg' => array("info", '激活码不正确')));
+                exit;
+            }
+            if(time()>strtotime($promoter_code['end_date'])){
+                $this->redirect("info", false, array('msg' => array("info", '激活码已过期')));
+                exit;
+            }
+            if($promoter_code['status']==0){
+                $this->redirect("info", false, array('msg' => array("info", '激活码已失效')));
+                exit;
+            }
+            $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id']))->insert();
+            if($result){
+                $this->model->table('promoter_code')->data(array('status'=>0))->where("code ='{$code}'")->update();
+                $this->redirect("/ucenter/index", false, array('msg' => array("success", "激活成功！")));
+            }else{
+                $this->redirect("info", false, array('msg' => array("info", '激活失败')));
+                exit;
+            }
+        }
+    }
+
 }

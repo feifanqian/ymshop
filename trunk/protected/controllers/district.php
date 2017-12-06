@@ -329,4 +329,28 @@ class DistrictController extends Controller {
         $type = Filter::str(Req::args('type'));
         $this->hirer->getInviteQrcode($type);
     }
+
+    public function promoter_code(){
+       $data = $this->model->table("promoter_code")->where("user_id =".$this->user['id'])->findAll();
+        
+       $this->assign('data',$data);
+       $this->assign("seo_title", "激活码"); 
+       $this->redirect(); 
+    }
+
+    public function makePromoterCode(){
+        $data = $this->model->table("promoter_code")->where("user_id =".$this->user['id'])->findAll();
+        if(count($data)>100){
+            exit(json_encode(array('status'=>'fail','msg'=>'您只有100个代理商邀请码资格')));
+        }
+        $code = Common::makePromoterCode();
+        $result = $this->model->table("promoter_code")->data(array('user_id'=>$this->user['id'],'code'=>$code,'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+30 days")),'district_id'=>$this->hirer->id))->insert();
+        if($result){
+            echo json_encode(array('status'=>'success','msg'=>'成功'));
+            exit();
+        }else{
+            exit(json_encode(array('status'=>'fail','msg'=>'失败')));
+        }
+    }
+
 }

@@ -1,0 +1,65 @@
+<style type='text/css'>
+    .shop{
+        text-align: center;
+        margin: 5px 5px;
+        border-radius: 20px;
+        background:-moz-linear-gradient(left, rgb(243, 201, 71), rgba(19, 233, 9, 0.56));/*火狐*/ 
+        background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(rgb(243, 201, 71)), to(rgba(19, 233, 9, 0.56)));/*谷歌*/ 
+        background: -webkit-linear-gradient(left, rgb(243, 201, 71), rgba(19, 233, 9, 0.56));   /*Safari5.1 Chrome 10+*/
+        background: -o-linear-gradient(left, rgb(243, 201, 71), rgba(19, 233, 9, 0.56));  /*Opera 11.10+*/
+    }
+    .shop p{
+        text-align: center;
+        margin:0 auto;
+        line-height: 40px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        font-weight: 800;
+        color:rgba(3, 3, 3, 0.81);
+    }
+    .layui-m-layercont{
+        padding-top: 10px;
+    }
+</style>
+<script type="text/javascript" src="{url:@static/js/layer/layer.js}"></script>
+<div class="ma20 bg-white p20 ">
+    <a href="javascript:;" class="weui-btn weui-btn_primary">生成激活码</a>
+</div>
+<div class="ma20 bg-white p20 ">
+<div class="weui-cells__title">我的激活码</div>
+{set:$i=0;}
+{foreach:items=$data key=$k item=$item}
+<div class="weui-flex">
+       <div class="weui-flex__item">
+         <div class="shop">
+           <p>激活码：{$item['code']}</p>
+           <p>生成时间：{$item['start_date']}</p>
+           <p>失效时间：{$item['end_date']}</p>
+        </div>
+       </div>
+</div>
+{/foreach}
+{if:count($data)==0}
+<div class="weui-loadmore weui-loadmore_line page_end">
+            <span class="weui-loadmore__tips" style="background-color:#FFF;">暂无数据</span>
+</div>
+{/if}
+</div>
+<script>
+    $(".weui-btn").click(function(){
+         $.post('{url:/district/makePromoterCode}',function(result){
+            var ret = JSON.parse(result);
+            console.log(ret.status);
+            layer.closeAll();
+           if(ret.status=='success'){
+                 $.toast("成功",'success',function(){
+                    window.location.reload();
+                });
+              }else{
+                 layer.msg("生成失败");
+          }
+         });
+    });
+</script>
