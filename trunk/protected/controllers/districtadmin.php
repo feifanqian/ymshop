@@ -758,6 +758,8 @@ class DistrictadminController extends Controller
             $pointcoin = Req::args("pointcoin") != null ? Req::args("pointcoin") : 0;
             // $financialcoin = Req::args("financialcoin")!=null?Req::args("financialcoin"):0;
             $ds_promoter = Req::args("ds_promoter");
+            $classify_id = Req::args("classify_id");//商家类型
+            $region_id = Req::args("region_id");//区县
             if (!$user_id) {
                 exit(json_encode(array("status" => 'fail', 'msg' => "参数错误")));
             }
@@ -797,6 +799,8 @@ class DistrictadminController extends Controller
                     $data['create_time'] = date('Y-m-d H:i:s');
                     $data['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
                     $data['status'] = 1;
+                    $data['classify_id'] = $classify_id;
+                    $data['region_id'] = $region_id;
                     $result = $model->table("district_promoter")->data($data)->insert();
                     if ($result) {
                         $logic = DistrictLogic::getInstance();

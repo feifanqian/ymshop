@@ -164,17 +164,17 @@ function addPromoters(){
             id:"select",
             type: 2,
             title:"选择用户",
-            area: ['85%', '520px'],
+            area: ['85%', '550px'],
             fixed: false, //不固定
             maxmin: false,
             zindex:2,
             content: '{url:/districtadmin/radio_customer_select}',
           });
 }
-function callback(hirer_id,user_id,pointcoin,ds_promoter){
+function callback(hirer_id,user_id,pointcoin,ds_promoter,classify_id,region_id){
      var load = layer.load();
      console.log(hirer_id+"|"+user_id);
-     $.post('{url:/districtadmin/addPromoter}', {hirer_id:hirer_id,user_id:user_id,pointcoin:pointcoin,ds_promoter:ds_promoter} , function(result){
+     $.post('{url:/districtadmin/addPromoter}', {hirer_id:hirer_id,user_id:user_id,pointcoin:pointcoin,ds_promoter:ds_promoter,classify_id:classify_id,region_id:region_id} , function(result){
             layer.close(load);
             if(result.status=='success'){
                layer.msg("添加成功",function(){
