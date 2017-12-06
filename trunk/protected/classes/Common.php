@@ -1388,5 +1388,13 @@ class Common {
         echo '<html><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'.$strTable.'</html>';
     }
 
-    
+    /**
+     * 生成代理商激活码
+     * @param 
+     * @param 
+     */
+    static function makePromoterCode()
+    {
+        
+    }
 }
