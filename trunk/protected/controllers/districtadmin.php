@@ -1307,7 +1307,7 @@ class DistrictadminController extends Controller
         $id = Req::args("id");
         $uid = Filter::int($id); //
         $model = new Model();
-        $promoter = $model->table('district_promoter')->fields('id,user_id,lng,lat,location,describe')->where('id=' . $uid)->find();
+        $promoter = $model->table('district_promoter')->fields('id,user_id,lng,lat,location,info')->where('id='.$uid)->find();
         $customer = $model->table('customer')->fields('user_id,real_name')->where('user_id=' . $promoter['user_id'])->find();
         $this->assign('customer', $customer);
         $this->assign('promoter',$promoter);
@@ -1323,9 +1323,9 @@ class DistrictadminController extends Controller
         $lng = Req::args('lng'); //经度
         $lat = Req::args('lat'); //纬度
         $location = Req::args('location');
-        $describe = Req::args('describe');
+        $info = Req::args('info');
         if ($lng || $lat) {
-                $model->table('district_promoter')->data(array('lng'=>$lng,'lat'=>$lat,'location'=>$location,'describe'=>$location))->where('id='.$id)->update();
+                $model->table('district_promoter')->data(array('lng'=>$lng,'lat'=>$lat,'location'=>$location,'info'=>$info))->where('id='.$id)->update();
             }
         $this->redirect("list_promoter");
     }
