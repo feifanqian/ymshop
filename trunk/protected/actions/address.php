@@ -271,12 +271,7 @@ class AddressAction extends Controller
 
             $s = 2 * asin(sqrt(pow(sin($a / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2))) * 6371;
             $d = round($s, 2);//保留小数点后两位
-            if ($d < 1) {
-                $result = ($d * 1000);
-            } else {
-                $result = $d;
-            }
-            $info_sql[$key]['dist'] = $result;
+            $info_sql[$key]['dist'] = $d;
         }
         //距离离我最近
         $arr = array();
