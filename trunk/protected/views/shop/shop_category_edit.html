@@ -4,7 +4,7 @@
 <h1 class="page_title">分类编辑</h1>
 <form action="{url:/shop/shop_category_save}" method="post" callback="check_tab_location" >
   <div id="obj_form" class="form2 tab">
-    {if:isset($id)}<input type="hidden" name="id" value="{$category['id']}">{/if}
+    {if:isset($id)}<input type="hidden" name="id" value="{$category['id']|''}">{/if}
     <!-- tab 头 start -->
     <ul class="tab-head">
       <li>基本信息</li>
@@ -18,13 +18,13 @@
         <dl class="lineD">
           <dt>名称：</dt>
           <dd>
-            <input name="name" type="text" pattern="required" value="{$category['name']}" alt="名称不能为空">
+            <input name="name" type="text" pattern="required" value="{$category['name']|''}" alt="名称不能为空">
             <label>分类名称</label>
           </dd>
         </dl><dl class="lineD">
         <dt>别名：</dt>
         <dd>
-          <input name="alias" type="text" pattern="[a-zA-Z]\w*" value="{$category['alias']}" alt="必需为字母与数字组合，且以字母开头">
+          <input name="alias" type="text" pattern="[a-zA-Z]\w*" value="{$category['alias']|''}" alt="必需为字母与数字组合，且以字母开头">
           <label>方便url识别美化</label>
         </dd>
       </dl><dl class="lineD">
@@ -48,7 +48,7 @@
     <dl class="lineD">
     <dt>排序：</dt>
     <dd>
-      <input name="sort" type="text" pattern="int" value="{$category['sort']}" style="width:40px;" alt="必需为数字">
+      <input name="sort" type="text" pattern="int" value="{$category['sort']|''}" style="width:40px;" alt="必需为数字">
       <label>数字越大越靠前</label>
     </dd>
   </dl>
@@ -67,7 +67,7 @@
       <ul class="piclist" id="pic_list">
         {if:isset($category['imgs']) && $imgs =  unserialize($category['imgs'])}
         {list:items=$imgs}
-        <li {if:$item['img'] == $img} class="current" {/if}>
+        <li {if:$item['img'] == $category['img']} class="current" {/if}>
           <div class="bord">
             <input type="hidden" name="imgs[]" value="{$item['img']}">
             <input type="hidden" name="links[]" value="{$item['link']}">
@@ -79,7 +79,7 @@
           {/list}
           {/if}
         </ul>
-        <input name="img" type="text" style="visibility: hidden;width:0;" value="{$category['img']}" id="img_index" alt="添加商品图片"/>
+        <input name="img" type="text" style="visibility: hidden;width:0;" value="{$category['img']|''}" id="img_index" alt="添加商品图片"/>
         <label></label>
       </dd>
     </dl>
@@ -90,21 +90,21 @@
     <dl class="lineD">
       <dt>页面标题：</dt>
       <dd>
-        <input name="seo_title" type="text" value="{$category['seo_title']}">
+        <input name="seo_title" type="text" value="{$category['seo_title']|''}">
         <label>页面标题(TITLE)</label>
       </dd>
     </dl>
     <dl class="lineD">
       <dt>页面关键词：</dt>
       <dd>
-        <input name="seo_keywords" type="text" value="{$category['seo_keywords']}">
+        <input name="seo_keywords" type="text" value="{$category['seo_keywords']|''}">
         <label>页面关键词(META_KEYWORDS)</label>
       </dd>
     </dl>
     <dl class="lineD">
       <dt>页面描述：</dt>
       <dd>
-        <input name="seo_description" type="text" value="{$category['seo_description']}">
+        <input name="seo_description" type="text" value="{$category['seo_description']|''}">
         <label>页面描述(META_DESCRIPTION)</label>
       </dd>
     </dl>
