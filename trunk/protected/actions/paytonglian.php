@@ -138,7 +138,8 @@ class PaytonglianAction extends Controller
 
     public function actionCheckVerificationCode()
     {
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $phone = Req::args('phone');
         $verificationCodeType = Req::args('verificationCodeType');
         $verificationCode = Req::args('verificationCode');
@@ -174,9 +175,10 @@ class PaytonglianAction extends Controller
 
     public function actionSetRealName()
     {
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $name = Req::args('name');
-        $identityType = Req::args('identityType');
+        $identityType = 1;
         $identityNo = Req::args('identityNo');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
@@ -349,7 +351,8 @@ class PaytonglianAction extends Controller
         $companyBasicInfo->bankName = Req::args('bankName');//'开户银行名称'
         $companyBasicInfo->parentBankName = Req::args('parentBankName');//'开户银行名称'
 
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $backUrl = Req::args('backUrl');
         $companyExtendInfo = new stdClass(); //扩展参数
         $param = array(
@@ -389,7 +392,8 @@ class PaytonglianAction extends Controller
         $userInfo->province = Req::args('province');
         $userInfo->area = Req::args('area');
         $userInfo->address = Req::args('address');
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $param = array(
             'bizUserId' => $bizUserId,
             'userInfo' => $userInfo,//个人基本信息
@@ -416,7 +420,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //请求参数
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $param = array(
             'bizUserId' => $bizUserId,
         );
@@ -597,7 +602,8 @@ class PaytonglianAction extends Controller
     public function actionSetSafeCard()
     {
 
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $setSafeCard = Req::args('setSafeCard');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
@@ -628,7 +634,8 @@ class PaytonglianAction extends Controller
 
     public function actionQueryBankCard()
     {
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $cardNo = Req::args('cardNo');
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
@@ -657,7 +664,8 @@ class PaytonglianAction extends Controller
 
     public function actionUnbindBankCard()
     {
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $client = new SOAClient();
         $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
         $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
@@ -701,7 +709,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //请求参数
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $oldPhone = Req::args('oldPhone');
         $newPhone = Req::args('newPhone');
         $newVerificationCode = Req::args('newVerificationCode');
@@ -733,7 +742,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //请求参数
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $param = array(
             'bizUserId' => $bizUserId,
         );
@@ -759,7 +769,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //请求参数
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $param = array(
             'bizUserId' => $bizUserId,
         );
@@ -889,7 +900,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
 
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $bizOrderNo = Req::args('bizOrderNo');
         $accountSetNo = Req::args('accountSetNo');
         $amount = Req::args('amount');    //只能为整型
@@ -1161,7 +1173,8 @@ class PaytonglianAction extends Controller
         $client->setSignMethod($this->signMethod);
 
         //请求参数
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $bizOrderNo = Req::args('bizOrderNo');
         $accountSetNo = Req::args('accountSetNo');
         $amount = Filter::int(Req::args('amount'));    //只能为整型
@@ -1407,7 +1420,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //请求数据
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $goodsType = Filter::int(Req::args('goodsType'));   //只能为整型
         $bizGoodsNo = Req::args('bizGoodsNo');
         $goodsName = Req::args('goodsName');
@@ -1466,7 +1480,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //请求参数
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $bizGoodsNo = Req::args('bizGoodsNo');
         $goodsType = Filter::int(Req::args('goodsType'));   //只能为整型
         $beginDate = Req::args('beginDate');
@@ -1505,7 +1520,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //参数
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $bizFreezenNo = Req::args('bizFreezenNo');
         $accountSetNo = Req::args('accountSetNo');
         $amount = Filter::int(Req::args('amount'));    //只能为整型
@@ -1542,7 +1558,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //参数
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $bizFreezenNo = Req::args('bizFreezenNo');
         $accountSetNo = Req::args('accountSetNo');
         $amount = Filter::int(Req::args('amount'));//只能为整型
@@ -1584,7 +1601,8 @@ class PaytonglianAction extends Controller
         //参数
         $bizOrderNo = Req::args('bizOrderNo');
         $oriBizOrderNo = Req::args('oriBizOrderNo');
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $amount = Filter::int(Req::args('amount'));    //只能为整型
         $couponAmount = Filter::int(Req::args('couponAmount'));;    //只能为整型
         $feeAmount = Filter::int(Req::args('feeAmount'));;   //只能为整型
@@ -1722,7 +1740,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //参数
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $accountSetNo = Req::args('accountSetNo');
         $param = array(
             'bizUserId' => $bizUserId,
@@ -1752,7 +1771,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //参数
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $bizOrderNo = Req::args('bizOrderNo');
         $param = array(
             'bizUserId' => $bizUserId,
@@ -1813,7 +1833,8 @@ class PaytonglianAction extends Controller
         $client->setSysId($this->sysid);
         $client->setSignMethod($this->signMethod);
         //请求参数
-        $bizUserId = Req::args('bizUserId');
+        $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$this->user['id'])->find();
+        $bizUserId = $customer['bizuserid'];
         $accountSetNo = Req::args('accountSetNo');
         $dateStart = Req::args('dateStart');
         $dateEnd = Req::args('dateEnd');

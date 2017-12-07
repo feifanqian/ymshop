@@ -500,7 +500,7 @@ class PaymentController extends Controller {
     }
 
     public function dopays(){
-       if($this->user['id']!=80000){
+       if($this->user['id']!=1776){
            $payment_id = Filter::int(Req::args('payment_id'));
            $order_no = Req::args('order_no');
            $order_amount = (Req::args('order_amount'));
@@ -577,9 +577,7 @@ class PaymentController extends Controller {
 
            $paramsStr = AppUtil::ToUrlParams($params);
            $url = AppConfig::APIURL . "/pay";
-           // if($user_id==42608){
-           //  print_r(json_encode($params));die;
-           // }
+           
            $rsp = AppUtil::Request($url, $paramsStr);
            
            $rspArray = json_decode($rsp, true);

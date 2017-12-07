@@ -28,7 +28,7 @@ class MapAction extends Controller
     }
 
     //使用此函数计算得到结果后，带入sql查询。
-    public function getMap()
+    public function getMaps()
     {
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
@@ -46,7 +46,9 @@ class MapAction extends Controller
             'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
             'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
         );
-        $info_sql = $this->model->query("select id,location,lat,lng,picture,describe from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']} AND region_id eq $region_id");
+        $info_sql = $this->model->table('district_promoter')->where('lat>'.$squares['right-bottom']['lat'].' and lat<'.$squares['left-top']['lat'].' and lng>'.$squares['left-top']['lng'].' and lng<'.$squares['right-bottom']['lng'].' and region_id='.$region_id)->findAll();
+        // var_dump($info_sql);die;
+        // $info_sql = $this->model->query("select id,location,lat,lng,picture,describe from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']} AND region_id = {$region_id}");
         $this->code = 0;
         $this->content = $info_sql;
     }
