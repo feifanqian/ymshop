@@ -175,6 +175,23 @@ class AddressAction extends Controller
         $this->code = 0;
     }
 
+    public function hasAttentioned(){
+        $promoter_id = Filter::int(Req::args('promoter_id'));
+        if(!$promoter_id){
+            $this->code=1000;
+            return; 
+        }
+        $exist = $this->model->table('promoter_collect')->where('user_id='.$this->user['id'].' and promoter_id='.$promoter_id)->find();
+        if($exist){
+            $attention = 1;
+        }else{
+            $attention = 0;
+        }
+
+        $this->code = 0;
+        $this->content = $attention;
+    }
+
     public function promoterEdit(){
         $model = new Model();
         $is_promoter = $model->table('district_promoter')->where('user_id=' . $this->user['id'])->find();
