@@ -270,7 +270,7 @@ class AddressAction extends Controller
             $arr[] = $val['dist'];
         }
         if ($distance_asc) {
-            $info_sql = array_multisort($arr, SORT_ASC, $info_sql);
+            array_multisort($arr, SORT_ASC, $info_sql);
         }
         if ($info_sql) {
             $this->code = 0;
