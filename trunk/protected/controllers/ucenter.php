@@ -2988,6 +2988,10 @@ class UcenterController extends Controller
                 exit;
             }
             $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id']))->insert();
+            $invite = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
+            if(!$invite){
+                $this->model->table('invite')->data(array('user_id'=>$promoter_code['user_id'],'invite_user_id'=>$this->user['id'],'from'=>'jihuo','district_id'=>$promoter_code['district_id'],'createtime'=>time()))->insert();
+            }
             if($result){
                 $this->model->table('promoter_code')->data(array('status'=>0))->where("code ='{$code}'")->update();
                 $this->redirect("/ucenter/index", false, array('msg' => array("success", "激活成功！")));
