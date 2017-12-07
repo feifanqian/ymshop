@@ -587,7 +587,7 @@ class PaymentController extends Controller {
              if($this->user['id']==42608){
                   $packData = $payment->getPaymentInfo('offline_order', $order_id);
                   // $packData = array_merge($extendDatas, $packData);
-                  $sendData = $paymentPlugin->packDatas($packData);
+                  $sendData = $paymentPlugin->packData($packData);
                   $this->assign("paymentPlugin", $paymentPlugin);
                   $this->assign("sendData", $sendData);
                   $this->assign("offline",1);
@@ -611,7 +611,7 @@ class PaymentController extends Controller {
            }else{
               $packData = $payment->getPaymentInfo('offline_order', $order_id);
               // $packData = array_merge($extendDatas, $packData);
-              $sendData = $paymentPlugin->packDatas($packData);
+              $sendData = $paymentPlugin->packData($packData);
               $this->assign("paymentPlugin", $paymentPlugin);
               $this->assign("sendData", $sendData);
               $this->assign("offline",1);
