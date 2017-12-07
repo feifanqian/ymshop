@@ -584,7 +584,16 @@ class PaymentController extends Controller {
            
            $rspArray = json_decode($rsp, true);
            if(AppUtil::ValidSigns($rspArray)){
-               $this->assign('jsApiParameters',$rspArray['payinfo']);
+             if($this->user['id']==42608){
+                  $packData = $payment->getPaymentInfo('offline_order', $order_id);
+                  // $packData = array_merge($extendDatas, $packData);
+                  $sendData = $paymentPlugin->packDatas($packData);
+                  $this->assign("paymentPlugin", $paymentPlugin);
+                  $this->assign("sendData", $sendData);
+                  $this->assign("offline",1);
+                  $this->redirect('pay_form', false);
+             }else{
+                $this->assign('jsApiParameters',$rspArray['payinfo']);
                Session::set('payinfo',$rspArray['payinfo']);
                
                $config = Config::getInstance();
@@ -597,14 +606,16 @@ class PaymentController extends Controller {
                $this->assign("paymentPlugin", $paymentPlugin);
                $this->assign("sendData", $sendData);
                $this->assign("offline",1);
-            //    if($user_id==42608){
-            //     $this->redirect('ucenter/demo?dopay=1&inviter_id='.$seller_id,true);
-            // }else{
-            //    $this->redirect('pay_forms', false);
-            // }
-            $this->redirect('pay_forms', false);
+               $this->redirect('pay_forms', false);
+             } 
            }else{
-               echo "error";die;
+              $packData = $payment->getPaymentInfo('offline_order', $order_id);
+              // $packData = array_merge($extendDatas, $packData);
+              $sendData = $paymentPlugin->packDatas($packData);
+              $this->assign("paymentPlugin", $paymentPlugin);
+              $this->assign("sendData", $sendData);
+              $this->assign("offline",1);
+              $this->redirect('pay_form', false);
            }
        }else{
           $payment_id = Filter::int(Req::args('payment_id'));
@@ -1307,14 +1318,19 @@ class PaymentController extends Controller {
                 $error_url = Url::urlFormat("/ucenter/recharge_center");
             } else {//商品订单
                 $order = $this->model->table("order")->where("order_no='{$order_no}'")->find();
-                if (!$order) {
+                $offline_order = $this->model->table("order_offline")->where("order_no='{$order_no}'")->find();
+                if ($order) {
+                    $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
+                    $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
+                    $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
+                }elseif($offline_order){
+                    $success_url = Url::urlFormat("/ucenter/order_details/id/{$offline_order['id']}");
+                    $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$offline_order['id']}");
+                    $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$offline_order['id']}");
+                }else{
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息啦"));
                     exit();
                 }
-                
-                $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
-                $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
-                $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
             }
             $this->assign("success_url", $success_url);
             $this->assign("cancel_url", $cancel_url);
