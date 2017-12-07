@@ -51,4 +51,10 @@ class MapAction extends Controller
         $this->content = $info_sql;
     }
 
+    public function promoterType(){
+        $list = $this->model->table('promoter_type')->findAll();
+        $this->code = 0;
+        $this->content = $list;
+    }
+
 }
