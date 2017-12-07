@@ -173,7 +173,7 @@ class V1Controller extends Controller {
         "seller_info"=>array("address/promoterInfo",0,1),
         "promoter_edit"=>array('address/promoterEdit',1,1),
         "promoter_type"=>array('map/promoterType',0,1),
-
+        "promoter_attention"=>array("address/promoterAttention",1,1), //关注商家
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息
