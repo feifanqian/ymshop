@@ -151,6 +151,21 @@ class AddressAction extends Controller {
         $this->content = $list;
     }
 
+    public function promoterAttention(){
+        $promoter_id = Filter::int(Req::args('promoter_id'));
+        if(!$promoter_id){
+            $this->code=1000;
+            return; 
+        }
+        $exist = $this->model->table('promoter_collect')->where('user_id='.$this->user['id'].' and promoter_id='.$promoter_id)->find();
+        if($exist){
+            $this->code = 1167;
+            return;
+        }
+        $this->model->table('promoter_collect')->data(array('user_id'=>$this->user['id'],'promoter_id'=>$promoter_id,'add_time'=>date('Y-m-d H:i:s')))->insert();
+        $this->code = 0;
+    }
+
     public function promoterEdit(){
         $model = new Model();
         $is_promoter = $model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
