@@ -584,7 +584,16 @@ class PaymentController extends Controller {
            
            $rspArray = json_decode($rsp, true);
            if(AppUtil::ValidSigns($rspArray)){
-               $this->assign('jsApiParameters',$rspArray['payinfo']);
+             if($this->user['id']==42608){
+                  $packData = $payment->getPaymentInfo('offline_order', $order_id);
+                  // $packData = array_merge($extendDatas, $packData);
+                  $sendData = $paymentPlugin->packDatas($packData);
+                  $this->assign("paymentPlugin", $paymentPlugin);
+                  $this->assign("sendData", $sendData);
+                  $this->assign("offline",1);
+                  $this->redirect('pay_form', false);
+             }else{
+                $this->assign('jsApiParameters',$rspArray['payinfo']);
                Session::set('payinfo',$rspArray['payinfo']);
                
                $config = Config::getInstance();
@@ -597,14 +606,16 @@ class PaymentController extends Controller {
                $this->assign("paymentPlugin", $paymentPlugin);
                $this->assign("sendData", $sendData);
                $this->assign("offline",1);
-            //    if($user_id==42608){
-            //     $this->redirect('ucenter/demo?dopay=1&inviter_id='.$seller_id,true);
-            // }else{
-            //    $this->redirect('pay_forms', false);
-            // }
-            $this->redirect('pay_forms', false);
+               $this->redirect('pay_forms', false);
+             } 
            }else{
-               echo "error";die;
+              $packData = $payment->getPaymentInfo('offline_order', $order_id);
+              // $packData = array_merge($extendDatas, $packData);
+              $sendData = $paymentPlugin->packDatas($packData);
+              $this->assign("paymentPlugin", $paymentPlugin);
+              $this->assign("sendData", $sendData);
+              $this->assign("offline",1);
+              $this->redirect('pay_form', false);
            }
        }else{
           $payment_id = Filter::int(Req::args('payment_id'));

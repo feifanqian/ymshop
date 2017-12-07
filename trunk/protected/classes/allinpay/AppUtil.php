@@ -73,7 +73,8 @@ class AppUtil{
             }
         }
         else{
-            echo "errmsg:".$array["retmsg"];
+            // echo "errmsg:".$array["retmsg"];
+            return FALSE;
         }
         
         return FALSE;
