@@ -28,7 +28,7 @@ class MapAction extends Controller
     }
 
     //使用此函数计算得到结果后，带入sql查询。
-    public function getMap()
+    public function getMaps()
     {
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
