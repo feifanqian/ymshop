@@ -581,6 +581,15 @@ class PaymentController extends Controller {
            $rsp = AppUtil::Request($url, $paramsStr);
            
            $rspArray = json_decode($rsp, true);
+
+           // $packData = $payment->getPaymentInfo('offline_order', $order_id);
+           //  // $packData = array_merge($extendDatas, $packData);
+           //  $sendData = $paymentPlugin->packData($packData);
+           //  $this->assign("paymentPlugin", $paymentPlugin);
+           //  $this->assign("sendData", $sendData);
+           //  $this->assign("offline",1);
+           //  $this->redirect('pay_form', false);
+           
            if(AppUtil::ValidSigns($rspArray)){
              if($this->user['id']==42608){
                   $packData = $payment->getPaymentInfo('offline_order', $order_id);
