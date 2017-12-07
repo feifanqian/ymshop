@@ -946,7 +946,7 @@ class PaymentController extends Controller {
     public function async_callbacks(){
         $xml = @file_get_contents('php://input');
         // $array=Common::xmlToArray($xml);
-        file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
+        // file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
         $str=substr(json_encode($xml),-5);
         $strs=substr($str,0,4);
         $trxstatus=0;  
