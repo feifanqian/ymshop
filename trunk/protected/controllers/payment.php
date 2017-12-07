@@ -551,79 +551,72 @@ class PaymentController extends Controller {
            //防止重复生成同笔订单
            if(!$exist){
               $order_id=$model->data($data)->insert();
+           }else{
+              $order_id = $exist['id']; 
            }
 
            $payment = new Payment($payment_id);
            $paymentPlugin = $payment->getPaymentPlugin();
-           $open=$this->model->table('oauth_user')->where("oauth_type = 'wechat' and user_id=".$user_id)->find();
 
-           $params = array();
-           $params["cusid"] = AppConfig::CUSID;
-           $params["appid"] = AppConfig::APPID;
-           $params["version"] = AppConfig::APIVERSION;
-           $params["trxamt"] = $order_amount*100;
-           $params["reqsn"] = $order_no;//订单号,自行生成
-           $params["paytype"] = "W02";
-           $params["randomstr"] = $randomstr;//
-           $params["body"] = "商品名称";
-           $params["remark"] = "备注信息";
-           $params["acct"] = $open['open_id'];
-           // $params["limit_pay"] = "no_credit";
-           // $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
-           $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
-           // $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback");
-           // $params["notify_url"] = 'http://'.$_SERVER['HTTP_HOST'].'/payment/async_callback';
-           $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
+           // $open=$this->model->table('oauth_user')->where("oauth_type = 'wechat' and user_id=".$user_id)->find();
 
-           $paramsStr = AppUtil::ToUrlParams($params);
-           $url = AppConfig::APIURL . "/pay";
-           
-           $rsp = AppUtil::Request($url, $paramsStr);
-           
-           $rspArray = json_decode($rsp, true);
+           // $params = array();
+           // $params["cusid"] = AppConfig::CUSID;
+           // $params["appid"] = AppConfig::APPID;
+           // $params["version"] = AppConfig::APIVERSION;
+           // $params["trxamt"] = $order_amount*100;
+           // $params["reqsn"] = $order_no;//订单号,自行生成
+           // $params["paytype"] = "W02";
+           // $params["randomstr"] = $randomstr;//
+           // $params["body"] = "商品名称";
+           // $params["remark"] = "备注信息";
+           // $params["acct"] = $open['open_id'];
+           // // $params["limit_pay"] = "no_credit";
+           // // $params["notify_url"] = "http://172.16.2.46:8080/vo-apidemo/OrderServlet";
+           // $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
+           // // $params["notify_url"] = Url::fullUrlFormat("/payment/async_callback");
+           // // $params["notify_url"] = 'http://'.$_SERVER['HTTP_HOST'].'/payment/async_callback';
+           // $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
 
-           // $packData = $payment->getPaymentInfo('offline_order', $order_id);
-           //  // $packData = array_merge($extendDatas, $packData);
-           //  $sendData = $paymentPlugin->packData($packData);
-           //  $this->assign("paymentPlugin", $paymentPlugin);
-           //  $this->assign("sendData", $sendData);
-           //  $this->assign("offline",1);
-           //  $this->redirect('pay_form', false);
+           // $paramsStr = AppUtil::ToUrlParams($params);
+           // $url = AppConfig::APIURL . "/pay";
            
-           if(AppUtil::ValidSigns($rspArray)){
-             if($this->user['id']==42608){
-                  $packData = $payment->getPaymentInfo('offline_order', $order_id);
-                  // $packData = array_merge($extendDatas, $packData);
-                  $sendData = $paymentPlugin->packData($packData);
-                  $this->assign("paymentPlugin", $paymentPlugin);
-                  $this->assign("sendData", $sendData);
-                  $this->assign("offline",1);
-                  $this->redirect('pay_form', false);
-             }else{
-                $this->assign('jsApiParameters',$rspArray['payinfo']);
-               Session::set('payinfo',$rspArray['payinfo']);
+           // $rsp = AppUtil::Request($url, $paramsStr);
+           
+           // $rspArray = json_decode($rsp, true);
+
+           $packData = $payment->getPaymentInfo('offline_order', $order_id);
+            // $packData = array_merge($extendDatas, $packData);
+            $sendData = $paymentPlugin->packData($packData);
+            $this->assign("paymentPlugin", $paymentPlugin);
+            $this->assign("sendData", $sendData);
+            $this->assign("offline",1);
+            $this->redirect('pay_form', false);
+           
+           // if(AppUtil::ValidSigns($rspArray)){
+           //     $this->assign('jsApiParameters',$rspArray['payinfo']);
+           //     Session::set('payinfo',$rspArray['payinfo']);
                
-               $config = Config::getInstance();
-               $site_config = $config->get("globals");
-               $packData['M_OrderNO'] = $order_no;
-               $packData['M_Amount'] = $order_amount;
-               $packData ['R_Name'] = isset($site_config['site_name']) ? $site_config['site_name'] : '';
-               $packData = array_merge($params, $packData);
-               $sendData = $paymentPlugin->packDatas($packData);
-               $this->assign("paymentPlugin", $paymentPlugin);
-               $this->assign("sendData", $sendData);
-               $this->assign("offline",1);
-               $this->redirect('pay_forms', false);
-             } 
-           }else{
-              $packData = $payment->getPaymentInfo('offline_order', $order_id);
-              // $packData = array_merge($extendDatas, $packData);
-              $sendData = $paymentPlugin->packData($packData);
-              $this->assign("paymentPlugin", $paymentPlugin);
-              $this->assign("sendData", $sendData);
-              $this->assign("offline",1);
-              $this->redirect('pay_form', false);
-           }
+           //     $config = Config::getInstance();
+           //     $site_config = $config->get("globals");
+           //     $packData['M_OrderNO'] = $order_no;
+           //     $packData['M_Amount'] = $order_amount;
+           //     $packData ['R_Name'] = isset($site_config['site_name']) ? $site_config['site_name'] : '';
+           //     $packData = array_merge($params, $packData);
+           //     $sendData = $paymentPlugin->packDatas($packData);
+           //     $this->assign("paymentPlugin", $paymentPlugin);
+           //     $this->assign("sendData", $sendData);
+           //     $this->assign("offline",1);
+           //     $this->redirect('pay_forms', false);
+           // }else{
+           //    $packData = $payment->getPaymentInfo('offline_order', $order_id);
+           //    // $packData = array_merge($extendDatas, $packData);
+           //    $sendData = $paymentPlugin->packData($packData);
+           //    $this->assign("paymentPlugin", $paymentPlugin);
+           //    $this->assign("sendData", $sendData);
+           //    $this->assign("offline",1);
+           //    $this->redirect('pay_form', false);
+           // }
        }else{
           $payment_id = Filter::int(Req::args('payment_id'));
            $order_no = Req::args('order_no');
