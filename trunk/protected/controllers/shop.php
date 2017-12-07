@@ -1,13 +1,15 @@
 <?php
 
-class ShopController extends Controller {
+class ShopController extends Controller
+{
 
     public $layout = 'admin';
     private $top = null;
     public $needRightActions = array('*' => true);
     private $manager;
 
-    public function init() {
+    public function init()
+    {
 
         $menu = new Menu();
         $this->assign('mainMenu', $menu->getMenu());
@@ -29,12 +31,14 @@ class ShopController extends Controller {
             $this->assign('admin_title', $currentNode['name']);
     }
 
-    public function noRight() {
+    public function noRight()
+    {
         $this->redirect("/admin/noright");
     }
 
     //商家分类
-    function shop_category_save() {
+    function shop_category_save()
+    {
         $shop_category = new Model("shop_category");
         $name = Req::args("name");
         $alias = Req::args("alias");
@@ -65,7 +69,7 @@ class ShopController extends Controller {
                 $this->msg = array("error", "同一级别下已经在在相同分类！");
             unset($item['id']);
             $this->redirect("shop_category_edit", false, Req::args());
-        }else {
+        } else {
             //最得父节点的信息
             $parent_node = $shop_category->where("id = $parent_id")->find();
             $parent_path = "";
@@ -87,7 +91,7 @@ class ShopController extends Controller {
                     $shop_category->data(array('parent_id' => $parent_id, 'id' => $id, 'sort' => $sort, 'name' => $name, 'alias' => $alias, 'nav_show' => $nav_show, 'list_show' => $list_show, 'recommend' => $recommend, 'type_id' => $type_id, 'seo_title' => $seo_title, 'seo_keywords' => $seo_keywords, 'seo_description' => $seo_description, 'img' => $img, 'imgs' => serialize($imgs)))->update();
                     Log::op($this->manager['id'], "更新商家分类", "管理员[" . $this->manager['name'] . "]:更新了商家分类 " . Req::args('name'));
                     $this->redirect("shop_category_list");
-                }else {
+                } else {
                     $this->msg = array("warning", "此节点不能放到自己的子节点上,操作失败！");
                     $this->redirect("shop_category_edit", false, Req::args());
                 }
@@ -109,7 +113,8 @@ class ShopController extends Controller {
     }
 
     //商家分类删除
-    function shop_category_del() {
+    function shop_category_del()
+    {
         $id = Req::args('id');
         $category = new Model("shop_category");
         $child = $category->where("parent_id = $id")->find();
@@ -135,7 +140,8 @@ class ShopController extends Controller {
         }
     }
 
-    function shop_save() {
+    function shop_save()
+    {
         //商家处理
         $shop = new Model('shop');
         $imgs = is_array(Req::args("imgs")) ? Req::args("imgs") : array();
@@ -172,7 +178,7 @@ class ShopController extends Controller {
             $gdata['salt'] = CHash::random(6);
             $gdata['password'] = md5(md5($gdata['password']) . $gdata['salt']);
         }
-        if ($id ==null) {
+        if ($id == null) {
             $gdata['create_time'] = date("Y-m-d H:i:s");
             $shop_id = $shop->data($gdata)->save();
             Log::op($this->manager['id'], "添加商家", "管理员[" . $this->manager['name'] . "]:添加了商家 " . Req::args('name'));
@@ -185,7 +191,8 @@ class ShopController extends Controller {
         $this->redirect("shop_list");
     }
 
-    function shop_del() {
+    function shop_del()
+    {
         $id = Req::args("id");
         $model = new Model();
         $str = '';
@@ -210,7 +217,8 @@ class ShopController extends Controller {
         $this->redirect("shop_list", false, array('msg' => $msg));
     }
 
-    function shop_list() {
+    function shop_list()
+    {
 
         $page = intval(Req::args("p"));
 
@@ -252,33 +260,38 @@ class ShopController extends Controller {
         $this->redirect();
     }
 
-    function photoshop() {
+    function photoshop()
+    {
         $this->layout = '';
         $this->redirect();
     }
-    function shop_edit(){
+
+    function shop_edit()
+    {
         $id = Req::args("id");
-        if($id){
+        if ($id) {
             $shop_model = new Model('shop');
-            $shop  = $shop_model->where("id =$id")->find();
-            $this->assign('shop',$shop);
+            $shop = $shop_model->where("id =$id")->find();
+            $this->assign('shop', $shop);
         }
         $this->redirect();
     }
-    function shop_category_list(){
+
+    function shop_category_list()
+    {
         $this->redirect();
     }
+
     //商家分类编辑
-    function shop_category_edit(){
+    function shop_category_edit()
+    {
         $id = Req::args('id');//判断是否有id传递过来
-        if (!empty($id)){
+        if ($id) {
             $shop_category = new Model("shop_category");
             $category = $shop_category->where("id=$id")->find();
-            $this->assign('category',$category);
-            $this->redirect();
-        }else{
-            $this->redirect();
+            $this->assign('category', $category);
         }
+        $this->redirect();
 
     }
 }
