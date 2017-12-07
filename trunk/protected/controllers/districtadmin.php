@@ -1324,9 +1324,18 @@ class DistrictadminController extends Controller
         $lat = Req::args('lat'); //纬度
         $location = Req::args('location');
         $info = Req::args('info');
-        if ($lng || $lat) {
-                $model->table('district_promoter')->data(array('lng'=>$lng,'lat'=>$lat,'location'=>$location,'info'=>$info))->where('id='.$id)->update();
+        if ($lng) {
+            $model->table('district_promoter')->data(array('lng'=>$lng))->where('id='.$id)->update();
             }
+        if ($lat) {
+            $model->table('district_promoter')->data(array('lat'=>$lat))->where('id='.$id)->update();
+            }
+        if ($location) {
+            $model->table('district_promoter')->data(array('location'=>$location))->where('id='.$id)->update();
+        }
+        if ($info) {
+            $model->table('district_promoter')->data(array('info'=>$info))->where('id='.$id)->update();
+        }
         $this->redirect("list_promoter");
     }
 }
