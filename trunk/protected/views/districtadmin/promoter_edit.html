@@ -3,28 +3,42 @@
 {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
 <div id="obj_form" class="form2 tab">
-    <h1 class="page_title">编辑专区名称</h1>
+    <h1 class="page_title">编辑代理商信息</h1>
     <form action="{url:/districtadmin/promoter_save}" method="post" >
-        {if:isset($list['user_id'])}<input type="hidden" name="user_id" value="{$list['user_id']}">{/if}
+        <input type="hidden" name="id" value="{$promoter['id']}">
         <dl class="lineD">
             <dt>专区名称：</dt>
             <dd>
-                <input name="real_name" type="text" pattern="required" value="{$list['real_name']}">
+                <input name="real_name" type="text" pattern="required" value="{$customer['real_name']}" readonly="readonly">
                 <label>专区名称</label>
             </dd>
         </dl>
         <dl class="lineD">
             <dt>专区经度：</dt>
             <dd>
-                <input name="lng" type="text" pattern="required" value="{$user_id['lng']}">
+                <input name="lng" type="text" pattern="required" value="{$promoter['lng']}">
                 <label>专区经度</label>
             </dd>
         </dl>
         <dl class="lineD">
             <dt>专区纬度：</dt>
             <dd>
-                <input name="lat" type="text" pattern="required" value="{$user_id['lat']}">
+                <input name="lat" type="text" pattern="required" value="{$promoter['lat']}">
                 <label>专区经度</label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>专区位置：</dt>
+            <dd>
+                <input name="location" type="text" pattern="required" value="{$promoter['location']}">
+                <label>地理位置</label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>专区详情：</dt>
+            <dd>
+                <input name="describe" type="text" pattern="required" value="{$promoter['describe']}">
+                <label>专区简介</label>
             </dd>
         </dl>
         <div style="text-align:left;margin-left:13%;"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>

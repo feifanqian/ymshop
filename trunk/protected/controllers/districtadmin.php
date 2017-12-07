@@ -1307,29 +1307,26 @@ class DistrictadminController extends Controller
         $id = Req::args("id");
         $uid = Filter::int($id); //
         $model = new Model();
-        $user_id = $model->table('district_promoter')->fields('user_id,lng,lat')->where('id=' . $uid)->find();
-        $list = $model->table('customer')->fields('user_id,real_name')->where('user_id=' . $user_id['user_id'])->find();
-        $this->assign('list', $list);
-        $this->assign('user_id',$user_id);
+        $promoter = $model->table('district_promoter')->fields('id,user_id,lng,lat,location,describe')->where('id=' . $uid)->find();
+        $customer = $model->table('customer')->fields('user_id,real_name')->where('user_id=' . $promoter['user_id'])->find();
+        $this->assign('customer', $customer);
+        $this->assign('promoter',$promoter);
         $this->redirect('promoter_edit');
     }
 
     //编辑代理商专区名称
     public function promoter_save()
     {
-        $id = Req::args('user_id');
+        $id = Req::args('id');
         $model = new Model();
-        $name = Req::args('real_name');
+        // $name = Req::args('real_name');
         $lng = Req::args('lng'); //经度
         $lat = Req::args('lat'); //纬度
-        if ($name) {
-            $model->table('customer')->data(array('real_name' => $name))->where("user_id=$id")->update();
-            if ($lng && $lat) {
-                    $id = $model->table('district_promoter')->fields('id')->where('user_id=' . $id)->find();
-                    $model->table('district_promoter')->data(array('lng'=>$lng,'lat'=>$lat))->where('id='.$id['id'])->update();
+        $location = Req::args('location');
+        $describe = Req::args('describe');
+        if ($lng || $lat) {
+                $model->table('district_promoter')->data(array('lng'=>$lng,'lat'=>$lat,'location'=>$location,'describe'=>$location))->where('id='.$id)->update();
             }
-        }
-
         $this->redirect("list_promoter");
     }
 }
