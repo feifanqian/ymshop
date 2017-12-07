@@ -1154,7 +1154,14 @@ class UcenterController extends Controller
             $shopname = '未知商家';
         }
         $paytypelist = $this->model->table('payment as pa')->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")->where("pa.status = 0 and pa.plugin_id=9 and pa.client_type =2")->order("pa.sort desc")->findAll();
+        if($paytypelist){
+            $paytype['payment'] = $paytypelist[0]['id'];
+            $paytype['payname'] = $paytypelist[0]['pay_name'];
+            $this->assign("paytype", $paytype);
+        }  
+
         $pay_status = $order['pay_status'];
+        
         $this->assign("paytypelist", $paytypelist);
         $this->assign('pay_status', $pay_status);
         $this->assign('shopname', $shopname);
