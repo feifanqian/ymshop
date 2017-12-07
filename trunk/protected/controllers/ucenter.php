@@ -1153,6 +1153,8 @@ class UcenterController extends Controller
         } else {
             $shopname = '未知商家';
         }
+        $pay_status = $order['pay_status'];
+        $this->assign('pay_status', $pay_status);
         $this->assign('shopname', $shopname);
         $this->assign("order", $order);
         $this->redirect();
