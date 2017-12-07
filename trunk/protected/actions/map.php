@@ -46,7 +46,7 @@ class MapAction extends Controller
             'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
             'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
         );
-        $info_sql = $this->model->table('district_promoter')->where('region_id='.$region_id)->findAll();
+        $info_sql = $this->model->table('district_promoter')->where('lat>'.$squares['right-bottom']['lat'].' and lat<'.$squares['left-top']['lat'].' and lng>'.$squares['left-top']['lng'].' and lng<'.$squares['right-bottom']['lng'].' and region_id='.$region_id)->findAll();
         var_dump($info_sql);die;
         // $info_sql = $this->model->query("select id,location,lat,lng,picture,describe from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']} AND region_id = {$region_id}");
         $this->code = 0;
