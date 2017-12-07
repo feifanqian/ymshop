@@ -268,7 +268,17 @@ class ShopController extends Controller {
     function shop_category_list(){
         $this->redirect();
     }
+    //商家分类编辑
     function shop_category_edit(){
-        $this->redirect();
+        $id = Req::args('id');//判断是否有id传递过来
+        if (!empty($id)){
+            $shop_category = new Model("shop_category");
+            $category = $shop_category->where("id=$id")->find();
+            $this->assign('category',$category);
+            $this->redirect();
+        }else{
+            $this->redirect();
+        }
+
     }
 }

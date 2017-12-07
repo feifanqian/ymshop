@@ -201,11 +201,13 @@ class AddressAction extends Controller {
         }
     }
 
+    //附近商家接口
     public function getMap()
     {
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
-        $distance = Req::args('distance');
+        $distance = Req::args('distance');//距离
+        $classify_id = Filter::int(Req::args('classify_id'));
 
         $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
         $dlng = rad2deg($dlng);//转成弧度
@@ -219,11 +221,60 @@ class AddressAction extends Controller {
             'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
             'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
         );
-        var_dump($squares);die;
-        $info_sql = $this->model->query("select id,location,lat,lng,picture,describe from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}");
-        var_dump($info_sql);die;
-        $this->code= 0;
-        $this->content = $info_sql;
+         if (!empty($classify_id)) {
+            $info_sql = $this->model->query("select * from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']} and classify_id = $classify_id");
+        } else {
+            $info_sql = $this->model->query("select * from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}");
+        }
+
+        if ($info_sql) {
+            $this->code = 0;
+            $this->content = $info_sql;
+        } else {
+            $this->code = 1166;
+        }
+    }
+
+     //按区域查找商家
+    public function getArea()
+    {
+        $region_id = Filter::int(Req::args('region_id')); //所在区域
+        $classify_id = Filter::int(Req::args('classify_id')); //分类
+        $tourist_id = Filter::int(Req::args('tourist_id'));//区域下的著名的景点或街道
+        $class_id = '';
+        $region = '';
+        $tourist = '';
+        if (!empty($classify_id)) {
+            $class_id = $classify_id;
+        }
+        if (!empty($region_id)) {
+            $region = $region_id;
+        }
+        if (!empty($tourist_id)) {
+            $tourist = $tourist_id;
+        }
+        $result = $this->model->table('district_promoter')->where("classify_id=$classify_id and region_id=$region_id and tourist_id=" . $tourist)->findAll();
+        if ($result) {
+            $this->code = 0;
+            $this->content = $result;
+        } else {
+            $this->code = 1166;
+        }
+    }
+
+    //按地铁线查找
+    public function getSubway()
+    {
+        $line_number = Filter::int(Req::args('line_number'));//几号线
+        $which_station = Filter::int(Req::args('which_station'));//哪个站
+        $result = $this->model->table('district_promoter')->where("line_number=$line_number and which_station=" . $which_station)->findAll();
+        if ($result) {
+            $this->code = 0;
+            $this->content = $result;
+        } else {
+            $this->code = 1166;
+        }
+
     }
 
 }

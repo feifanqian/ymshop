@@ -162,8 +162,11 @@ class V1Controller extends Controller {
         "shop_goods_list_by_time"=>array("personalShop/shopGoodsListByTime",0,1),
         //红包
         "redbag_list"=>array("address/redbagList",0,1),
+        //地图
         "get_maps"=>array("map/getMap",0,1),//地图功能
-        "get_map"=>array("address/getMap",0,1),//地图功能
+        "get_map" => array("address/getMap", 0, 1),//附近商家
+        "get_area" => array("address/getArea", 0, 1),//按区域查找商家
+        "get_subway"=>array("address/getSubway",0,1),//按地铁线查找
         //商家
         "seller_list"=>array("address/promoterList",0,1),
         "seller_info"=>array("address/promoterInfo",0,1),
