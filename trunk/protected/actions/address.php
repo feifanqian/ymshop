@@ -250,6 +250,17 @@ class AddressAction extends Controller
         $distance = Req::args('distance');//距离
         $classify_id = Filter::int(Req::args('classify_id'));//商家分类
         $distance_asc = Req::args('distance_asc'); //距离离我最近
+        $hot = Filter::int(Req::args('hot'));//人气
+        $evaluate = Filter::int(Req::args('evaluate'));//评价
+        $taste = Filter::int(Req::args('taste'));//口味
+        $environment = Filter::int(Req::args('environment'));//环境
+        $quality_service  = Filter::int(Req::args('quality_service '));//服务
+        $price = Filter::int(Req::args('price')); //价格
+        $region_id = Req::args('region_id'); //区域
+        $tourist_id = Req::args('tourist_id'); //街道或景点
+        $line_number = Filter::int(Req::args('line_number'));//几号线
+        $which_station = Filter::int(Req::args('which_station'));//哪个站
+        $customer = Req::args('customer');//商家or会员
 
         $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
         $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
@@ -268,6 +279,22 @@ class AddressAction extends Controller
             $info_sql = $this->model->query("select * from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']} and classify_id = $classify_id");
         } else {
             $info_sql = $this->model->query("select * from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}");
+        }
+         //区域
+        if ($region_id) {
+            $info_sql = $this->model->table('district_promoter')->where("region_id=$region_id")->findAll();
+        }
+        //街道
+        if ($tourist_id) {
+            $info_sql = $this->model->table('district_promoter')->where("region_id=$region_id")->findAll();
+        }
+        //地铁线路
+        if ($line_number) {
+           $info_sql = $this->model->table('district_promoter')->where("line_number=$line_number and which_station=" . $which_station)->findAll();
+        }
+        //商家or会员
+        if ($customer) {
+            $info_sql = $this->model->table('district_promoter')->where("user_id=" . $this->user['id'])->find();
         }
         //两点之间的距离
         /*
@@ -297,6 +324,56 @@ class AddressAction extends Controller
         }
         if ($distance_asc) {
             array_multisort($arr, SORT_ASC, $info_sql);
+        }
+        //人气
+        $hots = array();
+        foreach ($info_sql as $val) {
+            $hots[] = $val['hot'];
+        }
+        if ($hot) {
+            array_multisort($hots, SORT_DESC, $info_sql);
+        }
+        //评价
+        $evaluates = array();
+        foreach ($info_sql as $val) {
+            $evaluates[] = $val['evaluate'];
+        }
+        if ($evaluate) {
+            array_multisort($evaluates, SORT_DESC, $info_sql);
+        }
+         //口味
+        $tastes = array();
+        foreach ($info_sql as $val) {
+            $tastes[] = $val['taste'];
+        }
+        if ($taste) {
+            array_multisort($tastes, SORT_DESC, $info_sql);
+        }
+        //环境
+         $environments = array();
+        foreach ($info_sql as $val) {
+            $environments[] = $val['environment'];
+        }
+        if ($environment) {
+            array_multisort($environments, SORT_DESC, $info_sql);
+        }
+        //服务
+         $quality_services = array();
+        foreach ($info_sql as $val) {
+            $quality_services[] = $val['quality_service'];
+        }
+        if ($quality_service) {
+            array_multisort($quality_services, SORT_DESC, $info_sql);
+        }
+        //价格
+         $prices = array();
+        foreach ($info_sql as $val) {
+            $prices[] = $val['price'];
+        }
+        if ($price==1) {//1表示正序排，2表示倒序排
+            array_multisort($prices, SORT_ASC, $info_sql);
+        }elseif ($price==2) {
+             array_multisort($prices, SORT_DESC, $info_sql);
         }
         if ($info_sql) {
             $this->code = 0;

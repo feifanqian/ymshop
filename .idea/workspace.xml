@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5e7286e1-8ea1-416a-afb0-c86e85802771" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/trunk/protected/config/config.php" afterPath="$PROJECT_DIR$/trunk/protected/config/config.php" />
-      <change beforePath="$PROJECT_DIR$/trunk/themes/_default/views/index/index.html" afterPath="$PROJECT_DIR$/trunk/themes/_default/views/index/index.html" />
-      <change beforePath="$PROJECT_DIR$/trunk/themes/mobile/views/index/index.html" afterPath="$PROJECT_DIR$/trunk/themes/mobile/views/index/index.html" />
+      <change beforePath="$PROJECT_DIR$/trunk/protected/actions/address.php" afterPath="$PROJECT_DIR$/trunk/protected/actions/address.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,28 +25,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="config.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trunk/protected/config/config.php">
+      <file leaf-file-name="address.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/trunk/protected/actions/address.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="504">
-              <caret line="18" column="25" lean-forward="false" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="213" column="129" lean-forward="false" selection-start-line="213" selection-start-column="129" selection-end-line="213" selection-end-column="129" />
+              <caret line="258" column="32" lean-forward="false" selection-start-line="258" selection-start-column="32" selection-end-line="258" selection-end-column="32" />
               <folding>
-                <marker date="1512713947331" expanded="true" signature="13703:13709" ph=" " />
-                <marker date="1512713947331" expanded="true" signature="13709:13715" ph=" " />
-                <marker date="1512713947331" expanded="true" signature="13715:13721" ph=" " />
-                <marker date="1512713947331" expanded="true" signature="13721:13727" ph=" " />
-                <marker date="1512713947331" expanded="true" signature="13727:13733" ph=" " />
-                <marker date="1512713947331" expanded="true" signature="13733:13739" ph=" " />
+                <marker date="1512718945364" expanded="true" signature="10498:10725" ph="select * fro... tiny_district_promoter" />
+                <marker date="1512718945364" expanded="true" signature="10803:10978" ph="select * fro... tiny_district_promoter" />
               </folding>
             </state>
           </provider>
@@ -117,12 +101,12 @@
         <option value="$PROJECT_DIR$/trunk/protected/controllers/shop.php" />
         <option value="$PROJECT_DIR$/trunk/protected/views/shop/shop_category_edit.html" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/v1.php" />
-        <option value="$PROJECT_DIR$/trunk/protected/actions/address.php" />
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/index/flash.html" />
         <option value="$PROJECT_DIR$/trunk/themes/mobile/views/index/flash.html" />
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/index/index.html" />
         <option value="$PROJECT_DIR$/trunk/protected/config/config.php" />
         <option value="$PROJECT_DIR$/trunk/themes/mobile/views/index/index.html" />
+        <option value="$PROJECT_DIR$/trunk/protected/actions/address.php" />
       </list>
     </option>
   </component>
@@ -141,8 +125,8 @@
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="987" />
     <option name="y" value="20" />
-    <option name="width" value="673" />
-    <option name="height" value="1000" />
+    <option name="width" value="935" />
+    <option name="height" value="1014" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -175,7 +159,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -235,13 +219,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Console Font" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="settings.editor.splitter.proportion" value="0.26542604" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://D:/phpStudy16/WWW/ymshop/trunk/protected/controllers/v1.php&#10;Termin&#9;ACTION&#9;ActivateTerminalToolWindow&#10;Ter&#9;ACTION&#9;ActivateTerminalToolWindow&#10;ter&#9;ACTION&#9;ActivateTerminalToolWindow" />
@@ -314,11 +298,12 @@
       <workItem from="1512616176155" duration="12000" />
       <workItem from="1512696101812" duration="2009000" />
       <workItem from="1512713558902" duration="389000" />
+      <workItem from="1512718393274" duration="797000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="248398000" />
+    <option name="totallyTimeSpent" value="249195000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -331,11 +316,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="72" y="-8" width="1856" height="1096" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2201087" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6164383" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298913" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -385,13 +369,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/update_obj.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2262">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/widgets/sub_navs/district_header.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -642,13 +619,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/actions/address.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="279" column="9" lean-forward="true" selection-start-line="279" selection-start-column="9" selection-end-line="279" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/v1.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="354">
@@ -681,7 +651,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
           <caret line="5" column="55" lean-forward="false" selection-start-line="5" selection-start-column="55" selection-end-line="5" selection-end-column="55" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -689,7 +658,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
           <caret line="9" column="133" lean-forward="false" selection-start-line="9" selection-start-column="133" selection-end-line="9" selection-end-column="133" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -697,29 +665,47 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
           <caret line="149" column="79" lean-forward="true" selection-start-line="149" selection-start-column="79" selection-end-line="149" selection-end-column="79" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/config/config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="18" column="25" lean-forward="false" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
+        <state relative-caret-position="5964">
           <caret line="213" column="129" lean-forward="false" selection-start-line="213" selection-start-column="129" selection-end-line="213" selection-end-column="129" />
           <folding>
-            <marker date="1512713947331" expanded="true" signature="13703:13709" ph=" " />
-            <marker date="1512713947331" expanded="true" signature="13709:13715" ph=" " />
-            <marker date="1512713947331" expanded="true" signature="13715:13721" ph=" " />
-            <marker date="1512713947331" expanded="true" signature="13721:13727" ph=" " />
-            <marker date="1512713947331" expanded="true" signature="13727:13733" ph=" " />
-            <marker date="1512713947331" expanded="true" signature="13733:13739" ph=" " />
+            <marker date="1512718343409" expanded="true" signature="13703:13709" ph=" " />
+            <marker date="1512718343409" expanded="true" signature="13709:13715" ph=" " />
+            <marker date="1512718343409" expanded="true" signature="13715:13721" ph=" " />
+            <marker date="1512718343409" expanded="true" signature="13721:13727" ph=" " />
+            <marker date="1512718343409" expanded="true" signature="13727:13733" ph=" " />
+            <marker date="1512718343409" expanded="true" signature="13733:13739" ph=" " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/config/config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="532">
+          <caret line="19" column="17" lean-forward="true" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/demo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/actions/address.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="258" column="32" lean-forward="false" selection-start-line="258" selection-start-column="32" selection-end-line="258" selection-end-column="32" />
+          <folding>
+            <marker date="1512718945364" expanded="true" signature="10498:10725" ph="select * fro... tiny_district_promoter" />
+            <marker date="1512718945364" expanded="true" signature="10803:10978" ph="select * fro... tiny_district_promoter" />
           </folding>
         </state>
       </provider>
