@@ -24,25 +24,15 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="flash.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/flash.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="23" column="92" lean-forward="false" selection-start-line="23" selection-start-column="92" selection-end-line="23" selection-end-column="92" />
+            <state relative-caret-position="252">
+              <caret line="9" column="133" lean-forward="false" selection-start-line="9" selection-start-column="133" selection-end-line="9" selection-end-column="133" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="point.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/point.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="54" column="168" lean-forward="true" selection-start-line="54" selection-start-column="168" selection-end-line="54" selection-end-column="179" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -166,6 +156,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -218,8 +210,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -296,11 +286,12 @@
       <workItem from="1512615911091" duration="103000" />
       <workItem from="1512616036804" duration="52000" />
       <workItem from="1512616176155" duration="12000" />
+      <workItem from="1512696101812" duration="1269000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="246000000" />
+    <option name="totallyTimeSpent" value="247269000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -315,31 +306,23 @@
     <frame x="72" y="-8" width="1856" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18097825" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2201087" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298913" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3594203" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3594203" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3594203" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2201087" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294686" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298913" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -374,13 +357,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/safety.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1560">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/review.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -605,7 +581,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1596">
           <caret line="87" column="39" lean-forward="true" selection-start-line="87" selection-start-column="39" selection-end-line="87" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -613,14 +588,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3920">
           <caret line="140" column="104" lean-forward="true" selection-start-line="140" selection-start-column="87" selection-end-line="140" selection-end-column="104" />
-          <folding>
-            <marker date="1512625225687" expanded="true" signature="8590:8596" ph=" " />
-            <marker date="1512625225687" expanded="true" signature="8596:8602" ph=" " />
-            <marker date="1512625225687" expanded="true" signature="8656:8662" ph=" " />
-            <marker date="1512625225687" expanded="true" signature="8662:8668" ph=" " />
-            <marker date="1512625225687" expanded="true" signature="8737:8743" ph=" " />
-            <marker date="1512625225687" expanded="true" signature="8743:8749" ph=" " />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -628,15 +595,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
           <caret line="6" column="8" lean-forward="false" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
-          <folding>
-            <marker date="1512627076773" expanded="true" signature="7855:7861" ph=" " />
-            <marker date="1512627076773" expanded="true" signature="7861:7867" ph=" " />
-            <marker date="1512627076773" expanded="true" signature="7921:7927" ph=" " />
-            <marker date="1512627076773" expanded="true" signature="7927:7933" ph=" " />
-            <marker date="1512627076773" expanded="true" signature="8002:8008" ph=" " />
-            <marker date="1512627076773" expanded="true" signature="8008:8014" ph=" " />
-            <marker date="1512627076773" expanded="true" signature="9395:9407" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -644,7 +602,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
           <caret line="18" column="25" lean-forward="false" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -652,7 +609,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="224">
           <caret line="8" column="6" lean-forward="false" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -660,46 +616,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="335">
           <caret line="514" column="20" lean-forward="false" selection-start-line="514" selection-start-column="20" selection-end-line="514" selection-end-column="20" />
-          <folding>
-            <marker date="1512625222881" expanded="true" signature="2260:2309" ph="select user_... tiny_customer" />
-            <marker date="1512625222881" expanded="true" signature="6386:6441" ph="update tiny_... " />
-            <marker date="1512625222881" expanded="true" signature="10832:10881" ph="select user_... tiny_customer" />
-            <marker date="1512625222881" expanded="true" signature="22325:22373" ph="select count... " />
-            <marker date="1512625222881" expanded="true" signature="22921:22992" ph="select * fro... tiny_order" />
-            <marker date="1512625222881" expanded="true" signature="31187:31239" ph="select order... tiny_order" />
-            <marker date="1512625222881" expanded="true" signature="31365:31574" ph="select re.id... tiny_review" />
-            <marker date="1512625222881" expanded="true" signature="31688:31864" ph="select og.go... tiny_order_goods" />
-            <marker date="1512625222881" expanded="true" signature="31749:31816" ph="select id fr... tiny_order" />
-            <marker date="1512625222881" expanded="true" signature="34868:34943" ph="select * fro... tiny_message" />
-            <marker date="1512625222881" expanded="true" signature="35179:35277" ph="select * fro... tiny_message" />
-            <marker date="1512625222881" expanded="true" signature="35484:35546" ph="select * fro... tiny_message" />
-            <marker date="1512625222881" expanded="true" signature="39630:39694" ph="select count... " />
-            <marker date="1512625222881" expanded="true" signature="40100:40214" ph="select * fro... tiny_balance_log" />
-            <marker date="1512625222881" expanded="true" signature="41167:41231" ph="select count... " />
-            <marker date="1512625222881" expanded="true" signature="41637:41751" ph="select * fro... tiny_balance_log" />
-            <marker date="1512625222881" expanded="true" signature="42545:42631" ph="select pay_p... tiny_customer" />
-            <marker date="1512625222881" expanded="true" signature="47960:48024" ph="select * fro... tiny_attention" />
-            <marker date="1512625222881" expanded="true" signature="48203:48327" ph="insert into tiny_attention... " />
-            <marker date="1512625222881" expanded="true" signature="48567:48626" ph="select count... " />
-            <marker date="1512625222881" expanded="true" signature="49037:49179" ph="select c.*,g... tiny_attention" />
-            <marker date="1512625222881" expanded="true" signature="49448:49510" ph="delete from " />
-            <marker date="1512625222881" expanded="true" signature="49779:49848" ph="select * fro... tiny_attention" />
-            <marker date="1512625222881" expanded="true" signature="50971:51011" ph="select * fro... tiny_order_goods" />
-            <marker date="1512625222881" expanded="true" signature="51262:51322" ph="select * fro... tiny_order" />
-            <marker date="1512625222881" expanded="true" signature="51764:51845" ph="select * fro... tiny_sale_support" />
-            <marker date="1512625222881" expanded="true" signature="52194:52504" ph="insert into tiny_sale_support... " />
-            <marker date="1512625222881" expanded="true" signature="52564:52622" ph="update tiny_... " />
-            <marker date="1512625222881" expanded="true" signature="52804:52861" ph="select * fro... tiny_sale_support" />
-            <marker date="1512625222881" expanded="true" signature="53776:53828" ph="select messa... tiny_customer" />
-            <marker date="1512625222881" expanded="true" signature="54318:54393" ph="select count... " />
-            <marker date="1512625222881" expanded="true" signature="54438:54511" ph="select count... " />
-            <marker date="1512625222881" expanded="true" signature="54848:54954" ph="select count... " />
-            <marker date="1512625222881" expanded="true" signature="55134:55244" ph="select count... " />
-            <marker date="1512625222881" expanded="true" signature="55426:55536" ph="select count... " />
-            <marker date="1512625222881" expanded="true" signature="55821:55892" ph="select count... " />
-            <marker date="1512625222881" expanded="true" signature="56517:56658" ph="insert into tiny_complaint... " />
-            <marker date="1512625222881" expanded="true" signature="60808:60901" ph="select SUM(c... " />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -707,11 +623,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="335">
           <caret line="133" column="20" lean-forward="false" selection-start-line="133" selection-start-column="20" selection-end-line="133" selection-end-column="20" />
-          <folding>
-            <marker date="1512625222820" expanded="true" signature="9140:9196" ph="insert into $... " />
-            <marker date="1512625222820" expanded="true" signature="11659:11702" ph="delete from " />
-            <marker date="1512625222820" expanded="true" signature="13170:13314" ph="select ${{$s... " />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -719,6 +630,48 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/point.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="20" column="13" lean-forward="true" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/flashbuy.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4916">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/flash.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="18" column="13" lean-forward="true" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/actions/address.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="446">
+          <caret line="279" column="9" lean-forward="true" selection-start-line="279" selection-start-column="9" selection-end-line="279" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/v1.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="354">
+          <caret line="218" column="49" lean-forward="true" selection-start-line="218" selection-start-column="49" selection-end-line="218" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/point.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1512">
+          <caret line="54" column="168" lean-forward="false" selection-start-line="54" selection-start-column="168" selection-end-line="54" selection-end-column="179" />
           <folding />
         </state>
       </provider>
@@ -731,62 +684,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/point.html">
+    <entry file="file://$PROJECT_DIR$/trunk/protected/views/marketing/flash_sale_list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="560">
-          <caret line="20" column="13" lean-forward="true" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/flashbuy.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4916">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/flash.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="18" column="13" lean-forward="true" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/actions/address.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="279" column="9" lean-forward="true" selection-start-line="279" selection-start-column="9" selection-end-line="279" selection-end-column="9" />
-          <folding>
-            <marker date="1512640622133" expanded="true" signature="9773:10000" ph="select * fro... tiny_district_promoter" />
-            <marker date="1512640622133" expanded="true" signature="10078:10253" ph="select * fro... tiny_district_promoter" />
-            <marker date="1512640622133" expanded="true" signature="11107:11265" ph="select * fro... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/v1.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="218" column="49" lean-forward="true" selection-start-line="218" selection-start-column="49" selection-end-line="218" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/point.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="54" column="168" lean-forward="true" selection-start-line="54" selection-start-column="168" selection-end-line="54" selection-end-column="179" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/flash.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="23" column="92" lean-forward="false" selection-start-line="23" selection-start-column="92" selection-end-line="23" selection-end-column="92" />
+        <state relative-caret-position="252">
+          <caret line="9" column="133" lean-forward="false" selection-start-line="9" selection-start-column="133" selection-end-line="9" selection-end-column="133" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
           </folding>
