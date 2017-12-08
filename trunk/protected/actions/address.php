@@ -131,7 +131,9 @@ class AddressAction extends Controller
         }
         $model = new Model();
         $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->order('r.id desc')->findPage($page, 10);
-        unset($list['html']);
+        if($list){
+           unset($list['html']); 
+        }
         $this->code = 0;
         $this->content = $list;
     }
@@ -143,8 +145,10 @@ class AddressAction extends Controller
         }
         $model = new Model();
         $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where('r.user_id='.$this->user['id'])->order('r.id desc')->findPage($page, 10);
-        var_dump($list);die;
-        unset($list['html']);
+        if($list){
+           unset($list['html']); 
+        }
+        
         $this->code = 0;
         $this->content = $list;
     }
