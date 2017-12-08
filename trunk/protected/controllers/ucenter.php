@@ -712,7 +712,7 @@ class UcenterController extends Controller
     public function promoter_save(){
         $data = array(
                 'location' => Filter::text(Req::args('areas').Req::args('location')),
-                'info' => Filter::int(Req::args('info'))
+                'info' => Filter::text(Req::args('info'))
             );
 
             $id = $this->user['id'];
