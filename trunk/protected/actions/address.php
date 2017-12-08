@@ -453,7 +453,7 @@ class AddressAction extends Controller
             $is_business = FALSE;
         }
         $this->code = 0;
-        $this->content = $is_business;
+        $this->content['is_business'] = $is_business;
     }
 
 }
