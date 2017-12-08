@@ -7,7 +7,7 @@
                 </ol>-->
 
         <ul class="product-list clearfix">
-            {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc,gb.id desc limit=12 page=1 pagesize=12 id=$flashbuy}
+            {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=12 page=1 pagesize=12 id=$flashbuy}
             <li class="item  itemList" >
                 <dl class="product">
 

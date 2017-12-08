@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5e7286e1-8ea1-416a-afb0-c86e85802771" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/themes/_default/views/index/flash.html" afterPath="$PROJECT_DIR$/trunk/themes/_default/views/index/flash.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/themes/mobile/views/index/flash.html" afterPath="$PROJECT_DIR$/trunk/themes/mobile/views/index/flash.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,7 +25,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="flash.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="flash.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/flash.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="252">
@@ -33,6 +33,16 @@
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="flash.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/flash.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="140">
+              <caret line="5" column="121" lean-forward="false" selection-start-line="5" selection-start-column="121" selection-end-line="5" selection-end-column="121" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -101,9 +111,9 @@
         <option value="$PROJECT_DIR$/trunk/protected/config/config.php" />
         <option value="$PROJECT_DIR$/trunk/protected/views/shop/shop_category_edit.html" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/v1.php" />
-        <option value="$PROJECT_DIR$/trunk/themes/mobile/views/index/flash.html" />
         <option value="$PROJECT_DIR$/trunk/protected/actions/address.php" />
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/index/flash.html" />
+        <option value="$PROJECT_DIR$/trunk/themes/mobile/views/index/flash.html" />
       </list>
     </option>
   </component>
@@ -187,14 +197,14 @@
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="_default" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="mobile" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="_default" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="mobile" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -202,7 +212,7 @@
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="_default" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="mobile" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="index" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
@@ -286,12 +296,12 @@
       <workItem from="1512615911091" duration="103000" />
       <workItem from="1512616036804" duration="52000" />
       <workItem from="1512616176155" duration="12000" />
-      <workItem from="1512696101812" duration="1269000" />
+      <workItem from="1512696101812" duration="2009000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="247269000" />
+    <option name="totallyTimeSpent" value="248009000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -647,13 +657,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/flash.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="18" column="13" lean-forward="true" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/actions/address.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="446">
@@ -699,6 +702,14 @@
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/flash.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="5" column="121" lean-forward="false" selection-start-line="5" selection-start-column="121" selection-end-line="5" selection-end-column="121" />
+          <folding />
         </state>
       </provider>
     </entry>
