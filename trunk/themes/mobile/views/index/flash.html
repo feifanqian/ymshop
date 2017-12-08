@@ -1,27 +1,8 @@
-<style type="text/css">
-/*.weui_media_hds{
-	margin-right: .8em;
-    width: 90px;
-    height: 90px;
-    line-height: 60px;
-    text-align: center;
-}*/
-/*.tcmb20{
-	width: 38%;
-    float: left;
-    margin-bottom: 1em;
-}
-.tcp20{
-	width: 59%;
-    float: right;
-    padding: 1em;
-} */ 
-</style>
 {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
 {echo:JS::import('form');}
 <!--S 产品展示-->
-{query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=12 page=1 pagesize=2 id=$flashbuy}
+<!-- {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=12 page=1 pagesize=2 id=$flashbuy}
 <div class=" bg-white m_20 mt20">
         <div class="img box-header tc mb20"><a href="{url:/index/flashbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],367,367)}" width="100%" ></a></div>
         <div class="p20">
@@ -33,26 +14,28 @@
         </div>
 </div>
 {/query}
-<div class=" plr20 pb20 tc page-nav">{echo:$flashbuy->pageBar(5);}</div>
+<div class=" plr20 pb20 tc page-nav">{echo:$flashbuy->pageBar(5);}</div> -->
 <!--S 产品展示-->
-<!-- <div class="weui_panel weui_panel_access product-list">
-    <div class="weui_panel_bd">    
-        {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=12 page=1 pagesize=2 id=$flashbuy}     
+<div class="weui_panel weui_panel_access product-list">
+    <div class="weui_panel_bd">
+        
+        {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=12 page=1 pagesize=2 id=$flashbuy}
         <a href="{url:/index/flashbuy/id/$item[id]}" class="weui_media_box weui_media_appmsg">
-                    <div class="weui_media_hds">
-                        <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],90,90,'both')}" alt="">
-                    </div>
-                    <div class="weui_media_bd">
-                        <h4 class="weui_media_title">{$item['name']}</h4>
-                        <p class="weui_media_desc" style="color:red;">抢购价：<b class="red">{$currency_symbol}{$item['price']}</b></p>
-                        <p class="weui_media_desc"><span class="price fl">&nbsp;&nbsp;&nbsp;</span></p>
-                        <p class="weui_media_desc">{$item['order_num']}人已购买</p>  
-                        {if:$item['is_end']==0}<a href="{url:/index/flashbuy/id/$item[id]}" class="btn btn-mini">抢购</a>{else:}<p class="btn btn-mini btn-disable">已结束</p>{/if}   
-                    </div>
+            <div class="weui_media_hd">
+                <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],100,100)}" alt="">
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">{$item['name']}</h4>
+                <p class="weui_media_desc" style="color:red;">{$currency_symbol}{$item['price']}</p>
+                <p class="weui_media_desc">{$item['order_num']}人已购买</p>
+                
+            </div>
         </a>
         {/query}
-     </div>
-</div>        
-<div class=" plr20 pb20 tc page-nav">{echo:$flashbuy->pageBar(4);}</div> -->
+        
+
+    </div>
+</div>
+<div class=" plr20 pb20 tc page-nav">{echo:$flashbuy->pageBar(5);}</div>
 <!--E 产品展示-->
 <!--E 产品展示-->
