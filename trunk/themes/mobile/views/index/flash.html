@@ -6,7 +6,7 @@
     line-height: 60px;
     text-align: center;
 }*/
-.tcmb20{
+/*.tcmb20{
 	width: 38%;
     float: left;
     margin-bottom: 1em;
@@ -15,7 +15,7 @@
 	width: 59%;
     float: right;
     padding: 1em;
-}  
+} */ 
 </style>
 {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
@@ -23,8 +23,8 @@
 <!--S 产品展示-->
 {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=12 page=1 pagesize=2 id=$flashbuy}
 <div class=" bg-white m_20 mt20">
-        <div class="img box-header tcmb20"><a href="{url:/index/flashbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],367,367)}" width="100%" ></a></div>
-        <div class="tcp20">
+        <div class="img box-header tc mb20"><a href="{url:/index/flashbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],367,367)}" width="100%" ></a></div>
+        <div class="p20">
             <ul class="list">
                 <li class=" item plr20"><a href="{url:/index/product/id/$item[id]}">{$item['name']}</a></li>
                 <li class="clearfix"><span class="price fl">抢购价：<b class="red">{$currency_symbol}{$item['price']}</b></span><span class="market_price fr">{$item['order_num']}人已购买</span></li>
