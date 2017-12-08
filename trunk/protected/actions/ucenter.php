@@ -2043,7 +2043,7 @@ class UcenterAction extends Controller {
             default:
                 break;
         }
-        $log = $this->model->table("pointcoin_log")->where("user_id = " . $this->user['id'] . $where)->findPage($page, 10);
+        $log = $this->model->table("pointcoin_log")->where("user_id = " . $this->user['id'] . $where)->order('id desc')->findPage($page, 10);
         if (isset($log['html'])) {
             unset($log['html']);
         }
