@@ -29,9 +29,9 @@
                                         <a href="{url:/index/product/id/}{gid}" target="_blank">
                                             <img  class="weui_media_appmsg_thumb" src="{img}">
                                             <p style='padding-top: 10px;'>
-                                                {name}</p></a>
+                                                {$name}</p></a>
                                     </td><td>&times;1</td> 
-                                    <td>{accept_name}<i class="iconfont icon-wode"></i></td> <td><p>支付金额{$currency_symbol}{sell_price}</p></td>
+                                    <td>{$accept_name}<i class="iconfont icon-wode"></i></td> <td><p>支付金额{$currency_symbol}{$sell_price}</p></td>
                                     <td width="100px"><p><a href="{url:/ucenter/order_detail/id/}{order_id}" class="blue">订单详情</a></p>
                                         <p><a class="btn btn-mini red" style=" border: 1px solid #DDDDDD;" href="{url:/index/review/id/}{id}" target="_blank" >评价</a></p></td>
                                 </tr>
@@ -52,19 +52,19 @@
                         <div class="item">
                             <table class="simple" >
                                 <tr>
-                                    <th class="orderhead" >{comment_time}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   订单号:{order_no}</th> 
+                                    <th class="orderhead" >{$comment_time}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   订单号:{$order_no}</th> 
                                     <th class="orderhead" width="100" colspan="4"></th>
                                 </tr>
                                 <tr class="orderodd {odd-even}">
 
                                     <td width="50%" class="ordertextleft" ><a href="{url:/index/product/id/}{gid}" target="_blank">
                                             <img  class="weui_media_appmsg_thumb" src="{img}">
-                                            <p style='padding-top: 10px;'>{name}</p></a>
+                                            <p style='padding-top: 10px;'>{$name}</p></a>
                                         <p style='height: 30px;padding-top: 10px;'> 
                                             <span class="score " style='display: inline-block; height: 30px; width: 200px;background: url(../images/icon.png);'>
-                                                <i style="width:{point}%;background: url(../images/icon.png);background-position: 0 -20px;display: block;height: 20px; margin: 0; overflow: hidden; padding: 0; text-indent: -10000px;"></i></span></p>
+                                                <i style="width:{$point}%;background: url(../images/icon.png);background-position: 0 -20px;display: block;height: 20px; margin: 0; overflow: hidden; padding: 0; text-indent: -10000px;"></i></span></p>
                                     </td><td>&times;1</td> 
-                                    <td>{accept_name}<i class="iconfont icon-wode"></i></td> <td><p>支付金额{$currency_symbol}{sell_price}</p></td><td width="100px"><p><a href="{url:/ucenter/order_detail/id/}{order_id}">订单详情</a></p></td>
+                                    <td>{$accept_name}<i class="iconfont icon-wode"></i></td> <td><p>支付金额{$currency_symbol}{$sell_price}</p></td><td width="100px"><p><a href="{url:/ucenter/order_detail/id/}{order_id}">订单详情</a></p></td>
                                     <!--                                    <p><a class="btn btn-mini" style=" border: 1px solid #DDDDDD;" href="{url:/index/review/id/}{id}" target="_blank">评价</a></p>-->
                                 </tr>
                             </table>
