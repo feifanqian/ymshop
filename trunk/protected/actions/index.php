@@ -13,7 +13,7 @@ class IndexAction extends Controller {
 
     public function index() {
         $now  = date('Y-m-d H:i:s');
-        $items = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->where("gb.start_time<'$now'")->order("gb.is_end asc,gb.end_time asc")->join("left join goods as go on gb.goods_id = go.id")->findPage(1, 10);
+        $items = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->findPage(1, 10);
         
         $flashlist = array();
         if(isset($items['data'])&&!empty($items['data'])){
