@@ -448,11 +448,12 @@ class AddressAction extends Controller
     {
         $result = $this->model->table('district_promoter')->where("user_id=" . $this->user['id'])->find();
         if ($result) {
-            $this->code = 0;
-            $this->content = $result;
-        } else {
-            $this->code = 1166;
+            $is_business = TRUE;
+        }else{
+            $is_business = FALSE;
         }
+        $this->code = 0;
+        $this->content = $is_business;
     }
 
 }
