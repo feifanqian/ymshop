@@ -1090,7 +1090,10 @@ class Common {
          }   
          
          if($balance5>0){
-            $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$user_id,'create_time'=>date('Y-m-d H:i:s')))->insert();
+            $seller = $model->table('district_promoter')->fields('location,lng,lat')->where('user_id='.$seller_id)->find();
+            if($seller){
+               $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng'],'lat'=>$seller['lat']))->insert(); 
+            }
          }
      }
 
