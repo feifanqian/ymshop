@@ -348,50 +348,59 @@ class PaymentAction extends Controller {
        //   $this->code = 1162;
        // } 
        if($payment_id==7 || $payment_id==18){ //app微信支付
-             $paytype = "W01";
-             $acct = "";
+             // $paytype = "W01";
+             // $acct = "";
              
-             $params = array();
-             $params["cusid"] = AppConfig::CUSID;
-             // $params["cusid"] = "1486189412";
-             $params["appid"] = AppConfig::APPID;
-             // $params["appid"] = "wx167f2c4da1f798b0";
-             $params["version"] = AppConfig::APIVERSION;
-             $params["trxamt"] = $order_amount*100;
-             $params["reqsn"] = $order_no;//订单号,自行生成
-             $params["paytype"] = $paytype;
-             $params["randomstr"] = $randomstr;//
-             $params["body"] = "商品名称";
-             $params["remark"] = "备注信息";
-             $params["acct"] = $acct;
-             $params["open_id"] = '';
-             // $params["limit_pay"] = "no_credit";
-             $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
-             $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
+             // $params = array();
+             // $params["cusid"] = AppConfig::CUSID;
+             // // $params["cusid"] = "1486189412";
+             // $params["appid"] = AppConfig::APPID;
+             // // $params["appid"] = "wx167f2c4da1f798b0";
+             // $params["version"] = AppConfig::APIVERSION;
+             // $params["trxamt"] = $order_amount*100;
+             // $params["reqsn"] = $order_no;//订单号,自行生成
+             // $params["paytype"] = $paytype;
+             // $params["randomstr"] = $randomstr;//
+             // $params["body"] = "商品名称";
+             // $params["remark"] = "备注信息";
+             // $params["acct"] = $acct;
+             // $params["open_id"] = '';
+             // // $params["limit_pay"] = "no_credit";
+             // $params["notify_url"] = 'http://www.ymlypt.com/payment/async_callbacks';
+             // $params["sign"] = AppUtil::SignArray($params,AppConfig::APPKEY);//签名
              
-             $paramsStr = AppUtil::ToUrlParams($params);
-             $url = AppConfig::APIURL . "/pay";
-             $rsp = AppUtil::Request($url, $paramsStr);
+             // $paramsStr = AppUtil::ToUrlParams($params);
+             // $url = AppConfig::APIURL . "/pay";
+             // $rsp = AppUtil::Request($url, $paramsStr);
 
-             $rspArray = json_decode($rsp, true);
-             if(AppUtil::ValidSigns($rspArray)){
-                 if(isset($rspArray['payinfo'])){
-                  // var_dump($rspArray);die;
-                     $this->code = 0;
-                     $this->content = array(
-                              'order_id' => $order_id,
-                              'payment_id' => $payment_id,
-                              'senddata' => $rspArray,
-                          );
-                 }else{
-                   $this->code = 1161;
-                   $this->content = array(
-                              'senddata' => $rspArray['errmsg'],
-                          );
-                 }       
-             }else{
-                 $this->code = 1065;
-             } 
+             // $rspArray = json_decode($rsp, true);
+             // if(AppUtil::ValidSigns($rspArray)){
+             //     if(isset($rspArray['payinfo'])){
+             //      // var_dump($rspArray);die;
+             //         $this->code = 0;
+             //         $this->content = array(
+             //                  'order_id' => $order_id,
+             //                  'payment_id' => $payment_id,
+             //                  'senddata' => $rspArray,
+             //              );
+             //     }else{
+             //       $this->code = 1161;
+             //       $this->content = array(
+             //                  'senddata' => $rspArray['errmsg'],
+             //              );
+             //     }       
+             // }else{
+             //     $this->code = 1065;
+             // }
+             
+              $packData = $payment->getPaymentInfo('offline_order', $order_id);
+              $sendData = $paymentPlugin->packData($packData);
+              $this->code = 0;
+              $this->content = array(
+                        'order_id' => $order_id,
+                        'payment_id' => $payment_id,
+                        'senddata' => $sendData,
+                        );
 
        }elseif($payment_id==16 || $payment_id==17){ //app支付宝支付
          $packData = $payment->getPaymentInfo('offline_order', $order_id);
