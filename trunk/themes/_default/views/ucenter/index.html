@@ -136,7 +136,7 @@
 
                 <ul class="simindex-products">
 
-                    {query:name=tiny_goods as gb  fields=gb.name,gb.img,gb.sell_price,gb.id as id  join=left join tiny_user as go on gb.id eq go.id limit=5 order=rand() id=$guess }
+                    {query:name=tiny_goods as gb fields=gb.name,gb.img,gb.sell_price,gb.id as id join=left join tiny_user as go on gb.id eq go.id where=gb.is_online eq 0 limit=5 order=rand() id=$guess}
                     <!--                   SELECT * FROM  `tiny_user` LEFT JOIN tiny_goods ON tiny_user.id = tiny_order_goods.id LIMIT 0 , 30-->
                     <!--                    SELECT * FROM  `tiny_goods` LEFT JOIN tiny_user ON tiny_user.id = tiny_goods.id LIMIT 0 , 30-->
 

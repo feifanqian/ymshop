@@ -102,7 +102,7 @@
                 </div>
 
                 <ul class="cproduct-list clearfix">
-                      {query:name=tiny_goods as gb  fields=gb.name,gb.img,gb.sell_price,gb.id as id  join=left join tiny_user as go on gb.id eq go.id limit=5 order=rand() }
+                      {query:name=tiny_goods as gb  fields=gb.name,gb.img,gb.sell_price,gb.id as id  join=left join tiny_user as go on gb.id eq go.id where=gb.is_online eq 0 limit=5 order=rand() }
                     <li class="citem" >
                         <dl class=" cproduct">
                             <dt class="img"><a href="{url:/index/flashbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],235,235,'fwfh')}" ></a></dt>
