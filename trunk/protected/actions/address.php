@@ -136,7 +136,7 @@ class AddressAction extends Controller
         $this->content = $list;
     }
 
-    public function myRedBag(){
+    public function myRedbag(){
         $page = Filter::int(Req::args('page'));
         if (!$page) {
             $page = 1;
