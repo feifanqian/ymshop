@@ -3,7 +3,7 @@
 {echo:JS::import('dialogtools');}
 {echo:JS::import('form');}
 <!--S 产品展示-->
-{query:name=point_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id where=ps.status eq 1 and go.store_nums gt 0 order=ps.listorder asc limit=12 page=1 pagesize=5 id=$pointbuy}
+<!-- {query:name=point_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id where=ps.status eq 1 and go.store_nums gt 0 order=ps.listorder asc limit=12 page=1 pagesize=5 id=$pointbuy}
 <div class=" bg-white m_20 mt20">
         <div class="img tc box-header mb20"><a href="{url:/index/pointbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],367,367)}" width="100%" ></a></div>
         <div class="p20 ">
@@ -17,5 +17,27 @@
         </div>
 </div>
 {/query} 
-<div class=" plr20 pb20 tc page-nav">{echo:$pointbuy->pageBar(4);}</div>
+<div class=" plr20 pb20 tc page-nav">{echo:$pointbuy->pageBar(4);}</div> -->
 <!--E 产品展示-->
+<div class="weui_panel weui_panel_access product-list">
+    <div class="weui_panel_bd">
+        
+        {query:name=point_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id where=ps.status eq 1 and go.store_nums gt 0 order=ps.listorder asc limit=12 page=1 pagesize=12 id=$pointbuy}
+        <a href="{url:/index/pointbuy/id/$item[id]}" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],100,100)}" alt="">
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">{$item['name']}</h4>
+                <p class="weui_media_desc">原价：<del class="tag-price">{$currency_symbol}{$item['sell_price']}</del></p>
+                {set:$set = current(unserialize($item['price_set']));}
+                <p class="weui_media_desc">积分购价：<b class="red">{$currency_symbol}{$set['cash']}+{$set['point']}积分</b></span></p>
+                
+            </div>
+        </a>
+        {/query}
+        
+
+    </div>
+</div>
+<div class=" plr20 pb20 tc page-nav">{echo:$pointbuy->pageBar(5);}</div>
