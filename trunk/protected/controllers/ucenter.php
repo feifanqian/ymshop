@@ -698,6 +698,29 @@ class UcenterController extends Controller
             Tiny::Msg($this, 404);
     }
 
+    public function promoter_info()
+    {
+        $info = $this->model->table("district_promoter as dp")->fields("dp.*,c.real_name")->join("left join customer as c on dp.user_id = c.user_id")->where("dp.user_id = " . $this->user['id'])->find();
+        if ($info) {
+            $this->assign("promoter_info", $info);
+            $info = array_merge($info, Req::args());
+            $this->redirect("promoter_info", false, $info);
+        } else
+            Tiny::Msg($this, 404);
+    }
+
+    public function promoter_save(){
+        $data = array(
+                'location' => Filter::text(Req::args('areas').Req::args('location')),
+                'info' => Filter::int(Req::args('info'))
+            );
+
+            $id = $this->user['id'];
+            
+            $this->model->table("district_promoter")->data($data)->where("user_id=$id")->update();
+            $this->redirect("promoter_info", false, array('msg' => array("success", "保存成功！")));
+    }
+
     public function info_save()
     {
         $rules = array('nickname:required:昵称不能为空!', 'real_name:required:真实姓名不能为空!', 'sex:int:性别必需选择！', 'birthday:date:生日日期格式不正确！', 'province:[1-9]\d*:选择地区必需完成', 'city:[1-9]\d*:选择地区必需完成', 'county:[1-9]\d*:选择地区必需完成');
