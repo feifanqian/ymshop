@@ -160,7 +160,7 @@
                         </div>
                     </li>
 
-                    {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end asc,gb.id desc limit=3 id=$flashbuy}
+                    {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=3 id=$flashbuy}
                     <li class="col-{echo:$key+1}" style="float:left!important;    border-top: 1px solid #e4e4e4;border-left: 1px solid #e4e4e4;">
                         <dl class="">
                             <dd class="title"><a href="{url:/index/flashbuy/id/$item[id]}"><span>{$item['tag']}</span>{echo:TString::msubstr($item['title'],0,4,'utf-8','')}</a></dd>

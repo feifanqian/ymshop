@@ -211,7 +211,7 @@
         {/query}
         {/if}
         {if:$flash_count>0}
-        {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end asc,gb.id desc limit=12}
+        {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=12}
         <div class="swiper-slide">
             <a href="{url:/index/flashbuy/id/$item[id]}">
                 <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
