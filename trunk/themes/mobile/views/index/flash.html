@@ -19,7 +19,7 @@
 <div class="weui_panel weui_panel_access product-list">
     <div class="weui_panel_bd">
         
-        {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=12 page=1 pagesize=2 id=$flashbuy}
+        {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=12 page=1 pagesize=12 id=$flashbuy}
         <a href="{url:/index/flashbuy/id/$item[id]}" class="weui_media_box weui_media_appmsg">
             <div class="weui_media_hd">
                 <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],100,100)}" alt="">
