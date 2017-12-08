@@ -458,7 +458,7 @@ class ProductAction extends Controller {
         $page_size = 10;
         $now  = date('Y-m-d H:i:s');
         //更新状态
-        $result = $this->model->table('flash_sale')->data(array('is_end'=>1))->update();
+        // $result = $this->model->table('flash_sale')->data(array('is_end'=>1))->update();
         
         $first = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.end_time asc")->join("left join goods as go on gb.goods_id = go.id")->findPage(1,1);
         $list = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->findPage($page, $page_size);
