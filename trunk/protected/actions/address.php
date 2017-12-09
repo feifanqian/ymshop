@@ -314,10 +314,6 @@ class AddressAction extends Controller
             $where.="line_number=$line_number and which_station=" . $which_station;
         }
         $info_sql = $this->model->table('district_promoter')->where($where)->findAll();
-        if(!$info_sql){
-            $this->code = 0;
-            $this->content = [];
-        }
         //两点之间的距离
         /*
          *param deg2rad()函数将角度转换为弧度
@@ -444,8 +440,13 @@ class AddressAction extends Controller
                 $info_sql[$k]['consume_num'] = $count;
             }
         }
-        $this->code = 0;
-        $this->content = $info_sql; 
+         
+        if ($info_sql) {
+            $this->code = 0;
+            $this->content = $info_sql;
+        } else {
+            $this->code = 1166;
+        }
     }
 
     // //按区域查找商家
