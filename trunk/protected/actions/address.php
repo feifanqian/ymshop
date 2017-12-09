@@ -435,8 +435,9 @@ class AddressAction extends Controller
                     $info_sql[$k]['evaluate'] = '';
                 }
                 // $order = $this->model->table('order_offline')->fields('count(id) as consume_num')->where('shop_ids=17216')->group('user_id')->query();
-                $count = $this->model->table('order_offline')->where('shop_ids=17216')->group('user_id')->count();
-                $info_sql[$k]['consume_num'] = $count;
+                // $count = $this->model->table('order_offline')->where('shop_ids=17216')->group('user_id')->count();
+                $count = $this->model->query("SELECT COUNT( id ) AS count FROM  `tiny_order_offline` WHERE shop_ids =1314 GROUP BY user_id");
+                $info_sql[$k]['consume_num'] = isset($count[0]['count']) ? $count[0]['count'] : 0;
             }
         }
         if ($info_sql) {
