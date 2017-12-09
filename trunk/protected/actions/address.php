@@ -130,12 +130,12 @@ class AddressAction extends Controller
             $page = 1;
         }
         $model = new Model();
-        $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where("r.lng != '' and r.lat != ''")->order('r.id desc')->findPage($page, 10);
+        $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->order('r.id desc')->findPage($page, 10);
         if($list){
            unset($list['html']);
            if($list['data']){
             foreach($list['data'] as $k => $v){
-                 $promoter = $model->table('district_promoter')->fields('lng,lat')->where('user_id='.$v['user_id'])->find();
+                 $promoter = $model->table('district_promoter')->fields('lng,lat')->where("lng != '' and lat != '' and user_id=".$v["user_id"])->find();
                  $list['data']['lng'] = $promoter['lng']+rand(-0.0111,0.0111);
                  $list['data']['lat'] = $promoter['lat']+rand(-0.0111,0.0111);
             }
