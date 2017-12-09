@@ -435,9 +435,9 @@ class AddressAction extends Controller
                 if($info_sql[$k]['evaluate']==null){
                     $info_sql[$k]['evaluate'] = '';
                 }
-                $count = $this->model->table('order_offline')->where('shop_ids='.$v['user_id'])->group('user_id')->count();
+                $count = $this->model->table('order_offline')->where('shop_ids='.$v['user_id'])->group('user_id')->findAll();
                 if($count){
-                    $consume_num = $count;
+                    $consume_num = count($count);
                 }else{
                     $consume_num = 0;
                 }
