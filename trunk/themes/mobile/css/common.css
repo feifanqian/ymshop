@@ -644,7 +644,7 @@ dl.col-2 dd {
   position: relative;
 }
 .tab .tab-head {
-  background: none repeat scroll 0 0 #e4e4ec;
+  background: none repeat scroll 0 0 #ffffff;
   height: 3em;
   position: relative;
 }
@@ -659,7 +659,8 @@ dl.col-2 dd {
   overflow: hidden;
 }
 .tab .tab-head li.current {
-  background: #fff;
+  /*background: #fff;*/
+  background: #e4e4ec;
 }
 .tab .tab-body {
   border-top: none;
