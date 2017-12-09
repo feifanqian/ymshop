@@ -523,7 +523,12 @@ class AddressAction extends Controller
         $pid = $area['id'];
         
         $county = $this->model->table('areas')->where('parent_id='.$pid)->order('sort asc')->findAll();
-        
+        if($county){
+            // $street = array();
+            foreach($county as $k => $v){
+               $county[$k]['child'] = $this->model->table('areas')->where('parent_id='.$v['id'])->order('sort asc')->findAll();
+         }
+        }
         
         $this->code = 0;
         $this->content = $county;
