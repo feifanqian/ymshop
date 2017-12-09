@@ -313,6 +313,7 @@ class AddressAction extends Controller
         if ($line_number) {
             $where.="line_number=$line_number and which_station=" . $which_station;
         }
+        var_dump($where);die;
         $info_sql = $this->model->table('district_promoter')->where($where)->findAll();
         //两点之间的距离
         /*
