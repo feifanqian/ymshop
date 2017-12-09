@@ -282,7 +282,7 @@ class AddressAction extends Controller
         $tourist_id = Req::args('tourist_id'); //街道或景点
         $line_number = Filter::int(Req::args('line_number'));//几号线
         $which_station = Filter::int(Req::args('which_station'));//哪个站
-        $customer = Req::args('customer');//商家or会员
+        $customer = Req::args('customer');//商家or代理vip
 
         $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
         $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
@@ -450,8 +450,19 @@ class AddressAction extends Controller
                 
                 $info_sql[$k]['consume_num'] = $consume_num;
                 $shop_type = $this->model->table('promoter_type')->where('id='.$v['classify_id'])->find();
-                // var_dump($v['classify_id']);die;
+                $district = $this->model->table('district_shop')->where('owner_id='.$v['user_id'])->find();
+                if($district){
+                    $is_district = 1;
+                }else{
+                    $is_district = 0;
+                }
                 $info_sql[$k]['shop_type'] = $shop_type['name'];
+                $info_sql[$k]['is_district'] = $is_district;
+                if($customer==1){
+                    if($info_sql[$k]['is_district']==0){
+                        unset($info_sql[$k]);
+                    }
+                }
             }
         }
         $this->code = 0;
