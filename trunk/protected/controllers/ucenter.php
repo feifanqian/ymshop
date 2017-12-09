@@ -711,6 +711,7 @@ class UcenterController extends Controller
 
     public function promoter_save(){
         $data = array(
+                'shop_name' => Filter::text(Req::args('shop_name')),
                 'location' => Filter::text(Req::args('areas').Req::args('road')),
                 'info' => Filter::text(Req::args('info')),
                 'region_id' => Filter::int(Req::args('county')),
