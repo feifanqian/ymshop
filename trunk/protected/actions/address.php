@@ -266,6 +266,9 @@ class AddressAction extends Controller
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
         $distance = Req::args('distance');//距离
+        if(!$distance){
+            $$distance = 10;
+        }
         $classify_id = Filter::int(Req::args('classify_id'));//商家分类
         $distance_asc = Req::args('distance_asc'); //距离离我最近
         $hot = Filter::int(Req::args('hot'));//人气
@@ -392,6 +395,45 @@ class AddressAction extends Controller
             array_multisort($prices, SORT_ASC, $info_sql);
         }elseif ($price==2) {
              array_multisort($prices, SORT_DESC, $info_sql);
+        }
+        if($info_sql){
+            foreach($info_sql as $k => $v){
+                if($v['picture']==NULL){
+                    $v['picture'] = '';
+                }
+                if($v['tourist_id']==NULL){
+                    $v['tourist_id'] = '';
+                }
+                if($v['line_number']==NULL){
+                    $v['line_number'] = '';
+                }
+                if($v['which_station']==NULL){
+                    $v['which_station'] = '';
+                }
+                if($v['distance_asc']==NULL){
+                    $v['distance_asc'] = '';
+                }
+                if($v['distance_asc']==NULL){
+                    $v['distance_asc'] = '';
+                }
+                if($v['hot']==NULL){
+                    $v['hot'] = '';
+                }
+                if($v['taste']==NULL){
+                    $v['taste'] = '';
+                }
+                if($v['environment']==NULL){
+                    $v['environment'] = '';
+                }
+                if($v['quality_service']==NULL){
+                    $v['quality_service'] = '';
+                }
+                if($v['price']==NULL){
+                    $v['price'] = '';
+                }
+                $customer = $this->model->table('customer')->where('user_id='.$v['user_id'])->find();
+                $v['real_name'] = $customer['real_name'];
+            }
         }
         if ($info_sql) {
             $this->code = 0;
