@@ -301,7 +301,7 @@ class AjaxController extends Controller {
                 //$list["$id"]['pid'] = $value['parent_id'];
                 $list["$id"]['t'] = $value['name'];
                 //$list["$id"]['level'] = $level;
-                if ($level < 3)
+                if ($level < 2)
                     $list[$id]['c'] = $this->_AreaInits($value['id'], $level + 1);
             }
         }
