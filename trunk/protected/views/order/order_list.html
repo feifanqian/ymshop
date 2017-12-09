@@ -176,330 +176,348 @@
     </span>
 </div>
 <script type="text/javascript">
-    var pendingData = new Array();
+    var pendingData= new Array();
     var noticevoice = $("#notice-voice")[0];
     var voice_status;
     var dialog_status;
     var interval;
-    var count = 2;
-
-    noticevoice.addEventListener('ended', function () {
-        if (count > 0) {
-            this.play();
-            count--;
-        } else {
-            count = 2;
-        }
+    var count =2;
+    
+    noticevoice.addEventListener('ended',function(){
+        if (count > 0) { 
+           this.play();
+           count--;
+        }else{
+            count =2;
+        } 
     });
-
-    function voiceControl(context) {
-        if ($(".fa-ban", context).length == 0) {
-            $('i:first', context).addClass('fa-ban');
-            noticevoice.volume = 0.0;
-            $.cookie('voice_status', 'off', {expires: 30});//重置cookie
-            voice_status = 'off';
-        } else {
-            $('i:first', context).removeClass('fa-ban');
-            noticevoice.volume = 1.0;
-            $.cookie('voice_status', 'on', {expires: 30});
-            voice_status = 'on';
-        }
+    function voiceControl(context){
+       if($(".fa-ban",context).length==0){
+           $('i:first',context).addClass('fa-ban');
+           noticevoice.volume =0.0;
+           $.cookie('voice_status', 'off', { expires: 30 });//重置cookie
+           voice_status = 'off';
+       }else{
+           $('i:first',context).removeClass('fa-ban');
+           noticevoice.volume =1.0;
+           $.cookie('voice_status', 'on', { expires: 30 });
+           voice_status='on';
+       }
     }
-
-    function dialogControl(context) {
-        if ($(".fa-ban", context).length == 0) {
-            $('i:first', context).addClass('fa-ban');
-            layer.closeAll();
-            $.cookie('dialog_status', 'off', {expires: 30});
-            dialog_status = 'off';
-            console.log('offf');
-        } else {
-            $('i:first', context).removeClass('fa-ban');
-            $.cookie('dialog_status', 'on', {expires: 30});
-            dialog_status = 'on';
-            console.log('on');
-        }
+    function dialogControl(context){
+       if($(".fa-ban",context).length==0){
+           $('i:first',context).addClass('fa-ban');
+           layer.closeAll();
+           $.cookie('dialog_status', 'off', { expires: 30 });
+           dialog_status = 'off';
+           console.log('offf');
+       }else{
+           $('i:first',context).removeClass('fa-ban');
+           $.cookie('dialog_status', 'on', { expires: 30 });
+           dialog_status ='on';
+           console.log('on');
+       }
     }
-
-    function init() {
-        if ($.cookie('voice_status') == null || $.cookie('voice_status') == undefined) {
-            $.cookie('voice_status', 'on', {expires: 30});//默认开启声音
+    
+    function init(){
+        if($.cookie('voice_status')==null || $.cookie('voice_status')==undefined){
+            $.cookie('voice_status', 'on', { expires: 30 });//默认开启声音
         }
-        if ($.cookie('dialog_status') == null || $.cookie('dialog_status') == undefined) {
-            $.cookie('dialog_status', 'on', {expires: 30});//默认开启弹窗
+        if($.cookie('dialog_status')==null || $.cookie('dialog_status')==undefined){
+            $.cookie('dialog_status', 'on', { expires: 30 });//默认开启弹窗
         }
         voice_status = $.cookie('voice_status');
         dialog_status = $.cookie('dialog_status');
-        if (voice_status == 'on') {
+        if(voice_status=='on'){
             $("#voice i:first").removeClass('fa-ban');
-            noticevoice.volume = 1.0;
-        } else {
+            noticevoice.volume =1.0;
+        }else{
             $("#voice i:first").addClass('fa-ban');
-            noticevoice.volume = 0.0;
+            noticevoice.volume =0.0;
         }
-        if (dialog_status == 'on') {
+        if(dialog_status=='on'){
             $("#dialog i:first").removeClass('fa-ban');
-        } else {
+        }else{
             $("#dialog i:first").addClass('fa-ban');
         }
-        $.get("{url:/order/checkUpdateInfo}", function (returns) {
-            if (returns.status == 'success') {
+        $.get("{url:/order/checkUpdateInfo}",function(returns){
+            if(returns.status=='success'){
                 pendingData['all'] = returns.data.allOrderCount;
                 pendingData['undelivery'] = returns.data.undeliveryOrder;
+                pendingData['huadian'] = returns.data.pendingHuadianOrder;
                 pendingData['refund'] = returns.data.pendingRefundCount;
-                if (dialog_status == 'on') {
-                    refundNotice(returns.data.pendingRefundCount);
-                    undeliveryNotice(returns.data.undeliveryOrder);
-                }
-                setInterval("Update();", 10000);
+                if(dialog_status=='on'){
+                     refundNotice(returns.data.pendingRefundCount);
+                     huadianNotice(returns.data.pendingHuadianOrder);
+                     undeliveryNotice(returns.data.undeliveryOrder);
+               }
+               setInterval("Update();",10000); 
             }
-        }, 'json');
+        },'json');
     }
-
-    function refundNotice(num) {
-        if (dialog_status == 'off') {
-            return false;
-        }
-        if ($('#refundNotice').length == 0) {
-            layer.open({
-                id: 'refundNotice',
-                type: 1,
-                offset: ['444px', '17px'],
-                move: '.move',
-                anim: 1,
-                shade: false,
-                title: false, //不显示标题
-                content: "<p style='background-color:rgba(107, 0, 255, 0.93);width:160px;'><i class='icon-search move' style='color:rgb(0, 255, 104);'></i><a href='{url:/order/refund_apply_list}' style='color:white;'> 未处理的退款请求<span class='badge'>" + num + "</span></a></p>",
-            });
-        } else {
-            $('#refundNotice .badge').text(num);
-        }
+    
+    function refundNotice(num){
+       if(dialog_status=='off'){
+           return false;
+       }
+       if($('#refundNotice').length==0){
+       layer.open({
+                    id:'refundNotice',
+                    type: 1,
+                    offset:['444px','17px'],
+                    move: '.move',
+                    anim:1,
+                    shade: false,
+                    title: false, //不显示标题
+                    content: "<p style='background-color:rgba(107, 0, 255, 0.93);width:160px;'><i class='icon-search move' style='color:rgb(0, 255, 104);'></i><a href='{url:/order/refund_apply_list}' style='color:white;'> 未处理的退款请求<span class='badge'>"+num+"</span></a></p>", 
+       });
+      }else{
+         $('#refundNotice .badge').text(num);
+      }
     }
-
-    function newOrderNotice() {
-        interval = setInterval(function () {
-            if ($(document).attr("title").indexOf('★') == -1) {
-                $(document).attr("title", "★" + '订单有新' + "★");
-            } else {
-                $(document).attr("title", "☆" + '商品订单' + "☆");
-            }
-        }, 1000);
-        layer.tips("<i class='icon-info red' style='font-size:15px;line-height:22px;position: relative;top:2px;'></i>您有新订单！请点击查看", '.current', {
+    
+    function newOrderNotice(){
+        interval = setInterval(function(){
+        if($(document).attr("title").indexOf('★')==-1){
+            $(document).attr("title","★"+'订单有新'+"★");
+        }else{
+            $(document).attr("title","☆"+'商品订单'+"☆");
+        }
+      },1000);
+      layer.tips("<i class='icon-info red' style='font-size:15px;line-height:22px;position: relative;top:2px;'></i>您有新订单！请点击查看", '.current', {
             tips: 3,
             time: 20000
-        });
+      });
     }
-
-    function undeliveryNotice(num) {
-        if (dialog_status == 'off') {
-            return false;
-        }
-        if ($('#undeliveryNotice').length == 0) {
+    function huadianNotice(num){
+        if(dialog_status=='off'){
+           return false;
+       }
+       if($('#huadianNotice').length==0){
             layer.open({
-                id: 'undeliveryNotice',
-                type: 1,
-                offset: ['412px', '17px'],
-                move: '.move',
-                anim: 1,
-                shade: false,
-                title: false, //不显示标题
-                content: "<p style='background-color:rgba(107, 0, 255, 0.93);width:160px;'><i class='icon-search move' style='color:rgb(0, 255, 104);'></i><a href='/order/order_list?condition=and--pay_status--eq--1__and--delivery_status--eq--0__and--od.status--ne--6__and--od.status--ne--5' style='color:white;'> 未发货的商品订单<span class='badge'>" + num + "</span></a></p>",
-            });
-        } else {
-            $('#undeliveryNotice .badge').text(num);
+                        id:'huadianNotice',
+                        type: 1,
+                        offset:['378px','17px'],
+                        move: '.move',
+                        anim:1,
+                        shade: false,
+                        title: false, //不显示标题
+                        content: "<p style='background-color:rgba(107, 0, 255, 0.93);width:160px;'><i class='icon-search move' style='color:rgb(0, 255, 104);'></i><a href='/order/order_list?condition=and--type--eq--4__and--otherpay_status--eq--1__and--huabipay_status--eq--0__and--od.status--ne--6__and--od.status--ne--5' style='color:white;'> 未确定的华点订单<span class='badge'>"+num+"</span></a></p>", 
+           });
+        }else{
+             $('#huadianNotice .badge').text(num);
         }
     }
-
-    $(function () {
+    function undeliveryNotice(num){
+        if(dialog_status=='off'){
+           return false;
+       }
+        if($('#undeliveryNotice').length==0){
+         layer.open({
+                    id:'undeliveryNotice',
+                    type: 1,
+                    offset:['412px','17px'],
+                    move: '.move',
+                    anim:1,
+                    shade: false,
+                    title: false, //不显示标题
+                    content: "<p style='background-color:rgba(107, 0, 255, 0.93);width:160px;'><i class='icon-search move' style='color:rgb(0, 255, 104);'></i><a href='/order/order_list?condition=and--pay_status--eq--1__and--delivery_status--eq--0__and--od.status--ne--6__and--od.status--ne--5' style='color:white;'> 未发货的商品订单<span class='badge'>"+num+"</span></a></p>", 
+       });
+     }else{
+       $('#undeliveryNotice .badge').text(num);
+      }
+    }
+    
+    $(function(){
         init();
         Notification.requestPermission(function (status) {  //status值有三种：default/granted/denied
-            if (Notification.permission !== status) {
-                Notification.permission = status;
+                if (Notification.permission !== status) {
+                    Notification.permission = status;
             }
-        });
-        $(".admin-remark").mouseenter(function () {
-
-            var remark = $(this).next().text();
+       });
+       $(".admin-remark").mouseenter(function(){
+           
+           var remark = $(this).next().text();
             layer.tips(remark, $(this).prev(), {
-                tips: 1,
-                time: 20000
-            });
-        });
-        $(".admin-remark").mouseout(function () {
-            layer.closeAll("tips");
-        });
+            tips: 1,
+            time: 20000
+           });
+       });
+       $(".admin-remark").mouseout(function(){
+           layer.closeAll("tips"); 
+       });
     });
-
-    function Update() {
-        $.get("{url:/order/checkUpdateInfo}", function (returns) {
-            var change = false;
-            var options;
-            if (returns.status == 'success') {
-                if (pendingData['all'] < returns.data.allOrderCount) {
-                    pendingData['all'] = returns.data.allOrderCount;
-                    newOrderNotice();
-                    change = true;
-                }
-                if (pendingData['undelivery'] < returns.data.undeliveryOrder) {
+    
+    function Update(){
+        $.get("{url:/order/checkUpdateInfo}",function(returns){
+             var change =false;
+             var options;
+            if(returns.status=='success'){
+               if(pendingData['all']<returns.data.allOrderCount){
+                   pendingData['all']=returns.data.allOrderCount;
+                   newOrderNotice();
+                   change =true;
+               }
+               if(pendingData['undelivery'] < returns.data.undeliveryOrder){
                     pendingData['undelivery'] = returns.data.undeliveryOrder;
                     undeliveryNotice(pendingData['undelivery']);
-                    change = true;
-                    $('#undeliveryNotice .badge').addClass('shan');
-                    setTimeout(function () {
-                        $('#undeliveryNotice .badge').removeClass('shan');
-                    }, 20000);
-                }
-
-                if (pendingData['refund'] < returns.data.pendingRefundCount) {
+                    change =true;
+                     $('#undeliveryNotice .badge').addClass('shan');
+                    setTimeout(function(){
+                           $('#undeliveryNotice .badge').removeClass('shan');
+                     },20000);
+               }
+               if(pendingData['huadian'] < returns.data.pendingHuadianOrder){
+                   pendingData['huadian'] = returns.data.pendingHuadianOrder;
+                   huadianNotice(pendingData['huadian']);
+                   change=true;
+                   $('#huadianNotice .badge').addClass('shan');
+                   setTimeout(function(){
+                        $('#huadianNotice .badge').removeClass('shan');
+                   },20000);
+               }
+               if(pendingData['refund'] < returns.data.pendingRefundCount){
                     pendingData['refund'] = returns.data.pendingRefundCount;
                     refundNotice(pendingData['refund']);
-                    change = true;
-                    $('#refundNotice .badge').addClass('shan');
-                    setTimeout(function () {
+                    change =true;
+                     $('#refundNotice .badge').addClass('shan');
+                    setTimeout(function(){
                         $('#refundNotice .badge').removeClass('shan');
-                    }, 20000);
-                }
-            }
-            if (change === true) {
-                console.log(111);
-                options = {
-                    lang: "utf-8",
-                    icon: "{url:@static/images/logo.png}",
-                    body: "您有新的订单动态！点击查看"
-                };
-                var n = new Notification("圆梦", options);
-                n.onclick = function () {
-                    window.focus();
-                    n.close();
-                };
-                n.onshow = function () {
-                    setTimeout(function () {
+                    },20000);
+                   }
+               }
+               if(change===true){
+                   console.log(111);
+                 options = {
+                      lang: "utf-8",
+                      icon: "{url:@static/images/logo.png}",
+                      body: "您有新的订单动态！点击查看"
+                   };
+                  var n = new Notification("买一点", options);
+                  n.onclick = function () {
+                       window.focus();
+                       n.close();
+                  };
+                 n.onshow = function () {
+                     setTimeout(function(){
                         n.close();
-                    }, 10000)
-                };
-            }
-            if (change && voice_status == 'on') {
-                noticevoice.play();
-                console.log('dingdingding~~');
-            }
-            pendingData['all'] = returns.data.allOrderCount;
-            pendingData['undelivery'] = returns.data.undeliveryOrder;
-            pendingData['refund'] = returns.data.pendingRefundCount;
-        }, 'json');
+                       },10000)
+                   };
+                }
+               if(change && voice_status=='on'){
+                  noticevoice.play(); 
+                  console.log('dingdingding~~');
+               }
+                pendingData['all'] = returns.data.allOrderCount;
+                pendingData['undelivery'] = returns.data.undeliveryOrder;
+                pendingData['huadian'] = returns.data.pendingHuadianOrder;
+                pendingData['refund'] = returns.data.pendingRefundCount;
+        },'json');
     }
-
-    function edit(id) {
-        art.dialog.open("{url:/order/order_edit/id/}" + id, {
-            id: 'edit_dialog',
-            title: '订单编辑',
-            resize: false,
-            width: 900,
-            height: 450
-        });
+ 
+    function edit(id){
+        art.dialog.open("{url:/order/order_edit/id/}"+id,{id:'edit_dialog',title:'订单编辑',resize:false,width:900,height:450});
     }
-
-    function view(id) {
-        art.dialog.open("{url:/order/order_view/id/}" + id, {
-            id: 'view_dialog',
-            title: '查看订单',
-            resize: false,
-            width: 900,
-            height: 450
-        });
+    function view(id){
+        art.dialog.open("{url:/order/order_view/id/}"+id,{id:'view_dialog',title:'查看订单',resize:false,width:900,height:450});
     }
-
-    function send(id) {
-        art.dialog.open("{url:/order/order_send/id/}" + id, {
-            id: 'send_dialog',
-            title: '发货',
-            resize: false,
-            width: 900,
-            height: 450
-        });
+    function send(id){
+        art.dialog.open("{url:/order/order_send/id/}"+id,{id:'send_dialog',title:'发货',resize:false,width:900,height:450});
     }
-
-    function send_dialog_close() {
-        art.dialog({id: 'send_dialog'}).close();
+    function send_dialog_close(){
+        art.dialog({id:'send_dialog'}).close();
         tools_reload();
     }
-
-    function change_status(id, status, op) {
+    function comfirm_huabipay(oid){
+        $.post('{url:/order/comfirm_huabipay}',{id:oid},function(data){
+            if(data['status']=='success'){
+                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"</p>");
+                }else{
+                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"</p>");
+                }
+                setTimeout("tools_reload()",2000);
+        },'json');
+    }
+    function change_status(id,status,op){
         var title = '';
-        if (status == null) {
-            if (op == 'del') title = '删除订单';
-            else if (op == 'note') title = '备注订单';
-        } else {
-            if (status == 3) title = '审核订单';
-            else if (status == 4) title = '完成订单';
-            else if (status == 6) title = '作废订单';
+        if(status==null){
+            if(op=='del') title = '删除订单';
+            else if(op=='note') title = '备注订单';
+        }else{
+            if(status == 3) title = '审核订单';
+            else if(status == 4) title = '完成订单';
+            else if(status == 6) title = '作废订单';
         }
         $("#order_id").val(id);
         $("#order_status").val(status);
         $("#order_op").val(op);
-        art.dialog({
-            id: 'status_dialog',
-            title: title,
-            resize: false,
-            width: 500,
-            height: 200,
-            padding: '0 5px',
-            content: document.getElementById('status_dialog')
-        });
+        art.dialog({id:'status_dialog',title:title,resize:false,width:500,height:200,padding:'0 5px',content:document.getElementById('status_dialog')});
     }
-
-    function submit_status() {
-        var order_status = ['<span class="red">等待审核</span>', '<span class="red">等待审核</span>', '<span class="red">等待审核</span>', '已审核', '已完成', '已取消', '<span class="red"><s>已作废</s></span>'];
-        var remark = $("#order_remark").val();
+    function submit_status(){
+        var order_status = ['<span class="red">等待审核</span>','<span class="red">等待审核</span>','<span class="red">等待审核</span>','已审核','已完成','已取消','<span class="red"><s>已作废</s></span>'];
+        var remark= $("#order_remark").val();
         var id = $("#order_id").val();
         var status = $("#order_status").val();
         var op = $("#order_op").val();
-        if (remark != '') {
-            $.post('{url:/order/order_status}', {id: id, status: status, op: op, remark: remark}, function (data) {
-                art.dialog({id: 'status_dialog'}).close();
-                if (data['status'] == 'success') {
-                    $("#status_" + id).html(order_status[status]);
-                    art.dialog.tips("<p class='" + data['status'] + "'>" + data['msg'] + "成功！</p>");
-                } else {
-                    art.dialog.tips("<p class='" + data['status'] + "'>" + data['msg'] + "失败！</p>");
+        if(remark != ''){
+            $.post('{url:/order/order_status}',{id:id,status:status,op:op,remark:remark},function(data){
+                art.dialog({id:'status_dialog'}).close();
+                if(data['status']=='success'){
+                    $("#status_"+id).html(order_status[status]);
+                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"成功！</p>");
+                }else{
+                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"失败！</p>");
                 }
-                setTimeout("tools_reload()", 2000);
-            }, 'json');
-        } else {
+                setTimeout("tools_reload()",2000);
+            },'json');
+        }else{
             art.dialog.tips("<p class='warning'>备注信息不能为空!</p>");
         }
 
     }
-
-    function send_close() {
-        art.dialog({id: 'send_dialog'}).close();
+    function send_close(){
+        art.dialog({id:'send_dialog'}).close();
         art.dialog.tips("<p class='success'>发货成功！</p>");
     }
-
-    function close() {
-        art.dialog({id: 'edit_dialog'}).close();
+    function close(){
+        art.dialog({id:'edit_dialog'}).close();
         art.dialog.tips("<p class='success'>订单编辑成功！</p>");
     }
-
-    {
-        set:$payment = ""
-    }
-    {
-        query:name = payment
-        where = plugin_id
-        ne
-        19
-    }
-    {
-        set:$payment. = $item['id'].
-        ':'.
-        "'".$item['pay_name'].
-        "',"
-    }
-    {
-        /query}
-        {
-            set:$payment = trim($payment, ',');
+    function return_cash(order_id,huabipay_status){
+        if(huabipay_status==0){
+            layer.confirm('检测到未确认华点 ，确认标记为已退还华点部分货款吗？', {
+                btn: ['确定','取消'] //按钮
+              }, function(){
+                var load = layer.load();
+                $.post('{url:/order/return_cash}',{order_id:order_id},function(data){
+                    layer.close(load);
+                    if(data['status']=='success'){
+                        art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"</p>");
+                    }else{
+                        art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"</p>");
+                    }
+                    setTimeout("tools_reload()",2000);
+                 },'json');
+              }, function(){
+              });
+        }else{
+            var load = layer.load();
+            $.post('{url:/order/return_cash}',{order_id:order_id},function(data){
+                    layer.close(load);
+                    if(data['status']=='success'){
+                        art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"</p>");
+                    }else{
+                        art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"</p>");
+                    }
+                    setTimeout("tools_reload()",2000);
+                 },'json');
         }
+    }
+    {set:$payment=""}
+    {query:name=payment where=plugin_id ne 19}
+        {set:$payment.=$item['id'].':'."'".$item['pay_name']."',"}
+    {/query}
+    {set:$payment=trim($payment,',');}
         $("#condition").on("click", function () {
             $("body").Condition({
                 input: "#condition_input",
@@ -519,15 +537,11 @@
                     pay_status: {name: '支付状态', values: {0: '未付款', 1: '已付款', 2: '申请退款', 3: '已退款'}},
                     delivery_status: {name: '发货状态', values: {0: '未发货', 1: '已发货', 2: '已签收', 3: '申请换货', 4: '已换货'}},
                     'od.status': {name: '订单状态', values: {2: '等待审核', 3: '已审核', 4: '完成', 5: '取消', 6: '废除'}},
-                    payment: {name: '支付方式', values: {
-            {
-                $payment
-            }
+                    payment: {name: '支付方式', values: {{$payment}}
+           }
         }
-        }
-        }
+            
         })
-            ;
-        })
+      });      
 
 </script>
