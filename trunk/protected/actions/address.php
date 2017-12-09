@@ -265,8 +265,8 @@ class AddressAction extends Controller
     {
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
-        $distance = Req::args('distance');//距离
-        if(!$distance){
+        $distance = Filter::sql(Req::args('distance'));//距离
+        if($distance==NULL){
             $$distance = 10;
         }
         var_dump($distance);die;
