@@ -125,21 +125,19 @@ class AddressAction extends Controller
 
     public function redbagList()
     {
-        $page = Filter::int(Req::args('page'));
-        if (!$page) {
-            $page = 1;
-        }
+        
         $model = new Model();
-        $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->order('r.id desc')->findPage($page, 10);
+        $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->order('r.id desc')->findAll();
         if($list){
-           unset($list['html']);
-           if($list['data']){
-            foreach($list['data'] as $k => $v){
+           if($list){
+            foreach($list as $k => $v){
                  $promoter = $model->table('district_promoter')->fields('lng,lat')->where("lng != '' and lat != '' and user_id=".$v["user_id"])->find();
                  if($promoter){
-                    $list['data'][$k]['lng'] = $promoter['lng']+rand(-0.0111,0.0111);
-                    $list['data'][$k]['lat'] = $promoter['lat']+rand(-0.0111,0.0111);
+                    $list[$k]['lng'] = $promoter['lng']+rand(-0.0111,0.0111);
+                    $list[$k]['lat'] = $promoter['lat']+rand(-0.0111,0.0111);
                     // var_dump($promoter);die;
+                 }else{
+                     unset($list[$k]);
                  }  
             }
         } 
