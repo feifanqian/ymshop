@@ -433,7 +433,7 @@ class AddressAction extends Controller
                 if($info_sql[$k]['price']==null){
                     $info_sql[$k]['price'] = '';
                 }
-                if($info_sql[$k]['classify_id']==null){
+                if($info_sql[$k]['classify_id']==null || $info_sql[$k]['classify_id']==0){
                     $info_sql[$k]['classify_id'] = 1;
                 }
                 if($info_sql[$k]['evaluate']==null){
@@ -447,9 +447,10 @@ class AddressAction extends Controller
                 }
                 // $count = $this->model->table('order_offline')->where('shop_ids=17216')->group('user_id')->count();
                 // $count = $this->model->query("SELECT COUNT( id ) AS count FROM  `tiny_order_offline` WHERE shop_ids =1314 GROUP BY user_id");
+                
                 $info_sql[$k]['consume_num'] = $consume_num;
                 $shop_type = $this->model->table('promoter_type')->where('id='.$v['classify_id'])->find();
-                var_dump($v['classify_id']);die;
+                // var_dump($v['classify_id']);die;
                 $info_sql[$k]['shop_type'] = $shop_type['name'];
             }
         }
