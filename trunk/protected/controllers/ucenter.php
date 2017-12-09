@@ -714,19 +714,20 @@ class UcenterController extends Controller
         if($areas!='省份/直辖市市县/区'){
             $data = array(
                 'location' => Filter::text(Req::args('areas').Req::args('location')),
-                'info' => Filter::text(Req::args('info'))
+                'info' => Filter::text(Req::args('info')),
+                'region_id' => Filter::int(Req::args('county')),
             );
         }else{
             $data = array(
                 'location' => Filter::text(Req::args('location')),
-                'info' => Filter::text(Req::args('info'))
+                'info' => Filter::text(Req::args('info')),
+                'region_id' => Filter::int(Req::args('county')),
             );
         }
-        // var_dump($data['info']);die;
 
             $id = $this->user['id'];
             
-            $this->model->table("district_promoter")->data(array('location'=>$data['location'],'info'=>$data['info']))->where("user_id=$id")->update();
+            $this->model->table("district_promoter")->data(array('location'=>$data['location'],'info'=>$data['info'],'region_id'=>$data['region_id']))->where("user_id=$id")->update();
             $this->redirect("promoter_info", false, array('msg' => array("success", "保存成功！")));
     }
 
