@@ -265,7 +265,7 @@ class AddressAction extends Controller
     {
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
-        $distance = Filter::int(Req::args('distance'));//距离
+        $distance = Req::args('distance');//距离
         if(!$distance){
             $distance = 10;
         }
@@ -434,7 +434,7 @@ class AddressAction extends Controller
                 if($info_sql[$k]['evaluate']==null){
                     $info_sql[$k]['evaluate'] = '';
                 }
-                $count = $this->model->table('order_offline')->where('shop_ids=1')->group('user_id')->count();
+                $count = $this->model->table('order_offline')->where('shop_ids='.$this->user['id'])->group('user_id')->count();
                 // $count = $this->model->table('order_offline')->where('shop_ids=17216')->group('user_id')->count();
                 // $count = $this->model->query("SELECT COUNT( id ) AS count FROM  `tiny_order_offline` WHERE shop_ids =1314 GROUP BY user_id");
                 $info_sql[$k]['consume_num'] = $count;
