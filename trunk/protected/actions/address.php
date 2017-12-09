@@ -296,28 +296,25 @@ class AddressAction extends Controller
             'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
             'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
         );
+        $where = "lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
         //筛选商家分类
         if (!empty($classify_id)) {
-            $info_sql = $this->model->query("select * from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']} and classify_id = $classify_id");
-        } else {
-            $info_sql = $this->model->query("select * from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}");
+            $where.= " and classify_id = $classify_id";
+            // $info_sql = $this->model->query("select * from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']} and classify_id = $classify_id");
         }
          //区域
         if ($region_id) {
-            $info_sql = $this->model->table('district_promoter')->where("region_id=$region_id")->findAll();
+            $where.= " and region_id=$region_id";     
         }
         //街道
         if ($tourist_id) {
-            $info_sql = $this->model->table('district_promoter')->where("region_id=$region_id")->findAll();
+            $where.=" and region_id=$region_id";
         }
         //地铁线路
         if ($line_number) {
-           $info_sql = $this->model->table('district_promoter')->where("line_number=$line_number and which_station=" . $which_station)->findAll();
+            $where.="line_number=$line_number and which_station=" . $which_station;
         }
-        //商家or会员
-        if ($customer) {
-            $info_sql = $this->model->table('district_promoter')->where("user_id=" . $this->user['id'])->find();
-        }
+        $info_sql = $this->model->table('district_promoter')->where($where)->findAll();
         //两点之间的距离
         /*
          *param deg2rad()函数将角度转换为弧度
@@ -399,37 +396,37 @@ class AddressAction extends Controller
         }
         if($info_sql){
             foreach($info_sql as $k => $v){
-                if($v['picture']==NULL){
+                if($v['picture']==null){
                     $v['picture'] = '';
                 }
-                if($v['tourist_id']==NULL){
+                if($v['tourist_id']==null){
                     $v['tourist_id'] = '';
                 }
-                if($v['line_number']==NULL){
+                if($v['line_number']==null){
                     $v['line_number'] = '';
                 }
-                if($v['which_station']==NULL){
+                if($v['which_station']==null){
                     $v['which_station'] = '';
                 }
-                if($v['distance_asc']==NULL){
+                if($v['distance_asc']==null){
                     $v['distance_asc'] = '';
                 }
-                if($v['distance_asc']==NULL){
+                if($v['distance_asc']==null){
                     $v['distance_asc'] = '';
                 }
-                if($v['hot']==NULL){
+                if($v['hot']==null){
                     $v['hot'] = '';
                 }
-                if($v['taste']==NULL){
+                if($v['taste']==null){
                     $v['taste'] = '';
                 }
-                if($v['environment']==NULL){
+                if($v['environment']==null){
                     $v['environment'] = '';
                 }
-                if($v['quality_service']==NULL){
+                if($v['quality_service']==null){
                     $v['quality_service'] = '';
                 }
-                if($v['price']==NULL){
+                if($v['price']==null){
                     $v['price'] = '';
                 }
                 $customer = $this->model->table('customer')->where('user_id='.$v['user_id'])->find();
