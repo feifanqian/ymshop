@@ -1,7 +1,7 @@
 {echo:JS::import('dialog?skin=tinysimple');}
 {echo:JS::import('dialogtools');}
 <!--S 产品展示-->
-<link type="text/css" rel="stylesheet" href="{url:#css/product.css}" />
+<link type="text/css" rel="stylesheet" href="{url:#css/product.css}"/>
 <script type='text/javascript' src="{url:#js/jquery.enlarge.js}"></script>
 <script type="text/javascript">
     //$("body").addClass("screen_960");
@@ -29,23 +29,28 @@ echo '</pre>';
             <!--S 筛选部分-->
             <div id="selector">
                 <div class="spec-attr box">
-                    <h2><span class="red" >{$current_category['name']}</span> 商品筛选</h2>
+                    <h2><span class="red">{$current_category['name']}</span> 商品筛选</h2>
                     <!--S 品牌-->
+                    {if:$has_category}
                     <dl class="attr clearfix">
-                        <dt class="attr-key">分类：</dt>
+                        <dt class="attr-key" style="line-height: 27px !important;">分类：</dt>
                         <dd class="attr-value">
-                    {query:name=goods_category where=parent_id eq $cid}
-                    <a href="{url:/index/category/cid/$item[id]}">{$item['name']}</a>
-                    {/query}
-                    <dd>
+                            {query:name=goods_category where=parent_id eq $cid}
+                            <a href="{url:/index/category/cid/$item[id]}" style="line-height: 23px !important;">{$item['name']}</a>
+                            {/query}
+                        <dd>
                     </dl>
+                    {/if}
                     {if:$has_brand}
                     <dl class="attr clearfix">
-                        <dt class="attr-key">品牌：</dt>
+                        <dt class="attr-key" style="line-height: 27px !important;">品牌：</dt>
                         <dd class="attr-value">
                             {list:items=$has_brand}
-                            <a {if:isset($selected['brand']) && $selected['brand']==$item['id']} class="select" {set:$url_tem=str_replace("/brand/$item[id]","",$url);}href="{url:$url_tem}" 
-                                {else:}href="{url:$url/brand/$item[id]}" {/if} >{$item['name']}({$brand_num[$item['id']]})<i></i></a>
+                            <a style="line-height: 23px !important;" {if:isset($selected['brand']) &&
+                            $selected['brand']==$item['id']} class="select"
+                            {set:$url_tem=str_replace("/brand/$item[id]","",$url);}href="{url:$url_tem}"
+                            {else:}href="{url:$url/brand/$item[id]}" {/if}
+                            >{$item['name']}({$brand_num[$item['id']]})<i></i></a>
                             {/list}
                         </dd>
                     </dl>
@@ -54,11 +59,14 @@ echo '</pre>';
                     <!--S 价格-->
                     {if:$price_range}
                     <dl class="attr clearfix">
-                        <dt class="attr-key">价格：</dt>
+                        <dt class="attr-key" style="line-height: 27px !important;">价格：</dt>
                         <dd class="attr-value">
                             {list:items=$price_range}
-                            <a {if:isset($selected['price']) && $selected['price']==$item} class="select" {set:$url_tem=str_replace("/price/$item","",$url);}href="{url:$url_tem}" 
-                                {else:}href="{url:$url/price/$item}" {/if} >{if:strpos($item,'-')===false}{$item}以上{else:}{$item}{/if}<i></i></a>
+                            <a style="line-height: 23px !important;" {if:isset($selected['price']) &&
+                            $selected['price']==$item} class="select"
+                            {set:$url_tem=str_replace("/price/$item","",$url);}href="{url:$url_tem}"
+                            {else:}href="{url:$url/price/$item}" {/if}
+                            >{if:strpos($item,'-')===false}{$item}以上{else:}{$item}{/if}<i></i></a>
                             {/list}
                         </dd>
                     </dl>
@@ -70,29 +78,34 @@ echo '</pre>';
                         <dt class="attr-key">{$item['name']}：</dt>
                         <dd class="attr-value">
                             {list:items=$item['values'] item=$value}
-                            <a {if:isset($selected[$item['id']]) && $selected[$item['id']]==$value['id']} class="select" {set:$url_tem=str_replace("/$item[id]/$value[id]","",$url);}
-                                href="{url:$url_tem}" {else:}href="{url:$url/$item[id]/$value[id]}" {/if} >{$value['name']}<i></i></a>
+                            <a {if:isset($selected[$item['id']]) && $selected[$item['id']]==$value['id']} class="select"
+                            {set:$url_tem=str_replace("/$item[id]/$value[id]","",$url);}
+                            href="{url:$url_tem}" {else:}href="{url:$url/$item[id]/$value[id]}" {/if}
+                            >{$value['name']}<i></i></a>
                             {/list}
                         </dd>
                     </dl>
                     {/list}
                 </div>
                 <div id="select-more">
-                    <div class="attr-extra"><div></div></div>
+                    <div class="attr-extra">
+                        <div></div>
+                    </div>
                 </div>
             </div>
             <!--E 筛选部分-->
             <!--S 商品部分-->
             <div class="mt10 product_show  product-list  clearfix">
-                <div class="clearfix" >
+                <div class="clearfix">
                     <div class="sort-bar">
                         <span>排序：</span>
                         <a href="{url:$url/sort/0}" {if:$sort==0}class="current"{/if}>默认<i class="ie6png"></i></a>
 
                         <a href="{url:$url/sort/1}" {if:$sort==1}class="current" {/if}>销量<i></i></a>
                         <a href="{url:$url/sort/2}" {if:$sort==2}class="current"{/if}>评论数<i class="ie6png"></i></a>
-                        <a {if:$sort==4} href="{url:$url/sort/3}" class="current-2" {elseif:$sort==3}href="{url:$url/sort/4}" class="current"{else:} href="{url:$url/sort/4}" 
-                            {/if}>价格<i class="ie6png"></i></a>
+                        <a {if:$sort==4} href="{url:$url/sort/3}" class="current-2"
+                           {elseif:$sort==3}href="{url:$url/sort/4}" class="current" {else:} href="{url:$url/sort/4}"
+                           {/if}>价格<i class="ie6png"></i></a>
                         <a href="{url:$url/sort/5}" {if:$sort==5}class="current"{/if}>最新<i class="ie6png"></i></a>
                     </div>
                 </div>
@@ -103,10 +116,15 @@ echo '</pre>';
                             {list:items=$goods['data']}
                             <li>
                                 <dl class="product">
-                                    <dt class="img"><a href="{url:/index/product/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],220,220)}"></a></dt>
-                                    <dd class="title"><a href="{url:/index/product/id/$item[id]}">{if:$keyword}{echo:preg_replace("/($keyword)/i","<b class='red'>$1</b>",TString::msubstr($item['name'],0,25));}{else:}{echo:TString::msubstr($item['name'],0,25)}{/if}</a></dd>
+                                    <dt class="img"><a href="{url:/index/product/id/$item[id]}"><img
+                                            src="{echo:Common::thumb($item['img'],220,220)}"></a></dt>
+                                    <dd class="title"><a href="{url:/index/product/id/$item[id]}">{if:$keyword}{echo:preg_replace("/($keyword)/i","<b
+                                            class='red'>$1</b>",TString::msubstr($item['name'],0,25));}{else:}{echo:TString::msubstr($item['name'],0,25)}{/if}</a>
+                                    </dd>
                                     <dd class="price">{$currency_symbol}{$item['sell_price']}</dd>
-                                    <dd class='bottom'><span class="comment">已有{$item['review_count']}人评价</span> <a href="{url:/index/product/id/$item[id]}" id="add-cart" class="btn btn-main product-ext">立即购买</a></dd>
+                                    <dd class='bottom'><span class="comment">已有{$item['review_count']}人评价</span> <a
+                                            href="{url:/index/product/id/$item[id]}" id="add-cart"
+                                            class="btn btn-main product-ext">立即购买</a></dd>
                                 </dl>
                             </li>
                             {/list}
@@ -130,7 +148,7 @@ echo '</pre>';
             // attr_extra += self.find(".attr-key:eq(0)").text()+"、";
         }
         if (self.find(".attr-value").get(0).scrollHeight > self.height()) {
-            var span = $("<div class='o-more'>更多<b></b></div>");
+            var span = $("<div class='o-more' style='top: 0px !important;'>更多<b></b></div>");
             self.append(span);
             if (self.find('.select').size() > 0) {
                 span.html('收起<b></b>');
