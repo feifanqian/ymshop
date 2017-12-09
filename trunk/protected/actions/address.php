@@ -314,7 +314,7 @@ class AddressAction extends Controller
             $where.="line_number=$line_number and which_station=" . $which_station;
         }
         
-        $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,create_time,location,road,lng,lat,picture,quality_service')->where($where)->findAll();
+        $info_sql = $this->model->table('district_promoter')->where($where)->findAll();
         if(!$info_sql){
             $this->code = 0;
             $this->content = [];
