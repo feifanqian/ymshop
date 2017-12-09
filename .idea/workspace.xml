@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e7286e1-8ea1-416a-afb0-c86e85802771" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/trunk/themes/mobile/css/common.css" afterPath="$PROJECT_DIR$/trunk/themes/mobile/css/common.css" />
       <change beforePath="$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/review.html" afterPath="$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/review.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -55,21 +53,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="review.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="review.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/review.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="384">
-              <caret line="50" column="17" lean-forward="false" selection-start-line="50" selection-start-column="17" selection-end-line="50" selection-end-column="17" />
+            <state relative-caret-position="0">
+              <caret line="0" column="70" lean-forward="false" selection-start-line="0" selection-start-column="70" selection-end-line="0" selection-end-column="70" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="common.css" pinned="false" current-in-tab="true">
+      <file leaf-file-name="common.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/css/common.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="334">
-              <caret line="649" column="1" lean-forward="true" selection-start-line="649" selection-start-column="1" selection-end-line="649" selection-end-column="1" />
+              <caret line="649" column="1" lean-forward="false" selection-start-line="649" selection-start-column="1" selection-end-line="649" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -124,6 +122,7 @@
       <find>parseCondition</find>
       <find>o-more</find>
       <find>has_brand</find>
+      <find>.tab .tab-head li.current</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -167,8 +166,8 @@
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/ucenter/order.html" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/ucenter.php" />
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/index/category.html" />
-        <option value="$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/review.html" />
         <option value="$PROJECT_DIR$/trunk/themes/mobile/css/common.css" />
+        <option value="$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/review.html" />
       </list>
     </option>
   </component>
@@ -184,7 +183,7 @@
     </layout>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="987" />
     <option name="y" value="20" />
     <option name="width" value="935" />
@@ -369,12 +368,12 @@
       <workItem from="1512696101812" duration="2009000" />
       <workItem from="1512713558902" duration="389000" />
       <workItem from="1512718393274" duration="797000" />
-      <workItem from="1512783872257" duration="13700000" />
+      <workItem from="1512783872257" duration="13815000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="262895000" />
+    <option name="totallyTimeSpent" value="263010000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -386,7 +385,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="72" y="-8" width="1856" height="1096" extended-state="7" />
+    <frame x="72" y="-8" width="1856" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18315217" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -776,9 +775,9 @@
         <state relative-caret-position="-4778">
           <caret line="158" column="49" lean-forward="false" selection-start-line="158" selection-start-column="49" selection-end-line="158" selection-end-column="49" />
           <folding>
-            <marker date="1512799906957" expanded="true" signature="71029:71092" ph="update tiny_recharge_presentlog... " />
-            <marker date="1512799906957" expanded="true" signature="91187:91280" ph="select SUM(c... " />
-            <marker date="1512799906957" expanded="true" signature="121047:121111" ph="update tiny_recharge_presentlog... " />
+            <marker date="1512801779307" expanded="true" signature="71915:71978" ph="update tiny_recharge_presentlog... " />
+            <marker date="1512801779307" expanded="true" signature="92073:92166" ph="select SUM(c... " />
+            <marker date="1512801779307" expanded="true" signature="121933:121997" ph="update tiny_recharge_presentlog... " />
           </folding>
         </state>
       </provider>
@@ -810,18 +809,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/review.html">
+    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/css/common.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
-          <caret line="50" column="17" lean-forward="false" selection-start-line="50" selection-start-column="17" selection-end-line="50" selection-end-column="17" />
+        <state relative-caret-position="334">
+          <caret line="649" column="1" lean-forward="false" selection-start-line="649" selection-start-column="1" selection-end-line="649" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/css/common.css">
+    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/review.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="649" column="1" lean-forward="true" selection-start-line="649" selection-start-column="1" selection-end-line="649" selection-end-column="1" />
+        <state relative-caret-position="0">
+          <caret line="0" column="70" lean-forward="false" selection-start-line="0" selection-start-column="70" selection-end-line="0" selection-end-column="70" />
           <folding />
         </state>
       </provider>
