@@ -269,6 +269,7 @@ class AddressAction extends Controller
         if(!$distance){
             $$distance = 10;
         }
+        var_dump($distance);die;
         $classify_id = Filter::int(Req::args('classify_id'));//商家分类
         $distance_asc = Req::args('distance_asc'); //距离离我最近
         $hot = Filter::int(Req::args('hot'));//人气
