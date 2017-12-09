@@ -722,11 +722,11 @@ class UcenterController extends Controller
                 'info' => Filter::text(Req::args('info'))
             );
         }
-        
+        // var_dump($data['info']);die;
 
             $id = $this->user['id'];
             
-            $this->model->table("district_promoter")->data($data)->where("user_id=$id")->update();
+            $this->model->table("district_promoter")->data(array('location'=>$data['location'],'info'=>$data['info']))->where("user_id=$id")->update();
             $this->redirect("promoter_info", false, array('msg' => array("success", "保存成功！")));
     }
 
