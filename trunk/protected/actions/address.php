@@ -137,8 +137,8 @@ class AddressAction extends Controller
             foreach($list['data'] as $k => $v){
                  $promoter = $model->table('district_promoter')->fields('lng,lat')->where("lng != '' and lat != '' and user_id=".$v["user_id"])->find();
                  if($promoter){
-                    $list['data']['lng'] = $promoter['lng']+rand(-0.0111,0.0111);
-                    $list['data']['lat'] = $promoter['lat']+rand(-0.0111,0.0111);
+                    $list['data'][$k]['lng'] = $promoter['lng']+rand(-0.0111,0.0111);
+                    $list['data'][$k]['lat'] = $promoter['lat']+rand(-0.0111,0.0111);
                  }else{
                      unset($list['data'][$k]);
                  }  
