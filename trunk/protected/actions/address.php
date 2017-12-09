@@ -515,7 +515,7 @@ class AddressAction extends Controller
         // if(!$level){
         //     $level = 1;
         // }
-        $area = $this->model->table('areas')->where("name like '%$city%'")->find();
+        $area = $this->model->table('areas')->where("name like '%$city%' or short_name like '%$city%'")->find();
         if(!$area){
             $this->code = 1168;
             return;
