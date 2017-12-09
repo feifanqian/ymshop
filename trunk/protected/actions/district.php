@@ -198,7 +198,7 @@ class DistrictAction extends Controller {
         $upfile_path = Tiny::getPath("uploads") . "/head/";
         $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
         //$upfile_url = strtr(Tiny::getPath("uploads_url")."head/",APP_URL,'');
-        $upfile = new UploadFile('imgfile', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
         $upfile->save();
         $info = $upfile->getInfo();
         $result = array();
