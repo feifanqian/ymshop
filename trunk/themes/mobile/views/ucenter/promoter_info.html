@@ -8,6 +8,7 @@
         <dl>
             <!--<dd class="input gray">{$gname|'默认分组'}</dd>-->
             <dd class="input gray">商家名称: {$promoter_info['real_name']}</dd>
+            <dd><input class="input" type="text" name="shop_name" maxlen="20" value="{$promoter_info['shop_name']}"  placeholder="店铺名"></dd>
             <dd id="areas" class="h-box" >
                 <div class="flex_1">
                     <div class="select">
@@ -31,8 +32,8 @@
                     <select id="county" name="county"><option value="0">县/区</option></select>
                 </div>
             </dd>
-            <dd ><textarea class="textarea" name="location" pattern="required" minlen="5" maxlen="120" placeholder="店铺所在路名或街道地址，门牌号。" alt="路名或街道地址，门牌号，5-120字">{$promoter_info['location']}</textarea></dd>
-            <dd ><textarea class="textarea" name="detail" minlen="5" maxlen="120" placeholder="店铺简单描述信息" alt="">{$promoter_info['detail']}</textarea></dd>
+            <dd ><textarea class="textarea" name="road" pattern="required" minlen="5" maxlen="120" placeholder="店铺所在路名或街道地址，门牌号。" alt="路名或街道地址，门牌号，5-120字">{$promoter_info['road']}</textarea></dd>
+            <dd ><textarea class="textarea" name="info" minlen="5" maxlen="120" placeholder="店铺简单描述信息" alt="">{$promoter_info['info']}</textarea></dd>
             <dd>
                 <input class="btn" type="submit" value="保存">
             </dd>

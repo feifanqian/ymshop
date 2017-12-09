@@ -265,7 +265,11 @@ class AddressAction extends Controller
     {
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
-        $distance = Req::args('distance');//距离
+        $distance = Filter::int(Req::args('distance'));//距离
+        if(!$distance){
+            $distance = 10;
+        }
+        
         $classify_id = Filter::int(Req::args('classify_id'));//商家分类
         $distance_asc = Req::args('distance_asc'); //距离离我最近
         $hot = Filter::int(Req::args('hot'));//人气
@@ -292,28 +296,24 @@ class AddressAction extends Controller
             'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
             'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
         );
+        $where = "lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
         //筛选商家分类
         if (!empty($classify_id)) {
-            $info_sql = $this->model->query("select * from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']} and classify_id = $classify_id");
-        } else {
-            $info_sql = $this->model->query("select * from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}");
+            $where.= " and classify_id = $classify_id";
         }
          //区域
         if ($region_id) {
-            $info_sql = $this->model->table('district_promoter')->where("region_id=$region_id")->findAll();
+            $where.= " and region_id=$region_id";     
         }
         //街道
         if ($tourist_id) {
-            $info_sql = $this->model->table('district_promoter')->where("region_id=$region_id")->findAll();
+            $where.=" and region_id=$region_id";
         }
         //地铁线路
         if ($line_number) {
-           $info_sql = $this->model->table('district_promoter')->where("line_number=$line_number and which_station=" . $which_station)->findAll();
+            $where.="line_number=$line_number and which_station=" . $which_station;
         }
-        //商家or会员
-        if ($customer) {
-            $info_sql = $this->model->table('district_promoter')->where("user_id=" . $this->user['id'])->find();
-        }
+        $info_sql = $this->model->table('district_promoter')->where($where)->findAll();
         //两点之间的距离
         /*
          *param deg2rad()函数将角度转换为弧度
@@ -393,6 +393,51 @@ class AddressAction extends Controller
         }elseif ($price==2) {
              array_multisort($prices, SORT_DESC, $info_sql);
         }
+        if($info_sql){
+            foreach($info_sql as $k => $v){
+                if($info_sql[$k]['picture']==null){
+                    $info_sql[$k]['picture'] = '';
+                }
+                if($info_sql[$k]['tourist_id']==null){
+                    $info_sql[$k]['tourist_id'] = '';
+                }
+                if($info_sql[$k]['line_number']==null){
+                    $info_sql[$k]['line_number'] = '';
+                }
+                if($info_sql[$k]['which_station']==null){
+                    $info_sql[$k]['which_station'] = '';
+                }
+                if($info_sql[$k]['distance_asc']==null){
+                    $info_sql[$k]['distance_asc'] = '';
+                }
+                if($info_sql[$k]['distance_asc']==null){
+                    $info_sql[$k]['distance_asc'] = '';
+                }
+                if($info_sql[$k]['hot']==null){
+                    $info_sql[$k]['hot'] = '';
+                }
+                if($info_sql[$k]['taste']==null){
+                    $info_sql[$k]['taste'] = '';
+                }
+                if($info_sql[$k]['environment']==null){
+                    $info_sql[$k]['environment'] = '';
+                }
+                if($info_sql[$k]['quality_service']==null){
+                    $info_sql[$k]['quality_service'] = '';
+                }
+                if($info_sql[$k]['price']==null){
+                    $info_sql[$k]['price'] = '';
+                }
+                if($info_sql[$k]['classify_id']==null){
+                    $info_sql[$k]['classify_id'] = 0;
+                }
+                if($info_sql[$k]['evaluate']==null){
+                    $info_sql[$k]['evaluate'] = '';
+                }
+                $customer = $this->model->table('customer')->fields('real_name')->where('user_id='.$v['user_id'])->find();
+                $info_sql[$k]['real_name'] = $customer['real_name'];
+            }
+        }
         if ($info_sql) {
             $this->code = 0;
             $this->content = $info_sql;
@@ -401,32 +446,32 @@ class AddressAction extends Controller
         }
     }
 
-    //按区域查找商家
-    public function getArea()
-    {
-        $region_id = Filter::int(Req::args('region_id')); //所在区域
-        $classify_id = Filter::int(Req::args('classify_id')); //分类
-        $tourist_id = Filter::int(Req::args('tourist_id'));//区域下的著名的景点或街道
-        $class_id = '';
-        $region = '';
-        $tourist = '';
-        if (!empty($classify_id)) {
-            $class_id = $classify_id;
-        }
-        if (!empty($region_id)) {
-            $region = $region_id;
-        }
-        if (!empty($tourist_id)) {
-            $tourist = $tourist_id;
-        }
-        $result = $this->model->table('district_promoter')->where("classify_id=$classify_id and region_id=$region_id and tourist_id=" . $tourist)->findAll();
-        if ($result) {
-            $this->code = 0;
-            $this->content = $result;
-        } else {
-            $this->code = 1166;
-        }
-    }
+    // //按区域查找商家
+    // public function getArea()
+    // {
+    //     $region_id = Filter::int(Req::args('region_id')); //所在区域
+    //     $classify_id = Filter::int(Req::args('classify_id')); //分类
+    //     $tourist_id = Filter::int(Req::args('tourist_id'));//区域下的著名的景点或街道
+    //     $class_id = '';
+    //     $region = '';
+    //     $tourist = '';
+    //     if (!empty($classify_id)) {
+    //         $class_id = $classify_id;
+    //     }
+    //     if (!empty($region_id)) {
+    //         $region = $region_id;
+    //     }
+    //     if (!empty($tourist_id)) {
+    //         $tourist = $tourist_id;
+    //     }
+    //     $result = $this->model->table('district_promoter')->where("classify_id=$classify_id and region_id=$region_id and tourist_id=" . $tourist)->findAll();
+    //     if ($result) {
+    //         $this->code = 0;
+    //         $this->content = $result;
+    //     } else {
+    //         $this->code = 1166;
+    //     }
+    // }
 
     //按地铁线查找
     public function getSubway()
@@ -454,6 +499,19 @@ class AddressAction extends Controller
         }
         $this->code = 0;
         $this->content['is_business'] = $is_business;
+    }
+
+    public function getAreaByCity(){
+        $city = Req::args('city');
+        $area = $this->model->table('area')->where("name like '%$city%'")->find();
+        if(!$area){
+            $this->code = 1168;
+            return;
+        }
+        $pid = $area['id'];
+        $county = $this->model->table('area')->where('parent_id='.$pid)->order('sort asc')->findAll();
+        $this->code = 0;
+        $this->content = $county;
     }
 
 }

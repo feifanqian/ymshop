@@ -710,19 +710,13 @@ class UcenterController extends Controller
     }
 
     public function promoter_save(){
-        $areas = Req::args('areas');
-        if($areas!='省份/直辖市市县/区'){
-            $data = array(
-                'location' => Filter::text(Req::args('areas').Req::args('location')),
-                'info' => Filter::text(Req::args('info'))
+        $data = array(
+                'shop_name' => Req::args('shop_name'),
+                'location' => Filter::text(Req::args('areas').Req::args('road')),
+                'info' => Filter::text(Req::args('info')),
+                'region_id' => Filter::int(Req::args('county')),
+                'road' => Filter::text(Req::args('road')),
             );
-        }else{
-            $data = array(
-                'location' => Filter::text(Req::args('location')),
-                'info' => Filter::text(Req::args('info'))
-            );
-        }
-        
 
             $id = $this->user['id'];
             

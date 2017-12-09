@@ -33,6 +33,9 @@ class MapAction extends Controller
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
         $distance = Req::args('distance');//距离
+        if(!$distance){
+            $distance = 10; //默认10公里
+        }
         $region_id = Req::args('region_id');//区域，例如福田区
 
         $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
@@ -49,6 +52,7 @@ class MapAction extends Controller
         $info_sql = $this->model->table('district_promoter')->where('lat>'.$squares['right-bottom']['lat'].' and lat<'.$squares['left-top']['lat'].' and lng>'.$squares['left-top']['lng'].' and lng<'.$squares['right-bottom']['lng'].' and region_id='.$region_id)->findAll();
         // var_dump($info_sql);die;
         // $info_sql = $this->model->query("select id,location,lat,lng,picture,describe from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']} AND region_id = {$region_id}");
+        
         $this->code = 0;
         $this->content = $info_sql;
     }
