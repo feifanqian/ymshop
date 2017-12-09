@@ -464,7 +464,7 @@ class AddressAction extends Controller
             return;
         }
         $pid = $area['id'];
-        $county = $this->model->table('area')->where('parent_id='.$pid)->order('sort desc')->findAll();
+        $county = $this->model->table('area')->where('parent_id='.$pid)->order('sort asc')->findAll();
         $this->code = 0;
         $this->content = $county;
     }

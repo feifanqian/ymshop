@@ -33,6 +33,9 @@ class MapAction extends Controller
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
         $distance = Req::args('distance');//距离
+        if(!$distance){
+            $distance = 10; //默认10公里
+        }
         $region_id = Req::args('region_id');//区域，例如福田区
 
         $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
