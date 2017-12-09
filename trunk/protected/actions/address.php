@@ -300,7 +300,6 @@ class AddressAction extends Controller
         //筛选商家分类
         if (!empty($classify_id)) {
             $where.= " and classify_id = $classify_id";
-            // $info_sql = $this->model->query("select * from tiny_district_promoter where lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']} and classify_id = $classify_id");
         }
          //区域
         if ($region_id) {
@@ -396,41 +395,41 @@ class AddressAction extends Controller
         }
         if($info_sql){
             foreach($info_sql as $k => $v){
-                if($v['picture']==null){
-                    $v['picture'] = '';
+                if($info_sql[$k]['picture']==null){
+                    $info_sql[$k]['picture'] = '';
                 }
-                if($v['tourist_id']==null){
-                    $v['tourist_id'] = '';
+                if($info_sql[$k]['tourist_id']==null){
+                    $info_sql[$k]['tourist_id'] = '';
                 }
-                if($v['line_number']==null){
-                    $v['line_number'] = '';
+                if($info_sql[$k]['line_number']==null){
+                    $info_sql[$k]['line_number'] = '';
                 }
-                if($v['which_station']==null){
-                    $v['which_station'] = '';
+                if($info_sql[$k]['which_station']==null){
+                    $info_sql[$k]['which_station'] = '';
                 }
-                if($v['distance_asc']==null){
-                    $v['distance_asc'] = '';
+                if($info_sql[$k]['distance_asc']==null){
+                    $info_sql[$k]['distance_asc'] = '';
                 }
-                if($v['distance_asc']==null){
-                    $v['distance_asc'] = '';
+                if($info_sql[$k]['distance_asc']==null){
+                    $info_sql[$k]['distance_asc'] = '';
                 }
-                if($v['hot']==null){
-                    $v['hot'] = '';
+                if($info_sql[$k]['hot']==null){
+                    $info_sql[$k]['hot'] = '';
                 }
-                if($v['taste']==null){
-                    $v['taste'] = '';
+                if($info_sql[$k]['taste']==null){
+                    $info_sql[$k]['taste'] = '';
                 }
-                if($v['environment']==null){
-                    $v['environment'] = '';
+                if($info_sql[$k]['environment']==null){
+                    $info_sql[$k]['environment'] = '';
                 }
-                if($v['quality_service']==null){
-                    $v['quality_service'] = '';
+                if($info_sql[$k]['quality_service']==null){
+                    $info_sql[$k]['quality_service'] = '';
                 }
-                if($v['price']==null){
-                    $v['price'] = '';
+                if($info_sql[$k]['price']==null){
+                    $info_sql[$k]['price'] = '';
                 }
                 $customer = $this->model->table('customer')->where('user_id='.$v['user_id'])->find();
-                $v['real_name'] = $customer['real_name'];
+                $info_sql[$k]['real_name'] = $customer['real_name'];
             }
         }
         if ($info_sql) {
