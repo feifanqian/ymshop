@@ -730,7 +730,7 @@ class UcenterController extends Controller
                 'location' => Filter::text(Req::args('areas').Req::args('road')),
                 'info' => Filter::text(Req::args('info')),
                 'region_id' => Filter::int(Req::args('county')),
-                'road' => Filter::int(Req::args('road')),
+                'road' => Filter::text(Req::args('road')),
             );
 
             $id = $this->user['id'];
