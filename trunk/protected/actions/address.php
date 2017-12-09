@@ -449,7 +449,7 @@ class AddressAction extends Controller
                 // $count = $this->model->query("SELECT COUNT( id ) AS count FROM  `tiny_order_offline` WHERE shop_ids =1314 GROUP BY user_id");
                 $info_sql[$k]['consume_num'] = $consume_num;
                 $shop_type = $this->model->table('promoter_type')->where('id='.$v['classify_id'])->find();
-                var_dump($shop_type);die;
+                var_dump($v['classify_id']);die;
                 $info_sql[$k]['shop_type'] = $shop_type['name'];
             }
         }
