@@ -191,5 +191,30 @@ class DistrictAction extends Controller {
                 $this->code = 0;
                 $this->content['data']=$data;
             }
+    }
+
+    // 配置头像
+    public function setPicture() {
+        $upfile_path = Tiny::getPath("uploads") . "/head/";
+        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
+        //$upfile_url = strtr(Tiny::getPath("uploads_url")."head/",APP_URL,'');
+        $upfile = new UploadFile('imgfile', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile->save();
+        $info = $upfile->getInfo();
+        $result = array();
+
+        if ($info[0]['status'] == 1) {
+            $result = array('error' => 0, 'url' => $upfile_url . $info[0]['path']);
+            $image_url = $upfile_url . $info[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url, 100, 100);
+            $model = new Model('district_promoter');
+            $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
+            $model->data(array('picture' => $picture))->where("user_id=" . $this->user['id'])->update();
+            $this->code = 0;
+        } else {
+            $this->code = 1099;
+        }
     }      
 }
