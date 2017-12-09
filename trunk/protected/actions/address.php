@@ -428,7 +428,7 @@ class AddressAction extends Controller
                 if($info_sql[$k]['price']==null){
                     $info_sql[$k]['price'] = '';
                 }
-                $customer = $this->model->table('customer')->where('user_id='.$v['user_id'])->find();
+                $customer = $this->model->table('customer')->fields('real_name')->where('user_id='.$v['user_id'])->find();
                 $info_sql[$k]['real_name'] = $customer['real_name'];
             }
         }

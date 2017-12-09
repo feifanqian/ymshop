@@ -710,22 +710,6 @@ class UcenterController extends Controller
     }
 
     public function promoter_save(){
-        // $areas = Req::args('areas');
-        // if($areas!='省份/直辖市市县/区'){
-        //     $data = array(
-        //         'location' => Filter::text(Req::args('areas').Req::args('road')),
-        //         'info' => Filter::text(Req::args('info')),
-        //         'region_id' => Filter::int(Req::args('county')),
-        //         'road' => Filter::int(Req::args('road')),
-        //     );
-        // }else{
-        //     $data = array(
-        //         'location' => Filter::text(Req::args('road')),
-        //         'info' => Filter::text(Req::args('info')),
-        //         'region_id' => Filter::int(Req::args('county')),
-        //         'road' => Filter::int(Req::args('road')),
-        //     );
-        // }
         $data = array(
                 'location' => Filter::text(Req::args('areas').Req::args('road')),
                 'info' => Filter::text(Req::args('info')),
@@ -735,7 +719,7 @@ class UcenterController extends Controller
 
             $id = $this->user['id'];
             
-            $this->model->table("district_promoter")->data(array('location'=>$data['location'],'info'=>$data['info'],'region_id'=>$data['region_id'],'road'=>$data['road']))->where("user_id=$id")->update();
+            $this->model->table("district_promoter")->data($data)->where("user_id=$id")->update();
             $this->redirect("promoter_info", false, array('msg' => array("success", "保存成功！")));
     }
 
