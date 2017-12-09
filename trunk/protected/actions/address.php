@@ -313,7 +313,7 @@ class AddressAction extends Controller
         if ($line_number) {
             $where.="line_number=$line_number and which_station=" . $which_station;
         }
-        var_dump($where);die;
+        
         $info_sql = $this->model->table('district_promoter')->where($where)->findAll();
         //两点之间的距离
         /*
@@ -435,7 +435,7 @@ class AddressAction extends Controller
                 if($info_sql[$k]['evaluate']==null){
                     $info_sql[$k]['evaluate'] = '';
                 }
-                $count = $this->model->table('order_offline')->where('shop_ids='.$this->user['id'])->group('user_id')->count();
+                $count = $this->model->table('order_offline')->where('shop_ids='.$v['user_id'])->group('user_id')->count();
                 // $count = $this->model->table('order_offline')->where('shop_ids=17216')->group('user_id')->count();
                 // $count = $this->model->query("SELECT COUNT( id ) AS count FROM  `tiny_order_offline` WHERE shop_ids =1314 GROUP BY user_id");
                 $info_sql[$k]['consume_num'] = $count;
