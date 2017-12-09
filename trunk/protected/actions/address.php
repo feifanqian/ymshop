@@ -458,7 +458,15 @@ class AddressAction extends Controller
 
     public function getAreaByCity(){
         $city = Req::args('city');
-        
+        $area = $this->model->table('area')->where("name like '%$city%'")->find();
+        if(!$area){
+            $this->code = 1168;
+            return;
+        }
+        $pid = $area['id'];
+        $county = $this->model->table('area')->where('parent_id='.$pid)->order('sort desc')->findAll();
+        $this->code = 0;
+        $this->content = $county;
     }
 
 }

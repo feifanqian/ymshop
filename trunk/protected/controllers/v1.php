@@ -169,6 +169,7 @@ class V1Controller extends Controller {
         "get_area" => array("address/getArea", 0, 1),//按区域查找商家
         "get_subway"=>array("address/getSubway",0,1),//按地铁线查找
         "business_member"=>array("address/businessMember",1,1),//商家or会员
+        "get_area_by_city"=>array("address/getAreaByCity",0,1), //通过城市查找地区
         //商家
         "seller_list"=>array("address/promoterList",0,1),
         "seller_info"=>array("address/promoterInfo",0,1),
