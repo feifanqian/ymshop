@@ -290,6 +290,39 @@ class AjaxController extends Controller {
         echo ($result);
     }
 
+    private function _AreaInits($id, $level = '0') {
+        $result = $this->model->table('areas')->where("parent_id=" . $id)->order('sort')->findAll();
+        $list = array();
+        if ($result) {
+
+            foreach ($result as $key => $value) {
+                $id = "o_" . $value['id'];
+                //$list["$id"]['i'] = $value['id'];
+                //$list["$id"]['pid'] = $value['parent_id'];
+                $list["$id"]['t'] = $value['name'];
+                //$list["$id"]['level'] = $level;
+                if ($level < 2)
+                    $list[$id]['c'] = $this->_AreaInits($value['id'], $level + 1);
+            }
+        }
+        return $list;
+    }
+
+    public function areass() {
+        $cache = CacheFactory::getInstance();
+        $items = $cache->get("_AreaDatas");
+        if ($items == null) {
+            $items = JSON::encode($this->_AreaInits(0));
+            $cache->set("_AreaDatas", $items, 315360000);
+        }
+        return $items;
+    }
+
+    public function area_datas() {
+        $result = $this->areass();
+        echo ($result);
+    }
+
     public function test() {
         $codebar = "BCGcode128"; //$_REQUEST['codebar'];
         $color_black = new BCGColor(0, 0, 0);

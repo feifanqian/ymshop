@@ -265,7 +265,7 @@ class AddressAction extends Controller
     {
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
-        $distance = Filter::int(Req::args('distance'));//距离
+        $distance = Req::args('distance');//距离
         if(!$distance){
             $distance = 10;
         }
@@ -313,7 +313,12 @@ class AddressAction extends Controller
         if ($line_number) {
             $where.="line_number=$line_number and which_station=" . $which_station;
         }
+        
         $info_sql = $this->model->table('district_promoter')->where($where)->findAll();
+        if(!$info_sql){
+            $this->code = 0;
+            $this->content = [];
+        }
         //两点之间的距离
         /*
          *param deg2rad()函数将角度转换为弧度
@@ -423,7 +428,7 @@ class AddressAction extends Controller
                     $info_sql[$k]['environment'] = '';
                 }
                 if($info_sql[$k]['quality_service']==null){
-                    $info_sql[$k]['quality_service'] = '';
+                    $info_sql[$k]['quality_service'] = 5;
                 }
                 if($info_sql[$k]['price']==null){
                     $info_sql[$k]['price'] = '';
@@ -434,16 +439,19 @@ class AddressAction extends Controller
                 if($info_sql[$k]['evaluate']==null){
                     $info_sql[$k]['evaluate'] = '';
                 }
-                $customer = $this->model->table('customer')->fields('real_name')->where('user_id='.$v['user_id'])->find();
-                $info_sql[$k]['real_name'] = $customer['real_name'];
+                $count = $this->model->table('order_offline')->where('shop_ids='.$v['user_id'])->group('user_id')->findAll();
+                if($count){
+                    $consume_num = count($count);
+                }else{
+                    $consume_num = 0;
+                }
+                // $count = $this->model->table('order_offline')->where('shop_ids=17216')->group('user_id')->count();
+                // $count = $this->model->query("SELECT COUNT( id ) AS count FROM  `tiny_order_offline` WHERE shop_ids =1314 GROUP BY user_id");
+                $info_sql[$k]['consume_num'] = $consume_num;
             }
         }
-        if ($info_sql) {
-            $this->code = 0;
-            $this->content = $info_sql;
-        } else {
-            $this->code = 1166;
-        }
+        $this->code = 0;
+        $this->content = $info_sql; 
     }
 
     // //按区域查找商家

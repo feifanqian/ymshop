@@ -726,6 +726,7 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url, 100, 100);
             $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
         }
+
         $data = array(
                 'shop_name' => Req::args('shop_name'),
                 'location' => Filter::text(Req::args('areas').Req::args('road')),

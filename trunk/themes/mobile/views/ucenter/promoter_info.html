@@ -12,7 +12,7 @@
             <dd>
                
             </dd>
-            <dd><input class="input" type="file" name="picture" maxlen="20" value="" >选择图片</dd>
+            <dd><input class="input" type="file" name="picture" maxlen="20" value="" >上传图片</dd>
             <dd id="areas" class="h-box" >
                 <div class="flex_1">
                     <div class="select">
@@ -47,7 +47,7 @@
 <script type="text/javascript">
     $(function(){
     var selected = [{$province|0},{$city|0},{$county|0}];
-    $("#areas").Linkage({ url:"{url:/ajax/area_data}",selected:selected,initRunCallBack:true,callback:function(data){
+    $("#areas").Linkage({ url:"{url:/ajax/area_datas}",selected:selected,initRunCallBack:true,callback:function(data){
         var text = new Array();
         var value = new Array();
         for (i in data[0]){
