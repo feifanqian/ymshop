@@ -266,9 +266,8 @@ class AddressAction extends Controller
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
         $distance = Filter::int(Req::args('distance'));//距离
-        if($distance==0){
-            $$distance = 10;
-            var_dump($distance);die;
+        if(!$distance){
+            $distance = 10;
         }
         
         $classify_id = Filter::int(Req::args('classify_id'));//商家分类
