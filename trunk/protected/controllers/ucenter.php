@@ -710,12 +710,29 @@ class UcenterController extends Controller
     }
 
     public function promoter_save(){
+        $upfile_path = Tiny::getPath("uploads") . "/head/";
+        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
+        //$upfile_url = strtr(Tiny::getPath("uploads_url")."head/",APP_URL,'');
+        $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile->save();
+        $info = $upfile->getInfo();
+        $result = array();
+        $picture = "";
+        if ($info[0]['status'] == 1) {
+            $result = array('error' => 0, 'url' => $upfile_url . $info[0]['path']);
+            $image_url = $upfile_url . $info[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url, 100, 100);
+            $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
+        }
         $data = array(
                 'shop_name' => Req::args('shop_name'),
                 'location' => Filter::text(Req::args('areas').Req::args('road')),
                 'info' => Filter::text(Req::args('info')),
                 'region_id' => Filter::int(Req::args('county')),
                 'road' => Filter::text(Req::args('road')),
+                'picture' => $picture,
             );
 
             $id = $this->user['id'];
