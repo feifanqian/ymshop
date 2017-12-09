@@ -31,6 +31,7 @@
                 </div>
             </dd>
             <dd>
+              <div class="flex_1">
                 <div class="select">
                     <div class="option"></div>
                     <select id="county" name="county"><option value="0">县/区</option></select>
@@ -39,6 +40,7 @@
                     <div class="option"></div>
                     <select id="street" name="street"><option value="0">街道</option></select>
                 </div>
+              </div>  
             </dd>
             <dd ><textarea class="textarea" name="road" pattern="required" minlen="5" maxlen="120" placeholder="店铺所在路名或街道地址，门牌号。" alt="路名或街道地址，门牌号，5-120字">{$promoter_info['road']}</textarea></dd>
             <dd ><textarea class="textarea" name="info" minlen="5" maxlen="120" placeholder="店铺简单描述信息" alt="">{$promoter_info['info']}</textarea></dd>
@@ -52,6 +54,7 @@
     $(function(){
     var selected = [{$province|0},{$city|0},{$county|0}];
     $("#areas").Linkage({ url:"{url:/ajax/area_datas}",selected:selected,initRunCallBack:true,callback:function(data){
+
         var text = new Array();
         var value = new Array();
         for (i in data[0]){
@@ -60,7 +63,7 @@
                 value.push(data[0][i]);
             }
         }
-
+        console.log(data[1]);
         $("#province").parent().find(".option").text(data[1][0]);
         $("#city").parent().find(".option").text(data[1][1]);
         $("#county").parent().find(".option").text(data[1][2]);
