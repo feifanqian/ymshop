@@ -399,7 +399,7 @@ class AddressAction extends Controller
                     $info_sql[$k]['picture'] = '';
                 }
                 if($info_sql[$k]['tourist_id']==null){
-                    $info_sql[$k]['tourist_id'] = '';
+                    $info_sql[$k]['tourist_id'] = 0;
                 }
                 if($info_sql[$k]['line_number']==null){
                     $info_sql[$k]['line_number'] = '';
