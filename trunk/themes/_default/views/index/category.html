@@ -87,11 +87,11 @@ echo '</pre>';
                     </dl>
                     {/list}
                 </div>
-                <div id="select-more">
-                    <div class="attr-extra">
-                        <div></div>
-                    </div>
-                </div>
+                <!--<div id="select-more">-->
+                    <!--<div class="attr-extra">-->
+                        <!--&lt;!&ndash;<div></div>&ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
             <!--E 筛选部分-->
             <!--S 商品部分-->
@@ -140,7 +140,7 @@ echo '</pre>';
 </div>
 <!-- S 脚本处理 -->
 <script>
-    var attr_extra = '';
+ /*   var attr_extra = '';
     $(".attr").each(function (i) {
         var self = $(this);
         if (i > 3) {
@@ -164,9 +164,9 @@ echo '</pre>';
                 }
             });
         }
-    });
+    });*/
 
-    attr_extra = $(".attr:gt(3) .attr-key").text();
+  /*  attr_extra = $(".attr:gt(3) .attr-key").text();
     attr_extra = $.trim(attr_extra);
     attr_extra = attr_extra.replace(/：/gi, '、');
     attr_extra = attr_extra.replace(/、$/gi, '');
@@ -183,19 +183,19 @@ echo '</pre>';
         }
     } else {
         $("#select-more").css("display", "none");
-    }
-    $(".attr-extra:eq(0)").on("click", function () {
-        if ($(".attr:hidden").size() > 0) {
-            $(".attr:gt(3)").css("display", "block");
-            $(".attr-extra div:eq(0)").html('收起<b></b>');
-            $(".attr-extra").addClass("unflod");
-        } else {
-            $(".attr:gt(3)").css("display", "none");
-            $(".attr-extra div:eq(0)").html('更多选项（' + attr_extra + '）<b></b>');
-            $(".attr-extra").removeClass("unflod");
-        }
-
-    })
+    }*/
+    // $(".attr-extra:eq(0)").on("click", function () {
+    //     if ($(".attr:hidden").size() > 0) {
+    //         $(".attr:gt(3)").css("display", "block");
+    //         $(".attr-extra div:eq(0)").html('收起<b></b>');
+    //         $(".attr-extra").addClass("unflod");
+    //     } else {
+    //         $(".attr:gt(3)").css("display", "none");
+    //         $(".attr-extra div:eq(0)").html('更多选项（' + attr_extra + '）<b></b>');
+    //         $(".attr-extra").removeClass("unflod");
+    //     }
+    //
+    // });
 
     $(".attention").on("click", function () {
         var id = $(this).attr("val");

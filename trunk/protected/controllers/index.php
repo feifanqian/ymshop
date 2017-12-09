@@ -1384,6 +1384,7 @@ class IndexController extends Controller {
                 $this->assign("review", $review);
                 $this->redirect();
         } else {
+            $this->assign("review",1);
             $this->redirect("msg", false, array('type' => 'fail', 'msg' => '商品已经评论。'));
         }
     }
