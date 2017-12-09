@@ -1007,7 +1007,7 @@ class UcenterController extends Controller
         $goodslist = array();
         if ($ids) {
             $list = $this->model->table("order_goods AS og")
-                ->fields("og.product_id,og.spec,og.order_id,og.goods_id,og.goods_nums,go.img,go.imgs,go.name")
+                ->fields("og.product_id,og.spec,og.order_id,og.goods_id,og.goods_nums,og.goods_price,go.img,go.imgs,go.name")
                 ->join("goods AS go ON og.goods_id=go.id")
                 ->where("order_id IN (" . implode(',', $ids) . ")")
                 ->findAll();
@@ -1074,11 +1074,11 @@ class UcenterController extends Controller
                         if ($order_type == 4) {
 
                             $str = '<span class="text-danger">等待付款</span>';
-                            $btn = '<a href="javascript:;" class="btn  btn-gray btn-mini " onclick="order_delete(' . $item['id'] . ')">删除订单</a>&nbsp;<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a>';
+                            $btn = '<a href="javascript:;" class="btn  btn-gray btn-mini " style="margin-bottom:10px;" onclick="order_delete(' . $item['id'] . ')">删除订单</a><br><a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a>';
 
                         } else {
                             $str = '<span class="text-danger">等待付款</span>';
-                            $btn = '<a href="javascript:;" class="btn  btn-gray btn-mini " onclick="order_delete(' . $item['id'] . ')">删除订单</a>&nbsp;<a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a>';
+                            $btn = '<a href="javascript:;" class="btn  btn-gray btn-mini " style="margin-bottom:10px;"  onclick="order_delete(' . $item['id'] . ')">删除订单</a><br><a href="' . Url::urlFormat("/simple/order_status/order_id/$item[id]") . '" class="btn btn-main btn-mini">立即付款</a>';
                         }
                     }
                 }
