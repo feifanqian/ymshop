@@ -139,9 +139,7 @@ class AddressAction extends Controller
                  if($promoter){
                     $list['data'][$k]['lng'] = $promoter['lng']+rand(-0.0111,0.0111);
                     $list['data'][$k]['lat'] = $promoter['lat']+rand(-0.0111,0.0111);
-                    var_dump($promoter);die;
-                 }else{
-                     unset($list['data'][$k]);
+                    // var_dump($promoter);die;
                  }  
             }
         } 
