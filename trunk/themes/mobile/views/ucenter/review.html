@@ -1,4 +1,9 @@
-<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}"/>
+<style>
+    .tab.tab-head li.current {
+        background: #e4e4ec !important;
+    }
+</style>
 <div class="ma20 clearfix" style="position: relative;font-size:14px;">
     <div class="bg-white">
         <div class="mt10 tab">
@@ -6,16 +11,18 @@
                 <li>待评价商品</li>
                 <li>已评价商品</li>
             </ul>
-            <div class="tab-body pb20 pt20"  >
+            <div class="tab-body pb20 pt20">
                 <div id="review-n" class="clearfix">
                     <div class="page-content list-nav">
                         <div class="item">
-                            <div class="layout-3 mt10 line-b " >
-                                <div ><a href="{url:/index/product/id/}{gid}"><img src="{img}" ></a></div>
-                                <div style="height:5em;padding-left:1em;"><p  style="overflow:hidden;"><a href="{url:/index/product/id/}{gid}">{name}</a></p>
-                                    <p >价格：<b class="red">{$currency_symbol}{sell_price}</b></p></div>
+                            <div class="layout-3 mt10 line-b ">
+                                <div><a href="{url:/index/product/id/}{gid}"><img src="{img}"></a></div>
+                                <div style="height:5em;padding-left:1em;">
+                                    <p style="overflow:hidden;"><a href="{url:/index/product/id/}{gid}">{name}</a></p>
+                                    <p>价格：<b class="red">{$currency_symbol}{sell_price}</b></p>
+                                </div>
                                 <div><a class="btn btn-mini" href="{url:/index/review/id/}{id}">评价</a></div>
-                            </div>					
+                            </div>
                         </div>
                     </div>
                     <div class="page-nav tc"></div>
@@ -23,22 +30,27 @@
                 <div id="review-y" class="clearfix">
                     <div class="page-content list-nav">
                         <div class="item">
-                            <div class="layout-2 mt10 line-b " >
-                                <div ><a href="{url:/index/product/id/}{gid}"><img src="{img}" ></a></div>
-                                <div style="height:6em"><p  style="overflow:hidden;"><a href="{url:/index/product/id/}{gid}">{name}</a></p>
-                                    <p >价格：<b class="red">{$currency_symbol}{sell_price}</b></p></div>
+                            <div class="layout-2 mt10 line-b ">
+                                <div>
+                                    <a href="{url:/index/product/id/}{gid}"><img src="{img}"></a>
+                                </div>
+                                <div style="height:6em">
+                                    <p style="overflow:hidden;">
+                                        <a href="{url:/index/product/id/}{gid}">{name}</a>
+                                    </p>
+                                    <p>价格：<b class="red">{$currency_symbol}{sell_price}</b></p>
+                                </div>
                             </div>
                             <div class="mt20 mb20">
                                 <span class="score "><i style="width:{point}%;"></i></span>
                                 <span class="gray fr">{comment_time}</span>
-                            </div>						
+                            </div>
                         </div>
                     </div>
                     <div class="page-nav tc"></div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 <script type="text/javascript">
