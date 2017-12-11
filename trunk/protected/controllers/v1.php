@@ -163,6 +163,7 @@ class V1Controller extends Controller {
         //红包
         "redbag_list"=>array("address/redbagList",0,1),
         "my_redbag"=>array("address/myRedbag",1,1), //我的红包
+        "redbag_make"=>array("address/redbagMake",1,1), //发红包(商家自定义广告红包)
         //地图
         "get_maps"=>array("map/getMaps",0,1),//地图功能
         "get_map" => array("address/getMap", 0, 1),//附近商家
@@ -174,7 +175,7 @@ class V1Controller extends Controller {
         "seller_list"=>array("address/promoterList",0,1),
         "seller_info"=>array("address/promoterInfo",0,1),
         "promoter_edit"=>array('address/promoterEdit',1,1),
-        "promoter_type"=>array('map/promoterType',0,1),
+        "promoter_type"=>array('map/promoterType',0,1), //商家类型
         "promoter_attention"=>array("address/promoterAttention",1,1), //关注商家
         "has_attentioned"=>array('address/hasAttentioned',1,1), //判断商家是否已关注
         "set_picture"=>array("district/setPicture",1,1), //设置商家店铺头像

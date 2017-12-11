@@ -1096,7 +1096,7 @@ class Common {
                 if($seller['lng'] == '' && $seller['lat'] == ''){
                    $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location']))->insert(); 
                }else{
-                   $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+rand(-111,111)/100000,'lat'=>$seller['lat']+rand(-111,111)/100000))->insert();
+                   $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+rand(-111,111)/1000000,'lat'=>$seller['lat']+rand(-111,111)/1000000))->insert();
                }   
             }
          }

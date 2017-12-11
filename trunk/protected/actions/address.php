@@ -137,7 +137,7 @@ class AddressAction extends Controller
                     // $list[$k]['lng'] = $promoter['lng']+$rand;
                     // $list[$k]['lat'] = $promoter['lat']+$rand;
                     if($list[$k]['lng']=='' && $list[$k]['lat']==''){
-                        $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+rand(-111,111)/100000,'lat'=>$promoter['lat']+rand(-111,111)/100000))->where('id='.$v['id'])->update();
+                        $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+rand(-1111,1111)/1000000,'lat'=>$promoter['lat']+rand(-1111,1111)/1000000))->where('id='.$v['id'])->update();
                     }     
                  }  
             }
@@ -153,17 +153,123 @@ class AddressAction extends Controller
 
     public function myRedbag(){
         $page = Filter::int(Req::args('page'));
+        $type = Filter::int(Req::args('type'));
         if (!$page) {
             $page = 1;
         }
         $model = new Model();
-        $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where('r.user_id='.$this->user['id'])->order('r.id desc')->findPage($page, 10);
+        $user_id = $this->user['id'];
+        if($type==1){
+            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where('r.user_id='.$user_id)->order('r.id desc')->findPage($page, 10);
+        }elseif($type==2){
+            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where("r.status=1 and r.owner_id like '%$user_id%'")->order('r.id desc')->findPage($page, 10);
+        }
+        
         if($list){
            unset($list['html']); 
         }
         
         $this->code = 0;
         $this->content = $list;
+    }
+
+    public function redbagMake(){
+        $amount = Filter::float(Req::args('amount'));
+        $info = Filter::text(Req::args('info'));
+        $distance = Filter::int(Req::args('distance'));
+        $range = Req::args('range');
+        $num = Filter::int(Req::args('num'));
+        $promoter = $this->model->table('district_promoter')->fields('lng,lat')->where('user_id='.$this->user['id'])->find();
+        if(!$promoter){
+            $this->code = 1166;
+            return;
+        }
+        if($promoter['lng'] == '' || $promoter['lat'] == ''){
+            $this->code = 1170;
+            return;
+        }
+        switch ($range) {
+            case '0.5':
+                $rand1 = rand(-45,45)/10000;
+                if($rand1>0){
+                    $rand2 = 0.0045-$rand1;
+                }else{
+                    $rand2 = 0-(0.0045-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case '1':
+                $rand1 = rand(-9,9)/1000;
+                if($rand1>0){
+                    $rand2 = 0.009-$rand1;
+                }else{
+                    $rand2 = 0-(0.009-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case '3':
+                $rand1 = rand(-27,27)/1000;
+                if($rand1>0){
+                    $rand2 = 0.027-$rand1;
+                }else{
+                    $rand2 = 0-(0.027-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case '5':
+                $rand1 = rand(-45,45)/1000;
+                if($rand1>0){
+                    $rand2 = 0.045-$rand1;
+                }else{
+                    $rand2 = 0-(0.045-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case '10':
+                $rand1 = rand(-90,90)/1000;
+                if($rand1>0){
+                    $rand2 = 0.09-$rand1;
+                }else{
+                    $rand2 = 0-(0.09-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;            
+            default:
+                $rand1 = rand(-9,9)/1000;
+                if($rand1>0){
+                    $rand2 = 0.009-$rand1;
+                }else{
+                    $rand2 = 0-(0.009-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+        }
+        $data = array(
+             'amount'=>$amount,
+             'info'=>$info,
+             'lng'=>$lng,
+             'lat'=>$lat,
+             'user_id'=>$this->user['id'],
+             'distance'=>$distance,
+             'range'=>$range,
+             'create_time'=>date('Y-m-d H:i:s'),
+             'type'=>2,
+             'num'=>$num
+            );
+        $result = $this->model->table('redbag')->data($data)->insert();
+        if($result){
+            $this->code = 0;
+            $this->content = $this->model->table('redbag')->where('id='.$result)->find();
+        }else{
+            $this->code = 1169;
+            return;
+        }
     }
 
     public function promoterList()
@@ -230,7 +336,7 @@ class AddressAction extends Controller
             $this->code = 1133;
         }
         $name = Filter::str(Req::args('name'));
-        $describe = Filter::text(Req::args('describe'));
+        $info = Filter::text(Req::args('info'));
         $location = Filter::text(Req::args('location'));
         $lng = Filter::sql(Req::args('lng'));
         $lat = Filter::sql(Req::args('lat'));
@@ -253,8 +359,8 @@ class AddressAction extends Controller
         if ($name) {
             $result = $model->table('customer')->data(array('real_name' => $name))->where("user_id=" . $this->user['id'])->update();
         }
-        if ($describe) {
-            $result = $model->table('district_promoter')->data(array('describe' => $describe))->where("user_id=" . $this->user['id'])->update();
+        if ($info) {
+            $result = $model->table('district_promoter')->data(array('info' => $info))->where("user_id=" . $this->user['id'])->update();
         }
         if ($location) {
             $result = $model->table('district_promoter')->data(array('location' => $location))->where("user_id=" . $this->user['id'])->update();
@@ -282,7 +388,7 @@ class AddressAction extends Controller
         if(!$distance){
             $distance = 10;
         }
-        
+        $keyword = Filter::text(Req::args('keyword'));
         $classify_id = Filter::int(Req::args('classify_id'));//商家分类
         $distance_asc = Req::args('distance_asc'); //距离离我最近
         $hot = Filter::int(Req::args('hot'));//人气
@@ -310,6 +416,10 @@ class AddressAction extends Controller
             'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
         );
         $where = "lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
+        //按关键词搜索
+        if(!empty($keyword)){
+            $where.=" and shop_name like '%$keyword%'";
+        }
         //筛选商家分类
         if (!empty($classify_id)) {
             $where.= " and classify_id = $classify_id";
@@ -473,7 +583,7 @@ class AddressAction extends Controller
                 $info_sql[$k]['is_district'] = $is_district;
                 if($info_sql[$k]['shop_name']==''){
                     $user = $this->model->table('customer')->fields('real_name')->where('user_id='.$v['user_id'])->find();
-                    $info_sql[$k]['shop_name'] = $user['real_name'].'的店铺';
+                    $this->model->table('district_promoter')->data(array('shop_name'=>$user['real_name'].'的店铺'))->where('user_id='.$v['user_id'])->update();
                 }
                 if($customer==1){
                     if($info_sql[$k]['is_district']==0){
