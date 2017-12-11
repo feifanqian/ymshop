@@ -170,7 +170,7 @@ class AddressAction extends Controller
         $amount = Filter::float(Req::args('amount'));
         $info = Filter::text(Req::args('info'));
         $distance = Filter::int(Req::args('distance'));
-        $range = Filter::int(Req::args('range'));
+        $range = Req::args('range');
         $promoter = $this->model->table('district_promoter')->fields('lng,lat')->where('user_id='.$this->user['id'])->find();
         if(!$promoter){
             $this->code = 1166;
@@ -182,29 +182,64 @@ class AddressAction extends Controller
         }
         switch ($range) {
             case '0.5':
-                $lng = $promoter['lng']+rand(-11,11)/100000;
-                $lat = $promoter['lat']+rand(-11,11)/100000;
+                $rand1 = rand(-45,45)/10000;
+                if($rand1>0){
+                    $rand2 = 0.0045-$rand1;
+                }else{
+                    $rand2 = 0-(0.0045-abs($rand));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
                 break;
             case '1':
-                $rand = rand(-9,9)/1000;
-                $lng = $promoter['lng']+$rand;
-                $lat = $promoter['lat']+rand(-111,111)/100000;
+                $rand1 = rand(-9,9)/1000;
+                if($rand1>0){
+                    $rand2 = 0.009-$rand1;
+                }else{
+                    $rand2 = 0-(0.009-abs($rand));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
                 break;
             case '3':
-                $lng = $promoter['lng']+rand(-111,111)/100000;
-                $lat = $promoter['lat']+rand(-111,111)/100000;
+                $rand1 = rand(-27,27)/1000;
+                if($rand1>0){
+                    $rand2 = 0.027-$rand1;
+                }else{
+                    $rand2 = 0-(0.027-abs($rand));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
                 break;
             case '5':
-                $lng = $promoter['lng']+rand(-111,111)/100000;
-                $lat = $promoter['lat']+rand(-111,111)/100000;
+                $rand1 = rand(-45,45)/1000;
+                if($rand1>0){
+                    $rand2 = 0.045-$rand1;
+                }else{
+                    $rand2 = 0-(0.045-abs($rand));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
                 break;
             case '10':
-                $lng = $promoter['lng']+rand(-1111,1111)/100000;
-                $lat = $promoter['lat']+rand(-1111,1111)/100000;
+                $rand1 = rand(-90,90)/1000;
+                if($rand1>0){
+                    $rand2 = 0.09-$rand1;
+                }else{
+                    $rand2 = 0-(0.09-abs($rand));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
                 break;            
             default:
-                $lng = $promoter['lng']+rand(-111,111)/100000;
-                $lat = $promoter['lat']+rand(-111,111)/100000;
+                $rand1 = rand(-9,9)/1000;
+                if($rand1>0){
+                    $rand2 = 0.009-$rand1;
+                }else{
+                    $rand2 = 0-(0.009-abs($rand));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
                 break;
         }
         $data = array(
