@@ -133,8 +133,12 @@ class AddressAction extends Controller
             foreach($list as $k => $v){
                  $promoter = $model->table('district_promoter')->fields('lng,lat')->where("lng != '' and lat != '' and user_id=".$v["user_id"])->find();
                  if($promoter){
-                    $list[$k]['lng'] = $promoter['lng']+$rand;
-                    $list[$k]['lat'] = $promoter['lat']+$rand;
+                    // $list[$k]['lng'] = $promoter['lng']+$rand;
+                    // $list[$k]['lat'] = $promoter['lat']+$rand;
+                    if($list[$k]['lng']=='' && $list[$k]['lat']==''){
+                        $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+$rand,'lat'=>$promoter['lat']+$rand))->where('id='.$v['id'])->update();
+                    }
+                    $list[$k]['bag_name'] = $v['real_name'].'的红包';
                  }else{
                      unset($list[$k]);
                  }  
