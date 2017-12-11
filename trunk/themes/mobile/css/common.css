@@ -1526,7 +1526,7 @@ form dl dd {
   -moz-box-flex: 1;
   -ms-box-flex: 1;
   box-flex: 1;
-  width: 50%;
+  width: 49%;
   float: left;
 }
 .flex_3 {
@@ -1534,7 +1534,7 @@ form dl dd {
   -moz-box-flex: 1;
   -ms-box-flex: 1;
   box-flex: 1;
-  width: 50%;
+  width: 49%;
   float: right;
 }
 .select:after {
