@@ -281,6 +281,7 @@ function descartes(args) {
             arrNodeChild[i] = new Array();
         //请求格式化后的JSON数据
         $.post(o.url, function (data) {
+            console.log(data);
             $.each(data, function (i, n) {
                 var c_id = i.substr(2);
                 var selected = (c_id == arrSelect[0]) ? 'selected="selected"' : '';
