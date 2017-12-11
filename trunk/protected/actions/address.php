@@ -187,7 +187,7 @@ class AddressAction extends Controller
                 if($rand1>0){
                     $rand2 = 0.0045-$rand1;
                 }else{
-                    $rand2 = 0-(0.0045-abs($rand));
+                    $rand2 = 0-(0.0045-abs($rand1));
                 }
                 $lng = $promoter['lng']+$rand1;
                 $lat = $promoter['lat']+$rand2;
@@ -197,7 +197,7 @@ class AddressAction extends Controller
                 if($rand1>0){
                     $rand2 = 0.009-$rand1;
                 }else{
-                    $rand2 = 0-(0.009-abs($rand));
+                    $rand2 = 0-(0.009-abs($rand1));
                 }
                 $lng = $promoter['lng']+$rand1;
                 $lat = $promoter['lat']+$rand2;
@@ -207,7 +207,7 @@ class AddressAction extends Controller
                 if($rand1>0){
                     $rand2 = 0.027-$rand1;
                 }else{
-                    $rand2 = 0-(0.027-abs($rand));
+                    $rand2 = 0-(0.027-abs($rand1));
                 }
                 $lng = $promoter['lng']+$rand1;
                 $lat = $promoter['lat']+$rand2;
@@ -217,7 +217,7 @@ class AddressAction extends Controller
                 if($rand1>0){
                     $rand2 = 0.045-$rand1;
                 }else{
-                    $rand2 = 0-(0.045-abs($rand));
+                    $rand2 = 0-(0.045-abs($rand1));
                 }
                 $lng = $promoter['lng']+$rand1;
                 $lat = $promoter['lat']+$rand2;
@@ -227,7 +227,7 @@ class AddressAction extends Controller
                 if($rand1>0){
                     $rand2 = 0.09-$rand1;
                 }else{
-                    $rand2 = 0-(0.09-abs($rand));
+                    $rand2 = 0-(0.09-abs($rand1));
                 }
                 $lng = $promoter['lng']+$rand1;
                 $lat = $promoter['lat']+$rand2;
@@ -237,7 +237,7 @@ class AddressAction extends Controller
                 if($rand1>0){
                     $rand2 = 0.009-$rand1;
                 }else{
-                    $rand2 = 0-(0.009-abs($rand));
+                    $rand2 = 0-(0.009-abs($rand1));
                 }
                 $lng = $promoter['lng']+$rand1;
                 $lat = $promoter['lat']+$rand2;
