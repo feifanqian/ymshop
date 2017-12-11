@@ -1091,12 +1091,12 @@ class Common {
          
          if($balance5>0){
             $seller = $model->table('district_promoter')->fields('location,lng,lat')->where('user_id='.$seller_id)->find();
-            $rand = rand(-111,111)/1000;
+            // $rand = rand(-111,111)/100000;
             if($seller){
                 if($seller['lng'] == '' && $seller['lat'] == ''){
                    $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location']))->insert(); 
                }else{
-                   $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand,'lat'=>$seller['lat']+$rand))->insert();
+                   $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+rand(-111,111)/100000,'lat'=>$seller['lat']+rand(-111,111)/100000))->insert();
                }   
             }
          }

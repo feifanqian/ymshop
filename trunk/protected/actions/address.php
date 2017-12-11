@@ -125,7 +125,8 @@ class AddressAction extends Controller
 
     public function redbagList()
     {
-        $rand = rand(-111,111)/1000;
+        // $rand1 = rand(-111,111)/100000;
+        // $rand2 = rand(-111,111)/100000;
         $model = new Model();
         $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->order('r.id desc')->findAll();
         if($list){
@@ -136,7 +137,7 @@ class AddressAction extends Controller
                     // $list[$k]['lng'] = $promoter['lng']+$rand;
                     // $list[$k]['lat'] = $promoter['lat']+$rand;
                     if($list[$k]['lng']=='' && $list[$k]['lat']==''){
-                        $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+$rand,'lat'=>$promoter['lat']+$rand))->where('id='.$v['id'])->update();
+                        $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+rand(-111,111)/100000,'lat'=>$promoter['lat']+rand(-111,111)/100000))->where('id='.$v['id'])->update();
                     }     
                  }  
             }
