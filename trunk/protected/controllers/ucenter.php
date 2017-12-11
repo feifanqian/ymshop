@@ -92,6 +92,7 @@ class UcenterController extends Controller
         $this->assign("sidebar", $this->sidebar);
         $this->assign("category", $this->category);
         $this->assign("url_index", '');
+        $this->assign('user_id',$this->user['id']);
         $this->assign("seo_title", "用户中心");
         
     }
