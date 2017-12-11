@@ -383,11 +383,8 @@ class AddressAction extends Controller
     public function getMap()
     {
         $lng = Req::args('lng');//经度
-        $lat = Req::args('lat');//纬度
-        $distance = Req::args('distance');//距离
-        if(!$distance){
-            $distance = 10;
-        }
+        $lat = Req::args('lat');//纬度   
+        
         $keyword = Filter::text(Req::args('keyword'));
         $classify_id = Filter::int(Req::args('classify_id'));//商家分类
         $distance_asc = Req::args('distance_asc'); //距离离我最近
@@ -403,19 +400,43 @@ class AddressAction extends Controller
         $which_station = Filter::int(Req::args('which_station'));//哪个站
         $customer = Req::args('customer');//商家or代理vip
 
-        $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
-        $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
+        $where = "lat<>0";
+        //区域
+        if ($region_id) {
+            $where.= " and region_id=$region_id";     
+        }
+        //搜索附近
+        if(Req::args('distance')!=''){
+            $distance = Req::args('distance');//距离
+            $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
+            $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
 
-        $dlat = $distance / 6371;
-        $dlat = rad2deg($dlat);//rad2deg() 函数把弧度数转换为角度数
+            $dlat = $distance / 6371;
+            $dlat = rad2deg($dlat);//rad2deg() 函数把弧度数转换为角度数
 
-        $squares = array(
-            'left-top' => array('lat' => $lat + $dlat, 'lng' => $lng - $dlng),
-            'right-top' => array('lat' => $lat + $dlat, 'lng' => $lng + $dlng),
-            'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
-            'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
-        );
-        $where = "lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
+            $squares = array(
+                'left-top' => array('lat' => $lat + $dlat, 'lng' => $lng - $dlng),
+                'right-top' => array('lat' => $lat + $dlat, 'lng' => $lng + $dlng),
+                'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
+                'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
+            );
+            $where.= " and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
+        }else{
+            $distance = 10;
+            $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
+            $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
+
+            $dlat = $distance / 6371;
+            $dlat = rad2deg($dlat);//rad2deg() 函数把弧度数转换为角度数
+
+            $squares = array(
+                'left-top' => array('lat' => $lat + $dlat, 'lng' => $lng - $dlng),
+                'right-top' => array('lat' => $lat + $dlat, 'lng' => $lng + $dlng),
+                'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
+                'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
+            );
+            $where.= " and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
+        }
         //按关键词搜索
         if(!empty($keyword)){
             $where.=" and shop_name like '%$keyword%'";
@@ -424,13 +445,10 @@ class AddressAction extends Controller
         if (!empty($classify_id)) {
             $where.= " and classify_id = $classify_id";
         }
-         //区域
-        if ($region_id) {
-            $where.= " and region_id=$region_id";     
-        }
+         
         //街道
         if ($tourist_id) {
-            $where.=" and region_id=$region_id";
+            $where.=" and tourist_id=$tourist_id";
         }
         //地铁线路
         if ($line_number) {
