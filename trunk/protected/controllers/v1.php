@@ -175,7 +175,7 @@ class V1Controller extends Controller {
         "seller_list"=>array("address/promoterList",0,1),
         "seller_info"=>array("address/promoterInfo",0,1),
         "promoter_edit"=>array('address/promoterEdit',1,1),
-        "promoter_type"=>array('map/promoterType',0,1),
+        "promoter_type"=>array('map/promoterType',0,1), //商家类型
         "promoter_attention"=>array("address/promoterAttention",1,1), //关注商家
         "has_attentioned"=>array('address/hasAttentioned',1,1), //判断商家是否已关注
         "set_picture"=>array("district/setPicture",1,1), //设置商家店铺头像

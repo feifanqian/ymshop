@@ -336,7 +336,7 @@ class AddressAction extends Controller
             $this->code = 1133;
         }
         $name = Filter::str(Req::args('name'));
-        $describe = Filter::text(Req::args('describe'));
+        $info = Filter::text(Req::args('info'));
         $location = Filter::text(Req::args('location'));
         $lng = Filter::sql(Req::args('lng'));
         $lat = Filter::sql(Req::args('lat'));
@@ -359,8 +359,8 @@ class AddressAction extends Controller
         if ($name) {
             $result = $model->table('customer')->data(array('real_name' => $name))->where("user_id=" . $this->user['id'])->update();
         }
-        if ($describe) {
-            $result = $model->table('district_promoter')->data(array('describe' => $describe))->where("user_id=" . $this->user['id'])->update();
+        if ($info) {
+            $result = $model->table('district_promoter')->data(array('info' => $info))->where("user_id=" . $this->user['id'])->update();
         }
         if ($location) {
             $result = $model->table('district_promoter')->data(array('location' => $location))->where("user_id=" . $this->user['id'])->update();
@@ -388,7 +388,7 @@ class AddressAction extends Controller
         if(!$distance){
             $distance = 10;
         }
-        
+        $keyword = Filter::text(Req::args('keyword'));
         $classify_id = Filter::int(Req::args('classify_id'));//商家分类
         $distance_asc = Req::args('distance_asc'); //距离离我最近
         $hot = Filter::int(Req::args('hot'));//人气
@@ -416,6 +416,10 @@ class AddressAction extends Controller
             'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
         );
         $where = "lat<>0 and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
+        //按关键词搜索
+        if(!empty($keyword)){
+            $where.=" and shop_name like '%$keyword%'";
+        }
         //筛选商家分类
         if (!empty($classify_id)) {
             $where.= " and classify_id = $classify_id";
