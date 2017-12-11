@@ -265,7 +265,7 @@ class AddressAction extends Controller
         $result = $this->model->table('redbag')->data($data)->insert();
         if($result){
             $this->code = 0;
-            $this->content = '红包已生成';
+            $this->content = $this->model->table('redbag')->where('id='.$result)->find();
         }else{
             $this->code = 1169;
             return;
