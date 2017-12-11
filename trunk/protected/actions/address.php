@@ -250,6 +250,7 @@ class AddressAction extends Controller
              'lat'=>$lat,
              'user_id'=>$this->user['id'],
              'distance'=>$distance,
+             'range'=>$range,
              'create_time'=>date('Y-m-d H:i:s'),
              'type'=>2,
              'num'=>$num
