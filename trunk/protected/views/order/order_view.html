@@ -29,6 +29,7 @@
 		<h3 class="lineD mt10">订单信息：</h3>
 		<table class="default">
 		<tr><th width="100">订单编号：</th><td><i class="icon-order-{$item['type']}"></i>{$item['order_no']}</td><th width="100">下单时间：</th><td>{$item['create_time']}</td></tr>
+		<tr><th>付款时间：</th><td>{$item['pay_time']}</td><th>发货时间：</th><td>{$item['send_time']}</td></tr>
 		<tr><th>支付方式：</th><td>{if:$item['type']==4}{echo:'华点+'.$item['payname']}{else:}{$item['payname']}{/if}</td><th>支付手续费：</th><td class="golden">{$item['handling_fee']}</td></tr>
 		<tr><th>配送方式：</th><td>{$item['exname']}</td><th>配送费用：</th><td class="golden">{$item['payable_freight']}</td></tr>
 		<tr><th>实际配送费用：</th><td class="golden">{$item['real_freight']}</td><th>代金券：</th><td class="golden">{if:$item['voucher_id']}{set:$voucher=unserialize($item['voucher'])}{$voucher['value']}{else:}-{/if}</td></tr>
@@ -38,6 +39,7 @@
 		<tr><th>发票类型：</th><td ><b>{if:$invoice[0]==1}单位{else:}个人{/if}</b></td><th>发票抬头：</th><td ><b>{$invoice[1]}</b></td></tr>
 		{/if}
 		<tr><th>发票税金：</th><td class="golden">{$item['taxes']}</td><th>活动优惠金额：</th><td class="golden">{$item['discount_amount']}</td></tr>
+		<tr><th>用户签收时间：</th><td colspan="3">{$item['accept_time']}</td></tr>
 		<tr><th>原订单总金额：</th><td colspan=3  class="golden">{echo:sprintf("%.2f",$amount)} 注：记订单在未调价之前的总金额</td></tr>
                 {if:$item['type']==4} 
                 <tr><th>应支付华点：</th><td>{$item['huabipay_amount']}</td><th>还应支付人民币：</th><td>{$item['otherpay_amount']}</td><tr>
@@ -45,6 +47,7 @@
                 {/if}
                 <tr><th>订单折扣或涨价：</th><td colspan=3 >{$item['adjust_amount']|0}</td></tr>
 		<tr><th>调整后订单总金额：</th><td colspan=3   ><span style="display: inline-block;width: 100px" class="golden" id="order_amount">{$item['order_amount']} </span> 注：总金额不会小于0元</td></tr>
+
         <tr><th>调价原因：</th><td colspan=3>{$item['adjust_note']}</td></tr>
         <tr><th>用户备注：</th><td colspan=3>{$item['user_remark']}</td></tr>
 		<tr><th>管理人员备注：</th><td colspan=3>{$item['admin_remark']}</td></tr>
