@@ -171,6 +171,7 @@ class AddressAction extends Controller
         $info = Filter::text(Req::args('info'));
         $distance = Filter::int(Req::args('distance'));
         $range = Req::args('range');
+        $num = Filter::int(Req::args('num'));
         $promoter = $this->model->table('district_promoter')->fields('lng,lat')->where('user_id='.$this->user['id'])->find();
         if(!$promoter){
             $this->code = 1166;
@@ -250,7 +251,8 @@ class AddressAction extends Controller
              'user_id'=>$this->user['id'],
              'distance'=>$distance,
              'create_time'=>date('Y-m-d H:i:s'),
-             'type'=>2
+             'type'=>2,
+             'num'=>$num
             );
         $result = $this->model->table('redbag')->data($data)->insert();
         if($result){

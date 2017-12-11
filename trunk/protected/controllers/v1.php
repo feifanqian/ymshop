@@ -163,6 +163,7 @@ class V1Controller extends Controller {
         //红包
         "redbag_list"=>array("address/redbagList",0,1),
         "my_redbag"=>array("address/myRedbag",1,1), //我的红包
+        "redbag_make"=>array("address/redbagMake",1,1), //发红包(商家自定义广告红包)
         //地图
         "get_maps"=>array("map/getMaps",0,1),//地图功能
         "get_map" => array("address/getMap", 0, 1),//附近商家
