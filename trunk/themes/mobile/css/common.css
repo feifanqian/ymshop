@@ -1521,6 +1521,22 @@ form dl dd {
   box-flex: 1;
   width: 100%;
 }
+.flex_2 {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  box-flex: 1;
+  width: 48%;
+  float: left;
+}
+.flex_3 {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  box-flex: 1;
+  width: 48%;
+  float: right;
+}
 .select:after {
   background: url("../images/select_bg.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
   background-size: cover;
