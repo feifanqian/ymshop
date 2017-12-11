@@ -137,7 +137,7 @@ class AddressAction extends Controller
                     // $list[$k]['lng'] = $promoter['lng']+$rand;
                     // $list[$k]['lat'] = $promoter['lat']+$rand;
                     if($list[$k]['lng']=='' && $list[$k]['lat']==''){
-                        $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+rand(-111,111)/100000,'lat'=>$promoter['lat']+rand(-111,111)/100000))->where('id='.$v['id'])->update();
+                        $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+rand(-1111,1111)/1000000,'lat'=>$promoter['lat']+rand(-1111,1111)/1000000))->where('id='.$v['id'])->update();
                     }     
                  }  
             }
@@ -164,6 +164,67 @@ class AddressAction extends Controller
         
         $this->code = 0;
         $this->content = $list;
+    }
+
+    public function redbagMake(){
+        $amount = Filter::float(Req::args('amount'));
+        $info = Filter::text(Req::args('info'));
+        $distance = Filter::int(Req::args('distance'));
+        $range = Filter::int(Req::args('range'));
+        $promoter = $this->model->table('district_promoter')->fields('lng,lat')->where('user_id='.$this->user['id'])->find();
+        if(!$promoter){
+            $this->code = 1166;
+            return;
+        }
+        if($promoter['lng'] == '' || $promoter['lat'] == ''){
+            $this->code = 1170;
+            return;
+        }
+        switch ($range) {
+            case '0.5':
+                $lng = $promoter['lng']+rand(-11,11)/100000;
+                $lat = $promoter['lat']+rand(-11,11)/100000;
+                break;
+            case '1':
+                $rand = rand(-9,9)/1000;
+                $lng = $promoter['lng']+$rand;
+                $lat = $promoter['lat']+rand(-111,111)/100000;
+                break;
+            case '3':
+                $lng = $promoter['lng']+rand(-111,111)/100000;
+                $lat = $promoter['lat']+rand(-111,111)/100000;
+                break;
+            case '5':
+                $lng = $promoter['lng']+rand(-111,111)/100000;
+                $lat = $promoter['lat']+rand(-111,111)/100000;
+                break;
+            case '10':
+                $lng = $promoter['lng']+rand(-1111,1111)/100000;
+                $lat = $promoter['lat']+rand(-1111,1111)/100000;
+                break;            
+            default:
+                $lng = $promoter['lng']+rand(-111,111)/100000;
+                $lat = $promoter['lat']+rand(-111,111)/100000;
+                break;
+        }
+        $data = array(
+             'amount'=>$amount,
+             'info'=>$info,
+             'lng'=>$lng,
+             'lat'=>$lat,
+             'user_id'=>$this->user['id'],
+             'distance'=>$distance,
+             'create_time'=>date('Y-m-d H:i:s'),
+             'type'=>2
+            );
+        $result = $this->model->table('redbag')->data($data)->insert();
+        if($result){
+            $this->code = 0;
+            $this->content = '红包已生成';
+        }else{
+            $this->code = 1169;
+            return;
+        }
     }
 
     public function promoterList()
