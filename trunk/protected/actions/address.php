@@ -471,6 +471,10 @@ class AddressAction extends Controller
                 }
                 $info_sql[$k]['shop_type'] = $shop_type['name'];
                 $info_sql[$k]['is_district'] = $is_district;
+                if($info_sql[$k]['shop_name']==''){
+                    $user = $this->model->table('customer')->fields('real_name')->where('user_id='.$v['user_id'])->find();
+                    $info_sql[$k]['shop_name'] = $user['real_name'].'的店铺';
+                }
                 if($customer==1){
                     if($info_sql[$k]['is_district']==0){
                         unset($info_sql[$k]);
