@@ -125,7 +125,8 @@ class AddressAction extends Controller
 
     public function redbagList()
     {
-        $rand = rand(-111,111)/1000;
+        // $rand1 = rand(-111,111)/100000;
+        // $rand2 = rand(-111,111)/100000;
         $model = new Model();
         $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->order('r.id desc')->findAll();
         if($list){
@@ -133,16 +134,21 @@ class AddressAction extends Controller
             foreach($list as $k => $v){
                  $promoter = $model->table('district_promoter')->fields('lng,lat')->where("lng != '' and lat != '' and user_id=".$v["user_id"])->find();
                  if($promoter){
-                    $list[$k]['lng'] = $promoter['lng']+$rand;
-                    $list[$k]['lat'] = $promoter['lat']+$rand;
-                 }else{
-                     unset($list[$k]);
+                    // $list[$k]['lng'] = $promoter['lng']+$rand;
+                    // $list[$k]['lat'] = $promoter['lat']+$rand;
+                    if($list[$k]['lng']=='' && $list[$k]['lat']==''){
+                        $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+rand(-111,111)/100000,'lat'=>$promoter['lat']+rand(-111,111)/100000))->where('id='.$v['id'])->update();
+                    }     
                  }  
             }
-        } 
+         } 
+        }
+        $new_list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where("r.lng != '' and r.lat != ''")->order('r.id desc')->findAll();
+        foreach($new_list as $k => $v){
+            $new_list[$k]['bag_name'] = $v['real_name'].'的红包';
         }
         $this->code = 0;
-        $this->content = $list;
+        $this->content = $new_list;
     }
 
     public function myRedbag(){
@@ -465,6 +471,10 @@ class AddressAction extends Controller
                 }
                 $info_sql[$k]['shop_type'] = $shop_type['name'];
                 $info_sql[$k]['is_district'] = $is_district;
+                if($info_sql[$k]['shop_name']==''){
+                    $user = $this->model->table('customer')->fields('real_name')->where('user_id='.$v['user_id'])->find();
+                    $info_sql[$k]['shop_name'] = $user['real_name'].'的店铺';
+                }
                 if($customer==1){
                     if($info_sql[$k]['is_district']==0){
                         unset($info_sql[$k]);
