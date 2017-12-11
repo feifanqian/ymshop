@@ -56,7 +56,7 @@
     $(function(){
     var selected = [{$province|0},{$city|0},{$county|0}];
     $("#areas").Linkage({ url:"{url:/ajax/area_datas}",selected:selected,initRunCallBack:true,callback:function(data){
-
+        console.log(data[1]);
         var text = new Array();
         var value = new Array();
         for (i in data[0]){
@@ -65,7 +65,7 @@
                 value.push(data[0][i]);
             }
         }
-        console.log(data[1]);
+        
         $("#province").parent().find(".option").text(data[1][0]);
         $("#city").parent().find(".option").text(data[1][1]);
         $("#county").parent().find(".option").text(data[1][2]);

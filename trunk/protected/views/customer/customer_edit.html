@@ -92,9 +92,9 @@
                     <select id="county" name="county">
                         <option value="0">==县/区==</option>
                     </select>
-                    <select id="street" name="street">
+                    <!-- <select id="street" name="street">
                         <option value="0">==街道==</option>
-                    </select>
+                    </select> -->
                     <input id="test" type="text" style="visibility:hidden;width:0;"
                            value="{$province},{$city},{$county}" alt="请选择完整地区信息！"><label></label>
                 </div>
@@ -143,7 +143,7 @@
     form.setValue('parent_id', '{$parent_id}');
     form.setValue('type_id', '{$type_id}');
 
-    $("#area").Linkage({ url:"{url:/ajax/area_datas}",selected:[{$province|0},{$city|0},{$county|0}],callback:function(data){
+    $("#area").Linkage({ url:"{url:/ajax/area_data}",selected:[{$province|0},{$city|0},{$county|0}],callback:function(data){
         var text = new Array();
         var value = new Array();
         for(i in data[0]){
