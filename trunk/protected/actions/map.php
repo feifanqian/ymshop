@@ -58,7 +58,7 @@ class MapAction extends Controller
     }
 
     public function promoterType(){
-        $list = $this->model->table('promoter_type')->findAll();
+        $list = $this->model->table('promoter_type')->order('id desc')->findAll();
         $this->code = 0;
         $this->content = $list;
     }
