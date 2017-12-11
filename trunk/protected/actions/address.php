@@ -137,16 +137,17 @@ class AddressAction extends Controller
                     // $list[$k]['lat'] = $promoter['lat']+$rand;
                     if($list[$k]['lng']=='' && $list[$k]['lat']==''){
                         $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+$rand,'lat'=>$promoter['lat']+$rand))->where('id='.$v['id'])->update();
-                    }
-                    $list[$k]['bag_name'] = $v['real_name'].'的红包';
-                 }else{
-                     unset($list[$k]);
+                    }     
                  }  
             }
-        } 
+         } 
+        }
+        $new_list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where("r.lng != '' and r.lat != ''")->order('r.id desc')->findAll();
+        foreach($new_list as $k => $v){
+            $new_list[$k]['bag_name'] = $v['real_name'].'的红包';
         }
         $this->code = 0;
-        $this->content = $list;
+        $this->content = $new_list;
     }
 
     public function myRedbag(){
