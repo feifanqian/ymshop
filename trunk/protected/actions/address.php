@@ -153,11 +153,18 @@ class AddressAction extends Controller
 
     public function myRedbag(){
         $page = Filter::int(Req::args('page'));
+        $type = Filter::int(Req::args('type'));
         if (!$page) {
             $page = 1;
         }
         $model = new Model();
-        $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where('r.user_id='.$this->user['id'])->order('r.id desc')->findPage($page, 10);
+        $user_id = $this->user['id'];
+        if($type==1){
+            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where('r.user_id='.$user_id)->order('r.id desc')->findPage($page, 10);
+        }elseif($type==2){
+            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where("r.owner_id like '%$user_id%'")->order('r.id desc')->findPage($page, 10);
+        }
+        
         if($list){
            unset($list['html']); 
         }
