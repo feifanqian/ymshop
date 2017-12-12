@@ -216,5 +216,74 @@ class DistrictAction extends Controller {
         } else {
             $this->code = 1099;
         }
+    }
+
+    //生成激活码
+    public function makePromoterCode(){
+        $data = $this->model->table("promoter_code")->where("user_id =".$this->user['id'])->findAll();
+        if(count($data)>100){
+            $this->code = 1171;
+            return;
+        }
+        $code = Common::makePromoterCode();
+        $district = $this->model->table('district_shop')->fields('id')->where('owner_id='.$this->user['id'])->find();
+        if(!$district){
+           $this->code = 1132;
+           return; 
+        }
+        $district_id = $district['id'];
+        $result = $this->model->table("promoter_code")->data(array('user_id'=>$this->user['id'],'code'=>$code,'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+30 days")),'district_id'=>$district_id))->insert();
+        if($result){
+            $return = $this->model->table('promoter_code')->where('id='.$result)->find();
+            $this->code = 0;
+            $this->content = $return;
+        }else{
+            $this->code = 1171;
+            return;
+        }
+    }
+
+    //输入激活码
+    public function inputCode(){
+        $code = Filter::str(Req::args('code'));
+        $rules = array('code:required:激活码不能为空!');
+        $info = Validator::check($rules);
+        if (!$code) {
+            $this->code = 1173;
+            return;
+        }else{
+            $exist = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+            if($exist){
+                $this->code = 1174;
+                return;
+            }
+            $promoter_code = $this->model->table('promoter_code')->where("code ='{$code}'")->find();
+            if(!$promoter_code){
+                $this->code = 1175;
+                return;
+            }
+            if(time()>strtotime($promoter_code['end_date'])){
+                $this->code = 1176;
+                return;
+            }
+            if($promoter_code['status']==0){
+                $this->code = 1177;
+                return;
+            }
+            $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id']))->insert();
+            $invite = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
+            if(!$invite){
+                $this->model->table('invite')->data(array('user_id'=>$promoter_code['user_id'],'invite_user_id'=>$this->user['id'],'from'=>'jihuo','district_id'=>$promoter_code['district_id'],'createtime'=>time()))->insert();
+            }
+            if($result){
+                $this->model->table('promoter_code')->data(array('status'=>0))->where("code ='{$code}'")->update();
+                $promoter = $this->model->table('district_promoter')->where('id='.$result)->find();
+                $this->code = 0;
+                $this->content = $promoter;
+            }else{
+                $this->code = 1178;
+                return;
+            }
+        }
     }      
 }

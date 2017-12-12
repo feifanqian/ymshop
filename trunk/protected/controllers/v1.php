@@ -146,6 +146,8 @@ class V1Controller extends Controller {
         'get_my_invite_promoter'=>array("ucenter/getMyInvitePromoter",1,1),//获取我邀请的推广员列表
         "point_sale"=>array("product/point_sale",0,1),//获取积分购列表
         "pointbuy"=>array("product/pointbuy",0,1),//获取积分购列表
+        "make_promoter_code"=>array("district/makePromoterCode",1,1), //生成激活码
+        "input_code"=>array("district/inputCode",1,1), //激活码输入
         //提现
         "get_withdraw_set"=>array("index/getWithdrawSet",0,1),//提现设置
         
