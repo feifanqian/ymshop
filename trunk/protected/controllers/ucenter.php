@@ -1750,6 +1750,7 @@ class UcenterController extends Controller
                             //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
                             $user = $this->model->table('user')->fields('password,validcode')->where('id='.$result['user_id'])->find();
                             $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
+                            $this->model->table('oauth_user')->data(array('other_user_id'=>$result['user_id']))->where('user_id='.$this->user['id'])->update();
                             Session::clear('verifiedInfo');
                             Session::clear('activateObj');
                             $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
