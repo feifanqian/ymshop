@@ -513,6 +513,9 @@ class PaymentAction extends Controller {
                 case 'district':
                     $notin ="1,12,20";
                     break;
+                case 'offline':
+                    $notin ="1,17";
+                    break;    
                 default:
                      $notin="12";
                     break;
@@ -529,6 +532,9 @@ class PaymentAction extends Controller {
                 case 'district':
                     $notin ="1,12,20";
                     break;
+                case 'offline':
+                    $notin ="1,17";
+                    break;    
                 default:
                      $notin="12";
                     break;
