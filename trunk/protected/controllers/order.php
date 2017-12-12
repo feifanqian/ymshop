@@ -356,12 +356,13 @@ class OrderController extends Controller {
                 if ($flag) {
                     $model->where("id=$id")->data(array('status' => $status, 'admin_remark' => $admin_remark))->update();
                     //更新成功之后，用户的状态是订单作废的话，那就把用户的积分的金额退回给用户
-                    $order = $model->fields('pay_point,user_id')->where("id=$id")->find();//订单表的积分
+                    $order = $model->fields('pay_point,user_id,order_no')->where("id=$id")->find();//订单表的积分
                     if ($order['user_id']&& $order['pay_point']){
                         $models = new Model('customer');
                         $result = $models->fields('point_coin')->where('user_id='.$order['user_id'])->find();
                         $total = Filter::int($result['point_coin'])+Filter::int($order['pay_point']);
                         $results = $models->where('user_id='.$order['user_id'])->data(array('point_coin'=>$total))->update();
+                        Log::pointcoin_log($amount, $order['user_id'], $order['order_no'], $note = '', 12, $admin_id = 0);//日志写入
                     }
                     $info = array('status' => 'success', 'msg' => $parse_status[$status]);
                 } else {
