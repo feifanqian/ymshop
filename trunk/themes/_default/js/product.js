@@ -319,8 +319,9 @@ $(function () {
                 step2 = {top: end.top, left: end.left + 30, width: 100, height: 100, opacity: 0};
                 $(tmp).animate(step1, "slow").animate(step2, "slow", function () {
                     tmp.remove();
+                    window.location.reload();
                 });
-                window.location.reload();
+
             }, "json");
         } else {
             $("#spec-msg").css("display", "");

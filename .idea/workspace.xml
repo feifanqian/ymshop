@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="5e7286e1-8ea1-416a-afb0-c86e85802771" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/trunk/protected/classes/Log.php" afterPath="$PROJECT_DIR$/trunk/protected/classes/Log.php" />
-      <change beforePath="$PROJECT_DIR$/trunk/protected/controllers/order.php" afterPath="$PROJECT_DIR$/trunk/protected/controllers/order.php" />
+      <change beforePath="$PROJECT_DIR$/trunk/protected/views/order/doc_receiving_list.html" afterPath="$PROJECT_DIR$/trunk/protected/views/order/doc_receiving_list.html" />
+      <change beforePath="$PROJECT_DIR$/trunk/themes/_default/js/product.js" afterPath="$PROJECT_DIR$/trunk/themes/_default/js/product.js" />
+      <change beforePath="$PROJECT_DIR$/trunk/themes/_default/views/index/pointbuy.html" afterPath="$PROJECT_DIR$/trunk/themes/_default/views/index/pointbuy.html" />
+      <change beforePath="$PROJECT_DIR$/trunk/themes/_default/views/simple/cart.html" afterPath="$PROJECT_DIR$/trunk/themes/_default/views/simple/cart.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,32 +27,7 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="order.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/order.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="352" column="17" lean-forward="true" selection-start-line="352" selection-start-column="17" selection-end-line="352" selection-end-column="17" />
-              <folding>
-                <marker date="1513061788792" expanded="true" signature="35134:35609" ph="..." />
-                <marker date="1513061788792" expanded="true" signature="35138:35305" ph="..." />
-                <marker date="1513061788792" expanded="true" signature="35385:35555" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Log.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trunk/protected/classes/Log.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="702">
-              <caret line="39" column="55" lean-forward="false" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -61,7 +38,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>echo</find>
       <find>set_realname</find>
       <find>action</find>
       <find>realNameVerify</find>
@@ -91,6 +67,7 @@
       <find>购买量</find>
       <find>change_status</find>
       <find>order_status</find>
+      <find>buy-num</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -134,7 +111,6 @@
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/index/category.html" />
         <option value="$PROJECT_DIR$/trunk/protected/views/order/order_list.html" />
         <option value="$PROJECT_DIR$/trunk/protected/config/config.php" />
-        <option value="$PROJECT_DIR$/trunk/themes/_default/js/product.js" />
         <option value="$PROJECT_DIR$/trunk/themes/mobile/views/index/myinvite.html" />
         <option value="$PROJECT_DIR$/trunk/protected/views/order/order_view.html" />
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/ucenter/index.html" />
@@ -143,9 +119,12 @@
         <option value="$PROJECT_DIR$/trunk/protected/controllers/ucenter.php" />
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/ucenter/review.html" />
         <option value="$PROJECT_DIR$/trunk/protected/views/goods/goods_edit.html" />
-        <option value="$PROJECT_DIR$/trunk/themes/_default/views/index/pointbuy.html" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/order.php" />
         <option value="$PROJECT_DIR$/trunk/protected/classes/Log.php" />
+        <option value="$PROJECT_DIR$/trunk/themes/_default/js/product.js" />
+        <option value="$PROJECT_DIR$/trunk/themes/_default/views/simple/cart.html" />
+        <option value="$PROJECT_DIR$/trunk/themes/_default/views/index/pointbuy.html" />
+        <option value="$PROJECT_DIR$/trunk/protected/views/order/doc_receiving_list.html" />
       </list>
     </option>
   </component>
@@ -221,13 +200,6 @@
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="controllers" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -237,12 +209,6 @@
               <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="order" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -334,11 +300,12 @@
       <workItem from="1512971925615" duration="14830000" />
       <workItem from="1512992372287" duration="2607000" />
       <workItem from="1513043186946" duration="12373000" />
+      <workItem from="1513065291424" duration="5141000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="306262000" />
+    <option name="totallyTimeSpent" value="311403000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -351,9 +318,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="72" y="-8" width="1856" height="1096" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17445652" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17445652" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -405,27 +371,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/views/index/flashbuy.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4916">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/v1.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="218" column="49" lean-forward="true" selection-start-line="218" selection-start-column="49" selection-end-line="218" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/point.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1512">
-          <caret line="54" column="168" lean-forward="false" selection-start-line="54" selection-start-column="168" selection-end-line="54" selection-end-column="179" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/views/index/flash.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -528,27 +473,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
           <caret line="85" column="29" lean-forward="true" selection-start-line="85" selection-start-column="29" selection-end-line="85" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/config/config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="19" column="15" lean-forward="false" selection-start-line="19" selection-start-column="15" selection-end-line="19" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/js/product.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1118">
-          <caret line="322" column="41" lean-forward="false" selection-start-line="322" selection-start-column="41" selection-end-line="322" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/simple/cart.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-858">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -713,20 +637,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/product.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-514">
-          <caret line="138" column="30" lean-forward="true" selection-start-line="138" selection-start-column="30" selection-end-line="138" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/pointbuy.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="95" column="51" lean-forward="false" selection-start-line="95" selection-start-column="51" selection-end-line="95" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/views/order/order_list.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="733">
@@ -738,46 +648,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="630">
           <caret line="2029" column="35" lean-forward="false" selection-start-line="2029" selection-start-column="35" selection-end-line="2029" selection-end-column="35" />
-          <folding>
-            <marker date="1513051316407" expanded="true" signature="2260:2309" ph="select user_... tiny_customer" />
-            <marker date="1513051316407" expanded="true" signature="6435:6490" ph="update tiny_user... " />
-            <marker date="1513051316407" expanded="true" signature="10881:10930" ph="select user_... tiny_customer" />
-            <marker date="1513051316407" expanded="true" signature="22374:22422" ph="select count... " />
-            <marker date="1513051316407" expanded="true" signature="22970:23041" ph="select * fro... tiny_order" />
-            <marker date="1513051316407" expanded="true" signature="31236:31288" ph="select order... tiny_order" />
-            <marker date="1513051316407" expanded="true" signature="31414:31623" ph="select re.id... tiny_review" />
-            <marker date="1513051316407" expanded="true" signature="31737:31913" ph="select og.go... tiny_order_goods" />
-            <marker date="1513051316407" expanded="true" signature="31798:31865" ph="select id fr... tiny_order" />
-            <marker date="1513051316407" expanded="true" signature="34917:34992" ph="select * fro... tiny_message" />
-            <marker date="1513051316407" expanded="true" signature="35228:35326" ph="select * fro... tiny_message" />
-            <marker date="1513051316407" expanded="true" signature="35533:35595" ph="select * fro... tiny_message" />
-            <marker date="1513051316407" expanded="true" signature="39679:39743" ph="select count... " />
-            <marker date="1513051316407" expanded="true" signature="40149:40263" ph="select * fro... tiny_balance_log" />
-            <marker date="1513051316407" expanded="true" signature="41216:41280" ph="select count... " />
-            <marker date="1513051316407" expanded="true" signature="41686:41800" ph="select * fro... tiny_balance_log" />
-            <marker date="1513051316407" expanded="true" signature="42594:42680" ph="select pay_p... tiny_customer" />
-            <marker date="1513051316407" expanded="true" signature="48009:48073" ph="select * fro... tiny_attention" />
-            <marker date="1513051316407" expanded="true" signature="48252:48376" ph="insert into tiny_attention... " />
-            <marker date="1513051316407" expanded="true" signature="48616:48675" ph="select count... " />
-            <marker date="1513051316407" expanded="true" signature="49086:49228" ph="select c.*,g... tiny_attention" />
-            <marker date="1513051316407" expanded="true" signature="49497:49559" ph="delete from tiny_attention... " />
-            <marker date="1513051316407" expanded="true" signature="49828:49897" ph="select * fro... tiny_attention" />
-            <marker date="1513051316407" expanded="true" signature="51020:51060" ph="select * fro... tiny_order_goods" />
-            <marker date="1513051316407" expanded="true" signature="51311:51371" ph="select * fro... tiny_order" />
-            <marker date="1513051316407" expanded="true" signature="51813:51894" ph="select * fro... tiny_sale_support" />
-            <marker date="1513051316407" expanded="true" signature="52243:52553" ph="insert into tiny_sale_support... " />
-            <marker date="1513051316407" expanded="true" signature="52613:52671" ph="update tiny_order_goods... " />
-            <marker date="1513051316407" expanded="true" signature="52853:52910" ph="select * fro... tiny_sale_support" />
-            <marker date="1513051316407" expanded="true" signature="53825:53877" ph="select messa... tiny_customer" />
-            <marker date="1513051316407" expanded="true" signature="54367:54442" ph="select count... " />
-            <marker date="1513051316407" expanded="true" signature="54487:54560" ph="select count... " />
-            <marker date="1513051316407" expanded="true" signature="54897:55003" ph="select count... " />
-            <marker date="1513051316407" expanded="true" signature="55183:55293" ph="select count... " />
-            <marker date="1513051316407" expanded="true" signature="55475:55585" ph="select count... " />
-            <marker date="1513051316407" expanded="true" signature="55870:55941" ph="select count... " />
-            <marker date="1513051316407" expanded="true" signature="56566:56707" ph="insert into tiny_complaint... " />
-            <marker date="1513051316407" expanded="true" signature="60857:60950" ph="select SUM(c... " />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -785,31 +655,89 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="318">
           <caret line="2280" column="20" lean-forward="false" selection-start-line="2280" selection-start-column="20" selection-end-line="2280" selection-end-column="20" />
-          <folding>
-            <marker date="1513051316413" expanded="true" signature="72034:72097" ph="update tiny_recharge_presentlog... " />
-            <marker date="1513051316413" expanded="true" signature="93569:93662" ph="select SUM(c... " />
-            <marker date="1513051316413" expanded="true" signature="123569:123633" ph="update tiny_recharge_presentlog... " />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/classes/Log.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="702">
+        <state relative-caret-position="260">
           <caret line="39" column="55" lean-forward="false" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/ajax.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-156">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/config/config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="494">
+          <caret line="19" column="15" lean-forward="false" selection-start-line="19" selection-start-column="15" selection-end-line="19" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/simple.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="642" column="20" lean-forward="false" selection-start-line="642" selection-start-column="20" selection-end-line="642" selection-end-column="20" />
+          <folding>
+            <marker date="1513064915700" expanded="true" signature="46659:46871" ph="select SUM(o... " />
+            <marker date="1513064915700" expanded="true" signature="47912:48124" ph="select SUM(o... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/simple/cart.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4218">
+          <caret line="178" column="19" lean-forward="false" selection-start-line="178" selection-start-column="19" selection-end-line="178" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/js/product.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4154">
+          <caret line="321" column="45" lean-forward="false" selection-start-line="321" selection-start-column="45" selection-end-line="321" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/product.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="133" column="194" lean-forward="false" selection-start-line="133" selection-start-column="194" selection-end-line="133" selection-end-column="194" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/pointbuy.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="93" column="55" lean-forward="false" selection-start-line="93" selection-start-column="55" selection-end-line="93" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/views/order/doc_receiving_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1040">
+          <caret line="40" column="35" lean-forward="true" selection-start-line="40" selection-start-column="35" selection-end-line="40" selection-end-column="35" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/order.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="352" column="17" lean-forward="true" selection-start-line="352" selection-start-column="17" selection-end-line="352" selection-end-column="17" />
-          <folding>
-            <marker date="1513061788792" expanded="true" signature="35134:35609" ph="..." />
-            <marker date="1513061788792" expanded="true" signature="35138:35305" ph="..." />
-            <marker date="1513061788792" expanded="true" signature="35385:35555" ph="..." />
-          </folding>
+        <state relative-caret-position="318">
+          <caret line="99" column="20" lean-forward="false" selection-start-line="99" selection-start-column="20" selection-end-line="99" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>
