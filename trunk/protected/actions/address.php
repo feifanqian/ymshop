@@ -292,8 +292,12 @@ class AddressAction extends Controller
             return;
         }
         $model = new Model();
-        $model->table('district_promoter')->data(array('hot'=>"`hot`+1"))->where('id='.$id)->update();
+        
         $list = $model->table('district_promoter as d')->join('left join customer as c on d.user_id = c.user_id')->fields('d.*,c.real_name')->where('id=' . $id)->find();
+        if($list){
+            //增加访问量
+            $this->model->table('district_promoter')->data(array('hot'=>$list['hot']+1))->where('id='.$id)->update();
+        }
         if($list['invitor_id']==null){
             $list['invitor_id'] = 0;
         }
