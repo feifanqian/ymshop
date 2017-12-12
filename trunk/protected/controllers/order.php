@@ -325,7 +325,6 @@ class OrderController extends Controller {
         $flag = false;
         $info = array();
         if ($order) {
-
             if ($status) {
                 if ($order['status'] == 1 || $order['status'] == 2) {
                     if ($status == 3 || $status == 6)
@@ -356,6 +355,14 @@ class OrderController extends Controller {
                     $flag = true;
                 if ($flag) {
                     $model->where("id=$id")->data(array('status' => $status, 'admin_remark' => $admin_remark))->update();
+                    //更新成功之后，用户的状态是订单作废的话，那就把用户的积分的金额退回给用户
+                    $order = $model->fields('pay_point,user_id')->where("id=$id")->find();//订单表的积分
+                    if ($order['user_id']&& $order['pay_point']){
+                        $models = new Model('customer');
+                        $result = $models->fields('point_coin')->where('user_id='.$order['user_id'])->find();
+                        $total = Filter::int($result['point_coin'])+Filter::int($order['pay_point']);
+                        $results = $models->where('user_id='.$order['user_id'])->data(array('point_coin'=>$total))->update();
+                    }
                     $info = array('status' => 'success', 'msg' => $parse_status[$status]);
                 } else {
                     $info = array('status' => 'fail', 'msg' => $parse_status[$status]);

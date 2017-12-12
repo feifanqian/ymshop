@@ -93,11 +93,13 @@
                     <dt style="font-size: 16px;">购买量</dt>
                     <dd class="buy-num" >
                         <div style="width: 45px;height: 40px;float: left;">
-                            <input style="display: block;width: 40px; height: 35px; border: 1px solid #c8c7cc;text-align: center; font-size: 18px;line-height: 35px;overflow: hidden;" id="buy-num" name="buy_num" value="1"  maxlength=5 readonly="readonly"> 
+                            <!--readonly="readonly"-->
+                            <input style="display: block;width: 40px; height: 35px; border: 1px solid #c8c7cc;text-align: center; font-size: 18px;line-height: 35px;overflow: hidden;" id="buy-num" name="buy_num" value="1"  maxlength=5 >
                         </div>
                         <div style="width: 20px;height: 35px;float: left;">
-                            <a href="javascript:;" class="disable">&blacktriangle;</a>                 
-                            <a href="javascript:;" class="disable">&dtrif;</a>
+                            <a href="javascript:;">&blacktriangle;</a>
+                            <a href="javascript:;">&dtrif;</a>
+                            <!--class="disable"-->
                         </div>
 
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="vm">库存：<b id="store_nums" class="red">{$goods['store_nums']}</b></span></dd>
