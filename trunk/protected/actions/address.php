@@ -754,8 +754,9 @@ class AddressAction extends Controller
         // $key = "30e9de56560b226c08a389ee23550f68";
         $url = "http://restapi.amap.com/v3/geocode/geo?address=".$address."&output=JSON&key=30e9de56560b226c08a389ee23550f68";
         $result = file_get_contents($url);
+        $return = json_decode($result,true);
         $this->code = 0;
-        $this->content = $result;
+        $this->content = $return;
     }
 
 }
