@@ -38,8 +38,8 @@
 </div>
 
     <div class="weui_panel_hd withdraw-head">提现记录</div>
-    {set:$status=array("-1"=>"<span class='red'>申请被拒</span>","0"=>"<span class='green'>正在处理中</span>","1"=>"已转账")}
-     {query:name=balance_withdraw where=user_id eq $user[id] order=id desc page=1 id=$withdraw}
+    {set:$status=array("-1"=>"<span class='red'>申请被拒</span>","0"=>"<span class='green'>正在处理中</span>","1"=>"已转账","2"=>"提现失败")}
+     {query:name=balance_withdraw where=user_id eq $user[id] and type eq 1 order=id desc page=1 id=$withdraw}
     <div class="ma20 bg-white p20 ">
     <div class="weui-form-preview">
             <div class="weui-form-preview__hd">
