@@ -340,6 +340,14 @@ class AddressAction extends Controller
         if($list['price']==null){
             $list['price'] = '';
         }
+        $count = $this->model->table('promoter_collect')->where('promoter_id='.$id)->count();
+        $list['attention_num'] = $count;
+        $district = $this->model->table('district_shop')->where('owner_id='.$list['user_id'])->find();
+        if($district){
+            $list['is_district'] = 1;
+        }else{
+            $list['is_district'] = 0;
+        }
         $this->code = 0;
         $this->content = $list;
     }
