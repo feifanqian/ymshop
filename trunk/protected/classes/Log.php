@@ -37,7 +37,7 @@ class Log {
         if ($customer) {
             $log = array(   'admin_id' => $admin_id, 
                             'user_id' => $user_id, 
-                            'type' => $type,
+                            'type' => Filter::int($type),
                             'log_date' => date('Y-m-d H:i:s'), 
                             'amount' => $amount, 
                             'current_amount' => $customer['point_coin'], 
