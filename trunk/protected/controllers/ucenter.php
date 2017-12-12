@@ -733,6 +733,7 @@ class UcenterController extends Controller
                 'location' => Filter::text(Req::args('areas').Req::args('road')),
                 'info' => Filter::text(Req::args('info')),
                 'region_id' => Filter::int(Req::args('county')),
+                'tourist_id' => Filter::int(Req::args('street')),
                 'road' => Filter::text(Req::args('road')),
                 'picture' => $picture,
             );
@@ -1738,7 +1739,24 @@ class UcenterController extends Controller
                         $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
                         exit;
                     } else {
-                        $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
+                        // $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
+                        
+                        //将当前微信注册账号与APP端该手机注册的新号绑定
+                        $oauth_user = $this->model->table('oauth_user')->where('user_id='.$result['user_id'])->find();
+                        if($oauth_user){
+                            $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
+                        }else{
+                            $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1))->where('user_id=' . $this->user['id'])->update();
+                            //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
+                            $user = $this->model->table('user')->fields('password,validcode')->where('id='.$result['user_id'])->find();
+                            $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
+                            $this->model->table('oauth_user')->data(array('other_user_id'=>$result['user_id']))->where('user_id='.$this->user['id'])->update();
+                            Session::clear('verifiedInfo');
+                            Session::clear('activateObj');
+                            $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
+                            exit;
+                        }
+                        
                     }
                 }
             } else {
@@ -2042,6 +2060,7 @@ class UcenterController extends Controller
                                 echo json_encode($ret);
                                 exit;
                             }
+                            $this->model->table('customer')->data(array('mobile'=>$mobile))->where('user_id='.$this->user['id'])->update();
                             $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
                             if ($result) {
                                 $this->safebox->clear('user');
