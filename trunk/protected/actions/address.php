@@ -292,7 +292,50 @@ class AddressAction extends Controller
             return;
         }
         $model = new Model();
+        $model->table('district_promoter')->data(array('hot'=>"`hot`+1"))->where('id='.$id)->update();
         $list = $model->table('district_promoter as d')->join('left join customer as c on d.user_id = c.user_id')->fields('d.*,c.real_name')->where('id=' . $id)->find();
+        if($list['invitor_id']==null){
+            $list['invitor_id'] = 0;
+        }
+        if($list['location']==null){
+            $list['location'] = '';
+        }
+        if($list['road']==null){
+            $list['road'] = '';
+        }
+        if($list['picture']==null){
+            $list['picture'] = '';
+        }
+        if($list['info']==null){
+            $list['info'] = '';
+        }
+        if($list['line_number']==null){
+            $list['line_number'] = '';
+        }
+        if($list['which_station']==null){
+            $list['which_station'] = '';
+        }
+        if($list['distance_asc']==null){
+            $list['distance_asc'] = 0;
+        }
+        if($list['hot']==null){
+            $list['hot'] = 0;
+        }
+        if($list['evaluate']==null){
+            $list['evaluate'] = 0;
+        }
+        if($list['taste']==null){
+            $list['taste'] = 0;
+        }
+        if($list['environment']==null){
+            $list['environment'] = 0;
+        }
+        if($list['quality_service']==null){
+            $list['quality_service'] = 0;
+        }
+        if($list['price']==null){
+            $list['price'] = '';
+        }
         $this->code = 0;
         $this->content = $list;
     }
