@@ -1419,4 +1419,25 @@ class Common {
           
         return $guid; 
     }
+
+    static function getLnglat($address){
+        $url = "http://restapi.amap.com/v3/geocode/geo?address=".$address."&output=JSON&key=30e9de56560b226c08a389ee23550f68";
+        $result = file_get_contents($url);
+        $return = json_decode($result,true);
+        if($return['status']==1){
+            $location = $return['geocodes'][0]['location'];
+            $str = explode(',',$location);
+            $lng = $str[0];
+            $lat = $str[1];
+        }else{
+            $lng = 0;
+            $lat = 0;
+        }
+        
+        $array = array(
+            'lng'=>$lng,
+            'lat'=>$lat  
+            );
+        return $array;
+    }
 }

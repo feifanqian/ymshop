@@ -727,15 +727,19 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url, 100, 100);
             $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
         }
-
+        
+        $location =  Filter::text(Req::args('areas').Req::args('road'));
+        $lnglat = Common::getLnglat($location);
         $data = array(
                 'shop_name' => Req::args('shop_name'),
-                'location' => Filter::text(Req::args('areas').Req::args('road')),
+                'location' => $location,
                 'info' => Filter::text(Req::args('info')),
                 'region_id' => Filter::int(Req::args('county')),
                 'tourist_id' => Filter::int(Req::args('street')),
                 'road' => Filter::text(Req::args('road')),
                 'picture' => $picture,
+                'lng' => $lnglat['lng'],
+                'lat' => $lnglat['lat']
             );
 
             $id = $this->user['id'];

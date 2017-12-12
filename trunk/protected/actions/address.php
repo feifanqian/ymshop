@@ -292,7 +292,62 @@ class AddressAction extends Controller
             return;
         }
         $model = new Model();
+        
         $list = $model->table('district_promoter as d')->join('left join customer as c on d.user_id = c.user_id')->fields('d.*,c.real_name')->where('id=' . $id)->find();
+        if($list){
+            //增加访问量
+            $this->model->table('district_promoter')->data(array('hot'=>$list['hot']+1))->where('id='.$id)->update();
+        }
+        if($list['invitor_id']==null){
+            $list['invitor_id'] = 0;
+        }
+        if($list['location']==null){
+            $list['location'] = '';
+        }
+        if($list['road']==null){
+            $list['road'] = '';
+        }
+        if($list['picture']==null){
+            $list['picture'] = '';
+        }
+        if($list['info']==null){
+            $list['info'] = '';
+        }
+        if($list['line_number']==null){
+            $list['line_number'] = '';
+        }
+        if($list['which_station']==null){
+            $list['which_station'] = '';
+        }
+        if($list['distance_asc']==null){
+            $list['distance_asc'] = 0;
+        }
+        if($list['hot']==null){
+            $list['hot'] = 0;
+        }
+        if($list['evaluate']==null){
+            $list['evaluate'] = 0;
+        }
+        if($list['taste']==null){
+            $list['taste'] = 0;
+        }
+        if($list['environment']==null){
+            $list['environment'] = 0;
+        }
+        if($list['quality_service']==null){
+            $list['quality_service'] = 0;
+        }
+        if($list['price']==null){
+            $list['price'] = '';
+        }
+        $count = $this->model->table('promoter_collect')->where('promoter_id='.$id)->count();
+        $list['attention_num'] = $count;
+        $district = $this->model->table('district_shop')->where('owner_id='.$list['user_id'])->find();
+        if($district){
+            $list['is_district'] = 1;
+        }else{
+            $list['is_district'] = 0;
+        }
         $this->code = 0;
         $this->content = $list;
     }
@@ -692,6 +747,21 @@ class AddressAction extends Controller
         
         $this->code = 0;
         $this->content = $county;
+    }
+
+    public function getLnglat(){
+        $address = Filter::text(Req::args('address'));
+        $url = "http://restapi.amap.com/v3/geocode/geo?address=".$address."&output=JSON&key=30e9de56560b226c08a389ee23550f68";
+        $result = file_get_contents($url);
+        $return = json_decode($result,true);
+        $location = $return['geocodes'][0]['location'];
+        $str = explode(',',$location);
+        $lng = $str[0];
+        $lat = $str[1];
+        $this->code = 0;
+        // $this->content['lng'] = $lng;
+        // $this->content['lat'] = $lat;
+        $this->content = $return;
     }
 
 }
