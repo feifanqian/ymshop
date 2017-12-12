@@ -361,7 +361,7 @@ class OrderController extends Controller {
                         // $result = $models->fields('point_coin')->where('user_id='.$order['user_id'])->find();
                         // $total = Filter::int($result['point_coin'])+Filter::int($order['pay_point']);
                         $results = $models->data(array('point_coin'=>"`point_coin`+({$order['pay_point']})"))->where('user_id='.$order['user_id'])->update();
-                        Log::pointcoin_log($order['pay_point'], $order['user_id'], $order['order_no'], $note = '订单作废，积分退回', 12, $admin_id = 0);//日志写入
+                        Log::pointcoin_log($order['pay_point'], $order['user_id'], $order['order_no'], '订单作废，积分退回', 12);//日志写入
                     }
                     $info = array('status' => 'success', 'msg' => $parse_status[$status]);
                 } else {
