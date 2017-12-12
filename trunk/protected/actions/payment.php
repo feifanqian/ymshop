@@ -272,9 +272,7 @@ class PaymentAction extends Controller {
        if(!$seller_id){
         $this->code = 1158;
        }
-       if(!$seller_id || $seller_id==0){
-         $seller_id = Filter::int(Req::args('seller_ids'));
-       }
+       
        if(!$payment_id){
          $this->code = 1157;
        }
