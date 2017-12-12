@@ -29,12 +29,12 @@
       <file leaf-file-name="order.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/order.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="520">
-              <caret line="364" column="88" lean-forward="false" selection-start-line="364" selection-start-column="88" selection-end-line="364" selection-end-column="88" />
+            <state relative-caret-position="130">
+              <caret line="352" column="17" lean-forward="true" selection-start-line="352" selection-start-column="17" selection-end-line="352" selection-end-column="17" />
               <folding>
-                <marker date="1513057701161" expanded="true" signature="35109:35584" ph="..." />
-                <marker date="1513057701161" expanded="true" signature="35113:35280" ph="..." />
-                <marker date="1513057701161" expanded="true" signature="35360:35530" ph="..." />
+                <marker date="1513061788792" expanded="true" signature="35134:35609" ph="..." />
+                <marker date="1513061788792" expanded="true" signature="35138:35305" ph="..." />
+                <marker date="1513061788792" expanded="true" signature="35385:35555" ph="..." />
               </folding>
             </state>
           </provider>
@@ -43,8 +43,8 @@
       <file leaf-file-name="Log.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trunk/protected/classes/Log.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="30" column="133" lean-forward="false" selection-start-line="30" selection-start-column="133" selection-end-line="30" selection-end-column="133" />
+            <state relative-caret-position="702">
+              <caret line="39" column="55" lean-forward="false" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
               <folding />
             </state>
           </provider>
@@ -144,8 +144,8 @@
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/ucenter/review.html" />
         <option value="$PROJECT_DIR$/trunk/protected/views/goods/goods_edit.html" />
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/index/pointbuy.html" />
-        <option value="$PROJECT_DIR$/trunk/protected/classes/Log.php" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/order.php" />
+        <option value="$PROJECT_DIR$/trunk/protected/classes/Log.php" />
       </list>
     </option>
   </component>
@@ -333,12 +333,12 @@
       <workItem from="1512955691136" duration="6902000" />
       <workItem from="1512971925615" duration="14830000" />
       <workItem from="1512992372287" duration="2607000" />
-      <workItem from="1513043186946" duration="7644000" />
+      <workItem from="1513043186946" duration="12373000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="301533000" />
+    <option name="totallyTimeSpent" value="306262000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -795,20 +795,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/classes/Log.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="30" column="133" lean-forward="false" selection-start-line="30" selection-start-column="133" selection-end-line="30" selection-end-column="133" />
+        <state relative-caret-position="702">
+          <caret line="39" column="55" lean-forward="false" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/order.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="520">
-          <caret line="364" column="88" lean-forward="false" selection-start-line="364" selection-start-column="88" selection-end-line="364" selection-end-column="88" />
+        <state relative-caret-position="130">
+          <caret line="352" column="17" lean-forward="true" selection-start-line="352" selection-start-column="17" selection-end-line="352" selection-end-column="17" />
           <folding>
-            <marker date="1513057701161" expanded="true" signature="35109:35584" ph="..." />
-            <marker date="1513057701161" expanded="true" signature="35113:35280" ph="..." />
-            <marker date="1513057701161" expanded="true" signature="35360:35530" ph="..." />
+            <marker date="1513061788792" expanded="true" signature="35134:35609" ph="..." />
+            <marker date="1513061788792" expanded="true" signature="35138:35305" ph="..." />
+            <marker date="1513061788792" expanded="true" signature="35385:35555" ph="..." />
           </folding>
         </state>
       </provider>

@@ -358,10 +358,17 @@ class OrderController extends Controller {
                     //更新成功之后，用户的状态是订单作废的话，那就把用户的积分的金额退回给用户
                     if($order['type']==5){  // 前提是积分购的订单
                         $models = new Model('customer');
+<<<<<<< HEAD
+                        $result = $models->fields('point_coin')->where('user_id='.$order['user_id'])->find();
+                        $total = Filter::float($result['point_coin'])+Filter::float($order['pay_point']);
+                        $results = $models->where('user_id='.$order['user_id'])->data(array('point_coin'=>$total))->update();
+                        Log::pointcoin_log($order['pay_point'], $order['user_id'], $order['order_no'], '订单作废，积分回退', $type = 12, $admin_id = 0);//日志写入
+=======
                         // $result = $models->fields('point_coin')->where('user_id='.$order['user_id'])->find();
                         // $total = Filter::int($result['point_coin'])+Filter::int($order['pay_point']);
                         $results = $models->data(array('point_coin'=>"`point_coin`+({$order['pay_point']})"))->where('user_id='.$order['user_id'])->update();
                         Log::pointcoin_log($order['pay_point'], $order['user_id'], $order['order_no'], '订单作废，积分退回', 12);//日志写入
+>>>>>>> 1de2bdf86327b5014a8bb34c72dbca1aa3530021
                     }
                     $info = array('status' => 'success', 'msg' => $parse_status[$status]);
                 } else {
