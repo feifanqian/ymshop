@@ -755,8 +755,13 @@ class AddressAction extends Controller
         $url = "http://restapi.amap.com/v3/geocode/geo?address=".$address."&output=JSON&key=30e9de56560b226c08a389ee23550f68";
         $result = file_get_contents($url);
         $return = json_decode($result,true);
+        $location = $return['geocodes']['location'];
+        $str = explode(',',$location);
+        $lng = $str[0];
+        $lat = $str[1];
         $this->code = 0;
-        $this->content = $return;
+        $this->content['lng'] = $lng;
+        $this->content['lat'] = $lat;
     }
 
 }
