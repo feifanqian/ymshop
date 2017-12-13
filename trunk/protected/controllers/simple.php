@@ -641,7 +641,7 @@ class SimpleController extends Controller {
 
     //购物车
     public function cart() {
-        if (!$this->user && Common::checkInWechat()) {
+        if (!$this->user) {
             $this->noRight();
             exit;
         }
