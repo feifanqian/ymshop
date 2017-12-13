@@ -663,6 +663,9 @@ class SimpleController extends Controller {
         }else{
             $cart = Cart::getCart();
             $this->cart = $cart->all();
+            if($this->user['id']==42608){
+                var_dump($this->cart);die;
+            }
             $this->assign("cart", $this->cart);
         }
         $this->redirect();
