@@ -99,7 +99,7 @@ class Cart {
             $ids = trim(implode(",", $ids), ',');
             $uid = $this->uid;
             $cart_model = new Model('cart');
-            $idarr = $cart_model->where('user_id='.$uid)->findAll();
+            $idarr = $cart_model->fields('goods_id')->where('user_id='.$uid)->findAll();
             if($idarr){
                 foreach ($idarr as $key => $v) {
                     $areaid[$key] = $v['goods_id'];
@@ -113,7 +113,7 @@ class Cart {
                   
                     
                     foreach ($items as $item) {
-                        $num = $this->items[$item['id']];
+                        $num = $idarr[$item['id']];
                         if ($num > $item['store_nums']) {
                             $num = $item['store_nums'];
                             $this->modNum($item['id'], $num);
