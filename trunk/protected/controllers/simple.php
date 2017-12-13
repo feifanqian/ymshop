@@ -663,7 +663,6 @@ class SimpleController extends Controller {
         }else{
             $cart = Cart::getCart();
             $this->cart = $cart->all();
-            $this->assign("cart_type", "goods");
             $this->assign("cart", $this->cart);
         }
         $this->redirect();
