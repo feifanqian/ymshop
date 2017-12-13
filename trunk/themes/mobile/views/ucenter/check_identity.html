@@ -21,6 +21,27 @@
     <input type="hidden" name="type" value="{$type}">
     <input type="hidden" name="pay_password" value="{$pay_password}">
     <div class="weui_cells weui_cells_form">
+       {if:$type=='paypwd' && $userInfo['pay_password']==''}
+       <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>设置支付密码</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">密码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input bind="repassword" minlen=6 maxlen=6 class="weui_input" type="password" name="code" pattern="required" placeholder="密码" alt="6位任意字符组合">
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">确认密码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input bind="password" minlen=6 maxlen=6 class="weui_input" type="password"  name="recode" pattern="required" placeholder="确认密码" alt="6位任意字符组合">
+            </div>
+        </div>
+       {else:}
         <div class="weui_cell">
             <div class="weui_cell_bd weui_cell_primary">
                 <p>修改{$objInfo[$obj]}</p>
@@ -36,16 +57,7 @@
                 {elseif:$type=='mobile'}
                 <strong>{$userInfo['mobile']}</strong>
                 {elseif:$type=='paypwd'}
-                  {if: $userInfo['pay_password']==''}
-                  <div class="weui_cell_bd weui_cell_primary">
-                    <input class="weui_input" type="password"  name="code" maxlength="6" pattern="required" alt="" placeholder="支付密码">
-                  </div>
-                  <div class="weui_cell_bd weui_cell_primary">
-                    <input class="weui_input" type="password"  name="recode" maxlength="6" pattern="required" alt="" placeholder="再次输入支付密码">
-                  </div>
-                  {else:}
-                  <label><input class="weui_input" type="password"  name="code" pattern="required" alt="" placeholder="支付密码"></label>
-                  {/if}
+                  <label><input class="weui_input" type="password"  name="code" pattern="required" alt="" placeholder="支付密码"></label>         
                 {/if}
             </div>
             <div class="weui_cell_ft">
@@ -68,7 +80,7 @@
                 }
             </script>
         </div>
-
+        {/if}
 
         {if:$type=='email'}
         <div class="weui_cell">
