@@ -19,6 +19,7 @@
 <form action="{url:/ucenter/verified}" class="simple" method="post">
     <input type="hidden" name="obj" value="{$obj}">
     <input type="hidden" name="type" value="{$type}">
+    <input type="hidden" name="pay_password" value="{$pay_password}">
     <div class="weui_cells weui_cells_form">
         <div class="weui_cell">
             <div class="weui_cell_bd weui_cell_primary">
@@ -35,7 +36,12 @@
                 {elseif:$type=='mobile'}
                 <strong>{$userInfo['mobile']}</strong>
                 {elseif:$type=='paypwd'}
-                <input class="weui_input" type="password"  name="code" pattern="required" alt="" placeholder="支付密码"><label></label>
+                  {if: $pay_password==''}
+                  <input class="weui_input" type="password"  name="code" maxlength="6" pattern="required" alt="" placeholder="支付密码"><label></label>
+                  <input class="weui_input" type="password"  name="recode" maxlength="6" pattern="required" alt="" placeholder="再次输入支付密码"><label></label>
+                  {else:}
+                  <input class="weui_input" type="password"  name="code" pattern="required" alt="" placeholder="支付密码"><label></label>
+                  {/if}
                 {/if}
             </div>
             <div class="weui_cell_ft">

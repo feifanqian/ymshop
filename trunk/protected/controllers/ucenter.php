@@ -1625,17 +1625,30 @@ class UcenterController extends Controller
     public function check_identity()
     {
         $verified = $this->verifiedType();
+        $customer = $this->model->table('customer')->fields('pay_password')->where("user_id=" . $this->user['id'])->find();
+        $pay_password = $customer['pay_password'];
+        $this->assign('pay_password',$pay_password);
         $this->redirect();
     }
 
     public function verified()
     {
         $code = Req::args('code');
+        $recode = Req::args('recode');
         $type = Req::args('type');
         $obj = Req::args('obj');
+        $pay_password = Req::args('pay_password');
+        // if($pay_password==''){
+        //     if($code!=$recode){
+        //         $info = array('field' => 'code', 'msg' => '支付密码错误！');
+
+        //     }
+            
+        // }
         $obj = $this->updateObj($obj); //默认是修改登陆密码
+        
         $verifiedInfo = Session::get("verifiedInfo");
-        if ($code == $verifiedInfo['code']) {
+        if (isset($verifiedInfo['code']) && $code == $verifiedInfo['code']) {
             $verifiedInfo['obj'] = $obj;
             Session::set("verifiedInfo", $verifiedInfo);
             $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random']);
