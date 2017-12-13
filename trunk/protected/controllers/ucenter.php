@@ -920,9 +920,11 @@ class UcenterController extends Controller
     public function myinvite() {
         $model = new Model();
         $model = new Model("user as us");
-        $user = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.id=".$this->user['id'])->find();
+        $user_id = $this->user['id'];
+        
+        $user = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.id=".$user_id)->find();
         $this->assign('user', $user);
-        $this->assign('uid',$this->user['id']);
+        $this->assign('uid',$user_id);
         $this->redirect();
     }
 
@@ -1623,17 +1625,30 @@ class UcenterController extends Controller
     public function check_identity()
     {
         $verified = $this->verifiedType();
+        $customer = $this->model->table('customer')->fields('pay_password')->where("user_id=" . $this->user['id'])->find();
+        $pay_password = $customer['pay_password'];
+        $this->assign('pay_password',$pay_password);
         $this->redirect();
     }
 
     public function verified()
     {
         $code = Req::args('code');
+        $recode = Req::args('recode');
         $type = Req::args('type');
         $obj = Req::args('obj');
+        $pay_password = Req::args('pay_password');
+        // if($pay_password==''){
+        //     if($code!=$recode){
+        //         $info = array('field' => 'code', 'msg' => '支付密码错误！');
+
+        //     }
+            
+        // }
         $obj = $this->updateObj($obj); //默认是修改登陆密码
+        
         $verifiedInfo = Session::get("verifiedInfo");
-        if ($code == $verifiedInfo['code']) {
+        if (isset($verifiedInfo['code']) && $code == $verifiedInfo['code']) {
             $verifiedInfo['obj'] = $obj;
             Session::set("verifiedInfo", $verifiedInfo);
             $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random']);
@@ -1682,7 +1697,7 @@ class UcenterController extends Controller
         } elseif ($obj == 'mobile' && $userInfo['mobile_verified'] == 0) {
             Session::set('verifiedInfo', $verifiedInfo);
             $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random']);
-        } elseif ($obj == 'paypwd' && $userInfo['pay_password_open'] == 0) {
+        } elseif ($obj == 'paypwd' && $userInfo['pay_password_open'] == 1) {
             Session::set('verifiedInfo', $verifiedInfo);
             $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random']);
         } else {
@@ -1751,6 +1766,7 @@ class UcenterController extends Controller
                             $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
                         }else{
                             $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1))->where('user_id=' . $this->user['id'])->update();
+                            $this->model->table('customer')->data(array('status'=> 0))->where('user_id=' . $result['user_id'])->update();
                             //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
                             $user = $this->model->table('user')->fields('password,validcode')->where('id='.$result['user_id'])->find();
                             $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
@@ -2029,8 +2045,10 @@ class UcenterController extends Controller
     {
         $mobile = Filter::sql(Req::args('mobile'));
         $validatecode = Filter::sql(Req::args('validatecode'));
+        $type = Filter::int(Req::args('type'));
         if ($mobile != "" && $validatecode != "") {
             $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
+            // $ret['status'] = 'success';
             SMS::getInstance()->flushCode($mobile);
             if ($ret['status'] == 'success') {
                 //查询当前微信公众号绑定的user_id
@@ -2064,8 +2082,19 @@ class UcenterController extends Controller
                                 echo json_encode($ret);
                                 exit;
                             }
-                            $this->model->table('customer')->data(array('mobile'=>$mobile))->where('user_id='.$this->user['id'])->update();
-                            $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
+                            // var_dump($type);die;
+                            if($type==1){
+                                $this->model->table('customer')->data(array('mobile'=>$mobile))->where('user_id='.$this->user['id'])->update();
+                                $this->model->table('customer')->data(array('status'=>0))->where('user_id='.$other_account['user_id'])->update();
+                                $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
+                            }elseif($type==2){
+                                $this->model->table('customer')->data(array('mobile'=>''))->where('user_id='.$this->user['id'])->update();
+                                $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
+                            }
+                            //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
+                            $user = $this->model->table('user')->fields('password,validcode')->where('id='.$other_account['user_id'])->find();
+                            $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
+                            
                             if ($result) {
                                 $this->safebox->clear('user');
                                 $cookie = new Cookie();

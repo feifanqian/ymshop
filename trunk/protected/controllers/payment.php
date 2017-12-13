@@ -834,8 +834,10 @@ class PaymentController extends Controller {
         if ($return == 1) {
             $model = new Model("order");
             $orders = $model->where("order_no='{$orderNo}'")->find();
-            if($orders['type']==7){
-             $result=Common::setIncomeByInviteShip1($orders);
+            if($orders){
+               if($orders['type']==7){
+                 $result=Common::setIncomeByInviteShip1($orders);
+                } 
             }
             if (stripos($orderNo, 'promoter') !== false) {//如果是推广员入驻订单
                 $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
