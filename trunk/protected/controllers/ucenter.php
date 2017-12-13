@@ -921,9 +921,7 @@ class UcenterController extends Controller
         $model = new Model();
         $model = new Model("user as us");
         $user_id = $this->user['id'];
-        if($this->user['id']==50421){
-            $user_id = 43998;
-        }
+        
         $user = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.id=".$user_id)->find();
         $this->assign('user', $user);
         $this->assign('uid',$user_id);
