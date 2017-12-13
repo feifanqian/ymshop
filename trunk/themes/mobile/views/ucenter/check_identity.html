@@ -36,16 +36,16 @@
                 {elseif:$type=='mobile'}
                 <strong>{$userInfo['mobile']}</strong>
                 {elseif:$type=='paypwd'}
-                  {if: $pay_password==''}
-                  <input class="weui_input" type="password"  name="code" maxlength="6" pattern="required" alt="" placeholder="支付密码"><label></label>
-                  <input class="weui_input" type="password"  name="recode" maxlength="6" pattern="required" alt="" placeholder="再次输入支付密码"><label></label>
+                  {if: $userInfo['pay_password']==''}
+                  <label><input class="weui_input" type="password"  name="code" maxlength="6" pattern="required" alt="" placeholder="支付密码"></label>
+                  <label><input class="weui_input" type="password"  name="recode" maxlength="6" pattern="required" alt="" placeholder="再次输入支付密码"></label>
                   {else:}
-                  <input class="weui_input" type="password"  name="code" pattern="required" alt="" placeholder="支付密码"><label></label>
+                  <label><input class="weui_input" type="password"  name="code" pattern="required" alt="" placeholder="支付密码"></label>
                   {/if}
                 {/if}
             </div>
             <div class="weui_cell_ft">
-                <a class="link weui_btn weui_btn_primary weui_btn_mini" onClick="changevalidate();">切换</a>
+                <!-- <a class="link weui_btn weui_btn_primary weui_btn_mini" onClick="changevalidate();">切换</a> -->
             </div>
             <script>
                 function changevalidate(){

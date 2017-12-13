@@ -1638,14 +1638,20 @@ class UcenterController extends Controller
         $type = Req::args('type');
         $obj = Req::args('obj');
         $pay_password = Req::args('pay_password');
-        // if($pay_password==''){
-        //     if($code!=$recode){
-        //         $info = array('field' => 'code', 'msg' => '支付密码错误！');
-
-        //     }
-            
-        // }
         $obj = $this->updateObj($obj); //默认是修改登陆密码
+        if($pay_password=='' && $recode!=''){
+            if($code!=$recode){
+                $info = array('field' => 'code', 'msg' => '两次密码输入不一致！');
+                $this->assign("invalid", $info);
+                $this->redirect("/ucenter/check_identity/obj/" . $obj . "/type/" . $type, false);
+            }else{
+                $pay_validcode = CHash::random(8);
+                $password = CHash::md5($code,$pay_validcode);
+                $this->model->table('customer')->data(array('pay_password'=>$password,'pay_validcode'=>$pay_validcode))->where('user_id='.$this->user['id'])->update();
+                $this->redirect("/ucenter/safety");
+            }
+        }
+        
         
         $verifiedInfo = Session::get("verifiedInfo");
         if (isset($verifiedInfo['code']) && $code == $verifiedInfo['code']) {
