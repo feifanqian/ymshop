@@ -842,4 +842,12 @@ class GoodsController extends Controller {
     public function personal_shop_list(){
         $this->redirect();
     }
+
+    //分类的下拉框
+    public function category_dropdowns(){
+        $id = Req::args('id');
+        $models = new Model();
+        $data = $models->table('goods_category')->fields('id,name')->where("parent_id=$id")->findall();
+        echo json_encode($data);
+    }
 }

@@ -45,16 +45,17 @@
             <select name="category_id" id="category_id" pattern="[1-9]\d*" alt="选择分类，若无分类请先创建。">
               <option value="0">选择分类</option>
               {set:$id=isset($id)?$id:0;}
-              {query:name=goods_category order=path/}
-              {set:$goods_category = Common::treeArray($items)}
-              {list:items=$goods_category}
-              {if:!isset($path) || strpos($item['path'],$path)===false}
-              {set:$num = count(explode(',',$item['path']))-3;}
-                    <option value="{$item['id']}">{if:$num>0}├{/if}{echo:str_repeat('──',$num)}{$item['name']}</option>
-                    {/if}
-              {/list}
+              {query:name=goods_category where = parent_id eq 0 }
+                    <option value="{$item['id']}">{$item['name']}</option>
+              {/query}
             </select>
             <label></label>
+            <select name="category_ids" id="category_ids">
+                <option value="0">==二级分类==</option>
+            </select>
+              <select name="category_idss" id="category_idss">
+                  <option value="0">==三级分类==</option>
+              </select>
           </dd>
         </dl>
         <dl class="lineD">
@@ -674,12 +675,12 @@ function spec_del(id){
   }
 }
 //选择分类
-$("#category_id").on("change",function(){
-  $.post("{url:/ajax/category_type}", {id: $(this).val()},function(data){
-    //form.setValue('type_id',data.type_id);
-    //$("#type_id").change();
-  },"json");
-})
+// $("#category_id").on("change",function(){
+//   $.post("{url:/ajax/category_type}", {id: $(this).val()},function(data){
+//     //form.setValue('type_id',data.type_id);
+//     //$("#type_id").change();
+//   },"json");
+// });
 
 //改变类型处理操作
 $("#type_id").on("change",function(){
@@ -711,7 +712,7 @@ $("#type_id").on("change",function(){
     }
 
   },"json");
-})
+});
 
 //操作左右按钮事件绑定
 function bindEvent(){
@@ -727,5 +728,48 @@ function bindEvent(){
   });
 
 }
-bindEvent();
+
+//选择分类
+$("#category_id").on('change',function(){
+    var category_id = $("#category_id option:selected").val();
+    $("#category_ids option:not(:first)").remove();//先把二级的菜单的option清空
+    $("#category_idss option:not(:first)").remove();//先把二级的菜单的option清空
+    if(category_id){
+        $.ajax({
+         type:'post',
+         url:'/goods/category_dropdowns',
+         dataType:'json',
+         data:{'id':category_id},
+         success:function(data){
+             console.log(data);
+             var html = '';
+            for(var i in data){
+                html += '<option value='+data[i].id+'>'+data[i].name+'</option>';
+             }
+             $("#category_ids").append(html);
+            }
+    });
+    }
+});
+
+//二级分类选择三级分类
+$("#category_ids").on('change',function(){
+    var category_ids = $("#category_ids option:selected").val();
+    $("#category_idss option:not(:first)").remove();//先把二级的菜单的option清空
+    if(category_ids){
+        $.ajax({
+            type:'post',
+            url:'/goods/category_dropdowns',
+            dataType:'json',
+            data:{'id':category_ids},
+            success:function(data){
+                var html = '';
+                for(var i in data){
+                    html += '<option value='+data[i].id+'>'+data[i].name+'</option>';
+                }
+                $("#category_idss").append(html);
+            }
+        });
+    }
+});
 </script>
