@@ -2069,11 +2069,15 @@ class UcenterController extends Controller
                             // var_dump($type);die;
                             if($type==1){
                                 $this->model->table('customer')->data(array('mobile'=>$mobile))->where('user_id='.$this->user['id'])->update();
+                                $this->model->table('customer')->data(array('status'=>0))->where('user_id='.$other_account['user_id'])->update();
                                 $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
                             }elseif($type==2){
                                 $this->model->table('customer')->data(array('mobile'=>''))->where('user_id='.$this->user['id'])->update();
                                 $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
                             }
+                            //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
+                            $user = $this->model->table('user')->fields('password,validcode')->where('id='.$other_account['user_id'])->find();
+                            $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
                             
                             if ($result) {
                                 $this->safebox->clear('user');
