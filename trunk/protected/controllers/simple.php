@@ -649,6 +649,9 @@ class SimpleController extends Controller {
         $type = Req::args('cart_type');
         $this->assign("cart_type", "cart");
         $this->assign("user", $this->user);
+        if($this->user['id']==42608){
+                var_dump($type);die;
+            }
         if ($type == 'goods') {
             $cart = Cart::getCart('goods');
             $this->cart = $cart->all();
