@@ -1684,7 +1684,7 @@ class UcenterController extends Controller
         } elseif ($obj == 'mobile' && $userInfo['mobile_verified'] == 0) {
             Session::set('verifiedInfo', $verifiedInfo);
             $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random']);
-        } elseif ($obj == 'paypwd' && $userInfo['pay_password_open'] == 0) {
+        } elseif ($obj == 'paypwd' && $userInfo['pay_password_open'] == 1) {
             Session::set('verifiedInfo', $verifiedInfo);
             $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random']);
         } else {
