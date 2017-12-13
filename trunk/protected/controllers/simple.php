@@ -641,16 +641,20 @@ class SimpleController extends Controller {
 
     //购物车
     public function cart() {
-        if (!$this->user) {
+        if (!$this->user && Common::checkInWechat()) {
             $this->noRight();
             exit;
         }
+
         $type = Req::args('cart_type');
         $this->assign("cart_type", "cart");
         $this->assign("user", $this->user);
         if ($type == 'goods') {
             $cart = Cart::getCart('goods');
             $this->cart = $cart->all();
+            if($this->user['id']==42608){
+                var_dump($this->cart);die;
+            }
             $this->assign("cart_type", "goods");
             $this->assign("cart", $this->cart);
         }
