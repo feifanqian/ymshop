@@ -2072,7 +2072,7 @@ class UcenterController extends Controller
                                 $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
                             }elseif($type==2){
                                 $this->model->table('customer')->data(array('mobile'=>''))->where('user_id='.$this->user['id'])->update();
-                                $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id']))->where("id =" . $account_info['id'])->update();
+                                $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
                             }
                             
                             if ($result) {
