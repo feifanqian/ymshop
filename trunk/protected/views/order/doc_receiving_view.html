@@ -1,7 +1,7 @@
 {echo:JS::import("form")}
 <div style="overflow: auto;width:900px;height: 320px;">
         {set:$pay_status=array("1"=>"已支付","2"=>"申请退款","3"=>"已退款");}
-	{query:name=doc_receiving as dr fields= dr.*,py.pay_name,us.name,us.email,od.order_no,od.pay_status as pay_status,od.otherpay_status,od.huabipay_amount,od.create_time as c_time,od.otherpay_amount,od.type as order_type join= left join user as us on dr.user_id eq us.id left join payment as py on dr.payment_id eq py.id left join order as od on dr.order_id eq od.id where=dr.id eq $id /}
+	{query:name=doc_receiving as dr fields= dr.*,py.pay_name,us.name,us.email,od.order_no,od.pay_status as pay_status,od.create_time as c_time,od.type as order_type join= left join user as us on dr.user_id eq us.id left join payment as py on dr.payment_id eq py.id left join order as od on dr.order_id eq od.id where=dr.id eq $id /}
 	{set:$item = $items[0];}
 		<h3 class="lineD ">收款单详情：</h3>
 
