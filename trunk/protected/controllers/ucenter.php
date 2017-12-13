@@ -1639,10 +1639,10 @@ class UcenterController extends Controller
         $obj = Req::args('obj');
         $pay_password = Req::args('pay_password');
         $obj = $this->updateObj($obj); //默认是修改登陆密码
-        if($this->user['id']==42608){
-            var_dump($pay_password);
-            var_dump($recode);die;
-        }
+        // if($this->user['id']==42608){
+        //     var_dump($pay_password);
+        //     var_dump($recode);die;
+        // }
         if($pay_password=='' && $recode!=''){
             if($code!=$recode){
                 $info = array('field' => 'code', 'msg' => '两次密码输入不一致！');
