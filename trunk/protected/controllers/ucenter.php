@@ -2031,7 +2031,7 @@ class UcenterController extends Controller
         $validatecode = Filter::sql(Req::args('validatecode'));
         $type = Filter::int(Req::args('type'));
         if ($mobile != "" && $validatecode != "") {
-            $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
+            // $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
             $ret['status'] = 'success';
             SMS::getInstance()->flushCode($mobile);
             if ($ret['status'] == 'success') {
