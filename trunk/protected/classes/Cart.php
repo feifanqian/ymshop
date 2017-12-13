@@ -100,11 +100,11 @@ class Cart {
             $uid = $this->uid;
             if ($ids != '') {
                 $prom = new Prom();
-                if($uid==42608){
-                  $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($ids) and c.user_id = $uid")->findAll();  
-              }else{
+              //   if($uid==42608){
+              //     $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($ids) and c.user_id = $uid")->findAll();  
+              // }else{
                 $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id")->join("left join goods as go on pr.goods_id = go.id ")->where("pr.id in($ids)")->findAll();
-              }
+              // }
                 
                 foreach ($items as $item) {
                     $num = $this->items[$item['id']];
