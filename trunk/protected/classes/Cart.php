@@ -4,7 +4,7 @@ class Cart {
 
     private static $ins = null;
     private $items = array();
-
+    private $uid = null;
     final protected function __construct() {
         
     }
@@ -34,12 +34,15 @@ class Cart {
         }
     }
 
-    public function addItem($id, $num = 1) {
+    public function addItem($id, $num = 1,$uid = 0) {
         if ($this->hasItem($id)) {
             $this->incNum($id, $num);
             return;
         }
         $this->items[$id] = $num;
+        $this->uid = $uid;
+        $model = new Model();
+        $model->table('cart')->data(array('user_id'=>$uid,'goods_id'=>$id,'num'=>$num))->insert();
     }
 
     public function hasItem($id) {
@@ -94,9 +97,15 @@ class Cart {
             $model = new Model("products as pr");
             $ids = array_keys($this->items);
             $ids = trim(implode(",", $ids), ',');
+            $uid = $this->uid;
             if ($ids != '') {
                 $prom = new Prom();
+                if($uid==42608){
+                  $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($ids) and c.user_id = $uid")->findAll();  
+              }else{
                 $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id")->join("left join goods as go on pr.goods_id = go.id ")->where("pr.id in($ids)")->findAll();
+              }
+                
                 foreach ($items as $item) {
                     $num = $this->items[$item['id']];
                     if ($num > $item['store_nums']) {

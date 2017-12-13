@@ -158,7 +158,11 @@ class IndexController extends Controller {
         $num = intval(Req::args("num"));
         $num = $num > 0 ? $num : 1;
         $cart = $this->getCart();
-        $cart->addItem($id, $num);
+        if($this->user){
+           $cart->addItem($id, $num,$this->user['id']); 
+        }else{
+            $cart->addItem($id, $num,0);
+        }
         $products = $cart->all();
         echo JSON::encode($products);
     }
