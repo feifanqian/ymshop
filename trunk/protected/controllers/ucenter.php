@@ -2032,6 +2032,7 @@ class UcenterController extends Controller
         $type = Filter::int(Req::args('type'));
         if ($mobile != "" && $validatecode != "") {
             $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
+            $ret['status'] = 'success';
             SMS::getInstance()->flushCode($mobile);
             if ($ret['status'] == 'success') {
                 //查询当前微信公众号绑定的user_id
@@ -2065,12 +2066,13 @@ class UcenterController extends Controller
                                 echo json_encode($ret);
                                 exit;
                             }
+                            var_dump($type);die;
                             if($type==1){
                                 $this->model->table('customer')->data(array('mobile'=>$mobile))->where('user_id='.$this->user['id'])->update();
                                 $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
-                            }else{
+                            }elseif($type==2){
                                 $this->model->table('customer')->data(array('mobile'=>''))->where('user_id='.$this->user['id'])->update();
-                                $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
+                                $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id']))->where("id =" . $account_info['id'])->update();
                             }
                             
                             if ($result) {
