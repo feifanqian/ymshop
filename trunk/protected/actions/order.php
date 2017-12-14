@@ -232,6 +232,7 @@ class OrderAction extends Controller {
             $data['prom_id'] = $id;
             $order_type = 1;
         }else if ($type == "flashbuy") {//抢购处理
+            var_dump(111);die;
             $product_id = Filter::int($product_id[0]);
             $num = Filter::int($buy_num[0]);
             if ($num < 1)
@@ -245,6 +246,7 @@ class OrderAction extends Controller {
             $data['prom_id'] = $id;
             $data['point']=$item['send_point']*$num;
             $order_type = 2;
+            var_dump(123);die;
         }else if ($type == "bundbuy") {//捆绑销售处理
             if (is_array($product_id)) {
                 foreach ($product_id as $key => $val) {
@@ -373,7 +375,7 @@ class OrderAction extends Controller {
         $weight = 0;
         $point = 0;
         $productarr = array();
-        var_dump(123);die;
+        
         foreach ($order_products as $item) {
             $payable_amount+=$item['sell_total'];
             $real_amount+=$item['amount'];
