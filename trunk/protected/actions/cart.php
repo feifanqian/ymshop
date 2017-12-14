@@ -53,7 +53,7 @@ class CartAction extends Controller {
         $id = Filter::int(Req::args("id"));
         $num = intval(Req::args("num"));
         $session_id = Req::args("session_id");
-        var_dump($session_id);die;
+        // var_dump($session_id);die;
         $num = $num > 0 ? $num : 1;
         $cart = $this->getCart();
         $cart->modNum($id, $num);
