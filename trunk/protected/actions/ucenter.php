@@ -1548,7 +1548,7 @@ class UcenterAction extends Controller {
 
     //订单删除接口
     public function order_delete() {
-        $id  = Filter::int(Req::args('id'));
+        $id  = Filter::int(Req::args('order_id'));
         $isset = $this->model->table("order")->where("id=$id and user_id =".$this->user['id']." and status in(1,2,5,6)")->find();
         if(empty($isset)){
             $this->code = 1005;
