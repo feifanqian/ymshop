@@ -326,29 +326,30 @@ class OrderAction extends Controller {
             $this->code = 1058;
             return;
         }
-        var_dump(111);
          //=================限购处理==============
                 foreach ($order_products as $v){
                     $buy_goods_id = $v['goods_id'];
                     $buy_goods_num = $v['num'];
                     //查询限购数量
+                    var_dump(111);
                     $limit_info = $model->table("goods")->where("id=$buy_goods_id")->fields("limit_buy_num,name")->find();
                     if($limit_info['limit_buy_num']<=0){
                         break;
                     }
+                    var_dump(222);
                     //查询用户购买此商品的数量
                     $buyed = $model->table("order as o")
                             ->fields("SUM(`goods_nums`) as buyed_num")
                             ->join("order_goods as og on og.order_id = o.id")
                             ->where("o.user_id =".$this->user['id']." and o.status!=5 and o.status!=6 and o.create_time>'2017-03-09 00:00:00' and og.goods_id =$buy_goods_id")
                             ->find();
+                    var_dump(333);die;        
                     $buyed_num = $buyed['buyed_num']==NULL?0:$buyed['buyed_num'];
                     if($limit_info['limit_buy_num']<($buy_goods_num+$buyed_num)){
                         $this->code=1117;
                         return;
                     }
                 }
-                var_dump(222);
           //======================================
 //        //商品总金额,重量,积分计算
 //        $payable_amount = 0.00;
@@ -375,17 +376,14 @@ class OrderAction extends Controller {
         $weight = 0;
         $point = 0;
         $productarr = array();
-        var_dump(333);
         foreach ($order_products as $item) {
             $payable_amount+=$item['sell_total'];
             $real_amount+=$item['amount'];
-            var_dump(444);
             if(isset($item['freeshipping'])){
                 if (!$item['freeshipping']) {
                     $weight += $item['weight'] * $item['num'];
                 } 
             }
-            var_dump(555);die;
             $point += $item['point'] * $item['num'];
             $productarr[$item['id']] = $item['num'];
         }
