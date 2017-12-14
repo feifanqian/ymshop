@@ -119,7 +119,13 @@ class Cart {
                     // $newid = array_values($idarr);
                     // var_dump($newid);die;
                     foreach ($items as $item) {
-                        $num = $areaid[$item['id']];
+                        $cart = $cart_model->fields('num')->where('goods_id='.$item['id'].' and user_id='.$uid)->find();
+                        if($cart){
+                            $num = $cart['num'];
+                        }else{
+                            $num = 0;
+                        }
+                        // $num = $areaid[$item['id']];
                         if ($num > $item['store_nums']) {
                             $num = $item['store_nums'];
                             $this->modNum($item['id'], $num);
