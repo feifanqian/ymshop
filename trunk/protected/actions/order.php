@@ -331,12 +331,12 @@ class OrderAction extends Controller {
                     $buy_goods_id = $v['goods_id'];
                     $buy_goods_num = $v['num'];
                     //查询限购数量
-                    var_dump(111);
                     $limit_info = $model->table("goods")->where("id=$buy_goods_id")->fields("limit_buy_num,name")->find();
                     if($limit_info['limit_buy_num']<=0){
+                       var_dump(222); 
                         break;
                     }
-                    var_dump(222);
+                    
                     //查询用户购买此商品的数量
                     $buyed = $model->table("order as o")
                             ->fields("SUM(`goods_nums`) as buyed_num")
