@@ -238,16 +238,13 @@ class OrderAction extends Controller {
                 $num = 1;
             $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("*,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
             $this->flashStatus($id, $item['quota_num'], $this->user['id'],true);
-            var_dump(222);
             $order_products = $this->packFlashbuyProducts($item, $num);
-            var_dump(333);
             $flashbuy = $model->table("flash_sale")->where("id=$id")->find();
             unset($flashbuy['description']);
             $data['prom'] = serialize($flashbuy);
             $data['prom_id'] = $id;
             $data['point']=$item['send_point']*$num;
             $order_type = 2;
-            var_dump(123);die;
         }else if ($type == "bundbuy") {//捆绑销售处理
             if (is_array($product_id)) {
                 foreach ($product_id as $key => $val) {
@@ -329,6 +326,7 @@ class OrderAction extends Controller {
             $this->code = 1058;
             return;
         }
+        var_dump(111);
          //=================限购处理==============
                 foreach ($order_products as $v){
                     $buy_goods_id = $v['goods_id'];
@@ -350,6 +348,7 @@ class OrderAction extends Controller {
                         return;
                     }
                 }
+                var_dump(222);
           //======================================
 //        //商品总金额,重量,积分计算
 //        $payable_amount = 0.00;
@@ -376,16 +375,17 @@ class OrderAction extends Controller {
         $weight = 0;
         $point = 0;
         $productarr = array();
-        
+        var_dump(333);
         foreach ($order_products as $item) {
             $payable_amount+=$item['sell_total'];
             $real_amount+=$item['amount'];
+            var_dump(444);
             if(isset($item['freeshipping'])){
                 if (!$item['freeshipping']) {
                     $weight += $item['weight'] * $item['num'];
                 } 
             }
-            
+            var_dump(555);die;
             $point += $item['point'] * $item['num'];
             $productarr[$item['id']] = $item['num'];
         }
