@@ -289,7 +289,14 @@ class DistrictAction extends Controller {
 
     //激活码列表
     public function promoterCodeList(){
-        $list = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->findAll();
+        $page = Filter::int(Req::args('page'));
+        if(!$page){
+            $page = 1;
+        }
+        $list = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->findPage($page,10);
+        if($list){
+            unset($list['html']);
+        }
         $this->code = 0;
         $this->content = $list;
     }      
