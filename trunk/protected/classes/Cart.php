@@ -44,7 +44,7 @@ class Cart {
         $model = new Model();
         $exist = $model->table('cart')->where('goods_id='.$id.' and user_id='.$uid)->find();
         if($exist){
-            $model->data(array('num'=>"`num`+({$num})"))->where('goods_id='.$id.' and user_id='.$uid)->update();
+            $model->table('cart')->data(array('num'=>"`num`+({$num})"))->where('goods_id='.$id.' and user_id='.$uid)->update();
         }else{
             $model->table('cart')->data(array('user_id'=>$uid,'goods_id'=>$id,'num'=>$num))->insert();
         }  
@@ -58,11 +58,13 @@ class Cart {
         unset($this->items[$id]);
     }
 
-    public function modNum($id, $num = 1) {
+    public function modNum($id, $num = 1,$uid = 0) {
         if (!$this->hasItem($id)) {
             return false;
         }
         $this->items[$id] = $num;
+        $model = new Model();
+        $model->table('cart')->data(array('num'=>$num))->where('goods_id='.$id.' and user_id='.$uid)->update();
     }
 
     public function incNum($id, $num = 1) {
@@ -127,7 +129,7 @@ class Cart {
                         // $num = $areaid[$item['id']];
                         if ($num > $item['store_nums']) {
                             $num = $item['store_nums'];
-                            $this->modNum($item['id'], $num);
+                            $this->modNum($item['id'], $num,$uid);
                         }
 
                         if ($num <= 0) {
