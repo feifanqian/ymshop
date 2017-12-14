@@ -237,7 +237,7 @@ class OrderAction extends Controller {
             if ($num < 1)
                 $num = 1;
             $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("*,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
-            $this->flashStatus($id, $item['quota_num'], $this->user['id'],true);
+            $this->flashStatus($id, $item['quota_num'], $this->user['id']);
             $order_products = $this->packFlashbuyProducts($item, $num);
             $flashbuy = $model->table("flash_sale")->where("id=$id")->find();
             unset($flashbuy['description']);
@@ -632,7 +632,25 @@ class OrderAction extends Controller {
         $sell_total = $item['sell_price'] * $num;
         $product_id = $item['product_id'];
 
-        $product[$product_id] = array('id' => $product_id, 'goods_id' => $item['goods_id'], 'name' => $item['name'], 'img' => $item['img'], 'num' => $num, 'store_nums' => $have_num, 'price' => $item['price'], 'spec' => unserialize($item['spec']), 'amount' => $amount, 'sell_total' => $sell_total, 'weight' => $item['weight'], 'point' => $item['point'], "prom_goods" => array(), "sell_price" => $item['sell_price'], "real_price" => $item['price'],"shop_id"=>$item['shop_id']);
+        $product[$product_id] = array(
+            'id' => $product_id, 
+            'goods_id' => $item['goods_id'], 
+            'name' => $item['name'], 
+            'img' => $item['img'], 
+            'num' => $num, 
+            'store_nums' => $have_num, 
+            'price' => $item['price'], 
+            'spec' => unserialize($item['spec']), 
+            'amount' => $amount, 
+            'sell_total' => $sell_total, 
+            'weight' => $item['weight'], 
+            'point' => $item['point'], 
+            'freeshipping' => $item['freeshipping'], 
+            "prom_goods" => array(), 
+            "sell_price" => $item['sell_price'], 
+            "real_price" => $item['price'],
+            'shop_id'=>$item['shop_id']
+        );
         return $product;
     }
 
