@@ -1927,4 +1927,11 @@ class IndexController extends Controller {
         $qrCode->render();
         return;
     }
+
+    public function beagent()
+    {
+        $this->assign('random', rand(1000, 9999));
+        $this->assign('seo_title', "圆梦共享网");
+        $this->redirect();
+    }
 }
