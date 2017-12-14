@@ -237,9 +237,10 @@ class OrderAction extends Controller {
             if ($num < 1)
                 $num = 1;
             $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("*,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
-            var_dump(222);die;
             $this->flashStatus($id, $item['quota_num'], $this->user['id'],true);
+            var_dump(222);
             $order_products = $this->packFlashbuyProducts($item, $num);
+            var_dump(333);
             $flashbuy = $model->table("flash_sale")->where("id=$id")->find();
             unset($flashbuy['description']);
             $data['prom'] = serialize($flashbuy);
