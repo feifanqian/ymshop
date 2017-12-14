@@ -116,10 +116,10 @@ class Cart {
                     $prom = new Prom();
                     $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();  
                   
-                    $newid = array_values($idarr);
-                    var_dump($newid);die;
+                    // $newid = array_values($idarr);
+                    // var_dump($newid);die;
                     foreach ($items as $item) {
-                        $num = $newid[$item['id']];
+                        $num = $areaid[$item['id']];
                         if ($num > $item['store_nums']) {
                             $num = $item['store_nums'];
                             $this->modNum($item['id'], $num);
