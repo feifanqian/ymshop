@@ -169,6 +169,7 @@ class OrderAction extends Controller {
     
     //提交订单
     public function submit() {
+        var_dump(123);die;
         $address_id = Filter::int(Req::args('address_id'));
         $payment_id = Filter::int(Req::args('payment_id'));
         $prom_id = Filter::int(Req::args('prom_id'));
