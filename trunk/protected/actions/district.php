@@ -293,7 +293,7 @@ class DistrictAction extends Controller {
         if(!$page){
             $page = 1;
         }
-        $list = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->findPage($page,10);
+        $list = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->order('id desc')->findPage($page,10);
         if($list){
             unset($list['html']);
         }
