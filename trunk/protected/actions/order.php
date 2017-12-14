@@ -232,12 +232,12 @@ class OrderAction extends Controller {
             $data['prom_id'] = $id;
             $order_type = 1;
         }else if ($type == "flashbuy") {//抢购处理
-            var_dump(111);die;
             $product_id = Filter::int($product_id[0]);
             $num = Filter::int($buy_num[0]);
             if ($num < 1)
                 $num = 1;
             $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("*,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
+            var_dump(222);die;
             $this->flashStatus($id, $item['quota_num'], $this->user['id'],true);
             $order_products = $this->packFlashbuyProducts($item, $num);
             $flashbuy = $model->table("flash_sale")->where("id=$id")->find();
