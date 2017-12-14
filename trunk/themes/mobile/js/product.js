@@ -8,7 +8,6 @@ $(function () {
     $("#swiper-product").swiper({autoplay: 3000, pagination: '.swiper-pagination', loop: true});
     $(".weui_tab_bd_item").css("min-height", (document.documentElement.clientHeight - 110 + "px"));
     $(".spec-values .attr-item a").on("click", function () {
-        console.log(555);
         var disabled = $(this).hasClass('disabled');
         if (disabled)
             return;
@@ -63,7 +62,6 @@ $(function () {
         $("#buy-num-bar input").val(num);
     });
     $("#buy-num-bar input").on("change", function () {
-        console.log(333);
         var value = $(this).val();
         var max = parseInt($("#store_nums").text());
         if ((/^\d+$/i).test(value)) {
@@ -79,7 +77,6 @@ $(function () {
     });
     //点击购买
     $(".buy-now").on("click", function (e) {
-        console.log(222);
     // console.log(123);return false;
         var hasopen = $("#selectid").css("display") == "block" ? true : false;
         if (hasopen) {
@@ -126,7 +123,6 @@ $(function () {
 
     //添加到购物车
     $(".add-cart").on("click", function () {
-        console.log(111);
         var hasopen = $("#selectid").css("display") == "block" ? true : false;
         if (hasopen) {
             var product = currentProduct();
@@ -169,7 +165,6 @@ $(function () {
 });
 //取得当前商品
 function currentProduct() {
-    console.log(123);
     if ($(".spec-values").length == 0) {
         return Product.skuMap[''];
     }
@@ -215,7 +210,6 @@ function showMsgBar(type, text) {
 }
 
 function changeStatus() {
-    console.log(444);
     var specs_array = new Array();
     var specs_text = new Array();
     $(".spec-values").each(function (i) {
