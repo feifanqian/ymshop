@@ -105,6 +105,7 @@ class Cart {
             $uid = $this->uid;
             $cart_model = new Model('cart');
             $idarr = $cart_model->fields('goods_id')->where('user_id='.$uid)->findAll();
+            $idstr = '';
             if($idarr){
                 foreach ($idarr as $key => $v) {
                     $areaid[$key] = $v['goods_id'];
