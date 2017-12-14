@@ -236,8 +236,8 @@ class OrderAction extends Controller {
             $num = Filter::int($buy_num[0]);
             if ($num < 1)
                 $num = 1;
-            $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("fb.*,go.*,pr.*,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
-            $this->flashStatus($id, $item['quota_num'], $this->user['id']);
+            $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("*,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
+            $this->flashStatus($id, $item['quota_num'], $this->user['id'],true);
             $order_products = $this->packFlashbuyProducts($item, $num);
             $flashbuy = $model->table("flash_sale")->where("id=$id")->find();
             unset($flashbuy['description']);
