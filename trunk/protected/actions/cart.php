@@ -23,9 +23,14 @@ class CartAction extends Controller {
     public function add() {
         $id = Filter::int(Req::args("id"));
         $num = intval(Req::args("num"));
+        $uid = Filter::int(Req::args("user_id"));
         $num = $num > 0 ? $num : 1;
         $cart = $this->getCart();
-        $cart->addItem($id, $num);
+        if($uid){
+           $cart->addItem($id, $num,$uid); 
+       }else{
+           $cart->addItem($id, $num);
+       }
         $products = $cart->all();
         $this->code = 0;
         $this->content = array(
@@ -47,6 +52,8 @@ class CartAction extends Controller {
     public function num() {
         $id = Filter::int(Req::args("id"));
         $num = intval(Req::args("num"));
+        $session_id = Req::args("session_id");
+        var_dump($session_id);die;
         $num = $num > 0 ? $num : 1;
         $cart = $this->getCart();
         $cart->modNum($id, $num);
