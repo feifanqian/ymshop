@@ -42,7 +42,12 @@ class Cart {
         $this->items[$id] = $num;
         $this->uid = $uid;
         $model = new Model();
-        $model->table('cart')->data(array('user_id'=>$uid,'goods_id'=>$id,'num'=>$num))->insert();
+        $exist = $model->table('cart')->where('goods_id='.$id.' and user_id='.$uid)->find();
+        if($exist){
+            $model->data(array('num'=>"`num`+({$num})"))->where('goods_id='.$id.' and user_id='.$uid)->update();
+        }else{
+            $model->table('cart')->data(array('user_id'=>$uid,'goods_id'=>$id,'num'=>$num))->insert();
+        }  
     }
 
     public function hasItem($id) {
@@ -106,12 +111,13 @@ class Cart {
                 }
                 $idstr = implode(',', $areaid);
             }
-            if($uid==1776){
+            if($uid==42608){
                 if ($idstr != '') {
                     $prom = new Prom();
                     $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();  
                   
-                    
+                    // $newid = array_values($idarr);
+                    var_dump($idarr);die;
                     foreach ($items as $item) {
                         $num = $idarr[$item['id']];
                         if ($num > $item['store_nums']) {
