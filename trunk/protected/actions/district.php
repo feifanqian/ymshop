@@ -285,5 +285,12 @@ class DistrictAction extends Controller {
                 return;
             }
         }
+    }
+
+    //激活码列表
+    public function promoterCodeList(){
+        $list = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->findAll();
+        $this->code = 0;
+        $this->content = $list;
     }      
 }
