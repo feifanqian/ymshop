@@ -327,12 +327,12 @@ class OrderAction extends Controller {
             return;
         }
          //=================限购处理==============
-         var_dump($order_products);die;
+         // var_dump($order_products);die;
                 foreach ($order_products as $v){
                     $buy_goods_id = $v['goods_id'];
                     $buy_goods_num = $v['num'];
                     //查询限购数量
-                    var_dump($buy_goods_id);die;
+                    // var_dump($buy_goods_id);die;
                     $limit_info = $model->table("goods")->where("id=$buy_goods_id")->fields("limit_buy_num,name")->find();
                     if($limit_info['limit_buy_num']<=0){
                         break;
@@ -344,7 +344,7 @@ class OrderAction extends Controller {
                             ->join("order_goods as og on og.order_id = o.id")
                             ->where("o.user_id =".$this->user['id']." and o.status!=5 and o.status!=6 and o.create_time>'2017-03-09 00:00:00' and og.goods_id =$buy_goods_id")
                             ->find();
-                    var_dump(333);die;        
+                    // var_dump(333);die;        
                     $buyed_num = $buyed['buyed_num']==NULL?0:$buyed['buyed_num'];
                     if($limit_info['limit_buy_num']<($buy_goods_num+$buyed_num)){
                         $this->code=1117;
