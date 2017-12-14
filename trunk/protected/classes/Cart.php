@@ -116,7 +116,7 @@ class Cart {
                     $prom = new Prom();
                     $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();  
                   
-                    // $newid = array_values($idarr);
+                    $newid = array_values($idarr);
                     // var_dump($idarr);die;
                     foreach ($items as $item) {
                         $num = $newid[$item['id']];
