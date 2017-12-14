@@ -328,12 +328,13 @@ class OrderAction extends Controller {
         }
          //=================限购处理==============
                 foreach ($order_products as $v){
+                    var_dump(123);
                     $buy_goods_id = $v['goods_id'];
                     $buy_goods_num = $v['num'];
                     //查询限购数量
                     $limit_info = $model->table("goods")->where("id=$buy_goods_id")->fields("limit_buy_num,name")->find();
                     if($limit_info['limit_buy_num']<=0){
-                       var_dump(222); 
+                       var_dump(222);die; 
                         break;
                     }
                     
