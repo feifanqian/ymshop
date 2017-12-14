@@ -373,13 +373,16 @@ class OrderAction extends Controller {
         $weight = 0;
         $point = 0;
         $productarr = array();
-        var_dump($order_products);die;
+        // var_dump($order_products);die;
         foreach ($order_products as $item) {
             $payable_amount+=$item['sell_total'];
             $real_amount+=$item['amount'];
-            if (!$item['freeshipping']) {
-                $weight += $item['weight'] * $item['num'];
+            if(isset($item['freeshipping'])){
+                if (!$item['freeshipping']) {
+                    $weight += $item['weight'] * $item['num'];
+                } 
             }
+            
             $point += $item['point'] * $item['num'];
             $productarr[$item['id']] = $item['num'];
         }
