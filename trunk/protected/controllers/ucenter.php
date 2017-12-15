@@ -729,26 +729,27 @@ class UcenterController extends Controller
         }
         
         $location =  Filter::text(Req::args('areas').Req::args('road'));
-        if(Req::args('areas')!='省份/直辖市市县/区'){
-            $lnglat = Common::getLnglat($location);
-            $lng = $lnglat['lng'];
-            $lat = $lnglat['lat'];
-        }else{
-            $lng = '';
-            $lat = '';
-        }
-        
+
         $data = array(
                 'shop_name' => Req::args('shop_name'),
-                'location' => $location,
                 'info' => Filter::text(Req::args('info')),
-                'region_id' => Filter::int(Req::args('county')),
-                'tourist_id' => Filter::int(Req::args('street')),
                 'road' => Filter::text(Req::args('road')),
-                'picture' => $picture,
-                'lng' => $lng,
-                'lat' => $lat
             );
+        if(Req::args('areas')!='省份/直辖市市县/区'){
+            $lnglat = Common::getLnglat($location);
+            $data['location'] = $location;
+            $data['lng'] = $lnglat['lng'];
+            $data['lat'] = $lnglat['lat'];
+        }
+        if(Req::args('county')){
+            $data['region_id'] = Filter::int(Req::args('county'));
+        }
+        if(Req::args('street')){
+            $data['tourist_id'] = Filter::int(Req::args('street'));
+        }
+        if($picture){
+            $data['picture'] = $picture;
+        }
 
             $id = $this->user['id'];
             
