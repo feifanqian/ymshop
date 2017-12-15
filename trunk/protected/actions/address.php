@@ -353,7 +353,41 @@ class AddressAction extends Controller
     }
 
     public function myPromoterDetail(){
-        $list = $model->table('district_promoter')->fields('d.*,c.real_name')->where('user_id=' . $this->user['id'])->find();
+        $promoter = $model->table('district_promoter')->fields('shop_name,picture,province_id,city_id,region_id,tourist_id,location,road,info')->where('user_id=' . $this->user['id'])->find();
+        $customer = $model->table('customer')->fields('real_name')->where('user_id=' . $this->user['id'])->find();
+        if(!$promoter || !$customer){
+            $this->code = 1166;
+            return;
+        }
+        if($promoter['shop_name']==null){
+            $promoter['shop_name'] = $customer['real_name'].'的店铺';
+        }
+        if($promoter['picture']==null){
+            $promoter['picture'] = 'http://www.ymlypt.com/static/images/logo1.png';
+        }
+        if($promoter['province_id']==null){
+            $promoter['province_id'] = 0;
+        }
+        if($promoter['city_id']==null){
+            $promoter['city_id'] = 0;
+        }
+        if($promoter['region_id']==null){
+            $promoter['region_id'] = 0;
+        }
+        if($promoter['tourist_id']==null){
+            $promoter['tourist_id'] = 0;
+        }
+        if($promoter['location']==null){
+            $promoter['location'] = '';
+        }
+        if($promoter['road']==null){
+            $promoter['road'] = '';
+        }
+        if($promoter['info']==null){
+            $promoter['info'] = '';
+        }
+        $this->code = 0;
+        $this->content = $promoter;
     }
 
     public function promoterAttention(){
