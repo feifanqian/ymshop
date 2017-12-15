@@ -729,7 +729,7 @@ class UcenterController extends Controller
         }
         
         $location =  Filter::text(Req::args('areas').Req::args('road'));
-        if(Req::args('areas')!=''){
+        if(Req::args('areas')!='省份/直辖市市县/区'){
             $lnglat = Common::getLnglat($location);
             $lng = $lnglat['lng'];
             $lat = $lnglat['lat'];
