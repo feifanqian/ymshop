@@ -536,22 +536,23 @@ class AddressAction extends Controller
                 'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
             );
             $where.= " and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
-        }else{
-            $distance = 50;
-            $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
-            $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
-
-            $dlat = $distance / 6371;
-            $dlat = rad2deg($dlat);//rad2deg() 函数把弧度数转换为角度数
-
-            $squares = array(
-                'left-top' => array('lat' => $lat + $dlat, 'lng' => $lng - $dlng),
-                'right-top' => array('lat' => $lat + $dlat, 'lng' => $lng + $dlng),
-                'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
-                'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
-            );
-            $where.= " and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
         }
+        // else{
+        //     $distance = 50;
+        //     $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
+        //     $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
+
+        //     $dlat = $distance / 6371;
+        //     $dlat = rad2deg($dlat);//rad2deg() 函数把弧度数转换为角度数
+
+        //     $squares = array(
+        //         'left-top' => array('lat' => $lat + $dlat, 'lng' => $lng - $dlng),
+        //         'right-top' => array('lat' => $lat + $dlat, 'lng' => $lng + $dlng),
+        //         'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
+        //         'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
+        //     );
+        //     $where.= " and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
+        // }
         //按关键词搜索
         if(!empty($keyword)){
             $where.=" and shop_name like '%$keyword%'";
