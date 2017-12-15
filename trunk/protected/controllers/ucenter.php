@@ -718,9 +718,7 @@ class UcenterController extends Controller
         // $info = $upfile->getInfo();
         // $result = array();
         $picture = "";
-        if($this->user['id']==42608){
-            var_dump(Req::args('picture'));die;
-        }
+        
         // if ($info[0]['status'] == 1) {
         //     $result = array('error' => 0, 'url' => $upfile_url . $info[0]['path']);
         //     $image_url = $upfile_url . $info[0]['path'];
