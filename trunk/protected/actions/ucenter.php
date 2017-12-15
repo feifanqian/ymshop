@@ -1403,7 +1403,7 @@ class UcenterAction extends Controller {
             $options['save-key'] = "/data/uploads/support/{year}/{mon}/{day}/{filemd5}{.suffix}";
             $options['ext-param'] = "support";
         }elseif ($type == 'shop_picture') {
-            $options['save-key'] = "/data/uploads/picture/" . $this->user['id'] . ".jpg";
+            $options['save-key'] = "/data/uploads/picture/" . $this->user['id'] . ".png";
             $options['ext-param'] = "shop_picture:{$this->user['id']}";
             $this->model->table('district_promoter')->data(array('picture'=>$options['save-key']))->where('user_id='.$this->user['id'])->update();
         } else {
