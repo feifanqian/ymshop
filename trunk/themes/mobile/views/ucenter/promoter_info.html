@@ -16,17 +16,16 @@
     <form  action="{url:/ucenter/promoter_save}" method="post">
         <input name="areas" type="hidden" class="input"  value="" alt="请选择完整地区信息！">
         <dl>
-            <!--<dd class="input gray">{$gname|'默认分组'}</dd>-->
             <dd class="input gray">商家名称: {$promoter_info['real_name']}</dd>
             <dd><input class="input" type="text" name="shop_name" maxlen="20" value="{$promoter_info['shop_name']}"  placeholder="店铺名"></dd>
-            <!-- <div class="flex_1"> -->
+            <dd>
                 <select name="classify_id" id="classify_id" class="classify_id">
                     <option value="0">选择商家类型</option>
                      {query:name=promoter_type fields=id,name order=id desc}
                     <option value="{$item['id']}">{$item['name']}</option>
                     {/query}
                 </select>
-            <!-- </div> -->
+            </dd>
             <!-- {if:$promoter_info['picture']!=''}
             <dd><img src='{echo:Url::urlFormat("@".$promoter_info['picture'])}' alt=""></dd>
             {/if}

@@ -436,6 +436,7 @@ class AddressAction extends Controller
         $city_id = Filter::int(Req::args('city_id'));
         $region_id = Filter::int(Req::args('region_id'));
         $tourist_id = Filter::int(Req::args('tourist_id'));
+        $classify_id = Filter::int(Req::args('classify_id'));
         $road = Filter::text(Req::args('road'));
         $lnglat = Common::getLnglat($location);
         $lng = $lnglat['lng'];
@@ -482,6 +483,9 @@ class AddressAction extends Controller
         }
         if ($tourist_id) {
             $model->table('district_promoter')->data(array('tourist_id' => $tourist_id))->where("user_id=" . $this->user['id'])->update();
+        }
+        if ($classify_id) {
+            $model->table('district_promoter')->data(array('classify_id' => $classify_id))->where("user_id=" . $this->user['id'])->update();
         }
         if ($road) {
             $model->table('district_promoter')->data(array('road' => $road))->where("user_id=" . $this->user['id'])->update();
