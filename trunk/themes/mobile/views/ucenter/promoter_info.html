@@ -1,5 +1,20 @@
 
 <link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style type="text/css">
+.classify_id{
+    border: medium none;
+    border-radius: 0;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+}
+</style>
 {echo:JS::import('form');}
 {echo:JS::import('date');}
 <div class="ma20 bg-white p20">
@@ -10,7 +25,7 @@
             <dd class="input gray">商家名称: {$promoter_info['real_name']}</dd>
             <dd><input class="input" type="text" name="shop_name" maxlen="20" value="{$promoter_info['shop_name']}"  placeholder="店铺名"></dd>
             <div class="flex_1">
-                <select name="classify_id" id="classify_id">
+                <select name="classify_id" id="classify_id" class="classify_id">
                     <option value="0">选择商家类型</option>
                      {query:name=promoter_type fields=id,name order=id desc}
                     <option value="{$item['id']}">{$item['name']}</option>
