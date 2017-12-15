@@ -352,6 +352,10 @@ class AddressAction extends Controller
         $this->content = $list;
     }
 
+    public function myPromoterDetail(){
+        $list = $model->table('district_promoter')->fields('d.*,c.real_name')->where('user_id=' . $this->user['id'])->find();
+    }
+
     public function promoterAttention(){
         $promoter_id = Filter::int(Req::args('promoter_id'));
         if(!$promoter_id){

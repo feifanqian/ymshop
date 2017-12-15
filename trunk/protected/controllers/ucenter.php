@@ -718,7 +718,7 @@ class UcenterController extends Controller
         // $info = $upfile->getInfo();
         // $result = array();
         $picture = "";
-        
+
         // if ($info[0]['status'] == 1) {
         //     $result = array('error' => 0, 'url' => $upfile_url . $info[0]['path']);
         //     $image_url = $upfile_url . $info[0]['path'];
@@ -1494,9 +1494,14 @@ class UcenterController extends Controller
         }
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
-        $user = $this->model->table('customer')->fields('mobile_verified,realname_verified')->where('user_id=' . $this->user['id'])->find();
-        $this->assign('realname_verified',$user['realname_verified']);
-        $this->assign('mobile_verified',$user['mobile_verified']);
+        $customer_user = $this->model->table('customer')->fields('mobile_verified,realname_verified')->where('user_id=' . $this->user['id'])->find();
+        if($customer_user){
+            $this->assign('realname_verified',$customer_user['realname_verified']);
+            $this->assign('mobile_verified',$customer_user['mobile_verified']);
+        }else{
+            $this->assign('realname_verified',0);
+            $this->assign('mobile_verified',0);
+        }
         $this->assign("sign_in_open", $sign_in_set['open']);
         $this->assign("random", rand(1000, 9999));
         $this->assign('is_hirer', $is_hirer);
