@@ -293,10 +293,10 @@ class DistrictAction extends Controller {
         if(!$page){
             $page = 1;
         }
-        $code = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->findAll();
+        $code = $this->model->table('promoter_code')->where('status=1 and user_id='.$this->user['id'])->findAll();
         if($code){
             foreach($code as $k => $v){
-                if(time()>$v['end_date']){
+                if(time()>strtotime($v['end_date'])){
                     $this->model->table('promoter_code')->data(array('status'=>-1))->where('id='.$v['id'])->update();
                 }
             }
