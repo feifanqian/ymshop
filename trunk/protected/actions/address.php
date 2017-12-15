@@ -353,6 +353,7 @@ class AddressAction extends Controller
     }
 
     public function myPromoterDetail(){
+        $model = new Model();
         $promoter = $model->table('district_promoter')->fields('shop_name,picture,province_id,city_id,region_id,tourist_id,location,road,info')->where('user_id=' . $this->user['id'])->find();
         $customer = $model->table('customer')->fields('real_name')->where('user_id=' . $this->user['id'])->find();
         if(!$promoter || !$customer){
