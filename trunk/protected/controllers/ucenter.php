@@ -756,6 +756,9 @@ class UcenterController extends Controller
         if($picture){
             $data['picture'] = $picture;
         }
+        if(Req::args('classify_id')){
+            $data['classify_id'] = Filter::int(Req::args('classify_id'));
+        }
 
             $id = $this->user['id'];
             
