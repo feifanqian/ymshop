@@ -477,7 +477,7 @@ class AddressAction extends Controller
             );
             $where.= " and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
         }else{
-            $distance = 10;
+            $distance = 50;
             $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
             $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
 
