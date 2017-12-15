@@ -729,7 +729,15 @@ class UcenterController extends Controller
         }
         
         $location =  Filter::text(Req::args('areas').Req::args('road'));
-        $lnglat = Common::getLnglat($location);
+        if(Req::args('areas')!=''){
+            $lnglat = Common::getLnglat($location);
+            $lng = $lnglat['lng'];
+            $lat = $lnglat['lat'];
+        }else{
+            $lng = '';
+            $lat = '';
+        }
+        
         $data = array(
                 'shop_name' => Req::args('shop_name'),
                 'location' => $location,
@@ -738,8 +746,8 @@ class UcenterController extends Controller
                 'tourist_id' => Filter::int(Req::args('street')),
                 'road' => Filter::text(Req::args('road')),
                 'picture' => $picture,
-                'lng' => $lnglat['lng'],
-                'lat' => $lnglat['lat']
+                'lng' => $lng,
+                'lat' => $lat
             );
 
             $id = $this->user['id'];
