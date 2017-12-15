@@ -11,8 +11,8 @@
             <dd><input class="input" type="text" name="shop_name" maxlen="20" value="{$promoter_info['shop_name']}"  placeholder="店铺名"></dd>
             <dd>
                    <div class="select">
-                       <div class="option">选择商家店铺类型</div>
-                       <select name="classify_id">
+                       <select name="classify_id" id="classify_id">
+                            <option value="0">选择商家类型</option>
                             {query:name=promoter_type fields=id,name order=id desc}
                             <option value="{$item['id']}">{$item['name']}</option>
                             {/query}
@@ -65,6 +65,7 @@
 </div>
 <script type="text/javascript">
     $(function(){
+    var classify_id = $("input[name='classify_id']").val();  
     var selected = [{$province|0},{$city|0},{$county|0}];
     $("#areas").Linkage({ url:"{url:/ajax/area_data}",selected:selected,initRunCallBack:true,callback:function(data){
         
