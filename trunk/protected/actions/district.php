@@ -196,8 +196,9 @@ class DistrictAction extends Controller {
     // 配置头像
     public function setPicture() {
         $upfile_path = Tiny::getPath("uploads") . "/head/";
+        // $upfile_path = Tiny::getPath("uploads");
         $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
-        //$upfile_url = strtr(Tiny::getPath("uploads_url")."head/",APP_URL,'');
+        // $upfile_url = preg_replace("|^" . APP_URL . "|", '', Tiny::getPath("uploads_url"));
         $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
         $upfile->save();
         $info = $upfile->getInfo();
@@ -210,7 +211,8 @@ class DistrictAction extends Controller {
             $image->suffix = '';
             $image->thumb(APP_ROOT . $image_url, 100, 100);
             $model = new Model('district_promoter');
-            $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
+            // $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
+            $picture = "https://ymlypt.b0.upaiyun.com/" . $image_url;
             $model->data(array('picture' => $picture))->where("user_id=" . $this->user['id'])->update();
             $this->code = 0;
         } else {
