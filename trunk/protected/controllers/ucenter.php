@@ -719,10 +719,10 @@ class UcenterController extends Controller
         $info = $upfile->getInfo();
         $result = array();
         $picture = "";
-        if ($info[0]['status'] == 1) {
-            if($this->user['id']==42608){
-                var_dump(123);die;
+        if($this->user['id']==42608){
+                var_dump($info[0]);die;
             }
+        if ($info[0]['status'] == 1) {
             $result = array('error' => 0, 'url' => $upfile_url . $info[0]['path']);
             $image_url = $upfile_url . $info[0]['path'];
             $image = new Image();
