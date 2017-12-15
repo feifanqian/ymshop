@@ -429,10 +429,16 @@ class AddressAction extends Controller
             $this->code = 1133;
         }
         $name = Filter::str(Req::args('name'));
-        $info = Filter::text(Req::args('info'));
+        $infos = Filter::text(Req::args('info'));
         $location = Filter::text(Req::args('location'));
-        $lng = Filter::sql(Req::args('lng'));
-        $lat = Filter::sql(Req::args('lat'));
+        $province_id = Filter::int(Req::args('province_id'));
+        $city_id = Filter::int(Req::args('city_id'));
+        $region_id = Filter::int(Req::args('region_id'));
+        $tourist_id = Filter::int(Req::args('tourist_id'));
+        $road = Filter::text(Req::args('road'));
+        $lnglat = Common::getLnglat($location);
+        $lng = $lnglat['lng'];
+        $lat = $lnglat['lat'];
 
         $upfile_path = Tiny::getPath("uploads") . "/head/";
         $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
@@ -452,8 +458,8 @@ class AddressAction extends Controller
         if ($name) {
             $result = $model->table('customer')->data(array('real_name' => $name))->where("user_id=" . $this->user['id'])->update();
         }
-        if ($info) {
-            $result = $model->table('district_promoter')->data(array('info' => $info))->where("user_id=" . $this->user['id'])->update();
+        if ($infos) {
+            $result = $model->table('district_promoter')->data(array('info' => $infos))->where("user_id=" . $this->user['id'])->update();
         }
         if ($location) {
             $result = $model->table('district_promoter')->data(array('location' => $location))->where("user_id=" . $this->user['id'])->update();
@@ -463,6 +469,21 @@ class AddressAction extends Controller
         }
         if ($lat) {
             $result = $model->table('district_promoter')->data(array('lat' => $lat))->where("user_id=" . $this->user['id'])->update();
+        }
+        if ($province_id) {
+            $result = $model->table('district_promoter')->data(array('province_id' => $province_id))->where("user_id=" . $this->user['id'])->update();
+        }
+        if ($city_id) {
+            $result = $model->table('district_promoter')->data(array('city_id' => $city_id))->where("user_id=" . $this->user['id'])->update();
+        }
+        if ($region_id) {
+            $result = $model->table('district_promoter')->data(array('region_id' => $region_id))->where("user_id=" . $this->user['id'])->update();
+        }
+        if ($tourist_id) {
+            $result = $model->table('district_promoter')->data(array('tourist_id' => $tourist_id))->where("user_id=" . $this->user['id'])->update();
+        }
+        if ($road) {
+            $result = $model->table('district_promoter')->data(array('road' => $road))->where("user_id=" . $this->user['id'])->update();
         }
 
         if ($result) {
