@@ -293,6 +293,11 @@ class DistrictAction extends Controller {
         if(!$page){
             $page = 1;
         }
+        $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
+        if(!$district){
+            $this->code = 1131;
+            return;
+        }
         $code = $this->model->table('promoter_code')->where('status=1 and user_id='.$this->user['id'])->findAll();
         if($code){
             foreach($code as $k => $v){
