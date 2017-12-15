@@ -741,6 +741,12 @@ class UcenterController extends Controller
             $data['lng'] = $lnglat['lng'];
             $data['lat'] = $lnglat['lat'];
         }
+        if(Req::args('province')){
+            $data['province_id'] = Filter::int(Req::args('province'));
+        }
+        if(Req::args('city')){
+            $data['city_id'] = Filter::int(Req::args('city'));
+        }
         if(Req::args('county')){
             $data['region_id'] = Filter::int(Req::args('county'));
         }

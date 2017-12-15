@@ -183,6 +183,7 @@ class V1Controller extends Controller {
         "promoter_attention"=>array("address/promoterAttention",1,1), //关注商家
         "has_attentioned"=>array('address/hasAttentioned',1,1), //判断商家是否已关注
         "set_picture"=>array("district/setPicture",1,1), //设置商家店铺头像
+        "my_promoter_detail"=>array("address/myPromoterDetail",1,1), //我的商家信息详情
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息
