@@ -293,6 +293,14 @@ class DistrictAction extends Controller {
         if(!$page){
             $page = 1;
         }
+        $code = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->findAll();
+        if($code){
+            foreach($code as $k => $v){
+                if(time()>$v['end_date']){
+                    $this->model->table('promoter_code')->data(array('status'=>-1))->where('id='.$v['id'])->update();
+                }
+            }
+        }
         $list = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->order('id desc')->findPage($page,10);
         if($list){
             unset($list['html']);
