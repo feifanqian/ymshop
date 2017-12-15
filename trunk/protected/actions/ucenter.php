@@ -1399,9 +1399,12 @@ class UcenterAction extends Controller {
         if ($type == 'avatar') {
             $options['save-key'] = "/data/uploads/head/" . $this->user['id'] . "{.suffix}";
             $options['ext-param'] = "avatar:{$this->user['id']}";
-        } else if ($type == 'support') {
+        }elseif($type == 'support') {
             $options['save-key'] = "/data/uploads/support/{year}/{mon}/{day}/{filemd5}{.suffix}";
             $options['ext-param'] = "support";
+        }elseif ($type == 'shop_picture') {
+            $options['save-key'] = "/data/uploads/picture/" . $this->user['id'] . "{.suffix}";
+            $options['ext-param'] = "shop_picture:{$this->user['id']}";
         } else {
             $this->code = 1000;
             return;
@@ -2126,6 +2129,7 @@ class UcenterAction extends Controller {
             $image->thumb(APP_ROOT . $image_url, 100, 100);
             $model = new Model('user');
             $avatar = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
+            var_dump(123);die;
             $model->data(array('avatar' => $avatar))->where("id=" . $this->user['id'])->update();
 
             $safebox = Safebox::getInstance();
