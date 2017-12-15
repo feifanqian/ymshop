@@ -1405,6 +1405,7 @@ class UcenterAction extends Controller {
         }elseif ($type == 'shop_picture') {
             $options['save-key'] = "/data/uploads/picture/" . $this->user['id'] . "{.suffix}";
             $options['ext-param'] = "shop_picture:{$this->user['id']}";
+            $this->model->table('district_promoter')->data(array('picture'=>$options['save-key']))->where('user_id='.$this->user['id'])->update();
         } else {
             $this->code = 1000;
             return;
@@ -2129,7 +2130,7 @@ class UcenterAction extends Controller {
             $image->thumb(APP_ROOT . $image_url, 100, 100);
             $model = new Model('user');
             $avatar = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
-            var_dump(123);die;
+            // var_dump(123);die;
             $model->data(array('avatar' => $avatar))->where("id=" . $this->user['id'])->update();
 
             $safebox = Safebox::getInstance();
