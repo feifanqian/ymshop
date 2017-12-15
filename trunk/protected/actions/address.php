@@ -669,33 +669,6 @@ class AddressAction extends Controller
         $this->content = $info_sql; 
     }
 
-    // //按区域查找商家
-    // public function getArea()
-    // {
-    //     $region_id = Filter::int(Req::args('region_id')); //所在区域
-    //     $classify_id = Filter::int(Req::args('classify_id')); //分类
-    //     $tourist_id = Filter::int(Req::args('tourist_id'));//区域下的著名的景点或街道
-    //     $class_id = '';
-    //     $region = '';
-    //     $tourist = '';
-    //     if (!empty($classify_id)) {
-    //         $class_id = $classify_id;
-    //     }
-    //     if (!empty($region_id)) {
-    //         $region = $region_id;
-    //     }
-    //     if (!empty($tourist_id)) {
-    //         $tourist = $tourist_id;
-    //     }
-    //     $result = $this->model->table('district_promoter')->where("classify_id=$classify_id and region_id=$region_id and tourist_id=" . $tourist)->findAll();
-    //     if ($result) {
-    //         $this->code = 0;
-    //         $this->content = $result;
-    //     } else {
-    //         $this->code = 1166;
-    //     }
-    // }
-
     //按地铁线查找
     public function getSubway()
     {

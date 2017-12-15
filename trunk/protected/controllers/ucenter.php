@@ -2089,7 +2089,7 @@ class UcenterController extends Controller
                                 echo json_encode($ret);
                                 exit;
                             }
-                            var_dump($type);die;
+                            // var_dump($type);die;
                             if($type==1){
                                 $this->model->table('customer')->data(array('mobile'=>$mobile))->where('user_id='.$this->user['id'])->update();
                                 $this->model->table('customer')->data(array('status'=>0))->where('user_id='.$other_account['user_id'])->update();
