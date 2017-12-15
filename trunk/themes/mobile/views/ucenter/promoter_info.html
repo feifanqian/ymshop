@@ -9,7 +9,7 @@
             <!--<dd class="input gray">{$gname|'默认分组'}</dd>-->
             <dd class="input gray">商家名称: {$promoter_info['real_name']}</dd>
             <dd><input class="input" type="text" name="shop_name" maxlen="20" value="{$promoter_info['shop_name']}"  placeholder="店铺名"></dd>
-            <div class="select">
+            <div class="flex_1">
                 <select name="classify_id" id="classify_id">
                     <option value="0">选择商家类型</option>
                      {query:name=promoter_type fields=id,name order=id desc}
