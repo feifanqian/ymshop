@@ -450,7 +450,7 @@ class SimpleController extends Controller {
                         }
                     }
                     // 云账号同步
-                    // $customer = $this->model->table('customer')->fields('bizuserid')->find();
+                    // $customer = $this->model->table('customer')->fields('bizuserid')->where('user_id='.$is_oauth['user_id'])->find();
                     // if($customer){
                     //     if($customer['bizuserid']==NULL){
                     //         $sms = SMS::getInstance();
