@@ -195,10 +195,10 @@ class DistrictAction extends Controller {
 
     // 配置头像
     public function setPicture() {
-        $upfile_path = Tiny::getPath("uploads") . "/head/";
-        // $upfile_path = Tiny::getPath("uploads");
-        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
-        // $upfile_url = preg_replace("|^" . APP_URL . "|", '', Tiny::getPath("uploads_url"));
+        // $upfile_path = Tiny::getPath("uploads") . "/head/";
+        $upfile_path = Tiny::getPath("uploads");
+        // $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
+        $upfile_url = preg_replace("|^" . APP_URL . "|", '', Tiny::getPath("uploads_url"));
         $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
         $upfile->save();
         $info = $upfile->getInfo();
