@@ -361,7 +361,7 @@ class AddressAction extends Controller
             return;
         }
         if($promoter['shop_name']==null){
-            $promoter['shop_name'] = $customer['real_name'].'的店铺';
+            $promoter['shop_name'] = $customer['real_name'];
         }
         if($promoter['picture']==null){
             $promoter['picture'] = 'http://www.ymlypt.com/static/images/logo1.png';
@@ -457,41 +457,38 @@ class AddressAction extends Controller
             $result = $model->table('district_promoter')->data(array('picture' => $picture))->where("user_id=" . $this->user['id'])->update();
         }
         if ($name) {
-            $result = $model->table('customer')->data(array('real_name' => $name))->where("user_id=" . $this->user['id'])->update();
+            $model->table('customer')->data(array('real_name' => $name))->where("user_id=" . $this->user['id'])->update();
         }
         if ($infos) {
-            $result = $model->table('district_promoter')->data(array('info' => $infos))->where("user_id=" . $this->user['id'])->update();
+            $model->table('district_promoter')->data(array('info' => $infos))->where("user_id=" . $this->user['id'])->update();
         }
         if ($location) {
-            $result = $model->table('district_promoter')->data(array('location' => $location))->where("user_id=" . $this->user['id'])->update();
+            $model->table('district_promoter')->data(array('location' => $location))->where("user_id=" . $this->user['id'])->update();
         }
         if ($lng) {
-            $result = $model->table('district_promoter')->data(array('lng' => $lng))->where("user_id=" . $this->user['id'])->update();
+            $model->table('district_promoter')->data(array('lng' => $lng))->where("user_id=" . $this->user['id'])->update();
         }
         if ($lat) {
-            $result = $model->table('district_promoter')->data(array('lat' => $lat))->where("user_id=" . $this->user['id'])->update();
+            $model->table('district_promoter')->data(array('lat' => $lat))->where("user_id=" . $this->user['id'])->update();
         }
         if ($province_id) {
-            $result = $model->table('district_promoter')->data(array('province_id' => $province_id))->where("user_id=" . $this->user['id'])->update();
+            $model->table('district_promoter')->data(array('province_id' => $province_id))->where("user_id=" . $this->user['id'])->update();
         }
         if ($city_id) {
-            $result = $model->table('district_promoter')->data(array('city_id' => $city_id))->where("user_id=" . $this->user['id'])->update();
+            $model->table('district_promoter')->data(array('city_id' => $city_id))->where("user_id=" . $this->user['id'])->update();
         }
         if ($region_id) {
-            $result = $model->table('district_promoter')->data(array('region_id' => $region_id))->where("user_id=" . $this->user['id'])->update();
+            $model->table('district_promoter')->data(array('region_id' => $region_id))->where("user_id=" . $this->user['id'])->update();
         }
         if ($tourist_id) {
-            $result = $model->table('district_promoter')->data(array('tourist_id' => $tourist_id))->where("user_id=" . $this->user['id'])->update();
+            $model->table('district_promoter')->data(array('tourist_id' => $tourist_id))->where("user_id=" . $this->user['id'])->update();
         }
         if ($road) {
-            $result = $model->table('district_promoter')->data(array('road' => $road))->where("user_id=" . $this->user['id'])->update();
+            $model->table('district_promoter')->data(array('road' => $road))->where("user_id=" . $this->user['id'])->update();
         }
 
-        if ($result) {
-            $this->code = 0;
-        } else {
-            $this->code = 1099;
-        }
+        $this->code = 0;
+        
     }
 
     //附近商家接口
