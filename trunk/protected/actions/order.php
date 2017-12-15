@@ -762,7 +762,7 @@ class OrderAction extends Controller {
                 }else{
                    $user = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.nickname')->where('c.user_id='.$v['user_id'])->find();  
                 }
-                // var_dump($user);die;
+                var_dump($user['real_name']);die;
                 // $list['data'][$k]['shop_name'] = $user['real_name']!=''?$user['real_name']:$user['nickname'];
                 $list['data'][$k]['shop_name'] = $user['real_name'];
                 if($v['payment']==6 || $v['payment']==7 || $v['payment']==18){
