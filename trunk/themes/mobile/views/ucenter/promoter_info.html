@@ -20,7 +20,7 @@
             <dd>
                 <select name="classify_id" id="classify_id" class="classify_id">
                     <option value="0">选择商家类型</option>
-                     {query:name=promoter_type fields=id,name order=id desc}
+                    {query:name=promoter_type fields=id,name order=id desc}
                     <option value="{$item['id']}" {if:$item['id']==$promoter_info['classify_id']}selected="true"{/if}>{$item['name']}</option>
                     {/query}
                 </select>
@@ -82,7 +82,7 @@
                 value.push(data[0][i]);
             }
         }
-        
+        console.log(value);
         $("#province").parent().find(".option").text(data[1][0]);
         $("#city").parent().find(".option").text(data[1][1]);
         $("#county").parent().find(".option").text(data[1][2]);
