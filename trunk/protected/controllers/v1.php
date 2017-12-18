@@ -151,6 +151,7 @@ class V1Controller extends Controller {
         "input_code"=>array("district/inputCode",1,1), //激活码输入
         //提现
         "get_withdraw_set"=>array("index/getWithdrawSet",0,1),//提现设置
+        "get_merchant_balance"=>array("ucenter/get_merchant_balance",0,1),//商家余额提现
         
         "pointcoin_log"=>array("ucenter/pointcoin_log",1,1),
         //充值套餐详情
