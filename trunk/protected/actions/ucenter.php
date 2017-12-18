@@ -2268,4 +2268,13 @@ class UcenterAction extends Controller {
             return;
         }
     }
+
+    /*
+     * 银行卡列表
+     */
+    public function bankcardList(){
+        $list = $this->model->table('bankcard')->fields('bank_name,open_name,cardno,type')->where('user_id='.$this->user['id'])->findAll();
+        $this->code = 0;
+        $this->content = $list;
+    }
 }
