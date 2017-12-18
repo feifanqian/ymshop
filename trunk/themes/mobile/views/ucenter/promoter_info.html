@@ -71,7 +71,7 @@
 </div>
 <script type="text/javascript">
     $(function(){  
-    var selected = [{$province|0},{$city|0},{$county|0},{$street|0}];
+    var selected = [{$promoter_info['province_id']|0},{$promoter_info['city_id']|0},{$promoter_info['region_id']|0},{$promoter_info['tourist_id']|0}];
     $("#areas").Linkages({ url:"{url:/ajax/area_datas}",selected:selected,initRunCallBack:true,callback:function(data){
         
         var text = new Array();
