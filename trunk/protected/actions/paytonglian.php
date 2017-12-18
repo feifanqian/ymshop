@@ -504,15 +504,16 @@ class PaytonglianAction extends Controller
         $phone = Req::args('phone');
         $name = Req::args('name');
         $cardType = Req::args('cardType');  //卡类型   储蓄卡 1 整型         信用卡 2 整型
-        $identityType = Req::args('identityType');          //证件类型 1是身份证 目前只支持身份证
+        $identityType = 1;          //证件类型 1是身份证 目前只支持身份证
         $identityNo = $this->rsaEncrypt(Req::args('identityNo'), $publicKey, $privateKey);//必须rsa加密 330227198805284412
         $validate = Req::args('validate');
         $cvv2 = Req::args('cvv2');
-        $isSafeCard = Req::args('isSafeCard');  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
-        $cardCheck = Req::args('cardCheck'); //绑卡方式
+        $isSafeCard = false;  //信用卡时不能填写： true:设置为安全卡，false:不 设置。默认为 false
+        $cardCheck = 2; //绑卡方式
         $unionBank = Req::args('unionBank');
         $verificationCode = Req::args('verificationCode');
-
+        $province = Req::args('province');
+        $city = Req::args('city');
 
         if ($cardType == 2) {
             // 信用卡    有下面的参数
@@ -538,7 +539,7 @@ class PaytonglianAction extends Controller
             $transdate = $signedValue['transDate'];
             $exist = $this->model->table('bankcard')->where('user_id='.$this->user['id'].' and cardno='.$cardNos)->find();
             
-            $this->model->table('bankcard')->data(array('user_id'=>$this->user['id'],'trancenum'=>$trancenum,'transdate'=>$transdate,'cardno'=>$cardNos))->insert();
+            $this->model->table('bankcard')->data(array('user_id'=>$this->user['id'],'trancenum'=>$trancenum,'transdate'=>$transdate,'cardno'=>$cardNos,'province'=>$province,'city'=>$city))->insert();
             
             print_r($result);
         } else {

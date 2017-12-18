@@ -2236,8 +2236,8 @@ class UcenterAction extends Controller {
      */
     public function offlineBalanceWithdraw()
     {
-        $open_name = Filter::str(Req::args('name'));
-        $open_bank = Filter::str(Req::args('bank'));
+        $open_name = Filter::str(Req::args('open_name'));
+        $open_bank = Filter::str(Req::args('open_bank'));
         $prov = Filter::str(Req::args('province'));
         $city = Filter::str(Req::args("city"));
         $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
