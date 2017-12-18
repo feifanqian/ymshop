@@ -2236,11 +2236,18 @@ class UcenterAction extends Controller {
      */
     public function offlineBalanceWithdraw()
     {
-        $open_name = Filter::str(Req::args('open_name'));
-        $open_bank = Filter::str(Req::args('open_bank'));
-        $prov = Filter::str(Req::args('province'));
-        $city = Filter::str(Req::args("city"));
-        $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
+        $bankcard_id = Filter::int(Req::args('bankcard_id'));
+        $bankcard = $this->model->table('bankcard')->where('id='.$bankcard_id)->find();
+        if(!$bankcard){
+            $this->code = 1183;
+            return;
+        }
+        $open_name = $bankcard['open_name'];
+        $open_bank = $bankcard['bank_name'];
+        $prov = $bankcard['province'];
+        $city = $bankcard['city'];
+        $card_no = $bankcard['cardno'];
+        // $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
         $amount = Filter::float(Req::args('amount'));
         $amount = round($amount, 2);
         $customer = $this->model->table("customer")->where("user_id =" . $this->user['id'])->fields('offline_balance')->find();
@@ -2262,7 +2269,7 @@ class UcenterAction extends Controller {
             $this->model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
             Log::balance(0 - $amount, $this->user['id'], $withdraw_no, "商家余额提现申请", 11, 1);
             $this->code = 0;
-            $this->content = '申请提交成功';
+            $this->content = '申请成功';
         } else {
             $this->code = 1182;
             return;
