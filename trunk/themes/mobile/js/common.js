@@ -283,6 +283,8 @@ function descartes(args) {
         $.post(o.url, function (data) {
             $.each(data, function (i, n) {
                 var c_id = i.substr(2);
+                console.log(c_id);
+                console.log(arrSelect[0]);
                 var selected = (c_id == arrSelect[0]) ? 'selected="selected"' : '';
                 options[0] += '<option value="' + c_id + '" ' + selected + '>' + n.t + '</option>';
 

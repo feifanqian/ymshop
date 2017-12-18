@@ -91,7 +91,7 @@
         var address = data[1][0]+data[1][1]+data[1][2];
     
         $("input[name='areas']").val(address);
-        console.log($("#areas_hidden").val());
+        // console.log($("#areas_hidden").val());
         FireEvent(document.getElementById("areas_hidden"), "change");
     }});
     {if:isset($invalid)}
