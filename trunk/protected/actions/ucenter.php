@@ -2197,4 +2197,42 @@ class UcenterAction extends Controller {
         $this->content['realname'] = $user['realname'];
         $this->content['id_no'] = $user['id_no'];
     }
+
+    /*
+     * 商家余额提现到银行卡
+     */
+    public function offline_balance_withdraw()
+    {
+        $open_name = Filter::str(Req::args('name'));
+        $open_bank = Filter::str(Req::args('bank'));
+        $prov = Filter::str(Req::args('province'));
+        $city = Filter::str(Req::args("city"));
+        $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
+        $amount = Filter::float(Req::args('amount'));
+        $amount = round($amount, 2);
+        $customer = $this->model->table("customer")->where("user_id =" . $this->user['id'])->fields('offline_balance')->find();
+        $can_withdraw_amount = $customer ? $customer['offline_balance'] : 0;
+        if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
+            $this->code = 1180;
+            return;
+        }
+        $config = Config::getInstance();
+        $other = $config->get("other");
+        if ($amount < $other['min_withdraw_amount']) {
+            $this->code = 1181;
+            return;
+        }
+        $withdraw_no = "BW" . date("YmdHis") . rand(100, 999);
+        $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0, 'type' => 1);
+        $result = $this->model->table('balance_withdraw')->data($data)->insert();
+        if ($result) {
+            $this->model->table('customer')->data(array('offline_balance' => "`offline_balance`-" . $amount))->where('user_id=' . $this->user['id'])->update();
+            Log::balance(0 - $amount, $this->user['id'], $withdraw_no, "商家余额提现申请", 11, 1);
+            $this->code = 0;
+            $this->content = '申请提交成功';
+        } else {
+            $this->code = 1182;
+            return;
+        }
+    }
 }
