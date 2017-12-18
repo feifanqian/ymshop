@@ -1820,20 +1820,18 @@ class UcenterAction extends Controller {
     }
 
     //商家余额提现
-    public function get_merchant_balance()
+    public function getMerchantBalance()
     {
             $amount = Req::args('amount');
             $amount = round($amount, 2);
             $customer = $this->model->table("customer")->where("user_id =" . $this->user['id'])->fields('balance,offline_balance')->find();
             $can_withdraw_amount = $customer ? $customer['offline_balance'] : 0;
             if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分
-                //exit(json_encode(array('status' => 'fail', 'msg' => '提现金额超出的账户可提现余额')));
                 $this->code = 1180;
             }
             $config = Config::getInstance();
             $other = $config->get("other");
             if ($amount < $other['min_withdraw_amount']) {
-//                exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
                 $this->code = 1181;
                 $this->content = $other['min_withdraw_amount'];
             }
@@ -1850,7 +1848,6 @@ class UcenterAction extends Controller {
                 $this->code = 0;
                 $this->content = NULL;
             } else {
-//                exit(json_encode(array('status' => 'fail', 'msg' => '提现失败，数据库错误')));
                 $this->code = 1182;
             }
     }
@@ -2237,7 +2234,7 @@ class UcenterAction extends Controller {
     /*
      * 商家余额提现到银行卡
      */
-    public function offline_balance_withdraw()
+    public function offlineBalanceWithdraw()
     {
         $open_name = Filter::str(Req::args('name'));
         $open_bank = Filter::str(Req::args('bank'));
