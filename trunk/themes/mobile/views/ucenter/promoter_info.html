@@ -21,7 +21,7 @@
                 <select name="classify_id" id="classify_id" class="classify_id">
                     <option value="0">选择商家类型</option>
                      {query:name=promoter_type fields=id,name order=id desc}
-                    <option value="{$item['id']}">{$item['name']}</option>
+                    <option value="{$item['id']}" {if:$item['id']==$promoter_info['classify_id']}selected="true"{/if}>{$item['name']}</option>
                     {/query}
                 </select>
             </dd>
