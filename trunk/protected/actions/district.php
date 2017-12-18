@@ -222,16 +222,16 @@ class DistrictAction extends Controller {
 
     //生成激活码
     public function makePromoterCode(){
-        $data = $this->model->table("promoter_code")->where("user_id =".$this->user['id'])->findAll();
-        if(count($data)>100){
-            $this->code = 1171;
-            return;
-        }
         $code = Common::makePromoterCode();
-        $district = $this->model->table('district_shop')->fields('id')->where('owner_id='.$this->user['id'])->find();
+        $district = $this->model->table('district_shop')->fields('id,code_num')->where('owner_id='.$this->user['id'])->find();
         if(!$district){
            $this->code = 1132;
            return; 
+        }
+        $data = $this->model->table("promoter_code")->where("user_id =".$this->user['id'])->findAll();
+        if(count($data)>$district['code_num']){  //默认每个经销商只有100条激活码
+            $this->code = 1172;
+            return;
         }
         $district_id = $district['id'];
         $result = $this->model->table("promoter_code")->data(array('user_id'=>$this->user['id'],'code'=>$code,'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+30 days")),'district_id'=>$district_id))->insert();
@@ -312,7 +312,24 @@ class DistrictAction extends Controller {
         if($list){
             unset($list['html']);
         }
+        
+        $count1 = $district['code_num'];
+        $count2 = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->count();
+        $count3 = $this->model->table('promoter_code')->where('status=0 and user_id='.$this->user['id'])->count();
+        $count4 = $this->model->table('promoter_code')->where('status=1 and user_id='.$this->user['id'])->count();
+        $count5 = $this->model->table('promoter_code')->where('status=-1 and user_id='.$this->user['id'])->count();
+
+        $count = array(
+             'max_num'       => $count1, //允许生成激活码的数量,默认100
+             'made_num'      => $count2, //已生成
+             'remaining_num' => $count1-$count2, //剩余数量
+             'used_num'      => $count3, //已使用
+             'unused_num'    => $count4, //未使用
+             'expired_num'   => $count5 //已过期
+            );
+
         $this->code = 0;
-        $this->content = $list;
+        $this->content['list'] = $list;
+        $this->content['count'] = $count;
     }      
 }

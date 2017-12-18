@@ -2075,7 +2075,8 @@ class UcenterController extends Controller
     {
         $mobile = Filter::sql(Req::args('mobile'));
         $validatecode = Filter::sql(Req::args('validatecode'));
-        $type = Filter::int(Req::args('type'));
+        // $type = Filter::int(Req::args('type'));
+
         if ($mobile != "" && $validatecode != "") {
             $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
             // $ret['status'] = 'success';
@@ -2112,15 +2113,137 @@ class UcenterController extends Controller
                                 echo json_encode($ret);
                                 exit;
                             }
-                            // var_dump($type);die;
-                            if($type==1){
-                                $this->model->table('customer')->data(array('mobile'=>$mobile))->where('user_id='.$this->user['id'])->update();
-                                $this->model->table('customer')->data(array('status'=>0))->where('user_id='.$other_account['user_id'])->update();
+                            
+                            $this->model->table('customer')->data(array('mobile'=>$mobile))->where('user_id='.$this->user['id'])->update();
+                            $this->model->table('customer')->data(array('status'=>0))->where('user_id='.$other_account['user_id'])->update();
                                 $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
-                            }elseif($type==2){
-                                $this->model->table('customer')->data(array('mobile'=>''))->where('user_id='.$this->user['id'])->update();
-                                $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
+                            
+                            //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
+                            $user = $this->model->table('user')->fields('password,validcode')->where('id='.$other_account['user_id'])->find();
+                            $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
+                            
+                            if ($result) {
+                                $this->safebox->clear('user');
+                                $cookie = new Cookie();
+                                $cookie->setSafeCode(Tiny::app()->getSafeCode());
+                                $cookie->set('autologin', null, 0);
+                                $ret['status'] = "success";
+                                $ret['message'] = "绑定并切换成功";
+                                echo json_encode($ret);
+                                exit;
+                            } else {
+                                $ret['status'] = "fail";
+                                $ret['message'] = "切换失败,数据库错误1";
+                                echo json_encode($ret);
+                                exit;
                             }
+                        }
+                        $ret['status'] = "fail";
+                        $ret['message'] = "切换失败";
+                        echo json_encode($ret);
+                        exit;
+                    } else {//存在另一个user_id
+                        $ids = $account_info['other_user_id'] . "," . $account_info['user_id'];
+                        //验证手机号
+                        $isOk = $this->model->table("customer")->where("user_id in ($ids) and mobile='$mobile'")->find();
+                        if (!$isOk) {
+                            $ret['status'] = "fail";
+                            $ret['message'] = "切换失败,对应手机号码错误";
+                            echo json_encode($ret);
+                            exit;
+                        }
+                        //查询另一个账号是否真实存在没被禁用或删除
+                        $other_account = $this->model->table('user')->where("id=" . $account_info['other_user_id'] . " and status = 1")->find();
+                        if (empty($other_account)) {
+                            $ret['status'] = "fail";
+                            $ret['message'] = "切换失败,绑定的另一个账号信息为空";
+                            echo json_encode($ret);
+                            exit;
+                        } else {
+                            $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
+                            if ($result) {
+                                $this->safebox->clear('user');
+                                $cookie = new Cookie();
+                                $cookie->setSafeCode(Tiny::app()->getSafeCode());
+                                $cookie->set('autologin', null, 0);
+                                $ret['status'] = "success";
+                                $ret['message'] = "切换成功";
+                                echo json_encode($ret);
+                                exit;
+                            } else {
+                                $ret['status'] = "fail";
+                                $ret['message'] = "切换失败,数据库错误2";
+                                echo json_encode($ret);
+                                exit;
+                            }
+                        }
+                    }
+                }
+            } else {
+                $ret['status'] = "fail";
+                $ret['message'] = "验证码错误，请重新获取";
+                echo json_encode($ret);
+                exit;
+            }
+        } else {
+            $account_info = $this->model->table("oauth_user")->where("user_id =" . $this->user['id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->find();
+            if (isset($account_info['other_user_id'])) {
+                $nameinfo = $this->model->table("user")->where("id=" . $account_info['other_user_id'])->fields("nickname,name,avatar")->find();
+                if (!empty($nameinfo)) {
+                    $this->assign("other_account", $nameinfo);
+                }
+            }
+            $this->assign("seo_title", "切换账号");
+            $this->redirect("change_account");
+        }
+    }
+
+    public function change_accounts()
+    {
+        $mobile = Filter::sql(Req::args('mobile'));
+        $validatecode = Filter::sql(Req::args('validatecode'));
+        // $type = Filter::int(Req::args('type'));
+        
+        if ($mobile != "" && $validatecode != "") {
+            $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
+            // $ret['status'] = 'success';
+            SMS::getInstance()->flushCode($mobile);
+            if ($ret['status'] == 'success') {
+                //查询当前微信公众号绑定的user_id
+                $account_info_all = $this->model->table("oauth_user")->where("user_id =" . $this->user['id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->findAll();
+                if (empty($account_info_all) || count($account_info_all) > 1) {
+                    $ret['status'] = "fail";
+                    $ret['message'] = "切换失败,oauth信息错误";
+                } else {
+                    $account_info = $account_info_all[0];
+                    if ($account_info['other_user_id'] == 0 || $account_info['other_user_id'] == "") {//如果另一个账号信息不存在
+                        //查询手机号绑定的账号
+                        $other_account = $this->model->table('customer')->where("mobile='" . $mobile . "'")->fields('user_id,mobile')->find();
+                        if (empty($other_account) || $other_account['user_id'] == 0) {
+                            $ret['status'] = "fail";
+                            $ret['message'] = "切换失败,该手机号绑定的账号不存在";
+                            echo json_encode($ret);
+                            exit;
+                        } else {//查询成功
+                            if ($other_account['user_id'] == $account_info['user_id']) {//绑定的就是本账号
+                                $ret['status'] = "fail";
+                                $ret['message'] = "切换失败,不存在另一个账号";
+                                echo json_encode($ret);
+                                exit;
+                            }
+                            //判断该账号是否已经绑定过微信公众号登陆
+                            $isOk1 = $this->model->table("oauth_user")->where("user_id =" . $other_account['user_id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->findAll();
+                            $isOk2 = $this->model->table("oauth_user")->where("other_user_id =" . $other_account['user_id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->findAll();
+                            if (!empty($isOk1) && !empty($isOk2)) {
+                                $ret['status'] = "fail";
+                                $ret['message'] = "绑定失败，该手机号对应账号已经绑定了其他微信账号";
+                                echo json_encode($ret);
+                                exit;
+                            }
+                            
+                            $this->model->table('customer')->data(array('mobile'=>''))->where('user_id='.$this->user['id'])->update();
+                            $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
+                            
                             //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
                             $user = $this->model->table('user')->fields('password,validcode')->where('id='.$other_account['user_id'])->find();
                             $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();

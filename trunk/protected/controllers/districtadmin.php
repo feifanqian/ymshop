@@ -1284,7 +1284,7 @@ class DistrictadminController extends Controller
         $id = Req::args("id");
         $uid = Filter::int($id);
         $model = new Model();
-        $list = $model->table('district_shop')->fields('id,name')->where('id=' . $uid)->find();
+        $list = $model->table('district_shop')->fields('id,name,code_num')->where('id=' . $uid)->find();
         $this->assign('list', $list);
         $this->redirect('hirer_edit');
     }
@@ -1295,8 +1295,9 @@ class DistrictadminController extends Controller
         $id = Req::args('id');
         $model = new Model();
         $name = Req::args('name');
+        $code_num = Filter::int(Req::args('code_num'));
         if ($name) {
-            $model->table('district_shop')->data(array('name' => $name))->where("id=$id")->update();
+            $model->table('district_shop')->data(array('name' => $name,'code_num'=>$code_num))->where("id=$id")->update();
         }
         $this->redirect("list_hirer");
     }

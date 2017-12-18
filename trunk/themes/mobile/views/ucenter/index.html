@@ -260,16 +260,13 @@
 </div>
 {widget:name=sub_navs action=ucsidebar sidebar=$sidebar act=$actionId}
 </div>
-{if:$user['id']==42608}
-<div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_account?type=1}" class="weui_btn weui_btn_primary">绑定已有账号</a></div></div>
-{/if}
 {if:!Common::checkInWechat()}
 <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/simple/logout}" class="weui_btn weui_btn_primary">安全退出</a></div></div>
 {else:}
     {if:isset($open_change)&&$open_change==true}
-    <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_account?type=2}" class="weui_btn weui_btn_primary">切换微信绑定账号</a></div></div>
+    <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_accounts}" class="weui_btn weui_btn_primary">切换微信绑定账号</a></div></div>
     {elseif:isset($open_bind)&&$open_bind==true}
-    <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_account?type=1}" class="weui_btn weui_btn_primary">绑定已有账号</a></div></div>
+    <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_account}" class="weui_btn weui_btn_primary">绑定已有账号</a></div></div>
     {/if}
 {/if}
 {if:$sign_in_open==1}

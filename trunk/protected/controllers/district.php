@@ -339,9 +339,12 @@ class DistrictController extends Controller {
     }
 
     public function makePromoterCode(){
+        $district = $this->model->table('district_shop')->fields('id,code_num')->where('owner_id='.$this->user['id'])->find();
+
         $data = $this->model->table("promoter_code")->where("user_id =".$this->user['id'])->findAll();
-        if(count($data)>100){
-            exit(json_encode(array('status'=>'fail','msg'=>'您只有100个代理商邀请码资格')));
+
+        if(count($data)>$district['code_num']){
+            exit(json_encode(array('status'=>'fail','msg'=>'您的代理商邀请码已用完')));
         }
         $code = Common::makePromoterCode();
         $result = $this->model->table("promoter_code")->data(array('user_id'=>$this->user['id'],'code'=>$code,'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+30 days")),'district_id'=>$this->hirer->id))->insert();
