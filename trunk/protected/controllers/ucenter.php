@@ -711,25 +711,25 @@ class UcenterController extends Controller
     }
 
     public function promoter_save(){
-        if($this->user['id']==42608){
-            var_dump($_FILES);die;
-        }
-        // $upfile_path = Tiny::getPath("uploads") . "/head/";
-        // $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
-        // $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
-        // $upfile->save();
-        // $info = $upfile->getInfo();
-        // $result = array();
+        // if($this->user['id']==42608){
+        //     var_dump($_FILES);die;
+        // }
+        $upfile_path = Tiny::getPath("uploads") . "/head/";
+        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
+        $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile->save();
+        $info = $upfile->getInfo();
+        $result = array();
         $picture = "";
 
-        // if ($info[0]['status'] == 1) {
-        //     $result = array('error' => 0, 'url' => $upfile_url . $info[0]['path']);
-        //     $image_url = $upfile_url . $info[0]['path'];
-        //     $image = new Image();
-        //     $image->suffix = '';
-        //     $image->thumb(APP_ROOT . $image_url, 100, 100);
-        //     $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
-        // }
+        if ($info[0]['status'] == 1) {
+            $result = array('error' => 0, 'url' => $upfile_url . $info[0]['path']);
+            $image_url = $upfile_url . $info[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url, 100, 100);
+            $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
+        }
         
         $location =  Filter::text(Req::args('areas').Req::args('road'));
 
