@@ -2300,7 +2300,10 @@ class UcenterAction extends Controller {
         $list = $this->model->table('bankcard')->fields('bank_name,open_name,cardno,type,bank_code')->where('user_id='.$this->user['id'])->findAll();
         if($list){
             foreach($list as $k=>$v){  //设置银行logo
-                $v['logo'] = 'https://apimg.alipay.com/combo.png?d=cashier&t='.$v['bank_code'];
+                if($v['logo']==''){
+                    $logo = 'https://apimg.alipay.com/combo.png?d=cashier&t='.$v['bank_code'];
+                    $this->model->table('bankcard')->data(array('logo'=>$logo))->where('id='.$v['id'])->update();
+                }
                 $card_type = $v['type']==1?'储蓄卡':'信用卡';
                 $list[$k]['name'] = '尾号'.substr($v['cardno'], -4).$card_type;
             }
