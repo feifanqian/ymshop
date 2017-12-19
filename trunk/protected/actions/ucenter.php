@@ -2304,11 +2304,16 @@ class UcenterAction extends Controller {
                     $logo = 'https://apimg.alipay.com/combo.png?d=cashier&t='.$v['bank_code'];
                     $this->model->table('bankcard')->data(array('logo'=>$logo))->where('id='.$v['id'])->update();
                 }
-                $card_type = $v['type']==1?'储蓄卡':'信用卡';
-                $list[$k]['name'] = '尾号'.substr($v['cardno'], -4).$card_type;
+            }
+        }
+        $newlist = $this->model->table('bankcard')->fields('id,logo')->where('user_id='.$this->user['id'])->findAll();
+        if($newlist){
+            foreach($newlist as $k=>$v){
+                $card_type = $v['type']==1?' 储蓄卡':' 信用卡';
+                $newlist[$k]['name'] = '尾号 '.substr($v['cardno'], -4).$card_type;
             }
         }
         $this->code = 0;
-        $this->content = $list;
+        $this->content = $newlist;
     }
 }
