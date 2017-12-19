@@ -2292,7 +2292,7 @@ class UcenterAction extends Controller {
                         return;
                     }
                 }
-                $this->model->table('bankcard')->data(array('bankcode'=>$code['bank']))->where('id='.$v['id'])->update();
+                $this->model->table('bankcard')->data(array('bank_code'=>$code['bank']))->where('id='.$v['id'])->update();
             }
         }
         $list = $this->model->table('bankcard')->fields('bank_name,open_name,cardno,type')->where('user_id='.$this->user['id'])->findAll();
