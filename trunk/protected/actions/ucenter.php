@@ -2297,7 +2297,7 @@ class UcenterAction extends Controller {
                 }  
             }
         }
-        $list = $this->model->table('bankcard')->fields('bank_name,open_name,cardno,type,bank_code')->where('user_id='.$this->user['id'])->findAll();
+        $list = $this->model->table('bankcard')->fields('bank_name,open_name,cardno,type,bank_code,logo')->where('user_id='.$this->user['id'])->findAll();
         if($list){
             foreach($list as $k=>$v){  //设置银行logo
                 if($v['logo']==''){
