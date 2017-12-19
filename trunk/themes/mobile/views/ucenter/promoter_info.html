@@ -12,7 +12,7 @@
 {echo:JS::import('form');}
 {echo:JS::import('date');}
 <div class="ma20 bg-white p20">
-    <form  action="{url:/ucenter/promoter_save}" method="post">
+    <form  action="{url:/ucenter/promoter_save}" method="post" enctype="multipart/form-data">
         <input name="areas" type="hidden" class="input"  value="" alt="请选择完整地区信息！">
         <dl>
             <dd class="input gray">商家名称: {$promoter_info['real_name']}</dd>
