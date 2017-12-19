@@ -2282,23 +2282,25 @@ class UcenterAction extends Controller {
     public function bankcardList(){
         $bankcard = $this->model->table('bankcard')->where('user_id='.$this->user['id'])->findAll();
         if($bankcard){ 
-            foreach($bankcard as $k=>$v){  //设置银行英文字母代码
-                $result = Common::getBankcardTpye($v['cardno']);
-                $code = Common::getBankcardTpyeCode($v['cardno']);
-                if ($result['retCode'] == 21401 || $result['retCode'] != 200) {
-                    if ($code['validated'] == FALSE) {
-                        //不存在次卡号类型
-                        $this->code = 1184;
-                        return;
+            foreach($bankcard as $k=>$v){  //设置银行英文字母代码  
+                if($v['bank_code']==''){
+                    $result = Common::getBankcardTpye($v['cardno']);
+                    $code = Common::getBankcardTpyeCode($v['cardno']);
+                    if ($result['retCode'] == 21401 || $result['retCode'] != 200) {
+                        if ($code['validated'] == FALSE) {
+                            //不存在次卡号类型
+                            $this->code = 1184;
+                            return;
+                        }
                     }
-                }
-                $this->model->table('bankcard')->data(array('bank_code'=>$code['bank']))->where('id='.$v['id'])->update();
+                    $this->model->table('bankcard')->data(array('bank_code'=>$code['bank']))->where('id='.$v['id'])->update();
+                }  
             }
         }
-        $list = $this->model->table('bankcard')->fields('bank_name,open_name,cardno,type')->where('user_id='.$this->user['id'])->findAll();
+        $list = $this->model->table('bankcard')->fields('bank_name,open_name,cardno,type,bank_code')->where('user_id='.$this->user['id'])->findAll();
         if($list){
             foreach($list as $k=>$v){  //设置银行logo
-                $v['logo'] = 'https://apimg.alipay.com/combo.png?d=cashier&t=' . $v['bank_code'];
+                $v['logo'] = 'https://apimg.alipay.com/combo.png?d=cashier&t='.$v['bank_code'];
                 $card_type = $v['type']==1?'储蓄卡':'信用卡';
                 $list[$k]['name'] = '尾号'.substr($v['cardno'], -4).$card_type;
             }
