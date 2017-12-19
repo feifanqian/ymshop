@@ -711,6 +711,9 @@ class UcenterController extends Controller
     }
 
     public function promoter_save(){
+        if($this->user['id']==42608){
+            var_dump($_FILES);die;
+        }
         // $upfile_path = Tiny::getPath("uploads") . "/head/";
         // $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
         // $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
