@@ -2306,7 +2306,7 @@ class UcenterAction extends Controller {
                 }
             }
         }
-        $newlist = $this->model->table('bankcard')->fields('id,logo')->where('user_id='.$this->user['id'])->findAll();
+        $newlist = $this->model->table('bankcard')->fields('id,cardno,logo,type')->where('user_id='.$this->user['id'])->findAll();
         if($newlist){
             foreach($newlist as $k=>$v){
                 $card_type = $v['type']==1?' 储蓄卡':' 信用卡';
