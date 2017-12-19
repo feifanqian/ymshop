@@ -1,0 +1,94 @@
+{echo:JS::import('form');}
+{echo:JS::import('dialog?skin=tinysimple');}
+{echo:JS::import('dialogtools');}
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<form action="{url:/ucenter/update_obj_act}" name="form_update" class="simple" method="post">
+    <div class="weui_cells weui_cells_form">
+        <div class="weui_panel_hd">切换账号</div>
+         <div class="weui_cell">
+               <div class="weui_cell_primary" style="text-align:center;">
+                   <img class="weui_media_appmsg_thumb" src='{echo:Url::urlFormat("@".$other_account['avatar'])}' style="height:60px;border-radius:25px;">
+               </div>
+        </div>    
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">手机号码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input type="text" id="mobile" class="weui_input" name="mobile" pattern="mobi" placeholder="手机号码"  alt="正确的手机号码">
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input type="text"  id="validatecode" name="validatecode" class="weui_input" pattern="\d{6}" alt="6位短信验证码" placeholder="短信验证码">
+            </div>
+            <div class="weui_cell_ft">
+                <input id="sendSMS" type="button" class="weui_btn weui_btn_primary weui_btn_mini" value="获取">
+            </div>
+        </div>
+        <div class="weui_cell">
+        <div class="page__desc" style="margin-top: 5px;color: #888;text-align: left;font-size: 14px;">
+            该功能适用于之前在微信公众号内没有绑定手机号，又同时在网站注册并将手机号绑定的用户，原则上将这两个账号区分开来，不能同时绑定同一个手机号。
+            为方便此类用户，第一次可通过验证手机将在网站的注册的账号与公众号内的账号绑定，此后可以通过验证手机切换使用这两个账号，切换后的账号为进入公众号以后自动登陆的账号。
+            <br/>
+            PS：绑定机会只有一次，不要泄露验证码哦！
+        </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <div id="msgInfo" ></div>
+                <input type="submit" name="" class="weui_btn weui_btn_primary"" value="提交">
+            </div>
+        </div>
+    </div>
+</form>
+        <script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+        <script>
+            $(function () {
+                $("form").on("submit", function () {
+                    var mobile = $("#mobile").val();
+                    var validatecode = $("#validatecode").val();
+                    if (mobile && validatecode) {
+                        $.showLoading();
+                        $.post("{url:/ucenter/change_accounts}",{mobile: mobile, validatecode: validatecode},function(ret){
+                                $.hideLoading();
+                                if (ret.status == "success") {
+                                     $.toast(ret.message, "success");
+                                     setTimeout(function () {
+                                        location.href = "{url:/}";
+                                     }, 2000);
+                                } else {
+                                    $.toast(ret.message, "forbidden");
+                                }
+                        },'json');
+                    } else {
+                        $.toast("手机号和验证码不能为空!", "forbidden");
+                    }
+                    return false;
+                });
+                $("#sendSMS").on("click", function () {
+                    if ($("#mobile").val() == "") {
+                        $.toast("手机号码不能为空!", "forbidden");
+                        return;
+                    }
+                    $.showLoading();
+                    $.ajax({
+                        url: "{url:/ajax/send_sms}",
+                        data: {mobile: $("#mobile").val()},
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (ret) {
+                            $.hideLoading();
+                            if (ret.status == "success") {
+                                $.toast("验证码发送成功!");
+                            } else {
+                                $.toast(ret.msg, "forbidden");
+                            }
+                        }, error: function (e) {
+                            $.hideLoading();
+                            $.toast("验证码发送失败!明天再来吧", "forbidden");
+                        }
+                    });
+                });
+            });
+        </script>
