@@ -1440,4 +1440,18 @@ class Common {
             );
         return $array;
     }
+
+    static function getBankcardTpyeCode($bank_num) {
+        $url = 'https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?_input_charset=utf-8&cardNo=' . $bank_num.'&cardBinCheck=true';
+        $card = httpRequest($url,'GET');
+        $card = json_decode($card,true);
+        return $card;
+    }
+
+    static function getBankcardTpye($bank_num) {
+        $url = 'http://apicloud.mob.com/appstore/bank/card/query?key=1f4d2d20dd266&card='.$bank_num;
+        $return = httpRequest($url, 'GET');
+        $re = json_decode($return, TRUE);
+        return $re;
+    }
 }
