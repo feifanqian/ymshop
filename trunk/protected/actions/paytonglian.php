@@ -503,7 +503,13 @@ class PaytonglianAction extends Controller
         $cardNo = $this->rsaEncrypt(Req::args('cardNo'), $publicKey, $privateKey);//必须rsa加密
         $phone = Req::args('phone');
         $name = Req::args('name');
-        $cardType = Req::args('cardType');  //卡类型   储蓄卡 1 整型         信用卡 2 整型
+        $ret = Common::getBankcardTpye($cardNos);
+        if ($ret['retCode'] == 21401 || $ret['retCode'] != 200) {
+            //不存在次卡号类型
+            $this->code = 1184;
+            return;              
+        }
+        $cardType = $ret['result']['cardType']=='借记卡'?1:2;  //卡类型   储蓄卡 1 整型         信用卡 2 整型
         $identityType = 1;          //证件类型 1是身份证 目前只支持身份证
         $identityNo = $this->rsaEncrypt(Req::args('identityNo'), $publicKey, $privateKey);//必须rsa加密 330227198805284412
         $validate = Req::args('validate');
@@ -541,9 +547,12 @@ class PaytonglianAction extends Controller
             
             $this->model->table('bankcard')->data(array('user_id'=>$this->user['id'],'trancenum'=>$trancenum,'transdate'=>$transdate,'cardno'=>$cardNos,'province'=>$province,'city'=>$city))->insert();
             
-            print_r($result);
+            $this->code = 0;
+            return;
         } else {
             print_r($result);
+            $this->code = 1185;
+            return;
         }
 
     }
