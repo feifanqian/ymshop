@@ -2284,7 +2284,6 @@ class UcenterController extends Controller
                         echo json_encode($ret);
                         exit;
                     } else {//存在另一个user_id
-                        var_dump(123);
                         $ids = $account_info['other_user_id'] . "," . $account_info['user_id'];
                         //验证手机号
                         $isOk = $this->model->table("customer")->where("user_id in ($ids) and mobile='$mobile'")->find();
@@ -2302,8 +2301,6 @@ class UcenterController extends Controller
                             echo json_encode($ret);
                             exit;
                         } else {
-                            var_dump($other_account['id']);
-                            var_dump($this->user['id']);die;
                              $this->model->table('customer')->data(array('mobile'=>''))->where('user_id='.$other_account['id'])->update();
                             // $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
                             
