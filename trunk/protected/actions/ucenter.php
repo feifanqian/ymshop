@@ -2022,17 +2022,9 @@ class UcenterAction extends Controller {
     public function getMyInvitePromoter(){
         $page = Filter::int(Req::args('page'));
         $promoter = Promoter::getPromoterInstance($this->user['id']);
-        if(!is_object($promoter)){
-            $this->code = 1141;
-            return;
-        }else{
-            // if($promoter->role_type==1){
-            //     $this->code = 1156;
-            //     return;
-            // }
-            $this->code = 0;
-            $this->content = $promoter->getMyInviteList($page);
-        }
+        
+        $this->code = 0;
+        $this->content = $promoter->getMyInviteList($page);
     }
     
     //推广员申请结算提现
