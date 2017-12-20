@@ -2208,7 +2208,7 @@ class UcenterController extends Controller
         // $type = Filter::int(Req::args('type'));
         
         if ($mobile != "" && $validatecode != "") {
-            // var_dump(123);die;
+            var_dump(123);die;
             // $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
             $ret = array('status' => 'success', 'message' => '验证成功');
             SMS::getInstance()->flushCode($mobile);
