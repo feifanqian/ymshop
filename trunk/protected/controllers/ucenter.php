@@ -2203,6 +2203,7 @@ class UcenterController extends Controller
 
     public function change_accounts()
     {
+        var_dump(111);die;
         $mobile = Filter::sql(Req::args('mobile'));
         $validatecode = Filter::sql(Req::args('validatecode'));
         // $type = Filter::int(Req::args('type'));
