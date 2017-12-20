@@ -1769,7 +1769,7 @@ class UcenterController extends Controller
             $activateObj = Session::get('activateObj');
             $newCode = $activateObj['code'];
             $newAccount = $activateObj['obj'];
-            if ($code == $newCode && $account == $newAccount) {
+            if ($account == $newAccount) {
                 if ($obj == 'email' && Validator::email($account)) {
                     $result = $this->model->table('user')->where("email='" . $account . "' and id != " . $this->user['id'])->find();
                     if (!$result) {
