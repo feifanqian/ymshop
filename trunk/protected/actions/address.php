@@ -290,11 +290,16 @@ class AddressAction extends Controller
         //计算剩余可领取红包人数
         $num = $redbag['num']-$redbag['open_num'];
         //按人数随机分配红包金额
-        if($num>0){
-           //计算理论可领取最大红包金额，以分为最小单位
-           $max_money = ($redbag['amount']-$num*0.01)*100; //单位分
-           //随机分配红包金额
-           $get_money = rand(1,$max_money)*100; // 单位元
+        if($num>0){     
+            if($num>1){
+               //计算理论可领取最大红包金额，以分为最小单位
+               $max_money = ($redbag['amount']-$num*0.01)*100; //单位分
+               //随机分配红包金额
+               $get_money = rand(1,$max_money)*100; // 单位元
+            }else{
+               $get_money = $redbag['amount']; // 单位元
+            }
+           
            $this->model->table('redbag')->data(array('status'=>1,'amount'=>"`amount`-({$get_money})",'open_time'=>date('Y-m-d H:i:s'),'open_num'=>"`open_num`+1"))->where('id='.$id)->update();
            $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id']))->insert();
            $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
