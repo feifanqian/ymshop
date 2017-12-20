@@ -1769,7 +1769,7 @@ class UcenterController extends Controller
             $activateObj = Session::get('activateObj');
             $newCode = $activateObj['code'];
             $newAccount = $activateObj['obj'];
-            if ($account == $newAccount) {
+            // if ($code == $newCode && $account == $newAccount) {
                 if ($obj == 'email' && Validator::email($account)) {
                     $result = $this->model->table('user')->where("email='" . $account . "' and id != " . $this->user['id'])->find();
                     if (!$result) {
@@ -1812,9 +1812,9 @@ class UcenterController extends Controller
                         
                     }
                 }
-            } else {
-                $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
-            }
+            // } else {
+            //     $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
+            // }
             
             // if($obj == 'mobile' && Validator::mobi($account)){
             //      $sms = SMS::getInstance();
