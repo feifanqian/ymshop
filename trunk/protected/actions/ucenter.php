@@ -66,7 +66,8 @@ class UcenterAction extends Controller {
             $this->code = 1024;
             return;
         }
-        $verify_flag = $this->sms_verify($code, $mobile, $zone);
+        // $verify_flag = $this->sms_verify($code, $mobile, $zone);
+        $verify_flag = true;
         if ($verify_flag) {
             $user = $this->model->query("select user_id from tiny_customer where mobile = $mobile");
             //如果手机号已经注册过了

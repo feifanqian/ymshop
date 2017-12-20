@@ -174,7 +174,7 @@ class AddressAction extends Controller
     }
 
     public function redbagMake(){
-        $amount = Filter::float(Req::args('amount'));
+        $amount = round(Filter::float(Req::args('amount')),2);
         $info = Filter::text(Req::args('info'));
         $distance = Filter::int(Req::args('distance'));
         $range = Req::args('range');
@@ -186,6 +186,10 @@ class AddressAction extends Controller
         }
         if($promoter['lng'] == '' || $promoter['lat'] == ''){
             $this->code = 1170;
+            return;
+        }
+        if($amount*100<$num){
+            $this->code = 1186;
             return;
         }
         switch ($range) {
@@ -269,6 +273,35 @@ class AddressAction extends Controller
         }else{
             $this->code = 1169;
             return;
+        }
+    }
+
+    public function redbagOpen(){
+        $id = Filter::int(Req::args('redbag_id'));
+        $redbag = $this->model->table('redbag')->where('id='.$id)->find();
+        if(!$redbag){
+            $this->code = 1187;
+            return;
+        }
+        if($redbag['status']==1 && $redbag['open_num']==$redbag['num']){
+            $this->code = 1188;
+            return;
+        }
+        //计算剩余可领取红包人数
+        $num = $redbag['num']-$redbag['open_num'];
+        //按人数随机分配红包金额
+        if($num>0){
+           //计算理论可领取最大红包金额，以分为最小单位
+           $max_money = ($redbag['amount']-$num*0.01)*100; //单位分
+           //随机分配红包金额
+           $get_money = rand(1,$max_money)*100; // 单位元
+           $this->model->table('redbag')->data(array('status'=>1,'amount'=>"`amount`-({$get_money})",'open_time'=>date('Y-m-d H:i:s')))->where('id='.$id)->update();
+           $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id']))->insert();
+           $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
+           Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
+           $this->code = 0;
+           $this->content['redbag'] = $redbag;
+           $this->content['get_money'] = $get_money;
         }
     }
 
