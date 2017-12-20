@@ -2208,6 +2208,7 @@ class UcenterController extends Controller
         // $type = Filter::int(Req::args('type'));
         
         if ($mobile != "" && $validatecode != "") {
+            // var_dump(123);die;
             $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
             // $ret['status'] = 'success';
             SMS::getInstance()->flushCode($mobile);
@@ -2243,7 +2244,7 @@ class UcenterController extends Controller
                                 echo json_encode($ret);
                                 exit;
                             }
-                            var_dump($other_account['user_id']);die;
+                            // var_dump($other_account['user_id']);die;
                             
                             $this->model->table('customer')->data(array('mobile'=>''))->where('user_id='.$other_account['user_id'])->update();
                             $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
