@@ -1803,7 +1803,7 @@ class UcenterAction extends Controller {
         $type = Filter::int(Req::args('type'));  //0 可用余额记录 1商家余额记录
         $page = Filter::int(Req::args('page'));
         if($type==1){
-          $withdraw_list = $this->model->table("balance_withdraw")->where("type=1 and user_id = ".$this->user['id'])->order("id desc")->findPage($page,10);
+          $withdraw_list = $this->model->table("balance_withdraw")->where("type in (1,2) and user_id = ".$this->user['id'])->order("id desc")->findPage($page,10);
         }else{
             $withdraw_list = $this->model->table("balance_withdraw")->where("type=0 and user_id = ".$this->user['id'])->order("id desc")->findPage($page,10);
         }
