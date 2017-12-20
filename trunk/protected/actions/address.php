@@ -295,7 +295,7 @@ class AddressAction extends Controller
                //计算理论可领取最大红包金额，以分为最小单位
                $max_money = ($redbag['amount']-$num*0.01)*100; //单位分
                //随机分配红包金额
-               $get_money = rand(1,$max_money)*100; // 单位元
+               $get_money = rand(1,$max_money)/100; // 单位元
             }else{
                $get_money = $redbag['amount']; // 单位元
             }
