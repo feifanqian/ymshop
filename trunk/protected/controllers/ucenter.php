@@ -2216,6 +2216,10 @@ class UcenterController extends Controller
     }
 
     public function change_acct(){
+        $mobile = Filter::sql(Req::args('mobile'));
+        $validatecode = Filter::sql(Req::args('validatecode'));
+        var_dump($mobile);
+        var_dump($validatecode);die;
         $ret = array('status' => 'success', 'message' => '验证成功');
             SMS::getInstance()->flushCode($mobile);
             if ($ret['status'] == 'success') {
