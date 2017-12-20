@@ -1962,7 +1962,7 @@ class UcenterAction extends Controller {
             }else{
                 $this->model->table('invite')->data(array('user_id'=>$reference,'invite_user_id'=>$this->user['id'],'from'=>$from,'district_id'=>$district_id,'createtime'=>time()))->insert();
                 $this->code = 0;
-                $this->content = '已绑定邀请关系';
+                $this->content = '成功绑定邀请关系';
                 return;
             }
     }
