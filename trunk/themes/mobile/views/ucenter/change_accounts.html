@@ -50,7 +50,7 @@
                     var validatecode = $("#validatecode").val();
                     if (mobile && validatecode) {
                         $.showLoading();
-                        $.post("{url:/ucenter/change_accounts}",{mobile: mobile, validatecode: validatecode},function(ret){
+                        $.post("{url:/ucenter/change_acct}",{mobile: mobile, validatecode: validatecode},function(ret){
                                 $.hideLoading();
                                 if (ret.status == "success") {
                                      $.toast(ret.message, "success");

@@ -2203,15 +2203,20 @@ class UcenterController extends Controller
 
     public function change_accounts()
     {
-        $mobile = Filter::sql(Req::args('mobile'));
-        $validatecode = Filter::sql(Req::args('validatecode'));
-        // $type = Filter::int(Req::args('type'));
-        // var_dump($mobile);
-        // var_dump($validatecode);die;
-        if ($mobile != "" && $validatecode != "") {
-            var_dump(123);die;
-            // $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
-            $ret = array('status' => 'success', 'message' => '验证成功');
+        $account_info = $this->model->table("oauth_user")->where("user_id =" . $this->user['id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->find();
+        if (isset($account_info['other_user_id'])) {
+            $nameinfo = $this->model->table("user")->where("id=" . $account_info['other_user_id'])->fields("nickname,name,avatar")->find();
+            if (!empty($nameinfo)) {
+                $this->assign("other_account", $nameinfo);
+            }
+        }
+        $this->assign("seo_title", "切换账号");
+        $this->redirect("change_accounts");
+        
+    }
+
+    public function change_acct(){
+        $ret = array('status' => 'success', 'message' => '验证成功');
             SMS::getInstance()->flushCode($mobile);
             if ($ret['status'] == 'success') {
                 //查询当前微信公众号绑定的user_id
@@ -2317,17 +2322,6 @@ class UcenterController extends Controller
                 echo json_encode($ret);
                 exit;
             }
-        } else {
-            $account_info = $this->model->table("oauth_user")->where("user_id =" . $this->user['id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->find();
-            if (isset($account_info['other_user_id'])) {
-                $nameinfo = $this->model->table("user")->where("id=" . $account_info['other_user_id'])->fields("nickname,name,avatar")->find();
-                if (!empty($nameinfo)) {
-                    $this->assign("other_account", $nameinfo);
-                }
-            }
-            $this->assign("seo_title", "切换账号");
-            $this->redirect("change_accounts");
-        }
     }
 
     private function _isCanApplyRefund($order_id)
