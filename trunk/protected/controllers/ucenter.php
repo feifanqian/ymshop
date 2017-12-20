@@ -2284,6 +2284,7 @@ class UcenterController extends Controller
                         echo json_encode($ret);
                         exit;
                     } else {//存在另一个user_id
+                        var_dump(123);
                         $ids = $account_info['other_user_id'] . "," . $account_info['user_id'];
                         //验证手机号
                         $isOk = $this->model->table("customer")->where("user_id in ($ids) and mobile='$mobile'")->find();
@@ -2301,7 +2302,15 @@ class UcenterController extends Controller
                             echo json_encode($ret);
                             exit;
                         } else {
-                            $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
+                            var_dump($other_account['id']);
+                            var_dump($this->user['id']);die;
+                             $this->model->table('customer')->data(array('mobile'=>''))->where('user_id='.$other_account['id'])->update();
+                            // $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
+                            
+                            //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
+                            $this->model->table('user')->data(array('password' => $other_account['password'], 'validcode' => $other_account['validcode']))->where('id=' . $this->user['id'])->update();
+
+                            $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
                             if ($result) {
                                 $this->safebox->clear('user');
                                 $cookie = new Cookie();
