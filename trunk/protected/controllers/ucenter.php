@@ -2226,6 +2226,8 @@ class UcenterController extends Controller
                 if (empty($account_info_all) || count($account_info_all) > 1) {
                     $ret['status'] = "fail";
                     $ret['message'] = "切换失败,oauth信息错误";
+                    echo json_encode($ret);
+                    exit;
                 } else {
                     $account_info = $account_info_all[0];
                     if ($account_info['other_user_id'] == 0 || $account_info['other_user_id'] == "") {//如果另一个账号信息不存在
