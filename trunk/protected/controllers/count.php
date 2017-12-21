@@ -447,7 +447,7 @@ class CountController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A2", '序号');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2','厂商');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue("C2", '货品名称');
-        $objPHPExcel->setActiveSheetIndex(0) ->setCellValue('D2', '尺寸');
+        $objPHPExcel->setActiveSheetIndex(0) ->setCellValue('D2', '重量');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '单价');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '销量');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '销售额');
@@ -455,7 +455,7 @@ class CountController extends Controller
         $goods = new Model("goods as gd");
         $shop = new Model("shop as sh");
         $result = $goods->join("left join shop as sh on gd.shop_id = sh.id")
-            ->fields("gd.id as gid,sh.name as shname,gd.name as gdname,gd.base_sales_volume,sell_price")
+            ->fields("gd.id as gid,sh.name as shname,gd.name as gdname,gd.base_sales_volume,sell_price,gd.weight as gweight")
             ->where('gd.is_online=0 and gd.id>940 and gd.id<980')
             ->order("gd.id desc")
             ->findAll();
@@ -482,7 +482,7 @@ class CountController extends Controller
                     ->setCellValueExplicit('A' . $index, $k+1)
                     ->setCellValueExplicit('B' . $index, $v['shname'], PHPExcel_Cell_DataType::TYPE_STRING)
                     ->setCellValueExplicit('C' . $index, $v['gdname'], PHPExcel_Cell_DataType::TYPE_STRING)
-                    ->setCellValue('D' . $index, $v['base_sales_volume'])
+                    ->setCellValue('D' . $index, $v['gweight'])
                     ->setCellValue('E' . $index, $v['sell_price'])
                     ->setCellValue('F' . $index, $v['sales_volume'])
                     ->setCellValue('G' . $index, $v['sales_volume']*$v['sell_price']);
