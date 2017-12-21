@@ -1537,6 +1537,7 @@ class Common {
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         }
         $result = curl_exec($curl);
-        return(json_decode($result,true));
+        curl_close($curl);
+        return($result);
     }
 }
