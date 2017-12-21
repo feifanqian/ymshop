@@ -2237,12 +2237,14 @@ class UcenterAction extends Controller {
             $this->code = 1131;
             return;
         }
+        var_dump(111);
         $record = $this->model->table('invite as do')
                 ->join('left join user as u on do.invite_user_id = u.id')
                 ->fields('u.id,u.avatar,u.nickname,u.sex,do.createtime')
                 ->where("do.user_id=".$this->user['id'])
                 ->order("do.id desc")
-                ->findPage($page, 10);      
+                ->findPage($page, 10);
+        var_dump(222);die;              
         if (empty($record)) {
             return array('data'=>array());
         }
