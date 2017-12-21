@@ -2367,10 +2367,21 @@ class UcenterAction extends Controller {
       $bankcard = Req::args('bankcard');
       $idcard = Req::args('idcard');
       $realname = Filter::str(Req::args('realname'));
-      $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
+
+      $url = 'https://aliyun-bankcard-verify.apistore.cn/bank';
+      $header = array(
+            'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
+        );
+      $param = array(
+        'bankcard'=>$bankcard,
+        'cardNo'=>$idcard,
+        'realName'=>$realname
+        );
+      $ret = Common::httpRequest($url,'GET',$param,$header);
+      // $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
       $result = json_decode($ret,true);
-      // var_dump($ret);
-      var_dump($result);die;
+      var_dump($ret);
+      // var_dump($result);die;
       if($result['error_code']==0){
         $has_bind = $this->model->table('bankcard')->where('cardno='.$bankcard)->find();
         if($has_bind){
