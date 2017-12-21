@@ -158,6 +158,7 @@ class DistrictAction extends Controller {
     protected function getSubordinate(){
         // $this->code = 0;
         // $this->content = $this->hirer->getMySubordinate();
+        var_dump($this->user['id']);die;
         $page = Filter::int(Req::args('page'));
         $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
         if(!$district){
