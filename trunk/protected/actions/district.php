@@ -156,8 +156,29 @@ class DistrictAction extends Controller {
      * 获取拓展小区列表
      */
     protected function getSubordinate(){
+        // $this->code = 0;
+        // $this->content = $this->hirer->getMySubordinate();
+        $page = Filter::int(Req::args('page'));
+        $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
+        if(!$district){
+            $this->code = 1131;
+            return;
+        }
+        $record = $this->model->table('invite as do')
+                ->join('left join user as u on do.invite_user_id = u.id left join district_shop as ds on do.invite_user_id=ds.owner_id')
+                ->fields('u.id,u.avatar,u.nickname,u.sex,ds.create_time')
+                ->where("do.user_id=".$this->user_id)
+                ->order("do.id desc")
+                ->findPage($page, 10);
+        if (empty($record)) {
+            return array('data'=>array());
+        }
+        if (isset($record['html'])) {
+            unset($record['html']);
+        }
+
         $this->code = 0;
-        $this->content = $this->hirer->getMySubordinate();
+        $this->content = $record;
     }
     
     /*
@@ -229,12 +250,12 @@ class DistrictAction extends Controller {
            return; 
         }
         $data = $this->model->table("promoter_code")->where("user_id =".$this->user['id'])->findAll();
-        if(count($data)>$district['code_num']){  //默认每个经销商只有100条激活码
+        if(count($data)>=$district['code_num']){  //默认每个经销商只有100条激活码
             $this->code = 1172;
             return;
         }
         $district_id = $district['id'];
-        $result = $this->model->table("promoter_code")->data(array('user_id'=>$this->user['id'],'code'=>$code,'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+30 days")),'district_id'=>$district_id))->insert();
+        $result = $this->model->table("promoter_code")->data(array('user_id'=>$this->user['id'],'code'=>$code,'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+90 days")),'district_id'=>$district_id))->insert();
         if($result){
             $return = $this->model->table('promoter_code')->where('id='.$result)->find();
             $this->code = 0;
@@ -311,6 +332,10 @@ class DistrictAction extends Controller {
         $list = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->order('id desc')->findPage($page,10);
         if($list){
             unset($list['html']);
+        }else{
+            $list = array(
+                'data'=>array()
+                );
         }
         
         $count1 = $district['code_num'];

@@ -304,8 +304,9 @@ class AddressAction extends Controller
            $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id']))->insert();
            $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
            Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
+           $newredbag = $this->model->table('redbag')->where('id='.$id)->find();
            $this->code = 0;
-           $this->content['redbag'] = $redbag;
+           $this->content['redbag'] = $newredbag;
            $this->content['get_money'] = $get_money;
         }else{
            $this->code = 1189;
@@ -555,7 +556,7 @@ class AddressAction extends Controller
         $tourist_id = Req::args('tourist_id'); //街道或景点
         $line_number = Filter::int(Req::args('line_number'));//几号线
         $which_station = Filter::int(Req::args('which_station'));//哪个站
-        $customer = Req::args('customer');//商家or代理vip
+        $customer = Req::args('customer');//等于1筛选出经销商
 
         $where = "lat<>0";
         //区域
@@ -686,6 +687,8 @@ class AddressAction extends Controller
             foreach($info_sql as $k => $v){
                 if($info_sql[$k]['picture']==null){
                     $info_sql[$k]['picture'] = '';
+                }else{
+                    $info_sql[$k]['picture'].='?date='.time();
                 }
                 if($info_sql[$k]['tourist_id']==null){
                     $info_sql[$k]['tourist_id'] = 0;

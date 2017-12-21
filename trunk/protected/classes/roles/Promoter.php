@@ -282,7 +282,7 @@ class Promoter extends Object {
                 ->order("do.id desc")
                 ->findPage($page, 10);
         if (empty($record)) {
-            return array();
+            return array('data'=>array());
         }
         if (isset($record['html'])) {
             unset($record['html']);
