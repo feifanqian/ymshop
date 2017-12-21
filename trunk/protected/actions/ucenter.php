@@ -2369,13 +2369,14 @@ class UcenterAction extends Controller {
       $realname = Filter::str(Req::args('realname'));
       $result = Common::aliyunRequest($bankcard,$idcard,$realname);
       if($result['error_code']==0){
+        // var_dump($result);die;
         $data = array(
             'user_id'=>$this->user['id'],
             'cardno'=>$bankcard,
-            'bankname'=>$result['result']['result']['information']['bankname'],
+            'bankname'=>$result['result']['information']['bankname'],
             'open_name'=>$realname,
-            'type'=>$result['result']['result']['information']['iscreditcard'],
-            'bankcode'=>$result['result']['result']['information']['abbreviation']
+            'type'=>$result['result']['information']['iscreditcard'],
+            'bankcode'=>$result['result']['information']['abbreviation']
             );
         $this->model->table('bankcard')->data($data)->insert();
         $this->code = 0;
