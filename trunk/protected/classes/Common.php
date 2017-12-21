@@ -1538,6 +1538,6 @@ class Common {
         }
         $result = curl_exec($curl);
         curl_close($curl);
-        return($result);
+        return $result;
     }
 }
