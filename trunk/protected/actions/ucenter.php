@@ -2238,11 +2238,11 @@ class UcenterAction extends Controller {
             $this->code = 1131;
             return;
         }
-        $record = $this->model->table('invite as do')
-                ->join('left join user as u on do.invite_user_id = u.id inner join district_shop as ds on do.invite_user_id=ds.owner_id')
-                ->fields('u.id,u.avatar,u.nickname,do.createtime')
-                ->where("do.user_id=".$this->user['id'])
-                ->order("do.id desc")
+        $record = $this->model->table('district_shop as ds')
+                ->join('left join user as u on ds.owner_id = u.id left join invite as i on ds.owner_id=i.invite_user_id')
+                ->fields('u.id,u.avatar,u.nickname,i.createtime')
+                ->where("i.user_id=".$this->user['id'])
+                ->order("i.id desc")
                 ->findPage($page, 10);            
         if (empty($record)) {
             return array('data'=>array());
