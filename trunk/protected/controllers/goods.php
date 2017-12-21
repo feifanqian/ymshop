@@ -850,4 +850,18 @@ class GoodsController extends Controller {
         $data = $models->table('goods_category')->fields('id,name')->where("parent_id=$id")->findall();
         echo json_encode($data);
     }
+
+    //上架审核状态
+    public function set_online_status()
+    {
+        $id = Filter::int(Req::args('id'));
+        $remark = Req::args('remark');
+        $model = new Model();
+        $result = $model->table('goods')->data(array('remark'=>$remark))->where("id=".$id)->update();
+        if ($result){
+            exit(json_encode(array('status'=>'success','msg'=>'上架审核')));
+        }else{
+            exit(json_encode(array('status'=>'fail','msg'=>'上架审核'))) ;
+        }
+    }
 }

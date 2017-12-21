@@ -247,7 +247,7 @@ class CountController extends Controller {
         $order_goods = new Model("order_goods as og");
         $area = new Model("area");
         $result = $order->join("left join payment as p on o.payment = p.id left join user as us on o.user_id = us.id")
-                ->fields("o.id,o.type,o.otherpay_amount,o.huabipay_amount,o.order_no,o.order_amount,o.pay_status,o.province,o.city,o.county,o.create_time,o.pay_time,o.taxes,o.real_freight,p.pay_name,us.name,o.accept_name,o.mobile,o.addr")
+                ->fields("o.id,o.type,o.order_no,o.order_amount,o.pay_status,o.province,o.city,o.county,o.create_time,o.pay_time,o.taxes,o.real_freight,p.pay_name,us.name,o.accept_name,o.mobile,o.addr")
                 ->where($where)
                 ->order("id desc")
                 ->findAll();

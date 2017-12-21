@@ -42,6 +42,7 @@
         <th style="width:60px;">库存</th>
         <th style="width:60px;">分佣</th>
         <th style="width:60px;">状态</th>
+        <th style="width: 60px;">上架审核状态</th>
     </tr>
     {list:$items=$goodslist['data']}
         <tr ><td style="width:30px;"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
@@ -53,6 +54,7 @@
                         <li><a class="icon-point-down" href="{url:/goods/set_online/status/1/id/$item[id]}"> 下架</a></li>
                         <!-- <li><a class="icon-point-down" href="{url:/goods/set_weishang/status/1/id/$item[id]}"> 加入微商专区</a></li>
                         <li><a class="icon-point-down" href="{url:/goods/set_weishang/status/0/id/$item[id]}"> 移出微商专区</a></li> -->
+                        <li><a  class="icon-drawer-3" href="javascript:;" onclick="change_status({$item['id']})">上架审核</a></li>
                         <li><a class="icon-pencil" href="{url:/goods/goods_edit/id/$item[id]}"> 编辑</a></li>
                         <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/goods/goods_del/id/$item[id]}')"> 删除</a></li>
                         {if:$item['is_commission']==0}
@@ -75,6 +77,8 @@
         <td style="width:60px;" {if:$item['store_nums']<=$item['warning_line']}class="red"{/if}><b>{$item['store_nums']}</b></td>
          <td style="width:60px;">{if:$item['is_commission']==0}<a href="?condition=and--is_commission--eq--{$item['is_commission']}"><b class="green">未开启</b></a>{else:}<a href="?condition=and--is_commission--eq--{$item['is_commission']}"><b class="red">已开启</b></a>{/if}</td>
          <td style="width:60px;">{if:$item['is_online']==0}<b class="green">在售</b>{else:}<b class="red">下架</b>{/if}</td>
+         <td style="width: 80px;">{if:$item['remark']}<b class="green">已审核</b>{else:}<b class="red">未审核</b>{/if}</td>
+
         </tr>
     {/list}
 </table>
@@ -92,6 +96,15 @@
     {set:$category.=$item['id'].':'."'".$item['name']."',"}
 {/list}
 {set:$category=trim($category,',');}
+
+<div id="status_dialog" style="display: none; position: relative;" class="form2">
+    <h3 id="order_title">备注信息：</h3>
+    <input type="hidden" name="id" id="goods_id" value="">
+    <textarea id="remark" name="remark"></textarea>
+    <div class="tc">
+        <button class="focus_button" onclick="submit_status()">保存</button>
+    </div>
+</div>
 <script type="text/javascript">
     function layer_open(url){
         layer.open({
@@ -132,4 +145,28 @@
         }});
         });
     });
+
+    function change_status(id){
+        $("#goods_id").val(id);
+        art.dialog({id:'status_dialog',resize:false,width:500,height:200,padding:'0 5px',content:document.getElementById('status_dialog')});
+    }
+    function submit_status(){
+        var remark= $("#remark").val();
+        var id = $("#goods_id").val();
+        if(remark != ''){
+            $.post('{url:/goods/set_online_status}',{id:id,remark:remark},function(data){
+                console.log(data);
+                art.dialog({id:'status_dialog'}).close();
+                if(data['status']=='success'){
+                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"成功！</p>");
+                }else{
+                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"失败！</p>");
+                }
+                setTimeout("tools_reload()",2000);
+            },'json');
+        }else{
+            art.dialog.tips("<p class='warning'>备注信息不能为空!</p>");
+        }
+
+    }
 </script>
