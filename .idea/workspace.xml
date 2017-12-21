@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5e7286e1-8ea1-416a-afb0-c86e85802771" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/trunk/protected/controllers/count.php" afterPath="$PROJECT_DIR$/trunk/protected/controllers/count.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,7 +25,54 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="sales_rank.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/protected/views/count/sales_rank.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="312">
+              <caret line="12" column="48" lean-forward="false" selection-start-line="12" selection-start-column="48" selection-end-line="12" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="count.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/count.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="578">
+              <caret line="463" column="114" lean-forward="true" selection-start-line="463" selection-start-column="114" selection-end-line="463" selection-end-column="114" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="product.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/product.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4160">
+              <caret line="226" column="84" lean-forward="false" selection-start-line="226" selection-start-column="84" selection-end-line="226" selection-end-column="84" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="product.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/protected/actions/product.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="416">
+              <caret line="145" column="129" lean-forward="false" selection-start-line="145" selection-start-column="129" selection-end-line="145" selection-end-column="129" />
+              <folding>
+                <marker date="1513646902629" expanded="true" signature="36881:36936" ph="select name tiny_tags" />
+                <marker date="1513646902629" expanded="true" signature="37329:37428" ph="select id,na... tiny_goods" />
+                <marker date="1513646902629" expanded="true" signature="38792:38848" ph="select * fro... tiny_flash_sale" />
+                <marker date="1513646902629" expanded="true" signature="38992:39087" ph="update tiny_flash_sale... " />
+                <marker date="1513646902629" expanded="true" signature="39399:39497" ph="update tiny_flash_sale... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -73,11 +121,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/trunk/protected/classes/allinpay/RSAUtil.php" />
-        <option value="$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/set_realname.html" />
-        <option value="$PROJECT_DIR$/trunk/protected/actions/paytonglian.php" />
-        <option value="$PROJECT_DIR$/trunk/themes/mobile/views/ucenter/bind_bankcard.html" />
-        <option value="$PROJECT_DIR$/trunk/themes/mobile/widgets/sub_navs/ucsidebar.html" />
         <option value="$PROJECT_DIR$/trunk/protected/views/districtadmin/promoter_edit.html" />
         <option value="$PROJECT_DIR$/trunk/protected/actions/Map.php" />
         <option value="$PROJECT_DIR$/trunk/protected/actions/map.php" />
@@ -123,6 +166,11 @@
         <option value="$PROJECT_DIR$/trunk/protected/controllers/goods.php" />
         <option value="$PROJECT_DIR$/trunk/protected/views/goods/goods_list.html" />
         <option value="$PROJECT_DIR$/trunk/protected/classes/Menu.php" />
+        <option value="$PROJECT_DIR$/trunk/protected/views/count/division.html" />
+        <option value="$PROJECT_DIR$/trunk/protected/views/count/supplier.html" />
+        <option value="$PROJECT_DIR$/trunk/protected/views/count/sales_analysis.html" />
+        <option value="$PROJECT_DIR$/trunk/protected/views/count/inventory.html" />
+        <option value="$PROJECT_DIR$/trunk/protected/views/count/sales_rank.html" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/count.php" />
       </list>
     </option>
@@ -201,22 +249,37 @@
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="classes" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="actions" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="_default" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="_default" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="_default" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="count" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="index" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -315,12 +378,12 @@
       <workItem from="1513669701984" duration="6030000" />
       <workItem from="1513733279710" duration="10481000" />
       <workItem from="1513820255977" duration="12523000" />
-      <workItem from="1513838364241" duration="522000" />
+      <workItem from="1513838364241" duration="13585000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="364396000" />
+    <option name="totallyTimeSpent" value="377459000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -333,8 +396,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="72" y="-8" width="1856" height="1096" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18152174" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18152174" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299389" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -386,55 +450,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/trunk/protected/views/order/doc_receiving_view.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
-          <caret line="3" column="142" lean-forward="false" selection-start-line="3" selection-start-column="142" selection-end-line="3" selection-end-column="142" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/views/order/doc_receiving_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="436">
-          <caret line="40" column="35" lean-forward="false" selection-start-line="40" selection-start-column="35" selection-end-line="40" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/views/goods/goods_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="52" column="57" lean-forward="false" selection-start-line="52" selection-start-column="57" selection-end-line="52" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/views/goods/goods_category_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="670">
-          <caret line="42" column="41" lean-forward="false" selection-start-line="42" selection-start-column="41" selection-end-line="42" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/ucenter.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="305" column="7" lean-forward="true" selection-start-line="305" selection-start-column="7" selection-end-line="305" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/actions/ucenter.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="1822" column="20" lean-forward="false" selection-start-line="1822" selection-start-column="20" selection-end-line="1822" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/v1.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="26">
-          <caret line="153" column="80" lean-forward="false" selection-start-line="153" selection-start-column="80" selection-end-line="153" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/d0324e43-5224-4033-8195-1a1687d4daec/console_1.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -487,6 +502,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2580">
           <caret line="7" column="12" lean-forward="false" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -709,6 +725,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/views/layouts/admin.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-578">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/views/count/division.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/classes/Menu.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="312">
@@ -717,25 +748,72 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/views/layouts/admin.html">
+    <entry file="file://$PROJECT_DIR$/trunk/protected/views/count/supplier.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-578">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="104">
+          <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/count.php">
+    <entry file="file://$PROJECT_DIR$/trunk/protected/views/count/inventory.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="317" column="73" lean-forward="false" selection-start-line="317" selection-start-column="73" selection-end-line="317" selection-end-column="73" />
+        <state relative-caret-position="104">
+          <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/views/count/sales_analysis.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/views/count/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="26">
-          <caret line="11" column="28" lean-forward="false" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
+        <state relative-caret-position="286">
+          <caret line="11" column="28" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/views/count/sales_rank.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="12" column="48" lean-forward="false" selection-start-line="12" selection-start-column="48" selection-end-line="12" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/product.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4160">
+          <caret line="226" column="84" lean-forward="false" selection-start-line="226" selection-start-column="84" selection-end-line="226" selection-end-column="84" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/actions/product.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="145" column="129" lean-forward="false" selection-start-line="145" selection-start-column="129" selection-end-line="145" selection-end-column="129" />
+          <folding>
+            <marker date="1513646902629" expanded="true" signature="36881:36936" ph="select name tiny_tags" />
+            <marker date="1513646902629" expanded="true" signature="37329:37428" ph="select id,na... tiny_goods" />
+            <marker date="1513646902629" expanded="true" signature="38792:38848" ph="select * fro... tiny_flash_sale" />
+            <marker date="1513646902629" expanded="true" signature="38992:39087" ph="update tiny_flash_sale... " />
+            <marker date="1513646902629" expanded="true" signature="39399:39497" ph="update tiny_flash_sale... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/count.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="463" column="114" lean-forward="true" selection-start-line="463" selection-start-column="114" selection-end-line="463" selection-end-column="114" />
           <folding />
         </state>
       </provider>
