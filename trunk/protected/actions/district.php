@@ -167,7 +167,7 @@ class DistrictAction extends Controller {
         $record = $this->model->table('invite as do')
                 ->join('left join user as u on do.invite_user_id = u.id')
                 ->fields('u.id,u.avatar,u.nickname,u.sex,do.createtime')
-                ->where("do.user_id=".$this->user_id)
+                ->where("do.user_id=".$this->user['id'])
                 ->order("do.id desc")
                 ->findPage($page, 10);
         if (empty($record)) {
@@ -179,7 +179,6 @@ class DistrictAction extends Controller {
         if($record['data']){
             foreach($record['data'] as $k=>$v){
                 $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
                 if(!$shop){
                     unset($record['data'][$k]);
                 }
