@@ -414,43 +414,43 @@ class CountController extends Controller
     public function sales_rank_excel()
     {
         header("Content-type: text/html; charset=utf-8");
-        $time = Req::args("s_time");
-        if (!$time) {
-            $time = date("Y-m-d%20--%20Y-m-d");
-        }
-        $date = explode('%20--%20', $time);
-        $stime = date('Y-m-d 00:00:00', strtotime($date[0]));
-        $etime = date('Y-m-d 00:00:00', strtotime($date[1] . '+1day'));
-        $title = "圆梦销售排行[$stime - $etime]";
-        $where = "'$stime'< o.pay_time and o.pay_time<'$etime'";
-        // Create new PHPExcel object
-        $objPHPExcel = new PHPExcel();
+        // $time = Req::args("s_time");
+        // if (!$time) {
+        //     $time = date("Y-m-d%20--%20Y-m-d");
+        // }
+        // $date = explode('%20--%20', $time);
+        // $stime = date('Y-m-d 00:00:00', strtotime($date[0]));
+        // $etime = date('Y-m-d 00:00:00', strtotime($date[1] . '+1day'));
+        // $title = "圆梦销售排行[$stime - $etime]";
+        // $where = "'$stime'< o.pay_time and o.pay_time<'$etime'";
+        // // Create new PHPExcel object
+        // $objPHPExcel = new PHPExcel();
 
-        // Set document properties
-        $objPHPExcel->getProperties()
-            ->setCreator("ymlypt")
-            ->setLastModifiedBy("ymlypt")
-            ->setTitle("test")
-            ->setSubject("Office 2007 XLSX Test Document")
-            ->setDescription("goods of ymlypt")
-            ->setKeywords("goods")
-            ->setCategory("Test result file");
-        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('A')->setAutoSize(true);
-        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('B')->setWidth(25);
-        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('C')->setWidth(25);
-        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('D')->setWidth(15);
-        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('E')->setWidth(15);
-        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('F')->setWidth(10);
-        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('G')->setWidth(10);
-        // Add some data
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:G1')->setCellValue('A1', '产品销量排行榜');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A2", '序号');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2','厂商');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("C2", '货品名称');
-        $objPHPExcel->setActiveSheetIndex(0) ->setCellValue('D2', '尺寸');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '单价');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '销量');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '销售额');
+        // // Set document properties
+        // $objPHPExcel->getProperties()
+        //     ->setCreator("ymlypt")
+        //     ->setLastModifiedBy("ymlypt")
+        //     ->setTitle("test")
+        //     ->setSubject("Office 2007 XLSX Test Document")
+        //     ->setDescription("goods of ymlypt")
+        //     ->setKeywords("goods")
+        //     ->setCategory("Test result file");
+        // $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('A')->setAutoSize(true);
+        // $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('B')->setWidth(25);
+        // $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('C')->setWidth(25);
+        // $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('D')->setWidth(15);
+        // $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('E')->setWidth(15);
+        // $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('F')->setWidth(10);
+        // $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('G')->setWidth(10);
+        // // Add some data
+        // $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:G1')->setCellValue('A1', '产品销量排行榜');
+        // $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A2", '序号');
+        // $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2','厂商');
+        // $objPHPExcel->setActiveSheetIndex(0)->setCellValue("C2", '货品名称');
+        // $objPHPExcel->setActiveSheetIndex(0) ->setCellValue('D2', '尺寸');
+        // $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '单价');
+        // $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '销量');
+        // $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '销售额');
 
         $goods = new Model("goods as gd");
         $shop = new Model("shop as sh");
