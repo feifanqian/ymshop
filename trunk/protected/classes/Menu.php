@@ -106,6 +106,11 @@ class Menu {
             '/count/hot' => array('name' => '热销统计', 'parent' => 'count'),
             '/count/area_buy' => array('name' => '地区统计', 'parent' => 'count'),
             '/count/user_reg' => array('name' => '会员分布统计', 'parent' => 'customer_count'),
+            '/count/inventory' => array('name'=>'货品进销存明细表','parent'=>'financial_count'), //货品进销存统计表
+            '/count/sales_analysis' => array('name'=>'销售分析表','parent'=>'financial_count'), //货品进销存统计表
+            '/count/supplier' => array('name'=>'供应商明细表','parent'=>'financial_count'), //货品进销存统计表
+            '/count/division' => array('name'=>'提成划分明细表','parent'=>'financial_count'), //货品进销存统计表
+            '/count/sales_rank' => array('name'=>'销售排行榜表','parent'=>'financial_count'), //货品进销存统计表
             '/marketing/voucher_template_list' => array('name' => '代金券模板', 'parent' => 'voucher'),
             '/marketing/voucher_template_edit' => array('name' => '代金券模板编辑', 'parent' => 'voucher'),
             '/marketing/voucher_list' => array('name' => '代金券管理', 'parent' => 'voucher'),
@@ -170,6 +175,7 @@ class Menu {
             'express' => array('name' => '快递单配置', 'parent' => 'order'),
             'count' => array('name' => '销售统计', 'parent' => 'count'),
             'customer_count' => array('name' => '客户统计', 'parent' => 'count'),
+            'financial_count' => array('name'=> '财务统计', 'parent' => 'count'),
             'promotions' => array('name' => '促销活动', 'parent' => 'marketing'),
             'voucher' => array('name' => '代金券管理', 'parent' => 'marketing'),
             'welfare' => array('name' => '福利活动', 'parent' => 'marketing'),
