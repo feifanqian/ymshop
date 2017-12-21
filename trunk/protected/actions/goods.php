@@ -28,4 +28,8 @@ class GoodsAction extends Controller {
         );
     }
 
+    public function sellNumCount(){
+        $order_list = $this->model->table('order')->where('status=3 and pay_status=1')->findall();
+    }
+
 }

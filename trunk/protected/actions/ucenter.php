@@ -2215,7 +2215,8 @@ class UcenterAction extends Controller {
                 $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
                 if(!$promoter){
                     unset($record['data'][$k]);
-                }elseif($shop){
+                }
+                if($shop){
                     unset($record['data'][$k]);
                 }
             }
@@ -2238,7 +2239,7 @@ class UcenterAction extends Controller {
             return;
         }
         $record = $this->model->table('invite as do')
-                ->join('left join user as u on do.invite_user_id = u.id')
+                ->join('left join user as u on do.invite_user_id = u.id left join district_shop as ds on do.invite_user_id=ds.owner_id')
                 ->fields('u.id,u.avatar,u.nickname,do.createtime')
                 ->where("do.user_id=".$this->user['id'])
                 ->order("do.id desc")
@@ -2249,14 +2250,14 @@ class UcenterAction extends Controller {
         if (isset($record['html'])) {
             unset($record['html']);
         }
-        if($record['data']){
-            foreach($record['data'] as $k=>$v){
-                $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                if(!$shop){
-                    unset($record['data'][$k]);
-                }
-            }
-        }
+        // if($record['data']){
+        //     foreach($record['data'] as $k=>$v){
+        //         $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+        //         if(!$shop){
+        //             unset($record['data'][$k]);
+        //         }
+        //     }
+        // }
 
         $this->code = 0;
         $this->content = $record;
