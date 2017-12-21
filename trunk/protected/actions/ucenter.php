@@ -2240,7 +2240,7 @@ class UcenterAction extends Controller {
         }
         $record = $this->model->table('district_shop as ds')
                 ->join('left join user as u on ds.owner_id = u.id left join invite as i on ds.owner_id=i.invite_user_id')
-                ->fields('u.id,u.avatar,u.nickname,i.createtime')
+                ->fields('u.id,u.avatar,u.nickname,ds.linkman,i.createtime')
                 ->where("i.user_id=".$this->user['id'])
                 ->order("i.id desc")
                 ->findPage($page, 10);            
@@ -2250,14 +2250,6 @@ class UcenterAction extends Controller {
         if (isset($record['html'])) {
             unset($record['html']);
         }
-        // if($record['data']){
-        //     foreach($record['data'] as $k=>$v){
-        //         $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-        //         if(!$shop){
-        //             unset($record['data'][$k]);
-        //         }
-        //     }
-        // }
 
         $this->code = 0;
         $this->content = $record;
