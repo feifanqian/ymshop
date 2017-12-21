@@ -459,10 +459,12 @@ class CountController extends Controller
             ->order("base_sales_volume desc")
             ->findAll();
         //销量
-
-        $order_goods = new Model("order_goods as og");
-        $sales_volume = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id = $id o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->findAll();
-        $result['sales_volume'] = $sales_volume;
+        foreach ($result as $k => $v) {
+            $order_goods = new Model("order_goods as og");
+            $sales_volume = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id =".$v["gid"]." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->findAll();
+            $result[$k]['sales_volume'] = $sales_volume[0]['sell_volume'];
+        }
+        
         echo "<pre>";
         print_r($result);
         die();
