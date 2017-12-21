@@ -229,7 +229,7 @@ class DistrictAction extends Controller {
            return; 
         }
         $data = $this->model->table("promoter_code")->where("user_id =".$this->user['id'])->findAll();
-        if(count($data)>$district['code_num']){  //默认每个经销商只有100条激活码
+        if(count($data)>=$district['code_num']){  //默认每个经销商只有100条激活码
             $this->code = 1172;
             return;
         }
@@ -311,6 +311,8 @@ class DistrictAction extends Controller {
         $list = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->order('id desc')->findPage($page,10);
         if($list){
             unset($list['html']);
+        }else{
+            $list = array();
         }
         
         $count1 = $district['code_num'];
