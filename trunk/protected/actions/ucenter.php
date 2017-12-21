@@ -2202,8 +2202,7 @@ class UcenterAction extends Controller {
                 ->fields('u.id,u.avatar,u.nickname,do.createtime')
                 ->where("do.user_id=".$this->user['id'])
                 ->order("do.id desc")
-                ->findPage($page, 10);
-        // var_dump($record);die;        
+                ->findPage($page, 10);        
         if (empty($record)) {
             return array('data'=>array());
         }
