@@ -2359,4 +2359,17 @@ class UcenterAction extends Controller {
         $this->code = 0;
         $this->content = $newlist;
     }
+    
+    /*
+     * 绑定银行卡临时接口
+     */
+    public function bindCardTemp(){
+      $bankcard = Filter::str(Req::args('bankcard'));
+      $idcard = Filter::str(Req::args('idcard'));
+      $realname = Filter::str(Req::args('realname'));
+      $result = Common::aliyunRequest($bankcard,$idcard,$realname);
+      if($result['error_code']==0){
+        
+      }
+    }
 }

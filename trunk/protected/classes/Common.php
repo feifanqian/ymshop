@@ -1512,4 +1512,31 @@ class Common {
         return $response;
         //return array($http_code, $response,$requestinfo);
     }
+
+    static function aliyunRequest($bankcard,$cardNo,$realName){
+        $host = "https://aliyun-bankcard-verify.apistore.cn";
+        $path = "/bank";
+        $method = "GET";
+        $appcode = "8d41495e483346a5a683081fd046c0f2";
+        $headers = array();
+        array_push($headers, "Authorization:APPCODE " . $appcode);
+        $querys = "bankcard=".$bankcard."&cardNo=".$cardNo."&realName=".$realName;
+        $bodys = "";
+        $url = $host . $path . "?" . $querys;
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_FAILONERROR, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        if (1 == strpos("$".$host, "https://"))
+        {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        }
+        $result = curl_exec($curl);
+        return(json_decode($result,true));
+    }
 }
