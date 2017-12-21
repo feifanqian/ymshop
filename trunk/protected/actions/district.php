@@ -234,7 +234,7 @@ class DistrictAction extends Controller {
             return;
         }
         $district_id = $district['id'];
-        $result = $this->model->table("promoter_code")->data(array('user_id'=>$this->user['id'],'code'=>$code,'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+30 days")),'district_id'=>$district_id))->insert();
+        $result = $this->model->table("promoter_code")->data(array('user_id'=>$this->user['id'],'code'=>$code,'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+90 days")),'district_id'=>$district_id))->insert();
         if($result){
             $return = $this->model->table('promoter_code')->where('id='.$result)->find();
             $this->code = 0;
