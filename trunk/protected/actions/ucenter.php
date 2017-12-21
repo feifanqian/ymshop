@@ -2203,6 +2203,7 @@ class UcenterAction extends Controller {
                 ->where("do.user_id=".$this->user['id'])
                 ->order("do.id desc")
                 ->findPage($page, 10);
+        var_dump($record);die;        
         if (empty($record)) {
             return array('data'=>array());
         }
