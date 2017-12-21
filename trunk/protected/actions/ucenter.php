@@ -2364,8 +2364,8 @@ class UcenterAction extends Controller {
      * 绑定银行卡临时接口
      */
     public function bindCardTemp(){
-      $bankcard = Filter::str(Req::args('bankcard'));
-      $idcard = Filter::str(Req::args('idcard'));
+      $bankcard = Req::args('bankcard');
+      $idcard = Req::args('idcard');
       $realname = Filter::str(Req::args('realname'));
       $result = Common::aliyunRequest($bankcard,$idcard,$realname);
       var_dump($result);die;
