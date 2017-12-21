@@ -450,7 +450,7 @@ class CountController extends Controller
         $objPHPExcel->setActiveSheetIndex(0) ->setCellValue('D2', '尺寸');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '单价');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '销量');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '销售量');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '销售额');
 
         $goods = new Model("goods as gd");
         $shop = new Model("shop as sh");
@@ -459,6 +459,7 @@ class CountController extends Controller
             ->order("base_sales_volume desc")
             ->findAll();
         //销量
+        print_r($result);die;
         foreach ($result as $k => $v) {
             $order_goods = new Model("order_goods as og");
             $sales_volume = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id =".$v["gid"]." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->findAll();
@@ -477,8 +478,8 @@ class CountController extends Controller
                     ->setCellValueExplicit('C' . $index, $v['gdname'], PHPExcel_Cell_DataType::TYPE_STRING)
                     ->setCellValue('D' . $index, $v['base_sales_volume'])
                     ->setCellValue('E' . $index, $v['sell_price'])
-                    ->setCellValue('F' . $index, $v['base_sales_volume'])
-                    ->setCellValue('G' . $index, $v['base_sales_volume']*$v['sell_price']);
+                    ->setCellValue('F' . $index, $v['sales_volume'])
+                    ->setCellValue('G' . $index, $v['sales_volume']*$v['sell_price']);
             }
             $length = count($result) + 2;
             $objPHPExcel->setActiveSheetIndex(0);
