@@ -2191,6 +2191,7 @@ class UcenterAction extends Controller {
      * 获取推广员列表
      */
     public function getPromoterList(){   
+        var_dump(123);die;
         $page = Filter::int(Req::args('page'));
         $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
         if(!$district){
