@@ -2239,7 +2239,7 @@ class UcenterAction extends Controller {
             return;
         }
         $record = $this->model->table('invite as do')
-                ->join('left join user as u on do.invite_user_id = u.id left join district_shop as ds on do.invite_user_id=ds.owner_id')
+                ->join('left join user as u on do.invite_user_id = u.id inner join district_shop as ds on do.invite_user_id=ds.owner_id')
                 ->fields('u.id,u.avatar,u.nickname,do.createtime')
                 ->where("do.user_id=".$this->user['id'])
                 ->order("do.id desc")
