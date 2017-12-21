@@ -2369,7 +2369,7 @@ class UcenterAction extends Controller {
       $realname = Filter::str(Req::args('realname'));
       $result = Common::aliyunRequest($bankcard,$idcard,$realname);
       if($result['error_code']==0){
-        // var_dump($result);die;
+        var_dump($result);die;
         $data = array(
             'user_id'=>$this->user['id'],
             'cardno'=>$bankcard,
