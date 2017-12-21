@@ -1514,6 +1514,7 @@ class Common {
     }
 
     static function aliyunRequest($bankcard,$cardNo,$realName){
+        var_dump($bankcard,$cardNo,$realName);
         $host = "https://aliyun-bankcard-verify.apistore.cn";
         $path = "/bank";
         $method = "GET";
@@ -1537,6 +1538,7 @@ class Common {
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         }
         $result = curl_exec($curl);
+        var_dump($result);die;
         return(json_decode($result,true));
     }
 }
