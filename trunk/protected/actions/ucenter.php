@@ -2377,7 +2377,7 @@ class UcenterAction extends Controller {
         'cardNo'=>$idcard,
         'realName'=>$realname
         );
-      $ret = Common::httpRequest($url,'GET',$param,$header);
+      $ret = Common::httpRequest($url,'POST',$param,$header);
       // $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
       $result = json_decode($ret,true);
       var_dump($ret);
