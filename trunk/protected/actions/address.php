@@ -556,7 +556,7 @@ class AddressAction extends Controller
         $tourist_id = Req::args('tourist_id'); //街道或景点
         $line_number = Filter::int(Req::args('line_number'));//几号线
         $which_station = Filter::int(Req::args('which_station'));//哪个站
-        $customer = Req::args('customer');//商家or代理vip
+        $customer = Req::args('customer');//等于1筛选出经销商
 
         $where = "lat<>0";
         //区域
