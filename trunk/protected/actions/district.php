@@ -312,7 +312,9 @@ class DistrictAction extends Controller {
         if($list){
             unset($list['html']);
         }else{
-            $list = array();
+            $list = array(
+                'data'=>array()
+                );
         }
         
         $count1 = $district['code_num'];
