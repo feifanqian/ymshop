@@ -152,43 +152,7 @@ class DistrictAction extends Controller {
         $this->code = 0;
         $this->content = $this->hirer->getMyPrmoter($page);
     }
-    /*
-     * 获取拓展小区列表
-     */
-    protected function getSubordinate(){
-        // $this->code = 0;
-        // $this->content = $this->hirer->getMySubordinate();
-        $page = Filter::int(Req::args('page'));
-        $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
-        if(!$district){
-            $this->code = 1131;
-            return;
-        }
-        $record = $this->model->table('invite as do')
-                ->join('left join user as u on do.invite_user_id = u.id')
-                ->fields('u.id,u.avatar,u.nickname,u.sex,do.createtime')
-                ->where("do.user_id=".$this->user_id)
-                ->order("do.id desc")
-                ->findPage($page, 10);
-        if (empty($record)) {
-            return array('data'=>array());
-        }
-        if (isset($record['html'])) {
-            unset($record['html']);
-        }
-        if($record['data']){
-            foreach($record['data'] as $k=>$v){
-                $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
-                if(!$shop){
-                    unset($record['data'][$k]);
-                }
-            }
-        }
-
-        $this->code = 0;
-        $this->content = $record;
-    }
+    
     
     /*
      * 推广业绩图标数据

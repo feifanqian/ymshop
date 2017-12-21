@@ -2197,28 +2197,62 @@ class UcenterAction extends Controller {
             $this->code = 1131;
             return;
         }
-        $record = $this->model->table('invite as do')
-                ->join('left join user as u on do.invite_user_id = u.id')
-                ->fields('u.id,u.avatar,u.nickname,u.sex,do.createtime')
-                ->where("do.user_id=".$this->user_id)
-                ->order("do.id desc")
-                ->findPage($page, 10);
+        $record = $this->model->table('district_promoter as dp')
+                ->join('left join user as u on dp.user_id = u.id left join invite as i on dp.user_id=i.invite_user_id')
+                ->fields('u.id,u.avatar,u.nickname,i.createtime')
+                ->where("i.user_id=".$this->user['id'])
+                ->order("i.id desc")
+                ->findPage($page, 10);        
         if (empty($record)) {
             return array('data'=>array());
         }
         if (isset($record['html'])) {
             unset($record['html']);
         }
-        if($record['data']){
-            foreach($record['data'] as $k=>$v){
-                $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
-                if(!$promoter){
-                    unset($record['data'][$k]);
-                }elseif($shop){
-                    unset($record['data'][$k]);
-                }
-            }
+        // if($record['data']){
+        //     foreach($record['data'] as $k=>$v){
+        //         $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+        //         $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
+        //         if(!$promoter){
+        //             unset($record['data'][$k]);
+        //             $record['page']['total'] = $record['page']['total']-1;
+        //             $record['page']['totalPage'] = ceil($record['page']['total']/10);
+        //         }
+        //         if($shop){
+        //             unset($record['data'][$k]);
+        //             $record['page']['total'] = $record['page']['total']-1;
+        //             $record['page']['totalPage'] = ceil($record['page']['total']/10);
+        //         }
+        //     }
+        // }
+
+        $this->code = 0;
+        $this->content = $record;
+    }
+
+    /*
+     * 获取拓展小区列表
+     */
+    public function getSubordinate(){
+        // $this->code = 0;
+        // $this->content = $this->hirer->getMySubordinate();
+        $page = Filter::int(Req::args('page'));
+        $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
+        if(!$district){
+            $this->code = 1131;
+            return;
+        }
+        $record = $this->model->table('district_shop as ds')
+                ->join('left join user as u on ds.owner_id = u.id left join invite as i on ds.owner_id=i.invite_user_id')
+                ->fields('u.id,u.avatar,u.nickname,ds.linkman,i.createtime')
+                ->where("i.user_id=".$this->user['id'])
+                ->order("i.id desc")
+                ->findPage($page, 10);            
+        if (empty($record)) {
+            return array('data'=>array());
+        }
+        if (isset($record['html'])) {
+            unset($record['html']);
         }
 
         $this->code = 0;

@@ -130,7 +130,7 @@ class V1Controller extends Controller {
         'pay_district' => array("payment/pay_district", 1,1), //小区加盟费支付
         // 'get_promoter_list' => array("district/getPromoterList", 1,1), //获取推广员列表
         'get_promoter_list' => array("ucenter/getPromoterList", 1,1), //获取推广员列表
-        'get_subordinate' => array("district/getSubordinate", 1,1), //获取我的拓展小区
+        'get_subordinate' => array("ucenter/getSubordinate", 1,1), //获取我的拓展小区
         'district_achievement' => array("district/districtAchievement", 1,1), //获取小区业绩数据
         //推广员相关
         'isDistrictPromoter' => array("ucenter/isDistrictPromoter", 1,1),//判断是否是小区推广员
