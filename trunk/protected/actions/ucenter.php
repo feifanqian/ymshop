@@ -2369,7 +2369,20 @@ class UcenterAction extends Controller {
       $realname = Filter::str(Req::args('realname'));
       $result = Common::aliyunRequest($bankcard,$idcard,$realname);
       if($result['error_code']==0){
-        
+        $data = array(
+            'user_id'=>$this->user['id'],
+            'cardno'=>$bankcard,
+            'bankname'=>$result['result']['result']['information']['bankname'],
+            'open_name'=>$realname,
+            'type'=>$result['result']['result']['information']['iscreditcard'],
+            'bankcode'=>$result['result']['result']['information']['abbreviation']
+            );
+        $this->model->table('bankcard')->data($data)->insert();
+        $this->code = 0;
+        $this->content = '绑定成功';
+      }else{
+        $this->code = 1190;
+        return;
       }
     }
 }
