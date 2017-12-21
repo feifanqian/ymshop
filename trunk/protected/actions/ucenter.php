@@ -2369,7 +2369,7 @@ class UcenterAction extends Controller {
       $realname = Filter::str(Req::args('realname'));
       $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
       $result = json_decode($ret,true);
-      // var_dump($ret);
+      var_dump($ret);
       // var_dump($result);die;
       if($result['error_code']==0){
         $has_bind = $this->model->table('bankcard')->where('cardno='.$bankcard)->find();
