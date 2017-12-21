@@ -2192,39 +2192,26 @@ class UcenterAction extends Controller {
      */
     public function getPromoterLists(){   
         $page = Filter::int(Req::args('page'));
-        // var_dump($this->user['id']);die;
-        $promoter_list = $this->model->table("district_promoter as dp")->fields("dp.id,dp.user_id,dp.join_time,u.avatar,u.nickname,c.real_name,c.sex")->join("left join user as u on dp.user_id = u.id left join customer as c on dp.user_id = c.user_id")->where('dp.user_id ='.$this->user['id'])->order('dp.id desc')->findPage($page, 10);
-        // var_dump($promoter_list);die;
-        
-        // if(empty($promoter_list)){
-        //   return array();
-        // }
-        // if(isset($promoter_list['html'])){
-        //     unset($promoter_list['html']);
-        // }
-        if(!empty($promoter_list)){
-        foreach ($promoter_list['data'] as $k => $v){
-                $line_data['id']=$v['id'];
-                $lint_data['join_time']=$v['join_time'];
-                if($v['avatar']==''){
-                    $line_data['avatar']="/static/images/avatar.jpeg";
-                }else{
-                    $line_data['avatar']=Url::urlFormat('@'.$v['avatar']);
-                }
-                if(isset($v['real_name'])&&$v['real_name']!=''){
-                    $line_data['name']=$v['real_name'];
-                }else if(isset($v['nickname'])&&$v['nickname']!=''){
-                    $line_data['name']=$v['nickname'];
-                }else{
-                    $line_data['name']='未知推广者';
-                }
-                $line_data['sex']=$v['sex'];
-                $promoter_list['data'][$k]=$line_data;
-            }
+        $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
+        if(!$district){
+            $this->code = 1131;
+            return;
+        }
+        $record = $this->model->table('invite as do')
+                ->join('left join user as u on do.invite_user_id = u.id left join district_promoter as dp on do.invite_user_id=dp.user_id')
+                ->fields('u.id,u.avatar,u.nickname,u.sex,dp.create_time')
+                ->where("do.user_id=".$this->user_id)
+                ->order("do.id desc")
+                ->findPage($page, 10);
+        if (empty($record)) {
+            return array('data'=>array());
+        }
+        if (isset($record['html'])) {
+            unset($record['html']);
         }
 
         $this->code = 0;
-        $this->content = $promoter_list;
+        $this->content = $record;
     }
 
     /*
