@@ -454,10 +454,10 @@ class CountController extends Controller
 
         $goods = new Model("goods as gd");
         $shop = new Model("shop as sh");
-        $result = $goods->join("left join shop as sh on gd.shop_id = sh.id left join order_goods as og")
-            ->fields("gd.id as gid,sh.name as shname,gd.name as gdname,gd.base_sales_volume,sell_price,SUM(og.goods_nums) as sell_volume")
+        $result = $goods->join("left join shop as sh on gd.shop_id = sh.id")
+            ->fields("gd.id as gid,sh.name as shname,gd.name as gdname,gd.base_sales_volume,sell_price")
             ->where('gd.is_online=0 and gd.id>1000')
-            ->order("base_sales_volume desc")
+            ->order("gd.id desc")
             ->findAll();
         //销量
         // print_r($result);die;
