@@ -466,8 +466,9 @@ class CountController extends Controller
             $sales_volume = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id =".$v["gid"]." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->findAll();
             if($sales_volume){
                 $result[$k]['sales_volume'] = $sales_volume[0]['sell_volume'];
+                
             }else{
-                $result[$k]['sales_volume'] = 0;
+                $result[$k]['sales_volume'] = '0';
             }
             
         }
