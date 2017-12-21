@@ -2368,7 +2368,6 @@ class UcenterAction extends Controller {
       $idcard = Req::args('idcard');
       $realname = Filter::str(Req::args('realname'));
       $result = Common::aliyunRequest($bankcard,$idcard,$realname);
-      var_dump($result);die;
       if($result['error_code']==0){
         $data = array(
             'user_id'=>$this->user['id'],
