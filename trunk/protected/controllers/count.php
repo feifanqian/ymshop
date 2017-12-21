@@ -473,8 +473,8 @@ class CountController extends Controller
         }
         
         // echo "<pre>";
-        // print_r($result);
-        // die();
+        print_r($result);
+        die();
         if (!empty($result)) {
             foreach ($result as $k => $v) {
                 $index = $k + 3;
