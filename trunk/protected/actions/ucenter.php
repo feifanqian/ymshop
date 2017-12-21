@@ -2197,19 +2197,28 @@ class UcenterAction extends Controller {
             $this->code = 1131;
             return;
         }
-        var_dump(123);
         $record = $this->model->table('invite as do')
-                ->join('left join user as u on do.invite_user_id = u.id left join district_promoter as dp on do.invite_user_id=dp.user_id')
-                ->fields('u.id,u.avatar,u.nickname,u.sex,dp.create_time')
+                ->join('left join user as u on do.invite_user_id = u.id')
+                ->fields('u.id,u.avatar,u.nickname,u.sex,do.createtime')
                 ->where("do.user_id=".$this->user_id)
                 ->order("do.id desc")
                 ->findPage($page, 10);
-        var_dump(111);die;        
         if (empty($record)) {
             return array('data'=>array());
         }
         if (isset($record['html'])) {
             unset($record['html']);
+        }
+        if($record['data']){
+            foreach($record['data'] as $k=>$v){
+                $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
+                if(!$promoter){
+                    unset($record['data'][$k]);
+                }elseif($shop){
+                    unset($record['data'][$k]);
+                }
+            }
         }
 
         $this->code = 0;
