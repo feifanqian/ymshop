@@ -464,10 +464,8 @@ class CountController extends Controller
         foreach ($result as $k => $v) {
             $order_goods = new Model("order_goods as og");
             $sales_volume = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id =".$v["gid"]." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->findAll();
-            if($sales_volume){
-                var_dump($sales_volume);die;
+            if($sales_volume[0]['sell_volume']){
                 $result[$k]['sales_volume'] = $sales_volume[0]['sell_volume'];
-                  
             }else{
                 $result[$k]['sales_volume'] = 0;
             }
@@ -475,8 +473,8 @@ class CountController extends Controller
         }
         
         // echo "<pre>";
-        print_r($result);
-        die();
+        // print_r($result);
+        // die();
         if (!empty($result)) {
             foreach ($result as $k => $v) {
                 $index = $k + 3;
