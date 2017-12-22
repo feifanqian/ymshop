@@ -1514,7 +1514,7 @@ class Common {
     }
 
     static function aliyunRequest($bankcard,$cardNo,$realName){
-        $host = "https://aliyun-bankcard-verify.apistore.cn";
+        $host = "http://aliyun-bankcard-verify.apistore.cn";
         $path = "/bank";
         $method = "GET";
         $appcode = "8d41495e483346a5a683081fd046c0f2";
