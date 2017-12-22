@@ -2412,6 +2412,7 @@ class UcenterAction extends Controller {
         );
      
       $ret = Common::httpRequest($url,'GET',NULL,$header);
+      var_dump($ret);die;
       $result = json_decode($ret,true);
       if($result['error_code']==0){
         $this->code = 0;
