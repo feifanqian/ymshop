@@ -192,6 +192,7 @@ class AddressAction extends Controller
     }
 
     public function redbagMake(){
+        $payment_id = Filter::int(Req::args('payment_id'));
         $amount = round(Filter::float(Req::args('amount')),2);
         $info = Filter::text(Req::args('info'));
         $distance = Filter::int(Req::args('distance'));
@@ -209,6 +210,10 @@ class AddressAction extends Controller
         if($amount*100<$num){
             $this->code = 1186;
             return;
+        }
+        if(!$payment_id){
+         $this->code = 1157;
+         return;
         }
         switch ($range) {
             case '0.5':
@@ -272,7 +277,9 @@ class AddressAction extends Controller
                 $lat = $promoter['lat']+$rand2;
                 break;
         }
+        $order_no = Common::createOrderNo();
         $data = array(
+             'order_no'=>'redbag'.$order_no,
              'amount'=>$amount,
              'info'=>$info,
              'lng'=>$lng,
@@ -285,9 +292,16 @@ class AddressAction extends Controller
              'num'=>$num
             );
         $result = $this->model->table('redbag')->data($data)->insert();
+        $payment = new Payment($payment_id);
+        $paymentPlugin = $payment->getPaymentPlugin();
+        
         if($result){
+            $packData = $payment->getPaymentInfo('redbag', $result);
+            $sendData = $paymentPlugin->packData($packData);
+            
             $this->code = 0;
-            $this->content = $this->model->table('redbag')->where('id='.$result)->find();
+            $this->content['redbag'] = $this->model->table('redbag')->where('id='.$result)->find();
+            $this->content['senddata'] = $sendData;
         }else{
             $this->code = 1169;
             return;
