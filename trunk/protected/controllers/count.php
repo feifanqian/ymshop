@@ -320,7 +320,8 @@ class CountController extends Controller
 
         }
 
-
+        ob_end_clean(); //清空（擦除）缓冲区并关闭输出缓冲
+        ob_start();//打开输出控制缓冲
         // Redirect output to a client’s web browser (Excel5)
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="' . $title . '".xls"');
@@ -366,26 +367,22 @@ class CountController extends Controller
     //销售排行榜表
     public function sales_rank()
     {
-        $model = new Model("goods as gd");
+        header("Content-type: text/html; charset=utf-8");
         $cal = $this->calendar();
-        $stime = $cal['start'];
-        $etime = $cal['end'];
+        $stime = $cal['start']; //开始时间
+        $etime = $cal['end']; //结束时间
         $s_time = $cal['str'];
-        $num = $cal['days'];
+        $num = $cal['days'];//天数
 
         $monthData = array();
         $realData = array();
-        $model = new Model("order");
+        $models = new Model("order_goods as og");
+       // $rows = $models->join("left join goods as gd on og.goods_id = gd.id left join order as od on og.order_id = od.id")->fields("gd.name as gdname,gd.sell_price as gdprice,sum(og.goods_nums) as nums")->where("od.pay_time between '$stime' and '$etime' and od.pay_status=1")->findAll();
 
         if ($num <= 3) {
-            $rows = $model->fields("sum(payable_amount) as amount,sum(order_amount) as order_amount,TIME_FORMAT(create_time, '%H:00') as day ")->where("create_time between '$stime' and '$etime' and pay_status=1")->group('hour(create_time)')->findAll();
-
-            for ($i = 0; $i < 24; $i++) {
-                $monthData[($i < 10 ? '0' . $i : $i) . ':00'] = 0.00;
-                $realData[($i < 10 ? '0' . $i : $i) . ':00'] = 0.00;
-            }
+            $rows = $models->join("left join order as o on og.order_id = o.id left join goods as gd on og.goods_id = gd.id")->fields("gd.name as gdname,gd.sell_price as gdprice,sum(og.goods_nums) as nums,TIME_FORMAT(o.pay_time,'%H:00') as day ")->where("o.pay_time between '$stime' and '$etime' and o.pay_status=1")->group('hour(o.pay_time)')->findAll();
         } else {
-            $rows = $model->fields("sum(payable_amount) as amount,sum(order_amount) as order_amount,date_format(create_time,'%m-%d') as day ")->where("create_time between '$stime' and '$etime' and pay_status=1")->group('day')->findAll();
+            $rows = $models->join("left join order as o on og.order_id = o.id left join goods as gd on og.goods_id = gd.id")->fields("gd.name as gdname,gd.sell_price as gdprice,sum(og.goods_nums) as nums,date_format(o.pay_time,'%m-%d') as day ")->where("o.pay_time between '$stime' and '$etime' and o.pay_status=1")->group('day')->findAll();
             $month_day = null;
             for ($i = 0; $i < $num; $i++) {
                 $month_day = date("m-d", strtotime($stime . '+' . $i . 'day'));
@@ -393,15 +390,14 @@ class CountController extends Controller
                 $realData[$month_day] = 0.00;
             }
         }
-
         if ($rows) {
             foreach ($rows as $row) {
-                $monthData[$row['day']] = $row['amount'];
-                $realData[$row['day']] = $row['order_amount'];
+                $monthData[$row['day']] = $row['nums'];
+                $realData[$row['day']] = $row['nums']*$row['gdprice'];
             }
         }
 
-        $month = implode("','", array_keys($monthData));
+        $month = implode("','", array_keys($monthData)); //将数组转换成字符串
         $data = implode(",", $monthData);
         $realData = implode(",", $realData);
         $this->assign('s_time', $s_time);
@@ -456,14 +452,12 @@ class CountController extends Controller
         $shop = new Model("shop as sh");
         $result = $goods->join("left join shop as sh on gd.shop_id = sh.id")
             ->fields("gd.id as gid,sh.name as shname,gd.name as gdname,gd.base_sales_volume,sell_price,gd.weight as gweight")
-            ->where('gd.is_online=0 and gd.id>940 and gd.id<980')
-            ->order("gd.id desc")
             ->findAll();
         //销量
         // print_r($result);die;
         foreach ($result as $k => $v) {
             $order_goods = new Model("order_goods as og");
-            $sales_volume = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id =".$v["gid"]." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->findAll();
+            $sales_volume = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id =".$v["gid"]." and o.status in (3,4) and ".$where)->fields("SUM(og.goods_nums) as sell_volume")->order("sell_volume desc")->findAll();
             if($sales_volume[0]['sell_volume']){
                 $result[$k]['sales_volume'] = $sales_volume[0]['sell_volume'];
             }else{
