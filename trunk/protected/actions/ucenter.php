@@ -2386,8 +2386,9 @@ class UcenterAction extends Controller {
             'cardno'=>$bankcard,
             'bankname'=>$result['result']['information']['bankname'],
             'open_name'=>$realname,
-            'type'=>$result['result']['information']['iscreditcard'],
-            'bankcode'=>$result['result']['information']['abbreviation']
+            'type'=>intval($result['result']['information']['iscreditcard']),
+            'bankcode'=>$result['result']['information']['abbreviation'],
+            'bind_date'=>date('Y-m-d H:i:s')
             );
         // var_dump($data);die;
         $this->model->table('bankcard')->data($data)->insert();
