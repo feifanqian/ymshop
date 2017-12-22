@@ -193,7 +193,11 @@ class IndexController extends Controller {
     public function cart_del() {
         $id = Filter::int(Req::args("id"));
         $cart = $this->getCart();
-        $cart->delItem($id);
+        if($this->user){
+           $cart->delItem($id,$this->user['id']); 
+        }else{
+            $cart->delItem($id,0);
+        }
         $info = array('status' => "fail");
         if (!$cart->hasItem($id))
             $info = array('status' => "success");
