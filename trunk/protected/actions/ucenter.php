@@ -2426,7 +2426,7 @@ class UcenterAction extends Controller {
       $ret = Common::httpRequest($url,'GET',NULL,$header);
       $result = json_decode($ret,true);
       if($result['error_code']==0){
-        $this->model->table('customer')->data(array('realname_verified'=>1))->where('user_id='.$this->user['id'])->update();
+        $this->model->table('customer')->data(array('realname_verified'=>1,'realname'=>$realname,'id_no'=>$idcard))->where('user_id='.$this->user['id'])->update();
         $this->code = 0;
         $this->content = '验证成功';
       }else{
