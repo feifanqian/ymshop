@@ -35,28 +35,6 @@ class UcenterAction extends Controller {
         return $response;
     }
 
-    private function aliyunRequest($api, array $params = array(), $timeout = 30) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $api);
-        // 以返回的形式接收信息
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        // 设置为POST方式
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
-        // 不验证https证书
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
-        ));
-        // 发送数据
-        $response = curl_exec($ch);
-        // 不要忘记释放资源
-        curl_close($ch);
-        return $response;
-    }
-
     //验证短信
     private function sms_verify($code, $mobile, $zone) {
         $url = "https://webapi.sms.mob.com/sms/verify";
@@ -2394,18 +2372,9 @@ class UcenterAction extends Controller {
       $header = array(
             'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
         );
-      $param = array(
-        'bankcard'=>$bankcard,
-        'cardNo'=>$idcard,
-        'realName'=>$realname
-        );
      
-      // $ret = $this->aliyunRequest($url,$param);
-      $ret = Common::httpRequest($url,'GET',$param,$header);
-      // $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
-      // $result = json_decode($ret,true);
-      var_dump($ret);die;
-      // var_dump($result);die;
+      $ret = Common::httpRequest($url,'GET',NULL,$header);
+      $result = json_decode($ret,true);
       if($result['error_code']==0){
         $has_bind = $this->model->table('bankcard')->where('cardno='.$bankcard)->find();
         if($has_bind){
