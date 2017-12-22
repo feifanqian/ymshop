@@ -2367,6 +2367,12 @@ class UcenterAction extends Controller {
       $bankcard = Req::args('bankcard');
       $idcard = Req::args('idcard');
       $realname = Filter::str(Req::args('realname'));
+      
+      $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
+      if($customer['realname_verified']==0){
+        $this->code = 1192;
+        return;
+      }
 
       $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=".$bankcard."&cardNo=".$idcard."&realName=".$realname;
       $header = array(
@@ -2411,6 +2417,7 @@ class UcenterAction extends Controller {
         $this->code = 1191;
         return;
       }
+
       $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=&cardNo=".$idcard."&realName=".$realname;
       $header = array(
             'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
