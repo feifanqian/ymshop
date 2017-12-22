@@ -155,7 +155,9 @@ class V1Controller extends Controller {
         "offline_balance_withdraw"=>array("ucenter/offlineBalanceWithdraw",1,1), //商家余额提现到银行卡
         "bankcard_list"=>array("ucenter/bankcardList",1,1), //银行卡列表
         "bind_card_temp"=>array("ucenter/bindCardTemp",1,1), //绑定银行卡(临时)
+        "unbind_card_temp"=>array("ucenter/unbindCardTemp",1,1), //解绑银行卡(临时)
         "name_verified_temp"=>array("ucenter/nameVerifiedTemp",1,1), //二要素实名认证(临时)
+
         "pointcoin_log"=>array("ucenter/pointcoin_log",1,1),
         //充值套餐详情
         "package_info"=>array("index/package_info",0,1),
