@@ -2381,7 +2381,6 @@ class UcenterAction extends Controller {
             $this->code = 1191;
             return;
         }
-        var_dump($result['result']['information']);die;
         $data = array(
             'user_id'=>$this->user['id'],
             'cardno'=>$bankcard,
@@ -2390,6 +2389,7 @@ class UcenterAction extends Controller {
             'type'=>$result['result']['information']['iscreditcard'],
             'bankcode'=>$result['result']['information']['abbreviation']
             );
+        var_dump($data);die;
         $this->model->table('bankcard')->data($data)->insert();
         $this->code = 0;
         $this->content = '绑定成功';
