@@ -2390,15 +2390,38 @@ class UcenterAction extends Controller {
       $idcard = Req::args('idcard');
       $realname = Filter::str(Req::args('realname'));
 
-      $url = 'https://aliyun-bankcard-verify.apistore.cn/bank';
-      $header = array(
-            'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
-        );
-      $param = array(
-        'bankcard'=>$bankcard,
-        'cardNo'=>$idcard,
-        'realName'=>$realname
-        );
+      // $url = 'https://aliyun-bankcard-verify.apistore.cn/bank';
+      // $header = array(
+      //       'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
+      //   );
+      // $param = array(
+      //   'bankcard'=>$bankcard,
+      //   'cardNo'=>$idcard,
+      //   'realName'=>$realname
+      //   );
+      $host = "https://aliyun-bankcard-verify.apistore.cn";
+        $path = "/bank";
+        $method = "GET";
+        $appcode = "8d41495e483346a5a683081fd046c0f2";
+        $headers = array();
+        array_push($headers, "Authorization:APPCODE " . $appcode);
+        $querys = "Mobile=&bankcard=".$bankcard."&cardNo=".$idcard."&realName=".$realname;
+        $bodys = "";
+        $url = $host . $path . "?" . $querys;
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_FAILONERROR, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        if (1 == strpos("$".$host, "https://"))
+        {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        }
+        var_dump(curl_exec($curl));
       // $ret = $this->aliyunRequest($url,$param);
       // $ret = Common::httpRequest($url,'POST',$param,$header);
       $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
