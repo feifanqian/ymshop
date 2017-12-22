@@ -55,6 +55,8 @@ class Cart {
     }
 
     public function delItem($id) {
+        $model = new Model();
+        $model->table('cart')->where('goods_id='.$id.' and user_id='.$uid)->delete();
         unset($this->items[$id]);
     }
 
