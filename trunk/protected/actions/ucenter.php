@@ -2389,7 +2389,7 @@ class UcenterAction extends Controller {
             'type'=>$result['result']['information']['iscreditcard'],
             'bankcode'=>$result['result']['information']['abbreviation']
             );
-        var_dump($data);die;
+        // var_dump($data);die;
         $this->model->table('bankcard')->data($data)->insert();
         $this->code = 0;
         $this->content = '绑定成功';
