@@ -2390,7 +2390,7 @@ class UcenterAction extends Controller {
       $idcard = Req::args('idcard');
       $realname = Filter::str(Req::args('realname'));
 
-      $url = 'http://aliyun-bankcard-verify.apistore.cn/bank';
+      $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=".$bankcard."&cardNo=".$idcard."&realName=".$realname;
       $header = array(
             'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
         );
@@ -2399,7 +2399,7 @@ class UcenterAction extends Controller {
         'cardNo'=>$idcard,
         'realName'=>$realname
         );
-      
+     
       // $ret = $this->aliyunRequest($url,$param);
       $ret = Common::httpRequest($url,'GET',$param,$header);
       // $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
