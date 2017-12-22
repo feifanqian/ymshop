@@ -135,6 +135,12 @@ class Payment {
             $payment ['M_OrderNO'] = $argument['order_no'];
             $payment ['M_OrderId'] = $argument['order_id'];
             $payment ['M_Amount']  = $argument['amount'];
+        }else if($type == "redbag"){
+            $id = $argument;
+            $redbag = $model->table('redbag')->where('id = '.$id)->find();
+            $payment ['M_OrderNO'] = $redbag['order_no'];
+            $payment ['M_OrderId'] = $redbag['id'];
+            $payment ['M_Amount']  = $redbag['amount'];
         }
 
         $config = Config::getInstance();
