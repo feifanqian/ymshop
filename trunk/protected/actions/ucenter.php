@@ -2268,10 +2268,25 @@ class UcenterAction extends Controller {
             $this->code = 1159;
             return;
         }
+
+        $realname = $user['realname_verified'];
+        $id_no = $user['id_no'];
+        
+
+        if($user['realname_verified']){
+            $strlen = mb_strlen($user['realname_verified'], 'utf-8');
+            $lastStr = mb_substr($user['realname_verified'], -1, 1, 'utf-8');
+            $realname = str_repeat("*", $strlen - 1) . $lastStr;
+        }
+
+        if($user['id_no']){
+           $id_no = substr($user['id_no'],0,1).'****************'.substr($user['id_no'],0,-1);
+        }
+        
         $this->code = 0;
         $this->content['verified'] = $user['realname_verified'];
-        $this->content['realname'] = $user['realname'];
-        $this->content['id_no'] = $user['id_no'];
+        $this->content['realname'] = $realname;
+        $this->content['id_no'] = $id_no;
     }
 
     /*
@@ -2367,6 +2382,12 @@ class UcenterAction extends Controller {
       $bankcard = Req::args('bankcard');
       $idcard = Req::args('idcard');
       $realname = Filter::str(Req::args('realname'));
+      
+      $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
+      if($customer['realname_verified']==0){ //需要先实名认证
+        $this->code = 1192;
+        return;
+      }
 
       $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=".$bankcard."&cardNo=".$idcard."&realName=".$realname;
       $header = array(
@@ -2397,5 +2418,51 @@ class UcenterAction extends Controller {
         $this->code = 1190;
         return;
       }
+    }
+
+    /*
+     * 实名认证临时接口
+     */
+    public function nameVerifiedTemp(){
+      $idcard = Req::args('idcard');
+      $realname = Filter::str(Req::args('realname'));
+      
+      $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
+      if($customer['realname_verified']==1){ //已认证
+        $this->code = 1191;
+        return;
+      }
+
+      $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=&cardNo=".$idcard."&realName=".$realname;
+      $header = array(
+            'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
+        );
+     
+      $ret = Common::httpRequest($url,'GET',NULL,$header);
+      $result = json_decode($ret,true);
+      if($result['error_code']==0){
+        $this->model->table('customer')->data(array('realname_verified'=>1,'realname'=>$realname,'id_no'=>$idcard))->where('user_id='.$this->user['id'])->update();
+        $this->code = 0;
+        $this->content = '验证成功';
+      }else{
+        $this->code = 1190;
+        return;
+      }
+    }
+
+    public function unbindCardTemp(){
+        $list_id = Filter::int(Req::args('list_id'));
+        if(!$list_id){
+            $this->code = 1193;
+            return;
+        }
+        $result = $this->model->table('bankcard')->where('id='.$list_id.' and user_id='.$this->user['id'])->delete();
+        if($result){
+            $this->code = 0;
+            $this->content = '解绑成功';
+        }else{
+            $this->code = 1194;
+            return;
+        }
     }
 }

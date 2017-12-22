@@ -298,7 +298,7 @@ class AddressAction extends Controller
         if($result){
             $packData = $payment->getPaymentInfo('redbag', $result);
             $sendData = $paymentPlugin->packData($packData);
-            
+
             $this->code = 0;
             $this->content['redbag'] = $this->model->table('redbag')->where('id='.$result)->find();
             $this->content['senddata'] = $sendData;
@@ -531,8 +531,9 @@ class AddressAction extends Controller
             $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
             $result = $model->table('district_promoter')->data(array('picture' => $picture))->where("user_id=" . $this->user['id'])->update();
         }
+
         if ($name) {
-            $model->table('customer')->data(array('real_name' => $name))->where("user_id=" . $this->user['id'])->update();
+            $model->table('district_promoter')->data(array('shop_name' => $name))->where("user_id=" . $this->user['id'])->update();
         }
         if ($infos) {
             $model->table('district_promoter')->data(array('info' => $infos))->where("user_id=" . $this->user['id'])->update();
@@ -777,7 +778,12 @@ class AddressAction extends Controller
                 }else{
                     $is_district = 0;
                 }
-                $info_sql[$k]['shop_type'] = $shop_type['name'];
+                if($shop_type){
+                    $type_name = $shop_type['name'];
+                }else{
+                    $type_name = '其它';
+                }
+                $info_sql[$k]['shop_type'] = $type_name;
                 $info_sql[$k]['is_district'] = $is_district;
                 if($info_sql[$k]['shop_name']==''){
                     $user = $this->model->table('customer')->fields('real_name')->where('user_id='.$v['user_id'])->find();
