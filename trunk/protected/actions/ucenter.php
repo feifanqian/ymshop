@@ -2398,4 +2398,27 @@ class UcenterAction extends Controller {
         return;
       }
     }
+
+    /*
+     * 实名认证临时接口
+     */
+    public function nameVerifiedTemp(){
+      $idcard = Req::args('idcard');
+      $realname = Filter::str(Req::args('realname'));
+
+      $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=&cardNo=".$idcard."&realName=".$realname;
+      $header = array(
+            'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
+        );
+     
+      $ret = Common::httpRequest($url,'GET',NULL,$header);
+      $result = json_decode($ret,true);
+      if($result['error_code']==0){
+        $this->code = 0;
+        $this->content = '验证成功';
+      }else{
+        $this->code = 1190;
+        return;
+      }
+    }
 }
