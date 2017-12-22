@@ -2405,16 +2405,21 @@ class UcenterAction extends Controller {
     public function nameVerifiedTemp(){
       $idcard = Req::args('idcard');
       $realname = Filter::str(Req::args('realname'));
-
+      
+      $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
+      if($customer['realname_verified']==1){
+        $this->code = 1191;
+        return;
+      }
       $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=&cardNo=".$idcard."&realName=".$realname;
       $header = array(
             'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
         );
      
       $ret = Common::httpRequest($url,'GET',NULL,$header);
-      var_dump($ret);die;
       $result = json_decode($ret,true);
       if($result['error_code']==0){
+        $this->model->table('customer')->data(array('realname_verified'=>1))->where('user_id='.$this->user['id'])->update();
         $this->code = 0;
         $this->content = '验证成功';
       }else{
