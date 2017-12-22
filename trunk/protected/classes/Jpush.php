@@ -2,8 +2,8 @@
 
 class Jpush{
     private $ins = null;
-    private $app_key = '43ab0ebd01579deb1dc1a054';            //待发送的应用程序(appKey)，只能填一个。
-    private $master_secret = '8824c8c988556fab46b0f83b';      //主密码
+    private $app_key = 'feaaf7eaf74a3c1a161b779d';            //待发送的应用程序(appKey)，只能填一个。
+    private $master_secret = 'c8914faebc51bef2c87a1ea1';      //主密码
     private $push_url = "https://api.jpush.cn/v3/push";            //推送的地址
     private $validate_url = "https://api.jpush.cn/v3/push/validate";
     private $schedule_url="https://api.jpush.cn/v3/schedules";

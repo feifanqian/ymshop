@@ -2139,8 +2139,8 @@ class UcenterAction extends Controller {
                Log::pointcoin_log($data['send_point'], $this->user['id'], "", "每日签到赠送", 10);
                $this->code = 0;
                $this->content['send_point']=$data['send_point'];
-               $this->content['serial_day']=$data['serial_day'];
-               $this->content['sign_in_count']=$data['sign_in_count'];
+               $this->content['serial_day']=strval($data['serial_day']);
+               $this->content['sign_in_count']=strval($data['sign_in_count']);
             }else{
                $this->code = 1005; 
             }

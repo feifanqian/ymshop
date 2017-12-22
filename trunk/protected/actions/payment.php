@@ -307,7 +307,12 @@ class PaymentAction extends Controller {
        }
        $accept_name = Session::get('openname');
        $config = Config::getInstance()->get("district_set");
-       $data['type']=2;
+       if($payment_id==7 || $payment_id==16){
+        $type = 2;
+       }else{
+        $type = 3;
+       }
+       $data['type']=$type;
        $data['order_no'] = $order_no;
        $data['user_id'] = $user_id;
        $data['payment'] = $payment_id;
