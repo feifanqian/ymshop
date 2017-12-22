@@ -2399,35 +2399,13 @@ class UcenterAction extends Controller {
       //   'cardNo'=>$idcard,
       //   'realName'=>$realname
       //   );
-      $host = "https://aliyun-bankcard-verify.apistore.cn";
-        $path = "/bank";
-        $method = "GET";
-        $appcode = "8d41495e483346a5a683081fd046c0f2";
-        $headers = array();
-        array_push($headers, "Authorization:APPCODE " . $appcode);
-        $querys = "Mobile=&bankcard=".$bankcard."&cardNo=".$idcard."&realName=".$realname;
-        $bodys = "";
-        $url = $host . $path . "?" . $querys;
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_FAILONERROR, false);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HEADER, true);
-        if (1 == strpos("$".$host, "https://"))
-        {
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        }
-        var_dump(curl_exec($curl));
+      
       // $ret = $this->aliyunRequest($url,$param);
       // $ret = Common::httpRequest($url,'POST',$param,$header);
       $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
-      // $result = json_decode($ret,true);
-      var_dump($ret);die;
-      // var_dump($result);die;
+      $result = json_decode($ret,true);
+      var_dump($ret);
+      var_dump($result);die;
       if($result['error_code']==0){
         $has_bind = $this->model->table('bankcard')->where('cardno='.$bankcard)->find();
         if($has_bind){
