@@ -2449,4 +2449,20 @@ class UcenterAction extends Controller {
         return;
       }
     }
+
+    public function unbindCardTemp(){
+        $list_id = Filter::int(Req::args('list_id'));
+        if(!$list_id){
+            $this->code = 1193;
+            return;
+        }
+        $result = $this->model->table('bankcard')->where('id='.$list_id.' and user_id='.$this->user['id'])->delete();
+        if($result){
+            $this->code = 0;
+            $this->content = '解绑成功';
+        }else{
+            $this->code = 1194;
+            return;
+        }
+    }
 }
