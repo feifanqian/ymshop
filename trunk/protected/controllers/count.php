@@ -343,6 +343,47 @@ class CountController extends Controller
     //货品进销存明细表
     public function inventory()
     {
+        header("Content-type: text/html; charset=utf-8");
+        $cal = $this->calendar();
+        $stime = $cal['start']; //开始时间
+        $etime = $cal['end']; //结束时间
+        $s_time = $cal['str'];
+        $num = $cal['days'];//天数
+
+        $monthData = array();
+        $realData = array();
+        $models = new Model("order_goods as og");
+        // $rows = $models->join("left join goods as gd on og.goods_id = gd.id left join order as od on og.order_id = od.id")->fields("gd.name as gdname,gd.sell_price as gdprice,sum(og.goods_nums) as nums")->where("od.pay_time between '$stime' and '$etime' and od.pay_status=1")->findAll();
+
+        if ($num <= 3) {
+            $rows = $models->join("left join order as o on og.order_id = o.id left join goods as gd on og.goods_id = gd.id")->fields("gd.name as gdname,gd.sell_price as gdprice,sum(og.goods_nums) as nums,TIME_FORMAT(o.pay_time,'%H:00') as day ")->where("o.pay_time between '$stime' and '$etime' and o.pay_status=1")->group('hour(o.pay_time)')->findAll();
+            for ($i = 0; $i < 24; $i++) {
+                $monthData[($i < 10 ? '0' . $i : $i) . ':00'] = 0.00;
+                $realData[($i < 10 ? '0' . $i : $i) . ':00'] = 0.00;
+            }
+        } else {
+            $rows = $models->join("left join order as o on og.order_id = o.id left join goods as gd on og.goods_id = gd.id")->fields("gd.name as gdname,gd.sell_price as gdprice,sum(og.goods_nums) as nums,date_format(o.pay_time,'%m-%d') as day ")->where("o.pay_time between '$stime' and '$etime' and o.pay_status=1")->group('day')->findAll();
+            $month_day = null;
+            for ($i = 0; $i < $num; $i++) {
+                $month_day = date("m-d", strtotime($stime . '+' . $i . 'day'));
+                $monthData[$month_day] = 0.00;
+                $realData[$month_day] = 0.00;
+            }
+        }
+        if ($rows) {
+            foreach ($rows as $row) {
+                $monthData[$row['day']] = $row['nums'];
+                $realData[$row['day']] = $row['nums']*$row['gdprice'];
+            }
+        }
+
+        $month = implode("','", array_keys($monthData)); //将数组转换成字符串
+        $data = implode(",", $monthData);
+        $realData = implode(",", $realData);
+        $this->assign('s_time', $s_time);
+        $this->assign("month", "'$month'");
+        $this->assign("data", $data);
+        $this->assign("real_data", $realData);
         $this->redirect();
     }
 
@@ -381,6 +422,10 @@ class CountController extends Controller
 
         if ($num <= 3) {
             $rows = $models->join("left join order as o on og.order_id = o.id left join goods as gd on og.goods_id = gd.id")->fields("gd.name as gdname,gd.sell_price as gdprice,sum(og.goods_nums) as nums,TIME_FORMAT(o.pay_time,'%H:00') as day ")->where("o.pay_time between '$stime' and '$etime' and o.pay_status=1")->group('hour(o.pay_time)')->findAll();
+            for ($i = 0; $i < 24; $i++) {
+                $monthData[($i < 10 ? '0' . $i : $i) . ':00'] = 0.00;
+                $realData[($i < 10 ? '0' . $i : $i) . ':00'] = 0.00;
+            }
         } else {
             $rows = $models->join("left join order as o on og.order_id = o.id left join goods as gd on og.goods_id = gd.id")->fields("gd.name as gdname,gd.sell_price as gdprice,sum(og.goods_nums) as nums,date_format(o.pay_time,'%m-%d') as day ")->where("o.pay_time between '$stime' and '$etime' and o.pay_status=1")->group('day')->findAll();
             $month_day = null;
@@ -465,10 +510,6 @@ class CountController extends Controller
             }
             
         }
-        
-        // echo "<pre>";
-        // print_r($result);
-        // die();
         if (!empty($result)) {
             foreach ($result as $k => $v) {
                 $index = $k + 3;
@@ -485,6 +526,140 @@ class CountController extends Controller
             $objPHPExcel->setActiveSheetIndex(0);
             $objPHPExcel->getActiveSheet()->freezePane('A2');
             $objPHPExcel->setActiveSheetIndex(0)->getStyle('A1:G' . $length)->getAlignment()->setWrapText(true)->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        }
+
+        ob_end_clean(); //清空（擦除）缓冲区并关闭输出缓冲
+        ob_start();//打开输出控制缓冲
+        // Redirect output to a client’s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $title . '".xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    //货品进销存明细表
+    public function inventory_excel()
+    {
+        header("Content-type: text/html; charset=utf-8");
+        $time = Req::args("s_time");
+        if (!$time) {
+            $time = date("Y-m-d%20--%20Y-m-d");
+        }
+        $date = explode('%20--%20', $time);
+        $stime = date('Y-m-d 00:00:00', strtotime($date[0]));
+        $etime = date('Y-m-d 00:00:00', strtotime($date[1] . '+1day'));
+        $title = "圆梦销售排行[$stime - $etime]";
+        $where = "'$stime'< o.pay_time and o.pay_time<'$etime'";
+        // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()
+            ->setCreator("ymlypt")
+            ->setLastModifiedBy("ymlypt")
+            ->setTitle("test")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("goods of ymlypt")
+            ->setKeywords("goods")
+            ->setCategory("Test result file");
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('A')->setWidth(10);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('B')->setWidth(25);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('C')->setWidth(25);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('G')->setWidth(10);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('I')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('J')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('K')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('L')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('M')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('N')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('O')->setWidth(15);
+        // Add some data
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:O1')->setCellValue('A1', '货品进销存明细表');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:A4')->setCellValue("A2", '序号');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B2:B4')->setCellValue('B2','厂商');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('C2:C4')->setCellValue("C2", '货品名称');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('D2:D4') ->setCellValue('D2', '重量');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('E2:E4')->setCellValue('E2', '单价');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('F2:G3')->setCellValue('F2', '期初库存');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F4','数量');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G4','供货价');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('H2:I3')->setCellValue('H2','进仓（厂家发出货品后，默认已入仓）');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H4','数量');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I4','供货价');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G4','供货价');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('J2:M2')->setCellValue('J2','出仓');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('J3:K3')->setCellValue('J3','发出途中');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('L3:M3')->setCellValue('L3','已验收完成销售');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J4','数量');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K4','供货价');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L4', '数量');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M4','供货价');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N4','供货价');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O4', '数量');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('N2:O3')->setCellValue('N2','供货价');
+
+        $goods = new Model("goods as gd");
+        $shop = new Model("shop as sh");
+        $result = $goods->join("left join shop as sh on gd.shop_id = sh.id")
+            ->fields("gd.id as gid,sh.name as shname,gd.name as gdname,gd.base_sales_volume,sell_price,gd.weight as gweight,store_nums,cost_price")
+            ->findAll();
+        //销量
+
+        foreach ($result as $k => $v) {
+            $order_goods = new Model("order_goods as og");
+            $sales_volume = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id =".$v["gid"]." and o.status in (3,4) and ".$where)->fields("SUM(og.goods_nums) as sell_volume")->order("sell_volume desc")->findAll();
+            $order_status = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id =".$v["gid"]." and o.status=3")->fields("status")->findAll();
+            if ($order_status){
+                $result[$k]['order_status'] = $order_status;
+            }else{
+                $result[$k]['order_status'] = 0;
+            }
+            if($sales_volume[0]['sell_volume']){
+                $result[$k]['sales_volume'] = $sales_volume[0]['sell_volume'];
+            }else{
+                $result[$k]['sales_volume'] = 0;
+            }
+
+        }
+//        echo "<pre>";
+//        print_r($result);
+//        die();
+
+        if (!empty($result)) {
+            foreach ($result as $k => $v) {
+                $index = $k + 5;
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValueExplicit('A' . $index, $k+1)
+                    ->setCellValueExplicit('B' . $index, $v['shname'], PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValueExplicit('C' . $index, $v['gdname'], PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValue('D' . $index, $v['gweight'])
+                    ->setCellValue('E' . $index, $v['sell_price'])
+                    ->setCellValue('F' . $index, $v['store_nums'])
+                    ->setCellValue('G' . $index, $v['cost_price'])
+                    ->setCellValue('H' . $index, $v['store_nums'])
+                    ->setCellValue('I' . $index, $v['cost_price'])
+                    ->setCellValue('J' . $index, 0)
+                    ->setCellValue('K' . $index, $v['cost_price'])
+                    ;
+            }
+            $length = count($result) + 2;
+            $objPHPExcel->setActiveSheetIndex(0);
+            $objPHPExcel->getActiveSheet()->freezePane('A2');
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A1:O' . $length)->getAlignment()->setWrapText(true)->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
         }
 
