@@ -2384,13 +2384,12 @@ class UcenterAction extends Controller {
         $data = array(
             'user_id'=>$this->user['id'],
             'cardno'=>$bankcard,
-            'bankname'=>$result['result']['information']['bankname'],
+            'bank_name'=>$result['result']['information']['bankname'],
             'open_name'=>$realname,
             'type'=>intval($result['result']['information']['iscreditcard']),
-            'bankcode'=>$result['result']['information']['abbreviation'],
+            'bank_code'=>$result['result']['information']['abbreviation'],
             'bind_date'=>date('Y-m-d H:i:s')
             );
-        // var_dump($data);die;
         $this->model->table('bankcard')->data($data)->insert();
         $this->code = 0;
         $this->content = '绑定成功';
