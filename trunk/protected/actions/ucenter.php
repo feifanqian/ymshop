@@ -2399,10 +2399,10 @@ class UcenterAction extends Controller {
         'cardNo'=>$idcard,
         'realName'=>$realname
         );
-      $ret = $this->aliyunRequest($url,$param);
+      // $ret = $this->aliyunRequest($url,$param);
       // $ret = Common::httpRequest($url,'POST',$param,$header);
-      // $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
-      $result = json_decode($ret,true);
+      $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
+      // $result = json_decode($ret,true);
       var_dump($ret);
       // var_dump($result);die;
       if($result['error_code']==0){
