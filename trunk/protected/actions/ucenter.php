@@ -2390,22 +2390,22 @@ class UcenterAction extends Controller {
       $idcard = Req::args('idcard');
       $realname = Filter::str(Req::args('realname'));
 
-      // $url = 'https://aliyun-bankcard-verify.apistore.cn/bank';
-      // $header = array(
-      //       'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
-      //   );
-      // $param = array(
-      //   'bankcard'=>$bankcard,
-      //   'cardNo'=>$idcard,
-      //   'realName'=>$realname
-      //   );
+      $url = 'http://aliyun-bankcard-verify.apistore.cn/bank';
+      $header = array(
+            'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
+        );
+      $param = array(
+        'bankcard'=>$bankcard,
+        'cardNo'=>$idcard,
+        'realName'=>$realname
+        );
       
-      // $ret = $this->aliyunRequest($url,$param);
+      $ret = $this->aliyunRequest($url,$param);
       // $ret = Common::httpRequest($url,'POST',$param,$header);
-      $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
-      $result = json_decode($ret,true);
-      var_dump($ret);
-      var_dump($result);die;
+      // $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
+      // $result = json_decode($ret,true);
+      var_dump($ret);die;
+      // var_dump($result);die;
       if($result['error_code']==0){
         $has_bind = $this->model->table('bankcard')->where('cardno='.$bankcard)->find();
         if($has_bind){
