@@ -2400,8 +2400,8 @@ class UcenterAction extends Controller {
         'realName'=>$realname
         );
       // $ret = $this->aliyunRequest($url,$param);
-      // $ret = Common::httpRequest($url,'POST',$param,$header);
-      $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
+      $ret = Common::httpRequest($url,'POST',$param,$header);
+      // $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
       // $result = json_decode($ret,true);
       var_dump($ret);die;
       // var_dump($result);die;
