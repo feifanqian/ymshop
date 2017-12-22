@@ -125,12 +125,31 @@ class AddressAction extends Controller
 
     public function redbagList()
     {
-        // $rand1 = rand(-111,111)/100000;
-        // $rand2 = rand(-111,111)/100000;
+        $lng = Req::args('lng');//经度
+        $lat = Req::args('lat');//纬度
+        $where = "r.lng != '' and r.lat != ''";
+        //搜索附近
+        if($lng && $lat){
+            if(Req::args('distance')!=''){
+                $distance = Req::args('distance');//距离
+                $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
+                $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
+
+                $dlat = $distance / 6371;
+                $dlat = rad2deg($dlat);//rad2deg() 函数把弧度数转换为角度数
+
+                $squares = array(
+                    'left-top' => array('lat' => $lat + $dlat, 'lng' => $lng - $dlng),
+                    'right-top' => array('lat' => $lat + $dlat, 'lng' => $lng + $dlng),
+                    'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
+                    'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
+                );
+                $where.= " and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
+            }
+        }
         $model = new Model();
         $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->order('r.id desc')->findAll();
         if($list){
-           if($list){
             foreach($list as $k => $v){
                  $promoter = $model->table('district_promoter')->fields('lng,lat')->where("lng != '' and lat != '' and user_id=".$v["user_id"])->find();
                  if($promoter){
@@ -140,10 +159,9 @@ class AddressAction extends Controller
                         $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+rand(-1111,1111)/1000000,'lat'=>$promoter['lat']+rand(-1111,1111)/1000000))->where('id='.$v['id'])->update();
                     }     
                  }  
-            }
-         } 
+            }  
         }
-        $new_list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where("r.lng != '' and r.lat != ''")->order('r.id desc')->findAll();
+        $new_list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where($where)->order('r.id desc')->findAll();
         foreach($new_list as $k => $v){
             $new_list[$k]['bag_name'] = $v['real_name'].'的红包';
         }
@@ -564,21 +582,23 @@ class AddressAction extends Controller
             $where.= " and region_id=$region_id";     
         }
         //搜索附近
-        if(Req::args('distance')!=''){
-            $distance = Req::args('distance');//距离
-            $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
-            $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
+        if($lng && $lat){
+            if(Req::args('distance')!=''){
+                $distance = Req::args('distance');//距离
+                $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
+                $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
 
-            $dlat = $distance / 6371;
-            $dlat = rad2deg($dlat);//rad2deg() 函数把弧度数转换为角度数
+                $dlat = $distance / 6371;
+                $dlat = rad2deg($dlat);//rad2deg() 函数把弧度数转换为角度数
 
-            $squares = array(
-                'left-top' => array('lat' => $lat + $dlat, 'lng' => $lng - $dlng),
-                'right-top' => array('lat' => $lat + $dlat, 'lng' => $lng + $dlng),
-                'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
-                'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
-            );
-            $where.= " and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
+                $squares = array(
+                    'left-top' => array('lat' => $lat + $dlat, 'lng' => $lng - $dlng),
+                    'right-top' => array('lat' => $lat + $dlat, 'lng' => $lng + $dlng),
+                    'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
+                    'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
+                );
+                $where.= " and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
+            }
         }
         
         //按关键词搜索
