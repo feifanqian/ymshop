@@ -2381,6 +2381,7 @@ class UcenterAction extends Controller {
             $this->code = 1191;
             return;
         }
+        var_dump($result['result']);die;
         $data = array(
             'user_id'=>$this->user['id'],
             'cardno'=>$bankcard,
