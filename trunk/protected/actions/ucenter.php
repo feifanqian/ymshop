@@ -2403,7 +2403,7 @@ class UcenterAction extends Controller {
       // $ret = Common::httpRequest($url,'POST',$param,$header);
       $ret = Common::aliyunRequest($bankcard,$idcard,$realname);
       // $result = json_decode($ret,true);
-      var_dump($ret);
+      var_dump($ret);die;
       // var_dump($result);die;
       if($result['error_code']==0){
         $has_bind = $this->model->table('bankcard')->where('cardno='.$bankcard)->find();
