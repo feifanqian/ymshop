@@ -531,39 +531,21 @@ class AddressAction extends Controller
             $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
             $result = $model->table('district_promoter')->data(array('picture' => $picture))->where("user_id=" . $this->user['id'])->update();
         }
-        if ($name) {
-            $model->table('district_promoter')->data(array('shop_name' => $name))->where("user_id=" . $this->user['id'])->update();
-        }
-        if ($infos) {
-            $model->table('district_promoter')->data(array('info' => $infos))->where("user_id=" . $this->user['id'])->update();
-        }
-        if ($location) {
-            $model->table('district_promoter')->data(array('location' => $location))->where("user_id=" . $this->user['id'])->update();
-        }
-        if ($lng) {
-            $model->table('district_promoter')->data(array('lng' => $lng))->where("user_id=" . $this->user['id'])->update();
-        }
-        if ($lat) {
-            $model->table('district_promoter')->data(array('lat' => $lat))->where("user_id=" . $this->user['id'])->update();
-        }
-        if ($province_id) {
-            $model->table('district_promoter')->data(array('province_id' => $province_id))->where("user_id=" . $this->user['id'])->update();
-        }
-        if ($city_id) {
-            $model->table('district_promoter')->data(array('city_id' => $city_id))->where("user_id=" . $this->user['id'])->update();
-        }
-        if ($region_id) {
-            $model->table('district_promoter')->data(array('region_id' => $region_id))->where("user_id=" . $this->user['id'])->update();
-        }
-        if ($tourist_id) {
-            $model->table('district_promoter')->data(array('tourist_id' => $tourist_id))->where("user_id=" . $this->user['id'])->update();
-        }
-        if ($classify_id) {
-            $model->table('district_promoter')->data(array('classify_id' => $classify_id))->where("user_id=" . $this->user['id'])->update();
-        }
-        if ($road) {
-            $model->table('district_promoter')->data(array('road' => $road))->where("user_id=" . $this->user['id'])->update();
-        }
+        $data = array(
+            'shop_name'=>$name,
+            'info'=>$infos,
+            'location'=>$location,
+            'lng'=>$lng,
+            'lat'=>$lat,
+            'province_id'=>$province_id,
+            'city_id'=>$city_id,
+            'region_id'=>$region_id,
+            'tourist_id'=>$tourist_id,
+            'classify_id'=>$classify_id,
+            'road'=>$road
+            );
+
+        $model->table('district_promoter')->data($data)->where("user_id=" . $this->user['id'])->update();
 
         $this->code = 0;
         

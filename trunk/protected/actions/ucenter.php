@@ -2369,7 +2369,7 @@ class UcenterAction extends Controller {
       $realname = Filter::str(Req::args('realname'));
       
       $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
-      if($customer['realname_verified']==0){
+      if($customer['realname_verified']==0){ //需要先实名认证
         $this->code = 1192;
         return;
       }
@@ -2413,7 +2413,7 @@ class UcenterAction extends Controller {
       $realname = Filter::str(Req::args('realname'));
       
       $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
-      if($customer['realname_verified']==1){
+      if($customer['realname_verified']==1){ //已认证
         $this->code = 1191;
         return;
       }
