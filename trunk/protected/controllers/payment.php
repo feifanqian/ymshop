@@ -1167,8 +1167,9 @@ class PaymentController extends Controller {
                                 }      
                                 #****************************************
                             }else{
-                               //  $content = '';
-                               // Common::jpushSend($seller_id,$content,$type,$platform_type); 
+                                $type = 'offline_balance';
+                                $content = '余额到账{$money}元';
+                                Common::jpushSend($seller_id,$content,$type,$order['type']); 
                             }
                             
                         }

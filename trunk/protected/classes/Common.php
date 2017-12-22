@@ -1518,7 +1518,7 @@ class Common {
      * @return [type] [description]
      * APP极光推送
      */
-    static function jpushSend($user_id,$content,$type,$platform_type){
+    static function jpushSend($user_id,$content,$type,$platform_type=2){
         if($platform_type==2){
             $platform = 'android';
         }elseif($platform_type==3){
