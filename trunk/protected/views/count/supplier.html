@@ -1,10 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{echo:JS::import('highcharts')}
+{echo:JS::import('form')}
+{widget:name=count action=cal}
+<div class="tools_bar clearfix">
+    <form action="{url:/count/sales_supplier}" method="post">
+        <span class="fl">时间：<input name="s_time" type="text" value="{$s_time}" id="datepick" class="middle" readonly="readonly"></span>
+        <a href="javascript:tools_submit();" id="condition" class="icon-search" style=""> 查询</a>
+        <a href="javascript:;"  target="_blank" class="icon-print" id="output_excel"> 导出Excel</a>
+    </form>
+</div>
+<div id="container"></div>
+<script>
+    var ExcelUrl = "{url:/count/inventory_excel/s_time/}";
+    $(function () {
+        $("#output_excel").attr("href",ExcelUrl+$("input[name=s_time]").val());
+        $("input[name=s_time]").on("change",function(){
+            $("#output_excel").attr("href",ExcelUrl+$(this).val());
+        });
 
-</body>
-</html>
+        $('#container').highcharts({
+            chart: {
+                type: 'areaspline'
+            },
+            title: {
+                text: '{$s_time}销售分析'
+            },
+            xAxis: {
+                categories: [
+                    {$month}
+                ],
+                labels: {
+                    rotation: -45,
+                    align: 'right',
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '销售额 (元)'
+                }
+            },
+
+            tooltip: {
+                headerFormat: '{point.key}<br/>',
+                pointFormat: '{series.name}: <b>{point.y:.2f} 元</b>',
+                valueSuffix: '元'
+            },
+            series: [{
+                name: '销售额',
+                data: [{$real_data}],
+                dataLabels: {
+                    enabled: true,
+                    // rotation: -90,
+                    color: '#000',
+                    //align: 'top',
+                    x: 4,
+                    y: -6,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'//,
+                        //textShadow: '0 0 3px black'
+                    }
+                }
+            },{
+                name: '销量',
+                data: [{$data}]
+            }]
+        });
+    });
+
+</script>
