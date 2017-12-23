@@ -739,10 +739,13 @@ class CountController extends Controller
         $shop = new Model("shop as sh");
        $result = $goods->join("left join shop as sh on gd.shop_id = sh.id")
            ->fields("gd.id as gid,sh.id as shid,sh.name as shname,gd.name as gdname,sell_price,gd.weight as gweight,store_nums,cost_price")
-           ->where('gd.is_online=0 and gd.id>900')
-           ->group("shid")
+           ->where('gd.is_online=0')
+           ->order('sh.id desc')
            ->findAll();
         
+        foreach($result as $k=>$v){
+            array_push($result, $result[$k+1]=array('gid'=>$v['gid'],'shid'=>$v['shid'],'shname'=>$v['shname'],'gdname'=>$v['gdname'],'sell_price'=>0,'gweight'=>0,'store_nums'=>0,'cost_price'=>0));
+        }
         // $result = $goods->fields('gd.id as gid,sh.id as shid,sh.name as shname,gd.name as gdname,sell_price,gd.weight as gweight,store_nums,cost_price,sum(store_nums) as amount')->join("left join shop as sh on gd.shop_id = sh.id")->where('gd.is_online=0')->group('sh.id')->findAll();
            
         $model = new Model();
