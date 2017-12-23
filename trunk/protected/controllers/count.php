@@ -745,26 +745,24 @@ class CountController extends Controller
         
         $result2 = $goods->fields('gd.id as gid,sh.id as shid,sh.name as shname,sum(sell_price) as sprice,sum(gd.weight) as gweight,sum(store_nums) as total,sum(cost_price) as cprice')->join("left join shop as sh on gd.shop_id = sh.id")->where('gd.is_online=0 and gd.id>900')->group('sh.id')->findAll();
         foreach($result2 as $k=>$v){
-            $result2[$k]['gdname'] = '小结';
+            $result2[$k]['shname'] .= '小结';
+            $result2[$k]['gdname'] = '0';
         }
-           
-        // $model = new Model();
-        // $result = $model->query("select *,sum(gnum) as total_num from(select g.store_nums as gnum,g.id as gid,s.name as sname,g.name as gname from tiny_goods as g left join tiny_shop as s on g.shop_id=s.id where g.is_online=0 group by s.id) shops");
-        echo "<pre>";
+        
         $result = array_merge($result1,$result2);
         //先按厂家分组，后按库存排序
         $group = array();
         $sort = array();
         foreach ($result as $k=>$v) {
             $group[] = $v['shid'];
-            $sort[] = $v['total'];
+            $sort[] = $v['gdname'];
         }
         
-        array_multisort($group, SORT_DESC, $sort, SORT_ASC, $result);
+        array_multisort($group, SORT_DESC, $sort, SORT_NUMERIC, $result);
 
         
-        print_r($result);
-        die();
+        // print_r($result);
+        // die();
 
         foreach ($result as $k => $v) {
             $order_goods = new Model("order_goods as og");
