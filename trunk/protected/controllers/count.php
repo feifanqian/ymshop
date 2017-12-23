@@ -746,7 +746,7 @@ class CountController extends Controller
         $result2 = $goods->fields('gd.id as gid,sh.id as shid,sh.name as shname,sum(sell_price) as sprice,sum(gd.weight) as gweight,sum(store_nums) as total,sum(cost_price) as cprice')->join("left join shop as sh on gd.shop_id = sh.id")->where('gd.is_online=0 and gd.id>900')->group('sh.id')->findAll();
         foreach($result2 as $k=>$v){
             $result2[$k]['shname'] .= '小结';
-            $result2[$k]['gdname'] = '0';
+            $result2[$k]['gdname'] = '';
         }
         
         $result = array_merge($result1,$result2);
@@ -755,10 +755,10 @@ class CountController extends Controller
         $sort = array();
         foreach ($result as $k=>$v) {
             $group[] = $v['shid'];
-            $sort[] = $v['gdname'];
+            $sort[] = $v['shname'];
         }
         
-        array_multisort($group, SORT_DESC, $sort, SORT_NUMERIC, $result);
+        array_multisort($group, SORT_DESC, $sort, SORT_STRING, $result);
 
         
         // print_r($result);
@@ -785,6 +785,16 @@ class CountController extends Controller
 //        die();
 
         if (!empty($result)) {
+            $sum_sprice = 0;
+            $sum_total = 0;
+            $sum_cprice = 0;  
+            foreach($result as $k=>$v){  
+              $sum_sprice += $v['sprice'];
+              $sum_total += $v['total'];
+              $sum_cprice += $v['cprice'];  
+            }
+            $len = count($result);
+            $indexs = $len+4;
             foreach ($result as $k => $v) {
                 $index = $k + 5;
                 $objPHPExcel->setActiveSheetIndex(0)
@@ -805,6 +815,23 @@ class CountController extends Controller
                     ->setCellValue('O' . $index, $v['cprice'])
                     ;
             }
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValueExplicit('A' . $indexs, $len)
+                    ->setCellValueExplicit('B' . $indexs, '合计', PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValueExplicit('C' . $indexs, '', PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValue('D' . $indexs, 0)
+                    ->setCellValue('E' . $indexs, $sum_sprice)
+                    ->setCellValue('F' . $indexs, $sum_total)
+                    ->setCellValue('G' . $indexs, $sum_cprice)
+                    ->setCellValue('H' . $indexs, $sum_total)
+                    ->setCellValue('I' . $indexs, $sum_cprice)
+                    ->setCellValue('J' . $indexs, '')
+                    ->setCellValue('K' . $indexs, $sum_cprice)
+                    ->setCellValue('L' . $indexs, '')
+                    ->setCellValue('M' . $indexs, $sum_cprice)
+                    ->setCellValue('N' . $indexs, '')
+                    ->setCellValue('O' . $indexs, $sum_cprice)
+                    ;
             $length = count($result) + 4;
             $objPHPExcel->setActiveSheetIndex(0);
             $objPHPExcel->getActiveSheet()->freezePane('A2');
