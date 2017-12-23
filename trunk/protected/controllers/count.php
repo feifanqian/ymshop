@@ -742,7 +742,7 @@ class CountController extends Controller
 //            ->group("shid")
 //            ->findAll();
         $model = new Model();
-        $result = $model->query("select *,sum(gnum) as total_num from(select g.store_num as gnum,g.id as gid,s.name as sname,g.name as gname from tiny_goods as g left join tiny_shop as s on g.shop_id=s.id group by s.id) shops");
+        $result = $model->query("select *,sum(gnum) as total_num from(select g.store_nums as gnum,g.id as gid,s.name as sname,g.name as gname from tiny_goods as g left join tiny_shop as s on g.shop_id=s.id group by s.id) shops");
         echo "<pre>";
         print_r($result);
         die();
