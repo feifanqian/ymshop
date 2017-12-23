@@ -1149,7 +1149,7 @@ class PaymentController extends Controller {
                                  Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
                                  $money = $order['order_amount'];
                             }
-                            if($order['type']==1){
+                            if($order['type']==1){ //微信公众号消息推送
                                 #*****************推送消息***************
                                 $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
                                 $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
@@ -1166,7 +1166,7 @@ class PaymentController extends Controller {
                                     $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
                                 }      
                                 #****************************************
-                            }else{
+                            }else{ //APP极光推送
                                 $type = 'offline_balance';
                                 $content = '余额到账{$money}元';
                                 Common::jpushSend($seller_id,$content,$type,$order['type']); 

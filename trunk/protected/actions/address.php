@@ -180,7 +180,7 @@ class AddressAction extends Controller
         if($type==1){
             $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where('r.user_id='.$user_id)->order('r.id desc')->findPage($page, 10);
         }elseif($type==2){
-            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where("r.status=1 and r.owner_id like '%$user_id%'")->order('r.id desc')->findPage($page, 10);
+            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join redbag_get as rg on r.id = rg.redbag_id')->fields('r.id,r.amount,c.real_name,rg.amount as get_money,rg.get_date')->where("r.status=1 and rg.get_user_id=".$user_id)->order('r.id desc')->findPage($page, 10);
         }
         
         if($list){
@@ -198,6 +198,7 @@ class AddressAction extends Controller
         $distance = Filter::int(Req::args('distance'));
         $range = Req::args('range');
         $num = Filter::int(Req::args('num'));
+        $type = Filter::int(Req::args('type'));
         $promoter = $this->model->table('district_promoter')->fields('lng,lat')->where('user_id='.$this->user['id'])->find();
         if(!$promoter){
             $this->code = 1166;
@@ -288,7 +289,7 @@ class AddressAction extends Controller
              'distance'=>$distance,
              'range'=>$range,
              'create_time'=>date('Y-m-d H:i:s'),
-             'type'=>2,
+             'type'=>$type,
              'num'=>$num
             );
         $result = $this->model->table('redbag')->data($data)->insert();
@@ -333,7 +334,7 @@ class AddressAction extends Controller
             }
            
            $this->model->table('redbag')->data(array('status'=>1,'amount'=>"`amount`-({$get_money})",'open_time'=>date('Y-m-d H:i:s'),'open_num'=>"`open_num`+1"))->where('id='.$id)->update();
-           $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id']))->insert();
+           $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id'],'amount'=>$get_money,'get_date'=>date('Y-m-d H:i:s')))->insert();
            $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
            Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
            $newredbag = $this->model->table('redbag')->where('id='.$id)->find();
