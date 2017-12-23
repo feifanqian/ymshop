@@ -180,7 +180,7 @@ class AddressAction extends Controller
         if($type==1){
             $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where('r.user_id='.$user_id)->order('r.id desc')->findPage($page, 10);
         }elseif($type==2){
-            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where("r.status=1 and r.owner_id like '%$user_id%'")->order('r.id desc')->findPage($page, 10);
+            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join redbag_get as rg on r.id = rg.redbag_id')->fields('r.*,c.real_name')->where("r.status=1 and rg.get_user_id=".$user_id)->order('r.id desc')->findPage($page, 10);
         }
         
         if($list){
