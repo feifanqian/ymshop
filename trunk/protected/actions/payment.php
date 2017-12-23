@@ -484,8 +484,7 @@ class PaymentAction extends Controller {
             $client_type =9999;
         }
         $this->model = new Model("payment as pa");
-        $paytypelist = $this->model->fields("pa.id,pa.pay_name,pa.description,pa.pay_fee,pa.sort,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
-                        ->where("pa.status = 0 and pa.plugin_id not in({$notin}) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
+        $paytypelist = $this->model->fields("pa.id,pa.pay_name,pa.description,pa.pay_fee,pa.sort,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")->where("pa.status = 0 and pa.plugin_id not in({$notin}) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
         foreach ($paytypelist as $k => $v){
             $paytypelist[$k]['logo'] = trim($paytypelist[$k]['logo'], '/');
         }

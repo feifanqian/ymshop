@@ -737,15 +737,32 @@ class CountController extends Controller
 
         $goods = new Model("goods as gd");
         $shop = new Model("shop as sh");
-//        $result = $goods->join("left join shop as sh on gd.shop_id = sh.id")
-//            ->fields("gd.id as gid,sh.id as shid,sh.name as shname,gd.name as gdname,sell_price,gd.weight as gweight,store_nums,cost_price")
-//            ->group("shid")
-//            ->findAll();
-        $model = new Model();
-        $result = $model->query("select *,sum(store_nums) from(select g.id as gid,s.name as sname,g.name as gname from tiny_goods as g left join tiny_shop as s on g.shop_id=s.id group by s.id) as total");
-        echo "<pre>";
-        print_r($result);
-        die();
+       $result1 = $goods->join("left join shop as sh on gd.shop_id = sh.id")
+           ->fields("gd.id as gid,sh.id as shid,sh.name as shname,gd.name as gdname,gd.sell_price as sprice,gd.weight as gweight,gd.store_nums as total,gd.cost_price as cprice")
+           ->where('gd.is_online=0 and gd.id>900')
+           ->order('gd.id desc')
+           ->findAll();
+        
+        $result2 = $goods->fields('gd.id as gid,sh.id as shid,sh.name as shname,sum(sell_price) as sprice,sum(gd.weight) as gweight,sum(store_nums) as total,sum(cost_price) as cprice')->join("left join shop as sh on gd.shop_id = sh.id")->where('gd.is_online=0 and gd.id>900')->group('sh.id')->order('gd.id desc')->findAll();
+        foreach($result2 as $k=>$v){
+            $result2[$k]['shname'] .= '小结';
+            $result2[$k]['gdname'] = '';
+        }
+        
+        $result = array_merge($result1,$result2);
+        //先按厂家分组，后按库存排序
+        $group = array();
+        $sort = array();
+        foreach ($result as $k=>$v) {
+            $group[] = $v['shid'];
+            $sort[] = $v['shname'];
+        }
+        
+        array_multisort($group, SORT_DESC, $sort, SORT_STRING, $result);
+
+        
+        // print_r($result);
+        // die();
 
         foreach ($result as $k => $v) {
             $order_goods = new Model("order_goods as og");
@@ -768,6 +785,16 @@ class CountController extends Controller
 //        die();
 
         if (!empty($result)) {
+            $sum_sprice = 0;
+            $sum_total = 0;
+            $sum_cprice = 0;  
+            foreach($result as $k=>$v){  
+              $sum_sprice += $v['sprice'];
+              $sum_total += $v['total'];
+              $sum_cprice += $v['cprice'];  
+            }
+            $len = count($result);
+            $indexs = $len+4;
             foreach ($result as $k => $v) {
                 $index = $k + 5;
                 $objPHPExcel->setActiveSheetIndex(0)
@@ -775,19 +802,36 @@ class CountController extends Controller
                     ->setCellValueExplicit('B' . $index, $v['shname'], PHPExcel_Cell_DataType::TYPE_STRING)
                     ->setCellValueExplicit('C' . $index, $v['gdname'], PHPExcel_Cell_DataType::TYPE_STRING)
                     ->setCellValue('D' . $index, $v['gweight'])
-                    ->setCellValue('E' . $index, $v['sell_price'])
-                    ->setCellValue('F' . $index, $v['store_nums'])
-                    ->setCellValue('G' . $index, $v['cost_price'])
-                    ->setCellValue('H' . $index, $v['store_nums'])
-                    ->setCellValue('I' . $index, $v['cost_price'])
+                    ->setCellValue('E' . $index, $v['sprice'])
+                    ->setCellValue('F' . $index, $v['total'])
+                    ->setCellValue('G' . $index, $v['cprice'])
+                    ->setCellValue('H' . $index, $v['total'])
+                    ->setCellValue('I' . $index, $v['cprice'])
                     ->setCellValue('J' . $index, $v['delivery_status'])
-                    ->setCellValue('K' . $index, $v['cost_price'])
+                    ->setCellValue('K' . $index, $v['cprice'])
                     ->setCellValue('L' . $index, $v['receive_status'])
-                    ->setCellValue('M' . $index, $v['cost_price'])
-                    ->setCellValue('N' . $index, $v['store_nums']-$v['receive_status'])
-                    ->setCellValue('O' . $index, $v['cost_price'])
+                    ->setCellValue('M' . $index, $v['cprice'])
+                    ->setCellValue('N' . $index, $v['total']-$v['receive_status'])
+                    ->setCellValue('O' . $index, $v['cprice'])
                     ;
             }
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValueExplicit('A' . $indexs, $len)
+                    ->setCellValueExplicit('B' . $indexs, '合计', PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValueExplicit('C' . $indexs, '', PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValue('D' . $indexs, 0)
+                    ->setCellValue('E' . $indexs, $sum_sprice)
+                    ->setCellValue('F' . $indexs, $sum_total)
+                    ->setCellValue('G' . $indexs, $sum_cprice)
+                    ->setCellValue('H' . $indexs, $sum_total)
+                    ->setCellValue('I' . $indexs, $sum_cprice)
+                    ->setCellValue('J' . $indexs, '')
+                    ->setCellValue('K' . $indexs, $sum_cprice)
+                    ->setCellValue('L' . $indexs, '')
+                    ->setCellValue('M' . $indexs, $sum_cprice)
+                    ->setCellValue('N' . $indexs, '')
+                    ->setCellValue('O' . $indexs, $sum_cprice)
+                    ;
             $length = count($result) + 4;
             $objPHPExcel->setActiveSheetIndex(0);
             $objPHPExcel->getActiveSheet()->freezePane('A2');
