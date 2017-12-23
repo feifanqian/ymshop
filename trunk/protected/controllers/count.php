@@ -745,7 +745,7 @@ class CountController extends Controller
         
         $result2 = $goods->fields('gd.id as gid,sh.id as shid,sh.name as shname,sum(sell_price) as sprice,sum(gd.weight) as gweight,sum(store_nums) as total,sum(cost_price) as cprice')->join("left join shop as sh on gd.shop_id = sh.id")->where('gd.is_online=0 and gd.id>900')->group('sh.id')->findAll();
         foreach($result2 as $k=>$v){
-            $result2[$k]['gdname'] = '';
+            $result2[$k]['gdname'] = '小结';
         }
            
         // $model = new Model();
@@ -758,6 +758,13 @@ class CountController extends Controller
         }
         
         array_multisort($group, SORT_DESC, $result);
+
+        $sort = array();
+        foreach ($result as $k=>$v) {
+            $sort[] = $v['total'];
+        }
+        
+        array_multisort($sort, SORT_DESC, $result);
         
         print_r($result);
         die();
