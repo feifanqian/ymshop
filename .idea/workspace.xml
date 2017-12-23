@@ -4,9 +4,6 @@
     <list default="true" id="5e7286e1-8ea1-416a-afb0-c86e85802771" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/trunk/protected/controllers/count.php" afterPath="$PROJECT_DIR$/trunk/protected/controllers/count.php" />
-      <change beforePath="$PROJECT_DIR$/trunk/protected/views/count/division.html" afterPath="$PROJECT_DIR$/trunk/protected/views/count/division.html" />
-      <change beforePath="$PROJECT_DIR$/trunk/protected/views/count/sales_analysis.html" afterPath="$PROJECT_DIR$/trunk/protected/views/count/sales_analysis.html" />
-      <change beforePath="$PROJECT_DIR$/trunk/protected/views/count/supplier.html" afterPath="$PROJECT_DIR$/trunk/protected/views/count/supplier.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -29,25 +26,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="sales_analysis.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trunk/protected/views/count/sales_analysis.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="12" column="46" lean-forward="false" selection-start-line="12" selection-start-column="46" selection-end-line="12" selection-end-column="46" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="count.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/count.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="384">
-              <caret line="742" column="26" lean-forward="true" selection-start-line="742" selection-start-column="26" selection-end-line="742" selection-end-column="26" />
+            <state relative-caret-position="398">
+              <caret line="986" column="69" lean-forward="false" selection-start-line="986" selection-start-column="69" selection-end-line="986" selection-end-column="69" />
               <folding>
-                <marker date="1514010193667" expanded="true" signature="38046:38214" ph="select *,sum... id" />
-                <marker date="1514010193667" expanded="true" signature="38076:38204" ph="select g.id tiny_goods" />
-                <marker date="1514010193667" expanded="true" signature="47793:48046" ph="..." />
+                <element signature="e#48793#49355#0#PHP" expanded="false" />
+                <marker date="1514026979385" expanded="true" signature="38046:38214" ph="select *,sum... id" />
+                <marker date="1514026979385" expanded="true" signature="38076:38204" ph="select g.id tiny_goods" />
+                <marker date="1514026979385" expanded="true" signature="51082:51331" ph="..." />
               </folding>
             </state>
           </provider>
@@ -169,10 +157,10 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="341" />
-    <option name="y" value="319" />
-    <option name="width" value="1516" />
-    <option name="height" value="1014" />
+    <option name="x" value="107" />
+    <option name="y" value="120" />
+    <option name="width" value="1683" />
+    <option name="height" value="857" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -228,30 +216,31 @@
               <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="actions" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="controllers" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="_default" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="_default" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="themes" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="_default" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="views" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="count" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="index" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -354,12 +343,12 @@
       <workItem from="1513838364241" duration="13585000" />
       <workItem from="1513857790944" duration="910000" />
       <workItem from="1513906108874" duration="26327000" />
-      <workItem from="1513991567705" duration="13242000" />
+      <workItem from="1513991567705" duration="27678000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="417938000" />
+    <option name="totallyTimeSpent" value="432374000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -374,7 +363,7 @@
     <frame x="72" y="-8" width="1856" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17663044" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18043478" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299389" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -426,13 +415,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/trunk/framework/lib/util/validator_class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-78">
-          <caret line="129" column="4" lean-forward="false" selection-start-line="129" selection-start-column="4" selection-end-line="129" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/views/simple/login.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -806,14 +788,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/themes/_default/views/index/point.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1092">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/count.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
-          <caret line="742" column="26" lean-forward="true" selection-start-line="742" selection-start-column="26" selection-end-line="742" selection-end-column="26" />
+        <state relative-caret-position="398">
+          <caret line="986" column="69" lean-forward="false" selection-start-line="986" selection-start-column="69" selection-end-line="986" selection-end-column="69" />
           <folding>
-            <marker date="1514010193667" expanded="true" signature="38046:38214" ph="select *,sum... id" />
-            <marker date="1514010193667" expanded="true" signature="38076:38204" ph="select g.id tiny_goods" />
-            <marker date="1514010193667" expanded="true" signature="47793:48046" ph="..." />
+            <element signature="e#48793#49355#0#PHP" expanded="false" />
+            <marker date="1514026979385" expanded="true" signature="38046:38214" ph="select *,sum... id" />
+            <marker date="1514026979385" expanded="true" signature="38076:38204" ph="select g.id tiny_goods" />
+            <marker date="1514026979385" expanded="true" signature="51082:51331" ph="..." />
           </folding>
         </state>
       </provider>
