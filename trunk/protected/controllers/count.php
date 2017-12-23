@@ -737,20 +737,28 @@ class CountController extends Controller
 
         $goods = new Model("goods as gd");
         $shop = new Model("shop as sh");
-       // $result = $goods->join("left join shop as sh on gd.shop_id = sh.id")
-       //     ->fields("gd.id as gid,sh.id as shid,sh.name as shname,gd.name as gdname,gd.sell_price as sprice,gd.weight as gweight,gd.store_nums as total,gd.cost_price as cprice")
-       //     ->where('gd.is_online=0')
-       //     ->order('sh.id desc')
-       //     ->findAll();
+       $result1 = $goods->join("left join shop as sh on gd.shop_id = sh.id")
+           ->fields("gd.id as gid,sh.id as shid,sh.name as shname,gd.name as gdname,gd.sell_price as sprice,gd.weight as gweight,gd.store_nums as total,gd.cost_price as cprice")
+           ->where('gd.is_online=0')
+           ->order('sh.id desc')
+           ->findAll();
         
-        $result = $goods->fields('gd.id as gid,sh.id as shid,sh.name as shname,sum(sell_price) as sprice,sum(gd.weight) as gweight,sum(store_nums) as total,sum(cost_price) as cprice')->join("left join shop as sh on gd.shop_id = sh.id")->where('gd.is_online=0')->group('sh.id')->findAll();
-        foreach($result as $k=>$v){
-            $result[$k]['gdname'] = '';
+        $result2 = $goods->fields('gd.id as gid,sh.id as shid,sh.name as shname,sum(sell_price) as sprice,sum(gd.weight) as gweight,sum(store_nums) as total,sum(cost_price) as cprice')->join("left join shop as sh on gd.shop_id = sh.id")->where('gd.is_online=0')->group('sh.id')->findAll();
+        foreach($result2 as $k=>$v){
+            $result2[$k]['gdname'] = '';
         }
            
-        $model = new Model();
+        // $model = new Model();
         // $result = $model->query("select *,sum(gnum) as total_num from(select g.store_nums as gnum,g.id as gid,s.name as sname,g.name as gname from tiny_goods as g left join tiny_shop as s on g.shop_id=s.id where g.is_online=0 group by s.id) shops");
         echo "<pre>";
+        $result = array_merge($result1,$result2);
+        // $hots = array();
+        // foreach ($info_sql as $val) {
+        //     $hots[] = $val['gid'];
+        // }
+        // if ($hot) {
+        //     array_multisort($hots, SORT_DESC, $info_sql);
+        // }
         print_r($result);
         die();
 
