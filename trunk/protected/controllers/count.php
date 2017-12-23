@@ -739,11 +739,11 @@ class CountController extends Controller
         $shop = new Model("shop as sh");
        $result1 = $goods->join("left join shop as sh on gd.shop_id = sh.id")
            ->fields("gd.id as gid,sh.id as shid,sh.name as shname,gd.name as gdname,gd.sell_price as sprice,gd.weight as gweight,gd.store_nums as total,gd.cost_price as cprice")
-           ->where('gd.is_online=0')
+           ->where('gd.is_online=0 and gd.id>900')
            ->order('sh.id desc')
            ->findAll();
         
-        $result2 = $goods->fields('gd.id as gid,sh.id as shid,sh.name as shname,sum(sell_price) as sprice,sum(gd.weight) as gweight,sum(store_nums) as total,sum(cost_price) as cprice')->join("left join shop as sh on gd.shop_id = sh.id")->where('gd.is_online=0')->group('sh.id')->findAll();
+        $result2 = $goods->fields('gd.id as gid,sh.id as shid,sh.name as shname,sum(sell_price) as sprice,sum(gd.weight) as gweight,sum(store_nums) as total,sum(cost_price) as cprice')->join("left join shop as sh on gd.shop_id = sh.id")->where('gd.is_online=0 and gd.id>900')->group('sh.id')->findAll();
         foreach($result2 as $k=>$v){
             $result2[$k]['gdname'] = '';
         }
