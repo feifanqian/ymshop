@@ -752,13 +752,14 @@ class CountController extends Controller
         // $result = $model->query("select *,sum(gnum) as total_num from(select g.store_nums as gnum,g.id as gid,s.name as sname,g.name as gname from tiny_goods as g left join tiny_shop as s on g.shop_id=s.id where g.is_online=0 group by s.id) shops");
         echo "<pre>";
         $result = array_merge($result1,$result2);
-        
-        $res = array();
-        foreach($result as $k=>$v){
-            $res[$v['shid']][] = $v;  
+        $group = array();
+        foreach ($result as $k=>$v) {
+            $group[] = $v['shid'];
         }
         
-        print_r($res);
+        array_multisort($group, SORT_DESC, $result);
+        
+        print_r($result);
         die();
 
         foreach ($result as $k => $v) {
