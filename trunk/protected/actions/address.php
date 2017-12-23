@@ -334,7 +334,7 @@ class AddressAction extends Controller
             }
            
            $this->model->table('redbag')->data(array('status'=>1,'amount'=>"`amount`-({$get_money})",'open_time'=>date('Y-m-d H:i:s'),'open_num'=>"`open_num`+1"))->where('id='.$id)->update();
-           $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id'],'amount'=>$get_money))->insert();
+           $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id'],'amount'=>$get_money,'get_date'=>date('Y-m-d H:i:s')))->insert();
            $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
            Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
            $newredbag = $this->model->table('redbag')->where('id='.$id)->find();
