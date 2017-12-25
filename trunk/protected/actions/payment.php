@@ -81,8 +81,13 @@ class PaymentAction extends Controller {
                     $user['id']=$this->user['id'];
                     $recharge = round($recharge,2);
                     $paymentInfo = $payment->getPayment();
-                    if(!$rate){
+                    if($package==4){
+                      if($rate<2 || $rate>99){
+                        $this->code = 1195;
+                        return;
+                      }elseif(!$rate){
                         $rate = 3;
+                      }
                     }
                     $data = array('user_id'=>$this->user['id'],'account' => $recharge, 'paymentName' => $paymentInfo['name'],'package' => $package,'rate'=>$rate);
 

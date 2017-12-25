@@ -202,6 +202,9 @@ class AddressAction extends Controller
         $range = Req::args('range');
         $num = Filter::int(Req::args('num'));
         $type = Filter::int(Req::args('type'));
+        if(!$type){
+            $type = 2;
+        }
         $promoter = $this->model->table('district_promoter')->fields('lng,lat')->where('user_id='.$this->user['id'])->find();
         if(!$promoter){
             $this->code = 1166;
