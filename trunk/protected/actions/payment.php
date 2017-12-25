@@ -652,7 +652,7 @@ class PaymentAction extends Controller {
 
     public function jpushTest(){
       // $user_id = $this->user['id'];
-      $user_id = 82086;
+      $user_id = 50421;
       $money = Filter::float(Req::args('money'));
 
       $type = 'offline_balance';
