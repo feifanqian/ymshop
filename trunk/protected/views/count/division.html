@@ -5,16 +5,19 @@
     <form action="{url:/count/division}" method="post">
         <span class="fl">时间：<input name="s_time" type="text" value="{$s_time}" id="datepick" class="middle" readonly="readonly"></span>
         <a href="javascript:tools_submit();" id="condition" class="icon-search" style=""> 查询</a>
-        <a href="javascript:;"  target="_blank" class="icon-print" id="output_excel"> 导出Excel</a>
+        <a href="javascript:;"  target="_blank" class="icon-print" id="output_excel"> 导出Excel(按产品分类)</a>
+        <a href="javascript:;"  target="_blank" class="icon-print" id="outputs_excel"> 导出Excel(按收款人)</a>
     </form>
 </div>
 <div id="container"></div>
 <script>
-    var ExcelUrl = "{url:/count/inventory_excel/s_time/}";
+    var ExcelUrl = "{url:/count/division_excel/s_time/}";
+    var ExcelUrls = "{url:/count/division_byexcel/s_time/}";
     $(function () {
         $("#output_excel").attr("href",ExcelUrl+$("input[name=s_time]").val());
         $("input[name=s_time]").on("change",function(){
             $("#output_excel").attr("href",ExcelUrl+$(this).val());
+            $("#outputs_excel").attr("href",ExcelUrls+$(this).val());
         });
 
         $('#container').highcharts({
@@ -22,7 +25,7 @@
                 type: 'areaspline'
             },
             title: {
-                text: '{$s_time}销售分析'
+                text: '{$s_time}提成划分明细'
             },
             xAxis: {
                 categories: [

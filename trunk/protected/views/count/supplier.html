@@ -10,7 +10,7 @@
 </div>
 <div id="container"></div>
 <script>
-    var ExcelUrl = "{url:/count/inventory_excel/s_time/}";
+    var ExcelUrl = "{url:/count/supplier_excel/s_time/}";
     $(function () {
         $("#output_excel").attr("href",ExcelUrl+$("input[name=s_time]").val());
         $("input[name=s_time]").on("change",function(){
@@ -22,7 +22,7 @@
                 type: 'areaspline'
             },
             title: {
-                text: '{$s_time}销售分析'
+                text: '{$s_time}供应商明细'
             },
             xAxis: {
                 categories: [
