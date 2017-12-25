@@ -161,9 +161,12 @@ class AddressAction extends Controller
                  }  
             }  
         }
-        $new_list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->where($where)->order('r.id desc')->findAll();
+        $new_list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join user as u on r.user_id=u.id')->fields('r.*,c.real_name,u.avatar')->where($where)->order('r.id desc')->findAll();
         foreach($new_list as $k => $v){
             $new_list[$k]['bag_name'] = $v['real_name'].'的红包';
+            if($new_list[$k]['avatar']==null){
+                $new_list[$k]['avatar']='';
+            }
         }
         $this->code = 0;
         $this->content = $new_list;
@@ -199,6 +202,9 @@ class AddressAction extends Controller
         $range = Req::args('range');
         $num = Filter::int(Req::args('num'));
         $type = Filter::int(Req::args('type'));
+        if(!$type){
+            $type = 2;
+        }
         $promoter = $this->model->table('district_promoter')->fields('lng,lat')->where('user_id='.$this->user['id'])->find();
         if(!$promoter){
             $this->code = 1166;
@@ -856,7 +862,7 @@ class AddressAction extends Controller
 
     public function getLnglat(){
         $address = Filter::text(Req::args('address'));
-        $url = "http://restapi.amap.com/v3/geocode/geo?address=".$address."&output=JSON&key=30e9de56560b226c08a389ee23550f68";
+        $url = "http://restapi.amap.com/v3/geocode/geo?address=".$address."&output=JSON&key=12303bfdb8d40d67fa696d5bbfdcf595";
         $result = file_get_contents($url);
         $return = json_decode($result,true);
         $location = $return['geocodes'][0]['location'];

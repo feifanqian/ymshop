@@ -919,11 +919,14 @@ class MarketingController extends Controller {
         $info = Req::args("info");
         $distance = Req::args("distance");
         $model = new Model("redbag");
+        $lnglat = Common::getLnglat($location);
+        $lng = $lnglat['lng'];
+        $lat = $lnglat['lat'];
         if($id){
             $redbag=$model->where('id='.$id)->find();
             if($redbag){
                 
-                    $model->data(array('location'=>$location,'info'=>$info,'distance'=>$distance))->where('id='.$id)->update();
+                    $model->data(array('location'=>$location,'info'=>$info,'distance'=>$distance,'lng'=>$lng,'lat'=>$lat))->where('id='.$id)->update();
                     Log::op($this->manager['id'], "修改红包", "管理员[" . $this->manager['name'] . "]:修改了红包[id] " . $id . " 的信息");
                 
             }

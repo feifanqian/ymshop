@@ -81,8 +81,13 @@ class PaymentAction extends Controller {
                     $user['id']=$this->user['id'];
                     $recharge = round($recharge,2);
                     $paymentInfo = $payment->getPayment();
-                    if(!$rate){
+                    if($package==4){
+                      if($rate<2 || $rate>99){
+                        $this->code = 1195;
+                        return;
+                      }elseif(!$rate){
                         $rate = 3;
+                      }
                     }
                     $data = array('user_id'=>$this->user['id'],'account' => $recharge, 'paymentName' => $paymentInfo['name'],'package' => $package,'rate'=>$rate);
 
@@ -643,5 +648,25 @@ class PaymentAction extends Controller {
        $this->content['shop_name'] = $seller['real_name'];
        $this->content['order_no'] = $order['order_no'];
        $this->content['date'] = date("Y-m-d H:i:s");
+    }
+
+    public function jpushTest(){
+      // $user_id = $this->user['id'];
+      $user_id = 50421;
+      $money = Filter::float(Req::args('money'));
+
+      $type = 'offline_balance';
+      $content = "余额到账{$money}元";
+      $platform = 'all';
+      if (!$this->jpush) {
+              $NoticeService = new NoticeService();
+              $this->jpush = $NoticeService->getNotice('jpush');
+          }
+      $audience['alias'] = array($user_id);
+      $this->jpush->setPushData($platform, $audience, $content, $type, "");
+      $result = $this->jpush->push();
+      $this->code = 0;
+      $this->content = $result;
+      return;
     }
 }

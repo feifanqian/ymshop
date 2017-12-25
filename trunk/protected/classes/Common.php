@@ -1026,34 +1026,12 @@ class Common {
          if($balance1>0){
             $model->table('customer')->where('user_id='.$invite_id)->data(array("balance"=>"`balance`+({$balance1})"))->update();//上级邀请人提成
             Log::balance($balance1, $invite_id, $order_no,'线下消费上级邀请人提成', 8);
-            #*****************推送消息***************
-            // $oauth_info = $model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$invite_id." and oauth_type='wechat'")->find();
-            // $params = array(
-            //     'touser' => $oauth_info['open_id'],
-            //     'msgtype' => 'text',
-            //     "text" => array(
-            //             'content' => "亲爱的{$oauth_info['open_name']},您获得商家消费收益{$balance1}元，请登录个人中心查看。"
-            //             )
-            //         );
-            // $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
-            #****************************************
          }         
          
          if($balance2>0){
             if($promoter_id){
                 $model->table('customer')->where('user_id='.$promoter_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成
                 Log::balance($balance2, $promoter_id, $order_no,'线下消费上级代理商提成', 8);
-                #*****************推送消息***************
-                // $oauth_info = $model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$promoter_id." and oauth_type='wechat'")->find();      
-                // $params = array(
-                //     'touser' => $oauth_info['open_id'],
-                //     'msgtype' => 'text',
-                //     "text" => array(
-                //             'content' => "亲爱的代理商:{$oauth_info['open_name']},您获得商家消费收益{$balance2}元，请登录个人中心查看。"
-                //             )
-                //         );
-                // $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
-                #****************************************
              }else{
                 $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance2})"))->update();//上级代理商提成,默认为官方平台
                 Log::balance($balance2, 1, $order_no,'线下消费上级代理商提成', 8);
@@ -1066,17 +1044,6 @@ class Common {
                 if($exist){
                     $model->table('customer')->where('user_id='.$district_id)->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成
                     Log::balance($balance3, $district_id, $order_no,'线下消费上级经销商提成', 8);
-                    #*****************推送消息***************
-                    // $oauth_info = $model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$district_id." and oauth_type='wechat'")->find();
-                    // $params = array(
-                    //     'touser' => $oauth_info['open_id'],
-                    //     'msgtype' => 'text',
-                    //     "text" => array(
-                    //             'content' => "亲爱的经销商:{$oauth_info['open_name']},您获得商家消费收益{$balance3}元，请登录个人中心查看。"
-                    //             )
-                    //         );
-                    // $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
-                    #****************************************
                 }  
              }else{
                     $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance3})"))->update();//上级经销商提成,默认为官方平台
@@ -1421,7 +1388,7 @@ class Common {
     }
 
     static function getLnglat($address){
-        $url = "http://restapi.amap.com/v3/geocode/geo?address=".$address."&output=JSON&key=30e9de56560b226c08a389ee23550f68";
+        $url = "http://restapi.amap.com/v3/geocode/geo?address=".$address."&output=JSON&key=12303bfdb8d40d67fa696d5bbfdcf595";
         $result = file_get_contents($url);
         $return = json_decode($result,true);
         if($return['status']==1){
@@ -1511,27 +1478,5 @@ class Common {
         curl_close($ci);
         return $response;
         //return array($http_code, $response,$requestinfo);
-    }
-    
-    /**
-     * [jpushSend description]
-     * @return [type] [description]
-     * APP极光推送
-     */
-    static function jpushSend($user_id,$content,$type,$platform_type=2){
-        if($platform_type==2){
-            $platform = 'android';
-        }elseif($platform_type==3){
-            $platform = 'ios';
-        }else{
-            $platform = 'all';
-        }
-        if (!$this->jpush) {
-                $NoticeService = new NoticeService();
-                $this->jpush = $NoticeService->getNotice('jpush');
-            }
-        $audience['alias'] = array($user_id);
-        $this->jpush->setPushData($platform, $audience, $content, $type, "");
-        $this->jpush->push();
     }
 }
