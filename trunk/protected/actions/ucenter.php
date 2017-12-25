@@ -1904,58 +1904,24 @@ class UcenterAction extends Controller {
     public function becomepromoter() {
             $reference = Filter::int(Req::args('reference'));
             $from = Filter::str(Req::args('platform'));
-            // $invitor_role = Filter::str(Req::args('invitor_role'));
-            // $invitor_role = $invitor_role == NULL ? "shop" : $invitor_role; //默认是shop
-
-            // $promoter = Promoter::getPromoterInstance($this->user['id']);
-            // // if (is_object($promoter)) {
-            // //     $this->code = 1140;
-            // //     return;
-            // // }
-            // if ($reference == NULL) {
-            //     $this->code = 1126;
-            //     return;
-            // } else {
-            //     if ($invitor_role == 'shop') {
-            //         $district_info = $this->model->table("district_shop")->where("id = $reference")->fields("name,location")->find();
-            //     } else if ($invitor_role == 'promoter') {
-            //         $district_info = $this->model
-            //                 ->table("district_promoter as dp")->join("left join district_shop as ds on dp.hirer_id = ds.id")
-            //                 ->where("dp.id = $reference")
-            //                 ->fields("ds.name,ds.location")
-            //                 ->find();
-            //     } else {
-            //         $this->code = 1000;
-            //         return;
-            //     }
-            //     if (!isset($district_info) || !$district_info) {
-            //         $this->code = 1131;
-            //         return;
-            //     }
-            //     $config = Config::getInstance()->get("district_set");
-            //     //礼品
-            //     if (isset($config['join_send_gift']) && $config['join_send_gift'] != "") {
-            //         $gift = implode(",", explode("|", $config['join_send_gift']));
-            //     } else {
-            //         $this->code = 1005;
-            //         return;
-            //     }
-            //     $gift_list = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$gift})")->fields("p.id,g.img,g.name")->findAll();
-            //     $this->code=0;
-            //     $this->content['promoter_fee']=$config['promoter_fee'];
-            //     $this->content['refrence']=$reference;
-            //     $this->content['invitor_role']=$invitor_role;
-            //     $this->content["gift_list"]= $gift_list;
-            //     $this->content['district_info']=$district_info;
-            // }
             
             if ($reference == NULL) {
                 $this->code = 1126;
                 return; 
             }
+            if($reference == $this->user['id']){
+                $this->code = 1196;
+                return;
+            }
             $exist = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
             $invite = $this->model->table('invite')->where('invite_user_id='.$reference)->find();
             $district_id = $invite?$invite['district_id']:1;
+            if($invite){
+                if($invite['user_id'] == $this->user['id']){
+                    $this->code = 1197;
+                    return;
+                }
+            }
             if($exist){
                 $this->code = 1140;
                 return;
