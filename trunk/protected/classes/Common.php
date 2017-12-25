@@ -1519,13 +1519,14 @@ class Common {
      * APP极光推送
      */
     static function jpushSend($user_id,$content,$type,$platform_type=2){
-        if($platform_type==2){
-            $platform = 'android';
-        }elseif($platform_type==3){
-            $platform = 'ios';
-        }else{
-            $platform = 'all';
-        }
+        // if($platform_type==2){
+        //     $platform = 'android';
+        // }elseif($platform_type==3){
+        //     $platform = 'ios';
+        // }else{
+        //     $platform = 'all';
+        // }
+        $platform = 'all';
         if (!$this->jpush) {
                 $NoticeService = new NoticeService();
                 $this->jpush = $NoticeService->getNotice('jpush');
