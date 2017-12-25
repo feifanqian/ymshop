@@ -1902,7 +1902,7 @@ class UcenterAction extends Controller {
     
     // 成为推广员
     public function becomepromoter() {
-            $reference = Filter::int(Req::args('inviter_id'));
+            $reference = Filter::int(Req::args('reference'));
             $from = Filter::str(Req::args('platform'));
             // $invitor_role = Filter::str(Req::args('invitor_role'));
             // $invitor_role = $invitor_role == NULL ? "shop" : $invitor_role; //默认是shop
