@@ -651,12 +651,19 @@ class PaymentAction extends Controller {
     }
 
     public function jpushTest(){
-      $seller_id = $this->user['id'];
+      $user_id = $this->user['id'];
       $money = Filter::float(Req::args('money'));
 
       $type = 'offline_balance';
       $content = '余额到账{$money}元';
-      Common::jpushSend($seller_id,$content,$type,2);
+      $platform = 'all';
+      if (!$this->jpush) {
+              $NoticeService = new NoticeService();
+              $this->jpush = $NoticeService->getNotice('jpush');
+          }
+      $audience['alias'] = array($user_id);
+      $this->jpush->setPushData($platform, $audience, $content, $type, "");
+      $this->jpush->push();
       $this->code = 0;
       return;
     }
