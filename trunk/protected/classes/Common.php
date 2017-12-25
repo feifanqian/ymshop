@@ -1421,7 +1421,7 @@ class Common {
     }
 
     static function getLnglat($address){
-        $url = "http://restapi.amap.com/v3/geocode/geo?address=".$address."&output=JSON&key=30e9de56560b226c08a389ee23550f68";
+        $url = "http://restapi.amap.com/v3/geocode/geo?address=".$address."&output=JSON&key=12303bfdb8d40d67fa696d5bbfdcf595";
         $result = file_get_contents($url);
         $return = json_decode($result,true);
         if($return['status']==1){
