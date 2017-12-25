@@ -1167,16 +1167,18 @@ class PaymentController extends Controller {
                                 }      
                                 #****************************************
                              //APP极光推送
-                              $type = 'offline_balance';
-                              $content = "收款到账{$money}元";
-                              $platform = 'all';
-                              if (!$this->jpush) {
-                                      $NoticeService = new NoticeService();
-                                      $this->jpush = $NoticeService->getNotice('jpush');
-                                  }
-                              $audience['alias'] = array($seller_id);
-                              $this->jpush->setPushData($platform, $audience, $content, $type, "");
-                              $this->jpush->push();             
+                             if($order['type']==2 || $order['type']==3){
+                                  $type = 'offline_balance';
+                                  $content = "收款到账{$money}元";
+                                  $platform = 'all';
+                                  if (!$this->jpush) {
+                                          $NoticeService = new NoticeService();
+                                          $this->jpush = $NoticeService->getNotice('jpush');
+                                      }
+                                  $audience['alias'] = array($seller_id);
+                                  $this->jpush->setPushData($platform, $audience, $content, $type, "");
+                                  $this->jpush->push();
+                             }              
                         }
                 }
                 
