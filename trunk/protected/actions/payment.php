@@ -651,11 +651,12 @@ class PaymentAction extends Controller {
     }
 
     public function jpushTest(){
-      $user_id = $this->user['id'];
+      // $user_id = $this->user['id'];
+      $user_id = 82086;
       $money = Filter::float(Req::args('money'));
 
       $type = 'offline_balance';
-      $content = '余额到账{$money}元';
+      $content = "余额到账{$money}元";
       $platform = 'all';
       if (!$this->jpush) {
               $NoticeService = new NoticeService();
