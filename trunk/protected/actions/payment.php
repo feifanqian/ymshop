@@ -663,8 +663,9 @@ class PaymentAction extends Controller {
           }
       $audience['alias'] = array($user_id);
       $this->jpush->setPushData($platform, $audience, $content, $type, "");
-      $this->jpush->push();
+      $result = $this->jpush->push();
       $this->code = 0;
+      $this->content = $result;
       return;
     }
 }
