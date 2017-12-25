@@ -1168,7 +1168,7 @@ class PaymentController extends Controller {
                                 #****************************************
                              //APP极光推送
                               $type = 'offline_balance';
-                              $content = "余额到账{$money}元";
+                              $content = "收款到账{$money}元";
                               $platform = 'all';
                               if (!$this->jpush) {
                                       $NoticeService = new NoticeService();
