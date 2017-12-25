@@ -649,4 +649,15 @@ class PaymentAction extends Controller {
        $this->content['order_no'] = $order['order_no'];
        $this->content['date'] = date("Y-m-d H:i:s");
     }
+
+    public function jpushTest(){
+      $seller_id = $this->user['id'];
+      $money = Filter::float(Req::args('money'));
+
+      $type = 'offline_balance';
+      $content = '余额到账{$money}元';
+      Common::jpushSend($seller_id,$content,$type,2);
+      $this->code = 0;
+      return;
+    }
 }
