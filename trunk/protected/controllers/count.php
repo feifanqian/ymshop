@@ -868,7 +868,7 @@ class CountController extends Controller
         $date = explode('%20--%20', $time);
         $stime = date('Y-m-d 00:00:00', strtotime($date[0]));
         $etime = date('Y-m-d 00:00:00', strtotime($date[1] . '+1day'));
-        $title = "圆梦销售排行[$stime - $etime]";
+        $title = "圆梦销售分析[$stime - $etime]";
         $where = "'$stime'< o.pay_time and o.pay_time<'$etime'";
         // Create new PHPExcel object
         $objPHPExcel = new PHPExcel();
@@ -895,8 +895,20 @@ class CountController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('M')->setWidth(15);
         $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('N')->setWidth(15);
         $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('O')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('P')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('Q')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('R')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('S')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('T')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('U')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('V')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('W')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('X')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('Y')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('Z')->setWidth(15);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('AA')->setWidth(15);
         // Add some data
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:O1')->setCellValue('A1', '销售分析表');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:AA1')->setCellValue('A1', '销售分析表');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A2:A4')->setCellValue("A2", '序号');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B2:B4')->setCellValue('B2','客户');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('C2:C4')->setCellValue("C2", '厂商');
@@ -904,15 +916,13 @@ class CountController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('E2:E4')->setCellValue('E2', '重量');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('F2:F4')->setCellValue('F2', '单价');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('G2:G4')->setCellValue('G2','销量');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('H2：I2')->setCellValue('H2','销售收入');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('H2:I2')->setCellValue('H2','销售收入');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('H3:H4')->setCellValue('H3','会员价');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('I3:I4')->setCellValue('I3','积分兑换价');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('J2:J4')->setCellValue('J2','所需积分（积分不作为收入计算毛利）');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('K2:K4')->setCellValue('K2','货品供货价');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('L2:L4')->setCellValue('L2','折扣价');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('M2:M4')->setCellValue('M2','货品毛利');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('J3:K3')->setCellValue('J3','发出途中');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('L3:M3')->setCellValue('L3','已验收完成销售');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('N2:V2')->setCellValue('N2','提成');
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('N3:O3')->setCellValue('N3','一组');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N4','名字');
@@ -920,61 +930,111 @@ class CountController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells('P3:Q3')->setCellValue('P3', '二组');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P4','名字');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q4','金额');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O4', '数量');
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('N2:O3')->setCellValue('N2','期末库存');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('R3:S3')->setCellValue('R3', '三组');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('R4','名字');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S4','金额');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('T3:U3')->setCellValue('T3','四组');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T4','名字');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U4','金额');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('V3:V4')->setCellValue('V3','小计');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('W2:W4')->setCellValue('W2','产品净利');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('X2:Z2')->setCellValue('X2','赠品');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('X3:X4')->setCellValue('X3','货品名称');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('Y3:Y4')->setCellValue('Y3','数量');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('Z3:Z4')->setCellValue('Z3','进货金额');
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('AA2:AA4')->setCellValue('AA2','合计');
 
-        $goods = new Model("goods as gd");
-        $shop = new Model("shop as sh");
-        $result = $goods->join("left join shop as sh on gd.shop_id = sh.id")
-            ->fields("gd.id as gid,sh.id as shid,sh.name as shname,gd.name as gdname,sell_price,gd.weight as gweight,store_nums,cost_price")
-            ->group("shid")
+
+        $order_goods = new Model("order_goods as og");
+        $result = $order_goods->join("left join order as o on og.order_id = o.id left join shop as s on og.shop_id = s.id left join goods as gd on og.goods_id = gd.id")
+            ->fields("gd.id as gdid,o.user_id as ouser_id ,s.name as sname,gd.name as gname,og.goods_weight as gweight,og.real_price as og_real_price,gd.cost_price as gd_cost_price")
             ->findAll();
 
         foreach ($result as $k => $v) {
-            $order_goods = new Model("order_goods as og");
-            $delivery_status = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id =".$v["gid"]." and o.delivery_status=1")->fields("SUM(o.delivery_status) as num")->findAll();
-            $receive_status = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id =".$v["gid"]." and o.status=4")->fields("SUM(o.status) as nums")->findAll();
-            if ($receive_status[0]['nums']){
-                $result[$k]['receive_status'] = ($receive_status[0]['nums'])/4;
+            $model  = new Model();
+            if ($v["ouser_id"]){
+                $username = $model->table('user')->where("id =".$v["ouser_id"])->fields("nickname")->findAll();
+                if ($username){
+                    if ($username[0]['nickname']){
+                        $result[$k]['nickname'] = $username[0]['nickname'];
+
+                }else{
+                        $result[$k]['nickname'] = '';
+                    }
+                }else{
+                    $result[$k]['nickname'] = '';
+                }
+
             }else{
-                $result[$k]['receive_status'] = 0;
+                $result[$k]['nickname'] = '';
             }
-            if ($delivery_status[0]['num']){
-                $result[$k]['delivery_status'] = ($delivery_status[0]['num'])/4;
+            //积分
+            if ($v['gdid']){
+                $point = $model->table('point_sale')->where("goods_id=".$v["gdid"])->fields("price_set")->findAll();
+                if ($point){
+                    if ($point[0]['price_set']){
+                        $price_set = array_merge(unserialize($point[0]['price_set']));
+                        if ($price_set[0]['cash']){
+                            $result[$k]['cash'] = $price_set[0]['cash'];
+                        }else{
+                            $result[$k]['cash'] = '';
+                        }
+                        if ($price_set[0]['point']){
+                            $result[$k]['point'] = $price_set[0]['point'];
+                        }else{
+                            $result[$k]['point'] = $price_set[0]['point'];
+                        }
+                    }else{
+                        $result[$k]['cash'] = '';
+                        $result[$k]['point'] = '';
+                    }
+                }else{
+                    $result[$k]['cash'] = '';
+                    $result[$k]['point'] = '';
+                }
+
+            }
+            //销量
+            if ($v["gdid"]){
+                $sales_volume = $order_goods->join("left join order as o on og.order_id = o.id")->where("og.goods_id = ".$v["gdid"]." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->findAll();
+                if($sales_volume[0]['sell_volume']){
+                    $result[$k]['sales_volume'] = $sales_volume[0]['sell_volume'];
+                }else{
+                    $result[$k]['sales_volume'] = 0;
+                }
             }else{
-                $result[$k]['delivery_status'] = 0;
+                $result[$k]['sales_volume'] = 0;
             }
 
+
         }
-//        echo "<pre>";
-//        print_r($result);
-//        die();
+        echo "<pre>";
+        print_r($result);
+        die();
 
         if (!empty($result)) {
             foreach ($result as $k => $v) {
                 $index = $k + 5;
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValueExplicit('A' . $index, $k+1)
-                    ->setCellValueExplicit('B' . $index, $v['shname'], PHPExcel_Cell_DataType::TYPE_STRING)
-                    ->setCellValueExplicit('C' . $index, $v['gdname'], PHPExcel_Cell_DataType::TYPE_STRING)
-                    ->setCellValue('D' . $index, $v['gweight'])
-                    ->setCellValue('E' . $index, $v['sell_price'])
-                    ->setCellValue('F' . $index, $v['store_nums'])
-                    ->setCellValue('G' . $index, $v['cost_price'])
-                    ->setCellValue('H' . $index, $v['store_nums'])
-                    ->setCellValue('I' . $index, $v['cost_price'])
-                    ->setCellValue('J' . $index, $v['delivery_status'])
-                    ->setCellValue('K' . $index, $v['cost_price'])
-                    ->setCellValue('L' . $index, $v['receive_status'])
-                    ->setCellValue('M' . $index, $v['cost_price'])
-                    ->setCellValue('N' . $index, $v['store_nums']-$v['receive_status'])
-                    ->setCellValue('O' . $index, $v['cost_price'])
+                    ->setCellValueExplicit('B' . $index, $v['nickname'], PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValueExplicit('C' . $index, $v['sname'], PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValue('D' . $index, $v['gname'])
+                    ->setCellValue('E' . $index, $v['gweight'])
+                    ->setCellValue('F' . $index, $v['og_real_price'])
+                    ->setCellValue('G' . $index, $v['sales_volume'])
+                    ->setCellValue('H' . $index, '')
+                    ->setCellValue('I' . $index, '')
+                    ->setCellValue('J' . $index, $v['cash']+$v['point'])
+                    ->setCellValue('K' . $index, $v['gd_cost_price'])
+                    ->setCellValue('L' . $index, '')
+                    ->setCellValue('M' . $index, $v['gd_cost_price'])
                 ;
             }
             $length = count($result) + 4;
             $objPHPExcel->setActiveSheetIndex(0);
             $objPHPExcel->getActiveSheet()->freezePane('A2');
-            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A1:O' . $length)->getAlignment()->setWrapText(true)->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A1:AA' . $length)->getAlignment()->setWrapText(true)->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
         }
 
