@@ -569,24 +569,13 @@ class AddressAction extends Controller
         $tourist_id = Filter::int(Req::args('tourist_id'));
         $classify_id = Filter::int(Req::args('classify_id'));
         $road = Filter::text(Req::args('road'));
+        $picture = Req::args('picture');
         $lnglat = Common::getLnglat($location);
         $lng = $lnglat['lng'];
         $lat = $lnglat['lat'];
-
-        $upfile_path = Tiny::getPath("uploads") . "/head/";
-        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
-        //$upfile_url = strtr(Tiny::getPath("uploads_url")."head/",APP_URL,'');
-        $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
-        $upfile->save();
-        $info = $upfile->getInfo();
-
-        if ($info[0]['status'] == 1) {
-            $image_url = $upfile_url . $info[0]['path'];
-            $image = new Image();
-            $image->suffix = '';
-            $image->thumb(APP_ROOT . $image_url, 100, 100);
-            $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
-            $result = $model->table('district_promoter')->data(array('picture' => $picture))->where("user_id=" . $this->user['id'])->update();
+        
+        if($picture){
+            $picture='https://ymlypt.b0.upaiyun.com'.$picture;
         }
 
         if ($name) {
@@ -621,6 +610,9 @@ class AddressAction extends Controller
         }
         if ($road) {
             $model->table('district_promoter')->data(array('road' => $road))->where("user_id=" . $this->user['id'])->update();
+        }
+        if($picture){
+            $model->table('district_promoter')->data(array('picture' => $picture))->where("user_id=" . $this->user['id'])->update();
         }
 
         $this->code = 0;
