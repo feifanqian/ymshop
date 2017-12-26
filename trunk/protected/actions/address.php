@@ -198,8 +198,8 @@ class AddressAction extends Controller
         $payment_id = Filter::int(Req::args('payment_id'));
         $amount = round(Filter::float(Req::args('amount')),2);
         $info = Filter::text(Req::args('info'));
-        $distance = Filter::int(Req::args('distance'));
-        $range = Req::args('range');
+        $distance = 10; // 设置距离红包打开距离，默认10米
+        $range = Filter::int(Req::args('range'));
         $num = Filter::int(Req::args('num'));
         $type = Filter::int(Req::args('type'));
         if(!$type){
@@ -223,7 +223,47 @@ class AddressAction extends Controller
          return;
         }
         switch ($range) {
-            case '0.5':
+            case 1:
+                $rand1 = rand(-9,9)/10000;
+                if($rand1>0){
+                    $rand2 = 0.0009-$rand1;
+                }else{
+                    $rand2 = 0-(0.0009-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case 2:
+                $rand1 = rand(-18,18)/10000;
+                if($rand1>0){
+                    $rand2 = 0.0018-$rand1;
+                }else{
+                    $rand2 = 0-(0.0018-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case 3:
+                $rand1 = rand(-27,27)/10000;
+                if($rand1>0){
+                    $rand2 = 0.0027-$rand1;
+                }else{
+                    $rand2 = 0-(0.0027-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case 4:
+                $rand1 = rand(-36,36)/10000;
+                if($rand1>0){
+                    $rand2 = 0.0036-$rand1;
+                }else{
+                    $rand2 = 0-(0.0036-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;            
+            case 5:
                 $rand1 = rand(-45,45)/10000;
                 if($rand1>0){
                     $rand2 = 0.0045-$rand1;
@@ -233,8 +273,48 @@ class AddressAction extends Controller
                 $lng = $promoter['lng']+$rand1;
                 $lat = $promoter['lat']+$rand2;
                 break;
-            case '1':
-                $rand1 = rand(-9,9)/1000;
+            case 6:
+                $rand1 = rand(-54,54)/10000;
+                if($rand1>0){
+                    $rand2 = 0.0054-$rand1;
+                }else{
+                    $rand2 = 0-(0.0054-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case 7:
+                $rand1 = rand(-63,63)/10000;
+                if($rand1>0){
+                    $rand2 = 0.0063-$rand1;
+                }else{
+                    $rand2 = 0-(0.0063-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case 8:
+                $rand1 = rand(-72,72)/10000;
+                if($rand1>0){
+                    $rand2 = 0.0072-$rand1;
+                }else{
+                    $rand2 = 0-(0.0072-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case 9:
+                $rand1 = rand(-81,81)/10000;
+                if($rand1>0){
+                    $rand2 = 0.0081-$rand1;
+                }else{
+                    $rand2 = 0-(0.0081-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;                
+            case 10:
+                $rand1 = rand(-90,90)/10000;
                 if($rand1>0){
                     $rand2 = 0.009-$rand1;
                 }else{
@@ -242,37 +322,7 @@ class AddressAction extends Controller
                 }
                 $lng = $promoter['lng']+$rand1;
                 $lat = $promoter['lat']+$rand2;
-                break;
-            case '3':
-                $rand1 = rand(-27,27)/1000;
-                if($rand1>0){
-                    $rand2 = 0.027-$rand1;
-                }else{
-                    $rand2 = 0-(0.027-abs($rand1));
-                }
-                $lng = $promoter['lng']+$rand1;
-                $lat = $promoter['lat']+$rand2;
-                break;
-            case '5':
-                $rand1 = rand(-45,45)/1000;
-                if($rand1>0){
-                    $rand2 = 0.045-$rand1;
-                }else{
-                    $rand2 = 0-(0.045-abs($rand1));
-                }
-                $lng = $promoter['lng']+$rand1;
-                $lat = $promoter['lat']+$rand2;
-                break;
-            case '10':
-                $rand1 = rand(-90,90)/1000;
-                if($rand1>0){
-                    $rand2 = 0.09-$rand1;
-                }else{
-                    $rand2 = 0-(0.09-abs($rand1));
-                }
-                $lng = $promoter['lng']+$rand1;
-                $lat = $promoter['lat']+$rand2;
-                break;            
+                break;           
             default:
                 $rand1 = rand(-9,9)/1000;
                 if($rand1>0){
