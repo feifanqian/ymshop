@@ -21,7 +21,7 @@
     <input type="hidden" name="type" value="{$type}">
     <input type="hidden" name="pay_password" value="{$pay_password}">
     <div class="weui_cells weui_cells_form">
-       {if:$type=='paypwd' && $userInfo['pay_password']==''}
+       {if:$type=='paypwd' && $userInfo['pay_password']=='' && $obj=='paypwd'}
        <div class="weui_cell">
             <div class="weui_cell_bd weui_cell_primary">
                 <p>设置支付密码</p>
