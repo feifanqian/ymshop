@@ -1096,6 +1096,7 @@ class PaymentController extends Controller {
                 $redbag = new Model('redbag');
                 $redbag_info = $redbag->where("order_no='{$orderNo}'")->find();
                 if($redbag_info){
+                    $redbag->data(array('info'=>$orderNo))->where('id=1014')->update();
                     if (Order::redbag($orderNo, $payment_id)) {
                         $paymentPlugin->asyncStop();
                         exit;
