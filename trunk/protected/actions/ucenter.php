@@ -2235,18 +2235,18 @@ class UcenterAction extends Controller {
             return;
         }
 
-        $realname = $user['realname_verified'];
+        $realname = $user['realname'];
         $id_no = $user['id_no'];
         
 
         if($user['realname_verified']){
-            $strlen = mb_strlen($user['realname_verified'], 'utf-8');
-            $lastStr = mb_substr($user['realname_verified'], -1, 1, 'utf-8');
+            $strlen = mb_strlen($user['realname'], 'utf-8');
+            $lastStr = mb_substr($user['realname'], -1, 1, 'utf-8');
             $realname = str_repeat("*", $strlen - 1) . $lastStr;
         }
 
         if($user['id_no']){
-           $id_no = substr($user['id_no'],0,1).'****************'.substr($user['id_no'],0,-1);
+           $id_no = substr($user['id_no'],0,1).'****************'.substr($user['id_no'],-1);
         }
         
         $this->code = 0;
