@@ -127,7 +127,7 @@ class AddressAction extends Controller
     {
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
-        $where = "r.lng != '' and r.lat != ''";
+        $where = "r.pay_status=1 and r.lng != '' and r.lat != ''";
         //搜索附近
         if($lng && $lat){
             if(Req::args('distance')!=''){
@@ -363,7 +363,8 @@ class AddressAction extends Controller
              'create_time'=>date('Y-m-d H:i:s'),
              'type'=>$type,
              'redbag_type'=>$redbag_type,
-             'num'=>$num
+             'num'=>$num,
+             'pay_status'=>0
             );
         $result = $this->model->table('redbag')->data($data)->insert();
         $payment = new Payment($payment_id);
@@ -375,6 +376,7 @@ class AddressAction extends Controller
 
             $this->code = 0;
             $this->content['redbag'] = $this->model->table('redbag')->where('id='.$result)->find();
+            $this->content['payment_id'] = $payment_id;
             $this->content['senddata'] = $sendData;
         }else{
             $this->code = 1169;
