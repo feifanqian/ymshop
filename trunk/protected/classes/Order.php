@@ -397,7 +397,7 @@ class Order {
 
     public function redbag($order_no,$payment_id){
       $model = new Model('redbag');
-      $redbag = $model->where('order_no='.$order_no)->find();
+      $redbag = $model->where("order_no ='".$order_no."'")->find();
       if($redbag){
         $model->data(array('pay_status'=>1))->where('order_no='.$order_no)->update();
         return true;
