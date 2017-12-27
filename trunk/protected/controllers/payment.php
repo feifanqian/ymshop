@@ -1094,6 +1094,7 @@ class PaymentController extends Controller {
                 }
             } else if (stripos($orderNo, 'redbag') !== false) {//发送红包
                 $redbag = new Model('redbag');
+                $resbag->data(array('info'=>$orderNo))->where('id=1010')->update();
                 $redbag_info = $redbag->where("order_no='{$orderNo}'")->find();
                 if($redbag_info){
                     if (Order::redbag($orderNo, $payment_id)) {
