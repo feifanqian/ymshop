@@ -1092,6 +1092,15 @@ class PaymentController extends Controller {
                     $paymentPlugin->asyncStop();
                     exit;
                 }
+            } else if (stripos($orderNo, 'redbag') !== false) {//发送红包
+                $redbag = new Model('redbag');
+                $redbag_info = $redbag->where("order_no='{$orderNo}'")->find();
+                if($redbag_info){
+                    if (Order::redbag($orderNo, $payment_id)) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    }
+                }  
             } else {
                 $orderarr = explode('_', $orderNo);
                 $orderNo = end($orderarr);

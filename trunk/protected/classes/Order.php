@@ -395,6 +395,17 @@ class Order {
         }
     }
 
+    public function redbag($order_no,$payment_id){
+      $model = new Model('redbag');
+      $redbag = $model->where('order_no='.$order_no)->find();
+      if($redbag){
+        $model->data(array('pay_status'=>1))->where('order_no='.$order_no)->update();
+        return true;
+      }else{
+        return false;
+      }
+    }
+
     public function calculate_fare() {
         $weight = Filter::int(Req::args('weight'));
         $id = Filter::int(Req::args('id'));
