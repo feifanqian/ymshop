@@ -188,13 +188,11 @@ class AddressAction extends Controller
             $money = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join redbag_get as rg on r.id = rg.redbag_id left join user as u on r.user_id=u.id')->fields('sum(rg.amount) as total_money')->where("r.status=1 and rg.get_user_id=".$user_id)->order('r.id desc')->findAll();
         }
         
-        if($list){
-           unset($list['html']); 
-        }
-
-        if($money){
-            $total_money = $money[0]['total_money'];
+        if($list && $money){
+           unset($list['html']);
+           $total_money = $money[0]['total_money'];
         }else{
+            $list = array();
             $total_money = '0.00';
         }
         
