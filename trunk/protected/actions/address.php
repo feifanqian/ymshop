@@ -211,8 +211,12 @@ class AddressAction extends Controller
         $range = Filter::int(Req::args('range'));
         $num = Filter::int(Req::args('num'));
         $type = Filter::int(Req::args('type'));
+        $redbag_type = Filter::int(Req::args('redbag_type'));
         if(!$type){
             $type = 2;
+        }
+        if(!$redbag_type){
+            $redbag_type = 1;
         }
         $promoter = $this->model->table('district_promoter')->fields('lng,lat')->where('user_id='.$this->user['id'])->find();
         if(!$promoter){
@@ -344,9 +348,14 @@ class AddressAction extends Controller
                 break;
         }
         $order_no = Common::createOrderNo();
+        if($redbag_type==1){
+            $total_amount = $amount;
+        }else{
+            $total_amount = $amount*$num;
+        }
         $data = array(
              'order_no'=>'redbag'.$order_no,
-             'amount'=>$amount,
+             'amount'=>$total_amount,
              'info'=>$info,
              'lng'=>$lng,
              'lat'=>$lat,
@@ -355,6 +364,7 @@ class AddressAction extends Controller
              'range'=>$range,
              'create_time'=>date('Y-m-d H:i:s'),
              'type'=>$type,
+             'redbag_type'=>$redbag_type,
              'num'=>$num
             );
         $result = $this->model->table('redbag')->data($data)->insert();
@@ -390,10 +400,14 @@ class AddressAction extends Controller
         //按人数随机分配红包金额
         if($num>0){     
             if($num>1){
-               //计算理论可领取最大红包金额，以分为最小单位
-               $max_money = ($redbag['amount']-$num*0.01)*100; //单位分
-               //随机分配红包金额
-               $get_money = rand(1,$max_money)/100; // 单位元
+               if($redbag['redbag_type']==1){ //拼手气红包随机分配金额
+                   //计算理论可领取最大红包金额，以分为最小单位
+                   $max_money = ($redbag['amount']-$num*0.01)*100; //单位分
+                   //随机分配红包金额
+                   $get_money = rand(1,$max_money)/100; // 单位元
+               }else{ //普通红包没人等额
+                  $get_money = round($redbag['amount']/$redbag['num'],2);
+               }    
             }else{
                $get_money = $redbag['amount']; // 单位元
             }
