@@ -461,7 +461,10 @@ class PaymentAction extends Controller {
                     break;
                 case 'offline':
                     $notin ="1,17";
-                    break;    
+                    break;
+                case 'redbag':
+                    $notin ="12";
+                    break;        
                 default:
                      $notin="12";
                     break;
@@ -480,7 +483,10 @@ class PaymentAction extends Controller {
                     break;
                 case 'offline':
                     $notin ="1,17";
-                    break;    
+                    break;
+                case 'redbag':
+                    $notin ="12";
+                    break;        
                 default:
                      $notin="12";
                     break;
