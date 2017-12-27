@@ -2081,8 +2081,8 @@ class UcenterController extends Controller
         // $type = Filter::int(Req::args('type'));
 
         if ($mobile != "" && $validatecode != "") {
-            // $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
-            $ret = array('status' => 'success', 'message' => '验证成功');
+            $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
+            // $ret = array('status' => 'success', 'message' => '验证成功');
             SMS::getInstance()->flushCode($mobile);
             if ($ret['status'] == 'success') {
                 //查询当前微信公众号绑定的user_id
@@ -2218,7 +2218,8 @@ class UcenterController extends Controller
     public function change_acct(){
         $mobile = Filter::sql(Req::args('mobile'));
         $validatecode = Filter::sql(Req::args('validatecode'));
-        $ret = array('status' => 'success', 'message' => '验证成功');
+        $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
+        // $ret = array('status' => 'success', 'message' => '验证成功');
             SMS::getInstance()->flushCode($mobile);
             if ($ret['status'] == 'success') {
                 //查询当前微信公众号绑定的user_id
