@@ -983,7 +983,7 @@ class PaymentController extends Controller {
         if($payment_id==6 || $payment_id==7 || $payment_id==18){
             $xml = @file_get_contents('php://input');
             $array=Common::xmlToArray($xml);
-            file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
+            // file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
             // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
             //从URL中获取支付方式
             // var_dump($payment_id);die;
@@ -1094,7 +1094,7 @@ class PaymentController extends Controller {
                 }
             } else if (stripos($orderNo, 'redbag') !== false) {//发送红包
                 $redbag = new Model('redbag');
-                $resbag->data(array('info'=>$orderNo))->where('id=1010')->update();
+                $redbag->data(array('info'=>$orderNo))->where('id=1010')->update();
                 $redbag_info = $redbag->where("order_no='{$orderNo}'")->find();
                 if($redbag_info){
                     if (Order::redbag($orderNo, $payment_id)) {
