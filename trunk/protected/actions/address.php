@@ -426,9 +426,9 @@ class AddressAction extends Controller
                     }else{
                        $list = array(); 
                     }
+                    $newredbag['total_get_money'] = $total_get_money;
                     $this->code = 0;
                     $this->content['redbag'] = $newredbag;
-                    $this->content['total_get_money'] = $total_get_money;
                     $this->content['list'] = $list;
                  // $this->code = 1198;
                  // return;
@@ -446,10 +446,10 @@ class AddressAction extends Controller
                }else{
                  $list = array();
                }
+               $newredbag['total_get_money'] = $total_get_money;
                $this->code = 0;
                $this->content['redbag'] = $newredbag;
                $this->content['get_money'] = $get_money;
-               $this->content['total_get_money'] = $total_get_money;
                $this->content['list'] = $list;
             }else{
                $this->code = 1189;
@@ -465,9 +465,9 @@ class AddressAction extends Controller
             }else{
                $list = array(); 
             }
+            $newredbag['total_get_money'] = $total_get_money;
             $this->code = 0;
             $this->content['redbag'] = $newredbag;
-            $this->content['total_get_money'] = $total_get_money;
             $this->content['list'] = $list;
         }
         
