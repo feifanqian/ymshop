@@ -410,7 +410,10 @@ class AddressAction extends Controller
            
            $this->model->table('redbag')->data(array('status'=>1,'amount'=>"`amount`-({$get_money})",'open_time'=>date('Y-m-d H:i:s'),'open_num'=>"`open_num`+1"))->where('id='.$id)->update();
            $exist = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
-           if(!$exist){
+           if($exist){
+             $this->code = 1198;
+             return;
+           }else{
              $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id'],'amount'=>$get_money,'get_date'=>date('Y-m-d H:i:s')))->insert();
            }
            $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
