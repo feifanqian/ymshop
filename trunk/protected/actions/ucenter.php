@@ -234,7 +234,7 @@ class UcenterAction extends Controller {
         $oldpassword = Filter::str(Req::args('oldpassword'));
         $newpassword1 = Filter::str(Req::args('newpassword1'));
         $newpassword2 = Filter::str(Req::args('newpassword2'));
-        $user = $this->model->where("id = ".$this->user['id'])->fields("password,validcode")->find();
+        $user = $this->model->table('user')->where("id = ".$this->user['id'])->fields("password,validcode")->find();
         $validcode = $user['validcode'];
         if ($user['password'] != CHash::md5($oldpassword, $validcode)) {
             $this->code = 1016;
