@@ -757,6 +757,12 @@ class OrderAction extends Controller {
         }
         if($list){
             foreach($list['data'] as $k => $v){
+                if($type==2){
+                    $balance_log = $this->model->table('balance_log')->where('order_no='.$v['order_no'])->find();
+                    if($balance_log){
+                        $list['data'][$k]['order_amount'] = $balance_log['amount'];
+                    }
+                }
                 if($type==1){
                    $user = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.nickname')->where('c.user_id='.$v['shop_ids'])->find(); 
                 }else{
