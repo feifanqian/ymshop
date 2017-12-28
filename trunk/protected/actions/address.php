@@ -394,6 +394,7 @@ class AddressAction extends Controller
         }
         if($type==1){  // 抢红包
             if($redbag['status']==1 && $redbag['open_num']==$redbag['num']){
+                $this->model->table('redbag')->data(array('status'=>2))->where('id='.$id)->update();
                 $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
                 if($redbag_get){  //红包已被抢光了自己参与了
                     $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
@@ -409,7 +410,8 @@ class AddressAction extends Controller
                     $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
                    $this->code = 0;
                    $this->content['redbag'] = $newredbag;
-                   $this->content['list'] = $list; 
+                   $this->content['list'] = $list;
+                   return; 
                 }else{  //没抢到
                    $this->code = 1188;
                    return; 
@@ -449,6 +451,7 @@ class AddressAction extends Controller
                     $this->code = 0;
                     $this->content['redbag'] = $newredbag;
                     $this->content['list'] = $list;
+                    return;
                  // $this->code = 1198;
                  // return;
                }else{
@@ -471,7 +474,9 @@ class AddressAction extends Controller
                $this->content['redbag'] = $newredbag;
                $this->content['get_money'] = sprintf('%.2f',$get_money);
                $this->content['list'] = $list;
+               return;
             }else{
+               $this->model->table('redbag')->data(array('status'=>2))->where('id='.$id)->update();
                $this->code = 1189;
                return; 
             }
@@ -490,6 +495,7 @@ class AddressAction extends Controller
             $this->code = 0;
             $this->content['redbag'] = $newredbag;
             $this->content['list'] = $list;
+            return;
         }
         
     }
