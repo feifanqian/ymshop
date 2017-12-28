@@ -382,55 +382,71 @@ class AddressAction extends Controller
 
     public function redbagOpen(){
         $id = Filter::int(Req::args('redbag_id'));
+        $type = Filter::int(Req::args('type'));
+        if(!$type){
+            $type = 1; 
+        }
         $redbag = $this->model->table('redbag')->where('id='.$id)->find();
         if(!$redbag){
             $this->code = 1187;
             return;
         }
-        if($redbag['status']==1 && $redbag['open_num']==$redbag['num']){
-            $this->code = 1188;
-            return;
-        }
-        //计算剩余可领取红包人数
-        $num = $redbag['num']-$redbag['open_num'];
-        //按人数随机分配红包金额
-        if($num>0){     
-            if($num>1){
-               if($redbag['redbag_type']==1){ //拼手气红包随机分配金额
-                   //计算理论可领取最大红包金额，以分为最小单位
-                   $max_money = ($redbag['amount']-$num*0.01)*100; //单位分
-                   //随机分配红包金额
-                   $get_money = rand(1,$max_money)/100; // 单位元
-               }else{ //普通红包没人等额
-                  $get_money = round($redbag['amount']/$redbag['num'],2);
-               }    
-            }else{
-               $get_money = $redbag['amount']; // 单位元
+        if($type==1){  // 抢红包
+            if($redbag['status']==1 && $redbag['open_num']==$redbag['num']){
+                $this->code = 1188;
+                return;
             }
-           
-           $this->model->table('redbag')->data(array('status'=>1,'amount'=>"`amount`-({$get_money})",'open_time'=>date('Y-m-d H:i:s'),'open_num'=>"`open_num`+1"))->where('id='.$id)->update();
-           $exist = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
-           if($exist){
-             $this->code = 1198;
-             return;
-           }else{
-             $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id'],'amount'=>$get_money,'get_date'=>date('Y-m-d H:i:s')))->insert();
-           }
-           $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
-           Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
-           $newredbag = $this->model->table('redbag')->where('id='.$id)->find();
-           $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
-           if(!$list){
-            $list = array();
-           }
-           $this->code = 0;
-           $this->content['redbag'] = $newredbag;
-           $this->content['get_money'] = $get_money;
-           $this->content['list'] = $list;
-        }else{
-           $this->code = 1189;
-           return; 
+            //计算剩余可领取红包人数
+            $num = $redbag['num']-$redbag['open_num'];
+            //按人数随机分配红包金额
+            if($num>0){     
+                if($num>1){
+                   if($redbag['redbag_type']==1){ //拼手气红包随机分配金额
+                       //计算理论可领取最大红包金额，以分为最小单位
+                       $max_money = ($redbag['amount']-$num*0.01)*100; //单位分
+                       //随机分配红包金额
+                       $get_money = rand(1,$max_money)/100; // 单位元
+                   }else{ //普通红包没人等额
+                      $get_money = round($redbag['amount']/$redbag['num'],2);
+                   }    
+                }else{
+                   $get_money = $redbag['amount']; // 单位元
+                }
+               
+               $this->model->table('redbag')->data(array('status'=>1,'amount'=>"`amount`-({$get_money})",'open_time'=>date('Y-m-d H:i:s'),'open_num'=>"`open_num`+1"))->where('id='.$id)->update();
+               $exist = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
+               if($exist){
+                 $this->code = 1198;
+                 return;
+               }else{
+                 $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id'],'amount'=>$get_money,'get_date'=>date('Y-m-d H:i:s')))->insert();
+               }
+               $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
+               Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
+               $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
+               $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
+               if(!$list){
+                $list = array();
+               }
+               $this->code = 0;
+               $this->content['redbag'] = $newredbag;
+               $this->content['get_money'] = $get_money;
+               $this->content['list'] = $list;
+            }else{
+               $this->code = 1189;
+               return; 
+            }
+        }else{ //查看红包领取详情
+            $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
+            $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
+            if(!$list){
+               $list = array();
+            }
+            $this->code = 0;
+            $this->content['redbag'] = $newredbag;
+            $this->content['list'] = $list;
         }
+        
     }
 
     public function promoterList()
