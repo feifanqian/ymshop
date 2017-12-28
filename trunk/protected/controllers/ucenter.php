@@ -1951,6 +1951,9 @@ class UcenterController extends Controller
             } else if ($type == 'mobile') {
                 $sms = SMS::getInstance();
                 // if ($sms->getStatus()) {
+                if($this->user['id']==42608){
+                    var_dump($this->user['mobile']);die;
+                }
                     $result = $sms->sendCode($this->user['mobile'], $code);
                     if ($result['status'] == 'success') {
                         $info = array('status' => 'success', 'msg' => $result['message']);
