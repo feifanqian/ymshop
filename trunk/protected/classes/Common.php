@@ -1061,9 +1061,15 @@ class Common {
             // $rand = rand(-111,111)/100000;
             if($seller){
                 if($seller['lng'] == '' && $seller['lat'] == ''){
-                   $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location']))->insert(); 
+                   $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'pay_status'=>1))->insert(); 
                }else{
-                   $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+rand(-111,111)/1000000,'lat'=>$seller['lat']+rand(-111,111)/1000000))->insert();
+                $rand1 = rand(-9,9)/1000;
+                if($rand1>0){
+                    $rand2 = 0.009-$rand1;
+                }else{
+                    $rand2 = 0-(0.009-abs($rand1));
+                }
+                   $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand1,'lat'=>$seller['lat']+$rand2,'pay_status'=>1)->insert();
                }   
             }
          }
