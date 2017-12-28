@@ -402,6 +402,7 @@ class PaymentAction extends Controller {
             $customer = $this->model->where("user_id=" . $user_id)->find();
             if ($customer['balance'] >= $total_fee) {
                 $order = $this->model->table("order")->where("order_no='" . $order_no . "' and user_id=" . $user_id)->find();
+                $redbag = $this->model->table('redbag')->where("order_no='".$order_no."' and user_id=".$user_id)->find();
                 if ($order) {
                     if ($order['pay_status'] == 0 ) {
                         if($order['type']==4 && $order['otherpay_status']==1){
@@ -431,6 +432,21 @@ class PaymentAction extends Controller {
                     } else {
                         $this->code = 1062;
                         return;
+                    }
+                }elseif($redbag){
+                  if($redbag['pay_status']==0){
+                     //扣费并将订单状态更新
+                      $flag = $this->model->table("customer")->data(array("balance"=>"`balance`-{$total_fee}"))->where("user_id =".$user_id)->update();
+                      if ($flag) {
+                          $this->model->table("redbag")->data(array('pay_status'=>1))->where("order_no='".$order_no."' and user_id=".$user_id)->update();
+                          //记录余额 日志
+                          Log::balance((0 - $total_fee), $user_id, $order_no, '发红包');
+                      }
+                      $this->code = 0;
+                      return;
+                  }else{
+                      $this->code = 1199;
+                      return;
                     }
                 } else {
                     $this->code = 1063;
