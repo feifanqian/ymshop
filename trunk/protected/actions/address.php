@@ -394,8 +394,26 @@ class AddressAction extends Controller
         }
         if($type==1){  // 抢红包
             if($redbag['status']==1 && $redbag['open_num']==$redbag['num']){
-                $this->code = 1188;
-                return;
+                $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
+                if($redbag_get){  //红包已被抢光了自己参与了
+                    $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
+                    $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
+                    if($list){
+                        foreach($list as $k=>$v){
+                            $total_get_money+=$v['amount'];
+                        }
+                    }else{
+                       $list = array(); 
+                    }
+                    $newredbag['total_get_money'] = round($total_get_money,2);
+                    $newredbag['total_money'] = $newredbag['total_get_money']+$newredbag['amount'];
+                   $this->code = 0;
+                   $this->content['redbag'] = $newredbag;
+                   $this->content['list'] = $list; 
+                }else{  //没抢到
+                   $this->code = 1188;
+                   return; 
+                }  
             }
             //计算剩余可领取红包人数
             $num = $redbag['num']-$redbag['open_num'];
@@ -426,7 +444,8 @@ class AddressAction extends Controller
                     }else{
                        $list = array(); 
                     }
-                    $newredbag['total_get_money'] = $total_get_money;
+                    $newredbag['total_get_money'] = round($total_get_money,2);
+                    $newredbag['total_money'] = $newredbag['total_get_money']+$newredbag['amount'];
                     $this->code = 0;
                     $this->content['redbag'] = $newredbag;
                     $this->content['list'] = $list;
@@ -446,7 +465,8 @@ class AddressAction extends Controller
                }else{
                  $list = array();
                }
-               $newredbag['total_get_money'] = $total_get_money;
+               $newredbag['total_get_money'] = round($total_get_money,2);
+               $newredbag['total_money'] = $newredbag['total_get_money']+$newredbag['amount'];
                $this->code = 0;
                $this->content['redbag'] = $newredbag;
                $this->content['get_money'] = $get_money;
@@ -465,7 +485,8 @@ class AddressAction extends Controller
             }else{
                $list = array(); 
             }
-            $newredbag['total_get_money'] = $total_get_money;
+            $newredbag['total_get_money'] = round($total_get_money,2);
+            $newredbag['total_money'] = $newredbag['total_get_money']+$newredbag['amount'];
             $this->code = 0;
             $this->content['redbag'] = $newredbag;
             $this->content['list'] = $list;
