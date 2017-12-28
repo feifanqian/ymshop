@@ -413,9 +413,14 @@ class AddressAction extends Controller
            $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
            Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
            $newredbag = $this->model->table('redbag')->where('id='.$id)->find();
+           $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->findAll();
+           if(!$list){
+            $list = array();
+           }
            $this->code = 0;
            $this->content['redbag'] = $newredbag;
            $this->content['get_money'] = $get_money;
+           $this->content['list'] = $list;
         }else{
            $this->code = 1189;
            return; 

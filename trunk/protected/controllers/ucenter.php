@@ -1951,7 +1951,9 @@ class UcenterController extends Controller
             } else if ($type == 'mobile') {
                 $sms = SMS::getInstance();
                 // if ($sms->getStatus()) {
-                    $result = $sms->sendCode($this->user['mobile'], $code);
+                $customer = $this->model->table('customer')->fields('mobile')->where('user_id='.$this->user['id'])->find();
+                $mobile = $customer?$customer['mobile']:$this->user['mobile'];
+                    $result = $sms->sendCode($mobile, $code);
                     if ($result['status'] == 'success') {
                         $info = array('status' => 'success', 'msg' => $result['message']);
                         Session::set('verifiedInfo', $verifiedInfo);
