@@ -409,11 +409,14 @@ class AddressAction extends Controller
             }
            
            $this->model->table('redbag')->data(array('status'=>1,'amount'=>"`amount`-({$get_money})",'open_time'=>date('Y-m-d H:i:s'),'open_num'=>"`open_num`+1"))->where('id='.$id)->update();
-           $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id'],'amount'=>$get_money,'get_date'=>date('Y-m-d H:i:s')))->insert();
+           $exist = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
+           if(!$exist){
+             $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id'],'amount'=>$get_money,'get_date'=>date('Y-m-d H:i:s')))->insert();
+           }
            $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
            Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
            $newredbag = $this->model->table('redbag')->where('id='.$id)->find();
-           $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->findAll();
+           $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
            if(!$list){
             $list = array();
            }
