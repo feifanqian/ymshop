@@ -397,20 +397,10 @@ class AddressAction extends Controller
                 $this->model->table('redbag')->data(array('status'=>2))->where('id='.$id)->update();
                 $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
                 if($redbag_get){  //红包已被抢光了自己参与了
-                    $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
-                    $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
-                    if($list){
-                        foreach($list as $k=>$v){
-                            $total_get_money+=$v['amount'];
-                        }
-                    }else{
-                       $list = array(); 
-                    }
-                    $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
-                    $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
-                   $this->code = 0;
-                   $this->content['redbag'] = $newredbag;
-                   $this->content['list'] = $list;
+                   $result = $this->newredbag($id);
+                    $this->code = 0;
+                    $this->content['redbag'] = $result['newredbag'];
+                    $this->content['list'] = $result['list'];
                    return; 
                 }else{  //没抢到
                    $this->code = 1188;
@@ -437,20 +427,10 @@ class AddressAction extends Controller
                $this->model->table('redbag')->data(array('status'=>1,'amount'=>"`amount`-({$get_money})",'open_time'=>date('Y-m-d H:i:s'),'open_num'=>"`open_num`+1"))->where('id='.$id)->update();
                $exist = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
                if($exist){ //已领取过该红包 
-                    $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
-                    $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
-                    if($list){
-                        foreach($list as $k=>$v){
-                            $total_get_money+=$v['amount'];
-                        }
-                    }else{
-                       $list = array(); 
-                    }
-                    $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
-                    $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
+                    $result = $this->newredbag($id);
                     $this->code = 0;
-                    $this->content['redbag'] = $newredbag;
-                    $this->content['list'] = $list;
+                    $this->content['redbag'] = $result['newredbag'];
+                    $this->content['list'] = $result['list'];
                     return;
                  // $this->code = 1198;
                  // return;
@@ -459,21 +439,12 @@ class AddressAction extends Controller
                }
                $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
                Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
-               $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
-               $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
-               if($list){
-                 foreach($list as $k=>$v){
-                    $total_get_money+=$v['amount'];
-                }
-               }else{
-                 $list = array();
-               }
-               $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
-               $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
+               
+               $result = $this->newredbag($id);
                $this->code = 0;
-               $this->content['redbag'] = $newredbag;
+               $this->content['redbag'] = $result['newredbag'];
                $this->content['get_money'] = sprintf('%.2f',$get_money);
-               $this->content['list'] = $list;
+               $this->content['list'] = $result['list'];
                return;
             }else{
                $this->model->table('redbag')->data(array('status'=>2))->where('id='.$id)->update();
@@ -481,17 +452,6 @@ class AddressAction extends Controller
                return; 
             }
         }else{ //查看红包领取详情
-            // $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
-            // $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
-            // if($list){
-            //     foreach($list as $k=>$v){
-            //         $total_get_money+=$v['amount'];
-            //     }
-            // }else{
-            //    $list = array(); 
-            // }
-            // $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
-            // $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
             $result = $this->newredbag($id);
             $this->code = 0;
             $this->content['redbag'] = $result['newredbag'];
