@@ -1069,7 +1069,7 @@ class Common {
                 }else{
                     $rand2 = 0-(0.009-abs($rand1));
                 }
-                   $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand1,'lat'=>$seller['lat']+$rand2,'pay_status'=>1)->insert();
+                   // $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand1,'lat'=>$seller['lat']+$rand2,'pay_status'=>1)->insert();
                }   
             }
          }
