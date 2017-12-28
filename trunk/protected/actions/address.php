@@ -502,6 +502,7 @@ class AddressAction extends Controller
     }
 
     public function newredbag($id){
+        $total_get_money = 0;
         $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
         $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
         if($list){
