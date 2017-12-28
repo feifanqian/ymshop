@@ -406,7 +406,7 @@ class AddressAction extends Controller
                        $list = array(); 
                     }
                     $newredbag['total_get_money'] = round($total_get_money,2);
-                    $newredbag['total_money'] = $newredbag['total_get_money']+$newredbag['amount'];
+                    $newredbag['total_money'] = round($newredbag['total_get_money']+$newredbag['amount'],2);
                    $this->code = 0;
                    $this->content['redbag'] = $newredbag;
                    $this->content['list'] = $list; 
@@ -445,7 +445,7 @@ class AddressAction extends Controller
                        $list = array(); 
                     }
                     $newredbag['total_get_money'] = round($total_get_money,2);
-                    $newredbag['total_money'] = $newredbag['total_get_money']+$newredbag['amount'];
+                    $newredbag['total_money'] = round($newredbag['total_get_money']+$newredbag['amount'],2);
                     $this->code = 0;
                     $this->content['redbag'] = $newredbag;
                     $this->content['list'] = $list;
@@ -466,7 +466,7 @@ class AddressAction extends Controller
                  $list = array();
                }
                $newredbag['total_get_money'] = round($total_get_money,2);
-               $newredbag['total_money'] = $newredbag['total_get_money']+$newredbag['amount'];
+               $newredbag['total_money'] = round($newredbag['total_get_money']+$newredbag['amount'],2);
                $this->code = 0;
                $this->content['redbag'] = $newredbag;
                $this->content['get_money'] = $get_money;
@@ -486,7 +486,7 @@ class AddressAction extends Controller
                $list = array(); 
             }
             $newredbag['total_get_money'] = round($total_get_money,2);
-            $newredbag['total_money'] = $newredbag['total_get_money']+$newredbag['amount'];
+            $newredbag['total_money'] = round($newredbag['total_get_money']+$newredbag['amount'],2);
             $this->code = 0;
             $this->content['redbag'] = $newredbag;
             $this->content['list'] = $list;
