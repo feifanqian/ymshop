@@ -383,6 +383,7 @@ class AddressAction extends Controller
     public function redbagOpen(){
         $id = Filter::int(Req::args('redbag_id'));
         $type = Filter::int(Req::args('type'));
+        $total_get_money = 0;
         if(!$type){
             $type = 1; 
         }
@@ -416,7 +417,6 @@ class AddressAction extends Controller
                $this->model->table('redbag')->data(array('status'=>1,'amount'=>"`amount`-({$get_money})",'open_time'=>date('Y-m-d H:i:s'),'open_num'=>"`open_num`+1"))->where('id='.$id)->update();
                $exist = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
                if($exist){ //已领取过该红包 
-                    $total_get_money = 0;
                     $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
                     $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
                     if($list){
@@ -439,19 +439,23 @@ class AddressAction extends Controller
                Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
                $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
                $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
-               if(!$list){
-                $list = array();
+               if($list){
+                 foreach($list as $k=>$v){
+                    $total_get_money+=$v['amount'];
+                }
+               }else{
+                 $list = array();
                }
                $this->code = 0;
                $this->content['redbag'] = $newredbag;
                $this->content['get_money'] = $get_money;
+               $this->content['total_get_money'] = $total_get_money;
                $this->content['list'] = $list;
             }else{
                $this->code = 1189;
                return; 
             }
         }else{ //查看红包领取详情
-            $total_get_money = 0;
             $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
             $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
             if($list){
