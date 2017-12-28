@@ -346,11 +346,7 @@ class AddressAction extends Controller
                 break;
         }
         $order_no = Common::createOrderNo();
-        if($redbag_type==1){
-            $total_amount = $amount;
-        }else{
-            $total_amount = $amount*$num;
-        }
+        $total_amount = $amount;
         $data = array(
              'order_no'=>'redbag'.$order_no,
              'amount'=>$total_amount,
