@@ -405,8 +405,8 @@ class AddressAction extends Controller
                     }else{
                        $list = array(); 
                     }
-                    $newredbag['total_get_money'] = round($total_get_money,2);
-                    $newredbag['total_money'] = round($newredbag['total_get_money']+$newredbag['amount'],2);
+                    $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
+                    $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
                    $this->code = 0;
                    $this->content['redbag'] = $newredbag;
                    $this->content['list'] = $list; 
@@ -444,8 +444,8 @@ class AddressAction extends Controller
                     }else{
                        $list = array(); 
                     }
-                    $newredbag['total_get_money'] = round($total_get_money,2);
-                    $newredbag['total_money'] = round($newredbag['total_get_money']+$newredbag['amount'],2);
+                    $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
+                    $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
                     $this->code = 0;
                     $this->content['redbag'] = $newredbag;
                     $this->content['list'] = $list;
@@ -465,8 +465,8 @@ class AddressAction extends Controller
                }else{
                  $list = array();
                }
-               $newredbag['total_get_money'] = round($total_get_money,2);
-               $newredbag['total_money'] = round($newredbag['total_get_money']+$newredbag['amount'],2);
+               $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
+               $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
                $this->code = 0;
                $this->content['redbag'] = $newredbag;
                $this->content['get_money'] = $get_money;
@@ -485,8 +485,8 @@ class AddressAction extends Controller
             }else{
                $list = array(); 
             }
-            $newredbag['total_get_money'] = round($total_get_money,2);
-            $newredbag['total_money'] = round($newredbag['total_get_money']+$newredbag['amount'],2);
+            $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
+            $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
             $this->code = 0;
             $this->content['redbag'] = $newredbag;
             $this->content['list'] = $list;
