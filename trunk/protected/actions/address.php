@@ -481,23 +481,42 @@ class AddressAction extends Controller
                return; 
             }
         }else{ //查看红包领取详情
-            $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
-            $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
-            if($list){
-                foreach($list as $k=>$v){
-                    $total_get_money+=$v['amount'];
-                }
-            }else{
-               $list = array(); 
-            }
-            $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
-            $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
+            // $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
+            // $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
+            // if($list){
+            //     foreach($list as $k=>$v){
+            //         $total_get_money+=$v['amount'];
+            //     }
+            // }else{
+            //    $list = array(); 
+            // }
+            // $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
+            // $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
+            $result = $this->newredbag($id);
             $this->code = 0;
-            $this->content['redbag'] = $newredbag;
-            $this->content['list'] = $list;
+            $this->content['redbag'] = $result['newredbag'];
+            $this->content['list'] = $result['list'];
             return;
         }
         
+    }
+
+    public function newredbag($id){
+        $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
+        $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
+        if($list){
+            foreach($list as $k=>$v){
+                $total_get_money+=$v['amount'];
+            }
+        }else{
+            $list = array(); 
+        }
+        $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
+        $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
+        return array(
+             'newredbag'=>$newredbag,
+             'list'=>$list
+            );
     }
 
     public function promoterList()
