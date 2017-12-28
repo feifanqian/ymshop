@@ -469,7 +469,7 @@ class AddressAction extends Controller
                $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
                $this->code = 0;
                $this->content['redbag'] = $newredbag;
-               $this->content['get_money'] = $get_money;
+               $this->content['get_money'] = sprintf('%.2f',$get_money);
                $this->content['list'] = $list;
             }else{
                $this->code = 1189;
