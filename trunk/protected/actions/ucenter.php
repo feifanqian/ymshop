@@ -36,7 +36,7 @@ class UcenterAction extends Controller {
     }
 
     //验证短信
-    private function sms_verify($code, $mobile, $zone) {
+    private function sms_verify($code, $mobile, $zone='86') {
         $url = "https://webapi.sms.mob.com/sms/verify";
         $appkey = "1f4d2d20dd266";
         $return = $this->postRequest($url, array('appkey' => $appkey,
@@ -66,8 +66,8 @@ class UcenterAction extends Controller {
             $this->code = 1024;
             return;
         }
-        // $verify_flag = $this->sms_verify($code, $mobile, $zone);
-        $verify_flag = true;
+        $verify_flag = $this->sms_verify($code, $mobile, $zone);
+        // $verify_flag = true;
         if ($verify_flag) {
             $user = $this->model->query("select user_id from tiny_customer where mobile = $mobile");
             //如果手机号已经注册过了
@@ -1371,7 +1371,7 @@ class UcenterAction extends Controller {
 
         $result = $this->model->table('customer')->where('user_id=' . $this->user['id'])->fields('mobile,mobile_verified,pay_password_open,pay_password,pay_validcode')->find();
         if (!empty($result)) {
-            if ($result['mobile_verified'] == 1) {
+            // if ($result['mobile_verified'] == 1) {
                 if ($this->sms_verify($code, $result['mobile'], $zone)) {
                     $validcode = CHash::random(8);
                     $this->model->table('customer')->data(array('pay_password' => CHash::md5($pay_pwd, $validcode), 'pay_validcode' => $validcode, 'pay_password_open' => 1))->where('user_id=' . $this->user['id'])->update();
@@ -1379,9 +1379,9 @@ class UcenterAction extends Controller {
                 } else {
                     $this->code = 1026;
                 }
-            } else {
-                $this->code = 1030;
-            }
+            // } else {
+            //     $this->code = 1030;
+            // }
         }
     }
 
