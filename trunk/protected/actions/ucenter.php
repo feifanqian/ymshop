@@ -2362,9 +2362,6 @@ class UcenterAction extends Controller {
      
       $ret = Common::httpRequest($url,'GET',NULL,$header);
       $result = json_decode($ret,true);
-      if($this->user['id']==42608){
-        var_dump($result);die;
-      }
       if($result['error_code']==0){
         $has_bind = $this->model->table('bankcard')->where('cardno='.$bankcard)->find();
         if($has_bind){
