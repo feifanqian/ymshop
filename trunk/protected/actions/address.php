@@ -404,9 +404,11 @@ class AddressAction extends Controller
                 $this->model->table('redbag')->data(array('status'=>2))->where('id='.$id)->update();
                 $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
                 if($redbag_get){  //红包已被抢光了自己参与了
+                   $get_money = $redbag_get['amount']; 
                    $result = $this->newredbag($id);
                     $this->code = 0;
                     $this->content['redbag'] = $result['newredbag'];
+                    $this->content['get_money'] = sprintf('%.2f',$get_money);
                     $this->content['list'] = $result['list'];
                    return; 
                 }else{  //没抢到
@@ -724,7 +726,12 @@ class AddressAction extends Controller
         $which_station = Filter::int(Req::args('which_station'));//哪个站
         $customer = Req::args('customer');//等于1筛选出经销商
         $distance = Req::args('distance');//距离
-        $radius = 5; //默认5公里
+        if(!$distance){
+            $radius = 5000; //默认5公里
+        }else{
+            $radius = 0;
+        }
+        
         $where = "lat<>0";
         //区域
         if ($region_id) {
@@ -929,10 +936,10 @@ class AddressAction extends Controller
                     }
                 }
             }
-            if($info_sql){
+            if($info_sql && $radius){
                 foreach($info_sql as $k=>$v){
                    $actual_distance = Common::getDistanceByLatLng($lat,$lng,$v['lat'],$v['lng']);
-                   if($actual_distance>5000){
+                   if($actual_distance>$radius){
                       unset($info_sql[$k]);
                     }
               }
