@@ -127,7 +127,7 @@ class AddressAction extends Controller
     {
         $redbaglist = $this->model->table('redbag')->where('status=0')->findAll();
         foreach($redbaglist as $k=>$v){
-            if($v['total_amount']=0.00){
+            if($v['total_amount']=='0.00'){
                 $this->model->table('redbag')->data(array('total_amount'=>$v['amount']))->where('id='.$v['id'])->update();
             }
         }
