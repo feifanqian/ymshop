@@ -1063,7 +1063,7 @@ class Common {
                 if($seller['lng'] == '' && $seller['lat'] == ''){
                    $model->table('redbag')->data(array('amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'pay_status'=>1))->insert(); 
                }else{
-                $rand1 = rand(-9,9)/1000;
+                $rand1 = rand(-90,90)/10000;
                 if($rand1>0){
                     $rand2 = 0.009-$rand1;
                 }else{
