@@ -193,16 +193,8 @@ class AddressAction extends Controller
             $money = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join user as u on r.user_id=u.id')->fields('sum(r.amount) as total_money')->where('r.user_id='.$user_id)->order('r.id desc')->findAll();
             if($list){
                 foreach($list['data'] as $k=>$v){
-                    $redbag_get = $model->table('redbag_get')->where('redbag_id='.$v['id'])->findAll();
-                    if(!$redbag_get){
-                        $total_get_money = 0;
-                    }else{
-                        foreach($redbag_get as $k=>$v){
-                            $total_get_money+=$v['amount'];
-                        }
-                    }
-                    $list['data'][$k]['total_get_money'] = sprintf('%.2f',$total_get_money);
-                    $list['data'][$k]['total_money'] = sprintf('%.2f',$total_get_money+$v['amount']);
+                    $list['data'][$k]['total_get_money'] = sprintf('%.2f',$v['total_amount']-$v['amount']);
+                    $list['data'][$k]['total_money'] = sprintf('%.2f',$v['total_amount']);
                 }
             }
         }elseif($type==2){
@@ -372,6 +364,7 @@ class AddressAction extends Controller
         $data = array(
              'order_no'=>'redbag'.$order_no,
              'amount'=>$total_amount,
+             'total_amount'=>$total_amount,
              'info'=>$info,
              'lng'=>$lng,
              'lat'=>$lat,
