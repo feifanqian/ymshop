@@ -434,8 +434,8 @@ class AddressAction extends Controller
                        $max_money = ($redbag['amount']-$num*0.01)*100; //单位分
                        //随机分配红包金额
                        $get_money = rand(1,$max_money)/100; // 单位元
-                   }else{ //普通红包没人等额
-                      $get_money = round($redbag['amount']/$redbag['num'],2);
+                   }else{ //普通红包每人等额
+                      $get_money = round($redbag['total_amount']/$redbag['num'],2);
                    }    
                 }else{
                    $get_money = $redbag['amount']; // 单位元
@@ -482,15 +482,18 @@ class AddressAction extends Controller
         $total_get_money = 0;
         $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
         $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->order('rg.id desc')->findAll();
-        if($list){
-            foreach($list as $k=>$v){
-                $total_get_money+=$v['amount'];
-            }
-        }else{
-            $list = array(); 
+        // if($list){
+        //     foreach($list as $k=>$v){
+        //         $total_get_money+=$v['amount'];
+        //     }
+        // }else{
+        //     $list = array(); 
+        // }
+        if(!$list){
+            $list = array();
         }
-        $newredbag['total_get_money'] = sprintf('%.2f',$total_get_money);
-        $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_get_money']+$newredbag['amount']);
+        $newredbag['total_get_money'] = sprintf('%.2f',$newredbag['total_amount']-$newredbag['amount']);
+        $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_amount']);
         return array(
              'newredbag'=>$newredbag,
              'list'=>$list
