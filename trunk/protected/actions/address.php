@@ -500,6 +500,18 @@ class AddressAction extends Controller
             );
     }
 
+    public function redbagHadOpened(){
+        $id = Filter::int(Req::args('id'));
+        $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
+        if($redbag_get){
+            $had_opened = 1;
+        }else{
+            $had_opened = 0;
+        }
+        $this->code = 0;
+        $this->content['had_opened'] = $had_opened;
+    }
+
     public function promoterList()
     {
         $page = Filter::int(Req::args('page'));
