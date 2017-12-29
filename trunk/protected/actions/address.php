@@ -162,10 +162,10 @@ class AddressAction extends Controller
                  }  
             }  
         }
-        $new_list = $model->table('redbag as r')->join('left join district_promoter as dp on r.user_id=dp.user_id')->fields('r.*,dp.shop_name,dp.picture')->where($where)->order('r.id desc')->findAll();
+        $new_list = $model->table('redbag as r')->join('left join customer as c on c.user_id=r.user_id left join district_promoter as dp on r.user_id=dp.user_id')->fields('r.*,c.real_name,dp.shop_name,dp.picture')->where($where)->order('r.id desc')->findAll();
         if($new_list){
             foreach($new_list as $k => $v){
-                $new_list[$k]['bag_name'] = $v['shop_name'].'的红包';
+                $new_list[$k]['bag_name'] = $v['shop_name']!=''? $v['shop_name'].'的红包' : $v['real_name'].'的红包';
                 $new_list[$k]['avatar'] = $v['picture'];
                 if($new_list[$k]['avatar']==null){
                     $new_list[$k]['avatar']='';
@@ -487,7 +487,13 @@ class AddressAction extends Controller
 
     public function newredbag($id){
         $total_get_money = 0;
-        $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
+        $newredbag = $this->model->table('redbag as r')->join('left join user as u on u.id=r.user_id left join district_promoter as dp on r.user_id=dp.user_id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,dp.picture,dp.shop_name,c.real_name')->where('r.id='.$id)->find();
+        if(!$newredbag){
+            $this->code = 1200;
+            return;
+        }
+        $newredbag['real_name'] = $newredbag['shop_name'];
+        $newredbag['avatar'] = $newredbag['picture'];
         $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->order('rg.id desc')->findAll();
         // if($list){
         //     foreach($list as $k=>$v){
