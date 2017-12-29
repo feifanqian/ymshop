@@ -928,10 +928,10 @@ class AddressAction extends Controller
                         unset($info_sql[$k]);
                     }
                 }
-                $actual_distance = Common::getDistanceByLatLng($lat,$lng,$info_sql[$k]['lat'],$info_sql[$k]['lng']);
-                if($actual_distance>$radius){
-                  unset($info_sql[$k]);
-                }
+                // $actual_distance = Common::getDistanceByLatLng($lat,$lng,$info_sql[$k]['lat'],$info_sql[$k]['lng']);
+                // if($actual_distance>$radius){
+                //   unset($info_sql[$k]);
+                // }
             }
         }
         $this->code = 0;
