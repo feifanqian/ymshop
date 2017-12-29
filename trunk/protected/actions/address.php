@@ -454,8 +454,10 @@ class AddressAction extends Controller
                $exist = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
                if($exist){ //已领取过该红包 
                     $result = $this->newredbag($id);
+                    $get_money = $exist['amount'];
                     $this->code = 0;
                     $this->content['redbag'] = $result['newredbag'];
+                    $this->content['get_money'] = sprintf('%.2f',$get_money);
                     $this->content['list'] = $result['list'];
                     return;
                  // $this->code = 1198;
