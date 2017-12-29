@@ -163,18 +163,24 @@ class AddressAction extends Controller
             }  
         }
         $new_list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join user as u on r.user_id=u.id')->fields('r.*,c.real_name,u.avatar')->where($where)->order('r.id desc')->findAll();
-        foreach($new_list as $k => $v){
-            $new_list[$k]['bag_name'] = $v['real_name'].'的红包';
-            if($new_list[$k]['avatar']==null){
-                $new_list[$k]['avatar']='';
+        if($new_list){
+            foreach($new_list as $k => $v){
+                $new_list[$k]['bag_name'] = $v['real_name'].'的红包';
+                if($new_list[$k]['avatar']==null){
+                    $new_list[$k]['avatar']='';
+                }
+                if($lng && $lat && $radius){
+                   $actual_distance = Common::getDistanceByLatLng($lat,$lng,$v['lat'],$v['lng']);
+                   if($actual_distance>$radius){
+                    unset($new_list[$k]);
+                   }
+                }
             }
-            if($lng && $lat && $radius){
-               $actual_distance = Common::getDistanceByLatLng($lat,$lng,$v['lat'],$v['lng']);
-               if($actual_distance>$radius){
-                unset($new_list[$k]);
-               }
-            }
+            $new_list = array_values($new_list);
+        }else{
+            $new_list = array();
         }
+        
         $this->code = 0;
         $this->content = $new_list;
     }
@@ -968,6 +974,8 @@ class AddressAction extends Controller
               }
             }
             $info_sql = array_values($info_sql); 
+        }else{
+            $info_sql = array();
         }
         $this->code = 0;
         $this->content = $info_sql; 
