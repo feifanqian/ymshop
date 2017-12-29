@@ -127,6 +127,7 @@ class AddressAction extends Controller
     {
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
+        $radius = Req::args('radius');//半径
         $where = "r.pay_status=1 and r.lng != '' and r.lat != ''";
         //搜索附近
         if($lng && $lat){
@@ -166,6 +167,12 @@ class AddressAction extends Controller
             $new_list[$k]['bag_name'] = $v['real_name'].'的红包';
             if($new_list[$k]['avatar']==null){
                 $new_list[$k]['avatar']='';
+            }
+            if($lng && $lat && $radius){
+               $actual_distance = Common::getDistanceByLatLng($lat,$lng,$v['lat'],$v['lng']);
+               if($actual_distance>$radius){
+                unset($new_list[$k]);
+               }
             }
         }
         $this->code = 0;
@@ -464,7 +471,7 @@ class AddressAction extends Controller
     public function newredbag($id){
         $total_get_money = 0;
         $newredbag = $this->model->table('redbag as r')->join('left join user as u on r.user_id=u.id left join customer as c on r.user_id=c.user_id')->fields('r.*,u.avatar,c.real_name')->where('r.id='.$id)->find();
-        $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->findAll();
+        $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->order('rg.id desc')->findAll();
         if($list){
             foreach($list as $k=>$v){
                 $total_get_money+=$v['amount'];
