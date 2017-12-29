@@ -195,18 +195,21 @@ class AddressAction extends Controller
         $model = new Model();
         $user_id = $this->user['id'];
         $total_get_money = 0;
-        if($type==1){
+        if($type==1){ // 我发出去的红包
             $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join user as u on r.user_id=u.id')->fields('r.*,c.real_name,u.avatar')->where('r.pay_status=1 and r.user_id='.$user_id)->order('r.id desc')->findPage($page, 10);
-            $money = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join user as u on r.user_id=u.id')->fields('sum(r.amount) as total_money')->where('r.user_id='.$user_id)->order('r.id desc')->findAll();
+            $money = $model->table('redbag as r')->fields('sum(r.total_amount) as total_money')->where('r.pay_status=1 and r.user_id='.$user_id)->order('r.id desc')->findAll();
             if($list){
                 foreach($list['data'] as $k=>$v){
                     $list['data'][$k]['total_get_money'] = sprintf('%.2f',$v['total_amount']-$v['amount']);
                     $list['data'][$k]['total_money'] = sprintf('%.2f',$v['total_amount']);
                 }
             }
-        }elseif($type==2){
-            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join redbag_get as rg on r.id = rg.redbag_id left join user as u on r.user_id=u.id')->fields('r.id,r.amount,r.type,c.real_name,rg.amount as get_money,rg.get_date,u.avatar')->where("r.status=1 and rg.get_user_id=".$user_id)->order('rg.id desc')->findPage($page, 10);
-            $money = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join redbag_get as rg on r.id = rg.redbag_id left join user as u on r.user_id=u.id')->fields('sum(rg.amount) as total_money')->where("r.status=1 and rg.get_user_id=".$user_id)->order('rg.id desc')->findAll();
+        }elseif($type==2){ // 我抢到的红包
+            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join redbag_get as rg on r.id = rg.redbag_id left join user as u on r.user_id=u.id')->fields('r.id,r.amount,r.type,c.real_name,rg.amount as get_money,rg.get_date,u.avatar')->where("r.status!=0 and rg.get_user_id=".$user_id)->order('rg.id desc')->findPage($page, 10);
+            $money = $model->table('redbag as r')->join('left join redbag_get as rg on r.id = rg.redbag_id')->fields('sum(rg.amount) as total_money')->where("r.status!=0 and rg.get_user_id=".$user_id)->order('rg.id desc')->findAll();
+        }else{
+            $this->code = 1201;
+            return;
         }
         
         if($list && $money){
