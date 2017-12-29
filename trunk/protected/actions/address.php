@@ -229,8 +229,8 @@ class AddressAction extends Controller
         $payment_id = Filter::int(Req::args('payment_id'));
         $amount = round(Filter::float(Req::args('amount')),2);
         $info = Filter::text(Req::args('info'));
-        $distance = 10; // 设置距离红包打开距离，默认10米
-        $range = Filter::int(Req::args('range'));
+        $distance = 10; // 设置距离红包打开距离，默认10米，没用上
+        $range = Filter::int(Req::args('range')); // 单位百米
         $num = Filter::int(Req::args('num'));
         $type = Filter::int(Req::args('type'));
         $redbag_type = Filter::int(Req::args('redbag_type'));
