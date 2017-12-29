@@ -407,7 +407,7 @@ class AddressAction extends Controller
 
     public function redbagOpen(){
         $id = Filter::int(Req::args('redbag_id'));
-        $type = Filter::int(Req::args('type'));
+        $type = Filter::int(Req::args('type')); // 1抢 2看
         $total_get_money = 0;
         if(!$type){
             $type = 1; 
@@ -482,8 +482,15 @@ class AddressAction extends Controller
             }
         }else{ //查看红包领取详情
             $result = $this->newredbag($id);
+            $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
+            if($redbag_get){
+                $get_money = $redbag_get['amount']; 
+            }else{
+                $get_money = 0.00;
+            }
             $this->code = 0;
             $this->content['redbag'] = $result['newredbag'];
+            $this->content['get_money'] = sprintf('%.2f',$get_money);
             $this->content['list'] = $result['list'];
             return;
         }
