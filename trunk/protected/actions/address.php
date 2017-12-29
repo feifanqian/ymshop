@@ -936,7 +936,8 @@ class AddressAction extends Controller
                       unset($info_sql[$k]);
                     }
               }
-            } 
+            }
+            $info_sql = array_values($info_sql); 
         }
         $this->code = 0;
         $this->content = $info_sql; 
