@@ -418,15 +418,14 @@ class AddressAction extends Controller
             return;
         }
         if($type==1){  // 抢红包
-            if($redbag['status']==1 && $redbag['open_num']==$redbag['num']){
+            if($redbag['status']==1 && $redbag['open_num']==$redbag['num']){ // 红包没了
                 $this->model->table('redbag')->data(array('status'=>2))->where('id='.$id)->update();
                 $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
                 if($redbag_get){  //红包已被抢光了自己参与了
-                   $get_money = $redbag_get['amount']; 
                    $result = $this->newredbag($id);
                     $this->code = 0;
                     $this->content['redbag'] = $result['newredbag'];
-                    $this->content['get_money'] = sprintf('%.2f',$get_money);
+                    $this->content['get_money'] = $result['get_money'];
                     $this->content['list'] = $result['list'];
                    return; 
                 }else{  //没抢到
@@ -437,7 +436,7 @@ class AddressAction extends Controller
             //计算剩余可领取红包人数
             $num = $redbag['num']-$redbag['open_num'];
             //按人数随机分配红包金额
-            if($num>0){     
+            if($num>0){ // 开始抢红包    
                 if($num>1){
                    if($redbag['redbag_type']==1){ //拼手气红包随机分配金额
                        //计算理论可领取最大红包金额，以分为最小单位
@@ -454,43 +453,37 @@ class AddressAction extends Controller
                $exist = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
                if($exist){ //已领取过该红包 
                     $result = $this->newredbag($id);
-                    $get_money = $exist['amount'];
                     $this->code = 0;
                     $this->content['redbag'] = $result['newredbag'];
-                    $this->content['get_money'] = sprintf('%.2f',$get_money);
+                    $this->content['get_money'] = $result['get_money'];
                     $this->content['list'] = $result['list'];
                     return;
                  // $this->code = 1198;
                  // return;
-               }else{
+               }else{ // 抢到红包了
                  $this->model->table('redbag')->data(array('status'=>1,'amount'=>"`amount`-({$get_money})",'open_time'=>date('Y-m-d H:i:s'),'open_num'=>"`open_num`+1"))->where('id='.$id)->update();
                  $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id'],'amount'=>$get_money,'get_date'=>date('Y-m-d H:i:s')))->insert();
-               }
-               $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
-               Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
                
-               $result = $this->newredbag($id);
-               $this->code = 0;
-               $this->content['redbag'] = $result['newredbag'];
-               $this->content['get_money'] = sprintf('%.2f',$get_money);
-               $this->content['list'] = $result['list'];
-               return;
-            }else{
+                 $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
+                 Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
+               
+                 $result = $this->newredbag($id);
+                $this->code = 0;
+                $this->content['redbag'] = $result['newredbag'];
+                $this->content['get_money'] = $get_money;
+                $this->content['list'] = $result['list'];
+                return;
+              }
+            }else{  // 手慢红包无
                $this->model->table('redbag')->data(array('status'=>2))->where('id='.$id)->update();
                $this->code = 1188;
                return; 
             }
-        }else{ //查看红包领取详情
+        }else{ // 只查看红包领取详情不抢
             $result = $this->newredbag($id);
-            $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
-            if($redbag_get){
-                $get_money = $redbag_get['amount']; 
-            }else{
-                $get_money = 0.00;
-            }
             $this->code = 0;
             $this->content['redbag'] = $result['newredbag'];
-            $this->content['get_money'] = sprintf('%.2f',$get_money);
+            $this->content['get_money'] = $result['get_money'];
             $this->content['list'] = $result['list'];
             return;
         }
@@ -519,8 +512,15 @@ class AddressAction extends Controller
         }
         $newredbag['total_get_money'] = sprintf('%.2f',$newredbag['total_amount']-$newredbag['amount']);
         $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_amount']);
+        $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
+        if($redbag_get){
+            $get_money = $redbag_get['amount']; 
+        }else{
+            $get_money = 0.00;
+        }
         return array(
              'newredbag'=>$newredbag,
+             'get_money'=>sprintf('%.2f',$get_money),
              'list'=>$list
             );
     }
