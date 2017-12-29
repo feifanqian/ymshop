@@ -128,7 +128,7 @@ class AddressAction extends Controller
         $lng = Req::args('lng');//经度
         $lat = Req::args('lat');//纬度
         $radius = Req::args('radius');//半径
-        $where = "r.pay_status=1 and r.lng != '' and r.lat != ''";
+        $where = "r.pay_status=1 and r.status!=2 and r.lng != '' and r.lat != ''";
         //搜索附近
         if($lng && $lat){
             if(Req::args('distance')!=''){
@@ -191,8 +191,8 @@ class AddressAction extends Controller
             $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join user as u on r.user_id=u.id')->fields('r.*,c.real_name,u.avatar')->where('r.pay_status=1 and r.user_id='.$user_id)->order('r.id desc')->findPage($page, 10);
             $money = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join user as u on r.user_id=u.id')->fields('sum(r.amount) as total_money')->where('r.user_id='.$user_id)->order('r.id desc')->findAll();
         }elseif($type==2){
-            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join redbag_get as rg on r.id = rg.redbag_id left join user as u on r.user_id=u.id')->fields('r.id,r.amount,r.type,c.real_name,rg.amount as get_money,rg.get_date,u.avatar')->where("r.status=1 and rg.get_user_id=".$user_id)->order('r.id desc')->findPage($page, 10);
-            $money = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join redbag_get as rg on r.id = rg.redbag_id left join user as u on r.user_id=u.id')->fields('sum(rg.amount) as total_money')->where("r.status=1 and rg.get_user_id=".$user_id)->order('r.id desc')->findAll();
+            $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join redbag_get as rg on r.id = rg.redbag_id left join user as u on r.user_id=u.id')->fields('r.id,r.amount,r.type,c.real_name,rg.amount as get_money,rg.get_date,u.avatar')->where("r.status=1 and rg.get_user_id=".$user_id)->order('rg.id desc')->findPage($page, 10);
+            $money = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id left join redbag_get as rg on r.id = rg.redbag_id left join user as u on r.user_id=u.id')->fields('sum(rg.amount) as total_money')->where("r.status=1 and rg.get_user_id=".$user_id)->order('rg.id desc')->findAll();
         }
         
         if($list && $money){
@@ -455,7 +455,7 @@ class AddressAction extends Controller
                return;
             }else{
                $this->model->table('redbag')->data(array('status'=>2))->where('id='.$id)->update();
-               $this->code = 1189;
+               $this->code = 1188;
                return; 
             }
         }else{ //查看红包领取详情
