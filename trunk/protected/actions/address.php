@@ -724,7 +724,7 @@ class AddressAction extends Controller
         $which_station = Filter::int(Req::args('which_station'));//哪个站
         $customer = Req::args('customer');//等于1筛选出经销商
         $distance = Req::args('distance');//距离
-        $radius = 5000;
+        $radius = 5; //默认5公里
         $where = "lat<>0";
         //区域
         if ($region_id) {
@@ -793,6 +793,9 @@ class AddressAction extends Controller
             $s = 2 * asin(sqrt(pow(sin($a / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2))) * 6371;
             $d = round($s, 2);//保留小数点后两位
             $info_sql[$key]['dist'] = $d;
+            if($d>$radius){
+                unset($info_sql[$key]);
+            }
         }
         //距离离我最近
         $arr = array();
