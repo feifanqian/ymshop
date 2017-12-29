@@ -793,9 +793,6 @@ class AddressAction extends Controller
             $s = 2 * asin(sqrt(pow(sin($a / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2))) * 6371;
             $d = round($s, 2);//保留小数点后两位
             $info_sql[$key]['dist'] = $d;
-            if($d>$radius){
-                unset($info_sql[$key]);
-            }
         }
         //距离离我最近
         $arr = array();
@@ -931,11 +928,15 @@ class AddressAction extends Controller
                         unset($info_sql[$k]);
                     }
                 }
-                // $actual_distance = Common::getDistanceByLatLng($lat,$lng,$info_sql[$k]['lat'],$info_sql[$k]['lng']);
-                // if($actual_distance>$radius){
-                //   unset($info_sql[$k]);
-                // }
             }
+            if($info_sql){
+                foreach($info_sql as $k=>$v){
+                   $actual_distance = Common::getDistanceByLatLng($lat,$lng,$v['lat'],$v['lng']);
+                   if($actual_distance>5000){
+                      unset($info_sql[$k]);
+                    }
+              }
+            } 
         }
         $this->code = 0;
         $this->content = $info_sql; 
