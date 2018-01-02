@@ -251,7 +251,7 @@
 <!-- Start 商品展示-->
 {set:$i=0;}
 {list:items=$category item=$categ}
-{if:$categ['nav_show']==1}
+{if:$categ['list_show']==1}
 {set:$idx=$i%4;}
 {set:$i++;}
 <div class="nctouch-home-block item-goods item-category swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 10,'freeMode': true,'pagination': ''}">
