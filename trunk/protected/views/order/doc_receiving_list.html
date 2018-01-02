@@ -77,6 +77,10 @@
     function export_excel() {
       $("#export_form").submit();
     }
+    function Condition(id){
+        $("body").Condition({input:id,data:{'od.order_no':{name:'订单编号'},'us.name':{name:'用户名'},'dr.pay_status':{name:'支付状态',values:{0:'等待支付',1:'已支付'}},'dr.payment_id':{name:'支付方式',values:{{$payment}}}
+      }});
+    }
     function view(id){
         art.dialog.open("{url:/order/doc_receiving_view/id/}"+id,{id:'view_dialog',title:'查看收款单',resize:false,width:900,height:320});
     }
