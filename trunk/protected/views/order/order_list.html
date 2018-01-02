@@ -248,7 +248,6 @@
                 pendingData['refund'] = returns.data.pendingRefundCount;
                 if(dialog_status=='on'){
                      refundNotice(returns.data.pendingRefundCount);
-                     huadianNotice(returns.data.pendingHuadianOrder);
                      undeliveryNotice(returns.data.undeliveryOrder);
                }
                setInterval("Update();",10000); 
@@ -288,25 +287,6 @@
             tips: 3,
             time: 20000
       });
-    }
-    function huadianNotice(num){
-        if(dialog_status=='off'){
-           return false;
-       }
-       if($('#huadianNotice').length==0){
-            layer.open({
-                        id:'huadianNotice',
-                        type: 1,
-                        offset:['378px','17px'],
-                        move: '.move',
-                        anim:1,
-                        shade: false,
-                        title: false, //不显示标题
-                        content: "<p style='background-color:rgba(107, 0, 255, 0.93);width:160px;'><i class='icon-search move' style='color:rgb(0, 255, 104);'></i><a href='/order/order_list?condition=and--type--eq--4__and--otherpay_status--eq--1__and--huabipay_status--eq--0__and--od.status--ne--6__and--od.status--ne--5' style='color:white;'> 未确定的华点订单<span class='badge'>"+num+"</span></a></p>", 
-           });
-        }else{
-             $('#huadianNotice .badge').text(num);
-        }
     }
     function undeliveryNotice(num){
         if(dialog_status=='off'){
@@ -366,15 +346,6 @@
                     setTimeout(function(){
                            $('#undeliveryNotice .badge').removeClass('shan');
                      },20000);
-               }
-               if(pendingData['huadian'] < returns.data.pendingHuadianOrder){
-                   pendingData['huadian'] = returns.data.pendingHuadianOrder;
-                   huadianNotice(pendingData['huadian']);
-                   change=true;
-                   $('#huadianNotice .badge').addClass('shan');
-                   setTimeout(function(){
-                        $('#huadianNotice .badge').removeClass('shan');
-                   },20000);
                }
                if(pendingData['refund'] < returns.data.pendingRefundCount){
                     pendingData['refund'] = returns.data.pendingRefundCount;
