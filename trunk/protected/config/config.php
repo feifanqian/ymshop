@@ -16,7 +16,7 @@
     'tablePre' => 'tiny_',
     'host' => 'localhost',
     'user' => 'root',
-    'password' => '570428',
+    'password' => '',
     'name' => 'shop',
     'port' => '3306',
   ),

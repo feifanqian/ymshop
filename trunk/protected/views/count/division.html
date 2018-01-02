@@ -15,6 +15,7 @@
     var ExcelUrls = "{url:/count/division_byexcel/s_time/}";
     $(function () {
         $("#output_excel").attr("href",ExcelUrl+$("input[name=s_time]").val());
+        $("#outputs_excel").attr("href",ExcelUrls+$("input[name=s_time]").val());
         $("input[name=s_time]").on("change",function(){
             $("#output_excel").attr("href",ExcelUrl+$(this).val());
             $("#outputs_excel").attr("href",ExcelUrls+$(this).val());
