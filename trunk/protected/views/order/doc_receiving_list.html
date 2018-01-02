@@ -4,6 +4,7 @@
 <div class="tools_bar clearfix">
     <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
     <a class="icon-delicious" href="{url:/order/doc_receiving_list}"> 显示全部 </a>
+    <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a>
     
     <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
     
@@ -45,10 +46,41 @@
         <textarea id="order_remark" name="remark"></textarea>
     <div class="tc"><button class="focus_button" onclick="submit_status()">保存</button></div>
 </div>
+<div id="excel_box" style="display: none;width:600px;">
+    <h1 class="page_title">Excel导出</h1>
+    <div class="form2">
+        <form  id="export_form" action="{url:/order/doc_export_excel}" method="post" >
+           <dl class="lineD">
+          <dt>筛选条件：</dt>
+          <dd><input type="hidden"  id="condition_input_excel" name="condition" value="{$condition}"><label></label> <label><a href="javascript:;" onclick="Condition('#condition_input_excel')"  class="button" > 高级筛选</a></label>
+          </dd>
+          </dl>
+        <dl class="lineD">
+          <dt>导出字段：</dt>
+          <dd>
+            <label><input type="checkbox" name="fields[]" value="order_no" checked="checked"> 订单编号</label>
+            <label><input type="checkbox" name="fields[]" value="name"> 用户名</label>
+            <label><input type="checkbox" name="fields[]" value="amount"> 金额</label>
+            <label><input type="checkbox" name="fields[]" value="pay_status"> 支付状态</label>
+            <label><input type="checkbox" name="fields[]" value="payment_id"> 支付方式</label>
+            <label><input type="checkbox" name="fields[]" value="payment_time"> 时间</label>
+          </dd>
+          </dl>
+        <div class="tc mt10"><a href="javascript:;" onclick="export_excel()" class="button">导出</a></div>
+        </form>
+    </div>
+</div>
 <script type="text/javascript">
+    function export_excel_dialog(){
+        art.dialog({id:'export_excel_dialog',title:'Excel导出',lock:true,opacity:0.1,width:600,height:200,content:document.getElementById("excel_box")});
+    }
+    function export_excel() {
+      $("#export_form").submit();
+    }
     function view(id){
         art.dialog.open("{url:/order/doc_receiving_view/id/}"+id,{id:'view_dialog',title:'查看收款单',resize:false,width:900,height:320});
-    }{set:$payment=""}
+    }
+    {set:$payment=""}
     {query:name=payment}{set:$payment.=$item['id'].':'."'".$item['pay_name']."',"}{/query}
     {set:$payment=trim($payment,',');}
     $("#condition").on("click",function(){

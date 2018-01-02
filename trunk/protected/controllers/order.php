@@ -819,4 +819,41 @@ class OrderController extends Controller {
                 $this->redirect("offlineorder_list", false, Req::args());
             }
     }
+
+    public function doc_export_excel() {
+        $this->layout = '';
+        $condition = Req::args("condition");
+        $fields = Req::args("fields");
+        $condition = Common::str2where($condition);
+        $model = new Model("doc_receiving as dr");
+        if ($condition) {
+            $items = $model->fields("dr.id,dr.doc_type,py.pay_name,dr.amount,us.name,od.type,od.order_no,dr.create_time,dr.payment_time,od.pay_status as pay_status")->join("left join user as u on dr.user_id = u.id left join payment as py on dr.payment_id = py.id left join order as od on dr.order_id = od.id")->where($condition)->findAll();
+            if ($items) {
+                header("Content-type:application/vnd.ms-excel");
+                header("Content-Disposition:filename=csat.xls");
+                $fields_array = array('order_no' => '订单编号', 'name' => '用户名', 'amount' => '金额', 'pay_status' => '支付状态', 'payment_id' => '支付方式', 'payment_time' => '时间');
+                $str = "<table border=1><tr>";
+                foreach ($fields as $value) {
+                    $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
+                }
+                $str .= "</tr>";
+                foreach ($items as $item) {
+                    $str .= "<tr>";
+                    foreach ($fields as $value) {
+                        $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$value]) . "</td>";
+                    }
+                    $str .= "</tr>";
+                }
+                $str .= "</table>";
+                echo $str;
+                exit;
+            } else {
+                $this->msg = array("warning", "没有符合该筛选条件的数据，请重新筛选！");
+                $this->redirect("doc_receiving_list", false, Req::args());
+            }
+        } else {
+            $this->msg = array("warning", "请选择筛选条件后再导出！");
+            $this->redirect("doc_receiving_list", false);
+        }
+    }
 }
