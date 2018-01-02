@@ -933,4 +933,20 @@ class MarketingController extends Controller {
         }
         $this->redirect('redbag_list');
     }
+
+    public function index_notice_edit(){
+        $model = new Model('index_notice');
+        $notice = $model->where('id=1')->find();
+        $this->assign('notice', $notice);
+        $this->redirect();
+    }
+
+    public function index_notice_save(){
+        $title = Req::args('title');
+        $content = Req::args('content');
+        $is_disply = Req::args('is_disply');
+        $model = new Model('index_notice');
+        $model->data(array('title'=>$title,'content'=>$content,'is_disply'=>$is_disply))->where('id=1')->update();
+        $this->redirect('index_notice_edit');
+    }
 }
