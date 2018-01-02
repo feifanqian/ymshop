@@ -207,8 +207,8 @@
 
 <!-- S 商品展示 -->
 <div class="lists container">
-    {set:$cate_index=0;} {list:items=$categorys item=$categ}
-    {if:$categ['list_show']==1}
+    {set:$cate_index=0;} {list:items=$category item=$categ}
+    {if:$categ['nav_show']==1}
     {set:$cate_index++;}
     <div>
         <div class="title-nav">
