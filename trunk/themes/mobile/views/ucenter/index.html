@@ -303,7 +303,8 @@
 </script>
 {if:$user['id']==42608}
     {if:$notice==1}
-        
+        {if:isset($index_notice)}
+            {if:$index_notice['is_disply']==1}
             <script type="text/javascript">
                 function callnotice(){
                     // var contents = {$index_notice['content']};
@@ -311,13 +312,14 @@
                         type: 3,
                         skin: 'layui-layer-rim', //加上边框
                         area: ['100%', '400px'], //宽高
-                        content: "<a href='javascript:;'><img src='/static/images/yuandan.jpg'></a>"
+                        content: {$index_notice['content']}
                     });
                 }
                 window.onload = function () {
                     callnotice();
                 }
             </script>
-                
+            {/if}
+        {/if}    
     {/if}
 {/if}
