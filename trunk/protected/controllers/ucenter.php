@@ -1083,6 +1083,10 @@ class UcenterController extends Controller
                 }
             }
         }
+        $index_notice = $this->model->table('index_notice')->where('id=1')->find();
+        if($index_notice){
+            $this->assign('index_notice', $index_notice);
+        }
         $this->assign("status", $status);
         $this->assign("where", $where);
         $this->assign("orderlist", $orders);
@@ -1636,6 +1640,10 @@ class UcenterController extends Controller
                 $select4 = $this->model->table("products as p")->join("goods as g on p.goods_id=g.id")->where("p.id in ({$where})")->fields("p.id,g.img,g.name,g.id as goods_id")->order("field(p.id,$where)")->findAll();
                 $this->assign("select4", $select4);
             }
+        }
+        $index_notice = $this->model->table('index_notice')->where('id=1')->find();
+        if($index_notice){
+            $this->assign('index_notice', $index_notice);
         }
         $this->assign("notice", $notice);
         $this->assign('package_set', $package_set);

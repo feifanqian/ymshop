@@ -1314,6 +1314,10 @@ class IndexController extends Controller {
         $pointflash_count = count($pointflash);
         $flash = $this->model->table('flash_sale as fs')->join('left join goods as go on fs.goods_id=go.id')->fields('fs.*,go.name')->findAll();
         $flash_count = count($flash);
+        $index_notice = $this->model->table('index_notice')->where('id=1')->find();
+        if($index_notice){
+            $this->assign('index_notice', $index_notice);
+        }
         $this->assign('pointflash_count',$pointflash_count);
         $this->assign('flash_count',$flash_count);
         $this->assign('index',$index);
