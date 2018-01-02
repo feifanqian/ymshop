@@ -1,0 +1,29 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('editor');}
+{echo:JS::import('form');}
+<div id="obj_form" class="form2">
+    <form action="{url:/admin/index_notice_save}" method="post" >
+    <input type="hidden" name="id" value="{$notice['id']|1}">
+    <dl class="lineD">
+      <dt><b class="red">*</b>标题：</dt>
+      <dd>
+        <input name="title" type="text" value="{$notice['title']}" alt=""/><label></label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt>是否展示：</dt>
+      <dd>
+        <label><input type="radio" name="is_disply" value="1" {if:$notice['is_disply']==1}checked="checked"{/if}>是</label>
+        <label><input type="radio" name="is_disply" value="0" {if:$notice['is_disply']==0}checked="checked"{/if}>否</label>
+      </dd>
+    </dl>
+      <dl class="lineD">
+      <dt><b class="red">*</b>内容：</dt>
+      <dd>
+          <textarea id="contentdetail" class="kindeditor" name="content" alt="" style="width:700px;height:260px;visibility:hidden;">{$notice['content']}</textarea>
+      </dd>
+      </dl>
+    <div style="text-align:center"><input type="submit" value="提交" class="button"></div>
+    </form>
+</div>

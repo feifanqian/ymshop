@@ -22,6 +22,7 @@ class Menu {
             '/admin/msg_template_edit' => array('name' => '信息模板编辑', 'parent' => 'config'),
             '/admin/notice_template_list' => array('name' => '提醒管理', 'parent' => 'config'),
             '/admin/notice_template_edit' => array('name' => '提醒编辑', 'parent' => 'config'),
+            '/admin/index_notice_edit' => array('name' => '通知公告', 'parent' => 'config'),
             '/admin/oauth_list' => array('name' => '开放登录', 'parent' => 'third'),
             '/admin/oauth_edit' => array('name' => '开放登录编辑', 'parent' => 'third'),
             '/admin/class_config_list' => array('name' => '第三方列表', 'parent' => 'third'),
