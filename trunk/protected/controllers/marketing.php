@@ -934,7 +934,7 @@ class MarketingController extends Controller {
         $this->redirect('redbag_list');
     }
 
-    public function index_notice_edit(){
+    public function index_notice(){
         $model = new Model('index_notice');
         $notice = $model->where('id=1')->find();
         $this->assign('notice', $notice);
@@ -947,6 +947,6 @@ class MarketingController extends Controller {
         $is_disply = Req::args('is_disply');
         $model = new Model('index_notice');
         $model->data(array('title'=>$title,'content'=>$content,'is_disply'=>$is_disply))->where('id=1')->update();
-        $this->redirect('index_notice_edit');
+        $this->redirect('index_notice');
     }
 }
