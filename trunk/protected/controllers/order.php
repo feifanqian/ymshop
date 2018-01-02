@@ -834,8 +834,8 @@ class OrderController extends Controller {
             $items = $model->fields("dr.id,dr.doc_type,py.pay_name,dr.amount,us.name,od.type,od.order_no,dr.create_time,dr.payment_time,od.pay_status as pay_status")->join("left join user as us on dr.user_id = us.id left join payment as py on dr.payment_id = py.id left join order as od on dr.order_id = od.id")->where($where)->findAll();
             if ($items) {
                 header("Content-type:application/vnd.ms-excel");
-                header("Content-Disposition:filename=csat.xls");
-                $fields_array = array('order_no' => '订单编号', 'name' => '用户名', 'amount' => '金额', 'pay_status' => '支付状态', 'payment_id' => '支付方式', 'payment_time' => '时间');
+                header("Content-Disposition:filename=doc_receiving_list.xls");
+                $fields_array = array('order_no' => '订单编号', 'name' => '用户名', 'amount' => '金额', 'pay_status' => '支付状态', 'pay_name' => '支付方式', 'payment_time' => '时间');
                 $str = "<table border=1><tr>";
                 foreach ($fields as $value) {
                     $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
