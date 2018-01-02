@@ -750,12 +750,12 @@ class CustomerController extends Controller {
         }else{
             $where = '1=1';
         } 
-            $items = $model->fields("wd.*,us.name as uname")->join("left join user as us on wd.user_id = us.id")->where($where)->order('wd.id desc')->findAll();
+            $items = $model->where($where)->order('wd.id desc')->findAll();
             
             if ($items) {
                 header("Content-type:application/vnd.ms-excel");
                 header("Content-Disposition:filename=doc_receiving_list.xls");
-                $fields_array = array('withdraw_no' => '提现单号', 'uname' => '用户名', 'amount' => '金额', 'open_name' => '开户名', 'open_bank' => '开户行','card_no'=>'银行卡号', 'apply_date' => '时间');
+                $fields_array = array('withdraw_no' => '提现单号','amount' => '金额', 'open_name' => '开户名', 'open_bank' => '开户行','card_no'=>'银行卡号', 'apply_date' => '时间');
                 $str = "<table border=1><tr>";
                 foreach ($fields as $value) {
                     $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
