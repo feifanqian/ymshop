@@ -7,6 +7,7 @@
     <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/customer/withdraw_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>
     <a class="icon-delicious" href="{url:/customer/withdraw_list}"> 全部记录</a>
     <a class="icon-eye" href="javascript:balanceQuery();"> 查询代付备用金</a>
+    <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a>
     <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
 </div>
 <table class="default" >
@@ -60,6 +61,31 @@
 </form>
 <div class="page_nav">
 {echo:$obj->pageBar()}
+</div>
+<div id="excel_box" style="display: none;width:600px;">
+    <h1 class="page_title">Excel导出</h1>
+    <div class="form2">
+        <form  id="export_form" action="{url:/customer/withdraw_export_excel}" method="post" >
+           <dl class="lineD">
+          <dt>筛选条件：</dt>
+          <dd><input type="hidden"  id="condition_input_excel" name="condition" value="{$condition}"><label></label> <label><a href="javascript:;" onclick="Condition('#condition_input_excel')"  class="button" > 高级筛选</a></label>
+          </dd>
+          </dl>
+        <dl class="lineD">
+          <dt>导出字段：</dt>
+          <dd>
+            <label><input type="checkbox" name="fields[]" value="withdraw_no" checked="checked"> 提现单号</label>
+            <label><input type="checkbox" name="fields[]" value="name"> 用户名</label>
+            <label><input type="checkbox" name="fields[]" value="real_amount"> 金额</label>
+            <label><input type="checkbox" name="fields[]" value="open_name"> 开户名</label>
+            <label><input type="checkbox" name="fields[]" value="open_bank"> 开户行</label>
+            <label><input type="checkbox" name="fields[]" value="card_no"> 银行卡号</label>
+            <label><input type="checkbox" name="fields[]" value="apply_date"> 时间</label>
+          </dd>
+          </dl>
+        <div class="tc mt10"><a href="javascript:;" onclick="export_excel()" class="button">导出</a></div>
+        </form>
+    </div>
 </div>
 <script type="text/javascript">
     var refresh=false;
@@ -137,5 +163,15 @@
                 layer.msg(result.msg);
             }
         },'json');
+    }
+    function export_excel_dialog(){
+        art.dialog({id:'export_excel_dialog',title:'Excel导出',lock:true,opacity:0.1,width:600,height:200,content:document.getElementById("excel_box")});
+    }
+    function export_excel() {
+      $("#export_form").submit();
+    }
+    function Condition(id){
+        $("body").Condition({input:id,data:{'wd.withdraw_no':{name:'单号'},'us.name':{name:'用户名'},'wd.open_name':{name:'开户名'},'wd.open_bank':{name:'开户行'},'wd.card_no':{name:'银行卡号'},'wd.amount':{name:'提现金额'},'wd.status':{name:'状态',values:{'-1':'拒绝',0:'待处理',1:'已转账'}}
+        }});
     }
 </script>

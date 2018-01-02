@@ -739,4 +739,42 @@ class CustomerController extends Controller {
         var_dump($result);die;
     }
 
+    public function withdraw_export_excel() {
+        $this->layout = '';
+        $condition = Req::args("condition");
+        $fields = Req::args("fields");
+        $condition = Common::str2where($condition);
+        $model = new Model("balance_withdraw as wd");
+        if ($condition) {
+            $where = $condition;
+        }else{
+            $where = '1=1';
+        } 
+            $items = $model->fields("wd.*,us.name as uname")->join("left join user as us on wd.user_id = us.id")->where($where)->order('wd.id desc')->findAll();
+            
+            if ($items) {
+                header("Content-type:application/vnd.ms-excel");
+                header("Content-Disposition:filename=doc_receiving_list.xls");
+                $fields_array = array('withdraw_no' => '提现单号', 'name' => '用户名', 'real_amount' => '金额', 'open_name' => '开户名', 'open_bank' => '开户行','card_no'=>'银行卡号', 'apply_date' => '时间');
+                $str = "<table border=1><tr>";
+                foreach ($fields as $value) {
+                    $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
+                }
+                $str .= "</tr>";
+                foreach ($items as $item) {
+                    $str .= "<tr>";
+                    foreach ($fields as $value) {
+                        $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$value]) . "</td>";
+                    }
+                    $str .= "</tr>";
+                }
+                $str .= "</table>";
+                echo $str;
+                exit;
+            } else {
+                $this->msg = array("warning", "没有符合该筛选条件的数据，请重新筛选！");
+                $this->redirect("doc_receiving_list", false, Req::args());
+            }
+    }
+
 }
