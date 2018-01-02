@@ -1514,6 +1514,10 @@ class UcenterController extends Controller
             $this->assign('realname_verified',0);
             $this->assign('mobile_verified',0);
         }
+        $index_notice = $this->model->table('index_notice')->where('id=1')->find();
+        if($index_notice){
+            $this->assign('index_notice', $index_notice);
+        }
         $this->assign("sign_in_open", $sign_in_set['open']);
         $this->assign("random", rand(1000, 9999));
         $this->assign('is_hirer', $is_hirer);
