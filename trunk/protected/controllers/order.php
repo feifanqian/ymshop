@@ -831,7 +831,7 @@ class OrderController extends Controller {
         }else{
             $where = '1=1';
         } 
-            $items = $model->fields("dr.id,dr.doc_type,py.pay_name,dr.amount,us.name,od.type,od.order_no,dr.create_time,dr.payment_time,od.pay_status as pay_status")->join("left join user as u on dr.user_id = u.id left join payment as py on dr.payment_id = py.id left join order as od on dr.order_id = od.id")->where($where)->findAll();
+            $items = $model->fields("dr.id,dr.doc_type,py.pay_name,dr.amount,us.name,od.type,od.order_no,dr.create_time,dr.payment_time,od.pay_status as pay_status")->join("left join user as us on dr.user_id = us.id left join payment as py on dr.payment_id = py.id left join order as od on dr.order_id = od.id")->where($where)->findAll();
             if ($items) {
                 header("Content-type:application/vnd.ms-excel");
                 header("Content-Disposition:filename=csat.xls");
