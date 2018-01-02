@@ -6,6 +6,7 @@ class IndexController extends Controller {
     public $safebox = null;
     private $model = null;
     private $category = array();
+    private $categorys = array();
     protected $needRightActions = array('review' => true, 'review_act' => true);
 
     public function init() {
@@ -14,15 +15,18 @@ class IndexController extends Controller {
         $this->safebox = Safebox::getInstance();
         $this->user = $this->safebox->get('user');
         $category = Category::getInstance();
+        $categorys = Category::getInstance();
         if ($this->user == null) {
             $this->user = Common::autoLoginUserInfo();
             $this->safebox->set('user', $this->user);
         }
 
         $this->category = $category->getCategory();
+        $this->categorys = $categorys->getCategorys();
         $cart = Cart::getCart();
         $this->assign("cart", $cart->all());
         $this->assign("category", $this->category);
+        $this->assign("categorys", $this->categorys);
         $keyword = urldecode(Req::args('keyword'));
         if ($keyword != null)
             $this->assign("keyword", Filter::text($keyword));

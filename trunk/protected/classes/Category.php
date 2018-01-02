@@ -79,4 +79,36 @@ class Category {
         return $list;
     }
 
+    public function getCateGorys() {
+        $cache = CacheFactory::getInstance();
+        $items = $cache->get("_GoodsCategory");
+        if ($cache->get("_GoodsCategory") === null) {
+            $items = $this->_CategoryInits(0);
+            $cache->set("_GoodsCategory", $items, 315360000);
+        }
+        return $items;
+    }
+
+    private function _CategoryInits($id, $level = '0') {
+        $result = $this->model->table('goods_category')->where("nav_show=1 and parent_id=" . $id)->order("sort desc")->findAll();
+        $list = array();
+        if ($result) {
+            foreach ($result as $key => $value) {
+                $id = $value['id'];
+                $list[$id]['id'] = $value['id'];
+                $list[$id]['pid'] = $value['parent_id'];
+                $list[$id]['title'] = $value['name'];
+                $list[$id]['level'] = $level;
+                $list[$id]['path'] = $value['path'];
+                $list[$id]['img'] = $value['img'];
+                $list[$id]['imgs'] = $value['imgs'];
+                $list[$id]['alias'] = $value['alias'];
+                $list[$id]['nav_show'] = $value['nav_show'];
+                $list[$id]['list_show'] = $value['list_show'];
+                $list[$id]['child'] = $this->_CategoryInits($value['id'], $level + 1);
+            }
+        }
+        return $list;
+    }
+
 }
