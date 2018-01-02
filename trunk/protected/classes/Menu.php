@@ -131,7 +131,7 @@ class Menu {
             '/marketing/sign_in_set' => array('name' => '每日签到', 'parent' => 'welfare'),
             '/marketing/bonus' => array('name' => '商城分红', 'parent' => 'welfare'),
             '/marketing/redbag_list' => array('name' => '红包列表', 'parent' => 'welfare'),
-            '/marketing/index_notice_edit' => array('name' => '通知公告', 'parent' => 'welfare'),
+            '/marketing/redbag_list' => array('name' => '通知公告', 'parent' => 'welfare'),
             '/marketing/redbag_edit' => array('name' => '编辑红包', 'parent' => 'welfare', 'hidden'=>true),
             '/marketing/point_sale_edit' => array('name' => '积分购编辑', 'parent' => 'promotions'),
             '/wxmanager/wx_public_list' => array('name' => '公众号列表', 'parent' => 'weixin'),
