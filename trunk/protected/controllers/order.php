@@ -827,7 +827,11 @@ class OrderController extends Controller {
         $condition = Common::str2where($condition);
         $model = new Model("doc_receiving as dr");
         if ($condition) {
-            $items = $model->fields("dr.id,dr.doc_type,py.pay_name,dr.amount,us.name,od.type,od.order_no,dr.create_time,dr.payment_time,od.pay_status as pay_status")->join("left join user as u on dr.user_id = u.id left join payment as py on dr.payment_id = py.id left join order as od on dr.order_id = od.id")->where($condition)->findAll();
+            $where = $condition;
+        }else{
+            $where = '1=1';
+        } 
+            $items = $model->fields("dr.id,dr.doc_type,py.pay_name,dr.amount,us.name,od.type,od.order_no,dr.create_time,dr.payment_time,od.pay_status as pay_status")->join("left join user as u on dr.user_id = u.id left join payment as py on dr.payment_id = py.id left join order as od on dr.order_id = od.id")->where($where)->findAll();
             if ($items) {
                 header("Content-type:application/vnd.ms-excel");
                 header("Content-Disposition:filename=csat.xls");
@@ -851,9 +855,5 @@ class OrderController extends Controller {
                 $this->msg = array("warning", "没有符合该筛选条件的数据，请重新筛选！");
                 $this->redirect("doc_receiving_list", false, Req::args());
             }
-        } else {
-            $this->msg = array("warning", "请选择筛选条件后再导出！");
-            $this->redirect("doc_receiving_list", false);
-        }
     }
 }
