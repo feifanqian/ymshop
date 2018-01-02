@@ -99,7 +99,7 @@ class Menu {
             '/order/doc_receiving_list' => array('name' => '商品收款单', 'parent' => 'receipt'),
             '/order/recharge_list' => array('name' => '充值收款单', 'parent' => 'receipt'),
             '/order/doc_invoice_list' => array('name' => '发货单', 'parent' => 'receipt'),
-            '/order/doc_refund_list' => array('name' => '退款单【旧，可能废弃】', 'parent' => 'receipt'),
+            // '/order/doc_refund_list' => array('name' => '退款单【旧，可能废弃】', 'parent' => 'receipt'),
             '/order/refund_apply_list' => array('name' => '退款申请', 'parent' => 'receipt'),
             //'/order/doc_returns_list'=>array('name'=>'退货单','parent'=>'receipt'),
             '/count/index' => array('name' => '订单统计', 'parent' => 'count'),
