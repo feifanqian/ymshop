@@ -303,8 +303,7 @@
 </script>
 {if:$user['id']==42608}
     {if:$notice==1}
-        {if:isset($index_notice)}
-            {if:$index_notice['is_disply']==1}
+        
             <script type="text/javascript">
                 function callnotice(){
                     var contents = {$index_notice['content']};
@@ -319,7 +318,6 @@
                     callnotice();
                 }
             </script>
-            {/if}
-        {/if}    
+                
     {/if}
 {/if}
