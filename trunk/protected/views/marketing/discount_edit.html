@@ -1,0 +1,68 @@
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+<h1 class="page_title">优惠券模板编辑</h1>
+<div id="obj_form" class="form2">
+    <form action="{url:/marketing/discount_save}" method="post">
+        {if:isset($list['id'])}<input type="hidden" name="id" value="{$list['id']}">{/if}
+        <dl class="lineD">
+            <dt><b class="red">*</b> 模板名称：</dt>
+            <dd>
+                <input name="discount_name" type="text" pattern="required" value="{$list['discount_name']}"/>
+                <label></label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt><b class="red">*</b>面值：</dt>
+            <dd>
+                <input name="face_value" type="text" class="small" pattern="float" value="{$list['face_value']}">
+                <label>优惠券在购买时所抵金额</label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt><b class="red">*</b>消费金额：</dt>
+            <dd>
+                <input name="monetary" type="text" class="small" pattern="int" value="{$list['monetary']}">
+                <label>订单需满足的最低消费金额(必需为整数)才能使用</label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt><b class="red">*</b>开始时间：</dt>
+            <dd>
+                <input name="start_time" type="text" class="Wdate small" id="d4321" pattern="required"
+                       onFocus="WdatePicker({maxDate:'#F{ $dp.$D(\'d4322\',{d:0});}',minDate:'%y-%M-{%d}'})"
+                       value="{echo:date('Y-m-d')}">
+                <label></label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt><b class="red">*</b>结束时间：</dt>
+            <dd>
+                <input name="end_time" class="Wdate small" type="text" id="d4322" pattern="required"
+                       onFocus="WdatePicker({minDate:'#F{ $dp.$D(\'d4321\',{d:0});}'})" value="<?php echo isset($list['end_time']) && $list['end_time']?date('Y-m-d',$list['end_time']):'';?>">
+                <label></label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt><b class="red">*</b>适合用户人群：</dt>
+            <dd>
+                <select name="suit_person" class="small">
+                    <option value="1">新注册用户</option>
+                    <option value="2">已注册会员</option>
+                </select>
+            </dd>
+        </dl>
+
+        <div style="text-align:center">
+            <input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="reset" value="重置" class="button"></div>
+    </form>
+</div>
+<script>
+    $(function(){
+        var suit_person = "{$list['suit_person']}";
+        if(suit_person==2){
+            $("select option[name='suit_person']").attr("checked",true);
+        }
+    });
+</script>
+
