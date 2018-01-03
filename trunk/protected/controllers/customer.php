@@ -410,7 +410,7 @@ class CustomerController extends Controller {
         $config = Config::getInstance()->get("district_set");
         $model = new Model();
         $log_model = new Model('balance_log');
-        $log = $log_model->where("type=8 and UNIX_TIMESTAMP(time) <1513914610 and UNIX_TIMESTAMP(time) >1511146546 and note = '线下会员消费卖家收益(不参与分账)'")->findAll();
+        $log = $log_model->where("type=8 and UNIX_TIMESTAMP(time) <1513914610 and UNIX_TIMESTAMP(time) >1511955576 and note = '线下会员消费卖家收益(不参与分账)'")->findAll();
         foreach($log as $k=>$v){
             $promoter = $model->table('district_promoter')->fields('base_rate')->where('user_id='.$v['user_id'])->find();
             if($promoter){
