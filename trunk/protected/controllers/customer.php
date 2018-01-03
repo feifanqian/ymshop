@@ -421,7 +421,7 @@ class CustomerController extends Controller {
             $handling_fee = round($v['amount']*$config['handling_rate']/100,2);
             $time = strtotime($v['time']);
             $time1 = strtotime($v['time'])-30;
-            $invite = $model->table('invite')->where("from=second-wap and createtime<".$time." and createtime>".$time1." and user_id=".$v['user_id'])->find();
+            $invite = $model->table('invite')->where("createtime<".$time." and createtime>".$time1." and user_id=".$v['user_id'])->find();
             if($invite){
                 $uid = $invite['invite_user_id'];
             }else{
