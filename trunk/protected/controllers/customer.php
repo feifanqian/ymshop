@@ -412,16 +412,17 @@ class CustomerController extends Controller {
         // $log_model = new Model('balance_log');
         // $log = $log_model->where("type=8 and id<32832 and note = '线下会员消费卖家收益(不参与分账)'")->findAll();
         // foreach($log as $k=>$v){
-        //     $promoter = $model->table('district_promoter')->fields('base_rate')->where('user_id='.$v['shop_ids'])->find();
+        //     $promoter = $model->table('district_promoter')->fields('base_rate')->where('user_id='.$v['user_id'])->find();
         //     if($promoter){
         //         $payable_amount = round($v['amount']*(100-$promoter['base_rate'])/100,2);
         //     }else{
         //         $payable_amount = round($v['amount']*(100-$config['offline_base_rate'])/100,2);
         //     }
         //     $handling_fee = round($v['amount']*$config['handling_rate']/100,2);
+        //     $invite = $model->table('invite')->where("from='second-wap' and createtime user_id=".$v['user_id'])->find();
         //     $data = array(
         //         'order_no'=>$v['order_no'],
-        //         'user_id'=>1,
+        //         'user_id'=>$uid,
         //         'shop_ids'=>$v['user_id'],
         //         'payment'=>6,
         //         'status'=>3,
@@ -433,7 +434,7 @@ class CustomerController extends Controller {
         //         'pay_time'=>$v['time'],
         //         'create_time'=>$v['time'],
         //         'handling_fee'=>$handling_fee,
-        //         'prom_id'=>1,
+        //         'prom_id'=>$v['user_id'],
         //         'order_amount'=>$v['amount'],
         //         'type'=>1,
         //         );
