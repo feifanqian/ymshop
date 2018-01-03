@@ -691,4 +691,128 @@ class PaymentAction extends Controller {
       $this->content = $result;
       return;
     }
+
+    public function dinPay(){
+       $merchant_private_key='MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALf/+xHa1fDTCsLYPJLHy80aWq3djuV1T34sEsjp7UpLmV9zmOVMYXsoFNKQIcEzei4QdaqnVknzmIl7n1oXmAgHaSUF3qHjCttscDZcTWyrbXKSNr8arHv8hGJrfNB/Ea/+oSTIY7H5cAtWg6VmoPCHvqjafW8/UP60PdqYewrtAgMBAAECgYEAofXhsyK0RKoPg9jA4NabLuuuu/IU8ScklMQIuO8oHsiStXFUOSnVeImcYofaHmzIdDmqyU9IZgnUz9eQOcYg3BotUdUPcGgoqAqDVtmftqjmldP6F6urFpXBazqBrrfJVIgLyNw4PGK6/EmdQxBEtqqgXppRv/ZVZzZPkwObEuECQQDenAam9eAuJYveHtAthkusutsVG5E3gJiXhRhoAqiSQC9mXLTgaWV7zJyA5zYPMvh6IviX/7H+Bqp14lT9wctFAkEA05ljSYShWTCFThtJxJ2d8zq6xCjBgETAdhiH85O/VrdKpwITV/6psByUKp42IdqMJwOaBgnnct8iDK/TAJLniQJABdo+RodyVGRCUB2pRXkhZjInbl+iKr5jxKAIKzveqLGtTViknL3IoD+Z4b2yayXg6H0g4gYj7NTKCH1h1KYSrQJBALbgbcg/YbeU0NF1kibk1ns9+ebJFpvGT9SBVRZ2TjsjBNkcWR2HEp8LxB6lSEGwActCOJ8Zdjh4kpQGbcWkMYkCQAXBTFiyyImO+sfCccVuDSsWS+9jrc5KadHGIvhfoRjIj2VuUKzJ+mXbmXuXnOYmsAefjnMCI6gGtaqkzl527tw=';
+  
+  
+      $merchant_code = "1111110166";//商户号，1118004517是测试商户号，线上发布时要更换商家自己的商户号！
+
+      $service_type ="wxpub_pay"; 
+
+      $interface_version ="V3.0";
+
+      $sign_type ="RSA-S";
+
+      $input_charset = "UTF-8";
+      
+      $notify_url ="http://15l0549c66.iask.in:45191/testnewb2c/offline_notify.php";   
+      
+      $order_no = date( 'YmdHis' ); 
+
+      $order_time = date( 'Y-m-d H:i:s' );  
+
+      $order_amount = "0.1";  
+
+      $product_name ="testpay"; 
+
+      //以下参数为可选参数，如有需要，可参考文档设定参数值
+      
+      $return_url ="";  
+      
+      $pay_type = "";
+      
+      $redo_flag = "";  
+      
+      $product_code = ""; 
+
+      $product_desc = ""; 
+
+      $product_num = "";
+
+      $show_url = ""; 
+
+      $client_ip ="" ;  
+
+      $bank_code = "";  
+
+      $extend_param = "";
+
+      $extra_return_param = ""; 
+
+        
+      
+
+    /////////////////////////////   参数组装  /////////////////////////////////
+    /**
+    除了sign_type参数，其他非空参数都要参与组装，组装顺序是按照a~z的顺序，下划线"_"优先于字母  
+    */
+      
+      $signStr= "";
+      
+      if($bank_code != ""){
+        $signStr = $signStr."bank_code=".$bank_code."&";
+      }
+      if($client_ip != ""){
+        $signStr = $signStr."client_ip=".$client_ip."&";
+      }
+      if($extend_param != ""){
+        $signStr = $signStr."extend_param=".$extend_param."&";
+      }
+      if($extra_return_param != ""){
+        $signStr = $signStr."extra_return_param=".$extra_return_param."&";
+      }
+      
+      $signStr = $signStr."input_charset=".$input_charset."&";  
+      $signStr = $signStr."interface_version=".$interface_version."&";  
+      $signStr = $signStr."merchant_code=".$merchant_code."&";  
+      $signStr = $signStr."notify_url=".$notify_url."&";    
+      $signStr = $signStr."order_amount=".$order_amount."&";    
+      $signStr = $signStr."order_no=".$order_no."&";    
+      $signStr = $signStr."order_time=".$order_time."&";  
+
+      if($pay_type != ""){
+        $signStr = $signStr."pay_type=".$pay_type."&";
+      }
+
+      if($product_code != ""){
+        $signStr = $signStr."product_code=".$product_code."&";
+      } 
+      if($product_desc != ""){
+        $signStr = $signStr."product_desc=".$product_desc."&";
+      }
+      
+      $signStr = $signStr."product_name=".$product_name."&";
+
+      if($product_num != ""){
+        $signStr = $signStr."product_num=".$product_num."&";
+      } 
+      if($redo_flag != ""){
+        $signStr = $signStr."redo_flag=".$redo_flag."&";
+      }
+      if($return_url != ""){
+        $signStr = $signStr."return_url=".$return_url."&";
+      }   
+      
+      $signStr = $signStr."service_type=".$service_type;
+
+      if($show_url != ""){  
+        
+        $signStr = $signStr."&show_url=".$show_url;
+      }
+      
+        //echo $signStr."<br>";  
+        
+        
+      
+    /////////////////////////////   获取sign值（RSA-S加密）  /////////////////////////////////
+        
+      $merchant_private_key = "-----BEGIN PRIVATE KEY-----"."\r\n".wordwrap(trim($merchant_private_key),64,"\r\n",true)."\r\n"."-----END PRIVATE KEY-----";
+      
+      $merchant_private_key= openssl_get_privatekey($merchant_private_key);
+      
+      openssl_sign($signStr,$sign_info,$merchant_private_key,OPENSSL_ALGO_MD5);
+      
+      $sign = base64_encode($sign_info);
+    }
 }
