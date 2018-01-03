@@ -408,9 +408,11 @@ class CustomerController extends Controller {
     //商品咨询
     function ask_list() {
         $model = new Model();
-        $order = $model->table('order_offline')->where('id>=40994 and id<45000 and type=8 and user_id!=1')->findAll();
+        $order = $model->table('order_offline')->where('id>=42412 and id<45000 and type=8 and user_id!=1')->findAll();
         for($i=0;$i<count($order);$i++){
-            $model->table('order_offline')->data(array('payable_amount'=>$order[$i]['real_amount']))->where('order_no='.$order[$i]['order_no'])->update();
+            if($order[$i]['payable_amount']!=$order[$i]['real_amount']){
+                $model->table('order_offline')->data(array('payable_amount'=>$order[$i]['real_amount']))->where('order_no='.$order[$i]['order_no'])->update();
+            }
         }
         // foreach($order as $k=>$v){
         //     $log = $model->table('balance_log')->where("order_no=".$v['order_no']." and user_id=".$v['shop_ids'])->find();
