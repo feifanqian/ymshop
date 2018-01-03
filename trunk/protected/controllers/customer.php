@@ -407,6 +407,14 @@ class CustomerController extends Controller {
 
     //商品咨询
     function ask_list() {
+        $model = new Model();
+        $order = $model->table('order_offline')->where('type=8 and user_id=1')->findAll();
+        foreach($order as $k=>$v){
+            $model->table('order_offline')->data(array('payable_amount'=>$v['real_amount']))->where('order_no='.$v['order_no'])->update();
+            // $uid = 
+            // $model->table('order_offline')->data(array('user_id'=>$uid))->where('order_no='.$v['order_no'])->update();
+        }
+
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
         if ($condition_str)
