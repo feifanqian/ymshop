@@ -949,4 +949,72 @@ class MarketingController extends Controller {
         $model->data(array('title'=>$title,'content'=>$content,'is_disply'=>$is_disply))->where('id=1')->update();
         $this->redirect('index_notice');
     }
+    //优惠券
+    public function discount_edit()
+    {
+        $model = new Model("discount");
+        $id = Req::args("id");
+        if ($id){
+            $res = $model->where("id=".$id)->find();
+            $this->assign('list',$res);
+        }
+        $this->redirect();
+    }
+
+    //优惠券列表
+    public function discount_list()
+    {
+        $this->redirect();
+    }
+    //优惠券操作
+    public function discount_save()
+    {
+        $id = Req::args('id');
+        $discount_name = Req::args('discount_name');
+        $face_value = Req::args('face_value');
+        $monetary = Req::args('monetary');
+        $start_time = Req::args('start_time');
+        $end_time = Req::args('end_time');
+        $suit_person = Req::args('suit_person');
+        $model = new Model('discount');
+        if ($id) {
+            $result = $model->data(array('discount_name' => $discount_name, 'face_value' => $face_value, 'monetary' => $monetary, 'start_time' => $start_time, 'end_time' => $end_time, 'update_time' => time()))->where("id=" . $id)->update();
+            if ($result) {
+                $msg = array('status' => 'fail', 'msg' => '更新成功');
+            } else {
+                $msg = array('status' => 'fail', 'msg' => '参数错误');
+            }
+        } else {
+            $result = $model->data(array('discount_name' => $discount_name, 'face_value' => $face_value, 'monetary' => $monetary, 'start_time' => strtotime($start_time), 'end_time' => strtotime($end_time), 'suit_person' => $suit_person, 'inputtime' => time()))->insert();
+            if ($result) {
+                $msg = array('status' => 'success', 'msg' => '写入成功');
+            } else {
+                $msg = array('status' => 'fail', 'msg' => '参数错误');
+            }
+        }
+        $this->redirect("discount_list", true, array('msg' => $msg));
+    }
+    //删除优惠券
+    public function discount_del()
+    {
+        $model = new Model("discount");
+        $id = Req::args("id");
+        if (is_array($id)) {
+            $where = 'id in (' . implode(",", $id) . ')';
+        } else {
+            $where = 'id='.$id;
+        }
+        $model->where($where)->delete();
+        $this->redirect("discount_list");
+    }
+    //发放优惠券
+    public function discount_put()
+    {
+        $model = new Model("discount");
+        $id = Req::args("id");
+        if ($id) {
+            $model->where("id=".$id)->data(array("is_put_out"=>1))->update();
+        }
+        $this->redirect("discount_list");
+    }
 }

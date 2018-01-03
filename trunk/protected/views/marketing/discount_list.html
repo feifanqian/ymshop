@@ -1,0 +1,76 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+<form action="" method="post">
+    <div class="tools_bar clearfix">
+        <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+        <a class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/marketing/discount_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>
+        <a class="icon-plus" href="{url:/marketing/discount_edit}" title="添加"> 添加</a>
+        <a href="javascript:;" class="icon-loop-2" onclick="tools_reload()"> 刷新</a>
+    </div>
+    <table class="default">
+        <tr>
+            <th style="width:30px">选择</th>
+            <th style="width:70px">操作</th>
+            <th>名称</th>
+            <th style="width:100px">面额</th>
+            <th style="width:100px">需满金额</th>
+            <th style="width: 100px;">是否发放</th>
+            <th style="width:100px">开始时间</th>
+            <th style="width:100px">结束时间</th>
+        </tr>
+        {query:name=discount id=$obj order=inputtime DESC page=1}
+        <tr>
+            <td style="width:30px">
+                <input type="checkbox" name="id[]" value="{$item['id']}">
+            </td>
+            <td style="width:70px" class="btn_min">
+                <div class="operat hidden">
+                    <a class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                        <ul>
+                            <li>
+                                <a class="icon-credit" href="{url:/marketing/discount_put/id/$item[id]}">发放优惠券</a>
+                            </li>
+                            <li>
+                                <a class="icon-pencil" href="{url:/marketing/discount_edit/id/$item[id]}">编辑</a>
+                            </li>
+                            <li>
+                                <a class="icon-close" href="javascript:;" onclick="confirm_action('{url:/marketing/discount_del/id/$item[id]}')">删除</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </td>
+            <td>{$item['discount_name']}</td>
+            <td style="width:100px;">{$item['face_value']}</td>
+            <td style="width:100px">{$item['monetary']}</td>
+            <td style="width: 100px;">
+                {if:$item['is_put_out']==1}
+                    已发放
+                {else:}
+                    未发放
+                {/if}
+            </td>
+            <td style="width:100px">
+                {if:$item['start_time']}
+                {echo:date('Y-m-d',$item['start_time'])}
+                {else:}
+                {/if}
+            </td>
+            <td style="width: 100px;">
+                {if:$item['end_time']}
+                {echo:date('Y-m-d',$item['end_time'])}
+                {else:}
+                {/if}
+            </td>
+
+        </tr>
+        {/query}
+    </table>
+</form>
+<div class="page_nav">
+    {echo:$obj->pageBar()}
+</div>
+

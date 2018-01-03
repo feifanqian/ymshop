@@ -16,8 +16,8 @@
     'tablePre' => 'tiny_',
     'host' => 'localhost',
     'user' => 'root',
-    'password' => '',
-    'name' => 'shop',
+    'password' => '570428',
+    'name' => 'ymshop',
     'port' => '3306',
   ),
   'route' => 

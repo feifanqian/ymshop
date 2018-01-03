@@ -115,6 +115,8 @@ class Menu {
             '/marketing/voucher_template_edit' => array('name' => '代金券模板编辑', 'parent' => 'voucher'),
             '/marketing/voucher_list' => array('name' => '代金券管理', 'parent' => 'voucher'),
             '/marketing/voucher_edit' => array('name' => '代金券编辑', 'parent' => 'voucher'),
+            '/marketing/discount_list' => array('name' => '优惠券管理', 'parent' => 'voucher'),
+            '/marketing/discount_edit' => array('name' => '优惠券管理', 'parent' => 'voucher'),
             '/marketing/recharge_package_set' => array('name' => '充值套餐', 'parent' => 'promotions'),
             '/marketing/prom_goods_list' => array('name' => '商品促销', 'parent' => 'promotions'),
             '/marketing/prom_goods_edit' => array('name' => '编辑商品促销', 'parent' => 'promotions'),
