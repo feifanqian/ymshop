@@ -407,6 +407,42 @@ class CustomerController extends Controller {
 
     //商品咨询
     function ask_list() {
+        // $config = Config::getInstance()->get("district_set");
+        // $model = new Model();
+        // $log_model = new Model('balance_log');
+        // $log = $log_model->where("type=8 and id<32832 and note = '线下会员消费卖家收益(不参与分账)'")->findAll();
+        // foreach($log as $k=>$v){
+        //     $promoter = $model->table('district_promoter')->fields('base_rate')->where('user_id='.$v['shop_ids'])->find();
+        //     if($promoter){
+        //         $payable_amount = round($v['amount']*(100-$promoter['base_rate'])/100,2);
+        //     }else{
+        //         $payable_amount = round($v['amount']*(100-$config['offline_base_rate'])/100,2);
+        //     }
+        //     $handling_fee = round($v['amount']*$config['handling_rate']/100,2);
+        //     $data = array(
+        //         'order_no'=>$v['order_no'],
+        //         'user_id'=>1,
+        //         'shop_ids'=>$v['user_id'],
+        //         'payment'=>6,
+        //         'status'=>3,
+        //         'pay_status'=>1,
+        //         'delivery_status'=>1,
+        //         'accept_name'=>'',
+        //         'payable_amount'=>$payable_amount,
+        //         'real_amount'=>$v['amount'],
+        //         'pay_time'=>$v['time'],
+        //         'create_time'=>$v['time'],
+        //         'handling_fee'=>$handling_fee,
+        //         'prom_id'=>1,
+        //         'order_amount'=>$v['amount'],
+        //         'type'=>1,
+        //         );
+        //     $exist = $model->table('order_offline')->where('order_no='.$v['order_no'])->find();
+        //     if(!$exist){
+        //         $model->table('order_offline')->data($data)->insert();
+        //     }
+        // }
+
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
         if ($condition_str)

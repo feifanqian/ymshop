@@ -28,7 +28,7 @@
         <th style="width:50px">手续费</th>
         <th style="width:50px">打印</th>
     </tr>
-    {query:name=order_offline as od fields=od.*,us.nickname,us.name as uname,us.status as ustatus,cu.real_name,cu.mobile,c.real_name as shop_name join= left join user as us on od.user_id eq us.id left join customer as cu on od.user_id eq cu.user_id left join customer as c on od.shop_ids eq c.user_id where=$where id=$obj page=1 order= id desc }
+    {query:name=order_offline as od fields=od.*,us.nickname,us.name as uname,us.status as ustatus,cu.real_name,cu.mobile,c.real_name as shop_name join= left join user as us on od.user_id eq us.id left join customer as cu on od.user_id eq cu.user_id left join customer as c on od.shop_ids eq c.user_id where=$where id=$obj page=1 order= pay_time desc }
         <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:50px" class="btn_min">
             <div class="operat hidden">
