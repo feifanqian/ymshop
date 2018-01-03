@@ -409,17 +409,17 @@ class CustomerController extends Controller {
     function ask_list() {
         $model = new Model();
         $order = $model->table('order_offline')->where('type=8 and user_id=1')->findAll();
-        foreach($order as $k=>$v){
-            if($v['payable_amount']!=$v['real_amount']){
-                $model->table('order_offline')->data(array('payable_amount'=>$v['real_amount']))->where('order_no='.$v['order_no'])->update();
-            }
-            // $log = $model->table('balance_log')->where("order_no=".$v['order_no']." and user_id=".$v['shop_ids'])->find();
-            // $t1 = strtotime($log['time']);
-            // $t2 = strtotime($log['time'])-30;
-            // $invite = $model->table('invite')->where("createtime < $t1 and createtime > $t2 and user_id=".$v['shop_ids'])->find();
-            // $uid = $invite?$invite['invite_user_id']:1;
-            // $model->table('order_offline')->data(array('user_id'=>$uid))->where('order_no='.$v['order_no'])->update();
+        for($i=0;$i<count($order);$i++){
+            $model->table('order_offline')->data(array('payable_amount'=>$order[$i]['real_amount']))->where('order_no='.$order[$i]['order_no'])->update();
         }
+        // foreach($order as $k=>$v){
+        //     $log = $model->table('balance_log')->where("order_no=".$v['order_no']." and user_id=".$v['shop_ids'])->find();
+        //     $t1 = strtotime($log['time']);
+        //     $t2 = strtotime($log['time'])-30;
+        //     $invite = $model->table('invite')->where("createtime < $t1 and createtime > $t2 and user_id=".$v['shop_ids'])->find();
+        //     $uid = $invite?$invite['invite_user_id']:1;
+        //     $model->table('order_offline')->data(array('user_id'=>$uid))->where('order_no='.$v['order_no'])->update();
+        // }
 
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
