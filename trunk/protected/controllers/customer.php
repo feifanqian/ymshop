@@ -410,15 +410,24 @@ class CustomerController extends Controller {
         $config = Config::getInstance()->get("district_set");
         $model = new Model();
         $log_model = new Model('balance_log');
-        $log = $log_model->where("type=8 and UNIX_TIMESTAMP(time) <1513914610 and UNIX_TIMESTAMP(time) >1513829618 and note = '线下会员消费卖家收益(不参与分账)'")->findAll();
+        $log = $log_model->where("type=8 and UNIX_TIMESTAMP(time) <1513914610 and note = '线下会员消费卖家收益'")->findAll();
         foreach($log as $k=>$v){
             $promoter = $model->table('district_promoter')->fields('base_rate')->where('user_id='.$v['user_id'])->find();
             if($promoter){
                 $payable_amount = round($v['amount']*(100-$promoter['base_rate'])/100,2);
+                $total_amount = round($v['amount']*100/(100-$promoter['base_rate']),2);
             }else{
                 $payable_amount = round($v['amount']*(100-$config['offline_base_rate'])/100,2);
+                $total_amount = round($v['amount']*100/(100-$config['offline_base_rate']),2);
             }
-            $handling_fee = round($v['amount']*$config['handling_rate']/100,2);
+            $handling_fee = round($total_amount*$config['handling_rate']/100,2);
+
+            $invite_log = $log_model->where("note='线下消费上级邀请人提成' and order_no=".$v['order_no'])->find();
+            if($invite_log){
+                $prom_id = $invite_log['user_id'];
+            }else{
+                $prom_id = 1;
+            }
             $time = strtotime($v['time']);
             $time1 = strtotime($v['time'])-30;
             $invite = $model->table('invite')->where("createtime<".$time." and createtime>".$time1." and user_id=".$v['user_id'])->find();
@@ -427,6 +436,7 @@ class CustomerController extends Controller {
             }else{
                 $uid = 1;
             }
+
             $data = array(
                 'order_no'=>$v['order_no'],
                 'user_id'=>$uid,
@@ -437,13 +447,13 @@ class CustomerController extends Controller {
                 'delivery_status'=>1,
                 'accept_name'=>'',
                 'payable_amount'=>$payable_amount,
-                'real_amount'=>$v['amount'],
+                'real_amount'=>$total_amount,
                 'pay_time'=>$v['time'],
                 'create_time'=>$v['time'],
                 'handling_fee'=>$handling_fee,
-                'prom_id'=>$v['user_id'],
-                'order_amount'=>$v['amount'],
-                'type'=>8,
+                'prom_id'=>$prom_id,
+                'order_amount'=>$total_amount,
+                'type'=>9,
                 );
             $exist = $model->table('order_offline')->where('order_no='.$v['order_no'])->find();
             if(!$exist){
