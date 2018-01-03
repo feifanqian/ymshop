@@ -407,49 +407,21 @@ class CustomerController extends Controller {
 
     //商品咨询
     function ask_list() {
-        $config = Config::getInstance()->get("district_set");
         $model = new Model();
-        $log_model = new Model('balance_log');
-        $log = $log_model->where("type=8 and UNIX_TIMESTAMP(time) <1513914610 and UNIX_TIMESTAMP(time) >1511955576 and note = '线下会员消费卖家收益(不参与分账)'")->findAll();
-        foreach($log as $k=>$v){
-            $promoter = $model->table('district_promoter')->fields('base_rate')->where('user_id='.$v['user_id'])->find();
-            if($promoter){
-                $payable_amount = round($v['amount']*(100-$promoter['base_rate'])/100,2);
-            }else{
-                $payable_amount = round($v['amount']*(100-$config['offline_base_rate'])/100,2);
-            }
-            $handling_fee = round($v['amount']*$config['handling_rate']/100,2);
-            $time = strtotime($v['time']);
-            $time1 = strtotime($v['time'])-30;
-            $invite = $model->table('invite')->where("createtime<".$time." and createtime>".$time1." and user_id=".$v['user_id'])->find();
-            if($invite){
-                $uid = $invite['invite_user_id'];
-            }else{
-                $uid = 1;
-            }
-            $data = array(
-                'order_no'=>$v['order_no'],
-                'user_id'=>$uid,
-                'shop_ids'=>$v['user_id'],
-                'payment'=>6,
-                'status'=>3,
-                'pay_status'=>1,
-                'delivery_status'=>1,
-                'accept_name'=>'',
-                'payable_amount'=>$payable_amount,
-                'real_amount'=>$v['amount'],
-                'pay_time'=>$v['time'],
-                'create_time'=>$v['time'],
-                'handling_fee'=>$handling_fee,
-                'prom_id'=>$v['user_id'],
-                'order_amount'=>$v['amount'],
-                'type'=>8,
-                );
-            $exist = $model->table('order_offline')->where('order_no='.$v['order_no'])->find();
-            if(!$exist){
-                $model->table('order_offline')->data($data)->insert();
+        $order = $model->table('order_offline')->where('id>=42412 and id<45000 and type=8 and user_id!=1')->findAll();
+        for($i=0;$i<count($order);$i++){
+            if($order[$i]['payable_amount']!=$order[$i]['real_amount']){
+                $model->table('order_offline')->data(array('payable_amount'=>$order[$i]['real_amount']))->where('order_no='.$order[$i]['order_no'])->update();
             }
         }
+        // foreach($order as $k=>$v){
+        //     $log = $model->table('balance_log')->where("order_no=".$v['order_no']." and user_id=".$v['shop_ids'])->find();
+        //     $t1 = strtotime($log['time']);
+        //     $t2 = strtotime($log['time'])-30;
+        //     $invite = $model->table('invite')->where("createtime < $t1 and createtime > $t2 and user_id=".$v['shop_ids'])->find();
+        //     $uid = $invite?$invite['invite_user_id']:1;
+        //     $model->table('order_offline')->data(array('user_id'=>$uid))->where('order_no='.$v['order_no'])->update();
+        // }
 
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);

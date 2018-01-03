@@ -2348,6 +2348,8 @@ class UcenterAction extends Controller {
       $bankcard = Req::args('bankcard');
       $idcard = Req::args('idcard');
       $realname = Filter::str(Req::args('realname'));
+      $province = Filter::str(Req::args('province'));
+      $city = Filter::str(Req::args('city'));
       
       $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
       if($customer['realname_verified']==0){ //需要先实名认证
@@ -2373,6 +2375,8 @@ class UcenterAction extends Controller {
             'cardno'=>$bankcard,
             'bank_name'=>$result['result']['information']['bankname'],
             'open_name'=>$realname,
+            'province'=>$province,
+            'city'=>$city,
             'type'=>intval($result['result']['information']['iscreditcard']),
             'bank_code'=>$result['result']['information']['abbreviation'],
             'bind_date'=>date('Y-m-d H:i:s')
