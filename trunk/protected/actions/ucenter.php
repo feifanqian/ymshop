@@ -1996,10 +1996,41 @@ class UcenterAction extends Controller {
     //获取我邀请的推广员列表
     public function getMyInvitePromoter(){
         $page = Filter::int(Req::args('page'));
-        $promoter = Promoter::getPromoterInstance($this->user['id']);
+        // $promoter = Promoter::getPromoterInstance($this->user['id']);
         
+        // $this->code = 0;
+        // $this->content = $promoter->getMyInviteList($page);
+        
+        $record = $this->model->table('invite as do')
+                ->join('left join user as u on do.invite_user_id = u.id')
+                ->fields('u.id,u.avatar,u.nickname,do.createtime')
+                ->where("do.user_id=".$this->user['id'])
+                ->order("do.id desc")
+                ->findPage($page, 10);
+        if (empty($record)) {
+            $this->code = 0;
+            $this->content['data'] = array();
+            return;
+        }
+        if (isset($record['html'])) {
+            unset($record['html']);
+        }
+        if($record['data']){
+            foreach($record['data'] as $k=>$v){
+                $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
+                if($shop && $promoter){
+                    $record['data'][$k]['role_type'] = 2;
+                }elseif(!$shop && $promoter){
+                    $record['data'][$k]['role_type'] = 1;
+                }else{
+                    $record['data'][$k]['role_type'] = 0;
+                }
+            }
+        }
         $this->code = 0;
-        $this->content = $promoter->getMyInviteList($page);
+        $this->content = $record;
+        return;
     }
     
     //推广员申请结算提现
