@@ -93,15 +93,13 @@ $(function(){
                     flag = false;
                     notification("请完善绑卡信息");
                     return false;
-                } else {
-                    $.toast("绑卡信息已提交", 'success');
                 }
             },
             success: function (result) {
                 // console.log(result);
                var ret = JSON.parse(result);
                if (ret.status == 'success') {
-                   notification(ret.msg);
+                   $.toast("绑定成功", 'success');
                    window.location.href = '/ucenter/index';
                } else {
                    notification(ret.msg);
