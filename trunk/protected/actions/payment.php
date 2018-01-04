@@ -732,7 +732,7 @@ class PaymentAction extends Controller {
 
       $show_url = ""; 
 
-      $client_ip ="" ;  
+      $client_ip = Common::getIp();  
 
       $bank_code = "";  
 
