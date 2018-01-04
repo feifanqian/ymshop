@@ -49,7 +49,7 @@
 <script>
 $(function(){
     var selected = [{$province|0},{$city|0}];
-    $("#areas").Linkage1({ url:"{url:/ajax/area_data}",selected:selected,initRunCallBack:true,callback:function(data){
+    $("#areas").Linkage({ url:"{url:/ajax/area_data}",selected:selected,initRunCallBack:true,callback:function(data){
         var text = new Array();
         var value = new Array();
         for (i in data[0]){
