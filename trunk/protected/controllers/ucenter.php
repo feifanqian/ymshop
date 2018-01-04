@@ -3310,6 +3310,12 @@ class UcenterController extends Controller
             $this->model->table('bankcard')->data($data)->insert();
             exit(json_encode(array('status'=>'success','msg'=>'绑定银行卡成功')));
           }else{
+            var_dump($bankcard);
+            var_dump($idcard);
+            var_dump($realname);
+            echo "<pre>";
+            print_r($result);
+            echo "<pre>";
             exit(json_encode(array('status'=>'fail','msg'=>'绑定银行卡失败')));
           }
     }
