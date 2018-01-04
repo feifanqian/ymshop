@@ -271,7 +271,7 @@ class PaymentAction extends Controller {
     public function dopays(){
        $payment_id = Filter::int(Req::args('payment_id'));
        $order_no = date('YmdHis').rand(1000,9999);
-       $order_amount = (Req::args('order_amount'));
+       $order_amount = Filter::float(Req::args('order_amount'));
        $randomstr=rand(1000000000000,9999999999999);
        $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
        if(!$seller_id){
@@ -708,11 +708,11 @@ class PaymentAction extends Controller {
       
       $notify_url ="http://www.ymlypt.com/payment/callback";   
       
-      $order_no = date( 'YmdHis' ); 
+      $order_no = Common::createOrderNo(); 
 
       $order_time = date( 'Y-m-d H:i:s' );  
 
-      $order_amount = "0.1";  
+      $order_amount = Filter::float(Req::args('order_amount'));  
 
       $product_name ="testpay"; 
 
@@ -831,8 +831,18 @@ class PaymentAction extends Controller {
         'order_time'=>$order_time,
         'product_name'=>$product_name,
         'client_ip'=>$client_ip,
-        
+        'extend_param'=>$extend_param,
+        'extra_return_param'=>$extra_return_param,
+        'pay_type'=>$pay_type,
+        'product_code'=>$product_code,
+        'product_desc'=>$product_desc,
+        'product_num'=>$product_num,
+        'return_url'=>$return_url,
+        'show_url'=>$show_url,
+        'redo_flag'=>$redo_flag
         );
-      $result = Common::httpRequest($url,'POST',$params);
+      $ret = Common::httpRequest($url,'POST',$params);
+      $result = json_decode($ret,true);
+      var_dump($result);die;
     }
 }
