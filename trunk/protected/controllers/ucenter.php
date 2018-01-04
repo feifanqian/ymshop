@@ -3234,42 +3234,84 @@ class UcenterController extends Controller
     }
 
     //绑定银行卡 业务逻辑处理
-    public function bindbancard_do()
-    {
-        $client = new SOAClient();
-        $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
-        $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
-        $client->setServerAddress($this->serverAddress);
-        $client->setSignKey($privateKey);
-        $client->setPublicKey($publicKey);
-        $client->setSysId($this->sysid);
-        $client->setSignMethod($this->signMethod);
+    // public function bindbancard_do()
+    // {
+    //     $client = new SOAClient();
+    //     $privateKey = RSAUtil::loadPrivateKey($this->alias, $this->path, $this->pwd);
+    //     $publicKey = RSAUtil::loadPublicKey($this->alias, $this->path, $this->pwd);
+    //     $client->setServerAddress($this->serverAddress);
+    //     $client->setSignKey($privateKey);
+    //     $client->setPublicKey($publicKey);
+    //     $client->setSysId($this->sysid);
+    //     $client->setSignMethod($this->signMethod);
 
-        $user = $this->model->table('customer')->fields('id_no')->where('realname_verified=1 and user_id=' . $this->user['id'])->find();
-        if (!$user) {
-            exit(json_encode(array('status' => 'fail', 'msg' => '请先实名认证')));
-        } else {
-            $identityNo = $user['id_no'];
-        }
-        $bizUserId = date('YmdHis') . $this->user['id'];
-        $cardNo = Req::args('cardNo');
-        $phone = Req::args('phone');
-        $name = Req::args('name');
-        $cardCheck = 1; //绑卡方式 1三要素绑卡
-        $identityType = 1;//证件类型 1是身份证 目前只支持身份证
-        $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
-        $param["cardNo"] = $this->rsaEncrypt($cardNo, $publicKey, $privateKey);//银行卡号
-        $param["phone"] = $phone;  //银行预留的手机卡号
-        $param["name"] = $name; //用户的姓名
-        $param["cardCheck"] = $cardCheck; //绑卡方式
-        $param["identityType"] = $identityType;
-        $param["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);//必须rsa加密 身份证号码
-        $result = $client->request("MemberService", "applyBindBankCard", $param);
-        if ($result['status'] == 'OK') {
+    //     $user = $this->model->table('customer')->fields('id_no')->where('realname_verified=1 and user_id=' . $this->user['id'])->find();
+    //     if (!$user) {
+    //         exit(json_encode(array('status' => 'fail', 'msg' => '请先实名认证')));
+    //     } else {
+    //         $identityNo = $user['id_no'];
+    //     }
+    //     $bizUserId = date('YmdHis') . $this->user['id'];
+    //     $cardNo = Req::args('cardNo');
+    //     $phone = Req::args('phone');
+    //     $name = Req::args('name');
+    //     $cardCheck = 1; //绑卡方式 1三要素绑卡
+    //     $identityType = 1;//证件类型 1是身份证 目前只支持身份证
+    //     $param["bizUserId"] = $bizUserId;    //商户系统用户标识，商户系统中唯一编号
+    //     $param["cardNo"] = $this->rsaEncrypt($cardNo, $publicKey, $privateKey);//银行卡号
+    //     $param["phone"] = $phone;  //银行预留的手机卡号
+    //     $param["name"] = $name; //用户的姓名
+    //     $param["cardCheck"] = $cardCheck; //绑卡方式
+    //     $param["identityType"] = $identityType;
+    //     $param["identityNo"] = $this->rsaEncrypt($identityNo, $publicKey, $privateKey);//必须rsa加密 身份证号码
+    //     $result = $client->request("MemberService", "applyBindBankCard", $param);
+    //     if ($result['status'] == 'OK') {
+    //         exit(json_encode(array('status'=>'success','msg'=>'绑定银行卡成功')));
+    //     } else {
+    //         exit(json_encode(array('status'=>'fail','msg'=>'绑定银行卡失败')));
+    //     }
+    // }
+    
+    public function bindbancard_do(){
+          $bankcard = Req::args('bankcard');
+          $idcard = Req::args('idcard');
+          $realname = Filter::str(Req::args('realname'));
+          $province = Filter::str(Req::args('province'));
+          $city = Filter::str(Req::args('city'));
+          
+          $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
+          if($customer['realname_verified']==0){ //需要先实名认证
+            exit(json_encode(array('status'=>'fail','msg'=>'需要先实名认证')));
+          }
+
+          $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=".$bankcard."&cardNo=".$idcard."&realName=".$realname;
+          $header = array(
+                'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
+            );
+         
+          $ret = Common::httpRequest($url,'GET',NULL,$header);
+          $result = json_decode($ret,true);
+          if($result['error_code']==0){
+            $has_bind = $this->model->table('bankcard')->where('cardno='.$bankcard)->find();
+            if($has_bind){
+                exit(json_encode(array('status'=>'fail','msg'=>'该银行卡已绑定了')));
+            }
+            $data = array(
+                'user_id'=>$this->user['id'],
+                'cardno'=>$bankcard,
+                'bank_name'=>$result['result']['information']['bankname'],
+                'open_name'=>$realname,
+                'province'=>$province,
+                'city'=>$city,
+                'type'=>intval($result['result']['information']['iscreditcard']),
+                'bank_code'=>$result['result']['information']['abbreviation'],
+                'bind_date'=>date('Y-m-d H:i:s')
+                );
+            $this->model->table('bankcard')->data($data)->insert();
             exit(json_encode(array('status'=>'success','msg'=>'绑定银行卡成功')));
-        } else {
+          }else{
             exit(json_encode(array('status'=>'fail','msg'=>'绑定银行卡失败')));
-        }
+          }
     }
 
     public function code_input(){

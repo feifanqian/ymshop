@@ -58,9 +58,8 @@
             success: function (result) {
                 var ret = JSON.parse(result);
                 if (ret.status == 'success') {
-                    $.toast("实名认证已提交", 'success', function () {
-                        notification(ret.msg);
-                    });
+                    notification(ret.msg);
+                    window.location.href = '/ucenter/index';
                 } else {
                     notification(ret.msg);
                 }

@@ -366,6 +366,106 @@ function descartes(args) {
 
 // 无限级连动插件
 (function ($) {
+    $.fn.Linkage1 = function (o) {
+
+        o = $.extend({url: '', selects: ['#province', '#city'], initRunCallBack: false, selected: ['0', '0']}, o || {});
+        var url = o.url;
+        var arrNodeChild = new Array();
+        var arrSelect = o.selected;
+        var options = new Array();
+        $.each(arrSelect, function (i) {
+            options[i] = '';
+        });
+        var len = o.selects.length;
+        for (var i = 0; i < len; i++)
+            arrNodeChild[i] = new Array();
+        //请求格式化后的JSON数据
+        $.post(o.url, function (data) {
+            $.each(data, function (i, n) {
+                var c_id = i.substr(2);
+                var selected = (c_id == arrSelect[0]) ? 'selected="selected"' : '';
+                options[0] += '<option value="' + c_id + '" ' + selected + '>' + n.t + '</option>';
+
+                n.id = c_id;
+                if (n.c !== null) {
+                    arrNodeChild[0][i] = n.c;
+                    parse(n, 0);
+                }
+            });
+
+            $.each(o.selects, function (i, em) {
+                $(em).append(options[i]);
+            });
+            if (o.initRunCallBack)
+                callback();
+        }, "json");
+        //解析每一层元素
+        function parse(data, num) {
+            if (data.c !== undefined && data.c !== null) {
+                $.each(data.c, function (i, n) {
+                    var c_id = i.substr(2);
+                    if (data.id == arrSelect[num]) {
+                        var selected = (c_id == arrSelect[num + 1]) ? 'selected="selected"' : '';
+                        options[num + 1] += '<option value="' + c_id + '" ' + selected + '>' + n.t + '</option>';
+                    }
+                    n.id = c_id;
+                    arrNodeChild[num + 1][i] = n.c;
+                    if (n.c !== null)
+                        parse(n, num + 1);
+                });
+            }
+        }
+        //回调处理
+        function callback()
+        {
+            if (typeof (o.callback) == 'function') {
+                var selected = new Array();
+                value = new Array();
+                text = new Array();
+                $.each(o.selects, function (i, em) {
+                    value[i] = $(em).val();
+                    text[i] = $('option:selected', $(em)).text();
+                });
+                selected[0] = value;
+                selected[1] = text;
+                o.callback(selected);
+            }
+        }
+        //逐级绑定连动事件
+        var len = o.selects.length;
+        $.each(o.selects, function (i, em) {
+            $(em).change(function () {
+                var val = 'o_' + $(this).val();
+                if (arrNodeChild[i][val] !== null && i < len - 1) {
+
+                    for (var j = i + 1; j < len; j++) {
+                        var option = $(o.selects[j]).children().first();
+                        if (option.val() == 0)
+                            $(o.selects[j]).empty().append(option);
+                        else
+                            $(o.selects[j]).empty().append("<option value='0'>请选择</option>");
+                    }
+                    if (val != 0) {
+                        var select = '';
+                        if (arrNodeChild[i][val] !== undefined) {
+                            $.each(arrNodeChild[i][val], function (k, n) {
+                                var c_id = k.substr(2);
+
+                                select += '<option value="' + c_id + '">' + n.t + '</option>';
+                            });
+                            $(o.selects[i + 1]).append(select);
+                        }
+
+                    }
+                }
+                callback();
+            });
+        });
+    };
+})(jQuery);
+
+// 无限级连动插件
+(function ($) {
     $.fn.Linkages = function (o) {
 
         o = $.extend({url: '', selects: ['#province', '#city', '#county','#street'], initRunCallBack: false, selected: ['0', '0', '0','0']}, o || {});

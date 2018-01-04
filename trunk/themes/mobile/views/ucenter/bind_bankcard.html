@@ -8,13 +8,35 @@
                 <input class="input" type="text" pattern="required" name="name" maxlen="5" value=""
                        placeholder="姓名" alt="姓名不能为空">
             </dd>
-            <dd>
+            <!-- <dd>
                 <input class="input" type="text" pattern="required" name="phone" maxlength="11" value=""
                        placeholder="手机号码">
+            </dd> -->
+            <dd>
+                <input class="input" type="text" pattern="required" name="idcard" maxlength="20" value=""
+                       placeholder="身份证号码">
             </dd>
             <dd>
                 <input class="input" type="text" pattern="required" name="cardNo" maxlen="19" value=""
                        placeholder="银行卡号" alt="银行卡号不能为空">
+            </dd>
+            <dd class="input gray">开户行所在地</dd>
+            <dd id="areas" class="h-box" >
+                <div class="flex_1">
+                    <div class="select">
+                        <div class="option"></div>
+                        <input  id="areas_hidden" type="text" class="input" style="visibility:hidden;width:0;" value="{$province},{$city}" alt="请选择完整地区信息！">
+                        <select id="province" name="province" >
+                            <option value="0">省份/直辖市</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex_1">
+                    <div class="select">
+                        <div class="option"></div>
+                        <select id="city" name="city"><option value="0">市</option></select>
+                    </div>
+                </div>
             </dd>
             <dd>
                 <input class="btn" type="button" id="apply-submit" value="保存">
@@ -23,6 +45,25 @@
     </form>
 </div>
 <script>
+$(function(){
+    var selected = [{$province|0},{$city|0}];
+    $("#areas").Linkage({ url:"{url:/ajax/area_data}",selected:selected,initRunCallBack:true,callback:function(data){
+        var text = new Array();
+        var value = new Array();
+        for (i in data[0]){
+            if (data[0][i] != 0){
+                text.push(data[1][i]);
+                value.push(data[0][i]);
+            }
+        }
+        // console.log(value);
+        $("#province").parent().find(".option").text(data[1][0]);
+        $("#city").parent().find(".option").text(data[1][1]);
+        $("#areas_hidden").val(value.join(','));
+        FireEvent(document.getElementById("areas_hidden"), "change");
+    }});
+});
+
     function notification(msg) {
         layer.open({
             content: msg
@@ -35,13 +76,14 @@
         var name = $("input[name='name']").val();
         var phone = $("input[name='phone']").val();
         var cardNo = $("input[name='cardNo']").val();
+        var idcard = $("input[name='idcard']").val();
         $.ajax({
-            url: 'http://localhost/ymshop/trunk/ucenter/bindbancard_do',
+            url: '/ucenter/bindbancard_do',
             type: 'post',
-            data: {'name': name, 'phone': phone, 'cardNo': cardNo},
+            data: {'name': name, 'phone': phone, 'cardNo': cardNo,'idcard':idcard},
             beforeSend: function () {
                 var flag = true;
-                if ($("input[name='name']").val() == '' || $("input[name='phone']").val() == '' || $("input[name='cardNo']").val() == '') {
+                if ($("input[name='name']").val() == '' || $("input[name='cardNo']").val() == '') {
                     flag = false;
                     notification("请完善绑卡信息");
                     return false;
@@ -50,13 +92,14 @@
                 }
             },
             success: function (result) {
-                console.log(result);
-//                var ret = JSON.parse(result);
-//                if (ret.status == 'success') {
-//                    notification(ret.msg);
-//                } else {
-//                    notification(ret.msg);
-//                }
+                // console.log(result);
+               var ret = JSON.parse(result);
+               if (ret.status == 'success') {
+                   notification(ret.msg);
+                   window.location.href = '/ucenter/index';
+               } else {
+                   notification(ret.msg);
+               }
             }
         }, 'json');
     });
