@@ -106,11 +106,12 @@
                         </div>
                         <span class="weui_cell_ft"></span>
                     </a>
-                    <!-- <a class="weui_cell" href="javascript:void(0);" id="name_check">
+                    {if:$customer['realname_verified']==0}
+                    <a class="weui_cell" href="/ucenter/set_realname" id="name_check">
                         <div class="weui_cell_hd">
                             <span class="icon-stack icon-lg">
                                 <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
-                                <i class="iconfont icon-password icon-stack-1x icon-inverse"></i>
+                                <i class="iconfont icon-my1 icon-stack-1x icon-inverse"></i>
                             </span>
                         </div>
                         <div class="weui_cell_bd weui_cell_primary">
@@ -118,18 +119,21 @@
                         </div>
                         <span class="weui_cell_ft"></span>
                     </a>
-                    <a class="weui_cell" href="javascript:void(0);" id="bind_bankcard">
+                    {/if}
+                    {if:$card_bind==0}
+                    <a class="weui_cell" href="/ucenter/bind_bankcard" id="bind_bankcard">
                         <div class="weui_cell_hd">
                             <span class="icon-stack icon-lg">
                                 <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
-                                <i class="iconfont icon-password icon-stack-1x icon-inverse"></i>
+                                <i class="iconfont icon-card icon-stack-1x icon-inverse"></i>
                             </span>
                         </div>
                         <div class="weui_cell_bd weui_cell_primary">
                             <p>绑定银行卡</p>
                         </div>
                         <span class="weui_cell_ft"></span>
-                    </a> -->
+                    </a>
+                    {/if}
                 </div>
             </div>
         </div>
@@ -160,22 +164,22 @@
 {/list}	-->
 <script>
     //实名认证，判断用户是否已绑定手机
-    $("#name_check").click(function () {
-        var e = "{$mobile_verified}";
-        if (e) {
-            window.location.href = '/ucenter/set_realname';
-        } else {
-            $.toast('请先绑定手机', 'loading');
-        }
-    });
+    // $("#name_check").click(function () {
+    //     var e = "{$mobile_verified}";
+    //     if (e) {
+    //         window.location.href = '/ucenter/set_realname';
+    //     } else {
+    //         $.toast('请先绑定手机', 'loading');
+    //     }
+    // });
 
     //绑定银行卡，判断用户是否已实名认证
-    $("#bind_bankcard").click(function () {
-        var e = "{$realname_verified}";
-        if (e) {
-            window.location.href = '/ucenter/bind_bankcard';
-        } else {
-            $.toast('请先实名认证', 'loading');
-        }
-    });
+    // $("#bind_bankcard").click(function () {
+    //     var e = "{$realname_verified}";
+    //     if (e) {
+    //         window.location.href = '/ucenter/bind_bankcard';
+    //     } else {
+    //         $.toast('请先实名认证', 'loading');
+    //     }
+    // });
 </script>
