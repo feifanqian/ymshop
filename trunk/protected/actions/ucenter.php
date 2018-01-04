@@ -2015,9 +2015,12 @@ class UcenterAction extends Controller {
         if (isset($record['html'])) {
             unset($record['html']);
         }
-        if($this->user['id']!=1){
-            if($record['data']){
-                foreach($record['data'] as $k=>$v){
+            
+        if($record['data']){
+            foreach($record['data'] as $k=>$v){
+                if($v['id']==null){
+                    unset($record['data'][$k]);
+                }else{
                     $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
                     $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
                     if($shop && $promoter){
@@ -2030,6 +2033,7 @@ class UcenterAction extends Controller {
                 }
             }
         }
+        
         
         $this->code = 0;
         $this->content = $record;
