@@ -853,7 +853,11 @@ class PaymentAction extends Controller {
         );
       $ret = Common::httpRequest($url,'POST',$params);
       $result = json_decode($ret,true);
+      
+      echo "<pre>";
+      print_r($params);
+      echo "<pre>";
+      
       var_dump($result);
-      print_r($params);die;
     }
 }
