@@ -816,7 +816,23 @@ class PaymentAction extends Controller {
       $sign = base64_encode($sign_info);
       
       $url = 'https://pay.dinpay.com/gateway?input_charset=UTF-8';
-
+      
+      $params = array(
+        'sign'=>$sign,
+        'merchant_code'=>$merchant_code,
+        'bank_code'=>$bank_code,
+        'order_no'=>$order_no,
+        'order_amount'=>$order_amount,
+        'service_type'=>$service_type,
+        'input_charset'=>$input_charset,
+        'notify_url'=>$notify_url,
+        'interface_version'=>$interface_version,
+        'sign_type'=>$sign_type,
+        'order_time'=>$order_time,
+        'product_name'=>$product_name,
+        'client_ip'=>$client_ip,
+        
+        );
       $result = Common::httpRequest($url,'POST',$params);
     }
 }
