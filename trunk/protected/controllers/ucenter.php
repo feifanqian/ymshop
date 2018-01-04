@@ -1522,13 +1522,7 @@ class UcenterController extends Controller
         if($index_notice){
             $this->assign('index_notice', $index_notice);
         }
-        // $bankcard = $this->model->table('bankcard')->where('user_id='.$this->user['id'])->findAll();
-        // if($bankcard){
-        //     $card_bind = 1;
-        // }else{
-        //     $card_bind = 0;
-        // }
-        // $this->assign('card_bind',$card_bind);
+        
         $this->assign("sign_in_open", $sign_in_set['open']);
         $this->assign("random", rand(1000, 9999));
         $this->assign('is_hirer', $is_hirer);
