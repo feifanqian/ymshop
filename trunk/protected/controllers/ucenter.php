@@ -3273,9 +3273,9 @@ class UcenterController extends Controller
     // }
     
     public function bindbancard_do(){
-          $bankcard = Req::args('bankcard');
+          $bankcard = Req::args('cardNo');
           $idcard = Req::args('idcard');
-          $realname = Filter::str(Req::args('realname'));
+          $realname = Filter::str(Req::args('name'));
           $province = Filter::str(Req::args('province'));
           $city = Filter::str(Req::args('city'));
           

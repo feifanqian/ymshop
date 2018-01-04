@@ -21,6 +21,8 @@
                        placeholder="银行卡号" alt="银行卡号不能为空">
             </dd>
             <dd class="input gray">开户行所在地</dd>
+            <input type="hidden" name="province" value="" />
+            <input type="hidden" name="city" value="" />
             <dd id="areas" class="h-box" >
                 <div class="flex_1">
                     <div class="select">
@@ -59,6 +61,8 @@ $(function(){
         // console.log(value);
         $("#province").parent().find(".option").text(data[1][0]);
         $("#city").parent().find(".option").text(data[1][1]);
+        $("input[name='province']").val(data[1][0]);
+        $("input[name='city']").val(data[1][1]);
         $("#areas_hidden").val(value.join(','));
         FireEvent(document.getElementById("areas_hidden"), "change");
     }});
@@ -77,13 +81,15 @@ $(function(){
         var phone = $("input[name='phone']").val();
         var cardNo = $("input[name='cardNo']").val();
         var idcard = $("input[name='idcard']").val();
+        var province = $("input[name='province']").val();
+        var city = $("input[name='city']").val();
         $.ajax({
             url: '/ucenter/bindbancard_do',
             type: 'post',
-            data: {'name': name, 'phone': phone, 'cardNo': cardNo,'idcard':idcard},
+            data: {'name': name, 'phone': phone, 'cardNo': cardNo,'idcard':idcard,'province':province,'city':city},
             beforeSend: function () {
                 var flag = true;
-                if ($("input[name='name']").val() == '' || $("input[name='cardNo']").val() == '') {
+                if ($("input[name='name']").val() == '' || $("input[name='cardNo']").val() == '' || $("input[name='city']").val() == '') {
                     flag = false;
                     notification("请完善绑卡信息");
                     return false;
