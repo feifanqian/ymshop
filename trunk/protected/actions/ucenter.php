@@ -2007,6 +2007,9 @@ class UcenterAction extends Controller {
                 ->where("do.user_id=".$this->user['id'])
                 ->order("do.id desc")
                 ->findPage($page, 10);
+        if($this->user['id']==1){
+            var_dump($record);die;
+        }        
         if (empty($record)) {
             $this->code = 0;
             $this->content['data'] = array();
