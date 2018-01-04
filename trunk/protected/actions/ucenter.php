@@ -2006,10 +2006,7 @@ class UcenterAction extends Controller {
                 ->fields('u.id,u.avatar,u.nickname,do.createtime')
                 ->where("do.user_id=".$this->user['id'])
                 ->order("do.id desc")
-                ->findPage($page, 10);
-        if($this->user['id']==1){
-            var_dump($record);die;
-        }        
+                ->findPage($page, 10);        
         if (empty($record)) {
             $this->code = 0;
             $this->content['data'] = array();
@@ -2018,19 +2015,22 @@ class UcenterAction extends Controller {
         if (isset($record['html'])) {
             unset($record['html']);
         }
-        if($record['data']){
-            foreach($record['data'] as $k=>$v){
-                $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
-                if($shop && $promoter){
-                    $record['data'][$k]['role_type'] = 2;
-                }elseif(!$shop && $promoter){
-                    $record['data'][$k]['role_type'] = 1;
-                }else{
-                    $record['data'][$k]['role_type'] = 0;
+        if($this->user['id']!=1){
+            if($record['data']){
+                foreach($record['data'] as $k=>$v){
+                    $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                    $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
+                    if($shop && $promoter){
+                        $record['data'][$k]['role_type'] = 2;
+                    }elseif(!$shop && $promoter){
+                        $record['data'][$k]['role_type'] = 1;
+                    }else{
+                        $record['data'][$k]['role_type'] = 0;
+                    }
                 }
             }
         }
+        
         $this->code = 0;
         $this->content = $record;
         return;
