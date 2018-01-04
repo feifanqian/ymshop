@@ -1700,11 +1700,17 @@ class UcenterAction extends Controller {
     //余额提现接口
     public function balance_withdraw() {
         Filter::form();
-        $open_name = Filter::str(Req::args('name'));
-        $open_bank = Filter::str(Req::args('bank'));
-        $prov_id = Filter::str(Req::args('province'));
-        $city_id = Filter::str(Req::args("city"));
-        $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
+        $id = Filter::int(Req::args('id'));
+        $bankcard = $this->model->table('bankcard')->where('id='.$id)->find();
+        if(!$bankcard){
+            $this->code = 1202;
+            return;
+        }
+        $open_name = $bankcard['open_name'];
+        $open_bank = $bankcard['bank_name'];
+        $prov = $bankcard['province'];
+        $city = $bankcard['city'];
+        $card_no = $bankcard['cardno'];
         $amount = Filter::float(Req::args('amount'));
         $amount = round($amount, 2);
         $customer = $this->model->table('customer')->fields('balance,offline_balance')->where('user_id='.$this->user['id'])->find();
@@ -1732,10 +1738,7 @@ class UcenterAction extends Controller {
             //exit(json_encode(array('status' => 'fail', 'msg' => '申请失败，还有未处理完的提现申请')));
         }
         $withdraw_no = "BW" . date("YmdHis") . rand(100, 999);
-        $province = $this->model->table('area')->fields('name')->where('id='.$prov_id)->find();
-        $citys = $this->model->table('area')->fields('name')->where('id='.$city_id)->find();
-        $prov = $province['name'];
-        $city = $citys['name'];
+        
         $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0);
         $result = $this->model->table('balance_withdraw')->data($data)->insert();
         if ($result) {
@@ -1757,11 +1760,17 @@ class UcenterAction extends Controller {
 
     public function offline_balance_withdraw() {
             Filter::form();
-            $open_name = Filter::str(Req::args('name'));
-            $open_bank = Filter::str(Req::args('bank'));
-            $prov = Filter::str(Req::args('province'));
-            $city = Filter::str(Req::args("city"));
-            $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
+            $id = Filter::int(Req::args('id'));
+            $bankcard = $this->model->table('bankcard')->where('id='.$id)->find();
+            if(!$bankcard){
+                $this->code = 1202;
+                return;
+            }
+            $open_name = $bankcard['open_name'];
+            $open_bank = $bankcard['bank_name'];
+            $prov = $bankcard['province'];
+            $city = $bankcard['city'];
+            $card_no = $bankcard['cardno'];
             $amount = Filter::float(Req::args('amount'));
             $amount = round($amount, 2);
             $customer = $this->model->table("customer")->where("user_id =".$this->user['id'])->fields('offline_balance')->find();

@@ -696,7 +696,7 @@ class PaymentAction extends Controller {
        $merchant_private_key='MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAKwJnd8sHJojXIFxuf4Ibsdtc2cJHPlN2d/IKMBw5cuoRknNeMCTlR89MxEqfuPqYR7o1dGgOiehswR9T4vWByzhJlrLEFcgOcJFnDINzU9iZW4RcRKf187sLXYL8b5Vf5WjEfudXjnxSGt8HXPe+V0VimUVaIAQSWvBCWgHkFV/AgMBAAECgYBivF40EJAV0serrwatCk/x+xopf2x2lLy/l5Pz5pesS9aTUu7Dr6/9LtWZO4d57TFyWPUmi0v1JPOmVvkJa3vPz6HhZIzg5M4jd23Kj8fl94PaTSyGM3NEMRJDLPxWEB9ydR60VtRlieCf2lyH0JSKa5YMS09A6ks13W4SVNRqaQJBAOF22itr0KonXZaQxNIOrnGifCvBA11cKV1SMxT5iLOuYu5j2VOZNExC5oD4j1fkT/7kEq+7OSTEOhZwgcNkcGUCQQDDVmOlmKHBjUpMmv0xfc789Zj7PLoKO9WpYkDTbl7xPdc/Yb0OeeZlS123ZlplXLMVPpOQTpFcrbk9nhShaSYTAkEAhnrPsqqCMZt9VPtQikI7hof2LFrZ2OvJuGH5Gf+krBfN5ocj75sn+HzG5BJd3XzOwifjhXHUqbtpMk00+QiFiQJBAIv2JGQM3yn+ANSu4OhLSrp5h2nM80hN4yQA4I4eMS0NsGMbtwjeUzUVMUstrWufZjm8oqLtiL4tQ+Ngl0uoOb0CQQCuOR315Fwm/BW3QXjaASDwN8sahQxfNAtUyh7oGJfieKWYEjd3VYfaWXyful7FWW/Ry8H1pOSbIJZo07gLVTvA';
   
   
-      $merchant_code = "1111110166";//商户号，1118004517是测试商户号，线上发布时要更换商家自己的商户号！
+      $merchant_code = "4000038801";//商户号，1118004517是测试商户号，线上发布时要更换商家自己的商户号！
 
       $service_type ="wxpub_pay"; 
 
@@ -706,7 +706,7 @@ class PaymentAction extends Controller {
 
       $input_charset = "UTF-8";
       
-      $notify_url ="http://15l0549c66.iask.in:45191/testnewb2c/offline_notify.php";   
+      $notify_url ="http://www.ymlypt.com/payment/callback";   
       
       $order_no = date( 'YmdHis' ); 
 
@@ -814,5 +814,9 @@ class PaymentAction extends Controller {
       openssl_sign($signStr,$sign_info,$merchant_private_key,OPENSSL_ALGO_MD5);
       
       $sign = base64_encode($sign_info);
+      
+      $url = 'https://pay.dinpay.com/gateway?input_charset=UTF-8';
+
+      $result = Common::httpRequest($url,'POST',$params);
     }
 }
