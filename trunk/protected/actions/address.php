@@ -480,6 +480,9 @@ class AddressAction extends Controller
                return; 
             }
         }else{ // 只查看红包领取详情不抢
+            if($redbag['status']==1 && $redbag['open_num']==$redbag['num']){
+                $this->model->table('redbag')->data(array('status'=>2))->where('id='.$id)->update();
+            }
             $result = $this->newredbag($id);
             $this->code = 0;
             $this->content['redbag'] = $result['newredbag'];
