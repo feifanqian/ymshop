@@ -109,7 +109,7 @@ $.rawCitiesData = [{"id":"1","name":"\u5317\u4eac","sub":[{"id":"2","name":"\u53
               picker.updateValue();
             }
           }
-          console.log(picker.value);
+          // console.log(picker.value);
           var province = null;
           var city = null;
           var district = null;

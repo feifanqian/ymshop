@@ -384,7 +384,7 @@
                     </a>
                     {/if}
                     {if:$card_bind==0}
-                    <a class="weui_cell" href="/ucenter/bind_bankcard?jump=1" id="bind_bankcard">
+                    <a class="weui_cell" href="javascript:;" id="bind_bankcard">
                         <div class="weui_cell_hd">
                             <span class="icon-stack icon-lg">
                                 <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
@@ -397,7 +397,7 @@
                         <span class="weui_cell_ft"></span>
                     </a>
                     {else:}
-                    <a class="weui_cell" href="/ucenter/bind_bankcard?jump=1" id="bind_bankcard">
+                    <a class="weui_cell" href="javascript:;" id="bind_bankcard">
                         <div class="weui_cell_hd">
                             <span class="icon-stack icon-lg">
                                 <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
@@ -427,14 +427,15 @@
     // });
 
     //绑定银行卡，判断用户是否已实名认证
-    // $("#bind_bankcard").click(function () {
-    //     var e = "{$customer['realname_verified']}";
-    //     if (e) {
-    //         window.location.href = '/ucenter/bind_bankcard';
-    //     } else {
-    //         $.toast('请先实名认证', 'loading');
-    //     }
-    // });
+    $("#bind_bankcard").click(function () {
+        var e = {$customer['realname_verified']};
+        if (e==1) {
+            window.location.href = '/ucenter/bind_bankcard?jump=1';
+        } else {
+            $.toast('请先实名认证', 'loading');
+            window.location.href = '/ucenter/set_realname';
+        }
+    });
 </script>
 </div>
 {if:!Common::checkInWechat()}
