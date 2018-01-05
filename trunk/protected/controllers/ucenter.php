@@ -3310,6 +3310,12 @@ class UcenterController extends Controller
             if($has_bind){
                 exit(json_encode(array('status'=>'fail','msg'=>'该银行卡已绑定了')));
             }
+            $bank_code = $result['result']['information']['abbreviation'];
+            if($bank_code){
+                $logo = 'https://apimg.alipay.com/combo.png?d=cashier&t='.$bank_code;
+            }else{
+                $logo = '';
+            }
             $data = array(
                 'user_id'=>$this->user['id'],
                 'cardno'=>$bankcard,
@@ -3318,7 +3324,8 @@ class UcenterController extends Controller
                 'province'=>$province,
                 'city'=>$city,
                 'type'=>intval($result['result']['information']['iscreditcard']),
-                'bank_code'=>$result['result']['information']['abbreviation'],
+                'bank_code'=>$bank_code,
+                'logo'=>$logo,
                 'bind_date'=>date('Y-m-d H:i:s')
                 );
             $this->model->table('bankcard')->data($data)->insert();
