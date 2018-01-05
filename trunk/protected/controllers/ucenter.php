@@ -302,10 +302,11 @@ class UcenterController extends Controller
         } else {
             $config = Config::getInstance();
             $other = $config->get("other");
-            $info = $this->model->table("customer")->fields('offline_balance')->where("user_id=" . $this->user['id'])->find();
+            $info = $this->model->table("customer")->fields('offline_balance,realname_verified')->where("user_id=" . $this->user['id'])->find();
             $card_num = $this->model->table("bankcard")->where("user_id=" . $this->user['id'])->count();
             $this->assign('card_num',$card_num);
             $this->assign("goldcoin", $info['offline_balance']);
+            $this->assign("realname_verified", $info['realname_verified']);
             $this->assign("gold2silver", $other['gold2silver']);
             $this->assign("withdraw_fee_rate", $other['withdraw_fee_rate']);
             $this->assign('min_withdraw_amount', $other['min_withdraw_amount']);
@@ -3137,6 +3138,7 @@ class UcenterController extends Controller
     //实名认证
     public function set_realname()
     {
+        $this->assign("seo_title", "实名认证");
         $this->redirect();
     }
 
@@ -3245,6 +3247,7 @@ class UcenterController extends Controller
     { 
         $jump = Req::args('jump');
         $this->assign('jump',$jump);
+        $this->assign("seo_title", "绑定银行卡");
         $this->redirect();
     }
 

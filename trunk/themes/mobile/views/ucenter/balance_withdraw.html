@@ -160,7 +160,8 @@
         if (e==1) {
             window.location.href = '/ucenter/bind_bankcard?jump=2';
         } else {
-            notification("请先通过实名认证");
+            $.toast('请先实名认证', 'loading');
+            // notification("请先通过实名认证");
             window.location.href = '/ucenter/set_realname';
         }
     });
