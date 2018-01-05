@@ -334,14 +334,14 @@
             key = 'key';
         }
         value = form.getValue(key);
-        
+
         if (key == 'key') {
             var keytitle = typeof responselist[value] != 'undefined' ? responselist[value] : '';
             var cont = $(".is-click .create-click:first");
             $(".keytitle", cont).remove();
             cont.append('<div class="keytitle">资源名:' + keytitle + '</div>');
         }
-        
+
         currentItem.attr('data-type', type);
         currentItem.attr('data-action', key + "|" + value);
         if (currentItem == current_link) {
