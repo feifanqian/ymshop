@@ -3246,6 +3246,8 @@ class UcenterController extends Controller
     public function bind_bankcard()
     { 
         $jump = Req::args('jump');
+        $customer = $this->model->table('customer')->fields('realname_verified,realname,id_no')->where('user_id='.$this->user['id'])->find();
+        $this->assign('customer',$customer);
         $this->assign('jump',$jump);
         $this->assign("seo_title", "绑定银行卡");
         $this->redirect();

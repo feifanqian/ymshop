@@ -19,7 +19,7 @@
     <form action="" method="post" id="form">
         <dl>
             <dd>
-                <input class="input" type="text" pattern="required" name="name" maxlen="5" value=""
+                <input class="input" type="text" pattern="required" name="name" maxlen="5" value="{$customer['realname']}" readonly="readonly" 
                        placeholder="姓名" alt="姓名不能为空">
             </dd>
             <!-- <dd>
@@ -27,7 +27,7 @@
                        placeholder="手机号码">
             </dd> -->
             <dd>
-                <input class="input" type="text" pattern="required" name="idcard" maxlength="20" value=""
+                <input class="input" type="text" pattern="required" name="idcard" maxlength="20" value="{$customer['id_no']}" readonly="readonly"
                        placeholder="身份证号码">
             </dd>
             <dd>
@@ -84,7 +84,7 @@ $(function(){
             data: {'name': name, 'phone': phone, 'cardNo': cardNo,'idcard':idcard,'province':province,'city':city},
             beforeSend: function () {
                 var flag = true;
-                if ($("input[name='name']").val() == '' || $("input[name='cardNo']").val() == '' || $("input[name='city']").val() == '') {
+                if ($("input[name='cardNo']").val() == '' || $("input[name='city']").val() == '') {
                     flag = false;
                     notification("请完善绑卡信息");
                     return false;
