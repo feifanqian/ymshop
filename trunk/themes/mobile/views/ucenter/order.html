@@ -15,6 +15,9 @@
     .layui-m-layercont p{
     float: right;
     }
+    .layui-m-layercont img{
+        width: 100% !important;
+    }
 </style>
 {list:items=$orderlist}
 {set:list($status, $btn) = $this->order_status($item);}
@@ -83,7 +86,7 @@
                     type: 3,
                     skin: 'layui-layer-rim', //加上边框
                     area: ['100%', '400px'], //宽高
-                    content: {$index_notice['content']}
+                    content: '{$index_notice['content']}'
                 });
             }
             window.onload = function () {
