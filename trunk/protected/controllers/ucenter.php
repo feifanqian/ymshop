@@ -3294,16 +3294,17 @@ class UcenterController extends Controller
     
     public function bindbancard_do(){
           $bankcard = str_replace(' ', '', Req::args('cardNo'));
-          $idcard = Req::args('idcard');
+          
           $realname = Filter::str(Req::args('name'));
           $province = Filter::str(Req::args('province'));
           $city = Filter::str(Req::args('city'));
           
-          $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
+          $customer = $this->model->table('customer')->fields('realname_verified,id_no')->where('user_id='.$this->user['id'])->find();
+
           if($customer['realname_verified']==0){ //需要先实名认证
             exit(json_encode(array('status'=>'fail','msg'=>'需要先实名认证')));
           }
-
+          $idcard = $customer['id_no'];
           $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=".$bankcard."&cardNo=".$idcard."&realName=".$realname;
           $header = array(
                 'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
