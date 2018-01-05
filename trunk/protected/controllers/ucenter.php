@@ -3412,6 +3412,14 @@ class UcenterController extends Controller
       $order_amount = Filter::float(Req::args('order_amount'));  
 
       $product_name ="testpay";
+      $signStr = '';
+      $signStr = $signStr."input_charset=".$input_charset."&";  
+        $signStr = $signStr."interface_version=".$interface_version."&";    
+        $signStr = $signStr."merchant_code=".$merchant_code."&";    
+        $signStr = $signStr."notify_url=".$notify_url."&";      
+        $signStr = $signStr."order_amount=".$order_amount."&";      
+        $signStr = $signStr."order_no=".$order_no."&";      
+        $signStr = $signStr."order_time=".$order_time."&";
 
       $merchant_private_key = "-----BEGIN PRIVATE KEY-----"."\r\n".wordwrap(trim($merchant_private_key),64,"\r\n",true)."\r\n"."-----END PRIVATE KEY-----";
     
