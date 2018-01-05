@@ -208,13 +208,17 @@ class UcenterController extends Controller
     {
         if ($this->is_ajax_request()) {
             Filter::form();
-            $open_name = Filter::str(Req::args('name'));
-            $open_bank = Filter::str(Req::args('bank'));
-            $prov = Filter::str(Req::args('province'));
-            $city = Filter::str(Req::args("city"));
-            $card_no = str_replace(' ', '', Filter::str(Req::args('card_no')));
-            $amount = Filter::float(Req::args('amount'));
-            $amount = round($amount, 2);
+            $id = Filter::int(Req::args('id'));
+            $bankcard = $this->model->table('bankcard')->where('id='.$id)->find();
+            if(!$bankcard){
+                exit(json_encode(array('status' => 'fail', 'msg' => '该银行卡不存在')));
+            }
+            $open_name = $bankcard['open_name'];
+            $open_bank = $bankcard['bank_name'];
+            $prov = $bankcard['province'];
+            $city = $bankcard['city'];
+            $card_no = $bankcard['cardno'];
+            $amount = sprintf('%.2f',Req::args('amount'));
             $customer = $this->model->table("customer")->where("user_id =" . $this->user['id'])->fields('balance')->find();
             $can_withdraw_amount = $customer ? $customer['balance'] : 0;
             if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
@@ -3273,7 +3277,7 @@ class UcenterController extends Controller
     // }
     
     public function bindbancard_do(){
-          $bankcard = Req::args('cardNo');
+          $bankcard = str_replace(' ', '', Req::args('cardNo'));
           $idcard = Req::args('idcard');
           $realname = Filter::str(Req::args('name'));
           $province = Filter::str(Req::args('province'));
