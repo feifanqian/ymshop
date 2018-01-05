@@ -12,10 +12,10 @@ onclick="tools_reload()"> 刷新</a>
     <tr>
         <th style="width:30px">选择</th>
         <th style="width:80px">操作</th>
-        <th style="width:100px">平台</th>
-        <th style="width:100px">旧版本号</th>
-        <th style="width:100px">新版本号</th>
-        <th style="width:100px;">安装包大小</th>
+        <th style="width:80px">平台</th>
+        <th style="width:80px">旧版本号</th>
+        <th style="width:80px">新版本号</th>
+        <th style="width:80px;">安装包大小</th>
         <th style="width:200px;">升级内容</th>
         <th style="width:200px;">下载地址</th>
         <th style="width:100px;">更新时间</th>
@@ -29,10 +29,10 @@ onclick="tools_reload()"> 刷新</a>
                 <li><a class="icon-pencil" href="{url:/admin/version_edit/id/$item[id]}"> 编辑</a></li>
                <li><a class="icon-close" href="javascript:;" onclick="confirm_action('{url:/admin/version_del/id/$item[id]}')"> 删除</a></li>
             </ul></div></div> </td>
-          <td style="width:100px;">{$item['platform']}</td>
-          <td style="width:100px;">{$item['oldversion']}</td>
-          <td style="width:100px;">{$item['newversion']}</td>
-          <td style="width:100px;">{$item['packagesize']}</td>
+          <td style="width:80px;">{$item['platform']}</td>
+          <td style="width:80px;">{$item['oldversion']}</td>
+          <td style="width:80px;">{$item['newversion']}</td>
+          <td style="width:80px;">{$item['packagesize']}</td>
           <td style="width:200px;">{$item['content']}</td>
           <td style="width:200px;"><a href="{$item['url']}" target="_blank">{$item['downloadurl']}</a></td>
           <td style="width:100px;">{echo: date("Y-m-d H:i:s",$item['createtime'])}</td>
