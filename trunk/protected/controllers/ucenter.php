@@ -247,6 +247,8 @@ class UcenterController extends Controller
             $config = Config::getInstance();
             $other = $config->get("other");
             $info = $this->model->table("customer")->fields('balance')->where("user_id=" . $this->user['id'])->find();
+            $card_num = $this->model->table("bankcard")->where("user_id=" . $this->user['id'])->count();
+            $this->assign('card_num',$card_num);
             $this->assign("goldcoin", $info['balance']);
             $this->assign("gold2silver", $other['gold2silver']);
             $this->assign("withdraw_fee_rate", $other['withdraw_fee_rate']);

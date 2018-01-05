@@ -84,6 +84,7 @@
 <div class="apply_form"  style="display: none;font-size:15px;">    
 <div class="ma20 bg-white p20 ">
      <p style="width: 100%;text-align: center;color:red;"><i class="fa fa-exclamation-circle red"></i>提现需缴纳{$withdraw_fee_rate}%的手续费，请知悉。</p>
+            {if:$card_num>0}
             <div class="weui_panel_hd">提现信息</div>
             <div class="weui-cell">
                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">提现金额</label></div>
@@ -99,6 +100,10 @@
                     {/query}      
                 </select>
             </div>
+            {else:}
+            <div class="weui_panel_hd">尚未绑定银行卡</div>
+            <div class="m20"><a class="weui-btn weui-btn_primary" href="/ucenter/bind_bankcard">添加银行卡</a></div>
+            {/if}
              <!-- <div class="weui-cell">
                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">开户名</label></div>
                 <div class="weui-cell__bd">
