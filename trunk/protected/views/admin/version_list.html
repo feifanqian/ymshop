@@ -1,0 +1,43 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+    <a  class="icon-plus" href="{url:/admin/version_add}" title="添加"> 添加</a><a class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/admin/version_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a><a href="javascript:;" class="icon-loop-2"
+onclick="tools_reload()"> 刷新</a>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:30px">选择</th>
+        <th style="width:80px">操作</th>
+        <th style="width:100px">平台</th>
+        <th style="width:100px">旧版本号</th>
+        <th style="width:100px">新版本号</th>
+        <th style="width:100px;">安装包大小</th>
+        <th style="width:200px;">升级内容</th>
+        <th style="width:200px;">下载地址</th>
+        <th style="width:100px;">更新时间</th>
+    </tr>
+    </table>
+<div style="overflow: auto; height: 480px;">
+<table class="default" style="border-top: 0">
+    {query:name=version id=$obj order=id desc}
+        <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+          <td style="width:80px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                <li><a class="icon-pencil" href="{url:/admin/version_edit/id/$item[id]}"> 编辑</a></li>
+               <li><a class="icon-close" href="javascript:;" onclick="confirm_action('{url:/admin/version_del/id/$item[id]}')"> 删除</a></li>
+            </ul></div></div> </td>
+          <td style="width:100px;">{$item['platform']}</td>
+          <td style="width:100px;">{$item['oldversion']}</td>
+          <td style="width:100px;">{$item['newversion']}</td>
+          <td style="width:100px;">{$item['packagesize']}</td>
+          <td style="width:100px;">{$item['content']}</td>
+          <td style="width:100px;"><a href="{$item['url']}" target="_blank">{$item['downloadurl']}</a></td>
+          <td style="width:100px;">{echo: date("Y-m-d H:i:s",$item['createtime'])}</td>
+        </tr>
+    {/query}
+</table>
+</div>
+</form>

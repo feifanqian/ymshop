@@ -1030,4 +1030,66 @@ class AdminController extends Controller {
         }
     }
 
+    public function version_list(){
+      $this->redirect();
+    }
+
+    public function version_edit(){
+      $id = Filter::int(Req::args('id'));
+      if ($id) {
+            $model = new Model("version");
+            $version = $model->where("id=" . $id)->find();
+        }
+        $this->assign('version',$version);
+        $this->redirect();
+    }
+
+    public function version_save(){
+        $id = Req::args("id");
+        $platform = Req::args("platform");
+        $oldversion = Req::args("oldversion");
+        $newversion = Req::args("newversion");
+        $packagesize = Req::args("packagesize");
+        $content = Req::args("content");
+        $downloadurl = Req::args("downloadurl");
+        $createtime = time();
+        $model = new Model("version");
+        
+        if($id){
+            $version=$model->where('id='.$id)->find();
+            if($version){
+                    $model->data(array('platform'=>$platform,'oldversion'=>$oldversion,'newversion'=>$newversion,'packagesize'=>$packagesize,'content'=>$content,'downloadurl'=>$downloadurl,'createtime'=>$createtime))->where('id='.$id)->update();
+                    Log::op($this->manager['id'], "修改版本", "管理员[" . $this->manager['name'] . "]:修改了版本[id] " . $id . " 的信息");
+                
+            }
+        }
+        $this->redirect('version_list');
+    }
+
+    public function version_add(){
+        if ($this->is_ajax_request()){
+            $platform = Req::args("platform");
+            $oldversion = Req::args("oldversion");
+            $newversion = Req::args("newversion");
+            $packagesize = Req::args("packagesize");
+            $content = Req::args("content");
+            $downloadurl = Req::args("downloadurl");
+            $createtime = time();
+            $model = new Model("version");
+            $model->data(array('platform'=>$platform,'oldversion'=>$oldversion,'newversion'=>$newversion,'packagesize'=>$packagesize,'content'=>$content,'downloadurl'=>$downloadurl,'createtime'=>$createtime))->insert();
+            $this->redirect('version_list');
+        }else{
+            $this->redirect();
+        }
+    }
+
+    public function version_del(){
+      $id = Filter::int(Req::args('id'));
+      if ($id) {
+            $model = new Model("version");
+            $version = $model->where("id=" . $id)->delete();
+        }
+        $this->redirect('version_list');
+    }
+
 }
