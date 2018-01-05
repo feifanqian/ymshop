@@ -102,7 +102,7 @@
             </div>
             {else:}
             <div class="weui_panel_hd">尚未绑定银行卡</div>
-            <div class="m20"><a class="weui-btn weui-btn_primary" href="/ucenter/bind_bankcard?jump=2">添加银行卡</a></div>
+            <div class="m20"><a class="weui-btn weui-btn_primary" href="javascript:;" id="bind_bankcard">添加银行卡</a></div>
             {/if}
              <!-- <div class="weui-cell">
                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">开户名</label></div>
@@ -153,6 +153,16 @@
     $("#apply").click(function(){
         $(".withdraw-list").hide();
         $(".apply_form").slideDown();
+    });
+
+    $("#bind_bankcard").click(function () {
+        var e = {$realname_verified};
+        if (e==1) {
+            window.location.href = '/ucenter/bind_bankcard?jump=2';
+        } else {
+            $.toast("请先实名认证", "text");
+            window.location.href = '/ucenter/set_realname';
+        }
     });
     
     $("#apply-submit").click(function(){
