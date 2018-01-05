@@ -1067,8 +1067,11 @@ class AdminController extends Controller {
     }
 
     public function version_add(){
-        if ($this->is_ajax_request()){
-            $platform = Req::args("platform");
+            $this->redirect();
+    }
+ 
+    public function version_insert(){
+        $platform = Req::args("platform");
             $oldversion = Req::args("oldversion");
             $newversion = Req::args("newversion");
             $packagesize = Req::args("packagesize");
@@ -1084,13 +1087,9 @@ class AdminController extends Controller {
                'downloadurl'=>$downloadurl,
                'createtime'=>$createtime
                 );
-            var_dump($data);die;
             $model = new Model("version");
             $model->data($data)->insert();
             $this->redirect('version_list');
-        }else{
-            $this->redirect();
-        }
     }
 
     public function version_del(){
