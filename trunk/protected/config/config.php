@@ -17,7 +17,7 @@
     'host' => 'localhost',
     'user' => 'root',
     'password' => '',
-    'name' => 'ymshop',
+    'name' => 'shop',
     'port' => '3306',
   ),
   'route' => 

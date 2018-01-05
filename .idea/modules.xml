@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../tinyshop/.idea/tinyshop.iml" filepath="$PROJECT_DIR$/../tinyshop/.idea/tinyshop.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/ymshop.iml" filepath="$PROJECT_DIR$/.idea/ymshop.iml" />
     </modules>
   </component>

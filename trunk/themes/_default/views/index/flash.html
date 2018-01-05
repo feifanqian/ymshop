@@ -12,7 +12,8 @@
                 <dl class="product">
 
                     <dt class="img"><a href="{url:/index/flashbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],200,200,'fwfh')}" ></a>
-                        <span class="limited" style=" display: block;position: absolute;background: red;color: white;bottom: 10px;right: 0;padding: 0 5px;">限量：{$item['max_num']}份</span></dt>
+                        <!--<span class="limited" style=" display: block;position: absolute;background: red;color: white;bottom: 10px;right: 0;padding: 0 5px;">限量：{$item['max_num']}份</span>-->
+                    </dt>
                     <dd class="title" style='height: 42px;'><a href="{url:/index/flashbuy/id/$item[id]}">{echo:TString::msubstr($item['title'],0,15)}</a></dd>
                     <dd class="price"><span class="chophandprice">剁手价<span>{$item['price']}元</span></span><span class="originalprice">原价</span>{$item['sell_price']}元</span></dd>
                     <dd class="flashshoping">{if:$item['is_end']==0}<a class="flashbtn btn-main" href="{url:/index/flashbuy/id/$item[id]}">立即抢购</a>{else:}
