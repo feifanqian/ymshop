@@ -1075,8 +1075,18 @@ class AdminController extends Controller {
             $content = Req::args("content");
             $downloadurl = Req::args("downloadurl");
             $createtime = time();
+            $data = array(
+               'platform'=>$platform,
+               'oldversion'=>$oldversion,
+               'newversion'=>$newversion,
+               'packagesize'=>$packagesize,
+               'content'=>$content,
+               'downloadurl'=>$downloadurl,
+               'createtime'=>$createtime
+                );
+            var_dump($data);die;
             $model = new Model("version");
-            $model->data(array('platform'=>$platform,'oldversion'=>$oldversion,'newversion'=>$newversion,'packagesize'=>$packagesize,'content'=>$content,'downloadurl'=>$downloadurl,'createtime'=>$createtime))->insert();
+            $model->data($data)->insert();
             $this->redirect('version_list');
         }else{
             $this->redirect();
