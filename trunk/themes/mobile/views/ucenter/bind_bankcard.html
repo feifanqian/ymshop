@@ -91,11 +91,17 @@ $(function(){
                 }
             },
             success: function (result) {
-                // console.log(result);
+               var jump = {$jump}; 
                var ret = JSON.parse(result);
                if (ret.status == 'success') {
                    $.toast("绑定成功", 'success');
-                   window.location.href = '/ucenter/index';
+                   if(jump==2){
+                        window.location.href = '/ucenter/balance_withdraw';
+                    }else if(jump==3){
+                       window.location.href = '/ucenter/offline_balance_withdraw';
+                    }else{
+                        window.location.href = '/ucenter/index';
+                    }
                } else {
                    notification(ret.msg);
                }

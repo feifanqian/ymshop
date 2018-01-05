@@ -3235,7 +3235,9 @@ class UcenterController extends Controller
 
     //绑定银行卡 html页面
     public function bind_bankcard()
-    {
+    { 
+        $jump = Req::args('jump');
+        $this->assign('jump',$jump);
         $this->redirect();
     }
 
