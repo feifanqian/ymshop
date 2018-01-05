@@ -23,6 +23,8 @@ class Menu {
             '/admin/notice_template_list' => array('name' => '提醒管理', 'parent' => 'config'),
             '/admin/notice_template_edit' => array('name' => '提醒编辑', 'parent' => 'config'),
             '/admin/version_list' => array('name' => '版本更新', 'parent' => 'config'),
+            '/admin/version_edit' => array('name' => '版本更新编辑', 'parent' => 'config', 'hidden'=>true),
+            '/admin/version_add' => array('name' => '添加版本更新', 'parent' => 'config', 'hidden'=>true),
             '/admin/oauth_list' => array('name' => '开放登录', 'parent' => 'third'),
             '/admin/oauth_edit' => array('name' => '开放登录编辑', 'parent' => 'third'),
             '/admin/class_config_list' => array('name' => '第三方列表', 'parent' => 'third'),
