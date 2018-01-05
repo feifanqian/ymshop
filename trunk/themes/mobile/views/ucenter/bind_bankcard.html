@@ -27,7 +27,7 @@
                        placeholder="手机号码">
             </dd> -->
             <dd>
-                <input class="input" type="text" pattern="required" name="idcard" maxlength="20" value="{echo: substr($customer['id_no'],1).'**************'.substr($customer['id_no'],-1)}" readonly="readonly"
+                <input class="input" type="text" pattern="required" name="idcard" maxlength="20" value="{echo: substr($customer['id_no'],0,1).'**************'.substr($customer['id_no'],-1)}" readonly="readonly"
                        placeholder="身份证号码">
             </dd>
             <dd>
