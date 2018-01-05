@@ -86,6 +86,7 @@
 </div>
 <div class="apply_form"  style="display: none;font-size:15px;">    
 <div class="ma20 bg-white p20 ">
+            {if:$card_num>0}
             <div class="weui_panel_hd">提现信息</div>
             <div class="weui-cell">
                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">提现金额</label></div>
@@ -93,7 +94,19 @@
                     <input class="weui-input" type="number" name="amount" placeholder="  提现金额不小于{$min_withdraw_amount}的整数">
                 </div>
             </div>
-             <div class="weui-cell">
+            <div class="weui-cell">
+               <select id="card_id" name="card_id" class="input">
+                    <option value="0" selected="selected">请选择银行卡</option>
+                    {query:name=bankcard where=user_id eq $user[id] order=id desc page=1 id=$list}
+                    <option value="{$item['id']}" selected="selected">{$item['bank_name']}</option>
+                    {/query}      
+                </select>
+            </div>
+            {else:}
+            <div class="weui_panel_hd">尚未绑定银行卡</div>
+            <div class="m20"><a class="weui-btn weui-btn_primary" href="/ucenter/bind_bankcard?jump=3">添加银行卡</a></div>
+            {/if}
+             <!-- <div class="weui-cell">
                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">开户名</label></div>
                 <div class="weui-cell__bd">
                     <input class="weui-input" type="text" name="open_name" placeholder="  开户名">
@@ -118,8 +131,8 @@
                     <input type="hidden" name="province" />
                     <input type="hidden" name="city" />
                 </div>
-            </div>
-             </div>
+            </div> -->
+</div>
     <div class="ma20 bg-white p20 ">
         <a class="weui-btn weui-btn_primary" id="apply-submit">提交申请</a>
     <a href="javascript:changeShow();" class="weui-btn weui-btn_default">返回</a>
@@ -186,18 +199,19 @@
                           return false;
                      }
                     var amount = $("input[name='amount']").val();
-                    var name = $("input[name='open_name']").val();
-                    var bank = $("input[name='open_bank']").val();
-                    var province = $("input[name='province']").val();
-                    var city = $("input[name='city']").val();
-                    var card_no = $("input[name='card_no']").val();
+                    var id = $("#card_id option:selected").val();
+                    // var name = $("input[name='open_name']").val();
+                    // var bank = $("input[name='open_bank']").val();
+                    // var province = $("input[name='province']").val();
+                    // var city = $("input[name='city']").val();
+                    // var card_no = $("input[name='card_no']").val();
                     layer.open({
                      type: 2
                     ,content: '正在提交中'
                     ,shadeClose: false
                      });
                     setTimeout(function(){
-                      $.post("{url:/ucenter/offline_balance_withdraw}", {amount: amount, name: name, bank: bank, province: province,city:city,card_no:card_no}, function (result) {
+                      $.post("{url:/ucenter/offline_balance_withdraw}", {amount: amount, id:id}, function (result) {
                       layer.closeAll();
                       if(result.status=='success'){
                             $.toast("申请已提交",'success',function(){
