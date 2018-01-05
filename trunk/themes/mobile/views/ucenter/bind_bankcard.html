@@ -1,5 +1,18 @@
 <link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}"/>
 <link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<style type="text/css">
+.weui-input1{
+    width: 100%;
+    border: 0;
+    outline: 0;
+    -webkit-appearance: none;
+    background-color: transparent;
+    font-size: 16px;
+    color: inherit;
+    height: 1.41176471em;
+    line-height: 1.41176471;
+}
+</style>
 {echo:JS::import('form');}
 {echo:JS::import('date');}
 <div class="ma20 bg-white p20">
@@ -22,9 +35,9 @@
                        placeholder="银行卡号" alt="银行卡号不能为空">
             </dd>
             <div class="weui-cell">
-            <div class="weui-cell__hd" style="width:50%"><label class="weui-label">开户所在地</label></div>
+            <div class="weui-cell__hd" style="width:50%"><label class="weui-label" style="font-size: 16px;">开户所在地</label></div>
             <div class="weui-cell__bd">
-                    <input class="weui-input" name="address" placeholder="选择省市" />
+                    <input class="weui-input1" name="address" placeholder="选择省市" />
                     <input type="hidden" name="province" />
                     <input type="hidden" name="city" />
             </div>
