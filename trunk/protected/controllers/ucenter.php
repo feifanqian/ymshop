@@ -3409,7 +3409,7 @@ class UcenterController extends Controller
 
       $order_time = date( 'Y-m-d H:i:s' );  
 
-      $order_amount = Filter::float(Req::args('order_amount'));  
+      $order_amount = '0.01';  
 
       $product_name ="testpay";
       $signStr = '';
