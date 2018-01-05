@@ -412,7 +412,7 @@ class CustomerController extends Controller {
         for($i=0;$i<count($order);$i++){
             $log = $model->table('balance_log')->where("order_no=".$order[$i]['order_no']." and user_id=".$order[$i]['shop_ids'])->find();
             $t1 = strtotime($log['time']);
-            $t2 = strtotime($log['time'])-300;
+            $t2 = strtotime($log['time'])-500;
             $invite = $model->table('invite')->where("createtime < $t1 and createtime > $t2 and user_id=".$order[$i]['shop_ids'])->find();
             $uid = $invite?$invite['invite_user_id']:1;
             $model->table('order_offline')->data(array('user_id'=>$uid))->where('order_no='.$order[$i]['order_no'])->update();
