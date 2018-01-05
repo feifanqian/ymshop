@@ -3412,6 +3412,26 @@ class UcenterController extends Controller
       $order_amount = Filter::float(Req::args('order_amount'));  
 
       $product_name ="testpay";
+
+      $merchant_private_key = "-----BEGIN PRIVATE KEY-----"."\r\n".wordwrap(trim($merchant_private_key),64,"\r\n",true)."\r\n"."-----END PRIVATE KEY-----";
+    
+    $merchant_private_key= openssl_get_privatekey($merchant_private_key);
+    
+    openssl_sign($signStr,$sign_info,$merchant_private_key,OPENSSL_ALGO_MD5);
+    
+    $sign = base64_encode($sign_info);
+
+      $this->assign('sign',$sign);
+      $this->assign('merchant_code',$merchant_code);
+      $this->assign('service_type',$service_type);
+      $this->assign('interface_version',$interface_version);
+      $this->assign('sign_type',$sign_type);
+      $this->assign('input_charset',$input_charset);
+      $this->assign('notify_url',$notify_url);
+      $this->assign('order_no',$order_no);
+      $this->assign('order_time',$order_time);
+      $this->assign('product_name',$product_name);
+      $this->redirect();
     }
 
 }
