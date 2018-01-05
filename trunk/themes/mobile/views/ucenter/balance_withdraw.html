@@ -96,7 +96,7 @@
                <select id="card_id" name="card_id" class="input">
                     <option value="0" selected="selected">请选择银行卡</option>
                     {query:name=bankcard where=user_id eq $user[id] order=id desc page=1 id=$list}
-                    <option value="{$item['id']}" selected="selected">{$item['bank_name']}尾号{echo: substr($item['cardno'],-4)}</option>
+                    <option value="{$item['id']}" selected="selected">{$item['bank_name']}&nbsp;&nbsp;&nbsp;尾号{echo: substr($item['cardno'],-4)}</option>
                     {/query}      
                 </select>
             </div>
