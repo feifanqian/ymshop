@@ -423,7 +423,7 @@ class PaymentAction extends Controller {
                         //扣费并将订单状态更新
                         $flag = $this->model->table("customer")->data(array("balance"=>"`balance`-{$total_fee}"))->where("user_id = $user_id")->update();
                         if ($flag) {
-                            Order::updateStatus($order_no, 15);
+                            Order::updateStatus($order_no, $order['payment']);
                             //记录支付日志
                             Log::balance((0 - $total_fee), $user_id, $order_no, '购物下单');
                         }
