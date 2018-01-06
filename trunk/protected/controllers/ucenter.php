@@ -3411,8 +3411,8 @@ class UcenterController extends Controller
 
     $input_charset = "UTF-8";
     
-    $notify_url ="http://15l0549c66.iask.in:45191/testnewb2c/offline_notify.php";
-    //   $notify_url ="http://www.ymlypt.com/payment/callback";       
+    // $notify_url ="http://15l0549c66.iask.in:45191/testnewb2c/offline_notify.php";
+      $notify_url ="http://www.ymlypt.com/payment/dinpay_callback";       
     
     $order_no = Common::createOrderNo();
 
