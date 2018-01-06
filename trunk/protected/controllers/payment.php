@@ -1149,7 +1149,7 @@ class PaymentController extends Controller {
 
         $trade_no = $_POST["trade_no"];
 
-        $bank_seq_no = $_POST["bank_seq_no"];
+        $bank_seq_no = isset($_POST["bank_seq_no"])?$_POST["bank_seq_no"]:'';
 
         $extra_return_param = '';
 
@@ -1202,10 +1202,11 @@ class PaymentController extends Controller {
         
         
     ///////////////////////////   响应“SUCCESS” /////////////////////////////
-        $model->table('customer')->data(array('qq'=>$order_no))->where('user_id=42608')->update();
+        $order = $model->table('order_offline')->where('order_no='.$order_no)->find();
+        if($order){
+            $model->table('order_offline')->data(array('payable_amount'=>$order_amount,'order_amount'=>$order_amount,'real_amount'=>$order_amount))->where('order_no='.$order_no)->update();
+        }
         if($flag){
-            $model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
-            $order = $model->table('order_offline')->where('order_no='.$order_no)->find();
             if($order){
                 $model->table('order_offline')->data(array('status'=>3,'pay_status'=>1))->where('order_no='.$order_no)->update();
             }    
