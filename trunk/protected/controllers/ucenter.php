@@ -3416,11 +3416,38 @@ class UcenterController extends Controller
 
     $order_amount = "0.01";  
 
-    $product_name ="testpay";   
+    $product_name ="testpay";
+
+    //插入订单
+    $data['type']=4;
+    $data['order_no'] = $order_no;
+    $data['user_id'] = $this->user['id'];
+    $data['payment'] = 30;
+    $data['status'] = 2;
+    $data['pay_status'] = 0;
+    $data['accept_name'] = '';
+    $data['mobile'] = '';
+    $data['payable_amount'] = $order_amount;
+    $data['create_time'] = $order_time;
+    $data['pay_time'] = $order_time;
+    $data['handling_fee'] = 0.00;
+    $data['order_amount'] = $order_amount;
+    $data['real_amount'] = $order_amount;
+    $data['point'] = 0;
+    $data['voucher_id'] = 0;
+    $data['prom_id']=0;
+    $data['shop_ids']=0;
+    $model = new Model('order_offline');
+    $exist=$model->where('order_no='.$order_no)->find();
+    if(!$exist){
+        $order_id=$model->data($data)->insert();
+    }else{
+        $order_id=$exist['id'];
+    }   
 
     //以下参数为可选参数，如有需要，可参考文档设定参数值
     
-    $return_url ="http://www.ymlypt.com/ucenter/order_details";    
+    $return_url ="http://www.ymlypt.com/ucenter/order_details/id/{$order_id}";    
     
     $pay_type = "";
     
@@ -3543,30 +3570,6 @@ class UcenterController extends Controller
     //   print_r($params);
     //   echo "<pre>";
     //   die;
-    
-        $data['type']=4;
-        $data['order_no'] = $order_no;
-        $data['user_id'] = $this->user['id'];
-        $data['payment'] = 30;
-        $data['status'] = 2;
-        $data['pay_status'] = 0;
-        $data['accept_name'] = '';
-        $data['mobile'] = '';
-        $data['payable_amount'] = $order_amount;
-        $data['create_time'] = $order_time;
-        $data['pay_time'] = $order_time;
-        $data['handling_fee'] = 0.00;
-        $data['order_amount'] = $order_amount;
-        $data['real_amount'] = $order_amount;
-        $data['point'] = 0;
-        $data['voucher_id'] = 0;
-        $data['prom_id']=0;
-        $data['shop_ids']=0;
-        $model = new Model('order_offline');
-        $exist=$model->where('order_no='.$order_no)->find();
-        if(!$exist){
-            $order_id=$model->data($data)->insert();
-        }
 
       $this->assign('sign',$sign);
       $this->assign('merchant_code',$merchant_code);
