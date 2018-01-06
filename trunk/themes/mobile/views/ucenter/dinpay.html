@@ -257,6 +257,9 @@
             oDiv.innerHTML += this.innerHTML;
             var amount=$('#div').html();
             $("#order_amount").val(amount);
+            $.post("{url:/ucenter/dinpay}", {amount:amount}, function(){
+               console.log('yes');
+            }, 'json');
             // var re=/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/;
             // if(!re.test(amount)){
             //     console.log('error');

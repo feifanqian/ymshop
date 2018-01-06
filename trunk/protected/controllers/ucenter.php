@@ -3414,7 +3414,7 @@ class UcenterController extends Controller
 
     $order_time = date( 'Y-m-d H:i:s' );    
 
-    $order_amount = "0.01";  
+    $order_amount = Req::args('amount')?Req::args('amount'): '0.01';  
 
     $product_name ="testpay";
 
