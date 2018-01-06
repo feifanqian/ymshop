@@ -3428,7 +3428,35 @@ class UcenterController extends Controller
     openssl_sign($signStr,$sign_info,$merchant_private_key,OPENSSL_ALGO_MD5);
     
     $sign = base64_encode($sign_info);
-
+    
+    $params = array(
+        'sign'=>$sign,
+        'merchant_code'=>$merchant_code,
+        'bank_code'=>$bank_code,
+        'order_no'=>$order_no,
+        'order_amount'=>$order_amount,
+        'service_type'=>$service_type,
+        'input_charset'=>$input_charset,
+        'notify_url'=>$notify_url,
+        'interface_version'=>$interface_version,
+        'sign_type'=>$sign_type,
+        'order_time'=>$order_time,
+        'product_name'=>$product_name,
+        // 'client_ip'=>$client_ip,
+        // 'extend_param'=>$extend_param,
+        // 'extra_return_param'=>$extra_return_param,
+        // 'pay_type'=>$pay_type,
+        // 'product_code'=>$product_code,
+        // 'product_desc'=>$product_desc,
+        // 'product_num'=>$product_num,
+        // 'return_url'=>$return_url,
+        // 'show_url'=>$show_url,
+        // 'redo_flag'=>$redo_flag
+        );
+      echo "<pre>";
+      print_r($params);
+      echo "<pre>";
+      die;
       $this->assign('sign',$sign);
       $this->assign('merchant_code',$merchant_code);
       $this->assign('service_type',$service_type);
