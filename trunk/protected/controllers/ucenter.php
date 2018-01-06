@@ -3432,7 +3432,7 @@ class UcenterController extends Controller
     $params = array(
         'sign'=>$sign,
         'merchant_code'=>$merchant_code,
-        'bank_code'=>$bank_code,
+        // 'bank_code'=>$bank_code,
         'order_no'=>$order_no,
         'order_amount'=>$order_amount,
         'service_type'=>$service_type,
