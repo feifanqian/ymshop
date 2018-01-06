@@ -3570,6 +3570,7 @@ class UcenterController extends Controller
       $this->assign('extra_return_param',$extra_return_param);
       $this->assign('pay_type',$pay_type);
       $this->assign('product_code',$product_code);
+      $this->assign('product_name',$product_name);
       $this->assign('product_desc',$product_desc);
       $this->assign('product_num',$product_num);
       $this->assign('return_url',$return_url);
