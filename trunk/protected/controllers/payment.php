@@ -1115,24 +1115,102 @@ class PaymentController extends Controller {
     }
 
     public function dinpay_callback(){
-        $xml = $_POST;
-        // $xml = @file_get_contents('php://input');
-        // $return=Common::xmlToArray($xml);
-        file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
-        // exit();
-        // file_put_contents('./wxpay.php', json_encode($return) . PHP_EOL, FILE_APPEND);
-        $model = new Model('order_offline');
-        if(isset($return['dinpay']['response']['rep_code']) && $return['dinpay']['response']['rep_code']=='SUCCESS'){
-            if(isset($return['dinpay']['response']['order_no'])){
-                $order_no = $return['dinpay']['response']['order_no'];
-                $order = $model->where('order_no='.$order_no)->find();
-                if($order){
-                    $model->data(array('status'=>3,'pay_status'=>1))->where('order_no='.$order_no)->update();
-                }
-            }
-           echo 'success';
+        $array = $_POST;
+        file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
+
+        $merchant_private_key='MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAKwJnd8sHJojXIFxuf4Ibsdtc2cJHPlN2d/IKMBw5cuoRknNeMCTlR89MxEqfuPqYR7o1dGgOiehswR9T4vWByzhJlrLEFcgOcJFnDINzU9iZW4RcRKf187sLXYL8b5Vf5WjEfudXjnxSGt8HXPe+V0VimUVaIAQSWvBCWgHkFV/AgMBAAECgYBivF40EJAV0serrwatCk/x+xopf2x2lLy/l5Pz5pesS9aTUu7Dr6/9LtWZO4d57TFyWPUmi0v1JPOmVvkJa3vPz6HhZIzg5M4jd23Kj8fl94PaTSyGM3NEMRJDLPxWEB9ydR60VtRlieCf2lyH0JSKa5YMS09A6ks13W4SVNRqaQJBAOF22itr0KonXZaQxNIOrnGifCvBA11cKV1SMxT5iLOuYu5j2VOZNExC5oD4j1fkT/7kEq+7OSTEOhZwgcNkcGUCQQDDVmOlmKHBjUpMmv0xfc789Zj7PLoKO9WpYkDTbl7xPdc/Yb0OeeZlS123ZlplXLMVPpOQTpFcrbk9nhShaSYTAkEAhnrPsqqCMZt9VPtQikI7hof2LFrZ2OvJuGH5Gf+krBfN5ocj75sn+HzG5BJd3XzOwifjhXHUqbtpMk00+QiFiQJBAIv2JGQM3yn+ANSu4OhLSrp5h2nM80hN4yQA4I4eMS0NsGMbtwjeUzUVMUstrWufZjm8oqLtiL4tQ+Ngl0uoOb0CQQCuOR315Fwm/BW3QXjaASDwN8sahQxfNAtUyh7oGJfieKWYEjd3VYfaWXyful7FWW/Ry8H1pOSbIJZo07gLVTvA';
+       
+       $merchant_public_key='MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsCZ3fLByaI1yBcbn+CG7HbXNnCRz5TdnfyCjAcOXLqEZJzXjAk5UfPTMRKn7j6mEe6NXRoDonobMEfU+L1gcs4SZayxBXIDnCRZwyDc1PYmVuEXESn9fO7C12C/G+VX+VoxH7nV458UhrfB1z3vldFYplFWiAEElrwQloB5BVfwIDAQAB';
+
+       $dinpay_public_key='MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCOglLSDWk8iIHH5zFvAg9n++I4iew5Zj4M/8J8TLRj7UShJ3roroNgCkH1Iyw65xIddlCfJK8wkszpZ4OvPRiCDUBaEMENF/TQmscL2M+Ly7XEQ34RTQ1WVcpkZb7KJuiK3XIByYM0fETM1RVhQGJsnC7QpDaorjkWjpuLcR6bDwIDAQAB ';
+
+        $merchant_code  = $_POST["merchant_code"];  
+
+        $interface_version = $_POST["interface_version"];
+
+        $sign_type = $_POST["sign_type"];
+
+        $dinpaySign = base64_decode($_POST["sign"]);
+
+        $notify_type = $_POST["notify_type"];
+
+        $notify_id = $_POST["notify_id"];
+
+        $order_no = $_POST["order_no"];
+
+        $order_time = $_POST["order_time"]; 
+
+        $order_amount = $_POST["order_amount"];
+
+        $trade_status = $_POST["trade_status"];
+
+        $trade_time = $_POST["trade_time"];
+
+        $trade_no = $_POST["trade_no"];
+
+        $bank_seq_no = $_POST["bank_seq_no"];
+
+        $extra_return_param = $_POST["extra_return_param"];
+
+
+    /////////////////////////////   参数组装  /////////////////////////////////
+    /** 
+    除了sign_type dinpaySign参数，其他非空参数都要参与组装，组装顺序是按照a~z的顺序，下划线"_"优先于字母 
+    */
+
+        
+        $signStr = "";
+        
+        if($bank_seq_no != ""){
+            $signStr = $signStr."bank_seq_no=".$bank_seq_no."&";
+        }
+
+        if($extra_return_param != ""){
+            $signStr = $signStr."extra_return_param=".$extra_return_param."&";
+        }   
+
+        $signStr = $signStr."interface_version=".$interface_version."&";    
+
+        $signStr = $signStr."merchant_code=".$merchant_code."&";
+
+        $signStr = $signStr."notify_id=".$notify_id."&";
+
+        $signStr = $signStr."notify_type=".$notify_type."&";
+
+        $signStr = $signStr."order_amount=".$order_amount."&";  
+
+        $signStr = $signStr."order_no=".$order_no."&";  
+
+        $signStr = $signStr."order_time=".$order_time."&";  
+
+        $signStr = $signStr."trade_no=".$trade_no."&";  
+
+        $signStr = $signStr."trade_status=".$trade_status."&";
+
+        $signStr = $signStr."trade_time=".$trade_time;
+        
+        //echo $signStr;
+        
+    /////////////////////////////   RSA-S验证  /////////////////////////////////
+
+        $dinpay_public_key = "-----BEGIN PUBLIC KEY-----"."\r\n".wordwrap(trim($dinpay_public_key),62,"\r\n",true)."\r\n"."-----END PUBLIC KEY-----";
+        
+        $dinpay_public_key = openssl_get_publickey($dinpay_public_key);
+        
+        $flag = openssl_verify($signStr,$dinpaySign,$dinpay_public_key,OPENSSL_ALGO_MD5);   
+        
+        
+    ///////////////////////////   响应“SUCCESS” /////////////////////////////
+
+        if($flag){
+            $model = new Model('order_offline');
+            $order = $model->where('order_no='.$order_no)->find();
+            if($order){
+                $model->data(array('status'=>3,'pay_status'=>1))->where('order_no='.$order_no)->update();
+            }    
+            echo"SUCCESS";  
         }else{
-            echo 'fail';
+            echo"Verification Error"; 
         }  
     }
 
