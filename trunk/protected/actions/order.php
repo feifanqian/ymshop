@@ -753,7 +753,7 @@ class OrderAction extends Controller {
         if($type==1){
             $list = $this->model->table('order_offline')->where('type in (1,2,3) and pay_status=1 and user_id='.$this->user['id'])->order('pay_time desc')->findPage($page,10);
         }elseif($type==2){
-            $list = $this->model->table('order_offline')->where('type in (1,2,3) and pay_status=1 and shop_ids='.$this->user['id'])->order('pay_time desc')->findPage($page,10);
+            $list = $this->model->table('order_offline')->where('user_id!=1 and pay_status=1 and shop_ids='.$this->user['id'])->order('pay_time desc')->findPage($page,10);
         }
         if($list){
             foreach($list['data'] as $k => $v){
