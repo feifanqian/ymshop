@@ -1114,6 +1114,25 @@ class PaymentController extends Controller {
         }
     }
 
+    public function dinpay_callback(){
+        $xml = @file_get_contents('php://input');
+        $return=Common::xmlToArray($xml);
+        file_put_contents('./wxpay.php', json_encode($return) . PHP_EOL, FILE_APPEND);
+        $model = new Model('order_offline');
+        if(isset($return['dinpay']['response']['rep_code']) && $return['dinpay']['response']['rep_code']=='SUCCESS'){
+            if(isset($return['dinpay']['response']['order_no'])){
+                $order_no = $return['dinpay']['response']['order_no'];
+                $order = $model->where('order_no='.$order_no)->find();
+                if($order){
+                    $model->data(array('status'=>3,'pay_status'=>1))->where('order_no='.$order_no)->update();
+                }
+            }
+           echo 'success';
+        }else{
+            echo 'fail';
+        }  
+    }
+
     public function pay_alipay_submit() {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
             $out_trade_no = $_GET['out_trade_no'];

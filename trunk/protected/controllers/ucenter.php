@@ -3414,7 +3414,9 @@ class UcenterController extends Controller
     $notify_url ="http://15l0549c66.iask.in:45191/testnewb2c/offline_notify.php";
     //   $notify_url ="http://www.ymlypt.com/payment/callback";       
     
-    $order_no = Common::createOrderNo();    
+    $order_no = Common::createOrderNo();
+
+    $order_no='dinpay'.$order_no;    
 
     $order_time = date( 'Y-m-d H:i:s' );    
 
@@ -3519,7 +3521,7 @@ class UcenterController extends Controller
     openssl_sign($signStr,$sign_info,$merchant_private_key,OPENSSL_ALGO_MD5);
     
     $sign = base64_encode($sign_info);
-       
+
     // $params = array(
     //     'sign'=>$sign,
     //     'merchant_code'=>$merchant_code,
@@ -3547,6 +3549,31 @@ class UcenterController extends Controller
     //   print_r($params);
     //   echo "<pre>";
     //   die;
+    
+        $data['type']=4;
+        $data['order_no'] = $order_no;
+        $data['user_id'] = $this->user['id'];
+        $data['payment'] = 30;
+        $data['status'] = 2;
+        $data['pay_status'] = 0;
+        $data['accept_name'] = '';
+        $data['mobile'] = '';
+        $data['payable_amount'] = $order_amount;
+        $data['create_time'] = $order_time;
+        $data['pay_time'] = $order_time;
+        $data['handling_fee'] = 0.00;
+        $data['order_amount'] = $order_amount;
+        $data['real_amount'] = $order_amount;
+        $data['point'] = 0;
+        $data['voucher_id'] = 0;
+        $data['prom_id']=0;
+        $data['shop_ids']=0;
+        $model = new Model('order_offline');
+        $exist=$model->where('order_no='.$order_no)->find();
+        if(!$exist){
+            $order_id=$model->data($data)->insert();
+        }
+
       $this->assign('sign',$sign);
       $this->assign('merchant_code',$merchant_code);
       $this->assign('service_type',$service_type);
