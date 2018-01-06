@@ -3400,43 +3400,134 @@ class UcenterController extends Controller
 
     $dinpay_public_key ='MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCWOq5aHSTvdxGPDKZWSl6wrPpnMHW+8lOgVU71jB2vFGuA6dwa/RpJKnz9zmoGryZlgUmfHANnN0uztkgwb+5mpgmegBbNLuGqqHBpQHo2EsiAhgvgO3VRmWC8DARpzNxknsJTBhkUvZdy4GyrjnUrvsARg4VrFzKDWL0Yu3gunQIDAQAB ';
 
-       // $merchant_code = "4000038801";
-       $merchant_code = "1111110166";
+    $merchant_code = "1111110166";//商户号，1118004517是测试商户号，线上发布时要更换商家自己的商户号！
 
-       $service_type = "direct_pay";
+    $service_type ="direct_pay";    
 
-       $interface_version ="V3.0";
+    $interface_version ="V3.0";
 
-      $sign_type ="RSA-S";
+    $sign_type ="RSA-S";
 
-      $input_charset = "UTF-8";
-      
-      $notify_url ="http://www.ymlypt.com/payment/callback";   
-      
-      $order_no = Common::createOrderNo(); 
+    $input_charset = "UTF-8";
+    
+    $notify_url ="http://15l0549c66.iask.in:45191/testnewb2c/offline_notify.php";       
+    
+    $order_no = date( 'YmdHis' );   
 
-      $order_time = date( 'Y-m-d H:i:s' );  
+    $order_time = date( 'Y-m-d H:i:s' );    
 
-      $order_amount = '0.01';  
+    $order_amount = "0.01";  
 
-      $product_name ="testpay";
-      $signStr = '';
-      $signStr = $signStr."input_charset=".$input_charset."&";  
-        $signStr = $signStr."interface_version=".$interface_version."&";    
-        $signStr = $signStr."merchant_code=".$merchant_code."&";    
-        $signStr = $signStr."notify_url=".$notify_url."&";      
-        $signStr = $signStr."order_amount=".$order_amount."&";      
-        $signStr = $signStr."order_no=".$order_no."&";      
-        $signStr = $signStr."order_time=".$order_time."&";
+    $product_name ="testpay";   
 
-      $merchant_private_key = "-----BEGIN PRIVATE KEY-----"."\r\n".wordwrap(trim($merchant_private_key),64,"\r\n",true)."\r\n"."-----END PRIVATE KEY-----";
+    //以下参数为可选参数，如有需要，可参考文档设定参数值
+    
+    $return_url ="";    
+    
+    $pay_type = "";
+    
+    $redo_flag = "";    
+    
+    $product_code = ""; 
+
+    $product_desc = ""; 
+
+    $product_num = "";
+
+    $show_url = ""; 
+
+    $client_ip ="" ;    
+
+    $bank_code = "";    
+
+    $extend_param = "";
+
+    $extra_return_param = "";   
+
+        
+    
+
+/////////////////////////////   参数组装  /////////////////////////////////
+/**
+除了sign_type参数，其他非空参数都要参与组装，组装顺序是按照a~z的顺序，下划线"_"优先于字母    
+*/
+    
+    $signStr= "";
+    
+    if($bank_code != ""){
+        $signStr = $signStr."bank_code=".$bank_code."&";
+    }
+    if($client_ip != ""){
+        $signStr = $signStr."client_ip=".$client_ip."&";
+    }
+    if($extend_param != ""){
+        $signStr = $signStr."extend_param=".$extend_param."&";
+    }
+    if($extra_return_param != ""){
+        $signStr = $signStr."extra_return_param=".$extra_return_param."&";
+    }
+    
+    $signStr = $signStr."input_charset=".$input_charset."&";    
+    $signStr = $signStr."interface_version=".$interface_version."&";    
+    $signStr = $signStr."merchant_code=".$merchant_code."&";    
+    $signStr = $signStr."notify_url=".$notify_url."&";      
+    $signStr = $signStr."order_amount=".$order_amount."&";      
+    $signStr = $signStr."order_no=".$order_no."&";      
+    $signStr = $signStr."order_time=".$order_time."&";  
+
+    if($pay_type != ""){
+        $signStr = $signStr."pay_type=".$pay_type."&";
+    }
+
+    if($product_code != ""){
+        $signStr = $signStr."product_code=".$product_code."&";
+    }   
+    if($product_desc != ""){
+        $signStr = $signStr."product_desc=".$product_desc."&";
+    }
+    
+    $signStr = $signStr."product_name=".$product_name."&";
+
+    if($product_num != ""){
+        $signStr = $signStr."product_num=".$product_num."&";
+    }   
+    if($redo_flag != ""){
+        $signStr = $signStr."redo_flag=".$redo_flag."&";
+    }
+    if($return_url != ""){
+        $signStr = $signStr."return_url=".$return_url."&";
+    }       
+    
+    $signStr = $signStr."service_type=".$service_type;
+
+    if($show_url != ""){    
+        
+        $signStr = $signStr."&show_url=".$show_url;
+    }
+    
+      //echo $signStr."<br>";  
+        
+        
+    
+/////////////////////////////   获取sign值（RSA-S加密）  /////////////////////////////////
+    $merchant_private_key = "-----BEGIN PRIVATE KEY-----"."\r\n".wordwrap(trim($merchant_private_key),64,"\r\n",true)."\r\n"."-----END PRIVATE KEY-----";
     
     $merchant_private_key= openssl_get_privatekey($merchant_private_key);
     
-    var_dump($signStr);die;
     openssl_sign($signStr,$sign_info,$merchant_private_key,OPENSSL_ALGO_MD5);
     
     $sign = base64_encode($sign_info);
+
+       // $merchant_code = "4000038801";   
+    //   $notify_url ="http://www.ymlypt.com/payment/callback";   
+      
+    //   $order_no = Common::createOrderNo(); 
+
+    //   $order_time = date( 'Y-m-d H:i:s' );  
+
+    //   $order_amount = '0.01';  
+
+    
     
     // $params = array(
     //     'sign'=>$sign,
@@ -3450,16 +3541,16 @@ class UcenterController extends Controller
     //     'sign_type'=>$sign_type,
     //     'order_time'=>$order_time,
     //     'product_name'=>$product_name,
-    //     // 'client_ip'=>$client_ip,
-    //     // 'extend_param'=>$extend_param,
-    //     // 'extra_return_param'=>$extra_return_param,
-    //     // 'pay_type'=>$pay_type,
-    //     // 'product_code'=>$product_code,
-    //     // 'product_desc'=>$product_desc,
-    //     // 'product_num'=>$product_num,
-    //     // 'return_url'=>$return_url,
-    //     // 'show_url'=>$show_url,
-    //     // 'redo_flag'=>$redo_flag
+    //     'client_ip'=>$client_ip,
+    //     'extend_param'=>$extend_param,
+    //     'extra_return_param'=>$extra_return_param,
+    //     'pay_type'=>$pay_type,
+    //     'product_code'=>$product_code,
+    //     'product_desc'=>$product_desc,
+    //     'product_num'=>$product_num,
+    //     'return_url'=>$return_url,
+    //     'show_url'=>$show_url,
+    //     'redo_flag'=>$redo_flag
     //     );
     //   echo "<pre>";
     //   print_r($params);
@@ -3474,7 +3565,16 @@ class UcenterController extends Controller
       $this->assign('notify_url',$notify_url);
       $this->assign('order_no',$order_no);
       $this->assign('order_time',$order_time);
-      $this->assign('product_name',$product_name);
+      $this->assign('client_ip',$client_ip);
+      $this->assign('extend_param',$extend_param);
+      $this->assign('extra_return_param',$extra_return_param);
+      $this->assign('pay_type',$pay_type);
+      $this->assign('product_code',$product_code);
+      $this->assign('product_desc',$product_desc);
+      $this->assign('product_num',$product_num);
+      $this->assign('return_url',$return_url);
+      $this->assign('show_url',$show_url);
+      $this->assign('redo_flag',$redo_flag);
       $this->redirect();
     }
 
