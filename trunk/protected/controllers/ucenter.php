@@ -3416,7 +3416,7 @@ class UcenterController extends Controller
     
     $order_no = Common::createOrderNo();
 
-    $order_no='dinpay'.$order_no;    
+    // $order_no='dinpay'.$order_no;    
 
     $order_time = date( 'Y-m-d H:i:s' );    
 
