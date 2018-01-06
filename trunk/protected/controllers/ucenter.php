@@ -3426,7 +3426,7 @@ class UcenterController extends Controller
 
     //以下参数为可选参数，如有需要，可参考文档设定参数值
     
-    $return_url ="";    
+    $return_url ="http://www.ymlypt.com/ucenter/order_details";    
     
     $pay_type = "";
     
