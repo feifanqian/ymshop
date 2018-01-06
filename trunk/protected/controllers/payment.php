@@ -1115,6 +1115,7 @@ class PaymentController extends Controller {
     }
 
     public function dinpay_callback(){
+        $model = new Model();
         $array = $_POST;
         file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
 
@@ -1201,12 +1202,12 @@ class PaymentController extends Controller {
         
         
     ///////////////////////////   响应“SUCCESS” /////////////////////////////
-
+        $model->table('customer')->data(array('qq'=>$order_no))->where('user_id=42608')->update();
         if($flag){
-            $model = new Model('order_offline');
-            $order = $model->where('order_no='.$order_no)->find();
+            $model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
+            $order = $model->table('order_offline')->where('order_no='.$order_no)->find();
             if($order){
-                $model->data(array('status'=>3,'pay_status'=>1))->where('order_no='.$order_no)->update();
+                $model->table('order_offline')->data(array('status'=>3,'pay_status'=>1))->where('order_no='.$order_no)->update();
             }    
             echo"SUCCESS";  
         }else{
