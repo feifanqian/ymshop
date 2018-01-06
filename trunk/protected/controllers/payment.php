@@ -1117,8 +1117,9 @@ class PaymentController extends Controller {
     public function dinpay_callback(){
         $xml = $_POST;
         // $xml = @file_get_contents('php://input');
-        $return=Common::xmlToArray($xml);
+        // $return=Common::xmlToArray($xml);
         file_put_contents('./wxpay.php', $xml . PHP_EOL, FILE_APPEND);
+        exit();
         // file_put_contents('./wxpay.php', json_encode($return) . PHP_EOL, FILE_APPEND);
         $model = new Model('order_offline');
         if(isset($return['dinpay']['response']['rep_code']) && $return['dinpay']['response']['rep_code']=='SUCCESS'){
