@@ -3411,9 +3411,10 @@ class UcenterController extends Controller
 
     $input_charset = "UTF-8";
     
-    $notify_url ="http://15l0549c66.iask.in:45191/testnewb2c/offline_notify.php";       
+    $notify_url ="http://15l0549c66.iask.in:45191/testnewb2c/offline_notify.php";
+    //   $notify_url ="http://www.ymlypt.com/payment/callback";       
     
-    $order_no = date( 'YmdHis' );   
+    $order_no = Common::createOrderNo();    
 
     $order_time = date( 'Y-m-d H:i:s' );    
 
@@ -3518,18 +3519,7 @@ class UcenterController extends Controller
     openssl_sign($signStr,$sign_info,$merchant_private_key,OPENSSL_ALGO_MD5);
     
     $sign = base64_encode($sign_info);
-
-       // $merchant_code = "4000038801";   
-    //   $notify_url ="http://www.ymlypt.com/payment/callback";   
-      
-    //   $order_no = Common::createOrderNo(); 
-
-    //   $order_time = date( 'Y-m-d H:i:s' );  
-
-    //   $order_amount = '0.01';  
-
-    
-    
+       
     // $params = array(
     //     'sign'=>$sign,
     //     'merchant_code'=>$merchant_code,
