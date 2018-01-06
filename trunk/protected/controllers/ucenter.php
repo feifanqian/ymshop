@@ -3433,6 +3433,7 @@ class UcenterController extends Controller
     
     $merchant_private_key= openssl_get_privatekey($merchant_private_key);
     
+    var_dump($signStr);die;
     openssl_sign($signStr,$sign_info,$merchant_private_key,OPENSSL_ALGO_MD5);
     
     $sign = base64_encode($sign_info);
