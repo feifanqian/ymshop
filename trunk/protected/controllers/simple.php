@@ -963,6 +963,15 @@ class SimpleController extends Controller {
                 return false;
             }
         }
+        $flash_sale = $model->table('flash_sale')->where('id='.$prom_id)->find();
+        if($flash_sale){
+            if($flash_sale['is_end'] == 1){
+                if($isJump){
+                    $this->redirect("/index/msg", true, array('msg' => '很遗憾，来晚了一步，抢购已结束！', 'type' => 'error'));
+                    exit();
+                }
+            }
+        }
         if($quota_num==0 || $quota_num =="" || $quota_num <0){
             return true;
         }else{
@@ -970,6 +979,15 @@ class SimpleController extends Controller {
             if($sum[0]['sum']>= $quota_num){
                 if($isJump){
                      $this->redirect("/index/msg", true, array('msg' => '对不起，您已经达到了该商品的抢购上限', 'type' => 'error'));
+                exit();
+                }else{
+                    return false;
+                }
+            }
+            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6");
+            if($sum1[0]['sum']>= $quota_num){
+                if($isJump){
+                     $this->redirect("/index/msg", true, array('msg' => '对不起，该商品的抢购已达上限', 'type' => 'error'));
                 exit();
                 }else{
                     return false;
