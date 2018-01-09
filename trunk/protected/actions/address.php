@@ -216,7 +216,15 @@ class AddressAction extends Controller
            unset($list['html']);
            $total_money = $money[0]['total_money'];
         }else{
-            $list = array();
+            $list = array(
+                'data'=>array(),
+                'page'=>array(
+                    'total'=>'0',
+                    'totalPage'=>0,
+                    'pageSize'=>10,
+                    'page'=>1
+                    )
+                );
             $total_money = '0.00';
         }
         
