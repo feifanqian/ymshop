@@ -2505,9 +2505,7 @@ class UcenterAction extends Controller {
                 'Signature:'.$Signature,
                 'Content-Type: application/x-www-form-urlencoded'
                 );
-            echo "<pre>";
-            print_r($header);
-            echo "<pre>";die;
+            
             $return = Common::httpRequest($url,'POST',$data,$header);
             $ret = json_decode($return,true);
             $this->code = 0;
