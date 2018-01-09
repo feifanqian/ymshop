@@ -1720,7 +1720,6 @@ class UcenterAction extends Controller {
             $this->code = 1134;
             $this->content['can_withdraw_amount'] = $can_withdraw_amount;
             return;
-            //exit(json_encode(array('status' => 'fail', 'msg' => '提现金额超出的账户可提现余额')));
         }
         $config = Config::getInstance();
         $other = $config->get("other");
@@ -1729,7 +1728,6 @@ class UcenterAction extends Controller {
             $this->code = 1135;
             $this->content['min_withdraw_amount'] = $other['min_withdraw_amount'];
             return;
-            //exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于".$other['min_withdraw_amount'])));
         }
         // $isset = $this->model->table("balance_withdraw")->where("user_id =" . $this->user['id'] . " and status =0")->find();
         // if ($isset) {
@@ -1750,10 +1748,9 @@ class UcenterAction extends Controller {
             $this->content['card_no'] = $card_no;
             $this->content['amount'] = $amount;
             $this->content['withdraw_fee_rate'] = round($amount*($withdraw_fee_rate/100),2);
-            // exit(json_encode(array('status' => 'success', 'msg' => "申请提交成功")));
         } else {
             $this->code = 1005;
-            // exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
+            return;
         }
     }
 
@@ -1775,13 +1772,17 @@ class UcenterAction extends Controller {
             $customer = $this->model->table("customer")->where("user_id =".$this->user['id'])->fields('offline_balance')->find();
             $can_withdraw_amount =$customer?$customer['offline_balance']:0;
             if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
-                exit(json_encode(array('status' => 'fail', 'msg' => '提现金额超出的账户可提现余额')));
+                $this->code = 1134;
+                $this->content['can_withdraw_amount'] = $can_withdraw_amount;
+                return;
             }
             $config = Config::getInstance();
             $other = $config->get("other");
             $withdraw_fee_rate = $other['withdraw_fee_rate'];
             if ($amount < $other['min_withdraw_amount']) {
-                exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于" . $other['min_withdraw_amount'])));
+                $this->code = 1135;
+                $this->content['min_withdraw_amount'] = $other['min_withdraw_amount'];
+                return;
             }
             // $isset = $this->model->table("balance_withdraw")->where("user_id =" . $this->user['id'] . " and status =0")->find();
             // if ($isset) {
@@ -1802,6 +1803,7 @@ class UcenterAction extends Controller {
                 $this->content['withdraw_fee_rate'] = round($amount*($withdraw_fee_rate/100),2);
             } else {
                 $this->code = 1005;
+                return;
             }
         
     }
