@@ -2499,10 +2499,10 @@ class UcenterAction extends Controller {
             'portraitUri'=>$customer['avatar']!=null?$customer['avatar']:''
             );
             $header = array(
-                'App-Key'=>$appkey,
-                'Nonce'=>$Nonce,
-                'Timestamp'=>$Timestamp,
-                'Signature'=>$Signature
+                'App-Key:p5tvi9dsphuc4',
+                'Nonce:{$Nonce}',
+                'Timestamp:{$Timestamp}',
+                'Signature:{$Signature}'
                 );
             $return = Common::httpRequest($url,'POST',$data,$header);
             $ret = json_decode($return,true);
