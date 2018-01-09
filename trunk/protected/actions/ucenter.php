@@ -2500,9 +2500,9 @@ class UcenterAction extends Controller {
             );
             $header = array(
                 'App-Key:p5tvi9dsphuc4',
-                'Nonce:{$Nonce}',
-                'Timestamp:{$Timestamp}',
-                'Signature:{$Signature}',
+                'Nonce:'.$Nonce,
+                'Timestamp:'.$Timestamp,
+                'Signature:'.$Signature,
                 'Content-Type: application/x-www-form-urlencoded'
                 );
             echo "<pre>";
