@@ -1731,12 +1731,11 @@ class UcenterAction extends Controller {
             return;
             //exit(json_encode(array('status' => 'fail', 'msg' => "提现金额少于".$other['min_withdraw_amount'])));
         }
-        $isset = $this->model->table("balance_withdraw")->where("user_id =" . $this->user['id'] . " and status =0")->find();
-        if ($isset) {
-            $this->code = 1136;
-            return;
-            //exit(json_encode(array('status' => 'fail', 'msg' => '申请失败，还有未处理完的提现申请')));
-        }
+        // $isset = $this->model->table("balance_withdraw")->where("user_id =" . $this->user['id'] . " and status =0")->find();
+        // if ($isset) {
+        //     $this->code = 1136;
+        //     return;
+        // }
         $withdraw_no = "BW" . date("YmdHis") . rand(100, 999);
         
         $data = array("withdraw_no" => $withdraw_no, "user_id" => $this->user['id'], "amount" => $amount, 'open_name' => $open_name, "open_bank" => $open_bank, 'province' => $prov, "city" => $city, 'card_no' => $card_no, 'apply_date' => date("Y-m-d H:i:s"), 'status' => 0);
