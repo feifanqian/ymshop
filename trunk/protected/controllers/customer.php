@@ -408,14 +408,14 @@ class CustomerController extends Controller {
     //商品咨询
     function ask_list() {
         $model = new Model();
-        $order = $model->table('order_offline')->where('id<=40000 and type=8 and user_id=1')->findAll();
+        $order = $model->table('order_offline')->where('id>60000 and type=9 and user_id=1')->findAll();
         for($i=0;$i<count($order);$i++){
             $log = $model->table('balance_log')->where("order_no=".$order[$i]['order_no']." and user_id=".$order[$i]['shop_ids'])->find();
             $t1 = strtotime($log['time']);
             $t2 = strtotime($log['time'])-600;
-            $invite = $model->table('invite')->where("createtime < $t1 and user_id=".$order[$i]['shop_ids'])->order('createtime desc')->findAll();
+            $invite = $model->table('invite')->where("createtime < $t1 and user_id=".$order[$i]['prom_id'])->order('createtime desc')->findAll();
             $uid = $invite?$invite[0]['invite_user_id']:1;
-            $model->table('order_offline')->data(array('user_id'=>$uid,'type'=>10))->where('order_no='.$order[$i]['order_no'])->update();
+            $model->table('order_offline')->data(array('user_id'=>$uid,'type'=>11))->where('order_no='.$order[$i]['order_no'])->update();
         }
 
         $condition = Req::args("condition");
