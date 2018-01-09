@@ -46,6 +46,7 @@ class V1Controller extends Controller {
         'address_del' => array('address/del', 1,1),
         'address_save' => array('address/save', 1,1),
         'goods_add' => array('goods/add', 1,1), //直接购买
+        'rongyun_token'=> array('ucenter/rongyun_token',1,1), // 获取融云token
         //TODO tian
         "order" => array("ucenter/order", 1,1), //查询订单
         "offline_order" => array("order/offlineorder_list",1,1), //线下订单

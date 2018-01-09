@@ -2484,4 +2484,22 @@ class UcenterAction extends Controller {
             return;
         }
     }
+
+    public function rongyun_token(){
+        $url = 'http://api.cn.ronghub.com/user/getToken.json';
+        $customer = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.avatar')->where('c.user_id='.$this->user['id'])->find();
+        if($customer){
+            $data = array(
+            'userId'=>$this->user['id'],
+            'name'=>$customer['real_name'],
+            'portraitUri'=>$customer['avatar']!=null?$customer['avatar']:''
+            );
+            $return = $this->postRequest($url,$data);
+            $ret = json_decode($return,true);
+            $this->code = 0;
+            $this->content = $ret;
+        }else{
+            exit();
+        } 
+    }
 }
