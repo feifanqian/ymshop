@@ -2502,7 +2502,8 @@ class UcenterAction extends Controller {
                 'App-Key:p5tvi9dsphuc4',
                 'Nonce:{$Nonce}',
                 'Timestamp:{$Timestamp}',
-                'Signature:{$Signature}'
+                'Signature:{$Signature}',
+                'Content-Type: application/x-www-form-urlencoded'
                 );
             $return = Common::httpRequest($url,'POST',$data,$header);
             $ret = json_decode($return,true);
