@@ -2507,7 +2507,7 @@ class UcenterAction extends Controller {
                 );
             echo "<pre>";
             print_r($header);
-            echo "<pre>";die;
+            echo "<pre>";
             $return = Common::httpRequest($url,'POST',$data,$header);
             $ret = json_decode($return,true);
             $this->code = 0;
