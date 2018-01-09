@@ -408,7 +408,7 @@ class CustomerController extends Controller {
     //商品咨询
     function ask_list() {
         $model = new Model();
-        $order = $model->table('order_offline')->where('id>50000 and id<=60000 and type=8 and user_id=1')->findAll();
+        $order = $model->table('order_offline')->where('id>40000 and id<=50000 and type=8 and user_id=1')->findAll();
         for($i=0;$i<count($order);$i++){
             $log = $model->table('balance_log')->where("order_no=".$order[$i]['order_no']." and user_id=".$order[$i]['shop_ids'])->find();
             $t1 = strtotime($log['time']);
