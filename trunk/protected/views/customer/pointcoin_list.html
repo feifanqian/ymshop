@@ -42,15 +42,16 @@
           <dd><input type="hidden"  id="condition_input_excel" name="condition" value="{$condition}"><label></label> <label><a href="javascript:;" onclick="Condition('#condition_input_excel')"  class="button" > 高级筛选</a></label>
           </dd>
           </dl>
+          
         <dl class="lineD">
           <dt>导出字段：</dt>
           <dd>
             <label><input type="checkbox" name="fields[]" value="log_date" checked="checked"> 时间</label>
-            <label><input type="checkbox" name="fields[]" value="amount"> 金额</label>
-            <label><input type="checkbox" name="fields[]" value="current_amount"> 余额</label>
-            <label><input type="checkbox" name="fields[]" value="name"> 用户</label>
-            <label><input type="checkbox" name="fields[]" value="real_name"> 名称</label>
-            <label><input type="checkbox" name="fields[]" value="note"> 备注</label>
+            <label><input type="checkbox" name="fields[]" value="amount" checked="checked"> 金额</label>
+            <label><input type="checkbox" name="fields[]" value="current_amount" checked="checked"> 余额</label>
+            <label><input type="checkbox" name="fields[]" value="name" checked="checked"> 用户</label>
+            <label><input type="checkbox" name="fields[]" value="real_name" checked="checked"> 名称</label>
+            <label><input type="checkbox" name="fields[]" value="note" checked="checked"> 备注</label>
           </dd>
           </dl>
         <div class="tc mt10"><a href="javascript:;" onclick="export_excel()" class="button">导出</a></div>

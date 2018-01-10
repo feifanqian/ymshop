@@ -792,6 +792,10 @@ class CustomerController extends Controller {
         $this->layout = '';
         $condition = Req::args("condition");
         $fields = Req::args("fields");
+        $page = Filter::int(Req::args("page"));
+        if(!$page){
+            $page = 1;
+        }
         $condition = Common::str2where($condition);
         $model = new Model("balance_log as bl");
         if ($condition) {
@@ -799,10 +803,10 @@ class CustomerController extends Controller {
         }else{
             $where = '1=1';
         } 
-            $items = $model->join('left join user as us on bl.user_id = us.id left join customer as c on c.user_id = bl.user_id')->fields('bl.*,us.name,c.real_name,c.mobile')->where($where)->order('bl.id desc')->findAll();
+            $items = $model->join('left join user as us on bl.user_id = us.id left join customer as c on c.user_id = bl.user_id')->fields('bl.*,us.name,c.real_name,c.mobile')->where($where)->order('bl.id desc')->findPage($page,10);
             if ($items) {
-                foreach($items as $k=>$v){
-                    $items[$k]['order_no'] ='@'.$v['order_no'];
+                foreach($items['data'] as $k=>$v){
+                    $items['data'][$k]['order_no'] ='@'.$v['order_no'];
                 }
                 header("Content-type:application/vnd.ms-excel");
                 header("Content-Disposition:filename=balance_log_list.xls");
@@ -812,7 +816,7 @@ class CustomerController extends Controller {
                     $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
                 }
                 $str .= "</tr>";
-                foreach ($items as $item) {
+                foreach ($items['data'] as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $value) {
                         $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$value]) . "</td>";
@@ -849,6 +853,7 @@ class CustomerController extends Controller {
                     $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
                 }
                 $str .= "</tr>";
+                
                 foreach ($items as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $value) {

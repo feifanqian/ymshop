@@ -44,15 +44,19 @@
           <dd><input type="hidden"  id="condition_input_excel" name="condition" value="{$condition}"><label></label> <label><a href="javascript:;" onclick="Condition('#condition_input_excel')"  class="button" > 高级筛选</a></label>
           </dd>
           </dl>
+         <dl class="lineD">
+          <dt>页数：</dt>
+          <dd>第<input type="text" style="width:24px;text-align:center;" name="page" value="1">页</dd>
+          </dl> 
         <dl class="lineD">
           <dt>导出字段：</dt>
           <dd>
             <label><input type="checkbox" name="fields[]" value="order_no" checked="checked"> 订单号</label>
-            <label><input type="checkbox" name="fields[]" value="time"> 时间</label>
-            <label><input type="checkbox" name="fields[]" value="amount"> 金额</label>
-            <label><input type="checkbox" name="fields[]" value="amount_log"> 当前余额</label>
-            <label><input type="checkbox" name="fields[]" value="name"> 用户</label>
-            <label><input type="checkbox" name="fields[]" value="real_name"> 名称</label>
+            <label><input type="checkbox" name="fields[]" value="time" checked="checked"> 时间</label>
+            <label><input type="checkbox" name="fields[]" value="amount" checked="checked"> 金额</label>
+            <label><input type="checkbox" name="fields[]" value="amount_log" checked="checked"> 当前余额</label>
+            <label><input type="checkbox" name="fields[]" value="name" checked="checked"> 用户</label>
+            <label><input type="checkbox" name="fields[]" value="real_name" checked="checked"> 名称</label>
             <label><input type="checkbox" name="fields[]" value="note"> 备注</label>
           </dd>
           </dl>
