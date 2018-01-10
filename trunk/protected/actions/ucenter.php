@@ -113,6 +113,12 @@ class UcenterAction extends Controller {
             if ($obj['status'] == 1) {
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
                     $token = CHash::random(32, 'char');
+                    $rongyun_token = $this->rongyun_token();
+                    if($rongyun_token){
+                        if($obj['rongyun_token']==''){
+                            $this->model->table("user")->data(array('rongyun_token' => $rongyun_token)))->where('id=' . $obj['id'])->update();
+                        }
+                    }
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
                     $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $obj['id'])->update();
                     $this->code = 0;
@@ -2505,14 +2511,15 @@ class UcenterAction extends Controller {
                 'Signature:'.$Signature,
                 'Content-Type: application/x-www-form-urlencoded'
                 );
-            echo "<pre>";
-            print_r($header);
-            echo "<pre>";
             $return = Common::httpRequest($url,'POST',$data,$header);
             $ret = json_decode($return,true);
-            $this->code = 0;
-            $this->content = $ret;
+            if($ret['code']==200){
+                return $ret['token'];
+            }else{
+                return FALSE;
+            }
         }else{
+            return FALSE;
             exit();
         } 
     }
