@@ -973,7 +973,7 @@ class SimpleController extends Controller {
             }
             $start_time = $flash_sale['start_time'];
             $end_time = $flash_sale['end_time'];
-            $had_booght = $model->table('order')->where("type=2 and pay_status=1 and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}")->count();
+            $had_booght = $model->table('order')->where("type=2 and pay_status=1 and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}'")->count();
             if($had_booght>=1){
                 if($isJump){
                  $this->redirect("/index/msg", true, array('msg' => '抱歉，本次活动期间您只能参与一次抢购！', 'type' => 'error'));
