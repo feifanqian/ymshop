@@ -116,14 +116,11 @@ class UcenterAction extends Controller {
                     $url = 'http://api.cn.ronghub.com/user/getToken.json';
                     /********************获取融云token**********************/
                     $rongyun_token = $this->rongyun_token($obj['id']);
-                    if($obj['id']==42608){
-                        var_dump($rongyun_token);die; 
+                    if($rongyun_token){
+                        if($obj['rongyun_token']==''){
+                            $this->model->table("user")->data(array('rongyun_token' => $rongyun_token))->where('id=' . $obj['id'])->update();
+                        }
                     }
-                    // if($rongyun_token){
-                    //     if($obj['rongyun_token']==''){
-                    //         $this->model->table("user")->data(array('rongyun_token' => $rongyun_token))->where('id=' . $obj['id'])->update();
-                    //     }
-                    // }
                     /********************获取融云token**********************/
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
                     $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $obj['id'])->update();
