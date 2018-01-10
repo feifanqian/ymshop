@@ -116,7 +116,7 @@ class UcenterAction extends Controller {
                     $rongyun_token = $this->rongyun_token();
                     if($rongyun_token){
                         if($obj['rongyun_token']==''){
-                            $this->model->table("user")->data(array('rongyun_token' => $rongyun_token)))->where('id=' . $obj['id'])->update();
+                            $this->model->table("user")->data(array('rongyun_token' => $rongyun_token))->where('id=' . $obj['id'])->update();
                         }
                     }
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
