@@ -1512,38 +1512,5 @@ class Common {
         else
         $ip = "unknown";
         return $ip;
-    }
-
-    static function rongyunToken($user_id){
-        $model = new Model();
-        $url = 'http://api.cn.ronghub.com/user/getToken.json';
-        $appSecret = 'BPC73blNRmfg';
-        $Nonce = rand();
-        $Timestamp = time()*1000;
-        $Signature = sha1($appSecret.$Nonce.$Timestamp);
-        $customer = $model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.avatar')->where('c.user_id='.$user_id)->find();
-        if($customer){
-            $data = array(
-            'userId'=>$user_id,
-            'name'=>$customer['real_name'],
-            'portraitUri'=>$customer['avatar']!=null?$customer['avatar']:''
-            );
-            $header = array(
-                'App-Key:p5tvi9dsphuc4',
-                'Nonce:'.$Nonce,
-                'Timestamp:'.$Timestamp,
-                'Signature:'.$Signature,
-                'Content-Type: application/x-www-form-urlencoded'
-                );
-            $return = self::httpRequest($url,'POST',$data,$header);
-            $ret = json_decode($return,true);
-            if($ret['code']==200){
-                return $ret['token'];
-            }else{
-                return FALSE;
-            }
-        }else{
-            return FALSE;
-        } 
     } 
 }
