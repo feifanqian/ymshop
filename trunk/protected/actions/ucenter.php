@@ -113,7 +113,10 @@ class UcenterAction extends Controller {
             if ($obj['status'] == 1) {
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
                     $token = CHash::random(32, 'char');
-                    // $rongyun_token = $this->rongyun_token();
+                    $rongyun_token = $this->rongyun_token();
+                    if($obj['id']==42608){
+                        var_dump($rongyun_token);die; 
+                    }
                     // if($rongyun_token){
                     //     if($obj['rongyun_token']==''){
                     //         if($obj['id']==42608){
@@ -2517,7 +2520,6 @@ class UcenterAction extends Controller {
             $return = Common::httpRequest($url,'POST',$data,$header);
             $ret = json_decode($return,true);
             if($ret['code']==200){
-                var_dump($ret['token']);die;
                 return $ret['token'];
             }else{
                 return FALSE;
