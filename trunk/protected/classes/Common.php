@@ -1514,7 +1514,7 @@ class Common {
         return $ip;
     }
 
-    static function rongyun_token($user_id){
+    static function rongyunToken($user_id){
         $model = new Model();
         $url = 'http://api.cn.ronghub.com/user/getToken.json';
         $appSecret = 'BPC73blNRmfg';
