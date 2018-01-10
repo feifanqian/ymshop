@@ -1731,7 +1731,7 @@ class SimpleController extends Controller {
         if ($this->checkOnline()) {
             $order_id = Filter::int(Req::get("order_id"));
             if ($order_id) {
-                $order = $this->model->table("order as od")->join("left join payment as pa on od.payment= pa.id")->fields("od.id,od.order_no,od.payment,od.pay_status,od.order_amount,pa.pay_name as payname,od.type,od.status")->where("od.id=$order_id and od.status<4 and od.user_id = " . $this->user['id'])->find();
+                $order = $this->model->table("order as od")->join("left join payment as pa on od.payment= pa.id")->fields("od.id,od.order_no,od.payment,od.pay_status,od.order_amount,od,create_time,pa.pay_name as payname,od.type,od.status")->where("od.id=$order_id and od.status<4 and od.user_id = " . $this->user['id'])->find();
                 if ($order) {
                     if ($order['pay_status'] == 0) {
                         $payment_plugin = Common::getPaymentInfo($order['payment']);
@@ -1796,11 +1796,11 @@ class SimpleController extends Controller {
                         
                         $notify_url ="http://www.ymlypt.com/payment/dinpay_callback";       
                         
-                        $order_no = Common::createOrderNo(); 
+                        $order_no = $order['order_no']; 
 
-                        $order_time = date( 'Y-m-d H:i:s' );    
+                        $order_time = $order['create_time'];    
 
-                        $order_amount = Req::args('amount')?Req::args('amount'): '0.01';  
+                        $order_amount = $order['order_amount'];  
 
                         $product_name ="testpay";
 
