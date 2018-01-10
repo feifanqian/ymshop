@@ -113,18 +113,18 @@ class UcenterAction extends Controller {
             if ($obj['status'] == 1) {
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
                     $token = CHash::random(32, 'char');
-                    // $rongyun_token = Common::rongyunToken($obj['id']);
-                    // if($obj['id']==42608){
-                    //     var_dump($rongyun_token);die; 
-                    // }
+                    $url = 'http://api.cn.ronghub.com/user/getToken.json';
+                    /********************获取融云token**********************/
+                    $rongyun_token = $this->rongyun_token($obj['id']);
+                    if($obj['id']==42608){
+                        var_dump($rongyun_token);die; 
+                    }
                     // if($rongyun_token){
                     //     if($obj['rongyun_token']==''){
-                    //         if($obj['id']==42608){
-                    //            var_dump($rongyun_token);die; 
-                    //         }
                     //         $this->model->table("user")->data(array('rongyun_token' => $rongyun_token))->where('id=' . $obj['id'])->update();
                     //     }
                     // }
+                    /********************获取融云token**********************/
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
                     $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $obj['id'])->update();
                     $this->code = 0;
@@ -2497,16 +2497,16 @@ class UcenterAction extends Controller {
         }
     }
 
-    public function rongyun_token(){
+    public function rongyun_token($user_id){
         $url = 'http://api.cn.ronghub.com/user/getToken.json';
         $appSecret = 'BPC73blNRmfg';
         $Nonce = rand();
         $Timestamp = time()*1000;
         $Signature = sha1($appSecret.$Nonce.$Timestamp);
-        $customer = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.avatar')->where('c.user_id='.$this->user['id'])->find();
+        $customer = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.avatar')->where('c.user_id='.$user_id)->find();
         if($customer){
             $data = array(
-            'userId'=>$this->user['id'],
+            'userId'=>$user_id,
             'name'=>$customer['real_name'],
             'portraitUri'=>$customer['avatar']!=null?$customer['avatar']:''
             );
