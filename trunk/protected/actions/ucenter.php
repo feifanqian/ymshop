@@ -2487,10 +2487,10 @@ class UcenterAction extends Controller {
 
     public function rongyun_token(){
         $url = 'http://api.cn.ronghub.com/user/getToken.json';
-        $appkey = 'p5tvi9dsphuc4';
+        $appSecret = 'BPC73blNRmfg';
         $Nonce = rand();
         $Timestamp = time()*1000;
-        $Signature = sha1($appkey.$Nonce.$Timestamp);
+        $Signature = sha1($appSecret.$Nonce.$Timestamp);
         $customer = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.avatar')->where('c.user_id='.$this->user['id'])->find();
         if($customer){
             $data = array(
