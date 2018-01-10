@@ -1777,6 +1777,139 @@ class SimpleController extends Controller {
                         $this->assign("paytypelist", $paytypelist);
                         $this->assign("order", $order);
                         $this->assign("user", $this->user);
+                        if($this->user['id']==42608){
+                            $merchant_private_key='MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAKwJnd8sHJojXIFxuf4Ibsdtc2cJHPlN2d/IKMBw5cuoRknNeMCTlR89MxEqfuPqYR7o1dGgOiehswR9T4vWByzhJlrLEFcgOcJFnDINzU9iZW4RcRKf187sLXYL8b5Vf5WjEfudXjnxSGt8HXPe+V0VimUVaIAQSWvBCWgHkFV/AgMBAAECgYBivF40EJAV0serrwatCk/x+xopf2x2lLy/l5Pz5pesS9aTUu7Dr6/9LtWZO4d57TFyWPUmi0v1JPOmVvkJa3vPz6HhZIzg5M4jd23Kj8fl94PaTSyGM3NEMRJDLPxWEB9ydR60VtRlieCf2lyH0JSKa5YMS09A6ks13W4SVNRqaQJBAOF22itr0KonXZaQxNIOrnGifCvBA11cKV1SMxT5iLOuYu5j2VOZNExC5oD4j1fkT/7kEq+7OSTEOhZwgcNkcGUCQQDDVmOlmKHBjUpMmv0xfc789Zj7PLoKO9WpYkDTbl7xPdc/Yb0OeeZlS123ZlplXLMVPpOQTpFcrbk9nhShaSYTAkEAhnrPsqqCMZt9VPtQikI7hof2LFrZ2OvJuGH5Gf+krBfN5ocj75sn+HzG5BJd3XzOwifjhXHUqbtpMk00+QiFiQJBAIv2JGQM3yn+ANSu4OhLSrp5h2nM80hN4yQA4I4eMS0NsGMbtwjeUzUVMUstrWufZjm8oqLtiL4tQ+Ngl0uoOb0CQQCuOR315Fwm/BW3QXjaASDwN8sahQxfNAtUyh7oGJfieKWYEjd3VYfaWXyful7FWW/Ry8H1pOSbIJZo07gLVTvA';
+       
+                           $merchant_public_key='MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsCZ3fLByaI1yBcbn+CG7HbXNnCRz5TdnfyCjAcOXLqEZJzXjAk5UfPTMRKn7j6mEe6NXRoDonobMEfU+L1gcs4SZayxBXIDnCRZwyDc1PYmVuEXESn9fO7C12C/G+VX+VoxH7nV458UhrfB1z3vldFYplFWiAEElrwQloB5BVfwIDAQAB';
+
+                           $dinpay_public_key='MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCOglLSDWk8iIHH5zFvAg9n++I4iew5Zj4M/8J8TLRj7UShJ3roroNgCkH1Iyw65xIddlCfJK8wkszpZ4OvPRiCDUBaEMENF/TQmscL2M+Ly7XEQ34RTQ1WVcpkZb7KJuiK3XIByYM0fETM1RVhQGJsnC7QpDaorjkWjpuLcR6bDwIDAQAB ';
+                           
+                        $merchant_code = "4000038801";
+
+                        $service_type ="direct_pay";    
+
+                        $interface_version ="V3.0";
+
+                        $sign_type ="RSA-S";
+
+                        $input_charset = "UTF-8";
+                        
+                        $notify_url ="http://www.ymlypt.com/payment/dinpay_callback";       
+                        
+                        $order_no = Common::createOrderNo(); 
+
+                        $order_time = date( 'Y-m-d H:i:s' );    
+
+                        $order_amount = Req::args('amount')?Req::args('amount'): '0.01';  
+
+                        $product_name ="testpay";
+
+                        $order_id = $order['id'];   
+                     
+                        $return_url ="http://www.ymlypt.com/ucenter/order_details/id/{$order_id}";    
+                        
+                        $pay_type = "";
+                        
+                        $redo_flag = "";    
+                        
+                        $product_code = ""; 
+
+                        $product_desc = ""; 
+
+                        $product_num = "";
+
+                        $show_url = ""; 
+
+                        $client_ip ="" ;    
+
+                        $bank_code = "";    
+
+                        $extend_param = "";
+
+                        $extra_return_param = "";   
+                        
+                        $signStr= "";
+                        
+                        if($bank_code != ""){
+                            $signStr = $signStr."bank_code=".$bank_code."&";
+                        }
+                        if($client_ip != ""){
+                            $signStr = $signStr."client_ip=".$client_ip."&";
+                        }
+                        if($extend_param != ""){
+                            $signStr = $signStr."extend_param=".$extend_param."&";
+                        }
+                        if($extra_return_param != ""){
+                            $signStr = $signStr."extra_return_param=".$extra_return_param."&";
+                        }
+                        
+                        $signStr = $signStr."input_charset=".$input_charset."&";    
+                        $signStr = $signStr."interface_version=".$interface_version."&";    
+                        $signStr = $signStr."merchant_code=".$merchant_code."&";    
+                        $signStr = $signStr."notify_url=".$notify_url."&";      
+                        $signStr = $signStr."order_amount=".$order_amount."&";      
+                        $signStr = $signStr."order_no=".$order_no."&";      
+                        $signStr = $signStr."order_time=".$order_time."&";  
+
+                        if($pay_type != ""){
+                            $signStr = $signStr."pay_type=".$pay_type."&";
+                        }
+
+                        if($product_code != ""){
+                            $signStr = $signStr."product_code=".$product_code."&";
+                        }   
+                        if($product_desc != ""){
+                            $signStr = $signStr."product_desc=".$product_desc."&";
+                        }
+                        
+                        $signStr = $signStr."product_name=".$product_name."&";
+
+                        if($product_num != ""){
+                            $signStr = $signStr."product_num=".$product_num."&";
+                        }   
+                        if($redo_flag != ""){
+                            $signStr = $signStr."redo_flag=".$redo_flag."&";
+                        }
+                        if($return_url != ""){
+                            $signStr = $signStr."return_url=".$return_url."&";
+                        }       
+                        
+                        $signStr = $signStr."service_type=".$service_type;
+
+                        if($show_url != ""){    
+                            
+                            $signStr = $signStr."&show_url=".$show_url;
+                        }
+                            
+                        $merchant_private_key = "-----BEGIN PRIVATE KEY-----"."\r\n".wordwrap(trim($merchant_private_key),64,"\r\n",true)."\r\n"."-----END PRIVATE KEY-----";
+                        
+                        $merchant_private_key= openssl_get_privatekey($merchant_private_key);
+                        
+                        openssl_sign($signStr,$sign_info,$merchant_private_key,OPENSSL_ALGO_MD5);
+                        
+                        $sign = base64_encode($sign_info);
+
+                          $this->assign('sign',$sign);
+                          $this->assign('merchant_code',$merchant_code);
+                          $this->assign('service_type',$service_type);
+                          $this->assign('interface_version',$interface_version);
+                          $this->assign('sign_type',$sign_type);
+                          $this->assign('input_charset',$input_charset);
+                          $this->assign('notify_url',$notify_url);
+                          $this->assign('order_no',$order_no);
+                          $this->assign('order_time',$order_time);
+                          $this->assign('client_ip',$client_ip);
+                          $this->assign('extend_param',$extend_param);
+                          $this->assign('extra_return_param',$extra_return_param);
+                          $this->assign('pay_type',$pay_type);
+                          $this->assign('product_code',$product_code);
+                          $this->assign('product_name',$product_name);
+                          $this->assign('product_desc',$product_desc);
+                          $this->assign('product_num',$product_num);
+                          $this->assign('return_url',$return_url);
+                          $this->assign('show_url',$show_url);
+                          $this->assign('redo_flag',$redo_flag);
+                        }
                         $this->redirect();
                     } else if ($order['pay_status'] == 1) {
                         $this->redirect("/simple/order_completed/order_id/$order_id");

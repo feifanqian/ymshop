@@ -12,6 +12,7 @@
     }
 </style>
 <link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+{if:$user['id']!=42608}
 <form action="{url:/payment/dopay}" method="post" id="payform">
     <input type="hidden" name="order_id" value="{$order['id']}">
     <input type="hidden" name="payment_id" value="{$order['payment']}">
@@ -50,6 +51,64 @@
         <p class="tc"><input class="weui_btn weui_btn_primary" type="button" id="submitForm" value="立即支付"></p>
     </div>
 </form>
+{else:}
+<form action="https://pay.dinpay.com/gateway?input_charset=UTF-8" method="post" id="payform">
+        <input type="hidden" name="sign"          value="{$sign}" />
+        <input type="hidden" name="merchant_code" value="{$merchant_code}" />
+        <input type="hidden" name="bank_code"     value="{$bank_code}"/>
+        <input type="hidden" name="order_no"      value="{$order_no}"/>
+        <input type="hidden" name="order_amount" id="order_amount" value="{$order_amount}"/>
+        <input type="hidden" name="service_type"  value="{$service_type}"/>
+        <input type="hidden" name="input_charset" value="{$input_charset}"/>
+        <input type="hidden" name="notify_url"    value="{$notify_url}">
+        <input type="hidden" name="interface_version" value="{$interface_version}"/>
+        <input type="hidden" name="sign_type"     value="{$sign_type}"/>
+        <input type="hidden" name="order_time"    value="{$order_time}"/>
+        <input type="hidden" name="product_name"  value="{$product_name}"/>
+        <input Type="hidden" Name="client_ip"     value="{$client_ip}"/>
+        <input Type="hidden" Name="extend_param"  value="{$extend_param}"/>
+        <input Type="hidden" Name="extra_return_param" value="{$extra_return_param}"/>
+        <input Type="hidden" Name="pay_type"  value="{$pay_type}"/>
+        <input Type="hidden" Name="product_code"  value="{$product_code}"/>
+        <input Type="hidden" Name="product_desc"  value="{$product_desc}"/>
+        <input Type="hidden" Name="product_num"   value="{$product_num}"/>
+        <input Type="hidden" Name="return_url"    value="{$return_url}"/>
+        <input Type="hidden" Name="show_url"      value="{$show_url}"/>
+        <input Type="hidden" Name="redo_flag"     value="{$redo_flag}"/>
+        <div class="mt10">
+           <div class="weui_cells weui_cells_access">
+            <a href="{url:/ucenter/order_detail/id/}{$order['id']}" class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>订单号</p>
+                </div>
+                <div class="weui_cell_ft">
+                    {$order['order_no']}
+                </div>
+            </a>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>订单金额</p>
+                </div>
+                <div class="weui_cell_hd">
+                    {$currency_symbol}{$order['order_amount']}
+                </div>
+            </div>
+            <div class="weui_cell ">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>支付方式</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <!-- <input class="weui_input" id="paytype" name='paytype' type="text" value="{$order['payname']}" data-values="{$order['payment']}" style='text-align: right;display:inline-block;width:auto;' /> -->
+                    <input class="weui_input" id="paytype" name='paytype' type="text" value="微信" data-values="6" style='text-align: right;display:inline-block;width:auto;' />
+                </div>
+            </div>
+           </div>
+        </div>         
+        <div class="ma20 clearfix">
+            <p class="tc"><input class="weui_btn weui_btn_primary" type="button" id="submitForm" value="立即支付"></p>
+        </div>
+</form>
+{/if}
 <script type="text/javascript" charset="UTF-8" src="/themes/_default/js/jquery.iframe-post-form.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
