@@ -1796,8 +1796,15 @@ class SimpleController extends Controller {
                            $dinpay_public_key='MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCOglLSDWk8iIHH5zFvAg9n++I4iew5Zj4M/8J8TLRj7UShJ3roroNgCkH1Iyw65xIddlCfJK8wkszpZ4OvPRiCDUBaEMENF/TQmscL2M+Ly7XEQ34RTQ1WVcpkZb7KJuiK3XIByYM0fETM1RVhQGJsnC7QpDaorjkWjpuLcR6bDwIDAQAB ';
                            
                         $merchant_code = "4000038801";
-
-                        $service_type ="direct_pay";    
+                        
+                        if($order['payment']==6){
+                            $service_type = 'wxpub_pay';
+                        }elseif($order['payment']==12){
+                           $service_type ="direct_pay"; 
+                       }else{
+                           $service_type = 'wxpub_pay';
+                       }
+                            
 
                         $interface_version ="V3.0";
 
@@ -1909,6 +1916,7 @@ class SimpleController extends Controller {
                           $this->assign('notify_url',$notify_url);
                           $this->assign('order_no',$order_no);
                           $this->assign('order_time',$order_time);
+                          $this->assign('order_amount',$order_amount);
                           $this->assign('client_ip',$client_ip);
                           $this->assign('extend_param',$extend_param);
                           $this->assign('extra_return_param',$extra_return_param);
