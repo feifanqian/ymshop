@@ -113,15 +113,15 @@ class UcenterAction extends Controller {
             if ($obj['status'] == 1) {
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
                     $token = CHash::random(32, 'char');
-                    $rongyun_token = $this->rongyun_token();
-                    if($rongyun_token){
-                        if($obj['rongyun_token']==''){
-                            if($obj['id']==42608){
-                               var_dump($rongyun_token);die; 
-                            }
-                            $this->model->table("user")->data(array('rongyun_token' => $rongyun_token))->where('id=' . $obj['id'])->update();
-                        }
-                    }
+                    // $rongyun_token = $this->rongyun_token();
+                    // if($rongyun_token){
+                    //     if($obj['rongyun_token']==''){
+                    //         if($obj['id']==42608){
+                    //            var_dump($rongyun_token);die; 
+                    //         }
+                    //         $this->model->table("user")->data(array('rongyun_token' => $rongyun_token))->where('id=' . $obj['id'])->update();
+                    //     }
+                    // }
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
                     $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $obj['id'])->update();
                     $this->code = 0;
@@ -2517,6 +2517,7 @@ class UcenterAction extends Controller {
             $return = Common::httpRequest($url,'POST',$data,$header);
             $ret = json_decode($return,true);
             if($ret['code']==200){
+                var_dump($ret['token']);die;
                 return $ret['token'];
             }else{
                 return FALSE;
