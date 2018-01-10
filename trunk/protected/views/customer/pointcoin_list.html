@@ -4,21 +4,28 @@
 <form action="" method="post">
 <div class="tools_bar clearfix">
     <a class="icon-delicious" href="{url:/customer/pointcoin_list}"> 全部记录</a>
+    <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a>
     <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
 </div>
 <table class="default" >
     <tr>
         <th style="width:30">序号</th>
-        <th style="width:140">时间</th>
+        <th style="width:100">时间</th>
         <th style="width:80">金额</th>
         <th style="width:100">余额</th>
         <th style="width:100">用户</th>
+        <th style="width:100">名称</th>
         <th >备注 </th>   
     </tr>
     {query:name=pointcoin_log as bl fields=bl.*,us.name,c.real_name,c.mobile join=left join user as us on bl.user_id eq us.id left join customer as c on c.user_id eq bl.user_id where= $where order= bl.id desc id=$obj page=1 desc }
         <tr class="{if:$key%2==1}odd{/if}">
         <td style="width:30px;">{$item['id']}、</td>
-        <td style="width:140px">{$item['log_date']}</td><td style="width:80px">{$item['amount']}</td><td style="width:100px">{$item['current_amount']}</td><td style="width:100px">{$item['name']}</td><td >{$item['note']}</td>
+        <td style="width:100px">{$item['log_date']}</td>
+        <td style="width:80px">{$item['amount']}</td>
+        <td style="width:100px">{$item['current_amount']}</td>
+        <td style="width:100px">{$item['name']}</td>
+        <td style="width:100px">{$item['real_name']}</td>
+        <td >{$item['note']}</td>
         </tr>
     {/query}
 </table>
@@ -26,10 +33,44 @@
 <div class="page_nav">
 {echo:$obj->pageBar()}
 </div>
+<div id="excel_box" style="display: none;width:600px;">
+    <h1 class="page_title">Excel导出</h1>
+    <div class="form2">
+        <form  id="export_form" action="{url:/customer/pointcoin_export_excel}" method="post" >
+           <dl class="lineD">
+          <dt>筛选条件：</dt>
+          <dd><input type="hidden"  id="condition_input_excel" name="condition" value="{$condition}"><label></label> <label><a href="javascript:;" onclick="Condition('#condition_input_excel')"  class="button" > 高级筛选</a></label>
+          </dd>
+          </dl>
+        <dl class="lineD">
+          <dt>导出字段：</dt>
+          <dd>
+            <label><input type="checkbox" name="fields[]" value="log_date" checked="checked"> 时间</label>
+            <label><input type="checkbox" name="fields[]" value="amount"> 金额</label>
+            <label><input type="checkbox" name="fields[]" value="current_amount"> 余额</label>
+            <label><input type="checkbox" name="fields[]" value="name"> 用户</label>
+            <label><input type="checkbox" name="fields[]" value="real_name"> 名称</label>
+            <label><input type="checkbox" name="fields[]" value="note"> 备注</label>
+          </dd>
+          </dl>
+        <div class="tc mt10"><a href="javascript:;" onclick="export_excel()" class="button">导出</a></div>
+        </form>
+    </div>
+</div>
 <script type="text/javascript">
     var form =  new Form();
     $("#condition").on("click",function(){
-        $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/customer/pointcoin_list}',method:'get'});},data:{'name':{name:'用户名'},'c.real_name':{name:'真实姓名'},'c.mobile':{name:'手机号'},'note':{name:'备注'}
+        $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/customer/pointcoin_list}',method:'get'});},data:{'time':{name:'时间'},'name':{name:'用户名'},'c.real_name':{name:'真实姓名'},'note':{name:'备注'}
         }});
     });
+    function export_excel_dialog(){
+        art.dialog({id:'export_excel_dialog',title:'Excel导出',lock:true,opacity:0.1,width:600,height:200,content:document.getElementById("excel_box")});
+    }
+    function export_excel() {
+      $("#export_form").submit();
+    }
+    function Condition(id){
+        $("body").Condition({input:id,data:{'time':{name:'时间'},'name':{name:'用户名'},'c.real_name':{name:'真实姓名'},'note':{name:'备注'}
+        }});
+    }
 </script>

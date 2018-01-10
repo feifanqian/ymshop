@@ -799,14 +799,14 @@ class CustomerController extends Controller {
         }else{
             $where = '1=1';
         } 
-            $items = $model->join('left join user as us on bl.user_id = us.id left join customer as c on c.user_id = bl.user_id')->where($where)->order('bl.id desc')->findAll();
+            $items = $model->join('left join user as us on bl.user_id = us.id left join customer as c on c.user_id = bl.user_id')->fields('bl.*,us.name,c.real_name,c.mobile')->where($where)->order('bl.id desc')->findAll();
             if ($items) {
                 foreach($items as $k=>$v){
-                    $items[$k]['order_no'] ='*'.$v['order_no'];
+                    $items[$k]['order_no'] ='@'.$v['order_no'];
                 }
                 header("Content-type:application/vnd.ms-excel");
                 header("Content-Disposition:filename=balance_log_list.xls");
-                $fields_array = array('order_no' => '订单号','time' => '时间', 'amount' => '金额', 'amount_log' => 'name','name'=>'用户', 'real_name' => '名称','note'=>'备注');
+                $fields_array = array('order_no' => '订单号','time' => '时间', 'amount' => '金额', 'amount_log' => '当前余额','name'=>'用户', 'real_name' => '名称','note'=>'备注');
                 $str = "<table border=1><tr>";
                 foreach ($fields as $value) {
                     $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
@@ -824,7 +824,44 @@ class CustomerController extends Controller {
                 exit;
             } else {
                 $this->msg = array("warning", "没有符合该筛选条件的数据，请重新筛选！");
-                $this->redirect("doc_receiving_list", false, Req::args());
+                $this->redirect("balance_list", false, Req::args());
+            }
+    }
+
+    public function pointcoin_export_excel(){
+        $this->layout = '';
+        $condition = Req::args("condition");
+        $fields = Req::args("fields");
+        $condition = Common::str2where($condition);
+        $model = new Model("pointcoin_log as bl");
+        if ($condition) {
+            $where = $condition;
+        }else{
+            $where = '1=1';
+        } 
+            $items = $model->join('left join user as us on bl.user_id = us.id left join customer as c on c.user_id = bl.user_id')->fields('bl.*,us.name,c.real_name,c.mobile')->where($where)->order('bl.id desc')->findAll();
+            if ($items) {
+                header("Content-type:application/vnd.ms-excel");
+                header("Content-Disposition:filename=pointcoin_log_list.xls");
+                $fields_array = array('log_date' => '时间', 'amount' => '金额', 'current_amount' => '余额','name'=>'用户', 'real_name' => '名称','note'=>'备注');
+                $str = "<table border=1><tr>";
+                foreach ($fields as $value) {
+                    $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
+                }
+                $str .= "</tr>";
+                foreach ($items as $item) {
+                    $str .= "<tr>";
+                    foreach ($fields as $value) {
+                        $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$value]) . "</td>";
+                    }
+                    $str .= "</tr>";
+                }
+                $str .= "</table>";
+                echo $str;
+                exit;
+            } else {
+                $this->msg = array("warning", "没有符合该筛选条件的数据，请重新筛选！");
+                $this->redirect("pointcoin_list", false, Req::args());
             }
     }
 
