@@ -971,6 +971,17 @@ class SimpleController extends Controller {
                     exit();
                 }
             }
+            $start_time = $flash_sale['start_time'];
+            $end_time = $flash_sale['end_time'];
+            $had_booght = $model->table('order')->where("type=2 and pay_status=1 and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}")->count();
+            if($had_booght>=1){
+                if($isJump){
+                 $this->redirect("/index/msg", true, array('msg' => '抱歉，本次活动期间您只能参与一次抢购！', 'type' => 'error'));
+                 exit();
+                }else{
+                    return false;
+                }
+            }
         }
         if($quota_num==0 || $quota_num =="" || $quota_num <0){
             return true;
@@ -987,7 +998,7 @@ class SimpleController extends Controller {
             $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6");
             if($sum1[0]['sum']>= $quota_num){
                 if($isJump){
-                     $this->redirect("/index/msg", true, array('msg' => '对不起，该商品的抢购已达上限', 'type' => 'error'));
+                     $this->redirect("/index/msg", true, array('msg' => '对不起，该商品的抢购数量已达上限', 'type' => 'error'));
                 exit();
                 }else{
                     return false;
