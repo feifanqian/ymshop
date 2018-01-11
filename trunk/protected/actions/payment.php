@@ -133,7 +133,7 @@ class PaymentAction extends Controller {
                         if($flash_sale){
                             if($flash_sale['goods_num']>=$flash_sale['max_num'] || $flash_sale['is_end']==1){
                                 $this->code = 1205;
-                                exit();
+                                return;
                             }
                         }
                     }
