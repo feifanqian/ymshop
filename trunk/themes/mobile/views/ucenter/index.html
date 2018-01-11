@@ -117,7 +117,7 @@
     </div>
 </div>
 <div style='margin-top:10px;'>
-<!-- {if:$is_hirer==true}
+{if:$is_hirer==true}
 <div class="weui_panel js_show">
     <div class="weui_panel_hd js_category">我的专区<p><i class="ymicon icon-navicon"></i><p></div>
     <div class="weui_panel_bd js_categoryInner">
@@ -139,7 +139,7 @@
         </div>
     </div>
 </div>
-{/if} -->
+{else:}
 <div class="weui_panel js_show">
     <div class="weui_panel_hd js_category">我的专区<p><i class="ymicon icon-navicon"></i><p></div>
     <div class="weui_panel_bd js_categoryInner">
@@ -161,6 +161,7 @@
         </div>
     </div>
 </div>
+{/if}
  <div class="weui_panel js_show">
     <div class="weui_panel_hd js_category">推广中心{if:Req::args("first")==1}<span class="weui-badge" style="margin-left: 5px;margin-bottom:2px;">NEW</span>{/if}<p><i class="ymicon icon-navicon"></i><p></div>
     <div class="weui_panel_bd js_categoryInner">
