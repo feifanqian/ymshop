@@ -7,7 +7,7 @@
 {widget:name=sub_navs action=crumbs items=$items step=3 current=2}
 {/if}
 <div class="container">
-    {if:$user['id']!=1776}
+    {if:$user['id']!=42608}
     <form action="{url:/payment/dopay}" method="post" id='__payform'>
         <input type="hidden" name="order_id" value="{$order['id']}">
 <!--        <div class="status-bar">
