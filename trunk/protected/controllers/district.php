@@ -37,9 +37,6 @@ class DistrictController extends Controller {
                 $this->redirect('/district/district');
             }
         }
-        $this->assign('seo_title',"专区登录");
-        $this->assign('current',"district");
-        $this->redirect();
     }
     public function login_act(){
         $district_id = Filter::int(Req::args("id"));
