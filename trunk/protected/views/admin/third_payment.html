@@ -1,0 +1,24 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('validator');}
+<h2 class="page_title">选择第三方支付</h2>
+<div class="form2">
+	<form name="config_form" method="post" action="{url:/admin/third_payment_save/group/other}">
+    <dl class="lineD">
+      <dt>第三方支付：</dt>
+      <dd>
+        <input name="third_payment_value" type="radio"  value="0" {if:$data==0}checked="checked"{/if} /><label>官方支付</label>
+        <input name="third_payment_value" type="radio"   value="1" {if:$data==1}checked="checked"{/if}/><label>智付支付</label>
+      </dd>
+    </dl>
+    <div class="center">
+      <input type="submit" name="submit" class="button action fn" value="确 定">
+    </div>
+  </form>
+</div>
+<script>
+  {if:isset($message)}
+  art.dialog.tips('<p class="success">{$message}</p>');
+  {/if}
+</script>

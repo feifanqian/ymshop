@@ -30,6 +30,7 @@ class Menu {
             '/admin/class_config_list' => array('name' => '第三方列表', 'parent' => 'third'),
             '/admin/class_config_edit' => array('name' => '第三方配制编辑', 'parent' => 'third'),
             '/admin/payment_list' => array('name' => '支付方式', 'parent' => 'delivery'),
+            '/admin/third_payment' => array('name' => '第三方支付', 'parent' => 'delivery'),
             '/admin/payment_edit' => array('name' => '编辑支付方式', 'parent' => 'delivery'),
             '/admin/zoning_list' => array('name' => '区域划分', 'parent' => 'delivery'),
             '/admin/area_list' => array('name' => '地区管理', 'parent' => 'delivery'),

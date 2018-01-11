@@ -1101,4 +1101,20 @@ class AdminController extends Controller {
         $this->redirect('version_list');
     }
 
+    public function third_payment(){
+        $model = new Model('third_payment');
+        $third_payment = $model->where('id=1')->find();
+        $data = $third_payment['third_payment'];
+        $this->assign('data', $data);
+        $this->redirect();
+    }
+
+    public function third_payment_save(){
+        $model = new Model('third_payment');
+        $third_payment = Filter::int(Req::args('third_payment_value'));
+        $model->data(array('third_payment'=>$third_payment))->where('id=1')->update();
+        $this->assign('message', '信息保存成功！');
+        $this->redirect('third_payment',false);
+    }
+
 }
