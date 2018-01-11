@@ -154,7 +154,7 @@ class OrderAction extends Controller {
         $history =  $model->table("order")->where("type = 2 and prom_id = $prom_id and pay_status=0 and status not in (5,6) and is_del != 1 and user_id =".$user_id)->count();
         if($history>0){
            $this->code = 1108;
-           exit();
+           return;
         }
         $flash_sale = $model->table('flash_sale')->where('id='.$prom_id)->find();
         if($flash_sale){
@@ -174,7 +174,7 @@ class OrderAction extends Controller {
         $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6 and od.user_id = $user_id");
         if($sum[0]['sum']>= $quota_num){
             $this->code = 1109;
-            exit();
+            return;
         }
               
     }
