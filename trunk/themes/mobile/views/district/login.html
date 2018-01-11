@@ -15,8 +15,28 @@
         margin: 0 auto;
         height: 10px;
     }
+    .apply-district{
+        width: 80%;
+        margin-top: 40px;
+        background-color:#e5894c;
+        position: relative;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 14px;
+        padding-right: 14px;
+        box-sizing: border-box;
+        font-size: 18px;
+        text-align: center;
+        text-decoration: none;
+        color: #eee;
+        line-height: 2.55555556;
+        border-radius: 5px;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        overflow: hidden;
+    }
 </style>  
-<div class="weui_panel_hd">专区功能</div>
+<!-- <div class="weui_panel_hd">专区功能</div>
 <div class="weui_panel_bd">
         <div class="weui_media_box weui_media_small_appmsg">
             <div class="weui_cells weui_cells_access">
@@ -90,71 +110,77 @@
     </div>
     <div class="weui_panel_hd">待处理专区</div>
     <div class="weui_panel_bd">
-                {if:empty($apply_info)}
-                <div class="bg-white p20" style="height:90px;">
-                <div class="weui-loadmore weui-loadmore_line page_end">
-                    <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">暂无</span>
-                </div>
-                </div>
-                {else:}
-               {list:$items=$apply_info}
-                 <div class="ma20 bg-white p20 ">
-                    <div class="weui-form-preview">
-                            <div class="weui-form-preview__hd">
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">专区名称</label>
-                                    <em class="weui-form-preview__value">{$item['name']}</em>
-                                </div>
-                            </div>
-                            <div class="weui-form-preview__bd">
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">申请时间</label>
-                                    <span class="weui-form-preview__value">{$item['apply_time']}</span>
-                                </div>
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">地理位置</label>
-                                    <span class="weui-form-preview__value">{$item['location']}</span>
-                                </div>
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">联系人</label>
-                                    <span class="weui-form-preview__value">{$item['linkman']}</span>
-                                </div>
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">支付状态</label>
-                                    <span class="weui-form-preview__value">{if:$item['pay_status']==1}已支付{else:}未支付{/if}</span>
-                                </div>
-                                {if:$item['refuse_reason']!=""}
-                                <div class="weui-form-preview__item">
-                                    <label class="weui-form-preview__label">备注说明</label>
-                                    <span class="weui-form-preview__value">{$item['refuse_reason']}</span>
-                                </div>
-                                {/if}
-                            </div>
+        {if:empty($apply_info)}
+        <div class="bg-white p20" style="height:90px;">
+        <div class="weui-loadmore weui-loadmore_line page_end">
+            <span class="weui-loadmore__tips" style="background-color:#fbf9fe;">暂无</span>
+        </div>
+        </div>
+        {else:}
+        {list:$items=$apply_info}
+        <div class="ma20 bg-white p20 ">
+            <div class="weui-form-preview">
+                    <div class="weui-form-preview__hd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">专区名称</label>
+                            <em class="weui-form-preview__value">{$item['name']}</em>
+                        </div>
                     </div>
-                    <div class="weui-loadmore weui-loadmore_line page_end time">
-                            <span class="weui-loadmore__tips" >
-                                {if:$item['status']==0&&$item['pay_status']==0}
-                                <a href="{url:/ucenter/district_pay/id/$item[id]}" class="weui-btn weui-btn_mini weui-btn_primary">马上支付</a>
-                                {else:}
-                                等待审核
-                                {/if}
-                            </span>
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">申请时间</label>
+                            <span class="weui-form-preview__value">{$item['apply_time']}</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">地理位置</label>
+                            <span class="weui-form-preview__value">{$item['location']}</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">联系人</label>
+                            <span class="weui-form-preview__value">{$item['linkman']}</span>
+                        </div>
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">支付状态</label>
+                            <span class="weui-form-preview__value">{if:$item['pay_status']==1}已支付{else:}未支付{/if}</span>
+                        </div>
+                        {if:$item['refuse_reason']!=""}
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label">备注说明</label>
+                            <span class="weui-form-preview__value">{$item['refuse_reason']}</span>
+                        </div>
+                        {/if}
                     </div>
-                </div>
-               {/list}
-               {/if}
             </div>
+            <div class="weui-loadmore weui-loadmore_line page_end time">
+                    <span class="weui-loadmore__tips" >
+                        {if:$item['status']==0&&$item['pay_status']==0}
+                        <a href="{url:/ucenter/district_pay/id/$item[id]}" class="weui-btn weui-btn_mini weui-btn_primary">马上支付</a>
+                        {else:}
+                        等待审核
+                        {/if}
+                    </span>
+            </div>
+        </div>
+        {/list}
+        {/if}
+    </div> -->
+<div class="weui_panel_bd">
+ <img src="/static/images/hirer_bg.png" class="hirer_bg">
+ <a href="{url:/ucenter/apply_for_district}" class="apply-district">立即申请</a>
+</div>    
 <script>
     $(function(){
-        $("#main-tabbar a").click(function(e){
-             e.preventDefault();
-                  //提示
-            layer.open({
-              content: '请选择进入专区'
-              ,skin: 'msg'
-              ,time: 4 //2秒后自动关闭
-            });
-            return false;
-        });
+        var W = $('.weui_panel_bd').width();
+        $('.hirer_bg').css("width",W);
+        // $("#main-tabbar a").click(function(e){
+        //      e.preventDefault();
+        //           //提示
+        //     layer.open({
+        //       content: '请选择进入专区'
+        //       ,skin: 'msg'
+        //       ,time: 4 //2秒后自动关闭
+        //     });
+        //     return false;
+        // });
     })
 </script>
