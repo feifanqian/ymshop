@@ -1820,7 +1820,7 @@ class SimpleController extends Controller {
 
                         $order_id = $order['id'];   
                      
-                        $return_url ="http://www.ymlypt.com/ucenter/order_details/id/{$order_id}";    
+                        $return_url ="http://www.ymlypt.com/ucenter/order_detail/id/{$order_id}";    
                         
                         $pay_type = "";
                         
