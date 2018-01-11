@@ -1212,13 +1212,179 @@ class PaymentController extends Controller {
         
         
     ///////////////////////////   响应“SUCCESS” /////////////////////////////
-        $order = $model->table('order_offline')->where('order_no='.$order_no)->find();
-        if($order){
-            $model->table('order_offline')->data(array('payable_amount'=>$order_amount,'order_amount'=>$order_amount,'real_amount'=>$order_amount))->where('order_no='.$order_no)->update();
-        }
         if($flag){
-            if($order){
-                $model->table('order_offline')->data(array('status'=>3,'pay_status'=>1))->where('order_no='.$order_no)->update();
+            $orderNo = $order_no;
+            $money = $order_amount;
+            $callbackData = array();
+            if (stripos($orderNo, 'promoter') !== false) {
+                $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
+                if ($order) {
+                    $payment_id = $order['payment_id'];
+                    if ($order['pay_status'] == 1) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    } else {
+                        DistrictLogic::getInstance()->promoterPayCallback($orderNo, $money, $payment_id, $callbackData);
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    }
+                } else {
+                    file_put_contents('district_payErr.txt', date("Y-m-d H:i:s") . "==promoter==\n" . json_encode($callbackData) . "\n", FILE_APPEND);
+                    exit;
+                }
+            } else if (stripos($orderNo, 'district') !== false) {
+                $district_id = intval(substr($orderNo, stripos($orderNo, 'district') + 8));
+                $district = new Model("district_apply");
+                $district_info = $district->where("id=$district_id")->find();
+                if (!empty($district_info)) {
+                    if ($district_info['pay_status'] == 1) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    } else {
+                        $payment_info = $payment->getPayment();
+                        $result = $district->where("id=" . $district_id)->data(array("pay_status" => 1, "payment_name" => $payment_info['name'], 'pay_time' => date("Y-m-d H:i:s")))->update();
+                        if ($result) {
+                            Common::autoPassDistrictApply($district_id);
+                            $paymentPlugin->asyncStop();
+                            exit;
+                        } else {
+                            file_put_contents('district_payErr.txt', date("Y-m-d H:i:s") . "==district ID:$district_id==\n" . json_encode($callbackData) . "\n", FILE_APPEND);
+                            exit;
+                        }
+                    }
+                } else {
+                    file_put_contents('district_payErr.txt', date("Y-m-d H:i:s") . "==district ID:$district_id==\n" . json_encode($callbackData) . "\n", FILE_APPEND);
+                    exit;
+                }
+            } else if (stripos($orderNo, 'recharge') !== false) {//充值方式
+                $recharge_no = substr($orderNo, stripos($orderNo, 'recharge') + 8);
+                $recharge_no = $recharge_no == "" ? 0 : $recharge_no;
+                $recharge = new Model('recharge');
+                $recharge_info = $recharge->where("recharge_no='{$recharge_no}'")->find();
+                if($recharge_info){
+                    switch ($recharge_info['payment_name']) {
+                        case '微信[JSAPI]':
+                            $payment_id = 6;
+                            break;
+                        case '微信[APP]':
+                            $payment_id = 7;
+                            break;
+                        case '支付宝[APP]':
+                            $payment_id = 16;
+                            break;
+                        case '银联手机控件支付':
+                            $payment_id = 14;
+                            break;        
+                        default:
+                            $payment_id = 6;
+                            break;
+                    }
+                    if (Order::recharge($recharge_no, $payment_id)) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    }
+                }   
+            } else if (stripos($orderNo, 'redbag') !== false) {//发送红包
+                $redbag = new Model('redbag');
+                $redbag_info = $redbag->where("order_no='{$orderNo}'")->find();
+                if($redbag_info){
+                    $ret = $redbag->data(array('pay_status'=>1))->where("order_no='{$orderNo}'")->update();
+                    if ($ret) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    }
+                }  
+            } else {
+                $orderarr = explode('_', $orderNo);
+                $orderNo = end($orderarr);
+                //如果是订单支付的话
+                $model = new Model();
+                $order_info = $model->table('order')->where("order_no='{$orderNo}'")->find();
+                $order_offline = $model->table('order_offline')->where("order_no='{$orderNo}'")->find();
+                if (!empty($order_info)) {
+                    $payment_id = $order_info['payment_id'];
+                    if ($order_info['type'] == 4 && $order_info['is_new'] == 0) {
+                        if ($order_info['otherpay_amount'] > $money) {
+                            file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
+                            exit;
+                        }
+                    } else if ($order_info['order_amount'] > $money) {
+                        file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
+                        exit;
+                    }
+                    $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
+                    if ($order_id) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    } 
+                }elseif(!empty($order_offline)){
+                    $order_no = $orderNo;
+                     $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
+                        $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1,'pay_time'=>date('Y-m-d H:i:s')))->update();
+                        // $invite_id=Session::get('invite_id');
+                        $invite_id=$order['prom_id'];
+                        $seller_id=$order['shop_ids'];             
+                        if($invite_id==null){
+                            $invite_id=1;
+                        }
+                        if($seller_id==0){
+                            $seller_id=$invite_id;
+                        }
+                        // $promoter_id=Common::getFirstPromoter($order['user_id']);
+                        $exist=$this->model->table('balance_log')->where("order_no='{$order_no}'")->find();
+                        if(!$exist){
+                            //如果卖家是邀请人的话不参与分账
+                            if($seller_id!=$invite_id){
+                                $config = Config::getInstance()->get("district_set");
+                                $promoter = $this->model->table('district_promoter')->fields('base_rate')->where('user_id='.$seller_id)->find();
+                                if($promoter){
+                                    $amount = round($order['order_amount']*(100-$promoter['base_rate'])/100,2);
+                                }else{
+                                    $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
+                                }     
+                                $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
+                                Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
+                                Common::offlineBeneficial($order_no,$invite_id,$seller_id);
+                                $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('payable_amount'=>$amount))->update();
+                                $money = $amount;
+                            }else{
+                                $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
+                                 Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
+                                 $money = $order['order_amount'];
+                            }
+                             //微信公众号消息推送
+                                #*****************推送消息***************
+                                $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+                                $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+                                $token = $wechat->getAccessToken();
+                                $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$seller_id." and oauth_type='wechat'")->find();
+                                if($oauth_info){
+                                    $params = array(
+                                    'touser' => $oauth_info['open_id'],
+                                    'msgtype' => 'text',
+                                    "text" => array(
+                                            'content' => "亲爱的商家:{$oauth_info['open_name']},您获得商家消费收益{$money}元，请登录个人中心查看。"
+                                            )
+                                        );
+                                    $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
+                                }      
+                                #****************************************
+                             //APP极光推送
+                             if($order['type']==2 || $order['type']==3){
+                                  $type = 'offline_balance';
+                                  $content = "收款到账{$money}元";
+                                  $platform = 'all';
+                                  if (!$this->jpush) {
+                                          $NoticeService = new NoticeService();
+                                          $this->jpush = $NoticeService->getNotice('jpush');
+                                      }
+                                  $audience['alias'] = array($seller_id);
+                                  $this->jpush->setPushData($platform, $audience, $content, $type, "");
+                                  $this->jpush->push();
+                             }              
+                        }
+                }
+                
             }    
             echo"SUCCESS";  
         }else{

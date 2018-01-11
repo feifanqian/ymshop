@@ -7,6 +7,7 @@
 {widget:name=sub_navs action=crumbs items=$items step=3 current=2}
 {/if}
 <div class="container">
+    {if:$user['id']!=1776}
     <form action="{url:/payment/dopay}" method="post" id='__payform'>
         <input type="hidden" name="order_id" value="{$order['id']}">
 <!--        <div class="status-bar">
@@ -51,6 +52,71 @@
             <p class="tc"><input class="btn btn-main" type="button" id='_submitForm' value="立即支付"></p>
         </div>
     </form>
+    {else:}
+    <form action="https://pay.dinpay.com/gateway?input_charset=UTF-8" method="post" id='__payform'>
+        <input type="hidden" name="order_id" value="{$order['id']}">
+        <input type="hidden" name="sign"          value="{$sign}" />
+        <input type="hidden" name="merchant_code" value="{$merchant_code}" />
+        <input type="hidden" name="bank_code"     value="{$bank_code}"/>
+        <input type="hidden" name="order_no"      value="{$order_no}"/>
+        <input type="hidden" name="order_amount" id="order_amount" value="{$order_amount}"/>
+        <input type="hidden" name="service_type"  value="{$service_type}"/>
+        <input type="hidden" name="input_charset" value="{$input_charset}"/>
+        <input type="hidden" name="notify_url"    value="{$notify_url}">
+        <input type="hidden" name="interface_version" value="{$interface_version}"/>
+        <input type="hidden" name="sign_type"     value="{$sign_type}"/>
+        <input type="hidden" name="order_time"    value="{$order_time}"/>
+        <input type="hidden" name="product_name"  value="{$product_name}"/>
+        <input Type="hidden" Name="client_ip"     value="{$client_ip}"/>
+        <input Type="hidden" Name="extend_param"  value="{$extend_param}"/>
+        <input Type="hidden" Name="extra_return_param" value="{$extra_return_param}"/>
+        <input Type="hidden" Name="pay_type"  value="{$pay_type}"/>
+        <input Type="hidden" Name="product_code"  value="{$product_code}"/>
+        <input Type="hidden" Name="product_desc"  value="{$product_desc}"/>
+        <input Type="hidden" Name="product_num"   value="{$product_num}"/>
+        <input Type="hidden" Name="return_url"    value="{$return_url}"/>
+        <input Type="hidden" Name="show_url"      value="{$show_url}"/>
+        <input Type="hidden" Name="redo_flag"     value="{$redo_flag}"/>
+        <div class="mt20">
+            <div class="ordersucceed">
+                <h1><span class="fl"><span class="iconfont icon-gou" style="padding: 0 10px;color: #7BBC54;"></span>
+                        订单提交成功，请您尽快付款！</span><span class="fr">
+                        应付金额：
+                        <span class="ordertwoii">{$order['order_amount']}元</span></h1>
+                <table class="default mt10 p10 simplelist">
+                    <tr><td style="width:200px;">订单编号：</td><td><i class="icon-order-{$order['type']} ie6png"></i>{$order['order_no']} &nbsp;&nbsp;&nbsp;&nbsp;<a href="{url:/ucenter/order_detail/id/$order[id]}" target="_blank" class="red"> 查看订单>> </a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:tools_reload()" class=" btn btn-mini">刷新</a></td> </tr>
+                    <tr><td style="width:200px;">订单金额：</td><td class="red">{$currency_symbol}{$order['order_amount']}{if:$order['type']==4}&nbsp;<span style="font-size: 10px;">({echo:sprintf("%01.0f",$order['huabipay_amount'])}华点 + ￥{$order['otherpay_amount']})</span>{/if}</td> </tr>
+                    <tr><td style="width:200px;">支付方式：</td><td class="bold">{if:$order['type']==4}华点+{/if}<span id="pay_name">{$order['payment']}<span></td> </tr>
+                    {if:$order['type']==4}
+                        {if:$order['is_new']==1}
+                        <tr><td style="width:200px;">支付提醒：</td><td>为了尽快给您出货，新的华点订单需要您先支付全部货款。在收到您向商城账号<span style="color:red;">wlucky2101</span>的<span class='red'>{echo:sprintf("%.0f",$order['huabipay_amount'])}华点</span>转账后，客服人员将退款华点对应金点。</td> </tr>
+                        {else:}
+                        <tr><td style="width:200px;">支付提醒：</td><td>请您使用您的华点账号：<span class="red">{$order['huabi_account']}</span> 向 <span style="color:red;">wlucky2101</span> 支付<span class="red">{echo:sprintf("%01.0f",$order['huabipay_amount'])}华点</span>,并在此在线支付<span class="red">￥{$order['otherpay_amount']}</span>。支付完成后，后台人工审核通过后将马上为您发货。</td> </tr>
+                        {/if}
+                    {/if}
+                </table>
+                <p style='margin-top:10px;color:red;'>重要提醒：请您在提交订单后24小时内完成支付，逾期订单将会自动取消。</p>
+            </div>
+
+            <div class="mt10">
+                <a href="javascript:;" id="voucher-btn" style="line-height: 32px;height:32px;font-weight:800"><i class="icon-plus-1-16"></i> 其它支付方式：</a>
+            </div>
+            <div class="clearfix" id="payment-list">
+                <ul class="payment-list">
+                    {list:items=$paytypelist}
+                    <li {if:$item['plugin_id']==19}id="huadianpay"{/if}><input type="radio" id="{$item['class_name']}" name="payment_id" value="{$item['id']}" {if:$item['id']==$order['payment']}checked="checked"{/if} data-name="{$item['pay_name']}"><label><b>{$item['pay_name']}</b> {$item['pay_desc']}</label>
+                        <div><img src="{url:@protected/classes$item[logo]}"></div>
+                    </li>
+                    {/list}
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt10 mb20 clearfix">
+            <p class="tc"><input class="btn btn-main" type="button" id='_submitForm' value="立即支付"></p>
+        </div>
+    </form>
+    {/if}
     <div class="youalsocan">
         <p>您可以：<a href="{url:/ucenter/order_detail/id/$order[id]}" target="_blank"> 查看订单详情 </a></p>
     </div>
