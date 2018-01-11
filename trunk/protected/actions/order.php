@@ -209,15 +209,16 @@ class OrderAction extends Controller {
             }
             $data = Req::args();
             $data['is_invoice'] = $is_invoice;
-            if (!$address_id)
+            if (!$address_id){
                 $this->code = 1055;
                 return;
-            else if (!$payment_id)
+            }elseif (!$payment_id){
                 $this->code = 1056;
                 return;
-            else
+            }else{
                 $this->code = 1057;
-            return;
+                return;
+            }  
         }
         //地址信息
         $address_model = new Model('address');
