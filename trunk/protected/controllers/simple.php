@@ -978,8 +978,13 @@ class SimpleController extends Controller {
                 if($isJump){
                  $this->redirect("/index/msg", true, array('msg' => '抱歉，本次活动期间您只能参与一次抢购！', 'type' => 'error'));
                  exit();
-                }else{
-                    return false;
+                }
+            }
+            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6");
+            if($sum1[0]['sum']>= $flash_sale['max_num']){
+                if($isJump){
+                     $this->redirect("/index/msg", true, array('msg' => '对不起，该商品已抢完了', 'type' => 'error'));
+                     exit();
                 }
             }
         }
@@ -990,15 +995,6 @@ class SimpleController extends Controller {
             if($sum[0]['sum']>= $quota_num){
                 if($isJump){
                      $this->redirect("/index/msg", true, array('msg' => '对不起，您已经达到了该商品的抢购上限', 'type' => 'error'));
-                exit();
-                }else{
-                    return false;
-                }
-            }
-            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6");
-            if($sum1[0]['sum']>= $quota_num){
-                if($isJump){
-                     $this->redirect("/index/msg", true, array('msg' => '对不起，该商品的抢购数量已达上限', 'type' => 'error'));
                 exit();
                 }else{
                     return false;

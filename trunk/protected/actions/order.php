@@ -169,6 +169,11 @@ class OrderAction extends Controller {
                  $this->code = 1204;
                  return;       
             }
+            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6");
+            if($sum1[0]['sum']>= $flash_sale['max_num']){
+                $this->code = 1206;
+                return;
+            }
         }
         
         $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6 and od.user_id = $user_id");

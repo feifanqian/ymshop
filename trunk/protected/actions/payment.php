@@ -415,6 +415,16 @@ class PaymentAction extends Controller {
                 $redbag = $this->model->table('redbag')->where("order_no='".$order_no."' and user_id=".$user_id)->find();
                 if ($order) {
                     if ($order['pay_status'] == 0 ) {
+                        if($order['type']==2){
+                            $flash_model = new Model('flash_sale');
+                            $flash_sale = $flash_model->where('id='.$order['prom_id'])->find();
+                            if($flash_sale){
+                                if($flash_sale['goods_num']>=$flash_sale['max_num'] || $flash_sale['is_end']==1){
+                                    $this->code = 1205;
+                                    return;
+                                }
+                            }
+                        }
                         if($order['type']==4 && $order['otherpay_status']==1){
                              $this->code = 1062;
                              return;
