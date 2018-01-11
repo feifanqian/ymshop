@@ -139,6 +139,7 @@ class OrderAction extends Controller {
                $order_products = $this->packPointbuyProducts($item);
             } else {
                $this->code = 1148;
+               return;
             }
         }
         $this->assign("id", $id);
@@ -169,16 +170,13 @@ class OrderAction extends Controller {
                  return;       
             }
         }
-        if($quota_num==0 || $quota_num =="" || $quota_num <0){
-            return true;
-        }else{
-            $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6 and od.user_id = $user_id");
-            if($sum[0]['sum']>= $quota_num){
-               $this->code = 1109;
-               exit();
-            }
+        
+        $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6 and od.user_id = $user_id");
+        if($sum[0]['sum']>= $quota_num){
+            $this->code = 1109;
+            exit();
         }
-        return true;       
+              
     }
     
     //提交订单
@@ -213,8 +211,10 @@ class OrderAction extends Controller {
             $data['is_invoice'] = $is_invoice;
             if (!$address_id)
                 $this->code = 1055;
+                return;
             else if (!$payment_id)
                 $this->code = 1056;
+                return;
             else
                 $this->code = 1057;
             return;
