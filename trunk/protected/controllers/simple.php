@@ -1925,6 +1925,12 @@ class SimpleController extends Controller {
                           $this->assign('show_url',$show_url);
                           $this->assign('redo_flag',$redo_flag);
                           /*******************智付支付**********************/
+                          $third_pay = 0;
+                          $third_payment = $this->model->table('third_payment')->where('id=1')->find();
+                          if($third_payment){
+                             $third_pay = $third_payment['third_payment'];
+                          }
+                          $this->assign('third_pay',$third_pay);
                         $this->redirect();
                     } else if ($order['pay_status'] == 1) {
                         $this->redirect("/simple/order_completed/order_id/$order_id");

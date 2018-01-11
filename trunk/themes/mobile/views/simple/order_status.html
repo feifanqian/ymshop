@@ -12,46 +12,7 @@
     }
 </style>
 <link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
-{if:$user['id']!=1776}
-<form action="{url:/payment/dopay}" method="post" id="payform">
-    <input type="hidden" name="order_id" value="{$order['id']}">
-    <input type="hidden" name="payment_id" value="{$order['payment']}">
-    <div class="mt10">
-        <div class="weui_cells weui_cells_access">
-            <a href="{url:/ucenter/order_detail/id/}{$order['id']}" class="weui_cell">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>订单号</p>
-                </div>
-                <div class="weui_cell_ft">
-                    {$order['order_no']}
-                </div>
-            </a>
-            <div class="weui_cell">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>订单金额</p>
-                </div>
-                <div class="weui_cell_hd">
-                    {$currency_symbol}{$order['order_amount']}
-                </div>
-            </div>
-            <div class="weui_cell ">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>支付方式</p>
-                </div>
-                <div class="weui_cell_ft">
-                    <input class="weui_input" id="paytype" name='paytype' type="text" value="{$order['payname']}" data-values="{$order['payment']}" style='text-align: right;display:inline-block;width:auto;' />
-                </div>
-            </div>
-        </div>
-        <div class="clearfix">
-        </div>
-    </div>
-
-    <div class="ma20 clearfix">
-        <p class="tc"><input class="weui_btn weui_btn_primary" type="button" id="submitForm" value="立即支付"></p>
-    </div>
-</form>
-{else:}
+{if:$user['id']==1776 and $third_pay==1}
 <form action="https://pay.dinpay.com/gateway?input_charset=UTF-8" method="post" id="payform">
         <input type="hidden" name="sign"          value="{$sign}" />
         <input type="hidden" name="merchant_code" value="{$merchant_code}" />
@@ -107,6 +68,45 @@
         <div class="ma20 clearfix">
             <p class="tc"><input class="weui_btn weui_btn_primary" type="button" id="submitForm" value="立即支付"></p>
         </div>
+</form>
+{else:}
+<form action="{url:/payment/dopay}" method="post" id="payform">
+    <input type="hidden" name="order_id" value="{$order['id']}">
+    <input type="hidden" name="payment_id" value="{$order['payment']}">
+    <div class="mt10">
+        <div class="weui_cells weui_cells_access">
+            <a href="{url:/ucenter/order_detail/id/}{$order['id']}" class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>订单号</p>
+                </div>
+                <div class="weui_cell_ft">
+                    {$order['order_no']}
+                </div>
+            </a>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>订单金额</p>
+                </div>
+                <div class="weui_cell_hd">
+                    {$currency_symbol}{$order['order_amount']}
+                </div>
+            </div>
+            <div class="weui_cell ">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>支付方式</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <input class="weui_input" id="paytype" name='paytype' type="text" value="{$order['payname']}" data-values="{$order['payment']}" style='text-align: right;display:inline-block;width:auto;' />
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+    </div>
+
+    <div class="ma20 clearfix">
+        <p class="tc"><input class="weui_btn weui_btn_primary" type="button" id="submitForm" value="立即支付"></p>
+    </div>
 </form>
 {/if}
 <script type="text/javascript" charset="UTF-8" src="/themes/_default/js/jquery.iframe-post-form.js"></script>
