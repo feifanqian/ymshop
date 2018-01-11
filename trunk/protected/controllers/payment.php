@@ -309,6 +309,16 @@ class PaymentController extends Controller {
                     exit();
                 }
                 if ($order) {
+                    if($order['type']==2){
+                        $flash_model = new Model('flash_sale');
+                        $flash_sale = $flash_model->where('id='.$order['prom_id'])->find();
+                        if($flash_sale){
+                            if($flash_sale['goods_num']>=$flash_sale['max_num'] || $flash_sale['is_end']==1){
+                                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付晚了，抢购活动已结束'));
+                                exit();
+                            }
+                        }
+                    }
                     if ($order['order_amount'] == 0 && $payment_info['class_name'] != 'balance') {
                         $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '0元订单，仅限预付款支付，请选择预付款支付方式。'));
                         exit();

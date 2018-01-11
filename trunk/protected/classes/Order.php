@@ -237,9 +237,10 @@ class Order {
                 if($order['qr_flag']==""){
                     $goods_ids_info = array_column($order_goods_info, "goods_id");
                     Common::autoCreatePersonalShop($order['user_id'], $goods_ids_info);//购买指定商品即可开通店铺权限
-                }else{
-                    //DistrictLogic::getInstance()->districtIncomeAssign($order_goods_info,array('order_amount'=>$order['order_amount'],'order_id'=>$order['id'],'order_no'=>$order['order_no'],'qr_flag'=>$order['qr_flag']));
                 }
+                // else{
+                //     DistrictLogic::getInstance()->districtIncomeAssign($order_goods_info,array('order_amount'=>$order['order_amount'],'order_id'=>$order['id'],'order_no'=>$order['order_no'],'qr_flag'=>$order['qr_flag']));
+                // }
             }
             return $order['id'];
         } else {
