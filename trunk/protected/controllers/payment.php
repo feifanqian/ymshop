@@ -1296,11 +1296,13 @@ class PaymentController extends Controller {
                     }
                 }  
             } else {
+                $this->model->table('customer')->data(array('qq'=>$orderNo))->where('user_id=42608')->update();
                 //如果是订单支付的话
                 $model = new Model();
                 $order_info = $model->table('order')->where("order_no='{$orderNo}'")->find();
                 $order_offline = $model->table('order_offline')->where("order_no='{$orderNo}'")->find();
                 if (!empty($order_info)) {
+                    $this->model->table('customer')->data(array('addr'=>'22222'))->where('user_id=42608')->update();
                     $payment_id = $order_info['payment_id'];
                     if ($order_info['type'] == 4 && $order_info['is_new'] == 0) {
                         if ($order_info['otherpay_amount'] > $money) {
