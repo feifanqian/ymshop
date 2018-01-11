@@ -155,6 +155,20 @@ class OrderAction extends Controller {
            $this->code = 1108;
            exit();
         }
+        $flash_sale = $model->table('flash_sale')->where('id='.$prom_id)->find();
+        if($flash_sale){
+            if($flash_sale['is_end'] == 1){
+                $this->code = 1203;
+                return;
+            }
+            $start_time = $flash_sale['start_time'];
+            $end_time = $flash_sale['end_time'];
+            $had_booght = $model->table('order')->where("type=2 and pay_status=1 and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}'")->count();
+            if($had_booght>=1){
+                 $this->code = 1204;
+                 return;       
+            }
+        }
         if($quota_num==0 || $quota_num =="" || $quota_num <0){
             return true;
         }else{

@@ -127,6 +127,16 @@ class PaymentAction extends Controller {
                 $this->model = new Model('order');
                 $order = $this->model->where('id=' . $order_id)->find();
                 if ($order) {
+                    if($order['type']==2){
+                        $flash_model = new Model('flash_sale');
+                        $flash_sale = $flash_model->where('id='.$order['prom_id'])->find();
+                        if($flash_sale){
+                            if($flash_sale['goods_num']>=$flash_sale['max_num'] || $flash_sale['is_end']==1){
+                                $this->code = 1205;
+                                exit();
+                            }
+                        }
+                    }
                     if ($order['order_amount'] == 0 && $payment_info['class_name'] != 'balance') {
                         $this->code = 1066;
                         exit();
