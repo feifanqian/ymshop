@@ -165,9 +165,11 @@ class OrderAction extends Controller {
             $start_time = $flash_sale['start_time'];
             $end_time = $flash_sale['end_time'];
             $had_booght = $model->table('order')->where("type=2 and pay_status=1 and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}'")->count();
-            if($had_booght>=1){
-                 $this->code = 1204;
-                 return;       
+            if($flash_sale['is_limit']==1){
+                if($had_booght>=1){
+                     $this->code = 1204;
+                     return;       
+                }
             }
             $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6");
             if($sum1[0]['sum']>= $flash_sale['max_num']){
