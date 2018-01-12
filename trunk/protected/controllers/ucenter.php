@@ -1518,10 +1518,13 @@ class UcenterController extends Controller
             $is_promoter = true;
         }
         $is_hirer = false;
-        $hirer = $this->model->table("district_shop")->where("owner_id=" . $this->user['id'])->count();
-        if ($hirer > 0) {
+        $district_id = 0;
+        $hirer = $this->model->table("district_shop")->where("owner_id=" . $this->user['id'])->find();
+        if ($hirer) {
             $is_hirer = true;
+            $district_id = $hirer['id'];
         }
+        $this->assign('district_id', $district_id);
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
         
