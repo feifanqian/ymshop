@@ -46,6 +46,18 @@
                 <input id="sendSMS" type="button" class="weui_btn weui_btn_primary weui_btn_mini" value="获取">
             </div>
         </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">登录密码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input bind="password" minlen=6 maxlen=20 class="weui_input" type="password" name="password" pattern="required" placeholder="登录密码" alt="6-20任意字符组合">
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">确认登录密码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input bind="repassword" minlen=6 maxlen=20 class="weui_input" type="password"  name="repassword" pattern="required" placeholder="确认登录密码" alt="6-20任意字符组合">
+            </div>
+        </div>
         {elseif:$obj=='email'}
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">手机号码</label></div>

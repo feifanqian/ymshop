@@ -1813,6 +1813,13 @@ class UcenterController extends Controller
                     }
                 } elseif ($obj == 'mobile' && Validator::mobi($account)) {
                     $result = $this->model->table('customer')->where("mobile ='" . $account . "'" . '  and user_id!=' . $this->user['id'])->find();
+                    $password = Req::args('password');
+                    $repassword = Req::args('repassword');
+                    if($password!=$repassword){
+                        $info = array('field' => 'repassword', 'msg' => '两次登录密码不一致。');
+                    }
+                    $validcode = CHash::random(8);
+                    $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $this->user['id'])->update();
                     if (!$result) {
                         $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1))->where('user_id=' . $this->user['id'])->update();
                         Session::clear('verifiedInfo');
@@ -1830,8 +1837,8 @@ class UcenterController extends Controller
                             $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1))->where('user_id=' . $this->user['id'])->update();
                             $this->model->table('customer')->data(array('status'=> 0))->where('user_id=' . $result['user_id'])->update();
                             //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
-                            $user = $this->model->table('user')->fields('password,validcode')->where('id='.$result['user_id'])->find();
-                            $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
+                            // $user = $this->model->table('user')->fields('password,validcode')->where('id='.$result['user_id'])->find();
+                            // $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
                             $this->model->table('oauth_user')->data(array('other_user_id'=>$result['user_id']))->where('user_id='.$this->user['id'])->update();
                             Session::clear('verifiedInfo');
                             Session::clear('activateObj');
