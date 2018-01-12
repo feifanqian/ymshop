@@ -1,0 +1,58 @@
+<style>
+    .weui_panel_hd::after{
+        border:none;
+    }
+    .weui-form-preview::before{
+        border: none;
+    }
+    .weui-form-preview::after{
+        border: none;
+    }
+    .weui-form-preview__value{
+        padding-left: 50px;
+    }
+    .time{
+        margin: 0 auto;
+        height: 10px;
+    }
+    .apply-district{
+        width: 80%;
+        margin-top: 40px;
+        background-color:#e5894c;
+        position: relative;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 14px;
+        padding-right: 14px;
+        box-sizing: border-box;
+        font-size: 18px;
+        text-align: center;
+        text-decoration: none;
+        color: #eee;
+        line-height: 2.55555556;
+        border-radius: 5px;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        overflow: hidden;
+    }
+</style>  
+<div class="weui_panel_bd">
+ <img src="/static/images/hirer_bg.png" class="hirer_bg">
+ <a href="{url:/ucenter/apply_for_district}" class="apply-district">立即申请</a>
+</div>    
+<script>
+    $(function(){
+        var W = $('.weui_panel_bd').width();
+        $('.hirer_bg').css("width",W);
+        // $("#main-tabbar a").click(function(e){
+        //      e.preventDefault();
+        //           //提示
+        //     layer.open({
+        //       content: '请选择进入专区'
+        //       ,skin: 'msg'
+        //       ,time: 4 //2秒后自动关闭
+        //     });
+        //     return false;
+        // });
+    })
+</script>

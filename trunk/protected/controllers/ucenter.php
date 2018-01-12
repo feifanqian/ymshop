@@ -3594,4 +3594,8 @@ class UcenterController extends Controller
       $this->redirect();
     }
 
+    public function district_login(){
+        $this->redirect();
+    }
+
 }
