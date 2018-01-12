@@ -44,6 +44,14 @@
         </dd>
         </dl>
         <dl class="lineD">
+        <dt><b class="red">*</b>是否开启每人每次抢购活动只能参与一次：</dt>
+        <dd>
+          <input name="is_limit" type="radio" value="1" {if:$is_limit==1}checked='checked'{/if} />开启
+          <input name="is_limit" type="radio" value="0" {if:$is_limit==0}checked='checked'{/if}/>关闭
+          <label> 每个人能参与本次抢购活动的次数</label>
+        </dd>
+        </dl>
+        <dl class="lineD">
         <dt><b class="red">*</b> 限时抢购价格：</dt>
         <dd>
           <input name="price" type="text" class="small" pattern="float" value="{$price}" />
