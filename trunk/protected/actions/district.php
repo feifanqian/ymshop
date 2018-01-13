@@ -23,7 +23,9 @@ class DistrictAction extends Controller {
      * 实例化并设置hirer
      */
     public function setHirer() {
-        $district_id = Filter::int(Req::args('district_id'));
+        // $district_id = Filter::int(Req::args('district_id'));
+        $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
+        $district_id = $district?$district['id']:1;
         $user_id = $this->user['id'];
         if ($district_id) {
             $district_shop = Hirer::getHirerInstance($user_id, $district_id);
