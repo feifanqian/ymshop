@@ -605,7 +605,7 @@ class PaymentController extends Controller {
            }
            $accept_name = Session::get('openname');
            $config = Config::getInstance()->get("district_set");
-           $data['type']=1;
+           $data['type']=0;
            $data['order_no'] = $order_no;
            $data['user_id'] = $user_id;
            $data['payment'] = $payment_id;

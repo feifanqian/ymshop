@@ -11,6 +11,8 @@ class Hirer extends Object{
     protected $model ;
     
     private function __construct($user_id,$district_id) {
+      var_dump($user_id);
+      var_dump($district_id);die;
           $this->model = new Model('');
           $result = $this->model->table("district_shop")->where("owner_id=$user_id and id=$district_id")->find();
           if(!empty($result)){
