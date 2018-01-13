@@ -13,16 +13,17 @@ class DistrictAction extends Controller {
     }
     //调用需要实例化hirer的方法时
     //需要调用实例化hirer的方法需要设置为protected
-    // public function __call($name, $args = null) {
-    //     if($this->setHirer()){
-    //         return call_user_func_array([$this, $name], $args);
-    //     }
-    //     return false;
-    // }
+    public function __call($name, $args = null) {
+        if($this->setHirer()){
+            return call_user_func_array([$this, $name], $args);
+        }
+        return false;
+    }
     /*
      * 实例化并设置hirer
      */
     public function setHirer() {
+        var_dump(111);die;
         $district_id = Filter::int(Req::args('district_id'));
         $user_id = $this->user['id'];
         if ($district_id) {
