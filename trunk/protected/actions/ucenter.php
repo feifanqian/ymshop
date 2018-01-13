@@ -1312,7 +1312,7 @@ class UcenterAction extends Controller {
     }
 
     private function getUndeliveryOrderCount() {
-        $data = $this->model->query("select count(id) as count from tiny_order where is_del = 0 and delivery_status = 0 and status = 3 and user_id=" . $this->user['id']);
+        $data = $this->model->query("select count(id) as count from tiny_order where is_del = 0 and delivery_status = 0 and status = 3 and pay_status=1 and user_id=" . $this->user['id']);
         return isset($data[0]['count']) ? $data[0]['count'] : 0;
     }
 
