@@ -104,6 +104,7 @@ class DistrictAction extends Controller {
      * 获取小区的收益统计
      */
     protected function getDistrictInfo() {
+        var_dump(123);die;
         $this->code = 0;
         $this->content = $this->hirer->getPropertys();
     }
