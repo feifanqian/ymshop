@@ -217,10 +217,7 @@ class Hirer extends Object{
         $config_all = Config::getInstance();
         $set = $config_all->get('district_set');
         $min_withdraw_amount = $set['min_withdraw_amount'];
-        if(!isset($data['type'])){
-            return array('status'=>'fail','msg'=>'提交的数据错误','msg_code'=>1000);
-        }else if($data['type']==1){
-            
+        if($data['type']==0){  
             if(!isset($data['amount'])||$data['amount']<$min_withdraw_amount){
                  return array('status'=>'fail','msg'=>'提现金额不能小于'.$min_withdraw_amount,'msg_code'=>1135);
             }else if($data['amount']>$this->valid_income){
