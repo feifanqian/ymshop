@@ -23,7 +23,6 @@ class DistrictAction extends Controller {
      * 实例化并设置hirer
      */
     public function setHirer() {
-        var_dump(111);die;
         $district_id = Filter::int(Req::args('district_id'));
         $user_id = $this->user['id'];
         if ($district_id) {
@@ -105,7 +104,6 @@ class DistrictAction extends Controller {
      * 获取小区的收益统计
      */
     protected function getDistrictInfo() {
-        var_dump(123);die;
         $this->code = 0;
         $this->content = $this->hirer->getPropertys();
     }
