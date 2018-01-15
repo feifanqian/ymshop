@@ -581,7 +581,7 @@ class AddressAction extends Controller
         }
         $model = new Model();
         
-        $list = $model->table('district_promoter as d')->join('left join customer as c on d.user_id = c.user_id left join user as u on d.user_id=u.id')->fields('d.*,c.real_name,u.avatar')->where('id=' . $id)->find();
+        $list = $model->table('district_promoter as d')->join('left join customer as c on d.user_id = c.user_id left join user as u on d.user_id=u.id')->fields('d.*,c.real_name,u.avatar')->where('d.id=' . $id)->find();
         if($list){
             //增加访问量
             $this->model->table('district_promoter')->data(array('hot'=>$list['hot']+1))->where('id='.$id)->update();
