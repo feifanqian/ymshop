@@ -1094,4 +1094,14 @@ class AddressAction extends Controller
         $this->content = $return;
     }
 
+    public function caculateFare(){
+        $weight = Filter::float(Req::args('weight'));
+        $address_id = Filter::int(Req::args('address_id'));
+        $product_id = Filter::int(Req::args('product_id'));
+        $fare = new Fare($weight);
+        $totalfare = $fare->calculate($address_id, $product_id);
+        $this->code = 0;
+        $this->content['totalfare'] = $totalfare;
+    }
+
 }
