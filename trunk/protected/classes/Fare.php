@@ -145,9 +145,10 @@ class Fare {
 
             $totalfare = 0;
             //按商家来计算运费
-            foreach ($shopweight as $k => $v) {
-                $totalfare += $this->calculatenows($address_id, $v);
-            }
+            $totalfare = $this->calculatenows($address_id);
+            // foreach ($shopweight as $k => $v) {
+            //     $totalfare += $this->calculatenows($address_id, $v);
+            // }
         } else {
             $totalfare = $this->calculatenows($address_id);
         }
@@ -163,7 +164,6 @@ class Fare {
     public function calculatenows($address_id, $weight = NULL) {
         // $weight = is_null($weight) ? $this->weight : $weight;
         $weight = $this->weight;
-        var_dump($weight);die;
         $total = 0;
         $model = new Model("fare");
         $fare = $model->where("is_default=1")->find();
@@ -186,7 +186,7 @@ class Fare {
                         break;
                     }
                 }
-
+             // var_dump($first_weight);die;
                 if ($weight <= $first_weight)
                     $total = $first_price;
                 else {
