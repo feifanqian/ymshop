@@ -107,7 +107,6 @@ class Fare {
     }
 
     public function calculates($address_id, $productarr = NULL) {
-        var_dump($this->weight);die;
         if ($productarr) {
             $product_ids = array_filter(array_keys($productarr));
             $model = new Model("products as pr");
