@@ -70,7 +70,8 @@ class Fare {
      * @return float
      */
     public function calculatenow($address_id, $weight = NULL) {
-        $weight = is_null($weight) ? $this->weight : $weight;
+        // $weight = is_null($weight) ? $this->weight : $weight;
+        $weight = $this->weight;
         $total = 0;
         $model = new Model("fare");
         $fare = $model->where("is_default=1")->find();
