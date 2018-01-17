@@ -1099,7 +1099,8 @@ class AddressAction extends Controller
         $address_id = Filter::int(Req::args('address_id'));
         $product_id = Filter::int(Req::args('product_id'));
         $fare = new Fare($weight);
-        $totalfare = $fare->calculate($address_id, $product_id);
+        $productarr = array('1346'=>"1346");
+        $totalfare = $fare->calculate($address_id, $productarr);
         $this->code = 0;
         $this->content['totalfare'] = $totalfare;
     }
