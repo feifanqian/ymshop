@@ -983,10 +983,18 @@ class SimpleController extends Controller {
                     }
                 }
             } 
-            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6");
+            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6 and od.pay_time>'{$start_time}' and od.pay_time<'{$end_time}'");
             if($sum1[0]['sum']>= $flash_sale['max_num']){
                 if($isJump){
                      $this->redirect("/index/msg", true, array('msg' => '对不起，该商品已抢完了', 'type' => 'error'));
+                     exit();
+                }
+            }
+            $five_minutes = strtotime('-5 minutes');
+            $sum2 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and UNIX_TIMESTAMP(od.create_time)>".$five_minutes);
+            if($sum2[0]['sum']>= $flash_sale['max_num']){
+                if($isJump){
+                     $this->redirect("/index/msg", true, array('msg' => '抱歉手慢了，该商品已被别人抢先下单了', 'type' => 'error'));
                      exit();
                 }
             }
