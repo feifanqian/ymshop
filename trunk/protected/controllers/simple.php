@@ -966,7 +966,7 @@ class SimpleController extends Controller {
         }
         $flash_sale = $model->table('flash_sale')->where('id='.$prom_id)->find();
         if($flash_sale){
-            if($flash_sale['is_end'] == 1){
+            if($flash_sale['is_end'] == 1 || $flash_sale['goods_num']==$flash_sale['max_num'] || $flash_sale['order_num']==$flash_sale['max_num']){
                 if($isJump){
                     $this->redirect("/index/msg", true, array('msg' => '很遗憾，来晚了一步，抢购已结束！', 'type' => 'error'));
                     exit();
