@@ -137,6 +137,16 @@ class PaymentAction extends Controller {
                             }
                         }
                     }
+                    if($order['type']==6){
+                        $flash_model = new Model('pointflash_sale');
+                        $flash_sale = $flash_model->where('id='.$order['prom_id'])->find();
+                        if($flash_sale){
+                            if($flash_sale['order_count']>=$flash_sale['max_sell_count'] || $flash_sale['is_end']==1){
+                                $this->code = 1205;
+                                return;
+                            }
+                        }
+                    }
                     if ($order['order_amount'] == 0 && $payment_info['class_name'] != 'balance') {
                         $this->code = 1066;
                         exit();
@@ -420,6 +430,16 @@ class PaymentAction extends Controller {
                             $flash_sale = $flash_model->where('id='.$order['prom_id'])->find();
                             if($flash_sale){
                                 if($flash_sale['goods_num']>=$flash_sale['max_num'] || $flash_sale['is_end']==1){
+                                    $this->code = 1205;
+                                    return;
+                                }
+                            }
+                        }
+                        if($order['type']==6){
+                            $flash_model = new Model('pointflash_sale');
+                            $flash_sale = $flash_model->where('id='.$order['prom_id'])->find();
+                            if($flash_sale){
+                                if($flash_sale['order_count']>=$flash_sale['max_sell_count'] || $flash_sale['is_end']==1){
                                     $this->code = 1205;
                                     return;
                                 }
