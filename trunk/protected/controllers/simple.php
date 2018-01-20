@@ -1025,6 +1025,39 @@ class SimpleController extends Controller {
                 return false;
             }
         }
+        $flash_sale = $model->table('pointflash_sale')->where('id='.$prom_id)->find();
+        if($flash_sale){
+            if($flash_sale['is_end'] == 1 || $flash_sale['order_count']==$flash_sale['max_sell_count']){
+                if($isJump){
+                    $this->redirect("/index/msg", true, array('msg' => '很遗憾，来晚了一步，抢购已结束！', 'type' => 'error'));
+                    exit();
+                }
+            }
+            $start_time = $flash_sale['start_date'];
+            $end_time = $flash_sale['end_date'];
+            $had_booght = $model->table('order')->where("type=6 and pay_status=1 and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}'")->count();
+            if($had_booght>=$flash_sale['quota_count']){
+                    if($isJump){
+                     $this->redirect("/index/msg", true, array('msg' => '抱歉，您已经达到了该商品的抢购上限！', 'type' => 'error'));
+                     exit();
+                    }        
+            } 
+            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 6 and od.pay_status = 1 and od.status !=6 and od.pay_time>'{$start_time}' and od.pay_time<'{$end_time}'");
+            if($sum1[0]['sum']>= $flash_sale['max_sell_count']){
+                if($isJump){
+                     $this->redirect("/index/msg", true, array('msg' => '对不起，该商品已抢完了', 'type' => 'error'));
+                     exit();
+                }
+            }
+            $five_minutes = strtotime('-5 minutes');
+            $sum2 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 6 and UNIX_TIMESTAMP(od.create_time)>".$five_minutes);
+            if($sum2[0]['sum']>= $flash_sale['max_sell_count']){
+                if($isJump){
+                     $this->redirect("/index/msg", true, array('msg' => '抱歉手慢了，该商品已被别人抢先下单了', 'type' => 'error'));
+                     exit();
+                }
+            }
+        }
         if($quota_num==0 || $quota_num =="" || $quota_num <0){
             return true;
         }else{
