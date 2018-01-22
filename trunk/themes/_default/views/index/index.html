@@ -164,10 +164,12 @@
                     {query:name=pointflash_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id order=ps.is_end asc,ps.id desc limit=3}
                     <li class="col-{echo:$key+1}" style="float:left!important;    border-top: 1px solid #e4e4e4;border-left: 1px solid #e4e4e4;">
                         <dl class="">
-                            <dd class="title"><a href="{url:/index/pointflash/id/$item[id]}">{echo:TString::msubstr($item['title'],0,4,'utf-8','')}</a></dd>
+                            <dd class="title"><a href="{url:/index/pointflash/id/$item[id]}"><span>{$item['name']}</span>{echo:TString::msubstr($item['title'],0,4,'utf-8','')}</a></dd>
                             <dd class="img">
                                 <a href="{url:/index/pointflash/id/$item[id]}" target="_blank"><img src="{echo:Common::thumb($item['img'],500,500,'fwfh');}" width=100 height="100"></a>
                             </dd>
+                            {set:$set = current(unserialize($item['price_set']));}
+                            <dd class="price">{$currency_symbol}{$set['cash']}+{$set['point']}积分</dd>
                         </dl>
                     </li>
                     {/query}
@@ -181,6 +183,7 @@
                             <dd class="img">
                                 <a href="{url:/index/flashbuy/id/$item[id]}" target="_blank"><img src="{echo:Common::thumb($item['img'],500,500,'fwfh');}" width=100 height="100"></a>
                             </dd>
+                            <dd class="price">{$item['price']}{$currency_unit}</dd>
                         </dl>
                     </li>
                     {/query}
