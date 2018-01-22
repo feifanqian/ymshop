@@ -162,17 +162,14 @@
                     </li>
                     {if:$pointflash_count>0}
                     {query:name=pointflash_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id order=ps.is_end asc,ps.id desc limit=3}
-                    <div class="swiper-slide">
-                        <a href="{url:/index/pointflash/id/$item[id]}">
-                            <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
-                            <div class="title"><p>{$item['name']}</p></div>
-                            <div class="prices">
-                                 <del class="tag-price">{$currency_symbol}{$item['sell_price']}</del>
-                                {set:$set = current(unserialize($item['price_set']));}
-                                <span class="gb-price">{$currency_symbol}{$set['cash']}+{$set['point']}积分</span>
-                            </div>
-                        </a>
-                    </div>
+                    <li class="col-{echo:$key+1}" style="float:left!important;    border-top: 1px solid #e4e4e4;border-left: 1px solid #e4e4e4;">
+                        <dl class="">
+                            <dd class="title"><a href="{url:/index/pointflash/id/$item[id]}">{echo:TString::msubstr($item['title'],0,4,'utf-8','')}</a></dd>
+                            <dd class="img">
+                                <a href="{url:/index/pointflash/id/$item[id]}" target="_blank"><img src="{echo:Common::thumb($item['img'],500,500,'fwfh');}" width=100 height="100"></a>
+                            </dd>
+                        </dl>
+                    </li>
                     {/query}
                     {/if}
                     {if:$flash_count>0 and $pointflash_count < 3}
