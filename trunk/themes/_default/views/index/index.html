@@ -169,7 +169,7 @@
                                 <a href="{url:/index/pointflash/id/$item[id]}" target="_blank"><img src="{echo:Common::thumb($item['img'],500,500,'fwfh');}" width=100 height="100"></a>
                             </dd>
                             {set:$set = current(unserialize($item['price_set']));}
-                            <dd class="price">{$currency_symbol}{$set['cash']}+{$set['point']}积分</dd>
+                            <span class="chophandprice">{$currency_symbol}{$set['cash']}+{$set['point']}积分</span>
                         </dl>
                     </li>
                     {/query}
@@ -183,7 +183,7 @@
                             <dd class="img">
                                 <a href="{url:/index/flashbuy/id/$item[id]}" target="_blank"><img src="{echo:Common::thumb($item['img'],500,500,'fwfh');}" width=100 height="100"></a>
                             </dd>
-                            <dd class="price">{$item['price']}{$currency_unit}</dd>
+                            <span class="chophandprice">{$item['price']}{$currency_unit}</span>
                         </dl>
                     </li>
                     {/query}
@@ -201,6 +201,7 @@
                             <dd class="img">
                                 <a href="{url:/index/flashbuy/id/$item[id]}" target="_blank"><img src="{echo:Common::thumb($item['img'],500,500,'fwfh');}"  style="width:100px;height:100px;"></a>
                             </dd>
+                            <span class="chophandprice">{$item['price']}{$currency_unit}</span>
                         </dl>
                     </li>
                     {/query}
