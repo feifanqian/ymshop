@@ -314,6 +314,45 @@ class IndexController extends Controller {
     }
 
     public function flash() {
+        $page = Filter::sql(Req::args("p"));
+        $page = $page ==NULL ? 1 : $page;
+        $c1=$this->model->table("pointflash_sale as ps")->fields("*,ps.id as gid")->join("left join goods as go on ps.goods_id = go.id")->findAll();
+        $c2=$this->model->table("flash_sale as gb")->join("left join goods as go on gb.goods_id = go.id")->fields("go.*,gb.is_end,gb.id as id,gb.order_num,gb.price")->order("gb.is_end asc,gb.id desc")->findAll();  
+        $count1=count($c1);
+        $count2=count($c2);
+        $result=array_merge($c1,$c2);
+        $total=count($result);//总条数  
+        $num=5;//每页显示条数  
+        
+        $pagenum=ceil($total/$num);//总页数  
+        $offset=($page-1)*$num;//开始去数据的位置   
+        $start=$offset+1;//开始记录页  
+        $end=($page==$pagenum)?$total : ($page*$num);//结束记录页  
+        $next=($page==$pagenum)? $pagenum:($page+1);//下一页  
+        $prev=($page==1)? 1:($page-1);//前一页 
+        $html="<a href=/flash.html?p={$prev} >上一页</a>  <span class='current'>{$page}</span>
+<a href=/flash.html?p={$next} >下一页</a> &nbsp;&nbsp;&nbsp;&nbsp;共 {$pagenum}页";
+
+        $newarr = array_slice($result, ($page-1)*$num, $num);
+        // var_dump($newarr);die;
+        //PC端适用
+        $num1=8;//每页显示条数  
+        
+        $pagenum1=ceil($total/$num1);//总页数  
+        $offset1=($page-1)*$num1;//开始去数据的位置   
+        $start1=$offset1+1;//开始记录页  
+        $end1=($page==$pagenum1)?$total : ($page*$num1);//结束记录页  
+        $next1=($page==$pagenum1)? $pagenum1:($page+1);//下一页  
+        $prev1=($page==1)? 1:($page-1);//前一页 
+        $html1="<a href=/flash.html?p={$prev1} >上一页</a>  <span class='current'>{$page}</span>
+<a href=/flash.html?p={$next1} >下一页</a> &nbsp;&nbsp;&nbsp;&nbsp;共 {$pagenum1}页&nbsp;&nbsp;跳到第<input id='drumppage' style='width:24px;text-align:center' value='1'>页<a href='javascript:;' onclick='javascript:window.location.href=&quot;/flash.html?p=&quot;+document.getElementById(&quot;drumppage&quot;).value;'>确定</a>";
+
+        $newarr1 = array_slice($result, ($page-1)*$num1, $num1);
+        
+        $this->assign('html',$html);
+        $this->assign("newarr", $newarr);
+        $this->assign('html1',$html1);
+        $this->assign("newarr1", $newarr1);
         $this->assign('seo_title', '秒杀,优惠精选');
         $this->assign('seo_keywords', '抢购,优惠促销精选,限时抢购,更多优惠.');
         $this->redirect();
@@ -328,6 +367,54 @@ class IndexController extends Controller {
         $this->assign('seo_keywords', '积分,优惠促销精选,更多优惠.');
         $this->redirect();
     }
+
+    public function flashbuy1() {
+        $id = Filter::int(Req::args("id"));
+        $goods = $this->model->table("pointflash_sale as gb")->join("left join goods as go on gb.goods_id = go.id")->where("gb.id=$id")->find();
+        if ($goods) {
+            //检测抢购是否结束
+            if ($goods['store_nums'] <= 0 || $goods['order_count'] >= $goods['max_sell_count'] || time() >= strtotime($goods['end_date'])) {
+                $this->model->table('pointflash_sale')->data(array('is_end' => 1))->where("id=$id")->update();
+                $goods['is_end'] = 1;
+            }
+            $skumap = array();
+            $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = $goods[id]")->findAll();
+            if ($products) {
+                foreach ($products as $product) {
+                    $skumap[$product['specs_key']] = $product;
+                }
+            }
+            $attr_array = unserialize($goods['attrs']);
+            $goods_attrs = array();
+            if ($attr_array) {
+                $rows = $this->model->fields("ga.*,av.name as vname,av.id as vid")->table("goods_attr as ga")->join("left join attr_value as av on ga.id=av.attr_id")->where("ga.type_id = $goods[type_id]")->findAll();
+                $attrs = $_attrs = array();
+                foreach ($rows as $row) {
+                    $attrs[$row['id'] . '-' . $row['vid']] = $row;
+                    $_attrs[$row['id']] = $row;
+                }
+                foreach ($attr_array as $key => $value) {
+                    if (isset($attrs[$key . '-' . $value]))
+                        $goods_attrs[] = $attrs[$key . '-' . $value];
+                    else {
+                        $_attrs[$key]['vname'] = $value;
+                        $goods_attrs[] = $_attrs[$key];
+                    }
+                }
+                unset($attrs, $_attrs);
+            }
+            // var_dump($goods);die;
+            $this->assign('id', $id);
+            $this->assign("skumap", $skumap);
+            $this->assign("attr_array", $attr_array);
+            $this->assign("goods_attrs", $goods_attrs);
+            $this->assign("goods", $goods);
+            $this->redirect();
+        }else {
+            Tiny::Msg($this, "404");
+        }
+    }
+
     //团购
     public function groupbuy() {
         $id = Filter::int(Req::args("id"));

@@ -2,40 +2,37 @@
 {echo:JS::import('dialogtools');}
 {echo:JS::import('form');}
 <!--S 产品展示-->
-<!-- {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=12 page=1 pagesize=2 id=$flashbuy}
-<div class=" bg-white m_20 mt20">
-        <div class="img box-header tc mb20"><a href="{url:/index/flashbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],367,367)}" width="100%" ></a></div>
-        <div class="p20">
-            <ul class="list">
-                <li class=" item plr20"><a href="{url:/index/product/id/$item[id]}">{$item['name']}</a></li>
-                <li class="clearfix"><span class="price fl">抢购价：<b class="red">{$currency_symbol}{$item['price']}</b></span><span class="market_price fr">{$item['order_num']}人已购买</span></li>
-                <li class="tr">{if:$item['is_end']==0}<a href="{url:/index/flashbuy/id/$item[id]}" class="btn btn-mini">抢购</a>{else:}<span class="btn btn-mini btn-disable">已结束</span>{/if}</li>
-            </ul>
-        </div>
-</div>
-{/query}
-<div class=" plr20 pb20 tc page-nav">{echo:$flashbuy->pageBar(5);}</div> -->
 <!--S 产品展示-->
 <div class="weui_panel weui_panel_access product-list">
     <div class="weui_panel_bd">
         
-        {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=12 page=1 pagesize=12 id=$flashbuy}
-        <a href="{url:/index/flashbuy/id/$item[id]}" class="weui_media_box weui_media_appmsg">
-            <div class="weui_media_hd">
-                <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],100,100)}" alt="">
-            </div>
-            <div class="weui_media_bd">
-                <h4 class="weui_media_title">{$item['name']}</h4>
-                <p class="weui_media_desc" style="color:red;">{$currency_symbol}{$item['price']}</p>
-                <p class="weui_media_desc">{$item['order_num']}人已购买</p>
-                
-            </div>
-        </a>
-        {/query}
-        
-
+        {if:isset($newarr)}
+         {list:items=$newarr}                  
+            <a {if:isset($item['order_num'])} href="{url:/index/flashbuy/id/$item[id]}" {else:} href="{url:/index/pointflash/id/$item[gid]}" {/if} class="weui_media_box weui_media_appmsg">
+                <div class="weui_media_hd">
+                    <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],100,100)}" alt="">
+                </div>
+                <div class="weui_media_bd">
+                    <h4 class="weui_media_title">{$item['name']}</h4>
+                    {if:isset($item['order_num'])}
+                    <p class="weui_media_desc" style="color:red;">{$currency_symbol}{$item['price']}</p>
+                    {else:}
+                    {set:$set = current(unserialize($item['price_set']));}
+                    <p class="weui_media_desc" style="color:red;">{$currency_symbol}{$set['cash']}+{$set['point']}积分</p>
+                    {/if}
+                    {if:isset($item['order_num'])}
+                    <p class="weui_media_desc">{$item['order_num']}人已购买</p>
+                    {else:}
+                    <p class="weui_media_desc">{$item['order_count']}人已购买</p>
+                    {/if}
+                </div>
+            </a>        
+         {/list}
+        {/if}
     </div>
 </div>
-<div class=" plr20 pb20 tc page-nav">{echo:$flashbuy->pageBar(5);}</div>
+
+<div class=" plr20 pb20 tc page-nav">{$html}</div>
+
 <!--E 产品展示-->
 <!--E 产品展示-->
