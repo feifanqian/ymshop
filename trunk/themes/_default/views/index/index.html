@@ -128,7 +128,8 @@
     </div>
 
 </div>
-{if:$flash_count>0}
+{if:$pointflash_count>0 or $flash_count>0}
+{set:$limit_count = 3-$pointflash_count}
 <div class="top-show container">
     
     <div class="tab">
@@ -159,8 +160,23 @@
                             </ul>
                         </div>
                     </li>
-
-                    {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=3 id=$flashbuy}
+                    {if:$pointflash_count>0}
+                    {query:name=pointflash_sale as ps fields=ps.*,go.name,go.img,go.sell_price join=left join goods as go on ps.goods_id eq go.id order=ps.is_end asc,ps.id desc limit=3}
+                    <div class="swiper-slide">
+                        <a href="{url:/index/pointflash/id/$item[id]}">
+                            <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                            <div class="title"><p>{$item['name']}</p></div>
+                            <div class="prices">
+                                 <del class="tag-price">{$currency_symbol}{$item['sell_price']}</del>
+                                {set:$set = current(unserialize($item['price_set']));}
+                                <span class="gb-price">{$currency_symbol}{$set['cash']}+{$set['point']}积分</span>
+                            </div>
+                        </a>
+                    </div>
+                    {/query}
+                    {/if}
+                    {if:$flash_count>0 and $pointflash_count < 3}
+                    {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=gb.is_end desc limit=$limit_count id=$flashbuy}
                     <li class="col-{echo:$key+1}" style="float:left!important;    border-top: 1px solid #e4e4e4;border-left: 1px solid #e4e4e4;">
                         <dl class="">
                             <dd class="title"><a href="{url:/index/flashbuy/id/$item[id]}"><span>{$item['tag']}</span>{echo:TString::msubstr($item['title'],0,4,'utf-8','')}</a></dd>
@@ -171,12 +187,13 @@
                         </dl>
                     </li>
                     {/query}
+                    {/if}
                 </ul>
 
             </div>
             <div class="sub-2 sub-3" style="height:200px; border-bottom: 1px solid #e4e4e4;border-left: 1px solid #e4e4e4; width:1038px;">
                 <ul class="clearfix" style="    border-bottom: 1px solid #e4e4e4;border-right: 1px solid #e4e4e4;">
-                    {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=is_end , goods_num desc limit=3,5 id=$groupbuy}
+                    {query:name=flash_sale as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id order=is_end , goods_num desc limit=$limit_count,5 id=$groupbuy}
                     <li class="col-{echo:$key+1}">
                         <dl class="">
                             <dd class="title"><a href="{url:/index/flashbuy/id/$item[id]}"><span>{$item['tag']}</span>{echo:TString::msubstr($item['title'],0,4,'utf-8','')}</a></dd>
