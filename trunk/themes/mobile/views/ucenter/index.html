@@ -380,7 +380,7 @@
                         </div>
                         <span class="weui_cell_ft"></span>
                     </a>
-                    {if:$customer['mobile_verified']==0}
+                    <!-- {if:$customer['mobile_verified']==0}
                     <a class="weui_cell" href="/ucenter/activate_obj/obj/mobile">
                         <div class="weui_cell_hd">
                             <span class="icon-stack icon-lg">
@@ -393,7 +393,7 @@
                         </div>
                         <span class="weui_cell_ft"></span>
                     </a>
-                    {/if}
+                    {/if} -->
                     {if:$customer['realname_verified']==0}
                     <a class="weui_cell" href="/ucenter/set_realname" id="name_check">
                         <div class="weui_cell_hd">
@@ -466,10 +466,13 @@
 {if:!Common::checkInWechat()}
 <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/simple/logout}" class="weui_btn weui_btn_primary">安全退出</a></div></div>
 {else:}
-    {if:isset($open_change)&&$open_change==true}
+    <!-- {if:isset($open_change)&&$open_change==true}
     <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_accounts}" class="weui_btn weui_btn_primary">切换微信绑定账号</a></div></div>
     {elseif:isset($open_bind)&&$open_bind==true}
     <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/change_account}" class="weui_btn weui_btn_primary">绑定已有账号</a></div></div>
+    {/if} -->
+    {if:$customer['mobile_verified']==0}
+    <div class="content-padded weui-row"><div class="weui-col-100"><a href="{url:/ucenter/activate_obj/obj/mobile}" class="weui_btn weui_btn_primary">绑定手机号</a></div></div>
     {/if}
 {/if}
 {if:$sign_in_open==1}
