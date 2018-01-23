@@ -483,6 +483,68 @@ class ProductAction extends Controller {
         
     }
 
+    public function flash1(){
+        $page = Filter::int(Req::args("page"));
+        $page = $page < 0 ? 1 : $page;
+        $now  = date('Y-m-d H:i:s');
+        //更新状态
+        $result1 = $this->model->table('flash_sale')->data(array('is_end'=>1))->where("is_end=0 and end_time < '$now'")->update();
+        $result2 = $this->model->table('pointflash_sale')->data(array('is_end'=>1))->where("is_end=0 and end_date < '$now'")->update();
+        
+        $first = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.end_time asc")->join("left join goods as go on gb.goods_id = go.id")->findPage(1,1);
+        $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->findAll();
+        $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->findAll();
+        if($list1){
+            foreach($list1 as $k=>$v){
+                $list1[$k]['tag'] = $v['title'];
+                $list1[$k]['max_num'] = $v['max_sell_count'];
+                $list1[$k]['start_time'] = $v['start_date'];
+                $list1[$k]['end_time'] = $v['end_date'];
+                $list1[$k]['order_num'] = $v['order_count'];
+                $list1[$k]['quota_num'] = $v['quota_count'];
+                $set = current(unserialize($v['price_set']));
+                $list1[$k]['price'] = $set['cash'];
+                $list1[$k]['cost_point'] = $set['point'];
+                $list1[$k]['flash_type'] = 'point';
+                unset($list1[$k]['max_sell_count']);
+                unset($list1[$k]['start_date']);
+                unset($list1[$k]['end_date']);
+                unset($list1[$k]['order_count']);
+                unset($list1[$k]['quota_count']);
+                unset($list1[$k]['price_set']);
+            }
+        }
+        if($list2){
+            foreach($list2 as $k=>$v){
+                $list2[$k]['cost_point'] = '0';
+                $list2[$k]['flash_type'] = 'cash';
+            }
+        }
+        $list = array_merge($list1,$list2);
+        $total=count($list);//总条数  
+        $num=10;//每页显示条数  
+        
+        $list = array_slice($list, ($page-1)*$num, $num);
+        
+        if ($list) {
+            foreach ($list as $k => &$v) {
+                $v['imgs'] = array_values(unserialize($v['imgs']));
+                unset($v['specs'], $v['attrs'], $v['content']);
+            }
+        }
+        $this->code = 0;
+        $this->content = array(
+            'flashlist' => $list,
+            );
+        if(isset($first['data'][0]['end_time'])){
+            $this->content['end_time'] = $first['data'][0]['end_time'];
+            $this->content['now'] = date('Y-m-d H:i:s');
+        }else{
+            $this->content['end_time'] = date('Y-m-d H:i:s');
+            $this->content['now'] = date('Y-m-d H:i:s');
+        }
+    }
+
     public function wei() {
         $page = Filter::int(Req::args("page"));
         $page = $page < 0 ? 1 : $page;

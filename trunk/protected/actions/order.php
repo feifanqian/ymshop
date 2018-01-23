@@ -337,7 +337,87 @@ class OrderAction extends Controller {
             $data['prom'] = serialize($pointbuy);
             $data['prom_id'] = $id;
             $order_type = 5;
-        }
+        }else if($type == 'weibuy' || $type == 'pointwei'){
+                        $product_id = Filter::int($product_id[0]);
+                        $num = Filter::int($buy_num[0]);
+                        if ($num < 1)
+                            $num = 1;
+                        $item = $model->table("pointwei_sale as ps")
+                                ->join("left join goods as go on ps.goods_id=go.id left join products as pr on pr.goods_id=ps.goods_id")
+                                ->fields("*,pr.id as product_id,pr.spec")
+                                ->where("ps.id=$id and pr.id = $product_id")
+                                ->find();
+                        $weibuy = $model->table("pointwei_sale")->where("id=$id")->find();
+                        if(empty($weibuy)||empty($item)){
+                            $this->code = 1208;
+                            return;
+                        }
+                        $order_products = $this->packWeibuyProducts($item, $num);
+                        $user_point_coin = $model->table("customer")->where("user_id=".$this->user['id'])->fields('point_coin')->find();
+                        if(empty($user_point_coin)||!isset($user_point_coin['point_coin'])){
+                            $this->code = 1211;
+                            return;
+                        }else{
+                            if($user_point_coin['point_coin']<$order_products[$product_id]['point']){
+                                $this->code = 1212;
+                                return;
+                            }else{
+                                $office_point_coin = Common::getOfficialPromoterPointCoin($this->user['id']);
+                                if($user_point_coin['point_coin']-$office_point_coin<$order_products[$product_id]['point']){
+                                    $this->code = 1213;
+                                    return;
+                                }
+                            }
+                        }
+                        $data['pay_point'] = $order_products[$product_id]['point'];
+                        $data['prom'] = serialize($weibuy);
+                        $data['prom_id'] = $id;
+                        $order_type = 7;
+                }else if($type=="pointflash"){
+                        $product_id = Filter::int($product_id[0]);
+                        $num = Filter::int($buy_num[0]);
+                        if ($num < 1)
+                            $num = 1;
+                        $item = $model->table("pointflash_sale as ps")
+                                ->join("left join goods as go on ps.goods_id=go.id left join products as pr on pr.goods_id=ps.goods_id")
+                                ->fields("*,go.id as goods_id,pr.id as product_id,pr.spec")
+                                ->where("ps.id=$id and pr.id = $product_id")
+                                ->find();
+                        $pointflash = $model->table("pointflash_sale")->where("id=$id")->find();
+                        if(empty($pointflash)||empty($item)){
+                            $this->code = 1214;
+                            return;
+                        }
+                        $start_diff = time() - strtotime($pointflash['start_date']);
+                        $end_diff = time() - strtotime($pointflash['end_date']);
+                        if ($pointflash['is_end'] == 0 && $start_diff >= 0 && $end_diff < 0) {
+                            $this->pointflashStatus($id,$pointflash['quota_count'],$this->user['id'],true);
+                            $order_products = $this->packPointFlashProducts($item);
+                            $user_point_coin = $model->table("customer")->where("user_id=".$this->user['id'])->fields('point_coin')->find();
+                            if(empty($user_point_coin)||!isset($user_point_coin['point_coin'])){
+                                $this->code = 1215;
+                                return;
+                            }else{
+                                if($user_point_coin['point_coin']<$order_products[$product_id]['point']){
+                                    $this->code = 1212;
+                                    return;
+                                }else{
+                                    $office_point_coin = Common::getOfficialPromoterPointCoin($this->user['id']);
+                                    if($user_point_coin['point_coin']-$office_point_coin<$order_products[$product_id]['point']){
+                                        $this->code = 1213;
+                                        return;
+                                    }
+                                }
+                            }
+                            $data['pay_point'] = $order_products[$product_id]['point'];
+                            $data['prom'] = serialize($pointflash);
+                            $data['prom_id'] = $id;
+                            $order_type = 6;
+                        } else {
+                            $this->code = 1209;
+                            return;
+                        }
+                }
         if ($order_type == 0) {
             if ($cart_type == 'goods') {
                 $cart = Cart::getCart('goods');
@@ -814,4 +894,80 @@ class OrderAction extends Controller {
         $this->content = $list;
     }
 
+    public function packWeibuyProducts($item, $num = 1){
+        $price_set = unserialize($item['price_set']);
+        if($item['store_nums']<=0){
+           $this->code = 1209;
+           return;
+        }
+        if(is_array($price_set)){
+           $real_price = $price_set[$item['product_id']]['cash'];
+           $cash = $price_set[$item['product_id']]['cash']*$num;
+           $point = $price_set[$item['product_id']]['point']*$num;
+        }else{
+           $this->code = 1210;
+           return;
+        }
+        $sell_total = $item['sell_price'] * $num;
+        $product[$item['product_id']] = array(
+            'id' => $item['product_id'],
+            'goods_id' => $item['goods_id'], 
+            'name' => $item['name'], 
+            'img' => $item['img'], 
+            'num' => $num, 
+            'store_nums' => $item['store_nums'], 
+            'spec' => unserialize($item['spec']), 
+            'amount'=>$cash,
+            "real_price" =>$real_price,
+            'sell_total' => $sell_total,
+            "sell_price" => $item['sell_price'], 
+            'weight' => $item['weight'], 
+            'point' => $item['point'], 
+            'freeshipping' => $item['freeshipping'], 
+            "prom_goods" => array(),
+            'shop_id'=>$item['shop_id'],
+            'cash'=>$cash,
+            'point'=>$point
+        );
+        return $product;
+    }
+
 }
+
+public function packPointFlashProducts($item, $num = 1) {
+        $price_set = unserialize($item['price_set']);
+        if($item['store_nums']<=0){
+            $this->code = 1209;
+            return;
+        }
+        if(is_array($price_set)){
+           $real_price = $price_set[$item['product_id']]['cash'];
+           $cash = $price_set[$item['product_id']]['cash']*$num;
+           $point = $price_set[$item['product_id']]['point']*$num;
+        }else{
+            $this->code = 1210;
+            return;
+        }
+        $sell_total = $item['sell_price'] * $num;
+        $product[$item['product_id']] = array(
+            'id' => $item['product_id'],
+            'goods_id' => $item['goods_id'], 
+            'name' => $item['name'], 
+            'img' => $item['img'], 
+            'num' => $num, 
+            'store_nums' => $item['store_nums'], 
+            'spec' => unserialize($item['spec']), 
+            'amount'=>$cash,
+            "real_price" =>$real_price,
+            'sell_total' => $sell_total,
+            "sell_price" => $item['sell_price'], 
+            'weight' => $item['weight'], 
+            'point' => $item['point'], 
+            'freeshipping' => $item['freeshipping'], 
+            "prom_goods" => array(),
+            'shop_id'=>$item['shop_id'],
+            'cash'=>$cash,
+            'point'=>$point
+        );
+        return $product;
+    }
