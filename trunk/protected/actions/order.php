@@ -932,9 +932,7 @@ class OrderAction extends Controller {
         return $product;
     }
 
-}
-
-public function packPointFlashProducts($item, $num = 1) {
+    public function packPointFlashProducts($item, $num = 1) {
         $price_set = unserialize($item['price_set']);
         if($item['store_nums']<=0){
             $this->code = 1209;
@@ -971,3 +969,7 @@ public function packPointFlashProducts($item, $num = 1) {
         );
         return $product;
     }
+
+}
+
+
