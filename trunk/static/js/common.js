@@ -171,7 +171,7 @@ function tools_reload() {
     location.reload();
 }
 //提交前咨询
-function confirm_action(url, msg) {
+function confirm_action(url, msg){
     if (msg == undefined)
         msg = '你确认删除操作吗？删除后无法恢复！';
     art.dialog.confirm(msg, function () {
