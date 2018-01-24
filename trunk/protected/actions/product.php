@@ -506,7 +506,7 @@ class ProductAction extends Controller {
                 $list1[$k]['order_num'] = $v['order_count'];
                 $list1[$k]['quota_num'] = $v['quota_count'];
                 $set = current(unserialize($v['price_set']));
-                $list1[$k]['price'] = $set['cash'];
+                $list1[$k]['price'] = sprintf("%.2f",$set['cash']);
                 $list1[$k]['send_point'] = '0.00';
                 $list1[$k]['description'] = '';
                 $list1[$k]['goods_num'] = $v['max_sell_count'];
