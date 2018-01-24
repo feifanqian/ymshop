@@ -793,7 +793,7 @@ class ProductAction extends Controller {
                 $goods['is_end'] = 1;
             }
             $skumap = array();
-            $price_set = unserialize($goods['price_set']);
+            $price_set = current(unserialize($goods['price_set']));
             $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = $goods[id]")->findAll();
             if ($products) {
                 foreach ($products as $product) {
@@ -888,7 +888,8 @@ class ProductAction extends Controller {
             $this->content = array(
                 'id' => $id,
                 'skumap' => $skumap,
-                'price'=> current($price_set),
+                'price'=> sprintf("%.2f",$price_set['cash']),
+                'cost_point'=>$price_set['point'],
                 'attr_array' => $attr_array,
                 'goods_attrs' => $goods_attrs,
                 'goods' => $goods,
