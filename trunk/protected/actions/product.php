@@ -539,7 +539,9 @@ class ProductAction extends Controller {
         }
         $this->code = 0;
         $this->content = array(
-            'flashlist' => $list,
+            'flashlist' => array(
+                 'data'=>$list
+                ),
             );
         if(isset($first['data'][0]['end_time'])){
             $this->content['end_time'] = $first['data'][0]['end_time'];
