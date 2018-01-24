@@ -25,7 +25,7 @@ onclick="tools_reload()"> 刷新</a>
 <div style="overflow: auto; height: 480px;">
 <table class="default" style="border-top: 0">
 {set:$type=array("0"=>"否","1"=>"是")}
-    {query:name=version id=$obj order=id desc}
+    {query:name=version id=$obj page=1 pagesize=3 order=id desc}
         <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
           <td style="width:80px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
                 <li><a class="icon-pencil" href="{url:/admin/version_edit/id/$item[id]}"> 编辑</a></li>
