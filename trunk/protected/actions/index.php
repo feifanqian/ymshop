@@ -42,7 +42,7 @@ class IndexAction extends Controller {
         }
         if($list2){
             foreach($list2 as $k=>$v){
-                $list2[$k]['cost_point'] = '0';
+                $list2[$k]['cost_point'] = '0.00';
                 $list2[$k]['flash_type'] = 'cash';
             }
         }

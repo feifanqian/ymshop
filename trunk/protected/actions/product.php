@@ -452,38 +452,38 @@ class ProductAction extends Controller {
         );
     }
 
-    public function flash() {
-        $page = Filter::int(Req::args("page"));
-        $page = $page < 0 ? 1 : $page;
-        $page_size = 10;
-        $now  = date('Y-m-d H:i:s');
-        //更新状态
-        $result = $this->model->table('flash_sale')->data(array('is_end'=>1))->where("is_end=0 and end_time < '$now'")->update();
+    // public function flash() {
+    //     $page = Filter::int(Req::args("page"));
+    //     $page = $page < 0 ? 1 : $page;
+    //     $page_size = 10;
+    //     $now  = date('Y-m-d H:i:s');
+    //     //更新状态
+    //     $result = $this->model->table('flash_sale')->data(array('is_end'=>1))->where("is_end=0 and end_time < '$now'")->update();
         
-        $first = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.end_time asc")->join("left join goods as go on gb.goods_id = go.id")->findPage(1,1);
-        $list = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->findPage($page, $page_size);
-        unset($list['html']);
-        if ($list['data']) {
-            foreach ($list['data'] as $k => &$v) {
-                $v['imgs'] = array_values(unserialize($v['imgs']));
-                unset($v['specs'], $v['attrs'], $v['content']);
-            }
-        }
-        $this->code = 0;
-        $this->content = array(
-            'flashlist' => $list,
-            );
-        if(isset($first['data'][0]['end_time'])){
-            $this->content['end_time'] = $first['data'][0]['end_time'];
-            $this->content['now'] = date('Y-m-d H:i:s');
-        }else{
-            $this->content['end_time'] = date('Y-m-d H:i:s');
-            $this->content['now'] = date('Y-m-d H:i:s');
-        }
+    //     $first = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.end_time asc")->join("left join goods as go on gb.goods_id = go.id")->findPage(1,1);
+    //     $list = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->findPage($page, $page_size);
+    //     unset($list['html']);
+    //     if ($list['data']) {
+    //         foreach ($list['data'] as $k => &$v) {
+    //             $v['imgs'] = array_values(unserialize($v['imgs']));
+    //             unset($v['specs'], $v['attrs'], $v['content']);
+    //         }
+    //     }
+    //     $this->code = 0;
+    //     $this->content = array(
+    //         'flashlist' => $list,
+    //         );
+    //     if(isset($first['data'][0]['end_time'])){
+    //         $this->content['end_time'] = $first['data'][0]['end_time'];
+    //         $this->content['now'] = date('Y-m-d H:i:s');
+    //     }else{
+    //         $this->content['end_time'] = date('Y-m-d H:i:s');
+    //         $this->content['now'] = date('Y-m-d H:i:s');
+    //     }
         
-    }
+    // }
 
-    public function flash1(){
+    public function flash(){
         $page = Filter::int(Req::args("page"));
         $page = $page < 0 ? 1 : $page;
         $now  = date('Y-m-d H:i:s');
@@ -521,7 +521,7 @@ class ProductAction extends Controller {
         }
         if($list2){
             foreach($list2 as $k=>$v){
-                $list2[$k]['cost_point'] = '0';
+                $list2[$k]['cost_point'] = '0.00';
                 $list2[$k]['flash_type'] = 'cash';
             }
         }
