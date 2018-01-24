@@ -863,6 +863,27 @@ class ProductAction extends Controller {
                 $county = 120100;
                 $address = "北京市 北京市 市辖区";
             }
+            //评论
+            $comment = array();
+            $review = array('1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0);
+            $rows = $this->model->table("review")->fields("count(id) as num,point")->where("status=1 and goods_id =".$goods['id'])->group("point")->findAll();
+            foreach ($rows as $row) {
+                $review[$row['point']] = intval($row['num']);
+            }
+            $a = ($review[4] + $review[5]);
+            $b = ($review[3]);
+            $c = ($review[1] + $review[2]);
+            $total = $a + $b + $c;
+            $comment['total'] = $total;
+            if ($total == 0)
+                $total = 1;
+            $comment['a'] = array('num' => $a, 'percent' => round((100 * $a / $total)));
+            $comment['b'] = array('num' => $b, 'percent' => round((100 * $b / $total)));
+            $comment['c'] = array('num' => $c, 'percent' => round((100 * $c / $total)));
+
+            $where = "re.status=1 and re.goods_id = $id";
+            $lastreview = $this->model->table("review as re")->join("left join user as us on re.user_id = us.id")->fields("re.*,re.id as id,us.name as uname,us.avatar")->where($where)->order("re.id desc")->limit("0,1")->find();
+            $comment['last'] = $lastreview ? $lastreview : NULL;
             $this->code = 0;
             $this->content = array(
                 'id' => $id,
