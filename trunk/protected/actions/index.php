@@ -374,7 +374,7 @@ class IndexAction extends Controller {
 
     //ios版本更新检测
     public function version_update(){
-        $version = $this->model->table("version")->fields('enforce,newversion,downloadurl,content')->where("binary platform ='ios'")->order("id desc")->find();
+        $version = $this->model->table("version")->fields('enforce,newversion,packagesize,downloadurl,content')->where("binary platform ='ios'")->order("id desc")->find();
         $this->code =0;
         $this->content = $version;
     }
