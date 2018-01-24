@@ -37,7 +37,7 @@ onclick="tools_reload()"> 刷新</a>
           <td style="width:80px;">{$item['packagesize']}</td>
           <td style="width:200px;">{$item['content']}</td>
           <td style="width:200px;"><a href="{$item['url']}" target="_blank">{$item['downloadurl']}</a></td>
-          <td style="width:40px;">{$type[item['enforce']]}</td>
+          <td style="width:40px;">{$type[$item['enforce']]}</td>
           <td style="width:100px;">{echo: date("Y-m-d H:i:s",$item['createtime'])}</td>
         </tr>
     {/query}
