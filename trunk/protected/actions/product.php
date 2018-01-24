@@ -485,6 +485,9 @@ class ProductAction extends Controller {
 
     public function flash(){
         $page = Filter::int(Req::args("page"));
+        if(!$page){
+            $page = 1;
+        }
         $page = $page < 0 ? 1 : $page;
         $now  = date('Y-m-d H:i:s');
         //更新状态
@@ -537,10 +540,17 @@ class ProductAction extends Controller {
                 unset($v['specs'], $v['attrs'], $v['content']);
             }
         }
+        $newpage = array(
+            'total'=>$total,
+            'totalPage'=>ceil($total/$num),
+            'pageSize'=>$num,
+            'page'=>$page
+            );
         $this->code = 0;
         $this->content = array(
             'flashlist' => array(
-                 'data'=>$list
+                 'data'=>$list,
+                 'page'=>$newpage
                 ),
             );
         if(isset($first['data'][0]['end_time'])){
