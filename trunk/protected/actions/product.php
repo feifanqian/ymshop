@@ -867,7 +867,7 @@ class ProductAction extends Controller {
             $this->content = array(
                 'id' => $id,
                 'skumap' => $skumap,
-                'price'=> current($price_set)),
+                'price'=> current($price_set),
                 'attr_array' => $attr_array,
                 'goods_attrs' => $goods_attrs,
                 'goods' => $goods,
