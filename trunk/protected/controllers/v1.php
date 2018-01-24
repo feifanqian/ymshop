@@ -35,6 +35,7 @@ class V1Controller extends Controller {
         'get_ask' => array('product/get_ask', 0,1),//取得咨询
         'flashbuy' => array('product/flashbuy', 0,1),//商品秒杀接口
         'groupbuy' => array('product/groupbuy', 0,1),//商品团购接口
+        'pointflash'=> array('product/pointflash', 0,1),//商品积分秒杀接口
         'cart_add' => array('cart/add', 0,1), //添加商品到购物车接口
         'cart_del' => array('cart/del', 0,1), //移除购物车接口
         'cart_num' => array('cart/num', 0,1),//购买商品数量接口

@@ -783,6 +783,106 @@ class ProductAction extends Controller {
         }
     }
 
+    public function pointflash(){
+        $id = Filter::int(Req::args("id"));
+        $goods = $this->model->table("pointflash_sale as ps")->join("left join goods as go on ps.goods_id = go.id")->where("ps.id=$id")->find();
+        if ($goods) {
+            //检测抢购是否结束
+            if ($goods['store_nums'] <= 0 || $goods['order_count'] >= $goods['max_sell_count'] || time() >= strtotime($goods['end_date'])) {
+                $this->model->table('pointflash_sale')->data(array('is_end' => 1))->where("id=$id")->update();
+                $goods['is_end'] = 1;
+            }
+            $skumap = array();
+            $price_set = unserialize($goods['price_set']);
+            $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = $goods[id]")->findAll();
+            if ($products) {
+                foreach ($products as $product) {
+                    $product['sell_price']=$price_set[$product['id']]['cash']."+".$price_set[$product['id']]['point']."积分";
+                    $skumap[$product['specs_key']] = $product;
+                }
+            }
+            $attr_array = unserialize($goods['attrs']);
+            $goods_attrs = array();
+            if ($attr_array) {
+                $rows = $this->model->fields("ga.*,av.name as vname,av.id as vid")->table("goods_attr as ga")->join("left join attr_value as av on ga.id=av.attr_id")->where("ga.type_id = $goods[type_id]")->findAll();
+                $attrs = $_attrs = array();
+                foreach ($rows as $row) {
+                    $attrs[$row['id'] . '-' . $row['vid']] = $row;
+                    $_attrs[$row['id']] = $row;
+                }
+                foreach ($attr_array as $key => $value) {
+                    if (isset($attrs[$key . '-' . $value]))
+                        $goods_attrs[] = $attrs[$key . '-' . $value];
+                    else {
+                        $_attrs[$key]['vname'] = $value;
+                        $goods_attrs[] = $_attrs[$key];
+                    }
+                }
+                unset($attrs, $_attrs);
+            }
+            $skumap = array_values($skumap);
+            $goods['imgs'] = array_values(unserialize($goods['imgs']));
+            $goods['specs'] = array_values(unserialize($goods['specs']));
+            foreach ($goods['specs'] as $k => &$v) {
+                $v['value'] = array_values($v['value']);
+            }
+            $goods['now'] = date('Y-m-d H:i:s');
+            
+            $goods['attrs'] = unserialize($goods['attrs']);
+             //替换网址
+            //$goods['content'] = str_replace("/data/uploads", "http://".$_SERVER['HTTP_HOST']."/data/uploads", $goods['content']);
+            $html = '<!DOCTYPE html><html><head><title></title><meta charset="UTF-8">';
+            $html.='<meta name="viewport" content="width=device-width, initial-scale=1.0"></head>';
+            $html.='<body><div>'.$goods['content'].'</div></body></html>';
+            $goods['content']= $html;
+            $url = "http://".$_SERVER['HTTP_HOST']."/pointflash-".$id.".html";
+            $goods['shareurl']=$url;
+            if ($this->user) {
+                $area_ids = array();
+                $address = $this->model->table("address")->where("user_id=" . $this->user['id'])->order("is_default desc")->findAll();
+                foreach ($address as $add) {
+                    $area_ids[$add['province']] = $add['province'];
+                    $area_ids[$add['city']] = $add['city'];
+                    $area_ids[$add['county']] = $add['county'];
+                }
+                $area_ids = implode(",", $area_ids);
+                $areas = array();
+                if ($area_ids != '')
+                    $areas = $this->model->table("area")->where("id in($area_ids )")->findAll();
+                $parse_area = array();
+                foreach ($areas as $area) {
+                    $parse_area[$area['id']] = $area['name'];
+                }
+                $province = $area_ids ? $area_ids[0] : 0;
+                $city = $area_ids ? $area_ids[1] : 0;
+                $county = $area_ids ? $area_ids[2] : 0;
+                $address = implode(' ', $parse_area);
+            } else {
+                $province = 110000;
+                $city = 110100;
+                $county = 120100;
+                $address = "北京市 北京市 市辖区";
+            }
+            $this->code = 0;
+            $this->content = array(
+                'id' => $id,
+                'skumap' => $skumap,
+                'price'=> current($price_set)),
+                'attr_array' => $attr_array,
+                'goods_attrs' => $goods_attrs,
+                'goods' => $goods,
+                "province" => $province,
+                "city" => $city,
+                "county" => $county,
+                "address" => $address,
+                "comment" => $comment,
+            );
+            
+        } else {
+            $this->code = 1040;
+        }
+    }
+
     //捆绑
     public function bundbuy() {
         $id = Filter::int(Req::args("id"));
