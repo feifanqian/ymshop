@@ -11,7 +11,7 @@ class IndexAction extends Controller {
         $this->model = new Model();
     }
 
-    public function index1() {
+    public function index() {
         $now  = date('Y-m-d H:i:s');
         $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->limit(10)->findAll();
         $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->limit(10)->findAll();
@@ -25,6 +25,11 @@ class IndexAction extends Controller {
                 $list1[$k]['quota_num'] = $v['quota_count'];
                 $set = current(unserialize($v['price_set']));
                 $list1[$k]['price'] = $set['cash'];
+                $list1[$k]['send_point'] = '0.00';
+                $list1[$k]['description'] = '';
+                $list1[$k]['goods_num'] = $v['max_sell_count'];
+                $list1[$k]['wants'] = '';
+                $list1[$k]['wants_num'] = '0';
                 $list1[$k]['cost_point'] = $set['point'];
                 $list1[$k]['flash_type'] = 'point';
                 unset($list1[$k]['max_sell_count']);
@@ -63,30 +68,30 @@ class IndexAction extends Controller {
         } 
     }
     
-    public function index() {
-        $now  = date('Y-m-d H:i:s');
-        $items = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->where("gb.start_time<'$now'")->order("gb.is_end asc,gb.end_time asc")->join("left join goods as go on gb.goods_id = go.id")->findPage(1, 10);
+    // public function index() {
+    //     $now  = date('Y-m-d H:i:s');
+    //     $items = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->where("gb.start_time<'$now'")->order("gb.is_end asc,gb.end_time asc")->join("left join goods as go on gb.goods_id = go.id")->findPage(1, 10);
         
-        $flashlist = array();
-        if(isset($items['data'])&&!empty($items['data'])){
-            foreach ($items['data'] as $k => $v) {
-                $v['imgs'] = unserialize($v['imgs']);
-                unset($v['specs'], $v['content']);
-                $flashlist[] = $v;
-            }
-        }
-        $this->code = 0;
-        $this->content = array(
-            'flashlist' => $flashlist,
-        );
-        if(isset($flashlist[0]['end_time'])){
-            $this->content['end_time'] = $flashlist[0]['end_time'];
-            $this->content['now'] = date('Y-m-d H:i:s');
-        }else{
-            $this->content['end_time'] = date('Y-m-d H:i:s');
-            $this->content['now'] = date('Y-m-d H:i:s');
-        } 
-    }
+    //     $flashlist = array();
+    //     if(isset($items['data'])&&!empty($items['data'])){
+    //         foreach ($items['data'] as $k => $v) {
+    //             $v['imgs'] = unserialize($v['imgs']);
+    //             unset($v['specs'], $v['content']);
+    //             $flashlist[] = $v;
+    //         }
+    //     }
+    //     $this->code = 0;
+    //     $this->content = array(
+    //         'flashlist' => $flashlist,
+    //     );
+    //     if(isset($flashlist[0]['end_time'])){
+    //         $this->content['end_time'] = $flashlist[0]['end_time'];
+    //         $this->content['now'] = date('Y-m-d H:i:s');
+    //     }else{
+    //         $this->content['end_time'] = date('Y-m-d H:i:s');
+    //         $this->content['now'] = date('Y-m-d H:i:s');
+    //     } 
+    // }
     
     public function index_goods(){
         $page = Filter::int(Req::args('page'));
