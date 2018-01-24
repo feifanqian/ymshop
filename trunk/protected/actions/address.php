@@ -937,10 +937,9 @@ class AddressAction extends Controller
             foreach($info_sql as $k => $v){
                 if($info_sql[$k]['picture']==null){
                     $info_sql[$k]['picture'] = '';
+                }else{
+                    $info_sql[$k]['picture'].='?date='.time();
                 }
-                // else{
-                //     $info_sql[$k]['picture'].='?date='.time();
-                // }
                 if($info_sql[$k]['tourist_id']==null){
                     $info_sql[$k]['tourist_id'] = 0;
                 }
