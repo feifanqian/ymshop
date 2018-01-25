@@ -1052,13 +1052,14 @@ class AdminController extends Controller {
         $packagesize = Req::args("packagesize");
         $content = Req::args("content");
         $downloadurl = Req::args("downloadurl");
+        $enforce = Filter::int(Req::args("enforce"));
         $createtime = time();
         $model = new Model("version");
         
         if($id){
             $version=$model->where('id='.$id)->find();
             if($version){
-                    $model->data(array('platform'=>$platform,'oldversion'=>$oldversion,'newversion'=>$newversion,'packagesize'=>$packagesize,'content'=>$content,'downloadurl'=>$downloadurl,'createtime'=>$createtime))->where('id='.$id)->update();
+                    $model->data(array('platform'=>$platform,'oldversion'=>$oldversion,'newversion'=>$newversion,'packagesize'=>$packagesize,'content'=>$content,'downloadurl'=>$downloadurl,'createtime'=>$createtime,'enforce'=>$enforce))->where('id='.$id)->update();
                     Log::op($this->manager['id'], "修改版本", "管理员[" . $this->manager['name'] . "]:修改了版本[id] " . $id . " 的信息");
                 
             }
