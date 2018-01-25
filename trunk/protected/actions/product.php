@@ -827,7 +827,6 @@ class ProductAction extends Controller {
             $goods['quota_num'] = $goods['quota_count'];
             unset($goods['quota_count']);
             $goods['order_num'] = $goods['order_count'];
-            unset($goods['order_count']);
             $goods['send_point'] = '0.00';
             $goods['price'] = sprintf("%.2f",$set['cash']);
             $goods['description'] = '';
@@ -836,6 +835,7 @@ class ProductAction extends Controller {
             $goods['end_time'] = $goods['end_date'];
             unset($goods['end_date']);
             $goods['goods_num'] = $goods['order_count'];
+            unset($goods['order_count']);
             $goods['wants'] = '';
             $goods['wants_num'] = '0';
             $goods['tag'] = $goods['title'];
