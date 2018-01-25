@@ -374,7 +374,19 @@ class IndexAction extends Controller {
 
     //ios版本更新检测
     public function version_update(){
+        $current_version = Req::args("current_version");
+        if(!$current_version){
+            $this->code = 1216;
+            return;
+        }
+        $str = str_replace('.', '', $current_version);
         $version = $this->model->table("version")->fields('enforce,newversion,packagesize,downloadurl,content')->where("binary platform ='ios'")->order("id desc")->find();
+        if($version){
+            $newversion_str = str_replace('.', '', $version['newversion']);
+            if($str>=$newversion_str){
+                $version['enforce'] = 0;
+            }    
+        }
         $this->code =0;
         $this->content = $version;
     }
