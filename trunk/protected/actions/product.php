@@ -822,6 +822,23 @@ class ProductAction extends Controller {
                 unset($attrs, $_attrs);
             }
             $skumap = array_values($skumap);
+            $goods['max_num'] = $goods['max_sell_count'];
+            unset($goods['max_sell_count']);
+            $goods['quota_num'] = $goods['quota_count'];
+            unset($goods['quota_count']);
+            $goods['order_num'] = $goods['order_count'];
+            unset($goods['order_count']);
+            $goods['send_point'] = '0.00';
+            $goods['price'] = sprintf("%.2f",$set['cash']);
+            $goods['description'] = '';
+            $goods['start_time'] = $goods['start_date'];
+            unset($goods['start_date']);
+            $goods['end_time'] = $goods['end_date'];
+            unset($goods['end_date']);
+            $goods['goods_num'] = $goods['order_count'];
+            $goods['wants'] = '';
+            $goods['wants_num'] = '0';
+            $goods['tag'] = $goods['title'];
             $goods['imgs'] = array_values(unserialize($goods['imgs']));
             $goods['specs'] = array_values(unserialize($goods['specs']));
             foreach ($goods['specs'] as $k => &$v) {
