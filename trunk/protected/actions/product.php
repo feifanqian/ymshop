@@ -495,8 +495,10 @@ class ProductAction extends Controller {
         $result2 = $this->model->table('pointflash_sale')->data(array('is_end'=>1))->where("is_end=0 and end_date < '$now'")->update();
         
         $first = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.end_time asc")->join("left join goods as go on gb.goods_id = go.id")->findPage(1,1);
-        $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->where("gb.start_date<'$now' and gb.end_date>'$now'")->findAll();
-        $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->where("gb.start_time<'$now' and gb.end_time>'$now'")->findAll();
+        // $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->where("gb.start_date<'$now' and gb.end_date>'$now'")->findAll();
+        // $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->where("gb.start_time<'$now' and gb.end_time>'$now'")->findAll();
+        $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->findAll();
+        $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->findAll();
         if($list1){
             foreach($list1 as $k=>$v){
                 $list1[$k]['tag'] = $v['title'];
