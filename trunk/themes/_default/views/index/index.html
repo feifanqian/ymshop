@@ -129,7 +129,7 @@
 
 </div>
 {if:$pointflash_count>0 or $flash_count>0}
-{set:$limit_count = 3-$pointflash_count}
+{set:$limit_count = $pointflash_count<=3?3-$pointflash_count:0}
 <div class="top-show container">
     
     <div class="tab">
