@@ -495,8 +495,8 @@ class ProductAction extends Controller {
         $result2 = $this->model->table('pointflash_sale')->data(array('is_end'=>1))->where("is_end=0 and end_date < '$now'")->update();
         
         $first = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.end_time asc")->join("left join goods as go on gb.goods_id = go.id")->findPage(1,1);
-        $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->findAll();
-        $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->findAll();
+        $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->where("gb.start_date<'$now' and gb.end_date>'$now'")->findAll();
+        $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->where("gb.start_time<'$now' and gb.end_time>'$now'")->findAll();
         if($list1){
             foreach($list1 as $k=>$v){
                 $list1[$k]['tag'] = $v['title'];
@@ -1057,27 +1057,79 @@ class ProductAction extends Controller {
     
     public function next_flash(){
         $page = Filter::int(Req::args("page"));
+        if(!$page){
+            $page = 1;
+        }
         $page = $page < 0 ? 1 : $page;
-        $page_size = 10;
-        $next = date('Y-m-d 00:00:00',  strtotime('+1 day'));
         $now  = date('Y-m-d H:i:s');
-        $list = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.start_time asc")->join("left join goods as go on gb.goods_id = go.id")->where("gb.start_time between '$now' and '$next'")->findPage($page, $page_size);
-        unset($list['html']);
-        if ($list['data']) {
-            foreach ($list['data'] as $k => &$v) {
+        //更新状态
+        $result1 = $this->model->table('flash_sale')->data(array('is_end'=>1))->where("is_end=0 and end_time < '$now'")->update();
+        $result2 = $this->model->table('pointflash_sale')->data(array('is_end'=>1))->where("is_end=0 and end_date < '$now'")->update();
+        
+        $first = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.end_time asc")->join("left join goods as go on gb.goods_id = go.id")->findPage(1,1);
+        $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->where("gb.start_date>'$now'")->findAll();
+        $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->where("gb.start_time>'$now'")->findAll();
+        if($list1){
+            foreach($list1 as $k=>$v){
+                $list1[$k]['tag'] = $v['title'];
+                $list1[$k]['max_num'] = $v['max_sell_count'];
+                $list1[$k]['start_time'] = $v['start_date'];
+                $list1[$k]['end_time'] = $v['end_date'];
+                $list1[$k]['order_num'] = $v['order_count'];
+                $list1[$k]['quota_num'] = $v['quota_count'];
+                $set = current(unserialize($v['price_set']));
+                $list1[$k]['price'] = sprintf("%.2f",$set['cash']);
+                $list1[$k]['send_point'] = '0.00';
+                $list1[$k]['description'] = '';
+                $list1[$k]['goods_num'] = $v['max_sell_count'];
+                $list1[$k]['wants'] = '';
+                $list1[$k]['wants_num'] = '0';
+                $list1[$k]['cost_point'] = $set['point'];
+                $list1[$k]['flash_type'] = 'point';
+                unset($list1[$k]['max_sell_count']);
+                unset($list1[$k]['start_date']);
+                unset($list1[$k]['end_date']);
+                unset($list1[$k]['order_count']);
+                unset($list1[$k]['quota_count']);
+                unset($list1[$k]['price_set']);
+            }
+        }
+        if($list2){
+            foreach($list2 as $k=>$v){
+                $list2[$k]['cost_point'] = '0.00';
+                $list2[$k]['flash_type'] = 'cash';
+            }
+        }
+        $list = array_merge($list1,$list2);
+        $total=count($list);//总条数  
+        $num=10;//每页显示条数  
+        
+        $list = array_slice($list, ($page-1)*$num, $num);
+        
+        if ($list) {
+            foreach ($list as $k => &$v) {
                 $v['imgs'] = array_values(unserialize($v['imgs']));
                 unset($v['specs'], $v['attrs'], $v['content']);
-}
+            }
         }
+        $newpage = array(
+            'total'=>$total,
+            'totalPage'=>ceil($total/$num),
+            'pageSize'=>$num,
+            'page'=>$page
+            );
         $this->code = 0;
         $this->content = array(
-            'flashlist' => $list
-        );
-        if(isset($list['data'][0]['start_time'])){
-            $this->content['start_time'] = $list['data'][0]['start_time'];
+            'flashlist' => array(
+                 'data'=>$list,
+                 'page'=>$newpage
+                ),
+            );
+        if(isset($first['data'][0]['end_time'])){
+            $this->content['end_time'] = $first['data'][0]['end_time'];
             $this->content['now'] = date('Y-m-d H:i:s');
         }else{
-            $this->content['start_time'] = date('Y-m-d H:i:s');
+            $this->content['end_time'] = date('Y-m-d H:i:s');
             $this->content['now'] = date('Y-m-d H:i:s');
         }
     }
