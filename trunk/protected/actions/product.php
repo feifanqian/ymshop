@@ -1125,11 +1125,11 @@ class ProductAction extends Controller {
                  'page'=>$newpage
                 ),
             );
-        if(isset($first['data'][0]['end_time'])){
-            $this->content['end_time'] = $first['data'][0]['end_time'];
+        if(isset($first['data'][0]['start_time'])){
+            $this->content['start_time'] = $first['data'][0]['start_time'];
             $this->content['now'] = date('Y-m-d H:i:s');
         }else{
-            $this->content['end_time'] = date('Y-m-d H:i:s');
+            $this->content['start_time'] = date('Y-m-d H:i:s');
             $this->content['now'] = date('Y-m-d H:i:s');
         }
     }
