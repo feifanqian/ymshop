@@ -291,7 +291,8 @@ class AjaxController extends Controller {
     }
 
     private function _AreaInits($id, $level = '0') {
-        $result = $this->model->table('areas')->where("parent_id=" . $id)->order('sort')->findAll();
+        // $result = $this->model->table('areas')->where("parent_id=" . $id)->order('sort')->findAll();
+        $result = $this->model->table('region')->where("parent_id=" . $id)->order('id desc')->findAll();
         $list = array();
         if ($result) {
 
