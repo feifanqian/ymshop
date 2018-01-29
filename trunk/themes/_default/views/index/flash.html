@@ -15,7 +15,7 @@
                     {if:isset($item['order_num'])}
                     <a href="{url:/index/flashbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],200,200,'fwfh')}" ></a>
                     {else:}
-                    <a href="{url:/index/flashbuy1/id/$item[gid]}"><img src="{echo:Common::thumb($item['img'],200,200,'fwfh')}" ></a>
+                    <a href="{url:/index/pointflash/id/$item[gid]}"><img src="{echo:Common::thumb($item['img'],200,200,'fwfh')}" ></a>
                     {/if}
                     {if:isset($item['order_num'])}
                     <span class="limited" style=" display: block;position: absolute;background: red;color: white;bottom: 10px;right: 0;padding: 0 5px;">限量：{$item['max_num']}份</span></dt>
@@ -26,7 +26,7 @@
                     {if:isset($item['order_num'])}
                     <a href="{url:/index/flashbuy/id/$item[id]}">{$item['name']}</a>
                     {else:}
-                    <a href="{url:/index/flashbuy1/id/$item[gid]}">{$item['name']}</a>
+                    <a href="{url:/index/pointflash/id/$item[gid]}">{$item['name']}</a>
                     {/if}
                     </dd>
                     {if:isset($item['price'])}
@@ -39,7 +39,7 @@
                     <dd class="flashshoping">{if:$item['is_end']==0}<a class="flashbtn btn-main" href="{url:/index/flashbuy/id/$item[id]}">立即抢购</a>{else:}
                         <span class="flashbtn disabled btn-gray" style="padding: 5px 15px;">明天再来</span>{/if}</dd>
                     {else:}
-                    <dd class="flashshoping">{if:$item['is_end']==0}<a class="flashbtn btn-main" href="{url:/index/flashbuy1/id/$item[gid]}">立即抢购</a>{else:}
+                    <dd class="flashshoping">{if:$item['is_end']==0}<a class="flashbtn btn-main" href="{url:/index/pointflash/id/$item[gid]}">立即抢购</a>{else:}
                         <span class="flashbtn disabled btn-gray" style="padding: 5px 15px;">明天再来</span>{/if}</dd>
                     {/if}     
                 </dl>
