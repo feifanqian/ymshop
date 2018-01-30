@@ -13,10 +13,10 @@ class PaymentController extends Controller {
         $this->arrayXml = new ArrayAndXml();
         $safebox = Safebox::getInstance();
         $this->user = $safebox->get('user');
-        $this->param = array();
-        $this->param['pfxpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
-        $this->param['businessgatecerpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/businessgate.cer";
-        $this->param['pfxpassword'] = "123456";
+        // $this->param = array();
+        // $this->param['pfxpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        // $this->param['businessgatecerpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/businessgate.cer";
+        // $this->param['pfxpassword'] = "123456";
     }
 
     public function checkRight($actionId) {
