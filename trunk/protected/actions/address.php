@@ -1094,7 +1094,9 @@ class AddressAction extends Controller
         $this->code = 0;
         // $this->content['lng'] = $lng;
         // $this->content['lat'] = $lat;
-        $this->content = $return;
+        $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        $content = file_get_contents($pfxpath);
+        $this->content = $content;
     }
 
     public function caculateFare(){
