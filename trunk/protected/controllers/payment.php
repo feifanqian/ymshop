@@ -13,6 +13,10 @@ class PaymentController extends Controller {
         $this->arrayXml = new ArrayAndXml();
         $safebox = Safebox::getInstance();
         $this->user = $safebox->get('user');
+        $this->param = array();
+        $this->param['pfxpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        $this->param['businessgatecerpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/businessgate.cer";
+        $this->param['pfxpassword'] = "123456";
     }
 
     public function checkRight($actionId) {
@@ -886,10 +890,7 @@ class PaymentController extends Controller {
 
     public function sign_encrypt($input)
     {
-        $this->param = array();
-        $this->param['pfxpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
-        $this->param['businessgatecerpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/businessgate.cer";
-        $this->param['pfxpassword'] = "123456";
+        
         $return = array('success' => 0, 'msg' => '', 'check' => '');
         $pkcs12 = file_get_contents($this->param['pfxpath']); //私钥
         if (openssl_pkcs12_read($pkcs12, $certs, $this->param['pfxpassword'])) {
@@ -1115,7 +1116,6 @@ class PaymentController extends Controller {
 
     public function sign_check($sign, $data)
     {
-        $this->param['businessgatecerpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/businessgate.cer";
         $publickeyFile = $this->param['businessgatecerpath']; //公钥
         $certificateCAcerContent = file_get_contents($publickeyFile);
         $certificateCApemContent = '-----BEGIN CERTIFICATE-----' . PHP_EOL . chunk_split(base64_encode($certificateCAcerContent), 64, PHP_EOL) . '-----END CERTIFICATE-----' . PHP_EOL;
