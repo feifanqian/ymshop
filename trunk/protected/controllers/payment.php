@@ -770,6 +770,361 @@ class PaymentController extends Controller {
             $this->redirect('pay_forms', false);
     }
 
+    public function yinpay(){
+        //第三方银盛支付
+           $payment_id = Filter::int(Req::args('payment_id'));
+           $order_no = Req::args('order_no');
+           $order_amount = Req::args('order_amount');
+           $randomstr=rand(1000000000000,9999999999999);
+           $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
+           if(!$seller_id || $seller_id==0){
+             $seller_id = Filter::int(Req::args('seller_ids'));
+           }
+           $user_id = $this->user['id'];
+           $invite=$this->model->table('invite')->where('invite_user_id='.$user_id)->find();
+           if($invite){
+               $invite_id=intval($invite['user_id']);//邀请人用户id
+           }else{
+               $invite_id=1;
+           }
+           Session::set('invite_id',$invite_id);
+           $user=$this->model->table('customer')->fields('mobile')->where('user_id='.$user_id)->find();
+           if($user){
+            $mobile=$user['mobile'];
+           }else{
+            $mobile='';
+           }
+           $accept_name = Session::get('openname');
+           $config = Config::getInstance()->get("district_set");
+           $data['type']=0;
+           $data['order_no'] = $order_no;
+           $data['user_id'] = $user_id;
+           $data['payment'] = $payment_id;
+           $data['status'] = 2;
+           $data['pay_status'] = 0;
+           $data['accept_name'] = $accept_name;
+           $data['mobile'] = $mobile;
+           $data['payable_amount'] = $order_amount;
+           $data['create_time'] = date('Y-m-d H:i:s');
+           $data['pay_time'] = date("Y-m-d H:i:s");
+           $data['handling_fee'] = round($order_amount*$config['handling_rate']/100,2);
+           $data['order_amount'] = $order_amount;
+           $data['real_amount'] = $order_amount;
+           $data['point'] = 0;
+           $data['voucher_id'] = 0;
+           $data['prom_id']=$invite_id;
+           $data['shop_ids']=$seller_id;
+           $model = new Model('order_offline');
+           $exist=$model->where('order_no='.$order_no)->find();
+           //防止重复生成同笔订单
+           if(!$exist){
+              $order_id=$model->data($data)->insert();
+           }else{
+              $order_id = $exist['id']; 
+           }
+
+           $myParams = array();
+            $myParams['business_code'] = '01000010';
+            $myParams['charset'] = 'utf-8';
+            $myParams['method'] = 'ysepay.online.jsapi.pay';
+            $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
+            $myParams['out_trade_no'] = $order_no;
+            $myParams['partner_id'] = 'shanghu_test';
+            $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_detail/id/{$order_id}';
+            $myParams['seller_id'] = 'shanghu_test';
+            $myParams['seller_name'] = '银盛支付商户测试公司';
+            $myParams['sign_type'] = 'RSA';
+            $myParams['subject'] = '支付测试';
+            $myParams['timeout_express'] = '1d';
+            $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+            $myParams['total_amount'] = $order_amount;
+            $myParams['version'] = '3.0';
+    //        网银直连需添加以下参数
+    //        $myParams['pay_mode']           = 'internetbank';
+    //        $myParams['bank_type']           = '';
+    //        $myParams['bank_account_type']           = 'personal';
+    //        $myParams['support_card_type']           = 'debit';
+            ksort($myParams);
+            $data = $myParams;
+            $signStr = "";
+            foreach ($myParams as $key => $val) {
+                $signStr .= $key . '=' . $val . '&';
+            }
+            $signStr = rtrim($signStr, '&');
+            $sign = $this->sign_encrypt(array('data' => $signStr));
+            $myParams['sign'] = trim($sign['check']);
+
+    
+        $this->assign('business_code',$myParams['business_code']);
+        $this->assign('charset',$myParams['charset']);
+        $this->assign('method',$myParams['method']);
+        $this->assign('notify_url',$myParams['notify_url']);
+        $this->assign('out_trade_no',$myParams['out_trade_no']);
+        $this->assign('partner_id',$myParams['partner_id']);
+        $this->assign('return_url',$myParams['return_url']);
+        $this->assign('seller_id',$myParams['seller_id']);
+        $this->assign('seller_name',$myParams['seller_name']);
+        $this->assign('sign_type',$myParams['sign_type']);
+        $this->assign('subject',$myParams['subject']);
+        $this->assign('timeout_express',$myParams['timeout_express']);
+        $this->assign('timestamp',$myParams['timestamp']);
+        $this->assign('total_amount',$myParams['total_amount']);
+        $this->assign('version',$myParams['version']);
+        $this->assign('sign',$myParams['sign']);
+
+           $payment = new Payment($payment_id);
+           $paymentPlugin = $payment->getPaymentPlugin();
+
+           $packData = $payment->getPaymentInfo('offline_order', $order_id);
+            // $packData = array_merge($extendDatas, $packData);
+            $sendData = $paymentPlugin->packData($packData);
+            $this->assign("paymentPlugin", $paymentPlugin);
+            $this->assign("sendData", $sendData);
+            $this->assign("offline",1);
+            $this->redirect('yinpay', false);
+    }
+
+    public function sign_encrypt($input)
+    {
+        $this->param = array();
+        $this->param['pfxpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        $this->param['businessgatecerpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/businessgate.cer";
+        $this->param['pfxpassword'] = "123456";
+        $return = array('success' => 0, 'msg' => '', 'check' => '');
+        $pkcs12 = file_get_contents($this->param['pfxpath']); //私钥
+        if (openssl_pkcs12_read($pkcs12, $certs, $this->param['pfxpassword'])) {
+            $privateKey = $certs['pkey'];
+            $publicKey = $certs['cert'];
+            $signedMsg = "";
+            if (openssl_sign($input['data'], $signedMsg, $privateKey, OPENSSL_ALGO_SHA1)) {
+                $return['success'] = 1;
+                $return['check'] = base64_encode($signedMsg);
+                $return['msg'] = base64_encode($input['data']);
+
+            }
+        }
+
+        return $return;
+    }
+
+    public function yinpay_callback(){
+       //返回的数据处理
+        @$sign = trim($_POST['sign']);
+        $result = $_POST;
+        unset($result['sign']);
+        ksort($result);
+        $url = "";
+        foreach ($result as $key => $val) {
+            if ($val) $url .= $key . '=' . $val . '&';
+        }
+        $data = trim($url, '&');
+        /*写入日志*/
+        $file = "./notify.txt";
+        /* 验证签名 仅作基础验证*/
+        if ($this->sign_check($sign, $data) == true) {
+            file_put_contents($file, "\r\n", FILE_APPEND);
+            file_put_contents($file, "Verify success!|notify|:" . $data . "|sign:" . $sign, FILE_APPEND);
+        } else {
+            file_put_contents($file, "\r\n", FILE_APPEND);
+            file_put_contents($file, "Validation failure!|notify|:" . $data . "|sign:" . $sign, FILE_APPEND);
+        }
+        /*
+
+           开发须知:
+
+           收到异步通知后,必须响应success给银盛,用于告诉银盛已成功接收到异步消息,
+           多次不返回success的商户银盛将不会往商户异步地址发送异步消息(并拉黑商户异步地址)
+
+
+         */
+        
+        $orderNo = $_POST['order_no'];
+            $money = $_POST['order_amount'];
+            $callbackData = array();
+            if (stripos($orderNo, 'promoter') !== false) {
+                $order = $this->model->table("district_order")->where("order_no ='" . $orderNo . "'")->find();
+                if ($order) {
+                    $payment_id = $order['payment_id'];
+                    if ($order['pay_status'] == 1) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    } else {
+                        DistrictLogic::getInstance()->promoterPayCallback($orderNo, $money, $payment_id, $callbackData);
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    }
+                } else {
+                    file_put_contents('district_payErr.txt', date("Y-m-d H:i:s") . "==promoter==\n" . json_encode($callbackData) . "\n", FILE_APPEND);
+                    exit;
+                }
+            } else if (stripos($orderNo, 'district') !== false) {
+                $district_id = intval(substr($orderNo, stripos($orderNo, 'district') + 8));
+                $district = new Model("district_apply");
+                $district_info = $district->where("id=$district_id")->find();
+                if (!empty($district_info)) {
+                    if ($district_info['pay_status'] == 1) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    } else {
+                        $payment_info = $payment->getPayment();
+                        $result = $district->where("id=" . $district_id)->data(array("pay_status" => 1, "payment_name" => $payment_info['name'], 'pay_time' => date("Y-m-d H:i:s")))->update();
+                        if ($result) {
+                            Common::autoPassDistrictApply($district_id);
+                            $paymentPlugin->asyncStop();
+                            exit;
+                        } else {
+                            file_put_contents('district_payErr.txt', date("Y-m-d H:i:s") . "==district ID:$district_id==\n" . json_encode($callbackData) . "\n", FILE_APPEND);
+                            exit;
+                        }
+                    }
+                } else {
+                    file_put_contents('district_payErr.txt', date("Y-m-d H:i:s") . "==district ID:$district_id==\n" . json_encode($callbackData) . "\n", FILE_APPEND);
+                    exit;
+                }
+            } else if (stripos($orderNo, 'recharge') !== false) {//充值方式
+                $recharge_no = substr($orderNo, stripos($orderNo, 'recharge') + 8);
+                $recharge_no = $recharge_no == "" ? 0 : $recharge_no;
+                $recharge = new Model('recharge');
+                $recharge_info = $recharge->where("recharge_no='{$recharge_no}'")->find();
+                if($recharge_info){
+                    switch ($recharge_info['payment_name']) {
+                        case '微信[JSAPI]':
+                            $payment_id = 6;
+                            break;
+                        case '微信[APP]':
+                            $payment_id = 7;
+                            break;
+                        case '支付宝[APP]':
+                            $payment_id = 16;
+                            break;
+                        case '银联手机控件支付':
+                            $payment_id = 14;
+                            break;        
+                        default:
+                            $payment_id = 6;
+                            break;
+                    }
+                    if (Order::recharge($recharge_no, $payment_id)) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    }
+                }   
+            } else if (stripos($orderNo, 'redbag') !== false) {//发送红包
+                $redbag = new Model('redbag');
+                $redbag_info = $redbag->where("order_no='{$orderNo}'")->find();
+                if($redbag_info){
+                    $ret = $redbag->data(array('pay_status'=>1))->where("order_no='{$orderNo}'")->update();
+                    if ($ret) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    }
+                }  
+            } else {
+                //如果是订单支付的话
+                $model = new Model();
+                $order_info = $model->table('order')->where("order_no='{$orderNo}'")->find();
+                $order_offline = $model->table('order_offline')->where("order_no='{$orderNo}'")->find();
+                if (!empty($order_info)) {
+                    $payment_id = $order_info['payment'];
+                    if ($order_info['type'] == 4 && $order_info['is_new'] == 0) {
+                        if ($order_info['otherpay_amount'] > $money) {
+                            file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
+                            exit;
+                        }
+                    } else if ($order_info['order_amount'] > $money) {
+                        file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
+                        exit;
+                    }
+                    $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
+                    if ($order_id) {
+                        $paymentPlugin->asyncStop();
+                        exit;
+                    } 
+                }elseif(!empty($order_offline)){
+                    $order_no = $orderNo;
+                     $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
+                        $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1,'pay_time'=>date('Y-m-d H:i:s')))->update();
+                        // $invite_id=Session::get('invite_id');
+                        $invite_id=$order['prom_id'];
+                        $seller_id=$order['shop_ids'];             
+                        if($invite_id==null){
+                            $invite_id=1;
+                        }
+                        if($seller_id==0){
+                            $seller_id=$invite_id;
+                        }
+                        // $promoter_id=Common::getFirstPromoter($order['user_id']);
+                        $exist=$this->model->table('balance_log')->where("order_no='{$order_no}'")->find();
+                        if(!$exist){
+                            //如果卖家是邀请人的话不参与分账
+                            if($seller_id!=$invite_id){
+                                $config = Config::getInstance()->get("district_set");
+                                $promoter = $this->model->table('district_promoter')->fields('base_rate')->where('user_id='.$seller_id)->find();
+                                if($promoter){
+                                    $amount = round($order['order_amount']*(100-$promoter['base_rate'])/100,2);
+                                }else{
+                                    $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
+                                }     
+                                $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
+                                Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
+                                Common::offlineBeneficial($order_no,$invite_id,$seller_id);
+                                $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('payable_amount'=>$amount))->update();
+                                $money = $amount;
+                            }else{
+                                $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
+                                 Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
+                                 $money = $order['order_amount'];
+                            }
+                             //微信公众号消息推送
+                                #*****************推送消息***************
+                                $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+                                $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+                                $token = $wechat->getAccessToken();
+                                $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$seller_id." and oauth_type='wechat'")->find();
+                                if($oauth_info){
+                                    $params = array(
+                                    'touser' => $oauth_info['open_id'],
+                                    'msgtype' => 'text',
+                                    "text" => array(
+                                            'content' => "亲爱的商家:{$oauth_info['open_name']},您获得商家消费收益{$money}元，请登录个人中心查看。"
+                                            )
+                                        );
+                                    $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
+                                }      
+                                #****************************************
+                             //APP极光推送
+                             if($order['type']==2 || $order['type']==3){
+                                  $type = 'offline_balance';
+                                  $content = "收款到账{$money}元";
+                                  $platform = 'all';
+                                  if (!$this->jpush) {
+                                          $NoticeService = new NoticeService();
+                                          $this->jpush = $NoticeService->getNotice('jpush');
+                                      }
+                                  $audience['alias'] = array($seller_id);
+                                  $this->jpush->setPushData($platform, $audience, $content, $type, "");
+                                  $this->jpush->push();
+                             }              
+                        }
+                }
+                
+            }
+        echo 'success';
+        exit;
+    }
+
+    public function sign_check($sign, $data)
+    {
+        $this->param['businessgatecerpath'] = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/businessgate.cer";
+        $publickeyFile = $this->param['businessgatecerpath']; //公钥
+        $certificateCAcerContent = file_get_contents($publickeyFile);
+        $certificateCApemContent = '-----BEGIN CERTIFICATE-----' . PHP_EOL . chunk_split(base64_encode($certificateCAcerContent), 64, PHP_EOL) . '-----END CERTIFICATE-----' . PHP_EOL;
+        // 签名验证
+        $success = openssl_verify($data, base64_decode($sign), openssl_get_publickey($certificateCApemContent), OPENSSL_ALGO_SHA1);
+
+        return $success;
+    }
+
     public function dopayss(){
         $payment_id = Filter::int(Req::args('payment_id'));
            $order_no = Req::args('order_no');
