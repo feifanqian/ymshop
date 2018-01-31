@@ -891,7 +891,6 @@ class PaymentController extends Controller {
 
     public function sign_encrypt($input)
     {
-        var_dump(123);die;
         // $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
         $pfxpath = "./protected/classes/yinpay/certs/shanghu_test.pfx";
         $pfxpassword = '123456';
@@ -902,6 +901,7 @@ class PaymentController extends Controller {
             $publicKey = $certs['cert'];
             $signedMsg = "";
             if (openssl_sign($input['data'], $signedMsg, $privateKey, OPENSSL_ALGO_SHA1)) {
+                var_dump(123);die;
                 $return['success'] = 1;
                 $return['check'] = base64_encode($signedMsg);
                 $return['msg'] = base64_encode($input['data']);
