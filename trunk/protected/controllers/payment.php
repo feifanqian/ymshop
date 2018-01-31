@@ -890,10 +890,11 @@ class PaymentController extends Controller {
 
     public function sign_encrypt($input)
     {
-        
+        $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        $pfxpassword = '123456';
         $return = array('success' => 0, 'msg' => '', 'check' => '');
-        $pkcs12 = file_get_contents($this->param['pfxpath']); //私钥
-        if (openssl_pkcs12_read($pkcs12, $certs, $this->param['pfxpassword'])) {
+        $pkcs12 = file_get_contents($pfxpath); //私钥
+        if (openssl_pkcs12_read($pkcs12, $certs, $pfxpassword)) {
             $privateKey = $certs['pkey'];
             $publicKey = $certs['cert'];
             $signedMsg = "";
