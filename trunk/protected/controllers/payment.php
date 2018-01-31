@@ -890,7 +890,8 @@ class PaymentController extends Controller {
 
     public function sign_encrypt($input)
     {
-        $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        // $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        $pfxpath = "./protected/classes/yinpay/certs/shanghu_test.pfx";
         $pfxpassword = '123456';
         $return = array('success' => 0, 'msg' => '', 'check' => '');
         $pkcs12 = file_get_contents($pfxpath); //私钥
@@ -1117,7 +1118,8 @@ class PaymentController extends Controller {
 
     public function sign_check($sign, $data)
     {
-        $publickeyFile = $this->param['businessgatecerpath']; //公钥
+        $businessgatecerpath = "./protected/classes/yinpay/certs/businessgate.cer";
+        $publickeyFile = $businessgatecerpath; //公钥
         $certificateCAcerContent = file_get_contents($publickeyFile);
         $certificateCApemContent = '-----BEGIN CERTIFICATE-----' . PHP_EOL . chunk_split(base64_encode($certificateCAcerContent), 64, PHP_EOL) . '-----END CERTIFICATE-----' . PHP_EOL;
         // 签名验证
