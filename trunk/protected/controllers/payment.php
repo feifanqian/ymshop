@@ -901,7 +901,6 @@ class PaymentController extends Controller {
             $publicKey = $certs['cert'];
             $signedMsg = "";
             if (openssl_sign($input['data'], $signedMsg, $privateKey, OPENSSL_ALGO_SHA1)) {
-                var_dump(123);die;
                 $return['success'] = 1;
                 $return['check'] = base64_encode($signedMsg);
                 $return['msg'] = base64_encode($input['data']);
