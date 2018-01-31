@@ -859,7 +859,20 @@ class PaymentController extends Controller {
             $sign = $this->sign_encrypt(array('data' => $signStr));
             $myParams['sign'] = trim($sign['check']);
 
-    
+        $biz_content_arr = array(
+            "out_trade_no"=>$order_no,
+            "subject"=>$myParams['subject'],
+            "total_amount"=>$order_amount,
+            "seller_id"=>$myParams['seller_id'],
+            "seller_name"=>$myParams['seller_name'],
+            "timeout_express"=>$myParams['timeout_express'],
+            "business_code"=>$myParams['business_code'],
+            "sub_openid"=>'okZq1wQxLuLVnvPOlviRzjTcx1FM',
+            "user_code" => "shanghu_test",
+            "user_name" => "银盛支付商户测试公司"
+        );
+        $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+
         $this->assign('business_code',$myParams['business_code']);
         $this->assign('charset',$myParams['charset']);
         $this->assign('method',$myParams['method']);
@@ -876,6 +889,7 @@ class PaymentController extends Controller {
         $this->assign('total_amount',$myParams['total_amount']);
         $this->assign('version',$myParams['version']);
         $this->assign('sign',$myParams['sign']);
+        $this->assign('biz_content',$myParams['biz_content']);
 
            $payment = new Payment($payment_id);
            $paymentPlugin = $payment->getPaymentPlugin();
