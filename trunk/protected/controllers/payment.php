@@ -878,7 +878,7 @@ class PaymentController extends Controller {
         // echo "<pre>";
         // die;
         $url = 'https://mertest.ysepay.com/openapi_gateway/gateway.do';
-        $ret = Common::httpRequest($url,'POST',$myParams);.
+        $ret = Common::httpRequest($url,'POST',$myParams);
         var_dump($ret);die;
         $this->assign('business_code',$biz_content_arr['business_code']);
         $this->assign('charset',$myParams['charset']);
