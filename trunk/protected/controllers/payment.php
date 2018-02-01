@@ -847,12 +847,12 @@ class PaymentController extends Controller {
             
             $biz_content_arr = array(
             "out_trade_no"=>$order_no,
-            "subject"=>$myParams['subject'],
+            "subject"=>'支付测试',
             "total_amount"=>$order_amount,
-            "seller_id"=>$myParams['seller_id'],
-            "seller_name"=>$myParams['seller_name'],
-            "timeout_express"=>$myParams['timeout_express'],
-            "business_code"=>$myParams['business_code'],
+            "seller_id"=>'shanghu_test',
+            "seller_name"=>'银盛支付商户测试公司',
+            "timeout_express"=>'1d',
+            "business_code"=>'01000010',
             "sub_openid"=>'okZq1wQxLuLVnvPOlviRzjTcx1FM',
             // "user_code" => "shanghu_test",
             // "user_name" => "银盛支付商户测试公司"
