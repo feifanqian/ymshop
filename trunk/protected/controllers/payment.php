@@ -854,8 +854,8 @@ class PaymentController extends Controller {
             "timeout_express"=>$myParams['timeout_express'],
             "business_code"=>$myParams['business_code'],
             "sub_openid"=>'okZq1wQxLuLVnvPOlviRzjTcx1FM',
-            "user_code" => "shanghu_test",
-            "user_name" => "银盛支付商户测试公司"
+            // "user_code" => "shanghu_test",
+            // "user_name" => "银盛支付商户测试公司"
         );
         $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
     //        网银直连需添加以下参数
