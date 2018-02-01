@@ -910,6 +910,7 @@ class PaymentController extends Controller {
         $pfxpassword = '123456';
         $return = array('success' => 0, 'msg' => '', 'check' => '');
         $pkcs12 = file_get_contents($pfxpath); //私钥
+        var_dump($pkcs12);die;
         if (openssl_pkcs12_read($pkcs12, $certs, $pfxpassword)) {
             $privateKey = $certs['pkey'];
             $publicKey = $certs['cert'];
