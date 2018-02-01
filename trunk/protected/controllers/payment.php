@@ -872,10 +872,10 @@ class PaymentController extends Controller {
             $signStr = rtrim($signStr, '&');
             $sign = $this->sign_encrypt(array('data' => $signStr));
             $myParams['sign'] = trim($sign['check']);
-        echo "<pre>";
-        print_r($myParams);
-        echo "<pre>";
-        die;
+        // echo "<pre>";
+        // print_r($myParams);
+        // echo "<pre>";
+        // die;
         $this->assign('business_code',$myParams['business_code']);
         $this->assign('charset',$myParams['charset']);
         $this->assign('method',$myParams['method']);
