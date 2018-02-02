@@ -36,7 +36,8 @@ class AdminController extends Controller {
     public function noRight() {
         $this->layout = 'blank';
         if ($this->is_ajax_request()) {
-            echo JSON::encode(array('status' => 'fail', 'msg' => '123'));
+            // echo JSON::encode(array('status' => 'fail', 'msg' => '没有该项操作权限!'));
+            continue;
         } else {
             $this->redirect("noright");
         }
