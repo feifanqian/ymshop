@@ -6,6 +6,7 @@ class AdminController extends Controller {
     private $top = null;
     public $needRightActions = array('*' => true);
     private $manager;
+    private $current_act;
 
     public function init() {
         //只允许从mana进入
@@ -27,6 +28,7 @@ class AdminController extends Controller {
         $this->manager = $this->safebox->get('manager');
         $this->assign('manager', $this->safebox->get('manager'));
         $this->assign('upyuncfg', Config::getInstance()->get("upyun"));
+        $this->current_act = Req::get('con').'/'.$nav_act;
 
         $currentNode = $menu->currentNode();
         if (isset($currentNode['name']))
@@ -36,6 +38,7 @@ class AdminController extends Controller {
     public function noRight() {
         $this->layout = 'blank';
         if ($this->is_ajax_request()) {
+            var_dump($this->current_act);
             echo JSON::encode(array('status' => 'fail', 'msg' => '没有该项操作权限!'));
         } else {
             $this->redirect("noright");
