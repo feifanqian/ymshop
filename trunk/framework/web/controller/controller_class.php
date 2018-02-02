@@ -472,7 +472,7 @@ class Controller extends Object {
         if ($id === '')
             $actionId = $this->defaultAction;
         //统一拦截权限控制
-        var_dump($id);
+        // var_dump($id);
         if ($this->checkRight($id) == false ) {
             $this->noRight();
         } else {
