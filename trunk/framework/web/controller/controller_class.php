@@ -473,7 +473,7 @@ class Controller extends Object {
             $actionId = $this->defaultAction;
         //统一拦截权限控制
         if ($this->checkRight($id) == false) {
-            $this->noRight();
+            // $this->noRight();
         } else {
             //如果控制器直接定义了方式
             if (method_exists($this, $id) || Chips::isReWrite($this, '__call')) {
