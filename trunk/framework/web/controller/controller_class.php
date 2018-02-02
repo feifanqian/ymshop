@@ -74,7 +74,6 @@ class Controller extends Object {
         } else if (!Validator::name($id, 1)) {
             Tiny::Msg($this, "error");
         }
-
         //防止页面的循环调用
         if (!$this->module->popRequestStack($this->id . '@' . $id))
             $this->module->pushRequestStack($this->id . '@' . $id);
@@ -239,10 +238,12 @@ class Controller extends Object {
                 $roles = new Roles($manager['roles']);
                 $result = $roles->getRoles();
                 //var_dump($result);exit();
-                if (isset($result['rights']))
+                if (isset($result['rights'])){
                     $rights = $result['rights'];
-                else
+                }
+                else{
                     $rights = '';
+                }
                 if (stripos($rights, $code) !== false) {
                     $this->autoActionRight = true;
                     return true;
@@ -472,7 +473,6 @@ class Controller extends Object {
         if ($id === '')
             $actionId = $this->defaultAction;
         //统一拦截权限控制
-        // var_dump($id);
         if ($this->checkRight($id) == false ) {
             $this->noRight();
         } else {
@@ -535,7 +535,7 @@ class Controller extends Object {
         $old_args_num = count($args);
         $con = $this->getId();
         $act = (Req::get('act') == null ? $this->defaultAction : Req::get('act'));
-
+         
         $controllerId = $con;
         //if(stripos($operator, "http://")===false){
         if (preg_match("/https?:\/\//i", $operator) == 0) {
@@ -554,10 +554,12 @@ class Controller extends Object {
                         }
                     }
                     $operator = $operator[1];
-                } else
+                } else{
                     $operator = $operator[0];
-            } else
+                }
+            } else{
                 $operator = $act;
+            }
         }
         //如果请求的action 和新的跳转是同一action则进入到对应的视图Action
         if ($act == $operator && $controllerId == $con) {
