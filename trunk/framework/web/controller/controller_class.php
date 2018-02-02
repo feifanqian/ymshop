@@ -473,7 +473,7 @@ class Controller extends Object {
             $actionId = $this->defaultAction;
         //统一拦截权限控制
         if ($this->checkRight($id) == false) {
-            var_dump($actionId);die;
+            var_dump($this->defaultAction);die;
             $this->noRight();
         } else {
             //如果控制器直接定义了方式
