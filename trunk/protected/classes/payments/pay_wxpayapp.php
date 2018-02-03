@@ -130,8 +130,14 @@ class pay_wxpayapp extends PaymentPlugin {
         }
         $order = new Model("order");
         $out_trade_no = $order->where("order_no=$order_no")->fields("out_trade_no,order_amount")->find();
-        if(empty($out_trade_no)||$out_trade_no['out_trade_no']==""){
-            return array('status'=>'fail','msg'=>"out_trade_no未找到");
+        if(empty($out_trade_no)){
+            return array('status'=>'fail','msg'=>"订单未找到");
+        }
+        if($out_trade_no['out_trade_no']==""){
+            $out_trade_no['out_trade_no'] = $out_trade_no['trading_info'];
+            if($out_trade_no['out_trade_no']==""){
+                return array('status'=>'fail','msg'=>"out_trade_no未找到");
+            } 
         }
         $refund_no = 'R'.$out_trade_no['out_trade_no'];
 	$total_fee = $refund_amount*100;
