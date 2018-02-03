@@ -129,7 +129,7 @@ class pay_wxpayapp extends PaymentPlugin {
             return array('status'=>'fail','msg'=>"退款参数错误");
         }
         $order = new Model("order");
-        $out_trade_no = $order->where("order_no=$order_no")->fields("out_trade_no,order_amount")->find();
+        $out_trade_no = $order->where("order_no=$order_no")->fields("out_trade_no,order_amount,trading_info")->find();
         if(empty($out_trade_no)){
             return array('status'=>'fail','msg'=>"订单未找到");
         }
