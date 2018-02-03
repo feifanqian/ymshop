@@ -151,6 +151,7 @@ class pay_wxpayapp extends PaymentPlugin {
         $input->SetOp_user_id(WxPayConfig::MCHID);
         //$input->SetRefund_account('REFUND_SOURCE_RECHARGE_FUNDS');//使用余额退款
 	$result = WxPayApi::refund($input);
+    var_dump($result);exit();
         $refund = new Model("refund");
         if($result['return_code']=="SUCCESS" && $result['result_code']=="SUCCESS"){
             //查询是退款到哪里
