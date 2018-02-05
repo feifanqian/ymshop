@@ -464,19 +464,7 @@
 </div>
 </form>
 <script type="text/javascript">
-var form =  new Form();
-// var category_id = {$category_id};
-var category_idss = $("#category_idss").val();
-console.log(category_idss);
-form.setValue('shop_id','{$shop_id}');
-// form.setValue('category_id','{$category_id}');
-form.setValue('category_idss',category_idss);
-form.setValue('type_id','{$type_id}');
-form.setValue('brand_id','{$brand_id}');
-form.setValue('is_online','{$is_online}');
-{if:isset($personal_shop_id)&&$personal_shop_id!=""}
-form.setValue('personal_shop_id','{$personal_shop_id}');
-{/if}
+
 $("#type_id").change();
 
 {if:isset($products_info)}
@@ -776,4 +764,21 @@ $("#category_ids").on('change',function(){
         });
     }
 });
+$("#category_ids").on('change',function(){
+  var category_idss = $("#category_idss").val();
+  console.log(category_idss);
+});  
+var form =  new Form();
+// var category_id = {$category_id};
+var category_idss = $("#category_idss").val();
+console.log(category_idss);
+form.setValue('shop_id','{$shop_id}');
+// form.setValue('category_id','{$category_id}');
+form.setValue('category_idss',category_idss);
+form.setValue('type_id','{$type_id}');
+form.setValue('brand_id','{$brand_id}');
+form.setValue('is_online','{$is_online}');
+{if:isset($personal_shop_id)&&$personal_shop_id!=""}
+form.setValue('personal_shop_id','{$personal_shop_id}');
+{/if}
 </script>
