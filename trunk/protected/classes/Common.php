@@ -1517,7 +1517,16 @@ class Common {
     static function getPreviousLevel($id=0){
        $model = new Model('goods_category');
        $category = $model->where('id='.$id)->find();
-       $pid = $category?$category['parent_id']:0;
+       if($category){
+         if($category['parent_id']!=0){
+            $pid = $category['parent_id'];
+           }else{
+             $pid = $id;
+           }
+       }else{
+        $pid = $id;
+       }
+       
        return $pid; 
     } 
 }

@@ -47,8 +47,9 @@
               <option value="0">选择分类</option>
               {set:$id=isset($id)?$id:0;}
               {set:$pid = Common::getPreviousLevel($category_id)}
+              {set:$pids = Common::getPreviousLevel($pid)}
               {query:name=goods_category where = parent_id eq 0 }
-                    <option value="{$item['id']}" {if:$category_id==$item['id']}checked='checked'{else:$pid==$item['id']}checked='checked'{/if}>{$item['name']}</option>
+                    <option value="{$item['id']}" {if:$category_id==$item['id']}checked='checked'{else:$pids==$item['id']}checked='checked'{/if}>{$item['name']}</option>
               {/query}
             </select>
             <label></label>
@@ -76,7 +77,7 @@
               <option value="0">请选择类型...</option>
               {set:$id=isset($id)?$id:0;}
               {query:name=goods_type}
-              <option value="{$item['id']}" {if:$type_id==$item['id']}checked='checked'{/if} >{$item['name']}</option>
+              <option value="{$item['id']}" >{$item['name']}</option>
               {/query}
             </select>
             <label></label>
@@ -90,7 +91,7 @@
             <select name="brand_id">
               <option value="0">请选择品牌...</option>
               {query:name=brand}
-              <option value="{$item['id']}" {if:$brand_id==$item['id']}checked='checked'{/if}>{$item['name']}</option>
+              <option value="{$item['id']}" >{$item['name']}</option>
               {/query}
             </select>
             <label></label>
