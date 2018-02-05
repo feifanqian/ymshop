@@ -57,15 +57,23 @@
             <label></label>
             <select name="category_ids" id="category_ids">
                 <option value="0">==二级分类==</option>
+                {if:$pid!=$pids}
                 {query:name=goods_category where = parent_id gt 0 }
                     <option value="{$item['id']}" {if:$pid==$item['id']}selected='selected'{/if}>{$item['name']}</option>
                 {/query}
+                {else:}
+                {query:name=goods_category where = parent_id gt 0 }
+                    <option value="{$item['id']}" {if:$category_id==$item['id']}selected='selected'{/if}>{$item['name']}</option>
+                {/query}
+                {/if}
             </select>
               <select name="category_idss" id="category_idss">
                   <option value="0">==三级分类==</option>
+                  {if:$pid!=$pids}
                   {query:name=goods_category where = parent_id gt 0 }
                     <option value="{$item['id']}" {if:$category_id==$item['id']}selected='selected'{/if}>{$item['name']}</option>
                   {/query}
+                  {/if}
               </select>
           </dd>
         </dl>
