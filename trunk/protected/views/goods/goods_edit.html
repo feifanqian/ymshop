@@ -8,6 +8,10 @@
   {if:isset($id)}
   <input type="hidden" name="id" value="{$id}">
   {/if}
+  {set:$pid = Common::getPreviousLevel($category_id)}
+  {set:$pids = Common::getPreviousLevel($pid)}
+  <input type="hidden" name="pid" value="{$pid}">
+  <input type="hidden" name="pids" value="{$pids}">
   <input type="hidden" name="category_type" value="">
   <div id="obj_form" class="form2 tab">
     <!-- tab 头 start -->
@@ -46,18 +50,15 @@
             <select name="category_id" id="category_id" pattern="[1-9]\d*" alt="选择分类，若无分类请先创建。">
               <option value="0">选择分类</option>
               {set:$id=isset($id)?$id:0;}
-              {set:$pid = Common::getPreviousLevel($category_id)}
-              {set:$pids = Common::getPreviousLevel($pid)}
               {query:name=goods_category where = parent_id eq 0 }
-                    <option value="{$item['id']}" {if:$category_id==$item['id']}selected='selected'{else:$pids==$item['id']}selected='selected'{/if}>{$item['name']}</option>
+                    <option value="{$item['id']}" {if:$pids==$item['id']}selected='selected'{/if}>{$item['name']}</option>
               {/query}
             </select>
             <label></label>
             <select name="category_ids" id="category_ids">
                 <option value="0">==二级分类==</option>
-                {set:$pid = Common::getPreviousLevel($category_id)}
                 {query:name=goods_category where = parent_id gt 0 }
-                    <option value="{$item['id']}" {if:$category_id==$item['id']}selected='selected'{else:$pid==$item['id']}selected='selected'{/if}>{$item['name']}</option>
+                    <option value="{$item['id']}" {if:$pid==$item['id']}selected='selected'{/if}>{$item['name']}</option>
                 {/query}
             </select>
               <select name="category_idss" id="category_idss">
