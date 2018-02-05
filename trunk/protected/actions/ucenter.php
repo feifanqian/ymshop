@@ -108,7 +108,7 @@ class UcenterAction extends Controller {
         $account = Filter::sql(Req::post('account'));
         $passWord = Req::post('password');
         $model = $this->model->table("customer as cu");
-        $obj = $model->join("left join user as us on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("cu.mobile='$account' and cu.status=1")->find();
+        $obj = $model->join("left join user as us on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("cu.mobile='$account'")->find();
         if ($obj) {
             if ($obj['status'] == 1) {
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
