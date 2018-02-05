@@ -448,7 +448,7 @@ class GoodsController extends Controller {
         $id = intval(Req::args("id"));
         $gdata = Req::args();
         $gdata['name'] = Filter::sql($gdata['name']);
-        var_dump($_POST);exit();
+        // var_dump($_POST);exit();
         if (is_array($gdata['pro_no']))
             $gdata['pro_no'] = $gdata['pro_no'][0];
         if ($id == 0) {
