@@ -465,9 +465,11 @@
 </form>
 <script type="text/javascript">
 var form =  new Form();
-// var category_id = $category_idss!=0?$category_idss:($category_ids!=0?$category_ids:$category_id);
+// var category_id = {$category_id};
+var category_id = $("input[name='category_idss']").val();
+// console.log(category_id);
 form.setValue('shop_id','{$shop_id}');
-form.setValue('category_id','{$category_idss}');
+form.setValue('category_id',category_id);
 form.setValue('type_id','{$type_id}');
 form.setValue('brand_id','{$brand_id}');
 form.setValue('is_online','{$is_online}');
