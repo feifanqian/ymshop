@@ -1093,11 +1093,11 @@ class AddressAction extends Controller
         $lng = $str[0];
         $lat = $str[1];
         $this->code = 0;
-        // $this->content['lng'] = $lng;
-        // $this->content['lat'] = $lat;
-        $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
-        $content = file_get_contents($pfxpath);
-        $this->content = $content;
+        $this->content['lng'] = $lng;
+        $this->content['lat'] = $lat;
+        // $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        // $content = file_get_contents($pfxpath);
+        // $this->content = $content;
     }
 
     public function caculateFare(){
