@@ -33,7 +33,7 @@
                 <div class="flex_1">
                     <div class="select">
                         <div class="option"></div>
-                        <input  id="areas_hidden" type="text" class="input" style="visibility:hidden;width:0;" value="{$province},{$city},{$county},{$street}" alt="请选择完整地区信息！">
+                        <input  id="areas_hidden" type="text" class="input" style="visibility:hidden;width:0;" value="{$province},{$city},{$county}" alt="请选择完整地区信息！">
                         <select id="province" name="province" >
                             <option value="0">省份/直辖市</option>
                         </select>
@@ -54,12 +54,12 @@
                 </div>
               </div>
              
-              <div class="flex_1">
+              <!-- <div class="flex_1">
                 <div class="select">
                     <div class="option"></div>
                     <select id="street" name="street"><option value="0">街道</option></select>
                 </div>
-              </div>  
+              </div> -->  
             </dd>
             <dd ><textarea class="textarea" name="road" pattern="required" minlen="5" maxlen="120" placeholder="店铺所在路名或街道地址，门牌号。" alt="路名或街道地址，门牌号，5-120字" >{$promoter_info['road']}</textarea></dd>
             <dd ><textarea class="textarea" name="info" minlen="5" maxlen="120" placeholder="店铺简单描述信息" alt="">{$promoter_info['info']}</textarea></dd>
@@ -71,8 +71,8 @@
 </div>
 <script type="text/javascript">
     $(function(){  
-    var selected = [{$promoter_info['province_id']|0},{$promoter_info['city_id']|0},{$promoter_info['region_id']|0},{$promoter_info['tourist_id']|0}];
-    $("#areas").Linkages({ url:"{url:/ajax/area_datas}",selected:selected,initRunCallBack:true,callback:function(data){
+    var selected = [{$promoter_info['province_id']|0},{$promoter_info['city_id']|0},{$promoter_info['region_id']|0}];
+    $("#areas").Linkage({ url:"{url:/ajax/area_data}",selected:selected,initRunCallBack:true,callback:function(data){
         
         var text = new Array();
         var value = new Array();
@@ -86,7 +86,7 @@
         $("#province").parent().find(".option").text(data[1][0]);
         $("#city").parent().find(".option").text(data[1][1]);
         $("#county").parent().find(".option").text(data[1][2]);
-        $("#street").parent().find(".option").text(data[1][3]);
+        // $("#street").parent().find(".option").text(data[1][3]);
         $("#areas_hidden").val(value.join(','));
         var address = data[1][0]+data[1][1]+data[1][2];
     

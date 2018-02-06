@@ -767,9 +767,9 @@ class UcenterController extends Controller
         if(Req::args('county')){
             $data['region_id'] = Filter::int(Req::args('county'));
         }
-        if(Req::args('street')){
-            $data['tourist_id'] = Filter::int(Req::args('street'));
-        }
+        // if(Req::args('street')){
+        //     $data['tourist_id'] = Filter::int(Req::args('street'));
+        // }
         if($picture){
             $data['picture'] = $picture;
         }
