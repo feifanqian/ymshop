@@ -1063,18 +1063,18 @@ class AddressAction extends Controller
         // if(!$level){
         //     $level = 1;
         // }
-        $area = $this->model->table('area')->where("name like '%$city%' or short_name like '%$city%'")->find();
+        $area = $this->model->table('areas')->where("name like '%$city%' or short_name like '%$city%'")->find();
         if(!$area){
             $this->code = 1168;
             return;
         }
-        // $pid = $area['id'];
-        $pid = $area['parent_id'];
-        $county = $this->model->table('area')->where('parent_id='.$pid)->order('sort asc')->findAll();
+        $pid = $area['id'];
+        // $pid = $area['parent_id'];
+        $county = $this->model->table('areas')->where('parent_id='.$pid)->order('sort asc')->findAll();
         if($county){
             // $street = array();
             foreach($county as $k => $v){
-               $county[$k]['child'] = $this->model->table('area')->where('parent_id='.$v['id'])->order('sort asc')->findAll();
+               $county[$k]['child'] = $this->model->table('areas')->where('parent_id='.$v['id'])->order('sort asc')->findAll();
          }
         }
         
