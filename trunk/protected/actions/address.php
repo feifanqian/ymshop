@@ -811,9 +811,9 @@ class AddressAction extends Controller
         
         $where = "lat<>0";
         //区域
-        if ($region_id) {
-            $where.= " and region_id=$region_id";     
-        }
+        // if ($region_id) {
+        //     $where.= " and region_id=$region_id";     
+        // }
         //搜索附近
         if($lng && $lat){
             if(Req::args('distance')!=''){
@@ -845,7 +845,7 @@ class AddressAction extends Controller
          
         //街道
         if ($tourist_id) {
-            $where.=" and tourist_id=$tourist_id";
+            $where.=" and region_id=$tourist_id";
         }
         //地铁线路
         if ($line_number) {
