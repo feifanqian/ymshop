@@ -804,7 +804,7 @@ class AddressAction extends Controller
         $customer = Req::args('customer');//等于1筛选出经销商
         $distance = Req::args('distance');//距离
         if(!$distance){
-            $radius = 5000; //默认5公里
+            $radius = 5; //默认5公里
         }else{
             $radius = 0;
         }
