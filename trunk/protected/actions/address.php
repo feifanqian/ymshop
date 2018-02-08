@@ -865,18 +865,18 @@ class AddressAction extends Controller
          * pow pow（num1,num2）作用，计算出num1得num2次方。
          * */
         foreach ($info_sql as $key => $value) {
-            $radLat1 = deg2rad($lat);//deg2rad()函数将角度转换为弧度
-            $radLat2 = deg2rad($value['lat']);
+            // $radLat1 = deg2rad($lat);//deg2rad()函数将角度转换为弧度
+            // $radLat2 = deg2rad($value['lat']);
 
-            $radLng1 = deg2rad($lng);
-            $radLng2 = deg2rad($value['lng']);
+            // $radLng1 = deg2rad($lng);
+            // $radLng2 = deg2rad($value['lng']);
 
-            $a = $radLat1 - $radLat2;
-            $b = $radLng1 - $radLng2;
+            // $a = $radLat1 - $radLat2;
+            // $b = $radLng1 - $radLng2;
 
-            $s = 2 * asin(sqrt(pow(sin($a / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2))) * 6371;
-            $d = round($s, 2);//保留小数点后两位
-            $info_sql[$key]['dist'] = $d;
+            // $s = 2 * asin(sqrt(pow(sin($a / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2))) * 6371;
+            // $d = round($s, 2);//保留小数点后两位
+            $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng']);
         }
         //距离离我最近
         $arr = array();
