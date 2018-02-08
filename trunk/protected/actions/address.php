@@ -876,7 +876,7 @@ class AddressAction extends Controller
 
             // $s = 2 * asin(sqrt(pow(sin($a / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2))) * 6371;
             // $d = round($s, 2);//保留小数点后两位
-            $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng']);
+            $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
         }
         //距离离我最近
         $arr = array();
