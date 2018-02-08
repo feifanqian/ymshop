@@ -856,6 +856,7 @@ class AddressAction extends Controller
         if(!$info_sql){
             $this->code = 0;
             $this->content = [];
+            return;
         }
         //两点之间的距离
         /*
@@ -864,133 +865,64 @@ class AddressAction extends Controller
          * sin 正弦定理
          * pow pow（num1,num2）作用，计算出num1得num2次方。
          * */
-        foreach ($info_sql as $key => $value) {
-            // $radLat1 = deg2rad($lat);//deg2rad()函数将角度转换为弧度
-            // $radLat2 = deg2rad($value['lat']);
-
-            // $radLng1 = deg2rad($lng);
-            // $radLng2 = deg2rad($value['lng']);
-
-            // $a = $radLat1 - $radLat2;
-            // $b = $radLng1 - $radLng2;
-
-            // $s = 2 * asin(sqrt(pow(sin($a / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2))) * 6371;
-            // $d = round($s, 2);//保留小数点后两位
-            $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
-        }
-        //距离离我最近
         $arr = array();
-        foreach ($info_sql as $val) {
-            $arr[] = $val['dist'];
-        }
-        if ($distance_asc) {
-            array_multisort($arr, SORT_ASC, $info_sql);
-        }
-        //人气
         $hots = array();
-        foreach ($info_sql as $val) {
-            $hots[] = $val['hot'];
-        }
-        if ($hot) {
-            array_multisort($hots, SORT_DESC, $info_sql);
-        }
-        //评价
         $evaluates = array();
-        foreach ($info_sql as $val) {
-            $evaluates[] = $val['evaluate'];
-        }
-        if ($evaluate) {
-            array_multisort($evaluates, SORT_DESC, $info_sql);
-        }
-         //口味
         $tastes = array();
-        foreach ($info_sql as $val) {
-            $tastes[] = $val['taste'];
-        }
-        if ($taste) {
-            array_multisort($tastes, SORT_DESC, $info_sql);
-        }
-        //环境
-         $environments = array();
-        foreach ($info_sql as $val) {
-            $environments[] = $val['environment'];
-        }
-        if ($environment) {
-            array_multisort($environments, SORT_DESC, $info_sql);
-        }
-        //服务
-         $quality_services = array();
-        foreach ($info_sql as $val) {
-            $quality_services[] = $val['quality_service'];
-        }
-        if ($quality_service) {
-            array_multisort($quality_services, SORT_DESC, $info_sql);
-        }
-        //价格
-         $prices = array();
-        foreach ($info_sql as $val) {
-            $prices[] = $val['price'];
-        }
-        if ($price==1) {//1表示正序排，2表示倒序排
-            array_multisort($prices, SORT_ASC, $info_sql);
-        }elseif ($price==2) {
-             array_multisort($prices, SORT_DESC, $info_sql);
-        }
-        if($info_sql){
-            foreach($info_sql as $k => $v){
-                if($info_sql[$k]['picture']==null){
-                    $info_sql[$k]['picture'] = '';
+        $environments = array();
+        $quality_services = array();
+        $prices = array();
+        foreach ($info_sql as $key => $value) {
+            if($info_sql[$key]['picture']==null){
+                    $info_sql[$key]['picture'] = '';
                 }else{
-                    $info_sql[$k]['picture'].='?date='.time();
+                    $info_sql[$key]['picture'].='?date='.time();
                 }
-                if($info_sql[$k]['tourist_id']==null){
-                    $info_sql[$k]['tourist_id'] = 0;
+                if($info_sql[$key]['tourist_id']==null){
+                    $info_sql[$key]['tourist_id'] = 0;
                 }
-                if($info_sql[$k]['line_number']==null){
-                    $info_sql[$k]['line_number'] = '';
+                if($info_sql[$key]['line_number']==null){
+                    $info_sql[$key]['line_number'] = '';
                 }
-                if($info_sql[$k]['which_station']==null){
-                    $info_sql[$k]['which_station'] = '';
+                if($info_sql[$key]['which_station']==null){
+                    $info_sql[$key]['which_station'] = '';
                 }
-                if($info_sql[$k]['distance_asc']==null){
-                    $info_sql[$k]['distance_asc'] = '';
+                if($info_sql[$key]['distance_asc']==null){
+                    $info_sql[$key]['distance_asc'] = '';
                 }
-                if($info_sql[$k]['distance_asc']==null){
-                    $info_sql[$k]['distance_asc'] = '';
+                if($info_sql[$key]['distance_asc']==null){
+                    $info_sql[$key]['distance_asc'] = '';
                 }
-                if($info_sql[$k]['hot']==null){
-                    $info_sql[$k]['hot'] = '';
+                if($info_sql[$key]['hot']==null){
+                    $info_sql[$key]['hot'] = '';
                 }
-                if($info_sql[$k]['taste']==null){
-                    $info_sql[$k]['taste'] = '';
+                if($info_sql[$key]['taste']==null){
+                    $info_sql[$key]['taste'] = '';
                 }
-                if($info_sql[$k]['environment']==null){
-                    $info_sql[$k]['environment'] = '';
+                if($info_sql[$key]['environment']==null){
+                    $info_sql[$key]['environment'] = '';
                 }
-                if($info_sql[$k]['quality_service']==null){
-                    $info_sql[$k]['quality_service'] = 5;
+                if($info_sql[$key]['quality_service']==null){
+                    $info_sql[$key]['quality_service'] = 5;
                 }
-                if($info_sql[$k]['price']==null){
-                    $info_sql[$k]['price'] = '';
+                if($info_sql[$key]['price']==null){
+                    $info_sql[$key]['price'] = '';
                 }
-                if($info_sql[$k]['classify_id']==null || $info_sql[$k]['classify_id']==0){
-                    $info_sql[$k]['classify_id'] = 1;
+                if($info_sql[$key]['classify_id']==null || $info_sql[$key]['classify_id']==0){
+                    $info_sql[$key]['classify_id'] = 1;
                 }
-                if($info_sql[$k]['evaluate']==null){
-                    $info_sql[$k]['evaluate'] = '';
+                if($info_sql[$key]['evaluate']==null){
+                    $info_sql[$key]['evaluate'] = '';
                 }
-                $count = $this->model->table('order_offline')->where('shop_ids='.$v['user_id'])->group('user_id')->findAll();
+                $count = $this->model->table('order_offline')->where('shop_ids='.$value['user_id'])->group('user_id')->findAll();
                 if($count){
                     $consume_num = count($count);
                 }else{
                     $consume_num = 0;
                 }
-                // $count = $this->model->table('order_offline')->where('shop_ids=17216')->group('user_id')->count();
-                // $count = $this->model->query("SELECT COUNT( id ) AS count FROM  `tiny_order_offline` WHERE shop_ids =1314 GROUP BY user_id");
-                
-                $info_sql[$k]['consume_num'] = $consume_num;
-                $shop_type = $this->model->table('promoter_type')->where('id='.$v['classify_id'])->find();
-                $district = $this->model->table('district_shop')->where('owner_id='.$v['user_id'])->find();
+                $info_sql[$key]['consume_num'] = $consume_num;
+                $shop_type = $this->model->table('promoter_type')->where('id='.$value['classify_id'])->find();
+                $district = $this->model->table('district_shop')->where('owner_id='.$value['user_id'])->find();
                 if($district){
                     $is_district = 1;
                 }else{
@@ -1001,30 +933,60 @@ class AddressAction extends Controller
                 }else{
                     $type_name = '其它';
                 }
-                $info_sql[$k]['shop_type'] = $type_name;
-                $info_sql[$k]['is_district'] = $is_district;
-                if($info_sql[$k]['shop_name']==''){
-                    $user = $this->model->table('customer')->fields('real_name')->where('user_id='.$v['user_id'])->find();
-                    $this->model->table('district_promoter')->data(array('shop_name'=>$user['real_name']))->where('user_id='.$v['user_id'])->update();
+                $info_sql[$key]['shop_type'] = $type_name;
+                $info_sql[$key]['is_district'] = $is_district;
+                if($info_sql[$key]['shop_name']==''){
+                    $user = $this->model->table('customer')->fields('real_name')->where('user_id='.$value['user_id'])->find();
+                    $this->model->table('district_promoter')->data(array('shop_name'=>$user['real_name']))->where('user_id='.$value['user_id'])->update();
                 }
                 if($customer==1){
-                    if($info_sql[$k]['is_district']==0){
-                        unset($info_sql[$k]);
+                    if($info_sql[$key]['is_district']==0){
+                        unset($info_sql[$key]);
                     }
                 }
+            $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
+            $arr[] = $info_sql[$key]['dist'];
+            $hots[] = $value['hot'];
+            $evaluates[] = $value['evaluate'];
+            $tastes[] = $value['taste'];
+            $environments[] = $value['environment'];
+            $quality_services[] = $value['quality_service'];
+            $prices[] = $value['price'];
+            if($info_sql[$key]['dist']>$radius){
+                unset($info_sql[$key]);
             }
-            if($info_sql && $radius){
-                foreach($info_sql as $k=>$v){
-                   $actual_distance = Common::getDistanceByLatLng($lat,$lng,$v['lat'],$v['lng']);
-                   if($actual_distance>$radius){
-                      unset($info_sql[$k]);
-                    }
-              }
-            }
-            $info_sql = array_values($info_sql); 
-        }else{
-            $info_sql = array();
         }
+        //距离离我最近
+        if ($distance_asc) {
+            array_multisort($arr, SORT_ASC, $info_sql);
+        }
+        //人气
+        if ($hot) {
+            array_multisort($hots, SORT_DESC, $info_sql);
+        }
+        //评价
+        if ($evaluate) {
+            array_multisort($evaluates, SORT_DESC, $info_sql);
+        }
+         //口味
+        if ($taste) {
+            array_multisort($tastes, SORT_DESC, $info_sql);
+        }
+        //环境
+        if ($environment) {
+            array_multisort($environments, SORT_DESC, $info_sql);
+        }
+        //服务
+        if ($quality_service) {
+            array_multisort($quality_services, SORT_DESC, $info_sql);
+        }
+        //价格
+        if ($price==1) {//1表示正序排，2表示倒序排
+            array_multisort($prices, SORT_ASC, $info_sql);
+        }elseif ($price==2) {
+             array_multisort($prices, SORT_DESC, $info_sql);
+        }
+        $info_sql = array_values($info_sql);
         $this->code = 0;
         $this->content = $info_sql; 
     }
