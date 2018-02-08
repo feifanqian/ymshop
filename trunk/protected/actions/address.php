@@ -550,7 +550,12 @@ class AddressAction extends Controller
             return;
         }
         if($redbag['amount']=='0.00' && $redbag['open_num']==$redbag['num']){
-            $had_opened = 0; // 来晚了
+            $redbag_get1 = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
+            if($redbag_get1){
+                $had_opened = 2; //曾经抢到过但现在没有了
+            }else{
+                $had_opened = 0; // 来晚了
+            }
         }else{
             $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
             if($redbag_get){
