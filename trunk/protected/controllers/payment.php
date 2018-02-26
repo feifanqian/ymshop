@@ -857,7 +857,7 @@ class PaymentController extends Controller {
             "subject"=>'支付测试',
             "total_amount"=>$order_amount,
             "seller_id"=>'yuanmeng',
-            "seller_name"=>'银盛支付商户测试公司',
+            "seller_name"=>'圆梦互联网科技（深圳）有限公司',
             "timeout_express"=>'1d',
             "business_code"=>'3010001',
             "sub_openid"=>$sub_openid,
@@ -879,7 +879,7 @@ class PaymentController extends Controller {
             $signStr = rtrim($signStr, '&');
             $sign = $this->sign_encrypt(array('data' => $signStr));
             $myParams['sign'] = trim($sign['check']);
-            // var_dump($signStr);die;
+            var_dump($signStr);
         // echo "<pre>";
         // print_r($myParams);
         // echo "<pre>";
