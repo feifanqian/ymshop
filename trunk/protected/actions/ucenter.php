@@ -115,9 +115,9 @@ class UcenterAction extends Controller {
                     $token = CHash::random(32, 'char');
                     $url = 'http://api.cn.ronghub.com/user/getToken.json';
                     /********************获取融云token**********************/
-                    $rongyun_token = $this->rongyun_token($obj['id']);
-                    if($rongyun_token){
-                        if($obj['rongyun_token']==''){
+                    if($obj['rongyun_token']==''){
+                        $rongyun_token = $this->rongyun_token($obj['id']);
+                        if($rongyun_token){
                             $this->model->table("user")->data(array('rongyun_token' => $rongyun_token))->where('id=' . $obj['id'])->update();
                         }
                     }
