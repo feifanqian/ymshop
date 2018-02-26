@@ -826,6 +826,13 @@ class PaymentController extends Controller {
            }else{
               $order_id = $exist['id']; 
            }
+           
+           $oauth_user=$this->model->table('oauth_user')->fields('open_id')->where('user_id='.$user_id)->find();
+           if($oauth_user){
+            $sub_openid=$oauth_user['open_id'];
+           }else{
+            $sub_openid='';
+           }
 
            $myParams = array();
             // $myParams['business_code'] = '01000010';
@@ -833,7 +840,7 @@ class PaymentController extends Controller {
             $myParams['method'] = 'ysepay.online.jsapi.pay';
             $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
             // $myParams['out_trade_no'] = $order_no;
-            $myParams['partner_id'] = 'shanghu_test';
+            $myParams['partner_id'] = 'yuanmeng';
             // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
             $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
             // $myParams['seller_id'] = 'shanghu_test';
@@ -849,11 +856,11 @@ class PaymentController extends Controller {
             "out_trade_no"=>$order_no,
             "subject"=>'支付测试',
             "total_amount"=>$order_amount,
-            "seller_id"=>'shanghu_test',
+            "seller_id"=>'yuanmeng',
             "seller_name"=>'银盛支付商户测试公司',
             "timeout_express"=>'1d',
-            "business_code"=>'01000010',
-            "sub_openid"=>'okZq1wQxLuLVnvPOlviRzjTcx1FM',
+            "business_code"=>'3010001',
+            "sub_openid"=>$sub_openid,
             // "user_code" => "shanghu_test",
             // "user_name" => "银盛支付商户测试公司"
         );
@@ -913,8 +920,8 @@ class PaymentController extends Controller {
     public function sign_encrypt($input)
     {
         // $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
-        $pfxpath = "./protected/classes/yinpay/certs/shanghu_test.pfx";
-        $pfxpassword = '123456';
+        $pfxpath = "./protected/classes/yinpay/certs/yuanmeng.pfx";
+        $pfxpassword = '008596';
         $return = array('success' => 0, 'msg' => '', 'check' => '');
         $pkcs12 = file_get_contents($pfxpath); //私钥
         if (openssl_pkcs12_read($pkcs12, $certs, $pfxpassword)) {
