@@ -86,6 +86,9 @@ class UcenterController extends Controller
         }
         $config = Config::getInstance();
         $site_config = $config->get("globals");
+        $list = explode('_', $action);
+        $current = is_array($list)? $list[0]:NULL;
+        $this->assign('current',$current);
         $this->assign('site_title', $site_config['site_name']);
         $this->assign("actionId", $action);
         $this->assign("cart", $cart->all());
