@@ -1,0 +1,97 @@
+<div class="weui_panel">
+        <div class="weui_panel_hd">专区管理</div>
+        <div class="weui_panel_bd">
+            <div class="weui_media_box weui_media_small_appmsg">
+                <div class="weui_cells weui_cells_access">
+                     <a class="weui_cell" href="/district/district_info">
+                        <div class="weui_cell_hd">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-square fa-stack-2x icon-color-slateblue"></i>
+                                <i class="fa fa-info fa-stack-1x icon-inverse"></i>
+                             </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>专区信息 </p>
+                        </div>
+                        <span class="weui_cell_ft"></span>
+                    </a>
+                    <a class="weui_cell" href="/district/district_achievement">
+                        <div class="weui_cell_hd">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-square fa-stack-2x icon-color-slateblue"></i>
+                                <i class="fa fa-line-chart fa-stack-1x icon-inverse"></i>
+                             </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>专区销售业绩 </p>
+                        </div>
+                        <span class="weui_cell_ft"></span>
+                    </a>
+                    <a class="weui_cell" href="/district/district_promoter">
+                        <div class="weui_cell_hd">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-square fa-stack-2x icon-color-slateblue"></i>
+                                <i class="fa fa-street-view fa-stack-1x icon-inverse"></i>
+                             </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>代理商</p>
+                        </div>
+                        <span class="weui_cell_ft"></span>
+                    </a>
+                   <a class="weui_cell" href="/district/district_subordinate">
+                        <div class="weui_cell_hd">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-square fa-stack-2x icon-color-slateblue"></i>
+                                <i class="fa fa-sitemap fa-stack-1x icon-inverse"></i>
+                             </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>经销商 </p>
+                        </div>
+                        <span class="weui_cell_ft"></span>
+                    </a>
+                    <!-- <a class="weui_cell" href="/district/promoter_code">
+                        <div class="weui_cell_hd">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-square fa-stack-2x icon-color-slateblue"></i>
+                                <i class="fa fa-sitemap fa-stack-1x icon-inverse"></i>
+                             </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>代理商邀请码 </p>
+                        </div>
+                        <span class="weui_cell_ft"></span>
+                    </a> -->
+                </div>
+            </div>
+        </div>
+</div>
+<div class="ma20 bg-white p20 ">
+    {if:isset($test)&&$test==true}
+    <a href="{url:/district_introduce.html}" class="weui-btn weui-btn_primary">了解专区</a>
+    <a href="{url:/ucenter/apply_for_district}" class="weui-btn weui-btn_default">马上申请</a>
+    <a href="{url:/district/logout}" class="weui-btn weui-btn_default">退出</a>
+    {else:}
+    <a href="{url:/user/index}" class="weui-btn weui-btn_primary">退出专区</a>
+    {/if}
+    {if:Common::checkInWechat()}
+    <a onclick="WeixinJSBridge.call('closeWindow');" class="weui-btn weui-btn_default">返回微信</a>
+    {/if}
+</div>
+<script>
+    $(function(){
+        {if:isset($test)&&$test==true}
+            $(".weui_panel a").click(function(e){
+                e.preventDefault();
+                  //提示
+                layer.open({
+                  content: '抱歉，您还没有入驻专区，不能查看更多了。'
+                  ,skin: 'msg'
+                  ,time: 4 //2秒后自动关闭
+                });
+                return false;
+            });
+        {/if}
+    });
+</script>
