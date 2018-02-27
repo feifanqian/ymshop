@@ -170,7 +170,7 @@ class DistrictController extends Controller {
     public function district(){
         $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
         if(!$district){
-            $this->redirect('ucenter/district_login');
+            $this->redirect('/ucenter/district_login');
         }else{
             if($this->test){
               $this->assign('test',true);
