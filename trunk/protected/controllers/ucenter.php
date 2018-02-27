@@ -3611,7 +3611,12 @@ class UcenterController extends Controller
     }
 
     public function district_login(){
-        $this->redirect();
+        $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
+        if(!$district){
+            $this->redirect();
+        }else{
+            $this->redirect('/district/district');
+        }     
     }
 
 }
