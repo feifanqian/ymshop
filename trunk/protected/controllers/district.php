@@ -168,13 +168,16 @@ class DistrictController extends Controller {
          }
     }
     public function district(){
-        
+        $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
+        if(!$district){
+            $this->redirect('ucenter/district_login');
+        }else{
             if($this->test){
               $this->assign('test',true);
             }
             $this->assign("seo_title", "专区管理");
             $this->redirect();
-        
+        }
     }
     public function districts(){
         $this->redirect();  
