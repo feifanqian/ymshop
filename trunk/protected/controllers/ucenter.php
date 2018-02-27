@@ -3629,7 +3629,7 @@ class UcenterController extends Controller
             $this->assign('test',false);
             $this->assign('district_name',$district['name']);
             $this->assign("seo_title", "专区管理");
-            $this->redirect('/district/district');
+            $this->redirect();
         }
     }
 
