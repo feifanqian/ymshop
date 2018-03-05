@@ -87,7 +87,7 @@
 <div class="apply_form"  style="display: none;font-size:15px;">    
 <div class="ma20 bg-white p20 ">
             {if:$need_check==1}
-            <form  action="{url:/ucenter/shop_check_do}" method="post" enctype="multipart/form-data">
+            <form id="shop_check_form" action="{url:/ucenter/shop_check_do}" method="post" enctype="multipart/form-data">
               <div class="weui_panel_hd">完善商家认证信息</div>
               <div class="weui-cell">
                  <select id="shop_type" name="shop_type" class="input">
@@ -272,6 +272,42 @@
             window.location.href = '/ucenter/set_realname';
         }
     });
+    $("#shop_check_form").submit(function () {
+            if(!$("input[name=positive_idcard]").val()){
+              $.toast("请上传身份证正面照", "text");
+                return false;
+            }
+            if(!$("input[name=native_idcard]").val()){
+              $.toast("请上传身份证反面照", "text");
+                return false;
+            }
+            if(!$("input[name=account_card]").val()){
+              $.toast("请输入结算银行卡号", "text");
+                return false;
+            }
+            if ($("#shop_type option:selected").val()==0) {
+                $.toast("请选择商家类型", "text");
+                return false;
+            }else if($("#shop_type option:selected").val()==1){
+              if (!$("input[name=business_licence]").val()) {
+                  $.toast("请上传营业执照", "text");
+                  return false;
+              }
+              if (!$("input[name=account_picture]").val()) {
+                  $.toast("请上传开户许可证照", "text");
+                  return false;
+              }
+              if (!$("input[name=shop_photo]").val()) {
+                  $.toast("请上传门店照", "text");
+                  return false;
+              }
+            }else if($("#shop_type option:selected").val()==2){
+              if (!$("input[name=hand_idcard]").val()) {
+                  $.toast("请上传手持身份证照", "text");
+                  return false;
+              }  
+            } 
+        });
     $("#shop_type").change(function(){
         var shop_type = $("#shop_type option:selected").val();
         if(shop_type==1){
