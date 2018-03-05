@@ -154,7 +154,7 @@ class Menu {
             '/districtadmin/apply_withdraw'=>array('name'=>'提现申请','parent'=>'apply'),
             '/districtadmin/apply_join'=>array('name'=>'入驻申请','parent'=>'apply'),
             '/districtadmin/shop_check'=>array('name'=>'商家认证','parent'=>'apply'),
-            '/districtadmin/shop_check_detail'=>array('name'=>'商家认证详情','parent'=>'apply'),
+            '/districtadmin/shop_check_detail'=>array('name'=>'商家认证详情','parent'=>'apply','hidden'=>true),
             // '/districtadmin/qrcode_join'=>array('name'=>'商家二维码申请','parent'=>'apply'),
             '/districtadmin/set'=>array('name'=>'专区设置','parent'=>'set'),
             '/districtadmin/rate_edit' => array('name' => '设置分账比例', 'parent' => 'personnel', 'hidden'=>true),
