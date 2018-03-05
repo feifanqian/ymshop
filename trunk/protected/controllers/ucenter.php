@@ -3652,11 +3652,16 @@ class UcenterController extends Controller
     public function shop_check_do(){
         $upfile_path = Tiny::getPath("uploads") . "/shop_check/";
         $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/", 1);
+        $result1 = array();
+        $result2 = array();
+        $result3 = array();
+        $result4 = array();
+        $result5 = array();
+        $result6 = array();
 
         $upfile1 = new UploadFile('positive_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
         $upfile1->save();
-        $info1 = $upfile1->getInfo();
-        $result = array();
+        $info1 = $upfile1->getInfo();        
         $positive_idcard = "";
 
         $upfile2 = new UploadFile('native_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
@@ -3685,7 +3690,7 @@ class UcenterController extends Controller
         $hand_idcard = "";
 
         if ($info1[0]['status'] == 1) {
-            $result = array('error' => 0, 'url' => $upfile_url . $info1[0]['path']);
+            $result1 = array('error' => 0, 'url' => $upfile_url . $info1[0]['path']);
             $image_url1 = $upfile_url . $info1[0]['path'];
             $image = new Image();
             $image->suffix = '';
@@ -3694,7 +3699,7 @@ class UcenterController extends Controller
         }
 
         if ($info2[0]['status'] == 1) {
-            $result = array('error' => 0, 'url' => $upfile_url . $info2[0]['path']);
+            $result2 = array('error' => 0, 'url' => $upfile_url . $info2[0]['path']);
             $image_url2 = $upfile_url . $info2[0]['path'];
             $image = new Image();
             $image->suffix = '';
@@ -3703,7 +3708,7 @@ class UcenterController extends Controller
         }
 
         if ($info3[0]['status'] == 1) {
-            $result = array('error' => 0, 'url' => $upfile_url . $info3[0]['path']);
+            $result3 = array('error' => 0, 'url' => $upfile_url . $info3[0]['path']);
             $image_url3 = $upfile_url . $info3[0]['path'];
             $image = new Image();
             $image->suffix = '';
@@ -3712,7 +3717,7 @@ class UcenterController extends Controller
         }
 
         if ($info4[0]['status'] == 1) {
-            $result = array('error' => 0, 'url' => $upfile_url . $info4[0]['path']);
+            $result4 = array('error' => 0, 'url' => $upfile_url . $info4[0]['path']);
             $image_url4 = $upfile_url . $info4[0]['path'];
             $image = new Image();
             $image->suffix = '';
@@ -3721,7 +3726,7 @@ class UcenterController extends Controller
         }
 
         if ($info5[0]['status'] == 1) {
-            $result = array('error' => 0, 'url' => $upfile_url . $info5[0]['path']);
+            $result5 = array('error' => 0, 'url' => $upfile_url . $info5[0]['path']);
             $image_url5 = $upfile_url . $info5[0]['path'];
             $image = new Image();
             $image->suffix = '';
@@ -3730,7 +3735,7 @@ class UcenterController extends Controller
         }
 
         if ($info6[0]['status'] == 1) {
-            $result = array('error' => 0, 'url' => $upfile_url . $info6[0]['path']);
+            $result6 = array('error' => 0, 'url' => $upfile_url . $info6[0]['path']);
             $image_url6 = $upfile_url . $info6[0]['path'];
             $image = new Image();
             $image->suffix = '';
