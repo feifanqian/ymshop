@@ -639,7 +639,7 @@ class CountController extends Controller
         {
             $volume[$key]  = $row['sales_volume'];
         }
-        array_multisort($volume, SORT_DESC, $result);
+        array_multisort($result, SORT_DESC);
         if (!empty($result)) {
             foreach ($result as $k => $v) {
                 $index = $k + 3;
