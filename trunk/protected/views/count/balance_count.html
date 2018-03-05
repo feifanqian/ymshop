@@ -21,7 +21,7 @@
         
          
     </tr>
-    {query:name=customer as c fields=c.user_id,c.real_name,c.balance,c.offline_balance,sum(bw.real_amount) as amount_sum,sum(bws.real_amount) as amount_sums join=left join balance_withdraw as bw on c.user_id eq bw.user_id left join balance_withdraw as bws on c.user_id eq bws.user_id where= $where group=bw.user_id,bws.user_id order= c.user_id desc id=$obj page=1 limit=10 desc }
+    {query:name=customer as c fields=c.user_id,c.real_name,c.balance,c.offline_balance,sum(bw.real_amount) as amount_sum,sum(bws.real_amount) as amount_sums join=left join balance_withdraw as bw on c.user_id eq bw.user_id left join balance_withdraw as bws on c.user_id eq bws.user_id where= $where group=bw.user_id,bws.user_id order= c.user_id desc id=$obj page=1 desc }
         <tr class="{if:$key%2==1}odd{/if}">
             <td style="width:30px;">{$item['user_id']}、</td>
             <td style="width:100px">{$item['real_name'] | '--'}</td>
