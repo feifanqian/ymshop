@@ -311,7 +311,7 @@ class UcenterController extends Controller
             $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
             if($shop){
                $shop_check = $this->model->table('shop_check')->fields('id')->where('user_id='.$this->user['id'])->find();
-               if(!$shop_check && $this->user['id']==42608){
+               if(!$shop_check){
                  $need_check = 1;
                }else{
                 $need_check = 0;
