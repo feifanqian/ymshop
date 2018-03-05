@@ -2547,7 +2547,7 @@ class UcenterAction extends Controller {
     }
 
     /*
-     * 实名认证临时接口
+     * 商家认证接口
      */
     public function shop_check(){
        $type = Filter::int(Req::args('type')); //1实体商家 2个人微商
@@ -2629,5 +2629,21 @@ class UcenterAction extends Controller {
          $this->code = 1226;
          return;
        }
+    }
+
+    public function shop_checked(){
+        $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
+       if(!$shop){
+        $this->code = 1166;
+        return;
+       }
+        $shop_check = $this->model->table('shop_check')->fields('id')->where('status=1 and user_id='.$this->user['id'])->find();
+        if(!$shop_check){
+            $need_check = 0;
+        }else{
+          $need_check = 1;
+        }
+        $this->code = 0;
+        $this->content = $need_check;
     }
 }

@@ -166,6 +166,7 @@ class V1Controller extends Controller {
         "unbind_card_temp"=>array("ucenter/unbindCardTemp",1,1), //解绑银行卡(临时)
         "name_verified_temp"=>array("ucenter/nameVerifiedTemp",1,1), //二要素实名认证(临时)
         "shop_check"=>array("ucenter/shop_check",1,1), // 商家信息认证申请
+        "shop_checked"=>array("ucenter/shop_checked",1,1), // 判断商家是否认证过
 
         "pointcoin_log"=>array("ucenter/pointcoin_log",1,1),
         //充值套餐详情
