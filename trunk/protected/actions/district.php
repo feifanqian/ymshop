@@ -244,6 +244,7 @@ class DistrictAction extends Controller {
     //输入激活码
     public function inputCode(){
         $code = Filter::str(Req::args('code'));
+        $type = Filter::int(Req::args('type'));
         $rules = array('code:required:激活码不能为空!');
         $info = Validator::check($rules);
         if (!$code) {
@@ -268,7 +269,7 @@ class DistrictAction extends Controller {
                 $this->code = 1177;
                 return;
             }
-            $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id']))->insert();
+            $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id'],'shop_type'=>$type))->insert();
             $invite = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
             if(!$invite){
                 $this->model->table('invite')->data(array('user_id'=>$promoter_code['user_id'],'invite_user_id'=>$this->user['id'],'from'=>'jihuo','district_id'=>$promoter_code['district_id'],'createtime'=>time()))->insert();
