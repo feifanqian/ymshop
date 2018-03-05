@@ -3664,31 +3664,6 @@ class UcenterController extends Controller
         $info1 = $upfile1->getInfo();        
         $positive_idcard = "";
 
-        $upfile2 = new UploadFile('native_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
-        $upfile2->save();
-        $info2 = $upfile2->getInfo();
-        $native_idcard = "";
-
-        $upfile3 = new UploadFile('business_licence', $upfile_path, '500k', '', 'hash', $this->user['id']);
-        $upfile3->save();
-        $info3 = $upfile3->getInfo();
-        $business_licence = "";
-
-        $upfile4 = new UploadFile('account_picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
-        $upfile4->save();
-        $info4 = $upfile4->getInfo();
-        $account_picture = "";
-
-        $upfile5 = new UploadFile('shop_photo', $upfile_path, '500k', '', 'hash', $this->user['id']);
-        $upfile5->save();
-        $info5 = $upfile5->getInfo();
-        $shop_photo = "";
-
-        $upfile6 = new UploadFile('hand_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
-        $upfile6->save();
-        $info6 = $upfile6->getInfo();
-        $hand_idcard = "";
-
         if ($info1[0]['status'] == 1) {
             $result1 = array('error' => 0, 'url' => $upfile_url . $info1[0]['path']);
             $image_url1 = $upfile_url . $info1[0]['path'];
@@ -3697,6 +3672,11 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url1, 100, 100);
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
         }
+
+        $upfile2 = new UploadFile('native_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile2->save();
+        $info2 = $upfile2->getInfo();
+        $native_idcard = "";
 
         if ($info2[0]['status'] == 1) {
             $result2 = array('error' => 0, 'url' => $upfile_url . $info2[0]['path']);
@@ -3707,6 +3687,11 @@ class UcenterController extends Controller
             $native_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url2;
         }
 
+        $upfile3 = new UploadFile('business_licence', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile3->save();
+        $info3 = $upfile3->getInfo();
+        $business_licence = "";
+
         if ($info3[0]['status'] == 1) {
             $result3 = array('error' => 0, 'url' => $upfile_url . $info3[0]['path']);
             $image_url3 = $upfile_url . $info3[0]['path'];
@@ -3715,6 +3700,11 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url3, 100, 100);
             $business_licence = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url3;
         }
+
+        $upfile4 = new UploadFile('account_picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile4->save();
+        $info4 = $upfile4->getInfo();
+        $account_picture = "";
 
         if ($info4[0]['status'] == 1) {
             $result4 = array('error' => 0, 'url' => $upfile_url . $info4[0]['path']);
@@ -3725,14 +3715,24 @@ class UcenterController extends Controller
             $account_picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url4;
         }
 
+        $upfile5 = new UploadFile('shop_photo', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile5->save();
+        $info5 = $upfile5->getInfo();
+        $shop_photo = "";
+
         if ($info5[0]['status'] == 1) {
             $result5 = array('error' => 0, 'url' => $upfile_url . $info5[0]['path']);
             $image_url5 = $upfile_url . $info5[0]['path'];
             $image = new Image();
             $image->suffix = '';
             $image->thumb(APP_ROOT . $image_url5, 100, 100);
-            $hand_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url5;
+            $shop_photo = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url5;
         }
+
+        $upfile6 = new UploadFile('hand_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile6->save();
+        $info6 = $upfile6->getInfo();
+        $hand_idcard = "";
 
         if ($info6[0]['status'] == 1) {
             $result6 = array('error' => 0, 'url' => $upfile_url . $info6[0]['path']);
@@ -3740,7 +3740,7 @@ class UcenterController extends Controller
             $image = new Image();
             $image->suffix = '';
             $image->thumb(APP_ROOT . $image_url6, 100, 100);
-            $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url6;
+            $hand_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url6;
         }
 
        $type = Filter::int(Req::args('shop_type')); //1实体商家 2个人微商
