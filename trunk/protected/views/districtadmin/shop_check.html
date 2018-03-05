@@ -28,7 +28,7 @@
                 <div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a>
                     <div class="menu_select">
                         <ul>
-                            <li><a class="icon-question" href="{url:/districtadmin/shop_check_detail/id/{$item['id']}}"> 查看</a></li>
+                            <li><a class="icon-question" href="{url:/districtadmin/shop_check_detail/id/$item[id]}"> 查看</a></li>
                             {if:$item['status']==0}
                             <li><a class="icon-key" href="javascript:;" onclick="pass({$item['id']})"> 通过认证</a></li>
                             <li><a class="icon-remove" href="javascript:;" onclick="cancel({$item['id']})"> 作废该请求</a></li>
