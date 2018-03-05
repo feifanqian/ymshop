@@ -769,13 +769,13 @@ class CustomerController extends Controller {
                 $fields_array = array('withdraw_no' => '提现单号','amount' => '金额', 'open_name' => '开户名', 'open_bank' => '开户行','card_no'=>'银行卡号', 'apply_date' => '时间');
                 $str = "<table border=1><tr>";
                 foreach ($fields as $value) {
-                    $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
+                    $str .= "<th>" . iconv("UTF-8", "GBK", $fields_array[$value]) . "</th>";
                 }
                 $str .= "</tr>";
                 foreach ($items as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $value) {
-                        $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$value]) . "</td>";
+                        $str .= "<td>" . iconv("UTF-8", "GBK", $item[$value]) . "</td>";
                     }
                     $str .= "</tr>";
                 }
