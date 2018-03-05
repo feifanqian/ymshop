@@ -3651,7 +3651,7 @@ class UcenterController extends Controller
 
     public function shop_check_do(){
         $upfile_path = Tiny::getPath("uploads") . "/shop_check/";
-        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
+        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/", 1);
 
         $upfile1 = new UploadFile('positive_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
         $upfile1->save();
