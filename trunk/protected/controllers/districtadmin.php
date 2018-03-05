@@ -1402,13 +1402,13 @@ class DistrictadminController extends Controller
         $condition = Req::args("condition");
         $fields = Req::args("fields");
         $condition = Common::str2where($condition);
-        $model = new Model("shop_check as sc");
+        $model = new Model();
         if ($condition) {
             $where = $condition;
         }else{
             $where = '1=1';
         } 
-            $items = $model->join("left join user as u on u.id = sc.user_id left jon district_promoter as d on d.user_id = sc.user_id")->fields('sc.*,u.nickname,d.shop_name')->where($where)->findAll();
+            $items = $model->table('shop_check as sc')->join("left join user as u on sc.user_id = u.id left join district_promoter as d on sc.user_id = d.user_id")->fields('sc.*,u.nickname,d.shop_name')->where($where)->findAll();
             if ($items) {
                 header("Content-type:application/vnd.ms-excel");
                 header("Content-Disposition:filename=doc_receiving_list.xls");
