@@ -1622,7 +1622,7 @@ class CountController extends Controller
         if ($condition_str)
             $this->assign("where", $condition_str);
         else
-            $this->assign("where", "bw.status=1 and bws.status=1");
+            $this->assign("where", "bw.status=1 and bw.type=1 or bws.status=1 and bws.type=0");
         $this->assign('s_time', $s_time);
         $this->assign("condition", $condition);
         $this->redirect();
