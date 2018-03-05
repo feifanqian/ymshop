@@ -3650,8 +3650,18 @@ class UcenterController extends Controller
     }
 
     public function shop_check_do(){
-        $upfile_path = Tiny::getPath("uploads") . "/shop_check/";
-        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/", 1);
+        $upfile_path1 = Tiny::getPath("uploads") . "/shop_check/positive_idcard/";
+        $upfile_path2 = Tiny::getPath("uploads") . "/shop_check/native_idcard/";
+        $upfile_path3 = Tiny::getPath("uploads") . "/shop_check/business_licence/";
+        $upfile_path4 = Tiny::getPath("uploads") . "/shop_check/account_picture/";
+        $upfile_path5 = Tiny::getPath("uploads") . "/shop_check/shop_photo/";
+        $upfile_path6 = Tiny::getPath("uploads") . "/shop_check/hand_idcard/";
+        $upfile_url1 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/positive_idcard/", 1);
+        $upfile_url2 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/native_idcard/", 1);
+        $upfile_url3 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/business_licence/", 1);
+        $upfile_url4 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/account_picture/", 1);
+        $upfile_url5 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/shop_photo/", 1);
+        $upfile_url6 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/hand_idcard/", 1);
         $result1 = array();
         $result2 = array();
         $result3 = array();
@@ -3659,84 +3669,84 @@ class UcenterController extends Controller
         $result5 = array();
         $result6 = array();
 
-        $upfile1 = new UploadFile('positive_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile1 = new UploadFile('positive_idcard', $upfile_path1, '500k', '', 'hash', $this->user['id']);
         $upfile1->save();
         $info1 = $upfile1->getInfo();        
         $positive_idcard = "";
 
         if ($info1[0]['status'] == 1) {
-            $result1 = array('error' => 0, 'url' => $upfile_url . $info1[0]['path']);
-            $image_url1 = $upfile_url . $info1[0]['path'];
+            $result1 = array('error' => 0, 'url' => $upfile_url1 . $info1[0]['path']);
+            $image_url1 = $upfile_url1 . $info1[0]['path'];
             $image = new Image();
             $image->suffix = '';
             $image->thumb(APP_ROOT . $image_url1, 100, 100);
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
         }
 
-        $upfile2 = new UploadFile('native_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile2 = new UploadFile('native_idcard', $upfile_path2, '500k', '', 'hash', $this->user['id']);
         $upfile2->save();
         $info2 = $upfile2->getInfo();
         $native_idcard = "";
 
         if ($info2[0]['status'] == 1) {
-            $result2 = array('error' => 0, 'url' => $upfile_url . $info2[0]['path']);
-            $image_url2 = $upfile_url . $info2[0]['path'];
+            $result2 = array('error' => 0, 'url' => $upfile_url2 . $info2[0]['path']);
+            $image_url2 = $upfile_url2 . $info2[0]['path'];
             $image = new Image();
             $image->suffix = '';
             $image->thumb(APP_ROOT . $image_url2, 100, 100);
             $native_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url2;
         }
 
-        $upfile3 = new UploadFile('business_licence', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile3 = new UploadFile('business_licence', $upfile_path3, '500k', '', 'hash', $this->user['id']);
         $upfile3->save();
         $info3 = $upfile3->getInfo();
         $business_licence = "";
 
         if ($info3[0]['status'] == 1) {
-            $result3 = array('error' => 0, 'url' => $upfile_url . $info3[0]['path']);
-            $image_url3 = $upfile_url . $info3[0]['path'];
+            $result3 = array('error' => 0, 'url' => $upfile_url3 . $info3[0]['path']);
+            $image_url3 = $upfile_url3 . $info3[0]['path'];
             $image = new Image();
             $image->suffix = '';
             $image->thumb(APP_ROOT . $image_url3, 100, 100);
             $business_licence = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url3;
         }
 
-        $upfile4 = new UploadFile('account_picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile4 = new UploadFile('account_picture', $upfile_path4, '500k', '', 'hash', $this->user['id']);
         $upfile4->save();
         $info4 = $upfile4->getInfo();
         $account_picture = "";
 
         if ($info4[0]['status'] == 1) {
-            $result4 = array('error' => 0, 'url' => $upfile_url . $info4[0]['path']);
-            $image_url4 = $upfile_url . $info4[0]['path'];
+            $result4 = array('error' => 0, 'url' => $upfile_url4 . $info4[0]['path']);
+            $image_url4 = $upfile_url4 . $info4[0]['path'];
             $image = new Image();
             $image->suffix = '';
             $image->thumb(APP_ROOT . $image_url4, 100, 100);
             $account_picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url4;
         }
 
-        $upfile5 = new UploadFile('shop_photo', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile5 = new UploadFile('shop_photo', $upfile_path5, '500k', '', 'hash', $this->user['id']);
         $upfile5->save();
         $info5 = $upfile5->getInfo();
         $shop_photo = "";
 
         if ($info5[0]['status'] == 1) {
-            $result5 = array('error' => 0, 'url' => $upfile_url . $info5[0]['path']);
-            $image_url5 = $upfile_url . $info5[0]['path'];
+            $result5 = array('error' => 0, 'url' => $upfile_url5 . $info5[0]['path']);
+            $image_url5 = $upfile_url5 . $info5[0]['path'];
             $image = new Image();
             $image->suffix = '';
             $image->thumb(APP_ROOT . $image_url5, 100, 100);
             $shop_photo = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url5;
         }
 
-        $upfile6 = new UploadFile('hand_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile6 = new UploadFile('hand_idcard', $upfile_path6, '500k', '', 'hash', $this->user['id']);
         $upfile6->save();
         $info6 = $upfile6->getInfo();
         $hand_idcard = "";
 
         if ($info6[0]['status'] == 1) {
-            $result6 = array('error' => 0, 'url' => $upfile_url . $info6[0]['path']);
-            $image_url6 = $upfile_url . $info6[0]['path'];
+            $result6 = array('error' => 0, 'url' => $upfile_url6 . $info6[0]['path']);
+            $image_url6 = $upfile_url6 . $info6[0]['path'];
             $image = new Image();
             $image->suffix = '';
             $image->thumb(APP_ROOT . $image_url6, 100, 100);
