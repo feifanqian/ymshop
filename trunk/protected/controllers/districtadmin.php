@@ -1339,4 +1339,16 @@ class DistrictadminController extends Controller
         }
         $this->redirect("list_promoter");
     }
+
+    public function shop_check(){
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str) {
+            $this->assign("where", $condition_str);
+        } else {
+            $this->assign("where", "1=1");
+        }
+        $this->assign("condition", $condition);
+        $this->redirect();
+    }
 }

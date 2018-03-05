@@ -86,7 +86,94 @@
 </div>
 <div class="apply_form"  style="display: none;font-size:15px;">    
 <div class="ma20 bg-white p20 ">
-            {if:$card_num>0}
+            {if:$need_check==1}
+            <form  action="{url:/ucenter/shop_check_do}" method="post" enctype="multipart/form-data">
+              <div class="weui_panel_hd">完善商家认证信息</div>
+              <div class="weui-cell">
+                 <select id="shop_type" name="shop_type" class="input">
+                      <option value="0" selected="selected">请选择商家类型</option>
+                      <option value="1">实体商家</option>
+                      <option value="2">个人微商</option>     
+                  </select>
+              </div>
+              <div class="weui-cell">
+                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">身份证正面照</label></div>
+                 <div class="weui-cell__bd">
+                      <input class="input" type="file" name="positive_idcard" value="" >
+                 </div> 
+              </div>
+              <div class="weui-cell" style="display: none;" id="positive_idcard_preview">
+                 <div class="weui-cell__bd"  >
+                      <img src='' width="200" height="100" alt="" >
+                 </div> 
+              </div>
+              <div class="weui-cell">
+                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">身份证反面照</label></div>
+                 <div class="weui-cell__bd">
+                      <input class="input" type="file" name="native_idcard" value="" >
+                 </div>
+              </div>
+              <div class="weui-cell" style="display: none;" id="native_idcard_preview">
+                 <div class="weui-cell__bd"  >
+                      <img src='' width="200" height="100" alt="" >
+                 </div> 
+              </div>
+              <div class="weui-cell" style="display: none;" id="business_licence">
+                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">营业执照</label></div>
+                 <div class="weui-cell__bd">
+                      <input class="input" type="file" name="business_licence" value="" >
+                 </div>
+              </div>
+              <div class="weui-cell" style="display: none;" id="business_licence_preview">
+                 <div class="weui-cell__bd"  >
+                      <img src='' width="200" height="100" alt="" >
+                 </div> 
+              </div>
+              <div class="weui-cell" style="display: none;" id="account_picture">
+                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">开户许可证照</label></div>
+                 <div class="weui-cell__bd">
+                      <input class="input" type="file" name="account_picture" value="" >
+                 </div>
+              </div>
+              <div class="weui-cell" style="display: none;" id="account_picture_preview">
+                 <div class="weui-cell__bd"  >
+                      <img src='' width="200" height="100" alt="" >
+                 </div> 
+              </div>
+              <div class="weui-cell" style="display: none;" id="shop_photo">
+                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">门店照</label></div>
+                 <div class="weui-cell__bd">
+                      <input class="input" type="file" name="shop_photo" value="" >
+                 </div>
+              </div>
+              <div class="weui-cell" style="display: none;" id="shop_photo_preview">
+                 <div class="weui-cell__bd"  >
+                      <img src='' width="200" height="100" alt="" >
+                 </div> 
+              </div>
+              <div class="weui-cell" style="display: none;" id="hand_idcard">
+                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">手持身份证照</label></div>
+                 <div class="weui-cell__bd">
+                      <input class="input" type="file" name="hand_idcard" value="" >
+                 </div>
+              </div>
+              <div class="weui-cell" style="display: none;" id="positive_idcard_preview">
+                 <div class="weui-cell__bd"  >
+                      <img src='' width="200" height="100" alt="" >
+                 </div> 
+              </div>
+              <div class="weui-cell">
+                  <div class="weui-cell__hd" style="width:40%"><label class="weui-label">结算银行卡号</label></div>
+                  <div class="weui-cell__bd">
+                      <input class="input" type="text"  name="account_card" maxlen="19" value="" placeholder="银行卡号" alt="银行卡号不能为空">
+                  </div>
+              </div>
+              <div class="m20">
+                  <!-- <a class="weui-btn weui-btn_primary" href="javascript:;" id="shop_check_do">提交</a> -->
+                  <input class="weui-btn weui-btn_primary" type="submit" value="提交">
+              </div>
+            </form>  
+            {elseif:$card_num>0}
             <div class="weui_panel_hd">提现信息</div>
             <div class="weui-cell">
                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">提现金额</label></div>
@@ -184,6 +271,78 @@
             // notification("请先通过实名认证");
             window.location.href = '/ucenter/set_realname';
         }
+    });
+    $("#shop_type").change(function(){
+        var shop_type = $("#shop_type option:selected").val();
+        if(shop_type==1){
+            $("#business_licence").show();
+            $("#account_picture").show();
+            $("#shop_photo").show();
+            $("#hand_idcard").hide();
+            $("#hand_idcard_preview").hide();
+        }else if(shop_type==2){
+          $("#hand_idcard").show();
+          $("#business_licence").hide();
+          $("#account_picture").hide();
+          $("#shop_photo").hide();
+          $("#business_licence_preview").hide();
+          $("#account_picture_preview").hide();
+          $("#shop_photo_preview").hide();
+        }
+    });
+    $("input[name='positive_idcard']").change(function(){
+      $("#positive_idcard_preview").show();
+      var file = $("input[name='positive_idcard']").get(0).files[0];
+      var reader = new FileReader(); 
+      reader.readAsDataURL(file);
+      reader.onload=function(e){
+        $("#positive_idcard_preview img").get(0).src = e.target.result;
+      } 
+    });
+    $("input[name='native_idcard']").change(function(){
+      $("#native_idcard_preview").show();
+      var file = $("input[name='native_idcard']").get(0).files[0];
+      var reader = new FileReader(); 
+      reader.readAsDataURL(file);
+      reader.onload=function(e){
+        $("#native_idcard_preview img").get(0).src = e.target.result;
+      } 
+    });
+    $("input[name='business_licence']").change(function(){
+      $("#business_licence_preview").show();
+      var file = $("input[name='business_licence']").get(0).files[0];
+      var reader = new FileReader(); 
+      reader.readAsDataURL(file);
+      reader.onload=function(e){
+        $("#business_licence_preview img").get(0).src = e.target.result;
+      } 
+    });
+    $("input[name='account_picture']").change(function(){
+      $("#account_picture_preview").show();
+      var file = $("input[name='account_picture']").get(0).files[0];
+      var reader = new FileReader(); 
+      reader.readAsDataURL(file);
+      reader.onload=function(e){
+        $("#account_picture_preview img").get(0).src = e.target.result;
+      } 
+    });
+    $("input[name='shop_photo']").change(function(){
+      $("#shop_photo_preview").show();
+      var file = $("input[name='shop_photo']").get(0).files[0];
+      var reader = new FileReader(); 
+      reader.readAsDataURL(file);
+      reader.onload=function(e){
+        $("#shop_photo_preview img").get(0).src = e.target.result;
+      } 
+    });
+    $("input[name='hand_idcard']").change(function(){
+      $("#hand_idcard_preview").show();
+      var file = $("input[name='hand_idcard']").get(0).files[0];
+      var reader = new FileReader(); 
+      reader.readAsDataURL(file);
+      reader.onload=function(e){
+        $("#hand_idcard_preview img").get(0).src = e.target.result;
+      } 
     });
     $("#apply-submit").click(function(){
          //询问框

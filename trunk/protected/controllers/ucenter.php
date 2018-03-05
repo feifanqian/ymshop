@@ -307,6 +307,19 @@ class UcenterController extends Controller
             $other = $config->get("other");
             $info = $this->model->table("customer")->fields('offline_balance,realname_verified')->where("user_id=" . $this->user['id'])->find();
             $card_num = $this->model->table("bankcard")->where("user_id=" . $this->user['id'])->count();
+            $need_check = 0;
+            $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
+            if($shop){
+               $shop_check = $this->model->table('shop_check')->fields('id')->where('user_id='.$this->user['id'])->find();
+               if(!$shop_check && $this->user['id']==42608){
+                 $need_check = 1;
+               }else{
+                $need_check = 0;
+               }
+            }else{
+                $need_check = 0;
+            }
+            $this->assign('need_check',$need_check);
             $this->assign('card_num',$card_num);
             $this->assign("goldcoin", $info['offline_balance']);
             $this->assign("realname_verified", $info['realname_verified']);
@@ -3634,6 +3647,130 @@ class UcenterController extends Controller
             $this->assign("seo_title", "专区管理");
             $this->redirect();
         }
+    }
+
+    public function shop_check_do(){
+        $upfile_path = Tiny::getPath("uploads") . "/shop_check/";
+        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
+
+        $upfile1 = new UploadFile('positive_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile1->save();
+        $info1 = $upfile1->getInfo();
+        $result = array();
+        $positive_idcard = "";
+
+        $upfile2 = new UploadFile('native_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile2->save();
+        $info2 = $upfile2->getInfo();
+        $native_idcard = "";
+
+        $upfile3 = new UploadFile('business_licence', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile3->save();
+        $info3 = $upfile3->getInfo();
+        $business_licence = "";
+
+        $upfile4 = new UploadFile('account_picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile4->save();
+        $info4 = $upfile4->getInfo();
+        $account_picture = "";
+
+        $upfile5 = new UploadFile('shop_photo', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile5->save();
+        $info5 = $upfile5->getInfo();
+        $shop_photo = "";
+
+        $upfile6 = new UploadFile('hand_idcard', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile6->save();
+        $info6 = $upfile6->getInfo();
+        $hand_idcard = "";
+
+        if ($info1[0]['status'] == 1) {
+            $result = array('error' => 0, 'url' => $upfile_url . $info1[0]['path']);
+            $image_url1 = $upfile_url . $info1[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url1, 100, 100);
+            $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
+        }
+
+        if ($info2[0]['status'] == 1) {
+            $result = array('error' => 0, 'url' => $upfile_url . $info2[0]['path']);
+            $image_url2 = $upfile_url . $info2[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url2, 100, 100);
+            $native_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url2;
+        }
+
+        if ($info3[0]['status'] == 1) {
+            $result = array('error' => 0, 'url' => $upfile_url . $info3[0]['path']);
+            $image_url3 = $upfile_url . $info3[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url3, 100, 100);
+            $business_licence = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url3;
+        }
+
+        if ($info4[0]['status'] == 1) {
+            $result = array('error' => 0, 'url' => $upfile_url . $info4[0]['path']);
+            $image_url4 = $upfile_url . $info4[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url4, 100, 100);
+            $account_picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url4;
+        }
+
+        if ($info5[0]['status'] == 1) {
+            $result = array('error' => 0, 'url' => $upfile_url . $info5[0]['path']);
+            $image_url5 = $upfile_url . $info5[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url5, 100, 100);
+            $hand_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url5;
+        }
+
+        if ($info6[0]['status'] == 1) {
+            $result = array('error' => 0, 'url' => $upfile_url . $info6[0]['path']);
+            $image_url6 = $upfile_url . $info6[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url6, 100, 100);
+            $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url6;
+        }
+
+       $type = Filter::int(Req::args('shop_type')); //1实体商家 2个人微商
+       // $business_licence = Req::args('business_licence'); //营业执照
+       // $positive_idcard = Req::args('positive_idcard'); //身份证正面照
+       // $native_idcard = Req::args('native_idcard'); //身份证反面照
+       // $account_picture = Req::args('account_picture'); //开户许可证照
+       $account_card = Req::args('account_card'); //结算银行卡号
+       // $shop_photo = Req::args('shop_photo'); //门店照
+       // $hand_idcard = Req::args('hand_idcard'); //手持身份证照
+
+       // $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
+       
+       $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
+       
+       $data = array(
+        'user_id'=>$this->user['id'],
+        'type'=>$type,
+        'business_licence'=>$business_licence,
+        'positive_idcard'=>$positive_idcard,
+        'native_idcard'=>$native_idcard,
+        'account_picture'=>$account_picture,
+        'account_card'=>$account_card,
+        'shop_photo'=>$shop_photo,
+        'hand_idcard'=>$hand_idcard,
+        'status'=>0,
+        'create_date'=>date('Y-m-d H:i:s')
+        );
+       $shop_check = $this->model->table('shop_check')->fields('id,status')->where('user_id='.$this->user['id'])->find();
+       if(!$shop_check){
+           $this->model->table('shop_check')->data($data)->insert();
+       }
+       $this->redirect("ucenter/offline_balance_withdraw", false, array('msg' => array("success", "提交成功！")));
+       
+    
     }
 
 }

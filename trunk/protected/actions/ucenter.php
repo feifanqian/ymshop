@@ -1416,6 +1416,24 @@ class UcenterAction extends Controller {
             $options['save-key'] = "/data/uploads/picture/" . $this->user['id'] . ".png";
             $options['ext-param'] = "shop_picture:{$this->user['id']}";
             $this->model->table('district_promoter')->data(array('picture'=>$options['save-key']))->where('user_id='.$this->user['id'])->update();
+        }elseif ($type == 'business_licence') {
+            $options['save-key'] = "/data/uploads/business_licence/" . $this->user['id'] . ".jpg";
+            $options['ext-param'] = "business_licence:{$this->user['id']}";
+        }elseif ($type == 'positive_idcard') {
+            $options['save-key'] = "/data/uploads/positive_idcard/" . $this->user['id'] . ".jpg";
+            $options['ext-param'] = "positive_idcard:{$this->user['id']}";
+        }elseif ($type == 'native_idcard') {
+            $options['save-key'] = "/data/uploads/native_idcard/" . $this->user['id'] . ".jpg";
+            $options['ext-param'] = "native_idcard:{$this->user['id']}";
+        }elseif ($type == 'account_picture') {
+            $options['save-key'] = "/data/uploads/account_picture/" . $this->user['id'] . ".jpg";
+            $options['ext-param'] = "account_picture:{$this->user['id']}";
+        }elseif ($type == 'shop_photo') {
+            $options['save-key'] = "/data/uploads/shop_photo/" . $this->user['id'] . ".jpg";
+            $options['ext-param'] = "shop_photo:{$this->user['id']}";
+        }elseif ($type == 'hand_idcard') {
+            $options['save-key'] = "/data/uploads/hand_idcard/" . $this->user['id'] . ".jpg";
+            $options['ext-param'] = "hand_idcard:{$this->user['id']}";
         } else {
             $this->code = 1000;
             return;
@@ -1426,6 +1444,7 @@ class UcenterAction extends Controller {
         $this->code = 0;
         $this->content['policy'] = $policy;
         $this->content['signature'] = $signature;
+        $this->content['save_path'] = $options['save-key'];
     }
 
     public function myCommission() {
@@ -2525,5 +2544,90 @@ class UcenterAction extends Controller {
             return FALSE;
             exit();
         } 
+    }
+
+    /*
+     * 实名认证临时接口
+     */
+    public function shop_check(){
+       $type = Filter::int(Req::args('type')); //1实体商家 2个人微商
+       $business_licence = Req::args('business_licence'); //营业执照
+       $positive_idcard = Req::args('positive_idcard'); //身份证正面照
+       $native_idcard = Req::args('native_idcard'); //身份证反面照
+       $account_picture = Req::args('account_picture'); //开户许可证照
+       $account_card = Req::args('account_card'); //结算银行卡号
+       $shop_photo = Req::args('shop_photo'); //门店照
+       $hand_idcard = Req::args('hand_idcard'); //手持身份证照
+
+       $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
+       if(!$shop){
+        $this->code = 1166;
+        return;
+       }
+       if(!$positive_idcard){
+        $this->code = 1220;
+        return;
+       }
+       if(!$native_idcard){
+        $this->code = 1221;
+        return;
+       }
+       if(!$account_card){
+        $this->code = 1223;
+        return;
+       }
+       if($type==1){
+            if(!$business_licence){
+                $this->code = 1219;
+                return;
+            }
+            if(!$account_picture){
+                $this->code = 1222;
+                return;
+            }
+            if(!$shop_photo){
+                $this->code = 1224;
+                return;
+            }
+       }elseif($type==2){
+          if(!$hand_idcard){
+                $this->code = 1225;
+                return;
+            }
+       }
+       $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
+       
+       $data = array(
+        'user_id'=>$user_id,
+        'type'=>$type,
+        'business_licence'=>$business_licence,
+        'positive_idcard'=>$positive_idcard,
+        'native_idcard'=>$native_idcard,
+        'account_picture'=>$account_picture,
+        'account_card'=>$account_card,
+        'shop_photo'=>$shop_photo,
+        'hand_idcard'=>$hand_idcard,
+        'status'=>0
+        );
+       $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
+       if($shop_check){
+          if($shop_check['status']==0){
+             $this->code = 1227;
+             return;
+          }elseif($shop_check['status']==1){
+             $this->code = 1228;
+             return;
+          }else{
+             $result = $this->model->table('shop_check')->data($data)->where('user_id='.$this->user['id'])->update();
+          }
+       }
+       $result = $this->model->table('shop_check')->data($data)->insert();
+       if($result){
+        $this->code = 0;
+        return;
+       }else{
+         $this->code = 1226;
+         return;
+       }
     }
 }
