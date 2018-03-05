@@ -1408,7 +1408,7 @@ class DistrictadminController extends Controller
         }else{
             $where = '1=1';
         } 
-            $items = $model->join("user as u on u.id = sc.user_id")->join("district_promoter as d on d.user_id = sc.user_id")->fields('sc.*,u.nickname,d.shop_name')->where($where)->findAll();
+            $items = $model->join("left join user as u on u.id = sc.user_id left jon district_promoter as d on d.user_id = sc.user_id")->fields('sc.*,u.nickname,d.shop_name')->where($where)->findAll();
             if ($items) {
                 header("Content-type:application/vnd.ms-excel");
                 header("Content-Disposition:filename=doc_receiving_list.xls");
