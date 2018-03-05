@@ -1388,4 +1388,52 @@ class DistrictadminController extends Controller
             exit();
         }
     }
+
+    public function shop_check_dos(){
+        $id = Filter::sql(Req::args("id"));
+        $status = Filter::sql(Req::args("status"));
+        $model = new Model();
+        $model->table("shop_check")->data(array("status" =>1))->where("id=" . $id)->update();
+        $this->redirect('shop_check');
+    }
+
+    public function shop_check_export(){
+        $this->layout = '';
+        $condition = Req::args("condition");
+        $fields = Req::args("fields");
+        $condition = Common::str2where($condition);
+        $model = new Model("shop_check as sc");
+        if ($condition) {
+            $where = $condition;
+        }else{
+            $where = '1=1';
+        } 
+            $items = $model->join("user as u on u.id = sc.user_id")->join("district_promoter as d on d.user_id = sc.user_id")->fields('sc.*,u.nickname,d.shop_name')->where($where)->findAll();
+            if ($items) {
+                header("Content-type:application/vnd.ms-excel");
+                header("Content-Disposition:filename=doc_receiving_list.xls");
+                $fields_array = array('nickname' => '用户名','shop_name' => '店铺名', 'shop_type' => '商家类型', 'positive_idcard' => '身份证正面照','native_idcard'=>'身份证反面照', 'business_licence' => '营业执照','account_picture' => '开户许可证','shop_photo' => '门店照','hand_idcard' => '手持身份证照','account_card' => '结算银行卡号');
+                $str = "<table border=1><tr>";
+                foreach($items as $k=>$v){
+                    $items[$k]['shop_type'] = $v['type']==1?'实体商家':'个人微商';
+                }
+                foreach ($fields as $value) {
+                    $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
+                }
+                $str .= "</tr>";
+                foreach ($items as $item) {
+                    $str .= "<tr>";
+                    foreach ($fields as $value) {
+                        $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$value]) . "</td>";
+                    }
+                    $str .= "</tr>";
+                }
+                $str .= "</table>";
+                echo $str;
+                exit;
+            } else {
+                $this->msg = array("warning", "没有符合该筛选条件的数据，请重新筛选！");
+                $this->redirect("shop_check_list", false, Req::args());
+            }
+    }
 }
