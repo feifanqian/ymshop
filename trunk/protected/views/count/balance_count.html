@@ -1,0 +1,88 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('highcharts')}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <span class="fl">时间：<input name="s_time" type="text" value="{$s_time}" id="datepick" class="middle" readonly="readonly"></span>
+    <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a>
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:30">序号</th>
+        <th style="width:100">用户名</th>
+        
+        <th style="width:100">账上商家余额</th>
+        <th style="width:100">账上其它余额</th>
+        <th style="width:100">已提现商家款</th>
+        <th style="width:100">已提现其它款</th>
+        
+        
+         
+    </tr>
+    {query:name=customer as c fields=c.user_id,c.real_name,c.balance,c.offline_balance,sum(bw.real_amount) as amount_sum,sum(bws.real_amount) as amount_sums join=left join balance_withdraw as bw on c.user_id eq bw.user_id left join balance_withdraw as bws on c.user_id eq bws.user_id where= $where order= c.id desc id=$obj page=1 desc }
+        <tr class="{if:$key%2==1}odd{/if}">
+            <td style="width:30px;">{$item['id']}、</td>
+            <td style="width:100px">{$item['real_name'] | '--'}</td>
+            
+            <td style="width:100px">{$item['offline_balance']}</td>
+            <td style="width:100px">{$item['balance']}</td>
+            <td style="width:100px">{$item['amount_sum']}</td>
+            <td style="width:100px">{$item['amount_sums']}</td>
+            
+            
+            
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<div id="excel_box" style="display: none;width:600px;">
+    <h1 class="page_title">Excel导出</h1>
+    <div class="form2">
+        <form  id="export_form" action="{url:/count/balance_count_excel}" method="post" >
+           <dl class="lineD">
+          <dt>筛选条件：</dt>
+          <dd><input type="hidden"  id="condition_input_excel" name="condition" value="{$condition}"><label></label> <label><a href="javascript:;" onclick="Condition('#condition_input_excel')"  class="button" > 高级筛选</a></label>
+          </dd>
+          </dl>
+         <dl class="lineD">
+          <dt>页数：</dt>
+          <dd>第<input type="text" style="width:24px;text-align:center;" name="page" value="1">页</dd>
+          </dl> 
+        <dl class="lineD">
+          <dt>导出字段：</dt>
+          <dd>
+            <label><input type="checkbox" name="fields[]" value="user_id" checked="checked"> 序号</label>
+            <label><input type="checkbox" name="fields[]" value="real_name" checked="checked"> 用户名</label>
+            <label><input type="checkbox" name="fields[]" value="offline_balance" checked="checked"> 账上商家余额</label>
+            <label><input type="checkbox" name="fields[]" value="balance" checked="checked"> 账上其它余额</label>
+            <label><input type="checkbox" name="fields[]" value="amount_sum" checked="checked"> 已提现商家款</label>
+            <label><input type="checkbox" name="fields[]" value="amount_sums" checked="checked"> 已提现其它款</label>
+            
+          </dd>
+          </dl>
+        <div class="tc mt10"><a href="javascript:;" onclick="export_excel()" class="button">导出</a></div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    var form =  new Form();
+    $("#condition").on("click",function(){
+        $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/count/balance_count}',method:'get'});},data:{'time':{name:'时间'},'name':{name:'用户名'},'c.real_name':{name:'真实姓名'},'order_no':{name:'订单号'},'note':{name:'备注'}
+        }});
+    });
+    function export_excel_dialog(){
+        art.dialog({id:'export_excel_dialog',title:'Excel导出',lock:true,opacity:0.1,width:600,height:200,content:document.getElementById("excel_box")});
+    }
+    function export_excel() {
+      $("#export_form").submit();
+    }
+    function Condition(id){
+        $("body").Condition({input:id,data:{'time':{name:'时间'},'name':{name:'用户名'},'c.real_name':{name:'真实姓名'},'order_no':{name:'订单号'},'note':{name:'备注'}
+        }});
+    }
+</script>

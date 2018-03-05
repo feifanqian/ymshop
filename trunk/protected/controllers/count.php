@@ -1611,4 +1611,21 @@ class CountController extends Controller
         exit;
     }
 
+    public function balance_count(){
+        $cal = $this->calendar();
+        $stime = $cal['start']; //开始时间
+        $etime = $cal['end']; //结束时间
+        $s_time = $cal['str'];
+        $num = $cal['days'];//天数
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str)
+            $this->assign("where", $condition_str);
+        else
+            $this->assign("where", "bw.status=1 and bw.type=1 and bws.status=1 and bws.type=0");
+        $this->assign('s_time', $s_time);
+        $this->assign("condition", $condition);
+        $this->redirect();
+    }
+
 }
