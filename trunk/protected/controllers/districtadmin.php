@@ -1351,4 +1351,41 @@ class DistrictadminController extends Controller
         $this->assign("condition", $condition);
         $this->redirect();
     }
+
+    public function shop_check_detail(){
+       $id = Req::args("id");
+        $id = Filter::int($id); //
+        $model = new Model();
+        $shop_check = $model->table('shop_check')->fields('*')->where('id='.$id)->find();
+        
+        
+        $this->assign('shop_check',$shop_check);
+        $this->redirect();
+    }
+
+    public function shop_check_do(){
+      $id = Filter::sql(Req::args("id"));
+        $status = Filter::sql(Req::args("status"));
+        $reason = Filter::sql(Req::args("reason"));
+        $model = new Model();
+        if ($status == 2) {
+            if (trim($reason) != "") {//作废理由不能为空
+                $result = $model->query("update shop_check set status = 2,check_date='" . date("Y-m-d H:i:s") . "',reason ='$reason' where id = $id");
+                
+                    echo json_encode(array("status" => 'success', 'msg' => '成功'));
+                    exit();
+                
+            } else {
+                echo json_encode(array("status" => 'fail', 'msg' => '理由不能为空'));
+                exit();
+            }
+        }elseif($status==1){
+          $model->table("shop_check")->data(array("status" =>1))->where("id=" . $id)->update();
+          echo json_encode(array("status" => 'success', 'msg' => '成功'));
+          exit();
+        }else{
+            echo json_encode(array("status" => 'success', 'msg' => '成功'));
+            exit();
+        }
+    }
 }

@@ -1,0 +1,52 @@
+{echo:JS::import('form');}
+{echo:JS::import('editor');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<div id="obj_form" class="form2 tab">
+    <h1 class="page_title">商家认证详情</h1>
+    <form action="{url:/districtadmin/shop_check_do}" method="post" >
+        <input type="hidden" name="id" value="{$shop_check['id']}">
+        <input type="hidden" name="status" value="1">
+        <dl class="lineD">
+            <dt>身份证正面照：</dt>
+            <dd>
+                <img src="{$shop_check['positive_idcard']}" width="200" height="140">      
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>身份证反面照：</dt>
+            <dd>
+                <img src="{$shop_check['native_idcard']}" width="200" height="140"> 
+            </dd>
+        </dl>
+        {if:$shop_check['type']==1}
+        <dl class="lineD">
+            <dt>营业执照：</dt>
+            <dd>
+                <img src="{$shop_check['business_licence']}" width="200" height="140">      
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>开户许可证：</dt>
+            <dd>
+                <img src="{$shop_check['account_picture']}" width="200" height="140"> 
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>门店照：</dt>
+            <dd>
+                <img src="{$shop_check['shop_photo']}" width="200" height="140"> 
+            </dd>
+        </dl>
+        {else:}
+        <dl class="lineD">
+            <dt>手持身份证照：</dt>
+            <dd>
+                <img src="{$shop_check['hand_idcard']}" width="200" height="140"> 
+                
+            </dd>
+        </dl>
+        {/if}
+        <div style="text-align:left;margin-left:13%;"><input type="submit" value="通过认证" class="button"></div>
+    </form>
+</div>
