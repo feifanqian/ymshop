@@ -2259,8 +2259,9 @@ class UcenterAction extends Controller {
             unset($record['html']);
         }
         if($record['data']){
+            // $record['data'] = array_values($record['data']);
             foreach($record['data'] as $k=>$v){
-                $record['data']['createtime'] = strtotime($v['create_time']);
+                $record['data'][$k]['createtime'] = strtotime($v['create_time']);
             }    
         }
         // if($record['data']){
