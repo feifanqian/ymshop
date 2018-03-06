@@ -1640,7 +1640,7 @@ class CountController extends Controller
         // $result2 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,sum(bw.real_amount) as real_amounts')->where($where2)->order('c.user_id desc')->group('bw.user_id')->findAll();
         // $result = array_merge($result1,$result2);
         $results = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findPage($page, 10);
-        $resultss = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
+        // $resultss = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
         $result = $results['data'];
         foreach($result as $k=>$v){
             $where1.=" and user_id =".$v['user_id'];
