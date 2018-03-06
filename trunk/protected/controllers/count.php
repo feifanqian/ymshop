@@ -1631,36 +1631,55 @@ class CountController extends Controller
         }
         if(isset($_POST['s_name'])){
             $s_name = $_POST['s_name'];
-            $where1 = "bw.status=1 and bw.type=1 and c.real_name like '%{$s_name}%'";
-            $where2 = "bw.status=1 and bw.type=0 and c.real_name like '%{$s_name}%'";
+            $where = "real_name like '%{$s_name}%'";
+        }else{
+            $where = '1=1';
         }
         $model = new Model();
-        $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
-        $result2 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount as real_amounts')->where($where2)->order('c.user_id desc')->group('bw.user_id')->findAll();
-        $result = array_merge($result1,$result2); 
+        // $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,sum(bw.real_amount) as real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
+        // $result2 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,sum(bw.real_amount) as real_amounts')->where($where2)->order('c.user_id desc')->group('bw.user_id')->findAll();
+        // $result = array_merge($result1,$result2);
+        $results = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findPage($page, 10);
+        $resultss = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
+        $result = $results['data'];
         foreach($result as $k=>$v){
-            if(!isset($v['real_amounts'])){
-                $result[$k]['real_amounts']='0.00';
-            }
-            if(!isset($v['real_amount'])){
+            $where1.=" and user_id =".$v['user_id'];
+            $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amount')->where($where1)->find();
+            if($result1){
+                 $result[$k]['real_amount']=$result1['real_amount']==null?'0.00':$result1['real_amount']; 
+            }else{
                 $result[$k]['real_amount']='0.00';
             }
-        }
-        // var_dump($result);die;
-        $total=count($result);//总条数  
-        $num=10;//每页显示条数  
+            $where2.=" and user_id =".$v['user_id'];
+            $result2 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amounts')->where($where2)->find();
+            if($result2){
+                 $result[$k]['real_amounts']=$result2['real_amounts']==null?'0.00':$result2['real_amounts'];  
+            }else{
+                $result[$k]['real_amounts']='0.00';
+            }
+        } 
+        // foreach($result as $k=>$v){
+        //     if(!isset($v['real_amounts'])){
+        //         $result[$k]['real_amounts']='0.00';
+        //     }
+        //     if(!isset($v['real_amount'])){
+        //         $result[$k]['real_amount']='0.00';
+        //     }
+        // }
+        // $total=count($resultss);//总条数  
+        // $num=10;//每页显示条数  
         
-        $pagenum=ceil($total/$num);//总页数  
-        $offset=($page-1)*$num;//开始去数据的位置   
-        $start=$offset+1;//开始记录页  
-        $end=($page==$pagenum)?$total : ($page*$num);//结束记录页  
-        $next=($page==$pagenum)? $pagenum:($page+1);//下一页  
-        $prev=($page==1)? 1:($page-1);//前一页 
-        $html="<a href=/count/balance_count?p={$prev} >上一页</a>  <span class='current'>{$page}</span>
-<a href=/count/balance_count?p={$next} >下一页</a> &nbsp;&nbsp;&nbsp;&nbsp;共 {$pagenum}页&nbsp;&nbsp;跳到第<input id='drumppage' style='width:24px;text-align:center' value='1'>页<a href='javascript:;' onclick='javascript:window.location.href=&quot;/count/balance_count?p=&quot;+document.getElementById(&quot;drumppage&quot;).value;'>确定</a>";
-
-        $newarr = array_slice($result, ($page-1)*$num, $num);
-        $this->assign('result', $newarr);
+        // $pagenum=ceil($total/$num);//总页数  
+        // $offset=($page-1)*$num;//开始去数据的位置   
+        // $start=$offset+1;//开始记录页  
+        // $end=($page==$pagenum)?$total : ($page*$num);//结束记录页  
+        // $next=($page==$pagenum)? $pagenum:($page+1);//下一页  
+        // $prev=($page==1)? 1:($page-1);//前一页 
+//         $html="<a href=/count/balance_count?p={$prev} >上一页</a>  <span class='current'>{$page}</span>
+// <a href=/count/balance_count?p={$next} >下一页</a> &nbsp;&nbsp;&nbsp;&nbsp;共 {$pagenum}页&nbsp;&nbsp;跳到第<input id='drumppage' style='width:24px;text-align:center' value='1'>页<a href='javascript:;' onclick='javascript:window.location.href=&quot;/count/balance_count?p=&quot;+document.getElementById(&quot;drumppage&quot;).value;'>确定</a>";
+        $html = $results['html'];
+        // $newarr = array_slice($result, ($page-1)*$num, $num);
+        $this->assign('result', $result);
         $this->assign('html',$html);
         $this->assign('s_time', $s_time);
         $this->assign("condition", $condition);
@@ -1699,40 +1718,7 @@ class CountController extends Controller
         $fields = array('user_id','real_name','offline_balance','balance','real_amount','real_amounts');
         $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
         $result2 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount as real_amounts')->where($where2)->order('c.user_id desc')->group('bw.user_id')->findAll();
-        // $items = array_merge($result1,$result2); 
-        //     if ($items) {
-        //         foreach($items as $k=>$v){
-        //             if(!isset($v['real_amounts'])){
-        //                 $items[$k]['real_amounts']='0.00';
-        //             }
-        //             if(!isset($v['real_amount'])){
-        //                 $items[$k]['real_amount']='0.00';
-        //             }
-        //         }
-        //         header("Content-type:application/vnd.ms-excel");
-        //         // header("Content-Disposition:filename=doc_receiving_list.xls");
-        //         header('Content-Disposition: attachment;filename="' . $title . '".xls"');
-        //         $fields_array = array('user_id' => 'ID','real_name' => '用户名', 'offline_balance' => '账上商家余额', 'balance' => '账上其它余额','real_amount'=>'已提现商家款', 'real_amounts' => '已提现其它款');
-        //         $str = "<table border=1><tr>";
-        //         foreach ($fields as $value) {
-        //             $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
-        //         }
-        //         $str .= "</tr>";
-        //         foreach ($items as $item) {
-        //             $str .= "<tr>";
-        //             foreach ($fields as $value) {
-        //                 $str .= "<td>" . iconv("UTF-8", "GB2312//IGNORE", $item[$value]) . "</td>";
-        //                 // $str .= "<td>" . mb_convert_encoding("GBK", "UTF-8", $item[$value]) . "</td>";
-        //             }
-        //             $str .= "</tr>";
-        //         }
-        //         $str .= "</table>";
-        //         echo $str;
-        //         exit;
-        //     } else {
-        //         $this->msg = array("warning", "没有符合该筛选条件的数据，请重新筛选！");
-        //         $this->redirect("balance_count", false, Req::args());
-        //     }
+        
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()
             ->setCreator("ymlypt")
@@ -1757,17 +1743,36 @@ class CountController extends Controller
         $objPHPExcel->setActiveSheetIndex(0) ->setCellValue('D2', '账上其它余额');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '已提现商家款');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '已提现其它款');
-        $result = array_merge($result1,$result2); 
+        // $result = array_merge($result1,$result2); 
         
+        $result = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->order('offline_balance desc')->findAll();
+
+        foreach($result as $k=>$v){
+            $where1.=" and user_id =".$v['user_id'];
+            $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amount')->where($where1)->find();
+            if($result1){
+                 $result[$k]['real_amount']=$result1['real_amount']==null?'0.00':$result1['real_amount']; 
+            }else{
+                $result[$k]['real_amount']='0.00';
+            }
+            $where2.=" and user_id =".$v['user_id'];
+            $result2 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amounts')->where($where2)->find();
+            if($result2){
+                 $result[$k]['real_amounts']=$result2['real_amounts']==null?'0.00':$result2['real_amounts'];  
+            }else{
+                $result[$k]['real_amounts']='0.00';
+            }
+        } 
+
         if (!empty($result)) {
-            foreach($result as $k=>$v){
-                    if(!isset($v['real_amounts'])){
-                        $result[$k]['real_amounts']='0.00';
-                    }
-                    if(!isset($v['real_amount'])){
-                        $result[$k]['real_amount']='0.00';
-                    }
-                }
+            // foreach($result as $k=>$v){
+            //         if(!isset($v['real_amounts'])){
+            //             $result[$k]['real_amounts']='0.00';
+            //         }
+            //         if(!isset($v['real_amount'])){
+            //             $result[$k]['real_amount']='0.00';
+            //         }
+            //     }
             foreach ($result as $k => $v) {
                 $index = $k + 3;
                 $objPHPExcel->setActiveSheetIndex(0)
