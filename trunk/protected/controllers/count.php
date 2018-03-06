@@ -1722,7 +1722,7 @@ class CountController extends Controller
            $s_name = $_POST['s_name'];
            $where = "real_name like '%{$s_name}%'";
         }else{
-            $where = '1=1';
+            $where = 'balance>0 or offline_balance>0';
         } 
         $fields = array('user_id','real_name','offline_balance','balance','real_amount','real_amounts');
         // $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
@@ -1754,9 +1754,9 @@ class CountController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '已提现其它款');
         // $result = array_merge($result1,$result2); 
         
-        $results = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findPage($page, 10);
-        // $resultss = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
-        $result = $results['data'];
+        // $results = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findPage($page, 10);
+        $result = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
+        // $result = $results['data'];
         foreach($result as $k=>$v){
             $where1.=" and user_id =".$v['user_id'];
             $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amount')->where($where1)->find();
