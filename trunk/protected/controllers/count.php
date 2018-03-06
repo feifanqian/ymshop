@@ -1713,13 +1713,13 @@ class CountController extends Controller
                 $fields_array = array('user_id' => 'ID','real_name' => '用户名', 'offline_balance' => '账上商家余额', 'balance' => '账上其它余额','real_amount'=>'已提现商家款', 'real_amounts' => '已提现其它款');
                 $str = "<table border=1><tr>";
                 foreach ($fields as $value) {
-                    $str .= "<th>" . iconv("UTF-8", "GBK", $fields_array[$value]) . "</th>";
+                    $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
                 }
                 $str .= "</tr>";
                 foreach ($items as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $value) {
-                        $str .= "<td>" . iconv("UTF-8", "GBK", $item[$value]) . "</td>";
+                        $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$value]) . "</td>";
                     }
                     $str .= "</tr>";
                 }
