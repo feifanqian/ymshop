@@ -9,6 +9,7 @@
       <span class="fl">用户名<input name="s_name" type="text" value="" class="middle"></span>
       <a  id="condition" class="icon-search" style="" type="submit"> 查询</a>
       <!-- <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a> -->
+      <input name="page" type="hidden" value="{$page}">
       <a href="javascript:;"  target="_blank" class="icon-print" id="output_excel"> 导出Excel</a>
       <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
     </form>
@@ -81,8 +82,11 @@ var ExcelUrl = "{url:/count/balance_count_excel/s_time/}";
         $("input[name=s_time]").on("change",function(){
             $("#output_excel").attr("href",ExcelUrl+$(this).val());
         });
+        var s_time = $("input[name=s_time]").val();
         $("input[name=s_name]").on("change",function(){
-            $("#output_excel").attr("href","/s_name/"+$(this).val());
+          var ExcelUrls = ExcelUrl+s_time+'/s_name/'+$(this).val();
+          console.log(ExcelUrls);
+            $("#output_excel").attr("href",ExcelUrls);
         });
 });        
     var form =  new Form();

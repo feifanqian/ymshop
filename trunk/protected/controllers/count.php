@@ -1683,11 +1683,14 @@ class CountController extends Controller
         $this->assign('html',$html);
         $this->assign('s_time', $s_time);
         $this->assign("condition", $condition);
+        $this->assign("page", $page);
         $this->redirect();
     }
 
     public function balance_count_excel(){
         header("Content-type: text/html; charset=utf-8");
+        $page = Filter::sql(Req::args("p"));
+        $page = $page ==NULL ? 1 : $page;
         $time = Req::args("s_time");
         if (!$time) {
             $time = date("Y-m-d%20--%20Y-m-d");
@@ -1751,8 +1754,9 @@ class CountController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '已提现其它款');
         // $result = array_merge($result1,$result2); 
         
-        $result = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
-
+        $results = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findPage($page, 10);
+        // $resultss = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
+        $result = $results['data'];
         foreach($result as $k=>$v){
             $where1.=" and user_id =".$v['user_id'];
             $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amount')->where($where1)->find();
