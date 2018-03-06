@@ -1612,6 +1612,8 @@ class CountController extends Controller
     }
 
     public function balance_count(){
+        $page = Filter::sql(Req::args("p"));
+        $page = $page ==NULL ? 1 : $page;
         $cal = $this->calendar();
         $stime = $cal['start']; //开始时间
         $etime = $cal['end']; //结束时间
@@ -1619,10 +1621,47 @@ class CountController extends Controller
         $num = $cal['days'];//天数
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
-        if ($condition_str)
-            $this->assign("where", $condition_str);
-        else
-            $this->assign("where", "bw.status=1 and bw.type=1 and bws.status=1 and bws.type=0");
+        $where1 = 'bw.status=1 and bw.type=1';
+        $where2 = 'bw.status=1 and bw.type=0';
+        if(isset($_POST['s_time'])){
+            $stime = $cal['start']; //开始时间
+            $etime = $cal['end']; //结束时间
+            $where1 .= " and bw.apply_date between '$stime' and '$etime'";
+            $where2 .= " and bw.apply_date between '$stime' and '$etime'";
+        }
+        if(isset($_POST['s_name'])){
+            $s_name = $_POST['s_name'];
+            $where1 .= " and c.real_name like '%{$s_name}%'";
+            $where2 .= " and c.real_name like '%{$s_name}%'";
+        }
+        $model = new Model();
+        $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
+        $result2 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount as real_amounts')->where($where2)->order('c.user_id desc')->group('bw.user_id')->findAll();
+        $result = array_merge($result1,$result2); 
+        foreach($result as $k=>$v){
+            if(!isset($v['real_amounts'])){
+                $result[$k]['real_amounts']='0.00';
+            }
+            if(!isset($v['real_amount'])){
+                $result[$k]['real_amount']='0.00';
+            }
+        }
+        // var_dump($result);die;
+        $total=count($result);//总条数  
+        $num=10;//每页显示条数  
+        
+        $pagenum=ceil($total/$num);//总页数  
+        $offset=($page-1)*$num;//开始去数据的位置   
+        $start=$offset+1;//开始记录页  
+        $end=($page==$pagenum)?$total : ($page*$num);//结束记录页  
+        $next=($page==$pagenum)? $pagenum:($page+1);//下一页  
+        $prev=($page==1)? 1:($page-1);//前一页 
+        $html="<a href=/count/balance_count?p={$prev} >上一页</a>  <span class='current'>{$page}</span>
+<a href=/count/balance_count?p={$next} >下一页</a> &nbsp;&nbsp;&nbsp;&nbsp;共 {$pagenum}页&nbsp;&nbsp;跳到第<input id='drumppage' style='width:24px;text-align:center' value='1'>页<a href='javascript:;' onclick='javascript:window.location.href=&quot;/count/balance_count?p=&quot;+document.getElementById(&quot;drumppage&quot;).value;'>确定</a>";
+
+        $newarr = array_slice($result, ($page-1)*$num, $num);
+        $this->assign('result', $newarr);
+        $this->assign('html',$html);
         $this->assign('s_time', $s_time);
         $this->assign("condition", $condition);
         $this->redirect();
