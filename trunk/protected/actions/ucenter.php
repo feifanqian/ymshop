@@ -2240,14 +2240,28 @@ class UcenterAction extends Controller {
             $this->code = 1131;
             return;
         }
+        // $record = $this->model->table('district_promoter as dp')
+        //         ->join('left join user as u on dp.user_id = u.id left join invite as i on dp.user_id=i.invite_user_id')
+        //         ->fields('u.id,u.avatar,u.nickname,i.createtime')
+        //         ->where("i.user_id=".$this->user['id'])
+        //         ->order("i.id desc")
+        //         ->findPage($page, 10);
         $record = $this->model->table('district_promoter as dp')
-                ->join('left join user as u on dp.user_id = u.id left join invite as i on dp.user_id=i.invite_user_id')
-                ->fields('u.id,u.avatar,u.nickname,i.createtime')
-                ->where("i.user_id=".$this->user['id'])
+                ->join('left join user as u on dp.user_id = u.id')
+                ->fields('u.id,u.avatar,u.nickname,dp.createtime')
+                ->where("dp.hirer_id=".$district['id'])
                 ->order("i.id desc")
-                ->findPage($page, 10);        
+                ->findPage($page, 10);                
         if (empty($record)) {
-            return array('data'=>array());
+            $record = array(
+                'data'=>[],
+                'page'=>array(
+                    'total'=>0,
+                    'totalPage'=>0,
+                    'pageSize'=>10,
+                    'page'=>1
+                    ),
+                );
         }
         if (isset($record['html'])) {
             unset($record['html']);
