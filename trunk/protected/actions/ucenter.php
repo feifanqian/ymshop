@@ -2240,24 +2240,29 @@ class UcenterAction extends Controller {
             $this->code = 1131;
             return;
         }
-        // $record = $this->model->table('district_promoter as dp')
-        //         ->join('left join user as u on dp.user_id = u.id left join invite as i on dp.user_id=i.invite_user_id')
-        //         ->fields('u.id,u.avatar,u.nickname,i.createtime')
-        //         ->where("i.user_id=".$this->user['id'])
-        //         ->order("i.id desc")
-        //         ->findPage($page, 10);
         $record = $this->model->table('district_promoter as dp')
-                ->join('left join user as u on dp.user_id = u.id')
-                ->fields('u.id,u.avatar,u.nickname,dp.create_time')
-                ->where("dp.hirer_id=".$district['id'])
+                ->join('left join user as u on dp.user_id = u.id left join invite as i on dp.user_id=i.invite_user_id')
+                ->fields('u.id,u.avatar,u.nickname,i.createtime')
+                ->where("i.user_id=".$this->user['id'])
                 ->order("i.id desc")
-                ->findPage($page, 10);                
+                ->findPage($page, 10);
+        // $record = $this->model->table('district_promoter as dp')
+        //         ->join('left join user as u on dp.user_id = u.id')
+        //         ->fields('u.id,u.avatar,u.nickname,dp.create_time')
+        //         ->where("dp.hirer_id=".$district['id'])
+        //         ->order("i.id desc")
+        //         ->findPage($page, 10);                
         if (empty($record)) {
             $record['data'] = array();
         }
         if (isset($record['html'])) {
             unset($record['html']);
         }
+        // if($record['data']){
+        //     foreach($record['data'] as $k=>$v){
+        //         $record['data']['create_time'] = strtotime($v['create_time']);
+        //     }    
+        // }
         // if($record['data']){
         //     foreach($record['data'] as $k=>$v){
         //         $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
