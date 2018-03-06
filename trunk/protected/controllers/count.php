@@ -1699,40 +1699,109 @@ class CountController extends Controller
         $fields = array('user_id','real_name','offline_balance','balance','real_amount','real_amounts');
         $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
         $result2 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount as real_amounts')->where($where2)->order('c.user_id desc')->group('bw.user_id')->findAll();
-        $items = array_merge($result1,$result2); 
-            if ($items) {
-                foreach($items as $k=>$v){
+        // $items = array_merge($result1,$result2); 
+        //     if ($items) {
+        //         foreach($items as $k=>$v){
+        //             if(!isset($v['real_amounts'])){
+        //                 $items[$k]['real_amounts']='0.00';
+        //             }
+        //             if(!isset($v['real_amount'])){
+        //                 $items[$k]['real_amount']='0.00';
+        //             }
+        //         }
+        //         header("Content-type:application/vnd.ms-excel");
+        //         // header("Content-Disposition:filename=doc_receiving_list.xls");
+        //         header('Content-Disposition: attachment;filename="' . $title . '".xls"');
+        //         $fields_array = array('user_id' => 'ID','real_name' => '用户名', 'offline_balance' => '账上商家余额', 'balance' => '账上其它余额','real_amount'=>'已提现商家款', 'real_amounts' => '已提现其它款');
+        //         $str = "<table border=1><tr>";
+        //         foreach ($fields as $value) {
+        //             $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
+        //         }
+        //         $str .= "</tr>";
+        //         foreach ($items as $item) {
+        //             $str .= "<tr>";
+        //             foreach ($fields as $value) {
+        //                 $str .= "<td>" . iconv("UTF-8", "GB2312//IGNORE", $item[$value]) . "</td>";
+        //                 // $str .= "<td>" . mb_convert_encoding("GBK", "UTF-8", $item[$value]) . "</td>";
+        //             }
+        //             $str .= "</tr>";
+        //         }
+        //         $str .= "</table>";
+        //         echo $str;
+        //         exit;
+        //     } else {
+        //         $this->msg = array("warning", "没有符合该筛选条件的数据，请重新筛选！");
+        //         $this->redirect("balance_count", false, Req::args());
+        //     }
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()
+            ->setCreator("ymlypt")
+            ->setLastModifiedBy("ymlypt")
+            ->setTitle("test")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("goods of ymlypt")
+            ->setKeywords("goods")
+            ->setCategory("Test result file");
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('D')->setWidth(30);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('E')->setWidth(30);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('F')->setWidth(30);
+        
+        // Add some data
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:G1')->setCellValue('A1', '圆梦用户钱袋统计表');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A2", 'ID');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2','用户名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("C2", '账上商家余额');
+        $objPHPExcel->setActiveSheetIndex(0) ->setCellValue('D2', '账上其它余额');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '已提现商家款');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '已提现其它款');
+        $result = array_merge($result1,$result2); 
+        
+        if (!empty($result)) {
+            foreach($result as $k=>$v){
                     if(!isset($v['real_amounts'])){
-                        $items[$k]['real_amounts']='0.00';
+                        $result[$k]['real_amounts']='0.00';
                     }
                     if(!isset($v['real_amount'])){
-                        $items[$k]['real_amount']='0.00';
+                        $result[$k]['real_amount']='0.00';
                     }
                 }
-                header("Content-type:application/vnd.ms-excel");
-                // header("Content-Disposition:filename=doc_receiving_list.xls");
-                header('Content-Disposition: attachment;filename="' . $title . '".xls"');
-                $fields_array = array('user_id' => 'ID','real_name' => '用户名', 'offline_balance' => '账上商家余额', 'balance' => '账上其它余额','real_amount'=>'已提现商家款', 'real_amounts' => '已提现其它款');
-                $str = "<table border=1><tr>";
-                foreach ($fields as $value) {
-                    $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
-                }
-                $str .= "</tr>";
-                foreach ($items as $item) {
-                    $str .= "<tr>";
-                    foreach ($fields as $value) {
-                        $str .= "<td>" . iconv("UTF-8", "GB2312//TRANSLIT", $item[$value]) . "</td>";
-                        // $str .= "<td>" . mb_convert_encoding("GBK", "UTF-8", $item[$value]) . "</td>";
-                    }
-                    $str .= "</tr>";
-                }
-                $str .= "</table>";
-                echo $str;
-                exit;
-            } else {
-                $this->msg = array("warning", "没有符合该筛选条件的数据，请重新筛选！");
-                $this->redirect("balance_count", false, Req::args());
+            foreach ($result as $k => $v) {
+                $index = $k + 3;
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValueExplicit('A' . $index, $k+1)
+                    ->setCellValueExplicit('B' . $index, $v['real_name'], PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValueExplicit('C' . $index, $v['offline_balance'], PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValue('D' . $index, $v['balance'])
+                    ->setCellValue('E' . $index, $v['real_amount'])
+                    ->setCellValue('F' . $index, $v['real_amounts']);
             }
+            $length = count($result) + 2;
+            $objPHPExcel->setActiveSheetIndex(0);
+            $objPHPExcel->getActiveSheet()->freezePane('A2');
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A1:G' . $length)->getAlignment()->setWrapText(true)->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        }
+
+        ob_end_clean(); //清空（擦除）缓冲区并关闭输出缓冲
+        ob_start();//打开输出控制缓冲
+        // Redirect output to a client’s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $title . '".xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
     }
 
 }
