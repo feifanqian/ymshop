@@ -1644,11 +1644,11 @@ class CountController extends Controller
         $result = $results['data'];
         foreach($result as $k=>$v){
             $where1.=" and user_id =".$v['user_id'];
-            $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amount')->where($where1)->find();
+            $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as total_amount')->where($where1)->find();
             if($result1){
-                 $result[$k]['real_amount']=$result1['real_amount']==null?'0.00':$result1['real_amount']; 
+                 $result[$k]['total_amount']=$result1['total_amount']==null?'0.00':$result1['total_amount']; 
             }else{
-                $result[$k]['real_amount']='0.00';
+                $result[$k]['total_amount']='0.00';
             }
             $where2.=" and user_id =".$v['user_id'];
             $result2 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amounts')->where($where2)->find();
@@ -1724,7 +1724,7 @@ class CountController extends Controller
         }else{
             $where = 'balance>0 or offline_balance>0';
         } 
-        $fields = array('user_id','real_name','offline_balance','balance','real_amount','real_amounts');
+        $fields = array('user_id','real_name','offline_balance','balance','total_amount','real_amounts');
         // $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
         // $result2 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount as real_amounts')->where($where2)->order('c.user_id desc')->group('bw.user_id')->findAll();
         
@@ -1759,11 +1759,11 @@ class CountController extends Controller
         // $result = $results['data'];
         foreach($result as $k=>$v){
             $where1.=" and user_id =".$v['user_id'];
-            $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amount')->where($where1)->find();
+            $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as total_amount')->where($where1)->find();
             if($result1){
-                 $result[$k]['real_amount']=$result1['real_amount']==null?'0.00':$result1['real_amount']; 
+                 $result[$k]['total_amount']=$result1['total_amount']==null?'0.00':$result1['total_amount']; 
             }else{
-                $result[$k]['real_amount']='0.00';
+                $result[$k]['total_amount']='0.00';
             }
             $where2.=" and user_id =".$v['user_id'];
             $result2 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amounts')->where($where2)->find();
@@ -1790,7 +1790,7 @@ class CountController extends Controller
                     ->setCellValueExplicit('B' . $index, $v['real_name'], PHPExcel_Cell_DataType::TYPE_STRING)
                     ->setCellValueExplicit('C' . $index, $v['offline_balance'], PHPExcel_Cell_DataType::TYPE_STRING)
                     ->setCellValue('D' . $index, $v['balance'])
-                    ->setCellValue('E' . $index, $v['real_amount'])
+                    ->setCellValue('E' . $index, $v['total_amount'])
                     ->setCellValue('F' . $index, $v['real_amounts']);
             }
             $length = count($result) + 2;
