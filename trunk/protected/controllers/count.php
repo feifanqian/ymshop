@@ -1690,11 +1690,12 @@ class CountController extends Controller
         if($stime==date('Y-m-d 00:00:00')){
             $where1 = "bw.status=1 and bw.type=1";
             $where2 = "bw.status=1 and bw.type=0";
+            $title = "圆梦用户钱袋统计表";
         }else{
             $where1 = "bw.status=1 and bw.type=1 and '$stime'< bw.apply_date and bw.apply_date<'$etime'";
             $where2 = "bw.status=1 and bw.type=0 and '$stime'< bw.apply_date and bw.apply_date<'$etime'";
-        }
-        $title = "圆梦用户钱袋统计表[$stime - $etime]";
+            $title = "圆梦用户钱袋统计表[$stime - $etime]";
+        } 
         $fields = array('user_id','real_name','offline_balance','balance','real_amount','real_amounts');
         $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
         $result2 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount as real_amounts')->where($where2)->order('c.user_id desc')->group('bw.user_id')->findAll();
@@ -1720,7 +1721,7 @@ class CountController extends Controller
                 foreach ($items as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $value) {
-                        $str .= "<td>" . iconv("UTF-8", "GBK//IGNORE", $item[$value]) . "</td>";
+                        $str .= "<td>" . iconv("UTF-8", "GB2312//IGNORE", $item[$value]) . "</td>";
                     }
                     $str .= "</tr>";
                 }
