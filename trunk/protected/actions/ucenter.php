@@ -2253,15 +2253,7 @@ class UcenterAction extends Controller {
                 ->order("i.id desc")
                 ->findPage($page, 10);                
         if (empty($record)) {
-            $record = array(
-                'data'=>[],
-                'page'=>array(
-                    'total'=>0,
-                    'totalPage'=>0,
-                    'pageSize'=>10,
-                    'page'=>1
-                    ),
-                );
+            return array('data'=>array());
         }
         if (isset($record['html'])) {
             unset($record['html']);
