@@ -8,7 +8,8 @@
       <span class="fl">时间：<input name="s_time" type="text" value="{$s_time}" id="datepick" class="middle" readonly="readonly"></span>
       <span class="fl">用户名<input name="s_name" type="text" value="" class="middle"></span>
       <a  id="condition" class="icon-search" style="" type="submit"> 查询</a>
-      <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a>
+      <!-- <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a> -->
+      <a href="javascript:;"  target="_blank" class="icon-print" id="output_excel"> 导出Excel</a>
       <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
     </form>
 </div>
@@ -64,8 +65,8 @@
             <label><input type="checkbox" name="fields[]" value="real_name" checked="checked"> 用户名</label>
             <label><input type="checkbox" name="fields[]" value="offline_balance" checked="checked"> 账上商家余额</label>
             <label><input type="checkbox" name="fields[]" value="balance" checked="checked"> 账上其它余额</label>
-            <label><input type="checkbox" name="fields[]" value="amount_sum" checked="checked"> 已提现商家款</label>
-            <label><input type="checkbox" name="fields[]" value="amount_sums" checked="checked"> 已提现其它款</label>
+            <label><input type="checkbox" name="fields[]" value="real_amount" checked="checked"> 已提现商家款</label>
+            <label><input type="checkbox" name="fields[]" value="real_amounts" checked="checked"> 已提现其它款</label>
             
           </dd>
           </dl>
@@ -74,6 +75,13 @@
     </div>
 </div>
 <script type="text/javascript">
+var ExcelUrl = "{url:/count/balance_count_excel/s_time/}";
+    $(function () {
+        $("#output_excel").attr("href",ExcelUrl+$("input[name=s_time]").val());
+        $("input[name=s_time]").on("change",function(){
+            $("#output_excel").attr("href",ExcelUrl+$(this).val());
+        });
+});        
     var form =  new Form();
     $("#condition").on("click",function(){
       $('#submit_form').submit();

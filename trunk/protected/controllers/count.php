@@ -1631,8 +1631,8 @@ class CountController extends Controller
         }
         if(isset($_POST['s_name'])){
             $s_name = $_POST['s_name'];
-            $where1 .= " and c.real_name like '%{$s_name}%'";
-            $where2 .= " and c.real_name like '%{$s_name}%'";
+            $where1 = "bw.status=1 and bw.type=1 and c.real_name like '%{$s_name}%'";
+            $where2 = "bw.status=1 and bw.type=0 and c.real_name like '%{$s_name}%'";
         }
         $model = new Model();
         $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
@@ -1665,6 +1665,71 @@ class CountController extends Controller
         $this->assign('s_time', $s_time);
         $this->assign("condition", $condition);
         $this->redirect();
+    }
+
+    public function balance_count_excel(){
+        $time = Req::args("s_time");
+        if (!$time) {
+            $time = date("Y-m-d%20--%20Y-m-d");
+        }
+        $date = explode('%20--%20', $time);
+        $stime = date('Y-m-d 00:00:00', strtotime($date[0]));
+        $etime = date('Y-m-d 00:00:00', strtotime($date[1] . '+1day'));
+        
+        $this->layout = '';
+        // $condition = Req::args("condition");
+        // $fields = Req::args("fields");
+        // $condition = Common::str2where($condition);
+        $model = new Model();
+        // if ($condition) {
+        //     $where = $condition;
+        // }else{
+        //     $where = '1=1';
+        // }
+        if($stime==date('Y-m-d 00:00:00')){
+            $where1 = "bw.status=1 and bw.type=1";
+            $where2 = "bw.status=1 and bw.type=0";
+        }else{
+            $where1 = "bw.status=1 and bw.type=1 and '$stime'< bw.apply_date and bw.apply_date<'$etime'";
+            $where2 = "bw.status=1 and bw.type=0 and '$stime'< bw.apply_date and bw.apply_date<'$etime'";
+        }
+        $title = "圆梦用户钱袋统计表[$stime - $etime]";
+        $fields = array('user_id','real_name','offline_balance','balance','real_amount','real_amounts');
+        $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
+        $result2 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount as real_amounts')->where($where2)->order('c.user_id desc')->group('bw.user_id')->findAll();
+        $items = array_merge($result1,$result2); 
+            if ($items) {
+                foreach($items as $k=>$v){
+                    if(!isset($v['real_amounts'])){
+                        $items[$k]['real_amounts']='0.00';
+                    }
+                    if(!isset($v['real_amount'])){
+                        $items[$k]['real_amount']='0.00';
+                    }
+                }
+                header("Content-type:application/vnd.ms-excel");
+                // header("Content-Disposition:filename=doc_receiving_list.xls");
+                header('Content-Disposition: attachment;filename="' . $title . '".xls"');
+                $fields_array = array('user_id' => 'ID','real_name' => '用户名', 'offline_balance' => '账上商家余额', 'balance' => '账上其它余额','real_amount'=>'已提现商家款', 'real_amounts' => '已提现其它款');
+                $str = "<table border=1><tr>";
+                foreach ($fields as $value) {
+                    $str .= "<th>" . iconv("UTF-8", "GBK", $fields_array[$value]) . "</th>";
+                }
+                $str .= "</tr>";
+                foreach ($items as $item) {
+                    $str .= "<tr>";
+                    foreach ($fields as $value) {
+                        $str .= "<td>" . iconv("UTF-8", "GBK", $item[$value]) . "</td>";
+                    }
+                    $str .= "</tr>";
+                }
+                $str .= "</table>";
+                echo $str;
+                exit;
+            } else {
+                $this->msg = array("warning", "没有符合该筛选条件的数据，请重新筛选！");
+                $this->redirect("balance_count", false, Req::args());
+            }
     }
 
 }
