@@ -81,6 +81,9 @@ var ExcelUrl = "{url:/count/balance_count_excel/s_time/}";
         $("input[name=s_time]").on("change",function(){
             $("#output_excel").attr("href",ExcelUrl+$(this).val());
         });
+        $("input[name=s_name]").on("change",function(){
+            $("#output_excel").attr("href","/s_name/"+$(this).val());
+        });
 });        
     var form =  new Form();
     $("#condition").on("click",function(){
