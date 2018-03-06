@@ -1668,6 +1668,7 @@ class CountController extends Controller
     }
 
     public function balance_count_excel(){
+        header("Content-type: text/html; charset=utf-8");
         $time = Req::args("s_time");
         if (!$time) {
             $time = date("Y-m-d%20--%20Y-m-d");
@@ -1719,7 +1720,7 @@ class CountController extends Controller
                 foreach ($items as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $value) {
-                        $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$value]) . "</td>";
+                        $str .= "<td>" . iconv("UTF-8", "GBK", $item[$value]) . "</td>";
                     }
                     $str .= "</tr>";
                 }
