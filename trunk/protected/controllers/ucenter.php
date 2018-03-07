@@ -3653,13 +3653,13 @@ class UcenterController extends Controller
         $upfile_path1 = Tiny::getPath("uploads") . "/shop_check/positive_idcard/";
         $upfile_path2 = Tiny::getPath("uploads") . "/shop_check/native_idcard/";
         $upfile_path3 = Tiny::getPath("uploads") . "/shop_check/business_licence/";
-        $upfile_path4 = Tiny::getPath("uploads") . "/shop_check/account_picture/";
+        // $upfile_path4 = Tiny::getPath("uploads") . "/shop_check/account_picture/";
         $upfile_path5 = Tiny::getPath("uploads") . "/shop_check/shop_photo/";
         $upfile_path6 = Tiny::getPath("uploads") . "/shop_check/hand_idcard/";
         $upfile_url1 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/positive_idcard/", 1);
         $upfile_url2 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/native_idcard/", 1);
         $upfile_url3 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/business_licence/", 1);
-        $upfile_url4 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/account_picture/", 1);
+        // $upfile_url4 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/account_picture/", 1);
         $upfile_url5 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/shop_photo/", 1);
         $upfile_url6 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/hand_idcard/", 1);
         $result1 = array();
@@ -3711,19 +3711,19 @@ class UcenterController extends Controller
             $business_licence = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url3;
         }
 
-        $upfile4 = new UploadFile('account_picture', $upfile_path4, '500k', '', 'hash', $this->user['id']);
-        $upfile4->save();
-        $info4 = $upfile4->getInfo();
-        $account_picture = "";
+        // $upfile4 = new UploadFile('account_picture', $upfile_path4, '500k', '', 'hash', $this->user['id']);
+        // $upfile4->save();
+        // $info4 = $upfile4->getInfo();
+        // $account_picture = "";
 
-        if ($info4[0]['status'] == 1) {
-            $result4 = array('error' => 0, 'url' => $upfile_url4 . $info4[0]['path']);
-            $image_url4 = $upfile_url4 . $info4[0]['path'];
-            $image = new Image();
-            $image->suffix = '';
-            $image->thumb(APP_ROOT . $image_url4, 100, 100);
-            $account_picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url4;
-        }
+        // if ($info4[0]['status'] == 1) {
+        //     $result4 = array('error' => 0, 'url' => $upfile_url4 . $info4[0]['path']);
+        //     $image_url4 = $upfile_url4 . $info4[0]['path'];
+        //     $image = new Image();
+        //     $image->suffix = '';
+        //     $image->thumb(APP_ROOT . $image_url4, 100, 100);
+        //     $account_picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url4;
+        // }
 
         $upfile5 = new UploadFile('shop_photo', $upfile_path5, '500k', '', 'hash', $this->user['id']);
         $upfile5->save();
@@ -3772,7 +3772,7 @@ class UcenterController extends Controller
         'business_licence'=>$business_licence,
         'positive_idcard'=>$positive_idcard,
         'native_idcard'=>$native_idcard,
-        'account_picture'=>$account_picture,
+        // 'account_picture'=>$account_picture,
         'account_card'=>$account_card,
         'shop_photo'=>$shop_photo,
         'hand_idcard'=>$hand_idcard,
