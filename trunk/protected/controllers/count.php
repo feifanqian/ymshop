@@ -1839,7 +1839,7 @@ class CountController extends Controller
             $where2 .= " and bl.time>'$stime' and bl.time<'$etime'";
         }
         $where = '1=1';
-        if(isset($_POST['s_name'])){
+        if(isset($_POST['s_name']) && $_POST['s_name']!=''){
             $s_name = $_POST['s_name'];
             $where .= " and real_name like '%{$s_name}%' or c.user_id=".$s_name;
         }
