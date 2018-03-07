@@ -1828,16 +1828,16 @@ class CountController extends Controller
         $s_time = $cal['str'];
 
         $model = new Model();
-
+        // var_dump($cal['start']);die;
         // $where = 'bl.type=8 and note="线下会员消费卖家收益(不参与分账)" or note="线下会员消费卖家收益"';
         $where1 = 'bl.type=8 and note="线下会员消费卖家收益(不参与分账)"';
         $where2 = 'bl.type=8 and note="线下会员消费卖家收益"';
-        // if(isset($_POST['s_time'])){
+        if(isset($_POST['s_time'])){
             $stime = $cal['start']; //开始时间
             $etime = $cal['end']; //结束时间
             $where1 .= " and bl.time>'$stime' and bl.time<'$etime'";
             $where2 .= " and bl.time>'$stime' and bl.time<'$etime'";
-        // }
+        }
         $where = '1=1';
         if(isset($_POST['s_name'])){
             $s_name = $_POST['s_name'];
