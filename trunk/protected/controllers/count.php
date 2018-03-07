@@ -1833,6 +1833,7 @@ class CountController extends Controller
         $where1 = 'bl.type=8 and note="线下会员消费卖家收益(不参与分账)"';
         $where2 = 'bl.type=8 and note="线下会员消费卖家收益"';
         if(isset($_POST['s_time'])){
+            // var_dump($_POST['s_time']);die;
             $stime = $cal['start']; //开始时间
             $etime = $cal['end']; //结束时间
             $where1 .= " and bl.time>'$stime' and bl.time<'$etime'";
@@ -1863,6 +1864,9 @@ class CountController extends Controller
             // $result[$k]['sum_amount'] = $result[$k]['total_amount']+$result[$k]['total_amounts']; //入账金额
             
             $where1.=" and user_id =".$v['user_id'];
+            if($v['user_id']==121808){
+                var_dump($where1);die;
+            }
             $result1 = $model->table('balance_log as bl')->fields('sum(bl.amount) as total_amount')->where($where1)->findAll();
             if($result1){
                  $result[$k]['total_amount']=$result1[0]['total_amount']==null?'0.00':$result1[0]['total_amount']; //不让利入账金额
