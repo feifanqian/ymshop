@@ -117,6 +117,7 @@ class Menu {
             '/count/division' => array('name'=>'提成划分明细表','parent'=>'financial_count'), //货品进销存统计表
             '/count/sales_rank' => array('name'=>'销售排行榜表','parent'=>'financial_count'), //货品进销存统计表
             '/count/balance_count' => array('name'=>'用户钱袋统计表','parent'=>'financial_count'), //货品进销存统计表
+            '/count/balance_account' => array('name'=>'商家入账统计表','parent'=>'financial_count'), //货品进销存统计表
             '/marketing/voucher_template_list' => array('name' => '代金券模板', 'parent' => 'voucher'),
             '/marketing/voucher_template_edit' => array('name' => '代金券模板编辑', 'parent' => 'voucher'),
             '/marketing/voucher_list' => array('name' => '代金券管理', 'parent' => 'voucher'),

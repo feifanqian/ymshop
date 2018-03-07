@@ -1644,16 +1644,16 @@ class CountController extends Controller
         $result = $results['data'];
         foreach($result as $k=>$v){
             $where1.=" and user_id =".$v['user_id'];
-            $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as total_amount')->where($where1)->find();
+            $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as total_amount')->where($where1)->findAll();
             if($result1){
-                 $result[$k]['total_amount']=$result1['total_amount']==null?'0.00':$result1['total_amount']; 
+                 $result[$k]['total_amount']=$result1[0]['total_amount']==null?'0.00':$result1[0]['total_amount']; 
             }else{
                 $result[$k]['total_amount']='0.00';
             }
             $where2.=" and user_id =".$v['user_id'];
-            $result2 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amounts')->where($where2)->find();
+            $result2 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amounts')->where($where2)->findAll();
             if($result2){
-                 $result[$k]['real_amounts']=$result2['real_amounts']==null?'0.00':$result2['real_amounts'];  
+                 $result[$k]['real_amounts']=$result2[0]['real_amounts']==null?'0.00':$result2[0]['real_amounts'];  
             }else{
                 $result[$k]['real_amounts']='0.00';
             }
@@ -1759,16 +1759,16 @@ class CountController extends Controller
         // $result = $results['data'];
         foreach($result as $k=>$v){
             $where1.=" and user_id =".$v['user_id'];
-            $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as total_amount')->where($where1)->find();
+            $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as total_amount')->where($where1)->findAll();
             if($result1){
-                 $result[$k]['total_amount']=$result1['total_amount']==null?'0.00':$result1['total_amount']; 
+                 $result[$k]['total_amount']=$result1[0]['total_amount']==null?'0.00':$result1[0]['total_amount']; 
             }else{
                 $result[$k]['total_amount']='0.00';
             }
             $where2.=" and user_id =".$v['user_id'];
-            $result2 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amounts')->where($where2)->find();
+            $result2 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amounts')->where($where2)->findAll();
             if($result2){
-                 $result[$k]['real_amounts']=$result2['real_amounts']==null?'0.00':$result2['real_amounts'];  
+                 $result[$k]['real_amounts']=$result2[0]['real_amounts']==null?'0.00':$result2[0]['real_amounts'];  
             }else{
                 $result[$k]['real_amounts']='0.00';
             }
@@ -1817,6 +1817,60 @@ class CountController extends Controller
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
+    }
+
+    public function balance_account(){
+        $page = Filter::sql(Req::args("p"));
+        $page = $page ==NULL ? 1 : $page;
+        $cal = $this->calendar();
+        $stime = $cal['start']; //开始时间
+        $etime = $cal['end']; //结束时间
+        $s_time = $cal['str'];
+
+        $model = new Model();
+
+        // $results = $model->table('district_promoter as dp')->fields('dp.user_id,dp.base_rate,c.real_name')->join('customer as c on dp.user_id=c.user_id')->order('id desc')->findPage($page, 10);
+        // $resultss = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
+        $where = 'bl.type=8 and note="线下会员消费卖家收益(不参与分账)" or note="线下会员消费卖家收益"';
+
+        // if(isset($_POST['s_time'])){
+            $stime = $cal['start']; //开始时间
+            $etime = $cal['end']; //结束时间
+            // var_dump($stime);die;
+            $where .= " and bl.time>'$stime' and bl.time<'$etime'";
+        // }
+
+        if(isset($_POST['s_name'])){
+            $s_name = $_POST['s_name'];
+            $where = "real_name like '%{$s_name}%'";
+        }
+        // var_dump($where);die;
+        $results = $model->table('balance_log as bl')->fields('bl.amount,bl.note,bl.time,c.real_name,c.user_id,oo.real_amount,dp.base_rate')->join('left join customer as c on bl.user_id=c.user_id left join order_offline as oo on bl.order_no=oo.order_no left join district_promoter as dp on bl.user_id=dp.user_id')->where($where)->order('bl.id desc')->findPage($page, 10);
+        $result = $results['data'];
+        foreach($result as $k=>$v){
+            if($v['note']=='线下会员消费卖家收益(不参与分账)'){
+                $result[$k]['total_amount'] = $v['amount']; //不让利入账金额
+                $result[$k]['total_amounts'] = '0.00'; //让利入账全额
+                $result[$k]['amounts'] = '0.00'; //让利金额
+                $result[$k]['real_amounts'] = '0.00'; //让利后入账金额
+            }else{
+                $result[$k]['total_amount'] = '0.00'; //不让利入账金额
+                $result[$k]['total_amounts'] = $v['real_amount']; //让利入账全额
+                $result[$k]['amounts'] = $v['real_amount']-$v['amount']; //让利金额
+                $result[$k]['real_amounts'] = $v['amount']; //让利后入账金额
+            }
+            $result[$k]['rate'] = $v['base_rate']; //让利比例
+            $result[$k]['sum_amount'] = $result[$k]['total_amount']+$result[$k]['total_amounts']; //入账金额
+        }    
+        
+        
+        $html = $results['html'];
+        $this->assign('result', $result);
+        $this->assign('html',$html);
+        $this->assign('s_time', $s_time);
+        // $this->assign("condition", $condition);
+        $this->assign("page", $page);
+        $this->redirect();
     }
 
 }
