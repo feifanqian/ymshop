@@ -1830,15 +1830,8 @@ class CountController extends Controller
         $model = new Model();
         // var_dump($cal['start']);die;
         // $where = 'bl.type=8 and note="线下会员消费卖家收益(不参与分账)" or note="线下会员消费卖家收益"';
-        $where1 = 'bl.type=8 and note="线下会员消费卖家收益(不参与分账)"';
-        $where2 = 'bl.type=8 and note="线下会员消费卖家收益"';
-        if(isset($_POST['s_time'])){
-            // var_dump($_POST['s_time']);die;
-            $stime = $cal['start']; //开始时间
-            $etime = $cal['end']; //结束时间
-            $where1 .= " and bl.time>'$stime' and bl.time<'$etime'";
-            $where2 .= " and bl.time>'$stime' and bl.time<'$etime'";
-        }
+        // $where1 = 'bl.type=8 and note="线下会员消费卖家收益(不参与分账)"';
+        // $where2 = 'bl.type=8 and note="线下会员消费卖家收益"';
         // var_dump($where1);die;
         $where = '1=1';
         if(isset($_POST['s_name']) && $_POST['s_name']!=''){
@@ -1862,10 +1855,14 @@ class CountController extends Controller
             // }
             // $result[$k]['rate'] = $v['base_rate']; //让利比例
             // $result[$k]['sum_amount'] = $result[$k]['total_amount']+$result[$k]['total_amounts']; //入账金额
-            
-            $where1.=" and user_id =".$v['user_id'];
-            if($v['user_id']==121808){
-                var_dump($where1);die;
+            if(isset($_POST['s_time'])){
+                $stime = $cal['start']; //开始时间
+                $etime = $cal['end']; //结束时间
+                $where1 = "bl.type=8 and note='线下会员消费卖家收益(不参与分账)' and bl.time>'$stime' and bl.time<'$etime' and user_id=".$v['user_id'];
+                $where2 = "bl.type=8 and note='线下会员消费卖家收益' and bl.time>'$stime' and bl.time<'$etime' and user_id=".$v['user_id'];
+            }else{
+                $where1 = "bl.type=8 and note='线下会员消费卖家收益(不参与分账)' and user_id=".$v['user_id'];
+                $where2 = "bl.type=8 and note='线下会员消费卖家收益' and user_id=".$v['user_id'];
             }
             $result1 = $model->table('balance_log as bl')->fields('sum(bl.amount) as total_amount')->where($where1)->findAll();
             if($result1){
@@ -1873,7 +1870,7 @@ class CountController extends Controller
             }else{
                 $result[$k]['total_amount']='0.00'; //不让利入账金额
             }
-            $where2.=" and user_id =".$v['user_id'];
+            
             $result2 = $model->table('balance_log as bl')->fields('sum(bl.amount) as real_amounts')->where($where2)->findAll();
             if($result2){
                  $result[$k]['real_amounts']=$result2[0]['real_amounts']==null?'0.00':$result2[0]['real_amounts']; //让利后入账金额 
