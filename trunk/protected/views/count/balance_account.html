@@ -12,7 +12,7 @@
 </div>
 <table class="default" >
     <tr>
-        <th style="width:30">序号</th>
+        <th style="width:30">ID</th>
         <th style="width:120">商家名</th>
         <th style="width:100">不让利入账金额</th>
         <th style="width:100">让利入账全额</th>
@@ -56,7 +56,7 @@
         <dl class="lineD">
           <dt>导出字段：</dt>
           <dd>
-            <label><input type="checkbox" name="fields[]" value="user_id" checked="checked"> 序号</label>
+            <label><input type="checkbox" name="fields[]" value="user_id" checked="checked"> ID</label>
             <label><input type="checkbox" name="fields[]" value="real_name" checked="checked"> 商家名</label>
             <label><input type="checkbox" name="fields[]" value="total_amount" checked="checked"> 不让利入账金额</label>
             <label><input type="checkbox" name="fields[]" value="total_amounts" checked="checked"> 让利入账全额</label>
@@ -76,9 +76,14 @@
     //     $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/customer/balance_list}',method:'get'});},data:{'time':{name:'时间'},'name':{name:'用户名'},'c.real_name':{name:'真实姓名'},'order_no':{name:'订单号'},'note':{name:'备注'}
     //     }});
     // });
+    // function export_excel_dialog(){
+    //     art.dialog({id:'export_excel_dialog',title:'Excel导出',lock:true,opacity:0.1,width:600,height:200,content:document.getElementById("excel_box")});
+    // }
     function export_excel_dialog(){
-        art.dialog({id:'export_excel_dialog',title:'Excel导出',lock:true,opacity:0.1,width:600,height:200,content:document.getElementById("excel_box")});
-    }
+      var path = "{url:/count/balance_account_excel}";  
+        $('#submit_form').attr("action", path); 
+        $('#submit_form').submit();
+    } 
     function export_excel() {
       $("#export_form").submit();
     }

@@ -1831,4 +1831,122 @@ class CountController extends Controller
         $this->redirect();
     }
 
+    public function balance_account_excel(){
+        header("Content-type: text/html; charset=utf-8");
+        $page = Filter::sql(Req::args("p"));
+        $page = $page ==NULL ? 1 : $page;
+        $cal = $this->calendar();
+        $stime = $cal['start']; //开始时间
+        $etime = $cal['end']; //结束时间
+        
+        $this->layout = '';
+        
+        $model = new Model();
+        
+        if(isset($_POST['s_name']) && $_POST['s_name']!=''){
+           $s_name = $_POST['s_name'];
+           $where = "real_name like '%{$s_name}%'";
+        }else{
+            $where = '1=1';
+        } 
+        $fields = array('user_id','real_name','total_amount','total_amounts','base_rate','amounts','real_amounts','sum_amount');
+        
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()
+            ->setCreator("ymlypt")
+            ->setLastModifiedBy("ymlypt")
+            ->setTitle("test")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("goods of ymlypt")
+            ->setKeywords("goods")
+            ->setCategory("Test result file");
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('D')->setWidth(30);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('E')->setWidth(30);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('F')->setWidth(30);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('G')->setWidth(30);
+        $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension('H')->setWidth(30);
+        // Add some data
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:G1')->setCellValue('A1', '圆梦商家入账统计表');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A2", 'ID');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2','商家名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue("C2", '不让利入账金额');
+        $objPHPExcel->setActiveSheetIndex(0) ->setCellValue('D2', '让利入账全额');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '让利比例(%)');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '让利金额');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '让利后入账金额');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '入账总金额');
+        
+        $result = $model->table('district_promoter as dp')->fields('dp.user_id,dp.base_rate,c.real_name')->join('customer as c on dp.user_id=c.user_id')->where($where)->order('id desc')->findAll();
+        
+        foreach($result as $k=>$v){
+            if(!isset($_POST['s_time'])){
+                $where1 = "bl.type=8 and note='线下会员消费卖家收益(不参与分账)' and user_id=".$v['user_id'];
+                $where2 = "bl.type=8 and note='线下会员消费卖家收益' and user_id=".$v['user_id'];
+                $title = "圆梦商家入账统计表";
+            }else{
+                $where1 = "bl.type=8 and note='线下会员消费卖家收益(不参与分账)' and bl.time>'$stime' and bl.time<'$etime' and user_id=".$v['user_id'];
+                $where2 = "bl.type=8 and note='线下会员消费卖家收益' and bl.time>'$stime' and bl.time<'$etime' and user_id=".$v['user_id'];
+                $title = "圆梦商家入账统计表[$stime - $etime]";
+            }
+            $result1 = $model->table('balance_log as bl')->fields('sum(bl.amount) as total_amount')->where($where1)->findAll();
+            if($result1){
+                 $result[$k]['total_amount']=$result1[0]['total_amount']==null?'0.00':$result1[0]['total_amount']; //不让利入账金额
+            }else{
+                $result[$k]['total_amount']='0.00'; //不让利入账金额
+            }
+            
+            $result2 = $model->table('balance_log as bl')->fields('sum(bl.amount) as real_amounts')->where($where2)->findAll();
+            if($result2){
+                 $result[$k]['real_amounts']=$result2[0]['real_amounts']==null?'0.00':$result2[0]['real_amounts']; //让利后入账金额 
+            }else{
+                $result[$k]['real_amounts']='0.00';  //让利后入账金额
+            }
+            $result[$k]['total_amounts'] = sprintf("%.2f",$result[$k]['real_amounts']*100/(100-$v['base_rate']));
+            $result[$k]['amounts'] = $result[$k]['total_amounts']-$result[$k]['real_amounts'];
+            $result[$k]['rate'] = $v['base_rate']; //让利比例
+            $result[$k]['sum_amount'] = $result[$k]['total_amount']+$result[$k]['total_amounts']; //入账金额
+        } 
+
+        if (!empty($result)) {
+            foreach ($result as $k => $v) {
+                $index = $k + 3;
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValueExplicit('A' . $index, $v['user_id'])
+                    ->setCellValueExplicit('B' . $index, $v['real_name'], PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValueExplicit('C' . $index, $v['total_amount'], PHPExcel_Cell_DataType::TYPE_STRING)
+                    ->setCellValue('D' . $index, $v['total_amounts'])
+                    ->setCellValue('E' . $index, $v['base_rate'])
+                    ->setCellValue('F' . $index, $v['amounts'])
+                    ->setCellValue('F' . $index, $v['real_amounts'])
+                    ->setCellValue('F' . $index, $v['sum_amount']);
+            }
+            $length = count($result) + 2;
+            $objPHPExcel->setActiveSheetIndex(0);
+            $objPHPExcel->getActiveSheet()->freezePane('A2');
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A1:G' . $length)->getAlignment()->setWrapText(true)->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        }
+
+        ob_end_clean(); //清空（擦除）缓冲区并关闭输出缓冲
+        ob_start();//打开输出控制缓冲
+        // Redirect output to a client’s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $title . '".xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+    }
+
 }
