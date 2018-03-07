@@ -1838,6 +1838,7 @@ class CountController extends Controller
             $where1 .= " and bl.time>'$stime' and bl.time<'$etime'";
             $where2 .= " and bl.time>'$stime' and bl.time<'$etime'";
         }
+        // var_dump($where1);die;
         $where = '1=1';
         if(isset($_POST['s_name']) && $_POST['s_name']!=''){
             $s_name = $_POST['s_name'];
@@ -1875,7 +1876,7 @@ class CountController extends Controller
             }else{
                 $result[$k]['real_amounts']='0.00';  //让利后入账金额
             }
-            $result[$k]['total_amounts'] = sprintf("%.2f",$result[$k]['real_amounts']/(100-$v['base_rate']));
+            $result[$k]['total_amounts'] = sprintf("%.2f",$result[$k]['real_amounts']*100/(100-$v['base_rate']));
             $result[$k]['amounts'] = $result[$k]['total_amounts']-$result[$k]['real_amounts'];
             $result[$k]['rate'] = $v['base_rate']; //让利比例
             $result[$k]['sum_amount'] = $result[$k]['total_amount']+$result[$k]['total_amounts']; //入账金额
