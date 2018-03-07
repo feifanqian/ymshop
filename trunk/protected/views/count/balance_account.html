@@ -19,7 +19,7 @@
         <th style="width:100">让利金额</th>
         <th style="width:100">让利后入账金额</th>
         <th style="width:100">入账总金额</th>
-        <th style="width:100">入账时间</th>
+        <!-- <th style="width:100">入账时间</th> -->
     </tr>
     {list:items=$result}
         <tr class="{if:$key%2==1}odd{/if}">
@@ -31,7 +31,7 @@
             <td style="width:100px">{$item['amounts']}</td>
             <td style="width:100px">{$item['real_amounts']}</td>
             <td style="width:100px">{$item['sum_amount']}</td>
-            <td style="width:100px">{$item['time']}</td>
+            <!-- <td style="width:100px">{$item['time']}</td> -->
         </tr>
     {/list}
 </table>
