@@ -8,9 +8,6 @@
   {if:isset($id)}
   <input type="hidden" name="id" value="{$id}">
   {/if}
-  {set:$pid = isset($category_id)?Common::getPreviousLevel($category_id):0;}
-  {set:$pids = isset($category_id)?Common::getPreviousLevel($pid):0;}
-  <input type="hidden" name="category_type" value="">
   <div id="obj_form" class="form2 tab">
     <!-- tab 头 start -->
     <ul class="tab-head">
@@ -18,7 +15,6 @@
       <li>描述信息</li>
       <li>SEO信息</li>
       <li>售后保障</li>
-      <li>分成比例</li>
     </ul>
     <!-- tab 头 end -->
     <!-- tab body start -->
@@ -48,31 +44,16 @@
             <select name="category_id" id="category_id" pattern="[1-9]\d*" alt="选择分类，若无分类请先创建。">
               <option value="0">选择分类</option>
               {set:$id=isset($id)?$id:0;}
-              {query:name=goods_category where = parent_id eq 0 }
-                    <option value="{$item['id']}" {if:$pids==$item['id']}selected='selected'{/if}>{$item['name']}</option>
-              {/query}
+              {query:name=goods_category order=path/}
+              {set:$goods_category = Common::treeArray($items)}
+              {list:items=$goods_category}
+              {if:!isset($path) || strpos($item['path'],$path)===false}
+              {set:$num = count(explode(',',$item['path']))-3;}
+                    <option value="{$item['id']}">{if:$num>0}├{/if}{echo:str_repeat('──',$num)}{$item['name']}</option>
+                    {/if}
+              {/list}
             </select>
             <label></label>
-            <select name="category_ids" id="category_ids">
-                <option value="0">==二级分类==</option>
-                {if:$pid!=$pids}
-                {query:name=goods_category where = parent_id eq $pids }
-                    <option value="{$item['id']}" {if:$pid==$item['id']}selected='selected'{/if}>{$item['name']}</option>
-                {/query}
-                {else:}
-                {query:name=goods_category where = parent_id eq $pids }
-                    <option value="{$item['id']}" {if:isset($category_id) && $category_id==$item['id']}selected='selected'{/if}>{$item['name']}</option>
-                {/query}
-                {/if}
-            </select>
-              <select name="category_idss" id="category_idss">
-                  <option value="0">==三级分类==</option>
-                  {if:$pid!=$pids}
-                  {query:name=goods_category where = parent_id eq $pid }
-                    <option value="{$item['id']}" {if:isset($category_id) && $category_id==$item['id']}selected='selected'{/if}>{$item['name']}</option>
-                  {/query}
-                  {/if}
-              </select>
           </dd>
         </dl>
         <dl class="lineD">
@@ -84,7 +65,7 @@
               <option value="0">请选择类型...</option>
               {set:$id=isset($id)?$id:0;}
               {query:name=goods_type}
-              <option value="{$item['id']}" >{$item['name']}</option>
+              <option value="{$item['id']}">{$item['name']}</option>
               {/query}
             </select>
             <label></label>
@@ -98,21 +79,7 @@
             <select name="brand_id">
               <option value="0">请选择品牌...</option>
               {query:name=brand}
-              <option value="{$item['id']}" >{$item['name']}</option>
-              {/query}
-            </select>
-            <label></label>
-          </dd>
-        </dl>
-        <dl class="lineD">
-          <dt>
-            个人店铺：
-          </dt>
-          <dd>
-            <select name="personal_shop_id">
-              <option value="0">请选择店铺所有者...</option>
-              {query:name=personal_shop as ps join=left join customer as c on ps.user_id eq c.user_id }
-              <option value="{$item['id']}">{$item['real_name']}</option>
+              <option value="{$item['id']}">{$item['name']}</option>
               {/query}
             </select>
             <label></label>
@@ -403,7 +370,6 @@
       </div>
     </div>
   </div>
-  <!-- 基本信息 end -->
   <!-- 描述信息 start -->
   <div>
     <h2>详细介绍：</h2>
@@ -413,6 +379,7 @@
     </div>
   </div>
   <!-- 描述信息 end -->
+  <!-- 基本信息 end -->
   <!-- SEO 信息 start -->
   <div>
     <dl class="lineD">
@@ -447,31 +414,6 @@
     </div>
   </div>
   <!-- 售后保障 end -->
-  <!-- 分成比例 start -->
-  <div>
-    <dl class="lineD">
-      <dt>上级邀请人获得奖励：</dt>
-      <dd>
-        <input name="inviter_rate" type="text" value="{$inviter_rate}">
-        <label>%</label>
-      </dd>
-    </dl>
-    <dl class="lineD">
-      <dt>上级第一个代理商获得奖励：</dt>
-      <dd>
-        <input name="promoter_rate" type="text" value="{$promoter_rate}">
-        <label>%</label>
-      </dd>
-    </dl>
-    <dl class="lineD">
-      <dt>会员所属经销商获得奖励：</dt>
-      <dd>
-        <input name="districter_rate" type="text" value="{$districter_rate}">
-        <label>%</label>
-      </dd>
-    </dl>
-  </div>
-  <!-- 分成比例 end -->
 </div>
 <!-- tab 头 end -->
 <div style="text-align:center;margin-top:20px;">
@@ -481,7 +423,12 @@
 </div>
 </form>
 <script type="text/javascript">
-
+var form =  new Form();
+form.setValue('shop_id','{$shop_id}');
+form.setValue('category_id','{$category_id}');
+form.setValue('type_id','{$type_id}');
+form.setValue('brand_id','{$brand_id}');
+form.setValue('is_online','{$is_online}');
 $("#type_id").change();
 
 {if:isset($products_info)}
@@ -684,12 +631,12 @@ function spec_del(id){
   }
 }
 //选择分类
-// $("#category_id").on("change",function(){
-//   $.post("{url:/ajax/category_type}", {id: $(this).val()},function(data){
-//     //form.setValue('type_id',data.type_id);
-//     //$("#type_id").change();
-//   },"json");
-// });
+$("#category_id").on("change",function(){
+  $.post("{url:/ajax/category_type}", {id: $(this).val()},function(data){
+    //form.setValue('type_id',data.type_id);
+    //$("#type_id").change();
+  },"json");
+})
 
 //改变类型处理操作
 $("#type_id").on("change",function(){
@@ -721,7 +668,7 @@ $("#type_id").on("change",function(){
     }
 
   },"json");
-});
+})
 
 //操作左右按钮事件绑定
 function bindEvent(){
@@ -737,67 +684,5 @@ function bindEvent(){
   });
 
 }
-
-//选择分类
-$("#category_id").on('change',function(){
-    var category_id = $("#category_id option:selected").val();
-    $("#category_ids option:not(:first)").remove();//先把二级的菜单的option清空
-    $("#category_idss option:not(:first)").remove();//先把二级的菜单的option清空
-    if(category_id){
-        $.ajax({
-         type:'post',
-         url:'/goods/category_dropdowns',
-         dataType:'json',
-         data:{'id':category_id},
-         success:function(data){
-             console.log(data);
-             var html = '';
-            for(var i in data){
-                html += '<option value='+data[i].id+'>'+data[i].name+'</option>';
-             }
-             $("#category_ids").append(html);
-            }
-    });
-    }
-});
-
-//二级分类选择三级分类
-$("#category_ids").on('change',function(){
-    var category_ids = $("#category_ids option:selected").val();
-    $("#category_idss option:not(:first)").remove();//先把二级的菜单的option清空
-    if(category_ids){
-        $.ajax({
-            type:'post',
-            url:'/goods/category_dropdowns',
-            dataType:'json',
-            data:{'id':category_ids},
-            success:function(data){
-                var html = '';
-                for(var i in data){
-                    html += '<option value='+data[i].id+'>'+data[i].name+'</option>';
-                }
-                $("#category_idss").append(html);
-            }
-        });
-    }
-    var category_type = $("input[name='category_type']").val();
-    $("input[name='category_type']").val(category_ids);
-});
-$("#category_idss").on('change',function(){
-  var category_idss = $("#category_idss").val();
-  var category_type = $("input[name='category_type']").val();
-   $("input[name='category_type']").val(category_idss);
-});  
-var form =  new Form();
-// var category_id = {$category_id};
-// var category_idss = $("#category_idss").val();
-form.setValue('shop_id','{$shop_id}');
-// form.setValue('category_id','{$category_id}');
-// form.setValue('category_idss',category_idss);
-form.setValue('type_id','{$type_id}');
-form.setValue('brand_id','{$brand_id}');
-form.setValue('is_online','{$is_online}');
-{if:isset($personal_shop_id)&&$personal_shop_id!=""}
-form.setValue('personal_shop_id','{$personal_shop_id}');
-{/if}
+bindEvent();
 </script>

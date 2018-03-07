@@ -448,13 +448,13 @@ class GoodsController extends Controller {
         $id = intval(Req::args("id"));
         $gdata = Req::args();
         $gdata['name'] = Filter::sql($gdata['name']);
-        $gdata['category_id'] = $_POST['category_type']!=''?$_POST['category_type']:$_POST['category_id'];
+        $gdata['category_id'] = isset($_POST['category_type'])?$_POST['category_type']:$_POST['category_id'];
         if (is_array($gdata['pro_no']))
             $gdata['pro_no'] = $gdata['pro_no'][0];
         if ($id == 0) {
             $gdata['create_time'] = date("Y-m-d H:i:s");
             // var_dump($_POST['is_weishang']);die;
-            $goods_id = $goods->data($gdata)->save();
+            $goods_id = $goods->data($gdata)->insert();
             Log::op($this->manager['id'], "添加商品", "管理员[" . $this->manager['name'] . "]:添加了商品 " . Req::args('name'));
         } else {
             $goods_id = $id;
@@ -466,6 +466,7 @@ class GoodsController extends Controller {
         $g_store_nums = $g_warning_line = $g_weight = $g_sell_price = $g_market_price = $g_cost_price = 0;
         $products = new Model("products");
         $k = 0;
+        $goods_id = $goods_id==false?0:$goods_id;
         foreach ($values_dcr as $key => $value) {
             $result = $products->where("goods_id = " . $goods_id . " and specs_key = '$key'")->find();
 
