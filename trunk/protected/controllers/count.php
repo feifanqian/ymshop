@@ -1621,14 +1621,6 @@ class CountController extends Controller
         $num = $cal['days'];//天数
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
-        $where1 = 'bw.status=1 and bw.type=1';
-        $where2 = 'bw.status=1 and bw.type=0';
-        if(isset($_POST['s_time'])){
-            $stime = $cal['start']; //开始时间
-            $etime = $cal['end']; //结束时间
-            $where1 .= " and bw.apply_date between '$stime' and '$etime'";
-            $where2 .= " and bw.apply_date between '$stime' and '$etime'";
-        }
         if(isset($_POST['s_name'])){
             $s_name = $_POST['s_name'];
             $where = "real_name like '%{$s_name}%'";
@@ -1636,21 +1628,24 @@ class CountController extends Controller
             $where = '1=1';
         }
         $model = new Model();
-        // $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,sum(bw.real_amount) as real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
-        // $result2 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,sum(bw.real_amount) as real_amounts')->where($where2)->order('c.user_id desc')->group('bw.user_id')->findAll();
-        // $result = array_merge($result1,$result2);
         $results = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findPage($page, 10);
-        // $resultss = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
         $result = $results['data'];
         foreach($result as $k=>$v){
-            $where1.=" and user_id =".$v['user_id'];
+            if(isset($_POST['s_time'])){
+                $stime = $cal['start']; //开始时间
+                $etime = $cal['end']; //结束时间
+                $where1 = "bw.status=1 and bw.type=1 and bw.apply_date between '$stime' and '$etime' and user_id=".$v['user_id'];
+                $where2 = "bw.status=1 and bw.type=0 and bw.apply_date between '$stime' and '$etime' and user_id=".$v['user_id'];
+            }else{
+                $where1 = "bw.status=1 and bw.type=1 and user_id=".$v['user_id'];
+                $where2 = "bw.status=1 and bw.type=0 and user_id=".$v['user_id'];
+            }
             $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as total_amount')->where($where1)->findAll();
             if($result1){
                  $result[$k]['total_amount']=$result1[0]['total_amount']==null?'0.00':$result1[0]['total_amount']; 
             }else{
                 $result[$k]['total_amount']='0.00';
             }
-            $where2.=" and user_id =".$v['user_id'];
             $result2 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amounts')->where($where2)->findAll();
             if($result2){
                  $result[$k]['real_amounts']=$result2[0]['real_amounts']==null?'0.00':$result2[0]['real_amounts'];  
@@ -1658,27 +1653,8 @@ class CountController extends Controller
                 $result[$k]['real_amounts']='0.00';
             }
         } 
-        // foreach($result as $k=>$v){
-        //     if(!isset($v['real_amounts'])){
-        //         $result[$k]['real_amounts']='0.00';
-        //     }
-        //     if(!isset($v['real_amount'])){
-        //         $result[$k]['real_amount']='0.00';
-        //     }
-        // }
-        // $total=count($resultss);//总条数  
-        // $num=10;//每页显示条数  
-        
-        // $pagenum=ceil($total/$num);//总页数  
-        // $offset=($page-1)*$num;//开始去数据的位置   
-        // $start=$offset+1;//开始记录页  
-        // $end=($page==$pagenum)?$total : ($page*$num);//结束记录页  
-        // $next=($page==$pagenum)? $pagenum:($page+1);//下一页  
-        // $prev=($page==1)? 1:($page-1);//前一页 
-//         $html="<a href=/count/balance_count?p={$prev} >上一页</a>  <span class='current'>{$page}</span>
-// <a href=/count/balance_count?p={$next} >下一页</a> &nbsp;&nbsp;&nbsp;&nbsp;共 {$pagenum}页&nbsp;&nbsp;跳到第<input id='drumppage' style='width:24px;text-align:center' value='1'>页<a href='javascript:;' onclick='javascript:window.location.href=&quot;/count/balance_count?p=&quot;+document.getElementById(&quot;drumppage&quot;).value;'>确定</a>";
+    
         $html = $results['html'];
-        // $newarr = array_slice($result, ($page-1)*$num, $num);
         $this->assign('result', $result);
         $this->assign('html',$html);
         $this->assign('s_time', $s_time);
@@ -1700,24 +1676,9 @@ class CountController extends Controller
         $etime = date('Y-m-d 00:00:00', strtotime($date[1] . '+1day'));
         
         $this->layout = '';
-        // $condition = Req::args("condition");
-        // $fields = Req::args("fields");
-        // $condition = Common::str2where($condition);
+        
         $model = new Model();
-        // if ($condition) {
-        //     $where = $condition;
-        // }else{
-        //     $where = '1=1';
-        // }
-        if($stime==date('Y-m-d 00:00:00')){
-            $where1 = "bw.status=1 and bw.type=1";
-            $where2 = "bw.status=1 and bw.type=0";
-            $title = "圆梦用户钱袋统计表";
-        }else{
-            $where1 = "bw.status=1 and bw.type=1 and '$stime'< bw.apply_date and bw.apply_date<'$etime'";
-            $where2 = "bw.status=1 and bw.type=0 and '$stime'< bw.apply_date and bw.apply_date<'$etime'";
-            $title = "圆梦用户钱袋统计表[$stime - $etime]";
-        }
+        
         if(isset($_POST['s_name']) && $_POST['s_name']!=''){
            $s_name = $_POST['s_name'];
            $where = "real_name like '%{$s_name}%'";
@@ -1725,8 +1686,6 @@ class CountController extends Controller
             $where = 'balance>0 or offline_balance>0';
         } 
         $fields = array('user_id','real_name','offline_balance','balance','total_amount','real_amounts');
-        // $result1 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount')->where($where1)->order('c.user_id desc')->group('bw.user_id')->findAll();
-        // $result2 = $model->table('balance_withdraw as bw')->join('customer as c on bw.user_id=c.user_id')->fields('c.user_id,c.real_name,c.offline_balance,c.balance,bw.real_amount as real_amounts')->where($where2)->order('c.user_id desc')->group('bw.user_id')->findAll();
         
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()
@@ -1752,20 +1711,25 @@ class CountController extends Controller
         $objPHPExcel->setActiveSheetIndex(0) ->setCellValue('D2', '账上其它余额');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '已提现商家款');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '已提现其它款');
-        // $result = array_merge($result1,$result2); 
         
-        // $results = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findPage($page, 10);
         $result = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
-        // $result = $results['data'];
+        
         foreach($result as $k=>$v){
-            $where1.=" and user_id =".$v['user_id'];
+            if($stime==date('Y-m-d 00:00:00')){
+                $where1 = "bw.status=1 and bw.type=1 and user_id =".$v['user_id'];
+                $where2 = "bw.status=1 and bw.type=0 and user_id =".$v['user_id'];
+                $title = "圆梦用户钱袋统计表";
+            }else{
+                $where1 = "bw.status=1 and bw.type=1 and '$stime'< bw.apply_date and bw.apply_date<'$etime' and user_id =".$v['user_id'];
+                $where2 = "bw.status=1 and bw.type=0 and '$stime'< bw.apply_date and bw.apply_date<'$etime' and user_id =".$v['user_id'];
+                $title = "圆梦用户钱袋统计表[$stime - $etime]";
+            }
             $result1 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as total_amount')->where($where1)->findAll();
             if($result1){
                  $result[$k]['total_amount']=$result1[0]['total_amount']==null?'0.00':$result1[0]['total_amount']; 
             }else{
                 $result[$k]['total_amount']='0.00';
             }
-            $where2.=" and user_id =".$v['user_id'];
             $result2 = $model->table('balance_withdraw as bw')->fields('sum(bw.real_amount) as real_amounts')->where($where2)->findAll();
             if($result2){
                  $result[$k]['real_amounts']=$result2[0]['real_amounts']==null?'0.00':$result2[0]['real_amounts'];  
@@ -1775,14 +1739,6 @@ class CountController extends Controller
         } 
 
         if (!empty($result)) {
-            // foreach($result as $k=>$v){
-            //         if(!isset($v['real_amounts'])){
-            //             $result[$k]['real_amounts']='0.00';
-            //         }
-            //         if(!isset($v['real_amount'])){
-            //             $result[$k]['real_amount']='0.00';
-            //         }
-            //     }
             foreach ($result as $k => $v) {
                 $index = $k + 3;
                 $objPHPExcel->setActiveSheetIndex(0)
@@ -1828,33 +1784,15 @@ class CountController extends Controller
         $s_time = $cal['str'];
 
         $model = new Model();
-        // var_dump($cal['start']);die;
-        // $where = 'bl.type=8 and note="线下会员消费卖家收益(不参与分账)" or note="线下会员消费卖家收益"';
-        // $where1 = 'bl.type=8 and note="线下会员消费卖家收益(不参与分账)"';
-        // $where2 = 'bl.type=8 and note="线下会员消费卖家收益"';
-        // var_dump($where1);die;
         $where = '1=1';
         if(isset($_POST['s_name']) && $_POST['s_name']!=''){
             $s_name = $_POST['s_name'];
             $where .= " and real_name like '%{$s_name}%' or c.user_id=".$s_name;
         }
         $results = $model->table('district_promoter as dp')->fields('dp.user_id,dp.base_rate,c.real_name')->join('customer as c on dp.user_id=c.user_id')->where($where)->order('id desc')->findPage($page, 10);
-        // $results = $model->table('balance_log as bl')->fields('bl.amount,bl.note,bl.time,c.real_name,c.user_id,oo.real_amount,dp.base_rate')->join('left join customer as c on bl.user_id=c.user_id left join order_offline as oo on bl.order_no=oo.order_no left join district_promoter as dp on bl.user_id=dp.user_id')->where($where)->order('bl.id desc')->findPage($page, 10);
+    
         $result = $results['data'];
         foreach($result as $k=>$v){
-            // if($v['note']=='线下会员消费卖家收益(不参与分账)'){
-            //     $result[$k]['total_amount'] = $v['amount']; //不让利入账金额
-            //     $result[$k]['total_amounts'] = '0.00'; //让利入账全额
-            //     $result[$k]['amounts'] = '0.00'; //让利金额
-            //     $result[$k]['real_amounts'] = '0.00'; //让利后入账金额
-            // }else{
-            //     $result[$k]['total_amount'] = '0.00'; //不让利入账金额
-            //     $result[$k]['total_amounts'] = $v['real_amount']; //让利入账全额
-            //     $result[$k]['amounts'] = $v['real_amount']-$v['amount']; //让利金额
-            //     $result[$k]['real_amounts'] = $v['amount']; //让利后入账金额
-            // }
-            // $result[$k]['rate'] = $v['base_rate']; //让利比例
-            // $result[$k]['sum_amount'] = $result[$k]['total_amount']+$result[$k]['total_amounts']; //入账金额
             if(isset($_POST['s_time'])){
                 $stime = $cal['start']; //开始时间
                 $etime = $cal['end']; //结束时间
