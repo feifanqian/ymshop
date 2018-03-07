@@ -1841,7 +1841,7 @@ class CountController extends Controller
         $where = '1=1';
         if(isset($_POST['s_name'])){
             $s_name = $_POST['s_name'];
-            $where .= " and real_name like '%{$s_name}%'";
+            $where .= " and real_name like '%{$s_name}%' or c.user_id=".$s_name;
         }
         $results = $model->table('district_promoter as dp')->fields('dp.user_id,dp.base_rate,c.real_name')->join('customer as c on dp.user_id=c.user_id')->where($where)->order('id desc')->findPage($page, 10);
         // $results = $model->table('balance_log as bl')->fields('bl.amount,bl.note,bl.time,c.real_name,c.user_id,oo.real_amount,dp.base_rate')->join('left join customer as c on bl.user_id=c.user_id left join order_offline as oo on bl.order_no=oo.order_no left join district_promoter as dp on bl.user_id=dp.user_id')->where($where)->order('bl.id desc')->findPage($page, 10);
