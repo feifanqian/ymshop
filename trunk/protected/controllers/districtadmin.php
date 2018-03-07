@@ -1436,4 +1436,11 @@ class DistrictadminController extends Controller
                 $this->redirect("shop_check_list", false, Req::args());
             }
     }
+
+    public function shop_check_delete(){
+        $id = Filter::sql(Req::args("id"));
+        $model = new Model();
+        $model->table("shop_check")->where("id=" . $id)->delete();
+        $this->redirect('shop_check');
+    }
 }
