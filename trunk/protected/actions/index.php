@@ -393,25 +393,24 @@ class IndexAction extends Controller {
 
     //新导航分类列表
     public function category_nav(){
-        $list = $this->model->table('goods_category')->fields('id,name,adimg')->where('parent_id=0')->findAll();
+        $list = $this->model->table('goods_category')->fields('id,name,adimg')->where('parent_id=0 and id!=1')->findAll();
         foreach($list as $k=>$v){
             $list[$k]['type'] = 'category';
         }
-        $new = array(
-            0=>array(
-                'id'=>1,
+        $new1 = array(
+                'id'=>'1',
                 'name'=>'微商专区',
-                'adimg'=>'',
+                'adimg'=>'https://ymlypt.b0.upaiyun.com/data/uploads/2018/03/08/23a77be36c12d55a996649ef96d01d70.png',
                 'type'=>'mini_shop'
-                ),
-            1=>array(
-                'id'=>999,
+                );
+        array_push($list, $new1);
+        $new2 = array(
+                'id'=>'999',
                 'name'=>'附近',
-                'adimg'=>'',
+                'adimg'=>'https://ymlypt.b0.upaiyun.com/data/uploads/2018/03/08/457bdda9eb7d103edfd21c0f523fa584.png',
                 'type'=>'nearby'
-                )
-            );
-        array_push($list, $new);
+                );
+        array_push($list, $new2);
         $this->code = 0;
         $this->content = $list;
 
