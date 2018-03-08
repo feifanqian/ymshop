@@ -390,4 +390,30 @@ class IndexAction extends Controller {
         $this->code =0;
         $this->content = $version;
     }
+
+    //新导航分类列表
+    public function category_nav(){
+        $list = $this->model->table('goods_category')->fields('id,name,adimg')->where('parent_id=0')->findAll();
+        foreach($list as $k=>$v){
+            $list[$k]['type'] = 'category';
+        }
+        $new = array(
+            0=>array(
+                'id'=>1,
+                'name'=>'微商专区',
+                'adimg'=>'',
+                'type'=>'mini_shop'
+                ),
+            1=>array(
+                'id'=>999,
+                'name'=>'附近',
+                'adimg'=>'',
+                'type'=>'nearby'
+                )
+            );
+        array_push($list, $new);
+        $this->code = 0;
+        $this->content = $list;
+
+    }
 }
