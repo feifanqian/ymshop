@@ -1882,14 +1882,14 @@ class CountController extends Controller
         $result = $model->table('district_promoter as dp')->fields('dp.user_id,dp.base_rate,c.real_name')->join('customer as c on dp.user_id=c.user_id')->where($where)->order('id desc')->findAll();
         
         foreach($result as $k=>$v){
-            if(!isset($_POST['s_time'])){
-                $where1 = "bl.type=8 and note='线下会员消费卖家收益(不参与分账)' and user_id=".$v['user_id'];
-                $where2 = "bl.type=8 and note='线下会员消费卖家收益' and user_id=".$v['user_id'];
-                $title = "圆梦商家入账统计表";
-            }else{
+            if(isset($_POST['s_time'])){
+                $stime = $cal['start']; //开始时间
+                $etime = $cal['end']; //结束时间
                 $where1 = "bl.type=8 and note='线下会员消费卖家收益(不参与分账)' and bl.time>'$stime' and bl.time<'$etime' and user_id=".$v['user_id'];
                 $where2 = "bl.type=8 and note='线下会员消费卖家收益' and bl.time>'$stime' and bl.time<'$etime' and user_id=".$v['user_id'];
-                $title = "圆梦商家入账统计表[$stime - $etime]";
+            }else{
+                $where1 = "bl.type=8 and note='线下会员消费卖家收益(不参与分账)' and user_id=".$v['user_id'];
+                $where2 = "bl.type=8 and note='线下会员消费卖家收益' and user_id=".$v['user_id'];
             }
             $result1 = $model->table('balance_log as bl')->fields('sum(bl.amount) as total_amount')->where($where1)->findAll();
             if($result1){
@@ -1920,8 +1920,8 @@ class CountController extends Controller
                     ->setCellValue('D' . $index, $v['total_amounts'])
                     ->setCellValue('E' . $index, $v['base_rate'])
                     ->setCellValue('F' . $index, $v['amounts'])
-                    ->setCellValue('F' . $index, $v['real_amounts'])
-                    ->setCellValue('F' . $index, $v['sum_amount']);
+                    ->setCellValue('G' . $index, $v['real_amounts'])
+                    ->setCellValue('H' . $index, $v['sum_amount']);
             }
             $length = count($result) + 2;
             $objPHPExcel->setActiveSheetIndex(0);
@@ -2012,7 +2012,7 @@ class CountController extends Controller
                 foreach ($items as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $value) {
-                        $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$value]) . "</td>";
+                        $str .= "<td>" . iconv("UTF-8", "GBK", $item[$value]) . "</td>";
                     }
                     $str .= "</tr>";
                 }
