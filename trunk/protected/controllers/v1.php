@@ -22,6 +22,7 @@ class V1Controller extends Controller {
         'send_code' => array('ucenter/send_code', 0,1),
         'send_sms' => array('ucenter/send_sms', 0,1),
         'index' => array('index/index', 0,1), //获取主页接口
+        'index_area'=>array('index/index_area',0,1), //首页抢购积分专区
         'category_nav' => array('index/category_nav', 0,1), //新首页导航接口
         'index_goods' => array('index/index_goods', 0,1),
         'product' => array('product/info', 0,1), //获取产品信息接口

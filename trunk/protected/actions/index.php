@@ -415,4 +415,82 @@ class IndexAction extends Controller {
         $this->content = $list;
 
     }
+
+    public function index_area(){
+        $now  = date('Y-m-d H:i:s');
+        $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->limit(10)->findAll();
+        $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->limit(10)->findAll();
+        if($list1){
+            foreach($list1 as $k=>$v){
+                $list1[$k]['tag'] = $v['title'];
+                $list1[$k]['max_num'] = $v['max_sell_count'];
+                $list1[$k]['start_time'] = $v['start_date'];
+                $list1[$k]['end_time'] = $v['end_date'];
+                $list1[$k]['order_num'] = $v['order_count'];
+                $list1[$k]['quota_num'] = $v['quota_count'];
+                $set = current(unserialize($v['price_set']));
+                $list1[$k]['price'] = sprintf("%.2f",$set['cash']);
+                $list1[$k]['send_point'] = '0.00';
+                $list1[$k]['description'] = '';
+                $list1[$k]['goods_num'] = $v['max_sell_count'];
+                $list1[$k]['wants'] = '';
+                $list1[$k]['wants_num'] = '0';
+                $list1[$k]['cost_point'] = $set['point'];
+                $list1[$k]['flash_type'] = 'point';
+                unset($list1[$k]['max_sell_count']);
+                unset($list1[$k]['start_date']);
+                unset($list1[$k]['end_date']);
+                unset($list1[$k]['order_count']);
+                unset($list1[$k]['quota_count']);
+                unset($list1[$k]['price_set']);
+            }
+        }
+        if($list2){
+            foreach($list2 as $k=>$v){
+                $list2[$k]['cost_point'] = '0.00';
+                $list2[$k]['flash_type'] = 'cash';
+            }
+        }
+        $flashlist = array_merge($list1,$list2);
+        if ($flashlist) {
+            foreach ($flashlist as $k => &$v) {
+                $v['imgs'] = array_values(unserialize($v['imgs']));
+                unset($v['specs'], $v['attrs'], $v['content']);
+            }
+        }
+        
+        $ad1 = $this->model->table('ad')->fields('content')->where('id=52')->find();
+        $imgs1 = unserialize($ad1['content']);
+        $ad2 = $this->model->table('ad')->fields('content')->where('id=53')->find();
+        $imgs2 = unserialize($ad2['content']);
+        $flash=array(
+            'imgs'=>$imgs1,
+            'flashlist'=>$flashlist,
+            'end_time'=>isset($flashlist[0]['end_time'])?$flashlist[0]['end_time']:date('Y-m-d H:i:s'),
+            'now'=>date('Y-m-d H:i:s')
+            );
+
+        $point_list = $this->model->table("point_sale as ps")
+                ->join("goods as g on ps.goods_id = g.id")
+                ->where("ps.status = 1 and g.store_nums >0")
+                ->fields("ps.id,ps.price_set,ps.is_adjustable,ps.listorder,ps.goods_id,g.name,g.img,g.sell_price,g.subtitle")
+                ->order("ps.listorder")
+                ->limit(10)
+                ->findAll();
+        if(!empty($point_list)){
+            foreach($point_list as $k=>$v){
+                $point_list[$k]['price_set']=  array_values(unserialize($v['price_set']));
+            }
+        }
+        $point = array(
+            'imgs'=>$imgs2,
+            'pointlist'=>$point_list
+            );
+        $content = array(
+            'flash'=>$flash,
+            'point'=>$point
+            );
+        $this->code = 0;
+        $this->content = $content;
+    }
 }
