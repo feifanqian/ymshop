@@ -461,10 +461,12 @@ class IndexAction extends Controller {
         
         $ad1 = $this->model->table('ad')->fields('content')->where('id=52')->find();
         $imgs1 = unserialize($ad1['content']);
+        $imgs1[0]['url'] = json_decode($imgs1[0]['url'],true);
         $ad2 = $this->model->table('ad')->fields('content')->where('id=53')->find();
         $imgs2 = unserialize($ad2['content']);
+        $imgs2[0]['url'] = json_decode($imgs2[0]['url'],true);
         $flash=array(
-            'imgs'=>$imgs1,
+            'imgs'=>$imgs1[0],
             'flashlist'=>$flashlist,
             'end_time'=>isset($flashlist[0]['end_time'])?$flashlist[0]['end_time']:date('Y-m-d H:i:s'),
             'now'=>date('Y-m-d H:i:s')
@@ -483,7 +485,7 @@ class IndexAction extends Controller {
             }
         }
         $point = array(
-            'imgs'=>$imgs2,
+            'imgs'=>$imgs2[0],
             'pointlist'=>$point_list
             );
         $content = array(
