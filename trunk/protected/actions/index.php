@@ -499,9 +499,10 @@ class IndexAction extends Controller {
     }
 
     public function index_category(){
-        $list = $this->model->table('goods_category')->fields('id,name,img')->where('parent_id=0 and id!=1')->findAll();
+        $list = $this->model->table('goods_category')->fields('id,name,title_img,ad_img,font_color')->where('parent_id=0 and id!=1')->findAll();
 
-        $ad = $this->model->query("select content from tiny_ad where id>=54 and id<=61  and is_open = 1");
+
+        $ad = $this->model->query("select content from tiny_ad where id>=46 and id<=53  and is_open = 1");
         $arr = array();
         foreach ($ad as $kk => $vv){
              $ad[$kk]['content'] = unserialize($ad[$kk]['content']);
@@ -515,8 +516,10 @@ class IndexAction extends Controller {
                 $arr['imgs'][]= $ad[$kk]['content'][$k];
             }
         }
-        
+        foreach($list as $k=>$v){
+               $list[$k]['imgs'] = $arr[$key]['imgs']; 
+        }
         $this->code = 0;
-        $this->content = $content;
+        $this->content = $list;
     }
 }
