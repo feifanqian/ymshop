@@ -467,7 +467,7 @@ class IndexAction extends Controller {
         $imgs2[0]['url'] = json_decode($imgs2[0]['url'],true);
         $flash=array(
             'imgs'=>$imgs1[0],
-            'flashlist'=>$flashlist,
+            'list'=>$flashlist,
             'end_time'=>isset($flashlist[0]['end_time'])?$flashlist[0]['end_time']:date('Y-m-d H:i:s'),
             'now'=>date('Y-m-d H:i:s')
             );
@@ -482,11 +482,13 @@ class IndexAction extends Controller {
         if(!empty($point_list)){
             foreach($point_list as $k=>$v){
                 $point_list[$k]['price_set']=  array_values(unserialize($v['price_set']));
+                $point_list[$k]['cash']=  $point_list[$k]['price_set'][0]['cash'];
+                $point_list[$k]['point']=  $point_list[$k]['price_set'][0]['point'];
             }
         }
         $point = array(
             'imgs'=>$imgs2[0],
-            'pointlist'=>$point_list
+            'list'=>$point_list
             );
         $content = array(
             'flash'=>$flash,
