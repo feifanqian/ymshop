@@ -369,6 +369,7 @@ function setAdimg(value, needclose){
   }
 
 function setTitleimg(value, needclose){
+  console.log(2);
     var show_src = value.substr(0,4)!="http" ? ADMIN.upyuncfg.upyun_cdnurl + value : value;
     if($("img[name='title_img']").length>0){
         $("img[name='title_img']").prop('src',show_src);
