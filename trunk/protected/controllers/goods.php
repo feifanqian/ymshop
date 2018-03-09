@@ -288,6 +288,7 @@ class GoodsController extends Controller {
         $ad_img = Filter::sql(Req::args("ad_img"));
         $adurl = Filter::sql(Req::args("adurl"));
         $imgs = array();
+        var_dump($title_img);die;
         foreach ($imgs_array as $key => $value) {
             $imgs[] = array('img' => $value, 'link' => $links[$key]);
         }
