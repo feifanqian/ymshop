@@ -482,8 +482,8 @@ class IndexAction extends Controller {
         if(!empty($point_list)){
             foreach($point_list as $k=>$v){
                 $point_list[$k]['price_set']=  array_values(unserialize($v['price_set']));
-                $point_list[$k]['cash']=  $point_list[$k]['price_set'][0]['cash'];
-                $point_list[$k]['point']=  $point_list[$k]['price_set'][0]['point'];
+                $point_list[$k]['price']=  $point_list[$k]['price_set'][0]['cash'];
+                $point_list[$k]['cost_point']=  $point_list[$k]['price_set'][0]['point'];
             }
         }
         $point = array(
