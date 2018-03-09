@@ -497,4 +497,26 @@ class IndexAction extends Controller {
         $this->code = 0;
         $this->content = $content;
     }
+
+    public function index_category(){
+        $list = $this->model->table('goods_category')->fields('id,name,img')->where('parent_id=0 and id!=1')->findAll();
+
+        $ad = $this->model->query("select content from tiny_ad where id>=54 and id<=61  and is_open = 1");
+        $arr = array();
+        foreach ($ad as $kk => $vv){
+             $ad[$kk]['content'] = unserialize($ad[$kk]['content']);
+            foreach ($ad[$kk]['content'] as $k=>$v){
+                if($ad[$kk]['content'][$k]['url']!=''){
+                    $ad[$kk]['content'][$k]['url'] = json_decode($ad[$kk]['content'][$k]['url'],true);
+                }else{
+                    $ad[$kk]['content'][$k]['url']=array('type'=>'','type_value'=>'');
+                }
+                
+                $arr['imgs'][]= $ad[$kk]['content'][$k];
+            }
+        }
+        
+        $this->code = 0;
+        $this->content = $content;
+    }
 }

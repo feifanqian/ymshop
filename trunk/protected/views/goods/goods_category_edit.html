@@ -150,6 +150,64 @@
        
       </dd>
     </dl>
+    <dl class="lineD clearfix">
+    <dt>APP分类标题图片：</dt>
+    <dd class="min_inputs ">
+      <button class="button  select_button select_button3" type="button" >
+        <b class="icon-plus green"></b>
+        更换图片
+      </button> <b class="red">双击图片编辑APP跳转连接</b>
+    </dd>
+  </dl>
+ 
+  <dl>
+    <dt></dt>
+    <dd>
+      <ul class="piclist" id="pic_list_title_img">
+        {if:isset($title_img)&&$title_img!=''}
+       <li class="current">
+          <div class="bord">
+            <input type="hidden" name="title_img" value="<?php echo isset($title_img)?$title_img:"";?>">
+            <img name="title_img" src="<?php echo Common::thumb($title_img,100,100);?>" data-src=<?php echo isset($title_img)?$title_img:"";?> ondblclick="editAdurl(this)" width="80" height="80" alt="">
+          </div>
+            <div class="opera">
+             <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
+            </div>
+          </li>
+          {/if}
+        </ul>
+       
+      </dd>
+    </dl>
+    <dl class="lineD clearfix">
+    <dt>APP分类底部广告图片：</dt>
+    <dd class="min_inputs ">
+      <button class="button  select_button select_button4" type="button" >
+        <b class="icon-plus green"></b>
+        更换图片
+      </button> <b class="red">双击图片编辑APP跳转连接</b>
+    </dd>
+  </dl>
+ 
+  <dl>
+    <dt></dt>
+    <dd>
+      <ul class="piclist" id="pic_list_ad_img">
+        {if:isset($ad_img)&&$ad_img!=''}
+       <li class="current">
+          <div class="bord">
+            <input type="hidden" name="ad_img" value="<?php echo isset($ad_img)?$ad_img:"";?>">
+            <img name="ad_img" src="<?php echo Common::thumb($ad_img,100,100);?>" data-src=<?php echo isset($ad_img)?$ad_img:"";?> ondblclick="editAdurl(this)" width="80" height="80" alt="">
+          </div>
+            <div class="opera">
+             <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
+            </div>
+          </li>
+          {/if}
+        </ul>
+       
+      </dd>
+    </dl>
   </div>
   <!-- E 基本信息-->
   <!-- S SEO信息-->
@@ -253,6 +311,14 @@
     uploadFile("setAdimg");
     return false;
   });
+  $(".select_button3").on("click",function(){
+    uploadFile("setTitleimg");
+    return false;
+  });
+  $(".select_button4").on("click",function(){
+    uploadFile("setAdimgs");
+    return false;
+  });
   function uploadFile(value){
     art.dialog.open('<?php echo urldecode(Url::urlFormat("/admin/photoshop?type=category"));?>'+"&flag="+value,{id:'upimg_dialog',lock:true,opacity:0.1,title:'选择图片',width:613,height:380});
   }
@@ -300,6 +366,34 @@ function setAdimg(value, needclose){
         art.dialog({id:'upimg_dialog'}).close();
       }
   }
+
+function setTitleimg(value, needclose){
+    var show_src = value.substr(0,4)!="http" ? ADMIN.upyuncfg.upyun_cdnurl + value : value;
+    if($("img[name='title_img']").length>0){
+        $("img[name='title_img']").prop('src',show_src);
+        $("input[name='title_img']").prop('value',value);
+    }else{
+        $("#pic_list_title_img").append('<li> <div class="bord"><input type="hidden" name="title_img" value="'+value+'" /> <img src="'+show_src+'" data-src="'+value+'"   ondblclick="editAdurl(this)" width="80" height="80" alt=""></div> <div class="opera"><a class="icon-close" href="javascript:;" onclick="delImg(this)"></a> </div> </li>');
+    }
+    needclose = needclose==undefined ? 1 : needclose;
+    if(needclose){
+        art.dialog({id:'upimg_dialog'}).close();
+      }
+  }
+
+  function setAdimgs(value, needclose){
+    var show_src = value.substr(0,4)!="http" ? ADMIN.upyuncfg.upyun_cdnurl + value : value;
+    if($("img[name='ad_img']").length>0){
+        $("img[name='ad_img']").prop('src',show_src);
+        $("input[name='ad_img']").prop('value',value);
+    }else{
+        $("#pic_list_ad_img").append('<li> <div class="bord"><input type="hidden" name="ad_img" value="'+value+'" /> <img src="'+show_src+'" data-src="'+value+'"   ondblclick="editAdurl(this)" width="80" height="80" alt=""></div> <div class="opera"><a class="icon-close" href="javascript:;" onclick="delImg(this)"></a> </div> </li>');
+    }
+    needclose = needclose==undefined ? 1 : needclose;
+    if(needclose){
+        art.dialog({id:'upimg_dialog'}).close();
+      }
+  }  
 
 
 function openSetWindow(){
