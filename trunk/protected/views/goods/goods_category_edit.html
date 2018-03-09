@@ -165,11 +165,11 @@
     <dd>
       <ul class="piclist" id="pic_list_title_img">
         {if:isset($title_img)&&$title_img!=''}
-       <li class="current">
+       <li class="current" style="width: 200px;">
           <div class="bord">
             <input type="hidden" name="title_img" value="<?php echo isset($title_img)?$title_img:"";?>">
             <input type="hidden" name="adurl1" value="<?php echo isset($adurl1) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $adurl1)):""; ?>">
-            <img name="title_img" src="<?php echo Common::thumb($title_img,100,100);?>" data-src=<?php echo isset($title_img)?$title_img:"";?> ondblclick="editAdurl1(this)" width="80" height="80" alt="">
+            <img name="title_img" src="<?php echo Common::thumb($title_img,100,100);?>" data-src=<?php echo isset($title_img)?$title_img:"";?> ondblclick="editAdurl1(this)" width="200" height="80" alt="">
           </div>
             <div class="opera">
              <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
@@ -195,11 +195,11 @@
     <dd>
       <ul class="piclist" id="pic_list_ad_img">
         {if:isset($ad_img)&&$ad_img!=''}
-       <li class="current">
+       <li class="current" style="width: 400px;">
           <div class="bord">
             <input type="hidden" name="ad_img" value="<?php echo isset($ad_img)?$ad_img:"";?>">
             <input type="hidden" name="adurl2" value="<?php echo isset($adurl2) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $adurl2)):""; ?>">
-            <img name="ad_img" src="<?php echo Common::thumb($ad_img,100,100);?>" data-src=<?php echo isset($ad_img)?$ad_img:"";?> ondblclick="editAdurl2(this)" width="80" height="80" alt="">
+            <img name="ad_img" src="<?php echo Common::thumb($ad_img,100,100);?>" data-src=<?php echo isset($ad_img)?$ad_img:"";?> ondblclick="editAdurl2(this)" width="400" height="80" alt="">
           </div>
             <div class="opera">
              <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
