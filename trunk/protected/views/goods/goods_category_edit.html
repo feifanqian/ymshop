@@ -168,7 +168,8 @@
        <li class="current">
           <div class="bord">
             <input type="hidden" name="title_img" value="<?php echo isset($title_img)?$title_img:"";?>">
-            <img name="title_img" src="<?php echo Common::thumb($title_img,100,100);?>" data-src=<?php echo isset($title_img)?$title_img:"";?> ondblclick="editAdurl(this)" width="80" height="80" alt="">
+            <input type="hidden" name="adurl1" value="<?php echo isset($adurl1) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $adurl1)):""; ?>">
+            <img name="title_img" src="<?php echo Common::thumb($title_img,100,100);?>" data-src=<?php echo isset($title_img)?$title_img:"";?> ondblclick="editAdurl1(this)" width="80" height="80" alt="">
           </div>
             <div class="opera">
              <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
@@ -197,7 +198,8 @@
        <li class="current">
           <div class="bord">
             <input type="hidden" name="ad_img" value="<?php echo isset($ad_img)?$ad_img:"";?>">
-            <img name="ad_img" src="<?php echo Common::thumb($ad_img,100,100);?>" data-src=<?php echo isset($ad_img)?$ad_img:"";?> ondblclick="editAdurl(this)" width="80" height="80" alt="">
+            <input type="hidden" name="adurl2" value="<?php echo isset($adurl2) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $adurl2)):""; ?>">
+            <img name="ad_img" src="<?php echo Common::thumb($ad_img,100,100);?>" data-src=<?php echo isset($ad_img)?$ad_img:"";?> ondblclick="editAdurl2(this)" width="80" height="80" alt="">
           </div>
             <div class="opera">
              <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
@@ -375,7 +377,7 @@ function setTitleimg(value, needclose){
         $("img[name='title_img']").prop('src',show_src);
         $("input[name='title_img']").prop('value',value);
     }else{
-        $("#pic_list_title_img").append('<li> <div class="bord"><input type="hidden" name="title_img" value="'+value+'" /> <img src="'+show_src+'" data-src="'+value+'"   ondblclick="editAdurl(this)" width="80" height="80" alt=""></div> <div class="opera"><a class="icon-close" href="javascript:;" onclick="delImg(this)"></a> </div> </li>');
+        $("#pic_list_title_img").append('<li> <div class="bord"><input type="hidden" name="title_img" value="'+value+'" /> <img src="'+show_src+'" data-src="'+value+'"   ondblclick="editAdurl1(this)" width="80" height="80" alt=""></div> <div class="opera"><a class="icon-close" href="javascript:;" onclick="delImg(this)"></a> </div> </li>');
     }
     needclose = needclose==undefined ? 1 : needclose;
     if(needclose){
@@ -389,7 +391,7 @@ function setTitleimg(value, needclose){
         $("img[name='ad_img']").prop('src',show_src);
         $("input[name='ad_img']").prop('value',value);
     }else{
-        $("#pic_list_ad_img").append('<li> <div class="bord"><input type="hidden" name="ad_img" value="'+value+'" /> <img src="'+show_src+'" data-src="'+value+'"   ondblclick="editAdurl(this)" width="80" height="80" alt=""></div> <div class="opera"><a class="icon-close" href="javascript:;" onclick="delImg(this)"></a> </div> </li>');
+        $("#pic_list_ad_img").append('<li> <div class="bord"><input type="hidden" name="ad_img" value="'+value+'" /> <img src="'+show_src+'" data-src="'+value+'"   ondblclick="editAdurl2(this)" width="80" height="80" alt=""></div> <div class="opera"><a class="icon-close" href="javascript:;" onclick="delImg(this)"></a> </div> </li>');
     }
     needclose = needclose==undefined ? 1 : needclose;
     if(needclose){
@@ -443,6 +445,22 @@ function editAdurl(id){
   url = url.replace(/"/g, '&#34;',url.replace(/'/g, '&#39;', url));
   console.log("url="+url);
   art.dialog.data('currentAdurl', $(id).parent().parent().find("input[name='adurl']"));
+  art.dialog({id:'adurlDialog',title:'连接地址',content:'<div>连接地址：<input type="text"  value="'+url+'" style="width:400px;"  onfocus="openSetWindow()" /></div>',width:520});
+}
+
+function editAdurl1(id){
+  var url = $(id).parent().parent().find("input[name='adurl1']").val();
+  url = url.replace(/"/g, '&#34;',url.replace(/'/g, '&#39;', url));
+  console.log("url="+url);
+  art.dialog.data('currentAdurl', $(id).parent().parent().find("input[name='adurl1']"));
+  art.dialog({id:'adurlDialog',title:'连接地址',content:'<div>连接地址：<input type="text"  value="'+url+'" style="width:400px;"  onfocus="openSetWindow()" /></div>',width:520});
+}
+
+function editAdurl2(id){
+  var url = $(id).parent().parent().find("input[name='adurl2']").val();
+  url = url.replace(/"/g, '&#34;',url.replace(/'/g, '&#39;', url));
+  console.log("url="+url);
+  art.dialog.data('currentAdurl', $(id).parent().parent().find("input[name='adurl2']"));
   art.dialog({id:'adurlDialog',title:'连接地址',content:'<div>连接地址：<input type="text"  value="'+url+'" style="width:400px;"  onfocus="openSetWindow()" /></div>',width:520});
 }
 
