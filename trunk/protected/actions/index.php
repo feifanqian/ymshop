@@ -516,6 +516,9 @@ class IndexAction extends Controller {
                 $arr['imgs'][]= $ad[$kk]['content'][$k];
             }
         }
+        var_dump($list);
+        var_dump($arr);
+        die;
         foreach($list as $k=>$v){
                $list[$k]['imgs'] = $arr[$k]['imgs']; 
         }
