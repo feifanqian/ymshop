@@ -503,7 +503,6 @@ class IndexAction extends Controller {
 
 
         $ad = $this->model->query("select content from tiny_ad where id>=64 and id<=71  and is_open = 1");
-        $arr = array();
         foreach ($ad as $kk => $vv){
              $ad[$kk]['content'] = unserialize($ad[$kk]['content']);
             foreach ($ad[$kk]['content'] as $k=>$v){
@@ -512,15 +511,11 @@ class IndexAction extends Controller {
                 }else{
                     $ad[$kk]['content'][$k]['url']=array('type'=>'','type_value'=>'');
                 }
-                
-                $arr['imgs'][]= $ad[$kk]['content'][$k];
             }
         }
-        var_dump($list);
-        var_dump($ad);
-        die;
+        
         foreach($list as $k=>$v){
-               $list[$k]['imgs'] = $arr['imgs'][$k]; 
+               $list[$k]['imgs'] = $ad[$k]['content']; 
         }
         $this->code = 0;
         $this->content = $list;
