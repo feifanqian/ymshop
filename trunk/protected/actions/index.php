@@ -499,7 +499,7 @@ class IndexAction extends Controller {
     }
 
     public function index_category(){
-        $list = $this->model->table('goods_category')->fields('id,name,title_img,ad_img,font_color')->where('parent_id=0 and id!=1')->findAll();
+        $list = $this->model->table('goods_category')->fields('id,name,title_img,ad_img,font_color')->where('parent_id=0 and id!=1')->order('sort asc')->findAll();
 
 
         $ad = $this->model->query("select content from tiny_ad where id>=64 and id<=71  and is_open = 1");
