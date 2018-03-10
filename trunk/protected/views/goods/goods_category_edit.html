@@ -199,7 +199,7 @@
           <div class="bord">
             <input type="hidden" name="ad_img" value="<?php echo isset($ad_img)?$ad_img:"";?>">
             <input type="hidden" name="adurl2" value="<?php echo isset($adurl2) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $adurl2)):""; ?>">
-            <img name="ad_img" src="{$ad_img}" data-src=<?php echo isset($ad_img)?$ad_img:"";?> ondblclick="editAdurl2(this)" width="400" height="90" alt="">
+            <img name="ad_img" src="<?php echo Common::thumb($ad_img,400,100);?>" data-src=<?php echo isset($ad_img)?$ad_img:"";?> ondblclick="editAdurl2(this)" width="400" height="100" alt="">
           </div>
             <div class="opera">
              <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
