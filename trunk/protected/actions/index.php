@@ -517,10 +517,10 @@ class IndexAction extends Controller {
             }
         }
         var_dump($list);
-        var_dump($arr);
+        var_dump($ad);
         die;
         foreach($list as $k=>$v){
-               $list[$k]['imgs'] = $arr[$k]['imgs']; 
+               $list[$k]['imgs'] = $arr['imgs'][$k]; 
         }
         $this->code = 0;
         $this->content = $list;
