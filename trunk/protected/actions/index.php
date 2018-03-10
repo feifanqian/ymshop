@@ -517,7 +517,7 @@ class IndexAction extends Controller {
             }
         }
         foreach($list as $k=>$v){
-               $list[$k]['imgs'] = $arr[$key]['imgs']; 
+               $list[$k]['imgs'] = $arr[$k]['imgs']; 
         }
         $this->code = 0;
         $this->content = $list;
