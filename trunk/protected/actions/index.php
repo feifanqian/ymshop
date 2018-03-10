@@ -499,7 +499,7 @@ class IndexAction extends Controller {
     }
 
     public function index_category(){
-        $list = $this->model->table('goods_category')->fields('id,name,title_img,ad_img,font_color')->where('parent_id=0 and id!=1')->order('sort asc')->findAll();
+        $list = $this->model->table('goods_category')->fields('id,name,title_img,font_color,ad_position')->where('parent_id=0 and id!=1')->order('sort asc')->findAll();
 
 
         $ad = $this->model->query("select content from tiny_ad where id>=64 and id<=71  and is_open = 1");
@@ -513,9 +513,20 @@ class IndexAction extends Controller {
                 }
             }
         }
+
+        $banner = $this->model->query("select content from tiny_ad where id>=72 and id<=79  and is_open = 1");
+        foreach ($banner as $kk => $vv){
+             $banner[$kk]['content'] = unserialize($banner[$kk]['content']);
+             if($banner[$kk]['content']['url']!=''){
+                    $banner[$kk]['content']['url'] = json_decode($banner[$kk]['content']['url'],true);
+                }else{
+                    $banner[$kk]['content']['url']=array('type'=>'','type_value'=>'');
+                }
+        }
         
         foreach($list as $k=>$v){
-               $list[$k]['imgs'] = $ad[$k]['content']; 
+               $list[$k]['imgs'] = $ad[$k]['content'];
+               $list[$k]['banner_img'] = $banner[$k]['content']; 
         }
         foreach($list as $k => $v){
             $list[$k]['img_num'] = count($list[$k]['imgs']);

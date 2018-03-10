@@ -285,7 +285,7 @@ class GoodsController extends Controller {
         $links = is_array(Req::args("links")) ? Req::args("links") : array();
         $adimg = Filter::sql(Req::args("adimg"));
         $title_img = Filter::sql(Req::args("title_img"));
-        $ad_img = Filter::sql(Req::args("ad_img"));
+        // $ad_img = Filter::sql(Req::args("ad_img"));
         $adurl = Filter::sql(Req::args("adurl"));
         $imgs = array();
         // var_dump($title_img);die;
@@ -321,7 +321,7 @@ class GoodsController extends Controller {
                         $new_path = ',' . $current_node['id'] . ',';
 
                     $goods_category->data(array('path' => "replace(`path`,'$current_path','$new_path')"))->where("path like '$current_path%'")->update();
-                    $goods_category->data(array('parent_id' => $parent_id, 'id' => $id, 'sort' => $sort, 'name' => $name, 'alias' => $alias, 'nav_show' => $nav_show, 'list_show' => $list_show,'recommend'=>$recommend ,'type_id' => $type_id, 'seo_title' => $seo_title, 'seo_keywords' => $seo_keywords, 'seo_description' => $seo_description, 'img' => $img, 'imgs' => serialize($imgs),'adimg'=>$adimg,'adurl'=>$adurl,'title_img'=>$title_img,'ad_img'=>$ad_img))->update();
+                    $goods_category->data(array('parent_id' => $parent_id, 'id' => $id, 'sort' => $sort, 'name' => $name, 'alias' => $alias, 'nav_show' => $nav_show, 'list_show' => $list_show,'recommend'=>$recommend ,'type_id' => $type_id, 'seo_title' => $seo_title, 'seo_keywords' => $seo_keywords, 'seo_description' => $seo_description, 'img' => $img, 'imgs' => serialize($imgs),'adimg'=>$adimg,'adurl'=>$adurl,'title_img'=>$title_img))->update();
                     Log::op($this->manager['id'], "更新商品分类", "管理员[" . $this->manager['name'] . "]:更新了商品分类 " . Req::args('name'));
                     $this->redirect("goods_category_list");
                 }else {
@@ -335,7 +335,7 @@ class GoodsController extends Controller {
                     $new_path = $parent_path . "$lastid,";
                 else
                     $new_path = ",$lastid,";
-                $goods_category->data(array('path' => "$new_path", 'id' => $lastid, 'sort' => $sort, 'nav_show' => $nav_show, 'list_show' => $list_show,'recommend'=>$recommend , 'type_id' => $type_id, 'seo_title' => $seo_title, 'seo_keywords' => $seo_keywords, 'seo_description' => $seo_description, 'img' => $img, 'imgs' => serialize($imgs),'adimg'=>$adimg,'adurl'=>$adurl,'title_img'=>$title_img,'ad_img'=>$ad_img))->update();
+                $goods_category->data(array('path' => "$new_path", 'id' => $lastid, 'sort' => $sort, 'nav_show' => $nav_show, 'list_show' => $list_show,'recommend'=>$recommend , 'type_id' => $type_id, 'seo_title' => $seo_title, 'seo_keywords' => $seo_keywords, 'seo_description' => $seo_description, 'img' => $img, 'imgs' => serialize($imgs),'adimg'=>$adimg,'adurl'=>$adurl,'title_img'=>$title_img))->update();
 
                 Log::op($this->manager['id'], "添加商品分类", "管理员[" . $this->manager['name'] . "]:添加商品分类 " . Req::args('name'));
                 $this->redirect("goods_category_list");
