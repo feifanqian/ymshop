@@ -517,7 +517,7 @@ class IndexAction extends Controller {
         $banner = $this->model->query("select content from tiny_ad where id>=72 and id<=79  and is_open = 1");
         foreach ($banner as $kk => $vv){
              $banner[$kk]['content'] = unserialize($banner[$kk]['content']);
-             var_dump($banner);die;
+             $banner[$kk]['content'] = $banner[$kk]['content'][0];
              if($banner[$kk]['content']['url']!=''){
                     $banner[$kk]['content']['url'] = json_decode($banner[$kk]['content']['url'],true);
                 }else{
