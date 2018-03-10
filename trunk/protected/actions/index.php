@@ -517,6 +517,9 @@ class IndexAction extends Controller {
         foreach($list as $k=>$v){
                $list[$k]['imgs'] = $ad[$k]['content']; 
         }
+        foreach($list as $k => $v){
+            $list[$k]['img_num'] = count($list[$k]['imgs']);
+        }
         $this->code = 0;
         $this->content = $list;
     }
