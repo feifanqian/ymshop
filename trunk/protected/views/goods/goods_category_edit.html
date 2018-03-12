@@ -129,7 +129,36 @@
       </button> <b class="red">双击图片编辑APP跳转连接</b>
     </dd>
   </dl>
+ <dl class="lineD clearfix">
+    <dt>APP分类导航图片：</dt>
+    <dd class="min_inputs ">
+      <button class="button  select_button select_button4" type="button" >
+        <b class="icon-plus green"></b>
+        更换图片
+      </button> <b class="red">双击图片编辑APP跳转连接</b>
+    </dd>
+  </dl>
  
+  <dl>
+    <dt></dt>
+    <dd>
+      <ul class="piclist" id="pic_list_ad_img">
+        {if:isset($ad_img)&&$ad_img!=''}
+       <li class="current">
+          <div class="bord">
+            <input type="hidden" name="ad_img" value="<?php echo isset($ad_img)?$ad_img:"";?>">
+            <input type="hidden" name="adurl2" value="<?php echo isset($adurl2) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $adurl2)):""; ?>">
+            <img name="ad_img" src="<?php echo Common::thumb($ad_img,80,80);?>" data-src=<?php echo isset($ad_img)?$ad_img:"";?> ondblclick="editAdurl2(this)" width="80" height="80" alt="">
+          </div>
+            <div class="opera">
+             <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
+            </div>
+          </li>
+          {/if}
+        </ul>
+       
+      </dd>
+    </dl>
   <dl>
     <dt></dt>
     <dd>
@@ -187,36 +216,6 @@
       <input name="ad_position" id="" type="radio" value="0" {if:$ad_position==0}checked='checked'{/if}><label for="">上面</label>
     </dd>
    </dl>
-    <!-- <dl class="lineD clearfix">
-    <dt>APP分类底部广告图片：</dt>
-    <dd class="min_inputs ">
-      <button class="button  select_button select_button4" type="button" >
-        <b class="icon-plus green"></b>
-        更换图片
-      </button> <b class="red">双击图片编辑APP跳转连接</b>
-    </dd>
-  </dl>
- 
-  <dl>
-    <dt></dt>
-    <dd>
-      <ul class="piclist" id="pic_list_ad_img">
-        {if:isset($ad_img)&&$ad_img!=''}
-       <li class="current" style="width: 400px;">
-          <div class="bord">
-            <input type="hidden" name="ad_img" value="<?php echo isset($ad_img)?$ad_img:"";?>">
-            <input type="hidden" name="adurl2" value="<?php echo isset($adurl2) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $adurl2)):""; ?>">
-            <img name="ad_img" src="<?php echo Common::thumb($ad_img,400,100);?>" data-src=<?php echo isset($ad_img)?$ad_img:"";?> ondblclick="editAdurl2(this)" width="400" height="100" alt="">
-          </div>
-            <div class="opera">
-             <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
-            </div>
-          </li>
-          {/if}
-        </ul>
-       
-      </dd>
-    </dl> -->
   </div>
   <!-- E 基本信息-->
   <!-- S SEO信息-->

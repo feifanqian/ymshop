@@ -393,9 +393,11 @@ class IndexAction extends Controller {
 
     //新导航分类列表
     public function category_nav(){
-        $list = $this->model->table('goods_category')->fields('id,name,adimg')->where('parent_id=0 and id!=1')->findAll();
+        $list = $this->model->table('goods_category')->fields('id,name,ad_img')->where('parent_id=0 and id!=1')->findAll();
         foreach($list as $k=>$v){
             $list[$k]['type'] = 'category';
+            $list[$k]['adimg'] = $v['ad_img'];
+            unset($list[$k]['ad_img']);
         }
         $new1 = array(
                 'id'=>'1',
