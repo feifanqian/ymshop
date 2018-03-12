@@ -1507,12 +1507,12 @@ class PaymentController extends Controller {
                 $recharge_no = $recharge_no == "" ? 0 : $recharge_no;
                 $recharge = new Model('recharge');
                 $recharge_info = $recharge->where("recharge_no='{$recharge_no}'")->find();
-                // if (!empty($recharge_info)) {
-                //     if ($recharge_info['account'] > $money) {
-                //         file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========充值订单金额不符,订单号：{$orderNo}|{$recharge_info['account']}元|{$money}元|{$payment_id}======|\n", FILE_APPEND);
-                //         exit;
-                //     }
-                // } 
+                if (!empty($recharge_info)) {
+                    if ($recharge_info['account'] > $money) {
+                        file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========充值订单金额不符,订单号：{$orderNo}|{$recharge_info['account']}元|{$money}元|{$payment_id}======|\n", FILE_APPEND);
+                        exit;
+                    }
+                } 
                 if (Order::recharge($recharge_no, $payment_id)) {
                     $paymentPlugin->asyncStop();
                     exit;
