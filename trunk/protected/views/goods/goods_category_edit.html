@@ -129,7 +129,27 @@
       </button> <b class="red">双击图片编辑APP跳转连接</b>
     </dd>
   </dl>
- <dl class="lineD clearfix">
+  <dl>
+    <dt></dt>
+    <dd>
+      <ul class="piclist" id="pic_list_adimg">
+        {if:isset($adimg)&&$adimg!=''}
+       <li class="current">
+          <div class="bord">
+            <input type="hidden" name="adimg" value="<?php echo isset($adimg)?$adimg:"";?>">
+            <input type="hidden" name="adurl" value="<?php echo isset($adurl) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $adurl)):""; ?>">
+            <img name="adimg" src="<?php echo Common::thumb($adimg,100,100);?>" data-src=<?php echo isset($adimg)?$adimg:"";?> ondblclick="editAdurl(this)" width="80" height="80" alt="">
+          </div>
+            <div class="opera">
+             <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
+            </div>
+          </li>
+          {/if}
+        </ul>
+       
+      </dd>
+    </dl>
+    <dl class="lineD clearfix">
     <dt>APP分类导航图片：</dt>
     <dd class="min_inputs ">
       <button class="button  select_button select_button4" type="button" >
@@ -149,26 +169,6 @@
             <input type="hidden" name="ad_img" value="<?php echo isset($ad_img)?$ad_img:"";?>">
             <input type="hidden" name="adurl2" value="<?php echo isset($adurl2) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $adurl2)):""; ?>">
             <img name="ad_img" src="<?php echo Common::thumb($ad_img,80,80);?>" data-src=<?php echo isset($ad_img)?$ad_img:"";?> ondblclick="editAdurl2(this)" width="80" height="80" alt="">
-          </div>
-            <div class="opera">
-             <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
-            </div>
-          </li>
-          {/if}
-        </ul>
-       
-      </dd>
-    </dl>
-  <dl>
-    <dt></dt>
-    <dd>
-      <ul class="piclist" id="pic_list_adimg">
-        {if:isset($adimg)&&$adimg!=''}
-       <li class="current">
-          <div class="bord">
-            <input type="hidden" name="adimg" value="<?php echo isset($adimg)?$adimg:"";?>">
-            <input type="hidden" name="adurl" value="<?php echo isset($adurl) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $adurl)):""; ?>">
-            <img name="adimg" src="<?php echo Common::thumb($adimg,100,100);?>" data-src=<?php echo isset($adimg)?$adimg:"";?> ondblclick="editAdurl(this)" width="80" height="80" alt="">
           </div>
             <div class="opera">
              <a class="icon-close" href="javascript:;" onclick="delImg(this)"></a>
