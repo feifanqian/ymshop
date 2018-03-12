@@ -459,6 +459,10 @@ class PaymentController extends Controller {
                 if ($paymentPlugin instanceof pay_balance) {
                     $model = new Model('user as us');
                     $userInfo = $model->join('left join customer as cu on us.id = cu.user_id')->where('cu.user_id = ' . $this->user['id'])->find();
+                    if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002){
+                        $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！'));
+                        exit;
+                    }
                     if ($userInfo['pay_password_open'] == 1) {
                         $this->assign('pay_balance', true);
                         $this->assign('userInfo', $userInfo);
