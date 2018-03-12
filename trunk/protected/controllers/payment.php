@@ -1514,6 +1514,7 @@ class PaymentController extends Controller {
                 if (!empty($recharge_info)) {
                     if ($recharge_info['account'] > $money) {
                         file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========充值订单金额不符,订单号：{$orderNo}|{$recharge_info['account']}元|{$money}元|{$payment_id}======|\n", FILE_APPEND);
+                        echo 'fail';
                         exit;
                     }
                 } 
@@ -1546,6 +1547,7 @@ class PaymentController extends Controller {
                         }
                     } else if ($order_info['order_amount'] > $money) {
                         file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
+                        echo 'fail';
                         exit;
                     }
                     $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
@@ -1556,6 +1558,11 @@ class PaymentController extends Controller {
                 }elseif(!empty($order_offline)){
                     $order_no = $orderNo;
                      $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
+                     if ($order['order_amount'] != $money) {
+                        file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
+                        echo 'fail';
+                        exit;
+                    }
                         $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1,'pay_time'=>date('Y-m-d H:i:s')))->update();
                         // $invite_id=Session::get('invite_id');
                         $invite_id=$order['prom_id'];
