@@ -167,10 +167,10 @@ class IndexAction extends Controller {
          }
          $cache = CacheFactory::getInstance();
          $items = $cache->get("_GoodsCategory".$id);
-         if ($cache->get("_GoodsCategory".$id) === null) {
-            $items = $this->_CategoryInit($id);
-            $cache->set("_GoodsCategory".$id, $items, 315360000);
-         }
+         // if ($cache->get("_GoodsCategory".$id) === null) {
+         //    $items = $this->_CategoryInit($id);
+         //    $cache->set("_GoodsCategory".$id, $items, 315360000);
+         // }
          $this->code = 0;
          $this->content=$items;
     }
