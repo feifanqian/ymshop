@@ -210,6 +210,9 @@ class UcenterController extends Controller
     public function balance_withdraw()
     {
         if ($this->is_ajax_request()) {
+            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002){
+                exit(json_encode(array('status' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！')));
+            }
             Filter::form();
             $id = Filter::int(Req::args('id'));
             $bankcard = $this->model->table('bankcard')->where('id='.$id)->find();
@@ -266,6 +269,9 @@ class UcenterController extends Controller
     public function offline_balance_withdraw()
     {
         if ($this->is_ajax_request()) {
+            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002){
+                exit(json_encode(array('status' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！')));
+            }
             Filter::form();
             $id = Filter::int(Req::args('id'));
             $bankcard = $this->model->table('bankcard')->where('id='.$id)->find();

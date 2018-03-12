@@ -1299,6 +1299,10 @@ class SimpleController extends Controller {
     //提交订单处理
     public function order_act() {
         if ($this->checkOnline()) {
+            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002){
+                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！'));
+                exit;
+            }
             $address_id = Filter::int(Req::args('address_id'));
             $payment_id = Filter::int(Req::args('payment_id'));
             $prom_id = Filter::int(Req::args('prom_id'));
