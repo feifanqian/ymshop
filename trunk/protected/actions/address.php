@@ -821,7 +821,7 @@ class AddressAction extends Controller
         // }
         //搜索附近
         if($lng && $lat){
-            if(Req::args('distance')!=''){
+            if(Req::args('distance')!='' && empty($tourist_id)){
                 
                 $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
                 $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
@@ -850,7 +850,7 @@ class AddressAction extends Controller
          
         //街道
         if ($tourist_id) {
-            $where.=" and region_id=$tourist_id or city_id=$tourist_id";
+            $where.=" and region_id=$tourist_id";
         }
         //地铁线路
         if ($line_number) {
