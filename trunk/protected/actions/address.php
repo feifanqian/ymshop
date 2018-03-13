@@ -957,7 +957,7 @@ class AddressAction extends Controller
             $environments[] = $value['environment'];
             $quality_services[] = $value['quality_service'];
             $prices[] = $value['price'];
-            if($info_sql[$key]['dist']>$radius){
+            if($info_sql[$key]['dist']>$radius && empty($tourist_id)){
                 unset($info_sql[$key]);
             }
         }
