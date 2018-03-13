@@ -518,6 +518,7 @@ class AddressAction extends Controller
         $newredbag['avatar'] = $newredbag['picture']==null?'':$newredbag['picture'];
         $newredbag['picture'] = $newredbag['picture']==null?'':$newredbag['picture'];
         $newredbag['real_name'] = $newredbag['real_name']==null?'':$newredbag['real_name'];
+        $newredbag['shop_name'] = $newredbag['shop_name']==null?'':$newredbag['shop_name'];
         $list = $this->model->table('redbag_get as rg')->join('left join redbag as r on rg.redbag_id=r.id left join customer as c on rg.get_user_id=c.user_id left join user as u on rg.get_user_id=u.id')->fields('r.id,c.real_name,u.avatar,rg.amount,rg.get_date')->where('rg.redbag_id='.$id)->order('rg.id desc')->findAll();
         // if($list){
         //     foreach($list as $k=>$v){
@@ -530,8 +531,8 @@ class AddressAction extends Controller
             $list = array();
         }else{
             foreach($list as $k =>$v){
-                $v['real_name'] = $v['real_name']==null?'':$v['real_name'];
-                $v['avatar'] = $v['avatar']==null?'':$v['avatar'];
+                $list[$k]['real_name'] = $v['real_name']==null?'':$v['real_name'];
+                $list[$k]['avatar'] = $v['avatar']==null?'':$v['avatar'];
             }
         }
         $newredbag['total_get_money'] = sprintf('%.2f',$newredbag['total_amount']-$newredbag['amount']);
