@@ -528,9 +528,12 @@ class AddressAction extends Controller
         // }
         if(!$list){
             $list = array();
+        }else{
+            foreach($list as $k =>$v){
+                $v['real_name'] = $v['real_name']==null?'':$v['real_name'];
+                $v['avatar'] = $v['avatar']==null?'':$v['avatar'];
+            }
         }
-        $list['real_name'] = $list['real_name']==null?'':$list['real_name'];
-        $list['avatar'] = $list['avatar']==null?'':$list['avatar'];
         $newredbag['total_get_money'] = sprintf('%.2f',$newredbag['total_amount']-$newredbag['amount']);
         $newredbag['total_money'] = sprintf('%.2f',$newredbag['total_amount']);
         $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
