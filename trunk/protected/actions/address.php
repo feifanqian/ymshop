@@ -850,7 +850,7 @@ class AddressAction extends Controller
          
         //街道
         if ($tourist_id) {
-            $where.=" and region_id=$tourist_id";
+            $where.=" and region_id=$tourist_id or city_id=$tourist_id";
         }
         //地铁线路
         if ($line_number) {
