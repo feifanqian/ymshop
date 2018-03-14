@@ -938,9 +938,9 @@ class AddressAction extends Controller
                 // if($info_sql[$key]['quality_service']==null){
                 //     $info_sql[$key]['quality_service'] = 5;
                 // }
-                // if($info_sql[$key]['price']==null){
-                //     $info_sql[$key]['price'] = '';
-                // }
+                if($info_sql[$key]['price']==null){
+                    $info_sql[$key]['price'] = '';
+                }
                 // if($info_sql[$key]['classify_id']==null || $info_sql[$key]['classify_id']==0){
                 //     $info_sql[$key]['classify_id'] = 1;
                 // }
