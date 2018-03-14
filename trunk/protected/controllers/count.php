@@ -1627,8 +1627,15 @@ class CountController extends Controller
         }else{
             $where = '1=1';
         }
+        if(isset($_POST['s_time'])){
+            $stime = $cal['start']; //开始时间
+            $etime = $cal['end']; //结束时间
+            $where = "b.time between '$stime' and '$etime'";
+        }else{
+            $where = '1=1';
+        }
         $model = new Model();
-        $results = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findPage($page, 10);
+        $results = $model->table('customer as a')->fields('a.user_id,a.real_name,a.balance,b.amount_log as offline_balance')->join('balance_log as b on a.user_id=b.user_id')->where($where)->order('b.id desc')->findPage($page, 10);
         $result = $results['data'];
         foreach($result as $k=>$v){
             if(isset($_POST['s_time'])){
@@ -1684,6 +1691,13 @@ class CountController extends Controller
            $where = "real_name like '%{$s_name}%'";
         }else{
             $where = 'balance>0 or offline_balance>0';
+        }
+        if(isset($_POST['s_time'])){
+            $stime = $cal['start']; //开始时间
+            $etime = $cal['end']; //结束时间
+            $where = "b.time between '$stime' and '$etime'";
+        }else{
+            $where = '1=1';
         } 
         $fields = array('user_id','real_name','offline_balance','balance','total_amount','real_amounts');
         
@@ -1712,8 +1726,9 @@ class CountController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '已提现商家款');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '已提现其它款');
         
-        $result = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
-        
+        // $result = $model->table('customer')->fields('user_id,real_name,balance,offline_balance')->where($where)->order('offline_balance desc')->findAll();
+        $result = $model->table('customer as a')->fields('a.user_id,a.real_name,a.balance,b.amount_log as offline_balance')->join('balance_log as b on a.user_id=b.user_id')->where($where)->order('b.id desc')->findAll();
+
         foreach($result as $k=>$v){
             if($stime==date('Y-m-d 00:00:00')){
                 $where1 = "bw.status=1 and bw.type=1 and user_id =".$v['user_id'];
