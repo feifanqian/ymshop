@@ -896,7 +896,7 @@ class AddressAction extends Controller
             $order = 'price desc';
         }
 
-        $info_sql = $this->model->table('district_promoter')->fields('*')->where($where)->order($order)->findAll();
+        $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type')->where($where)->order($order)->findAll();
         if(!$info_sql){
             $this->code = 0;
             $this->content = [];
@@ -947,8 +947,7 @@ class AddressAction extends Controller
                 // if($info_sql[$key]['evaluate']==null){
                 //     $info_sql[$key]['evaluate'] = '';
                 // }
-                // $consume_num = $this->model->table('order_offline')->where('shop_ids='.$value['user_id'])->group('user_id')->count();
-                $count = $this->model->table('order_offline')->where('shop_ids='.$value['user_id'])->group('user_id')->findAll();
+                $count = $this->model->table('order_offline')->fields('id')->where('shop_ids='.$value['user_id'])->group('user_id')->findAll();
                 if($count){
                     $consume_num = count($count);
                 }else{
