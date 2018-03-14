@@ -992,14 +992,16 @@ class AddressAction extends Controller
             if($distance && $info_sql[$key]['dist']>$distance){
                 unset($info_sql[$key]);
             }
-        }   
-        
-        $info_sql = array_values($info_sql);
+        }
         //距离离我最近
-        if ($distance_asc || $distance) {
-            array_multisort($arr, SORT_ASC, $info_sql);
+        // if ($distance_asc || $distance) {
+        //     array_multisort($arr, SORT_ASC, $info_sql);
+        // }
+        if($distance){
+            $info_sql = Common::arraySequence($info_sql,'dist','SORT_ASC');
         }
         
+        $info_sql = array_values($info_sql);
         $this->code = 0;
         $this->content = $info_sql; 
     }
