@@ -865,7 +865,38 @@ class AddressAction extends Controller
             $where.=" and line_number=$line_number and which_station=" . $which_station;
         }
         
-        $info_sql = $this->model->table('district_promoter')->where($where)->findAll();
+        $order = 'id desc';
+        
+        //人气
+        if ($hot) {
+            $order = 'hot desc';
+        }
+
+        //评价
+        if ($evaluate) {
+            $order = 'evaluate desc';
+        }
+
+         //口味
+        if ($taste) {
+            $order = 'taste desc';
+        }
+        //环境
+        if ($environment) {
+            $order = 'environment desc';
+        }
+        //服务
+        if ($quality_service) {
+            $order = 'quality_service desc';
+        }
+        //价格
+        if ($price==1) {//1表示正序排，2表示倒序排
+            $order = 'price asc';
+        }elseif ($price==2) {
+            $order = 'price desc';
+        }
+
+        $info_sql = $this->model->table('district_promoter')->fields('*')->where($where)->order($order)->findAll();
         if(!$info_sql){
             $this->code = 0;
             $this->content = [];
@@ -879,60 +910,50 @@ class AddressAction extends Controller
          * pow pow（num1,num2）作用，计算出num1得num2次方。
          * */
         $arr = array();
-        $hots = array();
-        $evaluates = array();
-        $tastes = array();
-        $environments = array();
-        $quality_services = array();
-        $prices = array();
+        
         foreach ($info_sql as $key => $value) {
             if($info_sql[$key]['picture']==null){
                     $info_sql[$key]['picture'] = '';
                 }else{
                     $info_sql[$key]['picture'].='?date='.time();
                 }
-                if($info_sql[$key]['tourist_id']==null){
-                    $info_sql[$key]['tourist_id'] = 0;
-                }
-                if($info_sql[$key]['line_number']==null){
-                    $info_sql[$key]['line_number'] = '';
-                }
-                if($info_sql[$key]['which_station']==null){
-                    $info_sql[$key]['which_station'] = '';
-                }
-                if($info_sql[$key]['distance_asc']==null){
-                    $info_sql[$key]['distance_asc'] = '';
-                }
-                if($info_sql[$key]['distance_asc']==null){
-                    $info_sql[$key]['distance_asc'] = '';
-                }
-                if($info_sql[$key]['hot']==null){
-                    $info_sql[$key]['hot'] = '';
-                }
-                if($info_sql[$key]['taste']==null){
-                    $info_sql[$key]['taste'] = '';
-                }
-                if($info_sql[$key]['environment']==null){
-                    $info_sql[$key]['environment'] = '';
-                }
-                if($info_sql[$key]['quality_service']==null){
-                    $info_sql[$key]['quality_service'] = 5;
-                }
-                if($info_sql[$key]['price']==null){
-                    $info_sql[$key]['price'] = '';
-                }
-                if($info_sql[$key]['classify_id']==null || $info_sql[$key]['classify_id']==0){
-                    $info_sql[$key]['classify_id'] = 1;
-                }
-                if($info_sql[$key]['evaluate']==null){
-                    $info_sql[$key]['evaluate'] = '';
-                }
-                $count = $this->model->table('order_offline')->where('shop_ids='.$value['user_id'])->group('user_id')->findAll();
-                if($count){
-                    $consume_num = count($count);
-                }else{
-                    $consume_num = 0;
-                }
+                // if($info_sql[$key]['tourist_id']==null){
+                //     $info_sql[$key]['tourist_id'] = 0;
+                // }
+                // if($info_sql[$key]['line_number']==null){
+                //     $info_sql[$key]['line_number'] = '';
+                // }
+                // if($info_sql[$key]['which_station']==null){
+                //     $info_sql[$key]['which_station'] = '';
+                // }
+                // if($info_sql[$key]['distance_asc']==null){
+                //     $info_sql[$key]['distance_asc'] = '';
+                // }
+                // if($info_sql[$key]['taste']==null){
+                //     $info_sql[$key]['taste'] = '';
+                // }
+                // if($info_sql[$key]['environment']==null){
+                //     $info_sql[$key]['environment'] = '';
+                // }
+                // if($info_sql[$key]['quality_service']==null){
+                //     $info_sql[$key]['quality_service'] = 5;
+                // }
+                // if($info_sql[$key]['price']==null){
+                //     $info_sql[$key]['price'] = '';
+                // }
+                // if($info_sql[$key]['classify_id']==null || $info_sql[$key]['classify_id']==0){
+                //     $info_sql[$key]['classify_id'] = 1;
+                // }
+                // if($info_sql[$key]['evaluate']==null){
+                //     $info_sql[$key]['evaluate'] = '';
+                // }
+                $consume_num = $this->model->table('order_offline')->where('shop_ids='.$value['user_id'])->group('user_id')->count();
+                // $count = $this->model->table('order_offline')->where('shop_ids='.$value['user_id'])->group('user_id')->findAll();
+                // if($count){
+                //     $consume_num = count($count);
+                // }else{
+                //     $consume_num = 0;
+                // }
                 $info_sql[$key]['consume_num'] = $consume_num;
                 $shop_type = $this->model->table('promoter_type')->where('id='.$value['classify_id'])->find();
                 $district = $this->model->table('district_shop')->where('owner_id='.$value['user_id'])->find();
@@ -959,12 +980,7 @@ class AddressAction extends Controller
                 }
             $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
             $arr[] = $info_sql[$key]['dist'];
-            $hots[] = $value['hot'];
-            $evaluates[] = $value['evaluate'];
-            $tastes[] = $value['taste'];
-            $environments[] = $value['environment'];
-            $quality_services[] = $value['quality_service'];
-            $prices[] = $value['price'];
+            
             if($info_sql[$key]['dist']>$radius && empty($tourist_id)){
                 unset($info_sql[$key]);
             }
@@ -972,33 +988,8 @@ class AddressAction extends Controller
         //距离离我最近
         if ($distance_asc) {
             array_multisort($arr, SORT_ASC, $info_sql);
-        }
-        //人气
-        if ($hot) {
-            array_multisort($hots, SORT_DESC, $info_sql);
-        }
-        //评价
-        if ($evaluate) {
-            array_multisort($evaluates, SORT_DESC, $info_sql);
-        }
-         //口味
-        if ($taste) {
-            array_multisort($tastes, SORT_DESC, $info_sql);
-        }
-        //环境
-        if ($environment) {
-            array_multisort($environments, SORT_DESC, $info_sql);
-        }
-        //服务
-        if ($quality_service) {
-            array_multisort($quality_services, SORT_DESC, $info_sql);
-        }
-        //价格
-        if ($price==1) {//1表示正序排，2表示倒序排
-            array_multisort($prices, SORT_ASC, $info_sql);
-        }elseif ($price==2) {
-             array_multisort($prices, SORT_DESC, $info_sql);
-        }
+        }   
+        
         $info_sql = array_values($info_sql);
         $this->code = 0;
         $this->content = $info_sql; 
