@@ -816,6 +816,11 @@ class AddressAction extends Controller
         $which_station = Filter::int(Req::args('which_station'));//哪个站
         $customer = Req::args('customer');//等于1筛选出经销商
         $distance = Req::args('distance');//距离
+
+        $page = Filter::int(Req::args('page'));
+        if(!$page){
+            $page = 1;
+        }
         if(!$distance){
             $radius = 5; //默认5公里
         }else{
@@ -856,10 +861,10 @@ class AddressAction extends Controller
             $where.= " and classify_id = $classify_id";
         }
          
-        // //街道
-        // if ($tourist_id) {
-        //     $where.=" and region_id=$tourist_id";
-        // }
+        //地区
+        if ($tourist_id) {
+            $where.=" and region_id=$tourist_id";
+        }
         //地铁线路
         if ($line_number) {
             $where.=" and line_number=$line_number and which_station=" . $which_station;
@@ -896,12 +901,13 @@ class AddressAction extends Controller
             $order = 'price desc';
         }
 
-        $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type')->where($where)->order($order)->findAll();
-        if(!$info_sql){
+        $info_sqls = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type')->where($where)->order($order)->findPage($page,10);
+        if(!$info_sqls){
             $this->code = 0;
             $this->content = [];
             return;
         }
+        $info_sql = $info_sqls['data'];
         //两点之间的距离
         /*
          *param deg2rad()函数将角度转换为弧度
