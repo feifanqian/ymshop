@@ -947,13 +947,13 @@ class AddressAction extends Controller
                 // if($info_sql[$key]['evaluate']==null){
                 //     $info_sql[$key]['evaluate'] = '';
                 // }
-                $consume_num = $this->model->table('order_offline')->where('shop_ids='.$value['user_id'])->group('user_id')->count();
-                // $count = $this->model->table('order_offline')->where('shop_ids='.$value['user_id'])->group('user_id')->findAll();
-                // if($count){
-                //     $consume_num = count($count);
-                // }else{
-                //     $consume_num = 0;
-                // }
+                // $consume_num = $this->model->table('order_offline')->where('shop_ids='.$value['user_id'])->group('user_id')->count();
+                $count = $this->model->table('order_offline')->where('shop_ids='.$value['user_id'])->group('user_id')->findAll();
+                if($count){
+                    $consume_num = count($count);
+                }else{
+                    $consume_num = 0;
+                }
                 $info_sql[$key]['consume_num'] = $consume_num;
                 $shop_type = $this->model->table('promoter_type')->where('id='.$value['classify_id'])->find();
                 $district = $this->model->table('district_shop')->where('owner_id='.$value['user_id'])->find();
