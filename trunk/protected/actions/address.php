@@ -986,7 +986,7 @@ class AddressAction extends Controller
             $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
             $arr[] = $info_sql[$key]['dist'];
             
-            if($info_sql[$key]['dist']>$radius && empty($tourist_id)){
+            if($info_sql[$key]['dist']>$radius && empty($tourist_id) && empty($distance)){
                 unset($info_sql[$key]);
             }
         }
