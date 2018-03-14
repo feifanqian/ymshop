@@ -856,10 +856,10 @@ class AddressAction extends Controller
             $where.= " and classify_id = $classify_id";
         }
          
-        //街道
-        if ($tourist_id) {
-            $where.=" and region_id=$tourist_id";
-        }
+        // //街道
+        // if ($tourist_id) {
+        //     $where.=" and region_id=$tourist_id";
+        // }
         //地铁线路
         if ($line_number) {
             $where.=" and line_number=$line_number and which_station=" . $which_station;
