@@ -829,7 +829,7 @@ class AddressAction extends Controller
         // }
         //搜索附近
         if($lng && $lat){
-            if(Req::args('distance')!='' && empty($tourist_id)){
+            if(Req::args('distance')!=''){
                 
                 $dlng = 2 * asin(sin($distance / (2 * 6371)) / cos(deg2rad($lat)));
                 $dlng = rad2deg($dlng);//rad2deg() 函数把弧度数转换为角度数
