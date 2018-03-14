@@ -989,6 +989,9 @@ class AddressAction extends Controller
             if($info_sql[$key]['dist']>$radius && empty($tourist_id) && empty($distance)){
                 unset($info_sql[$key]);
             }
+            if($distance && $info_sql[$key]['dist']>$distance){
+                unset($info_sql[$key]);
+            }
         }
         //距离离我最近
         if ($distance_asc || $distance) {
