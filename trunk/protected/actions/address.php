@@ -994,9 +994,9 @@ class AddressAction extends Controller
             }
         }
         //距离离我最近
-        if ($distance_asc || $distance) {
-            array_multisort($arr, SORT_ASC, $info_sql);
-        }   
+        // if ($distance_asc || $distance) {
+        //     array_multisort($arr, SORT_ASC, $info_sql);
+        // }   
         
         $info_sql = array_values($info_sql);
         $this->code = 0;
