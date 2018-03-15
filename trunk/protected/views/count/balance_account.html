@@ -43,21 +43,13 @@
 </div>
 <div id="excel_box" style="display: none;width:600px;">
     <h1 class="page_title">Excel导出</h1>
-    <div class="form2 tools_bar">
+    <div class="form2">
         <form  id="export_form" action="{url:/count/balance_account_excel}" method="post" >
            <!-- <dl class="lineD">
           <dt>筛选条件：</dt>
           <dd><input type="hidden"  id="condition_input_excel" name="condition" value="{$condition}"><label></label> <label><a href="javascript:;" onclick="Condition('#condition_input_excel')"  class="button" > 高级筛选</a></label>
           </dd>
           </dl> -->
-          <dl class="lineD">
-          <dt>时间：</dt>
-          <dd><input name="s_time" type="text" value="{$s_time}" id="datepick" class="middle" readonly="readonly"></dd>
-          </dl>
-          <dl class="lineD">
-          <dt>用户名/ID</dt>
-          <dd><input name="s_name" type="text" value="" class="middle"></dd>
-          </dl>
          <dl class="lineD">
           <dt>页数：</dt>
           <dd>第<input type="text" style="width:24px;text-align:center;" name="page" value="1">页</dd>
