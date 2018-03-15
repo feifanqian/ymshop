@@ -1848,7 +1848,8 @@ class CountController extends Controller
            $s_name = $_POST['s_name'];
            $where = "real_name like '%{$s_name}%'";
         }else{
-            $where = 'balance>0 or offline_balance>0';
+            $where = '1=1';
+            // $where = 'balance>0 or offline_balance>0';
         } 
         $fields = array('user_id','real_name','total_amount','total_amounts','base_rate','amounts','real_amounts','sum_amount');
         
