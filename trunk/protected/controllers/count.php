@@ -1880,7 +1880,7 @@ class CountController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '让利后入账金额');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '入账总金额');
         
-        $results = $model->table('district_promoter as dp')->fields('dp.user_id,dp.base_rate,c.real_name')->join('customer as c on dp.user_id=c.user_id')->where($where)->order('id desc')->findAll($page,10);
+        $results = $model->table('district_promoter as dp')->fields('dp.user_id,dp.base_rate,c.real_name')->join('customer as c on dp.user_id=c.user_id')->where($where)->order('id desc')->findPage($page,10);
         $result = $results['data'];
         foreach($result as $k=>$v){
             if(isset($_POST['s_time'])){
