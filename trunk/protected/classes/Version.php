@@ -53,8 +53,6 @@ class Version {
             $old = explode('.', $version);
             $new_value = $new[0]*100+$new[1]*10+$new[2];
             $old_value = $old[0]*100+$old[1]*10+$old[2];
-            echo $new_value;
-            echo $old_value;
             if($new_value<=$old_value){
                 return NULL;
             }
