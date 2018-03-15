@@ -1833,9 +1833,9 @@ class CountController extends Controller
 
     public function balance_account_excel(){
         header("Content-type: text/html; charset=utf-8");
-        $page1 = Filter::sql(Req::args("p"));
+        $page1 = Filter::int(Req::args("page1"));
         $page1 = $page1 ==NULL ? 1 : $page1;
-        $page2 = Filter::sql(Req::args("p"));
+        $page2 = Filter::int(Req::args("page2"));
         $page2 = $page2 ==NULL ? 1 : $page2;
         $cal = $this->calendar();
         $stime = $cal['start']; //开始时间
