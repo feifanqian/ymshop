@@ -1831,7 +1831,7 @@ class CountController extends Controller
         $this->redirect();
     }
 
-    public function balance_account_excels(){
+    public function balance_account_excel(){
         header("Content-type: text/html; charset=utf-8");
         $page = Filter::sql(Req::args("p"));
         $page = $page ==NULL ? 1 : $page;
@@ -1951,7 +1951,7 @@ class CountController extends Controller
         $objWriter->save('php://output');
     }
 
-    public function balance_account_excel(){
+    public function balance_account_excels(){
         header("Content-type: text/html; charset=utf-8");
         $page = Filter::sql(Req::args("p"));
         $page = $page ==NULL ? 1 : $page;
