@@ -1831,7 +1831,7 @@ class CountController extends Controller
         $this->redirect();
     }
 
-    public function balance_account_excel(){
+    public function balance_account_excels(){
         header("Content-type: text/html; charset=utf-8");
         $page = Filter::sql(Req::args("p"));
         $page = $page ==NULL ? 1 : $page;
@@ -1951,7 +1951,7 @@ class CountController extends Controller
         $objWriter->save('php://output');
     }
 
-    public function balance_account_excels(){
+    public function balance_account_excel(){
         header("Content-type: text/html; charset=utf-8");
         $page = Filter::sql(Req::args("p"));
         $page = $page ==NULL ? 1 : $page;
@@ -1967,7 +1967,7 @@ class CountController extends Controller
            $s_name = $_POST['s_name'];
            $where = "real_name like '%{$s_name}%'";
         }else{
-            $where = '1=1';
+            $where = 'balance>0 or offline_balance>0';
         } 
         $fields = array('user_id','real_name','total_amount','total_amounts','base_rate','amounts','real_amounts','sum_amount');
 
