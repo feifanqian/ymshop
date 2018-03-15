@@ -6,8 +6,7 @@
 <div class="tools_bar clearfix">
     <span class="fl">时间：<input name="s_time" type="text" value="{$s_time}" id="datepick" class="middle" readonly="readonly"></span>
     <span class="fl">用户名/ID<input name="s_name" type="text" value="" class="middle"></span>
-    <input type="hidden" name="page1" value="{$page}">
-    <input type="hidden" name="page2" value="{$page}"> 
+    <input type="hidden" name="page" value="{$page}">
     <a  id="condition" class="icon-search" style="" type="submit"> 查询</a>
     <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a>
     <!-- <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span> -->
@@ -53,7 +52,7 @@
           </dl> -->
          <dl class="lineD">
           <dt>页数：</dt>
-          <dd>第<input type="text" style="width:24px;text-align:center;" name="page3" value="1">页至第<input type="text" style="width:24px;text-align:center;" name="page4" value="2">页</dd>
+          <dd>第<input type="text" style="width:24px;text-align:center;" name="page3" value="1">页</dd>
           </dl> 
         <!-- <dl class="lineD">
           <dt>导出字段：</dt>
@@ -90,8 +89,7 @@
       // $("#export_form").submit();
       var path = "{url:/count/balance_account_excel}";  
         $('#submit_form').attr("action", path);
-        $('input[name=page1]').val($('input[name=page3]').val());
-        $('input[name=page2]').val($('input[name=page4]').val()); 
+        $('input[name=page]').val($('input[name=page3]').val()); 
         $('#submit_form').submit();
     }
     function Condition(id){
