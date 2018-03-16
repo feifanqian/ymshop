@@ -897,13 +897,13 @@ class AddressAction extends Controller
             $order = 'price desc';
         }
 
-        $info_sqls = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type')->where($where)->order($order)->findPage($page,10);
+        $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type')->where($where)->order($order)->findAll();
         if(!$info_sqls){
             $this->code = 0;
             $this->content = [];
             return;
         }
-        $info_sql = $info_sqls['data'];
+        // $info_sql = $info_sqls['data'];
         //两点之间的距离
         /*
          *param deg2rad()函数将角度转换为弧度
