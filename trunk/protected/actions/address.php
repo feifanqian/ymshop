@@ -171,7 +171,7 @@ class AddressAction extends Controller
                     $new_list[$k]['avatar']='';
                 }
                 $config = Config::getInstance()->get("other");
-                $available_distance = isset($config['available_distance'])?$config['available_distance']:'500';
+                $available_distance = isset($config['available_distance'])?$config['available_distance']:'1000';
                 $new_list[$k]['available_distance'] = $available_distance;
                 if($lng && $lat && $radius){
                    $actual_distance = Common::getDistanceByLatLng($lat,$lng,$v['lat'],$v['lng']);
