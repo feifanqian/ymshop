@@ -898,7 +898,7 @@ class AddressAction extends Controller
         }
 
         $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type')->where($where)->order($order)->findAll();
-        if(!$info_sqls){
+        if(!$info_sql){
             $this->code = 0;
             $this->content = [];
             return;
