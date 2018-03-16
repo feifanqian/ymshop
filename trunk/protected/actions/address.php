@@ -821,11 +821,7 @@ class AddressAction extends Controller
         if(!$page){
             $page = 1;
         }
-        if(!$distance){
-            $radius = 5; //默认5公里
-        }else{
-            $radius = 0;
-        }
+        $radius = 5; //默认5公里
         
         $where = "lat<>0";
         //区域
