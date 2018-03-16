@@ -456,7 +456,11 @@ class IndexAction extends Controller {
         $flashlist = array_merge($list1,$list2);
         if ($flashlist) {
             foreach ($flashlist as $k => &$v) {
-                $v['imgs'] = array_values(unserialize($v['imgs']));
+                if(!empty($v['imgs'])){
+                    $v['imgs'] = array_values(unserialize($v['imgs']));
+                }else{
+                    $v['imgs'] = '';
+                }
                 unset($v['specs'], $v['attrs'], $v['content']);
             }
         }
