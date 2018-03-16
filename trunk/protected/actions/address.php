@@ -903,7 +903,6 @@ class AddressAction extends Controller
             $this->content = [];
             return;
         }
-        // $info_sql = $info_sqls['data'];
         //两点之间的距离
         /*
          *param deg2rad()函数将角度转换为弧度
@@ -998,6 +997,7 @@ class AddressAction extends Controller
         }
         
         $info_sql = array_values($info_sql);
+        $info_sql = array_slice($info_sql, ($page-1)*10, 10);
         $this->code = 0;
         $this->content = $info_sql; 
     }
