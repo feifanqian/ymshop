@@ -1084,42 +1084,5 @@ class AddressAction extends Controller
         $this->content['totalfare'] = $totalfare;
     }
 
-    public function callback_do(){
-        $order=$this->model->table('order_offline')->fields('order_no,order_amount,create_time,prom_id,shop_ids')->where("order_no in ('201803121558487400','201803121618382819','201803121834048805','201803131735202245','201803141546532363','201803141556343973','201803141657075669','201803150841452378','201803151329058005','201803151538025343','201803152021453312','201803161646556177','201803161753122099','201803161939028874','201803171019313692','201803171208333712','201803171308392399','201803171803125965','201803171831473678','201803171928087549','201803181410059351','201803181437082431','201803181818399677','201803181844219631','201803181918467091','201803181922205220','201803181930501664','201803190713523927')")->findAll();
-        foreach($order as $k=>$v){
-            $order_no = $v['order_no'];
-            $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1,'pay_time'=>$v['create_time']))->update();
-                        $invite_id=$v['prom_id'];
-                        $seller_id=$v['shop_ids'];             
-                        if($invite_id==null){
-                            $invite_id=1;
-                        }
-                        if($seller_id==0){
-                            $seller_id=$invite_id;
-                        }
-                        $exist=$this->model->table('balance_log')->where("order_no='{$order_no}'")->find();
-                        if(!$exist){
-                            //如果卖家是邀请人的话不参与分账
-                            if($seller_id!=$invite_id){
-                                $config = Config::getInstance()->get("district_set");
-                                $promoter = $this->model->table('district_promoter')->fields('base_rate')->where('user_id='.$seller_id)->find();
-                                if($promoter){
-                                    $amount = round($v['order_amount']*(100-$promoter['base_rate'])/100,2);
-                                }else{
-                                    $amount = round($v['order_amount']*(100-$config['offline_base_rate'])/100,2);
-                                }     
-                                $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
-                                Log::balances($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8,$v['create_time']);
-                                Common::offlineBeneficial($order_no,$invite_id,$seller_id);
-                                $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('payable_amount'=>$amount))->update();
-                            }else{
-                                $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$v['order_amount']})"))->update();//平台收益提成
-                                 Log::balances($v['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8,$v['create_time']);
-                            }                               
-                        }
-        }
-        $this->code = 0;
-        $this->content = null;
-    }
 
 }
