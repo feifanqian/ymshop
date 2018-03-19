@@ -157,4 +157,21 @@ class Log {
             return false;
         }
     }
+
+    public static function balances($amount, $user_id, $order_no='', $note = '', $type = 0, $time) {
+        //事件类型: 0:购物下单 1:用户充值 2:管理员充值 3:余额提现 4:管理员退款 5：佣金获取 6:推广收益 7：商城分红 8:下级会员线下消费提成 9:商家余额转入 10:推广收益提现到余额 11:商家余额提现 12:提现回退到余额 13:提现回退到商家余额 14:抢红包所得
+        $model = new Model();
+        $customer = $model->table('customer')->fields("balance,offline_balance")->where("user_id=" . $user_id)->find();
+        if ($customer) {
+            $log = array(   'amount' => $amount, 
+                            'user_id' => $user_id, 
+                            'time' => $time, 
+                            'amount_log' => $customer['balance']+$customer['offline_balance'], 
+                            'admin_id' => 0, 
+                            'type' => $type, 
+                            'note' => $note,
+                            'order_no'=>$order_no,);
+            $id = $model->table("balance_log")->data($log)->insert();
+        }
+    }
 }

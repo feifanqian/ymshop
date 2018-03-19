@@ -527,6 +527,10 @@ class PaymentController extends Controller {
            // $seller_id = Session::get('seller_id');
            // $oauth = new WechatOAuth();
            // $userinfo = $oauth->getUserInfo();
+           if($order_amount==0){
+            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '请输入正确的充值金额'));
+            exit();
+           }
            if(!$seller_id || $seller_id==0){
              $seller_id = Filter::int(Req::args('seller_ids'));
            }
