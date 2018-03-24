@@ -2025,7 +2025,7 @@ class PaymentController extends Controller {
             $input->SetBody($_POST['subject']);
             $input->SetAttach($order_no);
             $input->SetOut_trade_no($out_trade_no);
-            $input->SetTotal_fee(intval(($_POST['price'] * 10000)/100));
+            $input->SetTotal_fee(intval(bcmul($_POST['price'],100)));
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 3600));
             $input->SetGoods_tag("test");
