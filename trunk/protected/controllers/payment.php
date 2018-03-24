@@ -865,7 +865,7 @@ class PaymentController extends Controller {
             "subject"=>'支付测试',
             "total_amount"=>$order_amount,
             "seller_id"=>'yuanmeng',
-            "seller_name"=>'圆梦互联网科技（深圳）有限公司',
+            "seller_name"=>'圆梦互联网科技深圳有限公司',
             "timeout_express"=>'1d',
             "business_code"=>'3010001',
             "sub_openid"=>$sub_openid,
