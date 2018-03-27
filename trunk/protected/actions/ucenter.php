@@ -2685,6 +2685,9 @@ class UcenterAction extends Controller {
         $sign = $this->sign_encrypt(array('data' => $signStr));
         $myParams['sign'] = trim($sign['check']);
         $url = 'https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload';
+        echo "<pre>";
+        print_r($myParams);
+        echo "<pre>";
         $ret = Common::httpRequest($url,'POST',$myParams);
         var_dump($ret);die;
         $data = array(
