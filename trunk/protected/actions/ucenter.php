@@ -2610,7 +2610,7 @@ class UcenterAction extends Controller {
        $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
        
        $data = array(
-        'user_id'=>$user_id,
+        'user_id'=>$this->user['id'],
         'type'=>$type,
         'business_licence'=>$business_licence,
         'positive_idcard'=>$positive_idcard,
