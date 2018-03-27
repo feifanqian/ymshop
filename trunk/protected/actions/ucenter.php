@@ -2674,9 +2674,10 @@ class UcenterAction extends Controller {
         $myParams['version'] = '3.0';
         $biz_content_arr = array(
         );
-        $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+        // $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+        $myParams['biz_content'] = '{}';
         ksort($myParams);
-        $data = $myParams;
+        
         $signStr = "";
         foreach ($myParams as $key => $val) {
             $signStr .= $key . '=' . $val . '&';
