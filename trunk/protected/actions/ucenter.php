@@ -2658,4 +2658,89 @@ class UcenterAction extends Controller {
         $this->code = 0;
         $this->content = $need_check;
     }
+
+    public function shop_register(){
+
+        //获取token
+        $myParams = array();  
+        
+        $myParams['method'] = 'ysepay.merchant.register.token.get';
+        $myParams['partner_id'] = $this->user['id'];
+        $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+        $myParams['charset'] = 'GBK';
+        $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+        $myParams['sign_type'] = 'RSA';  
+          
+        $myParams['version'] = '3.0';
+        $biz_content_arr = array(
+        );
+        $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+        ksort($myParams);
+        $data = $myParams;
+        $signStr = "";
+        foreach ($myParams as $key => $val) {
+            $signStr .= $key . '=' . $val . '&';
+        }
+        $signStr = rtrim($signStr, '&');
+        $sign = $this->sign_encrypt(array('data' => $signStr));
+        $myParams['sign'] = trim($sign['check']);
+        $url = 'https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload';
+        $ret = Common::httpRequest($url,'POST',$myParams);
+        var_dump($ret);die;
+        $data = array(
+            'merchant_no'=>'yuanmeng',
+            'cust_type'=>$_POST['cust_type'],
+            'token'=>'',
+            'another_name'=>$_POST['another_name'],
+            'cust_name'=>$_POST['cust_name'],
+            'mer_flag'=>'12',
+            'industry'=>$_POST['industry'],
+            'province'=>$_POST['province'],
+            'city'=>$_POST['city'],
+            'company_addr'=>$_POST['company_addr'],
+            'legal_name'=>$_POST['legal_name'],
+            'legal_tel'=>$_POST['legal_tel'],
+            'legal_cert_type'=>'00',
+            'legal_cert_no'=>md5($_POST['legal_cert_no']),
+            'settle_type'=>'1',
+            'bank_account_no'=>$_POST['bank_account_no'],
+            'bank_account_name'=>$_POST['bank_account_name'],
+            'bank_account_type'=>'corporate',
+            'bank_card_type'=>'debit',
+            'bank_name'=>$_POST['bank_name'],
+            'bank_type'=>$_POST['bank_type'],
+            'bank_province'=>$_POST['bank_province'],
+            'bank_city'=>$_POST['bank_city'],
+            'cert_type'=>'00',
+            'cert_no'=>md5($_POST['cert_no']),
+            'bank_telephone_no'=>$_POST['bank_telephone_no']
+            );
+        $url1 = 'https:// register.ysepay.com:2443/gateway.do';
+        $res = Common::httpRequest($url1,'POST',$data);
+        var_dump($res);die;
+        $this->code = 0;
+        return;
+    }
+
+    public function sign_encrypt($input)
+    {
+        // $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        $pfxpath = "./protected/classes/yinpay/certs/yuanmeng.pfx";
+        $pfxpassword = '008596';
+        $return = array('success' => 0, 'msg' => '', 'check' => '');
+        $pkcs12 = file_get_contents($pfxpath); //私钥
+        if (openssl_pkcs12_read($pkcs12, $certs, $pfxpassword)) {
+            $privateKey = $certs['pkey'];
+            $publicKey = $certs['cert'];
+            $signedMsg = "";
+            if (openssl_sign($input['data'], $signedMsg, $privateKey, OPENSSL_ALGO_SHA1)) {
+                $return['success'] = 1;
+                $return['check'] = base64_encode($signedMsg);
+                $return['msg'] = base64_encode($input['data']);
+
+            }
+        }
+
+        return $return;
+    }
 }
