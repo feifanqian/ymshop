@@ -2685,7 +2685,7 @@ class UcenterAction extends Controller {
         $signStr = rtrim($signStr, '&');
         $sign = $this->sign_encrypt(array('data' => $signStr));
         $myParams['sign'] = trim($sign['check']);
-        $url = 'https:// register.ysepay.com:2443/gateway.do';
+        $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
         // echo "<pre>";
         // print_r($myParams);
         // echo "<pre>";
