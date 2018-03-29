@@ -276,11 +276,23 @@
             if(!$("input[name=positive_idcard]").val()){
               $.toast("请上传身份证正面照", "text");
                 return false;
+            }else{
+              var file1 = $("input[name='positive_idcard']").get(0).files[0];
+              if(file1.size>2000*1024){
+                $.toast("身份证正面照大小超过2MB", "text");
+                return false;
+              };
             }
             if(!$("input[name=native_idcard]").val()){
               $.toast("请上传身份证反面照", "text");
                 return false;
-            }
+            }else{
+              var file2 = $("input[name='native_idcard']").get(0).files[0];
+              if(file2.size>2000*1024){
+                $.toast("身份证反面照大小超过2MB", "text");
+                return false;
+              };
+            } 
             if(!$("input[name=account_card]").val()){
               $.toast("请输入结算银行卡号", "text");
                 return false;
@@ -292,6 +304,12 @@
               if (!$("input[name=business_licence]").val()) {
                   $.toast("请上传营业执照", "text");
                   return false;
+              }else{
+                var file3 = $("input[name='business_licence']").get(0).files[0];
+                if(file3.size>2000*1024){
+                  $.toast("营业执照大小超过2MB", "text");
+                  return false;
+                };
               }
               // if (!$("input[name=account_picture]").val()) {
               //     $.toast("请上传开户许可证照", "text");
@@ -300,11 +318,23 @@
               if (!$("input[name=shop_photo]").val()) {
                   $.toast("请上传门店照", "text");
                   return false;
+              }else{
+                var file4 = $("input[name='shop_photo']").get(0).files[0];
+                if(file4.size>2000*1024){
+                  $.toast("门店照大小超过2MB", "text");
+                  return false;
+                };
               }
             }else if($("#shop_type option:selected").val()==2){
               if (!$("input[name=hand_idcard]").val()) {
                   $.toast("请上传手持身份证照", "text");
                   return false;
+              }else{
+                var file5 = $("input[name='hand_idcard']").get(0).files[0];
+                if(file5.size>2000*1024){
+                  $.toast("门店照大小超过2MB", "text");
+                  return false;
+                };
               }  
             } 
         });
