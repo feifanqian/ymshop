@@ -329,6 +329,7 @@
     $("input[name='positive_idcard']").change(function(){
       $("#positive_idcard_preview").show();
       var file = $("input[name='positive_idcard']").get(0).files[0];
+      console.log(file.size);
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){
