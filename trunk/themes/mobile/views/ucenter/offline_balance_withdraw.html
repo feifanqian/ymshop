@@ -329,7 +329,10 @@
     $("input[name='positive_idcard']").change(function(){
       $("#positive_idcard_preview").show();
       var file = $("input[name='positive_idcard']").get(0).files[0];
-      console.log(file.size);
+      if(file.size>2000*1024){
+        $.toast("图片最大不超过2MB", "text");
+        return false;
+      };
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){
@@ -339,6 +342,10 @@
     $("input[name='native_idcard']").change(function(){
       $("#native_idcard_preview").show();
       var file = $("input[name='native_idcard']").get(0).files[0];
+      if(file.size>2000*1024){
+        $.toast("图片最大不超过2MB", "text");
+        return false;
+      };
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){
@@ -348,6 +355,10 @@
     $("input[name='business_licence']").change(function(){
       $("#business_licence_preview").show();
       var file = $("input[name='business_licence']").get(0).files[0];
+      if(file.size>2000*1024){
+        $.toast("图片最大不超过2MB", "text");
+        return false;
+      };
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){
@@ -366,6 +377,10 @@
     $("input[name='shop_photo']").change(function(){
       $("#shop_photo_preview").show();
       var file = $("input[name='shop_photo']").get(0).files[0];
+      if(file.size>2000*1024){
+        $.toast("图片最大不超过2MB", "text");
+        return false;
+      };
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){
@@ -375,6 +390,10 @@
     $("input[name='hand_idcard']").change(function(){
       $("#hand_idcard_preview").show();
       var file = $("input[name='hand_idcard']").get(0).files[0];
+      if(file.size>2000*1024){
+        $.toast("图片最大不超过2MB", "text");
+        return false;
+      };
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){
