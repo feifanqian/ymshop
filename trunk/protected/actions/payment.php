@@ -401,7 +401,7 @@ class PaymentAction extends Controller {
             "timeout_express"=>'1d',
             "business_code"=>'3010001',
             "bank_type"=>"1902000",
-            "appid"=>"wx167f2c4da1f798b0"
+            // "appid"=>"wx167f2c4da1f798b0"
             );
             $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
             ksort($myParams);
