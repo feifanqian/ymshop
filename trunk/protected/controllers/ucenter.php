@@ -3724,7 +3724,7 @@ class UcenterController extends Controller
             $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
             $result = Common::httpRequest($act,'POST',$data);
             if($this->user['id']==42608){
-                var_dump($_FILES['positive_idcard']);die;
+                var_dump($result);die;
             }
         }
 
