@@ -3717,25 +3717,25 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url1, 100, 100);
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
-            if($this->user['id']==42608){
-                $data['method'] = 'ysepay.merchant.register.token.get';
-                $data['partner_id'] = 'yuanmeng';
-                // $data['partner_id'] = $this->user['id'];
-                $data['timestamp'] = date('Y-m-d H:i:s', time());
-                $data['charset'] = 'GBK';
-                $data['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
-                $data['sign_type'] = 'RSA';  
+        //     if($this->user['id']==42608){
+        //         $data['method'] = 'ysepay.merchant.register.token.get';
+        //         $data['partner_id'] = 'yuanmeng';
+        //         // $data['partner_id'] = $this->user['id'];
+        //         $data['timestamp'] = date('Y-m-d H:i:s', time());
+        //         $data['charset'] = 'GBK';
+        //         $data['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+        //         $data['sign_type'] = 'RSA';  
                   
-                $data['version'] = '3.0';
-                $data['picType'] = '00';
-                $data['picFile'] = $_FILES['positive_idcard'];
-                $data['token'] = $ret['ysepay_merchant_register_token_get_response']['token'];
-                $data['superUsercode'] = 'yuanmeng';
-                $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-                $result = Common::httpRequest($act,'POST',$data);
-                var_dump($result);die;
-            }
-        }
+        //         $data['version'] = '3.0';
+        //         $data['picType'] = '00';
+        //         $data['picFile'] = $_FILES['positive_idcard'];
+        //         $data['token'] = $ret['ysepay_merchant_register_token_get_response']['token'];
+        //         $data['superUsercode'] = 'yuanmeng';
+        //         $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+        //         $result = Common::httpRequest($act,'POST',$data);
+        //         var_dump($result);die;
+        //     }
+        // }
 
         $upfile2 = new UploadFile('native_idcard', $upfile_path2, '2000k', '', 'hash', $this->user['id']);
         $upfile2->save();
