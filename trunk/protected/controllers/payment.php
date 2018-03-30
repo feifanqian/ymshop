@@ -977,7 +977,6 @@ class PaymentController extends Controller {
         file_put_contents($file, "return|data:" . $data . "|sign:" . $sign, FILE_APPEND);
         /* 验证签名 仅作基础验证*/
         if ($this->sign_check($sign, $data) == true) {
-            $model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
             if($result['trade_status']  == 'TRADE_SUCCESS'){
                 $orderNo = $_POST['out_trade_no'];
                 $money = $_POST['out_trade_no'];
