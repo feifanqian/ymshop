@@ -3728,7 +3728,7 @@ class UcenterController extends Controller
                   
                 $data['version'] = '3.0';
                 $data['picType'] = '00';
-                $data['picFile'] = $positive_idcard;
+                $data['picFile'] = $_FILES['positive_idcard'];
                 $data['token'] = $ret['ysepay_merchant_register_token_get_response']['token'];
                 $data['superUsercode'] = 'yuanmeng';
                 $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
