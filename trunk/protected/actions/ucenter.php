@@ -2666,8 +2666,8 @@ class UcenterAction extends Controller {
         $myParams = array();  
         
         $myParams['method'] = 'ysepay.merchant.register.token.get';
-        // $myParams['partner_id'] = 'yuanmeng';
-        $myParams['partner_id'] = $this->user['id'];
+        $myParams['partner_id'] = 'yuanmeng';
+        // $myParams['partner_id'] = $this->user['id'];
         $myParams['timestamp'] = date('Y-m-d H:i:s', time());
         $myParams['charset'] = 'GBK';
         $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
