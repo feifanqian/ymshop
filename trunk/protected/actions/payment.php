@@ -368,10 +368,65 @@ class PaymentAction extends Controller {
                 $this->code =1113;
                 exit();
        }
+       $third_pay = 0;
+       $third_payment = $this->model->table('third_payment')->where('id=1')->find();
+       if($third_payment){
+          $third_pay = $third_payment['third_payment'];
+       }
+        if($third_pay == 2 && $user_id == 42608){  //银盛支付
+            $oauth_user=$this->model->table('oauth_user')->fields('open_id')->where('user_id='.$user_id)->find();
+           if($oauth_user){
+            $sub_openid=$oauth_user['open_id'];
+           }else{
+            $sub_openid='';
+           }
+
+           $myParams = array();
+            $myParams['charset'] = 'utf-8';
+            $myParams['method'] = 'ysepay.online.jsapi.pay';
+            $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
+            $myParams['partner_id'] = 'yuanmeng';
+            // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
+            $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
+            $myParams['sign_type'] = 'RSA';
+            $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+            $myParams['version'] = '3.0';
+            
+            $biz_content_arr = array(
+            "out_trade_no"=>$order_no,
+            "subject"=>'支付测试',
+            "total_amount"=>$order_amount,
+            "seller_id"=>'yuanmeng',
+            "seller_name"=>'圆梦互联网科技深圳有限公司',
+            "timeout_express"=>'1d',
+            "business_code"=>'3010001',
+            "sub_openid"=>$sub_openid,
+            );
+            $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+            ksort($myParams);
+            $data = $myParams;
+            $signStr = "";
+            foreach ($myParams as $key => $val) {
+                $signStr .= $key . '=' . $val . '&';
+            }
+            $signStr = rtrim($signStr, '&');
+            $sign = $this->sign_encrypt(array('data' => $signStr));
+            $myParams['sign'] = trim($sign['check']);
+            
+            $url = 'https://openapi.ysepay.com/gateway.do';
+            $ret = Common::httpRequest($url,'POST',$myParams);
+            $ret = json_decode($ret,true);
+            if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])){
+               $this->code = 1228;
+               return;
+            }
+            $sendData = $ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'];
+        }else{
+            //app微信支付    7,18    app支付宝支付 16,,17        
+            $packData = $payment->getPaymentInfo('offline_order', $order_id);
+            $sendData = $paymentPlugin->packData($packData);
+        }
        
-       //app微信支付    7,18    app支付宝支付 16,,17        
-      $packData = $payment->getPaymentInfo('offline_order', $order_id);
-      $sendData = $paymentPlugin->packData($packData);
       $this->code = 0;
       $this->content = array(
               'order_id' => $order_id,
@@ -379,6 +434,25 @@ class PaymentAction extends Controller {
               'senddata' => $sendData,
               );
    }
+
+   public function sign_encrypt($input)
+    {
+        $pfxpath = "./protected/classes/yinpay/certs/yuanmeng.pfx";
+        $pfxpassword = '008596';
+        $return = array('success' => 0, 'msg' => '', 'check' => '');
+        $pkcs12 = file_get_contents($pfxpath); //私钥
+        if (openssl_pkcs12_read($pkcs12, $certs, $pfxpassword)) {
+            $privateKey = $certs['pkey'];
+            $publicKey = $certs['cert'];
+            $signedMsg = "";
+            if (openssl_sign($input['data'], $signedMsg, $privateKey, OPENSSL_ALGO_SHA1)) {
+                $return['success'] = 1;
+                $return['check'] = base64_encode($signedMsg);
+                $return['msg'] = base64_encode($input['data']);
+            }
+        }
+        return $return;
+    }
 
    public function pay_qrcode(){
     $user_id = $this->user['id'];
