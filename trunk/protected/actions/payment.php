@@ -382,8 +382,8 @@ class PaymentAction extends Controller {
            }
 
            $myParams = array();
-            $myParams['charset'] = 'utf-8';
-            $myParams['method'] = 'ysepay.online.jsapi.pay';
+            $myParams['charset'] = 'GBK';
+            $myParams['method'] = 'ysepay.online.sdkpay';
             $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
             $myParams['partner_id'] = 'yuanmeng';
             // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
@@ -400,7 +400,8 @@ class PaymentAction extends Controller {
             "seller_name"=>'圆梦互联网科技深圳有限公司',
             "timeout_express"=>'1d',
             "business_code"=>'3010001',
-            "sub_openid"=>$sub_openid,
+            "bank_type"=>"1902000",
+            "appid"=>"wx167f2c4da1f798b0"
             );
             $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
             ksort($myParams);
@@ -416,7 +417,7 @@ class PaymentAction extends Controller {
             $url = 'https://openapi.ysepay.com/gateway.do';
             $ret = Common::httpRequest($url,'POST',$myParams);
             $ret = json_decode($ret,true);
-            
+
             if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])){
                $this->code = 1228;
                return;
