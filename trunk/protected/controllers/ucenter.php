@@ -3717,13 +3717,13 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url1, 100, 100);
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
-            $data['picType'] = '00';
-            $data['picFile'] = $positive_idcard;
-            $data['token'] = $ret['ysepay_merchant_register_token_get_response']['token'];
-            $data['superUsercode'] = 'yuanmeng';
-            $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-            $result = Common::httpRequest($act,'POST',$data);
             if($this->user['id']==42608){
+                $data['picType'] = '00';
+                $data['picFile'] = $positive_idcard;
+                $data['token'] = $ret['ysepay_merchant_register_token_get_response']['token'];
+                $data['superUsercode'] = 'yuanmeng';
+                $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+                $result = Common::httpRequest($act,'POST',$data);
                 var_dump($result);die;
             }
         }
