@@ -887,14 +887,20 @@ class PaymentController extends Controller {
             $signStr = rtrim($signStr, '&');
             $sign = $this->sign_encrypt(array('data' => $signStr));
             $myParams['sign'] = trim($sign['check']);
-            var_dump($signStr);
+            // var_dump($signStr);
         // echo "<pre>";
         // print_r($myParams);
         // echo "<pre>";
         // die;
         $url = 'https://openapi.ysepay.com/gateway.do';
         $ret = Common::httpRequest($url,'POST',$myParams);
-        var_dump($ret);die;
+        
+        $success_url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
+        $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
+        $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
+        $this->assign("success_url", $success_url);
+        $this->assign("cancel_url", $cancel_url);
+        $this->assign("error_url", $error_url);
         $this->assign('business_code',$biz_content_arr['business_code']);
         $this->assign('charset',$myParams['charset']);
         $this->assign('method',$myParams['method']);
@@ -912,6 +918,7 @@ class PaymentController extends Controller {
         $this->assign('version',$myParams['version']);
         $this->assign('sign',$myParams['sign']);
         $this->assign('biz_content',$myParams['biz_content']);
+        $this->assign("jsApiParameters", $ret['jsapi_pay_info']);
 
            $payment = new Payment($payment_id);
            $paymentPlugin = $payment->getPaymentPlugin();
