@@ -3723,9 +3723,9 @@ class UcenterController extends Controller
             // $data['superUsercode'] = 'yuanmeng';
             // $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
             // $result = Common::httpRequest($act,'POST',$data);
-            if($this->user['id']==42608){
-                var_dump($_FILES['positive_idcard']);die;
-            }
+            // if($this->user['id']==42608){
+            //     var_dump($_FILES['positive_idcard']);die;
+            // }
         }
 
         $upfile2 = new UploadFile('native_idcard', $upfile_path2, '2000k', '', 'hash', $this->user['id']);
