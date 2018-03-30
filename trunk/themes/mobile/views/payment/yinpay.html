@@ -22,7 +22,7 @@
     <body>
         <div class="viewport">
             {widget:name=sub_navs action=header}
-            <!-- <form id="paysubmit" name="paysubmit" action="https://mertest.ysepay.com/openapi_gateway/gateway.do" method="post">
+            <form id="paysubmit" name="paysubmit" action="https://mertest.ysepay.com/openapi_gateway/gateway.do" method="post">
                 <input type="hidden" name="sign"          value="{$sign}" />
                 <input type="hidden" name="business_code" value="{$business_code}" />
                 <input type="hidden" name="charset"     value="{$charset}"/>
@@ -43,8 +43,8 @@
             </form>
             <script type='text/javascript'>
                 document.forms['paysubmit'].submit();
-            </script>  -->
-            <div class="weui_msg">
+            </script> 
+            <!-- <div class="weui_msg">
                 <div class="weui_icon_area"><i class="weui_icon_info weui_icon_msg"></i></div>
                 <div class="weui_text_area">
                     <h2 class="weui_msg_title">温馨提示</h2>
@@ -99,7 +99,7 @@
                 window.onload = function () {
                     callpay();
                 }
-            </script>      
+            </script> -->      
         </div>
         {set:$curtab=isset($curtab)?$curtab:Req::args('con');}
         {widget:name=tabbar action=item cart=0 current=ucenter}
