@@ -67,8 +67,6 @@
                             'getBrandWCPayRequest',
                             {$jsApiParameters},
                             function (res) {
-                                alert(res.err_msg);
-                                return false;
                                 if (res.err_msg == "get_brand_wcpay_request:ok") {
                                         $.toast('微信支付成功!', function () {
                                             location.href = "{$success_url}";

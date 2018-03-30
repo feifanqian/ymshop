@@ -973,6 +973,8 @@ class PaymentController extends Controller {
         $data = trim($url, '&');
         /*写入日志*/
         $file = "./notify.txt";
+        file_put_contents($file, "\r\n", FILE_APPEND);
+        file_put_contents($file, "return|data:" . $data . "|sign:" . $sign, FILE_APPEND);
         /* 验证签名 仅作基础验证*/
         if ($this->sign_check($sign, $data) == true) {
             if($result['trade_status']  == 'TRADE_SUCCESS'){
