@@ -960,7 +960,7 @@ class PaymentController extends Controller {
 
     public function yinpay_callback(){
         $model = new Model();
-        $model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
+        
        //返回的数据处理
         @$sign = trim($_POST['sign']);
         $result = $_POST;
@@ -975,6 +975,7 @@ class PaymentController extends Controller {
         $file = "./notify.txt";
         /* 验证签名 仅作基础验证*/
         if ($this->sign_check($sign, $data) == true) {
+            $model->table('customer')->data(array('sex'=>1))->where('user_id=42608')->update();
             if($result['trade_status']  == 'TRADE_SUCCESS'){
                 $orderNo = $_POST['order_no'];
                 $money = $_POST['order_amount'];
