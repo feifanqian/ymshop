@@ -979,8 +979,8 @@ class PaymentController extends Controller {
         if ($this->sign_check($sign, $data) == true) {
             $model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
             if($result['trade_status']  == 'TRADE_SUCCESS'){
-                $orderNo = $_POST['order_no'];
-                $money = $_POST['order_amount'];
+                $orderNo = $_POST['out_trade_no'];
+                $money = $_POST['out_trade_no'];
                 $callbackData = array();
                 if (stripos($orderNo, 'promoter') !== false) {
                     
