@@ -417,6 +417,7 @@ class PaymentAction extends Controller {
             $url = 'https://openapi.ysepay.com/gateway.do';
             $ret = Common::httpRequest($url,'POST',$myParams);
             $ret = json_decode($ret,true);
+            var_dump($myParams);
             var_dump($ret);die;
             if(!isset($ret['ysepay_online_sdkpay_response']['pay_info'])){
                $this->code = 1228;
