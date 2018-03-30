@@ -975,7 +975,6 @@ class PaymentController extends Controller {
         $file = "./notify.txt";
         /* 验证签名 仅作基础验证*/
         if ($this->sign_check($sign, $data) == true) {
-            $model->table('customer')->data(array('sex'=>1))->where('user_id=42608')->update();
             if($result['trade_status']  == 'TRADE_SUCCESS'){
                 $orderNo = $_POST['order_no'];
                 $money = $_POST['order_amount'];
@@ -1082,6 +1081,7 @@ class PaymentController extends Controller {
             echo 'success';
             exit();
         } else {
+            $model->table('customer')->data(array('sex'=>1))->where('user_id=42608')->update();
             file_put_contents($file, "\r\n", FILE_APPEND);
             file_put_contents($file, "Validation failure!|notify|:" . $data . "|sign:" . $sign, FILE_APPEND);
             echo 'fail';
