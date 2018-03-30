@@ -895,6 +895,10 @@ class PaymentController extends Controller {
         $url = 'https://openapi.ysepay.com/gateway.do';
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
+        echo "<pre>";
+        print_r($ret);
+        echo "<pre>";
+        die;
         $success_url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
         $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
         $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
