@@ -3735,7 +3735,7 @@ class UcenterController extends Controller
         //         $result = Common::httpRequest($act,'POST',$data);
         //         var_dump($result);die;
         //     }
-        // }
+        }
 
         $upfile2 = new UploadFile('native_idcard', $upfile_path2, '2000k', '', 'hash', $this->user['id']);
         $upfile2->save();
