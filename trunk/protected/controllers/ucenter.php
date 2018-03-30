@@ -3717,15 +3717,15 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url1, 100, 100);
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
-            // $data['picType'] = '00';
-            // $data['picFile'] = $_FILES['positive_idcard'];
-            // $data['token'] = $ret['ysepay_merchant_register_token_get_response']['token'];
-            // $data['superUsercode'] = 'yuanmeng';
-            // $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-            // $result = Common::httpRequest($act,'POST',$data);
-            // if($this->user['id']==42608){
-            //     var_dump($_FILES['positive_idcard']);die;
-            // }
+            $data['picType'] = '00';
+            $data['picFile'] = $_FILES['positive_idcard'];
+            $data['token'] = $ret['ysepay_merchant_register_token_get_response']['token'];
+            $data['superUsercode'] = 'yuanmeng';
+            $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+            $result = Common::httpRequest($act,'POST',$data);
+            if($this->user['id']==42608){
+                var_dump($_FILES['positive_idcard']);die;
+            }
         }
 
         $upfile2 = new UploadFile('native_idcard', $upfile_path2, '2000k', '', 'hash', $this->user['id']);
@@ -3831,6 +3831,28 @@ class UcenterController extends Controller
        $this->redirect("ucenter/offline_balance_withdraw", false, array('msg' => array("success", "提交成功！")));
        
     
+    }
+
+    public function sign_encrypt($input)
+    {
+        // $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        $pfxpath = "./protected/classes/yinpay/certs/yuanmeng.pfx";
+        $pfxpassword = '008596';
+        $return = array('success' => 0, 'msg' => '', 'check' => '');
+        $pkcs12 = file_get_contents($pfxpath); //私钥
+        if (openssl_pkcs12_read($pkcs12, $certs, $pfxpassword)) {
+            $privateKey = $certs['pkey'];
+            $publicKey = $certs['cert'];
+            $signedMsg = "";
+            if (openssl_sign($input['data'], $signedMsg, $privateKey, OPENSSL_ALGO_SHA1)) {
+                $return['success'] = 1;
+                $return['check'] = base64_encode($signedMsg);
+                $return['msg'] = base64_encode($input['data']);
+
+            }
+        }
+
+        return $return;
     }
 
 }
