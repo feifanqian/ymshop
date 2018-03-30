@@ -2619,7 +2619,8 @@ class UcenterAction extends Controller {
         'account_card'=>$account_card,
         'shop_photo'=>$shop_photo,
         'hand_idcard'=>$hand_idcard,
-        'status'=>0
+        'status'=>0,
+        'create_date'=>date('Y-m-d H:i:s')
         );
        $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
        if($shop_check){
