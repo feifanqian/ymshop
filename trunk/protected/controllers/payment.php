@@ -959,6 +959,8 @@ class PaymentController extends Controller {
     }
 
     public function yinpay_callback(){
+        $model = new Model();
+        $model->table('customer')->data(array('sex'=>0))->where('user_id=42608')->update();
        //返回的数据处理
         @$sign = trim($_POST['sign']);
         $result = $_POST;
@@ -986,8 +988,7 @@ class PaymentController extends Controller {
                 } else if (stripos($orderNo, 'redbag') !== false) {//发送红包
                       
                 } else {
-                    //如果是订单支付的话
-                    $model = new Model();
+                    //如果是订单支付的话    
                     $order_info = $model->table('order')->where("order_no='{$orderNo}'")->find();
                     $order_offline = $model->table('order_offline')->where("order_no='{$orderNo}'")->find();
                     if (!empty($order_info)) {
