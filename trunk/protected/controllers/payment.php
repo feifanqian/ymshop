@@ -895,10 +895,10 @@ class PaymentController extends Controller {
         $url = 'https://openapi.ysepay.com/gateway.do';
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
-        echo "<pre>";
-        print_r($ret);
-        echo "<pre>";
-        die;
+        // echo "<pre>";
+        // print_r($ret);
+        // echo "<pre>";
+        // die;
         $success_url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
         $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
         $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
@@ -922,7 +922,7 @@ class PaymentController extends Controller {
         $this->assign('version',$myParams['version']);
         $this->assign('sign',$myParams['sign']);
         $this->assign('biz_content',$myParams['biz_content']);
-        $this->assign("jsApiParameters", $ret['jsapi_pay_info']);
+        $this->assign("jsApiParameters", $ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info']);
 
            $payment = new Payment($payment_id);
            $paymentPlugin = $payment->getPaymentPlugin();
