@@ -387,7 +387,7 @@ class PaymentAction extends Controller {
             $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
             $myParams['partner_id'] = 'yuanmeng';
             // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
-            $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
+            // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
             $myParams['sign_type'] = 'RSA';
             $myParams['timestamp'] = date('Y-m-d H:i:s', time());
             $myParams['version'] = '3.0';
@@ -418,11 +418,11 @@ class PaymentAction extends Controller {
             $ret = Common::httpRequest($url,'POST',$myParams);
             $ret = json_decode($ret,true);
             var_dump($ret);die;
-            if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])){
+            if(!isset($ret['ysepay_online_sdkpay_response']['pay_info'])){
                $this->code = 1228;
                return;
             }
-            $sendData = json_decode($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'],true);
+            $sendData = json_decode($ret['ysepay_online_sdkpay_response']['pay_info'],true);
         }else{
             //app微信支付    7,18    app支付宝支付 16,,17        
             $packData = $payment->getPaymentInfo('offline_order', $order_id);
