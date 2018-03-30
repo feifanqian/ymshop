@@ -2666,7 +2666,8 @@ class UcenterAction extends Controller {
         $myParams = array();  
         
         $myParams['method'] = 'ysepay.merchant.register.token.get';
-        $myParams['partner_id'] = 'yuanmeng';
+        // $myParams['partner_id'] = 'yuanmeng';
+        $myParams['partner_id'] = $this->user['id'];
         $myParams['timestamp'] = date('Y-m-d H:i:s', time());
         $myParams['charset'] = 'GBK';
         $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
@@ -2691,8 +2692,10 @@ class UcenterAction extends Controller {
         // print_r($myParams);
         // echo "<pre>";
         $ret = Common::httpRequest($url,'POST',$myParams);
+        $ret = json_decode($ret,true);
         var_dump($ret);die;
-        $data = array(
+        if($ret['ysepay_merchant_register_token_get_response']['code'] == 10000 && $ret['ysepay_merchant_register_token_get_response']['msg'] =='Success'){
+          $data = array(
             'merchant_no'=>'yuanmeng',
             'cust_type'=>$_POST['cust_type'],
             'token'=>'',
@@ -2720,11 +2723,15 @@ class UcenterAction extends Controller {
             'cert_no'=>md5($_POST['cert_no']),
             'bank_telephone_no'=>$_POST['bank_telephone_no']
             );
-        $url1 = 'https:// register.ysepay.com:2443/gateway.do';
-        $res = Common::httpRequest($url1,'POST',$data);
-        var_dump($res);die;
-        $this->code = 0;
-        return;
+            $url1 = 'https:// register.ysepay.com:2443/gateway.do';
+            $res = Common::httpRequest($url1,'POST',$data);
+            var_dump($res);die;
+            $this->code = 0;
+            return;
+        }else{
+            $this->code = 1229;
+            return;
+        }
     }
 
     public function sign_encrypt($input)
