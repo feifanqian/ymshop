@@ -849,7 +849,7 @@ class PaymentController extends Controller {
             $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
             // $myParams['out_trade_no'] = $order_no;
             $myParams['partner_id'] = 'yuanmeng';
-            $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
+            $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
             // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
             // $myParams['seller_id'] = 'shanghu_test';
             // $myParams['seller_name'] = '银盛支付商户测试公司';
@@ -1083,7 +1083,7 @@ class PaymentController extends Controller {
             echo 'success';
             exit();
         } else {
-            $model->table('customer')->data(array('sex'=>1))->where('user_id=42608')->update();
+            
             file_put_contents($file, "\r\n", FILE_APPEND);
             file_put_contents($file, "Validation failure!|notify|:" . $data . "|sign:" . $sign, FILE_APPEND);
             echo 'fail';
