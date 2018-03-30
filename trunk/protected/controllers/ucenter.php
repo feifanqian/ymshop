@@ -3718,6 +3718,15 @@ class UcenterController extends Controller
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
             if($this->user['id']==42608){
+                $data['method'] = 'ysepay.merchant.register.token.get';
+                $data['partner_id'] = 'yuanmeng';
+                // $data['partner_id'] = $this->user['id'];
+                $data['timestamp'] = date('Y-m-d H:i:s', time());
+                $data['charset'] = 'GBK';
+                $data['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+                $data['sign_type'] = 'RSA';  
+                  
+                $data['version'] = '3.0';
                 $data['picType'] = '00';
                 $data['picFile'] = $positive_idcard;
                 $data['token'] = $ret['ysepay_merchant_register_token_get_response']['token'];
