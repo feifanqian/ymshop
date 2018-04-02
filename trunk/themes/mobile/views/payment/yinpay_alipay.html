@@ -31,28 +31,7 @@
         </style>
     </head>
     <body>
-        {if:$agent !== false}
-        <div class="viewport">
-            <p class="wechattips" style="display: block; transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);"></p>
-            {widget:name=sub_navs action=header}
-            <div class="weui_msg">
-                <div class="weui_icon_area"><i class="weui_icon_info weui_icon_msg"></i></div>
-                <div class="weui_text_area">
-                    <h2 class="weui_msg_title">温馨提示</h2>
-                    <p class="weui_msg_desc">请点击选择右上角“在浏览器中打开链接”继续支付</p>
-                </div>
-                <div class="weui_opr_area">
-                    <p class="weui_btn_area">
-                        <a href="{$success_url}" class="weui_btn weui_btn_primary">完成支付</a>
-                        <a href="{$cancel_url}" class="weui_btn weui_btn_default">返回</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-        {set:$curtab='asset';}
-        {set:$curtab=isset($curtab)?$curtab:Req::args('con');}
-        {widget:name=tabbar action=item cart=0 current=ucenter}
-        {else:}
+        
         <form id="paysubmit" name="paysubmit" action="https://mertest.ysepay.com/openapi_gateway/gateway.do" method="post">
                 <input type="hidden" name="sign"          value="{$sign}" />
                 <input type="hidden" name="business_code" value="{$business_code}" />
@@ -77,6 +56,6 @@
         <script type='text/javascript'>
             document.forms['paysubmit'].submit();
         </script>
-        {/if}   
+           
     </body>
 </html>
