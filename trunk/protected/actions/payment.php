@@ -403,8 +403,8 @@ class PaymentAction extends Controller {
             );
           if($payment_id==8){
             $myParams['method'] = 'ysepay.online.wap.directpay.createbyuser';
-            $myParams['bank_type'] = "1903000";
-            $myParams['pay_mode'] = "native";
+            // $myParams['bank_type'] = "1903000";
+            // $myParams['pay_mode'] = "native";
             $myParams['out_trade_no'] = $order_no;
             $myParams['subject'] = '支付测试';
             $myParams["total_amount"]=$order_amount;
