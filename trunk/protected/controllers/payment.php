@@ -958,9 +958,9 @@ class PaymentController extends Controller {
                 $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
                 exit();
             }
-            $success_url = Url::urlFormat("/ucenter/order_details/id/{$offline_order['id']}");
-            $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$offline_order['id']}");
-            $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$offline_order['id']}"); 
+            $success_url = Url::urlFormat("/ucenter/order_details/id/{$order['id']}");
+            $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order['id']}");
+            $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order['id']}"); 
             $this->assign("success_url", $success_url);
             $this->assign("cancel_url", $cancel_url);
             $this->assign("error_url", $error_url);
