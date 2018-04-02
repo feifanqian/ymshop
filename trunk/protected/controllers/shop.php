@@ -169,7 +169,7 @@ class ShopController extends Controller
                 unset($gdata['password']);
             }
         } else {
-            $userinfo = $shop->where("username='{$gdata['username']}'")->find();
+            $userinfo = $shop->where("username='{$gdata['name']}'")->find();
             if ($userinfo) {
                 $this->msg = array("warning", "用户名已经存在！添加失败!");
                 $this->redirect("shop_edit", false, Req::args());
