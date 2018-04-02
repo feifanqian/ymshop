@@ -373,6 +373,12 @@ class PaymentAction extends Controller {
        if($third_payment){
           $third_pay = $third_payment['third_payment'];
        }
+       $oauth_user=$this->model->table('oauth_user')->fields('open_id')->where('user_id='.$user_id)->find();
+       if($oauth_user){
+          $sub_openid=$oauth_user['open_id'];
+        }else{
+         $sub_openid='';
+        }
         if($third_pay == 2 && $user_id == 42608){  //银盛支付
             //test
             $myParams['charset'] = 'utf-8';
