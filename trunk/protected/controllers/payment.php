@@ -922,7 +922,9 @@ class PaymentController extends Controller {
         $this->assign('total_amount',$order_amount);
         $this->assign('version',$myParams['version']);
         $this->assign('sign',$myParams['sign']);
-        $this->assign('biz_content',$myParams['biz_content']);
+        if($payment_id==6){
+            $this->assign('biz_content',$myParams['biz_content']);
+        }
         $this->assign("jsApiParameters", $ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info']);
         if($payment_id==8){
             $this->assign('bank_type',$myParams['bank_type']);
