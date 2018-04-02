@@ -843,21 +843,14 @@ class PaymentController extends Controller {
            }
 
            $myParams = array();
-            // $myParams['business_code'] = '01000010';
             $myParams['charset'] = 'utf-8';
             $myParams['method'] = 'ysepay.online.jsapi.pay';
             $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
-            // $myParams['out_trade_no'] = $order_no;
             $myParams['partner_id'] = 'yuanmeng';
             // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
             $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
-            // $myParams['seller_id'] = 'shanghu_test';
-            // $myParams['seller_name'] = '银盛支付商户测试公司';
             $myParams['sign_type'] = 'RSA';
-            // $myParams['subject'] = '支付测试';
-            // $myParams['timeout_express'] = '1d';
             $myParams['timestamp'] = date('Y-m-d H:i:s', time());
-            // $myParams['total_amount'] = $order_amount;
             $myParams['version'] = '3.0';
             
             $biz_content_arr = array(
@@ -869,9 +862,11 @@ class PaymentController extends Controller {
             "timeout_express"=>'1d',
             "business_code"=>'3010001',
             "sub_openid"=>$sub_openid,
-            // "user_code" => "shanghu_test",
-            // "user_name" => "银盛支付商户测试公司"
-        );
+            );
+          if($payment_id==8){
+            $biz_content_arr['bank_type'] = "1903000";
+            $myParams['pay_mode'] = "native";
+           }  
         $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
     //        网银直连需添加以下参数
     //        $myParams['pay_mode']           = 'internetbank';
@@ -887,18 +882,11 @@ class PaymentController extends Controller {
             $signStr = rtrim($signStr, '&');
             $sign = $this->sign_encrypt(array('data' => $signStr));
             $myParams['sign'] = trim($sign['check']);
-            // var_dump($signStr);
-        // echo "<pre>";
-        // print_r($myParams);
-        // echo "<pre>";
-        // die;
+        
         $url = 'https://openapi.ysepay.com/gateway.do';
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
-        // echo "<pre>";
-        // print_r($ret);
-        // echo "<pre>";
-        // die;
+        var_dump($ret);die;
         $success_url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
         $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
         $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
