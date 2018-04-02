@@ -944,6 +944,8 @@ class PaymentController extends Controller {
         $this->assign("agent",$agent);
         if($payment_id==6){
            $this->redirect('yinpay', false); 
+       }elseif($payment_id==8 && $agent==true){
+           $this->redirect('yinpay', false);
        }else{
            $this->redirect('yinpay_alipay', false);
        }     
