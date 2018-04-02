@@ -896,10 +896,10 @@ class PaymentController extends Controller {
         $url = 'https://openapi.ysepay.com/gateway.do';
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
-        echo "<pre>";
-        print_r($myParams);
-        echo "<pre>";
-        var_dump($ret);die;
+        // echo "<pre>";
+        // print_r($myParams);
+        // echo "<pre>";
+        // var_dump($ret);die;
         $success_url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
         $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
         $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
@@ -924,17 +924,23 @@ class PaymentController extends Controller {
         $this->assign('sign',$myParams['sign']);
         $this->assign('biz_content',$myParams['biz_content']);
         $this->assign("jsApiParameters", $ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info']);
+        if($payment_id==8){
+            $this->assign('bank_type',$myParams['bank_type']);
+            $this->assign('pay_mode',$myParams['pay_mode']);
+        }
+        $payment = new Payment($payment_id);
+        $paymentPlugin = $payment->getPaymentPlugin();
 
-           $payment = new Payment($payment_id);
-           $paymentPlugin = $payment->getPaymentPlugin();
-
-           $packData = $payment->getPaymentInfo('offline_order', $order_id);
-            // $packData = array_merge($extendDatas, $packData);
-            $sendData = $paymentPlugin->packData($packData);
-            $this->assign("paymentPlugin", $paymentPlugin);
-            $this->assign("sendData", $sendData);
-            $this->assign("offline",1);
-            $this->redirect('yinpay', false);
+        $packData = $payment->getPaymentInfo('offline_order', $order_id);
+        // $packData = array_merge($extendDatas, $packData);
+        $sendData = $paymentPlugin->packData($packData);
+        $this->assign("paymentPlugin", $paymentPlugin);
+        $this->assign("sendData", $sendData);
+        $this->assign("payment_id",$payment_id);
+        $agent = strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger');
+        // var_dump($agent);die;
+        $this->assign("agent",$agent);
+        $this->redirect('yinpay', false);
     }
 
     public function sign_encrypt($input)
