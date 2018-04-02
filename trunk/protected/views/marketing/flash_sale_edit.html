@@ -86,6 +86,28 @@
           <label></label>
         </dd>
         </dl>
+        <dl class="lineD">
+        <dt><b class="red">*</b>活动状态：</dt>
+        <dd>
+          <input name="is_end" type="radio" value="1" {echo:isset($is_end) && $is_end?'checked="checked"':''}/>开启
+          <input name="is_end" type="radio" value="0" {echo:!isset($is_end) || !$is_end?'checked="checked"':''}/>关闭
+          <label> </label>
+        </dd>
+        </dl>
+        <dl class="lineD">
+        <dt><b class="red">*</b>商品数量：</dt>
+        <dd>
+          <input name="goods_num" type="text" class="small" pattern="int" value="{$goods_num|0}" />
+          <label>抢购活动开启前为0</label>
+        </dd>
+        </dl>
+        <dl class="lineD">
+        <dt><b class="red">*</b> 已下单数量：</dt>
+        <dd>
+          <input name="order_num" type="text" class="small" pattern="int" value="{$order_num|0}" />
+          <label>抢购活动开启前为0</label>
+        </dd>
+        </dl>
       </div>
       <!--活动描述 end-->
       <div style="text-align:center"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>

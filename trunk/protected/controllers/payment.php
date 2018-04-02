@@ -855,7 +855,7 @@ class PaymentController extends Controller {
             
             $biz_content_arr = array(
             "out_trade_no"=>$order_no,
-            "subject"=>'支付测试',
+            "subject"=>'圆梦共享网',
             "total_amount"=>$order_amount,
             "seller_id"=>'yuanmeng',
             "seller_name"=>'圆梦互联网科技深圳有限公司',
@@ -868,7 +868,7 @@ class PaymentController extends Controller {
             $myParams['bank_type'] = "1903000";
             $myParams['pay_mode'] = "native";
             $myParams['out_trade_no'] = $order_no;
-            $myParams['subject'] = '支付测试';
+            $myParams['subject'] = '圆梦共享网';
             $myParams["total_amount"]=$order_amount;
             $myParams["seller_id"]='yuanmeng';
             $myParams["seller_name"]='圆梦互联网科技深圳有限公司';
