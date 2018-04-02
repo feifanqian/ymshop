@@ -3718,21 +3718,34 @@ class UcenterController extends Controller
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
             if($this->user['id']==42608){
-                $data['method'] = 'ysepay.merchant.register.token.get';
-                $data['partner_id'] = 'yuanmeng';
-                // $data['partner_id'] = $this->user['id'];
-                $data['timestamp'] = date('Y-m-d H:i:s', time());
-                $data['charset'] = 'GBK';
-                $data['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
-                $data['sign_type'] = 'RSA';  
-                  
-                $data['version'] = '3.0';
-                $data['picType'] = '00';
-                $data['picFile'] = $_FILES['positive_idcard'];
-                $data['token'] = $ret['ysepay_merchant_register_token_get_response']['token'];
-                $data['superUsercode'] = 'yuanmeng';
+                $param['method'] = 'ysepay.merchant.register.token.get';
+                $param['partner_id'] = 'yuanmeng';
+                // $param['partner_id'] = $this->user['id'];
+                $param['timestamp'] = date('Y-m-d H:i:s', time());
+                $param['charset'] = 'GBK';
+                $param['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+                $param['sign_type'] = 'RSA';               
+                $param['version'] = '3.0';
+                
+                $biz_content = array(
+                    'picType'=>'00',
+                    'picFile'=>$_FILES['positive_idcard'],
+                    'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                    'superUsercode'=>'yuanmeng'
+                    );
+                $param['biz_content'] = json_encode($biz_content, JSON_UNESCAPED_UNICODE);
+
+                ksort($param);
+                $data = $param;
+                $signStr = "";
+                foreach ($param as $key => $val) {
+                    $signStr .= $key . '=' . $val . '&';
+                }
+                $signStr = rtrim($signStr, '&');
+                $sign = $this->sign_encrypt(array('data' => $signStr));
+                $param['sign'] = trim($sign['check']);
                 $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-                $result = Common::httpRequest($act,'POST',$data);
+                $result = Common::httpRequest($act,'POST',$param);
                 var_dump($result);die;
             }
         }
