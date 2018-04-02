@@ -3169,6 +3169,12 @@ class UcenterController extends Controller
         if($third_payment){
             $third_pay = $third_payment['third_payment'];
         }
+        $models = new Model("payment as pa");
+        $paytypelist = $models->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
+                        ->where("pa.id in (6,8)")->order("pa.sort desc")->findAll();
+        $paytypeone = reset($paytypelist);
+        $this->assign("paytypeone", $paytypeone);
+        $this->assign("paytypelist", $paytypelist);
         $this->assign('third_pay',$third_pay);      
         $this->redirect();
     }

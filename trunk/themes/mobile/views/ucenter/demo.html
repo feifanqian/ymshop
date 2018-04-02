@@ -204,6 +204,9 @@
             <div class="weui_cell_ft">
                 <input class="weui_input" id="paytype" name='paytype' type="text" readonly="readonly" value="微信支付" data-values="6" style='text-align: right;display:inline-block;width:auto;font-size:16px;' />
             </div>
+            <div class="weui_cell_ft">
+                <input class="weui_input" id="paytype" name='paytype' type="text" readonly="readonly" value="支付宝支付" data-values="8" style='text-align: right;display:inline-block;width:auto;font-size:16px;' />
+            </div>
         </div>
         <input type="submit" value="确认支付" class="submit" />
     </form>
@@ -224,7 +227,10 @@
                 <p style="font-size:16px;">付款方式</p>
             </div>
             <div class="weui_cell_ft">
-                <input class="weui_input" id="paytype" name='paytype' type="text" readonly="readonly" value="微信支付" data-values="6" style='text-align: right;display:inline-block;width:auto;font-size:16px;' />
+                <!-- <input class="weui_input" id="paytype" name='paytype' type="text" readonly="readonly" value="微信支付" data-values="6" style='text-align: right;display:inline-block;width:auto;font-size:16px;' /> -->
+                {if:$paytypeone}
+                <input class="weui_input" id="paytype" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" style='text-align: right;display:inline-block;width:auto;' />
+                {/if}
             </div>
         </div>
         <input type="submit" value="确认支付" class="submit" />
@@ -387,6 +393,11 @@
             oDiv.innerHTML = oDivHtml.substring(0,oDivHtml.length-1);
             var amounts=$('#div').html();
             $("#order_amount").val(amounts);
+        });
+        $('#paytype').change(function(){
+          var payment = $(this).currentTarget.dataset.values;
+          alert(payment);
+          $("input[name='payment_id']").val(payment);
         }); 
     });
 </script>
