@@ -155,7 +155,7 @@ class ShopController extends Controller
         if ($id) {
             $shopinfo = $shop->where("id='{$id}'")->find();
             if ($shopinfo['username'] != $gdata['username']) {
-                $userinfo = $shop->where("username='{$gdata['username']}' AND id!='{$id}'")->find();
+                $userinfo = $shop->where("username='{$gdata['name']}' AND id!='{$id}'")->find();
                 if ($userinfo) {
                     $this->msg = array("warning", "用户名已经存在！添加失败!");
                     $this->redirect("shop_edit", false, Req::args());
