@@ -869,10 +869,10 @@ class PaymentController extends Controller {
             $myParams['pay_mode'] = "native";
             $myParams['out_trade_no'] = $order_no;
             $myParams['subject'] = '支付测试';
-            $myParams["total_amount"]=>$order_amount;
-            $myParams["seller_id"]=>'yuanmeng';
-            $myParams["seller_name"]=>'圆梦互联网科技深圳有限公司';
-            $myParams["timeout_express"]=>'1d';
+            $myParams["total_amount"]=$order_amount;
+            $myParams["seller_id"]='yuanmeng';
+            $myParams["seller_name"]='圆梦互联网科技深圳有限公司';
+            $myParams["timeout_express"]='1d';
             $myParams['business_code'] = '3010001'; 
            }
            if($payment_id==6){
