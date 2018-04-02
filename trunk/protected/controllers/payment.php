@@ -940,7 +940,7 @@ class PaymentController extends Controller {
         $this->assign("sendData", $sendData);
         $this->assign("payment_id",$payment_id);
         $agent = strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger');
-        // var_dump($agent);die;
+        var_dump($agent);die;
         $this->assign("agent",$agent);
         if($payment_id==6){
            $this->redirect('yinpay', false); 
