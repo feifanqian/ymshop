@@ -864,11 +864,20 @@ class PaymentController extends Controller {
             "sub_openid"=>$sub_openid,
             );
           if($payment_id==8){
-            $biz_content_arr['bank_type'] = "1903000";
-            $myParams['pay_mode'] = "native";
             $myParams['method'] = 'ysepay.online.wap.directpay.createbyuser';
+            $myParams['bank_type'] = "1903000";
+            $myParams['pay_mode'] = "native";
+            $myParams['out_trade_no'] = $order_no;
+            $myParams['subject'] = '支付测试';
+            $myParams["total_amount"]=>$order_amount;
+            $myParams["seller_id"]=>'yuanmeng';
+            $myParams["seller_name"]=>'圆梦互联网科技深圳有限公司';
+            $myParams["timeout_express"]=>'1d';
+            $myParams['business_code'] = '3010001'; 
+           }
+           if($payment_id==6){
+            $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
            }  
-        $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
     //        网银直连需添加以下参数
     //        $myParams['pay_mode']           = 'internetbank';
     //        $myParams['bank_type']           = '';
