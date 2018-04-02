@@ -2014,10 +2014,10 @@ class SimpleController extends Controller {
                         $client_type = Chips::clientType();
                         $client_type = ($client_type == "desktop") ? 0 : ($client_type == "wechat" ? 2 : 1);
                         $model = new Model("payment as pa");
-                        if($order['type']!=0){
-                            $paytypelist = $model->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
+                        
+                        $paytypelist = $model->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
                                         ->where("pa.status = 0 and pa.plugin_id not in(12,19) and pa.client_type = $client_type")->order("pa.sort desc")->findAll();
-                        }
+                        
                         //防止跨平台支付方式错乱
                         $in = false;
                         foreach ($paytypelist as $key => $value) {
