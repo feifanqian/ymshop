@@ -866,6 +866,7 @@ class PaymentController extends Controller {
           if($payment_id==8){
             $biz_content_arr['bank_type'] = "1903000";
             $myParams['pay_mode'] = "native";
+            $myParams['method'] = 'ysepay.online.wap.directpay.createbyuser';
            }  
         $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
     //        网银直连需添加以下参数
