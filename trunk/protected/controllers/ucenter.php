@@ -3746,6 +3746,7 @@ class UcenterController extends Controller
                 $param['sign'] = trim($sign['check']);
                 $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
                 $result = Common::httpRequest($act,'POST',$param);
+                var_dump($param);
                 var_dump($result);die;
             }
         }
