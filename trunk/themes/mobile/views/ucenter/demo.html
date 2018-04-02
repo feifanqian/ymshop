@@ -342,6 +342,10 @@
 </div>
 
 <script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+{set:$paydict = array();}
+{list:items=$paytypelist}
+{set:$paydict[]=array('title'=>$item['pay_name'], 'value'=>$item['id']);}
+{/list}
 <script>
     $(function(){
         
@@ -392,7 +396,15 @@
             var amounts=$('#div').html();
             $("#order_amount").val(amounts);
         });
-         
+        $("#paytype").select({
+            title: "选择支付方式",
+            items: {echo: json_encode($paydict); },
+            onChange: function () {
+                    var payment_id = $("#paytype").attr("data-values");
+                    var payname = $("#paytype").val();
+                    $("input[name='payment_id']").val($("#paytype").attr("data-values"));
+                }
+        }); 
     });
 </script>
 </body>
