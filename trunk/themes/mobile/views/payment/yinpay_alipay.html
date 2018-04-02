@@ -33,24 +33,9 @@
     <body>
         
         <form id="paysubmit" name="paysubmit" action="https://mertest.ysepay.com/openapi_gateway/gateway.do" method="post">
-                <input type="hidden" name="sign"          value="{$sign}" />
-                <input type="hidden" name="business_code" value="{$business_code}" />
-                <input type="hidden" name="charset"     value="{$charset}"/>
-                <input type="hidden" name="method"      value="{$method}"/>
-                <input type="hidden" name="notify_url" id="notify_url" value="{$notify_url}"/>
-                <input type="hidden" name="out_trade_no"  value="{$out_trade_no}"/>
-                <input type="hidden" name="partner_id" value="{$partner_id}"/>
-                <input type="hidden" name="return_url"    value="{$return_url}">
-                <input type="hidden" name="seller_id" value="{$seller_id}"/>
-                <input type="hidden" name="seller_name"     value="{$seller_name}"/>
-                <input type="hidden" name="sign_type"    value="{$sign_type}"/>
-                <input type="hidden" name="subject"  value="{$subject}"/>
-                <input Type="hidden" name="timeout_express"     value="{$timeout_express}"/>
-                <input Type="hidden" name="timestamp"  value="{$timestamp}"/>
-                <input Type="hidden" name="total_amount" value="{$total_amount}"/>
-                <input Type="hidden" name="version"  value="{$version}"/>
-                <input Type="hidden" name="bank_type"  value="{$bank_type}"/>
-                <input Type="hidden" name="pay_mode"  value="{$pay_mode}"/>
+            {list:items = $sendData}
+            <input type='hidden' name='{$key}' value='{$item}' />
+            {/list}
                 <!-- <input Type="hidden" name="biz_content"  value="{$biz_content}"/> -->
         </form>
         <script type='text/javascript'>

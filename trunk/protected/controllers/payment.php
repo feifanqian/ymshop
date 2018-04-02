@@ -945,8 +945,15 @@ class PaymentController extends Controller {
         if($payment_id==6){
            $this->redirect('yinpay', false); 
        }else{
-           $this->redirect('yinpay_alipay', false);
+           $this->redirect('yinpay_form', false);
        }     
+    }
+
+    public function yinpay_alipay(){
+        $sendData = $_GET;
+        unset($sendData['con'], $sendData['act']);
+        $this->assign("sendData", $sendData);
+        $this->redirect();
     }
 
     public function sign_encrypt($input)

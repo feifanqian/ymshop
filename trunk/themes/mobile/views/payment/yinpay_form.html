@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        <meta name="author" content=""/>
+        <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <link rel="stylesheet" href="{url:#css/weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/jquery.weui.min.css}">
+        <link rel="stylesheet" href="{url:#css/iconfont.css}">
+        <link rel="stylesheet" href="{url:#css/common.css}">
+        {echo:JS::import('jquery');}
+
+        <!--<script src="{url:#js/jquery.mobile-1.4.3.min.js}"></script>-->
+        <script type="text/javascript" src="{url:#js/jquery.weui.min.js}"></script>
+        <script type="text/javascript" src="{url:#js/common.js}"></script>
+        {set:$title = isset($seo_title)?$seo_title:(isset($site_title)?$site_title:'fastshop');$title=TString::msubstr($title,0,12);}
+        <title>圆梦共享网</title>
+        <style>
+            .wechattips {
+                position: absolute;
+                top:0px;right:15px;
+                z-index:999;
+                width: 11.156rem;
+                height: 4.2rem;
+                background:url("{url:#images/wechattips.png}");
+                background-size: contain;
+            }
+        </style>
+    </head>
+    <body>
+        {if:$agent !== false}
+        <div class="viewport">
+            <p class="wechattips" style="display: block; transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);"></p>
+            {widget:name=sub_navs action=header}
+            <div class="weui_msg">
+                <div class="weui_icon_area"><i class="weui_icon_info weui_icon_msg"></i></div>
+                <div class="weui_text_area">
+                    <h2 class="weui_msg_title">温馨提示</h2>
+                    <p class="weui_msg_desc">请点击选择右上角“在浏览器中打开链接”继续支付</p>
+                </div>
+                <div class="weui_opr_area">
+                    <p class="weui_btn_area">
+                        <a href="{$success_url}" class="weui_btn weui_btn_primary">完成支付</a>
+                        <a href="{$cancel_url}" class="weui_btn weui_btn_default">返回</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {set:$curtab='asset';}
+        {set:$curtab=isset($curtab)?$curtab:Req::args('con');}
+        {widget:name=tabbar action=item cart=0 current=ucenter}
+        {else:}
+        <form id="paysubmit" name="paysubmit" action="{url:/payment/yinpay_alipay}" method="get">
+                <input type="hidden" name="sign"          value="{$sign}" />
+                <input type="hidden" name="business_code" value="{$business_code}" />
+                <input type="hidden" name="charset"     value="{$charset}"/>
+                <input type="hidden" name="method"      value="{$method}"/>
+                <input type="hidden" name="notify_url" id="notify_url" value="{$notify_url}"/>
+                <input type="hidden" name="out_trade_no"  value="{$out_trade_no}"/>
+                <input type="hidden" name="partner_id" value="{$partner_id}"/>
+                <input type="hidden" name="return_url"    value="{$return_url}">
+                <input type="hidden" name="seller_id" value="{$seller_id}"/>
+                <input type="hidden" name="seller_name"     value="{$seller_name}"/>
+                <input type="hidden" name="sign_type"    value="{$sign_type}"/>
+                <input type="hidden" name="subject"  value="{$subject}"/>
+                <input Type="hidden" name="timeout_express"     value="{$timeout_express}"/>
+                <input Type="hidden" name="timestamp"  value="{$timestamp}"/>
+                <input Type="hidden" name="total_amount" value="{$total_amount}"/>
+                <input Type="hidden" name="version"  value="{$version}"/>
+                <input Type="hidden" name="bank_type"  value="{$bank_type}"/>
+                <input Type="hidden" name="pay_mode"  value="{$pay_mode}"/>
+                <!-- <input Type="hidden" name="biz_content"  value="{$biz_content}"/> -->
+        </form>
+        <script type='text/javascript'>
+            document.forms['paysubmit'].submit();
+        </script>
+        {/if}   
+    </body>
+</html>
