@@ -400,9 +400,9 @@
             title: "选择支付方式",
             items: {echo: json_encode($paydict); },
             onChange: function () {
-                    var payment_id = $("#paytype").attr("data-values");
-                    var payname = $("#paytype").val();
-                    $("input[name='payment_id']").val($("#paytype").attr("data-values"));
+                    var payment_id = $("#paytypes").attr("data-values");
+                    var payname = $("#paytypes").val();
+                    $("input[name='payment_id']").val($("#paytypes").attr("data-values"));
                 }
         }); 
     });
