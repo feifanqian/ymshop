@@ -204,7 +204,7 @@
                 </div>
                 <div class="weui_cell_ft">
                     {if:$paytypeone}
-                    <input class="weui_input" id="paytype" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" style='text-align: right;display:inline-block;width:auto;' />
+                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" style='text-align: right;display:inline-block;width:auto;' />
                     {/if}
                 </div>
             </div>
@@ -396,7 +396,7 @@
             var amounts=$('#div').html();
             $("#order_amount").val(amounts);
         });
-        $("#paytype").select({
+        $("#paytypes").select({
             title: "选择支付方式",
             items: {echo: json_encode($paydict); },
             onChange: function () {
