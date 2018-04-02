@@ -942,7 +942,11 @@ class PaymentController extends Controller {
         $agent = strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger');
         // var_dump($agent);die;
         $this->assign("agent",$agent);
-        $this->redirect('yinpay', false);
+        if($payment_id==6){
+           $this->redirect('yinpay', false); 
+       }else{
+           $this->redirect('yinpay_alipay', false);
+       }     
     }
 
     public function sign_encrypt($input)
