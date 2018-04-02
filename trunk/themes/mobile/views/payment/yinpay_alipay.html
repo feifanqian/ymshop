@@ -32,7 +32,7 @@
     </head>
     <body>
         {if:isset($sendData)}
-        <form id="paysubmit" name="paysubmit" action="https://mertest.ysepay.com/openapi_gateway/gateway.do" method="GET">
+        <form id="paysubmit" name="paysubmit" action="https://mertest.ysepay.com/openapi_gateway/gateway.do" method="POST">
             {list:items = $sendData}
             <input type='hidden' name='{$key}' value='{$item}' />
             {/list}
