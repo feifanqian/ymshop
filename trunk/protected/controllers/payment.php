@@ -950,10 +950,27 @@ class PaymentController extends Controller {
     }
 
     public function yinpay_alipay(){
-        $sendData = $_GET;
-        unset($sendData['con'], $sendData['act']);
-        $this->assign("sendData", $sendData);
-        $this->redirect();
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+            $out_trade_no = $_GET['out_trade_no'];
+            $order_no = $out_trade_no;
+            $order = $this->model->table("order_offline")->where("order_no='{$order_no}'")->find();
+            if (!$order) {
+                $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
+                exit();
+            }
+            $success_url = Url::urlFormat("/ucenter/order_details/id/{$offline_order['id']}");
+            $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$offline_order['id']}");
+            $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$offline_order['id']}"); 
+            $this->assign("success_url", $success_url);
+            $this->assign("cancel_url", $cancel_url);
+            $this->assign("error_url", $error_url);
+            $this->redirect();
+        } else {
+            $sendData = $_GET;
+            unset($sendData['con'], $sendData['act']);
+            $this->assign("sendData", $sendData);
+            $this->redirect();
+        }
     }
 
     public function sign_encrypt($input)

@@ -31,8 +31,8 @@
         </style>
     </head>
     <body>
-        {if:$agent !== false}
-        <div class="viewport">
+        
+        <!-- <div class="viewport">
             <p class="wechattips" style="display: block; transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);"></p>
             {widget:name=sub_navs action=header}
             <div class="weui_msg">
@@ -51,8 +51,9 @@
         </div>
         {set:$curtab='asset';}
         {set:$curtab=isset($curtab)?$curtab:Req::args('con');}
-        {widget:name=tabbar action=item cart=0 current=ucenter}
-        {else:}
+        {widget:name=tabbar action=item cart=0 current=ucenter} -->
+        <div class="viewport">
+        {widget:name=sub_navs action=header}
         <form id="paysubmit" name="paysubmit" action="{url:/payment/yinpay_alipay}" method="get">
                 <input type="hidden" name="sign"          value="{$sign}" />
                 <input type="hidden" name="business_code" value="{$business_code}" />
@@ -77,6 +78,7 @@
         <script type='text/javascript'>
             document.forms['paysubmit'].submit();
         </script>
-        {/if}   
+        {widget:name=tabbar action=item cart=0 current=ucenter}
+        </div>   
     </body>
 </html>
