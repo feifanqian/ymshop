@@ -3732,6 +3732,7 @@ class UcenterController extends Controller
                     );
                 $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
                 $result = Common::httpRequest($act,'POST',$data);
+                var_dump($data);
                 var_dump($result);die;
             }
         }
