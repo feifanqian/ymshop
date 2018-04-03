@@ -2693,8 +2693,20 @@ class UcenterAction extends Controller {
         // echo "<pre>";
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
-        var_dump($ret);die;
+        // var_dump($ret);die;
         if($ret['ysepay_merchant_register_token_get_response']['code'] == 10000 && $ret['ysepay_merchant_register_token_get_response']['msg'] =='Success'){
+            if($this->user['id']==42608){    
+                $data = array(
+                    'picType'=>'00',
+                    'picFile'=>$_FILES['positive_idcard'],
+                    'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                    'superUsercode'=>'yuanmeng'
+                    );
+                $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+                $result = Common::httpRequest($act,'POST',$data);
+                var_dump($data);
+                print_r($result);die;
+            }
           $data = array(
             'merchant_no'=>'yuanmeng',
             'cust_type'=>$_POST['cust_type'],
