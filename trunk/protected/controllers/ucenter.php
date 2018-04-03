@@ -3733,7 +3733,7 @@ class UcenterController extends Controller
                 $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
                 $result = Common::httpRequest($act,'POST',$data);
                 var_dump($data);
-                echo $result;die;
+                print_r($result);die;
             }
         }
 
