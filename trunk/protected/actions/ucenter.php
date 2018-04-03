@@ -2440,9 +2440,14 @@ class UcenterAction extends Controller {
       $province = Filter::str(Req::args('province'));
       $city = Filter::str(Req::args('city'));
       
-      $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
+      $customer = $this->model->table('customer')->fields('realname_verified,realname,id_no')->where('user_id='.$this->user['id'])->find();
       if($customer['realname_verified']==0){ //需要先实名认证
         $this->code = 1192;
+        return;
+      }
+
+      if($realname!=$customer['realname'] || $idcard!=$customer['id_no']){
+        $this->code = 1230;
         return;
       }
 
@@ -2698,7 +2703,7 @@ class UcenterAction extends Controller {
             if($this->user['id']==42608){    
                 $data = array(
                     'picType'=>'00',
-                    'picFile'=>$_FILES['positive_idcard'],
+                    'picFile'=>$_FILES['name']['upload'],
                     'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
                     'superUsercode'=>'yuanmeng'
                     );
