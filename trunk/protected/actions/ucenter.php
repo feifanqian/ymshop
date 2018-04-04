@@ -2704,7 +2704,7 @@ class UcenterAction extends Controller {
                 $data = array(
                     'picType'=>'00',
                     // 'picFile'=>$_FILES['positive_idcard'],
-                    'picFile'=>json_encode($_FILES['positive_idcard'], JSON_UNESCAPED_UNICODE);
+                    'picFile'=>json_encode($_FILES['positive_idcard'], JSON_UNESCAPED_UNICODE),
                     'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
                     'superUsercode'=>'yuanmeng'
                     );
