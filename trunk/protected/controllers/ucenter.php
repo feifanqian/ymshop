@@ -3716,7 +3716,7 @@ class UcenterController extends Controller
         $result5 = array();
         $result6 = array();
 
-        $upfile1 = new UploadFile('positive_idcard', $upfile_path1, '2000k', '', 'hash', $this->user['id']);
+        $upfile1 = new UploadFile('positive_idcard', $upfile_path1, '4000k', '', 'hash', $this->user['id']);
         $upfile1->save();
         $info1 = $upfile1->getInfo();        
         $positive_idcard = "";
