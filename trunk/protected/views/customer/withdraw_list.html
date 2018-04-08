@@ -16,6 +16,7 @@
         <th style="width:70px">操作</th>
         <th style="width:180px">提现单号</th>
         <th style="width:100px">用户</th>
+        <th style="width:100px">用户昵称</th>
         <th style="width:100px">提现金额</th>
         <th style="width:100px">实际转账</th>
         <th style="width:100px">开户名</th>
@@ -27,7 +28,7 @@
     </tr>
     {set:$status=array("-1"=>"<span class='red'>申请被拒</span>","0"=>"<span class='green'>待处理</span>","1"=>"已转账","2"=>"<span class='red'>提现失败</span>","3"=>"<span class='red'>已废弃</span>","4"=>"<span class='red'>代付中</span>")}
     {set:$type=array("0"=>"可用余额提现","1"=>"商家余额提现")}
-    {query:name=balance_withdraw as wd fields=wd.*,us.name as uname join= left join user as us on wd.user_id eq us.id where= $where id=$obj page=1 order=wd.id desc }
+    {query:name=balance_withdraw as wd fields=wd.*,us.nickname,us.name as uname join= left join user as us on wd.user_id eq us.id where= $where id=$obj page=1 order=wd.id desc }
         <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
         <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
                 {if:$item['status']==0}
@@ -47,6 +48,7 @@
             </ul></div></div> </td>
         <td >{$item['withdraw_no']}</td>
         <td>{$item['uname']}</td>
+        <td>{$item['nickname']}</td>
         <td>{$item['amount']}</td>
         <td>{$item['real_amount']|" "}</td>
         <td >{$item['open_name']}</td>
