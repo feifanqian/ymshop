@@ -313,7 +313,7 @@ class UcenterController extends Controller
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
             }
         } else {
-            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002 || $this->user['id']==126954 || $this->user['id']==42608){
+            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002 || $this->user['id']==126954){
                 $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！'));
                 exit;
             }
