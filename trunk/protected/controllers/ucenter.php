@@ -250,6 +250,9 @@ class UcenterController extends Controller
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
             }
         } else {
+            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002){
+                exit(json_encode(array('status' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！')));
+            }
             $config = Config::getInstance();
             $other = $config->get("other");
             $info = $this->model->table("customer")->fields('balance,realname_verified')->where("user_id=" . $this->user['id'])->find();
@@ -269,7 +272,7 @@ class UcenterController extends Controller
     public function offline_balance_withdraw()
     {
         if ($this->is_ajax_request()) {
-            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002){
+            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002 || $this->user['id']==126954 || $this->user['id']==42608){
                 exit(json_encode(array('status' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！')));
             }
             Filter::form();
@@ -309,6 +312,9 @@ class UcenterController extends Controller
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
             }
         } else {
+            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002 || $this->user['id']==126954 || $this->user['id']==42608){
+                exit(json_encode(array('status' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！')));
+            }
             $config = Config::getInstance();
             $other = $config->get("other");
             $info = $this->model->table("customer")->fields('offline_balance,realname_verified')->where("user_id=" . $this->user['id'])->find();
