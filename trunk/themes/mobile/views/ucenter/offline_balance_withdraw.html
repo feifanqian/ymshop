@@ -278,7 +278,7 @@
                 return false;
             }else{
               var file1 = $("input[name='positive_idcard']").get(0).files[0];
-              if(file1.size>40000*1024){
+              if(file1.size>4000*1024){
                 $.toast("身份证正面照大小超过4MB", "text");
                 return false;
               };
@@ -288,7 +288,7 @@
                 return false;
             }else{
               var file2 = $("input[name='native_idcard']").get(0).files[0];
-              if(file2.size>40000*1024){
+              if(file2.size>4000*1024){
                 $.toast("身份证反面照大小超过4MB", "text");
                 return false;
               };
@@ -306,7 +306,7 @@
                   return false;
               }else{
                 var file3 = $("input[name='business_licence']").get(0).files[0];
-                if(file3.size>40000*1024){
+                if(file3.size>4000*1024){
                   $.toast("营业执照大小超过4MB", "text");
                   return false;
                 };
@@ -320,7 +320,7 @@
                   return false;
               }else{
                 var file4 = $("input[name='shop_photo']").get(0).files[0];
-                if(file4.size>40000*1024){
+                if(file4.size>4000*1024){
                   $.toast("门店照大小超过4MB", "text");
                   return false;
                 };
@@ -331,7 +331,7 @@
                   return false;
               }else{
                 var file5 = $("input[name='hand_idcard']").get(0).files[0];
-                if(file5.size>40000*1024){
+                if(file5.size>4000*1024){
                   $.toast("门店照大小超过4MB", "text");
                   return false;
                 };
@@ -359,7 +359,7 @@
     $("input[name='positive_idcard']").change(function(){
       $("#positive_idcard_preview").show();
       var file = $("input[name='positive_idcard']").get(0).files[0];
-      if(file.size>40000*1024){
+      if(file.size>4000*1024){
         $.toast("图片最大不超过4MB", "text");
         return false;
       };
@@ -372,7 +372,7 @@
     $("input[name='native_idcard']").change(function(){
       $("#native_idcard_preview").show();
       var file = $("input[name='native_idcard']").get(0).files[0];
-      if(file.size>40000*1024){
+      if(file.size>4000*1024){
         $.toast("图片最大不超过4MB", "text");
         return false;
       };
@@ -385,7 +385,7 @@
     $("input[name='business_licence']").change(function(){
       $("#business_licence_preview").show();
       var file = $("input[name='business_licence']").get(0).files[0];
-      if(file.size>40000*1024){
+      if(file.size>4000*1024){
         $.toast("图片最大不超过4MB", "text");
         return false;
       };
@@ -407,7 +407,7 @@
     $("input[name='shop_photo']").change(function(){
       $("#shop_photo_preview").show();
       var file = $("input[name='shop_photo']").get(0).files[0];
-      if(file.size>40000*1024){
+      if(file.size>4000*1024){
         $.toast("图片最大不超过4MB", "text");
         return false;
       };
@@ -420,7 +420,7 @@
     $("input[name='hand_idcard']").change(function(){
       $("#hand_idcard_preview").show();
       var file = $("input[name='hand_idcard']").get(0).files[0];
-      if(file.size>40000*1024){
+      if(file.size>4000*1024){
         $.toast("图片最大不超过4MB", "text");
         return false;
       };
