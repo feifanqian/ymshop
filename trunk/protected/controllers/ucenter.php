@@ -251,7 +251,8 @@ class UcenterController extends Controller
             }
         } else {
             if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002){
-                exit(json_encode(array('status' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！')));
+                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！'));
+                exit;
             }
             $config = Config::getInstance();
             $other = $config->get("other");
@@ -313,7 +314,8 @@ class UcenterController extends Controller
             }
         } else {
             if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002 || $this->user['id']==126954 || $this->user['id']==42608){
-                exit(json_encode(array('status' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！')));
+                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！'));
+                exit;
             }
             $config = Config::getInstance();
             $other = $config->get("other");
