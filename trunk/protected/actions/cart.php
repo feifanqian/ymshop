@@ -53,10 +53,15 @@ class CartAction extends Controller {
         $id = Filter::int(Req::args("id"));
         $num = intval(Req::args("num"));
         $session_id = Req::args("session_id");
+        $uid = Filter::int(Req::args("user_id"));
         // var_dump($session_id);die;
         $num = $num > 0 ? $num : 1;
         $cart = $this->getCart();
+        if($uid){
+           $cart->modNum($id, $num,$uid); 
+       }else{
         $cart->modNum($id, $num);
+       }
         $products = $cart->all();
         if($products){
              foreach ($products as $k =>$v){

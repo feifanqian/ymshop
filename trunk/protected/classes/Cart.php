@@ -64,6 +64,9 @@ class Cart {
         if (!$this->hasItem($id)) {
             return false;
         }
+        if($uid){
+            $this->uid = $uid;
+        }
         $this->items[$id] = $num;
         $model = new Model();
         $model->table('cart')->data(array('num'=>$num))->where('goods_id='.$id.' and user_id='.$uid)->update();
