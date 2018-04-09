@@ -2780,7 +2780,7 @@ class UcenterAction extends Controller {
         $myParams['charset'] = 'utf-8';
         $myParams['method'] = 'ysepay.df.single.quick.accept';
         $myParams['notify_url'] = 'http://yspay.ngrok.cc/pay/respond_notify.php';
-        $myParams['partner_id'] = 'YM-liusl';
+        $myParams['partner_id'] = 'yuanmeng';
         $myParams['sign_type'] = 'RSA';
         $myParams['timestamp'] = date('Y-m-d H:i:s', time());
         $myParams['version'] = '3.0';
