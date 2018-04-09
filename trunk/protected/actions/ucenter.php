@@ -2773,4 +2773,45 @@ class UcenterAction extends Controller {
 
         return $return;
     }
+
+    public function yin_df_test(){
+        $order_no = $_POST['order_no'];
+        $myParams = array();
+        $myParams['charset'] = 'utf-8';
+        $myParams['method'] = 'ysepay.df.single.quick.accept';
+        $myParams['notify_url'] = 'http://yspay.ngrok.cc/pay/respond_notify.php';
+        $myParams['partner_id'] = 'YM-liusl';
+        $myParams['sign_type'] = 'RSA';
+        $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+        $myParams['version'] = '3.0';
+        $biz_content_arr = array(
+            "out_trade_no" => $order_no,
+            "business_code" => "01000009",
+            "currency" => "CNY",
+            "total_amount" => "0.01",
+            "subject" => "测试",
+            "bank_name" => "中国建设银行江西分行昌北支行",
+            "bank_city" => "南昌市",
+            "bank_account_no" => "6227002021490888887",
+            "bank_account_name" => "工行",
+            "bank_account_type" => "personal",
+            "bank_card_type" => "debit"
+        );
+        $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+        // var_dump($myParams);
+        ksort($myParams);
+        $signStr = "";
+        foreach ($myParams as $key => $val) {
+            $signStr .= $key . '=' . $val . '&';
+        }
+        $signStr = rtrim($signStr, '&');
+        // var_dump($signStr);
+        $sign = $this->sign_encrypt(array('data' => $signStr));
+        $myParams['sign'] = trim($sign['check']);
+        // var_dump($myParams);
+        $act = "https://df.ysepay.com/gateway.do";
+        $result = Common::httpRequest($act,'POST',$myParams);
+        var_dump($result);die;
+        return $myParams;
+    }
 }
