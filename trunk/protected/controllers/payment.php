@@ -902,7 +902,7 @@ class PaymentController extends Controller {
         // echo "<pre>";
         // print_r($myParams);
         // echo "<pre>";
-        // var_dump($ret);die;
+        var_dump($ret);die;
         $success_url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
         $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
         $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
