@@ -856,12 +856,9 @@ class PaymentController extends Controller {
             $biz_content_arr = array(
             "out_trade_no"=>$order_no,
             "subject"=>'圆梦共享网',
-            // "subject"=>'福寿平饭店',
             "total_amount"=>$order_amount,
             "seller_id"=>'yuanmeng',
-            // "seller_id"=>'YM-liusl',
             "seller_name"=>'圆梦互联网科技深圳有限公司',
-            // "seller_name"=>'赣州经济技术开发区福寿平饭店',
             "timeout_express"=>'1d',
             "business_code"=>'3010001',
             "sub_openid"=>$sub_openid,
@@ -902,7 +899,7 @@ class PaymentController extends Controller {
         // echo "<pre>";
         // print_r($myParams);
         // echo "<pre>";
-        var_dump($ret);die;
+        // var_dump($ret);die;
         $success_url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
         $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
         $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
