@@ -2795,7 +2795,8 @@ class UcenterAction extends Controller {
             "bank_account_no" => "6227002021490888887",
             "bank_account_name" => "工行",
             "bank_account_type" => "personal",
-            "bank_card_type" => "debit"
+            "bank_card_type" => "debit",
+            'shopdate'=>date('Y-m-d', time())
         );
         $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
         var_dump($myParams);
