@@ -2786,7 +2786,7 @@ class UcenterAction extends Controller {
         $myParams['version'] = '3.0';
         $biz_content_arr = array(
             "out_trade_no" => $order_no,
-            "business_code" => "01000009",
+            "business_code" => "2010002",
             "currency" => "CNY",
             "total_amount" => "0.01",
             "subject" => "测试",
