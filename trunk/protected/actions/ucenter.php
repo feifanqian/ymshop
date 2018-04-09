@@ -2798,7 +2798,7 @@ class UcenterAction extends Controller {
             "bank_card_type" => "debit"
         );
         $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
-        // var_dump($myParams);
+        var_dump($myParams);
         ksort($myParams);
         $signStr = "";
         foreach ($myParams as $key => $val) {
