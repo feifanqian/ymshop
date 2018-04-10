@@ -172,7 +172,15 @@
                   <!-- <a class="weui-btn weui-btn_primary" href="javascript:;" id="shop_check_do">提交</a> -->
                   <input class="weui-btn weui-btn_primary" type="submit" value="提交">
               </div>
-            </form>  
+            </form>
+            <div style="display: none;">
+              <form id="yin_upload" name="yin_upload" action="https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload" method="post" enctype="multipart/form-data">
+                  <input type="file" name='picFile' />
+                  <input type="hidden" name="picType" value="" />
+                  <input type="hidden" name="token" value="{$yin_token}">
+                  <input type="hidden" name="superUsercode" value="yuanmeng">
+              </form>
+            </div>    
             {elseif:$card_num>0}
             <div class="weui_panel_hd">提现信息</div>
             <div class="weui-cell">
@@ -367,7 +375,12 @@
       reader.readAsDataURL(file);
       reader.onload=function(e){
         $("#positive_idcard_preview img").get(0).src = e.target.result;
-      } 
+      }
+
+      var positive_idcard = $(this).val();
+      $("input[name='picType']").val('00');
+      $("input[name='picFile']").val(positive_idcard);
+      document.forms['yin_upload'].submit();
     });
     $("input[name='native_idcard']").change(function(){
       $("#native_idcard_preview").show();
