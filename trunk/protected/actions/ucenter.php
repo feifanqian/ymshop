@@ -2819,4 +2819,50 @@ class UcenterAction extends Controller {
         var_dump($result);die;
         return $myParams;
     }
+
+    public function yin_fz_test(){
+        $order_no = $_POST['order_no'];
+        $order = $this->model->table('order_offline')->fields('order_amount,shop_ids')->where('order_no='.$order_no)->find();
+        $shop = $this->model->table('district_promoter')->fields('partner_id')->where('user_id='.$order['shop_ids'])->find();
+        $rate = 0.5;
+        $myParams = array();
+        $myParams['method'] = 'ysepay.single.division.online.accept';
+        $myParams['partner_id'] = 'yuanmeng';
+        $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+        $myParams['charset'] = 'GBK';
+        $myParams['sign_type'] = 'RSA';
+        $myParams['version'] = '3.0';
+        $div_list = array();
+        $div_list[0] = array(
+                'division_mer_usercode'=>$shop['partner_id'],
+                'div_amount'=>sprintf('%.2f',$order['order_amount']*$rate),
+                'div_ratio'=>$rate,
+                'is_chargeFee'=>'01'
+                );
+        $biz_content_arr = array(
+            "out_trade_no" => $order_no,
+            "org_no" => "0000100000",
+            "division_mode" => "01",
+            "total_amount" => $order['order_amount'],
+            "is_divistion" => "01",
+            "is_again_division" => "N",
+            "div_list" => $div_list
+        );
+        $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+        // var_dump($myParams);
+        ksort($myParams);
+        $signStr = "";
+        foreach ($myParams as $key => $val) {
+            $signStr .= $key . '=' . $val . '&';
+        }
+        $signStr = rtrim($signStr, '&');
+        // var_dump($signStr);
+        $sign = $this->sign_encrypt(array('data' => $signStr));
+        $myParams['sign'] = trim($sign['check']);
+        // var_dump($myParams);
+        $act = "https://commonapi.ysepay.com/gateway.do";
+        $result = Common::httpRequest($act,'POST',$myParams);
+        var_dump($result);die;
+        return $myParams;
+    }
 }

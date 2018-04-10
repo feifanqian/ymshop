@@ -206,6 +206,7 @@ class V1Controller extends Controller {
         "my_promoter_detail"=>array("address/myPromoterDetail",1,1), //我的商家信息详情
         "shop_register"=>array("ucenter/shop_register",1,1),
         "yin_df_test"=>array("ucenter/yin_df_test",1,1),
+        "yin_fz_test"=>array("ucenter/yin_fz_test",1,1),
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息
