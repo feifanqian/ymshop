@@ -88,6 +88,10 @@
 <div class="ma20 bg-white p20 ">
             {if:$need_check==1}
             <form id="shop_check_form" action="{url:/ucenter/shop_check_do}" method="post" enctype="multipart/form-data">
+                  <input type="file" name='picFile' />
+                  <input type="hidden" name="picType" value="" />
+                  <input type="hidden" name="token" value="{$yin_token}">
+                  <input type="hidden" name="superUsercode" value="yuanmeng">
               <div class="weui_panel_hd">请先完善商家认证信息(图片最大不超过4MB)</div>
               <div class="weui-cell">
                  <select id="shop_type" name="shop_type" class="input">
@@ -172,15 +176,7 @@
                   <!-- <a class="weui-btn weui-btn_primary" href="javascript:;" id="shop_check_do">提交</a> -->
                   <input class="weui-btn weui-btn_primary" type="submit" value="提交">
               </div>
-            </form>
-            <div style="display: none;">
-              <form id="yin_upload" name="yin_upload" action="https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload" method="post" enctype="multipart/form-data">
-                  <input type="file" name='picFile' />
-                  <input type="hidden" name="picType" value="" />
-                  <input type="hidden" name="token" value="{$yin_token}">
-                  <input type="hidden" name="superUsercode" value="yuanmeng">
-              </form>
-            </div>    
+            </form>    
             {elseif:$card_num>0}
             <div class="weui_panel_hd">提现信息</div>
             <div class="weui-cell">
@@ -376,11 +372,12 @@
       reader.onload=function(e){
         $("#positive_idcard_preview img").get(0).src = e.target.result;
       }
-
-      var positive_idcard = $(this).val();
       $("input[name='picType']").val('00');
-      $("input[name='picFile']").val(positive_idcard);
-      document.forms['yin_upload'].submit();
+      $(this).attr("name",'picFile');
+      $("#shop_check_form").attr("action","https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload");   
+      document.forms['shop_check_form'].submit();
+      $(this).attr("name",'positive_idcard');
+      $("#shop_check_form").attr("action","/user/shop_check_do");
     });
     $("input[name='native_idcard']").change(function(){
       $("#native_idcard_preview").show();
