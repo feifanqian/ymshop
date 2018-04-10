@@ -2780,6 +2780,7 @@ class UcenterAction extends Controller {
 
     public function yin_df_test(){
         $order_no = $_POST['order_no'];
+        $order = $this->model->table('order_offline')->fields('order_amount,shop_ids')->where('order_no='.$order_no)->find();
         $myParams = array();
         $myParams['charset'] = 'utf-8';
         $myParams['method'] = 'ysepay.df.single.quick.accept';
@@ -2792,12 +2793,12 @@ class UcenterAction extends Controller {
             "out_trade_no" => $order_no,
             "business_code" => "2010002",
             "currency" => "CNY",
-            "total_amount" => "0.01",
+            "total_amount" => $order['order_amount'],
             "subject" => "测试",
             "bank_name" => "中国建设银行江西分行昌北支行",
             "bank_city" => "南昌市",
             "bank_account_no" => "6227002021490888887",
-            "bank_account_name" => "工行",
+            "bank_account_name" => "潜非凡",
             "bank_account_type" => "personal",
             "bank_card_type" => "debit",
             'shopdate'=>date('Ymd', time())
