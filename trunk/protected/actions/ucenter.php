@@ -2859,7 +2859,7 @@ class UcenterAction extends Controller {
         // var_dump($signStr);
         $sign = $this->sign_encrypt(array('data' => $signStr));
         $myParams['sign'] = trim($sign['check']);
-        // var_dump($myParams);
+        var_dump($myParams);
         $act = "https://commonapi.ysepay.com/gateway.do";
         $result = Common::httpRequest($act,'POST',$myParams);
         var_dump($result);die;
