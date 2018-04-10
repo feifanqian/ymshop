@@ -2655,11 +2655,15 @@ class UcenterAction extends Controller {
         $this->code = 1166;
         return;
        }
-        $shop_check = $this->model->table('shop_check')->fields('id')->where('status=1 and user_id='.$this->user['id'])->find();
+        $shop_check = $this->model->table('shop_check')->fields('id,status')->where('user_id='.$this->user['id'])->find();
         if(!$shop_check){
-            $need_check = 0;
+            $need_check = 0; //没认证
+        }elseif($shop_check['status']==1){
+          $need_check = 1; //通过认证
+        }elseif($shop_check['status']==0){
+          $need_check = 2; //认证审核中
         }else{
-          $need_check = 1;
+          $need_check = -1; //认证失败  
         }
         $this->code = 0;
         $this->content = $need_check;
