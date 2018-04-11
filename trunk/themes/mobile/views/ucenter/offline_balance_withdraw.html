@@ -371,12 +371,12 @@
       reader.onload=function(e){
         $("#positive_idcard_preview img").get(0).src = e.target.result;
       }
-      $("input[name='picType']").val('00');
-      $(this).attr("name",'picFile');
-      $("#shop_check_form").attr("action","https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload");   
-      document.forms['shop_check_form'].submit();
-      $(this).attr("name",'positive_idcard');
-      $("#shop_check_form").attr("action","/user/shop_check_do");
+      // $("input[name='picType']").val('00');
+      // $(this).attr("name",'picFile');
+      // $("#shop_check_form").attr("action","https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload");   
+      // document.forms['shop_check_form'].submit();
+      // $(this).attr("name",'positive_idcard');
+      // $("#shop_check_form").attr("action","/user/shop_check_do");
     });
     $("input[name='native_idcard']").change(function(){
       $("#native_idcard_preview").show();
