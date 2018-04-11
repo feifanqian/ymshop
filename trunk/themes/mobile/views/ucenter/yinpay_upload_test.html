@@ -1,0 +1,52 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<script type="text/javascript" src="{url:#js/city-picker.js}" charset="utf-8"></script>
+<style>
+    .weui_panel_hd::after{
+        border:none;
+    }
+    .weui-form-preview::before{
+        border: none;
+    }
+    .weui-form-preview::after{
+        border: none;
+    }
+    .weui-form-preview__value{
+        padding-left: 50px;
+    }
+    .time{
+        margin: 0 auto;
+        height: 1px;
+    }
+    .gold_coin{
+        height:70px;
+        text-align: center;
+    }
+    .gold_coin .amount1{
+        font-size: 20px;
+        font-weight: 900;
+    }
+    .gold_coin .amount2{
+        font-size: 15px;
+         font-weight: 700;
+    }
+</style>
+<div class="withdraw-list">
+  <div class="apply_form"  style="display: none;font-size:15px;">    
+    <div class="ma20 bg-white p20 ">
+      <form id="shop_check_form" action="https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload" method="post" enctype="multipart/form-data">
+         <div class="weui-cell">
+            <div class="weui-cell__hd" style="width:40%"><label class="weui-label">选择图片：</label></div>
+            <div class="weui-cell__bd">
+                <input class="input" type="file" name="picFile" value="" >
+            </div> 
+        </div>
+         <input type="hidden" name="picType" value="00" />
+         <input type="hidden" name="token" value="{$yin_token}">
+         <input type="hidden" name="superUsercode" value="yuanmeng">
+         <div class="m20">
+            <input class="weui-btn weui-btn_primary" type="submit" value="提交">
+         </div>
+      </form>            
+    </div>
+  </div>
+</div>

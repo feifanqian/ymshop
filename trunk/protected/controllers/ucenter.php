@@ -3907,4 +3907,43 @@ class UcenterController extends Controller
         return $return;
     }
 
+    public function yinpay_upload_test(){
+        $myParams = array();  
+        
+            $myParams['method'] = 'ysepay.merchant.register.token.get';
+            $myParams['partner_id'] = 'yuanmeng';
+            // $myParams['partner_id'] = $this->user['id'];
+            $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+            $myParams['charset'] = 'GBK';
+            $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+            $myParams['sign_type'] = 'RSA';  
+              
+            $myParams['version'] = '3.0';
+            $biz_content_arr = array(
+            );
+
+            $myParams['biz_content'] = '{}';
+            ksort($myParams);
+            
+            $signStr = "";
+            foreach ($myParams as $key => $val) {
+                $signStr .= $key . '=' . $val . '&';
+            }
+            $signStr = rtrim($signStr, '&');
+            $sign = $this->sign_encrypt(array('data' => $signStr));
+            $myParams['sign'] = trim($sign['check']);
+            $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
+
+            $ret = Common::httpRequest($url,'POST',$myParams);
+            $ret = json_decode($ret,true);
+
+            if(isset($ret['ysepay_merchant_register_token_get_response']['token'])){
+                $this->assign('yin_token',$ret['ysepay_merchant_register_token_get_response']['token']);
+            }else{
+                $this->assign('yin_token','');
+            }
+            $this->assign('seo_title', '上传图片测试');
+            $this->redirect();
+    }
+
 }
