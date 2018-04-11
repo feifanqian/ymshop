@@ -2842,7 +2842,7 @@ class UcenterAction extends Controller {
                 );
         $biz_content_arr = array(
             "out_trade_no" => $order_no,
-            "org_no" => "6584000007",
+            "org_no" => "",
             "division_mode" => "01",
             "total_amount" => $order['order_amount'],
             "is_divistion" => "01",
