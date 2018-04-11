@@ -375,7 +375,6 @@
       $(this).attr("name",'picFile');
       $("#shop_check_form").attr("action","https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload");   
       document.forms['shop_check_form'].submit();
-      window.history.back(-1); 
       $(this).attr("name",'positive_idcard');
       $("#shop_check_form").attr("action","/user/shop_check_do");
     });
