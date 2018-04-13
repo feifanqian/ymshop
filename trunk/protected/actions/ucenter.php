@@ -2842,6 +2842,7 @@ class UcenterAction extends Controller {
                 );
         $biz_content_arr = array(
             "out_trade_no" => $order_no,
+            'payee_usercode' => 'yuanmeng',
             "org_no" => "",
             "division_mode" => "01",
             "total_amount" => $order['order_amount'],
