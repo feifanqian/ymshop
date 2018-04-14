@@ -2446,10 +2446,10 @@ class UcenterAction extends Controller {
         return;
       }
 
-      if($realname!=$customer['realname'] || $idcard!=$customer['id_no']){
-        $this->code = 1230;
-        return;
-      }
+      // if($realname!=$customer['realname'] || $idcard!=$customer['id_no']){
+      //   $this->code = 1230;
+      //   return;
+      // }
 
       $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=".$bankcard."&cardNo=".$idcard."&realName=".$realname;
       $header = array(
