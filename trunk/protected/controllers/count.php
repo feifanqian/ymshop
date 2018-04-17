@@ -1977,12 +1977,12 @@ class CountController extends Controller
         
         foreach($items as $k=>$v){
             if(!isset($_POST['s_time'])){
-                $where1 = "bl.type=8 and note='线下会员消费卖家收益(不参与分账)' and user_id=".$v['user_id'];
-                $where2 = "bl.type=8 and note='线下会员消费卖家收益' and user_id=".$v['user_id'];
+                $where1 = "note='线下会员消费卖家收益(不参与分账)' and user_id=".$v['user_id'];
+                $where2 = "note='线下会员消费卖家收益' and user_id=".$v['user_id'];
                 $title = "圆梦商家入账统计表";
             }else{
-                $where1 = "bl.type=8 and note='线下会员消费卖家收益(不参与分账)' and bl.time>'$stime' and bl.time<'$etime' and user_id=".$v['user_id'];
-                $where2 = "bl.type=8 and note='线下会员消费卖家收益' and bl.time>'$stime' and bl.time<'$etime' and user_id=".$v['user_id'];
+                $where1 = "note='线下会员消费卖家收益(不参与分账)' and bl.time>'$stime' and bl.time<'$etime' and user_id=".$v['user_id'];
+                $where2 = "note='线下会员消费卖家收益' and bl.time>'$stime' and bl.time<'$etime' and user_id=".$v['user_id'];
                 $title = "圆梦商家入账统计表[$stime - $etime]";
             }
             $items1 = $model->table('balance_log as bl')->fields('sum(bl.amount) as total_amount')->where($where1)->findAll();
