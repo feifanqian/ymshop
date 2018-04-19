@@ -1084,11 +1084,14 @@ class AddressAction extends Controller
         $this->content['totalfare'] = $totalfare;
     }
 
-    public function get_all_child_promoters(){
+    public function get_all_child_promoters(){      
         $user_id = Filter::int(Req::args('user_id'));
+        $shop = $this->model->table('district_shop')->fields('id')->where('owner_id='.$user_id)->find();
+        $list = $this->model->table('district_promoter')->fields('dp.user_id')->join('LEFT JOIN customer AS c ON dp.user_id = c.user_id LEFT JOIN district_shop AS ds ON dp.hirer_id = ds.id')->where('ds.invite_shop_id ='.$shop['id'])->findAll();
+
         // var_dump($user_id);die;
-        $result = Common::getAllChildPromoters($user_id);
+        // $result = Common::getAllChildPromoters($user_id);
         $this->code = 0;
-        $this->content = $result;
+        $this->content = $list;
     }
 }
