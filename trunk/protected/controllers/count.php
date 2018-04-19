@@ -2042,8 +2042,8 @@ class CountController extends Controller
         $items = $model->table('district_promoter as dp')->join("left join customer as u on dp.user_id = u.user_id")->fields('u.user_id,u.real_name,u.offline_balance')->where("dp.user_id in ({$goods_type_array})")->findAll();
         foreach ($items as $k => $v) {
             $sum1 = $model->table('balance_log')->fields('sum(amount) as sum1')->where("note='线下会员消费卖家收益(不参与分账)' and user_id=".$v['user_id'])->findAll();
-            $sum2 = $model->table('balance_log')->fields('sum(amount) as sum1')->where("note='线下会员消费卖家收益' and user_id=".$v['user_id'])->findAll();
-            $sum3 = $model->table('balance_log')->fields('sum(amount) as sum1')->where("note like '%线下会员消费卖家收益%' and user_id=".$v['user_id'])->findAll();
+            $sum2 = $model->table('balance_log')->fields('sum(amount) as sum2')->where("note='线下会员消费卖家收益' and user_id=".$v['user_id'])->findAll();
+            $sum3 = $model->table('balance_log')->fields('sum(amount) as sum3')->where("note like '%线下会员消费卖家收益%' and user_id=".$v['user_id'])->findAll();
             $items[$k]['amount1'] = empty($sum1)?0:$sum1[0]['sum1'];
             $items[$k]['amount2'] = empty($sum1)?0:$sum1[0]['sum2'];
             $items[$k]['amount3'] = empty($sum1)?0:$sum1[0]['sum3'];
