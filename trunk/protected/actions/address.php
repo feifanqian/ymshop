@@ -1086,7 +1086,7 @@ class AddressAction extends Controller
 
     public function get_all_child_promoters(){
         $user_id = Filter::int(Req::args('user_id'));
-        var_dump($user_id);die;
+        // var_dump($user_id);die;
         $result = Common::getAllChildPromoters($user_id);
         $this->code = 0;
         $this->content = $result;
