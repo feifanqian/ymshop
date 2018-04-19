@@ -921,6 +921,37 @@ class Common {
         
      }
 
+     static function getAllChildPromoters($user_id){
+        $model = new Model();
+        $is_break = false;
+        $now_user_id = $user_id;
+        $result = [];
+        while (!$is_break) {
+            $invite = $model->table("invite")->fields('invite_user_id')->where("user_id=".$now_user_id)->findAll();
+            if($invite){
+                foreach ($invite as $k => $v) {
+                    $shop = $model->table('district_shop')->where('owner_id='.$v['invite_user_id'])->find();
+                    $promoter = $model->table('district_promoter')->where('user_id='.$v['invite_user_id'])->find();
+                    if($shop && $promoter){
+                        array_push($result, $v['invite_user_id']);
+                        $now_user_id = $v['invite_user_id'];
+                        $is_break = false;
+                    }elseif($shop && !$promoter){
+                        array_push($result, $v['invite_user_id']);
+                        $is_break = true; 
+                    }else{
+                       $is_break = true; 
+                    }      
+                }
+                $is_break = false;
+            }else{
+                $is_break = true;
+                $result = [];
+            }
+        }
+        return $result;
+     }
+
      static function getFirstPromoterName($user_id){
         $model = new Model();
         // $is_promoter = $model->table("district_promoter")->where("user_id=".$user_id)->find();
