@@ -2039,7 +2039,7 @@ class CountController extends Controller
             $goods_type_array .= ','.$v['user_id'];
         }
         
-        $items = $model->table('district_promoter as dp')->join("left join user as u on dp.user_id = u.id")->fields('u.user_id,u.real_name,u.offline_balance')->where("dp.user_id in ({$goods_type_array})")->findAll();
+        $items = $model->table('district_promoter as dp')->join("left join user as u on dp.user_id = u.user_id")->fields('u.user_id,u.real_name,u.offline_balance')->where("dp.user_id in ({$goods_type_array})")->findAll();
         foreach ($items as $k => $v) {
             $sum1 = $model->table('balance_log')->fields('sum(amount) as sum1')->where("note='线下会员消费卖家收益(不参与分账)' and user_id=".$v['user_id'])->findAll();
             $sum2 = $model->table('balance_log')->fields('sum(amount) as sum1')->where("note='线下会员消费卖家收益' and user_id=".$v['user_id'])->findAll();
