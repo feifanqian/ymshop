@@ -2030,19 +2030,20 @@ class CountController extends Controller
     }
 
     public function get_all_child_promoters(){
+        $model = new Model();
         $user_id = 1050;
-        $shop = $this->model->table('district_shop')->fields('id')->where('owner_id='.$user_id)->find();
-        $list = $this->model->table('district_promoter as dp')->fields('dp.user_id')->join('LEFT JOIN customer AS c ON dp.user_id = c.user_id LEFT JOIN district_shop AS ds ON dp.hirer_id = ds.id')->where('ds.invite_shop_id ='.$shop['id'])->findAll();
+        $shop = $model->table('district_shop')->fields('id')->where('owner_id='.$user_id)->find();
+        $list = $model->table('district_promoter as dp')->fields('dp.user_id')->join('LEFT JOIN customer AS c ON dp.user_id = c.user_id LEFT JOIN district_shop AS ds ON dp.hirer_id = ds.id')->where('ds.invite_shop_id ='.$shop['id'])->findAll();
         $goods_type_array = '';
         foreach ($list as $k => $v) {
             $goods_type_array .= ','.$v['user_id'];
         }
         
-        $items = $this->model->table('district_promoter as dp')->join("left join user as u on dp.user_id = u.id")->fields('u.user_id,u.real_name,u.offline_balance')->where("dp.user_id in ({$goods_type_array})")->findAll();
+        $items = $model->table('district_promoter as dp')->join("left join user as u on dp.user_id = u.id")->fields('u.user_id,u.real_name,u.offline_balance')->where("dp.user_id in ({$goods_type_array})")->findAll();
         foreach ($items as $k => $v) {
-            $sum1 = $this->model->table('balance_log')->fields('sum(amount) as sum1')->where("note='线下会员消费卖家收益(不参与分账)' and user_id=".$v['user_id'])->findAll();
-            $sum2 = $this->model->table('balance_log')->fields('sum(amount) as sum1')->where("note='线下会员消费卖家收益' and user_id=".$v['user_id'])->findAll();
-            $sum3 = $this->model->table('balance_log')->fields('sum(amount) as sum1')->where("note like '%线下会员消费卖家收益%' and user_id=".$v['user_id'])->findAll();
+            $sum1 = $model->table('balance_log')->fields('sum(amount) as sum1')->where("note='线下会员消费卖家收益(不参与分账)' and user_id=".$v['user_id'])->findAll();
+            $sum2 = $model->table('balance_log')->fields('sum(amount) as sum1')->where("note='线下会员消费卖家收益' and user_id=".$v['user_id'])->findAll();
+            $sum3 = $model->table('balance_log')->fields('sum(amount) as sum1')->where("note like '%线下会员消费卖家收益%' and user_id=".$v['user_id'])->findAll();
             $items[$k]['amount1'] = empty($sum1)?0:$sum1[0]['sum1'];
             $items[$k]['amount2'] = empty($sum1)?0:$sum1[0]['sum2'];
             $items[$k]['amount3'] = empty($sum1)?0:$sum1[0]['sum3'];
