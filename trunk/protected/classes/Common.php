@@ -928,7 +928,6 @@ class Common {
         $result = [];
         while (!$is_break) {
             $invite = $model->table("invite")->fields('invite_user_id')->where("user_id=".$now_user_id)->findAll();
-            var_dump($invite);die;
             if($invite){
                 foreach ($invite as $k => $v) {
                     $shop = $model->table('district_shop')->where('owner_id='.$v['invite_user_id'])->find();
