@@ -1424,7 +1424,7 @@ class DistrictadminController extends Controller
                 foreach ($items as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $value) {
-                        $str .= "<td>" . iconv("UTF-8", "GBK", $item[$value]) . "</td>";
+                        $str .= "<td>" . iconv("UTF-8", "GB2312//IGNORE", $item[$value]) . "</td>";
                     }
                     $str .= "</tr>";
                 }
