@@ -1418,13 +1418,13 @@ class DistrictadminController extends Controller
                     $items[$k]['shop_type'] = $v['type']==1?'实体商家':'个人微商';
                 }
                 foreach ($fields as $value) {
-                    $str .= "<th>" . iconv("UTF-8", "GB2312", $fields_array[$value]) . "</th>";
+                    $str .= "<th>" . iconv("UTF-8", "GBK", $fields_array[$value]) . "</th>";
                 }
                 $str .= "</tr>";
                 foreach ($items as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $value) {
-                        $str .= "<td>" . iconv("UTF-8", "GB2312", $item[$value]) . "</td>";
+                        $str .= "<td>" . iconv("UTF-8", "GBK", $item[$value]) . "</td>";
                     }
                     $str .= "</tr>";
                 }
