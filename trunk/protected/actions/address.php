@@ -1090,7 +1090,7 @@ class AddressAction extends Controller
         $list = $this->model->table('district_promoter as dp')->fields('dp.user_id')->join('LEFT JOIN customer AS c ON dp.user_id = c.user_id LEFT JOIN district_shop AS ds ON dp.hirer_id = ds.id')->where('ds.invite_shop_id ='.$shop['id'])->findAll();
         $goods_type_array = '';
         foreach ($list as $k => $v) {
-            $goods_type_array .= $v['user_id'];
+            $goods_type_array .= ','.$v['user_id'];
         }
 
         // var_dump($user_id);die;
