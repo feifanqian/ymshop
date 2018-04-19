@@ -1084,7 +1084,7 @@ class AddressAction extends Controller
         $this->content['totalfare'] = $totalfare;
     }
 
-    public function getAllChildPromoters(){
+    public function get_all_child_promoters(){
         $user_id = Filter::int(Req::args('user_id'));
         $result = Common::getAllChildPromoters($user_id);
         $this->code = 0;
