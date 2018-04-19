@@ -1401,7 +1401,6 @@ class DistrictadminController extends Controller
         $this->layout = '';
         $condition = Req::args("condition");
         $fields = Req::args("fields");
-        var_dump($fields);die;
         $condition = Common::str2where($condition);
         $model = new Model();
         if ($condition) {

@@ -2048,13 +2048,16 @@ class CountController extends Controller
             $items[$k]['amount2'] = empty($sum2)?0:$sum2[0]['sum2'];
             $items[$k]['amount3'] = empty($sum3)?0:$sum3[0]['sum3'];
         }
+        $fields = array(
+            'real_name','amount1','amount2','amount3','offline_balance'
+            ); 
         if ($items) {
             header("Content-type:application/vnd.ms-excel");
             header("Content-Disposition:filename=district_promoter_account.xls");
             $fields_array = array('real_name' => '商家名', 'amount1' => '不让利入账金额',  'amount2' => '让利入账金额', 'amount3' => '入账总金额','offline_balance' => '未提现商家金额');
             $str = "<table border=1><tr>";
             
-            foreach ($fields_array as $value) {
+            foreach ($fields as $value) {
                 $str .= "<th>" . iconv("UTF-8", "GBK", $fields_array[$value]) . "</th>";
             }
             $str .= "</tr>";
