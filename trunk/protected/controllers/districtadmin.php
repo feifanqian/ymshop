@@ -1424,7 +1424,7 @@ class DistrictadminController extends Controller
                 foreach ($items as $item) {
                     $str .= "<tr>";
                     foreach ($fields as $value) {
-                        $str .= "<td>" . iconv("GBK","UTF-8", $item[$value]) . "</td>";
+                        $str .= "<td>" . mb_convert_encoding("UTF-8", "GB2312", $item[$value]) . "</td>";
                     }
                     $str .= "</tr>";
                 }
