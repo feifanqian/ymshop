@@ -2050,12 +2050,10 @@ class CountController extends Controller
         }
         if ($items) {
             header("Content-type:application/vnd.ms-excel");
-            header("Content-Disposition:filename=doc_receiving_list.xls");
+            header("Content-Disposition:filename=district_promoter_account.xls");
             $fields_array = array('real_name' => '商家名', 'amount1' => '不让利入账金额',  'amount2' => '让利入账金额', 'amount3' => '入账总金额','offline_balance' => '未提现商家金额');
             $str = "<table border=1><tr>";
-            foreach($items as $k=>$v){
-                $items[$k]['shop_type'] = $v['type']==1?'实体商家':'个人微商';
-            }
+            
             foreach ($fields_array as $value) {
                 $str .= "<th>" . iconv("UTF-8", "GBK", $fields_array[$value]) . "</th>";
             }
