@@ -427,7 +427,7 @@ class SimpleController extends Controller {
         $token = $oauth->getAccessToken($code, $extend);
         $userinfo = $oauth->getUserInfo();
         // $userinfo = $oauth->getUserInfos($token['access_token'],$token['openid']);
-        if($type!='wechat' || $type!='qq' || $type!='weixin' || $type!='sina'){
+        if($type!='wechat'){
             var_dump($type);die;
         }
         if (!empty($userinfo)) {
