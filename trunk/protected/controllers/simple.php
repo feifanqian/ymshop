@@ -268,7 +268,7 @@ class SimpleController extends Controller {
                 $oauth_login[$oauth['name']]['url'] = $tem->getRequestCodeURL();
                 $oauth_login[$oauth['name']]['icon'] = $oauth['icon'];
             }
-            var_dump(123);die;
+            // var_dump(123);die;
             $this->assign('oauth_login', $oauth_login);
             $this->redirect();
         }
