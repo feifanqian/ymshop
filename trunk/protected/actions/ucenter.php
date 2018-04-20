@@ -2844,7 +2844,7 @@ class UcenterAction extends Controller {
             "out_trade_no" => $order_no,
             'payee_usercode' => 'yuanmeng',
             // "org_no" => "6584000000",
-            "org_no" => "",
+            // "org_no" => "",
             "division_mode" => "01",
             "total_amount" => $order['order_amount'],
             "is_divistion" => "01",
