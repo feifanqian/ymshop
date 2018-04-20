@@ -125,7 +125,9 @@ class UcenterController extends Controller
             $this->redirect($url);
             exit;
         }
-        var_dump($_SERVER['HTTP_USER_AGENT']);die;
+        if(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
+            var_dump(123);die;
+        }
         $this->redirect("/simple/login");
     }
 
