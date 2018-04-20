@@ -2841,7 +2841,7 @@ class UcenterAction extends Controller {
                 'is_chargeFee'=>'01'
                 );
         $biz_content_arr = array(
-            "out_batch_no" =>'S'.$order_no,
+            "out_batch_no" =>'S'.substr($order_no,0,15),
             "out_trade_no" => $order_no,
             'payee_usercode' => 'yuanmeng',
             // "org_no" => "6584000000",
