@@ -10,39 +10,39 @@
         <dl class="lineD">
             <dt>身份证正面照：</dt>
             <dd>
-                <img src="{echo:Common::thumb($shop_check['positive_idcard'],100,100);}" data-src="{$shop_check['positive_idcard']}" width="300" height="180">      
+                <img src="{$shop_check['positive_idcard']}" width="300" height="180">      
             </dd>
         </dl>
         <dl class="lineD">
             <dt>身份证反面照：</dt>
             <dd>
-                <img src="{echo:Common::thumb($shop_check['native_idcard'],100,100);}" data-src="{$shop_check['native_idcard']}" width="300" height="180"> 
+                <img src="{$shop_check['native_idcard']}" width="300" height="180"> 
             </dd>
         </dl>
         {if:$shop_check['type']==1}
         <dl class="lineD">
             <dt>营业执照：</dt>
             <dd>
-                <img src="{echo:Common::thumb($shop_check['business_licence'],100,100);}" data-src="{$shop_check['business_licence']}" width="300" height="180">      
+                <img src="{$shop_check['business_licence']}" width="300" height="180">      
             </dd>
         </dl>
         <dl class="lineD">
             <dt>开户许可证：</dt>
             <dd>
-                <img src="{echo:Common::thumb($shop_check['account_picture'],100,100);}" data-src="{$shop_check['account_picture']}" width="300" height="180"> 
+                <img src="{$shop_check['account_picture']}" width="300" height="180"> 
             </dd>
         </dl>
         <dl class="lineD">
             <dt>门店照：</dt>
             <dd>
-                <img src="{echo:Common::thumb($shop_check['shop_photo'],100,100);}" data-src="{$shop_check['shop_photo']}" width="300" height="180"> 
+                <img src="{$shop_check['shop_photo']}" width="300" height="180"> 
             </dd>
         </dl>
         {else:}
         <dl class="lineD">
             <dt>手持身份证照：</dt>
             <dd>
-                <img src="{echo:Common::thumb($shop_check['hand_idcard'],100,100);}" data-src="{$shop_check['hand_idcard']}" width="300" height="180"> 
+                <img src="{$shop_check['hand_idcard']}" width="300" height="180"> 
                 
             </dd>
         </dl>
