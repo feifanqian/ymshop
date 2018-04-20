@@ -399,6 +399,13 @@ class IndexAction extends Controller {
             $list[$k]['adimg'] = $v['ad_img'];
             unset($list[$k]['ad_img']);
         }
+        $new = array(
+                'id'=>'0',
+                'name'=>'全部分类',
+                'adimg'=>'https://ymlypt.b0.upaiyun.com/data/uploads/2018/03/08/457bdda9eb7d103edfd21c0f523fa584.png',
+                'type'=>'classify'
+                );
+        array_unshift($list, $new);
         $new1 = array(
                 'id'=>'1',
                 'name'=>'微商专区',
@@ -406,13 +413,13 @@ class IndexAction extends Controller {
                 'type'=>'mini_shop'
                 );
         array_push($list, $new1);
-        $new2 = array(
-                'id'=>'999',
-                'name'=>'附近',
-                'adimg'=>'https://ymlypt.b0.upaiyun.com/data/uploads/2018/03/08/457bdda9eb7d103edfd21c0f523fa584.png',
-                'type'=>'nearby'
-                );
-        array_push($list, $new2);
+        // $new2 = array(
+        //         'id'=>'999',
+        //         'name'=>'附近',
+        //         'adimg'=>'https://ymlypt.b0.upaiyun.com/data/uploads/2018/03/08/457bdda9eb7d103edfd21c0f523fa584.png',
+        //         'type'=>'nearby'
+        //         );
+        // array_push($list, $new2);
         $this->code = 0;
         $this->content = $list;
 
