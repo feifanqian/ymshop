@@ -573,7 +573,7 @@ class SimpleController extends Controller {
             $this->assign("user", $this->user);
             $this->redirect("/simple/oauth_bind");
         } else{
-            var_dump(123);die;
+            // var_dump(123);die;
             $this->redirect("/index/index");
         }
     }
@@ -2180,6 +2180,7 @@ class SimpleController extends Controller {
             $this->redirect($url);
             exit;
         }
+        var_dump(123);die;
         $this->redirect("/simple/login");
     }
 
