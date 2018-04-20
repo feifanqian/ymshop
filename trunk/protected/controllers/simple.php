@@ -427,6 +427,9 @@ class SimpleController extends Controller {
         $token = $oauth->getAccessToken($code, $extend);
         $userinfo = $oauth->getUserInfo();
         // $userinfo = $oauth->getUserInfos($token['access_token'],$token['openid']);
+        if($type!='wechat' || $type!='qq' $type!='weixin' $type!='sina'){
+            var_dump($type);die;
+        }
         if (!empty($userinfo)) {
             $oauth_user = $this->model->table('oauth_user');
             $is_oauth = $oauth_user->fields('user_id')
