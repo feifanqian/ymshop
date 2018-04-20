@@ -844,7 +844,7 @@ class AddressAction extends Controller
                     'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
                     'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
                 );
-                $where.= " and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
+                $where.= " and lat>{$squares['right-bottom']['lat']} and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
             }
         }
         
