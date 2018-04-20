@@ -145,23 +145,23 @@ class AddressAction extends Controller
                     'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
                     'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
                 );
-                $where.= " and lat>{$squares['right-bottom']['lat']}and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
+                $where.= " and lat>{$squares['right-bottom']['lat']} and lat<{$squares['left-top']['lat']} and lng>{$squares['left-top']['lng']} and lng<{$squares['right-bottom']['lng']}";
             }
         }
         $model = new Model();
-        $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->order('r.id desc')->findAll();
-        if($list){
-            foreach($list as $k => $v){
-                 $promoter = $model->table('district_promoter')->fields('lng,lat')->where("lng != '' and lat != '' and user_id=".$v["user_id"])->find();
-                 if($promoter){
-                    // $list[$k]['lng'] = $promoter['lng']+$rand;
-                    // $list[$k]['lat'] = $promoter['lat']+$rand;
-                    if($list[$k]['lng']=='' && $list[$k]['lat']==''){
-                        $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+rand(-1111,1111)/1000000,'lat'=>$promoter['lat']+rand(-1111,1111)/1000000))->where('id='.$v['id'])->update();
-                    }     
-                 }  
-            }  
-        }
+        // $list = $model->table('redbag as r')->join('left join customer as c on r.user_id = c.user_id')->fields('r.*,c.real_name')->order('r.id desc')->findAll();
+        // if($list){
+        //     foreach($list as $k => $v){
+        //          $promoter = $model->table('district_promoter')->fields('lng,lat')->where("lng != '' and lat != '' and user_id=".$v["user_id"])->find();
+        //          if($promoter){
+        //             // $list[$k]['lng'] = $promoter['lng']+$rand;
+        //             // $list[$k]['lat'] = $promoter['lat']+$rand;
+        //             if($list[$k]['lng']=='' && $list[$k]['lat']==''){
+        //                 $this->model->table('redbag')->data(array('lng'=>$promoter['lng']+rand(-1111,1111)/1000000,'lat'=>$promoter['lat']+rand(-1111,1111)/1000000))->where('id='.$v['id'])->update();
+        //             }     
+        //          }  
+        //     }  
+        // }
         $new_list = $model->table('redbag as r')->join('left join customer as c on c.user_id=r.user_id left join district_promoter as dp on r.user_id=dp.user_id')->fields('r.*,c.real_name,dp.shop_name,dp.picture')->where($where)->order('r.id desc')->findAll();
         if($new_list){
             foreach($new_list as $k => $v){
