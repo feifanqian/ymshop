@@ -125,7 +125,7 @@ class UcenterController extends Controller
             $this->redirect($url);
             exit;
         }
-        // var_dump(123);die;
+        var_dump($_SERVER['HTTP_USER_AGENT']);die;
         $this->redirect("/simple/login");
     }
 
