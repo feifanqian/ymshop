@@ -427,9 +427,9 @@ class SimpleController extends Controller {
         $token = $oauth->getAccessToken($code, $extend);
         $userinfo = $oauth->getUserInfo();
         // $userinfo = $oauth->getUserInfos($token['access_token'],$token['openid']);
-        if($type!='wechat'){
-            var_dump($type);die;
-        }
+        // if($type!='wechat'){
+        //     var_dump($type);die;
+        // }
         if (!empty($userinfo)) {
             $oauth_user = $this->model->table('oauth_user');
             $is_oauth = $oauth_user->fields('user_id')
@@ -573,6 +573,7 @@ class SimpleController extends Controller {
             $this->assign("user", $this->user);
             $this->redirect("/simple/oauth_bind");
         } else{
+            var_dump(123);die;
             $this->redirect("/index/index");
         }
     }
