@@ -133,7 +133,7 @@ class UcenterController extends Controller
         }  
     }
 
-    public function alipayLogin(){
+    public function alipaylogin(){
         var_dump($_GET);die;
        $auth_code = $_GET['auth_code'];
        $pay_alipayapp = new pay_alipayapp();
@@ -3200,8 +3200,6 @@ class UcenterController extends Controller
         }
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
-        }elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
-            var_dump(123);die;
         } else {
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
