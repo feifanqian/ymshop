@@ -175,6 +175,7 @@ class AddressAction extends Controller
                 $new_list[$k]['available_distance'] = $available_distance;
                 if($lng && $lat && $radius){
                    $actual_distance = Common::getDistanceByLatLng($lat,$lng,$v['lat'],$v['lng']);
+                   $new_list[$k]['dist'] = $actual_distance;
                    if($actual_distance>$radius){
                     unset($new_list[$k]);
                    }
