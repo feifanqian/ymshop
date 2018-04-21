@@ -126,10 +126,10 @@ class UcenterController extends Controller
             exit;
         }
         if(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
-            // $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017072607901626&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/alipaylogin&state=test";
-            var_dump(123);die;
-            // $this->redirect($act);
-            // exit;
+            $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017072607901626&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/alipaylogin&state=test";
+            // var_dump(123);die;
+            $this->redirect($act);
+            exit;
             // $result =$this->alipayLogin();
             // var_dump($result);die;
         }
