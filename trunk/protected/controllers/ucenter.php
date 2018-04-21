@@ -3202,10 +3202,11 @@ class UcenterController extends Controller
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
         } else {
             Cookie::set("inviter", $inviter_id);
-            $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017072607901626&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/alipaylogin&state=test";
-            $this->redirect($act);
-            // $result = Common::httpRequest($act,'GET',[]);
-            // $this->noRight();
+            if(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
+                $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017072607901626&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/alipaylogin&state=test";
+                $this->redirect($act);
+            }
+            $this->noRight();
         }
         $user_id = $this->user['id'];
         $shop = $this->model->table('customer')->fields('real_name')->where('user_id=' . $inviter_id)->find();
