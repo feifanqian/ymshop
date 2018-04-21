@@ -944,6 +944,9 @@ class UcenterAction extends Controller {
         if ($log) {
             foreach ($log as $k => $v) {
                 $log[$k]['amount'] = $log[$k]['amount'] > 0 ? "+" . $log[$k]['amount'] : $log[$k]['amount'];
+                if($log[$k]['order_no']==null){
+                    $log[$k]['order_no'] = '';
+                }
             }
         }
 
