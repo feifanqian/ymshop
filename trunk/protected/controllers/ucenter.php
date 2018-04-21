@@ -3200,6 +3200,8 @@ class UcenterController extends Controller
         }
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
+        }elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
+            var_dump(123);die;
         } else {
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
