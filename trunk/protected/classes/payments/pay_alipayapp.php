@@ -245,7 +245,8 @@ class pay_alipayapp extends PaymentPlugin {
         $request = new AlipaySystemOauthTokenRequest();  
         $request->setGrantType("authorization_code");  
         $request->setCode($auth_code);  
-        $result = $aop->execute($request);   
+        $result = $aop->execute($request);
+        var_dump($result);die;   
     }
 
 }
