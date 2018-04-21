@@ -3203,9 +3203,9 @@ class UcenterController extends Controller
         } else {
             Cookie::set("inviter", $inviter_id);
             $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017072607901626&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/alipaylogin&state=test";
-            header("Location:$act");exit;
+            $this->redirect($act);
             // $result = Common::httpRequest($act,'GET',[]);
-            $this->noRight();
+            // $this->noRight();
         }
         $user_id = $this->user['id'];
         $shop = $this->model->table('customer')->fields('real_name')->where('user_id=' . $inviter_id)->find();
