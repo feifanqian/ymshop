@@ -126,7 +126,7 @@ class UcenterController extends Controller
             exit;
         }elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
             if(!isset($_GET['auth_code'])){
-                $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/alipaylogin&state=test";
+                $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test";
                 $this->redirect($act);
                 exit;
             }else{
