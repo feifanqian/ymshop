@@ -127,7 +127,6 @@ class UcenterController extends Controller
         }
         if(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
             $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017072607901626&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/alipaylogin&state=test";
-            // var_dump(123);die;
             $this->redirect($act);
             exit;
             // $result =$this->alipayLogin();
@@ -137,10 +136,7 @@ class UcenterController extends Controller
     }
 
     public function alipayLogin(){
-        var_dump($_POST);
-        var_dump($_GET);die;
        $auth_code = $_GET['auth_code'];
-       var_dump($auth_code);
        $pay_alipayapp = new pay_alipayapp();
        $result = $pay_alipayapp->alipayLogin($auth_code);
        return $result;

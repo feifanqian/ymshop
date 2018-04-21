@@ -379,7 +379,7 @@ class PaymentAction extends Controller {
         }else{
          $sub_openid='';
         }
-        if($third_pay == 2 && $user_id == 42608){  //银盛支付
+        if($third_pay == 2 && $user_id == 1776){  //银盛支付
             //test
             $myParams['charset'] = 'utf-8';
             $myParams['method'] = 'ysepay.online.jsapi.pay';
