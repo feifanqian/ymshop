@@ -125,10 +125,19 @@ class UcenterController extends Controller
             $this->redirect($url);
             exit;
         }
-        // if(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
-        //     var_dump(123);die;
-        // }
+        if(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
+            $result =$this->alipayLogin();
+            var_dump($result);die;
+        }
         $this->redirect("/simple/login");
+    }
+
+    public function alipayLogin(){
+       $auth_code = $_GET['auth_code'];
+       var_dump($auth_code);
+       $pay_alipayapp = new pay_alipayapp();
+       $result = $pay_alipayapp->alipayLogin($auth_code);
+       return $result;
     }
 
     //生成邀请码
@@ -3191,6 +3200,8 @@ class UcenterController extends Controller
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
         } else {
             Cookie::set("inviter", $inviter_id);
+            $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017072607901626&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/alipaylogin&state=test";
+            $result = Common::httpRequest($act,'GET',[]);
             $this->noRight();
         }
         $user_id = $this->user['id'];
