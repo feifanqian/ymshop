@@ -162,7 +162,7 @@ class AddressAction extends Controller
         //          }  
         //     }  
         // }
-        $new_list = $model->table('redbag as r')->join('left join customer as c on c.user_id=r.user_id left join district_promoter as dp on r.user_id=dp.user_id')->fields('r.*,c.real_name,dp.shop_name,dp.picture')->where($where)->order('r.id desc')->findAll();
+        $new_list = $model->table('redbag as r')->join('left join customer as c on c.user_id=r.user_id left join district_promoter as dp on r.user_id=dp.user_id')->fields('r.*,c.real_name,dp.shop_name,dp.picture,dp.id as dp_id')->where($where)->order('r.id desc')->findAll();
         if($new_list){
             foreach($new_list as $k => $v){
                 $new_list[$k]['bag_name'] = $v['shop_name']!=''? $v['shop_name'].'的红包' : $v['real_name'].'的红包';
