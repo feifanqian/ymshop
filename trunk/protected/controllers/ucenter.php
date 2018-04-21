@@ -3201,7 +3201,6 @@ class UcenterController extends Controller
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
         } else {
-            var_dump(123);die;
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
         }
