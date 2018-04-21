@@ -125,30 +125,38 @@ class UcenterController extends Controller
             $this->redirect($url);
             exit;
         }elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
-            if(!isset($_GET['auth_code'])){
-                $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test";
-                $this->redirect($act);
-                exit;
-            }else{
-                $auth_code = $_GET['auth_code'];
-                var_dump($auth_code);
-                $pay_alipayapp = new pay_alipayapp();
-                $result = $pay_alipayapp->alipayLogin($auth_code);
-                var_dump($result);die;
-                return $result;
-            }  
+            $this->redirect('http://www.ymlypt.com/ucenter/alipaylogin');
+            exit;
+            // if(!isset($_GET['auth_code'])){
+            //     $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test";
+            //     $this->redirect($act);
+            //     exit;
+            // }else{
+            //     $auth_code = $_GET['auth_code'];
+            //     var_dump($auth_code);
+            //     $pay_alipayapp = new pay_alipayapp();
+            //     $result = $pay_alipayapp->alipayLogin($auth_code);
+            //     var_dump($result);die;
+            //     return $result;
+            // }  
         }else{
            $this->redirect("/simple/login"); 
         }  
     }
 
     public function alipaylogin(){
-        var_dump($_GET);die;
-       $auth_code = $_GET['auth_code'];
-       $pay_alipayapp = new pay_alipayapp();
-       $result = $pay_alipayapp->alipayLogin($auth_code);
-       // var_dump($result);die;
-       return $result;
+       if(!isset($_GET['auth_code'])){
+            $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test";
+            $this->redirect($act);
+            exit;
+        }else{
+            $auth_code = $_GET['auth_code'];
+            var_dump($auth_code);
+            $pay_alipayapp = new pay_alipayapp();
+            $result = $pay_alipayapp->alipayLogin($auth_code);
+            var_dump($result);die;
+            return $result;
+        }
     }
 
     //生成邀请码
