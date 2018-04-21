@@ -139,7 +139,7 @@ class UcenterController extends Controller
        $auth_code = $_GET['auth_code'];
        $pay_alipayapp = new pay_alipayapp();
        $result = $pay_alipayapp->alipayLogin($auth_code);
-       var_dump($result);die;
+       // var_dump($result);die;
        return $result;
     }
 
