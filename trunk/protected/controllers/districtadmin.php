@@ -1368,6 +1368,7 @@ class DistrictadminController extends Controller
         $status = Filter::int(Req::args("status"));
         $reason = Req::args("reason");
         $model = new Model();
+        var_dump(123);die;
         if ($status == 2) {
             if (trim($reason) != "") {//作废理由不能为空
                 $result = $model->table("shop_check")->data(array("status" =>2,'check_date'=> date("Y-m-d H:i:s"),'reason'=>$reason))->where("id=" . $id)->update();
