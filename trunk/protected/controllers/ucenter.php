@@ -3292,6 +3292,9 @@ class UcenterController extends Controller
         $paytypelist = $models->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
                         ->where("pa.id in (6,8)")->order("pa.sort desc")->findAll();
         $paytypeone = reset($paytypelist);
+        if($this->user['id']==140531){
+            var_dump($pay_type);die;
+        }
         $this->assign("paytypeone", $paytypeone);
         $this->assign("paytypelist", $paytypelist);
         $this->assign("pay_type", $pay_type);
