@@ -174,7 +174,7 @@ class UcenterController extends Controller
                     $this->user = $this->safebox->get('user');
                     $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
                 }
-                $this->redirect("http://www.ymlypt.com/ucenter/demo?inviter_id={$seller_id}&pay_type=alipay");
+                $this->redirect("http://www.ymlypt.com/ucenter/demo?pay_type=alipay&inviter_id={$seller_id}");
                 exit;
             }  
         }else{
