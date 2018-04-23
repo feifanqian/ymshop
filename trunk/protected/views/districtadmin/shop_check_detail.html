@@ -59,6 +59,14 @@
             </dd>
         </dl>
         {/if}
+        {if:$shop_check['status']==2}
+        <dl class="lineD">
+            <dt>未通过原因：</dt>
+            <dd>
+                <textarea type="text" cols="20" rows="5">{$shop_check['reason']}</textarea>       
+            </dd>
+        </dl>
+        {/if}
         <div style="text-align:left;margin-left:13%;"><input type="submit" value="通过认证" class="button">&nbsp;&nbsp;&nbsp;<a class="button" href="javascript:;" onclick="cancel({$shop_check['id']})"> 拒绝认证</a></div>
     </form>
 </div>
