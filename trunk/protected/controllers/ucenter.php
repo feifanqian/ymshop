@@ -125,19 +125,19 @@ class UcenterController extends Controller
             $this->redirect($url);
             exit;
         }elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
-            // $this->redirect('http://www.ymlypt.com/ucenter/alipaylogin');
-            // exit;
+            var_dump($_GET);die;
             if(!isset($_GET['auth_code'])){
                 $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test";
                 $this->redirect($act);
                 exit;
             }else{
                 $auth_code = $_GET['auth_code'];
-                // var_dump($auth_code);
                 $pay_alipayapp = new pay_alipayapp();
                 $result = $pay_alipayapp->alipayLogin($auth_code);
-                var_dump($result);die;
-                return $result;
+                if(!isset($result['code']) || $result['code']!=10000){
+                    $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付宝授权登录失败！'));
+                    exit;
+                }
             }  
         }else{
            $this->redirect("/simple/login"); 
@@ -151,15 +151,13 @@ class UcenterController extends Controller
             exit;
         }else{
             $auth_code = $_GET['auth_code'];
-            // var_dump($auth_code);
             $pay_alipayapp = new pay_alipayapp();
             $result = $pay_alipayapp->alipayLogin($auth_code);
-            // $result= Common::objectToArray($result);
-            // $result['alipay_system_oauth_token_response'] = (array)$result['alipay_system_oauth_token_response'];
-            echo "<pre>";
-            print_r($result);
-            echo "<pre>";
-            die;
+            if(!isset($result['code']) || $result['code']!=10000){
+                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付宝授权登录失败！'));
+                exit;
+            }
+            
             return $result;
         }
     }
