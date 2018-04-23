@@ -71,7 +71,7 @@ function cancel(id){
             layer.close(index);
             if(data.status=='success'){
             layer.msg('您拒绝了认证申请，理由是：'+text, {icon: 6},function(){
-                tools_reload();
+                window.location='{url:/districtadmin/shop_check}';
             }); 
           }else{
             layer.msg(data.msg, {icon: 5}); 
