@@ -3257,10 +3257,10 @@ class UcenterController extends Controller
         if (!$inviter_id) {
             $inviter_id = Session::get('seller_id');
         }
-        // $pay_type = Req::args('pay_type');
-        $pay_type = Session::get('pay_type');
-        Session::clear('pay_type');
-        if(!$pay_type){
+        
+        if(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
+            $pay_type = 'alipay';
+        }else{
             $pay_type = 'wechat';
         }
         if (isset($this->user['id'])) {
