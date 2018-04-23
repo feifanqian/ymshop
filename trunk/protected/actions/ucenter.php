@@ -2643,8 +2643,10 @@ class UcenterAction extends Controller {
           }else{
              $result = $this->model->table('shop_check')->data($data)->where('user_id='.$this->user['id'])->update();
           }
+       }else{
+        $result = $this->model->table('shop_check')->data($data)->insert();
        }
-       $result = $this->model->table('shop_check')->data($data)->insert();
+       
        if($result){
         $this->code = 0;
         return;
