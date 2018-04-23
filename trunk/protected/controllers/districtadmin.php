@@ -1370,7 +1370,7 @@ class DistrictadminController extends Controller
         $model = new Model();
         if ($status == 2) {
             if (trim($reason) != "") {//作废理由不能为空
-                $result = $model->query("update shop_check set status = 2,check_date='" . date("Y-m-d H:i:s") . "',reason ='$reason' where id = $id");
+                $result = $model->table("shop_check")->data(array("status" =>2,'check_date'=> date("Y-m-d H:i:s"),'reason'=>$reason))->where("id=" . $id)->update();
                 
                     echo json_encode(array("status" => 'success', 'msg' => '成功'));
                     exit();
