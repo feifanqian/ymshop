@@ -246,7 +246,14 @@ class pay_alipayapp extends PaymentPlugin {
         $request->setGrantType("authorization_code");  
         $request->setCode($auth_code);  
         $result = $aop->execute($request);
-        $arr = (array)$result;
+        $access_token = $result->alipay_system_oauth_token_response->access_token;
+
+        $request = new AlipayUserInfoShareRequest();
+        $result = $aop->execute ( $request, $access_token);
+        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+        $resultCode = $result->$responseNode->code;
+        $data = $result->$responseNode;
+        $arr = (array)$data;
         return $arr;   
     }
 

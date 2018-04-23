@@ -154,8 +154,8 @@ class UcenterController extends Controller
             // var_dump($auth_code);
             $pay_alipayapp = new pay_alipayapp();
             $result = $pay_alipayapp->alipayLogin($auth_code);
-            $result= Common::objectToArray($result);
-            $result['alipay_system_oauth_token_response'] = (array)$result['alipay_system_oauth_token_response'];
+            // $result= Common::objectToArray($result);
+            // $result['alipay_system_oauth_token_response'] = (array)$result['alipay_system_oauth_token_response'];
             echo "<pre>";
             print_r($result);
             echo "<pre>";

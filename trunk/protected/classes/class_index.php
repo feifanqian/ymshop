@@ -131,6 +131,7 @@ return array(
     "AlipayTradeAppPayRequest"=>"Alipay/aop/AlipayTradeAppPayRequest.php",
     "AlipayFundTransToaccountTransferRequest"=>"Alipay/aop/request/AlipayFundTransToaccountTransferRequest.php",
     "AlipaySystemOauthTokenRequest"=>"Alipay/aop/request/AlipaySystemOauthTokenRequest.php",
+    "AlipayUserInfoShareRequest"=>"Alipay/aop/request/AlipayUserInfoShareRequest.php",
     "AopSdk"=>"Alipay/AopSdk.php",
     "AppConfig"=>"allinpay/AppConfig.php",
     "AppUtil"=>"allinpay/AppUtil.php",
