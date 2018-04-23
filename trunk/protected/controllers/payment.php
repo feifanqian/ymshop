@@ -1995,13 +1995,20 @@ class PaymentController extends Controller {
                 $error_url = Url::urlFormat("/ucenter/recharge_center");
             } else {//商品订单
                 $order = $this->model->table("order")->where("order_no='{$order_no}'")->find();
-                if (!$order) {
-                    $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
+                $offline_order = $this->model->table("order_offline")->where("order_no='{$order_no}'")->find();
+                if ($order) {
+                    $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
+                    $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
+                    $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
+                }elseif($offline_order){
+                    // var_dump($offline_order);die;
+                    $success_url = Url::urlFormat("/ucenter/order_details/id/{$offline_order['id']}");
+                    $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$offline_order['id']}");
+                    $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$offline_order['id']}");
+                }else{
+                    $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息啦"));
                     exit();
                 }
-                $success_url = Url::urlFormat("/ucenter/order_detail/id/{$order['id']}");
-                $cancel_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
-                $error_url = Url::urlFormat("/simple/order_status/order_id/{$order['id']}");
             } 
             $this->assign("success_url", $success_url);
             $this->assign("cancel_url", $cancel_url);
