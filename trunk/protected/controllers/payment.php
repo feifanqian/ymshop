@@ -1366,7 +1366,7 @@ class PaymentController extends Controller {
                         $this->redirect("/simple/order_completed/order_id/" . $order_id);
                         exit;
                     }
-                    $msg = array('type' => 'fail', 'msg' => '订单修改失败！');
+                    $msg = array('type' => 'fail', 'msg' => '订单修改失败了！');
                     $this->redirect('/index/msg', false, $msg);
                     exit;
                 }
