@@ -1349,7 +1349,7 @@ class PaymentController extends Controller {
                     $orderarr = explode('_', $orderNo);
                     $orderNo = end($orderarr);
                     $order = new Model("order");
-                    $orders = new Model("orders");
+                    $orders = new Model("order_offline");
                     $order_info = $order->where("order_no='{$orderNo}'")->find();
                     $order_offline = $orders->where("order_no='{$orderNo}'")->find();
                     if (!empty($order_info)) {
