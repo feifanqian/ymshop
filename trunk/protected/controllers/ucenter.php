@@ -175,7 +175,7 @@ class UcenterController extends Controller
                     $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
                 }
                 Session::set('pay_type', 'alipay');
-                $this->redirect("http://www.ymlypt.com/ucenter/demo?pay_type=alipay&inviter_id={$seller_id}");
+                $this->redirect("http://www.ymlypt.com/ucenter/demo?inviter_id={$seller_id}");
                 exit;
             }  
         }else{
@@ -3295,9 +3295,6 @@ class UcenterController extends Controller
         $paytypelist = $models->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
                         ->where("pa.id in (6,8)")->order("pa.sort desc")->findAll();
         $paytypeone = reset($paytypelist);
-        if($this->user['id']==140531){
-            var_dump($pay_type);die;
-        }
         $this->assign("paytypeone", $paytypeone);
         $this->assign("paytypelist", $paytypelist);
         $this->assign("pay_type", $pay_type);
