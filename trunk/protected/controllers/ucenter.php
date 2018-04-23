@@ -174,6 +174,7 @@ class UcenterController extends Controller
                     $this->user = $this->safebox->get('user');
                     $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
                 }
+                Session::set('pay_type', 'alipay');
                 $this->redirect("http://www.ymlypt.com/ucenter/demo?pay_type=alipay&inviter_id={$seller_id}");
                 exit;
             }  
@@ -3256,7 +3257,9 @@ class UcenterController extends Controller
         if (!$inviter_id) {
             $inviter_id = Session::get('seller_id');
         }
-        $pay_type = Req::args('pay_type');
+        // $pay_type = Req::args('pay_type');
+        $pay_type = Session::get('pay_type');
+        Session::clear('pay_type');
         if(!$pay_type){
             $pay_type = 'wechat';
         }
