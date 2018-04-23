@@ -174,7 +174,7 @@ class UcenterController extends Controller
                     $this->user = $this->safebox->get('user');
                     $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
                 }
-                $this->redirect("http://www.ymlypt.com/ucenter/demo?inviter_id={$seller_id}");
+                $this->redirect("http://www.ymlypt.com/ucenter/demo?inviter_id={$seller_id}&pay_type=alipay");
                 exit;
             }  
         }else{
@@ -3256,6 +3256,10 @@ class UcenterController extends Controller
         if (!$inviter_id) {
             $inviter_id = Session::get('seller_id');
         }
+        $pay_type = Req::args('pay_type');
+        if(!$pay_type){
+            $pay_type = 'wechat';
+        }
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
         } else {
@@ -3290,6 +3294,7 @@ class UcenterController extends Controller
         $paytypeone = reset($paytypelist);
         $this->assign("paytypeone", $paytypeone);
         $this->assign("paytypelist", $paytypelist);
+        $this->assign("pay_type", $pay_type);
         $this->assign('third_pay',$third_pay);      
         $this->redirect();
     }
