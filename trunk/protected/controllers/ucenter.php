@@ -138,10 +138,7 @@ class UcenterController extends Controller
                     $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付宝授权登录失败！'));
                     exit;
                 }
-                echo "<pre>";
-                print_r($result);
-                echo "<pre>";
-                die;
+                
                 $is_oauth = $this->model()->table('oauth_user')->where('open_id="' . $result['user_id'] . '" and oauth_type="alipay"')->find();
                 if($is_oauth){
                     $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id left join oauth_user as o on us.id = o.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("o.open_id='{$result['user_id']}'")->find();
@@ -168,7 +165,8 @@ class UcenterController extends Controller
                     //更新用户名和邮箱
                     $model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = '{$last_id}'")->update();
                     //更新customer表
-                    $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nickname, 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                    $sex = $result['gender']=='m'?1:0;
+                    $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nickname, 'sex'=>$sex,'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
                     Log::pointcoin_log(200, $last_id, '', '支付宝新用户积分奖励', 10);
                     //记录登录信息
                     $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id='$last_id'")->find();
@@ -176,6 +174,8 @@ class UcenterController extends Controller
                     $this->user = $this->safebox->get('user');
                     $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
                 }
+                $this->redirect("http://www.ymlypt.com/ucenter/demo?inviter_id={$seller_id}");
+                exit;
             }  
         }else{
            $this->redirect("/simple/login"); 
