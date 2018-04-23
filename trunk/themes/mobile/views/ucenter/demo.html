@@ -218,7 +218,11 @@
     {else:}
     <form action="{url:/payment/dopays}" method="post" id="payform">
         <input type="hidden" name="order_no" value="{$order_no}">
+        {if:$pay_type=='alipay'}
+        <input type="hidden" name="payment_id" value="8">
+        {else:}
         <input type="hidden" name="payment_id" value="6">
+        {/if}
         <input type="hidden" name="seller_id" value="{$seller_id}">
         <input type="hidden" name="seller_ids" value="{$seller_ids}">
         <input type="hidden" name="order_amount" id="order_amount" value="">
