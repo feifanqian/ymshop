@@ -1349,7 +1349,9 @@ class PaymentController extends Controller {
                     $orderarr = explode('_', $orderNo);
                     $orderNo = end($orderarr);
                     $order = new Model("order");
+                    $orders = new Model("orders");
                     $order_info = $order->where("order_no='{$orderNo}'")->find();
+                    $order_offline = $orders->where("order_no='{$orderNo}'")->find();
                     if (!empty($order_info)) {
                         if ($order_info['type'] == 4 && $order_info['is_new'] == 0) {
                             if ($order_info['otherpay_amount'] > $money) {
@@ -1360,11 +1362,15 @@ class PaymentController extends Controller {
                             file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
                             exit;
                         }
+                        $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
+                        if ($order_id) {
+                            $this->redirect("/simple/order_completed/order_id/" . $order_id);
+                            exit;
+                        }
                     }
-                    $order_id = Order::updateStatus($orderNo, $payment_id, $callbackData);
-                    if ($order_id) {
-                        $this->redirect("/simple/order_completed/order_id/" . $order_id);
-                        exit;
+                    if(!empty($order_offline)){
+                        $this->redirect("/ucenter/order_details/id/{$order_offline['id']}");
+                            exit;
                     }
                     $msg = array('type' => 'fail', 'msg' => '订单修改失败了！');
                     $this->redirect('/index/msg', false, $msg);
