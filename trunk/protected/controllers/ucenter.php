@@ -139,13 +139,13 @@ class UcenterController extends Controller
                     exit;
                 }
                 
-                $is_oauth = $this->model()->table('oauth_user')->where('open_id="' . $result['user_id'] . '" and oauth_type="alipay"')->find();
+                $is_oauth = $this->model->table('oauth_user')->where('open_id="' . $result['user_id'] . '" and oauth_type="alipay"')->find();
                 if($is_oauth){
                     $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id left join oauth_user as o on us.id = o.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("o.open_id='{$result['user_id']}'")->find();
                     $this->safebox->set('user', $obj, 31622400);
                     $this->user = $this->safebox->get('user');
                 }else{
-                    $this->model()->table('oauth_user')->data(array(
+                    $this->model->table('oauth_user')->data(array(
                         'open_name' => $result['nick_name'],
                         'oauth_type' => 'alipay',
                         'posttime' => time(),
