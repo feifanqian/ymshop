@@ -2576,6 +2576,7 @@ class UcenterAction extends Controller {
        $native_idcard = Req::args('native_idcard'); //身份证反面照
        $account_picture = Req::args('account_picture'); //开户许可证照
        $account_card = Req::args('account_card'); //结算银行卡号
+       $bank_name = Req::args('bank_name'); //银行卡信息
        $shop_photo = Req::args('shop_photo'); //门店照
        $hand_idcard = Req::args('hand_idcard'); //手持身份证照
 
@@ -2601,10 +2602,10 @@ class UcenterAction extends Controller {
                 $this->code = 1219;
                 return;
             }
-            if(!$account_picture){
-                $this->code = 1222;
-                return;
-            }
+            // if(!$account_picture){
+            //     $this->code = 1222;
+            //     return;
+            // }
             if(!$shop_photo){
                 $this->code = 1224;
                 return;

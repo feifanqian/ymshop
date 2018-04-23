@@ -155,7 +155,7 @@
                  </div> 
               </div>
               <div class="weui-cell" style="display: none;" id="hand_idcard">
-                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">手持身份证照</label></div>
+                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">本人手持身份证照</label></div>
                  <div class="weui-cell__bd">
                       <input class="input" type="file" name="hand_idcard" value="" >
                  </div>
@@ -169,6 +169,12 @@
                   <div class="weui-cell__hd" style="width:40%"><label class="weui-label">结算银行卡号</label></div>
                   <div class="weui-cell__bd">
                       <input class="input" type="text"  name="account_card" maxlen="19" value="" placeholder="银行卡号" alt="银行卡号不能为空">
+                  </div>
+              </div>
+              <div class="weui-cell">
+                  <div class="weui-cell__hd" style="width:40%"><label class="weui-label">银行卡开户信息</label></div>
+                  <div class="weui-cell__bd">
+                      <input class="input" type="text"  name="bank_name" value="" placeholder="**银行**分行**支行" alt="银行卡号不能为空">
                   </div>
               </div>
               <div class="m20">
@@ -339,6 +345,10 @@
                   return false;
                 };
               }  
+            }
+            if(!$("input[name=bank_name]").val()){
+              $.toast("请完善银行信息", "text");
+                return false;
             } 
         });
     $("#shop_type").change(function(){

@@ -125,18 +125,56 @@ class UcenterController extends Controller
             $this->redirect($url);
             exit;
         }elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
-            var_dump($_GET);die;
-            if(!isset($_GET['auth_code'])){
-                $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test";
+            if(isset($_GET['inviter_id']) && !isset($_GET['auth_code'])){
+                $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test&inviter_id=".$_GET['inviter_id'];
                 $this->redirect($act);
                 exit;
             }else{
                 $auth_code = $_GET['auth_code'];
+                $seller_id = $_GET['inviter_id'];
                 $pay_alipayapp = new pay_alipayapp();
                 $result = $pay_alipayapp->alipayLogin($auth_code);
                 if(!isset($result['code']) || $result['code']!=10000){
                     $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付宝授权登录失败！'));
                     exit;
+                }
+                echo "<pre>";
+                print_r($result);
+                echo "<pre>";
+                die;
+                $is_oauth = $this->model()->table('oauth_user')->where('open_id="' . $result['user_id'] . '" and oauth_type="alipay"')->find();
+                if($is_oauth){
+                    $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id left join oauth_user as o on us.id = o.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("o.open_id='{$result['user_id']}'")->find();
+                    $this->safebox->set('user', $obj, 31622400);
+                    $this->user = $this->safebox->get('user');
+                }else{
+                    $this->model()->table('oauth_user')->data(array(
+                        'open_name' => $result['nick_name'],
+                        'oauth_type' => 'alipay',
+                        'posttime' => time(),
+                        'token' => '',
+                        'expires' => '',
+                        'open_id' => $result['user_id']
+                    ))->insert();
+                    Session::set('openname', $result['nick_name']);
+                    $passWord = CHash::random(6);
+                    $nickname = $result['nick_name'];
+                    $time = date('Y-m-d H:i:s');
+                    $validcode = CHash::random(8);
+                    $model = $this->model;
+                    $last_id = $model->table("user")->data(array('nickname' => $nickname, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $result['avatar'], 'validcode' => $validcode))->insert();
+                    $name = "u" . sprintf("%09d", $last_id);
+                    $email = $name . "@no.com";
+                    //更新用户名和邮箱
+                    $model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = '{$last_id}'")->update();
+                    //更新customer表
+                    $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nickname, 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                    Log::pointcoin_log(200, $last_id, '', '支付宝新用户积分奖励', 10);
+                    //记录登录信息
+                    $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id='$last_id'")->find();
+                    $this->safebox->set('user', $obj, 1800);
+                    $this->user = $this->safebox->get('user');
+                    $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
                 }
             }  
         }else{
