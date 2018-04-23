@@ -150,7 +150,7 @@ class UcenterController extends Controller
                         'oauth_type' => 'alipay',
                         'posttime' => time(),
                         'token' => '',
-                        'expires' => '',
+                        'expires' => '7200',
                         'open_id' => $result['user_id']
                     ))->insert();
                     Session::set('openname', $result['nick_name']);
