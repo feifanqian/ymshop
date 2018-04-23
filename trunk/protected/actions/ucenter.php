@@ -2626,6 +2626,7 @@ class UcenterAction extends Controller {
         'native_idcard'=>$native_idcard,
         'account_picture'=>$account_picture,
         'account_card'=>$account_card,
+        'bank_name'=>$bank_name,
         'shop_photo'=>$shop_photo,
         'hand_idcard'=>$hand_idcard,
         'status'=>0,

@@ -3939,6 +3939,7 @@ class UcenterController extends Controller
        // $native_idcard = Req::args('native_idcard'); //身份证反面照
        // $account_picture = Req::args('account_picture'); //开户许可证照
        $account_card = Req::args('account_card'); //结算银行卡号
+       $bank_name = Req::args('bank_name');
        // $shop_photo = Req::args('shop_photo'); //门店照
        // $hand_idcard = Req::args('hand_idcard'); //手持身份证照
 
@@ -3954,6 +3955,7 @@ class UcenterController extends Controller
         'native_idcard'=>$native_idcard,
         // 'account_picture'=>$account_picture,
         'account_card'=>$account_card,
+        'bank_name'=>$bank_name,
         'shop_photo'=>$shop_photo,
         'hand_idcard'=>$hand_idcard,
         'status'=>0,

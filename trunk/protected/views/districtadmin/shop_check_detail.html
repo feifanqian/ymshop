@@ -19,6 +19,18 @@
                 <img src="{$shop_check['native_idcard']}" width="300" height="180"> 
             </dd>
         </dl>
+        <dl class="lineD">
+            <dt>结算银行卡号:</dt>
+            <dd>
+                <input type="text" value="{$shop_check['account_card']}" style="width: 200px;height: 40px;"> 
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>银行信息:</dt>
+            <dd>
+                <input type="text" value="{$shop_check['bank_name']}" style="width: 200px;height: 40px;"> 
+            </dd>
+        </dl>
         {if:$shop_check['type']==1}
         <dl class="lineD">
             <dt>营业执照：</dt>
@@ -47,6 +59,24 @@
             </dd>
         </dl>
         {/if}
-        <div style="text-align:left;margin-left:13%;"><input type="submit" value="通过认证" class="button"></div>
+        <div style="text-align:left;margin-left:13%;"><input type="submit" value="通过认证" class="button"><a class="icon-remove" href="javascript:;" onclick="cancel({$item['id']})"> 作废该请求</a></div>
     </form>
 </div>
+<script type="text/javascript">
+function cancel(id){
+     layer.prompt({title: '请输入作废理由', formType: 2}, function(text, index){
+     layer.close(index);
+     var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+     $.post("{url:/districtadmin/shop_check_do}",{id:id,status:2,reason:text},function(data){
+            layer.close(index);
+            if(data.status=='success'){
+            layer.msg('您拒绝了认证申请，理由是：'+text, {icon: 6},function(){
+                tools_reload();
+            }); 
+          }else{
+            layer.msg(data.msg, {icon: 5}); 
+          }
+        },'json');
+   });
+}
+</script>

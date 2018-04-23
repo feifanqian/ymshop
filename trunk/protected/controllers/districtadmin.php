@@ -1364,9 +1364,9 @@ class DistrictadminController extends Controller
     }
 
     public function shop_check_do(){
-      $id = Filter::sql(Req::args("id"));
-        $status = Filter::sql(Req::args("status"));
-        $reason = Filter::sql(Req::args("reason"));
+      $id = Filter::int(Req::args("id"));
+        $status = Filter::int(Req::args("status"));
+        $reason = Req::args("reason");
         $model = new Model();
         if ($status == 2) {
             if (trim($reason) != "") {//作废理由不能为空
