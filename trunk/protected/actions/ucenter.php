@@ -2620,9 +2620,12 @@ class UcenterAction extends Controller {
             }
        }elseif($type==2){
           if(!$hand_idcard){
-                $this->code = 1225;
+                $this->code = 1231;
                 return;
             }
+       }else{
+         $this->code = 1225;
+         return;
        }
        $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
        
