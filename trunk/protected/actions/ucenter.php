@@ -2468,6 +2468,12 @@ class UcenterAction extends Controller {
             $this->code = 1191;
             return;
         }
+        $bank_code = $result['result']['information']['abbreviation'];
+        if($bank_code){
+            $logo = 'https://apimg.alipay.com/combo.png?d=cashier&t='.$bank_code;
+        }else{
+            $logo = '';
+        }
         $data = array(
             'user_id'=>$this->user['id'],
             'cardno'=>$bankcard,
@@ -2477,7 +2483,8 @@ class UcenterAction extends Controller {
             'city'=>$city,
             'type'=>intval($result['result']['information']['iscreditcard']),
             'bank_code'=>$result['result']['information']['abbreviation'],
-            'bind_date'=>date('Y-m-d H:i:s')
+            'bind_date'=>date('Y-m-d H:i:s'),
+            'logo'=>$logo
             );
         $this->model->table('bankcard')->data($data)->insert();
         $this->code = 0;
