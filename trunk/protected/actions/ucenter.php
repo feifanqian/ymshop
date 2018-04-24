@@ -2454,7 +2454,7 @@ class UcenterAction extends Controller {
       //   return;
       // }
       $realname = $customer['realname'];
-      $idcard = $customer['idcard']; 
+      $idcard = $customer['id_no']; 
       $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=".$bankcard."&cardNo=".$idcard."&realName=".$realname;
       $header = array(
             'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
