@@ -873,7 +873,7 @@ class AddressAction extends Controller
         // }
 
         if(empty($tourist_id) && empty($distance)){
-            $where.=' and dist<{$radius}';
+            $where.=' and dist<'.$radius;
         }
         
         $order = 'id desc';
