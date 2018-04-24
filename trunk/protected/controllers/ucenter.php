@@ -3260,11 +3260,13 @@ class UcenterController extends Controller
         
         if(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
             $pay_type = 'alipay';
+            $from = 'alipay';
         }else{
             $pay_type = 'wechat';
+            $from = 'second-wap';
         }
         if (isset($this->user['id'])) {
-            Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
+            Common::buildInviteShip($inviter_id, $this->user['id'], $from);
         } else {
             Cookie::set("inviter", $inviter_id);
             $this->noRight();
