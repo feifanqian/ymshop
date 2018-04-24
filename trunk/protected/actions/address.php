@@ -911,7 +911,7 @@ class AddressAction extends Controller
         //     $order = 'dist asc';
         // }
 
-        $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type,(6378.138 * 2 * asin(sqrt(pow(sin((lat * pi() / 180 - ".$lat." * pi() / 180) / 2),2) + cos(lat * pi() / 180) * cos(".$lat." * pi() / 180) * pow(sin((lng * pi() / 180 - ".$lng." * pi() / 180) / 2),2))) * 1000) as dist')->where($where)->order($order)->findPage($page, 10);
+        $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type')->where($where)->order($order)->findPage($page, 10);
         if(!$info_sql){
             $this->code = 0;
             $this->content = [];
@@ -993,7 +993,7 @@ class AddressAction extends Controller
                         unset($info_sql[$key]);
                     }
                 }
-            // $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
+            $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
             // $arr[] = $info_sql[$key]['dist'];
             
             if($info_sql[$key]['dist']>$radius && empty($tourist_id) && empty($distance)){
@@ -1010,7 +1010,7 @@ class AddressAction extends Controller
         // if($distance){
         //     $info_sql = Common::arraySequence($info_sql,'dist','SORT_ASC');
         // }
-        // array_multisort($arr, SORT_ASC, $info_sql);
+        array_multisort(array_column($info_sql,'dist'),SORT_ASC,$info_sql);
         $info_sql = array_values($info_sql);
         // $info_sql = array_slice($info_sql, ($page-1)*10, 10);
         $this->code = 0;
