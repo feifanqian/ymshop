@@ -994,7 +994,7 @@ class AddressAction extends Controller
                     }
                 }
             // $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
-            $arr[] = $info_sql[$key]['dist'];
+            // $arr[] = $info_sql[$key]['dist'];
             
             // if($info_sql[$key]['dist']>$radius && empty($tourist_id) && empty($distance)){
             //     unset($info_sql[$key]);
@@ -1010,7 +1010,7 @@ class AddressAction extends Controller
         // if($distance){
         //     $info_sql = Common::arraySequence($info_sql,'dist','SORT_ASC');
         // }
-        array_multisort($arr, SORT_ASC, $info_sql);
+        // array_multisort($arr, SORT_ASC, $info_sql);
         $info_sql = array_values($info_sql);
         // $info_sql = array_slice($info_sql, ($page-1)*10, 10);
         $this->code = 0;
