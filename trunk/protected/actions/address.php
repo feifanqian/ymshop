@@ -868,13 +868,13 @@ class AddressAction extends Controller
         if ($line_number) {
             $where.=" and line_number=$line_number and which_station=" . $which_station;
         }
-        if($distance){
-            $where.=' and dist<{$radius}';
-        }
+        // if($distance){
+        //     $where.=' and dist<{$radius}';
+        // }
 
-        if(empty($tourist_id) && empty($distance)){
-            $where.=' and dist<{$radius}';
-        }
+        // if(empty($tourist_id) && empty($distance)){
+        //     $where.=' and dist<{$radius}';
+        // }
         
         $order = 'id desc';
         
@@ -907,9 +907,9 @@ class AddressAction extends Controller
             $order = 'price desc';
         }
 
-        if($distance || $distance_asc){
-            $order = 'dist asc';
-        }
+        // if($distance || $distance_asc){
+        //     $order = 'dist asc';
+        // }
 
         $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type,(6378.138 * 2 * asin(sqrt(pow(sin((lat * pi() / 180 - ".$lat." * pi() / 180) / 2),2) + cos(lat * pi() / 180) * cos(".$lat." * pi() / 180) * pow(sin((lng * pi() / 180 - ".$lng." * pi() / 180) / 2),2))) * 1000) as dist')->where($where)->order($order)->findPage($page, 10);
         if(!$info_sql){
