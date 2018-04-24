@@ -898,7 +898,7 @@ class AddressAction extends Controller
             $order = 'price desc';
         }
 
-        $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type')->where($where)->order($order)->findAll();
+        $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type')->where($where)->order($order)->findPage($page, 10);
         if(!$info_sql){
             $this->code = 0;
             $this->content = [];
@@ -912,7 +912,7 @@ class AddressAction extends Controller
          * pow pow（num1,num2）作用，计算出num1得num2次方。
          * */
         $arr = array();
-        
+        $info_sql = $info_sql['data'];
         foreach ($info_sql as $key => $value) {
             if($info_sql[$key]['picture']==null){
                     $info_sql[$key]['picture'] = '';
@@ -940,9 +940,9 @@ class AddressAction extends Controller
                 // if($info_sql[$key]['quality_service']==null){
                 //     $info_sql[$key]['quality_service'] = 5;
                 // }
-                if($info_sql[$key]['price']==null){
-                    $info_sql[$key]['price'] = '';
-                }
+                // if($info_sql[$key]['price']==null){
+                //     $info_sql[$key]['price'] = '';
+                // }
                 // if($info_sql[$key]['classify_id']==null || $info_sql[$key]['classify_id']==0){
                 //     $info_sql[$key]['classify_id'] = 1;
                 // }
@@ -970,9 +970,10 @@ class AddressAction extends Controller
                 }
                 $info_sql[$key]['shop_type'] = $type_name;
                 $info_sql[$key]['is_district'] = $is_district;
-                if($info_sql[$key]['shop_name']==''){
-                    $user = $this->model->table('customer')->fields('real_name')->where('user_id='.$value['user_id'])->find();
-                    $this->model->table('district_promoter')->data(array('shop_name'=>$user['real_name']))->where('user_id='.$value['user_id'])->update();
+                if($info_sql[$key]['shop_name']==null){
+                    $info_sql[$key]['shop_name'] = '';
+                    // $user = $this->model->table('customer')->fields('real_name')->where('user_id='.$value['user_id'])->find();
+                    // $this->model->table('district_promoter')->data(array('shop_name'=>$user['real_name']))->where('user_id='.$value['user_id'])->update();
                 }
                 if($customer==1){
                     if($info_sql[$key]['is_district']==0){
@@ -998,7 +999,7 @@ class AddressAction extends Controller
         }
         
         $info_sql = array_values($info_sql);
-        $info_sql = array_slice($info_sql, ($page-1)*10, 10);
+        // $info_sql = array_slice($info_sql, ($page-1)*10, 10);
         $this->code = 0;
         $this->content = $info_sql; 
     }
