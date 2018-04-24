@@ -822,7 +822,7 @@ class AddressAction extends Controller
         if(!$page){
             $page = 1;
         }
-        $radius = 10; //默认5公里
+        $radius = 5; //默认5公里
         
         $where = "lat<>0";
         //区域
@@ -911,7 +911,7 @@ class AddressAction extends Controller
         //     $order = 'dist asc';
         // }
 
-        $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type')->where($where)->order($order)->findAll();
+        $info_sql = $this->model->table('district_promoter')->fields('id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type')->where($where)->order($order)->findPage($page, 10);
         if(!$info_sql){
             $this->code = 0;
             $this->content = [];
@@ -925,7 +925,7 @@ class AddressAction extends Controller
          * pow pow（num1,num2）作用，计算出num1得num2次方。
          * */
         $arr = array();
-        // $info_sql = $info_sql['data'];
+        $info_sql = $info_sql['data'];
         foreach ($info_sql as $key => $value) {
             if($info_sql[$key]['picture']==null){
                     $info_sql[$key]['picture'] = '';
@@ -996,9 +996,9 @@ class AddressAction extends Controller
             $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
             // $arr[] = $info_sql[$key]['dist'];
             
-            if($info_sql[$key]['dist']>$radius && empty($tourist_id) && empty($distance)){
-                unset($info_sql[$key]);
-            }
+            // if($info_sql[$key]['dist']>$radius && empty($tourist_id) && empty($distance)){
+            //     unset($info_sql[$key]);
+            // }
             // if($distance && $info_sql[$key]['dist']>$distance){
             //     unset($info_sql[$key]);
             // }
@@ -1011,8 +1011,8 @@ class AddressAction extends Controller
         //     $info_sql = Common::arraySequence($info_sql,'dist','SORT_ASC');
         // }
         array_multisort(array_column($info_sql,'dist'),SORT_ASC,$info_sql);
-        $info_sql = array_values($info_sql);
-        $info_sql = array_slice($info_sql, ($page-1)*10, 10);
+        // $info_sql = array_values($info_sql);
+        // $info_sql = array_slice($info_sql, ($page-1)*10, 10);
         $this->code = 0;
         $this->content = $info_sql; 
     }
