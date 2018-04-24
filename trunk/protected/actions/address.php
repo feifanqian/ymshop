@@ -876,7 +876,7 @@ class AddressAction extends Controller
         //     $where.=' and dist<'.$radius;
         // }
         
-        $order = 'id desc';
+        $order = 'dist asc';
         
         //人气
         if ($hot) {
