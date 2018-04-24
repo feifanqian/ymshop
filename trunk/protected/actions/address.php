@@ -822,7 +822,7 @@ class AddressAction extends Controller
         if(!$page){
             $page = 1;
         }
-        $radius = 5000; //默认5公里
+        $radius = 5; //默认5公里
         
         $where = "lat<>0";
         //区域
