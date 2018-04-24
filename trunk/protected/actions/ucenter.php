@@ -2438,8 +2438,8 @@ class UcenterAction extends Controller {
      */
     public function bindCardTemp(){
       $bankcard = Req::args('bankcard');
-      $idcard = Req::args('idcard');
-      $realname = Filter::str(Req::args('realname'));
+      // $idcard = Req::args('idcard');
+      // $realname = Filter::str(Req::args('realname'));
       $province = Filter::str(Req::args('province'));
       $city = Filter::str(Req::args('city'));
       
@@ -2449,11 +2449,12 @@ class UcenterAction extends Controller {
         return;
       }
 
-      if($realname!=$customer['realname'] || $idcard!=$customer['id_no']){
-        $this->code = 1230;
-        return;
-      }
-
+      // if($realname!=$customer['realname'] || $idcard!=$customer['id_no']){
+      //   $this->code = 1230;
+      //   return;
+      // }
+      $realname = $customer['realname'];
+      $idcard = $customer['idcard']; 
       $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=".$bankcard."&cardNo=".$idcard."&realName=".$realname;
       $header = array(
             'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
