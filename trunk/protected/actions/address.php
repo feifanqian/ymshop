@@ -1010,7 +1010,7 @@ class AddressAction extends Controller
         // if($distance){
         //     $info_sql = Common::arraySequence($info_sql,'dist','SORT_ASC');
         // }
-        array_multisort(array_column($info_sql,'dist'),SORT_ASC,$info_sql);
+        // array_multisort(array_column($info_sql,'dist'),SORT_ASC,$info_sql);
         // $info_sql = array_values($info_sql);
         // $info_sql = array_slice($info_sql, ($page-1)*10, 10);
         $this->code = 0;
