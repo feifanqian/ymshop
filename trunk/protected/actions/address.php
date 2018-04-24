@@ -868,13 +868,13 @@ class AddressAction extends Controller
         if ($line_number) {
             $where.=" and line_number=$line_number and which_station=" . $which_station;
         }
-        // if($distance){
-        //     $where.=' and dist<{$radius}';
-        // }
+        if($distance){
+            $where.=' and dist<{$radius}';
+        }
 
-        // if(empty($tourist_id) && empty($distance)){
-        //     $where.=' and dist<{$radius}';
-        // }
+        if(empty($tourist_id) && empty($distance)){
+            $where.=' and dist<{$radius}';
+        }
         
         $order = 'id desc';
         
@@ -1007,9 +1007,9 @@ class AddressAction extends Controller
         // if ($distance_asc || $distance) {
         //     array_multisort($arr, SORT_ASC, $info_sql);
         // }
-        // if($distance){
-        //     $info_sql = Common::arraySequence($info_sql,'dist','SORT_ASC');
-        // }
+        if($distance){
+            $info_sql = Common::arraySequence($info_sql,'dist','SORT_ASC');
+        }
         
         $info_sql = array_values($info_sql);
         // $info_sql = array_slice($info_sql, ($page-1)*10, 10);
