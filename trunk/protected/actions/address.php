@@ -822,7 +822,7 @@ class AddressAction extends Controller
         if(!$page){
             $page = 1;
         }
-        $radius = 5; //默认5公里
+        $radius = 10; //默认5公里
         
         $where = "lat<>0";
         //区域
@@ -876,7 +876,7 @@ class AddressAction extends Controller
         //     $where.=' and dist<'.$radius;
         // }
         
-        $order = 'id desc';
+        $order = 'dist desc';
         
         //人气
         if ($hot) {
@@ -1010,8 +1010,8 @@ class AddressAction extends Controller
         // if($distance){
         //     $info_sql = Common::arraySequence($info_sql,'dist','SORT_ASC');
         // }
-        array_multisort(array_column($info_sql,'dist'),SORT_ASC,$info_sql);
-        $info_sql = array_values($info_sql);
+        // array_multisort(array_column($info_sql,'dist'),SORT_ASC,$info_sql);
+        // $info_sql = array_values($info_sql);
         // $info_sql = array_slice($info_sql, ($page-1)*10, 10);
         $this->code = 0;
         $this->content = $info_sql; 
