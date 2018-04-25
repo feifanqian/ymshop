@@ -2843,7 +2843,7 @@ class UcenterAction extends Controller {
         $order_no = $_POST['order_no'];
         $order = $this->model->table('order_offline')->fields('order_amount,shop_ids')->where('order_no='.$order_no)->find();
         $shop = $this->model->table('district_promoter')->fields('partner_id')->where('user_id='.$order['shop_ids'])->find();
-        $rate = 0.5;
+        $rate = 1.0;
         $myParams = array();
         $myParams['method'] = 'ysepay.single.division.online.accept';
         $myParams['partner_id'] = 'yuanmeng';
