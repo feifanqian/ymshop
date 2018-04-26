@@ -2301,16 +2301,19 @@ class UcenterAction extends Controller {
             return;
         }
         $record = $this->model->table('district_shop as ds')
-                ->join('left join user as u on ds.owner_id = u.id left join invite as i on ds.owner_id=i.invite_user_id')
-                ->fields('u.id,u.avatar,u.nickname,ds.linkman,i.createtime')
-                ->where("i.user_id=".$this->user['id'])
-                ->order("i.id desc")
+                ->join('left join user as u on ds.owner_id = u.id')
+                ->fields('u.id,u.avatar,u.nickname,ds.linkman,ds.create_time as createtime')
+                ->where("ds.invite_shop_id=".$district['id'])
+                ->order("ds.id desc")
                 ->findPage($page, 10);            
         if (empty($record)) {
             return array('data'=>array());
         }
         if (isset($record['html'])) {
             unset($record['html']);
+        }
+        foreach ($record['data'] as $k => $v) {
+            $v['createtime'] = strtotime($v['createtime']);
         }
 
         $this->code = 0;
@@ -2842,7 +2845,7 @@ class UcenterAction extends Controller {
     public function yin_fz_test(){
         $order_no = $_POST['order_no'];
         $order = $this->model->table('order_offline')->fields('order_amount,shop_ids')->where('order_no='.$order_no)->find();
-        $shop = $this->model->table('district_promoter')->fields('partner_id')->where('user_id='.$order['shop_ids'])->find();
+        $shop = $this->model->table('district_promoter')->fields('partner_id,base_rate')->where('user_id='.$order['shop_ids'])->find();
         $rate = 1.0;
         $myParams = array();
         $myParams['method'] = 'ysepay.single.division.online.accept';
@@ -2854,7 +2857,7 @@ class UcenterAction extends Controller {
         $div_list = array();
         $div_list[0] = array(
                 'division_mer_usercode'=>$shop['partner_id'],
-                'div_amount'=>sprintf('%.2f',$order['order_amount']*$rate),
+                'div_amount'=>sprintf('%.2f',$order['order_amount']*(100-$shop['base_rate'])/100),
                 'div_ratio'=>$rate,
                 'is_chargeFee'=>'01'
                 );
