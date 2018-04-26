@@ -3848,11 +3848,10 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url1, 100, 100);
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
-            if($this->user['id']==42608){
-            var_dump($_FILES['positive_idcard']);    
+            if($this->user['id']==42608){    
                 $data = array(
                     'picType'=>'00',
-                    'picFile'=>curl_file_create($positive_idcard),
+                    'picFile'=>curl_file_create(realpath($_FILES['positive_idcard']['name'])),
                     'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
                     'superUsercode'=>'yuanmeng'
                     );
