@@ -2526,7 +2526,7 @@ class UcenterAction extends Controller {
         $this->code = 0;
         $this->content = '验证成功';
       }else{
-        $this->code = 1190;
+        $this->code = 1232;
         return;
       }
     }

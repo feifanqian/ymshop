@@ -868,9 +868,9 @@ class AddressAction extends Controller
         if ($line_number) {
             $where.=" and line_number=$line_number and which_station=" . $which_station;
         }
-        // if($distance){
-        //     $where.=' and dist<{$radius}';
-        // }
+        if($distance){
+            $where.=' and dist<{$radius}';
+        }
 
         // if(empty($tourist_id) && empty($distance)){
         //     $where.=' and dist<'.$radius;
@@ -993,6 +993,7 @@ class AddressAction extends Controller
                         unset($info_sql[$key]);
                     }
                 }
+                $info_sql[$key]['dist'] = sprintf('%.3f',$v['dist']);
             // $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
             // $arr[] = $info_sql[$key]['dist'];
             
