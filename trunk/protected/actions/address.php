@@ -868,9 +868,9 @@ class AddressAction extends Controller
         if ($line_number) {
             $where.=" and line_number=$line_number and which_station=" . $which_station;
         }
-        if($distance){
-            $where.=' and dist<{$radius}';
-        }
+        // if($distance){
+        //     $where.=' and dist<{$radius}';
+        // }
 
         // if(empty($tourist_id) && empty($distance)){
         //     $where.=' and dist<'.$radius;
@@ -1000,9 +1000,9 @@ class AddressAction extends Controller
             // if($info_sql[$key]['dist']>$radius && empty($tourist_id) && empty($distance)){
             //     unset($info_sql[$key]);
             // }
-            // if($distance && $info_sql[$key]['dist']>$distance){
-            //     unset($info_sql[$key]);
-            // }
+            if($distance && $info_sql[$key]['dist']>$distance){
+                unset($info_sql[$key]);
+            }
         }
         //距离离我最近
         // if ($distance_asc || $distance) {
