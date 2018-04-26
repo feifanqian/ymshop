@@ -993,7 +993,7 @@ class AddressAction extends Controller
                         unset($info_sql[$key]);
                     }
                 }
-                $info_sql[$key]['dist'] = sprintf('%.3f',$v['dist']);
+                $info_sql[$key]['dist'] = sprintf('%.3f',$value['dist']);
             // $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
             // $arr[] = $info_sql[$key]['dist'];
             
