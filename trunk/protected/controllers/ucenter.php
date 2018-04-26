@@ -3863,7 +3863,10 @@ class UcenterController extends Controller
                     );
                 $result = Common::httpRequest($act,'POST',$data,$header);
                 var_dump($data);
-                print_r($result);die;
+                  echo "<pre>";
+                  print_r($result);
+                  echo "<pre>";
+                  die;
             }
         }
 
