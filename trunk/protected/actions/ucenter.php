@@ -2313,7 +2313,10 @@ class UcenterAction extends Controller {
             unset($record['html']);
         }
         foreach ($record['data'] as $k => $v) {
-            $v['createtime'] = strtotime($v['createtime']);
+            if($v['id']==null){
+                unset($record['data'][$k]);
+            }
+            $record['data'][$k]['createtime'] = strtotime($v['createtime']);
         }
 
         $this->code = 0;
