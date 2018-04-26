@@ -3848,7 +3848,8 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url1, 100, 100);
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
-            if($this->user['id']==42608){    
+            if($this->user['id']==42608){
+            var_dump($_FILES['positive_idcard']);    
                 $data = array(
                     'picType'=>'00',
                     'picFile'=>curl_file_create($positive_idcard),
@@ -3856,7 +3857,10 @@ class UcenterController extends Controller
                     'superUsercode'=>'yuanmeng'
                     );
                 $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-                $result = Common::httpRequest($act,'POST',$data);
+                $header = array(
+                    'Content-Type:multipart/form-data'
+                    );
+                $result = Common::httpRequest($act,'POST',$data,$header);
                 var_dump($data);
                 print_r($result);die;
             }
