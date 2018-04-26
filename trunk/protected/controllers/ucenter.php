@@ -3853,7 +3853,7 @@ class UcenterController extends Controller
             // var_dump(realpath($_FILES['positive_idcard']['tmp_name']));die;    
                 $data = array(
                     'picType'=>'00',
-                    'picFile'=>curl_file_create(realpath($_FILES['positive_idcard']['tmp_name'])),
+                    'picFile'=>curl_file_create($positive_idcard),
                     'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
                     'superUsercode'=>'yuanmeng'
                     );
