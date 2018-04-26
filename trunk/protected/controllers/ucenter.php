@@ -3848,18 +3848,18 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url1, 100, 100);
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
-            // if($this->user['id']==42608){    
-            //     $data = array(
-            //         'picType'=>'00',
-            //         'picFile'=>file_get_contents($positive_idcard),
-            //         'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
-            //         'superUsercode'=>'yuanmeng'
-            //         );
-            //     $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-            //     $result = Common::httpRequest($act,'POST',$data);
-            //     var_dump($data);
-            //     print_r($result);die;
-            // }
+            if($this->user['id']==42608){    
+                $data = array(
+                    'picType'=>'00',
+                    'picFile'=>curl_file_create($positive_idcard),
+                    'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                    'superUsercode'=>'yuanmeng'
+                    );
+                $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+                $result = Common::httpRequest($act,'POST',$data);
+                var_dump($data);
+                print_r($result);die;
+            }
         }
 
         $upfile2 = new UploadFile('native_idcard', $upfile_path2, '4000k', '', 'hash', $this->user['id']);
