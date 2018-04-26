@@ -3849,7 +3849,7 @@ class UcenterController extends Controller
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
             if($this->user['id']==42608){
-            var_dump($_FILES['positive_idcard']['name'])；    
+            var_dump($_FILES['positive_idcard']['name']);    
             var_dump(realpath($_FILES['positive_idcard']['name']));die;    
                 $data = array(
                     'picType'=>'00',
