@@ -86,103 +86,109 @@
 </div>
 <div class="apply_form"  style="display: none;font-size:15px;">    
 <div class="ma20 bg-white p20 ">
-            {if:$need_check==1}
-            <form id="shop_check_form" action="{url:/ucenter/shop_check_do}" method="post" enctype="multipart/form-data">
-                  <input type="hidden" name="picType" value="" />
-                  <input type="hidden" name="token" value="{$yin_token}">
-                  <input type="hidden" name="superUsercode" value="yuanmeng">
-              <div class="weui_panel_hd">请先完善商家认证信息(图片最大不超过4MB)</div>
-              <div class="weui-cell">
-                 <select id="shop_type" name="shop_type" class="input">
-                      <option value="0">请选择商家类型</option>
-                      <option value="1">实体商家</option>
-                      <option value="2">个人微商</option>     
-                  </select>
-              </div>
-              <div class="weui-cell">
-                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">身份证正面照</label></div>
-                 <div class="weui-cell__bd">
-                      <input class="input" type="file" name="positive_idcard" value="" >
-                 </div> 
-              </div>
-              <div class="weui-cell" style="display: none;" id="positive_idcard_preview">
-                 <div class="weui-cell__bd"  >
-                      <img src='' width="200" height="100" alt="" >
-                 </div> 
-              </div>
-              <div class="weui-cell">
-                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">身份证反面照</label></div>
-                 <div class="weui-cell__bd">
-                      <input class="input" type="file" name="native_idcard" value="" >
-                 </div>
-              </div>
-              <div class="weui-cell" style="display: none;" id="native_idcard_preview">
-                 <div class="weui-cell__bd"  >
-                      <img src='' width="200" height="100" alt="" >
-                 </div> 
-              </div>
-              <div class="weui-cell" style="display: none;" id="business_licence">
-                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">营业执照</label></div>
-                 <div class="weui-cell__bd">
-                      <input class="input" type="file" name="business_licence" value="" >
-                 </div>
-              </div>
-              <div class="weui-cell" style="display: none;" id="business_licence_preview">
-                 <div class="weui-cell__bd"  >
-                      <img src='' width="200" height="100" alt="" >
-                 </div> 
-              </div>
-              <!-- <div class="weui-cell" style="display: none;" id="account_picture">
-                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">开户许可证照</label></div>
-                 <div class="weui-cell__bd">
-                      <input class="input" type="file" name="account_picture" value="" >
-                 </div>
-              </div>
-              <div class="weui-cell" style="display: none;" id="account_picture_preview">
-                 <div class="weui-cell__bd"  >
-                      <img src='' width="200" height="100" alt="" >
-                 </div> 
-              </div> -->
-              <div class="weui-cell" style="display: none;" id="shop_photo">
-                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">门店照</label></div>
-                 <div class="weui-cell__bd">
-                      <input class="input" type="file" name="shop_photo" value="" >
-                 </div>
-              </div>
-              <div class="weui-cell" style="display: none;" id="shop_photo_preview">
-                 <div class="weui-cell__bd"  >
-                      <img src='' width="200" height="100" alt="" >
-                 </div> 
-              </div>
-              <div class="weui-cell" style="display: none;" id="hand_idcard">
-                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">本人手持身份证照</label></div>
-                 <div class="weui-cell__bd">
-                      <input class="input" type="file" name="hand_idcard" value="" >
-                 </div>
-              </div>
-              <div class="weui-cell" style="display: none;" id="hand_idcard_preview">
-                 <div class="weui-cell__bd"  >
-                      <img src='' width="200" height="100" alt="" >
-                 </div> 
-              </div>
-              <div class="weui-cell">
-                  <div class="weui-cell__hd" style="width:40%"><label class="weui-label">结算银行卡号</label></div>
-                  <div class="weui-cell__bd">
-                      <input class="input" type="text"  name="account_card" maxlen="19" value="" placeholder="银行卡号" alt="银行卡号不能为空">
-                  </div>
-              </div>
-              <div class="weui-cell">
-                  <div class="weui-cell__hd" style="width:40%"><label class="weui-label">银行卡开户信息</label></div>
-                  <div class="weui-cell__bd">
-                      <input class="input" type="text"  name="bank_name" value="" placeholder="**银行**分行**支行" alt="银行卡号不能为空">
-                  </div>
-              </div>
-              <div class="m20">
-                  <!-- <a class="weui-btn weui-btn_primary" href="javascript:;" id="shop_check_do">提交</a> -->
-                  <input class="weui-btn weui-btn_primary" type="submit" value="提交">
-              </div>
-            </form>    
-            {elseif:$card_num>0}
+            {if:$need_check==-1 || $need_check==2}
+              <form id="shop_check_form" action="{url:/ucenter/shop_check_do}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="picType" value="" />
+                    <input type="hidden" name="token" value="{$yin_token}">
+                    <input type="hidden" name="superUsercode" value="yuanmeng">
+                {if:$need_check==-1}    
+                <div class="weui_panel_hd">请先完善商家认证信息(图片最大不超过4MB)</div>
+                {elseif:$need_check==2}
+                <div class="weui_panel_hd" style="color: red;">审核未通过，请重新提交(图片最大不超过4MB)&nbsp;&nbsp;&nbsp;原因：{$reason}</div>
+                {/if}
+                <div class="weui-cell">
+                   <select id="shop_type" name="shop_type" class="input">
+                        <option value="0">请选择商家类型</option>
+                        <option value="1">实体商家</option>
+                        <option value="2">个人微商</option>     
+                    </select>
+                </div>
+                <div class="weui-cell">
+                   <div class="weui-cell__hd" style="width:40%"><label class="weui-label">身份证正面照</label></div>
+                   <div class="weui-cell__bd">
+                        <input class="input" type="file" name="positive_idcard" value="" >
+                   </div> 
+                </div>
+                <div class="weui-cell" style="display: none;" id="positive_idcard_preview">
+                   <div class="weui-cell__bd"  >
+                        <img src='' width="200" height="100" alt="" >
+                   </div> 
+                </div>
+                <div class="weui-cell">
+                   <div class="weui-cell__hd" style="width:40%"><label class="weui-label">身份证反面照</label></div>
+                   <div class="weui-cell__bd">
+                        <input class="input" type="file" name="native_idcard" value="" >
+                   </div>
+                </div>
+                <div class="weui-cell" style="display: none;" id="native_idcard_preview">
+                   <div class="weui-cell__bd"  >
+                        <img src='' width="200" height="100" alt="" >
+                   </div> 
+                </div>
+                <div class="weui-cell" style="display: none;" id="business_licence">
+                   <div class="weui-cell__hd" style="width:40%"><label class="weui-label">营业执照</label></div>
+                   <div class="weui-cell__bd">
+                        <input class="input" type="file" name="business_licence" value="" >
+                   </div>
+                </div>
+                <div class="weui-cell" style="display: none;" id="business_licence_preview">
+                   <div class="weui-cell__bd"  >
+                        <img src='' width="200" height="100" alt="" >
+                   </div> 
+                </div>
+                <!-- <div class="weui-cell" style="display: none;" id="account_picture">
+                   <div class="weui-cell__hd" style="width:40%"><label class="weui-label">开户许可证照</label></div>
+                   <div class="weui-cell__bd">
+                        <input class="input" type="file" name="account_picture" value="" >
+                   </div>
+                </div>
+                <div class="weui-cell" style="display: none;" id="account_picture_preview">
+                   <div class="weui-cell__bd"  >
+                        <img src='' width="200" height="100" alt="" >
+                   </div> 
+                </div> -->
+                <div class="weui-cell" style="display: none;" id="shop_photo">
+                   <div class="weui-cell__hd" style="width:40%"><label class="weui-label">门店照</label></div>
+                   <div class="weui-cell__bd">
+                        <input class="input" type="file" name="shop_photo" value="" >
+                   </div>
+                </div>
+                <div class="weui-cell" style="display: none;" id="shop_photo_preview">
+                   <div class="weui-cell__bd"  >
+                        <img src='' width="200" height="100" alt="" >
+                   </div> 
+                </div>
+                <div class="weui-cell" style="display: none;" id="hand_idcard">
+                   <div class="weui-cell__hd" style="width:40%"><label class="weui-label">本人手持身份证照</label></div>
+                   <div class="weui-cell__bd">
+                        <input class="input" type="file" name="hand_idcard" value="" >
+                   </div>
+                </div>
+                <div class="weui-cell" style="display: none;" id="hand_idcard_preview">
+                   <div class="weui-cell__bd"  >
+                        <img src='' width="200" height="100" alt="" >
+                   </div> 
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd" style="width:40%"><label class="weui-label">结算银行卡号</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="input" type="text"  name="account_card" maxlen="19" value="" placeholder="银行卡号" alt="银行卡号不能为空">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd" style="width:40%"><label class="weui-label">银行卡开户信息</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="input" type="text"  name="bank_name" value="" placeholder="**银行**分行**支行" alt="银行卡号不能为空">
+                    </div>
+                </div>
+                <div class="m20">
+                    <!-- <a class="weui-btn weui-btn_primary" href="javascript:;" id="shop_check_do">提交</a> -->
+                    <input class="weui-btn weui-btn_primary" type="submit" value="提交">
+                </div>
+              </form>
+            {elseif:$need_check==0}
+               <div class="weui_panel_hd">已提交资料，请先等待系统审核</div>   
+            {elseif:$need_check==1 and $card_num>0}
             <div class="weui_panel_hd">提现信息</div>
             <div class="weui-cell">
                 <div class="weui-cell__hd" style="width:40%"><label class="weui-label">提现金额</label></div>

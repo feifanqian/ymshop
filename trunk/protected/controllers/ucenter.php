@@ -394,19 +394,26 @@ class UcenterController extends Controller
             $other = $config->get("other");
             $info = $this->model->table("customer")->fields('offline_balance,realname_verified')->where("user_id=" . $this->user['id'])->find();
             $card_num = $this->model->table("bankcard")->where("user_id=" . $this->user['id'])->count();
-            $need_check = 0;
+            $need_check = -2;
+            $reason = '';
             $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
             if($shop){
-               $shop_check = $this->model->table('shop_check')->fields('id')->where('user_id='.$this->user['id'])->find();
+               $shop_check = $this->model->table('shop_check')->fields('*')->where('user_id='.$this->user['id'])->find();
                if(!$shop_check){
-                 $need_check = 1;
+                 $need_check = -1; //需要上传
+               }elseif($shop_check['status']==0){ 
+                $need_check = 0;  //等待审核
+               }elseif($shop_check['status']==1)){
+                $need_check = 1;  //通过审核
                }else{
-                $need_check = 0;
+                $need_check = 2; //未通过，需要重新提交
+                $reason = $shop_check['reason'];
                }
             }else{
-                $need_check = 0;
+                $need_check = -2;
             }
             $this->assign('need_check',$need_check);
+            $this->assign('reason',$reason);
             //银盛上传资料token获取
             $myParams = array();  
         
@@ -3974,6 +3981,8 @@ class UcenterController extends Controller
        $shop_check = $this->model->table('shop_check')->fields('id,status')->where('user_id='.$this->user['id'])->find();
        if(!$shop_check){
            $this->model->table('shop_check')->data($data)->insert();
+       }else{
+           $this->model->table('shop_check')->data($data)->where('id='.$shop_check['id'])->update();
        }
        $this->redirect("ucenter/offline_balance_withdraw", false, array('msg' => array("success", "提交成功！")));
        
