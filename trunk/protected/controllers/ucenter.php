@@ -403,7 +403,7 @@ class UcenterController extends Controller
                  $need_check = -1; //需要上传
                }elseif($shop_check['status']==0){ 
                 $need_check = 0;  //等待审核
-               }elseif($shop_check['status']==1)){
+               }elseif($shop_check['status']==1){
                 $need_check = 1;  //通过审核
                }else{
                 $need_check = 2; //未通过，需要重新提交
