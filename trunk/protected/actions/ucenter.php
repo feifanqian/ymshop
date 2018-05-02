@@ -2295,6 +2295,7 @@ class UcenterAction extends Controller {
         // $this->code = 0;
         // $this->content = $this->hirer->getMySubordinate();
         $page = Filter::int(Req::args('page'));
+        $page = $page==1?0:$page;
         $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
         if(!$district){
             $this->code = 1131;
