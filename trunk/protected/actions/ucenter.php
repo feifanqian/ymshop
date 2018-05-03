@@ -2365,6 +2365,16 @@ class UcenterAction extends Controller {
             $this->code = 1183;
             return;
         }
+        $shop_check = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
+        if($shop_check){
+            if($shop_check['status'] == 0){
+                $this->code = 1233;
+                return;
+            } elseif($shop_check['status'] == 2){
+                $this->code = 1234;
+                return;
+            }
+        }
         $open_name = $bankcard['open_name'];
         $open_bank = $bankcard['bank_name'];
         $prov = $bankcard['province'];
