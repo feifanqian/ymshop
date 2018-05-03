@@ -138,7 +138,7 @@ class UcenterController extends Controller
                     $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付宝授权登录失败！'));
                     exit;
                 }
-                
+                $nick_name = isset($result['nick_name'])?$result['nick_name']:'';
                 $is_oauth = $this->model->table('oauth_user')->where('open_id="' . $result['user_id'] . '" and oauth_type="alipay"')->find();
                 if($is_oauth){
                     $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id left join oauth_user as o on us.id = o.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("o.open_id='{$result['user_id']}'")->find();
@@ -146,27 +146,26 @@ class UcenterController extends Controller
                     $this->user = $this->safebox->get('user');
                 }else{
                     $this->model->table('oauth_user')->data(array(
-                        'open_name' => $result['nick_name'],
+                        'open_name' => $nick_name,
                         'oauth_type' => 'alipay',
                         'posttime' => time(),
                         'token' => '',
                         'expires' => '7200',
                         'open_id' => $result['user_id']
                     ))->insert();
-                    Session::set('openname', $result['nick_name']);
+                    Session::set('openname', $nick_name);
                     $passWord = CHash::random(6);
-                    $nickname = $result['nick_name'];
                     $time = date('Y-m-d H:i:s');
                     $validcode = CHash::random(8);
                     $model = $this->model;
-                    $last_id = $model->table("user")->data(array('nickname' => $nickname, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $result['avatar'], 'validcode' => $validcode))->insert();
+                    $last_id = $model->table("user")->data(array('nickname' => $nick_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $result['avatar'], 'validcode' => $validcode))->insert();
                     $name = "u" . sprintf("%09d", $last_id);
                     $email = $name . "@no.com";
                     //更新用户名和邮箱
                     $model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = '{$last_id}'")->update();
                     //更新customer表
                     $sex = $result['gender']=='m'?1:0;
-                    $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nickname, 'sex'=>$sex,'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                    $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nick_name, 'sex'=>$sex,'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
                     Log::pointcoin_log(200, $last_id, '', '支付宝新用户积分奖励', 10);
                     //记录登录信息
                     $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id='$last_id'")->find();
