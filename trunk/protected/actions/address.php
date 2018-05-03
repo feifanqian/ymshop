@@ -758,9 +758,9 @@ class AddressAction extends Controller
         if ($name) {
             $model->table('district_promoter')->data(array('shop_name' => $name))->where("user_id=" . $this->user['id'])->update();
         }
-        if ($infos) {
-            $model->table('district_promoter')->data(array('info' => $infos))->where("user_id=" . $this->user['id'])->update();
-        }
+        
+        $model->table('district_promoter')->data(array('info' => $infos))->where("user_id=" . $this->user['id'])->update();
+        
         if ($location) {
             $model->table('district_promoter')->data(array('location' => $location))->where("user_id=" . $this->user['id'])->update();
         }
