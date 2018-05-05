@@ -230,6 +230,74 @@ class pay_alipayapp extends PaymentPlugin {
         return $sign;
     }
 
+    public function applyRefund($refundParams) {
+        $order_no=isset($refundParams['order_no'])?$refundParams['order_no']:"";
+        $refund_amount=isset($refundParams['refund_amount'])?$refundParams['refund_amount']:"";
+        $refund_id=isset($refundParams['refund_id'])?$refundParams['refund_id']:"";
+        if($order_no==""||$refund_amount==""||$refund_id==""){
+            return array('status'=>'fail','msg'=>"退款参数错误");
+        }
+       $order = new Model("order");
+       $out_trade_no = $order->where("order_no=$order_no")->fields("out_trade_no,order_amount")->find();
+       
+       $detail_data=$out_trade_no['out_trade_no'].'^'.$refund_amount.'^'."协商退款";
+       $refund_no = date("Ymd")."R".substr($order_no,0,18);
+       $parameter = array(
+        "service" => "refund_fastpay_by_platform_nopwd",
+        "partner" => trim($this->classConfig['partner_id']),
+        "batch_no"  => $refund_no,
+        "refund_date"   => date("Y-m-d H:i:s"),
+        "batch_num" => 1,
+        "detail_data"   => $detail_data,
+        "_input_charset"=> "utf-8"
+        );
+        $alipay_config['partner']=$this->classConfig['partner_id'];
+        $alipay_config['key']=$this->classConfig['partner_key'];
+        //签名方式 不需修改
+        $alipay_config['sign_type']    = strtoupper('MD5');
+
+        //字符编码格式 目前支持 gbk 或 utf-8
+        $alipay_config['input_charset']= strtolower('utf-8');
+        //ca证书路径地址，用于curl中ssl校验
+        //请保证cacert.pem文件在当前文件夹目录中
+        $alipay_config['cacert']    = dirname(dirname(__FILE__)).'/delivery/alipay/cacert.pem';
+        //访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
+        $alipay_config['transport']    = 'http';
+        //建立请求
+        $alipaySubmit = new AlipaySubmit($alipay_config);
+        $html_text = $alipaySubmit->buildRequestHttp($parameter);
+        
+        //解析XML
+        //注意：该功能PHP5环境及以上支持，需开通curl、SSL等PHP配置环境。建议本地调试时使用PHP开发软件
+        $doc = new DOMDocument();
+        $doc->loadXML($html_text);
+        if(!empty($doc->getElementsByTagName( "alipay" )->item(0)->nodeValue) ) {
+    $alipay = $doc->getElementsByTagName( "alipay" )->item(0)->nodeValue;
+       if(trim($alipay)=='T'){
+               $refund = new Model('refund');
+               $refund->data(array('bank_handle_time'=>date("Y-m-d H:i:s"),"refund_no"=>$refund_no))->where("id =$refund_id")->update();
+               $ordermodel = new Model("order");
+                $order_model = $ordermodel->fields('user_id,order_amount,id')->where('order_no='.$order_no)->find();
+                if($order_model){
+                   Common::backIncomeByInviteShip($order_model);
+                }
+               if(Order::refunded($refund_id)){
+                       echo json_encode(array('status' => 'success', 'msg' => '退款操作成功，可能会有延迟哦'));
+                       exit();
+                 }else{
+                     $refund->data(array("error_record"=>"退款成功，但是订单和退款信息未更新！！"))->where("id =$refund_id")->update();
+                     echo json_encode(array('status' => 'fail', 'msg' => '退款操作成功，但是订单和退款信息未更新！！'));
+                     exit();
+                 }
+           }else{
+               echo json_encode(array('status' => 'fail', 'msg' => '退款失败：原因'.$alipay));
+               exit();
+           }
+        }
+        echo json_encode(array('status' => 'fail', 'msg' => '退款失败，原因：参数错误'));
+        exit();
+    }
+
     public function alipayLogin($auth_code){
         $aop = new AopClient();
 

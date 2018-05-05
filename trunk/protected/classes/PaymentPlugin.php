@@ -89,7 +89,9 @@ class PaymentPlugin {
     }
     
     public function applyRefund($refundParams){
-        return array('status'=>'fail','msg'=>'该支付方式暂未实现退款功能');
+        $pay_alipayapp = new pay_alipayapp();
+        return $pay_alipayapp->applyRefund($refundParams);
+        // return array('status'=>'fail','msg'=>'该支付方式暂未实现退款功能');
     }
     
     public function refundCallback($callbackData){
