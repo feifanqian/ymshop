@@ -152,7 +152,7 @@ class UcenterAction extends Controller {
         }else{
             $is_business = 0;
         }
-        $sign = $this->model->table('sign_in')->where('user_id='.$this->user['id'].' and date='.date('Y-m-d'))->find();
+        $sign = $this->model->table('sign_in')->where("user_id=".$this->user['id']." and date='".date('Y-m-d')."'")->find();
         $this->code = 0;
         $this->content['userinfo'] = $this->user;
         $this->content['userinfo']['is_business'] = $is_business;
