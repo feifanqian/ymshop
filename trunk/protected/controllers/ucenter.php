@@ -169,7 +169,7 @@ class UcenterController extends Controller
                     Log::pointcoin_log(200, $last_id, '', '支付宝新用户积分奖励', 10);
                     //记录登录信息
                     $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id='$last_id'")->find();
-                    $this->safebox->set('user', $obj, 1800);
+                    $this->safebox->set('user', $obj, 31622400);
                     $this->user = $this->safebox->get('user');
                     $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
                 }
