@@ -2007,7 +2007,7 @@ class SimpleController extends Controller {
         if ($this->checkOnline()) {
             $order_id = Filter::int(Req::get("order_id"));
             if ($order_id) {
-                $order = $this->model->table("order_offline as od")->join("left join payment as pa on od.payment= pa.id")->fields("od.id,od.order_no,od.payment,od.pay_status,od.order_amount,pa.pay_name as payname,od.type,od.status")->where("od.id=$order_id and od.status<4 and od.user_id = " . $this->user['id'])->find();
+                $order = $this->model->table("order_offline as od")->join("left join payment as pa on od.payment= pa.id")->fields("od.id,od.order_no,od.payment,od.pay_status,od.order_amount,pa.pay_name as payname,od.type,od.status,od.pay_time,od.shop_ids")->where("od.id=$order_id and od.status<4 and od.user_id = " . $this->user['id'])->find();
                 if ($order) {
                     if ($order['pay_status'] == 0) {
                         $payment_plugin = Common::getPaymentInfo($order['payment']);
@@ -2036,14 +2036,22 @@ class SimpleController extends Controller {
                             $order['payname'] = $paytypelist[0]['pay_name'];
                         }
                         $paytypeone = reset($paytypelist);
+                        $shop = $this->model->table('customer')->fields('real_name')->where('user_id=' . $order['shop_ids'])->find();
+                        if ($shop) {
+                            $shopname = $shop['real_name'];
+                        } else {
+                            $shopname = '未知商家';
+                        }
+                        $this->assign('shopname', $shopname);
                         $this->assign("paytypeone", $paytypeone);
                         $this->assign("paytypelist", $paytypelist);
                         $this->assign("order", $order);
                         $this->assign("user", $this->user);
                         $this->redirect();
-                    } else if ($order['pay_status'] == 1) {
-                        $this->redirect("/ucenter/order_details/id/{$order_id}");
                     }
+                    //  else if ($order['pay_status'] == 1) {
+                    //     $this->redirect("/ucenter/order_details/id/{$order_id}");
+                    // }
                 } else {
                     Tiny::Msg($this, 404);
                 }

@@ -10,8 +10,37 @@
     .weui-select-modal{
         min-height: 250px;
     }
+    .bg-content{
+        width:100%;
+        height:300px;
+        /*background-color: #f2764a;*/
+      background:url(/themes/mobile/images/anzhuo.png) no-repeat center;
+        padding-left: 20px;
+      padding-right: 20px; 
+    }
+    .bg-content1{
+      width: 100%;
+      height: auto;
+      padding-left: 20px;
+      padding-right: 20px;
+      margin-top: 10px;
+    }
+    .line-text{
+      width:100%;
+      height: 50px;
+      /*margin-top: 10px;*/
+      border-bottom: 1px solid #ccc;
+    }
+    .line-text p{
+       line-height: 50px;
+       font-size: 16px;
+       color:#494949;
+       font-family: "Microsoft YaHei";
+       font-weight: 800;
+    }
 </style>
 <link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+{if:$order['pay_status']==0}
 <form action="{url:/payment/dopays}" method="post" id="payform">
     <input type="hidden" name="order_id" value="{$order['id']}">
     <input type="hidden" name="payment_id" value="{$order['payment']}">
@@ -53,6 +82,34 @@
         <p class="tc"><input class="weui_btn weui_btn_primary" type="button" id="submitForm" value="立即支付"></p>
     </div>
 </form>
+{else:}
+<div class="bg-content">
+   <div style="padding-top:10px; ">
+      <p style="font-size:20px;text-align: center;color:#fff;">支付成功</p>
+   </div>
+   <div style="text-align: center;">
+      <img src="/themes/mobile/images/cat.png" width="150" height="150">
+   </div>
+   <div>
+      <p style="font-size:24px;text-align: center;color:#fff;margin-top: 10px;">欧耶,支付成功了</p>
+   </div>
+   <div><p class="black" style="font-size:20px;text-align: center;color:#fff;margin-top: 10px;">￥{$order['order_amount']}</p></div>
+</div>
+<div class="bg-content1">
+  <div class="line-text">
+      <p style="float: left;">收款方</p>
+      <p style="float: right;">{$shopname}</p>
+  </div>
+  <div class="line-text">
+      <p style="float: left;">收款时间</p>
+      <p style="float: right;">{$order['pay_time']}</p>
+  </div>
+  <div class="line-text">
+      <p style="float: left;">订单号</p>
+      <p style="float: right;">{$order['order_no']}</p>
+  </div>
+</div>
+{/if}
 <script type="text/javascript" charset="UTF-8" src="/themes/_default/js/jquery.iframe-post-form.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
