@@ -1623,7 +1623,7 @@ class PaymentController extends Controller {
                     } 
                 }elseif(!empty($order_offline)){
                     // if($order_offline['user_id']==42608){
-                        
+
                     // }
                     $order_no = $orderNo;
                      $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
@@ -2037,7 +2037,8 @@ class PaymentController extends Controller {
             $out_trade_no = Filter::sql($_POST['out_trade_no']);
             $return_url = Filter::sql($_POST['return_url']);
             //获取真实订单号 exp :5567_promoter2017050514260743
-            $order_no = substr($out_trade_no, 5);
+            // $order_no = substr($out_trade_no, 5);
+            $order_no = $out_trade_no;
             if (stripos($out_trade_no, 'promoter') !== false) {//推广员入驻订单
                 $order = $this->model->table("district_order")->where("order_no ='" . $order_no . "'")->find();
                 if (!$order) {
