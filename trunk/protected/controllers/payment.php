@@ -575,6 +575,9 @@ class PaymentController extends Controller {
               $order_id=$model->data($data)->insert();
            }else{
               $order_id = $exist['id']; 
+              if($exist['status']==3 && $exist['pay_status']==1){
+                $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "支付成功，请勿重复支付"));
+              }
            }
 
            $payment = new Payment($payment_id);
@@ -1622,9 +1625,9 @@ class PaymentController extends Controller {
                         exit;
                     } 
                 }elseif(!empty($order_offline)){
-                    // if($order_offline['user_id']==42608){
-                    //    exit;
-                    // }
+                    if($order_offline['user_id']==42608){
+                       exit;
+                    }
                     $order_no = $orderNo;
                      $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
                      if ($order['order_amount'] != $money) {
