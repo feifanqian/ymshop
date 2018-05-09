@@ -2037,9 +2037,8 @@ class PaymentController extends Controller {
             $out_trade_no = Filter::sql($_POST['out_trade_no']);
             $return_url = Filter::sql($_POST['return_url']);
             //获取真实订单号 exp :5567_promoter2017050514260743
-            // $order_no = substr($out_trade_no, 5);
-            $order_no = $out_trade_no;
             if (stripos($out_trade_no, 'promoter') !== false) {//推广员入驻订单
+                $order_no = substr($out_trade_no, 5);
                 $order = $this->model->table("district_order")->where("order_no ='" . $order_no . "'")->find();
                 if (!$order) {
                     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
@@ -2049,6 +2048,7 @@ class PaymentController extends Controller {
                 $cancel_url = Url::urlFormat("/ucenter/becomepromoter/reference/{$order['invitor_id']}/invitor_role/{$order['invitor_role']}");
                 $error_url = Url::urlFormat("/ucenter/becomepromoter/reference/{$order['invitor_id']}/invitor_role/{$order['invitor_role']}");
             } else if (stripos($out_trade_no, 'district') !== false) {//专区入驻订单
+                $order_no = substr($out_trade_no, 5);
                 $apply_id = intval(substr($order_no, stripos($order_no, 'district') + 8));
                 $order = $this->model->table("district_apply")->where("id=$apply_id")->find();
                 if (!$order) {
@@ -2059,6 +2059,7 @@ class PaymentController extends Controller {
                 $cancel_url = Url::urlFormat("/ucenter/district_pay/id/{$order['id']}");
                 $error_url = Url::urlFormat("/ucenter/district_pay/id/{$order['id']}");
             } else if (stripos($out_trade_no, 'recharge') !== false) {//充值订单
+                $order_no = substr($out_trade_no, 5);
                 $recharge_no = substr($order_no, 8);
                 $order = $this->model->table("recharge")->where("recharge_no ='" . $recharge_no . "'")->find();
                 if (!$order) {
@@ -2069,6 +2070,7 @@ class PaymentController extends Controller {
                 $cancel_url = Url::urlFormat("/ucenter/recharge_center");
                 $error_url = Url::urlFormat("/ucenter/recharge_center");
             } else {//商品订单
+                $order_no = $out_trade_no;
                 $order = $this->model->table("order")->where("order_no='{$order_no}'")->find();
                 $offline_order = $this->model->table("order_offline")->where("order_no='{$order_no}'")->find();
                 if ($order) {
