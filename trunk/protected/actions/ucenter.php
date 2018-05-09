@@ -2906,4 +2906,23 @@ class UcenterAction extends Controller {
         var_dump($result);die;
         return $myParams;
     }
+
+    public function get_my_sign_info(){
+        $date = date("Y-m-d");
+        $yesterday = date("Y-m-d",strtotime("-1 day"));
+        $signed = $this->model->table("sign_in")->where("date='$date' and user_id=".$this->user['id'])->find();
+        $last_signed = $this->model->table("sign_in")->where("date='$yesterday' and user_id=".$this->user['id'])->find();
+        if($signed && $last_signed){ //今天昨天都签到了
+            $continue_sign_days = $signed['serial_day'];
+        }elseif($signed && !$last_signed){ //今天签到了，昨天没签
+            $continue_sign_days = 1; 
+        }elseif(!$signed && $last_signed){ // 今天没签，昨天签了
+            $continue_sign_days = $last_signed['serial_day'];
+        }else{
+            $continue_sign_days = 0; //今天昨天都没签
+        }
+        $this->code = 0;
+        $this->content['is_signed'] = $signed?1:0;
+        $this->content['continue_sign_days'] = $continue_sign_days;
+    }
 }

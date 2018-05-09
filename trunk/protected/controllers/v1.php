@@ -179,6 +179,7 @@ class V1Controller extends Controller {
         "recharge_package_set"=>array("index/recharge_package_set",0,1),//套餐设置
         "sign_in"=>array("ucenter/sign_in",1,1),
         "get_sign_in_data_by_ym"=>array("ucenter/getSignInDataByYm",1,1),
+        "get_my_sign_info"=>array("ucenter/get_my_sign_info",1,1),
         "personal_shop_list"=>array("personalShop/shopList",0,1),
         "shop_index_goods"=>array("personalShop/shopIndexGoods",0,1),
         "shop_goods_list_by_time"=>array("personalShop/shopGoodsListByTime",0,1),
