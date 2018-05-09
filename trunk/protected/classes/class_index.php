@@ -141,6 +141,9 @@ return array(
     "AllinpayDf"=>"payments/pay_unionpay/df/AllinpayDf.php",
     "Pay_tonglian" =>"payments/pay_tonglian.php",
     "SOAClient"=>"allinpay/SOAClient.php",
-    "RSAUtil"=>"allinpay/RSAUtil.php"
+    "RSAUtil"=>"allinpay/RSAUtil.php",
+    "TopSdk"=>"taobao/TopSdk.php",
+    "TopClient"=>"taobao/TopClient.php",
+    "TbkItemGetRequest"=>"taobao/request/TbkItemGetRequest.php",
 );
 ?>
