@@ -1599,8 +1599,8 @@ class PaymentController extends Controller {
                     }
                 }  
             } else {
-                $orderarr = explode('_', $orderNo);
-                $orderNo = end($orderarr);
+                // $orderarr = explode('_', $orderNo);
+                // $orderNo = end($orderarr);
                 //如果是订单支付的话
                 $model = new Model();
                 $order_info = $model->table('order')->where("order_no='{$orderNo}'")->find();
@@ -1622,6 +1622,9 @@ class PaymentController extends Controller {
                         exit;
                     } 
                 }elseif(!empty($order_offline)){
+                    // if($order_offline['user_id']==42608){
+                        
+                    // }
                     $order_no = $orderNo;
                      $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
                      if ($order['order_amount'] != $money) {

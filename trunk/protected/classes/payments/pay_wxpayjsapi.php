@@ -83,7 +83,8 @@ class pay_wxpayjsapi extends PaymentPlugin {
         $return['notify_url'] = $this->asyncCallbackUrl;
           
         $return['subject'] = $payment['R_Name'];
-        $return['out_trade_no'] = substr(time(), 6) . "_" . $payment['M_OrderNO'];
+        // $return['out_trade_no'] = substr(time(), 6) . "_" . $payment['M_OrderNO'];
+        $return['out_trade_no'] = $payment['M_OrderNO'];
         $return['price'] = number_format($payment['M_Amount'], 2, '.', '');
         $return['quantity'] = 1;
 
