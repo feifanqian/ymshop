@@ -36,6 +36,9 @@ class GoodsAction extends Controller {
         $c = new TopClient;
         $c->appkey = '24874156';
         $c->secretKey = 'a5e3998f3225cc0c673a5025845acd51';
+        $c->sign_method = 'md5';
+        $c->format = 'json';
+        $c->v = '2.0';
         $req = new TbkItemGetRequest;
         $req->setFields("num_iid,title,pict_url,small_images,reserve_price,zk_final_price,user_type,provcity,item_url,seller_id,volume,nick");
         $req->setQ("女装");
@@ -53,7 +56,7 @@ class GoodsAction extends Controller {
         $req->setPageSize("20");
         $resp = $c->execute($req);
         $this->code = 0;
-        $this->content = json_decode($resp,true);
+        $this->content = $resp;
     }
 
 }
