@@ -5,7 +5,7 @@ class PaymentController extends Controller {
     public $layout = '';
     public $model = null;
     private $user;
-    public $needRightActions = array('dopay' => true, 'callback' => true, 'pay_district' => true, 'pay_silver' => true, 'pay_balance' => true);
+    public $needRightActions = array('dopay' => true,'dopays'=>true, 'callback' => true, 'pay_district' => true, 'pay_silver' => true, 'pay_balance' => true);
 
     public function init() {
         header("Content-type: text/html; charset=" . $this->encoding);
@@ -1625,9 +1625,9 @@ class PaymentController extends Controller {
                         exit;
                     } 
                 }elseif(!empty($order_offline)){
-                    // if($order_offline['user_id']==42608){
-                    //    exit;
-                    // }
+                    if($order_offline['user_id']==42608){
+                       exit;
+                    }
                     $order_no = $orderNo;
                      $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
                      if ($order['order_amount'] != $money) {
