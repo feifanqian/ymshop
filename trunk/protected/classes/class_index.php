@@ -146,5 +146,6 @@ return array(
     "TopClient"=>"taobao/TopClient.php",
     "TbkItemGetRequest"=>"taobao/request/TbkItemGetRequest.php",
     "ResultSet"=>"taobao/ResultSet.php",
+    "RequestCheckUtil"=>"taobao/RequestCheckUtil.php",
 );
 ?>
