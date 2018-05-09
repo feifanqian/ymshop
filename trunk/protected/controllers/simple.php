@@ -2009,7 +2009,7 @@ class SimpleController extends Controller {
             if ($order_id) {
                 $order = $this->model->table("order_offline as od")->join("left join payment as pa on od.payment= pa.id")->fields("od.id,od.order_no,od.payment,od.pay_status,od.order_amount,pa.pay_name as payname,od.type,od.status,od.pay_time,od.shop_ids")->where("od.id=$order_id and od.status<4 and od.user_id = " . $this->user['id'])->find();
                 if ($order) {
-                    if ($order['pay_status'] == 0) {
+                    
                         $payment_plugin = Common::getPaymentInfo($order['payment']);
                         if ($payment_plugin != null && $payment_plugin['class_name'] == 'received' && $order['status'] == 3) {
                             $this->redirect("/simple/order_completed/order_id/$order_id");
@@ -2048,7 +2048,7 @@ class SimpleController extends Controller {
                         $this->assign("order", $order);
                         $this->assign("user", $this->user);
                         $this->redirect();
-                    }
+                    
                     //  else if ($order['pay_status'] == 1) {
                     //     $this->redirect("/ucenter/order_details/id/{$order_id}");
                     // }

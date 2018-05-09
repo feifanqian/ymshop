@@ -1625,9 +1625,9 @@ class PaymentController extends Controller {
                         exit;
                     } 
                 }elseif(!empty($order_offline)){
-                    if($order_offline['user_id']==42608){
-                       exit;
-                    }
+                    // if($order_offline['user_id']==42608){
+                    //    exit;
+                    // }
                     $order_no = $orderNo;
                      $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
                      if ($order['order_amount'] != $money) {
