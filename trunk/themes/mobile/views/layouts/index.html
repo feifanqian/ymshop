@@ -13,6 +13,13 @@
         <link rel="stylesheet" href="{url:#css/font-awesome.min.css}">
         <link rel="stylesheet" href="//at.alicdn.com/t/font_cudhf587rx561or.css">
         <script type="text/javascript" src="{url:#js/layer_mobile/layer.js}"></script>
+        <style>
+            body { /* IOS禁止微信调整字体大小 */
+                -webkit-text-size-adjust: 100% !important;
+                text-size-adjust: 100% !important;
+                -moz-text-size-adjust: 100% !important;
+            }
+        </style>
         {echo:JS::import('jquery');}
         {set:$title = isset($seo_title)?$seo_title:(isset($site_title)?$site_title:'圆梦共享网');$title=TString::msubstr($title,0,12);}
         <title>{$title}</title>
@@ -32,5 +39,26 @@
         </div>
         <script type="text/javascript" src="{url:#js/jquery.weui.min.js}"></script>
         <script type="text/javascript" src="{url:#js/common.js}"></script>
+        <script>
+               (function() {
+                   if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+                       handleFontSize();
+                   } else {
+                       if (document.addEventListener) {
+                           document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+                       } else if (document.attachEvent) {
+                           document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+                           document.attachEvent("onWeixinJSBridgeReady", handleFontSize);  }
+                   }
+                   function handleFontSize() {
+                       // 设置网页字体为默认大小
+                       WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+                       // 重写设置网页字体大小的事件
+                       WeixinJSBridge.on('menu:setfont', function() {
+                           WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+                       });
+                   }
+               })();
+        </script>
     </body>
 </html>
