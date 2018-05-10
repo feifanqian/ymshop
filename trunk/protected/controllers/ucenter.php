@@ -3857,9 +3857,15 @@ class UcenterController extends Controller
             if($this->user['id']==42608){
                 $save_url = '/data/uploads/positive_idcard/'.$this->user['id'].$_FILES['positive_idcard']['name'];
                 $upyun = new Upyun();
-                $file =  file_get_contents($positive_idcard);
-                $upyun->writeFile($save_url,$file);
-                $positive_idcard = 'https://ymlypt.b0.upaiyun.com'.$save_url;
+            
+                $fh = fopen($_FILES[ "positive_idcard" ][ 'tmp_name' ], 'rb');
+                $oldname=$_FILES[ "positive_idcard" ]["name"];
+                $filetype = pathinfo($oldname, PATHINFO_EXTENSION);
+                $newname=getName() .'.'.$filetype;
+                $newfileurl='/data/uploads/positive_idcard/'.$newname;
+                $upinfo = $upyun->writeFile($newfileurl, $fh, True);   // 上传图片，自动创建目录
+                fclose($fh);
+                $positive_idcard = 'https://ymlypt.b0.upaiyun.com'.$newfileurl;
             // var_dump($_FILES['positive_idcard']);    
             // // var_dump(realpath($_FILES['positive_idcard']['tmp_name']));die;    
             //     $data = array(
