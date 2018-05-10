@@ -3863,7 +3863,7 @@ class UcenterController extends Controller
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
             if ($this->user['id'] == 42608) {
-                // var_dump($_FILES['positive_idcard']['name']);die;
+                var_dump(realpath($_FILES['positive_idcard']['name']));die;
                 // $save_url = '/data/uploads/positive_idcard/'.$this->user['id'].$_FILES['positive_idcard']['name'];
                 $upyun = new Upyun();
 
@@ -3874,8 +3874,8 @@ class UcenterController extends Controller
                 //    'x-gmkerl-quality'  => 100, // 缩略图压缩质量
                 //    'x-gmkerl-unsharp' => true // 是否进行锐化处理
                 // );
-                // $fh = fopen($image_url1, 'rb');
-                $fh = fopen($_FILES["positive_idcard"]["name"], 'r');
+                $fh = fopen($image_url1, 'rb');
+                // $fh = fopen($_FILES["positive_idcard"]["name"], 'r');
                 // $oldname = $_FILES["positive_idcard"]["name"];
                 // $filetype = pathinfo($oldname, PATHINFO_EXTENSION);
                 $newname = time().$this->user['id'] . '.jpg';
