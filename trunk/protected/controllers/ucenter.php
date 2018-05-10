@@ -3858,7 +3858,7 @@ class UcenterController extends Controller
                 $save_url = '/data/uploads/positive_idcard/'.$this->user['id'].$_FILES['positive_idcard']['name'];
                 $upyun = new Upyun();
                 $file =  fopen($positive_idcard, "rb")
-                $res = $upyun->writeFile($save_url,$file);
+                $upyun->writeFile($save_url,$file);
                 $positive_idcard = 'https://ymlypt.b0.upaiyun.com'.$save_url;
             // var_dump($_FILES['positive_idcard']);    
             // // var_dump(realpath($_FILES['positive_idcard']['tmp_name']));die;    
