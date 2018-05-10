@@ -470,7 +470,7 @@ class IndexAction extends Controller {
                 //     $v['imgs'] = '';
                 // }
                 unset($v['specs'], $v['attrs'], $v['content']);
-                if(($flashlist[$k]['id']==328)){
+                if($flashlist[$k]['id']==328){
                    unset($flashlist[$k]);
                 }
             }
