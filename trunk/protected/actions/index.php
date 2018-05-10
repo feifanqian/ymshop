@@ -428,7 +428,7 @@ class IndexAction extends Controller {
     public function index_area(){
         $now  = date('Y-m-d H:i:s');
         $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->limit(10)->findAll();
-        $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->limit(10)->findAll();
+        // $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->limit(10)->findAll();
         if($list1){
             foreach($list1 as $k=>$v){
                 $list1[$k]['tag'] = $v['title'];
@@ -454,13 +454,14 @@ class IndexAction extends Controller {
                 unset($list1[$k]['price_set']);
             }
         }
-        if($list2){
-            foreach($list2 as $k=>$v){
-                $list2[$k]['cost_point'] = '0.00';
-                $list2[$k]['flash_type'] = 'cash';
-            }
-        }
-        $flashlist = array_merge($list1,$list2);
+        // if($list2){
+        //     foreach($list2 as $k=>$v){
+        //         $list2[$k]['cost_point'] = '0.00';
+        //         $list2[$k]['flash_type'] = 'cash';
+        //     }
+        // }
+        // $flashlist = array_merge($list1,$list2);
+        $flashlist = $list1;
         if ($flashlist) {
             foreach ($flashlist as $k => &$v) {
                 // if(!empty($v['imgs'])){
