@@ -3868,18 +3868,18 @@ class UcenterController extends Controller
                 $upyun = new Upyun();
 
                 // $fh = fopen($_FILES["positive_idcard"]["tmp_name"], 'rb');
-                $opts = array(
-                    'x-gmkerl-type'    => 'fix_width_or_height', // 缩略图类型
-                    'x-gmkerl-value'  => '300pxx180px', // 缩略图大小
-                   'x-gmkerl-quality'  => 100, // 缩略图压缩质量
-                   'x-gmkerl-unsharp' => true // 是否进行锐化处理
-                );
+                // $opts = array(
+                //     'x-gmkerl-type'    => 'fix_width_or_height', // 缩略图类型
+                //     'x-gmkerl-value'  => '300pxx180px', // 缩略图大小
+                //    'x-gmkerl-quality'  => 100, // 缩略图压缩质量
+                //    'x-gmkerl-unsharp' => true // 是否进行锐化处理
+                // );
                 $fh = fopen($image_url1, 'rb');
                 // $oldname = $_FILES["positive_idcard"]["name"];
                 // $filetype = pathinfo($oldname, PATHINFO_EXTENSION);
                 $newname = time().$this->user['id'] . '.jpg';
                 $newfileurl = '/data/uploads/positive_idcard/' . $newname;
-                $upinfo = $upyun->writeFile($newfileurl, $fh, True, $opts);   // 上传图片，自动创建目录
+                $upinfo = $upyun->writeFile($newfileurl, $fh, True);   // 上传图片，自动创建目录
                 fclose($fh);
                 $positive_idcard = 'https://ymlypt.b0.upaiyun.com' . $newfileurl;
                 // var_dump($_FILES['positive_idcard']);
