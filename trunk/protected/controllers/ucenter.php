@@ -87,17 +87,17 @@ class UcenterController extends Controller
         $config = Config::getInstance();
         $site_config = $config->get("globals");
         $list = explode('_', $action);
-        $current = is_array($list)? $list[0]:NULL;
-        $this->assign('current',$current);
+        $current = is_array($list) ? $list[0] : NULL;
+        $this->assign('current', $current);
         $this->assign('site_title', $site_config['site_name']);
         $this->assign("actionId", $action);
         $this->assign("cart", $cart->all());
         $this->assign("sidebar", $this->sidebar);
         $this->assign("category", $this->category);
         $this->assign("url_index", '');
-        $this->assign('user_id',$this->user['id']);
+        $this->assign('user_id', $this->user['id']);
         $this->assign("seo_title", "用户中心");
-        
+
     }
 
     public function checkRight($actionId)
@@ -124,27 +124,27 @@ class UcenterController extends Controller
             $url = $wechat->getRequestCodeURL();
             $this->redirect($url);
             exit;
-        }elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
-            if(isset($_GET['inviter_id']) && !isset($_GET['auth_code'])){
-                $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test&inviter_id=".$_GET['inviter_id'];
+        } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false) {
+            if (isset($_GET['inviter_id']) && !isset($_GET['auth_code'])) {
+                $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test&inviter_id=" . $_GET['inviter_id'];
                 $this->redirect($act);
                 exit;
-            }else{
+            } else {
                 $auth_code = $_GET['auth_code'];
                 $seller_id = $_GET['inviter_id'];
                 $pay_alipayapp = new pay_alipayapp();
                 $result = $pay_alipayapp->alipayLogin($auth_code);
-                if(!isset($result['code']) || $result['code']!=10000){
+                if (!isset($result['code']) || $result['code'] != 10000) {
                     $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付宝授权登录失败！'));
                     exit;
                 }
-                $nick_name = isset($result['nick_name'])?$result['nick_name']:'';
+                $nick_name = isset($result['nick_name']) ? $result['nick_name'] : '';
                 $is_oauth = $this->model->table('oauth_user')->where('open_id="' . $result['user_id'] . '" and oauth_type="alipay"')->find();
-                if($is_oauth){
+                if ($is_oauth) {
                     $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id left join oauth_user as o on us.id = o.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("o.open_id='{$result['user_id']}'")->find();
                     $this->safebox->set('user', $obj, 31622400);
                     $this->user = $this->safebox->get('user');
-                }else{
+                } else {
                     $this->model->table('oauth_user')->data(array(
                         'open_name' => $nick_name,
                         'oauth_type' => 'alipay',
@@ -164,8 +164,8 @@ class UcenterController extends Controller
                     //更新用户名和邮箱
                     $model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = '{$last_id}'")->update();
                     //更新customer表
-                    $sex = $result['gender']=='m'?1:0;
-                    $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nick_name, 'sex'=>$sex,'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                    $sex = $result['gender'] == 'm' ? 1 : 0;
+                    $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nick_name, 'sex' => $sex, 'point_coin' => 200, 'reg_time' => $time, 'login_time' => $time))->insert();
                     Log::pointcoin_log(200, $last_id, '', '支付宝新用户积分奖励', 10);
                     //记录登录信息
                     $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id='$last_id'")->find();
@@ -176,26 +176,27 @@ class UcenterController extends Controller
                 Session::set('pay_type', 'alipay');
                 $this->redirect("http://www.ymlypt.com/ucenter/demo?inviter_id={$seller_id}");
                 exit;
-            }  
-        }else{
-           $this->redirect("/simple/login"); 
-        }  
+            }
+        } else {
+            $this->redirect("/simple/login");
+        }
     }
 
-    public function alipaylogin(){
-       if(!isset($_GET['auth_code'])){
+    public function alipaylogin()
+    {
+        if (!isset($_GET['auth_code'])) {
             $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/alipaylogin&state=test";
             $this->redirect($act);
             exit;
-        }else{
+        } else {
             $auth_code = $_GET['auth_code'];
             $pay_alipayapp = new pay_alipayapp();
             $result = $pay_alipayapp->alipayLogin($auth_code);
-            if(!isset($result['code']) || $result['code']!=10000){
+            if (!isset($result['code']) || $result['code'] != 10000) {
                 $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付宝授权登录失败！'));
                 exit;
             }
-            
+
             return $result;
         }
     }
@@ -282,13 +283,13 @@ class UcenterController extends Controller
     public function balance_withdraw()
     {
         if ($this->is_ajax_request()) {
-            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002){
+            if ($this->user['id'] == 126935 || $this->user['id'] == 126676 || $this->user['id'] == 126663 || $this->user['id'] == 126243 || $this->user['id'] == 126002) {
                 exit(json_encode(array('status' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！')));
             }
             Filter::form();
             $id = Filter::int(Req::args('id'));
-            $bankcard = $this->model->table('bankcard')->where('id='.$id)->find();
-            if(!$bankcard){
+            $bankcard = $this->model->table('bankcard')->where('id=' . $id)->find();
+            if (!$bankcard) {
                 exit(json_encode(array('status' => 'fail', 'msg' => '该银行卡不存在')));
             }
             $open_name = $bankcard['open_name'];
@@ -296,7 +297,7 @@ class UcenterController extends Controller
             $prov = $bankcard['province'];
             $city = $bankcard['city'];
             $card_no = $bankcard['cardno'];
-            $amount = sprintf('%.2f',Req::args('amount'));
+            $amount = sprintf('%.2f', Req::args('amount'));
             $customer = $this->model->table("customer")->where("user_id =" . $this->user['id'])->fields('balance')->find();
             $can_withdraw_amount = $customer ? $customer['balance'] : 0;
             if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
@@ -322,7 +323,7 @@ class UcenterController extends Controller
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
             }
         } else {
-            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002){
+            if ($this->user['id'] == 126935 || $this->user['id'] == 126676 || $this->user['id'] == 126663 || $this->user['id'] == 126243 || $this->user['id'] == 126002) {
                 $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！'));
                 exit;
             }
@@ -330,7 +331,7 @@ class UcenterController extends Controller
             $other = $config->get("other");
             $info = $this->model->table("customer")->fields('balance,realname_verified')->where("user_id=" . $this->user['id'])->find();
             $card_num = $this->model->table("bankcard")->where("user_id=" . $this->user['id'])->count();
-            $this->assign('card_num',$card_num);
+            $this->assign('card_num', $card_num);
             $this->assign("goldcoin", $info['balance']);
             $this->assign("realname_verified", $info['realname_verified']);
             $this->assign("gold2silver", $other['gold2silver']);
@@ -345,13 +346,13 @@ class UcenterController extends Controller
     public function offline_balance_withdraw()
     {
         if ($this->is_ajax_request()) {
-            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002){
+            if ($this->user['id'] == 126935 || $this->user['id'] == 126676 || $this->user['id'] == 126663 || $this->user['id'] == 126243 || $this->user['id'] == 126002) {
                 exit(json_encode(array('status' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！')));
             }
             Filter::form();
             $id = Filter::int(Req::args('id'));
-            $bankcard = $this->model->table('bankcard')->where('id='.$id)->find();
-            if(!$bankcard){
+            $bankcard = $this->model->table('bankcard')->where('id=' . $id)->find();
+            if (!$bankcard) {
                 exit(json_encode(array('status' => 'fail', 'msg' => '该银行卡不存在')));
             }
             $open_name = $bankcard['open_name'];
@@ -359,7 +360,7 @@ class UcenterController extends Controller
             $prov = $bankcard['province'];
             $city = $bankcard['city'];
             $card_no = $bankcard['cardno'];
-            $amount = sprintf('%.2f',Req::args('amount'));
+            $amount = sprintf('%.2f', Req::args('amount'));
             $customer = $this->model->table("customer")->where("user_id =" . $this->user['id'])->fields('offline_balance')->find();
             $can_withdraw_amount = $customer ? $customer['offline_balance'] : 0;
             if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分 
@@ -385,7 +386,7 @@ class UcenterController extends Controller
                 exit(json_encode(array('status' => 'fail', 'msg' => '申请提交失败，数据库错误')));
             }
         } else {
-            if($this->user['id']==126935 || $this->user['id']==126676 || $this->user['id']==126663 || $this->user['id']==126243 || $this->user['id']==126002){
+            if ($this->user['id'] == 126935 || $this->user['id'] == 126676 || $this->user['id'] == 126663 || $this->user['id'] == 126243 || $this->user['id'] == 126002) {
                 $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！'));
                 exit;
             }
@@ -395,42 +396,41 @@ class UcenterController extends Controller
             $card_num = $this->model->table("bankcard")->where("user_id=" . $this->user['id'])->count();
             $need_check = -2;
             $reason = '';
-            $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
-            if($shop){
-               $shop_check = $this->model->table('shop_check')->fields('*')->where('user_id='.$this->user['id'])->find();
-               if(!$shop_check){
-                 $need_check = -1; //需要上传
-               }elseif($shop_check['status']==0){ 
-                $need_check = 0;  //等待审核
-               }elseif($shop_check['status']==1){
-                $need_check = 1;  //通过审核
-               }else{
-                $need_check = 2; //未通过，需要重新提交
-                $reason = $shop_check['reason'];
-               }
-            }else{
+            $shop = $this->model->table('district_promoter')->fields('id')->where('user_id=' . $this->user['id'])->find();
+            if ($shop) {
+                $shop_check = $this->model->table('shop_check')->fields('*')->where('user_id=' . $this->user['id'])->find();
+                if (!$shop_check) {
+                    $need_check = -1; //需要上传
+                } elseif ($shop_check['status'] == 0) {
+                    $need_check = 0;  //等待审核
+                } elseif ($shop_check['status'] == 1) {
+                    $need_check = 1;  //通过审核
+                } else {
+                    $need_check = 2; //未通过，需要重新提交
+                    $reason = $shop_check['reason'];
+                }
+            } else {
                 $need_check = -2;
             }
-            $this->assign('need_check',$need_check);
-            $this->assign('reason',$reason);
+            $this->assign('need_check', $need_check);
+            $this->assign('reason', $reason);
             //银盛上传资料token获取
-            $myParams = array();  
-        
+            $myParams = array();
+
             $myParams['method'] = 'ysepay.merchant.register.token.get';
             $myParams['partner_id'] = 'yuanmeng';
             // $myParams['partner_id'] = $this->user['id'];
             $myParams['timestamp'] = date('Y-m-d H:i:s', time());
             $myParams['charset'] = 'GBK';
-            $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
-            $myParams['sign_type'] = 'RSA';  
-              
+            $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';
+            $myParams['sign_type'] = 'RSA';
+
             $myParams['version'] = '3.0';
-            $biz_content_arr = array(
-            );
+            $biz_content_arr = array();
 
             $myParams['biz_content'] = '{}';
             ksort($myParams);
-            
+
             $signStr = "";
             foreach ($myParams as $key => $val) {
                 $signStr .= $key . '=' . $val . '&';
@@ -440,15 +440,15 @@ class UcenterController extends Controller
             $myParams['sign'] = trim($sign['check']);
             $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
 
-            $ret = Common::httpRequest($url,'POST',$myParams);
-            $ret = json_decode($ret,true);
+            $ret = Common::httpRequest($url, 'POST', $myParams);
+            $ret = json_decode($ret, true);
 
-            if(isset($ret['ysepay_merchant_register_token_get_response']['token'])){
-                $this->assign('yin_token',$ret['ysepay_merchant_register_token_get_response']['token']);
-            }else{
-                $this->assign('yin_token','');
+            if (isset($ret['ysepay_merchant_register_token_get_response']['token'])) {
+                $this->assign('yin_token', $ret['ysepay_merchant_register_token_get_response']['token']);
+            } else {
+                $this->assign('yin_token', '');
             }
-            $this->assign('card_num',$card_num);
+            $this->assign('card_num', $card_num);
             $this->assign("goldcoin", $info['offline_balance']);
             $this->assign("realname_verified", $info['realname_verified']);
             $this->assign("gold2silver", $other['gold2silver']);
@@ -868,7 +868,8 @@ class UcenterController extends Controller
             Tiny::Msg($this, 404);
     }
 
-    public function promoter_save(){
+    public function promoter_save()
+    {
         // if($this->user['id']==42608){
         //     var_dump($_FILES);die;
         // }
@@ -888,43 +889,43 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url, 100, 100);
             $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
         }
-        
-        $location =  Filter::text(Req::args('areas').Req::args('road'));
+
+        $location = Filter::text(Req::args('areas') . Req::args('road'));
 
         $data = array(
-                'shop_name' => Req::args('shop_name'),
-                'info' => Filter::text(Req::args('info')),
-                'road' => Filter::text(Req::args('road')),
-            );
-        if(Req::args('areas')!='省份/直辖市市县/区'){
+            'shop_name' => Req::args('shop_name'),
+            'info' => Filter::text(Req::args('info')),
+            'road' => Filter::text(Req::args('road')),
+        );
+        if (Req::args('areas') != '省份/直辖市市县/区') {
             $lnglat = Common::getLnglat($location);
             $data['location'] = $location;
             $data['lng'] = $lnglat['lng'];
             $data['lat'] = $lnglat['lat'];
         }
-        if(Req::args('province')){
+        if (Req::args('province')) {
             $data['province_id'] = Filter::int(Req::args('province'));
         }
-        if(Req::args('city')){
+        if (Req::args('city')) {
             $data['city_id'] = Filter::int(Req::args('city'));
         }
-        if(Req::args('county')){
+        if (Req::args('county')) {
             $data['region_id'] = Filter::int(Req::args('county'));
         }
         // if(Req::args('street')){
         //     $data['tourist_id'] = Filter::int(Req::args('street'));
         // }
-        if($picture){
+        if ($picture) {
             $data['picture'] = $picture;
         }
-        if(Req::args('classify_id')){
+        if (Req::args('classify_id')) {
             $data['classify_id'] = Filter::int(Req::args('classify_id'));
         }
 
-            $id = $this->user['id'];
-            
-            $this->model->table("district_promoter")->data($data)->where("user_id=$id")->update();
-            $this->redirect("promoter_info", false, array('msg' => array("success", "保存成功！")));
+        $id = $this->user['id'];
+
+        $this->model->table("district_promoter")->data($data)->where("user_id=$id")->update();
+        $this->redirect("promoter_info", false, array('msg' => array("success", "保存成功！")));
     }
 
     public function info_save()
@@ -1091,19 +1092,20 @@ class UcenterController extends Controller
             ->where("i.user_id = " . $this->user['id'])
             ->findPage($page, 10);
         $this->assign("invite", $invite);
-        $this->assign('uid',$this->user['id']);
+        $this->assign('uid', $this->user['id']);
         $this->assign("seo_title", "我的邀请");
         $this->redirect();
     }
 
-    public function myinvite() {
+    public function myinvite()
+    {
         $model = new Model();
         $model = new Model("user as us");
         $user_id = $this->user['id'];
-        
-        $user = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.id=".$user_id)->find();
+
+        $user = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.id=" . $user_id)->find();
         $this->assign('user', $user);
-        $this->assign('uid',$user_id);
+        $this->assign('uid', $user_id);
         $this->redirect();
     }
 
@@ -1242,7 +1244,7 @@ class UcenterController extends Controller
             }
         }
         $index_notice = $this->model->table('index_notice')->where('id=1')->find();
-        if($index_notice){
+        if ($index_notice) {
             $this->assign('index_notice', $index_notice);
         }
         $this->assign("status", $status);
@@ -1389,14 +1391,14 @@ class UcenterController extends Controller
             $shopname = '未知商家';
         }
         $paytypelist = $this->model->table('payment as pa')->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")->where("pa.status = 0 and pa.plugin_id=9 and pa.client_type =2")->order("pa.sort desc")->findAll();
-        if($paytypelist){
+        if ($paytypelist) {
             $paytype['payment'] = $paytypelist[0]['id'];
             $paytype['payname'] = $paytypelist[0]['pay_name'];
             $this->assign("paytype", $paytype);
-        }  
+        }
 
         $pay_status = $order['pay_status'];
-        
+
         $this->assign("paytypelist", $paytypelist);
         $this->assign('pay_status', $pay_status);
         $this->assign('shopname', $shopname);
@@ -1671,18 +1673,18 @@ class UcenterController extends Controller
         $this->assign('district_id', $district_id);
         //签到
         $sign_in_set = Config::getInstance()->get('sign_in_set');
-        
+
         $index_notice = $this->model->table('index_notice')->where('id=1')->find();
-        if($index_notice){
+        if ($index_notice) {
             $this->assign('index_notice', $index_notice);
         }
-        $bankcard = $this->model->table('bankcard')->where('user_id='.$this->user['id'])->findAll();
-        if($bankcard){
+        $bankcard = $this->model->table('bankcard')->where('user_id=' . $this->user['id'])->findAll();
+        if ($bankcard) {
             $card_bind = 1;
-        }else{
+        } else {
             $card_bind = 0;
         }
-        $this->assign('card_bind',$card_bind);
+        $this->assign('card_bind', $card_bind);
         $this->assign("sign_in_open", $sign_in_set['open']);
         $this->assign("random", rand(1000, 9999));
         $this->assign('is_hirer', $is_hirer);
@@ -1803,7 +1805,7 @@ class UcenterController extends Controller
             }
         }
         $index_notice = $this->model->table('index_notice')->where('id=1')->find();
-        if($index_notice){
+        if ($index_notice) {
             $this->assign('index_notice', $index_notice);
         }
         $this->assign("notice", $notice);
@@ -1826,7 +1828,7 @@ class UcenterController extends Controller
         $verified = $this->verifiedType();
         $customer = $this->model->table('customer')->fields('pay_password')->where("user_id=" . $this->user['id'])->find();
         $pay_password = $customer['pay_password'];
-        $this->assign('pay_password',$pay_password);
+        $this->assign('pay_password', $pay_password);
         $this->redirect();
     }
 
@@ -1838,21 +1840,21 @@ class UcenterController extends Controller
         $obj = Req::args('obj');
         $pay_password = Req::args('pay_password');
         $obj = $this->updateObj($obj); //默认是修改登陆密码
-        
-        if($pay_password=='' && $recode!=''){
-            if($code!=$recode){
+
+        if ($pay_password == '' && $recode != '') {
+            if ($code != $recode) {
                 $info = array('field' => 'code', 'msg' => '两次密码输入不一致！');
                 $this->assign("invalid", $info);
                 $this->redirect("/ucenter/check_identity/obj/" . $obj . "/type/" . $type, false);
-            }else{
+            } else {
                 $pay_validcode = CHash::random(8);
-                $password = CHash::md5($code,$pay_validcode);
-                $this->model->table('customer')->data(array('pay_password'=>$password,'pay_validcode'=>$pay_validcode))->where('user_id='.$this->user['id'])->update();
+                $password = CHash::md5($code, $pay_validcode);
+                $this->model->table('customer')->data(array('pay_password' => $password, 'pay_validcode' => $pay_validcode))->where('user_id=' . $this->user['id'])->update();
                 $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
             }
         }
-        
-        
+
+
         $verifiedInfo = Session::get("verifiedInfo");
         if (isset($verifiedInfo['code']) && $code == $verifiedInfo['code']) {
             $verifiedInfo['obj'] = $obj;
@@ -1959,7 +1961,7 @@ class UcenterController extends Controller
                     $result = $this->model->table('customer')->where("mobile ='" . $account . "'" . '  and user_id!=' . $this->user['id'])->find();
                     $password = Req::args('password');
                     $repassword = Req::args('repassword');
-                    if($password!=$repassword){
+                    if ($password != $repassword) {
                         $info = array('field' => 'repassword', 'msg' => '两次登录密码不一致。');
                     }
                     $validcode = CHash::random(8);
@@ -1972,30 +1974,30 @@ class UcenterController extends Controller
                         exit;
                     } else {
                         // $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
-                        
+
                         //将当前微信注册账号与APP端该手机注册的新号绑定
-                        $oauth_user = $this->model->table('oauth_user')->where('user_id='.$result['user_id'])->find();
-                        if($oauth_user){
+                        $oauth_user = $this->model->table('oauth_user')->where('user_id=' . $result['user_id'])->find();
+                        if ($oauth_user) {
                             $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
-                        }else{
+                        } else {
                             $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1))->where('user_id=' . $this->user['id'])->update();
-                            $this->model->table('customer')->data(array('status'=> 0))->where('user_id=' . $result['user_id'])->update();
+                            $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $result['user_id'])->update();
                             //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
                             // $user = $this->model->table('user')->fields('password,validcode')->where('id='.$result['user_id'])->find();
                             // $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
-                            $this->model->table('oauth_user')->data(array('other_user_id'=>$result['user_id']))->where('user_id='.$this->user['id'])->update();
+                            $this->model->table('oauth_user')->data(array('other_user_id' => $result['user_id']))->where('user_id=' . $this->user['id'])->update();
                             Session::clear('verifiedInfo');
                             Session::clear('activateObj');
                             $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
                             exit;
                         }
-                        
+
                     }
                 }
             } else {
                 $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
             }
-            
+
             // if($obj == 'mobile' && Validator::mobi($account)){
             //      $sms = SMS::getInstance();
             //      $return = $sms->actionBindPhone($account,$code,$this->user['id']);
@@ -2073,16 +2075,16 @@ class UcenterController extends Controller
             } else if (Validator::mobi($account)) {
                 $sms = SMS::getInstance();
                 // if ($sms->getStatus()) {
-                    $result = $sms->sendCode($account, $code);
-                    // $result = $sms->actionSendVerificationCode($account, $this->user['id']); //使用云账户接口
-                    if ($result['status'] == 'success') {
-                        $info = array('status' => 'success', 'msg' => $result['message']);
-                        $activateObj = array('time' => time(), 'code' => $code, 'obj' => $account);
-                        Session::set('activateObj', $activateObj);
-                        $info = array('status' => 'success');
-                    } else {
-                        $info = array('status' => 'fail', 'msg' => $result['message']);
-                    }
+                $result = $sms->sendCode($account, $code);
+                // $result = $sms->actionSendVerificationCode($account, $this->user['id']); //使用云账户接口
+                if ($result['status'] == 'success') {
+                    $info = array('status' => 'success', 'msg' => $result['message']);
+                    $activateObj = array('time' => time(), 'code' => $code, 'obj' => $account);
+                    Session::set('activateObj', $activateObj);
+                    $info = array('status' => 'success');
+                } else {
+                    $info = array('status' => 'fail', 'msg' => $result['message']);
+                }
                 // } else {
                 //     $info = array('status' => 'fail', 'msg' => '系统没有开启手机验证功能!');
                 // }
@@ -2131,16 +2133,16 @@ class UcenterController extends Controller
             } else if ($type == 'mobile') {
                 $sms = SMS::getInstance();
                 // if ($sms->getStatus()) {
-                $customer = $this->model->table('customer')->fields('mobile')->where('user_id='.$this->user['id'])->find();
-                $mobile = $customer?$customer['mobile']:$this->user['mobile'];
-                    $result = $sms->sendCode($mobile, $code);
-                    if ($result['status'] == 'success') {
-                        $info = array('status' => 'success', 'msg' => $result['message']);
-                        Session::set('verifiedInfo', $verifiedInfo);
-                        $info = array('status' => 'success');
-                    } else {
-                        $info = array('status' => 'fail', 'msg' => $result['message']);
-                    }
+                $customer = $this->model->table('customer')->fields('mobile')->where('user_id=' . $this->user['id'])->find();
+                $mobile = $customer ? $customer['mobile'] : $this->user['mobile'];
+                $result = $sms->sendCode($mobile, $code);
+                if ($result['status'] == 'success') {
+                    $info = array('status' => 'success', 'msg' => $result['message']);
+                    Session::set('verifiedInfo', $verifiedInfo);
+                    $info = array('status' => 'success');
+                } else {
+                    $info = array('status' => 'fail', 'msg' => $result['message']);
+                }
                 // } else {
                 //     $info = array('status' => 'fail', 'msg' => '系统没有开启手机验证功能!');
                 // }
@@ -2298,15 +2300,15 @@ class UcenterController extends Controller
                                 echo json_encode($ret);
                                 exit;
                             }
-                            
-                            $this->model->table('customer')->data(array('mobile'=>$mobile))->where('user_id='.$this->user['id'])->update();
-                            $this->model->table('customer')->data(array('status'=>0))->where('user_id='.$other_account['user_id'])->update();
-                                $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
-                            
+
+                            $this->model->table('customer')->data(array('mobile' => $mobile))->where('user_id=' . $this->user['id'])->update();
+                            $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $other_account['user_id'])->update();
+                            $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => $account_info['user_id']))->where("id =" . $account_info['id'])->update();
+
                             //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
-                            $user = $this->model->table('user')->fields('password,validcode')->where('id='.$other_account['user_id'])->find();
+                            $user = $this->model->table('user')->fields('password,validcode')->where('id=' . $other_account['user_id'])->find();
                             $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
-                            
+
                             if ($result) {
                                 $this->safebox->clear('user');
                                 $cookie = new Cookie();
@@ -2394,127 +2396,128 @@ class UcenterController extends Controller
         }
         $this->assign("seo_title", "切换账号");
         $this->redirect("change_accounts");
-        
+
     }
 
-    public function change_acct(){
+    public function change_acct()
+    {
         $mobile = Filter::sql(Req::args('mobile'));
         $validatecode = Filter::sql(Req::args('validatecode'));
         $ret = SMS::getInstance()->checkCode($mobile, $validatecode);
         // $ret = array('status' => 'success', 'message' => '验证成功');
-            SMS::getInstance()->flushCode($mobile);
-            if ($ret['status'] == 'success') {
-                //查询当前微信公众号绑定的user_id
-                $account_info_all = $this->model->table("oauth_user")->where("user_id =" . $this->user['id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->findAll();
-                if (empty($account_info_all) || count($account_info_all) > 1) {
-                    $ret['status'] = "fail";
-                    $ret['message'] = "切换失败,oauth信息错误";
-                    echo json_encode($ret);
-                    exit;
-                } else {
-                    $account_info = $account_info_all[0];
-                    if ($account_info['other_user_id'] == 0 || $account_info['other_user_id'] == "") {//如果另一个账号信息不存在
-                        //查询手机号绑定的账号
-                        $other_account = $this->model->table('customer')->where("mobile='" . $mobile . "'")->fields('user_id,mobile')->find();
-                        if (empty($other_account) || $other_account['user_id'] == 0) {
-                            $ret['status'] = "fail";
-                            $ret['message'] = "切换失败,该手机号绑定的账号不存在";
-                            echo json_encode($ret);
-                            exit;
-                        } else {//查询成功
-                            if ($other_account['user_id'] == $account_info['user_id']) {//绑定的就是本账号
-                                $ret['status'] = "fail";
-                                $ret['message'] = "切换失败,不存在另一个账号";
-                                echo json_encode($ret);
-                                exit;
-                            }
-                            //判断该账号是否已经绑定过微信公众号登陆
-                            $isOk1 = $this->model->table("oauth_user")->where("user_id =" . $other_account['user_id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->findAll();
-                            $isOk2 = $this->model->table("oauth_user")->where("other_user_id =" . $other_account['user_id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->findAll();
-                            if (!empty($isOk1) && !empty($isOk2)) {
-                                $ret['status'] = "fail";
-                                $ret['message'] = "绑定失败，该手机号对应账号已经绑定了其他微信账号";
-                                echo json_encode($ret);
-                                exit;
-                            }
-                            // var_dump($other_account['user_id']);die;
-                            
-                            $this->model->table('customer')->data(array('mobile'=>''))->where('user_id='.$other_account['user_id'])->update();
-                            $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
-                            
-                            //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
-                            $user = $this->model->table('user')->fields('password,validcode')->where('id='.$other_account['user_id'])->find();
-                            $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
-                            
-                            if ($result) {
-                                $this->safebox->clear('user');
-                                $cookie = new Cookie();
-                                $cookie->setSafeCode(Tiny::app()->getSafeCode());
-                                $cookie->set('autologin', null, 0);
-                                $ret['status'] = "success";
-                                $ret['message'] = "绑定并切换成功";
-                                echo json_encode($ret);
-                                exit;
-                            } else {
-                                $ret['status'] = "fail";
-                                $ret['message'] = "切换失败,数据库错误1";
-                                echo json_encode($ret);
-                                exit;
-                            }
-                        }
+        SMS::getInstance()->flushCode($mobile);
+        if ($ret['status'] == 'success') {
+            //查询当前微信公众号绑定的user_id
+            $account_info_all = $this->model->table("oauth_user")->where("user_id =" . $this->user['id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->findAll();
+            if (empty($account_info_all) || count($account_info_all) > 1) {
+                $ret['status'] = "fail";
+                $ret['message'] = "切换失败,oauth信息错误";
+                echo json_encode($ret);
+                exit;
+            } else {
+                $account_info = $account_info_all[0];
+                if ($account_info['other_user_id'] == 0 || $account_info['other_user_id'] == "") {//如果另一个账号信息不存在
+                    //查询手机号绑定的账号
+                    $other_account = $this->model->table('customer')->where("mobile='" . $mobile . "'")->fields('user_id,mobile')->find();
+                    if (empty($other_account) || $other_account['user_id'] == 0) {
                         $ret['status'] = "fail";
-                        $ret['message'] = "切换失败";
+                        $ret['message'] = "切换失败,该手机号绑定的账号不存在";
                         echo json_encode($ret);
                         exit;
-                    } else {//存在另一个user_id
-                        $ids = $account_info['other_user_id'] . "," . $account_info['user_id'];
-                        //验证手机号
-                        $isOk = $this->model->table("customer")->where("user_id in ($ids) and mobile='$mobile'")->find();
-                        if (!$isOk) {
+                    } else {//查询成功
+                        if ($other_account['user_id'] == $account_info['user_id']) {//绑定的就是本账号
                             $ret['status'] = "fail";
-                            $ret['message'] = "切换失败,对应手机号码错误";
+                            $ret['message'] = "切换失败,不存在另一个账号";
                             echo json_encode($ret);
                             exit;
                         }
-                        //查询另一个账号是否真实存在没被禁用或删除
-                        $other_account = $this->model->table('user')->where("id=" . $account_info['other_user_id'] . " and status = 1")->find();
-                        if (empty($other_account)) {
+                        //判断该账号是否已经绑定过微信公众号登陆
+                        $isOk1 = $this->model->table("oauth_user")->where("user_id =" . $other_account['user_id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->findAll();
+                        $isOk2 = $this->model->table("oauth_user")->where("other_user_id =" . $other_account['user_id'] . " and oauth_type ='wechat'")->fields("id,user_id,other_user_id")->findAll();
+                        if (!empty($isOk1) && !empty($isOk2)) {
                             $ret['status'] = "fail";
-                            $ret['message'] = "切换失败,绑定的另一个账号信息为空";
+                            $ret['message'] = "绑定失败，该手机号对应账号已经绑定了其他微信账号";
+                            echo json_encode($ret);
+                            exit;
+                        }
+                        // var_dump($other_account['user_id']);die;
+
+                        $this->model->table('customer')->data(array('mobile' => ''))->where('user_id=' . $other_account['user_id'])->update();
+                        $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
+
+                        //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
+                        $user = $this->model->table('user')->fields('password,validcode')->where('id=' . $other_account['user_id'])->find();
+                        $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
+
+                        if ($result) {
+                            $this->safebox->clear('user');
+                            $cookie = new Cookie();
+                            $cookie->setSafeCode(Tiny::app()->getSafeCode());
+                            $cookie->set('autologin', null, 0);
+                            $ret['status'] = "success";
+                            $ret['message'] = "绑定并切换成功";
                             echo json_encode($ret);
                             exit;
                         } else {
-                             $this->model->table('customer')->data(array('mobile'=>''))->where('user_id='.$other_account['id'])->update();
-                            // $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
-                            
-                            //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
-                            $this->model->table('user')->data(array('password' => $other_account['password'], 'validcode' => $other_account['validcode']))->where('id=' . $this->user['id'])->update();
+                            $ret['status'] = "fail";
+                            $ret['message'] = "切换失败,数据库错误1";
+                            echo json_encode($ret);
+                            exit;
+                        }
+                    }
+                    $ret['status'] = "fail";
+                    $ret['message'] = "切换失败";
+                    echo json_encode($ret);
+                    exit;
+                } else {//存在另一个user_id
+                    $ids = $account_info['other_user_id'] . "," . $account_info['user_id'];
+                    //验证手机号
+                    $isOk = $this->model->table("customer")->where("user_id in ($ids) and mobile='$mobile'")->find();
+                    if (!$isOk) {
+                        $ret['status'] = "fail";
+                        $ret['message'] = "切换失败,对应手机号码错误";
+                        echo json_encode($ret);
+                        exit;
+                    }
+                    //查询另一个账号是否真实存在没被禁用或删除
+                    $other_account = $this->model->table('user')->where("id=" . $account_info['other_user_id'] . " and status = 1")->find();
+                    if (empty($other_account)) {
+                        $ret['status'] = "fail";
+                        $ret['message'] = "切换失败,绑定的另一个账号信息为空";
+                        echo json_encode($ret);
+                        exit;
+                    } else {
+                        $this->model->table('customer')->data(array('mobile' => ''))->where('user_id=' . $other_account['id'])->update();
+                        // $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['user_id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
 
-                            $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
-                            if ($result) {
-                                $this->safebox->clear('user');
-                                $cookie = new Cookie();
-                                $cookie->setSafeCode(Tiny::app()->getSafeCode());
-                                $cookie->set('autologin', null, 0);
-                                $ret['status'] = "success";
-                                $ret['message'] = "切换成功";
-                                echo json_encode($ret);
-                                exit;
-                            } else {
-                                $ret['status'] = "fail";
-                                $ret['message'] = "切换失败,数据库错误2";
-                                echo json_encode($ret);
-                                exit;
-                            }
+                        //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
+                        $this->model->table('user')->data(array('password' => $other_account['password'], 'validcode' => $other_account['validcode']))->where('id=' . $this->user['id'])->update();
+
+                        $result = $this->model->table("oauth_user")->data(array('user_id' => $other_account['id'], 'other_user_id' => ''))->where("id =" . $account_info['id'])->update();
+                        if ($result) {
+                            $this->safebox->clear('user');
+                            $cookie = new Cookie();
+                            $cookie->setSafeCode(Tiny::app()->getSafeCode());
+                            $cookie->set('autologin', null, 0);
+                            $ret['status'] = "success";
+                            $ret['message'] = "切换成功";
+                            echo json_encode($ret);
+                            exit;
+                        } else {
+                            $ret['status'] = "fail";
+                            $ret['message'] = "切换失败,数据库错误2";
+                            echo json_encode($ret);
+                            exit;
                         }
                     }
                 }
-            } else {
-                $ret['status'] = "fail";
-                $ret['message'] = "验证码错误，请重新获取";
-                echo json_encode($ret);
-                exit;
             }
+        } else {
+            $ret['status'] = "fail";
+            $ret['message'] = "验证码错误，请重新获取";
+            echo json_encode($ret);
+            exit;
+        }
     }
 
     private function _isCanApplyRefund($order_id)
@@ -3263,11 +3266,11 @@ class UcenterController extends Controller
         if (!$inviter_id) {
             $inviter_id = Session::get('seller_id');
         }
-        
-        if(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false){
+
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false) {
             $pay_type = 'alipay';
             $from = 'alipay';
-        }else{
+        } else {
             $pay_type = 'wechat';
             $from = 'second-wap';
         }
@@ -3296,17 +3299,17 @@ class UcenterController extends Controller
         $this->assign('user_id', $user_id);
         $third_pay = 0;
         $third_payment = $this->model->table('third_payment')->where('id=1')->find();
-        if($third_payment){
+        if ($third_payment) {
             $third_pay = $third_payment['third_payment'];
         }
         $models = new Model("payment as pa");
         $paytypelist = $models->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
-                        ->where("pa.id in (6,8)")->order("pa.sort desc")->findAll();
+            ->where("pa.id in (6,8)")->order("pa.sort desc")->findAll();
         $paytypeone = reset($paytypelist);
         $this->assign("paytypeone", $paytypeone);
         $this->assign("paytypelist", $paytypelist);
         $this->assign("pay_type", $pay_type);
-        $this->assign('third_pay',$third_pay);      
+        $this->assign('third_pay', $third_pay);
         $this->redirect();
     }
 
@@ -3372,33 +3375,34 @@ class UcenterController extends Controller
     //     }
 
     // }
-    
-    public function realNameVerify(){
-          $idcard = Req::args('identityNo');
-          $realname = Filter::str(Req::args('name'));
-          
-          $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id='.$this->user['id'])->find();
-          if(!$customer){
+
+    public function realNameVerify()
+    {
+        $idcard = Req::args('identityNo');
+        $realname = Filter::str(Req::args('name'));
+
+        $customer = $this->model->table('customer')->fields('realname_verified')->where('user_id=' . $this->user['id'])->find();
+        if (!$customer) {
             exit(json_encode(array('status' => 'fail', 'msg' => '用户不存在')));
-          }
+        }
 
-          if($customer['realname_verified']==1){ //已认证
+        if ($customer['realname_verified'] == 1) { //已认证
             exit(json_encode(array('status' => 'fail', 'msg' => '您已经通过实名认证了')));
-          }
+        }
 
-          $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=&cardNo=".$idcard."&realName=".$realname;
-          $header = array(
-                'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
-            );
-         
-          $ret = Common::httpRequest($url,'GET',NULL,$header);
-          $result = json_decode($ret,true);
-          if($result['error_code']==0){
-            $this->model->table('customer')->data(array('realname_verified'=>1,'realname'=>$realname,'id_no'=>$idcard))->where('user_id='.$this->user['id'])->update();
+        $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=&cardNo=" . $idcard . "&realName=" . $realname;
+        $header = array(
+            'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
+        );
+
+        $ret = Common::httpRequest($url, 'GET', NULL, $header);
+        $result = json_decode($ret, true);
+        if ($result['error_code'] == 0) {
+            $this->model->table('customer')->data(array('realname_verified' => 1, 'realname' => $realname, 'id_no' => $idcard))->where('user_id=' . $this->user['id'])->update();
             exit(json_encode(array('status' => 'success', 'msg' => '实名认证成功')));
-          }else{
+        } else {
             exit(json_encode(array('status' => 'fail', 'msg' => '实名认证失败，请核对信息是否准确无误！')));
-          }
+        }
     }
 
     //加密
@@ -3419,11 +3423,11 @@ class UcenterController extends Controller
 
     //绑定银行卡 html页面
     public function bind_bankcard()
-    { 
+    {
         $jump = Req::args('jump');
-        $customer = $this->model->table('customer')->fields('realname_verified,realname,id_no')->where('user_id='.$this->user['id'])->find();
-        $this->assign('customer',$customer);
-        $this->assign('jump',$jump);
+        $customer = $this->model->table('customer')->fields('realname_verified,realname,id_no')->where('user_id=' . $this->user['id'])->find();
+        $this->assign('customer', $customer);
+        $this->assign('jump', $jump);
         $this->assign("seo_title", "绑定银行卡");
         $this->redirect();
     }
@@ -3466,310 +3470,312 @@ class UcenterController extends Controller
     //         exit(json_encode(array('status'=>'fail','msg'=>'绑定银行卡失败')));
     //     }
     // }
-    
-    public function bindbancard_do(){
-          $bankcard = str_replace(' ', '', Req::args('cardNo'));
-          
-          $realname = Filter::str(Req::args('name'));
-          $province = Filter::str(Req::args('province'));
-          $city = Filter::str(Req::args('city'));
-          
-          $customer = $this->model->table('customer')->fields('realname_verified,id_no')->where('user_id='.$this->user['id'])->find();
 
-          if($customer['realname_verified']==0){ //需要先实名认证
-            exit(json_encode(array('status'=>'fail','msg'=>'需要先实名认证')));
-          }
-          $idcard = $customer['id_no'];
-          $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=".$bankcard."&cardNo=".$idcard."&realName=".$realname;
-          $header = array(
-                'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
-            );
-         
-          $ret = Common::httpRequest($url,'GET',NULL,$header);
-          $result = json_decode($ret,true);
-          if($result['error_code']==0){
-            $has_bind = $this->model->table('bankcard')->where('cardno='.$bankcard)->find();
-            if($has_bind){
-                exit(json_encode(array('status'=>'fail','msg'=>'该银行卡已绑定了')));
+    public function bindbancard_do()
+    {
+        $bankcard = str_replace(' ', '', Req::args('cardNo'));
+
+        $realname = Filter::str(Req::args('name'));
+        $province = Filter::str(Req::args('province'));
+        $city = Filter::str(Req::args('city'));
+
+        $customer = $this->model->table('customer')->fields('realname_verified,id_no')->where('user_id=' . $this->user['id'])->find();
+
+        if ($customer['realname_verified'] == 0) { //需要先实名认证
+            exit(json_encode(array('status' => 'fail', 'msg' => '需要先实名认证')));
+        }
+        $idcard = $customer['id_no'];
+        $url = "https://aliyun-bankcard-verify.apistore.cn/bank?Mobile=&bankcard=" . $bankcard . "&cardNo=" . $idcard . "&realName=" . $realname;
+        $header = array(
+            'Authorization:APPCODE 8d41495e483346a5a683081fd046c0f2'
+        );
+
+        $ret = Common::httpRequest($url, 'GET', NULL, $header);
+        $result = json_decode($ret, true);
+        if ($result['error_code'] == 0) {
+            $has_bind = $this->model->table('bankcard')->where('cardno=' . $bankcard)->find();
+            if ($has_bind) {
+                exit(json_encode(array('status' => 'fail', 'msg' => '该银行卡已绑定了')));
             }
             $bank_code = $result['result']['information']['abbreviation'];
-            if($bank_code){
-                $logo = 'https://apimg.alipay.com/combo.png?d=cashier&t='.$bank_code;
-            }else{
+            if ($bank_code) {
+                $logo = 'https://apimg.alipay.com/combo.png?d=cashier&t=' . $bank_code;
+            } else {
                 $logo = '';
             }
             $data = array(
-                'user_id'=>$this->user['id'],
-                'cardno'=>$bankcard,
-                'bank_name'=>$result['result']['information']['bankname'],
-                'open_name'=>$realname,
-                'province'=>$province,
-                'city'=>$city,
-                'type'=>intval($result['result']['information']['iscreditcard']),
-                'bank_code'=>$bank_code,
-                'logo'=>$logo,
-                'bind_date'=>date('Y-m-d H:i:s')
-                );
+                'user_id' => $this->user['id'],
+                'cardno' => $bankcard,
+                'bank_name' => $result['result']['information']['bankname'],
+                'open_name' => $realname,
+                'province' => $province,
+                'city' => $city,
+                'type' => intval($result['result']['information']['iscreditcard']),
+                'bank_code' => $bank_code,
+                'logo' => $logo,
+                'bind_date' => date('Y-m-d H:i:s')
+            );
             $this->model->table('bankcard')->data($data)->insert();
-            exit(json_encode(array('status'=>'success','msg'=>'绑定银行卡成功')));
-          }else{
-            exit(json_encode(array('status'=>'fail','msg'=>'绑定银行卡失败')));
-          }
+            exit(json_encode(array('status' => 'success', 'msg' => '绑定银行卡成功')));
+        } else {
+            exit(json_encode(array('status' => 'fail', 'msg' => '绑定银行卡失败')));
+        }
     }
 
-    public function code_input(){
+    public function code_input()
+    {
         $this->redirect();
     }
 
-    public function toBePromoter(){
+    public function toBePromoter()
+    {
         $code = Filter::str(Req::args('code'));
         $rules = array('code:required:激活码不能为空!');
         $info = Validator::check($rules);
         if (is_array($info)) {
             $this->redirect("code_input", false, array('msg' => array("info", $info['msg'])));
-        }else{
-            $exist = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
-            if($exist){
+        } else {
+            $exist = $this->model->table('district_promoter')->where('user_id=' . $this->user['id'])->find();
+            if ($exist) {
                 $this->redirect("code_input", false, array('msg' => array("info", '您已经是代理了')));
                 exit;
             }
             $promoter_code = $this->model->table('promoter_code')->where("code ='{$code}'")->find();
-            if(!$promoter_code){
+            if (!$promoter_code) {
                 $this->redirect("code_input", false, array('msg' => array("info", '激活码不正确')));
                 exit;
             }
-            if(time()>strtotime($promoter_code['end_date'])){
+            if (time() > strtotime($promoter_code['end_date'])) {
                 $this->redirect("code_input", false, array('msg' => array("info", '激活码已过期')));
                 exit;
             }
-            if($promoter_code['status']==0){
+            if ($promoter_code['status'] == 0) {
                 $this->redirect("code_input", false, array('msg' => array("info", '激活码已失效')));
                 exit;
             }
-            $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>6,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id']))->insert();
-            $invite = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
-            if(!$invite){
-                $this->model->table('invite')->data(array('user_id'=>$promoter_code['user_id'],'invite_user_id'=>$this->user['id'],'from'=>'jihuo','district_id'=>$promoter_code['district_id'],'createtime'=>time()))->insert();
+            $result = $this->model->table('district_promoter')->data(array('user_id' => $this->user['id'], 'type' => 6, 'invitor_id' => $promoter_code['user_id'], 'create_time' => date('Y-m-d H:i:s'), 'join_time' => date('Y-m-d H:i:s'), 'hirer_id' => $promoter_code['district_id']))->insert();
+            $invite = $this->model->table('invite')->where('invite_user_id=' . $this->user['id'])->find();
+            if (!$invite) {
+                $this->model->table('invite')->data(array('user_id' => $promoter_code['user_id'], 'invite_user_id' => $this->user['id'], 'from' => 'jihuo', 'district_id' => $promoter_code['district_id'], 'createtime' => time()))->insert();
             }
-            if($result){
-                $this->model->table('promoter_code')->data(array('status'=>0))->where("code ='{$code}'")->update();
+            if ($result) {
+                $this->model->table('promoter_code')->data(array('status' => 0))->where("code ='{$code}'")->update();
                 $this->redirect("/ucenter/index", false, array('msg' => array("success", "激活成功！")));
-            }else{
+            } else {
                 $this->redirect("code_input", false, array('msg' => array("info", '激活失败')));
                 exit;
             }
         }
     }
 
-    public function dinpay(){
-        $merchant_private_key='MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAKwJnd8sHJojXIFxuf4Ibsdtc2cJHPlN2d/IKMBw5cuoRknNeMCTlR89MxEqfuPqYR7o1dGgOiehswR9T4vWByzhJlrLEFcgOcJFnDINzU9iZW4RcRKf187sLXYL8b5Vf5WjEfudXjnxSGt8HXPe+V0VimUVaIAQSWvBCWgHkFV/AgMBAAECgYBivF40EJAV0serrwatCk/x+xopf2x2lLy/l5Pz5pesS9aTUu7Dr6/9LtWZO4d57TFyWPUmi0v1JPOmVvkJa3vPz6HhZIzg5M4jd23Kj8fl94PaTSyGM3NEMRJDLPxWEB9ydR60VtRlieCf2lyH0JSKa5YMS09A6ks13W4SVNRqaQJBAOF22itr0KonXZaQxNIOrnGifCvBA11cKV1SMxT5iLOuYu5j2VOZNExC5oD4j1fkT/7kEq+7OSTEOhZwgcNkcGUCQQDDVmOlmKHBjUpMmv0xfc789Zj7PLoKO9WpYkDTbl7xPdc/Yb0OeeZlS123ZlplXLMVPpOQTpFcrbk9nhShaSYTAkEAhnrPsqqCMZt9VPtQikI7hof2LFrZ2OvJuGH5Gf+krBfN5ocj75sn+HzG5BJd3XzOwifjhXHUqbtpMk00+QiFiQJBAIv2JGQM3yn+ANSu4OhLSrp5h2nM80hN4yQA4I4eMS0NsGMbtwjeUzUVMUstrWufZjm8oqLtiL4tQ+Ngl0uoOb0CQQCuOR315Fwm/BW3QXjaASDwN8sahQxfNAtUyh7oGJfieKWYEjd3VYfaWXyful7FWW/Ry8H1pOSbIJZo07gLVTvA';
-       
-       $merchant_public_key='MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsCZ3fLByaI1yBcbn+CG7HbXNnCRz5TdnfyCjAcOXLqEZJzXjAk5UfPTMRKn7j6mEe6NXRoDonobMEfU+L1gcs4SZayxBXIDnCRZwyDc1PYmVuEXESn9fO7C12C/G+VX+VoxH7nV458UhrfB1z3vldFYplFWiAEElrwQloB5BVfwIDAQAB';
+    public function dinpay()
+    {
+        $merchant_private_key = 'MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAKwJnd8sHJojXIFxuf4Ibsdtc2cJHPlN2d/IKMBw5cuoRknNeMCTlR89MxEqfuPqYR7o1dGgOiehswR9T4vWByzhJlrLEFcgOcJFnDINzU9iZW4RcRKf187sLXYL8b5Vf5WjEfudXjnxSGt8HXPe+V0VimUVaIAQSWvBCWgHkFV/AgMBAAECgYBivF40EJAV0serrwatCk/x+xopf2x2lLy/l5Pz5pesS9aTUu7Dr6/9LtWZO4d57TFyWPUmi0v1JPOmVvkJa3vPz6HhZIzg5M4jd23Kj8fl94PaTSyGM3NEMRJDLPxWEB9ydR60VtRlieCf2lyH0JSKa5YMS09A6ks13W4SVNRqaQJBAOF22itr0KonXZaQxNIOrnGifCvBA11cKV1SMxT5iLOuYu5j2VOZNExC5oD4j1fkT/7kEq+7OSTEOhZwgcNkcGUCQQDDVmOlmKHBjUpMmv0xfc789Zj7PLoKO9WpYkDTbl7xPdc/Yb0OeeZlS123ZlplXLMVPpOQTpFcrbk9nhShaSYTAkEAhnrPsqqCMZt9VPtQikI7hof2LFrZ2OvJuGH5Gf+krBfN5ocj75sn+HzG5BJd3XzOwifjhXHUqbtpMk00+QiFiQJBAIv2JGQM3yn+ANSu4OhLSrp5h2nM80hN4yQA4I4eMS0NsGMbtwjeUzUVMUstrWufZjm8oqLtiL4tQ+Ngl0uoOb0CQQCuOR315Fwm/BW3QXjaASDwN8sahQxfNAtUyh7oGJfieKWYEjd3VYfaWXyful7FWW/Ry8H1pOSbIJZo07gLVTvA';
 
-       $dinpay_public_key='MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCOglLSDWk8iIHH5zFvAg9n++I4iew5Zj4M/8J8TLRj7UShJ3roroNgCkH1Iyw65xIddlCfJK8wkszpZ4OvPRiCDUBaEMENF/TQmscL2M+Ly7XEQ34RTQ1WVcpkZb7KJuiK3XIByYM0fETM1RVhQGJsnC7QpDaorjkWjpuLcR6bDwIDAQAB ';
-       
+        $merchant_public_key = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsCZ3fLByaI1yBcbn+CG7HbXNnCRz5TdnfyCjAcOXLqEZJzXjAk5UfPTMRKn7j6mEe6NXRoDonobMEfU+L1gcs4SZayxBXIDnCRZwyDc1PYmVuEXESn9fO7C12C/G+VX+VoxH7nV458UhrfB1z3vldFYplFWiAEElrwQloB5BVfwIDAQAB';
 
-    // $merchant_code = "1111110166";//商户号，1118004517是测试商户号，线上发布时要更换商家自己的商户号！
-    $merchant_code = "4000038801";
+        $dinpay_public_key = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCOglLSDWk8iIHH5zFvAg9n++I4iew5Zj4M/8J8TLRj7UShJ3roroNgCkH1Iyw65xIddlCfJK8wkszpZ4OvPRiCDUBaEMENF/TQmscL2M+Ly7XEQ34RTQ1WVcpkZb7KJuiK3XIByYM0fETM1RVhQGJsnC7QpDaorjkWjpuLcR6bDwIDAQAB ';
 
-    $service_type ="direct_pay";    
 
-    $interface_version ="V3.0";
+        // $merchant_code = "1111110166";//商户号，1118004517是测试商户号，线上发布时要更换商家自己的商户号！
+        $merchant_code = "4000038801";
 
-    $sign_type ="RSA-S";
+        $service_type = "direct_pay";
 
-    $input_charset = "UTF-8";
-    
-    // $notify_url ="http://15l0549c66.iask.in:45191/testnewb2c/offline_notify.php";
-      $notify_url ="http://www.ymlypt.com/payment/dinpay_callback";       
-    
-    $order_no = Common::createOrderNo();
+        $interface_version = "V3.0";
 
-    // $order_no='dinpay'.$order_no;    
+        $sign_type = "RSA-S";
 
-    $order_time = date( 'Y-m-d H:i:s' );    
+        $input_charset = "UTF-8";
 
-    $order_amount = Req::args('amount')?Req::args('amount'): '0.01';  
+        // $notify_url ="http://15l0549c66.iask.in:45191/testnewb2c/offline_notify.php";
+        $notify_url = "http://www.ymlypt.com/payment/dinpay_callback";
 
-    $product_name ="testpay";
+        $order_no = Common::createOrderNo();
 
-    //插入订单
-    $data['type']=4;
-    $data['order_no'] = $order_no;
-    $data['user_id'] = $this->user['id'];
-    $data['payment'] = 30;
-    $data['status'] = 2;
-    $data['pay_status'] = 0;
-    $data['accept_name'] = '';
-    $data['mobile'] = '';
-    $data['payable_amount'] = $order_amount;
-    $data['create_time'] = $order_time;
-    $data['pay_time'] = $order_time;
-    $data['handling_fee'] = 0.00;
-    $data['order_amount'] = $order_amount;
-    $data['real_amount'] = $order_amount;
-    $data['point'] = 0;
-    $data['voucher_id'] = 0;
-    $data['prom_id']=0;
-    $data['shop_ids']=0;
-    $model = new Model('order_offline');
-    $exist=$model->where('order_no='.$order_no)->find();
-    if(!$exist){
-        $order_id=$model->data($data)->insert();
-    }else{
-        $order_id=$exist['id'];
-    }   
+        // $order_no='dinpay'.$order_no;
 
-    //以下参数为可选参数，如有需要，可参考文档设定参数值
-    
-    $return_url ="http://www.ymlypt.com/ucenter/order_details/id/{$order_id}";    
-    
-    $pay_type = "";
-    
-    $redo_flag = "";    
-    
-    $product_code = ""; 
+        $order_time = date('Y-m-d H:i:s');
 
-    $product_desc = ""; 
+        $order_amount = Req::args('amount') ? Req::args('amount') : '0.01';
 
-    $product_num = "";
+        $product_name = "testpay";
 
-    $show_url = ""; 
+        //插入订单
+        $data['type'] = 4;
+        $data['order_no'] = $order_no;
+        $data['user_id'] = $this->user['id'];
+        $data['payment'] = 30;
+        $data['status'] = 2;
+        $data['pay_status'] = 0;
+        $data['accept_name'] = '';
+        $data['mobile'] = '';
+        $data['payable_amount'] = $order_amount;
+        $data['create_time'] = $order_time;
+        $data['pay_time'] = $order_time;
+        $data['handling_fee'] = 0.00;
+        $data['order_amount'] = $order_amount;
+        $data['real_amount'] = $order_amount;
+        $data['point'] = 0;
+        $data['voucher_id'] = 0;
+        $data['prom_id'] = 0;
+        $data['shop_ids'] = 0;
+        $model = new Model('order_offline');
+        $exist = $model->where('order_no=' . $order_no)->find();
+        if (!$exist) {
+            $order_id = $model->data($data)->insert();
+        } else {
+            $order_id = $exist['id'];
+        }
 
-    $client_ip ="" ;    
+        //以下参数为可选参数，如有需要，可参考文档设定参数值
 
-    $bank_code = "";    
+        $return_url = "http://www.ymlypt.com/ucenter/order_details/id/{$order_id}";
 
-    $extend_param = "";
+        $pay_type = "";
 
-    $extra_return_param = "";   
+        $redo_flag = "";
 
-        
-    
+        $product_code = "";
+
+        $product_desc = "";
+
+        $product_num = "";
+
+        $show_url = "";
+
+        $client_ip = "";
+
+        $bank_code = "";
+
+        $extend_param = "";
+
+        $extra_return_param = "";
+
 
 /////////////////////////////   参数组装  /////////////////////////////////
-/**
-除了sign_type参数，其他非空参数都要参与组装，组装顺序是按照a~z的顺序，下划线"_"优先于字母    
-*/
-    
-    $signStr= "";
-    
-    if($bank_code != ""){
-        $signStr = $signStr."bank_code=".$bank_code."&";
-    }
-    if($client_ip != ""){
-        $signStr = $signStr."client_ip=".$client_ip."&";
-    }
-    if($extend_param != ""){
-        $signStr = $signStr."extend_param=".$extend_param."&";
-    }
-    if($extra_return_param != ""){
-        $signStr = $signStr."extra_return_param=".$extra_return_param."&";
-    }
-    
-    $signStr = $signStr."input_charset=".$input_charset."&";    
-    $signStr = $signStr."interface_version=".$interface_version."&";    
-    $signStr = $signStr."merchant_code=".$merchant_code."&";    
-    $signStr = $signStr."notify_url=".$notify_url."&";      
-    $signStr = $signStr."order_amount=".$order_amount."&";      
-    $signStr = $signStr."order_no=".$order_no."&";      
-    $signStr = $signStr."order_time=".$order_time."&";  
+        /**
+         * 除了sign_type参数，其他非空参数都要参与组装，组装顺序是按照a~z的顺序，下划线"_"优先于字母
+         */
 
-    if($pay_type != ""){
-        $signStr = $signStr."pay_type=".$pay_type."&";
-    }
+        $signStr = "";
 
-    if($product_code != ""){
-        $signStr = $signStr."product_code=".$product_code."&";
-    }   
-    if($product_desc != ""){
-        $signStr = $signStr."product_desc=".$product_desc."&";
-    }
-    
-    $signStr = $signStr."product_name=".$product_name."&";
+        if ($bank_code != "") {
+            $signStr = $signStr . "bank_code=" . $bank_code . "&";
+        }
+        if ($client_ip != "") {
+            $signStr = $signStr . "client_ip=" . $client_ip . "&";
+        }
+        if ($extend_param != "") {
+            $signStr = $signStr . "extend_param=" . $extend_param . "&";
+        }
+        if ($extra_return_param != "") {
+            $signStr = $signStr . "extra_return_param=" . $extra_return_param . "&";
+        }
 
-    if($product_num != ""){
-        $signStr = $signStr."product_num=".$product_num."&";
-    }   
-    if($redo_flag != ""){
-        $signStr = $signStr."redo_flag=".$redo_flag."&";
-    }
-    if($return_url != ""){
-        $signStr = $signStr."return_url=".$return_url."&";
-    }       
-    
-    $signStr = $signStr."service_type=".$service_type;
+        $signStr = $signStr . "input_charset=" . $input_charset . "&";
+        $signStr = $signStr . "interface_version=" . $interface_version . "&";
+        $signStr = $signStr . "merchant_code=" . $merchant_code . "&";
+        $signStr = $signStr . "notify_url=" . $notify_url . "&";
+        $signStr = $signStr . "order_amount=" . $order_amount . "&";
+        $signStr = $signStr . "order_no=" . $order_no . "&";
+        $signStr = $signStr . "order_time=" . $order_time . "&";
 
-    if($show_url != ""){    
-        
-        $signStr = $signStr."&show_url=".$show_url;
-    }
-    
-      //echo $signStr."<br>";  
-        
-        
-    
+        if ($pay_type != "") {
+            $signStr = $signStr . "pay_type=" . $pay_type . "&";
+        }
+
+        if ($product_code != "") {
+            $signStr = $signStr . "product_code=" . $product_code . "&";
+        }
+        if ($product_desc != "") {
+            $signStr = $signStr . "product_desc=" . $product_desc . "&";
+        }
+
+        $signStr = $signStr . "product_name=" . $product_name . "&";
+
+        if ($product_num != "") {
+            $signStr = $signStr . "product_num=" . $product_num . "&";
+        }
+        if ($redo_flag != "") {
+            $signStr = $signStr . "redo_flag=" . $redo_flag . "&";
+        }
+        if ($return_url != "") {
+            $signStr = $signStr . "return_url=" . $return_url . "&";
+        }
+
+        $signStr = $signStr . "service_type=" . $service_type;
+
+        if ($show_url != "") {
+
+            $signStr = $signStr . "&show_url=" . $show_url;
+        }
+
+        //echo $signStr."<br>";
+
+
 /////////////////////////////   获取sign值（RSA-S加密）  /////////////////////////////////
-    $merchant_private_key = "-----BEGIN PRIVATE KEY-----"."\r\n".wordwrap(trim($merchant_private_key),64,"\r\n",true)."\r\n"."-----END PRIVATE KEY-----";
-    
-    $merchant_private_key= openssl_get_privatekey($merchant_private_key);
-    
-    openssl_sign($signStr,$sign_info,$merchant_private_key,OPENSSL_ALGO_MD5);
-    
-    $sign = base64_encode($sign_info);
+        $merchant_private_key = "-----BEGIN PRIVATE KEY-----" . "\r\n" . wordwrap(trim($merchant_private_key), 64, "\r\n", true) . "\r\n" . "-----END PRIVATE KEY-----";
 
-    // $params = array(
-    //     'sign'=>$sign,
-    //     'merchant_code'=>$merchant_code,
-    //     'order_no'=>$order_no,
-    //     'order_amount'=>$order_amount,
-    //     'service_type'=>$service_type,
-    //     'input_charset'=>$input_charset,
-    //     'notify_url'=>$notify_url,
-    //     'interface_version'=>$interface_version,
-    //     'sign_type'=>$sign_type,
-    //     'order_time'=>$order_time,
-    //     'product_name'=>$product_name,
-    //     'client_ip'=>$client_ip,
-    //     'extend_param'=>$extend_param,
-    //     'extra_return_param'=>$extra_return_param,
-    //     'pay_type'=>$pay_type,
-    //     'product_code'=>$product_code,
-    //     'product_desc'=>$product_desc,
-    //     'product_num'=>$product_num,
-    //     'return_url'=>$return_url,
-    //     'show_url'=>$show_url,
-    //     'redo_flag'=>$redo_flag
-    //     );
-    //   echo "<pre>";
-    //   print_r($params);
-    //   echo "<pre>";
-    //   die;
+        $merchant_private_key = openssl_get_privatekey($merchant_private_key);
 
-      $this->assign('sign',$sign);
-      $this->assign('merchant_code',$merchant_code);
-      $this->assign('service_type',$service_type);
-      $this->assign('interface_version',$interface_version);
-      $this->assign('sign_type',$sign_type);
-      $this->assign('input_charset',$input_charset);
-      $this->assign('notify_url',$notify_url);
-      $this->assign('order_no',$order_no);
-      $this->assign('order_time',$order_time);
-      $this->assign('client_ip',$client_ip);
-      $this->assign('extend_param',$extend_param);
-      $this->assign('extra_return_param',$extra_return_param);
-      $this->assign('pay_type',$pay_type);
-      $this->assign('product_code',$product_code);
-      $this->assign('product_name',$product_name);
-      $this->assign('product_desc',$product_desc);
-      $this->assign('product_num',$product_num);
-      $this->assign('return_url',$return_url);
-      $this->assign('show_url',$show_url);
-      $this->assign('redo_flag',$redo_flag);
-      $this->redirect();
+        openssl_sign($signStr, $sign_info, $merchant_private_key, OPENSSL_ALGO_MD5);
+
+        $sign = base64_encode($sign_info);
+
+        // $params = array(
+        //     'sign'=>$sign,
+        //     'merchant_code'=>$merchant_code,
+        //     'order_no'=>$order_no,
+        //     'order_amount'=>$order_amount,
+        //     'service_type'=>$service_type,
+        //     'input_charset'=>$input_charset,
+        //     'notify_url'=>$notify_url,
+        //     'interface_version'=>$interface_version,
+        //     'sign_type'=>$sign_type,
+        //     'order_time'=>$order_time,
+        //     'product_name'=>$product_name,
+        //     'client_ip'=>$client_ip,
+        //     'extend_param'=>$extend_param,
+        //     'extra_return_param'=>$extra_return_param,
+        //     'pay_type'=>$pay_type,
+        //     'product_code'=>$product_code,
+        //     'product_desc'=>$product_desc,
+        //     'product_num'=>$product_num,
+        //     'return_url'=>$return_url,
+        //     'show_url'=>$show_url,
+        //     'redo_flag'=>$redo_flag
+        //     );
+        //   echo "<pre>";
+        //   print_r($params);
+        //   echo "<pre>";
+        //   die;
+
+        $this->assign('sign', $sign);
+        $this->assign('merchant_code', $merchant_code);
+        $this->assign('service_type', $service_type);
+        $this->assign('interface_version', $interface_version);
+        $this->assign('sign_type', $sign_type);
+        $this->assign('input_charset', $input_charset);
+        $this->assign('notify_url', $notify_url);
+        $this->assign('order_no', $order_no);
+        $this->assign('order_time', $order_time);
+        $this->assign('client_ip', $client_ip);
+        $this->assign('extend_param', $extend_param);
+        $this->assign('extra_return_param', $extra_return_param);
+        $this->assign('pay_type', $pay_type);
+        $this->assign('product_code', $product_code);
+        $this->assign('product_name', $product_name);
+        $this->assign('product_desc', $product_desc);
+        $this->assign('product_num', $product_num);
+        $this->assign('return_url', $return_url);
+        $this->assign('show_url', $show_url);
+        $this->assign('redo_flag', $redo_flag);
+        $this->redirect();
     }
 
-    public function district_login(){
+    public function district_login()
+    {
         $this->redirect();
         // $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
         // if(!$district){
@@ -3779,22 +3785,24 @@ class UcenterController extends Controller
         // }     
     }
 
-    public function district(){
-        $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
-        if(!$district){
+    public function district()
+    {
+        $district = $this->model->table('district_shop')->where('owner_id=' . $this->user['id'])->find();
+        if (!$district) {
             $this->redirect('/ucenter/district_login');
-        }else{
+        } else {
             // $this->layout = "district_layout";
-            $this->assign('test',false);
-            $this->assign('district_name',$district['name']);
+            $this->assign('test', false);
+            $this->assign('district_name', $district['name']);
             $this->assign("seo_title", "专区管理");
             $this->redirect();
         }
     }
 
-    public function shop_check_do(){
+    public function shop_check_do()
+    {
         // $myParams = array();  
-        
+
         // $myParams['method'] = 'ysepay.merchant.register.token.get';
         // $myParams['partner_id'] = 'yuanmeng';
         // // $myParams['partner_id'] = $this->user['id'];
@@ -3802,14 +3810,14 @@ class UcenterController extends Controller
         // $myParams['charset'] = 'GBK';
         // $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
         // $myParams['sign_type'] = 'RSA';  
-          
+
         // $myParams['version'] = '3.0';
         // $biz_content_arr = array(
         // );
 
         // $myParams['biz_content'] = '{}';
         // ksort($myParams);
-        
+
         // $signStr = "";
         // foreach ($myParams as $key => $val) {
         //     $signStr .= $key . '=' . $val . '&';
@@ -3843,7 +3851,7 @@ class UcenterController extends Controller
 
         $upfile1 = new UploadFile('positive_idcard', $upfile_path1, '10000k', '', 'hash', $this->user['id']);
         $upfile1->save();
-        $info1 = $upfile1->getInfo();        
+        $info1 = $upfile1->getInfo();
         $positive_idcard = "";
 
         if ($info1[0]['status'] == 1) {
@@ -3854,37 +3862,38 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url1, 100, 100);
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
-            if($this->user['id']==42608){
+            if ($this->user['id'] == 42608) {
                 // var_dump($_FILES['positive_idcard']['name']);die;
                 // $save_url = '/data/uploads/positive_idcard/'.$this->user['id'].$_FILES['positive_idcard']['name'];
                 $upyun = new Upyun();
-            
-                $fh = fopen($_FILES["positive_idcard"]["tmp_name"], 'rb');
-                $oldname=$_FILES["positive_idcard"]["name"];
+
+                // $fh = fopen($_FILES["positive_idcard"]["tmp_name"], 'rb');
+                $fh = fopen($image_url1, 'rb');
+                $oldname = $_FILES["positive_idcard"]["name"];
                 $filetype = pathinfo($oldname, PATHINFO_EXTENSION);
-                $newname=$this->user['id'].'.jpg';
-                $newfileurl='/data/uploads/positive_idcard/'.$newname;
+                $newname = $this->user['id'] . '.jpg';
+                $newfileurl = '/data/uploads/positive_idcard/' . $newname;
                 $upinfo = $upyun->writeFile($newfileurl, $fh, True);   // 上传图片，自动创建目录
                 fclose($fh);
-                $positive_idcard = 'https://ymlypt.b0.upaiyun.com'.$newfileurl;
-            // var_dump($_FILES['positive_idcard']);    
-            // // var_dump(realpath($_FILES['positive_idcard']['tmp_name']));die;    
-            //     $data = array(
-            //         'picType'=>'00',
-            //         'picFile'=>curl_file_create($positive_idcard),
-            //         'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
-            //         'superUsercode'=>'yuanmeng'
-            //         );
-            //     $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-            //     $header = array(
-            //         'Content-Type:multipart/form-data'
-            //         );
-            //     $result = Common::httpRequest($act,'POST',$data,$header);
-            //     var_dump($data);
-            //       echo "<pre>";
-            //       print_r($result);
-            //       echo "<pre>";
-            //       die;
+                $positive_idcard = 'https://ymlypt.b0.upaiyun.com' . $newfileurl;
+                // var_dump($_FILES['positive_idcard']);
+                // // var_dump(realpath($_FILES['positive_idcard']['tmp_name']));die;
+                //     $data = array(
+                //         'picType'=>'00',
+                //         'picFile'=>curl_file_create($positive_idcard),
+                //         'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                //         'superUsercode'=>'yuanmeng'
+                //         );
+                //     $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+                //     $header = array(
+                //         'Content-Type:multipart/form-data'
+                //         );
+                //     $result = Common::httpRequest($act,'POST',$data,$header);
+                //     var_dump($data);
+                //       echo "<pre>";
+                //       print_r($result);
+                //       echo "<pre>";
+                //       die;
             }
         }
 
@@ -3899,7 +3908,7 @@ class UcenterController extends Controller
             $image = new Image();
             $image->suffix = '';
             $image->thumb(APP_ROOT . $image_url2, 100, 100);
-            $native_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url2; 
+            $native_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url2;
         }
 
         $upfile3 = new UploadFile('business_licence', $upfile_path3, '10000k', '', 'hash', $this->user['id']);
@@ -3958,46 +3967,46 @@ class UcenterController extends Controller
             $hand_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url6;
         }
 
-       $type = Filter::int(Req::args('shop_type')); //1实体商家 2个人微商
-       if($type==0){
-        $this->redirect("ucenter/offline_balance_withdraw", false, array('msg' => array("warning", "店铺类型未选择")));
-       }
-       // $business_licence = Req::args('business_licence'); //营业执照
-       // $positive_idcard = Req::args('positive_idcard'); //身份证正面照
-       // $native_idcard = Req::args('native_idcard'); //身份证反面照
-       // $account_picture = Req::args('account_picture'); //开户许可证照
-       $account_card = Req::args('account_card'); //结算银行卡号
-       $bank_name = Req::args('bank_name');
-       // $shop_photo = Req::args('shop_photo'); //门店照
-       // $hand_idcard = Req::args('hand_idcard'); //手持身份证照
+        $type = Filter::int(Req::args('shop_type')); //1实体商家 2个人微商
+        if ($type == 0) {
+            $this->redirect("ucenter/offline_balance_withdraw", false, array('msg' => array("warning", "店铺类型未选择")));
+        }
+        // $business_licence = Req::args('business_licence'); //营业执照
+        // $positive_idcard = Req::args('positive_idcard'); //身份证正面照
+        // $native_idcard = Req::args('native_idcard'); //身份证反面照
+        // $account_picture = Req::args('account_picture'); //开户许可证照
+        $account_card = Req::args('account_card'); //结算银行卡号
+        $bank_name = Req::args('bank_name');
+        // $shop_photo = Req::args('shop_photo'); //门店照
+        // $hand_idcard = Req::args('hand_idcard'); //手持身份证照
 
-       // $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
-       
-       $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
-       
-       $data = array(
-        'user_id'=>$this->user['id'],
-        'type'=>$type,
-        'business_licence'=>$business_licence,
-        'positive_idcard'=>$positive_idcard,
-        'native_idcard'=>$native_idcard,
-        // 'account_picture'=>$account_picture,
-        'account_card'=>$account_card,
-        'bank_name'=>$bank_name,
-        'shop_photo'=>$shop_photo,
-        'hand_idcard'=>$hand_idcard,
-        'status'=>0,
-        'create_date'=>date('Y-m-d H:i:s')
+        // $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
+
+        $this->model->table('district_promoter')->data(array('shop_type' => $type))->where('user_id=' . $this->user['id'])->update();
+
+        $data = array(
+            'user_id' => $this->user['id'],
+            'type' => $type,
+            'business_licence' => $business_licence,
+            'positive_idcard' => $positive_idcard,
+            'native_idcard' => $native_idcard,
+            // 'account_picture'=>$account_picture,
+            'account_card' => $account_card,
+            'bank_name' => $bank_name,
+            'shop_photo' => $shop_photo,
+            'hand_idcard' => $hand_idcard,
+            'status' => 0,
+            'create_date' => date('Y-m-d H:i:s')
         );
-       $shop_check = $this->model->table('shop_check')->fields('id,status')->where('user_id='.$this->user['id'])->find();
-       if(!$shop_check){
-           $this->model->table('shop_check')->data($data)->insert();
-       }else{
-           $this->model->table('shop_check')->data($data)->where('id='.$shop_check['id'])->update();
-       }
-       $this->redirect("ucenter/offline_balance_withdraw", false, array('msg' => array("success", "提交成功！")));
-       
-    
+        $shop_check = $this->model->table('shop_check')->fields('id,status')->where('user_id=' . $this->user['id'])->find();
+        if (!$shop_check) {
+            $this->model->table('shop_check')->data($data)->insert();
+        } else {
+            $this->model->table('shop_check')->data($data)->where('id=' . $shop_check['id'])->update();
+        }
+        $this->redirect("ucenter/offline_balance_withdraw", false, array('msg' => array("success", "提交成功！")));
+
+
     }
 
     public function sign_encrypt($input)
@@ -4022,43 +4031,43 @@ class UcenterController extends Controller
         return $return;
     }
 
-    public function yinpay_upload_test(){
-        $myParams = array();  
-        
-            $myParams['method'] = 'ysepay.merchant.register.token.get';
-            $myParams['partner_id'] = 'yuanmeng';
-            // $myParams['partner_id'] = $this->user['id'];
-            $myParams['timestamp'] = date('Y-m-d H:i:s', time());
-            $myParams['charset'] = 'GBK';
-            $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
-            $myParams['sign_type'] = 'RSA';  
-              
-            $myParams['version'] = '3.0';
-            $biz_content_arr = array(
-            );
+    public function yinpay_upload_test()
+    {
+        $myParams = array();
 
-            $myParams['biz_content'] = '{}';
-            ksort($myParams);
-            
-            $signStr = "";
-            foreach ($myParams as $key => $val) {
-                $signStr .= $key . '=' . $val . '&';
-            }
-            $signStr = rtrim($signStr, '&');
-            $sign = $this->sign_encrypt(array('data' => $signStr));
-            $myParams['sign'] = trim($sign['check']);
-            $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
+        $myParams['method'] = 'ysepay.merchant.register.token.get';
+        $myParams['partner_id'] = 'yuanmeng';
+        // $myParams['partner_id'] = $this->user['id'];
+        $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+        $myParams['charset'] = 'GBK';
+        $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';
+        $myParams['sign_type'] = 'RSA';
 
-            $ret = Common::httpRequest($url,'POST',$myParams);
-            $ret = json_decode($ret,true);
+        $myParams['version'] = '3.0';
+        $biz_content_arr = array();
 
-            if(isset($ret['ysepay_merchant_register_token_get_response']['token'])){
-                $this->assign('yin_token',$ret['ysepay_merchant_register_token_get_response']['token']);
-            }else{
-                $this->assign('yin_token','');
-            }
-            $this->assign('seo_title', '上传图片测试');
-            $this->redirect();
+        $myParams['biz_content'] = '{}';
+        ksort($myParams);
+
+        $signStr = "";
+        foreach ($myParams as $key => $val) {
+            $signStr .= $key . '=' . $val . '&';
+        }
+        $signStr = rtrim($signStr, '&');
+        $sign = $this->sign_encrypt(array('data' => $signStr));
+        $myParams['sign'] = trim($sign['check']);
+        $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
+
+        $ret = Common::httpRequest($url, 'POST', $myParams);
+        $ret = json_decode($ret, true);
+
+        if (isset($ret['ysepay_merchant_register_token_get_response']['token'])) {
+            $this->assign('yin_token', $ret['ysepay_merchant_register_token_get_response']['token']);
+        } else {
+            $this->assign('yin_token', '');
+        }
+        $this->assign('seo_title', '上传图片测试');
+        $this->redirect();
     }
 
 }
