@@ -3841,7 +3841,7 @@ class UcenterController extends Controller
         $result5 = array();
         $result6 = array();
 
-        $upfile1 = new UploadFile('positive_idcard', $upfile_path1, '5000k', '', 'hash', $this->user['id']);
+        $upfile1 = new UploadFile('positive_idcard', $upfile_path1, '10000k', '', 'hash', $this->user['id']);
         $upfile1->save();
         $info1 = $upfile1->getInfo();        
         $positive_idcard = "";
@@ -3880,7 +3880,7 @@ class UcenterController extends Controller
             // }
         }
 
-        $upfile2 = new UploadFile('native_idcard', $upfile_path2, '5000k', '', 'hash', $this->user['id']);
+        $upfile2 = new UploadFile('native_idcard', $upfile_path2, '10000k', '', 'hash', $this->user['id']);
         $upfile2->save();
         $info2 = $upfile2->getInfo();
         $native_idcard = "";
@@ -3894,7 +3894,7 @@ class UcenterController extends Controller
             $native_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url2; 
         }
 
-        $upfile3 = new UploadFile('business_licence', $upfile_path3, '5000k', '', 'hash', $this->user['id']);
+        $upfile3 = new UploadFile('business_licence', $upfile_path3, '10000k', '', 'hash', $this->user['id']);
         $upfile3->save();
         $info3 = $upfile3->getInfo();
         $business_licence = "";
@@ -3922,7 +3922,7 @@ class UcenterController extends Controller
         //     $account_picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url4;
         // }
 
-        $upfile5 = new UploadFile('shop_photo', $upfile_path5, '5000k', '', 'hash', $this->user['id']);
+        $upfile5 = new UploadFile('shop_photo', $upfile_path5, '10000k', '', 'hash', $this->user['id']);
         $upfile5->save();
         $info5 = $upfile5->getInfo();
         $shop_photo = "";
@@ -3936,7 +3936,7 @@ class UcenterController extends Controller
             $shop_photo = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url5;
         }
 
-        $upfile6 = new UploadFile('hand_idcard', $upfile_path6, '5000k', '', 'hash', $this->user['id']);
+        $upfile6 = new UploadFile('hand_idcard', $upfile_path6, '10000k', '', 'hash', $this->user['id']);
         $upfile6->save();
         $info6 = $upfile6->getInfo();
         $hand_idcard = "";
