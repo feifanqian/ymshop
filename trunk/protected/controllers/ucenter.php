@@ -3856,7 +3856,7 @@ class UcenterController extends Controller
 
             if($this->user['id']==42608){
                 $save_url = '/data/uploads/positive_idcard/'.date('Y-m-d').$this->user['id'].'.jpg';
-                $upyun = new UpYun();
+                $upyun = new Upyun();
                 $res = $upyun->writeFile($save_url,$_FILES['positive_idcard']);
                 $positive_idcard = 'https://ymlypt.b0.upaiyun.com'.$save_url;
             // var_dump($_FILES['positive_idcard']);    
