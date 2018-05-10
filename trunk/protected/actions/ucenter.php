@@ -2583,6 +2583,7 @@ class UcenterAction extends Controller {
             $return = Common::httpRequest($url,'POST',$data,$header);
             $ret = json_decode($return,true);
             if($ret['code']==200){
+
                 return $ret['token'];
             }else{
                 return FALSE;
@@ -2616,6 +2617,7 @@ class UcenterAction extends Controller {
         $return = Common::httpRequest($url,'POST',$data,$header);
         $ret = json_decode($return,true);
         if($ret['code']==200){
+            $this->model->table("user")->data(array('rongyun_token' => $ret['token']))->where('id=' . $user_id)->update();
             $this->code = 0;
             $this->content = $ret['token'];
             return;
