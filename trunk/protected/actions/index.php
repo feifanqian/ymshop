@@ -427,33 +427,33 @@ class IndexAction extends Controller {
 
     public function index_area(){
         $now  = date('Y-m-d H:i:s');
-        $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->limit(10)->findAll();
-        // $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->limit(10)->findAll();
-        if($list1){
-            foreach($list1 as $k=>$v){
-                $list1[$k]['tag'] = $v['title'];
-                $list1[$k]['max_num'] = $v['max_sell_count'];
-                $list1[$k]['start_time'] = $v['start_date'];
-                $list1[$k]['end_time'] = $v['end_date'];
-                $list1[$k]['order_num'] = $v['order_count'];
-                $list1[$k]['quota_num'] = $v['quota_count'];
-                $set = current(unserialize($v['price_set']));
-                $list1[$k]['price'] = sprintf("%.2f",$set['cash']);
-                $list1[$k]['send_point'] = '0.00';
-                $list1[$k]['description'] = '';
-                $list1[$k]['goods_num'] = $v['max_sell_count'];
-                $list1[$k]['wants'] = '';
-                $list1[$k]['wants_num'] = '0';
-                $list1[$k]['cost_point'] = $set['point'];
-                $list1[$k]['flash_type'] = 'point';
-                unset($list1[$k]['max_sell_count']);
-                unset($list1[$k]['start_date']);
-                unset($list1[$k]['end_date']);
-                unset($list1[$k]['order_count']);
-                unset($list1[$k]['quota_count']);
-                unset($list1[$k]['price_set']);
-            }
-        }
+        // $list1 = $this->model->table("pointflash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->limit(10)->findAll();
+        $list2 = $this->model->table("flash_sale as gb")->fields("*,gb.id as id")->order("gb.is_end asc,gb.id desc")->join("left join goods as go on gb.goods_id = go.id")->limit(10)->findAll();
+        // if($list1){
+        //     foreach($list1 as $k=>$v){
+        //         $list1[$k]['tag'] = $v['title'];
+        //         $list1[$k]['max_num'] = $v['max_sell_count'];
+        //         $list1[$k]['start_time'] = $v['start_date'];
+        //         $list1[$k]['end_time'] = $v['end_date'];
+        //         $list1[$k]['order_num'] = $v['order_count'];
+        //         $list1[$k]['quota_num'] = $v['quota_count'];
+        //         $set = current(unserialize($v['price_set']));
+        //         $list1[$k]['price'] = sprintf("%.2f",$set['cash']);
+        //         $list1[$k]['send_point'] = '0.00';
+        //         $list1[$k]['description'] = '';
+        //         $list1[$k]['goods_num'] = $v['max_sell_count'];
+        //         $list1[$k]['wants'] = '';
+        //         $list1[$k]['wants_num'] = '0';
+        //         $list1[$k]['cost_point'] = $set['point'];
+        //         $list1[$k]['flash_type'] = 'point';
+        //         unset($list1[$k]['max_sell_count']);
+        //         unset($list1[$k]['start_date']);
+        //         unset($list1[$k]['end_date']);
+        //         unset($list1[$k]['order_count']);
+        //         unset($list1[$k]['quota_count']);
+        //         unset($list1[$k]['price_set']);
+        //     }
+        // }
         // if($list2){
         //     foreach($list2 as $k=>$v){
         //         $list2[$k]['cost_point'] = '0.00';
@@ -461,7 +461,7 @@ class IndexAction extends Controller {
         //     }
         // }
         // $flashlist = array_merge($list1,$list2);
-        $flashlist = $list1;
+        $flashlist = $list2;
         if ($flashlist) {
             foreach ($flashlist as $k => &$v) {
                 // if(!empty($v['imgs'])){
