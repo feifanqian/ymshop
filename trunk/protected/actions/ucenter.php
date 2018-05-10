@@ -82,7 +82,7 @@ class UcenterAction extends Controller {
                 $validcode = CHash::random(8);
                 $token = CHash::random(32, 'char');
                 $time = date('Y-m-d H:i:s');
-                $last_id = $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day')), 'nickname' => $mobile, 'password' => CHash::md5($password, $validcode), 'avatar' => '', 'validcode' => $validcode))->insert();
+                $last_id = $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day')), 'nickname' => $mobile, 'password' => CHash::md5($password, $validcode), 'avatar' => 'http://www.ymlypt.com/themes/mobile/images/logo-new.png', 'validcode' => $validcode))->insert();
                 //更新用户名
                 if($last_id){
                     $name = "u" . sprintf("%09d", $last_id);
