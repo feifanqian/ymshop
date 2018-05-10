@@ -36,7 +36,8 @@ class Upyun {
     public function __construct() {
         $upyun = Config::getInstance()->get("upyun");
         $this->_bucketname = $upyun['upyun_bucket'];
-        $this->_username = $upyun['upyun_username'];
+        // $this->_username = $upyun['upyun_username'];
+        $this->_username = 'y7932192';
         $this->_password = md5($upyun['upyun_password']);
         $this->_timeout = 30;
         $this->endpoint = self::ED_AUTO;
