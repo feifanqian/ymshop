@@ -3854,11 +3854,13 @@ class UcenterController extends Controller
             $image->thumb(APP_ROOT . $image_url1, 100, 100);
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
-            // if($this->user['id']==42608){
-            //     $save_url = '/data/uploads/positive_idcard/'.date('Y-m-d').$this->user['id'].'.jpg';
-            //     $upyun = new Upyun();
-            //     $res = $upyun->writeFile($save_url,$_FILES['positive_idcard']['tmp_name']);
-            //     $positive_idcard = 'https://ymlypt.b0.upaiyun.com'.$save_url;
+            if($this->user['id']==42608){
+                var_dump($_FILES['positive_idcard']['tmp_name']);die; 
+                $save_url = '/data/uploads/positive_idcard/';
+                $upyun = new Upyun();
+
+                $res = $upyun->writeFile($save_url,$_FILES['positive_idcard']['tmp_name']);
+                $positive_idcard = 'https://ymlypt.b0.upaiyun.com'.$save_url;
             // var_dump($_FILES['positive_idcard']);    
             // // var_dump(realpath($_FILES['positive_idcard']['tmp_name']));die;    
             //     $data = array(
@@ -3877,7 +3879,7 @@ class UcenterController extends Controller
             //       print_r($result);
             //       echo "<pre>";
             //       die;
-            // }
+            }
         }
 
         $upfile2 = new UploadFile('native_idcard', $upfile_path2, '10000k', '', 'hash', $this->user['id']);
