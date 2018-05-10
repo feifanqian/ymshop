@@ -3870,7 +3870,7 @@ class UcenterController extends Controller
                 // $fh = fopen($_FILES["positive_idcard"]["tmp_name"], 'rb');
                 $opts = array(
                     'x-gmkerl-type'    => 'fix_width_or_height', // 缩略图类型
-                    'x-gmkerl-value'  => '300x180', // 缩略图大小
+                    'x-gmkerl-value'  => '300pxx180px', // 缩略图大小
                    'x-gmkerl-quality'  => 100, // 缩略图压缩质量
                    'x-gmkerl-unsharp' => true // 是否进行锐化处理
                 );
