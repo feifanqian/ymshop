@@ -3855,7 +3855,7 @@ class UcenterController extends Controller
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
             if($this->user['id']==42608){
-                var_dump($_FILES['positive_idcard']['tmp_name']);die; 
+                var_dump($_FILES['positive_idcard']);die; 
                 $save_url = '/data/uploads/positive_idcard/';
                 $upyun = new Upyun();
 
