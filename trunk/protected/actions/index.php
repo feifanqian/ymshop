@@ -454,12 +454,12 @@ class IndexAction extends Controller {
         //         unset($list1[$k]['price_set']);
         //     }
         // }
-        // if($list2){
-        //     foreach($list2 as $k=>$v){
-        //         $list2[$k]['cost_point'] = '0.00';
-        //         $list2[$k]['flash_type'] = 'cash';
-        //     }
-        // }
+        if($list2){
+            foreach($list2 as $k=>$v){
+                $list2[$k]['cost_point'] = '0.00';
+                $list2[$k]['flash_type'] = 'cash';
+            }
+        }
         // $flashlist = array_merge($list1,$list2);
         $flashlist = $list2;
         if ($flashlist) {
