@@ -3793,34 +3793,34 @@ class UcenterController extends Controller
     }
 
     public function shop_check_do(){
-        $myParams = array();  
+        // $myParams = array();  
         
-        $myParams['method'] = 'ysepay.merchant.register.token.get';
-        $myParams['partner_id'] = 'yuanmeng';
-        // $myParams['partner_id'] = $this->user['id'];
-        $myParams['timestamp'] = date('Y-m-d H:i:s', time());
-        $myParams['charset'] = 'GBK';
-        $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
-        $myParams['sign_type'] = 'RSA';  
+        // $myParams['method'] = 'ysepay.merchant.register.token.get';
+        // $myParams['partner_id'] = 'yuanmeng';
+        // // $myParams['partner_id'] = $this->user['id'];
+        // $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+        // $myParams['charset'] = 'GBK';
+        // $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+        // $myParams['sign_type'] = 'RSA';  
           
-        $myParams['version'] = '3.0';
-        $biz_content_arr = array(
-        );
+        // $myParams['version'] = '3.0';
+        // $biz_content_arr = array(
+        // );
 
-        $myParams['biz_content'] = '{}';
-        ksort($myParams);
+        // $myParams['biz_content'] = '{}';
+        // ksort($myParams);
         
-        $signStr = "";
-        foreach ($myParams as $key => $val) {
-            $signStr .= $key . '=' . $val . '&';
-        }
-        $signStr = rtrim($signStr, '&');
-        $sign = $this->sign_encrypt(array('data' => $signStr));
-        $myParams['sign'] = trim($sign['check']);
-        $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
+        // $signStr = "";
+        // foreach ($myParams as $key => $val) {
+        //     $signStr .= $key . '=' . $val . '&';
+        // }
+        // $signStr = rtrim($signStr, '&');
+        // $sign = $this->sign_encrypt(array('data' => $signStr));
+        // $myParams['sign'] = trim($sign['check']);
+        // $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
 
-        $ret = Common::httpRequest($url,'POST',$myParams);
-        $ret = json_decode($ret,true);
+        // $ret = Common::httpRequest($url,'POST',$myParams);
+        // $ret = json_decode($ret,true);
 
         $upfile_path1 = Tiny::getPath("uploads") . "/shop_check/positive_idcard/";
         $upfile_path2 = Tiny::getPath("uploads") . "/shop_check/native_idcard/";
@@ -3855,24 +3855,28 @@ class UcenterController extends Controller
             $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
             if($this->user['id']==42608){
-            var_dump($_FILES['positive_idcard']);    
-            // var_dump(realpath($_FILES['positive_idcard']['tmp_name']));die;    
-                $data = array(
-                    'picType'=>'00',
-                    'picFile'=>curl_file_create($positive_idcard),
-                    'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                    'superUsercode'=>'yuanmeng'
-                    );
-                $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-                $header = array(
-                    'Content-Type:multipart/form-data'
-                    );
-                $result = Common::httpRequest($act,'POST',$data,$header);
-                var_dump($data);
-                  echo "<pre>";
-                  print_r($result);
-                  echo "<pre>";
-                  die;
+                $save_url = '/data/uploads/positive_idcard/'.date('Y-m-d').$this->user['id'].'.jpg';
+                $upyun = new UpYun();
+                $res = $upyun->writeFile($save_url,$_FILES['positive_idcard']);
+                $positive_idcard = 'https://ymlypt.b0.upaiyun.com'.$save_url;
+            // var_dump($_FILES['positive_idcard']);    
+            // // var_dump(realpath($_FILES['positive_idcard']['tmp_name']));die;    
+            //     $data = array(
+            //         'picType'=>'00',
+            //         'picFile'=>curl_file_create($positive_idcard),
+            //         'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            //         'superUsercode'=>'yuanmeng'
+            //         );
+            //     $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+            //     $header = array(
+            //         'Content-Type:multipart/form-data'
+            //         );
+            //     $result = Common::httpRequest($act,'POST',$data,$header);
+            //     var_dump($data);
+            //       echo "<pre>";
+            //       print_r($result);
+            //       echo "<pre>";
+            //       die;
             }
         }
 
