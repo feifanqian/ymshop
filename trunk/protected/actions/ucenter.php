@@ -2962,8 +2962,9 @@ class UcenterAction extends Controller {
     }
 
     public function mobile_exist(){
-        $mobile = Req::args('mobile');
-        $exist = $this->model->table('customer')->fields('mobile')->where('mobile='.$mobile)->find();
+        $mobile = $_POST['mobile'];
+        var_dump(111);
+        $exist = $this->model->table('customer')->fields('mobile')->where("mobile='$mobile'")->find();
         $this->code = 0;
         $this->content = $exist?1:0; 
     }
