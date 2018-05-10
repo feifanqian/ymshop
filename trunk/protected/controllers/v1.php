@@ -54,6 +54,7 @@ class V1Controller extends Controller {
         'rongyun_token'=> array('ucenter/rongyun_token',1,1), // 获取融云token
         'caculate_fare'=>array('address/caculateFare',0,1), //计算运费
         'version_update'=>array('index/version_update',0,1), //ios版本更新提醒
+        "mobile_exist"=>array('ucenter/mobile_exist',0,1),
         //TODO tian
         "order" => array("ucenter/order", 1,1), //查询订单
         "offline_order" => array("order/offlineorder_list",1,1), //线下订单

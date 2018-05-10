@@ -2960,4 +2960,11 @@ class UcenterAction extends Controller {
         $this->content['is_signed'] = $signed?1:0;
         $this->content['continue_sign_days'] = $continue_sign_days;
     }
+
+    public function mobile_exist(){
+        $mobile = Req::args('mobile');
+        $exist = $this->model->table('customer')->fields('mobile')->where('mobile='.$mobile)->find();
+        $this->code = 0;
+        $this->content = $exist?1:0; 
+    }
 }
