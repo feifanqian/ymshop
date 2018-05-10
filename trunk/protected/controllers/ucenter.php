@@ -3859,7 +3859,7 @@ class UcenterController extends Controller
                 $save_url = '/data/uploads/positive_idcard/'.$this->user['id'].$_FILES['positive_idcard']['name'];
                 $upyun = new Upyun();
             
-                $fh = fopen($positive_idcard, 'rb');
+                $fh = fopen('../../../'.$image_url1, 'rb');
                 $oldname=$_FILES[ "positive_idcard" ]["name"];
                 $filetype = pathinfo($oldname, PATHINFO_EXTENSION);
                 $newname=$this->user['id'].'.jpg';
