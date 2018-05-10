@@ -2593,6 +2593,39 @@ class UcenterAction extends Controller {
         } 
     }
 
+    public function get_rongyun_token(){
+        $user_id = $this->user['id'];
+        $url = 'http://api.cn.ronghub.com/user/getToken.json';
+        $appSecret = 'BPC73blNRmfg';
+        $Nonce = rand();
+        $Timestamp = time()*1000;
+        $Signature = sha1($appSecret.$Nonce.$Timestamp);
+        $customer = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.avatar')->where('c.user_id='.$user_id)->find();
+        $data = array(
+            'userId'=>$user_id,
+            'name'=>$customer['real_name'],
+            'portraitUri'=>$customer['avatar']!=null?$customer['avatar']:''
+            );
+        $header = array(
+            'App-Key:p5tvi9dsphuc4',
+            'Nonce:'.$Nonce,
+            'Timestamp:'.$Timestamp,
+            'Signature:'.$Signature,
+            'Content-Type: application/x-www-form-urlencoded'
+            );
+        $return = Common::httpRequest($url,'POST',$data,$header);
+        $ret = json_decode($return,true);
+        if($ret['code']==200){
+            $this->code = 0;
+            $this->content = $ret['token'];
+            return;
+        }else{
+            $this->code = 0;
+            return;
+        }
+         
+    }
+
     /*
      * 商家认证接口
      */
