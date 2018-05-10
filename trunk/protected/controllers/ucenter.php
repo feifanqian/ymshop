@@ -3856,11 +3856,11 @@ class UcenterController extends Controller
 
             if($this->user['id']==42608){
                 // var_dump($_FILES['positive_idcard']['name']);die;
-                $save_url = '/data/uploads/positive_idcard/'.$this->user['id'].$_FILES['positive_idcard']['name'];
+                // $save_url = '/data/uploads/positive_idcard/'.$this->user['id'].$_FILES['positive_idcard']['name'];
                 $upyun = new Upyun();
             
-                $fh = fopen('/'.$image_url1, 'rb');
-                $oldname=$_FILES[ "positive_idcard" ]["name"];
+                $fh = fopen($_FILES["positive_idcard"]["tmp_name"], 'rb');
+                $oldname=$_FILES["positive_idcard"]["name"];
                 $filetype = pathinfo($oldname, PATHINFO_EXTENSION);
                 $newname=$this->user['id'].'.jpg';
                 $newfileurl='/data/uploads/positive_idcard/'.$newname;
