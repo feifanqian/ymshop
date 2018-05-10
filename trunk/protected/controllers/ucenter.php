@@ -3871,7 +3871,7 @@ class UcenterController extends Controller
                 $fh = fopen($image_url1, 'rb');
                 // $oldname = $_FILES["positive_idcard"]["name"];
                 // $filetype = pathinfo($oldname, PATHINFO_EXTENSION);
-                $newname = $this->user['id'] . '.jpg';
+                $newname = time().$this->user['id'] . '.jpg';
                 $newfileurl = '/data/uploads/positive_idcard/' . $newname;
                 $upinfo = $upyun->writeFile($newfileurl, $fh, True);   // 上传图片，自动创建目录
                 fclose($fh);
