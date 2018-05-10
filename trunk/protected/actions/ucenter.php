@@ -2601,10 +2601,10 @@ class UcenterAction extends Controller {
         $Nonce = rand();
         $Timestamp = time()*1000;
         $Signature = sha1($appSecret.$Nonce.$Timestamp);
-        $customer = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.avatar')->where('c.user_id='.$user_id)->find();
+        $customer = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.avatar,u.nickname')->where('c.user_id='.$user_id)->find();
         $data = array(
             'userId'=>$user_id,
-            'name'=>$customer['real_name'],
+            'name'=>$customer['real_name']?$customer['real_name']:$customer['nickname'],
             'portraitUri'=>$customer['avatar']!=null?$customer['avatar']:''
             );
         $header = array(
