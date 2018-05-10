@@ -470,10 +470,11 @@ class IndexAction extends Controller {
                 //     $v['imgs'] = '';
                 // }
                 unset($v['specs'], $v['attrs'], $v['content']);
-                if($flashlist[$k]['id']==328){
-                   unset($flashlist[$k]);
-                }
+                // if($flashlist[$k]['id']==328){
+                //    unset($flashlist[$k]);
+                // }
             }
+            array_pop($flashlist);
         }
         
         $ad1 = $this->model->table('ad')->fields('content')->where('id=52')->find();
