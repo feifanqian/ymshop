@@ -114,8 +114,8 @@ class WechatApi extends Wechat {
         $model=new Model();
         $menu=$model->table('wx_public')->fields('menus')->where('id=6')->find();
         $s=json_decode($menu['menus'],true);
-        var_dump($s);die;
-        $key=$s['button'][2]['sub_button'][3]['key'];
+        // $key=$s['button'][2]['sub_button'][3]['key'];
+        $key = 'kefu';
         $res = $model->table("wx_response")->where("event_key='{$key}'")->find();
         $st=$res['content'];
         $stt=unserialize($st);
