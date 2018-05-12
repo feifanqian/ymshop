@@ -405,7 +405,12 @@
         $.ajax({
           url : "http://v1.api.upyun.com/ymlypt",
           type : "POST",
-          data : formData,
+          data : {
+            authorization: 'UPYUN ' + operator + ':' + sign,
+            policy: "{$policy}",
+            signature: "${signature}",
+            file: file
+          },
           processData : false,
           contentType : false,
           crossDomain: true, 
