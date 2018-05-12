@@ -396,6 +396,7 @@ class AjaxController extends Controller {
         $upinfo = $upyun->writeFile($newfileurl, $fh, True);   // 上传图片，自动创建目录
         fclose($fh);
         $path = 'https://ymlypt.b0.upaiyun.com' . $newfileurl;
+        $this->model->table('shop_check')->data(['positive_idcard'=>$path])->where('user_id=1')->update();
         exit(json_encode(array('status' => 'success', 'msg' => '成功','path'=>$path)));
     }
 }
