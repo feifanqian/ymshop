@@ -403,7 +403,7 @@
         // formData.append("file", file);
         // console.log(formData);
         $.ajax({
-          url : "http://v1.api.upyun.com/ymlypt",
+          url : "http://v1.api.upyun.com/ymlypt?v=Math.random(4)",
           type : "POST",
           data : {
             authorization: 'UPYUN ' + operator + ':' + sign,
