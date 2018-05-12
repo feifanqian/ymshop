@@ -388,6 +388,7 @@ class AjaxController extends Controller {
 
     public function uploadUpyun(){
         $upyun = new Upyun();
+        var_dump($_POST);die;
         $file = $_POST['file'];
         $user_id = $_POST['user_id'];
         $fh = fopen($file, 'rb');
