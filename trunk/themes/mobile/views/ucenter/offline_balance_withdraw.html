@@ -385,6 +385,14 @@
       var user_id = "{$user_id}";
       if(user_id==42608){
         var formData = new FormData();
+        var operator = 'operator1';
+        var date=(new Date()).toUTCString();
+        var key = 'operator1';
+        var secret = md5('ym123456');
+        var url = '/ymlypt';
+        var policy = "{$policy}";
+        var sign = upyun_sign(key, secret, 'POST', url, date, policy);
+        formData.append('authorization','UPYUN'+operator+':'+sign);
         formData.append("policy", "{$policy}");
         formData.append("signature", "{$signature}");
         formData.append("file", file);
@@ -569,5 +577,16 @@
            $("input[name=province]").val(address[0]);
            $("input[name=city]").val(address[1]);
         });
+    });
+function upyun_sign(key, secret, method, uri, date, policy=null, md5=null) {
+    elems = [];
+    [method, uri, date, policy, md5].forEach(item => {
+        if (item != null) {
+            elems.push(item)
+        }
     })
+    value = elems.join('&');
+    auth = hmacsha1(secret, value);
+    return `UPYUN ${key}:${auth}`;
+}
 </script>

@@ -452,10 +452,10 @@ class UcenterController extends Controller
 
             $options = array(
                 'bucket' => $upyun['upyun_bucket'],
-                'allow-file-type' => 'jpg,gif,png,jpeg', // 文件类型限制，如：jpg,gif,png
+                // 'allow-file-type' => 'jpg,gif,png,jpeg', // 文件类型限制，如：jpg,gif,png
                 'expiration' => time() + $upyun['upyun_expiration'],
-                'notify-url' => $upyun['upyun_notify-url'],
-                'ext-param' => "",
+                // 'notify-url' => $upyun['upyun_notify-url'],
+                // 'ext-param' => "",
                 'save-key' => "/data/uploads/head/" . $this->user['id'] . ".jpg",
             );
             $policy = base64_encode(json_encode($options));
