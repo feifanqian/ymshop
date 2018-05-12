@@ -2606,7 +2606,7 @@ class UcenterAction extends Controller {
         $customer = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.avatar,u.nickname')->where('c.user_id='.$user_id)->find();
         $data = array(
             'userId'=>$user_id,
-            'name'=>$customer['real_name']?$customer['real_name']:$customer['nickname'],
+            'name'=>$customer['real_name']!=''?$customer['real_name']:$customer['nickname'],
             'portraitUri'=>$customer['avatar']!=null?$customer['avatar']:''
             );
         $header = array(
@@ -2625,6 +2625,7 @@ class UcenterAction extends Controller {
             return;
         }else{
             $this->code = 0;
+            $this->content = $ret;
             return;
         }
          
