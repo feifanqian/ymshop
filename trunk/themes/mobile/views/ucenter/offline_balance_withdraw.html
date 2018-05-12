@@ -402,33 +402,41 @@
         // formData.append("signature", "{$signature}");
         // formData.append("file", file);
         // console.log(formData);
-        $.ajax({
-          // url : "http://v1.api.upyun.com/ymlypt?v=Math.random(4)",
-          url:"{url:/ajax/uploadUpyun}",
-          type : "POST",
-          data : {
-            // authorization: 'UPYUN ' + operator + ':' + sign,
-            // policy: "{$policy}",
-            // signature: "${signature}",
-            file: file,
-            user_id:user_id
-          },
-          processData : false,
-          contentType : 'application/json',
-          // crossDomain: true, 
-          dataType:'json',
-          // jsonp:'callback',
-          // beforeSend: function () {
-          //   //可以做一些正在上传的效果
-          // },
-          success : function(data) {
-            console.log(data);
-            //data，我们这里是异步上传到后端程序所返回的图片地址
-          },
-          error : function(responseStr) {
-             console.log(JSON.stringify(responseStr));
-          }
-        });
+        // $.ajax({
+        //   // url : "http://v1.api.upyun.com/ymlypt?v=Math.random(4)",
+        //   url:"{url:/ajax/uploadUpyun}",
+        //   type : "POST",
+        //   data : {
+        //     // authorization: 'UPYUN ' + operator + ':' + sign,
+        //     // policy: "{$policy}",
+        //     // signature: "${signature}",
+        //     file: file,
+        //     user_id:user_id
+        //   },
+        //   processData : false,
+        //   contentType : 'application/json',
+        //   // crossDomain: true, 
+        //   dataType:'json',
+        //   // jsonp:'callback',
+        //   // beforeSend: function () {
+        //   //   //可以做一些正在上传的效果
+        //   // },
+        //   success : function(data) {
+        //     console.log(data);
+        //     //data，我们这里是异步上传到后端程序所返回的图片地址
+        //   },
+        //   error : function(responseStr) {
+        //      console.log(JSON.stringify(responseStr));
+        //   }
+        // });
+        $.post("{url:/ajax/uploadUpyun}", {file: file, user_id:user_id}, function (result) {
+              layer.closeAll();
+              if(result.status=='success'){
+                  console.log('success');
+              }else{
+                  notification(result.msg);
+              }
+        },'json');
       }
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
