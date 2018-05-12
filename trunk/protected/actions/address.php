@@ -988,21 +988,23 @@ class AddressAction extends Controller
                     // $user = $this->model->table('customer')->fields('real_name')->where('user_id='.$value['user_id'])->find();
                     // $this->model->table('district_promoter')->data(array('shop_name'=>$user['real_name']))->where('user_id='.$value['user_id'])->update();
                 }
+                $info_sql[$key]['dist'] = sprintf('%.3f',$value['dist']);
+                if($distance && $info_sql[$key]['dist']>$distance){
+                    unset($info_sql[$key]);
+                }
                 if($customer==1){
                     if($info_sql[$key]['is_district']==0){
                         unset($info_sql[$key]);
                     }
                 }
-                $info_sql[$key]['dist'] = sprintf('%.3f',$value['dist']);
+                
             // $info_sql[$key]['dist'] = Common::getDistanceByLatLng($lat,$lng,$value['lat'],$value['lng'])/1000;
             // $arr[] = $info_sql[$key]['dist'];
             
             // if($info_sql[$key]['dist']>$radius && empty($tourist_id) && empty($distance)){
             //     unset($info_sql[$key]);
             // }
-            if($distance && $info_sql[$key]['dist']>$distance){
-                unset($info_sql[$key]);
-            }
+            
         }
         //距离离我最近
         // if ($distance_asc || $distance) {

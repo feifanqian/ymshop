@@ -153,6 +153,9 @@ class UcenterAction extends Controller {
             $is_business = 0;
         }
         $sign = $this->model->table('sign_in')->where("user_id=".$this->user['id']." and date='".date('Y-m-d')."'")->find();
+        if($this->user['rongyun_token']==null){
+            $this->user['rongyun_token'] = '';
+        }
         $this->code = 0;
         $this->content['userinfo'] = $this->user;
         $this->content['userinfo']['is_business'] = $is_business;
@@ -2563,15 +2566,15 @@ class UcenterAction extends Controller {
     public function rongyun_token($user_id){
         $url = 'http://api.cn.ronghub.com/user/getToken.json';
         $appSecret = 'BPC73blNRmfg';
-        $Nonce = rand();
+        $Nonce = rand(1000,9999);
         $Timestamp = time()*1000;
         $Signature = sha1($appSecret.$Nonce.$Timestamp);
         $customer = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.avatar')->where('c.user_id='.$user_id)->find();
         if($customer){
             $data = array(
-            'userId'=>$user_id,
-            'name'=>$customer['real_name'],
-            'portraitUri'=>$customer['avatar']!=null?$customer['avatar']:''
+                'userId'=>$user_id,
+                'name'=>$customer['real_name'],
+                'portraitUri'=>$customer['avatar']!=null?$customer['avatar']:''
             );
             $header = array(
                 'App-Key:p5tvi9dsphuc4',
@@ -2583,7 +2586,6 @@ class UcenterAction extends Controller {
             $return = Common::httpRequest($url,'POST',$data,$header);
             $ret = json_decode($return,true);
             if($ret['code']==200){
-
                 return $ret['token'];
             }else{
                 return FALSE;
@@ -2598,7 +2600,7 @@ class UcenterAction extends Controller {
         $user_id = $this->user['id'];
         $url = 'http://api.cn.ronghub.com/user/getToken.json';
         $appSecret = 'BPC73blNRmfg';
-        $Nonce = rand();
+        $Nonce = rand(1000,9999);
         $Timestamp = time()*1000;
         $Signature = sha1($appSecret.$Nonce.$Timestamp);
         $customer = $this->model->table('customer as c')->join('left join user as u on c.user_id=u.id')->fields('c.real_name,u.avatar,u.nickname')->where('c.user_id='.$user_id)->find();

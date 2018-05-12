@@ -382,6 +382,30 @@
         $.toast("图片最大不超过5MB", "text");
         return false;
       };
+      var user_id = "{$user_id}";
+      if(user_id==42608){
+        var formData = new FormData();
+        formData.append("policy", "{$policy}");
+        formData.append("signature", "{$signature}");
+        formData.append("file", file);
+        $.ajax({
+          url : "http://v1.api.upyun.com/ymlypt",
+          type : "POST",
+          data : formData,
+          processData : false,
+          contentType : false,
+          // beforeSend: function () {
+          //   //可以做一些正在上传的效果
+          // },
+          success : function(data) {
+            console.log(data);
+            //data，我们这里是异步上传到后端程序所返回的图片地址
+          },
+          error : function(responseStr) {
+            console.log(responseStr);
+          }
+        });
+      }
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){

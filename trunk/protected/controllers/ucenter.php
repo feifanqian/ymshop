@@ -448,6 +448,21 @@ class UcenterController extends Controller
             } else {
                 $this->assign('yin_token', '');
             }
+            $upyun = Config::getInstance()->get("upyun");
+
+            $options = array(
+                'bucket' => $upyun['upyun_bucket'],
+                'allow-file-type' => 'jpg,gif,png,jpeg', // 文件类型限制，如：jpg,gif,png
+                'expiration' => time() + $upyun['upyun_expiration'],
+                'notify-url' => $upyun['upyun_notify-url'],
+                'ext-param' => "",
+                'save-key' => "/data/uploads/head/" . $this->user['id'] . ".jpg",
+            );
+            $policy = base64_encode(json_encode($options));
+            $signature = md5($policy . '&' . $upyun['upyun_formkey']);
+            $this->assign('policy', $policy);
+            $this->assign('signature', $signature);
+            $this->assign('user_id', $this->user['id']);
             $this->assign('card_num', $card_num);
             $this->assign("goldcoin", $info['offline_balance']);
             $this->assign("realname_verified", $info['realname_verified']);
