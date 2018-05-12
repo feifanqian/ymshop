@@ -388,7 +388,7 @@
         var operator = 'operator1';
         var date=(new Date()).toUTCString();
         var key = 'operator1';
-        var secret = md5('ym123456');
+        var secret = "{$secret}";
         var url = '/ymlypt';
         var policy = "{$policy}";
         var sign = upyun_sign(key, secret, 'POST', url, date, policy);

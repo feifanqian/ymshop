@@ -460,6 +460,7 @@ class UcenterController extends Controller
             );
             $policy = base64_encode(json_encode($options));
             $signature = md5($policy . '&' . $upyun['upyun_formkey']);
+            $this->assign('secret', md5('ym123456'));
             $this->assign('policy', $policy);
             $this->assign('signature', $signature);
             $this->assign('user_id', $this->user['id']);
