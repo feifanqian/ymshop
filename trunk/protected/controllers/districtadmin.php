@@ -1379,7 +1379,7 @@ class DistrictadminController extends Controller
                 exit();
             }
         }elseif($status==1){
-          $model->table("shop_check")->data(array("status" =>1))->where("id=" . $id)->update();
+          $model->table("shop_check")->data(array("status" =>1,'check_date'=> date("Y-m-d H:i:s")))->where("id=" . $id)->update();
           echo json_encode(array("status" => 'success', 'msg' => '成功'));
           exit();
         }else{
@@ -1392,7 +1392,7 @@ class DistrictadminController extends Controller
         $id = Filter::sql(Req::args("id"));
         $status = Filter::sql(Req::args("status"));
         $model = new Model();
-        $model->table("shop_check")->data(array("status" =>1))->where("id=" . $id)->update();
+        $model->table("shop_check")->data(array("status" =>1,'check_date'=> date("Y-m-d H:i:s")))->where("id=" . $id)->update();
         $this->redirect('shop_check');
     }
 
