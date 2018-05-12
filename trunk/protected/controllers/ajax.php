@@ -385,4 +385,17 @@ class AjaxController extends Controller {
         $result = $model->data(array('mobile'=>$mobile,'code'=>$code,'send_time'=>time()))->insert();
         var_dump($result);
     }
+
+    public function uploadUpyun(){
+        $upyun = new Upyun();
+        $file = $_POST['file'];
+        $user_id = $_POST['user_id'];
+        $fh = fopen($file, 'rb');
+        $newname = time().$user_id . '.jpg';
+        $newfileurl = '/data/uploads/positive_idcard/' . $newname;
+        $upinfo = $upyun->writeFile($newfileurl, $fh, True);   // 上传图片，自动创建目录
+        fclose($fh);
+        $path = 'https://ymlypt.b0.upaiyun.com' . $newfileurl;
+        exit(json_encode(array('status' => 'success', 'msg' => '成功','path'=>$path)));
+    }
 }

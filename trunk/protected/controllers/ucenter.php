@@ -3891,7 +3891,7 @@ class UcenterController extends Controller
                 //    'x-gmkerl-unsharp' => true // 是否进行锐化处理
                 // );
                 $fh = fopen($image_url1, 'rb');
-                // $fh = fopen($_FILES["positive_idcard"]["name"], 'r');
+                // $fh = fopen($_FILES["positive_idcard"]["tmp_name"], 'r');
                 // $oldname = $_FILES["positive_idcard"]["name"];
                 // $filetype = pathinfo($oldname, PATHINFO_EXTENSION);
                 $newname = time().$this->user['id'] . '.jpg';

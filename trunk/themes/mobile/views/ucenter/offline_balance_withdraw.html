@@ -403,13 +403,15 @@
         // formData.append("file", file);
         // console.log(formData);
         $.ajax({
-          url : "http://v1.api.upyun.com/ymlypt?v=Math.random(4)",
+          // url : "http://v1.api.upyun.com/ymlypt?v=Math.random(4)",
+          url:"{url:/ucenter/offline_balance_withdraw}",
           type : "POST",
           data : {
             authorization: 'UPYUN ' + operator + ':' + sign,
             policy: "{$policy}",
             // signature: "${signature}",
-            file: file
+            file: file,
+            user_id:user_id
           },
           processData : false,
           contentType : 'application/json',
