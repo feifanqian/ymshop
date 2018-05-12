@@ -395,12 +395,13 @@
         var bucket = "ymlypt";
         var save_as = "/data/uploads/head/" +user_id+ ".jpg";
         // var sign = upyun_sign(key, secret, 'POST', url, date, policy);
-        var sign  = SparkMD5.hash("PUT&/"+encodeURI(bucket+save_as)+"&"+date+"&0&"+SparkMD5.hash('ym123456'));
+        var sign  = SparkMD5.hash("POST&/"+encodeURI(bucket+save_as)+"&"+date+"&0&"+SparkMD5.hash('ym123456'));
         console.log(sign);
         formData.append('authorization','UPYUN '+operator+':'+sign);
         formData.append("policy", "{$policy}");
         formData.append("signature", "{$signature}");
         formData.append("file", file);
+        console.log(formData);
         $.ajax({
           url : "http://v1.api.upyun.com/ymlypt",
           type : "POST",
