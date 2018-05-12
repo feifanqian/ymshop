@@ -405,7 +405,7 @@
             //data，我们这里是异步上传到后端程序所返回的图片地址
           },
           error : function(responseStr) {
-            console.log(responseStr);
+             alert("失败:" + JSON.stringify(responseStr));
           }
         });
       }
