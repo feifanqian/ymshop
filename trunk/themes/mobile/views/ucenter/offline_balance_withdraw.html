@@ -406,7 +406,7 @@
             'save-key': save_as
           };
           var policy = window.btoa(JSON.stringify(options));
-          var form_api_secret = "{$secret}";
+          var form_api_secret = "REGXLUpFH4GQcVa/ehZLS6QinhI=";
           var signature = CryptoJS.MD5(policy + '&' + form_api_secret);
           var data = new FormData();
               data.append('policy', policy);
