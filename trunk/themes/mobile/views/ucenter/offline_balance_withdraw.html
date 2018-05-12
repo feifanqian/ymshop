@@ -397,7 +397,7 @@
         // var sign = upyun_sign(key, secret, 'POST', url, date, policy);
         var sign  = SparkMD5.hash("PUT&/"+encodeURI(bucket+save_as)+"&"+date+"&0&"+SparkMD5.hash('ym123456'));
         console.log(sign);
-        formData.append('Authorization','UPYUN'+operator+':'+sign);
+        formData.append('authorization','UPYUN '+operator+':'+sign);
         formData.append("policy", "{$policy}");
         formData.append("signature", "{$signature}");
         formData.append("file", file);
