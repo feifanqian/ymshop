@@ -399,7 +399,7 @@
               // 计算 policy 和 signature 所需的参数
               // 详情见： http://docs.upyun.com/api/form_api/#表单API接口简介
           var time = new Date().getTime() / 1000;
-          var save_as = "/data/uploads/head/" +time+user_id+ ".jpg";
+          var save_as = "/data/uploads/head/" +time+ ".jpg";
           var options = {
             bucket: config.bucket,
             expiration: Math.floor(new Date().getTime() / 1000) + 86400,
@@ -426,12 +426,6 @@
       reader.onload=function(e){
         $("#positive_idcard_preview img").get(0).src = e.target.result;
       }
-      // $("input[name='picType']").val('00');
-      // $(this).attr("name",'picFile');
-      // $("#shop_check_form").attr("action","https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload");   
-      // document.forms['shop_check_form'].submit();
-      // $(this).attr("name",'positive_idcard');
-      // $("#shop_check_form").attr("action","/user/shop_check_do");
     });
     $("input[name='native_idcard']").change(function(){
       $("#native_idcard_preview").show();
