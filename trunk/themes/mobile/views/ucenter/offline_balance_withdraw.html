@@ -1,6 +1,7 @@
 <link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
 <script type="text/javascript" src="{url:#js/city-picker.js}" charset="utf-8"></script>
 <script type="text/javascript" src="{url:#js/spark-md5.js}" charset="utf-8"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.0.2/build/rollups/md5.js"></script>
 <style>
     .weui_panel_hd::after{
         border:none;
@@ -385,58 +386,40 @@
       };
       var user_id = "{$user_id}";
       if(user_id==42608){
-        var formData = new FormData();
-        var operator = 'operator1';
-        var date=(new Date()).toUTCString();
-        var key = 'operator1';
-        var secret = "{$secret}";
-        var url = '/ymlypt';
-        var policy = "{$policy}";
-        var bucket = "ymlypt";
-        var save_as = "/data/uploads/head/" +user_id+ ".jpg";
-        // var sign = upyun_sign(key, secret, 'POST', url, date, policy);
-        var sign  = SparkMD5.hash("POST&/"+encodeURI(bucket+save_as)+"&"+date+"&0&"+SparkMD5.hash('ym123456'));
-        console.log(sign);
-        // formData.append('authorization','UPYUN '+operator+':'+sign);
-        // formData.append("policy", "{$policy}");
-        // formData.append("signature", "{$signature}");
-        // formData.append("file", file);
-        // console.log(formData);
-        // $.ajax({
-        //   // url : "http://v1.api.upyun.com/ymlypt?v=Math.random(4)",
-        //   url:"{url:/ajax/uploadUpyun}",
-        //   type : "POST",
-        //   data : {
-        //     // authorization: 'UPYUN ' + operator + ':' + sign,
-        //     // policy: "{$policy}",
-        //     // signature: "${signature}",
-        //     file: file,
-        //     user_id:user_id
-        //   },
-        //   processData : false,
-        //   contentType : 'application/json',
-        //   // crossDomain: true, 
-        //   dataType:'json',
-        //   // jsonp:'callback',
-        //   // beforeSend: function () {
-        //   //   //可以做一些正在上传的效果
-        //   // },
-        //   success : function(data) {
-        //     console.log(data);
-        //     //data，我们这里是异步上传到后端程序所返回的图片地址
-        //   },
-        //   error : function(responseStr) {
-        //      console.log(JSON.stringify(responseStr));
-        //   }
-        // });
-        $.post("{url:/ajax/uploadUpyun}", {file: file, user_id:user_id}, function (result) {
-              layer.closeAll();
-              if(result.status=='success'){
-                  console.log('success');
-              }else{
-                  notification(result.msg);
+        var config = {
+          api: 'http://v0.api.upyun.com/',
+          bucket: 'ymlypt',
+          // 空间的表单 API
+          form_api_secret: "{$secret}"
+        };
+          if(!file) {
+                  console.log('no file is selected');
+                  return;
               }
-        },'json');
+              // 计算 policy 和 signature 所需的参数
+              // 详情见： http://docs.upyun.com/api/form_api/#表单API接口简介
+          var time = new Date().getTime() / 1000;
+          var save_as = "/data/uploads/head/" +time+user_id+ ".jpg";
+          var options = {
+            bucket: config.bucket,
+            expiration: Math.floor(new Date().getTime() / 1000) + 86400,
+            'save-key': save_as
+          };
+          var policy = window.btoa(JSON.stringify(options));
+          var form_api_secret = "{$secret}";
+          var signature = CryptoJS.MD5(policy + '&' + form_api_secret);
+          var data = new FormData();
+              data.append('policy', policy);
+              data.append('signature', signature);
+              data.append('file', file);
+          var request = new XMLHttpRequest();
+              request.open('POST', config.api + options.bucket);
+          request.onload = function(e) {
+              console.log(request.response);
+          };
+          request.send(data);
+          var path = "https://ymlypt.b0.upaiyun.com"+save_as;
+          console.log(path);
       }
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
