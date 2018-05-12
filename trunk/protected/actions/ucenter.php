@@ -123,7 +123,7 @@ class UcenterAction extends Controller {
                     }
                     /********************获取融云token**********************/
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
-                    $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $obj['id'])->update();
+                    $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+7 days'))))->where('id=' . $obj['id'])->update();
                     $this->code = 0;
                     $this->content = array(
                         'user_id' => $obj['id'],
