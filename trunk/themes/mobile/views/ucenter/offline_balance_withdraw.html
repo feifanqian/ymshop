@@ -93,10 +93,15 @@
                     <input type="hidden" name="picType" value="" />
                     <input type="hidden" name="token" value="{$yin_token}">
                     <input type="hidden" name="superUsercode" value="yuanmeng">
+                    <input type="hidden" name="positive_idcard_url" value="">
+                    <input type="hidden" name="native_idcard_url" value="">
+                    <input type="hidden" name="business_licence_url" value="">
+                    <input type="hidden" name="shop_photo_url" value="">
+                    <input type="hidden" name="hand_idcard_url" value="">
                 {if:$need_check==-1}    
-                <div class="weui_panel_hd">请先完善商家认证信息(图片最大不超过5MB)</div>
+                <div class="weui_panel_hd">请先完善商家认证信息(图片最大不超过8MB)</div>
                 {elseif:$need_check==2}
-                <div class="weui_panel_hd" style="color: red;">审核未通过，请重新提交(图片最大不超过5MB)</br>原因：{$reason}</div>
+                <div class="weui_panel_hd" style="color: red;">审核未通过，请重新提交(图片最大不超过8MB)</br>原因：{$reason}</div>
                 {/if}
                 <div class="weui-cell">
                    <select id="shop_type" name="shop_type" class="input">
@@ -295,8 +300,8 @@
                 return false;
             }else{
               var file1 = $("input[name='positive_idcard']").get(0).files[0];
-              if(file1.size>10000*1024){
-                $.toast("身份证正面照大小超过5MB", "text");
+              if(file1.size>8000*1024){
+                $.toast("身份证正面照大小超过8MB", "text");
                 return false;
               };
             }
@@ -305,8 +310,8 @@
                 return false;
             }else{
               var file2 = $("input[name='native_idcard']").get(0).files[0];
-              if(file2.size>10000*1024){
-                $.toast("身份证反面照大小超过5MB", "text");
+              if(file2.size>8000*1024){
+                $.toast("身份证反面照大小超过8MB", "text");
                 return false;
               };
             } 
@@ -323,8 +328,8 @@
                   return false;
               }else{
                 var file3 = $("input[name='business_licence']").get(0).files[0];
-                if(file3.size>10000*1024){
-                  $.toast("营业执照大小超过5MB", "text");
+                if(file3.size>8000*1024){
+                  $.toast("营业执照大小超过8MB", "text");
                   return false;
                 };
               }
@@ -337,8 +342,8 @@
                   return false;
               }else{
                 var file4 = $("input[name='shop_photo']").get(0).files[0];
-                if(file4.size>10000*1024){
-                  $.toast("门店照大小超过5MB", "text");
+                if(file4.size>8000*1024){
+                  $.toast("门店照大小超过8MB", "text");
                   return false;
                 };
               }
@@ -348,8 +353,8 @@
                   return false;
               }else{
                 var file5 = $("input[name='hand_idcard']").get(0).files[0];
-                if(file5.size>10000*1024){
-                  $.toast("门店照大小超过5MB", "text");
+                if(file5.size>8000*1024){
+                  $.toast("门店照大小超过8MB", "text");
                   return false;
                 };
               }  
@@ -377,50 +382,17 @@
           $("#shop_photo_preview").hide();
         }
     });
+      
     $("input[name='positive_idcard']").change(function(){
       $("#positive_idcard_preview").show();
       var file = $("input[name='positive_idcard']").get(0).files[0];
-      if(file.size>10000*1024){
-        $.toast("图片最大不超过5MB", "text");
+      if(file.size>8000*1024){
+        $.toast("图片最大不超过8MB", "text");
         return false;
       };
-      var user_id = "{$user_id}";
-      if(user_id==42608){
-        var config = {
-          api: 'http://v1.api.upyun.com/',
-          bucket: 'ymlypt',
-          // 空间的表单 API
-          form_api_secret: "{$secret}"
-        };
-          if(!file) {
-                  console.log('no file is selected');
-                  return;
-              }
-              // 计算 policy 和 signature 所需的参数
-              // 详情见： http://docs.upyun.com/api/form_api/#表单API接口简介
-          var time = new Date().getTime() / 1000;
-          var save_as = "/data/uploads/head/" +time+ ".jpg";
-          var options = {
-            bucket: config.bucket,
-            expiration: Math.floor(new Date().getTime() / 1000) + 86400,
-            'save-key': save_as
-          };
-          var policy = window.btoa(JSON.stringify(options));
-          var form_api_secret = "REGXLUpFH4GQcVa/ehZLS6QinhI=";
-          var signature = CryptoJS.MD5(policy + '&' + form_api_secret);
-          var data = new FormData();
-              data.append('policy', policy);
-              data.append('signature', signature);
-              data.append('file', file);
-          var request = new XMLHttpRequest();
-              request.open('POST', config.api + options.bucket);
-          request.onload = function(e) {
-              console.log(request.response);
-          };
-          request.send(data);
-          var path = "https://ymlypt.b0.upaiyun.com"+save_as;
-          console.log(path);
-      }
+      
+      upyun_upload('positive_idcard',file);
+      
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){
@@ -430,10 +402,11 @@
     $("input[name='native_idcard']").change(function(){
       $("#native_idcard_preview").show();
       var file = $("input[name='native_idcard']").get(0).files[0];
-      if(file.size>10000*1024){
-        $.toast("图片最大不超过5MB", "text");
+      if(file.size>8000*1024){
+        $.toast("图片最大不超过8MB", "text");
         return false;
       };
+      upyun_upload('native_idcard',file);
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){
@@ -443,10 +416,11 @@
     $("input[name='business_licence']").change(function(){
       $("#business_licence_preview").show();
       var file = $("input[name='business_licence']").get(0).files[0];
-      if(file.size>10000*1024){
-        $.toast("图片最大不超过5MB", "text");
+      if(file.size>8000*1024){
+        $.toast("图片最大不超过8MB", "text");
         return false;
       };
+      upyun_upload('business_licence',file);
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){
@@ -465,10 +439,11 @@
     $("input[name='shop_photo']").change(function(){
       $("#shop_photo_preview").show();
       var file = $("input[name='shop_photo']").get(0).files[0];
-      if(file.size>10000*1024){
-        $.toast("图片最大不超过5MB", "text");
+      if(file.size>8000*1024){
+        $.toast("图片最大不超过8MB", "text");
         return false;
       };
+      upyun_upload('shop_photo',file);
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){
@@ -478,10 +453,11 @@
     $("input[name='hand_idcard']").change(function(){
       $("#hand_idcard_preview").show();
       var file = $("input[name='hand_idcard']").get(0).files[0];
-      if(file.size>10000*1024){
-        $.toast("图片最大不超过5MB", "text");
+      if(file.size>8000*1024){
+        $.toast("图片最大不超过8MB", "text");
         return false;
       };
+      upyun_upload('hand_idcard',file);
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
       reader.onload=function(e){
@@ -576,15 +552,58 @@
            $("input[name=city]").val(address[1]);
         });
     });
-function upyun_sign(key, secret, method, uri, date, policy=null, md5=null) {
-    elems = [];
-    [method, uri, date, policy, md5].forEach(item => {
-        if (item != null) {
-            elems.push(item)
-        }
-    })
-    value = elems.join('&');
-    auth = hmacsha1(secret, value);
-    return `UPYUN ${key}:${auth}`;
+function upyun_upload(type,file) {
+    var config = {
+        api: 'http://v1.api.upyun.com/',
+        bucket: 'ymlypt',
+          // 空间的表单 API
+        form_api_secret: "{$secret}"
+      };
+    var form_api_secret = "REGXLUpFH4GQcVa/ehZLS6QinhI=";
+    var user_id = "{$user_id}"; 
+    if(!file) {
+          console.log('no file is selected');
+          return;
+      }
+      // 计算 policy 和 signature 所需的参数
+      // 详情见： http://docs.upyun.com/api/form_api/#表单API接口简介
+      var time = new Date().getTime() / 1000;
+      var save_as = "/data/uploads/shop_check/"+type+"/" +user_id+ ".jpg";
+      var options = {
+          bucket: config.bucket,
+          expiration: Math.floor(new Date().getTime() / 1000) + 86400,
+          'save-key': save_as
+        };
+      var policy = window.btoa(JSON.stringify(options));
+          
+      var signature = CryptoJS.MD5(policy + '&' + form_api_secret);
+      var data = new FormData();
+          data.append('policy', policy);
+          data.append('signature', signature);
+          data.append('file', file);
+      var request = new XMLHttpRequest();
+          request.open('POST', config.api + options.bucket);
+      request.onload = function(e) {
+              console.log(request.response);
+      };
+          request.send(data);
+      var path = "https://ymlypt.b0.upaiyun.com"+save_as;
+          // console.log(path);
+      if(type=='positive_idcard'){
+        $("input[name='positive_idcard_url']").val(path);
+      }
+      if(type=='native_idcard'){
+        $("input[name='native_idcard_url']").val(path);
+      }
+      if(type=='business_licence'){
+        $("input[name='business_licence_url']").val(path);
+      }
+      if(type=='shop_photo'){
+        $("input[name='shop_photo_url']").val(path);
+      }
+      if(type=='hand_idcard'){
+        $("input[name='hand_idcard_url']").val(path);
+      }
+      return true;
 }
 </script>

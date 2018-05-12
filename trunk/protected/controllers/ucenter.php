@@ -3846,107 +3846,107 @@ class UcenterController extends Controller
         // $ret = Common::httpRequest($url,'POST',$myParams);
         // $ret = json_decode($ret,true);
 
-        $upfile_path1 = Tiny::getPath("uploads") . "/shop_check/positive_idcard/";
-        $upfile_path2 = Tiny::getPath("uploads") . "/shop_check/native_idcard/";
-        $upfile_path3 = Tiny::getPath("uploads") . "/shop_check/business_licence/";
-        // $upfile_path4 = Tiny::getPath("uploads") . "/shop_check/account_picture/";
-        $upfile_path5 = Tiny::getPath("uploads") . "/shop_check/shop_photo/";
-        $upfile_path6 = Tiny::getPath("uploads") . "/shop_check/hand_idcard/";
-        $upfile_url1 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/positive_idcard/", 1);
-        $upfile_url2 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/native_idcard/", 1);
-        $upfile_url3 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/business_licence/", 1);
-        // $upfile_url4 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/account_picture/", 1);
-        $upfile_url5 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/shop_photo/", 1);
-        $upfile_url6 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/hand_idcard/", 1);
-        $result1 = array();
-        $result2 = array();
-        $result3 = array();
-        $result4 = array();
-        $result5 = array();
-        $result6 = array();
+        // $upfile_path1 = Tiny::getPath("uploads") . "/shop_check/positive_idcard/";
+        // $upfile_path2 = Tiny::getPath("uploads") . "/shop_check/native_idcard/";
+        // $upfile_path3 = Tiny::getPath("uploads") . "/shop_check/business_licence/";
+        // // $upfile_path4 = Tiny::getPath("uploads") . "/shop_check/account_picture/";
+        // $upfile_path5 = Tiny::getPath("uploads") . "/shop_check/shop_photo/";
+        // $upfile_path6 = Tiny::getPath("uploads") . "/shop_check/hand_idcard/";
+        // $upfile_url1 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/positive_idcard/", 1);
+        // $upfile_url2 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/native_idcard/", 1);
+        // $upfile_url3 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/business_licence/", 1);
+        // // $upfile_url4 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/account_picture/", 1);
+        // $upfile_url5 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/shop_photo/", 1);
+        // $upfile_url6 = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "shop_check/hand_idcard/", 1);
+        // $result1 = array();
+        // $result2 = array();
+        // $result3 = array();
+        // $result4 = array();
+        // $result5 = array();
+        // $result6 = array();
 
-        $upfile1 = new UploadFile('positive_idcard', $upfile_path1, '10000k', '', 'hash', $this->user['id']);
-        $upfile1->save();
-        $info1 = $upfile1->getInfo();
-        $positive_idcard = "";
+        // $upfile1 = new UploadFile('positive_idcard', $upfile_path1, '10000k', '', 'hash', $this->user['id']);
+        // $upfile1->save();
+        // $info1 = $upfile1->getInfo();
+        // $positive_idcard = "";
 
-        if ($info1[0]['status'] == 1) {
-            $result1 = array('error' => 0, 'url' => $upfile_url1 . $info1[0]['path']);
-            $image_url1 = $upfile_url1 . $info1[0]['path'];
-            $image = new Image();
-            $image->suffix = '';
-            $image->thumb(APP_ROOT . $image_url1, 100, 100);
-            $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
+        // if ($info1[0]['status'] == 1) {
+        //     $result1 = array('error' => 0, 'url' => $upfile_url1 . $info1[0]['path']);
+        //     $image_url1 = $upfile_url1 . $info1[0]['path'];
+        //     $image = new Image();
+        //     $image->suffix = '';
+        //     $image->thumb(APP_ROOT . $image_url1, 100, 100);
+        //     $positive_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url1;
 
-            if ($this->user['id'] == 42608) {
-                // var_dump(realpath($_FILES['positive_idcard']['name']));die;
-                // $save_url = '/data/uploads/positive_idcard/'.$this->user['id'].$_FILES['positive_idcard']['name'];
-                $upyun = new Upyun();
+        //     if ($this->user['id'] == 42608) {
+        //         // var_dump(realpath($_FILES['positive_idcard']['name']));die;
+        //         // $save_url = '/data/uploads/positive_idcard/'.$this->user['id'].$_FILES['positive_idcard']['name'];
+        //         $upyun = new Upyun();
 
-                // $fh = fopen($_FILES["positive_idcard"]["tmp_name"], 'rb');
-                // $opts = array(
-                //     'x-gmkerl-type'    => 'fix_width_or_height', // 缩略图类型
-                //     'x-gmkerl-value'  => '300*180', // 缩略图大小
-                //    'x-gmkerl-quality'  => 100, // 缩略图压缩质量
-                //    'x-gmkerl-unsharp' => true // 是否进行锐化处理
-                // );
-                $fh = fopen($image_url1, 'rb');
-                // $fh = fopen($_FILES["positive_idcard"]["tmp_name"], 'r');
-                // $oldname = $_FILES["positive_idcard"]["name"];
-                // $filetype = pathinfo($oldname, PATHINFO_EXTENSION);
-                $newname = time().$this->user['id'] . '.jpg';
-                $newfileurl = '/data/uploads/positive_idcard/' . $newname;
-                $upinfo = $upyun->writeFile($newfileurl, $fh, True);   // 上传图片，自动创建目录
-                fclose($fh);
-                $positive_idcard = 'https://ymlypt.b0.upaiyun.com' . $newfileurl;
-                // var_dump($_FILES['positive_idcard']);
-                // // var_dump(realpath($_FILES['positive_idcard']['tmp_name']));die;
-                //     $data = array(
-                //         'picType'=>'00',
-                //         'picFile'=>curl_file_create($positive_idcard),
-                //         'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                //         'superUsercode'=>'yuanmeng'
-                //         );
-                //     $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-                //     $header = array(
-                //         'Content-Type:multipart/form-data'
-                //         );
-                //     $result = Common::httpRequest($act,'POST',$data,$header);
-                //     var_dump($data);
-                //       echo "<pre>";
-                //       print_r($result);
-                //       echo "<pre>";
-                //       die;
-            }
-        }
+        //         // $fh = fopen($_FILES["positive_idcard"]["tmp_name"], 'rb');
+        //         // $opts = array(
+        //         //     'x-gmkerl-type'    => 'fix_width_or_height', // 缩略图类型
+        //         //     'x-gmkerl-value'  => '300*180', // 缩略图大小
+        //         //    'x-gmkerl-quality'  => 100, // 缩略图压缩质量
+        //         //    'x-gmkerl-unsharp' => true // 是否进行锐化处理
+        //         // );
+        //         $fh = fopen($image_url1, 'rb');
+        //         // $fh = fopen($_FILES["positive_idcard"]["tmp_name"], 'r');
+        //         // $oldname = $_FILES["positive_idcard"]["name"];
+        //         // $filetype = pathinfo($oldname, PATHINFO_EXTENSION);
+        //         $newname = time().$this->user['id'] . '.jpg';
+        //         $newfileurl = '/data/uploads/positive_idcard/' . $newname;
+        //         $upinfo = $upyun->writeFile($newfileurl, $fh, True);   // 上传图片，自动创建目录
+        //         fclose($fh);
+        //         $positive_idcard = 'https://ymlypt.b0.upaiyun.com' . $newfileurl;
+        //         // var_dump($_FILES['positive_idcard']);
+        //         // // var_dump(realpath($_FILES['positive_idcard']['tmp_name']));die;
+        //         //     $data = array(
+        //         //         'picType'=>'00',
+        //         //         'picFile'=>curl_file_create($positive_idcard),
+        //         //         'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+        //         //         'superUsercode'=>'yuanmeng'
+        //         //         );
+        //         //     $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+        //         //     $header = array(
+        //         //         'Content-Type:multipart/form-data'
+        //         //         );
+        //         //     $result = Common::httpRequest($act,'POST',$data,$header);
+        //         //     var_dump($data);
+        //         //       echo "<pre>";
+        //         //       print_r($result);
+        //         //       echo "<pre>";
+        //         //       die;
+        //     }
+        // }
 
-        $upfile2 = new UploadFile('native_idcard', $upfile_path2, '10000k', '', 'hash', $this->user['id']);
-        $upfile2->save();
-        $info2 = $upfile2->getInfo();
-        $native_idcard = "";
+        // $upfile2 = new UploadFile('native_idcard', $upfile_path2, '10000k', '', 'hash', $this->user['id']);
+        // $upfile2->save();
+        // $info2 = $upfile2->getInfo();
+        // $native_idcard = "";
 
-        if ($info2[0]['status'] == 1) {
-            $result2 = array('error' => 0, 'url' => $upfile_url2 . $info2[0]['path']);
-            $image_url2 = $upfile_url2 . $info2[0]['path'];
-            $image = new Image();
-            $image->suffix = '';
-            $image->thumb(APP_ROOT . $image_url2, 100, 100);
-            $native_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url2;
-        }
+        // if ($info2[0]['status'] == 1) {
+        //     $result2 = array('error' => 0, 'url' => $upfile_url2 . $info2[0]['path']);
+        //     $image_url2 = $upfile_url2 . $info2[0]['path'];
+        //     $image = new Image();
+        //     $image->suffix = '';
+        //     $image->thumb(APP_ROOT . $image_url2, 100, 100);
+        //     $native_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url2;
+        // }
 
-        $upfile3 = new UploadFile('business_licence', $upfile_path3, '10000k', '', 'hash', $this->user['id']);
-        $upfile3->save();
-        $info3 = $upfile3->getInfo();
-        $business_licence = "";
+        // $upfile3 = new UploadFile('business_licence', $upfile_path3, '10000k', '', 'hash', $this->user['id']);
+        // $upfile3->save();
+        // $info3 = $upfile3->getInfo();
+        // $business_licence = "";
 
-        if ($info3[0]['status'] == 1) {
-            $result3 = array('error' => 0, 'url' => $upfile_url3 . $info3[0]['path']);
-            $image_url3 = $upfile_url3 . $info3[0]['path'];
-            $image = new Image();
-            $image->suffix = '';
-            $image->thumb(APP_ROOT . $image_url3, 100, 100);
-            $business_licence = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url3;
-        }
+        // if ($info3[0]['status'] == 1) {
+        //     $result3 = array('error' => 0, 'url' => $upfile_url3 . $info3[0]['path']);
+        //     $image_url3 = $upfile_url3 . $info3[0]['path'];
+        //     $image = new Image();
+        //     $image->suffix = '';
+        //     $image->thumb(APP_ROOT . $image_url3, 100, 100);
+        //     $business_licence = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url3;
+        // }
 
         // $upfile4 = new UploadFile('account_picture', $upfile_path4, '2000k', '', 'hash', $this->user['id']);
         // $upfile4->save();
@@ -3962,46 +3962,46 @@ class UcenterController extends Controller
         //     $account_picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url4;
         // }
 
-        $upfile5 = new UploadFile('shop_photo', $upfile_path5, '10000k', '', 'hash', $this->user['id']);
-        $upfile5->save();
-        $info5 = $upfile5->getInfo();
-        $shop_photo = "";
+        // $upfile5 = new UploadFile('shop_photo', $upfile_path5, '10000k', '', 'hash', $this->user['id']);
+        // $upfile5->save();
+        // $info5 = $upfile5->getInfo();
+        // $shop_photo = "";
 
-        if ($info5[0]['status'] == 1) {
-            $result5 = array('error' => 0, 'url' => $upfile_url5 . $info5[0]['path']);
-            $image_url5 = $upfile_url5 . $info5[0]['path'];
-            $image = new Image();
-            $image->suffix = '';
-            $image->thumb(APP_ROOT . $image_url5, 100, 100);
-            $shop_photo = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url5;
-        }
+        // if ($info5[0]['status'] == 1) {
+        //     $result5 = array('error' => 0, 'url' => $upfile_url5 . $info5[0]['path']);
+        //     $image_url5 = $upfile_url5 . $info5[0]['path'];
+        //     $image = new Image();
+        //     $image->suffix = '';
+        //     $image->thumb(APP_ROOT . $image_url5, 100, 100);
+        //     $shop_photo = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url5;
+        // }
 
-        $upfile6 = new UploadFile('hand_idcard', $upfile_path6, '10000k', '', 'hash', $this->user['id']);
-        $upfile6->save();
-        $info6 = $upfile6->getInfo();
-        $hand_idcard = "";
+        // $upfile6 = new UploadFile('hand_idcard', $upfile_path6, '10000k', '', 'hash', $this->user['id']);
+        // $upfile6->save();
+        // $info6 = $upfile6->getInfo();
+        // $hand_idcard = "";
 
-        if ($info6[0]['status'] == 1) {
-            $result6 = array('error' => 0, 'url' => $upfile_url6 . $info6[0]['path']);
-            $image_url6 = $upfile_url6 . $info6[0]['path'];
-            $image = new Image();
-            $image->suffix = '';
-            $image->thumb(APP_ROOT . $image_url6, 100, 100);
-            $hand_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url6;
-        }
+        // if ($info6[0]['status'] == 1) {
+        //     $result6 = array('error' => 0, 'url' => $upfile_url6 . $info6[0]['path']);
+        //     $image_url6 = $upfile_url6 . $info6[0]['path'];
+        //     $image = new Image();
+        //     $image->suffix = '';
+        //     $image->thumb(APP_ROOT . $image_url6, 100, 100);
+        //     $hand_idcard = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url6;
+        // }
 
         $type = Filter::int(Req::args('shop_type')); //1实体商家 2个人微商
         if ($type == 0) {
             $this->redirect("ucenter/offline_balance_withdraw", false, array('msg' => array("warning", "店铺类型未选择")));
         }
-        // $business_licence = Req::args('business_licence'); //营业执照
-        // $positive_idcard = Req::args('positive_idcard'); //身份证正面照
-        // $native_idcard = Req::args('native_idcard'); //身份证反面照
+        $business_licence = Req::args('business_licence_url'); //营业执照
+        $positive_idcard = Req::args('positive_idcard_url'); //身份证正面照
+        $native_idcard = Req::args('native_idcard_url'); //身份证反面照
         // $account_picture = Req::args('account_picture'); //开户许可证照
         $account_card = Req::args('account_card'); //结算银行卡号
         $bank_name = Req::args('bank_name');
-        // $shop_photo = Req::args('shop_photo'); //门店照
-        // $hand_idcard = Req::args('hand_idcard'); //手持身份证照
+        $shop_photo = Req::args('shop_photo_url'); //门店照
+        $hand_idcard = Req::args('hand_idcard_url'); //手持身份证照
 
         // $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
 
