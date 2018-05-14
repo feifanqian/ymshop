@@ -1,4 +1,5 @@
 <?php
+include("TopSdk.php");
 class TopClient
 {
 	public $appkey;
