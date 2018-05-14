@@ -392,6 +392,10 @@
       };
       
       upyun_upload('positive_idcard',file);
+      var user_id = "{$user_id}";
+      if(user_id==42608){
+        yinsheng_ajax_upload(user_id,file);
+      }
       
       var reader = new FileReader(); 
       reader.readAsDataURL(file);
@@ -584,7 +588,7 @@ function upyun_upload(type,file) {
       var request = new XMLHttpRequest();
           request.open('POST', config.api + options.bucket);
       request.onload = function(e) {
-              console.log(request.response);
+              // console.log(request.response);
       };
           request.send(data);
       var path = "https://ymlypt.b0.upaiyun.com"+save_as;
@@ -605,5 +609,31 @@ function upyun_upload(type,file) {
         $("input[name='hand_idcard_url']").val(path);
       }
       return true;
+}
+function yinsheng_ajax_upload(user_id,file){
+  var yinsheng_token = "{$yin_token}"
+  var data = new FormData();
+      data.append('picType', '00');
+      data.append('picFile', file);
+      data.append('token', yinsheng_token);
+      data.append('superUsercode', 'yuanmeng');
+  var request = new XMLHttpRequest();
+      request.open('POST', 'https://register.ysepay.com:2443/register_gateway/gateway.do');
+  request.onload = function(e) {
+          console.log(request.response);
+  };
+      request.send(data);
+  // $.ajax({
+  //           url: '/ucenter/yinsheng_upload',
+  //           type: 'post',
+  //           data: {'user_id': user_id, 'picFile': file},
+            
+  //           success: function (result) {
+  //              console.log(result);
+  //           },
+  //           error: function (res){
+  //             console.log(res);
+  //           }
+  //       }, 'json');
 }
 </script>
