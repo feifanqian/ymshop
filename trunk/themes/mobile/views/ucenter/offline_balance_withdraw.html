@@ -627,7 +627,9 @@ function yinsheng_ajax_upload(user_id,file){
             url: '/ucenter/yinsheng_upload',
             type: 'post',
             data: {'user_id': user_id, 'picFile': file,'token':yinsheng_token},
-            
+            processData : false,
+            contentType : false,
+            dataType: "json", 
             success: function (result) {
                console.log(result);
             },
