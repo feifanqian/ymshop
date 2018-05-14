@@ -763,10 +763,13 @@ class AddressAction extends Controller
             $this->code = 1236;
             return;
         }
-        $data = array(
-            'shop_name'=>$name,
-            'location'=>$location,
-            );
+        $data = array();
+        if($name!=''){
+            $data['shop_name'] = $name;
+        }
+        if($location!=''){
+            $data['location'] = $location;
+        }
         if($lng) {
             $data['lng'] = $lng;
         }
