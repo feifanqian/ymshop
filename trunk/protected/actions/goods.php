@@ -32,6 +32,7 @@ class GoodsAction extends Controller {
         $order_list = $this->model->table('order')->where('status=3 and pay_status=1')->findall();
     }
 
+    //淘宝客商品查询
     public function tbk_item_get(){
         $c = new TopClient;
         $c->appkey = '24874156';
@@ -54,6 +55,26 @@ class GoodsAction extends Controller {
         $req->setPlatform("1");
         $req->setPageNo("123");
         $req->setPageSize("20");
+        $resp = $c->execute($req);
+        $this->code = 0;
+        $this->content = $resp;
+    }
+    
+    //淘宝客好券清单API【导购】
+    public function tbk_item_coupon_get(){
+        $c = new TopClient;
+        $c->appkey = '24874156';
+        $c->secretKey = 'a5e3998f3225cc0c673a5025845acd51';
+        $c->sign_method = 'md5';
+        $c->format = 'json';
+        $c->v = '2.0';
+        $req = new TbkDgItemCouponGetRequest;
+        $req->setAdzoneId("123");
+        $req->setPlatform("1");
+        $req->setCat("16,18");
+        $req->setPageSize("10");
+        $req->setQ("女装");
+        $req->setPageNo("1");
         $resp = $c->execute($req);
         $this->code = 0;
         $this->content = $resp;

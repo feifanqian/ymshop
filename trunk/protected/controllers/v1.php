@@ -131,6 +131,7 @@ class V1Controller extends Controller {
         'offline_balance_withdraw' => array("ucenter/offline_balance_withdraw", 1,1),
         "name_verified" =>array("ucenter/name_verified",1,1),
         "tbk_item_get"=>array("goods/tbk_item_get",0,1),
+        "tbk_item_coupon_get"=>array("goods/tbk_item_coupon_get",0,1),
         "get_rongyun_token"=>array("ucenter/get_rongyun_token",1,1),
         //小区相关接口
         'apply_for_district' => array("district/applyForDistrict", 1,1), //申请小区

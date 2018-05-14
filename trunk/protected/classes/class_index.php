@@ -145,6 +145,7 @@ return array(
     "TopSdk"=>"taobao/TopSdk.php",
     "TopClient"=>"taobao/TopClient.php",
     "TbkItemGetRequest"=>"taobao/request/TbkItemGetRequest.php",
+    "TbkDgItemCouponGetRequest"=>"taobao/request/TbkDgItemCouponGetRequest.php",
     "ResultSet"=>"taobao/ResultSet.php",
     "RequestCheckUtil"=>"taobao/RequestCheckUtil.php",
 );
