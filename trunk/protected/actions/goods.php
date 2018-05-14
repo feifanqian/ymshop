@@ -39,11 +39,11 @@ class GoodsAction extends Controller {
         // $c->appkey = '24874156';
         // $c->secretKey = 'a5e3998f3225cc0c673a5025845acd51';
         //安卓
-        $c->appkey = '24878644';
-        $c->secretKey = '453423588409212afb30d32be37df832';
+        $c->appkey = '24875594';
+        $c->secretKey = '8aac26323a65d4e887697db01ad7e7a8';
         //ios
-        // $c->appkey = '24878695';
-        // $c->secretKey = '7a579c1d21ce8e610da1a80cd839427a';
+        // $c->appkey = '24876667';
+        // $c->secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
         $c->sign_method = 'md5';
         $c->format = 'json';
         $c->v = '2.0';
@@ -71,11 +71,11 @@ class GoodsAction extends Controller {
     public function tbk_item_coupon_get(){
         $c = new TopClient;
         //安卓
-        $c->appkey = '24878644';
-        $c->secretKey = '453423588409212afb30d32be37df832';
+        $c->appkey = '24875594';
+        $c->secretKey = '8aac26323a65d4e887697db01ad7e7a8';
         //ios
-        // $c->appkey = '24878695';
-        // $c->secretKey = '7a579c1d21ce8e610da1a80cd839427a';
+        // $c->appkey = '24876667';
+        // $c->secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
         $c->sign_method = 'md5';
         $c->format = 'json';
         $c->v = '2.0';
