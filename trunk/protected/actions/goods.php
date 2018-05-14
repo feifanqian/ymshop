@@ -112,4 +112,29 @@ class GoodsAction extends Controller {
         $this->content = $resp;
     }
 
+    public function taobao_item_detail_get(){
+        $form = Filter::str(Req::args("form"));
+        $item_id = Filter::int(Req::args("item_id"));
+        if(!$form) {
+            $form = 'android';
+        }
+        if($form=='android') { //安卓
+            $appkey = '24875594';
+            $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
+        } else { //ios
+            $appkey = '24876667';
+            $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
+        }
+        $c = new TopClient;
+        $c->appkey = $appkey;
+        $c->secretKey = $secretKey;
+        $req = new ItemDetailGetRequest;
+        $req->setParams("areaId");
+        $req->setItemId($item_id);
+        $req->setFields("item,price,delivery,skuBase,skuCore,trade,feature,props,debug");
+        $resp = $c->execute($req);
+        $this->code = 0;
+        $this->content = $resp;
+    }
+
 }
