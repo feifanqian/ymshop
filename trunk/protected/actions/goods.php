@@ -34,22 +34,31 @@ class GoodsAction extends Controller {
 
     //淘宝客商品查询
     public function tbk_item_get(){
-        $c = new TopClient;
-        //微信
-        // $c->appkey = '24874156';
-        // $c->secretKey = 'a5e3998f3225cc0c673a5025845acd51';
-        //安卓
-        $c->appkey = '24875594';
-        $c->secretKey = '8aac26323a65d4e887697db01ad7e7a8';
-        //ios
-        // $c->appkey = '24876667';
-        // $c->secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
+        $q = Filter::str(Req::args("q"));
+        $page = Filter::int(Req::args("page"));
+        $form = Filter::str(Req::args("form"));
+        if(!$page) {
+            $page = 1;
+        }
+        if(!$form) {
+            $form = 'android';
+        }
+        $c = new TopClient;  
+        if($form=='android') { //安卓
+            $appkey = '24875594';
+            $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
+        } else { //ios
+            $appkey = '24876667';
+            $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
+        }
+        $c->appkey = $appkey;
+        $c->secretKey = $secretKey;
         $c->sign_method = 'md5';
         $c->format = 'json';
         $c->v = '2.0';
         $req = new TbkItemGetRequest;
         $req->setFields("num_iid,title,pict_url,small_images,reserve_price,zk_final_price,user_type,provcity,item_url,seller_id,volume,nick");
-        $req->setQ("女装");
+        $req->setQ($q);
         $req->setCat("16,18");
         // $req->setItemloc("杭州");
         $req->setSort("tk_rate_des");
@@ -60,8 +69,8 @@ class GoodsAction extends Controller {
         // $req->setStartTkRate("123");
         // $req->setEndTkRate("123");
         $req->setPlatform("1");
-        $req->setPageNo("123");
-        $req->setPageSize("20");
+        $req->setPageNo($page);
+        $req->setPageSize("10");
         $resp = $c->execute($req);
         $this->code = 0;
         $this->content = $resp;
@@ -69,23 +78,35 @@ class GoodsAction extends Controller {
     
     //淘宝客好券清单API【导购】
     public function tbk_item_coupon_get(){
-        $c = new TopClient;
-        //安卓
-        $c->appkey = '24875594';
-        $c->secretKey = '8aac26323a65d4e887697db01ad7e7a8';
-        //ios
-        // $c->appkey = '24876667';
-        // $c->secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
+        $q = Filter::str(Req::args("q"));
+        $page = Filter::int(Req::args("page"));
+        $form = Filter::str(Req::args("form"));
+        if(!$page) {
+            $page = 1;
+        }
+        if(!$form) {
+            $form = 'android';
+        }
+        $c = new TopClient;  
+        if($form=='android') { //安卓
+            $appkey = '24875594';
+            $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
+        } else { //ios
+            $appkey = '24876667';
+            $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
+        }
+        $c->appkey = $appkey;
+        $c->secretKey = $secretKey;
         $c->sign_method = 'md5';
         $c->format = 'json';
         $c->v = '2.0';
         $req = new TbkDgItemCouponGetRequest;
-        $req->setAdzoneId("123");
+        $req->setAdzoneId("513416107");
         $req->setPlatform("1");
-        $req->setCat("16,18");
-        $req->setPageSize("1");
-        $req->setQ("女装");
-        $req->setPageNo("1");
+        // $req->setCat("16,18");
+        $req->setPageSize("10");
+        $req->setQ($q);
+        $req->setPageNo($page);
         $resp = $c->execute($req);
         $this->code = 0;
         $this->content = $resp;
