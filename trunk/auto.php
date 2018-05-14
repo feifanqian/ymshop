@@ -215,7 +215,7 @@ class LinuxCliTask{
     public function autoClearRedbag(){
         $redbag = $this->model->table('redbag')->fields('id,create_time')->where("lat!='' and lng!='' and status!=2 and pay_status=1")->findAll();
         foreach ($redbag as $k => $v) {
-            if(now()-strtotime($v['create_time'])>24*60*60){
+            if(time()-strtotime($v['create_time'])>24*60*60){
                 $this->model->table('redbag')->data(['status'=>2,'remark'=>'1天未领取完自动清除'])->where('id='.$v['id'])->update();
             }
         }
