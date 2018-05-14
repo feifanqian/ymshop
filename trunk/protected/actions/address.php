@@ -755,11 +755,11 @@ class AddressAction extends Controller
             $picture='https://ymlypt.b0.upaiyun.com'.$picture;
         }
 
-        if($location && !$name){
+        if($name==''){
             $this->code = 1235;
             return;
         }
-        if($name && !$location){
+        if($location==''){
             $this->code = 1236;
             return;
         }
