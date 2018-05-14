@@ -763,7 +763,7 @@ class AddressAction extends Controller
             $this->code = 1236;
             return;
         }
-        if($location){
+        if($location!=''){
            $lnglat = Common::getLnglat($location);
             $lng = $lnglat['lng'];
             $lat = $lnglat['lat'];
