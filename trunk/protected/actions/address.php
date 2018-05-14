@@ -764,12 +764,8 @@ class AddressAction extends Controller
         //     return;
         // }
         $data = array();
-        if($name!=''){
-            $data['shop_name'] = $name;
-        }
-        if($location!=''){
-            $data['location'] = $location;
-        }
+        $data['shop_name'] = $name!=''?$name:$is_promoter['shop_name'];
+        $data['location'] = $location!=''?$location:$is_promoter['location'];
         if($lng) {
             $data['lng'] = $lng;
         }
