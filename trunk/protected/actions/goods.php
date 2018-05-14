@@ -83,7 +83,7 @@ class GoodsAction extends Controller {
         $req->setAdzoneId("123");
         $req->setPlatform("1");
         $req->setCat("16,18");
-        $req->setPageSize("10");
+        $req->setPageSize("1");
         $req->setQ("女装");
         $req->setPageNo("1");
         $resp = $c->execute($req);
