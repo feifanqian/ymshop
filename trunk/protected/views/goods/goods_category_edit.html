@@ -209,6 +209,7 @@
        
       </dd>
     </dl>
+    {if:isset($ad_position)}
     <dl class="lineD">
     <dt>首页分类广告banner图位置：</dt>
     <dd>
@@ -216,6 +217,7 @@
       <input name="ad_position" id="" type="radio" value="0" {if:$ad_position==0}checked='checked'{/if}><label for="">上面</label>
     </dd>
    </dl>
+   {/if}
   </div>
   <!-- E 基本信息-->
   <!-- S SEO信息-->
