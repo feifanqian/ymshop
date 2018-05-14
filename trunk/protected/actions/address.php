@@ -755,17 +755,17 @@ class AddressAction extends Controller
             $picture='https://ymlypt.b0.upaiyun.com'.$picture;
         }
 
-        // if($name==''){
-        //     $this->code = 1235;
-        //     return;
-        // }
-        // if($location==''){
-        //     $this->code = 1236;
-        //     return;
-        // }
         $data = array();
         $data['shop_name'] = $name!=''?$name:$is_promoter['shop_name'];
         $data['location'] = $location!=''?$location:$is_promoter['location'];
+        if($data['shop_name']==''){
+            $this->code = 1235;
+            return;
+        }
+        if($data['location']==''){
+            $this->code = 1236;
+            return;
+        }
         if($lng) {
             $data['lng'] = $lng;
         }
