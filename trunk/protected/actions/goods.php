@@ -129,7 +129,7 @@ class GoodsAction extends Controller {
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;
         $req = new ItemDetailGetRequest;
-        $req->setParams("areaId");
+        // $req->setParams("areaId");
         $req->setItemId($item_id);
         $req->setFields("item,price,delivery,skuBase,skuCore,trade,feature,props,debug");
         $resp = $c->execute($req);

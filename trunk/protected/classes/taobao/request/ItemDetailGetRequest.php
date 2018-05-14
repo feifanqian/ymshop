@@ -64,7 +64,7 @@ class ItemDetailGetRequest
     {
         return $this->nick;
     }
-    public function setNumIids($numIids)
+    public function setItemId($numIids)
     {
         $this->numIids = $numIids;
         $this->apiParas["num_iids"] = $numIids;
