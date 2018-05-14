@@ -102,7 +102,7 @@ class ItemDetailGetRequest
     }
     public function getApiMethodName()
     {
-        return "taobao.taobaoke.items.detail.get";
+        return "taobao.item.detail.get";
     }
     public function getApiParas()
     {
