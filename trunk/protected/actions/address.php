@@ -763,15 +763,17 @@ class AddressAction extends Controller
             $this->code = 1236;
             return;
         }
-        $lnglat = Common::getLnglat($data['location']);
-        $lng = $lnglat['lng'];
-        $lat = $lnglat['lat'];
-        if($lng) {
-            $data['lng'] = $lng;
-        }
-        if($lat) {
-            $data['lat'] = $lat;
-        }
+        if($location){
+           $lnglat = Common::getLnglat($location);
+            $lng = $lnglat['lng'];
+            $lat = $lnglat['lat'];
+            if($lng) {
+                $data['lng'] = $lng;
+            }
+            if($lat) {
+                $data['lat'] = $lat;
+            } 
+        }  
         if($province_id) {
             $data['province_id'] = $province_id;
         }
