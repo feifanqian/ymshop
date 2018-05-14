@@ -44,12 +44,12 @@ class GoodsAction extends Controller {
             $form = 'android';
         }
         $c = new TopClient;  
-        if($form=='android') { //安卓
-            $appkey = '24875594';
-            $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
-        } else { //ios
-            $appkey = '24876667';
-            $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
+        if($form=='android') { //百川安卓
+            $appkey = '24878644';
+            $secretKey = '453423588409212afb30d32be37df832';
+        } else { //百川ios
+            $appkey = '24878695';
+            $secretKey = '7a579c1d21ce8e610da1a80cd839427a';
         }
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;
