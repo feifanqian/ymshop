@@ -144,6 +144,7 @@ return array(
     "RSAUtil"=>"allinpay/RSAUtil.php",
     "TopSdk"=>"taobao/TopSdk.php",
     "TopClient"=>"taobao/TopClient.php",
+    "TopLogger"=>"taobao/TopLogger.php",
     "TbkItemGetRequest"=>"taobao/request/TbkItemGetRequest.php",
     "TbkDgItemCouponGetRequest"=>"taobao/request/TbkDgItemCouponGetRequest.php",
     "ResultSet"=>"taobao/ResultSet.php",
