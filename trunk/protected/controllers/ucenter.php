@@ -4094,7 +4094,6 @@ class UcenterController extends Controller
     }
 
     public function yinsheng_upload(){
-        var_dump(Req::args('picFile'));die;
         $data = array(
                 'picType'=>'00',
                 'picFile'=>$_POST['picFile'],
