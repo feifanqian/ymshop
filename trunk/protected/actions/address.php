@@ -747,9 +747,6 @@ class AddressAction extends Controller
         $classify_id = Filter::int(Req::args('classify_id'));
         $road = Filter::text(Req::args('road'));
         $picture = Req::args('picture');
-        $lnglat = Common::getLnglat($location);
-        $lng = $lnglat['lng'];
-        $lat = $lnglat['lat'];
         
         if($picture){
             $picture='https://ymlypt.b0.upaiyun.com'.$picture;
@@ -766,6 +763,9 @@ class AddressAction extends Controller
             $this->code = 1236;
             return;
         }
+        $lnglat = Common::getLnglat($data['location']);
+        $lng = $lnglat['lng'];
+        $lat = $lnglat['lat'];
         if($lng) {
             $data['lng'] = $lng;
         }
