@@ -755,9 +755,15 @@ class AddressAction extends Controller
             $picture='https://ymlypt.b0.upaiyun.com'.$picture;
         }
 
-        if ($name) {
-            $model->table('district_promoter')->data(array('shop_name' => $name))->where("user_id=" . $this->user['id'])->update();
+        if(!$name){
+            $this->code = 1235;
+            return;
         }
+        if(!$location){
+            $this->code = 1236;
+            return;
+        }
+        $model->table('district_promoter')->data(array('shop_name' => $name))->where("user_id=" . $this->user['id'])->update(); 
         
         $model->table('district_promoter')->data(array('info' => $infos))->where("user_id=" . $this->user['id'])->update();
         
