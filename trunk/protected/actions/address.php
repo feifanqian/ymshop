@@ -755,14 +755,14 @@ class AddressAction extends Controller
             $picture='https://ymlypt.b0.upaiyun.com'.$picture;
         }
 
-        if($name==''){
-            $this->code = 1235;
-            return;
-        }
-        if($location==''){
-            $this->code = 1236;
-            return;
-        }
+        // if($name==''){
+        //     $this->code = 1235;
+        //     return;
+        // }
+        // if($location==''){
+        //     $this->code = 1236;
+        //     return;
+        // }
         $data = array();
         if($name!=''){
             $data['shop_name'] = $name;
