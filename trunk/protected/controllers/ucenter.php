@@ -345,6 +345,7 @@ class UcenterController extends Controller
     //更新的提现操作(线下商家余额提现)
     public function offline_balance_withdraw()
     {
+        header("Access-Control-Allow-Origin:*");
         if ($this->is_ajax_request()) {
             if ($this->user['id'] == 126935 || $this->user['id'] == 126676 || $this->user['id'] == 126663 || $this->user['id'] == 126243 || $this->user['id'] == 126002) {
                 exit(json_encode(array('status' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！')));
