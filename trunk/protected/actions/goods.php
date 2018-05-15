@@ -164,4 +164,41 @@ class GoodsAction extends Controller {
         $this->content = $resp;
     }
 
+    public function tbk_item_guess_like(){
+        $c = new TopClient;
+        $c->appkey = $appkey;
+        $c->secretKey = $secret;
+        $req = new TbkItemGuessLikeRequest;
+        $req->setAdzoneId("123");
+        $req->setUserNick("abc");
+        $req->setUserId("123456");
+        $req->setOs("ios");
+        $req->setIdfa("65A509BA-227C-49AC-91EC-DE6817E63B10");
+        $req->setImei("641221321098757");
+        $req->setImeiMd5("115d1f360c48b490c3f02fc3e7111111");
+        $req->setIp("106.11.34.15");
+        $req->setUa("Mozilla/5.0");
+        $req->setApnm("com.xxx");
+        $req->setNet("wifi");
+        $req->setMn("iPhone7%2C2");
+        $req->setPageNo("1");
+        $req->setPageSize("20");
+        $resp = $c->execute($req);
+
+    }
+
+    public function tbk_index_banner(){
+        $banner = $this->model->table('ad')->fields('id,name,content')->where('id=80')->find();
+        $banner['content'] = unserialize($banner['content']);
+        foreach ($banner['content'] as $k=>$v){
+            if($banner['content'][$k]['url']!=''){
+                $banner['content'][$k]['url'] = json_decode($banner['content'][$k]['url'],true);
+            }else{
+                $banner['content'][$k]['url'] =array('type'=>'','type_value'=>'');
+            }
+        }
+        $this->code = 0;
+        $this->content = $banner;
+    }
+
 }

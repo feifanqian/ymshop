@@ -99,6 +99,7 @@ class V1Controller extends Controller {
         'get_hot' => array('product/get_hot', 0,1),
         "guess" => array("product/guess", 0,1),
         "get_index_ad" => array("index/get_index_ad", 0,1),
+        "tbk_index_banner" => array("goods/tbk_index_banner", 0,1),
         'want' => array('product/want', 1,1),
         "sale_support" => array('ucenter/sale_support', 1,1),
         "support_info" => array('ucenter/support_info', 1,1),
