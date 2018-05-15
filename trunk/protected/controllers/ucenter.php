@@ -346,6 +346,8 @@ class UcenterController extends Controller
     public function offline_balance_withdraw()
     {
         header("Access-Control-Allow-Origin:*");
+        header('Access-Control-Allow-Methods:POST');
+        header('Access-Control-Allow-Headers:x-requested-with,content-type');   
         if ($this->is_ajax_request()) {
             if ($this->user['id'] == 126935 || $this->user['id'] == 126676 || $this->user['id'] == 126663 || $this->user['id'] == 126243 || $this->user['id'] == 126002) {
                 exit(json_encode(array('status' => 'fail', 'msg' => '账号已被冻结，请联系官方客服！')));
@@ -1993,7 +1995,7 @@ class UcenterController extends Controller
                         // $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
 
                         //将当前微信注册账号与APP端该手机注册的新号绑定
-                        $oauth_user = $this->model->table('oauth_user')->where('user_id=' . $result['user_id'])->find();
+                        $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' and user_id=" . $result['user_id'])->find();
                         if ($oauth_user) {
                             $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
                         } else {
