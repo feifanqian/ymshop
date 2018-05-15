@@ -3283,7 +3283,10 @@ class UcenterController extends Controller
         if (!$inviter_id) {
             $inviter_id = Session::get('seller_id');
         }
-
+        if($inviter_id == 1){
+            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
+            exit;
+        } 
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false) {
             $pay_type = 'alipay';
             $from = 'alipay';
