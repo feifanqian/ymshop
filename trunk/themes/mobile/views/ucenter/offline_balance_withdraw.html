@@ -612,34 +612,34 @@ function upyun_upload(type,file) {
 }
 function yinsheng_ajax_upload(user_id,file){
   var yinsheng_token = "{$yin_token}";
-  // var data = new FormData();
-  //     data.append('picType', '00');
-  //     data.append('picFile', file);
-  //     data.append('token', yinsheng_token);
-  //     data.append('superUsercode', 'yuanmeng');
-  // var request = new XMLHttpRequest();
-  //     request.open('POST', 'https://register.ysepay.com:2443/register_gateway/gateway.do');
-  //     // request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
-  //     request.setRequestHeader("Access-Control-Allow-Origin", "*");
-  //     // request.withCredentials = true;
-  // request.onload = function(e) {
-  //         console.log(request.response);
-  // };
-  //     request.send(data);
-  $.ajax({
-            url: 'https://register.ysepay.com:2443/register_gateway/gateway.do',
-            type: 'post',
-            data: {'picType': '00', 'picFile': file,'token':yinsheng_token,'superUsercode':'yuanmeng'},
-            processData : false,
-            contentType : false,
-            dataType: "jsonp",
-            crossDomain: true, 
-            success: function (result) {
-               console.log(result);
-            },
-            error: function (res){
-              console.log(res);
-            }
-        }, 'json');
+  var data = new FormData();
+      data.append('picType', '00');
+      data.append('picFile', file);
+      data.append('token', yinsheng_token);
+      data.append('superUsercode', 'yuanmeng');
+  var request = new XMLHttpRequest();
+      request.open('POST', 'https://register.ysepay.com:2443/register_gateway/gateway.do');
+      // request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+      request.setRequestHeader("Access-Control-Allow-Origin", "*");
+      // request.withCredentials = true;
+  request.onload = function(e) {
+          console.log(request.response);
+  };
+      request.send(data);
+  // $.ajax({
+  //           url: 'https://register.ysepay.com:2443/register_gateway/gateway.do',
+  //           type: 'post',
+  //           data: {'picType': '00', 'picFile': file,'token':yinsheng_token,'superUsercode':'yuanmeng'},
+  //           processData : false,
+  //           contentType : false,
+  //           dataType: "jsonp",
+  //           crossDomain: true, 
+  //           success: function (result) {
+  //              console.log(result);
+  //           },
+  //           error: function (res){
+  //             console.log(res);
+  //           }
+  //       }, 'json');
 }
 </script>
