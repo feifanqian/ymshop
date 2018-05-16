@@ -1877,6 +1877,10 @@ class UcenterAction extends Controller {
                 $this->code = 1180;
                 return;
             }
+            if($amount<=0.00){
+                $this->code = 1238;
+                return;
+            }
             $config = Config::getInstance();
             $other = $config->get("other");
             if ($amount < $other['min_withdraw_amount']) {
