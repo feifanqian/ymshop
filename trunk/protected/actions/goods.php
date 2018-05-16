@@ -110,7 +110,7 @@ class GoodsAction extends Controller {
         $resp = $c->execute($req);
 
         $cache = CacheFactory::getInstance();
-        $id = tbk_cat_title_to_id($q);
+        $id = $this->tbk_cat_title_to_id($q);
         $items = $cache->get("_ItemCoupon".$id);
         if ($cache->get("_ItemCoupon".$id) === null) {
             $items = $resp;
@@ -232,6 +232,7 @@ class GoodsAction extends Controller {
 
     public function tbk_cat_nav(){
         $list = $this->model->table('tbk_cat_nav')->where('status=1')->order('sort desc')->findAll();
+        $cache = CacheFactory::getInstance();
         $items = $cache->get("_CatNav");
         if ($cache->get("_CatNav") === null) {
             $items = $list;
