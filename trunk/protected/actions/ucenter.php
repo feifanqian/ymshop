@@ -97,6 +97,7 @@ class UcenterAction extends Controller {
                     $this->content['token'] = $token;
                 } else {
                     $this->code = 1005;
+                    return;
                 }
             }
         } else {
@@ -131,11 +132,14 @@ class UcenterAction extends Controller {
                     );
                 } else {
                     $this->code = 1016;
+                    return;
                 }
             } else if ($obj['status'] == 2) {
                 $this->code = 1017;
+                return;
             } else {
                 $this->code = 1018;
+                return;
             }
         } else {
             $this->code = 1019;
@@ -185,6 +189,7 @@ class UcenterAction extends Controller {
         $info = Validator::check($rules);
         if (is_array($info)) {
             $this->code = 1000;
+            return;
         } else {
             $data = array(
                 'name' => Filter::txt(Req::args('name')),
@@ -373,6 +378,7 @@ class UcenterAction extends Controller {
                     }
                 }else{
                     $this->code= 1005;
+                    return;
                 }
             }
             // $token = CHash::random(32, 'char');
@@ -451,6 +457,7 @@ class UcenterAction extends Controller {
                 $flag = $mail->send_email($this->user['email'], '您的验证身份验证码', "身份验证码：" . $code);
                 if (!$flag) {
                     $this->code = 1034;
+                    return;
                 } else {
                     Session::set('verifiedInfo', $verifiedInfo);
                     $this->code = 0;
@@ -465,12 +472,15 @@ class UcenterAction extends Controller {
                         $this->code = 0;
                     } else {
                         $this->code = 1032;
+                        return;
                     }
                 } else {
                     $this->code = 1035;
+                    return;
                 }
             } else {
                 $this->code = 1000;
+                return;
             }
         } else {
             $this->code = 1036;
@@ -499,6 +509,7 @@ class UcenterAction extends Controller {
                 $flag = $mail->send_email($this->user['email'], '您的验证身份验证码', "身份验证码：" . $code);
                 if (!$flag) {
                     $this->code = 1034;
+                    return;
                 } else {
                     Session::set('activateObj', $activateObj);
                     $this->code = 0;
@@ -512,12 +523,15 @@ class UcenterAction extends Controller {
                         $this->code = 0;
                     } else {
                         $this->code = 1032;
+                        return;
                     }
                 } else {
                     $this->code = 1035;
+                    return;
                 }
             } else {
                 $this->code = 1000;
+                return;
             }
         } else {
             $this->code = 1036;
@@ -696,6 +710,7 @@ class UcenterAction extends Controller {
         //$flag = $this->model->query("select * from tiny_order where id = $id and user_id=".$this->user['id']." and status = 4");
         if (!empty($flag)) {
             $this->code = 1043;
+            return;
         } else {
             $result = $this->model->table('order')->where("id=$id and user_id=" . $this->user['id'] . " and status=3 and pay_status=1 and delivery_status=1")->data(array('delivery_status' => 2, 'status' => 4, 'completion_time' => date('Y-m-d H:i:s')))->update();
             if ($result) {
@@ -1013,6 +1028,7 @@ class UcenterAction extends Controller {
             $this->code = 0;
         } else {
             $this->code = 1025;
+            return;
         }
         //不需要验证码的
         if ($type == 'pay_password') {
@@ -1593,6 +1609,7 @@ class UcenterAction extends Controller {
         $isset = $this->model->table("order")->where("id=$id and user_id =".$this->user['id']." and status in(1,2,5,6)")->find();
         if(empty($isset)){
             $this->code = 1005;
+            return;
         }
         $result = $this->model->table("order")->where("id = $id and user_id = ".$this->user['id'].' and status in (1,2,5,6)')->data(array('is_del'=>'1'))->update();
         if($result){
@@ -1886,6 +1903,7 @@ class UcenterAction extends Controller {
             if ($amount < $other['min_withdraw_amount']) {
                 $this->code = 1181;
                 $this->content = $other['min_withdraw_amount'];
+                return;
             }
             $user_id = $this->user['id'];
             $user_id = intval($user_id);
@@ -1901,6 +1919,7 @@ class UcenterAction extends Controller {
                 $this->content = NULL;
             } else {
                 $this->code = 1182;
+                return;
             }
     }
     
@@ -1920,6 +1939,7 @@ class UcenterAction extends Controller {
         $base_info = $this->model->table("customer")->fields('user_id,valid_income,frezze_income,settled_income')->where("user_id=".$this->user['id'])->find();
         if(!$base_info){
             $this->code = 1159;
+            return;
         }
         $pay_promoter   = $this->model->table('district_promoter')->where("user_id=".$this->user['id'])->fields("id,hirer_id,type")->find();
         if($pay_promoter){
@@ -1945,6 +1965,7 @@ class UcenterAction extends Controller {
         $district_info = $this->model->table("district_shop")->where("id=$district_id")->fields("id,name,location")->find();
         if(empty($district_info)){
             $this->code = 1139;
+            return;
         }else{
             $this->code = 0;
             $this->content = $district_info;
@@ -2169,6 +2190,7 @@ class UcenterAction extends Controller {
         $is_signed = $this->model->table("sign_in")->where("date='$date' and user_id=".$this->user['id'])->find();
         if($is_signed){
             $this->code = 1154;
+            return;
         }else{
             $last_sign = $this->model->table("sign_in")->order('date desc')->where("user_id=".$this->user['id'])->find();
             if($last_sign){
@@ -2198,7 +2220,8 @@ class UcenterAction extends Controller {
                $this->content['serial_day']=strval($data['serial_day']);
                $this->content['sign_in_count']=strval($data['sign_in_count']);
             }else{
-               $this->code = 1005; 
+               $this->code = 1005;
+               return; 
             }
         }
     }
