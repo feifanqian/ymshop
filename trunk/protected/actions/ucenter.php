@@ -1875,6 +1875,7 @@ class UcenterAction extends Controller {
             $can_withdraw_amount = $customer ? $customer['offline_balance'] : 0;
             if ($can_withdraw_amount < $amount) {//提现金额中包含 暂时不能提现部分
                 $this->code = 1180;
+                return;
             }
             $config = Config::getInstance();
             $other = $config->get("other");
