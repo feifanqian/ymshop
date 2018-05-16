@@ -346,7 +346,7 @@ class UcenterController extends Controller
     public function offline_balance_withdraw()
     {
         header("Access-Control-Allow-Origin:*");
-        header('Access-Control-Allow-Methods:POST');
+        header('Access-Control-Allow-Methods:OPTIONS, GET, POST');
         header('Access-Control-Allow-Headers:x-requested-with,content-type');   
         if ($this->is_ajax_request()) {
             if ($this->user['id'] == 126935 || $this->user['id'] == 126676 || $this->user['id'] == 126663 || $this->user['id'] == 126243 || $this->user['id'] == 126002) {
