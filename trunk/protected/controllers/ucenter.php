@@ -165,7 +165,7 @@ class UcenterController extends Controller
                     //更新用户名和邮箱
                     $model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = '{$last_id}'")->update();
                     //更新customer表
-                    $sex = $result['gender'] == 'm' ? 1 : 0;
+                    $sex = isset($result['gender']) && $result['gender']== 'm' ? 1 : 0;
                     $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nick_name, 'sex' => $sex, 'point_coin' => 200, 'reg_time' => $time, 'login_time' => $time))->insert();
                     Log::pointcoin_log(200, $last_id, '', '支付宝新用户积分奖励', 10);
                     //记录登录信息
