@@ -158,7 +158,8 @@ class UcenterController extends Controller
                     $time = date('Y-m-d H:i:s');
                     $validcode = CHash::random(8);
                     $model = $this->model;
-                    $last_id = $model->table("user")->data(array('nickname' => $nick_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $result['avatar'], 'validcode' => $validcode))->insert();
+                    $avatar = isset($result['avatar'])?$result['avatar']:'http://www.ymlypt.com/themes/mobile/images/logo-new.png';
+                    $last_id = $model->table("user")->data(array('nickname' => $nick_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $avatar, 'validcode' => $validcode))->insert();
                     $name = "u" . sprintf("%09d", $last_id);
                     $email = $name . "@no.com";
                     //更新用户名和邮箱
