@@ -3868,7 +3868,7 @@ class UcenterController extends Controller
         if ($this->user['id'] == 42608) {
             $data = array(
                 'picType'=>'00',
-                'picFile'=>file_get_contents($positive_idcard),
+                'picFile'=>fopen($positive_idcard,'r'),
                 'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
                 'superUsercode'=>'yuanmeng'
                 );
