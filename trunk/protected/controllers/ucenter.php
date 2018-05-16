@@ -345,7 +345,8 @@ class UcenterController extends Controller
 
     //更新的提现操作(线下商家余额提现)
     public function offline_balance_withdraw()
-    {
+    {   
+        header("Access-Control-Allow-Credentials", "true");
         header("Access-Control-Allow-Origin:*");
         header('Access-Control-Allow-Methods:OPTIONS, GET, POST');
         header('Access-Control-Allow-Headers:x-requested-with,content-type');   

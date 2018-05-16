@@ -620,7 +620,7 @@ function yinsheng_ajax_upload(user_id,file){
   var request = new XMLHttpRequest();
       request.open('POST', 'https://register.ysepay.com:2443/register_gateway/gateway.do',true);
       // request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
-      request.setRequestHeader("Access-Control-Allow-Origin", "https://register.ysepay.com:2443/register_gateway/gateway.do");
+      request.setRequestHeader("Access-Control-Allow-Origin", "*");
       request.withCredentials = true;
   request.onload = function(e) {
           console.log(request.response);
