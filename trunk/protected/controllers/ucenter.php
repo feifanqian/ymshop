@@ -3877,7 +3877,7 @@ class UcenterController extends Controller
             //     'Content-Type:multipart/form-data'
             //     );
             $result = Common::httpRequest($act,'POST',$data);
-            var_dump($data);
+            // var_dump($data);
             echo "<pre>";
             print_r($result);
             echo "<pre>";
