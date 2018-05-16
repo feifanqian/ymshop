@@ -221,4 +221,10 @@ class GoodsAction extends Controller {
         $this->content = $banner;
     }
 
+    public function tbk_cat_nav(){
+        $list = $this->model->table('tbk_cat_nav')->where('status=1')->order('sort desc')->findAll();
+        $this->code = 0;
+        $this->content = $list;
+    }
+
 }
