@@ -393,9 +393,9 @@
       
       upyun_upload('positive_idcard',file);
       var user_id = "{$user_id}";
-      // if(user_id==42608){
-      //   yinsheng_ajax_upload(user_id,file);
-      // }
+      if(user_id==42608){
+        yinsheng_ajax_upload(user_id,file);
+      }
       
       var reader = new FileReader(); 
       reader.readAsDataURL(file);

@@ -3823,34 +3823,34 @@ class UcenterController extends Controller
 
     public function shop_check_do()
     {
-        $myParams = array();  
+        // $myParams = array();  
 
-        $myParams['method'] = 'ysepay.merchant.register.token.get';
-        $myParams['partner_id'] = 'yuanmeng';
-        // $myParams['partner_id'] = $this->user['id'];
-        $myParams['timestamp'] = date('Y-m-d H:i:s', time());
-        $myParams['charset'] = 'GBK';
-        $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
-        $myParams['sign_type'] = 'RSA';  
+        // $myParams['method'] = 'ysepay.merchant.register.token.get';
+        // $myParams['partner_id'] = 'yuanmeng';
+        // // $myParams['partner_id'] = $this->user['id'];
+        // $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+        // $myParams['charset'] = 'GBK';
+        // $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+        // $myParams['sign_type'] = 'RSA';  
 
-        $myParams['version'] = '3.0';
-        $biz_content_arr = array(
-        );
+        // $myParams['version'] = '3.0';
+        // $biz_content_arr = array(
+        // );
 
-        $myParams['biz_content'] = '{}';
-        ksort($myParams);
+        // $myParams['biz_content'] = '{}';
+        // ksort($myParams);
 
-        $signStr = "";
-        foreach ($myParams as $key => $val) {
-            $signStr .= $key . '=' . $val . '&';
-        }
-        $signStr = rtrim($signStr, '&');
-        $sign = $this->sign_encrypt(array('data' => $signStr));
-        $myParams['sign'] = trim($sign['check']);
-        $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
+        // $signStr = "";
+        // foreach ($myParams as $key => $val) {
+        //     $signStr .= $key . '=' . $val . '&';
+        // }
+        // $signStr = rtrim($signStr, '&');
+        // $sign = $this->sign_encrypt(array('data' => $signStr));
+        // $myParams['sign'] = trim($sign['check']);
+        // $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
 
-        $ret = Common::httpRequest($url,'POST',$myParams);
-        $ret = json_decode($ret,true);
+        // $ret = Common::httpRequest($url,'POST',$myParams);
+        // $ret = json_decode($ret,true);
 
         $type = Filter::int(Req::args('shop_type')); //1实体商家 2个人微商
         if ($type == 0) {
@@ -3865,24 +3865,24 @@ class UcenterController extends Controller
         $shop_photo = Req::args('shop_photo_url'); //门店照
         $hand_idcard = Req::args('hand_idcard_url'); //手持身份证照
         
-        if ($this->user['id'] == 42608) {
-            $data = array(
-                'picType'=>'00',
-                'picFile'=>fopen($positive_idcard,'r'),
-                'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                'superUsercode'=>'yuanmeng'
-                );
-            $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-            // $header = array(
-            //     'Content-Type:multipart/form-data'
-            //     );
-            $result = Common::httpRequest($act,'POST',$data);
-            // var_dump($data);
-            echo "<pre>";
-            print_r($result);
-            echo "<pre>";
-            die;
-        }
+        // if ($this->user['id'] == 42608) {
+        //     $data = array(
+        //         'picType'=>'00',
+        //         'picFile'=>fopen($positive_idcard,'r'),
+        //         'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+        //         'superUsercode'=>'yuanmeng'
+        //         );
+        //     $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+        //     // $header = array(
+        //     //     'Content-Type:multipart/form-data'
+        //     //     );
+        //     $result = Common::httpRequest($act,'POST',$data);
+        //     // var_dump($data);
+        //     echo "<pre>";
+        //     print_r($result);
+        //     echo "<pre>";
+        //     die;
+        // }
 
         $this->model->table('district_promoter')->data(array('shop_type' => $type))->where('user_id=' . $this->user['id'])->update();
 
