@@ -108,8 +108,17 @@ class GoodsAction extends Controller {
         $req->setQ($q);
         $req->setPageNo($page);
         $resp = $c->execute($req);
+
+        $cache = CacheFactory::getInstance();
+        $id = tbk_cat_title_to_id($q);
+        $items = $cache->get("_ItemCoupon".$id);
+        if ($cache->get("_ItemCoupon".$id) === null) {
+            $items = $resp;
+            $cache->set("_ItemCoupon".$id, $items, 86400);
+        }
+
         $this->code = 0;
-        $this->content = $resp;
+        $this->content = $items;
     }
 
     public function taobao_item_detail_get(){
@@ -223,8 +232,18 @@ class GoodsAction extends Controller {
 
     public function tbk_cat_nav(){
         $list = $this->model->table('tbk_cat_nav')->where('status=1')->order('sort desc')->findAll();
+        $items = $cache->get("_CatNav");
+        if ($cache->get("_CatNav") === null) {
+            $items = $list;
+            $cache->set("_CatNav", $items, 86400);
+        }
         $this->code = 0;
-        $this->content = $list;
+        $this->content = $items;
+    }
+
+    public function tbk_cat_title_to_id($title){
+       $item = $this->model->table('tbk_cat_nav')->where("title='{$title}'")->find();
+       return $item?$item['cat_id']:0;
     }
 
 }
