@@ -1581,7 +1581,7 @@ class Common {
                 return;  
             }  
             if (gettype($v) == 'object' || gettype($v) == 'array') {  
-                $obj[$k] = (array)object_to_array($v);  
+                $obj[$k] = (array)objectToArray($v);  
             }  
         }  
        
