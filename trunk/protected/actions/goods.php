@@ -126,7 +126,7 @@ class GoodsAction extends Controller {
         // }
         // $resp = Common::objectToArray($resp);
         // $resp = array_slice($resp, ($page-1)*10, 10);
-        // $this->code = 0;
+        $this->code = 0;
         $this->content = $resp;
     }
 
