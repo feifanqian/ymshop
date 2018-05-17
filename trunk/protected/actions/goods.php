@@ -108,12 +108,11 @@ class GoodsAction extends Controller {
         $req->setAdzoneId("513416107");
         $req->setPlatform("1");
         $req->setPageSize(10);
-        // if($type==1){
-        //     $req->setQ($q);
-        // } else {
-        //     $req->setCat($q);
-        // }
-        $req->setQ($q);
+        if($type==1){
+            $req->setQ($q);
+        } else {
+            $req->setCat($q);
+        }
         $req->setPageNo($page);
         $resp = $c->execute($req);
 
