@@ -82,9 +82,9 @@ class GoodsAction extends Controller {
         $page = Filter::int(Req::args("page"));
         $form = Filter::str(Req::args("form"));
         $type = Filter::int(Req::args("type"));
-        if(!$page) {
-            $page = 1;
-        }
+        // if(!$page) {
+        //     $page = 1;
+        // }
         if(!$type) {
             $type = 1;
         }
