@@ -574,7 +574,7 @@ class AddressAction extends Controller
                 $info = '您已经领取过该红包';
             }else{
                 $had_opened = 1; // 没抢到
-                $info = '';
+                $info = '可领取的红包';
             }
         }
         $this->code = 0;
