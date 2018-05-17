@@ -573,7 +573,7 @@ class AddressAction extends Controller
                 $had_opened = 2; // 抢到过
                 $info = '您已经领取过该红包';
             }else{
-                $had_opened = 1; // 没抢到
+                $had_opened = 1; // 没抢过
                 $info = '可领取的红包';
             }
         }
@@ -758,16 +758,16 @@ class AddressAction extends Controller
         }
 
         $data = array();
-        $data['shop_name'] = $name!=''?$name:$is_promoter['shop_name'];
-        $data['location'] = $location!=''?$location:$is_promoter['location'];
-        if($data['shop_name']==''){
-            $this->code = 1235;
-            return;
-        }
-        if($data['location']==''){
-            $this->code = 1236;
-            return;
-        }
+        $data['shop_name'] = $name;
+        $data['location'] = $location;
+        // if($data['shop_name']==''){
+        //     $this->code = 1235;
+        //     return;
+        // }
+        // if($data['location']==''){
+        //     $this->code = 1236;
+        //     return;
+        // }
         if($location!=''){
            $lnglat = Common::getLnglat($location);
             $lng = $lnglat['lng'];
