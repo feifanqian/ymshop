@@ -78,11 +78,15 @@ class GoodsAction extends Controller {
     
     //淘宝客好券清单API【导购】
     public function tbk_item_coupon_get(){
-        $q = Filter::str(Req::args("q"));
+        $q = Filter::str(Req::args("q")); //商品分类标题或分类id
         $page = Filter::int(Req::args("page"));
         $form = Filter::str(Req::args("form"));
+        $type = Filter::int(Req::args("type"));
         if(!$page) {
             $page = 1;
+        }
+        if(!$type) {
+            $type = 1;
         }
         if(!$form) {
             $form = 'android';
@@ -103,22 +107,26 @@ class GoodsAction extends Controller {
         $req = new TbkDgItemCouponGetRequest;
         $req->setAdzoneId("513416107");
         $req->setPlatform("1");
-        // $req->setCat("16,18");
         $req->setPageSize("10");
-        $req->setQ($q);
+        if($type==1){
+            $req->setQ($q);
+        } else {
+            $req->setCat($q);
+        }
+        
         $req->setPageNo($page);
         $resp = $c->execute($req);
 
-        $cache = CacheFactory::getInstance();
-        $id = $this->tbk_cat_title_to_id($q);
-        $items = $cache->get("_ItemCoupon".$id);
-        if ($cache->get("_ItemCoupon".$id) === null) {
-            $items = $resp;
-            $cache->set("_ItemCoupon".$id, $items, 86400);
-        }
+        // $cache = CacheFactory::getInstance();
+        // $id = $this->tbk_cat_title_to_id($q);
+        // $items = $cache->get("_ItemCoupon".$id);
+        // if ($cache->get("_ItemCoupon".$id) === null) {
+        //     $items = $resp;
+        //     $cache->set("_ItemCoupon".$id, $items, 86400);
+        // }
 
         $this->code = 0;
-        $this->content = $items;
+        $this->content = $resp;
     }
 
     public function taobao_item_detail_get(){
