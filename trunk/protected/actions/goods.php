@@ -124,9 +124,9 @@ class GoodsAction extends Controller {
         //     $items = $resp;
         //     $cache->set("_ItemCoupon".$id, $items, 86400);
         // }
-        $resp = Common::objectToArray($resp);
-        $resp = array_slice($resp, ($page-1)*10, 10);
-        $this->code = 0;
+        // $resp = Common::objectToArray($resp);
+        // $resp = array_slice($resp, ($page-1)*10, 10);
+        // $this->code = 0;
         $this->content = $resp;
     }
 
