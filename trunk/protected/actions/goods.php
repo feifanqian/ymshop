@@ -195,6 +195,9 @@ class GoodsAction extends Controller {
         if(!$page) {
             $page = 1;
         }
+        if(!$form) {
+            $form = 'android';
+        }
         if($form=='android') { //安卓
             $appkey = '24875594';
             $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
@@ -205,6 +208,9 @@ class GoodsAction extends Controller {
         $c = new TopClient;
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;
+        $c->sign_method = 'md5';
+        $c->format = 'json';
+        $c->v = '2.0';
         // $req = new TbkItemGuessLikeRequest;
         // $req->setAdzoneId("513416107");
         // // $req->setUserNick("abc");
@@ -230,7 +236,7 @@ class GoodsAction extends Controller {
         
         $req->setPageNo($page);
         $resp = $c->execute($req);
-        
+
         $resp = Common::objectToArray($resp);
         $resp = array_slice($resp, ($page-1)*10, 10);
         $this->code = 0;
