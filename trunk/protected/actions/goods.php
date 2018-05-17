@@ -231,7 +231,7 @@ class GoodsAction extends Controller {
         $req = new TbkDgItemCouponGetRequest;
         $req->setAdzoneId("513416107");
         $req->setPlatform("1");
-        $req->setPageSize(10);
+        $req->setPageSize(100);
         $req->setQ($q);
         
         $req->setPageNo($page);
