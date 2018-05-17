@@ -107,13 +107,13 @@ class GoodsAction extends Controller {
         $req = new TbkDgItemCouponGetRequest;
         $req->setAdzoneId("513416107");
         $req->setPlatform("1");
-        $req->setPageSize(100);
-        if($type==1){
-            $req->setQ($q);
-        } else {
-            $req->setCat($q);
-        }
-        
+        $req->setPageSize(10);
+        // if($type==1){
+        //     $req->setQ($q);
+        // } else {
+        //     $req->setCat($q);
+        // }
+        $req->setQ($q);
         $req->setPageNo($page);
         $resp = $c->execute($req);
 
