@@ -562,19 +562,24 @@ class AddressAction extends Controller
             $redbag_get1 = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
             if($redbag_get1){
                 $had_opened = 2; //曾经抢到过但现在没有了
+                $info = '红包没了，您已经领取过该红包';
             }else{
                 $had_opened = 0; // 来晚了
+                $info = '手慢了，红包没了';
             }
         }else{
             $redbag_get = $this->model->table('redbag_get')->where('redbag_id='.$id.' and get_user_id='.$this->user['id'])->find();
             if($redbag_get){
                 $had_opened = 2; // 抢到过
+                $info = '您已经领取过该红包';
             }else{
                 $had_opened = 1; // 没抢到
+                $info = '';
             }
         }
         $this->code = 0;
         $this->content['had_opened'] = $had_opened;
+        $this->content['info'] = $info;
     }
 
     public function promoterList()
