@@ -238,7 +238,7 @@ class GoodsAction extends Controller {
         $resp = $c->execute($req);
 
         $resp = Common::objectToArray($resp);
-        $resp = array_slice($resp, ($page-1)*10, 10);
+        $resp['result']['tbk_coupon'] = array_slice($resp['result']['tbk_coupon'], ($page-1)*10, 10);
         $this->code = 0;
         $this->content = $resp;
     }
