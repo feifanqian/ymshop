@@ -1573,7 +1573,7 @@ class Common {
         return $array;
     } 
 
-    static function objectToArray($stdclassobject)
+    static function objectToArray($obj)
     {
         $obj = (array)$obj;  
         foreach ($obj as $k => $v) {  

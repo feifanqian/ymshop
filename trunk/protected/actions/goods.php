@@ -191,6 +191,7 @@ class GoodsAction extends Controller {
     public function tbk_item_guess_like(){
         $page = Filter::int(Req::args("page"));
         $form = Filter::str(Req::args("form"));
+        $q = Filter::str(Req::args("q")); //商品分类标题或分类id
         if(!$page) {
             $page = 1;
         }
@@ -204,22 +205,34 @@ class GoodsAction extends Controller {
         $c = new TopClient;
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;
-        $req = new TbkItemGuessLikeRequest;
+        // $req = new TbkItemGuessLikeRequest;
+        // $req->setAdzoneId("513416107");
+        // // $req->setUserNick("abc");
+        // // $req->setUserId("123456");
+        // $req->setOs($form);
+        // // $req->setIdfa("65A509BA-227C-49AC-91EC-DE6817E63B10");
+        // // $req->setImei("641221321098757");
+        // // $req->setImeiMd5("115d1f360c48b490c3f02fc3e7111111");
+        // $req->setIp($_SERVER['REMOTE_ADDR']);
+        // $req->setUa($_SERVER['HTTP_USER_AGENT']);
+        // // $req->setApnm("com.xxx");
+        // $req->setNet("wifi");
+        // // $req->setMn("iPhone7%2C2");
+        // $req->setPageNo($page);
+        // $req->setPageSize("10");
+        // $resp = $c->execute($req);
+        
+        $req = new TbkDgItemCouponGetRequest;
         $req->setAdzoneId("513416107");
-        // $req->setUserNick("abc");
-        // $req->setUserId("123456");
-        $req->setOs($form);
-        // $req->setIdfa("65A509BA-227C-49AC-91EC-DE6817E63B10");
-        // $req->setImei("641221321098757");
-        // $req->setImeiMd5("115d1f360c48b490c3f02fc3e7111111");
-        $req->setIp($_SERVER['REMOTE_ADDR']);
-        $req->setUa($_SERVER['HTTP_USER_AGENT']);
-        // $req->setApnm("com.xxx");
-        $req->setNet("wifi");
-        // $req->setMn("iPhone7%2C2");
+        $req->setPlatform("1");
+        $req->setPageSize(10);
+        $req->setQ($q);
+        
         $req->setPageNo($page);
-        $req->setPageSize("10");
         $resp = $c->execute($req);
+        
+        $resp = Common::objectToArray($resp);
+        $resp = array_slice($resp, ($page-1)*10, 10);
         $this->code = 0;
         $this->content = $resp;
     }
