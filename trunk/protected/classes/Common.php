@@ -1575,12 +1575,16 @@ class Common {
 
     static function objectToArray($stdclassobject)
     {
-        $array = array();
-        $arrays = is_object($stdclassobject)?get_object_vars($stdclassobject):$stdclassobject;
-        foreach($arrays as $key=>$value){
-            $value = (is_array($value) || is_object($value))?std_class_object_to_array($value):$value;
-            $array[$key] = $value;
-        }
-        return $array;
+        $obj = (array)$obj;  
+        foreach ($obj as $k => $v) {  
+            if (gettype($v) == 'resource') {  
+                return;  
+            }  
+            if (gettype($v) == 'object' || gettype($v) == 'array') {  
+                $obj[$k] = (array)object_to_array($v);  
+            }  
+        }  
+       
+        return $obj;
     }
 }
