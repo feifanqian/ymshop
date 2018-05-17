@@ -107,14 +107,14 @@ class GoodsAction extends Controller {
         $req = new TbkDgItemCouponGetRequest;
         $req->setAdzoneId("513416107");
         $req->setPlatform("1");
-        $req->setPageSize(10);
+        $req->setPageSize(100);
         if($type==1){
             $req->setQ($q);
         } else {
             $req->setCat($q);
         }
         
-        $req->setPageNo(2);
+        $req->setPageNo($page);
         $resp = $c->execute($req);
 
         // $cache = CacheFactory::getInstance();
@@ -124,7 +124,7 @@ class GoodsAction extends Controller {
         //     $items = $resp;
         //     $cache->set("_ItemCoupon".$id, $items, 86400);
         // }
-
+        $resp = array_slice($resp, ($page-1)*10, 10);
         $this->code = 0;
         $this->content = $resp;
     }
