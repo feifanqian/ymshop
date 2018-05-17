@@ -107,7 +107,7 @@ class GoodsAction extends Controller {
         $req = new TbkDgItemCouponGetRequest;
         $req->setAdzoneId("513416107");
         $req->setPlatform("1");
-        $req->setPageSize(10);
+        $req->setPageSize(100);
         if($type==1){
             $req->setQ($q);
         } else {
@@ -116,15 +116,11 @@ class GoodsAction extends Controller {
         $req->setPageNo($page);
         $resp = $c->execute($req);
 
-        // $cache = CacheFactory::getInstance();
-        // $id = $this->tbk_cat_title_to_id($q);
-        // $items = $cache->get("_ItemCoupon".$id);
-        // if ($cache->get("_ItemCoupon".$id) === null) {
-        //     $items = $resp;
-        //     $cache->set("_ItemCoupon".$id, $items, 86400);
-        // }
-        // $resp = Common::objectToArray($resp);
-        // $resp = array_slice($resp, ($page-1)*10, 10);
+        $resp = Common::objectToArray($resp);
+        if(isset($resp['results']['tbk_coupon'])) {
+            $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
+        }
+        
         $this->code = 0;
         $this->content = $resp;
     }
@@ -238,7 +234,6 @@ class GoodsAction extends Controller {
         $resp = $c->execute($req);
 
         $resp = Common::objectToArray($resp);
-        var_dump(count($resp['results']['tbk_coupon']));die;
         $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
         $this->code = 0;
         $this->content = $resp;
