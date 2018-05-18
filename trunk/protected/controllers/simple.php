@@ -765,7 +765,7 @@ class SimpleController extends Controller {
         $this->assign("paytypelist", $paytypelist);
         //计算运费
         $fare = new Fare($totalweight);
-        if($$totalweight==0){
+        if($totalweight==0){
             $totalfare = 0;
         }else{
             $totalfare = $fare->calculate(isset($address[0]['id']) ? $address[0]['id'] : 0, $productarr);
