@@ -2593,7 +2593,7 @@ class UcenterAction extends Controller {
 
     public function rongyun_token($user_id){
         $url = 'http://api.cn.ronghub.com/user/getToken.json';
-        $appSecret = 'BPC73blNRmfg';
+        $appSecret = 'snTBfamLUz3NM';
         $Nonce = rand(1000,9999);
         $Timestamp = time()*1000;
         $Signature = sha1($appSecret.$Nonce.$Timestamp);
@@ -2605,7 +2605,7 @@ class UcenterAction extends Controller {
                 'portraitUri'=>$customer['avatar']!=null?$customer['avatar']:''
             );
             $header = array(
-                'App-Key:p5tvi9dsphuc4',
+                'App-Key:n19jmcy5nsuh9',
                 'Nonce:'.$Nonce,
                 'Timestamp:'.$Timestamp,
                 'Signature:'.$Signature,
@@ -2627,7 +2627,7 @@ class UcenterAction extends Controller {
     public function get_rongyun_token(){
         $user_id = $this->user['id'];
         $url = 'http://api.cn.ronghub.com/user/getToken.json';
-        $appSecret = 'BPC73blNRmfg';
+        $appSecret = 'snTBfamLUz3NM';
         $Nonce = rand(1000,9999);
         $Timestamp = time()*1000;
         $Signature = sha1($appSecret.$Nonce.$Timestamp);
@@ -2638,7 +2638,7 @@ class UcenterAction extends Controller {
             'portraitUri'=>$customer['avatar']!=null?$customer['avatar']:''
             );
         $header = array(
-            'App-Key:p5tvi9dsphuc4',
+            'App-Key:n19jmcy5nsuh9',
             'Nonce:'.$Nonce,
             'Timestamp:'.$Timestamp,
             'Signature:'.$Signature,
