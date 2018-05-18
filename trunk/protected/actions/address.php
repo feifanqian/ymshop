@@ -677,7 +677,7 @@ class AddressAction extends Controller
             $promoter['shop_name'] = $customer['real_name'];
         }
         if($promoter['picture']==null){
-            $promoter['picture'] = 'http://www.ymlypt.com/static/images/logo1.png';
+            $promoter['picture'] = 'http://www.ymlypt.com/themes/mobile/images/logo-new.png';
         }
         if($promoter['province_id']==null){
             $promoter['province_id'] = 0;

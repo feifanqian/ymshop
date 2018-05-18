@@ -2010,7 +2010,7 @@ class IndexController extends Controller {
 
     public function downloadapp(){
         $url = "http://www.ymlypt.com/static/upload/app/app-release.apk";
-        $logo = APP_ROOT."static/images/logo1.png";
+        $logo = "http://www.ymlypt.com/themes/mobile/images/logo-new.png";
         ob_clean();
         $qrCode = new QrCode();
         $qrCode->setText($url)
