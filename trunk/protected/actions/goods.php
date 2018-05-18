@@ -255,7 +255,7 @@ class GoodsAction extends Controller {
     }
 
     public function tbk_cat_title_to_id($title){
-       $item = $this->model->table('tbk_cat_nav')->where("title='{$title}'")->find();
+       $item = $this->model->table('tbk_cat_nav')->where("title like '%{$title}%'")->find();
        return $item?$item['cat_id']:0;
     }
 
