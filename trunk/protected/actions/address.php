@@ -1111,7 +1111,22 @@ class AddressAction extends Controller
         $product_id = Filter::int(Req::args('product_id'));
         $fare = new Fare($weight);
         $productarr = array(1346=>1);
-        $totalfare = $fare->calculates($address_id, $productarr);
+        $product = $this->model->table('product')->fields('goods_id')->where('id='.$product_id)->find();
+        if(!$product){
+            $this->code = 1040;
+            return;
+        }
+        $goods = $this->model->table('goods')->fields('freeshipping')->where('id='.$product['goods_id'])->find();
+        if(!$goods){
+            $this->code = 1040;
+            return;
+        }
+        if($goods['freeshipping']==1){
+            $totalfare = '0.00';
+        } else {
+            $totalfare = $fare->calculates($address_id, $productarr);
+        }
+        
         $this->code = 0;
         $this->content['totalfare'] = $totalfare;
     }
