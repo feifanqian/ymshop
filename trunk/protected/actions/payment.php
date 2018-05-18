@@ -500,10 +500,10 @@ class PaymentAction extends Controller {
    public function pay_qrcode(){
     $user_id = $this->user['id'];
     $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
-    $promoter = $this->model->table('district_promoter')->fields('qrcode_no')->where('user_id='.$user_id)->find();
+    $promoter = $this->model->table('district_promoter')->fields('id,qrcode_no')->where('user_id='.$user_id)->find();
     $this->code = 0;
     $this->content['url'] = $url;
-    $this->content['qrcode_no'] = $promoter?'0000'.$promoter['qrcode_no']:'0000';
+    $this->content['qrcode_no'] = $promoter?'0000'.$promoter['id'].rand(1000,9999):'0000';
    }
 
     //余额支付
