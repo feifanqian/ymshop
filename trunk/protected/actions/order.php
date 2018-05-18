@@ -870,12 +870,12 @@ class OrderAction extends Controller {
         }
         $fare = new Fare($weight);
         $product_ids = array_filter(array_keys($productarr));
-        $product = $this->model->table('products')->fields('goods_id')->where('id='.$product_ids[0])->find();
+        $product = $this->model->table('products')->fields('goods_id')->where("id IN (" . implode(',', $product_ids) . ")")->findAll();
         if(!$product){
             $this->code = 1040;
             return;
         }      
-        $goods = $this->model->table('goods')->fields('freeshipping')->where('id='.$product['goods_id'])->find();
+        $goods = $this->model->table('goods')->fields('freeshipping')->where('id='.$product[0]['goods_id'])->find();
         if(!$goods){
             $this->code = 1040;
             return;
