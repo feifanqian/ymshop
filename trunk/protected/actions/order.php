@@ -880,7 +880,7 @@ class OrderAction extends Controller {
             return;
         }
         if($goods['freeshipping']==1){
-            $fee = '1.0';
+            $fee = 0.00;
         } else {
             $fee = $fare->calculate($id,$product_info);
         }
