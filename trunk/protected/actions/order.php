@@ -868,23 +868,23 @@ class OrderAction extends Controller {
             $this->code = 1000;
             return;
         }
-        $product = $this->model->table('products')->fields('goods_id')->where('id='.$product_info[0]['id'])->find();
-        if(!$product){
-            $this->code = 1040;
-            return;
-        }      
-        $goods = $this->model->table('goods')->fields('freeshipping')->where('id='.$product['goods_id'])->find();
-        if(!$goods){
-            $this->code = 1040;
-            return;
-        }
-        $fare = new Fare($weight);
-        if($goods['freeshipping']==1){
-            $fee = '1.0';
-        } else {
-            $fee = $fare->calculate($id,$product_info);
-        }
-        // $fee = $fare->calculate($id,$product_info);
+        // $product = $this->model->table('products')->fields('goods_id')->where('id='.$product_info[0]['id'])->find();
+        // if(!$product){
+        //     $this->code = 1040;
+        //     return;
+        // }      
+        // $goods = $this->model->table('goods')->fields('freeshipping')->where('id='.$product['goods_id'])->find();
+        // if(!$goods){
+        //     $this->code = 1040;
+        //     return;
+        // }
+        // $fare = new Fare($weight);
+        // if($goods['freeshipping']==1){
+        //     $fee = '1.0';
+        // } else {
+        //     $fee = $fare->calculate($id,$product_info);
+        // }
+        $fee = $fare->calculate($id,$product_info);
         $this->code = 0;
         $this->content = array(
             'fee' => $fee
