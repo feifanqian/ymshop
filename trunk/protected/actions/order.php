@@ -869,22 +869,23 @@ class OrderAction extends Controller {
             return;
         }
         $fare = new Fare($weight);
-        // $product = $this->model->table('products')->fields('goods_id')->where('id='.$product_info[0]['id'])->find();
-        // if(!$product){
-        //     $this->code = 1040;
-        //     return;
-        // }      
-        // $goods = $this->model->table('goods')->fields('freeshipping')->where('id='.$product['goods_id'])->find();
-        // if(!$goods){
-        //     $this->code = 1040;
-        //     return;
-        // }
-        // if($goods['freeshipping']==1){
-        //     $fee = 0.00;
-        // } else {
-        //     $fee = $fare->calculate($id,$product_info);
-        // }
-        $fee = $fare->calculates($id,$product_info);
+        $product_ids = array_filter(array_keys($productarr));
+        $product = $this->model->table('products')->fields('goods_id')->where('id='.$product_ids[0])->find();
+        if(!$product){
+            $this->code = 1040;
+            return;
+        }      
+        $goods = $this->model->table('goods')->fields('freeshipping')->where('id='.$product['goods_id'])->find();
+        if(!$goods){
+            $this->code = 1040;
+            return;
+        }
+        if($goods['freeshipping']==1){
+            $fee = 0.00;
+        } else {
+            $fee = $fare->calculate($id,$product_info);
+        }
+        // $fee = $fare->calculates($id,$product_info);
         $this->code = 0;
         $this->content = array(
             'fee' => $fee
