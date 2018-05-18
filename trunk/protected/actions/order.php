@@ -869,7 +869,7 @@ class OrderAction extends Controller {
             return;
         }
         $fare = new Fare($weight);
-        $product_ids = array_filter(array_keys($productarr));
+        $product_ids = array_filter(array_keys($product_info));
         $product = $this->model->table('products')->fields('goods_id')->where("id IN (" . implode(',', $product_ids) . ")")->findAll();
         if(!$product){
             $this->code = 1040;
