@@ -503,7 +503,7 @@ class PaymentAction extends Controller {
     $promoter = $this->model->table('district_promoter')->fields('qrcode_no')->where('user_id='.$user_id)->find();
     $this->code = 0;
     $this->content['url'] = $url;
-    $this->content['qrcode_no'] = $promoter?$promoter['qrcode_no']:'';
+    $this->content['qrcode_no'] = $promoter?'0000'.$promoter['qrcode_no']:'0000';
    }
 
     //余额支付
