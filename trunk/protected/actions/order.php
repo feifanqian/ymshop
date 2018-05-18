@@ -879,11 +879,12 @@ class OrderAction extends Controller {
             return;
         }
         $fare = new Fare($weight);
-        if($goods['freeshipping']==1){
-            $fee = '0.1';
-        } else {
-            $fee = $fare->calculate($id,$product_info);
-        }
+        // if($goods['freeshipping']==1){
+        //     $fee = '0.1';
+        // } else {
+        //     $fee = $fare->calculate($id,$product_info);
+        // }
+        $fee = $fare->calculate($id,$product_info);
         $this->code = 0;
         $this->content = array(
             'fee' => $fee
