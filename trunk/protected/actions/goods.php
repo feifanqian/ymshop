@@ -259,4 +259,16 @@ class GoodsAction extends Controller {
        return $item?$item['cat_id']:0;
     }
 
+    public function make_shop_qrcode_no(){
+        $list = $this->model->table('district_promoter')->fields('id,qrcode_no')->findAll();
+        foreach ($list as $k => $v) {
+            if($v['qrcode_no']=='') {
+                $no = sprintf("%08d", $v['id']).rand(1000,9999);
+                $this->model->table('district_promoter')->data(['qrcode_no'=>$no])->where('id='.$v['id'])->update();
+            }
+        }
+        $this->code = 0;
+        return;
+    }
+
 }
