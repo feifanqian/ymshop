@@ -1111,7 +1111,7 @@ class AddressAction extends Controller
         $product_id = Filter::int(Req::args('product_id'));
         $fare = new Fare($weight);
         $productarr = array(1346=>1);
-        $product = $this->model->table('product')->fields('goods_id')->where('id='.$product_id)->find();
+        $product = $this->model->table('products')->fields('goods_id')->where('id='.$product_id)->find();
         if(!$product){
             $this->code = 1040;
             return;
