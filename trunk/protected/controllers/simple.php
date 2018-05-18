@@ -738,14 +738,18 @@ class SimpleController extends Controller {
         $productarr = array();
         
         foreach ($this->selectcart as $k => $v) {
-            $totalamount+=$v['amount'];
-            $totalweight+=$v['weight'] * $v['num'];
+            $totalamount+=$v['amount']; 
             $totalpoint+=$v['point'] * $v['num'];
             $productarr[$v['id']] = $v['num'];
             if(!isset($product_amount[$v['id']])){
                 $product_amount[$v['id']]=0.00;
             }
-            $product_amount[$v['id']]+=$v['amount'];            
+            $product_amount[$v['id']]+=$v['amount'];
+            if($v['freeshipping']==0) {
+                $totalweight+=$v['weight'] * $v['num'];
+            } else {
+                $totalweight+= 0;
+            }            
         }
         
         $client_type = Chips::clientType();
@@ -761,7 +765,7 @@ class SimpleController extends Controller {
         $this->assign("paytypelist", $paytypelist);
         //计算运费
         $fare = new Fare($totalweight);
-        if($this->user['id']==42608){
+        if($$totalweight==0){
             $totalfare = 0;
         }else{
             $totalfare = $fare->calculate(isset($address[0]['id']) ? $address[0]['id'] : 0, $productarr);
