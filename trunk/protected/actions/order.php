@@ -884,7 +884,7 @@ class OrderAction extends Controller {
         // } else {
         //     $fee = $fare->calculate($id,$product_info);
         // }
-        $fee = $fare->calculate($id,$product_info);
+        $fee = $fare->calculates($id,$product_info);
         $this->code = 0;
         $this->content = array(
             'fee' => $fee
