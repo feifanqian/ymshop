@@ -263,7 +263,9 @@ class GoodsAction extends Controller {
         $list = $this->model->table('district_promoter')->fields('id,qrcode_no')->findAll();
         foreach ($list as $k => $v) {
             $no = $v['id'].rand(1000,9999);
-            $this->model->table('district_promoter')->data(array('qrcode_no'=>$no))->where('id='.$v['id'])->update();
+            var_dump($no);
+            $res = $this->model->table('district_promoter')->data(array('qrcode_no'=>$no))->where('id='.$v['id'])->update();
+            var_dump($res);die;
         }
         $this->code = 0;
         return;
