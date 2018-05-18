@@ -229,7 +229,7 @@ class GoodsAction extends Controller {
     }
 
     public function tbk_index_banner(){
-        $banner = $this->model->table('ad')->fields('id,name,content')->where('id=80')->find();
+        $banner = $this->model->table('ad')->fields('id,name,content,width,height')->where('id=80')->find();
         $banner['content'] = unserialize($banner['content']);
         foreach ($banner['content'] as $k=>$v){
             if($banner['content'][$k]['url']!=''){
@@ -263,7 +263,7 @@ class GoodsAction extends Controller {
         $list = $this->model->table('district_promoter')->fields('id,qrcode_no')->findAll();
         foreach ($list as $k => $v) {
             $no = $v['id'].rand(1000,9999);
-            $this->model->table('district_promoter')->data(['qrcode_no'=>$no])->where('id='.$v['id'])->update();
+            $this->model->table('district_promoter')->data(array('qrcode_no'=>$no))->where('id='.$v['id'])->update();
         }
         $this->code = 0;
         return;
