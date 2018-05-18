@@ -868,6 +868,7 @@ class OrderAction extends Controller {
             $this->code = 1000;
             return;
         }
+        $fare = new Fare($weight);
         // $product = $this->model->table('products')->fields('goods_id')->where('id='.$product_info[0]['id'])->find();
         // if(!$product){
         //     $this->code = 1040;
@@ -878,7 +879,6 @@ class OrderAction extends Controller {
         //     $this->code = 1040;
         //     return;
         // }
-        // $fare = new Fare($weight);
         // if($goods['freeshipping']==1){
         //     $fee = '1.0';
         // } else {
