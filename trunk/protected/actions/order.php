@@ -868,7 +868,7 @@ class OrderAction extends Controller {
             $this->code = 1000;
             return;
         }
-        $product = $this->model->table('products')->fields('goods_id')->where('id='.$product_info['id'])->find();
+        $product = $this->model->table('products')->fields('goods_id')->where('id='.$product_info[0]['id'])->find();
         if(!$product){
             $this->code = 1040;
             return;
