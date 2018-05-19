@@ -153,9 +153,20 @@ class AllinpayDf{
         $act = "https://searchdf.ysepay.com/gateway.do";
         $result = Common::httpRequest($act,'POST',$myParams);
         $result = json_decode($result,true);
-        var_dump($result);die;
-        $return['code']=0;
-        $return['msg']='';
+        // var_dump($result);die;
+        if(isset($result['ysepay_df_single_query_response']['trade_status'])) {
+            if($result['ysepay_df_single_query_response']['trade_status']=='TRADE_ACCEPT_SUCCESS' || $result['ysepay_df_single_query_response']['trade_status']=='TRADE_SUCCESS') {
+                $return['code']=1;
+                $return['msg']=$result['ysepay_df_single_query_response']['trade_status_description'];
+            } else {
+                $return['code']=0;
+                $return['msg']=$result['ysepay_df_single_query_response']['trade_status_description'];
+            }
+        } else {
+            $return['code']=0;
+            $return['msg']='未知错误';
+        }
+        
         return $return;
     }
 
