@@ -228,8 +228,21 @@ class CustomerController extends Controller {
                          exit(json_encode(array('status'=>'fail','msg'=>'代付金额小于或等于0')));
                     }
                     $params['purpose']="用户{$obj['user_id']}提现";
+                    $third_pay = 0;
+                    $third_payment = $this->model->table('third_payment')->where('id=1')->find();
+                    if($third_payment){
+                        $third_pay = $third_payment['third_payment'];
+                    }
                     // $result = $ChinapayDf->DfPay($params);
-                    $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口
+                    if($third_pay==2 && $obj['user_id']==42608){
+                        $result = $ChinapayDf->DfYinsheng($params); //使用银盛代付接口
+                        if($result['status']!=1) {
+                            $result = $ChinapayDf->DFAllinpay($params);
+                        }
+                    } else {
+                       $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口 
+                    }
+                    
                     if($result['status']==1){
                         $date = date("Y-m-d H:i:s");
                         $real_amount = round($params['transAmt']/100,2);
