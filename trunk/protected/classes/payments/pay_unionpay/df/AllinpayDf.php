@@ -111,6 +111,7 @@ class AllinpayDf{
         $act = "https://df.ysepay.com/gateway.do";
         $result = Common::httpRequest($act,'POST',$myParams);
         $result = json_decode($result,true);
+        var_dump($result);die;
         if(isset($result['ysepay_df_single_quick_accept_response']['trade_status']) && ($result['ysepay_df_single_quick_accept_response']['trade_status']=='TRADE_ACCEPT_SUCCESS' || $result['ysepay_df_single_quick_accept_response']['trade_status']=='TRADE_SUCCESS')) {
            $return = array(
             'status'=>1,
