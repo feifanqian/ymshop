@@ -87,7 +87,7 @@ class AllinpayDf{
             "out_trade_no" => substr($params['withdraw_no'],2),
             "business_code" => "2010002",
             "currency" => "CNY",
-            "total_amount" => $params["transAmt"]*100,
+            "total_amount" => $params["transAmt"]/100,
             "subject" => "余额提现",
             "bank_name" => $params['openBank'],
             "bank_city" => $params['city'],
@@ -111,7 +111,7 @@ class AllinpayDf{
         $act = "https://df.ysepay.com/gateway.do";
         $result = Common::httpRequest($act,'POST',$myParams);
         $result = json_decode($result,true);
-        var_dump($result);die;
+        // var_dump($result);die;
         if(isset($result['ysepay_df_single_quick_accept_response']['trade_status']) && ($result['ysepay_df_single_quick_accept_response']['trade_status']=='TRADE_ACCEPT_SUCCESS' || $result['ysepay_df_single_quick_accept_response']['trade_status']=='TRADE_SUCCESS')) {
            $return = array(
             'status'=>1,
@@ -123,6 +123,39 @@ class AllinpayDf{
             'msg'=>$result['ysepay_df_single_quick_accept_response']['sub_msg']
             );
         }
+        return $return;
+    }
+
+    public function DfYinshengQuery($withdraw_no){
+        $myParams = array();
+        $myParams['charset'] = 'utf-8';
+        $myParams['method'] = 'ysepay.df.single.query';
+        // $myParams['notify_url'] = 'http://yspay.ngrok.cc/pay/respond_notify.php';
+        $myParams['partner_id'] = 'yuanmeng';
+        $myParams['sign_type'] = 'RSA';
+        $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+        $myParams['version'] = '3.0';
+        $biz_content_arr = array(
+            "out_trade_no" => substr($withdraw_no,2),
+            'shopdate'=>date('Ymd', time())
+        );
+        $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+        ksort($myParams);
+        $signStr = "";
+        foreach ($myParams as $key => $val) {
+            $signStr .= $key . '=' . $val . '&';
+        }
+        $signStr = rtrim($signStr, '&');
+        // var_dump($signStr);
+        $sign = $this->sign_encrypt(array('data' => $signStr));
+        $myParams['sign'] = trim($sign['check']);
+        // var_dump($myParams);
+        $act = "https://searchdf.ysepay.com/gateway.do";
+        $result = Common::httpRequest($act,'POST',$myParams);
+        $result = json_decode($result,true);
+        var_dump($result);die;
+        $return['code']=0;
+        $return['msg']='';
         return $return;
     }
 

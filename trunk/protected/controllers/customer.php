@@ -146,7 +146,18 @@ class CustomerController extends Controller {
                     $params['merDate']= substr( $params['merSeqId'],0,8);
                     $merchantId=AppConfig::MERCHANT_ID;
                     $req_sn = $merchantId.$obj['withdraw_no'];
-                    $result = $ChinapayDf->DfQuery($req_sn);
+
+                    $third_pay = 0;
+                    $payment_model = new Model();
+                    $third_payment = $payment_model->table('third_payment')->where('id=1')->find();
+                    if($third_payment){
+                        $third_pay = $third_payment['third_payment'];
+                    }
+                    if($third_pay==2 && $obj['user_id']==42608){
+                        $result = $ChinapayDf->DfYinshengQuery($obj['withdraw_no']); //使用银盛代付查询接口
+                    } else {
+                       $result = $ChinapayDf->DfQuery($req_sn); //使用通联代付查询接口 
+                    }
 
                     if($result['code']==1){
                         if($obj['status']==4 || $obj['status']==0 || $obj['status']==2){
