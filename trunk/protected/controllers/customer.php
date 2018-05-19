@@ -229,7 +229,8 @@ class CustomerController extends Controller {
                     }
                     $params['purpose']="用户{$obj['user_id']}提现";
                     $third_pay = 0;
-                    $third_payment = $this->model->table('third_payment')->where('id=1')->find();
+                    $payment_model = new Model();
+                    $third_payment = $payment_model->table('third_payment')->where('id=1')->find();
                     if($third_payment){
                         $third_pay = $third_payment['third_payment'];
                     }
