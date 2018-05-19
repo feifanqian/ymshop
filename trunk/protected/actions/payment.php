@@ -383,6 +383,7 @@ class PaymentAction extends Controller {
          $sub_openid='';
         }
         if($third_pay == 2 && $user_id == 1776){  //银盛支付
+            $this->model->table('order_offline')->data(array('third_pay'=>2))->where('id='.$order_id)->update();
             //test
             $myParams['charset'] = 'utf-8';
             $myParams['method'] = 'ysepay.online.jsapi.pay';

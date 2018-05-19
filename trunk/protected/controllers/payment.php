@@ -638,6 +638,7 @@ class PaymentController extends Controller {
            $data['voucher_id'] = 0;
            $data['prom_id']=$invite_id;
            $data['shop_ids']=$seller_id;
+           $data['third_pay'] = 1;
            $model = new Model('order_offline');
            $exist=$model->where('order_no='.$order_no)->find();
            //防止重复生成同笔订单
@@ -829,6 +830,7 @@ class PaymentController extends Controller {
            $data['voucher_id'] = 0;
            $data['prom_id']=$invite_id;
            $data['shop_ids']=$seller_id;
+           $data['third_pay'] = 2;
            $model = new Model('order_offline');
            $exist=$model->where('order_no='.$order_no)->find();
            //防止重复生成同笔订单
