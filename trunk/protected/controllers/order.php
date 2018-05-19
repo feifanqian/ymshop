@@ -262,6 +262,7 @@ class OrderController extends Controller {
         $this->assign("status", array('0' => '<span class="red">等待审核</span>', '1' => '<span class="red">等待审核</span>', '2' => '<span class="red">等待审核</span>', '3' => '已审核', '4' => '已完成', '5' => '已取消', '6' => '<span class="red"><s>已作废</s></span>'));
         $this->assign("pay_status", array('0' => '<span class="red">未付款</span>', '1' => '已付款', '2' => '申请退款', '3' => '已退款'));
         $this->assign("delivery_status", array('0' => '<span class="red">未发货</span>', '1' => '已发货', '2' => '已签收', '3' => '申请换货', '4' => '已换货'));
+        $this->assign("third_pay", array('0' => '官方通道', '1' => '智付通道', '2' => '银盛通道'));
         $model = new Model("payment");
         $items = $model->findAll();
         $payment = array();
