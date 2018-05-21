@@ -1594,14 +1594,20 @@ class Common {
         //根据所属上级关系找到下级所有经销商
         $is_break = false; //false继续 true停止
         $promoter_user_id = '';
+        $num = 0;
         $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
         $now_user_id = $shop['id'];
         while(!$is_break){
             $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id=".$now_user_id)->findAll();
             if($inviter_info){
                 foreach ($inviter_info as $k => $v) {
-                    $promoter_user_id .= ','.$v['id'];
+                    if($promoter_user_id=='') {
+                       $promoter_user_id = $v['id']; 
+                    } else {
+                       $promoter_user_id .= ','.$v['id'];
+                    }
                     // $promoter_user_id .= ','.self::getAllChildShops($v['owner_id']);
+                    $num = $num+1;
                     $now_user_id = $v['id'];
                     $is_break = false;
                 }    
@@ -1609,6 +1615,9 @@ class Common {
                 $is_break = true;
             }
         }
-        return $promoter_user_id;
+        $result = array();
+        $result['shop_ids'] = $promoter_user_id;
+        $result['num'] = $num;
+        return $result;
     }
 }
