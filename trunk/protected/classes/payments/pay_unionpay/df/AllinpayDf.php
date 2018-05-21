@@ -163,9 +163,8 @@ class AllinpayDf{
                 $return['msg']=$result['ysepay_df_single_query_response']['trade_status_description'];
             }
         } else {
-            var_dump($result);die;
             $return['code']=0;
-            $return['msg']='未知错误';
+            $return['msg']=$result['ysepay_df_single_query_response']['sub_msg'];
         }
         
         return $return;
