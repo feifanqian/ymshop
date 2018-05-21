@@ -246,7 +246,7 @@ class CustomerController extends Controller {
                         $third_pay = $third_payment['third_payment'];
                     }
                     // $result = $ChinapayDf->DfPay($params);
-                    if($third_pay==2 && $obj['user_id']==42608){
+                    if($third_pay==0 && $obj['user_id']==42608){
                         $result = $ChinapayDf->DfYinsheng($params); //使用银盛代付接口
                         if($result['status']!=1) {
                             $result = $ChinapayDf->DFAllinpay($params);
