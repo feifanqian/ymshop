@@ -1597,11 +1597,14 @@ class Common {
         $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
         $now_user_id = $shop['id'];
         while(!$is_break){
-            $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id=".$now_user_id)->find();
+            $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id=".$now_user_id)->findAll();
             if($inviter_info){
-                $promoter_user_id .= ','.$inviter_info['id'];
-                $now_user_id = $inviter_info['id'];
-                $is_break = false;
+                foreach ($inviter_info as $k => $v) {
+                    $promoter_user_id .= ','.$v['id'];
+                    // $promoter_user_id .= ','.self::getAllChildShops($v['owner_id']);
+                    $now_user_id = $v['id'];
+                    $is_break = false;
+                }    
             }else{
                 $is_break = true;
             }
