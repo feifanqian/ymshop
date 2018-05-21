@@ -153,7 +153,7 @@ class CustomerController extends Controller {
                     if($third_payment){
                         $third_pay = $third_payment['third_payment'];
                     }
-                    if($third_pay==2 && $obj['user_id']==42608){
+                    if($third_pay==0 && $obj['user_id']==42608){
                         $result = $ChinapayDf->DfYinshengQuery($obj['withdraw_no']); //使用银盛代付查询接口
                     } else {
                        $result = $ChinapayDf->DfQuery($req_sn); //使用通联代付查询接口 
