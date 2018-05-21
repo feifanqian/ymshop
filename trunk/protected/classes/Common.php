@@ -1587,4 +1587,25 @@ class Common {
        
         return $obj;
     }
+
+    static function getAllChildShops($user_id)
+    {
+        $model = new Model();
+        //根据所属上级关系找到下级所有经销商
+        $is_break = false; //false继续 true停止
+        $promoter_user_id = '';
+        $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
+        $now_user_id = $shop['id'];
+        while(!$is_break){
+            $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id=".$now_user_id)->find();
+            if($inviter_info){
+                $promoter_user_id .= ','.$inviter_info['id'];
+                $now_user_id = $inviter_info['id'];
+                $is_break = false;
+            }else{
+                $is_break = true;
+            }
+        }
+        return $promoter_user_id;
+    }
 }

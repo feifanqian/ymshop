@@ -332,5 +332,12 @@ class DistrictAction extends Controller {
         $this->code = 0;
         $this->content['list'] = $list;
         $this->content['count'] = $count;
+    }
+
+    public function getAllChildShopId(){
+        $user_id = Filter::int(Req::args('user_id'));
+        $idstr = Common::getAllChildShops($user_id);
+        $this->code = 0;
+        $this->content = $idstr;
     }      
 }
