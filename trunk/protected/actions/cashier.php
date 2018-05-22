@@ -187,6 +187,10 @@ class CashierAction extends Controller
     public function cashier_desk_income()
     {
     	$id = Filter::int(Req::args('id'));
+    	if(!$id) {
+    		$this->code = 1246;
+            return;
+    	}
     	$date = Filter::str(Req::args('date'));
     	if($date) {
     		$where = "o.desk_id={$id} and o.pay_status=1 and DATE_FORMAT(FROM_UNIXTIME(o.pay_time),'%Y-%m-%d') = DATE_FORMAT({$date},'%Y-%m-%d')";
