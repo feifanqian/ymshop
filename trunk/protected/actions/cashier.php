@@ -199,6 +199,15 @@ class CashierAction extends Controller
     	}
     	
     	$list = $this->model->table('order_offline as o')->fields('o.payment,o.pay_time,o.payable_amount,c.desk_no')->join('cashier_desk as c on o.desk_id=c.id')->where($where)->order('pay_time desc')->findAll();
+    	if($list) {
+    		foreach ($list as $k => $v) {
+    			if($v['payment']==6 || $v['payment']==7 || $v['payment']==18) {
+    				$list[$k]['payment_name'] = '微信支付';
+    			} else {
+    				$list[$k]['payment_name'] = '支付宝支付';
+    			}
+    		}
+    	}
     	$sum = $this->model->table('order_offline as o')->fields('SUM(o.payable_amount) as account')->join('cashier_desk as c on o.desk_id=c.id')->where($where)->find();
         $account = $sum['account']==null?'0.00':$sum['account'];
         $this->code = 0;
