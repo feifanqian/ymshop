@@ -110,7 +110,7 @@ class CashierAction extends Controller
     {
     	$id = Filter::int(Req::args('id'));
     	$date = Filter::str(Req::args('date'));
-    	if($data) {
+    	if($date) {
     		$where = "cashier_id={$id} and pay_status=1 and DATE_FORMAT(FROM_UNIXTIME(pay_time),'%Y-%m-%d') = DATE_FORMAT({$date},'%Y-%m-%d')";
     	} else {
             $where = "cashier_id={$id} and pay_status=1";
@@ -188,7 +188,7 @@ class CashierAction extends Controller
     {
     	$id = Filter::int(Req::args('id'));
     	$date = Filter::str(Req::args('date'));
-    	if($data) {
+    	if($date) {
     		$where = "o.desk_id={$id} and o.pay_status=1 and DATE_FORMAT(FROM_UNIXTIME(o.pay_time),'%Y-%m-%d') = DATE_FORMAT({$date},'%Y-%m-%d')";
     	} else {
             $where = "o.desk_id={$id} and o.pay_status=1";
