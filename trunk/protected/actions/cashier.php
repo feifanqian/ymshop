@@ -66,7 +66,7 @@ class CashierAction extends Controller
             $this->jpush = $NoticeService->getNotice('jpush');
         }
         $audience['alias'] = array($cashier['user_id']);
-        $this->jpush->setPushData($platform, $audience, $content, $type, "");
+        $this->jpush->setPushData($platform, $audience, $content, $type, $res);
         $ret = $this->jpush->push();
         if(!$ret) {
         	$this->code = 1242;
@@ -79,6 +79,41 @@ class CashierAction extends Controller
             $this->code = 1241;
             return;
         } 
+    }
+
+    //接收or拒绝邀请
+    public function cashier_operate()
+    {
+    	$id = Filter::int(Req::args('id'));
+    	$status = Filter::int(Req::args('status'));
+    	$res = $this->model->table('cashier')->data(array('status'=>$status))->where("id=".$id." and user_id=".$this->user['id']." and status=0")->update();
+    	if($res) {
+        	$this->code = 0;
+            return;
+        } else {
+            $this->code = 1241;
+            return;
+        }
+    }
+
+    //收银员列表
+    public function cashier_list()
+    {
+    	$list = $this->model->table('cashier as ca')->fields('cu.real_name,ca.mobile,ca.job_no,ca.id')->join('customer as cu')->where("ca.hire_user_id=".$this->user['id']." and ca.status=1")->findAll();
+    	$this->code = 0;
+    	$this->content = $list;
+        return;
+    }
+
+    //收银员收款明细
+    public function cashier_detail()
+    {
+    	$id = Filter::int(Req::args('id'));
+    	$list = $this->model->table('order_offline')->fields("pay_time as pay_date,payable_amount, case dayofweek(pay_time)  when 1 then '星期日' when 2 then '星期一' when 3 then '星期二' when 4 then '星期三' when 5 then '星期四' when 6 then '星期五' when 7 then '星期六' end")->where('cashier_id='.$id)->findAll();
+
+        $this->code = 0;
+    	$this->content = $list;
+        return;
     }
 }
 ?>

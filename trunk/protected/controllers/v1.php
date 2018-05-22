@@ -221,6 +221,9 @@ class V1Controller extends Controller {
         "get_all_child_promoters"=>array('address/get_all_child_promoters',0,1),
         //收银员
         "add_cashier"=>array("cashier/add_cashier",1,1),
+        "cashier_operate"=>array("cashier/cashier_operate",1,1),
+        "cashier_list"=>array("cashier/cashier_list",1,1),
+        "cashier_detail"=>array("cashier/cashier_detail",1,1),
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息

@@ -294,6 +294,10 @@ class PaymentAction extends Controller {
        $order_amount = Filter::float(Req::args('order_amount'));
        $randomstr=rand(1000000000000,9999999999999);
        $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
+       $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
+       if(!$cashier_id) {
+        $cashier_id = 1;
+       }
        if(!$seller_id){
         $this->code = 1158;
        }
@@ -358,6 +362,7 @@ class PaymentAction extends Controller {
        $data['voucher_id'] = 0;
        $data['prom_id']=$invite_id;
        $data['shop_ids']=$seller_id;
+       $data['cashier_id'] = $cashier_id;
        $model = new Model('order_offline');
        $exist=$model->where('order_no='.$order_no)->find();
        //防止重复生成同笔订单

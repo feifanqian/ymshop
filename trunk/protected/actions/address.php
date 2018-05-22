@@ -942,7 +942,7 @@ class AddressAction extends Controller
         $info_sql = $info_sql['data'];
         foreach ($info_sql as $key => $value) {
             if($info_sql[$key]['picture']==null){
-                    $info_sql[$key]['picture'] = '';
+                    $info_sql[$key]['picture'] = 'http://www.ymlypt.com/themes/mobile/images/logo-new.png';
                 }else{
                     $info_sql[$key]['picture'].='?date='.time();
                 }
