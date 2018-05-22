@@ -34,7 +34,7 @@ class CashierAction extends Controller
         	$this->code = 1159;
             return;
         }
-        $promoter = $this->model->table('district_promoter as dp')->fields('dp.id,dp.user_id,c.real_name')join("customer AS c ON dp.user_id=c.user_id")->where('dp.user_id='.$this->user['id'])->find();
+        $promoter = $this->model->table('district_promoter as dp')->fields('dp.id,dp.user_id,c.real_name')->join("customer AS c ON dp.user_id=c.user_id")->where('dp.user_id='.$this->user['id'])->find();
         if(!$promoter) {
         	$this->code = 1159;
             return;
