@@ -109,7 +109,13 @@ class CashierAction extends Controller
     public function cashier_detail()
     {
     	$id = Filter::int(Req::args('id'));
-    	$list = $this->model->table('order_offline')->fields("pay_time as pay_date,payable_amount, case dayofweek(pay_time)  when 1 then '星期日' when 2 then '星期一' when 3 then '星期二' when 4 then '星期三' when 5 then '星期四' when 6 then '星期五' when 7 then '星期六' end as  weekday")->where('cashier_id='.$id)->findAll();
+    	$date = Filter::str(Req::args('date'));
+    	if($data) {
+    		$where = "cashier_id={$id} and pay_status=1 and DATE_FORMAT(FROM_UNIXTIME(pay_time),'%Y-%m-%d') = DATE_FORMAT({$date},'%Y-%m-%d')";
+    	} else {
+            $where = "cashier_id={$id} and pay_status=1";
+    	}
+    	$list = $this->model->table('order_offline')->fields("pay_time as pay_date,payable_amount, case dayofweek(pay_time)  when 1 then '星期日' when 2 then '星期一' when 3 then '星期二' when 4 then '星期三' when 5 then '星期四' when 6 then '星期五' when 7 then '星期六' end as  weekday")->where($where)->order('pay_time desc')->findAll();
 
         $this->code = 0;
     	$this->content = $list;
@@ -166,6 +172,35 @@ class CashierAction extends Controller
             $this->code = 1241;
             return;
         }
+    }
+
+    //收银台列表
+    public function cashier_desk_list()
+    {
+    	$list = $this->model->table('cashier_desk')->fields('id,desk_no,cashier_id')->where('hire_user_id='.$this->user['id'])->findAll();
+    	$this->code = 0;
+    	$this->content = $list;
+        return;
+    }
+
+    //收银台收易明细
+    public function cashier_desk_income()
+    {
+    	$id = Filter::int(Req::args('id'));
+    	$date = Filter::str(Req::args('date'));
+    	if($data) {
+    		$where = "o.desk_id={$id} and o.pay_status=1 and DATE_FORMAT(FROM_UNIXTIME(o.pay_time),'%Y-%m-%d') = DATE_FORMAT({$date},'%Y-%m-%d')";
+    	} else {
+            $where = "o.desk_id={$id} and o.pay_status=1";
+    	}
+    	
+    	$list = $this->model->table('order_offline as o')->fields('o.payment,o.pay_time,o.payable_amount,c.desk_no')->join('cashier_desk as c on o.desk_id=c.id')->where($where)->order('pay_time desc')->findAll();
+    	$sum = $this->model->table('order_offline as o')->fields('SUM(o.payable_amount) as account')->join('cashier_desk as c on o.desk_id=c.id')->where($where)->find();
+        $account = empty($sum)?'0.00':$sum['account'];
+        $this->code = 0;
+    	$this->content['list'] = $list;
+    	$this->content['sum'] = $account;
+        return;
     }
 }
 ?>
