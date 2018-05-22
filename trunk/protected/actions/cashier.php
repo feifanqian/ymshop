@@ -109,7 +109,7 @@ class CashierAction extends Controller
     public function cashier_detail()
     {
     	$id = Filter::int(Req::args('id'));
-    	$list = $this->model->table('order_offline')->fields("pay_time as pay_date,payable_amount, case dayofweek(pay_time)  when 1 then '星期日' when 2 then '星期一' when 3 then '星期二' when 4 then '星期三' when 5 then '星期四' when 6 then '星期五' when 7 then '星期六' end")->where('cashier_id='.$id)->findAll();
+    	$list = $this->model->table('order_offline')->fields("pay_time as pay_date,payable_amount, case dayofweek(pay_time)  when 1 then '星期日' when 2 then '星期一' when 3 then '星期二' when 4 then '星期三' when 5 then '星期四' when 6 then '星期五' when 7 then '星期六' end as  weekday")->where('cashier_id='.$id)->findAll();
 
         $this->code = 0;
     	$this->content = $list;

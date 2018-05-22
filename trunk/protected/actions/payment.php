@@ -296,7 +296,7 @@ class PaymentAction extends Controller {
        $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
        $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
        if(!$cashier_id) {
-        $cashier_id = 1;
+        $cashier_id = 0;
        }
        if(!$seller_id){
         $this->code = 1158;
