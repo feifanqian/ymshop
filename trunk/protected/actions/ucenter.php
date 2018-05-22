@@ -160,6 +160,9 @@ class UcenterAction extends Controller {
         if($this->user['rongyun_token']==null){
             $this->user['rongyun_token'] = '';
         }
+        if($this->user['avatar']=='') {
+           $this->user['avatar']=='http://www.ymlypt.com/themes/mobile/images/logo-new.png'; 
+        }
         $this->code = 0;
         $this->content['userinfo'] = $this->user;
         $this->content['userinfo']['is_business'] = $is_business;

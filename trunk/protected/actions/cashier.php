@@ -115,5 +115,57 @@ class CashierAction extends Controller
     	$this->content = $list;
         return;
     }
+
+    //添加收银台
+    public function add_cashier_desk()
+    {
+    	$count = $this->model->table('cashier_desk')->where('hire_user_id='.$this->user['id'])->count();
+    	if($count==6) {
+    		$this->code = 1245;
+            return;
+    	}
+    	switch ($count) {
+    		case 0:
+    			$desk_no = '01';
+    			break;
+    		case 1:
+    			$desk_no = '02';
+    			break;
+    		case 2:
+    			$desk_no = '03';
+    			break;
+    		case 3:
+    			$desk_no = '04';
+    			break;
+    		case 4:
+    			$desk_no = '05';
+    			break;
+    		case 5:
+    			$desk_no = '06';
+    			break;
+    		default :
+    		    $desk_no = '01';
+    			break;					
+    	}
+    	$promoter = $this->model->table('district_promoter as dp')->fields('dp.id,dp.user_id,c.real_name')->join("customer AS c ON dp.user_id=c.user_id")->where('dp.user_id='.$this->user['id'])->find();
+        if(!$promoter) {
+        	$this->code = 1159;
+            return;
+        }
+        $data = array(
+        	'hire_promoter_id'=>$promoter['id'],
+        	'hire_user_id'=>$this->user['id'],
+        	'desk_no'=>$desk_no,
+        	'status'=>1
+        	);
+        $res = $this->model->table('cashier_desk')->data($data)->insert();
+        if($res) {
+        	$this->code = 0;
+            return;
+        } else {
+            $this->code = 1241;
+            return;
+        }
+    }
 }
 ?>
