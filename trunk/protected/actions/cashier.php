@@ -14,12 +14,12 @@ class CashierAction extends Controller
     //邀请收银员
     public function add_cashier()
     {
-    	$mobile = Filter::sql(Req::args('mobile'));
+    	$mobile = Filter::str(Req::args('mobile'));
     	if (!Validator::mobi($mobile)) {
             $this->code = 1024;
             return;
         }
-        $job_no = Filter::sql(Req::args('job_no'));
+        $job_no = Filter::str(Req::args('job_no'));
         if(!$job_no) {
         	$this->code = 1239;
             return;
@@ -34,6 +34,16 @@ class CashierAction extends Controller
         	$this->code = 1159;
             return;
         }
+        $exist = $this->model->table('cashier')->where("user_id=".$cashier['user_id']." and status=1")->find();
+        if($exist) {
+        	$this->code = 1243;
+            return;
+        }
+        $invited = $this->model->table('cashier')->where("user_id=".$cashier['user_id']." and hire_user_id =".$this->user['id']." and status=0")->find();
+        if($invited) {
+        	$this->code = 1244;
+            return;
+        }
         $promoter = $this->model->table('district_promoter as dp')->fields('dp.id,dp.user_id,c.real_name')->join("customer AS c ON dp.user_id=c.user_id")->where('dp.user_id='.$this->user['id'])->find();
         if(!$promoter) {
         	$this->code = 1159;
@@ -44,6 +54,7 @@ class CashierAction extends Controller
         	'hire_promoter_id'=>$promoter['id'],
         	'hire_user_id'=>$this->user['id'],
         	'mobile'=>$mobile,
+        	'job_no'=>$job_no,
         	'status'=>0
         	);
         $res = $this->model->table('cashier')->data($data)->insert();
