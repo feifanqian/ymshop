@@ -200,7 +200,7 @@ class CashierAction extends Controller
     	
     	$list = $this->model->table('order_offline as o')->fields('o.payment,o.pay_time,o.payable_amount,c.desk_no')->join('cashier_desk as c on o.desk_id=c.id')->where($where)->order('pay_time desc')->findAll();
     	$sum = $this->model->table('order_offline as o')->fields('SUM(o.payable_amount) as account')->join('cashier_desk as c on o.desk_id=c.id')->where($where)->find();
-        $account = empty($sum)?'0.00':$sum['account'];
+        $account = $sum['account']==null?'0.00':$sum['account'];
         $this->code = 0;
     	$this->content['list'] = $list;
     	$this->content['sum'] = $account;
