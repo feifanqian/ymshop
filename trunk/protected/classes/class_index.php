@@ -148,6 +148,7 @@ return array(
     "TbkItemGetRequest"=>"taobao/request/TbkItemGetRequest.php",
     "TbkDgItemCouponGetRequest"=>"taobao/request/TbkDgItemCouponGetRequest.php",
     "ItemDetailGetRequest"=>"taobao/request/ItemDetailGetRequest.php",
+    "TbkTpwdCreateRequest"=>"taobao/request/TbkTpwdCreateRequest.php",
     "ResultSet"=>"taobao/ResultSet.php",
     "RequestCheckUtil"=>"taobao/RequestCheckUtil.php",
 );
