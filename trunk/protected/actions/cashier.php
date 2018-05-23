@@ -216,7 +216,7 @@ class CashierAction extends Controller
         return;
     }
 
-    //收银台修改昵称
+    //商家修改收银员昵称
     public function cashier_edit_name()
     {
         $name = Filter::str(Req::args('name'));

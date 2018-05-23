@@ -227,6 +227,7 @@ class V1Controller extends Controller {
         "add_cashier_desk"=>array("cashier/add_cashier_desk",1,1), //添加收银台
         "cashier_desk_list"=>array("cashier/cashier_desk_list",1,1), //收银台列表
         "cashier_desk_income"=>array("cashier/cashier_desk_income",1,1), //收银台收易明细
+        "cashier_edit_name"=>array("cashier/cashier_edit_name",1,1), //商家修改收银员昵称
         "cashier_sign_in"=>array("cashier/cashier_sign_in",1,1), //收银员上下班打卡
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
