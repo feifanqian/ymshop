@@ -251,7 +251,7 @@ class CashierAction extends Controller
             'user_id'=>$this->user['id'],
             'desk_no'=>$desk_no,
             'work_on_date'=>date('Y-m-d'),
-            'work_on_time'=>date('Y-m-d H:i:s'),
+            'work_on_time'=>date('H:i:s'),
             'status'=>1
             );
             $res = $this->model->table('cashier_attendance')->data($data)->insert();
@@ -264,7 +264,7 @@ class CashierAction extends Controller
             }
             $data = array(
             'work_off_date'=>date('Y-m-d'),
-            'work_off_time'=>date('Y-m-d H:i:s'),
+            'work_off_time'=>date('H:i:s'),
             );
             $res = $this->model->table('cashier_attendance')->data($data)->where('id='.$exist1['id'])->update();
         } else {
@@ -301,7 +301,7 @@ class CashierAction extends Controller
                 if($v['work_off_time']=='') {
                     $log[$k]['work_hours'] = 8;
                 } else {
-                    $log[$k]['work_hours'] = intval(floor((strtotime($v['work_off_time'])-strtotime($v['work_on_time']))/3600));
+                    $log[$k]['work_hours'] = intval(floor((strtotime($v['work_off_date'].' '.$v['work_off_time'])-strtotime($v['work_on_date'].' '.$v['work_on_time']))/3600));
                 }   
             }
         }
