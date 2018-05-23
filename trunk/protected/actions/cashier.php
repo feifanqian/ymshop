@@ -301,7 +301,7 @@ class CashierAction extends Controller
     public function cashier_work_log()
     {
         $today = date('Y-m-d');
-        $log = $this->model->table('cashier_attendance')->fields('work_on_date,work_on_time,work_off_time')->where("user_id=".$this->user['id']." and work_on_date<'{$today}'")->findAll();
+        $log = $this->model->table('cashier_attendance')->fields('work_on_date,work_off_date,work_on_time,work_off_time')->where("user_id=".$this->user['id']." and work_off_date !=''")->findAll();
         if($log) {
             foreach ($log as $k => $v) {
                 if($v['work_off_time']=='') {
