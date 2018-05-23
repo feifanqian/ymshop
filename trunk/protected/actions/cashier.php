@@ -258,6 +258,7 @@ class CashierAction extends Controller
             'status'=>1
             );
             $res = $this->model->table('cashier_attendance')->data($data)->insert();
+            $sign_time = $data['work_on_time'];
         } elseif($exist1 && !$exist2) {
             $type = 2; //下班
             $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
@@ -270,6 +271,7 @@ class CashierAction extends Controller
             'work_off_time'=>date('H:i:s'),
             );
             $res = $this->model->table('cashier_attendance')->data($data)->where('id='.$exist1['id'])->update();
+            $sign_time = $data['work_off_time'];
         } else {
             $this->code = 1247;
             return;
@@ -277,6 +279,7 @@ class CashierAction extends Controller
         
         if($res) {
             $this->code = 0;
+            $this->content['sign_time'] = $sign_time;
             return;
         } else {
             $this->code = 1241;
