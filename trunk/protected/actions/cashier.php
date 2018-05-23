@@ -298,7 +298,11 @@ class CashierAction extends Controller
         $log = $this->model->table('cashier_attendance')->fields('work_on_date,work_on_time,work_off_time')->where("user_id=".$this->user['id']." and work_on_date<'{$today}'")->findAll();
         if($log) {
             foreach ($log as $k => $v) {
-                $log[$k]['work_hours'] = intval(floor((strtotime($v['work_off_time'])-strtotime($v['work_on_time']))/3600));
+                if($v['work_off_time']=='') {
+                    $log[$k]['work_hours'] = 8;
+                } else {
+                    $log[$k]['work_hours'] = intval(floor((strtotime($v['work_off_time'])-strtotime($v['work_on_time']))/3600));
+                }   
             }
         }
         $this->code = 0;
