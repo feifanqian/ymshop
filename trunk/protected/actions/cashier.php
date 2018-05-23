@@ -242,7 +242,7 @@ class CashierAction extends Controller
         $today = date('Y-m-d');
         $exist1 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
         $exist2 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_off_date='{$today}' and status=1")->find();
-        var_dump($exist2);die;
+        var_dump(count($exist2));
         if(!$exist1 && !$exist2) {
             $type = 1; //上班
             $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
@@ -260,7 +260,8 @@ class CashierAction extends Controller
             );
             $res = $this->model->table('cashier_attendance')->data($data)->insert();
             $sign_time = $data['work_on_time'];
-        } elseif($exist1 && !$exist2) {
+        } elseif($exist1 && empty($exist2)) {
+            var_dump(123);die;
             $type = 2; //下班
             $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
             if($exist) {
