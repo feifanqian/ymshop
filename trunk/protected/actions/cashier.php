@@ -198,7 +198,7 @@ class CashierAction extends Controller
             $where = "o.desk_id={$id} and o.pay_status=1";
     	}
     	
-    	$list = $this->model->table('order_offline as o')->fields('o.payment,o.pay_time,o.payable_amount,c.desk_no')->join('cashier_desk as c on o.desk_id=c.id')->where($where)->order('pay_time desc')->findAll();
+    	$list = $this->model->table('order_offline as o')->fields('o.id,o.payment,o.pay_time,o.payable_amount,c.desk_no,o.remark')->join('cashier_desk as c on o.desk_id=c.id')->where($where)->order('pay_time desc')->findAll();
     	if($list) {
     		foreach ($list as $k => $v) {
     			if($v['payment']==6 || $v['payment']==7 || $v['payment']==18) {
@@ -206,6 +206,9 @@ class CashierAction extends Controller
     			} else {
     				$list[$k]['payment_name'] = '支付宝支付';
     			}
+                if($list[$k]['remark']==null) {
+                   $list[$k]['remark'] = ''; 
+                }
     		}
     	}
     	$sum = $this->model->table('order_offline as o')->fields('SUM(o.payable_amount) as account')->join('cashier_desk as c on o.desk_id=c.id')->where($where)->find();
@@ -308,6 +311,21 @@ class CashierAction extends Controller
         $this->code = 0;
         $this->content = $log;
         return;
+    }
+
+    //收银台收款记录添加备注
+    public function cashier_income_remark()
+    {
+        $id = Filter::int(Req::args('id'));
+        $remark = Filter::str(Req::args('remark'));
+        $res = $this->model->table('order_offline')->data(array('remark'=>$remark))->where('id='.$id)->update();
+        if($res) {
+            $this->code = 0;
+            return;
+        } else {
+            $this->code = 1241;
+            return;
+        }
     }
 }
 ?>
