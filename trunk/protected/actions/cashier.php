@@ -275,7 +275,8 @@ class CashierAction extends Controller
     //收银员上班记录
     public function cashier_work_log()
     {
-        $log = $this->model->table('cashier_attendance')->fields('work_date,work_time,type')->where('user_id='.$this->user['id'])->group('work_date')->findAll();
+        $today = date('Y-m-d');
+        $log = $this->model->table('cashier_attendance')->fields('work_date,work_time,type')->where("user_id=".$this->user['id']." and work_date<'{$today}'")->group('work_date')->findAll();
         var_dump($log);die;
         // if($log) {
         //     foreach ($log as $k => $v) {
