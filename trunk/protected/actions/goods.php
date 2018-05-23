@@ -272,6 +272,7 @@ class GoodsAction extends Controller {
         $form = Filter::str(Req::args("form"));
         $text = Filter::text(Req::args("text"));
         $url = Filter::str(Req::args("url"));
+        $logo = Filter::str(Req::args("logo"));
         if(!$form) {
             $form = 'android';
         }
@@ -290,7 +291,9 @@ class GoodsAction extends Controller {
         // $req->setUserId("123");
         $req->setText($text);
         $req->setUrl($url);
-        // $req->setLogo("https://uland.taobao.com/");
+        if($logo) {
+            $req->setLogo($logo);
+        }
         $req->setExt("{}");
         $resp = $c->execute($req);
         $this->code = 0;
