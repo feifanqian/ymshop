@@ -99,6 +99,7 @@ class CashierAction extends Controller
     //收银员列表
     public function cashier_list()
     {
+        var_dump(123);die;
     	$list = $this->model->table('cashier as ca')->fields('cu.real_name,ca.mobile,ca.job_no,ca.id')->join('customer as cu')->where("ca.hire_user_id=".$this->user['id']." and ca.status=1")->findAll();
     	$this->code = 0;
     	$this->content = $list;
