@@ -486,6 +486,11 @@ class PaymentAction extends Controller {
     $user_id = $this->user['id'];
     $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
     $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no')->where('user_id='.$user_id)->find();
+    if($promoter['qrcode_no']=='') {
+        $no = '0000'.$v['id'].rand(1000,9999);
+        $this->model->table('district_promoter')->data(array('qrcode_no'=>$no))->where('id='.$promoter['id'])->update();
+    }
+    $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no')->where('user_id='.$user_id)->find();
     $this->code = 0;
     $this->content['url'] = $url;
     $this->content['qrcode_no'] = $promoter?$promoter['qrcode_no']:'0000';

@@ -238,7 +238,15 @@ class CashierAction extends Controller
     public function cashier_sign_in()
     {
         $desk_no = Filter::str(Req::args('desk_no'));
+        if(!$desk_no) {
+            $this->code = 1251;
+            return;
+        }
         $cashier = $this->model->table('cashier')->where('user_id='.$this->user['id'])->find();
+        if(!$cashier) {
+            $this->code = 1250;
+            return;
+        }
         $today = date('Y-m-d');
         $exist1 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
         $exist2 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_off_date='{$today}' and status=1")->find();
@@ -249,10 +257,16 @@ class CashierAction extends Controller
                 $this->code = 1247;
                 return;
             }
+            $desk = $this->model->table('cashier_desk')->fields('id')->where("hire_user_id=".$cashier['hire_user_id']." and desk_no=".$desk_no)->find();
+            if(!$desk) {
+                $this->code = 1252;
+                return;
+            }
             $data = array(
             'cashier_id'=>$cashier['id'],
             'user_id'=>$this->user['id'],
             'desk_no'=>$desk_no,
+            'desk_id'=>$desk['id'],
             'work_on_date'=>date('Y-m-d'),
             'work_on_time'=>date('H:i:s'),
             'status'=>1
@@ -330,6 +344,33 @@ class CashierAction extends Controller
             $this->code = 1241;
             return;
         }
+    }
+
+    //收银员收款二维码扫码跳转地址
+    public function cashier_qrcode_url()
+    {
+        $user_id = $this->user['id'];
+        $cashier = $this->model->table('cashier')->where('user_id='.$user_id)->find();
+        if(!$cashier) {
+            $this->code = 1250;
+            return;
+        }
+        $today = date('Y-m-d');
+        $sign = $this->model->table('cashier_attendance')->fields('desk_id')->where("user_id=".$user_id." and work_on_date='{$today}'")->find();
+        if(!$sign) {
+            $this->code = 1253;
+            return;
+        }
+        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$cashier['hire_user_id']."/cashier_id/".$cashier['id']."/desk_id/".$sign['desk_id']);
+        $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no')->where('user_id='.$cashier['hire_user_id'])->find();
+        if($promoter['qrcode_no']=='') {
+            $no = '0000'.$v['id'].rand(1000,9999);
+            $this->model->table('district_promoter')->data(array('qrcode_no'=>$no))->where('id='.$promoter['id'])->update();
+        }
+        $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no')->where('user_id='.$cashier['hire_user_id'])->find();
+        $this->code = 0;
+        $this->content['url'] = $url;
+        $this->content['qrcode_no'] = $promoter?$promoter['qrcode_no']:'0000';
     }
 }
 ?>
