@@ -261,5 +261,15 @@ class CashierAction extends Controller
             return;
         }
     }
+
+    //收银员打卡时选择的收银台列表
+    public function cashier_desk_sign_list()
+    {
+        $cashier = $this->model->table('cashier')->fields('hire_user_id')->where('user_id='.$this->user['id'])->find();
+        $list = $this->model->table('cashier_desk')->fields('id,desk_no,cashier_id')->where('hire_user_id='.$cashier['hire_user_id'])->findAll();
+        $this->code = 0;
+        $this->content = $list;
+        return;
+    }
 }
 ?>
