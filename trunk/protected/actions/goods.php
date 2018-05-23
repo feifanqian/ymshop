@@ -283,6 +283,14 @@ class GoodsAction extends Controller {
             $appkey = '24876667';
             $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
         }
+        if(!$text) {
+            $this->code = 1248;
+            return;
+        }
+        if(!$url) {
+            $this->code = 1249;
+            return;
+        }
         $c = new TopClient;
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;
