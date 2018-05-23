@@ -271,5 +271,22 @@ class CashierAction extends Controller
         $this->content = $list;
         return;
     }
+
+    //收银员上班记录
+    public function cashier_work_log()
+    {
+        $log = $this->model->table('cashier_attendance')->fields('work_date,work_time,type')->where('user_id='.$this->user['id'])->group('work_date')->findAll();
+        var_dump($log);die;
+        // if($log) {
+        //     foreach ($log as $k => $v) {
+        //         if($v[''])
+        //         $work1 = 
+        //         $log[$k]['work_hours'] = 
+        //     }
+        // }
+        $this->code = 0;
+        $this->content = $log;
+        return;
+    }
 }
 ?>

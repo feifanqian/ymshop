@@ -230,6 +230,7 @@ class V1Controller extends Controller {
         "cashier_edit_name"=>array("cashier/cashier_edit_name",1,1), //商家修改收银员昵称
         "cashier_sign_in"=>array("cashier/cashier_sign_in",1,1), //收银员上下班打卡
         "cashier_desk_sign_list"=>array("cashier/cashier_desk_sign_list",1,1), //收银员打卡时选择的收银台列表
+        "cashier_work_log"=>array("cashier/cashier_work_log",1,1), //收银员上班记录
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息
