@@ -99,7 +99,7 @@ class CashierAction extends Controller
     //收银员列表
     public function cashier_list()
     {
-    	$list = $this->model->table('cashier as ca')->fields('cu.real_name,ca.mobile,ca.job_no,ca.id')->join('customer as cu on cu.user_id=ca.user_id')->where("ca.hire_user_id=".$this->user['id']." and ca.status=1")->findAll();
+    	$list = $this->model->table('cashier as ca')->fields('cu.real_name,ca.name,ca.mobile,ca.job_no,ca.id')->join('customer as cu on cu.user_id=ca.user_id')->where("ca.hire_user_id=".$this->user['id']." and ca.status=1")->findAll();
     	$this->code = 0;
     	$this->content = $list;
         return;
@@ -214,6 +214,52 @@ class CashierAction extends Controller
     	$this->content['list'] = $list;
     	$this->content['sum'] = $account;
         return;
+    }
+
+    //收银台修改昵称
+    public function cashier_edit_name()
+    {
+        $name = Filter::str(Req::args('name'));
+        $id = Filter::int(Req::args('id'));
+        $res = $this->model->table('cashier')->data(array('name'=>$name))->where('id='.$id)->update();
+        if($res) {
+            $this->code = 0;
+            return;
+        } else {
+            $this->code = 1241;
+            return;
+        }
+    }
+
+    //收银员上下班打卡
+    public function cashier_sign_in()
+    {
+        $desk_no = Filter::str(Req::args('desk_no'));
+        $type = Filter::int(Req::args('type'));
+        $cashier = $this->model->table('cashier')->where('user_id='.$this->user['id'])->find();
+        $today = date('Y-m-d');
+        $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_date='{$today}' and type={$type} and status=1")->find();
+        if($exist) {
+            $this->code = 1247;
+            return;
+        }
+        $data = array(
+            'cashier_id'=>$cashier['id'],
+            'user_id'=>$this->user['id'],
+            'desk_no'=>$desk_no,
+            'type'=>$type,
+            'work_date'=>date('Y-m-d'),
+            'work_time'=>date('Y-m-d H:i:s'),
+            'status'=>1
+            );
+        $res = $this->model->table('cashier_attendance')->data($data)->insert();
+        if($res) {
+            $this->code = 0;
+            return;
+        } else {
+            $this->code = 1241;
+            return;
+        }
     }
 }
 ?>
