@@ -235,24 +235,43 @@ class CashierAction extends Controller
     public function cashier_sign_in()
     {
         $desk_no = Filter::str(Req::args('desk_no'));
-        $type = Filter::int(Req::args('type'));
         $cashier = $this->model->table('cashier')->where('user_id='.$this->user['id'])->find();
         $today = date('Y-m-d');
-        $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_date='{$today}' and type={$type} and status=1")->find();
-        if($exist) {
-            $this->code = 1247;
-            return;
-        }
-        $data = array(
+        $exist1 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
+        $exist2 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_off_date='{$today}' and status=1")->find();
+        if(!$exist1 && !$exist2) {
+            $type = 1; //上班
+            $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
+            if($exist) {
+                $this->code = 1247;
+                return;
+            }
+            $data = array(
             'cashier_id'=>$cashier['id'],
             'user_id'=>$this->user['id'],
             'desk_no'=>$desk_no,
-            'type'=>$type,
-            'work_date'=>date('Y-m-d'),
-            'work_time'=>date('Y-m-d H:i:s'),
+            'work_on_date'=>date('Y-m-d'),
+            'work_on_time'=>date('Y-m-d H:i:s'),
             'status'=>1
             );
-        $res = $this->model->table('cashier_attendance')->data($data)->insert();
+            $res = $this->model->table('cashier_attendance')->data($data)->insert();
+        } elseif($exist1 && !$exist2) {
+            $type = 2; //下班
+            $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
+            if($exist) {
+                $this->code = 1247;
+                return;
+            }
+            $data = array(
+            'work_off_date'=>date('Y-m-d'),
+            'work_off_time'=>date('Y-m-d H:i:s'),
+            );
+            $res = $this->model->table('cashier_attendance')->data($data)->where('id='.$exist1['id'])->update();
+        } else {
+            $this->code = 1247;
+            return;
+        }
+        
         if($res) {
             $this->code = 0;
             return;
@@ -276,15 +295,12 @@ class CashierAction extends Controller
     public function cashier_work_log()
     {
         $today = date('Y-m-d');
-        $log = $this->model->table('cashier_attendance')->fields('work_date,work_time,type')->where("user_id=".$this->user['id']." and work_date<'{$today}'")->group('work_date')->findAll();
-        var_dump($log);die;
-        // if($log) {
-        //     foreach ($log as $k => $v) {
-        //         if($v[''])
-        //         $work1 = 
-        //         $log[$k]['work_hours'] = 
-        //     }
-        // }
+        $log = $this->model->table('cashier_attendance')->fields('work_on_date,work_on_time,work_off_time')->where("user_id=".$this->user['id']." and work_on_date<'{$today}'")->findAll();
+        if($log) {
+            foreach ($log as $k => $v) {
+                $log[$k]['work_hours'] = intval(floor((strtotime($v['work_off_time'])-strtotime($v['work_on_time']))/3600));
+            }
+        }
         $this->code = 0;
         $this->content = $log;
         return;
