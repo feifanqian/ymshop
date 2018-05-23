@@ -524,9 +524,14 @@ class PaymentController extends Controller {
            $order_amount = (Req::args('order_amount'));
            $randomstr=rand(1000000000000,9999999999999);
            $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
-           // $seller_id = Session::get('seller_id');
-           // $oauth = new WechatOAuth();
-           // $userinfo = $oauth->getUserInfo();
+           $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
+           if(!$cashier_id) {
+            $cashier_id = 0;
+           }
+           $desk_id = Filter::int(Req::args('desk_id'));//收银员id
+           if(!$desk_id) {
+            $desk_id = 0;
+           }
            if($order_amount==0){
             $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '请输入正确的充值金额'));
             exit();
@@ -568,6 +573,8 @@ class PaymentController extends Controller {
            $data['voucher_id'] = 0;
            $data['prom_id']=$invite_id;
            $data['shop_ids']=$seller_id;
+           $data['cashier_id'] = $cashier_id;
+           $data['desk_id'] = $desk_id;
            $model = new Model('order_offline');
            $exist=$model->where('order_no='.$order_no)->find();
            //防止重复生成同笔订单
@@ -584,7 +591,6 @@ class PaymentController extends Controller {
            $paymentPlugin = $payment->getPaymentPlugin();
 
            $packData = $payment->getPaymentInfo('offline_order', $order_id);
-            // $packData = array_merge($extendDatas, $packData);
             $sendData = $paymentPlugin->packData($packData);
             $this->assign("paymentPlugin", $paymentPlugin);
             $this->assign("sendData", $sendData);
@@ -793,6 +799,14 @@ class PaymentController extends Controller {
            $order_amount = Req::args('order_amount');
            $randomstr=rand(1000000000000,9999999999999);
            $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
+           $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
+           if(!$cashier_id) {
+            $cashier_id = 0;
+           }
+           $desk_id = Filter::int(Req::args('desk_id'));//收银员id
+           if(!$desk_id) {
+            $desk_id = 0;
+           }
            if(!$seller_id || $seller_id==0){
              $seller_id = Filter::int(Req::args('seller_ids'));
            }
@@ -831,6 +845,8 @@ class PaymentController extends Controller {
            $data['prom_id']=$invite_id;
            $data['shop_ids']=$seller_id;
            $data['third_pay'] = 2;
+           $data['cashier_id'] = $cashier_id;
+           $data['desk_id'] = $desk_id;
            $model = new Model('order_offline');
            $exist=$model->where('order_no='.$order_no)->find();
            //防止重复生成同笔订单

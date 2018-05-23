@@ -430,31 +430,7 @@ class PaymentAction extends Controller {
            if($payment_id==6){
             $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
            }
-            //test
-
-           // $myParams = array();
-           //  $myParams['charset'] = 'GBK';
-           //  $myParams['method'] = 'ysepay.online.sdkpay';
-           //  $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
-           //  $myParams['partner_id'] = 'yuanmeng';
-           //  // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
-           //  // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
-           //  $myParams['sign_type'] = 'RSA';
-           //  $myParams['timestamp'] = date('Y-m-d H:i:s', time());
-           //  $myParams['version'] = '3.0';
             
-           //  $biz_content_arr = array(
-           //  "out_trade_no"=>$order_no,
-           //  "subject"=>'支付测试',
-           //  "total_amount"=>$order_amount,
-           //  "seller_id"=>'yuanmeng',
-           //  "seller_name"=>'圆梦互联网科技深圳有限公司',
-           //  "timeout_express"=>'1d',
-           //  "business_code"=>'3010001',
-           //  "bank_type"=>"1902000",
-           //  // "appid"=>"wx167f2c4da1f798b0"
-           //  );
-           //  $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
             ksort($myParams);
             $data = $myParams;
             $signStr = "";
@@ -468,8 +444,6 @@ class PaymentAction extends Controller {
             $url = 'https://openapi.ysepay.com/gateway.do';
             $ret = Common::httpRequest($url,'POST',$myParams);
             $ret = json_decode($ret,true);
-            var_dump($myParams);
-            var_dump($ret);die;
             if(!isset($ret['ysepay_online_sdkpay_response']['pay_info'])){
                $this->code = 1228;
                return;
