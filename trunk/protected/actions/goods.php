@@ -187,7 +187,6 @@ class GoodsAction extends Controller {
     public function tbk_item_guess_like(){
         $page = Filter::int(Req::args("page"));
         $form = Filter::str(Req::args("form"));
-        $q = Filter::str(Req::args("q")); //商品分类标题或分类id
         if(!$page) {
             $page = 1;
         }
