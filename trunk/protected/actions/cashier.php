@@ -254,6 +254,7 @@ class CashierAction extends Controller
             'work_on_time'=>date('H:i:s'),
             'status'=>1
             );
+            var_dump($data);die;
             $res = $this->model->table('cashier_attendance')->data($data)->insert();
         } elseif($exist1 && !$exist2) {
             $type = 2; //下班
