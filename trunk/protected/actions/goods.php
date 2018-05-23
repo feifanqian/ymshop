@@ -268,5 +268,33 @@ class GoodsAction extends Controller {
         $this->code = 0;
         return;
     }
-
+    
+    public function tbk_tpwd_create(){
+        $form = Filter::str(Req::args("form"));
+        $text = Filter::text(Req::args("text"));
+        $url = Filter::str(Req::args("url"));
+        if(!$form) {
+            $form = 'android';
+        }
+        if($form=='android') { //安卓
+            $appkey = '24875594';
+            $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
+        } else { //ios
+            $appkey = '24876667';
+            $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
+        }
+        $c = new TopClient;
+        $c->appkey = $appkey;
+        $c->secretKey = $secretKey;
+        $c->format = 'json';
+        $req = new TbkTpwdCreateRequest;
+        // $req->setUserId("123");
+        $req->setText($text);
+        $req->setUrl($url);
+        // $req->setLogo("https://uland.taobao.com/");
+        $req->setExt("{}");
+        $resp = $c->execute($req);
+        $this->code = 0;
+        $this->content = $resp;
+    }
 }

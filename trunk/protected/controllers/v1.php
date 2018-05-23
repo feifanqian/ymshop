@@ -133,12 +133,14 @@ class V1Controller extends Controller {
         'balance_withdraw' => array("ucenter/balance_withdraw", 1,1),
         'offline_balance_withdraw' => array("ucenter/offline_balance_withdraw", 1,1),
         "name_verified" =>array("ucenter/name_verified",1,1),
+        "get_rongyun_token"=>array("ucenter/get_rongyun_token",1,1),
+        //淘宝客
         "tbk_item_get"=>array("goods/tbk_item_get",0,1),
         "tbk_item_coupon_get"=>array("goods/tbk_item_coupon_get",0,1),
         "taobao_item_detail_get"=>array("goods/taobao_item_detail_get",0,1),
         "tbk_cat_nav"=>array("goods/tbk_cat_nav",0,1),
         "tbk_item_guess_like"=>array("goods/tbk_item_guess_like",0,1),
-        "get_rongyun_token"=>array("ucenter/get_rongyun_token",1,1),
+        "tbk_tpwd_create"=>array("goods/tbk_tpwd_create",0,1),
         //小区相关接口
         'apply_for_district' => array("district/applyForDistrict", 1,1), //申请小区
         'get_district_list' => array("district/getDistrictList", 1,1), //获取小区列表
