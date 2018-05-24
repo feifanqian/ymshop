@@ -1454,4 +1454,16 @@ class DistrictadminController extends Controller
         $this->assign("condition", $condition);
         $this->redirect();
     }
+
+    public function cashier_log(){
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str) {
+            $this->assign("where", $condition_str);
+        } else {
+            $this->assign("where", "1=1");
+        }
+        $this->assign("condition", $condition);
+        $this->redirect();
+    }
 }

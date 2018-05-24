@@ -166,6 +166,7 @@ class Menu {
             '/districtadmin/promoter_edit'=> array('name' => '编辑代理商专区名称','parent' =>'personnel', 'hidden'=>true),
             // '/districtadmin/payset'=>array('name'=>'秒到支付','parent'=>'set'),
             '/districtadmin/cashier_list'=> array('name' => '收银员列表','parent' =>'cashier'),
+            '/districtadmin/cashier_log'=> array('name' => '收银员上班记录','parent' =>'cashier'),
         );
         //分组菜单
         $subMenu = array(
