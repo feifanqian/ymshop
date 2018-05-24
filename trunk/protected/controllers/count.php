@@ -2100,7 +2100,7 @@ class CountController extends Controller
         $withdrawing_amount = $model->table('balance_withdraw')->fields('sum(real_amount) as sum')->where('status=0 and type=0')->query();
         $withdrawed_amounts = $model->table('balance_withdraw')->fields('sum(real_amount) as sum')->where('status=1 and type=1')->query();
         $withdrawing_amounts = $model->table('balance_withdraw')->fields('sum(real_amount) as sum')->where('status=0 and type=1')->query();
-        $new_come_count = $model->table('customer')->fields('count(id) as num')->where($where)->query();
+        $new_come_count = $model->table('customer')->fields('count(user_id) as num')->where($where)->query();
 
         $this->assign("order_num", $order_num[0]['num']);
         $this->assign("offline_order_num", $offline_order_num[0]['num']);
