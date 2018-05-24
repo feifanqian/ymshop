@@ -2081,25 +2081,41 @@ class CountController extends Controller
         $s_time = $cal['str'];
         if($stime && $etime) {
             $where = "reg_time between '$stime' and '$etime' and status=1";
+            $where1 = "pay_time between '$stime' and '$etime' and pay_status=1";
+            $where2 = "pay_time between '$stime' and '$etime' and pay_status=1 and payment in (6,7,18)";
+            $where3 = "pay_time between '$stime' and '$etime' and pay_status=1 and payment in (8,9,10,16,17)";
+            $where4 = "pay_time between '$stime' and '$etime' and pay_status=1 and payment in (1,2,3,4,5)";
+            $where5 = "submit_date between '$stime' and '$etime' and status=1 and type=0";
+            $where6 = "submit_date between '$stime' and '$etime' and status=0 and type=0";
+            $where7 = "submit_date between '$stime' and '$etime' and status=1 and type=1";
+            $where8 = "submit_date between '$stime' and '$etime' and status=0 and type=1";
         } else {
             $where = "status=1";
+            $where1 = "pay_status=1";
+            $where2 = 'payment in (6,7,18) and pay_status=1';
+            $where3 = 'payment in (8,9,10,16,17) and pay_status=1';
+            $where4 = "pay_status=1 and payment in (1,2,3,4,5)";
+            $where5 = "status=1 and type=0";
+            $where6 = "status=0 and type=0";
+            $where7 = "status=1 and type=1";
+            $where8 = "status=0 and type=1";
         }
         $model = new Model();
-        $order_num = $model->table('order')->fields('count(id) as num')->where('pay_status=1')->query();
-        $offline_order_num = $model->table('order_offline')->fields('count(id) as num')->where('pay_status=1')->query();
-        $order_amount = $model->table('order')->fields('sum(order_amount) as sum')->where('pay_status=1')->query();
-        $offline_order_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where('pay_status=1')->query();
-        $weixin_order_amount = $model->table('order')->fields('sum(order_amount) as sum')->where('payment in (6,7,18) and pay_status=1')->query();
-        $alipay_order_amount = $model->table('order')->fields('sum(order_amount) as sum')->where('payment in (8,9,10,16,17) and pay_status=1')->query();
-        $balance_order_amount = $model->table('order')->fields('sum(order_amount) as sum')->where('payment in (1,2,3,4,5) and pay_status=1')->query();
-        $weixin_offline_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where('payment in (6,7,18) and pay_status=1')->query();
-        $alipay_offline_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where('payment in (8,9,10,16,17) and pay_status=1')->query();
+        $order_num = $model->table('order')->fields('count(id) as num')->where($where1)->query();
+        $offline_order_num = $model->table('order_offline')->fields('count(id) as num')->where($where1)->query();
+        $order_amount = $model->table('order')->fields('sum(order_amount) as sum')->where($where1)->query();
+        $offline_order_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where($where1)->query();
+        $weixin_order_amount = $model->table('order')->fields('sum(order_amount) as sum')->where($where2)->query();
+        $alipay_order_amount = $model->table('order')->fields('sum(order_amount) as sum')->where($where3)->query();
+        $balance_order_amount = $model->table('order')->fields('sum(order_amount) as sum')->where($where4)->query();
+        $weixin_offline_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where($where2)->query();
+        $alipay_offline_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where($where3)->query();
         $balance_account = $model->table('customer')->fields('sum(balance) as sum')->where('status=1')->query();
         $offline_balance_account = $model->table('customer')->fields('sum(offline_balance) as sum')->where('status=1')->query();
-        $withdrawed_amount = $model->table('balance_withdraw')->fields('sum(real_amount) as sum')->where('status=1 and type=0')->query();
-        $withdrawing_amount = $model->table('balance_withdraw')->fields('sum(amount) as sum')->where('status=0 and type=0')->query();
-        $withdrawed_amounts = $model->table('balance_withdraw')->fields('sum(real_amount) as sum')->where('status=1 and type=1')->query();
-        $withdrawing_amounts = $model->table('balance_withdraw')->fields('sum(amount) as sum')->where('status=0 and type=1')->query();
+        $withdrawed_amount = $model->table('balance_withdraw')->fields('sum(real_amount) as sum')->where($where5)->query();
+        $withdrawing_amount = $model->table('balance_withdraw')->fields('sum(amount) as sum')->where($where6)->query();
+        $withdrawed_amounts = $model->table('balance_withdraw')->fields('sum(real_amount) as sum')->where($where7)->query();
+        $withdrawing_amounts = $model->table('balance_withdraw')->fields('sum(amount) as sum')->where($where8)->query();
         $new_come_count = $model->table('customer')->fields('count(user_id) as num')->where($where)->query();
         
         $this->assign('s_time', $s_time);
