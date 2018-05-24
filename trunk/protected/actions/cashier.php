@@ -266,6 +266,7 @@ class CashierAction extends Controller
             $data = array(
             'cashier_id'=>$cashier['id'],
             'user_id'=>$this->user['id'],
+            'hire_user_id'=>$cashier['hire_user_id'],
             'desk_no'=>$desk_no,
             'desk_id'=>$desk['id'],
             'work_on_date'=>date('Y-m-d'),
