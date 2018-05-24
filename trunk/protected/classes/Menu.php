@@ -118,6 +118,7 @@ class Menu {
             '/count/sales_rank' => array('name'=>'销售排行榜表','parent'=>'financial_count'), //货品进销存统计表
             '/count/balance_count' => array('name'=>'用户钱袋统计表','parent'=>'financial_count'), //货品进销存统计表
             '/count/balance_account' => array('name'=>'商家入账统计表','parent'=>'financial_count'), //货品进销存统计表
+            '/count/order_account' => array('name'=>'订单统计','parent'=>'order_count'), //订单统计表
             '/marketing/voucher_template_list' => array('name' => '代金券模板', 'parent' => 'voucher'),
             '/marketing/voucher_template_edit' => array('name' => '代金券模板编辑', 'parent' => 'voucher'),
             '/marketing/voucher_list' => array('name' => '代金券管理', 'parent' => 'voucher'),
@@ -191,6 +192,7 @@ class Menu {
             'count' => array('name' => '销售统计', 'parent' => 'count'),
             'customer_count' => array('name' => '客户统计', 'parent' => 'count'),
             'financial_count' => array('name'=> '财务统计', 'parent' => 'count'),
+            'order_count' => array('name'=> '订单统计', 'parent' => 'count'),
             'promotions' => array('name' => '促销活动', 'parent' => 'marketing'),
             'voucher' => array('name' => '代金券管理', 'parent' => 'marketing'),
             'welfare' => array('name' => '福利活动', 'parent' => 'marketing'),
