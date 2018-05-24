@@ -55,7 +55,8 @@ class CashierAction extends Controller
         	'hire_user_id'=>$this->user['id'],
         	'mobile'=>$mobile,
         	'job_no'=>$job_no,
-        	'status'=>0
+        	'status'=>0,
+            'create_time'=>date('Y-m-d H:i:s')
         	);
         $res = $this->model->table('cashier')->data($data)->insert();
         $type = 'cashier_invite';

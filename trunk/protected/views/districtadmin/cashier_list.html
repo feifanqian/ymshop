@@ -1,0 +1,137 @@
+ {echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{set:$status=array("0"=>"<span class='green icon-busy'>待确认</span>","1"=>"<span class='gray icon-coin'>同意</span>","-1"=>"<span class='red icon-remove'>拒绝</span>");}
+{set:$type = array("0"=>"未知","1"=>"实体商家","2"=>"个人微商");}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+    <a class="icon-delicious" href="{url:/districtadmin/shop_check}"> 查看全部</a>
+    <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a>
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:50px">选择</th>
+        <th style="width:65px">操作</th>
+        <th style="width:80px">收银员姓名</th>
+        <th style="width:80px">收银员昵称</th>
+        <th style="width:80px">收银员工号</th>
+        <th style="width:80px">收银员手机号</th>
+        <th style="width:120px">所属商家</th> 
+        
+        <th style="width:140px">创建时间</th>
+        
+        <th style="width:120px">状态</th>
+    </tr>
+    {query:name=cashier as ca join=left join customer as cu on ca.user_id eq cu.user_id left join customer as dp on ca.hire_user_id eq dp.user_id fields=ca.*,cu.real_name,dp.real_name as shop_name where=$where id=$obj page=1 order= id desc}
+        <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:65px" class="btn_min">
+                <div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                        <ul>
+                            <!-- <li><a class="icon-question" href="{url:/districtadmin/shop_check_detail/id/$item[id]}"> 查看</a></li> -->
+                            {if:$item['status']==0}
+                            <!-- <li><a class="icon-key" href="javascript:;" onclick="pass({$item['id']})"> 通过认证</a></li> -->
+                            <!-- <li><a class="icon-remove" href="javascript:;" onclick="cancel({$item['id']})"> 作废该请求</a></li> -->
+                            {/if}
+                            <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/cashier_delete/id/$item[id]}')">删除</a></li>
+                        </ul>
+                   </div>
+                </div> 
+            </td>
+            <td style="width:80px">{$item['name']}</td>
+            <td style="width:80px">{$item['real_name']}</td>
+            <td style="width:80px">{$item['job_no']}</td>
+            <td style="width:80px">{$item['mobile']}</td>
+            <td style="width:80px">{$item['shop_name']}</td>
+            
+            <td style="width:140px">{$item['create_time']}</td>
+            
+            <td style="width:120px">{$status[$item['status']]}</td>
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+<div id="excel_box" style="display: none;width:600px;">
+    <h1 class="page_title">Excel导出</h1>
+    <div class="form2">
+        <form  id="export_form" action="{url:/districtadmin/shop_check_export}" method="post" >
+           <dl class="lineD">
+          <dt>筛选条件：</dt>
+          <dd><input type="hidden"  id="condition_input_excel" name="condition" value="{$condition}"><label></label> <label><a href="javascript:;" onclick="Condition('#condition_input_excel')"  class="button" > 高级筛选</a></label>
+          </dd>
+          </dl>
+        <dl class="lineD">
+          <dt>导出字段：</dt>
+          <dd>
+            <label><input type="checkbox" name="fields[]" value="nickname" checked="checked"> 用户名</label>
+            <label><input type="checkbox" name="fields[]" value="shop_name" checked="checked"> 店铺名</label>
+            <label><input type="checkbox" name="fields[]" value="shop_type" checked="checked"> 商家类型</label>
+            <label><input type="checkbox" name="fields[]" value="positive_idcard" checked="checked"> 身份证正面照</label>
+            <label><input type="checkbox" name="fields[]" value="native_idcard" checked="checked"> 身份证反面照</label>
+            <label><input type="checkbox" name="fields[]" value="business_licence" checked="checked"> 营业执照</label>
+            <label><input type="checkbox" name="fields[]" value="account_picture" checked="checked"> 开户许可证</label>
+            <label><input type="checkbox" name="fields[]" value="shop_photo" checked="checked"> 门店照</label>
+            <label><input type="checkbox" name="fields[]" value="hand_idcard" checked="checked"> 手持身份证照</label>
+            <label><input type="checkbox" name="fields[]" value="account_card" checked="checked"> 结算银行卡号</label>
+          </dd>
+          </dl>
+        <div class="tc mt10"><a href="javascript:;" onclick="export_excel()" class="button">导出</a></div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+function cancel(id){
+     layer.prompt({title: '请输入作废理由', formType: 2}, function(text, index){
+     layer.close(index);
+     var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+     $.post("{url:/districtadmin/shop_check_do}",{id:id,status:2,reason:text},function(data){
+            layer.close(index);
+            if(data.status=='success'){
+            layer.msg('您拒绝了认证申请，理由是：'+text, {icon: 6},function(){
+                tools_reload();
+            }); 
+          }else{
+            layer.msg(data.msg, {icon: 5}); 
+          }
+        },'json');
+   });
+}
+function pass(id){
+    layer.confirm('您确定要通过吗？', {
+        btn: ['确定','取消'] //按钮
+      }, function(index){
+        layer.close(index);
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $.post("{url:/districtadmin/shop_check_do}",{id:id,status:1},function(data){
+             layer.close(index);
+            if(data.status=='success'){
+            layer.msg('操作成功', {icon: 6},function(){
+                tools_reload();
+            }); 
+          }else{
+            layer.msg(data.msg, {icon: 5}); 
+          }
+        },'json');
+      }, function(){
+          layer.msg("您取消了操作"); 
+        });
+}
+function export_excel_dialog(){
+    art.dialog({id:'export_excel_dialog',title:'Excel导出',lock:true,opacity:0.1,width:600,height:200,content:document.getElementById("excel_box")});
+}
+function export_excel() {
+    $("#export_form").submit();
+}
+function Condition(id){
+    $("body").Condition({input:id,data:{'wd.withdraw_no':{name:'单号'},'us.name':{name:'用户名'},'wd.open_name':{name:'开户名'},'wd.open_bank':{name:'开户行'},'wd.card_no':{name:'银行卡号'},'wd.amount':{name:'提现金额'},'wd.status':{name:'状态',values:{'-1':'拒绝',0:'待处理',1:'已转账'}}
+        }});
+}
+$("#condition").on("click",function(){
+   
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/shop_check}',method:'get'});},data:{'u.nickname':{name:'  申请者'},'u.name':{name:'用户名'},'dp.shop_name':{name:'店铺名'},'sc.status':{name:'状态',values:{0:'未处理',1:'已通过',2:'已作废'}}}});
+})
+</script>

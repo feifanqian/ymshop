@@ -1442,4 +1442,16 @@ class DistrictadminController extends Controller
         $model->table("shop_check")->where("id=" . $id)->delete();
         $this->redirect('shop_check');
     }
+
+    public function cashier_list(){
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str) {
+            $this->assign("where", $condition_str);
+        } else {
+            $this->assign("where", "1=1");
+        }
+        $this->assign("condition", $condition);
+        $this->redirect();
+    }
 }

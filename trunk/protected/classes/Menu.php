@@ -165,6 +165,7 @@ class Menu {
             '/districtadmin/hirer_edit'=> array('name' => '编辑专区名称','parent' =>'personnel', 'hidden'=>true),
             '/districtadmin/promoter_edit'=> array('name' => '编辑代理商专区名称','parent' =>'personnel', 'hidden'=>true),
             // '/districtadmin/payset'=>array('name'=>'秒到支付','parent'=>'set'),
+            '/districtadmin/cashier_list'=> array('name' => '收银员列表','parent' =>'cashier'),
         );
         //分组菜单
         $subMenu = array(
@@ -202,6 +203,7 @@ class Menu {
             'personnel'=>array('name'=>'专区人员','parent'=>'districtadmin'),
             'apply'=>array('name'=>'申请信息','parent'=>'districtadmin'),
             'set'=>array('name'=>'专区配置','parent'=>'districtadmin'),
+            'cashier'=>array('name'=>'收银管理','parent'=>'districtadmin'),
         );
         //主菜单
         $menu = array(
