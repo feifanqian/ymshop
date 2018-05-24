@@ -23,7 +23,7 @@
         <th style="width:140px">下班时间</th>
         <th style="width:120px">状态</th>
     </tr>
-    {query:name=cashier as c join=left join cashier_attendance as ca on c.id eq ca.cashier_id left join customer as cu on c.user_id eq cu.user_id left join customer as dp on c.hire_user_id eq dp.user_id fields=ca.desk_no,ca.work_on_date,ca.work_on_time,ca.work_off_time,c.name,c.job_no,cu.real_name,dp.real_name as shop_name where=$where id=$obj page=1 order= ca.id desc}
+    {query:name=cashier as c join=left join cashier_attendance as ca on c.id eq ca.cashier_id left join customer as cu on c.user_id eq cu.user_id left join customer as dp on c.hire_user_id eq dp.user_id fields=ca.id,ca.desk_no,ca.work_on_date,ca.work_on_time,ca.work_off_time,c.name,c.job_no,cu.real_name,dp.real_name as shop_name where=$where id=$obj page=1 order= ca.id desc}
         <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a>
