@@ -71,12 +71,12 @@ class CashierAction extends Controller
         $ret = $this->jpush->push();
         if(!$ret) {
         	$this->code = 1242;
-            $this->content['jpush_type'] = 'cashier_invite';
-            $this->content['jpush_id'] = $cashier['user_id'];
             return;
         }
         if($res) {
         	$this->code = 0;
+            $this->content['jpush_type'] = 'cashier_invite';
+            $this->content['jpush_id'] = $cashier['user_id'];
             return;
         } else {
             $this->code = 1241;
