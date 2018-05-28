@@ -788,13 +788,16 @@ class PaymentAction extends Controller {
         $this->code = 1158;
         return;
       }
+      $promoter = $this->model->table('district_promoter')->fields('shop_name')->where('user_id='.$user_id)->find();
       $seller = $this->model->table('customer')->fields('real_name')->where('user_id='.$user_id)->find();
-      if(!$seller){
+      $user = $this->model->table('user')->fields('nickname')->where('id='.$user_id)->find();
+      if(!$seller || !$user){
         $this->code = 1159;
         return;
       }
-      $shop_name = $seller['real_name'];
-      if($seller['real_name']==''){
+      
+      $shop_name = isset($promoter['shop_name']) && $promoter['shop_name']!=''?$promoter['shop_name']:($seller['real_name']!=''?$seller['real_name']:$user['nickname']);
+      if($shop_name['real_name']==''){
         $shop_name = "匿名商家";
       }
       $this->code = 0;
