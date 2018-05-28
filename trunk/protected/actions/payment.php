@@ -797,9 +797,7 @@ class PaymentAction extends Controller {
       }
       
       $shop_name = isset($promoter['shop_name']) && $promoter['shop_name']!=''?$promoter['shop_name']:($seller['real_name']!=''?$seller['real_name']:$user['nickname']);
-      if($shop_name['real_name']==''){
-        $shop_name = "匿名商家";
-      }
+      
       $this->code = 0;
       $this->content['shop_name'] = $shop_name;
       return;
