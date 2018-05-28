@@ -77,6 +77,8 @@ class CashierAction extends Controller
         	$this->code = 0;
             $this->content['jpush_type'] = 'cashier_invite';
             $this->content['jpush_id'] = $cashier['user_id'];
+            $this->content['seller_id'] = $this->user['id'];
+            $this->content['seller_name'] = $this->user['nickname'];
             return;
         } else {
             $this->code = 1241;
