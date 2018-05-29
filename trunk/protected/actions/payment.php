@@ -392,7 +392,7 @@ class PaymentAction extends Controller {
         }else{
          $sub_openid='';
         }
-        if($third_pay == 2 && $user_id == 1776){  //银盛支付
+        if($third_pay==0 and in_array($user_id, [42608,1776])){  //银盛支付
             $this->model->table('order_offline')->data(array('third_pay'=>2))->where('id='.$order_id)->update();
             //test
             $myParams['charset'] = 'utf-8';
@@ -410,7 +410,7 @@ class PaymentAction extends Controller {
             "subject"=>'支付测试',
             "total_amount"=>$order_amount,
             "seller_id"=>'yuanmeng',
-            "seller_name"=>'圆梦互联网科技深圳有限公司',
+            "seller_name"=>'圆梦互联网科技（深圳）有限公司',
             "timeout_express"=>'1d',
             "business_code"=>'3010001',
             "sub_openid"=>$sub_openid,
@@ -423,7 +423,7 @@ class PaymentAction extends Controller {
             $myParams['subject'] = '支付测试';
             $myParams["total_amount"]=$order_amount;
             $myParams["seller_id"]='yuanmeng';
-            $myParams["seller_name"]='圆梦互联网科技深圳有限公司';
+            $myParams["seller_name"]='圆梦互联网科技（深圳）有限公司';
             $myParams["timeout_express"]='1d';
             $myParams['business_code'] = '3010001'; 
            }
