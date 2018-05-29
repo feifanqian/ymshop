@@ -445,7 +445,7 @@ class PaymentAction extends Controller {
             $ret = Common::httpRequest($url,'POST',$myParams);
             $ret = json_decode($ret,true);
             if(!isset($ret['ysepay_online_sdkpay_response']['pay_info'])){
-                var_dump($ret['ysepay_online_sdkpay_response']);die;
+                var_dump($ret);die;
                $this->code = 1228;
                return;
             }
