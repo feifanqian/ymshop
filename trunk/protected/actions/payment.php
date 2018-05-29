@@ -395,7 +395,8 @@ class PaymentAction extends Controller {
         if($third_pay==0 and in_array($user_id, [42608,140531])){  //银盛支付
             $this->model->table('order_offline')->data(array('third_pay'=>2))->where('id='.$order_id)->update();
             //test       
-            $myParams['method'] = 'ysepay.online.sdkpay';
+            // $myParams['method'] = 'ysepay.online.sdkpay';
+            $myParams['method'] = 'ysepay.online.jsapi.pay';
             $myParams['partner_id'] = 'yuanmeng';
             $myParams['timestamp'] = date('Y-m-d H:i:s', time());
             $myParams['charset'] = 'utf-8';
@@ -413,7 +414,7 @@ class PaymentAction extends Controller {
             "seller_name"=>'圆梦互联网科技（深圳）有限公司',
             "timeout_express"=>'1d',
             "business_code"=>'3010001',
-            // "sub_openid"=>$sub_openid,
+            "sub_openid"=>$sub_openid,
             );
             if($payment_id==7 || $payment_id==18) {
                 $biz_content_arr['bank_type'] = '1902000'; //微信
