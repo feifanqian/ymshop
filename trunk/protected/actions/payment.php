@@ -459,9 +459,13 @@ class PaymentAction extends Controller {
                return;
             }
             $sendData = json_decode($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'],true);
+            $sendData['appid'] = $sendData['appId'];
             $sendData['partnerid'] = '1486189412';
+            $sendData['noncestr'] = $sendData['nonceStr']; 
+            $sendData['timestamp'] = $sendData['timeStamp'];
             $sendData['prepayid'] = substr($sendData['package'],10);
             $sendData['package'] = 'Sign=WXPay';
+            $sendData['sign'] = $sendData['paySign'];
         }else{
             //app微信支付    7,18    app支付宝支付 16,,17        
             $packData = $payment->getPaymentInfo('offline_order', $order_id);
