@@ -270,6 +270,9 @@ class DistrictAction extends Controller {
                 return;
             }
             $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id'],'shop_type'=>$type))->insert();
+            $point = 3600.00;
+            $this->model->table('customer')->data(array('point_coin'=>"`point_coin`+({$point})"))->where('user_id='.$this->user['id'])->update();
+            Log::pointcoin_log($point,$this->user['id'], '', "激活码激活升级为代理商积分赠送", 5);
             $invite = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
             if(!$invite){
                 $this->model->table('invite')->data(array('user_id'=>$promoter_code['user_id'],'invite_user_id'=>$this->user['id'],'from'=>'jihuo','district_id'=>$promoter_code['district_id'],'createtime'=>time()))->insert();
