@@ -444,12 +444,12 @@ class PaymentAction extends Controller {
             $url = 'https://openapi.ysepay.com/gateway.do';
             $ret = Common::httpRequest($url,'POST',$myParams);
             $ret = json_decode($ret,true);
-            if(!isset($ret['ysepay_online_sdkpay_response']['pay_info'])){
-                var_dump($ret);die;
+            if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])){
+                // var_dump($ret);die;
                $this->code = 1228;
                return;
             }
-            $sendData = json_decode($ret['ysepay_online_sdkpay_response']['pay_info'],true);
+            $sendData = json_decode($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'],true);
         }else{
             //app微信支付    7,18    app支付宝支付 16,,17        
             $packData = $payment->getPaymentInfo('offline_order', $order_id);
