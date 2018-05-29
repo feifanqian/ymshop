@@ -451,6 +451,7 @@ class PaymentAction extends Controller {
             $url = 'https://openapi.ysepay.com/gateway.do';
             $ret = Common::httpRequest($url,'POST',$myParams);
             $ret = json_decode($ret,true);
+            var_dump($ret);die;
             if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])){
                 var_dump($myParams);
                 var_dump($ret);die;
