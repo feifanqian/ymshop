@@ -392,7 +392,7 @@ class PaymentAction extends Controller {
         }else{
          $sub_openid='';
         }
-        if($third_pay==0 and in_array($user_id, [42608,1776])){  //银盛支付
+        if($third_pay==0 and in_array($user_id, [42608,140531,1776])){  //银盛支付
             $this->model->table('order_offline')->data(array('third_pay'=>2))->where('id='.$order_id)->update();
             //test
             $myParams['charset'] = 'utf-8';
