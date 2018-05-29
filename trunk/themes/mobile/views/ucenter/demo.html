@@ -207,8 +207,12 @@
                     <p><b>支付方式</b></p>
                 </div>
                 <div class="weui_cell_ft">
-                    {if:$paytypeone}
-                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" style='text-align: right;display:inline-block;width:auto;' />
+                    {if:$pay_type=='alipay'}
+                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="支付宝支付" data-values="8" style='text-align:right;display:inline-block;width:auto;font-size:16px;' />
+                    {else:}
+                      {if:$paytypeone}
+                        <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" style='text-align:right;display:inline-block;width:auto;font-size:16px;' />
+                      {/if}
                     {/if}
                 </div>
             </div>
