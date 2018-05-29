@@ -394,15 +394,15 @@ class PaymentAction extends Controller {
         }
         if($third_pay==0 and in_array($user_id, [42608,140531])){  //银盛支付
             $this->model->table('order_offline')->data(array('third_pay'=>2))->where('id='.$order_id)->update();
-            //test
-            $myParams['charset'] = 'utf-8';
+            //test       
             $myParams['method'] = 'ysepay.online.sdkpay';
-            $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
             $myParams['partner_id'] = 'yuanmeng';
-            // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
-            $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
-            $myParams['sign_type'] = 'RSA';
             $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+            $myParams['charset'] = 'utf-8';
+            $myParams['sign_type'] = 'RSA';
+            $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';      
+            // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
+            $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details'; 
             $myParams['version'] = '3.0';
             
             $biz_content_arr = array(
@@ -451,6 +451,7 @@ class PaymentAction extends Controller {
             $ret = Common::httpRequest($url,'POST',$myParams);
             $ret = json_decode($ret,true);
             if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])){
+                var_dump($myParams);
                 var_dump($ret);die;
                $this->code = 1228;
                return;
