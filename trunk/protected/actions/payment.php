@@ -415,7 +415,7 @@ class PaymentAction extends Controller {
             "business_code"=>'3010001',
             "sub_openid"=>$sub_openid,
             );
-          if($payment_id==8){
+          if($payment_id==16 || $payment_id==17){
             $myParams['method'] = 'ysepay.online.wap.directpay.createbyuser';
             // $myParams['bank_type'] = "1903000";
             // $myParams['pay_mode'] = "native";
@@ -427,7 +427,7 @@ class PaymentAction extends Controller {
             $myParams["timeout_express"]='1d';
             $myParams['business_code'] = '3010001'; 
            }
-           if($payment_id==6){
+           if($payment_id==7 || $payment_id==18){
             $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
            }
             
