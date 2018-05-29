@@ -392,7 +392,7 @@ class PaymentAction extends Controller {
         }else{
          $sub_openid='';
         }
-        if($third_pay==0 and in_array($user_id, [42608,140531,141580,141585])){  //银盛支付
+        if($third_pay==0 and in_array($user_id, [42608,140531])){  //银盛支付
             $this->model->table('order_offline')->data(array('third_pay'=>2))->where('id='.$order_id)->update();
             //test
             $myParams['charset'] = 'utf-8';
@@ -450,6 +450,7 @@ class PaymentAction extends Controller {
                return;
             }
             $sendData = json_decode($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'],true);
+            $sendData['package'] = 'Sign=WXPay';
         }else{
             //app微信支付    7,18    app支付宝支付 16,,17        
             $packData = $payment->getPaymentInfo('offline_order', $order_id);
