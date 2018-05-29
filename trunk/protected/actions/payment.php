@@ -451,7 +451,7 @@ class PaymentAction extends Controller {
             $url = 'https://openapi.ysepay.com/gateway.do';
             $ret = Common::httpRequest($url,'POST',$myParams);
             $ret = json_decode($ret,true);
-            var_dump($ret);die;
+            // var_dump($ret);die;
             if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])){
                 var_dump($myParams);
                 var_dump($ret);die;
@@ -459,6 +459,8 @@ class PaymentAction extends Controller {
                return;
             }
             $sendData = json_decode($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'],true);
+            $sendData['partnerid'] = '1486189412';
+            $sendData['prepayid'] = substr($sendData['package'],10);
             $sendData['package'] = 'Sign=WXPay';
         }else{
             //app微信支付    7,18    app支付宝支付 16,,17        
