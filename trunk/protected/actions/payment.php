@@ -396,7 +396,7 @@ class PaymentAction extends Controller {
             $this->model->table('order_offline')->data(array('third_pay'=>2))->where('id='.$order_id)->update();
             //test
             $myParams['charset'] = 'utf-8';
-            $myParams['method'] = 'ysepay.online.jsapi.pay';
+            $myParams['method'] = 'ysepay.online.sdkpay';
             $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
             $myParams['partner_id'] = 'yuanmeng';
             // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
@@ -413,24 +413,30 @@ class PaymentAction extends Controller {
             "seller_name"=>'圆梦互联网科技（深圳）有限公司',
             "timeout_express"=>'1d',
             "business_code"=>'3010001',
-            "sub_openid"=>$sub_openid,
+            // "sub_openid"=>$sub_openid,
             );
-          if($payment_id==16 || $payment_id==17){
-            $myParams['method'] = 'ysepay.online.wap.directpay.createbyuser';
-            // $myParams['bank_type'] = "1903000";
-            // $myParams['pay_mode'] = "native";
-            $myParams['out_trade_no'] = $order_no;
-            $myParams['subject'] = '支付测试';
-            $myParams["total_amount"]=$order_amount;
-            $myParams["seller_id"]='yuanmeng';
-            $myParams["seller_name"]='圆梦互联网科技（深圳）有限公司';
-            $myParams["timeout_express"]='1d';
-            $myParams['business_code'] = '3010001'; 
-           }
-           if($payment_id==7 || $payment_id==18){
-            $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
-           }
+            if($payment_id==7 || $payment_id==18) {
+                $biz_content_arr['bank_type'] = '1902000'; //微信
+            } else {
+                $biz_content_arr['bank_type'] = '1903000'; //支付宝
+            }
+          // if($payment_id==16 || $payment_id==17){
+          //   $myParams['method'] = 'ysepay.online.wap.directpay.createbyuser';
+          //   // $myParams['bank_type'] = "1903000";
+          //   // $myParams['pay_mode'] = "native";
+          //   $myParams['out_trade_no'] = $order_no;
+          //   $myParams['subject'] = '支付测试';
+          //   $myParams["total_amount"]=$order_amount;
+          //   $myParams["seller_id"]='yuanmeng';
+          //   $myParams["seller_name"]='圆梦互联网科技（深圳）有限公司';
+          //   $myParams["timeout_express"]='1d';
+          //   $myParams['business_code'] = '3010001';
+          //   $myParams['bank_type'] = '1902000'; 
+          //  }
+           // if($payment_id==7 || $payment_id==18){
             
+           // }
+           $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
             ksort($myParams);
             $data = $myParams;
             $signStr = "";
@@ -445,7 +451,7 @@ class PaymentAction extends Controller {
             $ret = Common::httpRequest($url,'POST',$myParams);
             $ret = json_decode($ret,true);
             if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])){
-                // var_dump($ret);die;
+                var_dump($ret);die;
                $this->code = 1228;
                return;
             }

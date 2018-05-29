@@ -97,6 +97,9 @@ class CashierAction extends Controller
     	$id = Filter::int(Req::args('id'));
     	$status = Filter::int(Req::args('status'));
     	$res = $this->model->table('cashier')->data(array('status'=>$status))->where("id=".$id." and user_id=".$this->user['id']." and status=0")->update();
+        if($status==1) {
+            $this->model->table('customer')->data(array('is_cashier'=>1))->where("user_id=".$this->user['id'])->update();
+        }
     	if($res) {
         	$this->code = 0;
             return;
