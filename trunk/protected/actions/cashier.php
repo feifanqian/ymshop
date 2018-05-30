@@ -24,7 +24,7 @@ class CashierAction extends Controller
         	$this->code = 1239;
             return;
         }
-        $job_no_exist = $this->model->table('cashier')->where('job_no='.$job_no.' and hire_user_id='.$this->user['id'])->find();
+        $job_no_exist = $this->model->table('cashier')->where("job_no=".$job_no." and hire_user_id=".$this->user['id']." and status=1")->find();
         if($job_no_exist) {
         	$this->code = 1240;
             return;
@@ -255,7 +255,7 @@ class CashierAction extends Controller
             $this->code = 1251;
             return;
         }
-        $cashier = $this->model->table('cashier')->where('user_id='.$this->user['id'])->find();
+        $cashier = $this->model->table('cashier')->where("user_id=".$this->user['id']." and status=1")->find();
         if(!$cashier) {
             $this->code = 1250;
             return;
@@ -318,7 +318,7 @@ class CashierAction extends Controller
     //收银员打卡时选择的收银台列表
     public function cashier_desk_sign_list()
     {
-        $cashier = $this->model->table('cashier')->fields('hire_user_id')->where('user_id='.$this->user['id'])->find();
+        $cashier = $this->model->table('cashier')->fields('hire_user_id')->where("user_id=".$this->user['id']." and status=1")->find();
         $list = $this->model->table('cashier_desk')->fields('id,desk_no,cashier_id')->where('hire_user_id='.$cashier['hire_user_id'])->findAll();
         $this->code = 0;
         $this->content = $list;
@@ -364,7 +364,7 @@ class CashierAction extends Controller
     public function cashier_qrcode_url()
     {
         $user_id = $this->user['id'];
-        $cashier = $this->model->table('cashier')->where('user_id='.$user_id)->find();
+        $cashier = $this->model->table('cashier')->where('user_id='.$user_id.' and status=1')->find();
         if(!$cashier) {
             $this->code = 1250;
             return;
