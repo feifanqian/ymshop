@@ -241,6 +241,10 @@ class CashierAction extends Controller
     {
         $name = Filter::str(Req::args('name'));
         $id = Filter::int(Req::args('id'));
+        if(!$id) {
+            $this->code = 1255;
+            return;
+        }
         $res = $this->model->table('cashier')->data(array('name'=>$name))->where('id='.$id)->update();
         if($res) {
             $this->code = 0;
@@ -451,6 +455,25 @@ class CashierAction extends Controller
 
         $this->code = 0;
         $this->content = $list;
+    }
+
+    //商家启用或删除收银员
+    public function cashier_manage() {
+        $id = Filter::int(Req::args('id'));
+        $status = Filter::int(Req::args('status'));
+        if(!$id) {
+            $this->code = 1246;
+            return;
+        }
+        if($status==1) { //启用
+            $this->model->table('cashier')->data(array('status'=>1))->where('id='.$id)->update();
+        } elseif($status==0) { //停用
+            $this->model->table('cashier')->data(array('status'=>2))->where('id='.$id)->update();
+        } else {
+            $this->model->table('cashier')->where('id='.$id)->delete();
+        }
+        $this->code = 0;
+        return;
     }
 }
 ?>
