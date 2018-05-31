@@ -391,7 +391,36 @@ class CashierAction extends Controller
         $this->content['qrcode_no'] = $promoter?$promoter['qrcode_no']:'0000';
     }
 
-    //判断收银员是否已经打卡
-    
+    //收银员打卡状态
+    public function cashier_ready_sign() {
+        $cashier = $this->model->table('cashier')->where('user_id='.$this->user['id'].' and status=1')->find();
+        if(!$cashier) {
+            $this->code = 1250;
+            return;
+        }
+        $promoter_user_id = $cashier['hire_user_id'];
+        $promoter = $this->model->table('district_promoter')->fields('shop_name')->where('user_id='.$promoter_user_id)->find();
+        $seller = $this->model->table('customer')->fields('real_name')->where('user_id='.$promoter_user_id)->find();
+        $user = $this->model->table('user')->fields('nickname')->where('id='.$promoter_user_id)->find();
+        if(!$promoter || !$seller || !$user){
+          $this->code = 1159;
+          return;
+        }
+      
+        $shop_name = $promoter['shop_name']!=''?$promoter['shop_name']:($seller['real_name']!=''?$seller['real_name']:$user['nickname']);
+
+        if($shop_name==null){
+            $shop_name = "";
+        }
+        
+        $today = date('Y-m-d');
+        $log = $this->model->table('cashier_attendance')->fields('work_on_date,work_off_date,work_on_time,work_off_time')->where("user_id=".$this->user['id']." and work_on_date ='{$today}'")->find();
+        $this->code = 0;
+        $this->content['shop_name'] = $shop_name;
+        $this->content['on_duty'] = empty($log)?0:1;
+        $this->content['on_duty_time'] = empty($log)?'':$log['work_on_time'];
+        $this->content['off_duty'] = empty($log)?0:($log['work_off_time']==''?0:1);
+        $this->content['off_duty_time'] = empty($log)?'':($log['work_off_time']==''?'':$log['work_off_time']);
+    }
 }
 ?>
