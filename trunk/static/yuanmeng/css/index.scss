@@ -1,0 +1,78 @@
+@import "untils";
+@import "mixin";
+
+//  default
+
+section, .section {
+  img.title {
+    display: block;
+    @include size(100%, auto)
+  }
+  .content {
+  }
+}
+
+/* left and right padding */
+$sides-padding: 24px;
+
+$detail-table-left-width: 36%;
+
+.section-1 > .content {
+  & > img {
+    @include sizeFitImg()
+  }
+  .intro > img {
+    @include sizeFitImg()
+  }
+  .desc {
+    padding: $sides-padding *1.5 $sides-padding;
+    font-size: 22px;
+    p {
+      margin: 0;
+      line-height: 200%;
+      text-indent: 2em;
+      word-break: break-all;
+    }
+  }
+
+  table.detail {
+    display: table;
+    width: 100%;
+    font-size: 13px;
+    padding: 0 $sides-padding;
+    td {
+      height: 22px;
+      &:first-child {
+        width: $detail-table-left-width;
+      }
+      &:last-child {
+        width: 100% - $detail-table-left-width;
+      }
+      .key {
+        width: 80px;
+        text-align: justify;
+        text-align-last: justify;
+        -ms-text-align-last: justify;
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.section-2 > .content {
+  .header, .cell {
+    @include sizeFitImg()
+  }
+}
+
+.section-3 > .content {
+  img {
+    @include sizeFitImg()
+  }
+}
+
+.section-4 > .content {
+  img {
+    @include sizeFitImg()
+  }
+}

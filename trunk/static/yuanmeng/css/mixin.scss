@@ -1,0 +1,58 @@
+@mixin size($width, $height:$width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin sizeFitImg($width: 100%) {
+  display: block;
+  @include size($width, auto)
+}
+
+@mixin radius($radius: 50%) {
+  border-radius: $radius;
+  overflow: hidden;
+}
+
+.pin-auto {
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+}
+
+.pin-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+@mixin pin($top: auto, $right: $top, $bottom: $top,$left: $top) {
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+.select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@mixin aaa($abc, $value) {
+  -webkit-#{$abc}: $value;
+  -moz-#{$abc}: $value;
+  -ms-#{$abc}: $value;
+  #{$abc}: $value
+}
+
+.select-text {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+

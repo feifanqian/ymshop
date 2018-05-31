@@ -1,0 +1,12 @@
+@import "untils", "mixin";
+
+@import "sharednet";
+
+section {
+  img.title, img.cell {
+    @include sizeFitImg()
+  }
+  img.cell {
+    margin-bottom: 10px;
+  }
+}

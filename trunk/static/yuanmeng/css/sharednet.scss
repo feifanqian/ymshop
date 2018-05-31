@@ -1,0 +1,21 @@
+@import "untils", "mixin";
+
+#app {
+  img.header, img.title, img.cell {
+    @include sizeFitImg()
+  }
+  .entrance {
+    @extend .clearfix;
+    a {
+      display: block;
+      float: left;
+      margin-left: 25px;
+      margin-top: 20px;
+      img {
+        display: block;
+        @include size(280px, auto);
+      }
+    }
+  }
+
+}

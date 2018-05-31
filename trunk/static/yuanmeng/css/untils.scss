@@ -1,0 +1,75 @@
+/// reset
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* auto-break */
+section, p, div, h1, h2, h3, h4, h5, h6, .fix-break {
+  word-break: break-all;
+}
+
+html {
+  font-size: 24px;
+}
+
+a {
+  text-decoration: none;
+  &:link {
+    color: #000;
+  }
+  &:visited {
+    color: #000;
+  }
+}
+
+img {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+/////
+
+.hide {
+  display: none !important;
+}
+
+.no-break {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.clearfix {
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+}
+
+#app {
+  width: 640px;
+  margin: 0 auto;
+  box-shadow: 0 0 16px #eee;
+  padding-bottom: 20px;
+  min-height: 100vh;
+}
+
+/// p
+.introduce {
+  padding: 0 24px;
+  p.desc {
+    margin: 0;
+    padding: 0;
+    line-height: 170%;
+    text-indent: 2em;
+    color: #454545;
+    font-size: 24px;
+  }
+}
+

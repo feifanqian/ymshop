@@ -1,0 +1,18 @@
+@import "untils";
+@import "mixin";
+
+#app {
+  .title {
+    @include sizeFitImg()
+  }
+  .cell {
+    @include sizeFitImg()
+  }
+  #banner {
+    img {
+      width: 200px;
+      height: auto;
+    }
+  }
+}
+
