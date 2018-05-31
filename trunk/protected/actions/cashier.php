@@ -255,10 +255,7 @@ class CashierAction extends Controller
     public function cashier_sign_in()
     {
         $desk_no = Filter::str(Req::args('desk_no'));
-        if(!$desk_no) {
-            $this->code = 1251;
-            return;
-        }
+        
         $cashier = $this->model->table('cashier')->where("user_id=".$this->user['id']." and status=1")->find();
         if(!$cashier) {
             $this->code = 1250;
@@ -269,6 +266,10 @@ class CashierAction extends Controller
         $exist2 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_off_date='{$today}' and status=1")->find();
         if(!$exist1 && !$exist2) {
             $type = 1; //上班
+            if(!$desk_no) {
+                $this->code = 1251;
+                return;
+            }
             $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
             if($exist) {
                 $this->code = 1247;
