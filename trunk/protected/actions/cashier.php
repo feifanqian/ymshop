@@ -206,7 +206,7 @@ class CashierAction extends Controller
     	}
     	$date = Filter::str(Req::args('date'));
         $start_time = $date.' 00:00:00';
-        $end_time = $data.' 23:59:59';
+        $end_time = $date.' 23:59:59';
     	if($date) {
     		$where = "o.desk_id={$id} and o.pay_status=1 and o.pay_time between '{$start_time}' and '{$end_time}'";
             // var_dump($datetime);die;
