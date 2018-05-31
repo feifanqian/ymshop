@@ -343,10 +343,10 @@ class CashierAction extends Controller
                     $log[$k]['work_hours'] = ($hours-floor($hours))>=0.5?floor($hours)+0.5:floor($hours);
                 }
                 if($v['work_off_date']==null) {
-                    $v['work_off_date'] = '';
+                    $log[$k]['work_off_date'] = '';
                 }
                 if($v['work_off_time']==null) {
-                    $v['work_off_time'] = '';
+                    $log[$k]['work_off_time'] = '';
                 }   
             }
         }
