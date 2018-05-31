@@ -205,9 +205,10 @@ class CashierAction extends Controller
             return;
     	}
     	$date = Filter::str(Req::args('date'));
-        $datetime = strtotime($date);
+        $start_time = $date.' 00:00:00';
+        $end_time = $data.' 23:59:59';
     	if($date) {
-    		$where = "o.desk_id={$id} and o.pay_status=1 and DATE_FORMAT(UNIX_TIMESTAMP(o.pay_time),'%Y-%m-%d') > DATE_FORMAT({$datetime},'%Y-%m-%d')";
+    		$where = "o.desk_id={$id} and o.pay_status=1 and o.pay_time between '{$start_time}' and '{$end_time}'";
             // var_dump($datetime);die;
     	} else {
             $where = "o.desk_id={$id} and o.pay_status=1";
