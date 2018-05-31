@@ -236,6 +236,7 @@ class V1Controller extends Controller {
         "cashier_income_remark"=>array("cashier/cashier_income_remark",1,1), //收银台收款记录添加备注
         "cashier_qrcode_url"=>array("cashier/cashier_qrcode_url",1,1), //收银员收款二维码扫码跳转地址
         "cashier_ready_sign"=>array("cashier/cashier_ready_sign",1,1), //查看收银员打卡状态
+        "cashier_my_income_log"=>array("cashier/cashier_my_income_log",1,1), // 收银员我的收款记录
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息

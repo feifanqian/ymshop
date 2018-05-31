@@ -430,5 +430,27 @@ class CashierAction extends Controller
         $this->content['off_duty'] = empty($log)?0:($log['work_off_time']==''?0:1);
         $this->content['off_duty_time'] = empty($log)?'':($log['work_off_time']==''?'':$log['work_off_time']);
     }
+
+    //收银员我的收款记录
+    public function cashier_my_income_log() {
+        $cashier = $this->model->table('cashier')->where('user_id='.$this->user['id'].' and status=1')->find();
+        if(!$cashier) {
+            $this->code = 1250;
+            return;
+        }
+        $id = $cashier['id'];
+        $date = Filter::str(Req::args('date'));
+        $start_time = $date.' 00:00:00';
+        $end_time = $date.' 23:59:59';
+        if($date) {
+            $where = "cashier_id={$id} and pay_status=1 and pay_time between '{$start_time}' and '{$end_time}'";
+        } else {
+            $where = "cashier_id={$id} and pay_status=1";
+        }
+        $list = $this->model->table('order_offline')->fields("pay_time as pay_date,payable_amount, case dayofweek(pay_time)  when 1 then '星期日' when 2 then '星期一' when 3 then '星期二' when 4 then '星期三' when 5 then '星期四' when 6 then '星期五' when 7 then '星期六' end as  weekday")->where($where)->order('pay_time desc')->findAll();
+
+        $this->code = 0;
+        $this->content = $list;
+    }
 }
 ?>
