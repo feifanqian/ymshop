@@ -289,7 +289,7 @@ class UcenterAction extends Controller {
         //验证情况标识
         $pass = $this->sms_verify($code, $mobile, $zone);
         if ($pass) {
-            $user = $this->model->query("select user_id from tiny_customer where mobile = $mobile");
+            $user = $this->model->query("select user_id from tiny_customer where mobile = $mobile and status=1");
             if (!$user) {
                 $this->code = 1030;
                 return;
