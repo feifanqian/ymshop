@@ -832,14 +832,20 @@ class Common {
          $inviter_info = $model->table("invite")->where("invite_user_id=".$order['user_id'])->find();
          if($inviter_info){
                 $income1 = round($order['order_amount']*$goods['inviter_rate']/100,2);
-             Log::incomeLog($income1, 1, $inviter_info['user_id'], $order['id'], 0,"下级消费分成(上级邀请者)");
+                if($income1>0) {
+                   Log::incomeLog($income1, 1, $inviter_info['user_id'], $order['id'], 0,"下级消费分成(上级邀请者)"); 
+                }
              $first_promoter_user_id = self::getFirstPromoter($inviter_info['user_id']);
              if($first_promoter_user_id){
                 $income2 = round($order['order_amount']*$goods['promoter_rate']/100,2);
-                Log::incomeLog($income2, 2, $first_promoter_user_id, $order['id'], 0,"下级消费分成(上级第一个代理商)");
+                if($income2>0) {
+                    Log::incomeLog($income2, 2, $first_promoter_user_id, $order['id'], 0,"下级消费分成(上级第一个代理商)");
+                }
              }
              $income3 = round($order['order_amount']*$goods['districter_rate']/100,2);
-             Log::incomeLog($income3, 3, $inviter_info['district_id'], $order['id'], 0,"下级消费分成(所属专区)");
+             if($income3>0) {
+                Log::incomeLog($income3, 3, $inviter_info['district_id'], $order['id'], 0,"下级消费分成(所属专区)");
+             } 
          }else{
              return false;
          }

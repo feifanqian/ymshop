@@ -232,8 +232,8 @@ class Order {
             }
              */
             if($order['type']==0){
-                Common::setIncomeByInviteShip($order);
-                // Common::setIncomeByInviteShipEachGoods($order);
+                // Common::setIncomeByInviteShip($order);
+                Common::setIncomeByInviteShipEachGoods($order);
                 if($order['qr_flag']==""){
                     $goods_ids_info = array_column($order_goods_info, "goods_id");
                     Common::autoCreatePersonalShop($order['user_id'], $goods_ids_info);//购买指定商品即可开通店铺权限
