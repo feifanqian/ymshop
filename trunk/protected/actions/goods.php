@@ -118,9 +118,7 @@ class GoodsAction extends Controller {
         $resp = $c->execute($req);
 
         $resp = Common::objectToArray($resp);
-        if(isset($resp['results']['tbk_coupon'])) {
-            $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
-        }
+        
         // $cache = CacheFactory::getInstance();
         // $tbk_coupon = $cache->get("_TbkCoupon");
         // if ($cache->get("_TbkCoupon") === null) {
@@ -147,6 +145,9 @@ class GoodsAction extends Controller {
                     array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_DESC,$resp['results']['tbk_coupon']);
                     break;        
             }
+        }
+        if(isset($resp['results']['tbk_coupon'])) {
+            $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
         }
         $this->code = 0;
         $this->content = $resp;
