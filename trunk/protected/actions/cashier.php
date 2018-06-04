@@ -269,7 +269,7 @@ class CashierAction extends Controller
         $exist1 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->order('id desc')->find();
         // $exist2 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_off_date='{$today}' and status=1")->order('id desc')->findAll();
         if(!$exist1 ) {
-            $type = 1; //上班
+            // $type = 1; //上班
             if(!$desk_no) {
                 $this->code = 1251;
                 return;
@@ -296,9 +296,10 @@ class CashierAction extends Controller
             );
             $res = $this->model->table('cashier_attendance')->data($data)->insert();
             $sign_time = $data['work_on_time'];
+            $type = 'on';
         } else {
             if($exist1['work_off_date']=='') {
-                $type = 2; //下班
+                // $type = 2; //下班
                 // $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_off_date='{$today}' and status=1")->find();
                 // if($exist) {
                 //     $this->code = 1247;
@@ -310,6 +311,7 @@ class CashierAction extends Controller
                 );
                 $res = $this->model->table('cashier_attendance')->data($data)->where('id='.$exist1['id'])->update();
                 $sign_time = $data['work_off_time'];
+                $type = 'off';
             } else { // 第n次上班
                 $data = array(
                 'cashier_id'=>$exist1['id'],
@@ -323,6 +325,7 @@ class CashierAction extends Controller
                 );
                 $res = $this->model->table('cashier_attendance')->data($data)->insert();
                 $sign_time = $data['work_on_time'];
+                $type = 'on';
             }
             
         }
@@ -330,6 +333,7 @@ class CashierAction extends Controller
         if($res) {
             $this->code = 0;
             $this->content['sign_time'] = $sign_time;
+            $this->content['on'] = $type;
             return;
         } else {
             $this->code = 1241;
