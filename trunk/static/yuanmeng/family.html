@@ -77,10 +77,10 @@
     <!--董事团队-->
     <img src="img/family/title_06.jpg" alt="" class="cell">
     <!--<div class="introduce">-->
-        <!--<p class="desc">-->
-            <!--当今世界新一轮科技和创业革命，分享经济正在蓬勃发展，互联网金融已经成为中国经济发展必经之路，互联网金融时代的到来，也给众筹众创带来了非常好的发展空间，股权分拆激励制度改变了以往创业投资观念,每一个创业者都有圆梦的可能，让所有参与者都变成所有者。同时，随着互联网及移动终端的快速发展和普及，李克强总理提出的“互联网+”行动计划，以大数据与云计算，互联网等新技术相结合，互联网+逐渐渗透到生活的方方面面，而股权激励机制将彻底改变人类生活方式。</p>-->
-        <!--<p class="desc">-->
-            <!--圆梦集团拥有一批大梦想、大创造、大影响力的团队，互助、共创、激励的团队氛围形成了圆梦集团“大爱、梦想、共赢”的企业文化，圆梦集团在全国各地如雨后春笋般成立子公司，设立地区运营中心，形成圆梦有爱大家庭——有梦，追梦，一起圆梦。</p>-->
+    <!--<p class="desc">-->
+    <!--当今世界新一轮科技和创业革命，分享经济正在蓬勃发展，互联网金融已经成为中国经济发展必经之路，互联网金融时代的到来，也给众筹众创带来了非常好的发展空间，股权分拆激励制度改变了以往创业投资观念,每一个创业者都有圆梦的可能，让所有参与者都变成所有者。同时，随着互联网及移动终端的快速发展和普及，李克强总理提出的“互联网+”行动计划，以大数据与云计算，互联网等新技术相结合，互联网+逐渐渗透到生活的方方面面，而股权激励机制将彻底改变人类生活方式。</p>-->
+    <!--<p class="desc">-->
+    <!--圆梦集团拥有一批大梦想、大创造、大影响力的团队，互助、共创、激励的团队氛围形成了圆梦集团“大爱、梦想、共赢”的企业文化，圆梦集团在全国各地如雨后春笋般成立子公司，设立地区运营中心，形成圆梦有爱大家庭——有梦，追梦，一起圆梦。</p>-->
     <!--</div>-->
     <!--<br>-->
     <img src="img/family/3.jpg" alt="" class="cell">
@@ -91,38 +91,12 @@
 <script src="js/main.js"></script>
 <script>
 
-    //  创始人
-    new Swiper('#chaung', {
-        autoplay: true,
-        slidesPerView: 3,
-        spaceBetween: 0,
-        slidesOffsetAfter: 30,
-        slidesOffsetBefore: 30
-    })
-
-    new Swiper('#dong', {
-        autoplay: true,
-        slidesPerView: 3,
-        spaceBetween: 0,
-        slidesOffsetAfter: 0,
-        slidesOffsetBefore: 0
-    })
-
-    new Swiper('#yunying', {
-        autoplay: true,
-        slidesPerView: 3,
-        spaceBetween: 0,
-        slidesOffsetAfter: 0,
-        slidesOffsetBefore: 0
-    })
-
-    new Swiper('#hehuoren', {
-        autoplay: true,
-        slidesPerView: 3,
-        spaceBetween: 20,
-        slidesOffsetAfter: 0,
-        slidesOffsetBefore: 0
-    })
+    window.onload = function () {
+        initSwiper('#chaung', 3, 0, 30);
+        initSwiper('#dong', 3, 0, 0);
+        initSwiper('#yunying', 3, 0, 0);
+        initSwiper('#hehuoren', 3, 20, 0);
+    }
 
 </script>
 </html>

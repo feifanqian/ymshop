@@ -1,3 +1,5 @@
+;
+
 /*解决某些低端Android手机缩放失真*/
 var fixScreen = function () {
     var metaEl = doc.querySelector('meta[name="viewport"]'),
@@ -22,4 +24,22 @@ var fixScreen = function () {
             metaEl.content += ',initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale;
         }
     }
+}
+
+/**
+ * 初始化轮播
+ * @param el 操作对象
+ * @param slidesPerView 默认显示几个item
+ * @param spaceBetween item之间间距
+ * @param slidesOffset 轮播整体两边的边距
+ * @return {Swiper} Swiper对象
+ */
+function initSwiper(el, slidesPerView, spaceBetween, slidesOffset) {
+    return new Swiper(el, {
+        autoplay: true,
+        slidesPerView: slidesPerView,
+        spaceBetween: spaceBetween,
+        slidesOffsetAfter: slidesOffset,
+        slidesOffsetBefore: slidesOffset
+    })
 }

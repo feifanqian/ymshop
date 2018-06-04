@@ -1,5 +1,7 @@
 @import "untils", "mixin";
 
+$main-color: #f1f2f6;
+
 #app {
   padding: 0;
 }
@@ -9,7 +11,7 @@ img.title, img.cell {
 }
 
 .banner {
-  background: #f1f2f6;
+  background: $main-color;
   .swiper-container {
     margin: 0 30px;
   }
@@ -18,15 +20,13 @@ img.title, img.cell {
 #chaung {
   margin: 0 12px 56px;
   .swiper-slide {
-    position: relative;
     transform: skewX(-10deg);
     box-shadow: 0 0 1px #a3a3a3;
     overflow: hidden;
-    background: #f1f2f6;
+    background: $main-color;
     img {
-      display: block;
       transform: skewX(10deg);
-      @include size(190px, auto)
+      @include sizeFitImg(190px)
     }
   }
 }
