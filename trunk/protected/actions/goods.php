@@ -129,8 +129,7 @@ class GoodsAction extends Controller {
         // $resp['results']['tbk_coupon'] = $tbk_coupon;
         if($resp['results']['tbk_coupon']) {
             foreach ($resp['results']['tbk_coupon'] as $k => $v) {
-                // $resp['results']['tbk_coupon'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
-                $resp['results']['tbk_coupon'][$k]['decrease_price'] = $v['coupon_info'];
+                $resp['results']['tbk_coupon'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
             }
         }
         $this->code = 0;
@@ -324,6 +323,9 @@ class GoodsAction extends Controller {
         $b = mb_strpos($str,$begin) + mb_strlen($begin);
         $e = mb_strpos($str,$end) - $b;
 
-        return mb_substr($str,$b,$e);
+        // return mb_substr($str,$b,$e);
+        $t1 = mb_strpos($str,$begin);
+        $t2 = mb_strpos($str,$end);
+        return mb_substr($str,$t1,$t2-$t1);
     }
 }
