@@ -266,19 +266,19 @@ class CashierAction extends Controller
             return;
         }
         $today = date('Y-m-d');
-        $exist1 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
-        $exist2 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_off_date='{$today}' and status=1")->find();
-        if(!$exist1 && !$exist2) {
+        $exist1 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->order('id desc')->find();
+        // $exist2 = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_off_date='{$today}' and status=1")->order('id desc')->findAll();
+        if(!$exist1 ) {
             $type = 1; //上班
             if(!$desk_no) {
                 $this->code = 1251;
                 return;
             }
-            $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
-            if($exist) {
-                $this->code = 1247;
-                return;
-            }
+            // $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_on_date='{$today}' and status=1")->find();
+            // if($exist) {
+            //     $this->code = 1247;
+            //     return;
+            // }
             $desk = $this->model->table('cashier_desk')->fields('id')->where("hire_user_id=".$cashier['hire_user_id']." and desk_no=".$desk_no)->find();
             if(!$desk) {
                 $this->code = 1252;
@@ -296,22 +296,35 @@ class CashierAction extends Controller
             );
             $res = $this->model->table('cashier_attendance')->data($data)->insert();
             $sign_time = $data['work_on_time'];
-        } elseif($exist1 && empty($exist2)) {
-            $type = 2; //下班
-            $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_off_date='{$today}' and status=1")->find();
-            if($exist) {
-                $this->code = 1247;
-                return;
-            }
-            $data = array(
-            'work_off_date'=>date('Y-m-d'),
-            'work_off_time'=>date('H:i:s'),
-            );
-            $res = $this->model->table('cashier_attendance')->data($data)->where('id='.$exist1['id'])->update();
-            $sign_time = $data['work_off_time'];
         } else {
-            $this->code = 1247;
-            return;
+            if($exist1['work_off_date']=='') {
+                $type = 2; //下班
+                // $exist = $this->model->table('cashier_attendance')->where("user_id=".$this->user['id']." and work_off_date='{$today}' and status=1")->find();
+                // if($exist) {
+                //     $this->code = 1247;
+                //     return;
+                // }
+                $data = array(
+                'work_off_date'=>date('Y-m-d'),
+                'work_off_time'=>date('H:i:s'),
+                );
+                $res = $this->model->table('cashier_attendance')->data($data)->where('id='.$exist1['id'])->update();
+                $sign_time = $data['work_off_time'];
+            } else { // 第n次上班
+                $data = array(
+                'cashier_id'=>$exist1['id'],
+                'user_id'=>$this->user['id'],
+                'hire_user_id'=>$exist1['hire_user_id'],
+                'desk_no'=>$exist1['desk_no'],
+                'desk_id'=>$exist1['desk_id'],
+                'work_on_date'=>date('Y-m-d'),
+                'work_on_time'=>date('H:i:s'),
+                'status'=>1
+                );
+                $res = $this->model->table('cashier_attendance')->data($data)->insert();
+                $sign_time = $data['work_on_time'];
+            }
+            
         }
         
         if($res) {
