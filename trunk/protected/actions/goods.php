@@ -323,6 +323,6 @@ class GoodsAction extends Controller {
         $t1 = mb_strpos($str,$begin);
         $t2 = mb_strpos($str,$end);
         $ret = mb_substr($str,$t1,$t2-$t1);
-        return $ret;
+        return substr($ret,1);
     }
 }
