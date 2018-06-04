@@ -127,14 +127,11 @@ class GoodsAction extends Controller {
         //     $cache->set("_TbkCoupon", $items, 60*60);
         // }
         // $resp['results']['tbk_coupon'] = $tbk_coupon;
-        // if($resp['results']['tbk_coupon']) {
-        //     foreach ($resp['results']['tbk_coupon'] as $key => $value) {
-        //         // $price = $value['coupon_info'];
-        //         // $b= strpos($price,"减");
-        //         // $c= strpos($price,"元");
-        //         $resp['results']['tbk_coupon'][$key]['decrease_price'] = substr($value['coupon_info'],4,5);
-        //     }
-        // }
+        if($resp['results']['tbk_coupon']) {
+            foreach ($resp['results']['tbk_coupon'] as $k => $v) {
+                $resp['results']['tbk_coupon'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
+            }
+        }
         $this->code = 0;
         $this->content = $resp;
     }
@@ -320,5 +317,12 @@ class GoodsAction extends Controller {
         $resp = $c->execute($req);
         $this->code = 0;
         $this->content = $resp;
+    }
+
+    public function cut($begin,$end,$str){
+        $b = mb_strpos($str,$begin) + mb_strlen($begin);
+        $e = mb_strpos($str,$end) - $b;
+
+        return mb_substr($str,$b,$e);
     }
 }
