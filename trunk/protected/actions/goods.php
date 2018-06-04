@@ -121,6 +121,20 @@ class GoodsAction extends Controller {
             $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
         }
         
+        $tbk_coupon = $cache->get("_TbkCoupon");
+        if ($cache->get("_TbkCoupon") === null) {
+            $tbk_coupon = $$resp['results']['tbk_coupon'];
+            $cache->set("_TbkCoupon", $items, 60*60);
+        }
+        $resp['results']['tbk_coupon'] = $tbk_coupon;
+        if($resp['results']['tbk_coupon']) {
+            foreach ($resp['results']['tbk_coupon'] as $key => $value) {
+                $price = $value['coupon_info'];
+                $start = '减';
+                $end = '元';
+                $resp['results']['tbk_coupon'][$key]['decrease_price'] = substr($price, strlen($start)+strpos($price, $start),(strlen($price) - strpos($price, $end))*(-1));
+            }
+        }
         $this->code = 0;
         $this->content = $resp;
     }
