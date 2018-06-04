@@ -120,7 +120,7 @@ class GoodsAction extends Controller {
         if(isset($resp['results']['tbk_coupon'])) {
             $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
         }
-        
+        $cache = CacheFactory::getInstance();
         $tbk_coupon = $cache->get("_TbkCoupon");
         if ($cache->get("_TbkCoupon") === null) {
             $tbk_coupon = $$resp['results']['tbk_coupon'];
