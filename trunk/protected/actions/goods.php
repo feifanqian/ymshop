@@ -82,6 +82,7 @@ class GoodsAction extends Controller {
         $page = Filter::int(Req::args("page"));
         $form = Filter::str(Req::args("form"));
         $type = Filter::int(Req::args("type"));
+        $sort = Filter::str(Req::args("sort"));
         // if(!$page) {
         //     $page = 1;
         // }
@@ -131,6 +132,20 @@ class GoodsAction extends Controller {
             foreach ($resp['results']['tbk_coupon'] as $k => $v) {
                 $resp['results']['tbk_coupon'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
                 $resp['results']['tbk_coupon'][$k]['final_price'] = $v['zk_final_price'] - $resp['results']['tbk_coupon'][$k]['decrease_price'];
+            }
+            switch ($sort) {
+                case 'price_asc': 
+                    array_multisort(array_column($resp['results']['tbk_coupon'],'final_price'),SORT_ASC,$resp['results']['tbk_coupon']);
+                    break;
+                case 'price_desc':
+                    array_multisort(array_column($resp['results']['tbk_coupon'],'final_price'),SORT_DESC,$resp['results']['tbk_coupon']);
+                    break;
+                case 'volume_asc':
+                    array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_ASC,$resp['results']['tbk_coupon']);
+                    break;
+                case 'volume_desc':
+                    array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_DESC,$resp['results']['tbk_coupon']);
+                    break;        
             }
         }
         $this->code = 0;
