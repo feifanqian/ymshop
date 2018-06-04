@@ -320,11 +320,7 @@ class GoodsAction extends Controller {
     }
 
     public function cut($begin,$end,$str){
-        $b = mb_strpos($str,$begin) + mb_strlen($begin);
-        $e = mb_strpos($str,$end) - $b;
-
-        // return mb_substr($str,$b,$e);
-        $t1 = mb_strpos($str,$begin);
+        $t1 = mb_strpos($str,$begin)+1;
         $t2 = mb_strpos($str,$end);
         return mb_substr($str,$t1,$t2-$t1);
     }
