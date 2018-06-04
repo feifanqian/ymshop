@@ -130,9 +130,9 @@ class GoodsAction extends Controller {
         if($resp['results']['tbk_coupon']) {
             foreach ($resp['results']['tbk_coupon'] as $key => $value) {
                 $price = $value['coupon_info'];
-                $start = '减';
-                $end = '元';
-                $resp['results']['tbk_coupon'][$key]['decrease_price'] = substr($price, strlen($start)+strpos($price, $start),(strlen($price) - strpos($price, $end))*(-1));
+                $b= (strpos($price,"减"));
+                $c= (strpos($price,"元"));
+                $resp['results']['tbk_coupon'][$key]['decrease_price'] = substr($price,$b+1,$c-1);
             }
         }
         $this->code = 0;
