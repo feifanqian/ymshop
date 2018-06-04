@@ -314,7 +314,7 @@ class CashierAction extends Controller
                 $type = 'off';
             } else { // 第n次上班
                 $data = array(
-                'cashier_id'=>$exist1['id'],
+                'cashier_id'=>$exist1['cashier_id'],
                 'user_id'=>$this->user['id'],
                 'hire_user_id'=>$exist1['hire_user_id'],
                 'desk_no'=>$exist1['desk_no'],
