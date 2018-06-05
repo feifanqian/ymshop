@@ -570,7 +570,7 @@ class IndexAction extends Controller {
     }
 
     public function announcement() {
-        $notice=Session::get('notice');
+        $notice=Session::get('notice')==null?0:Session::get('notice');
         Session::clear('notice');
         $index_notice = $this->model->table('index_notice')->where('id=1')->find();
         $this->code = 0;
