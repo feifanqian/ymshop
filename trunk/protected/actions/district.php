@@ -342,5 +342,37 @@ class DistrictAction extends Controller {
         $idstr = Common::getAllChildShops($user_id);
         $this->code = 0;
         $this->content = $idstr;
-    }      
+    } 
+
+    public function sendActiveCode() {
+        $mobile = Filter::str(Req::args('mobile'));
+        $num = Filter::int(Req::args('num'));
+        if($num>20) {
+            $this->code = 0;
+            return;
+        }
+        $exist = $this->model->table('customer')->fields('user_id')->where('mobile='.$mobile)->find();
+        if(!$exist) {
+            $this->code = 1257;
+            return;
+        }
+        $is_shop = $this->model->table('district_shop')->where('owner_id='.$exist['user_id'])->find();
+        if(!$is_shop) {
+            $this->code = 1258;
+            return;
+        }
+        $myself = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
+        if($myself['code_num']<$num) {
+            $this->code = 1259;
+            return;
+        }
+        $num1 = $myself['code_num'] - $num;
+        $num2 = $is_shop['code_num'] + $num;
+        $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->data(['code_num'=>$num1])->update();
+        $this->model->table('district_shop')->where('owner_id='.$exist['user_id'])->data(['code_num'=>$num2])->update();
+
+        $this->code = 0;
+        $this->content['myself_code_num'] = $num1;
+        $this->content['her_code_num'] = $num2;
+    }     
 }

@@ -172,6 +172,7 @@ class V1Controller extends Controller {
         "make_promoter_code"=>array("district/makePromoterCode",1,1), //生成激活码
         "promoter_code_list"=>array("district/promoterCodeList",1,1), //激活码列表
         "input_code"=>array("district/inputCode",1,1), //激活码输入
+        "send_active_code"=>array("district/sendActiveCode",1,1), //经销商互赠激活码数量
         //提现
         "get_withdraw_set"=>array("index/getWithdrawSet",0,1),//提现设置
         "get_merchant_balance"=>array("ucenter/getMerchantBalance",1,1),//商家余额提现
