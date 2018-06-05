@@ -442,7 +442,7 @@ class CashierAction extends Controller
         }
         
         $today = date('Y-m-d');
-        $log = $this->model->table('cashier_attendance')->fields('work_on_date,work_off_date,work_on_time,work_off_time')->where("user_id=".$this->user['id']." and work_on_date ='{$today}'")->order('create_time desc')->find();
+        $log = $this->model->table('cashier_attendance')->fields('work_on_date,work_off_date,work_on_time,work_off_time')->where("user_id=".$this->user['id']." and work_on_date ='{$today}'")->order('id desc')->find();
         $this->code = 0;
         $this->content['shop_name'] = $shop_name;
         $this->content['cashier_name'] = $cashier['name']==null?'':$cashier['name'];
