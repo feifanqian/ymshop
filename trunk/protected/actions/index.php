@@ -568,4 +568,13 @@ class IndexAction extends Controller {
             return $result;
         }
     }
+
+    public function announcement() {
+        $notice=Session::get('notice');
+        Session::clear('notice');
+        $index_notice = $this->model->table('index_notice')->where('id=1')->find();
+        $this->code = 0;
+        $this->content['status'] = $notice;
+        $this->content['index_notice'] = $index_notice;
+    }
 }
