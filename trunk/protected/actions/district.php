@@ -347,10 +347,10 @@ class DistrictAction extends Controller {
     public function sendActiveCode() {
         $mobile = Filter::str(Req::args('mobile'));
         $num = Filter::int(Req::args('num'));
-        if($num>20) {
-            $this->code = 0;
-            return;
-        }
+        // if($num>20) {
+        //     $this->code = 0;
+        //     return;
+        // }
         $exist = $this->model->table('customer')->fields('user_id')->where('mobile='.$mobile)->find();
         if(!$exist) {
             $this->code = 1257;
