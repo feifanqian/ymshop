@@ -3013,6 +3013,7 @@ class UcenterAction extends Controller {
         $result = $this->model->table('customer')->where('user_id=' . $this->user['id'])->fields('pay_password_open,pay_password,pay_validcode')->find();
         if ($result['pay_password'] == CHash::md5($pay_password, $result['pay_validcode'])) {
             $this->code = 0;
+            $this->content = 'success';
             return;
         } else {
             $this->code = 1060;
