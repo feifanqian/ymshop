@@ -831,20 +831,44 @@ class Common {
 
          $inviter_info = $model->table("invite")->where("invite_user_id=".$order['user_id'])->find();
          if($inviter_info){
-                $income1 = round($order['order_amount']*$goods['inviter_rate']/100,2);
-                if($income1>0) {
-                   Log::incomeLog($income1, 1, $inviter_info['user_id'], $order['id'], 0,"下级消费分成(上级邀请者)"); 
-                }
+                $base_balance = round($order['order_amount']*$goods['inviter_rate']/100,2);
+                $config = Config::getInstance()->get("district_set");
+                
+                $balance1 = round($base_balance*$config['promoter_rate']/100,2);
+                $balance2 = round($base_balance*$config['district_rate']/100,2);
+                $balance3 = round($base_balance*$config['promoter2_rate']/100,2);
+                $balance4 = round($base_balance*$config['plat_rate']/100,2);
+
+                $district = $model->table('district_shop')->fields('owner_id')->where('id='.$inviter_info['district_id'])->find();
+                 if($district) {
+                    $district_id = $district['owner_id'];
+                 }
+
+             if($balance1>0) {
+                   // Log::incomeLog($balance1, 1, $inviter_info['user_id'], $order['id'], 0,"下级消费分成(上级邀请者)");
+                   $model->table('customer')->where('user_id='.$inviter_info['user_id'])->data(array("balance"=>"`balance`+({$balance1})"))->update();
+                   Log::balance($balance1, $inviter_info['user_id'], $order['order_no'],'下级消费分成(上级邀请者)', 5); 
+             }
              $first_promoter_user_id = self::getFirstPromoter($inviter_info['user_id']);
-             if($first_promoter_user_id){
-                $income2 = round($order['order_amount']*$goods['promoter_rate']/100,2);
-                if($income2>0) {
-                    Log::incomeLog($income2, 2, $first_promoter_user_id, $order['id'], 0,"下级消费分成(上级第一个代理商)");
+             if($first_promoter_user_id){   
+                if($balance2>0) {
+                    // Log::incomeLog($balance2, 2, $first_promoter_user_id, $order['id'], 0,"下级消费分成(上级第一个代理商)");
+                    $model->table('customer')->where('user_id='.$first_promoter_user_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();
+                    Log::balance($balance2, $first_promoter_user_id, $order['order_no'],'下级消费分成(上级第一个代理商)', 5);
                 }
              }
-             $income3 = round($order['order_amount']*$goods['districter_rate']/100,2);
-             if($income3>0) {
-                Log::incomeLog($income3, 3, $inviter_info['district_id'], $order['id'], 0,"下级消费分成(所属专区)");
+             
+             if($balance3>0) {
+                // Log::incomeLog($balance3, 3, $inviter_info['district_id'], $order['id'], 0,"下级消费分成(所属专区)");
+                if($district_id) {
+                    $model->table('customer')->where('user_id='.$district_id)->data(array("balance"=>"`balance`+({$balance3})"))->update();
+                    Log::balance($balance3, $district_id, $order['order_no'],'下级消费分成(所属专区)', 5);
+                }
+             }
+
+             if($balance4>0) {
+                $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance4})"))->update();
+                Log::balance($balance4, 1, $order['order_no'],'下级消费分成(平台)', 5);
              } 
          }else{
              return false;
