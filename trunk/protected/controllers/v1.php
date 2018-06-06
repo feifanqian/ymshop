@@ -135,6 +135,7 @@ class V1Controller extends Controller {
         'offline_balance_withdraw' => array("ucenter/offline_balance_withdraw", 1,1),
         "name_verified" =>array("ucenter/name_verified",1,1),
         "get_rongyun_token"=>array("ucenter/get_rongyun_token",1,1),
+        "pay_pwd_valid"=>array("ucenter/payPwdValid",1,1),
         //淘宝客
         "tbk_item_get"=>array("goods/tbk_item_get",0,1),
         "tbk_item_coupon_get"=>array("goods/tbk_item_coupon_get",0,1),

@@ -3003,4 +3003,20 @@ class UcenterAction extends Controller {
         $this->code = 0;
         $this->content = $exist?1:0; 
     }
+
+    public function payPwdValid() {
+        $pay_password = Filter::str(Req::args('pay_password'));
+        if(!$pay_password) {
+            $this->code = 1260;
+            return;
+        }
+        $result = $this->model->table('customer')->where('user_id=' . $this->user['id'])->fields('pay_password_open,pay_password,pay_validcode')->find();
+        if ($result['pay_password'] == CHash::md5($pay_password, $result['pay_validcode'])) {
+            $this->code = 0;
+            return;
+        } else {
+            $this->code = 1060;
+            return;
+        }
+    }
 }
