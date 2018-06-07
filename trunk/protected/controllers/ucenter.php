@@ -1112,6 +1112,56 @@ class UcenterController extends Controller
             ->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")
             ->where("i.user_id = " . $this->user['id'])
             ->findPage($page, 10);
+        if($invite) {
+            if($invite['data']!=null) {
+                foreach ($invite['data'] as $k => $v) {
+                    switch ($v['from']) {
+                        case 'second-wap':
+                            $invite['data'][$k]['from'] = '微信公众号支付';
+                            break;
+                        case 'alipay':
+                            $invite['data'][$k]['from'] = '支付宝支付';
+                            break;
+                        case 'wechat':
+                            $invite['data'][$k]['from'] = '邀请二维码';
+                            break;
+                        case 'android_weixin':
+                            $invite['data'][$k]['from'] = 'APP微信支付';
+                            break;
+                        case 'android_alipay':
+                            $invite['data'][$k]['from'] = 'APP支付宝支付';
+                            break;
+                        case 'ios_weixin':
+                            $invite['data'][$k]['from'] = 'APP微信支付';
+                            break;
+                        case 'ios_alipay':
+                            $invite['data'][$k]['from'] = 'APP支付宝支付';
+                            break;
+                        case 'admin':
+                            $invite['data'][$k]['from'] = '系统平台';
+                            break;
+                        case 'jihuo':
+                            $invite['data'][$k]['from'] = '激活码';
+                            break;
+                        case 'wap':
+                            $invite['data'][$k]['from'] = 'PC端扫码';
+                            break;                                
+                        default:
+                            $invite['data'][$k]['from'] = '微信支付';
+                            break;
+                    }
+                    $shop = $this->model->table('district_shop')->where('owner_id='.$v['invite_user_id'])->find();
+                    $promoter = $this->model->table('district_promoter')->where('user_id='.$v['invite_user_id'])->find();
+                    if($shop && $promoter){
+                        $invite['data'][$k]['role_type'] = '经销商';
+                    }elseif(!$shop && $promoter){
+                        $invite['data'][$k]['role_type'] = '代理商';
+                    }else{
+                        $invite['data'][$k]['role_type'] = '普通会员';
+                    }
+                }
+            }
+        }    
         $this->assign("invite", $invite);
         $this->assign('uid', $this->user['id']);
         $this->assign("seo_title", "我的邀请");
