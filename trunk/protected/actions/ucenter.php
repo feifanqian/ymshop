@@ -2071,7 +2071,7 @@ class UcenterAction extends Controller {
         
         $record = $this->model->table('invite as do')
                 ->join('left join user as u on do.invite_user_id = u.id')
-                ->fields('u.id,u.avatar,u.nickname,do.createtime,do.from')
+                ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
                 ->where("do.user_id=".$this->user['id'])
                 ->order("do.id desc")
                 ->findPage($page, 10);        
