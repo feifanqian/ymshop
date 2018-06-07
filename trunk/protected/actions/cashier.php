@@ -359,7 +359,8 @@ class CashierAction extends Controller
         if($log) {
             foreach ($log as $k => $v) {
                 if($v['work_off_time']=='') {
-                    $log[$k]['work_hours'] = 8;
+                    $hours = (strtotime('23:59:00')-strtotime($v['work_on_time']))/3600;
+                    $log[$k]['work_hours'] = ($hours-floor($hours))>=0.5?floor($hours)+0.5:floor($hours);
                 } else {
                     $hours = (strtotime($v['work_off_date'].' '.$v['work_off_time'])-strtotime($v['work_on_date'].' '.$v['work_on_time']))/3600;
                     $log[$k]['work_hours'] = ($hours-floor($hours))>=0.5?floor($hours)+0.5:floor($hours);
