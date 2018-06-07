@@ -946,7 +946,7 @@ class MarketingController extends Controller {
         $content = Req::args('content');
         $is_disply = Req::args('is_disply');
         $model = new Model('index_notice');
-        $model->data(array('title'=>$title,'content'=>$content,'is_disply'=>$is_disply))->where('id=1')->update();
+        $model->data(array('title'=>$title,'content'=>$content,'is_disply'=>$is_disply,'date'=>date('Y-m-d H:i:s')))->where('id=1')->update();
         $this->redirect('index_notice');
     }
     //优惠券
