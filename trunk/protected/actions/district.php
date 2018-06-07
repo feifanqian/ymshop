@@ -386,7 +386,7 @@ class DistrictAction extends Controller {
         $num = 0;
         $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
         $idstr = Common::getAllChildShops($user_id);
-        $now_user_id = $idstr==''?$shop['id']:$shop['id'].','.$idstr;
+        $now_user_id = $idstr['shop_ids']==''?$shop['id']:$shop['id'].','.$idstr['shop_ids'];
         $inviter_info = $model->table("district_promoter")->fields('id,user_id')->where("hirer_id in (".$now_user_id.")")->findAll();
         $ids = array();
         if($inviter_info) {
