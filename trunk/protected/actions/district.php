@@ -374,5 +374,23 @@ class DistrictAction extends Controller {
         $this->code = 0;
         $this->content['myself_code_num'] = $num1;
         $this->content['her_code_num'] = $num2;
+    }
+
+    public function getAllChildPromotersIds()
+    {
+        $user_id = Filter::int(Req::args('user_id'));
+        $model = new Model();
+        //根据所属上级关系找到下级所有经销商
+        $is_break = false; //false继续 true停止
+        $promoter_user_id = '';
+        $num = 0;
+        $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
+        $idstr = Common::getAllChildShops($user_id);
+        $now_user_id = $idstr==''?$shop['id']:$shop['id'].','.$idstr;
+        $inviter_info = $model->table("district_promoter")->fields('id,user_id')->where("hirer_id in (".$now_user_id.")")->findAll();
+            
+        $this->code = 0;
+        $this->content['promoter_ids'] = $inviter_info;
+        $this->content['num'] = count($inviter_info);
     }     
 }
