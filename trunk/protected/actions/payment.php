@@ -317,11 +317,24 @@ class PaymentAction extends Controller {
        if($invite){
            $invite_id=intval($invite['user_id']);//邀请人用户id
        }else{
-           if($payment_id==7 || $payment_id==16){
-            $from = 'android';
-           }else{
-            $from = 'IOS';
-           }
+           switch ($payment_id) {
+                case 7:
+                    $from = 'android_weixin';
+                    break;
+                case 18:
+                    $from = 'ios_weixin';
+                    break;
+                case 16:
+                    $from = 'android_alipay';
+                    break;
+                case 17:
+                    $from = 'ios_alipay';
+                    break;        
+                default:
+                    $from = 'android_weixin';
+                    break;
+            } 
+           
            $district = $this->model->table('invite')->where('invite_user_id='.$seller_id)->find();
            if($district){
                 $district_id = $district['district_id'];
