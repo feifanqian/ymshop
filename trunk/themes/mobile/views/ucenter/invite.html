@@ -12,11 +12,11 @@
         background-color: #fff;
         overflow: hidden;
         width: 100%;
-        margin-top: 16%;
+        margin-top: 10%;
     }
 </style>
 <div class="ma20">
-    <div class="m20">推广人员总数：{count($invite['data'])}<a id="invitenow" class="btn" href="/ucenter/myinvite" style="width: 30%;float: right;">立即邀请</a></div>  
+    <div class="m20">推广人员总数：{echo:count($invite['data'])}<a id="invitenow" class="btn" href="/ucenter/myinvite" style="width: 30%;float: right;">立即邀请</a></div>  
     <!-- <div class="m20"><a id="invitenow" class="btn" href="/myinvite.html?uid={$user['id']}">立即邀请</a></div>  -->
 </div>
 {if:count($invite['data'])>0}
@@ -29,7 +29,8 @@
             </div>
             <div class="weui_media_bd">
                 <h4 class="weui_media_title">{$item['real_name']}</h4>
-                <p class="weui_media_desc">{echo:date("Y-m-d H:i:s",$item['createtime'])}<br/>来源:{$item['from']}<br/>级别：{$item['role_type']} </p>
+                <p class="weui_media_desc">{echo:date("Y-m-d H:i:s",$item['createtime'])}<br/>来源:{$item['from']}</p>
+                <p class="weui_media_desc">级别：{$item['role_type']} </p>
             </div>
         </a>
         {/list}
