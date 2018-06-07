@@ -1471,16 +1471,27 @@ class DistrictadminController extends Controller
         $model = new Model();
         $id = Filter::sql(Req::args("id"));
         $idstr = Common::getAllChildShops($id);
-        $shop_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where("pay_status=1 and shop_ids in (".$idstr['user_ids'].")")->query();    
-
+        if($idstr['user_ids']!='') {
+            $shop_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where("pay_status=1 and shop_ids in (".$idstr['user_ids'].")")->query();
+            $shop_sum = $shop_amount[0]['sum'];
+        } else {
+            $shop_sum = 0.00;
+        }
+            
         $idstr1 = Common::getAllChildPromotersIds($id);
-        $promoter_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where("pay_status=1 and shop_ids in (".$idstr1['user_ids'].")")->query();
-        
+        if($idstr1['user_ids']!='') {
+            $promoter_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where("pay_status=1 and shop_ids in (".$idstr1['user_ids'].")")->query();
+            $promoter_sum = $promoter_amount[0]['sum'];
+        } else {
+            $promoter_sum = 0.00;
+        }
+
         $info['shop_num'] = $idstr['num'];
-        $info['shop_amount'] = $shop_amount[0]['sum'];
+        $info['shop_amount'] = $shop_sum;
         $info['promoter_num'] = $idstr1['num'];
-        $info['promoter_amount'] = $promoter_amount[0]['sum'];
+        $info['promoter_amount'] = $promoter_sum;
         $this->assign("info", $info);
         $this->redirect();
+        
     }
 }
