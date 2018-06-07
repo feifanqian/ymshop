@@ -1466,4 +1466,21 @@ class DistrictadminController extends Controller
         $this->assign("condition", $condition);
         $this->redirect();
     }
+
+    public function shop_child_count() {
+        $model = new Model();
+        $id = Filter::sql(Req::args("id"));
+        $idstr = Common::getAllChildShops($id);
+        $shop_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where("pay_status=1 and shop_ids in (".$idstr['user_ids'].")")->query();    
+
+        $idstr1 = Common::getAllChildPromotersIds($id);
+        $promoter_amount = $model->table('order_offline')->fields('sum(order_amount) as sum')->where("pay_status=1 and shop_ids in (".$idstr1['user_ids'].")")->query();
+        
+        $info['shop_num'] = $idstr['num'];
+        $info['shop_amount'] = $shop_amount[0]['sum'];
+        $info['promoter_num'] = $idstr1['num'];
+        $info['promoter_amount'] = $promoter_amount[0]['sum'];
+        $this->assign("info", $info);
+        $this->redirect();
+    }
 }

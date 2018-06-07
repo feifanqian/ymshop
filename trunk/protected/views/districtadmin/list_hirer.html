@@ -34,6 +34,7 @@
                        <li><a class="icon-eye" href="javascript:;" onclick="viewAchievement('{$item['name']}',{$item['owner_id']},{$item['id']});"> 查看销售业绩</a></li>
                        <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/hirer_del/hirer_id/$item[id]}')"> 移出经销商</a></li>
                        <li><a class="icon-pencil" href="{url:/districtadmin/hirer_edit/id/$item[id]}">编辑专区信息</a></li>
+                       <li><a class="icon-pencil" href="javascript:;" onclick="viewChildCount({$item['owner_id']});">查看所属下级专区和代理商销售信息</a></li>
                      </ul>
                    </div>
                 </div>
@@ -63,6 +64,27 @@ layer.open({
 //        maxmin: true, //开启最大化最小化按钮
         area: ['893px', '600px'],
         content: '{url:/districtadmin/chart}/role_type/2/user_id/'+id+"/district_id/"+district_id ,
+        full:function(){
+            console.log(option);
+        },
+        min:function(){
+            console.log(option);
+        },
+        restore:function(){
+            console.log(option);
+        }
+    });
+}
+function viewChildCount(district_id){
+layer.open({
+        id: id,
+        type: 2,
+        title: name,
+        shadeClose: true,
+        shade: false,
+//        maxmin: true, //开启最大化最小化按钮
+        area: ['893px', '600px'],
+        content: '{url:/districtadmin/shop_child_count}'+'/id/'+district_id ,
         full:function(){
             console.log(option);
         },

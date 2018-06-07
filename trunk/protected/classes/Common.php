@@ -1623,7 +1623,8 @@ class Common {
         $model = new Model();
         //根据所属上级关系找到下级所有经销商
         $is_break = false; //false继续 true停止
-        $promoter_user_id = '';
+        $shop_ids = '';
+        $user_ids = '';
         $num = 0;
         $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
         $now_user_id = $shop['id'];
@@ -1631,12 +1632,17 @@ class Common {
             $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id=".$now_user_id)->findAll();
             if($inviter_info){
                 foreach ($inviter_info as $k => $v) {
-                    if($promoter_user_id=='') {
-                       $promoter_user_id = $v['id']; 
+                    if($shop_ids=='') {
+                       $shop_ids = $v['id']; 
                     } else {
-                       $promoter_user_id .= ','.$v['id'];
+                       $shop_ids .= ','.$v['id'];
                     }
-                    // $promoter_user_id .= ','.self::getAllChildShops($v['owner_id']);
+                    if($user_ids=='') {
+                       $user_ids = $v['owner_id']; 
+                    } else {
+                       $user_ids .= ','.$v['owner_id'];
+                    }
+                    // $shop_ids .= ','.self::getAllChildShops($v['owner_id']);
                     $num = $num+1;
                     $now_user_id = $v['id'];
                     $is_break = false;
@@ -1646,8 +1652,33 @@ class Common {
             }
         }
         $result = array();
-        $result['shop_ids'] = $promoter_user_id;
+        $result['shop_ids'] = $shop_ids;
+        $result['user_ids'] = $user_ids;
         $result['num'] = $num;
         return $result;
+    }
+
+    static function getAllChildPromotersIds($user_id)
+    {
+        $model = new Model();
+        //根据所属上级关系找到下级所有经销商
+        $is_break = false; //false继续 true停止
+        $promoter_user_id = '';
+        $num = 0;
+        $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
+        $idstr = self::getAllChildShops($user_id);
+        $now_user_id = $idstr['shop_ids']==''?$shop['id']:$shop['id'].','.$idstr['shop_ids'];
+        $inviter_info = $model->table("district_promoter")->fields('id,user_id')->where("hirer_id in (".$now_user_id.")")->findAll();
+        $ids = array();
+        if($inviter_info) {
+            foreach($inviter_info as $k =>$v) {
+               $ids[] = $v['user_id'];
+            }
+        }
+        $promoter_ids = $ids!=null?implode(',', $ids):'';
+        $result = array();
+        $result['user_ids'] = $promoter_ids;
+        $result['num'] = count($inviter_info);
+        return $result;    
     }
 }
