@@ -32,6 +32,7 @@ var fixScreen = function () {
  * @param slidesPerView 默认显示几个item
  * @param spaceBetween item之间间距
  * @param slidesOffset 轮播整体两边的边距
+ * @param navigation 左右箭头样式
  * @return {Swiper} Swiper对象
  */
 function initSwiper(el, slidesPerView, spaceBetween, slidesOffset) {
@@ -40,6 +41,10 @@ function initSwiper(el, slidesPerView, spaceBetween, slidesOffset) {
         slidesPerView: slidesPerView,
         spaceBetween: spaceBetween,
         slidesOffsetAfter: slidesOffset,
-        slidesOffsetBefore: slidesOffset
+        slidesOffsetBefore: slidesOffset,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        }
     })
 }

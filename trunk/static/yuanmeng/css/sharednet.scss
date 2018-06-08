@@ -2,20 +2,16 @@
 
 #app {
   img.header, img.title, img.cell {
-    @include sizeFitImg()
+    @include sizeFitImg();
   }
-  .entrance {
-    @extend .clearfix;
-    a {
+  .entrance > a {
+    display: block;
+    float: left;
+    margin-left: 25px;
+    margin-top: 20px;
+    img {
       display: block;
-      float: left;
-      margin-left: 25px;
-      margin-top: 20px;
-      img {
-        display: block;
-        @include size(280px, auto);
-      }
+      @include size(280px, auto);
     }
   }
-
 }

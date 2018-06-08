@@ -4,9 +4,9 @@
 //  default
 
 section, .section {
-  img.title {
+  img.title, img.section {
     display: block;
-    @include size(100%, auto)
+    @include size(100%, auto);
   }
   .content {
   }
@@ -24,10 +24,10 @@ $detail-table-left-width: 36%;
     @include sizeFitImg()
   }
   .desc {
-    padding: $sides-padding *1.5 $sides-padding;
+    padding: $sides-padding *1.5 0;
     font-size: 22px;
     p {
-      margin: 0;
+      margin: 0 $sides-padding;
       line-height: 200%;
       text-indent: 2em;
       word-break: break-all;
