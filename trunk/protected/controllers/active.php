@@ -32,5 +32,9 @@ class ActiveController extends Controller
     public function recruit() {
     	$this->redirect();
     }
+
+    public function login() {
+    	$this->redirect();
+    }
 }
 ?>

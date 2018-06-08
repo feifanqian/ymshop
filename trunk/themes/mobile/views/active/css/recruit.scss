@@ -1,0 +1,317 @@
+@charset "UTF-8";
+@import "base";
+
+$section_1-h: $section-w / 1.92;
+$section_1_ambo: 20px;
+
+$section_2-h: $section-w * 855 / 1130;
+
+$section_3-h: $section-w * 980 / 1130;
+
+$section_4-h: $section-w * 985 / 1130;
+
+$section_5-h: $section-w * 1635 / 1130;
+
+#app {
+  background: $main-color;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: $main-color;
+  padding-bottom: 78px;
+}
+
+section, .section {
+  border-radius: 12px;
+}
+
+section + section {
+  margin-bottom: 14px;
+}
+
+.header {
+  position: relative;
+  background: url("../img/recruit/header.jpg") no-repeat center / cover;
+  @include size($section-w, $section_1-h);
+  .count-down {
+    position: absolute;
+    display: block;
+    width: 100%;
+    font-size: 13px;
+    left: 0;
+    bottom: 26px;
+    text-align: center;
+  }
+}
+
+.section_1 {
+  display: flex;
+  flex-direction: column;
+  background: url("../img/recruit/section_01_bg.png") no-repeat center / cover;
+  @include size($section-w, $section_1-h);
+  .info {
+    position: relative;
+    height: $section_1-h / 2;
+    .avatar {
+      position: absolute;
+      display: block;
+      top: 12px;
+      left: $section_1_ambo;
+      @include size(120px)
+    }
+    .nickname {
+      position: absolute;
+      top: 30px;
+      left: 150px;
+      font-size: 26px;
+    }
+    .bonus {
+      position: absolute;
+      top: 76px;
+      left: 150px;
+      font-size: 25px;
+      line-height: 36px;
+      height: 36px;
+      vertical-align: middle;
+      i {
+        font-size: 32px;
+        font-weight: bold;
+        margin: 0 3px 0 -3px;
+      }
+    }
+    .cut, .app {
+      position: absolute;
+      right: $section_1_ambo;
+      img {
+        display: block;
+        @include size(130px, auto);
+      }
+    }
+    .cut {
+      top: 22px;
+    }
+    .app {
+      top: 74px;
+    }
+  }
+  .plan {
+    height: $section_1-h / 2;
+    position: relative;
+    .tip {
+      position: absolute;
+      top: 18px;
+      left: $section_1_ambo + 4px;
+      font-size: 18px;
+      color: $main-color;
+      text-align: left;
+      i {
+        font-size: 24px;
+        color: blue;
+      }
+    }
+    .plan-content {
+      position: relative;
+      margin: 70px auto 0;
+      width: 90%;
+      height: 8px;
+      background: $main-color;
+      .plan-content__pin {
+        @include size(12px);
+        background: $main-color;
+        border-radius: 50%;
+        box-shadow: 0 0 0 1px #fff;
+        top: -2px;
+        span.number {
+          display: block;
+          position: absolute;
+          top: 20px;
+          font-size: 26px;
+          width: 80px;
+          left: -50px;
+          color: $main-color;
+        }
+      }
+      .plan-content__left {
+        position: absolute;
+        left: 0;
+      }
+      .plan-content__right {
+        position: absolute;
+        right: 0;
+      }
+    }
+    .plan-arrow {
+      width: calc(90% - 12px);
+      margin: 0 auto;
+      .plan-arrow__content {
+        @include size(140px, 60px);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        top: -10px;
+        left: -70px;
+      }
+    }
+    .plan-content__center {
+      @include size(12px);
+      background: $main-color;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px #fff;
+    }
+    .arrow {
+      display: block;
+      margin-top: 12px;
+      font-size: 20px;
+      padding: 8px;
+      line-height: 20px;
+      background: $main-color;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      position: relative;
+      &::before {
+        position: absolute;
+        content: '';
+        @include size(0);
+        bottom: 92%;
+        left: calc(50% - 10px);
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid $main-color;
+      }
+    }
+  }
+}
+
+.section_2 {
+  @include size($section-w, $section_2-h);
+  background: url("../img/recruit/p11.png") no-repeat center / cover;
+  background: rgba(256, 256, 256, .6);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  p {
+    text-align: center;
+    margin: 10px;
+  }
+  .title {
+    margin-top: 22px;
+    font-size: 28px;
+  }
+  .sub-title {
+    font-size: 22px;
+  }
+  img {
+    position: absolute;
+    @include pin(0);
+    @include size(600px, auto);
+  }
+}
+
+.section_3 {
+  background: url("../img/recruit/p7.png") no-repeat center / cover;
+  @include size($section-w, $section_3-h);
+  padding-top: 50px;
+  .cell {
+    position: relative;
+    height: 156px;
+    .detail {
+      position: absolute;
+      color: #fff;
+      font-size: 26px;
+      left: 216px;
+      top: 38px;
+      text-align: center;
+    }
+    .count {
+      position: absolute;
+      top: 26px;
+      right: 28px;
+      text-align: right;
+      font-size: 26px;
+      color: $main-color;
+    }
+    .status, .status > img {
+      display: block;
+      @include size(auto, 35px);
+    }
+    .status {
+      position: absolute;
+      top: 62px;
+      right: 25px;
+    }
+  }
+}
+
+$section_4-cell-h: 108px;
+$section_4-cell-avatar-s: 82px;
+
+.section_4 {
+  background: url("../img/recruit/p8.png") no-repeat center / cover;
+  @include size($section-w, $section_4-h);
+  .content {
+    margin-top: 48px;
+    .cell {
+      position: relative;
+      height: $section_4-cell-h;
+      font-size: 26px;
+      width: 96%;
+      margin-left: 2%;
+      border-bottom: 1px dashed #fff;
+      .avatar {
+        display: block;
+        position: absolute;
+        @include size($section_4-cell-avatar-s);
+        top: ($section_4-cell-h - $section_4-cell-avatar-s) / 2;
+        left: ($section_4-cell-h - $section_4-cell-avatar-s) / 2;
+      }
+      .nickname {
+        position: absolute;
+        top: 20px;
+        left: 110px;
+      }
+      .time {
+        position: absolute;
+        top: 60px;
+        left: 110px;
+        font-size: 22px;
+      }
+      .status {
+        position: absolute;
+        font-size: 24px;
+        top: 58px;
+        right: 12px;
+      }
+    }
+  }
+  .more {
+    display: block;
+    width: 96%;
+    margin-left: 2%;
+    text-align: right;
+    color: $main-color;
+    font-size: 22px;
+    padding: 4px;
+    margin-top: 2px;
+  }
+}
+
+.section_5 {
+  background: url("../img/recruit/p10.png") no-repeat center / cover;
+  @include size($section-w, $section_5-h);
+}
+
+.invite {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
+  background: #fff;
+  img {
+    display: block;
+    @include size(auto, 44px);
+    margin: 0 auto;
+  }
+}
