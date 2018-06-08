@@ -343,4 +343,10 @@ class GoodsAction extends Controller {
         $ret = mb_substr($str,$t1+3,$t2-$t1);
         return $ret;
     }
+
+    public function promoter_upload_goods() {
+        $name = Filter::str(Req::args('name'));
+        $img = Filter::str(Req::args('img'));
+        
+    }
 }
