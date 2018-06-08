@@ -1,5 +1,5 @@
 <?php
-class UcenterController extends Controller
+class ActiveController extends Controller
 {
     public $layout = 'recruit';
     public $safebox = null;
