@@ -1,0 +1,113 @@
+@charset "UTF-8";
+@import "base";
+
+//  列表的宽度
+$list-w: $section-w;
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: url("../img/login/login_bg.png") $main-color no-repeat center / cover;
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+  margin-top: 75px;
+  @include size(400px, 46px);
+  input {
+    background: transparent;
+    border-radius: 6px;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 3px 6px;
+    flex: 1;
+  }
+  a, a > img {
+    background: #fff;
+    border-radius: 6px;
+    @include size(55px, 45px);
+  }
+  a {
+    margin-left: 4px;
+  }
+}
+
+$cell-h: 100px;
+$cell-avatar-s: 82px;
+$cell-avatar-margin: ($cell-h - $cell-avatar-s) / 2;
+
+.list {
+  margin-top: 34px;
+  width: $list-w;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(256, 256, 256, .6);
+  .title {
+    background: #fff;
+    color: $main-color;
+    text-align: center;
+    padding: 6px;
+    font-size: 24px;
+    margin: 0;
+  }
+  .list-content {
+
+    .cell {
+      width: 96%;
+      margin-left: 2%;
+      margin-right: 2%;
+      position: relative;
+      height: $cell-h;
+      border-bottom: 1px dashed #fff;
+      color: $main-color;
+      font-size: 24px;
+      .avatar {
+        display: block;
+        position: absolute;
+        @include size($cell-avatar-s);
+        top: $cell-avatar-margin;
+        left: $cell-avatar-margin;
+      }
+      .nickname {
+        position: absolute;
+        top: 20px;
+        left: 110px;
+      }
+      .time {
+        position: absolute;
+        top: 60px;
+        left: 110px;
+        font-size: 18px;
+      }
+      .status {
+        position: absolute;
+        top: 66px - 11px;
+        right: 12px;
+        font-size: 22px;
+      }
+    }
+  }
+  .more {
+    height: 44px;
+    line-height: 44px;
+    font-size: 20px;
+    text-align: center;
+    color: $main-color;
+  }
+}
+
+.invite {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
+  background: #fff;
+  img {
+    display: block;
+    @include size(auto, 44px);
+    margin: 0 auto;
+  }
+}

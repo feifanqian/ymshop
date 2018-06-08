@@ -1,0 +1,90 @@
+@charset "UTF-8";
+@import "base";
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  //background: url("../img/login/login_bg.png") $main-color no-repeat top / contain;
+  background-color: $main-color;
+  padding-bottom: 88px;
+}
+
+$section-1-h: $section-w * 230 / 1130;
+$section-2-h: $section-w * 980 / 1130;
+$section-3-h: $section-w * 1690 / 1130;
+
+section {
+  margin: 20px auto 0;
+}
+
+.section_1 {
+  background: rgba(256, 256, 256, .6);
+  border-radius: 16px;
+  @include size($section-w, $section-1-h);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: $main-color;
+  .avatar {
+    margin-left: 15px;
+    display: block;
+    @include size(90px);
+  }
+  .nickname {
+    margin-left: 12px;
+    font-size: 24px;
+    flex: 1;
+  }
+  .tips {
+    @include size(auto, 60px);
+    margin: 0 22px 0 12px;
+  }
+}
+
+.section_2 {
+  background: url("../img/list/p3.png") no-repeat center / cover;
+  @include size($section-w, $section-2-h);
+  padding-top: 48px;
+  .cell {
+    position: relative;
+    height: 156px;
+    .detail {
+      position: absolute;
+      color: #fff;
+      font-size: 26px;
+      left: 216px;
+      top: 38px;
+      text-align: center;
+    }
+    .count {
+      position: absolute;
+      top: 38px;
+      right: 20px;
+      text-align: right;
+      font-size: 24px;
+      color: $main-color;
+    }
+  }
+}
+
+.section_3 {
+  background: url("../img/list/p4.png") no-repeat center / cover;
+  border-radius: 12px;
+  overflow: hidden;
+  @include size($section-w, $section-3-h);
+}
+
+.invite {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
+  background: #fff;
+  img {
+    display: block;
+    @include size(auto, 44px);
+    margin: 0 auto;
+  }
+}
