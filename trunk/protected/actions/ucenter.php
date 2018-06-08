@@ -838,6 +838,8 @@ class UcenterAction extends Controller {
             }
             if (!empty($message_ids)) {
                 $ids = implode(',', $message_ids[1]);
+            } else {
+                $ids = '';
             }
         }
 
