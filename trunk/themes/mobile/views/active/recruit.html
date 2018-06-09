@@ -19,11 +19,41 @@
 
     <!--我的信息-->
     <section class="section_1">
+        {if:isset($user)}
         <div class="info">
-            <img src="/themes/mobile/images/avatar.png" alt="" class="avatar">
-            <span class="nickname">进击的圆梦</span>
+            <img src='{echo:Url::urlFormat("@".$user['avatar']."?v=".time())}' alt="" class="avatar">
+            <span class="nickname">{$user['real_name']}</span>
             <span class="bonus">累积: <i>XXX</i>元</span>
             <a href="/active/login" class="cut"><img src="/themes/mobile/images/p3.png" alt=""></a>
+            <a href="" class="app"><img src="/themes/mobile/images/p2.png" alt=""></a>
+        </div>
+        <!--实时进度-->
+        <div class="plan">
+            <span class="tip">就差<i>X</i>个又可以拆红包啦</span>
+            <div class="plan-content">
+                <div class="plan-content__pin plan-content__left">
+                    <span class="number" style="margin-left: 50px;text-align: left;">0</span>
+                </div>
+                <div class="plan-content__pin plan-content__right">
+                    <span class="number" style="right: 120px;text-align: center;">1000</span>
+                </div>
+            </div>
+            <!--中间的红点和tips文字-->
+            <div class="plan-arrow">
+                <!--修改这个百分比调整进度-->
+                <div class="plan-arrow__content" style="margin-left: 0;">
+                    <div class="plan-content__center"></div>
+                    <span class="arrow">已邀请{$invite_num}人</span>
+                </div>
+
+            </div>
+        </div>
+        {else:}
+        <div class="info">
+            <img src='/themes/mobile/images/logo-new.png' alt="" class="avatar">
+            <a href="/active/login" class="nickname">请登录</a>
+            <!-- <span class="bonus">累积: <i>XXX</i>元</span> -->
+            <!-- <a href="/active/login" class="cut"><img src="/themes/mobile/images/p3.png" alt=""></a> -->
             <a href="" class="app"><img src="/themes/mobile/images/p2.png" alt=""></a>
         </div>
         <!--实时进度-->
@@ -47,6 +77,7 @@
 
             </div>
         </div>
+        {/if}
     </section>
 
     <!--拆红包 看手机-->
