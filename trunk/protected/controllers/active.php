@@ -41,6 +41,7 @@ class ActiveController extends Controller
         $redirectURL = '/active/recruit';
         $this->assign("redirectURL", $redirectURL);
         $account = Filter::sql(Req::post('account'));
+        var_dump($account);
         $passWord = Req::post('password');
         $autologin = Req::args("autologin");
         if ($autologin == null)
