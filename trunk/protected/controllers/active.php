@@ -47,7 +47,8 @@ class ActiveController extends Controller
     }
 
     public function login_act() {
-         $redirectURL = Req::args("redirect");
+        $redirectURL = Filter::str(Req::args("redirect"));
+        var_dump($redirectURL);die;
         $this->assign("redirectURL", $redirectURL);
         $account = Filter::str(Req::args('account'));
         $passWord = Filter::str(Req::args('password'));
@@ -71,6 +72,7 @@ class ActiveController extends Controller
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
 
                     if ($redirectURL=='recruit'){
+                        var_dump(111);die;
                         $this->redirect("/active/recruit");
                     } else {
                         $url = Cookie::get('url');
