@@ -100,6 +100,15 @@ class ActiveController extends Controller
         $this->redirect("login", false, Req::args());
     }
 
+    public function sign_up() {
+        $user_id = $this->user['id'];
+        if($user_id) {
+            $customer = $this->model->table("customer as cu")->fields("cu.*,u.avatar")->join("left join user as u on cu.user_id = u.id")->where("cu.user_id = $user_id")->find();
+            $this->assign("user", $customer);
+        }
+        $this->redirect();
+    }
+
     
 }
 ?>

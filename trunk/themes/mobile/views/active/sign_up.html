@@ -13,8 +13,13 @@
     <img src="img/list/1.jpg" alt="" class="sizeFitImg">
     <!--info-->
     <section class="section_1">
-        <img src="img/recruit/avatar.png" alt="" class="avatar">
-        <div class="nickname">进击的圆梦</div>
+        {if:isset($user)}
+        <img src='{echo:Url::urlFormat("@".$user['avatar']."?v=".time())}' alt="" class="avatar">
+        <div class="nickname">{$user['real_name']}</div>
+        {else:}
+        <img src="/themes/mobile/images/logo-new.png" alt="" class="avatar">
+        <a class="nickname" href="/active/login/redirect/recruit">点击登录</a>
+        {/if}
         <span>邀请</span>
         <img src="img/list/p11.png" alt="" class="tips">
     </section>
