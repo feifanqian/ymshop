@@ -50,7 +50,6 @@ class ActiveController extends Controller
 
     public function login_act() {
         $redirectURL = Filter::str(Req::args("redirect"));
-        var_dump($redirectURL);die;
         $this->assign("redirectURL", $redirectURL);
         $account = Filter::str(Req::args('account'));
         $passWord = Filter::str(Req::args('password'));
@@ -75,6 +74,8 @@ class ActiveController extends Controller
 
                     if ($redirectURL=='recruit'){
                         $this->redirect("/active/recruit");
+                    } elseif ($redirectURL=='sign_up'){
+                        $this->redirect("/active/sign_up");
                     } else {
                         $url = Cookie::get('url');
                         $url = $url!=NULL?$url:'/ucenter/index';
