@@ -39,6 +39,8 @@ class ActiveController extends Controller
     }
 
     public function login() {
+        $redirectURL = Filter::str(Req::args("redirect"));
+        $this->assign("redirectURL", $redirectURL);
         $this->safebox->clear('user');
         $cookie = new Cookie();
         $cookie->setSafeCode(Tiny::app()->getSafeCode());
@@ -72,7 +74,6 @@ class ActiveController extends Controller
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
 
                     if ($redirectURL=='recruit'){
-                        var_dump(111);die;
                         $this->redirect("/active/recruit");
                     } else {
                         $url = Cookie::get('url');
