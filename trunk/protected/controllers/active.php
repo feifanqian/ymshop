@@ -31,7 +31,7 @@ class ActiveController extends Controller
 
     public function recruit() {
         $user_id = $this->user['id'];
-        $customer = $this->model->table("customer as cu")->fields("cu.*,gr.name as gname")->join("left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = $user_id")->find();
+        $customer = $this->model->table("customer as cu")->fields("cu.*,u.avatar")->join("left join user as u on cu.user_id = u.id")->where("cu.user_id = $user_id")->find();
         if($user_id && $customer) {
             $this->assign("user", $customer);
         } 
