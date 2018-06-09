@@ -653,6 +653,10 @@ class AddressAction extends Controller
         if($list['avatar']==null){
             $list['avatar'] = '';
         }
+        if($list['shop_name']==null){
+            $user = $this->model->table('customer as c')->fields('c.real_name,u.nickname')->join("left join user as u on c.user_id = u.id")->where('c.user_id='.$list['user_id'])->find();
+            $list['shop_name'] = empty($user['real_name'])?$user['nickname']:$user['real_name'];  
+        }
         $count = $this->model->table('promoter_collect')->where('promoter_id='.$id)->count();
         $list['attention_num'] = $count;
         $district = $this->model->table('district_shop')->where('owner_id='.$list['user_id'])->find();
