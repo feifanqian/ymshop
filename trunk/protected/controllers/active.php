@@ -50,6 +50,7 @@ class ActiveController extends Controller
         if ($obj) {
             if ($obj['status'] == 1) {
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
+                    var_dump(222);die;
                     $cookie = new Cookie();
                     $cookie->setSafeCode(Tiny::app()->getSafeCode());
                     if ($autologin == 1) {
