@@ -38,7 +38,7 @@ class ActiveController extends Controller
     }
 
     public function login_act() {
-        $redirectURL = Req::args("redirectURL");
+        $redirectURL = '/active/recruit';
         $this->assign("redirectURL", $redirectURL);
         $account = Filter::sql(Req::post('account'));
         $passWord = Req::post('password');
