@@ -30,6 +30,8 @@ class ActiveController extends Controller
     }
 
     public function recruit() {
+        $user_id = $this->user['id'];
+        var_dump($user_id);die; 
     	$this->redirect();
     }
 
