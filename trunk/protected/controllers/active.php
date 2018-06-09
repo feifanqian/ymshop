@@ -63,7 +63,6 @@ class ActiveController extends Controller
                     // $redirectURL = Req::args("redirectURL");
 
                     if ($redirectURL != ''){
-                        var_dump(123);die;
                         $this->redirect("/active/recruit");
                     } else {
                         $url = Cookie::get('url');
@@ -75,7 +74,6 @@ class ActiveController extends Controller
                         exit;
                     }    
                 }else {
-                    var_dump(333);die;
                     $info = array('field' => 'password', 'msg' => '密码错误！');
                 }
             } else if ($obj['status'] == 2) {
