@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import "untils", "mixin";
 
 #app {
@@ -5,6 +6,7 @@
     @include sizeFitImg();
   }
   .entrance > a {
+    background: #fff;
     display: block;
     float: left;
     margin-left: 25px;
