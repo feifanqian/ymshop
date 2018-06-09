@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="css/login.css">
+    <title>登录</title>
+</head>
+<body>
+<div id="app">
+    <form class="main" action="">
+        <div class="main-content">
+            <div class="cell">
+                <label>手机号</label>
+                <div class="line"></div>
+                <div class="input_content">
+                    <input type="tel" id="mobile" name="" placeholder="请输入" required>
+                </div>
+            </div>
+            <div class="cell">
+                <label>密码</label>
+                <div class="line"></div>
+                <div class="input_content">
+                    <input type="password" id="password" name="" placeholder="请输入" required>
+                </div>
+            </div>
+        </div>
+        <a class="find" href="javascript:alert('找回密码');">找回密码</a>
+        <a id="submit">登录</a>
+        <a class="register" href="javascript:alert('注册');">注册</a>
+    </form>
+</div>
+</body>
+<script src="js/main.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(function ($) {
+        //  点击登录
+        $('#submit').click((e) => {
+            let mobile = $('#mobile').val();
+            let password = $('#password').val();
+
+            if (mobile.length === 0 || password.length === 0) {
+                alert('请输入完整内容!');
+                return;
+            }
+
+            //  执行登录操作以及跳转
+            alert(`手机号:${mobile}\n密码:${password}`);
+        })
+    })
+</script>
+</html>

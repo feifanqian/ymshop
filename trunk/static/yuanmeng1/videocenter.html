@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="css/videocenter.css">
+    <title>视频中心</title>
+</head>
+<body>
+<div id="app">
+    <img src="img/videocenter/videocenter_title.jpg" alt="" class="title">
+    <img src="img/videocenter/header_img.jpg" alt="" class="title">
+    <div class="main">
+        <div class="cell">
+            <img src="img/videocenter/1.jpg" alt="">
+            <p class="title">圆梦集团宣传片</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=a0521ic33fx&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/2.jpg" alt="">
+            <p class="title">圆梦集团董事会宣誓大会</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=m0523t0ft7g&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/3.jpg" alt="">
+            <p class="title">圆梦集团第三期《资本密码》</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=z0519q56rtm&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/4.jpg" alt="">
+            <p class="title">圆梦集团第四期《资本密码》</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=n05309z2ldx&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/5.jpg" alt="">
+            <p class="title">圆梦旅游挂牌上市广东电视台新闻</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=i0358042zcd&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/6.jpg" alt="">
+            <p class="title">圆梦集团感人节目《在路上》</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=b0510oxtokf&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/7.jpg" alt="">
+            <p class="title">圆梦旅投挂牌上市董事长致辞</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=b051267iefh&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/8.jpg" alt="">
+            <p class="title">圆梦旅投挂牌上市深圳财经频道</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=f0358hfhama&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/9.jpg" alt="">
+            <p class="title">圆梦集团南澳之旅（高清版）</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=n0524jdm8ou&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/10.jpg" alt="">
+            <p class="title">听听大咖们是怎么加入圆梦的?</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=p0527uxk0gk&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/11.jpg" alt="">
+            <p class="title">一起圆梦MV（挂牌版）</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=v0399rwbag8&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/12.jpg" alt="">
+            <p class="title">我们能为父亲做些什么?</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=h0515xoj3kv&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/13.jpg" alt="">
+            <p class="title">一个自动帮你赚钱的神奇二维码（最新）</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=p0527s9y4vi&tiny=0&auto=1" class="hide"></a>
+        </div>
+        <div class="cell">
+            <img src="img/videocenter/14.jpg" alt="">
+            <p class="title">圆梦销购网上线发布会（圆梦共享网前身）</p>
+            <a href="https://v.qq.com/iframe/player.html?vid=i0522e2d64i&tiny=0&auto=1" class="hide"></a>
+        </div>
+    </div>
+    <!--视频播放层-->
+    <div id="mode" class="hide">
+        <a class="close" href="javascript:void(0);"><img src="img/videocenter/close.png" alt=""></a>
+        <div class="video"></div>
+    </div>
+</div>
+</body>
+<script src="js/main.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(function ($) {
+        //  点击播放
+        $('.cell').click(function (e) {
+            //  获取视频地址
+            let url = $(this).children('a.hide')[0].href;
+            //  显示mode
+            $('#mode').removeClass('hide');
+            //  插入iframe
+            $('#mode > .video').append(`<iframe height=100% width=100% src='${url}' frameborder=0 allowfullscreen></iframe>`);
+        })
+
+        //  关闭播放窗口
+        $('#mode > .close').click(function (e) {
+            //  移除iframe
+            $('#mode > .video').empty();
+            //  隐藏mode
+            $('#mode').addClass('hide');
+        })
+    });
+
+</script>
+</html>

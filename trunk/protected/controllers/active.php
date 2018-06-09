@@ -106,6 +106,9 @@ class ActiveController extends Controller
             $customer = $this->model->table("customer as cu")->fields("cu.*,u.avatar")->join("left join user as u on cu.user_id = u.id")->where("cu.user_id = $user_id")->find();
             $this->assign("user", $customer);
         }
+        $sign_up = $this->model->table("sign_up")->where("user_id = $user_id")->find();
+        $signed = $sign_up?1:0;
+        $this->assign("signed", $signed);
         $this->redirect();
     }
 

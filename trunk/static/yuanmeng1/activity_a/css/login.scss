@@ -1,0 +1,92 @@
+@charset "UTF-8";
+@import "base";
+
+$main-w: 480px;
+$cell-h: 62px;
+
+//  section_1两侧的边距
+$cell-content-margin: 10px;
+
+#app {
+  background: url("../img/login/login_bg.png") $main-color no-repeat top / contain;
+  padding-top: 120px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: $main-w;
+  margin: 0 auto;
+  background: transparent;
+  font-size: 24px;
+  .main-content {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .cell {
+    width: 100%;
+    height: $cell-h;
+    line-height: $cell-h;
+    display: flex;
+    margin-bottom: 1px;
+    background: rgba(226, 256, 256, .45);
+    label {
+      margin: 0;
+      color: $main-color;
+      padding: 0 $cell-content-margin 0 0;
+      width: 120px;
+      text-align: right;
+    }
+    .line {
+      @include size(1px, 40px);
+      background: $main-color;
+      margin-top: ($cell-h - 40px) / 2;
+    }
+    .input_content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-items: center;
+      input {
+        display: block;
+        height: 40px;
+        line-height: 40px;
+        width: 340px;
+        margin-top: ($cell-h - 40px) / 2;
+        padding: 0 0 0 $cell-content-margin;
+        border: 0;
+        //border-left: 1px solid $main-color;
+        //box-shadow: -2px 0 0 0 $main-color;
+        background: transparent;
+        color: #fff;
+        &::-webkit-input-placeholder {
+          color: rgba(256, 256, 256, .6);
+        }
+      }
+    }
+  }
+  .find {
+    color: #fff;
+    margin: 12px 22px 0 0;
+    font-size: 20px;
+    align-self: flex-end;
+  }
+  #submit {
+    font-size: 28px;
+    color: $main-color;
+    background: #feec34;
+    width: 265px;
+    height: 54px;
+    line-height: 54px;
+    text-align: center;
+    margin-top: 26px;
+    border-radius: 12px;
+  }
+  .register {
+    color: #fff;
+    font-size: 22px;
+    margin-top: 18px;
+  }
+}

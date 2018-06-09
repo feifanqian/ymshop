@@ -1,0 +1,32 @@
+@import "untils";
+@import "mixin";
+
+#app {
+  .title {
+    @include sizeFitImg()
+  }
+  .cell {
+    @include sizeFitImg()
+  }
+  #banner {
+    img {
+      width: 200px;
+      height: auto;
+    }
+  }
+  .honour {
+    height: 320px;
+    padding-top: 39px;
+    background: url("../img/affirm/222.jpg") no-repeat center / cover;
+    #rongyao {
+      width: 380px;
+      margin:0 auto;
+      img {
+        @include size(360px, auto);
+      }
+    }
+  }
+}
+
+
+

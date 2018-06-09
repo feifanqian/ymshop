@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="css/recruit.css">
+    <title>会员招募</title>
+</head>
+<body>
+<div id="app">
+
+    <!--header-->
+    <section class="header">
+        <img src="img/recruit/header.jpg" alt="" class="sizeFitImg">
+        <span class="count-down">活动倒计时: <span>29天23时34分</span></span>
+    </section>
+
+    <!--我的信息-->
+    <section class="section_1">
+        <div class="info">
+            <img src="img/recruit/avatar.png" alt="" class="avatar">
+            <span class="nickname">进击的圆梦</span>
+            <span class="bonus">累积: <i>XXX</i>元</span>
+            <a href="" class="cut"><img src="img/recruit/p3.png" alt=""></a>
+            <a href="" class="app"><img src="img/recruit/p2.png" alt=""></a>
+        </div>
+        <!--实时进度-->
+        <div class="plan">
+            <span class="tip">就差<i>X</i>个又可以拆红包啦</span>
+            <div class="plan-content">
+                <div class="plan-content__pin plan-content__left">
+                    <span class="number" style="margin-left: 50px;text-align: left;">0</span>
+                </div>
+                <div class="plan-content__pin plan-content__right">
+                    <span class="number" style="right: 120px;text-align: center;">1000</span>
+                </div>
+            </div>
+            <!--中间的红点和tips文字-->
+            <div class="plan-arrow">
+                <!--修改这个百分比调整进度-->
+                <div class="plan-arrow__content" style="margin-left: 0;">
+                    <div class="plan-content__center"></div>
+                    <span class="arrow">已邀请XX人</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!--拆红包 看手机-->
+    <section class="section_2">
+        <p class="title">拆红包&nbsp;看手气</p>
+        <p class="sub-title">你还有3次抽奖机会</p>
+        <img src="img/recruit/p12.png" alt="">
+    </section>
+
+    <!--邀用户 得豪礼-->
+    <section class="section_3">
+        <div class="cell">
+            <a href="//www.baidu.com" class="detail">查看<br>详情<br>>></a>
+            <a href="" class="status"><img src="img/recruit/p9.png" alt=""></a>
+            <span class="count">累积邀请XX人</span>
+        </div>
+        <div class="cell">
+            <a href="//www.baidu.com" class="detail">查看<br>详情<br>>></a>
+            <a href="" class="status"><img src="img/recruit/p9.png" alt=""></a>
+            <span class="count">累积邀请XX人</span>
+        </div>
+        <div class="cell">
+            <a href="//www.baidu.com" class="detail">查看<br>详情<br>>></a>
+            <a href="" class="status"><img src="img/recruit/p9.png" alt=""></a>
+            <span class="count">累积邀请XX人</span>
+        </div>
+    </section>
+
+    <!--邀请名单-->
+    <section class="section_4">
+        <div class="content">
+            <div class="cell">
+                <img src="img/recruit/avatar.png" alt="" class="avatar">
+                <span class="nickname">宝爷</span>
+                <span class="time">2018-05-30  21:00:01</span>
+                <span class="status">注册成功</span>
+            </div>
+            <div class="cell">
+                <img src="img/recruit/avatar.png" alt="" class="avatar">
+                <span class="nickname">宝爷</span>
+                <span class="time">2018-05-30  21:00:01</span>
+                <span class="status">注册成功</span>
+            </div>
+            <div class="cell">
+                <img src="img/recruit/avatar.png" alt="" class="avatar">
+                <span class="nickname">宝爷</span>
+                <span class="time">2018-05-30  21:00:01</span>
+                <span class="status">注册成功</span>
+            </div>
+            <div class="cell">
+                <img src="img/recruit/avatar.png" alt="" class="avatar">
+                <span class="nickname">宝爷</span>
+                <span class="time">2018-05-30  21:00:01</span>
+                <span class="status">注册成功</span>
+            </div>
+        </div>
+        <a href="" class="more">查看更多>></a>
+    </section>
+
+    <!--活动规则-->
+    <section class="section_5"></section>
+
+    <!--邀请好友-->
+    <div class="invite">
+        <a href="inviteregist.html"><img src="img/recruit/p5.png" alt=""></a>
+    </div>
+
+</div>
+</body>
+<script src="js/main.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(function ($) {
+        //  试试动态的进度动画
+        $('.plan-arrow__content').delay(500).animate({'margin-left': '70%'}, 2000);
+
+        //  抽红包的点击事件
+        $('.section_2').click((e) => {
+            alert('抽红包咯!');
+        })
+
+    });
+
+</script>
+</html>

@@ -1,0 +1,62 @@
+@import "untils";
+@import "mixin";
+
+#app > img.section {
+  @include sizeFitImg()
+}
+
+$cell-height: 160px;
+$cell-text-margin-left: $cell-height + 12px;
+
+.consult {
+  padding: 28px;
+  .cell {
+    position: relative;
+    margin-bottom: 15px;
+    height: $cell-height;
+    background: #edeeef;
+    border-radius: 6px;
+    overflow: hidden;
+    img {
+      position: absolute;
+      display: block;
+      @include size($cell-height);
+      top: 0;
+      left: 0;
+      bottom: 0;
+    }
+    p {
+      margin: 0
+    }
+    .title {
+      position: absolute;
+      top: 12px;
+      left: $cell-text-margin-left;
+      right: 10px;
+      font-size: 24px;
+    }
+    .desc {
+      position: absolute;
+      top: 50px;
+      left: $cell-text-margin-left;
+      right: 10px;
+      line-height: 150%;
+      color: #757575;
+      font-size: 16px;
+      display: -webkit-box;
+      display: -moz-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      -moz-box-orient: vertical;
+      overflow: hidden;
+    }
+    .more {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      font-size: 18px;
+    }
+  }
+}
+

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="css/inviteregist.css">
+    <title>邀请列表</title>
+</head>
+<body>
+<div id="app">
+    <div class="search">
+        <input type="text" id="keyword" name="" title="" required>
+        <a href="" class="go"><img src="img/inviteregist/p1.png" alt=""></a>
+    </div>
+    <div class="list">
+        <p class="title">邀请名单</p>
+        <div class="list-content">
+            <div class="cell">
+                <img src="img/recruit/avatar.png" alt="" class="avatar">
+                <span class="nickname">宝爷</span>
+                <span class="time">2018-05-30  21:00:01</span>
+                <span class="status">注册成功</span>
+            </div>
+            <div class="cell">
+                <img src="img/recruit/avatar.png" alt="" class="avatar">
+                <span class="nickname">宝爷</span>
+                <span class="time">2018-05-30  21:00:01</span>
+                <span class="status">注册成功</span>
+            </div>
+            <div class="cell">
+                <img src="img/recruit/avatar.png" alt="" class="avatar">
+                <span class="nickname">宝爷</span>
+                <span class="time">2018-05-30  21:00:01</span>
+                <span class="status">注册成功</span>
+            </div>
+        </div>
+        <!--加载更多-->
+        <div class="more">加载更多</div>
+    </div>
+    <div class="invite">
+        <a href="inviteregist.html"><img src="img/recruit/p5.png" alt=""></a>
+    </div>
+</div>
+</body>
+<script src="js/main.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(function ($) {
+        //  搜索
+        $('.search > .go').click(e => {
+            let keyword = $('#keyword').val();
+            if (keyword === '' || keyword.length === 0) {
+                alert('请输入搜索内容');
+                return;
+            }
+            alert(`搜索:${keyword}`);
+        });
+
+        // 加载更多
+        $('.list > .more').click(e => {
+            alert('加载更多');
+        })
+    })
+</script>
+</html>

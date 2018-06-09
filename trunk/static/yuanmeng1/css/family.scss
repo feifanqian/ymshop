@@ -1,0 +1,53 @@
+@import "untils", "mixin";
+
+$main-color: #f1f2f6;
+
+#app {
+  padding: 0;
+}
+
+img.title, img.cell {
+  @include sizeFitImg()
+}
+
+.banner {
+  background: $main-color;
+  .swiper-container {
+    margin: 0 30px;
+  }
+}
+
+#chaung {
+  margin: 0 12px 56px;
+  .swiper-slide {
+    transform: skewX(-10deg);
+    box-shadow: 0 0 1px #a3a3a3;
+    overflow: hidden;
+    background: $main-color;
+    img {
+      transform: skewX(10deg);
+      @include sizeFitImg(190px)
+    }
+  }
+}
+
+#dong {
+  img {
+    display: block;
+    @include size(210px, auto)
+  }
+}
+
+#yunying {
+  img {
+    display: block;
+    @include size(210px, auto)
+  }
+}
+
+#hehuoren {
+  img {
+    display: block;
+    @include size(172px, auto)
+  }
+}

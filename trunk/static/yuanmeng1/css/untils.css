@@ -1,0 +1,9 @@
+.hide {
+  display: none !important; }
+
+.clearfix::after {
+  display: block;
+  clear: both;
+  content: ""; }
+
+/*# sourceMappingURL=untils.css.map */

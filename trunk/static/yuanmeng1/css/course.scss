@@ -1,0 +1,8 @@
+@import "untils";
+@import "mixin";
+
+#app {
+  img.title, img.section {
+    @include sizeFitImg()
+  }
+}

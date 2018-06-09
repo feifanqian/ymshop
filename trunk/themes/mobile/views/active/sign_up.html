@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=640, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
-    <link rel="stylesheet" href="http://www.ymlypt.com/static/yuanmeng/activity_a/css/invitelist.css">
+    <link rel="stylesheet" href="http://www.ymlypt.com/static/yuanmeng1/activity_a/css/invitelist.css">
     <title>邀请注册</title>
 </head>
 <body>
@@ -47,10 +47,22 @@
     <section class="section_3">
 
     </section>
-
-    <div class="invite">
-        <a href="inviteregist.html"><img src="img/recruit/p5.png" alt=""></a>
-    </div>
+    {if:isset($user)}
+        {if:$signed==1}
+        <div class="invite">
+            <a href="inviteregist.html"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a>
+        </div>
+        {else:}
+        <div class="invite">
+            <a href="inviteregist.html">报名</a>
+        </div>
+        {/if}
+    {else:}
+        <div class="invite">
+            <a href="/active/login/redirect/sign_up">请先登录</a>
+        </div>
+    {/if}
+    
 </div>
 </body>
 <script src="js/main.js"></script>
