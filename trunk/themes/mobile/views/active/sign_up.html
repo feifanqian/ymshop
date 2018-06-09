@@ -85,8 +85,8 @@
 $('#signup_act').on("click",function(){
     var user_id = {$user['user_id']};
     $.ajax({
-            url: "{url:/active/sign_up_act/user_id/}"+user_id,
-            data: {mobile: mobile, validatecode: validatecode},
+            url: "{url:/active/sign_up_act}",
+            data: {user_id: user_id},
             type: 'post',
             dataType: 'json',
             success: function (ret) { 
