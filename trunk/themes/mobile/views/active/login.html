@@ -39,7 +39,7 @@
     $(function ($) {
         //  点击登录
         $('#submit').click((e) => {
-            let mobile = $('#mobile').val();
+            let mobile = $('#account').val();
             let password = $('#password').val();
 
             if (mobile.length === 0 || password.length === 0) {
@@ -52,7 +52,7 @@
         })
     })
 </script>
-{echo:JS::import('form')}
+<!-- {echo:JS::import('form')} -->
 <script type="text/javascript">
     // {if:isset($invalid)}
     // var form = new Form();
