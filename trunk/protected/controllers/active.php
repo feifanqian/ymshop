@@ -62,17 +62,18 @@ class ActiveController extends Controller
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
                     // $redirectURL = Req::args("redirectURL");
 
-                    if ($redirectURL != '')
+                    if ($redirectURL != ''){
                         var_dump(123);die;
                         $this->redirect("/active/recruit");
-                    else
+                    } else {
                         $url = Cookie::get('url');
                         $url = $url!=NULL?$url:'/ucenter/index';
                         if(strpos($url, '/')!==0){
                             $url = "/".$url;
                         }
                         header("Location:$url");
-                    exit;
+                        exit;
+                    }    
                 }else {
                     $info = array('field' => 'password', 'msg' => '密码错误！');
                 }
