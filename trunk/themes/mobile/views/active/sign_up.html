@@ -92,12 +92,12 @@ $('#signup_act').on("click",function(){
             dataType: 'json',
             success: function (ret) { 
                 if (ret.status == "success") {                  
-                    $.toast('报名成功', "forbidden");
+                    alert('报名成功');
                 }                    
             }, 
             error: function (e) {
                 console.log(e);
-                $.toast("服务器繁忙!", "forbidden");
+                alert("服务器繁忙!");
             }
     });
 });
