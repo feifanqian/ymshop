@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=640, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
-    <link rel="stylesheet" href="css/invitelist.css">
+    <link rel="stylesheet" href="http://www.ymlypt.com/static/yuanmeng/activity_a/css/invitelist.css">
     <title>邀请注册</title>
 </head>
 <body>
@@ -15,10 +15,10 @@
     <section class="section_1">
         {if:isset($user)}
         <img src='{echo:Url::urlFormat("@".$user['avatar']."?v=".time())}' alt="" class="avatar">
-        <div class="nickname">{$user['real_name']}</div>
+        <a class="nickname" href="/active/login/redirect/sign_up" title="切换账号">{$user['real_name']}</a>
         {else:}
         <img src="/themes/mobile/images/logo-new.png" alt="" class="avatar">
-        <a class="nickname" href="/active/login/redirect/recruit">点击登录</a>
+        <a class="nickname" href="/active/login/redirect/sign_up">点击登录</a>
         {/if}
         <span>邀请</span>
         <img src="img/list/p11.png" alt="" class="tips">
