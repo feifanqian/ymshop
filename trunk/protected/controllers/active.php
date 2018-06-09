@@ -39,6 +39,10 @@ class ActiveController extends Controller
     }
 
     public function login() {
+        $this->safebox->clear('user');
+        $cookie = new Cookie();
+        $cookie->setSafeCode(Tiny::app()->getSafeCode());
+        $cookie->set('autologin', null, 0);
     	$this->redirect();
     }
 
