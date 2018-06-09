@@ -28,7 +28,7 @@
             </div>
         </div>
         <a class="find" href="javascript:alert('找回密码');">找回密码</a>
-        <a id="submit">登录</a>
+        <button class="weui_btn weui_btn_primary" id="submit">登录</button>
         <a class="register" href="javascript:alert('注册');">注册</a>
     </form>
 </div>
@@ -52,40 +52,40 @@
         })
     })
 </script>
-<!-- {echo:JS::import('form')} -->
+{echo:JS::import('form')}
 <script type="text/javascript">
-    // {if:isset($invalid)}
-    // var form = new Form();
-    // form.setValue('account', '{$account}');
-    // autoValidate.showMsg({id: $("input[name='{$invalid['field']}']").get(0), error: true, msg: "{$invalid['msg']}"});
-    // $(".invalid-msg").show();
-    // {/if}
-    //         $("input[pattern]").on("blur", function (event) {
-    //     $(".invalid-msg , .valid-msg").hide();
-    //     var current_input = $(this);
-    //     var result = autoValidate.validate(event);
-    //     if (result) {
-    //         current_input.parent().removeClass('invalid').addClass('valid');
-    //     } else {
-    //         current_input.parent().removeClass('valid').addClass('invalid');
-    //     }
-    //     if (result) {
-    //         if (current_input.attr('id') == 'account') {
-    //             $.post("{url:/ajax/account/account/}" + $(this).val(), function (data) {
-    //                 var msg = '合法用户';
-    //                 if (!data['status']) {
-    //                     msg = '用户不存在';
-    //                     current_input.next().show();
-    //                     current_input.parent().removeClass('valid').addClass('invalid');
-    //                     autoValidate.showMsg({id: document.getElementById('account'), error: data['status'], msg: msg});
-    //                 }
+    {if:isset($invalid)}
+    var form = new Form();
+    form.setValue('account', '{$account}');
+    autoValidate.showMsg({id: $("input[name='{$invalid['field']}']").get(0), error: true, msg: "{$invalid['msg']}"});
+    $(".invalid-msg").show();
+    {/if}
+            $("input[pattern]").on("blur", function (event) {
+        $(".invalid-msg , .valid-msg").hide();
+        var current_input = $(this);
+        var result = autoValidate.validate(event);
+        if (result) {
+            current_input.parent().removeClass('invalid').addClass('valid');
+        } else {
+            current_input.parent().removeClass('valid').addClass('invalid');
+        }
+        if (result) {
+            if (current_input.attr('id') == 'account') {
+                $.post("{url:/ajax/account/account/}" + $(this).val(), function (data) {
+                    var msg = '合法用户';
+                    if (!data['status']) {
+                        msg = '用户不存在';
+                        current_input.next().show();
+                        current_input.parent().removeClass('valid').addClass('invalid');
+                        autoValidate.showMsg({id: document.getElementById('account'), error: data['status'], msg: msg});
+                    }
                     
-    //             }, 'json');
-    //         }
-    //         $(".invalid-msg").show();
-    //     } else {
-    //         current_input.next().show();
-    //     }
-    // });
+                }, 'json');
+            }
+            $(".invalid-msg").show();
+        } else {
+            current_input.next().show();
+        }
+    });
 </script>
 </html>

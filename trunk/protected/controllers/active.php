@@ -49,13 +49,7 @@ class ActiveController extends Controller
         $obj = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile,cu.real_name")->where("cu.mobile='$account' and cu.status=1")->find();
         if ($obj) {
             if ($obj['status'] == 1) {
-                var_dump($account);
-                var_dump($passWord);
-                var_dump($obj['id']);
-                var_dump($obj['password']);
-                var_dump(CHash::md5($passWord, $obj['validcode']));die;
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
-                    var_dump(222);die;
                     $cookie = new Cookie();
                     $cookie->setSafeCode(Tiny::app()->getSafeCode());
                     if ($autologin == 1) {
