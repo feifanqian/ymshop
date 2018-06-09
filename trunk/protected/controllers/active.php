@@ -49,6 +49,7 @@ class ActiveController extends Controller
         $obj = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile,cu.real_name")->where("us.email='$account' or us.name='$account' or cu.mobile='$account' and cu.status=1")->find();
         if ($obj) {
             if ($obj['status'] == 1) {
+                var_dump(111);
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
                     var_dump(222);die;
                     $cookie = new Cookie();
@@ -76,6 +77,7 @@ class ActiveController extends Controller
                         exit;
                     }    
                 }else {
+                    var_dump(333);die;
                     $info = array('field' => 'password', 'msg' => '密码错误！');
                 }
             } else if ($obj['status'] == 2) {
