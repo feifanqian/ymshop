@@ -67,7 +67,7 @@
         {else:}
         <div class="invite">
            <div id="signup">
-            <a href="inviteregist.html" style="color: #fff;">报名</a>
+            <a href="javascript:;" id="signup" style="color: #fff;">报名</a>
            </div> 
         </div>
         {/if}
@@ -81,4 +81,23 @@
 </body>
 <script src="js/main.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+$('#signup').on("click",function(){
+    var user_id = {$user['user_id']};
+    $.ajax({
+            url: "{url:/active/sign_up_act/user_id/}"+user_id,
+            data: {mobile: mobile, validatecode: validatecode},
+            type: 'post',
+            dataType: 'json',
+            success: function (ret) { 
+                if (ret.status == "success") {                  
+                    $.toast('报名成功', "forbidden");
+                }                    
+            }, error: function (e) {
+                $.hideLoading();
+                $.toast("验证码发送失败!", "forbidden");
+            }
+    });
+});
+</script>
 </html>

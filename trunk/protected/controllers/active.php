@@ -112,6 +112,10 @@ class ActiveController extends Controller
         $this->redirect();
     }
 
-    
+    public function sign_up_act() {
+        $user_id = Filter::int(Req::args("user_id"));
+        $this->model->table('invite_active')->data(array('user_id'=>$user_id,'invite_num'=>0,'sign_time'=>date('Y-m-d H:i:s'),'end_time'=>date('Y-m-d H:i:s','+30 days')))->insert();
+        echo JSON::encode(array('status' => 'success'));
+    }
 }
 ?>
