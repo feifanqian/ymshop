@@ -299,7 +299,7 @@ class SimpleController extends Controller {
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
                     $redirectURL = Req::args("redirectURL");
 
-                    if ($redirectURL != '')
+                    if ($redirectURL != '' && preg_match("/https?:\/\//i", $redirectURL) == 0 && stripos($redirectURL, "reg") === false && stripos($redirectURL, "login_act") === false && stripos($redirectURL, "oauth_bind") === false && stripos($redirectURL, "activation_user") === false && stripos($redirectURL, "reset_password_act") === false)
                         header('Location: ' . $redirectURL, true, 302);
                     else
                         $url = Cookie::get('url');
