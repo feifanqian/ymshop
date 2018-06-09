@@ -47,7 +47,6 @@ class ActiveController extends Controller
             $autologin = 0;
         $model = $this->model->table("user as us");
         $obj = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile,cu.real_name")->where("us.email='$account' or us.name='$account' or cu.mobile='$account' and cu.status=1")->find();
-        var_dump($obj);die;
         if ($obj) {
             if ($obj['status'] == 1) {
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
@@ -64,7 +63,7 @@ class ActiveController extends Controller
                     $redirectURL = Req::args("redirectURL");
 
                     if ($redirectURL != '')
-                        header('Location: ' . $redirectURL, true, 302);
+                        $this->redirect("recruit", false, Req::args());
                     else
                         $url = Cookie::get('url');
                         $url = $url!=NULL?$url:'/ucenter/index';
