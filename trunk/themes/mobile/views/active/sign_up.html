@@ -93,9 +93,10 @@ $('#signup_act').on("click",function(){
                 if (ret.status == "success") {                  
                     $.toast('报名成功', "forbidden");
                 }                    
-            }, error: function (e) {
-                $.hideLoading();
-                $.toast("验证码发送失败!", "forbidden");
+            }, 
+            error: function (e) {
+                console.log(e);
+                $.toast("服务器繁忙!", "forbidden");
             }
     });
 });
