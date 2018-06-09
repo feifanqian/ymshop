@@ -67,7 +67,7 @@
         {else:}
         <div class="invite">
            <div id="signup">
-            <a href="javascript:;" id="signup" style="color: #fff;">报名</a>
+            <a href="javascript:;" id="signup_act" style="color: #fff;">报名</a>
            </div> 
         </div>
         {/if}
@@ -82,7 +82,7 @@
 <script src="js/main.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
-$('#signup').on("click",function(){
+$('#signup_act').on("click",function(){
     var user_id = {$user['user_id']};
     $.ajax({
             url: "{url:/active/sign_up_act/user_id/}"+user_id,
