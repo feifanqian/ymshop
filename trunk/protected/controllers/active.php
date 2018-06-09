@@ -40,9 +40,8 @@ class ActiveController extends Controller
     public function login_act() {
         $redirectURL = '/active/recruit';
         $this->assign("redirectURL", $redirectURL);
-        $account = Filter::sql(Req::post('account'));
-        var_dump($account);
-        $passWord = Req::post('password');
+        $account = Filter::str(Req::args('account'));
+        $passWord = Filter::str(Req::args('password'));
         $autologin = Req::args("autologin");
         if ($autologin == null)
             $autologin = 0;
