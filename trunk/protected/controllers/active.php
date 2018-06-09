@@ -60,7 +60,7 @@ class ActiveController extends Controller
                         $this->safebox->set('user', $obj, 1800);
                     }
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
-                    $redirectURL = Req::args("redirectURL");
+                    // $redirectURL = Req::args("redirectURL");
 
                     if ($redirectURL != '')
                         $this->redirect("recruit", false, Req::args());
