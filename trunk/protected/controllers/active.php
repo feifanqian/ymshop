@@ -63,7 +63,8 @@ class ActiveController extends Controller
                     // $redirectURL = Req::args("redirectURL");
 
                     if ($redirectURL != '')
-                        $this->redirect("recruit", false, Req::args());
+                        var_dump(123);die;
+                        $this->redirect("/active/recruit");
                     else
                         $url = Cookie::get('url');
                         $url = $url!=NULL?$url:'/ucenter/index';
