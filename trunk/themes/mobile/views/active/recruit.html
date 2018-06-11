@@ -112,49 +112,35 @@
         <div class="cell">
             <a href="//www.baidu.com" class="detail">查看<br>详情<br>>></a>
             <a href="" class="status1 had-get">已领取</a>
-            <span class="count">累积邀请XX人</span>
+            <span class="count">累积邀请{$invite_num}人</span>
         </div>
         <div class="cell">
             <a href="//www.baidu.com" class="detail">查看<br>详情<br>>></a>
             <a href="" class="status1 had-get">已领取</a>
-            <span class="count">累积邀请XX人</span>
+            <span class="count">累积邀请{$invite_num}人</span>
         </div>
         <div class="cell">
             <a href="//www.baidu.com" class="detail">查看<br>详情<br>>></a>
             <a href="" class="status1 had-get">已领取</a>
-            <span class="count">累积邀请XX人</span>
+            <span class="count">累积邀请{$invite_num}人</span>
         </div>
     </section>
 
     <!--邀请名单-->
     <section class="section_4">
+        {if:$list!=null}
         <div class="content">
+            {foreach:items=$data key=$k item=$item}
             <div class="cell">
-                <img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/avatar.png" alt="" class="avatar">
-                <span class="nickname">宝爷</span>
-                <span class="time">2018-05-30  21:00:01</span>
+                <img src='{echo:Url::urlFormat("@".$item['avatar'])}' alt="" class="avatar">
+                <span class="nickname">{$item['real_name']|$item['nickname']}</span>
+                <span class="time">{$item['create_time']}</span>
                 <span class="status">注册成功</span>
             </div>
-            <div class="cell">
-                <img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/avatar.png" alt="" class="avatar">
-                <span class="nickname">宝爷</span>
-                <span class="time">2018-05-30  21:00:01</span>
-                <span class="status">注册成功</span>
-            </div>
-            <div class="cell">
-                <img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/avatar.png" alt="" class="avatar">
-                <span class="nickname">宝爷</span>
-                <span class="time">2018-05-30  21:00:01</span>
-                <span class="status">注册成功</span>
-            </div>
-            <div class="cell">
-                <img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/avatar.png" alt="" class="avatar">
-                <span class="nickname">宝爷</span>
-                <span class="time">2018-05-30  21:00:01</span>
-                <span class="status">注册成功</span>
-            </div>
+            {/foreach}
         </div>
         <a href="" class="more">查看更多>></a>
+        {/if}
     </section>
 
     <!--活动规则-->
@@ -172,7 +158,12 @@
 <script>
     $(function ($) {
         //  试试动态的进度动画
-        $('.plan-arrow__content').delay(500).animate({'margin-left': '70%'}, 2000);
+        var progress;
+        var invite_num = {$invite_num};
+        var rate;
+        rate = invite_num<=38?invite_num/38:(invite_num<=200?invite_num/200:invite_num/800);
+        progress = rate*100+'%';
+        $('.plan-arrow__content').delay(500).animate({'margin-left': progress}, 2000);
 
         //  抽红包的点击事件
         $('.section_2').click((e) => {

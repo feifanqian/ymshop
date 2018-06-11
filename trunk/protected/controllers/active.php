@@ -34,7 +34,14 @@ class ActiveController extends Controller
         if($user_id) {
             $customer = $this->model->table("customer as cu")->fields("cu.*,u.avatar")->join("left join user as u on cu.user_id = u.id")->where("cu.user_id = $user_id")->find();
             $this->assign("user", $customer);
+            $invite_num = $this->model->table("invite")->where("user_id = ".$user_id." and from ='active'")->count();
+            $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where("i.user_id = " . $this->user['id'])->limit(4)->findAll();
+        } else {
+            $invite_num = 0;
+            $list = [];
         }
+        $this->assign("invite_num", $invite_num);
+        $this->assign("list", $list);
     	$this->redirect();
     }
 

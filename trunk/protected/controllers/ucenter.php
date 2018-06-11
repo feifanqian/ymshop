@@ -1145,7 +1145,10 @@ class UcenterController extends Controller
                             break;
                         case 'wap':
                             $invite['data'][$k]['from'] = 'PC端扫码';
-                            break;                                
+                            break;
+                        case 'active':
+                            $invite['data'][$k]['from'] = 'H5拉新活动';
+                            break;                                    
                         default:
                             $invite['data'][$k]['from'] = '微信支付';
                             break;
