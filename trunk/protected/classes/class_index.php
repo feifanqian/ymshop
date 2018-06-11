@@ -151,6 +151,6 @@ return array(
     "TbkTpwdCreateRequest"=>"taobao/request/TbkTpwdCreateRequest.php",
     "ResultSet"=>"taobao/ResultSet.php",
     "RequestCheckUtil"=>"taobao/RequestCheckUtil.php",
-    "Jssdk"=>"payments/jssdk.php",
+    "JSSDK"=>"payments/jssdk.php",
 );
 ?>
