@@ -1111,6 +1111,7 @@ class UcenterController extends Controller
             ->fields("i.*,u.nickname,u.avatar,cu.real_name")
             ->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")
             ->where("i.user_id = " . $this->user['id'])
+            ->order('i.createtime desc')
             ->findPage($page, 10);
         if($invite) {
             if($invite['data']!=null) {
