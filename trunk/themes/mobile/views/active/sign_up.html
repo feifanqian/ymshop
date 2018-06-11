@@ -93,6 +93,7 @@ $('#signup_act').on("click",function(){
             success: function (ret) { 
                 if (ret.status == "success") {                  
                     alert('报名成功');
+                    window.location.reload();
                 }                    
             }, 
             error: function (e) {
