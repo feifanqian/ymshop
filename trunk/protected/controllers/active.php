@@ -140,7 +140,7 @@ class ActiveController extends Controller
         echo JSON::encode(array('status' => 'success'));
     }
 
-    public function inviteregister() {
+    public function inviteregist() {
         $user_id = $this->user['id'];
         if($user_id) {
             $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where("i.from='active' and i.user_id=".$user_id)->findAll();
