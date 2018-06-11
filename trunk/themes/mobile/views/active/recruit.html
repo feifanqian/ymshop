@@ -127,8 +127,8 @@
     </section>
 
     <!--邀请名单-->
+    {if:$list!=null}
     <section class="section_4">
-        {if:$list!=null}
         <div class="content">
             {foreach:items=$data key=$k item=$item}
             <div class="cell">
@@ -139,17 +139,30 @@
             </div>
             {/foreach}
         </div>
-        <a href="" class="more">查看更多>></a>
-        {/if}
+        <a href="" class="more">查看更多>></a> 
     </section>
-
+    {/if}
     <!--活动规则-->
     <section class="section_5"></section>
 
     <!--邀请好友-->
-    <div class="invite">
-        <a href="inviteregist.html"><img src="/themes/mobile/views/active/img/recruit/p5.png" alt=""></a>
-    </div>
+    {if:isset($user)}
+        {if:$signed==1}
+        <div class="invite">
+            <a href="inviteregist.html"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a>
+        </div>
+        {else:}
+        <div class="invite">
+           <div id="signup">
+            <a href="javascript:;" id="signup_act" style="color: #fff;">报名</a>
+           </div> 
+        </div>
+        {/if}
+    {else:}
+        <div class="invite">
+            <a href="/active/login/redirect/sign_up">请先登录</a>
+        </div>
+    {/if}
 
 </div>
 </body>
