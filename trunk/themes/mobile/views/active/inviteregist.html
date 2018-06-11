@@ -17,24 +17,14 @@
     <div class="list">
         <p class="title">邀请名单</p>
         <div class="list-content">
+            {foreach:items=$list key=$k item=$item}
             <div class="cell">
-                <img src="img/recruit/avatar.png" alt="" class="avatar">
-                <span class="nickname">宝爷</span>
-                <span class="time">2018-05-30  21:00:01</span>
+                <img src='{echo:Url::urlFormat("@".$item['avatar'])}' alt="" class="avatar">
+                <span class="nickname">{$item['real_name']|$item['nickname']}</span>
+                <span class="time">{$item['create_time']}</span>
                 <span class="status">注册成功</span>
             </div>
-            <div class="cell">
-                <img src="img/recruit/avatar.png" alt="" class="avatar">
-                <span class="nickname">宝爷</span>
-                <span class="time">2018-05-30  21:00:01</span>
-                <span class="status">注册成功</span>
-            </div>
-            <div class="cell">
-                <img src="img/recruit/avatar.png" alt="" class="avatar">
-                <span class="nickname">宝爷</span>
-                <span class="time">2018-05-30  21:00:01</span>
-                <span class="status">注册成功</span>
-            </div>
+            {/foreach}
         </div>
         <!--加载更多-->
         <div class="more">加载更多</div>

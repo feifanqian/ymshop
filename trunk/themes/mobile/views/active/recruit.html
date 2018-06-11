@@ -130,7 +130,7 @@
     {if:$list!=null}
     <section class="section_4">
         <div class="content">
-            {foreach:items=$data key=$k item=$item}
+            {foreach:items=$list key=$k item=$item}
             <div class="cell">
                 <img src='{echo:Url::urlFormat("@".$item['avatar'])}' alt="" class="avatar">
                 <span class="nickname">{$item['real_name']|$item['nickname']}</span>
@@ -149,7 +149,7 @@
     {if:isset($user)}
         {if:$signed==1}
         <div class="invite">
-            <a href="inviteregist.html"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a>
+            <a href="/active/inviteregist"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a>
         </div>
         {else:}
         <div class="invite">
@@ -183,6 +183,25 @@
             alert('抽红包咯!');
         })
 
-    })
+    });
+    $('#signup_act').on("click",function(){
+        var user_id = {$user['user_id']};
+        $.ajax({
+                url: "{url:/active/sign_up_act}",
+                data: {user_id: user_id},
+                type: 'post',
+                dataType: 'json',
+                success: function (ret) { 
+                    if (ret.status == "success") {                  
+                        alert('报名成功');
+                        window.location.reload();
+                    }                    
+                }, 
+                error: function (e) {
+                    console.log(e);
+                    alert("服务器繁忙!");
+                }
+        });
+    });
 </script>
 </html>
