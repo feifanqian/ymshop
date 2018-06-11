@@ -118,7 +118,7 @@ class ActiveController extends Controller
             'user_id'=>$user_id,
             'invite_num'=>0,
             'sign_time'=>date('Y-m-d H:i:s'),
-            'end_time'=>date('Y-m-d H:i:s','+30 days')
+            'end_time'=>date("Y-m-d",strtotime('+ 30 days'))
             );
         var_dump($data);die;
         $this->model->table('invite_active')->data($data)->insert();
