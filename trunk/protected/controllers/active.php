@@ -43,23 +43,28 @@ class ActiveController extends Controller
                     $status1 = $sign_up['status1']==0?1:2;
                     $status2 = $sign_up['status2']==0?1:2;
                     $status3 = $sign_up['status3']==0?1:2;
+                    $num = 1000;
                 } elseif($invite_num>200 && $invite_num<800) {
                     $status1 = $sign_up['status1']==0?1:2;
                     $status2 = $sign_up['status2']==0?1:2;
                     $status3 = 0;
+                    $num = 800;
                 } elseif($invite_num>38 && $invite_num<200) {
                     $status1 = $sign_up['status1']==0?1:2;
                     $status2 = 0;
                     $status3 = 0;
+                    $num = 200;
                 } else {
                     $status1 = 0;
                     $status2 = 0;
                     $status3 = 0;
+                    $num = 38;
                 } 
             } else {
                 $status1 = 0;
                 $status2 = 0;
                 $status3 = 0;
+                $num = 38;
             }
             
         } else {
@@ -69,6 +74,7 @@ class ActiveController extends Controller
             $status1 = 0;
             $status2 = 0;
             $status3 = 0;
+            $num = 38;
         }
         $chance = floor($invite_num/3);
         $status = array('0'=>'未达成','1'=>'可领取','2'=>'已领取');
@@ -80,6 +86,7 @@ class ActiveController extends Controller
         $this->assign("chance", $chance);
         $this->assign("signed", $signed);
         $this->assign("invite_num", $invite_num);
+        $this->assign("num", $num);
         $this->assign("list", $list);
     	$this->redirect();
     }
