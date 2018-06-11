@@ -187,7 +187,14 @@ class ActiveController extends Controller
         } else {
             $list = [];
         }
+        $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+        $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+        $token = $wechat->getAccessToken();
+
+        $jssdk = new Jssdk($wechatcfg['app_key'], $wechatcfg['app_secret']);
+        $signPackage = $jssdk->GetSignPackage();
         $this->assign("list", $list);
+        $this->assign("signPackage", $signPackage);
         $this->redirect();
     }
 }
