@@ -185,8 +185,10 @@
         //  试试动态的进度动画
         var progress;
         var invite_num = {$invite_num};
+        var num = {$num};
         var rate;
-        rate = invite_num<=38?invite_num/38:(invite_num<=200?invite_num/200:invite_num/800);
+        rate = invite_num/num;
+        console.log(rate);
         progress = rate*100+'%';
         $('.plan-arrow__content').delay(500).animate({'margin-left': progress}, 2000);
 
