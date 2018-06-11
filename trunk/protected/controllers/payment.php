@@ -946,6 +946,9 @@ class PaymentController extends Controller {
         if($payment_id==6){
             $this->assign('biz_content',$myParams['biz_content']);
         }
+        if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])) {
+            var_dump($ret['ysepay_online_jsapi_pay_response']);die;
+        }
         $this->assign("jsApiParameters", $ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info']);
         if($payment_id==8){
             $this->assign('bank_type',$myParams['bank_type']);
