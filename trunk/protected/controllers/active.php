@@ -43,6 +43,8 @@ class ActiveController extends Controller
             $list = [];
             $signed = 0;
         }
+        $chance = floor($invite_num/3);
+        $this->assign("chance", $chance);
         $this->assign("signed", $signed);
         $this->assign("invite_num", $invite_num);
         $this->assign("list", $list);
