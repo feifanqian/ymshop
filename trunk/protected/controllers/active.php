@@ -38,12 +38,45 @@ class ActiveController extends Controller
             $invite_num = count($list);
             $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
             $signed = $sign_up?1:0;
+            if($sign_up) {
+               if($invite_num>=800) {
+                    $status1 = $sign_up['status1']==0?1:2;
+                    $status2 = $sign_up['status2']==0?1:2;
+                    $status3 = $sign_up['status3']==0?1:2;
+                } elseif($invite_num>200 && $invite_num<800) {
+                    $status1 = $sign_up['status1']==0?1:2;
+                    $status2 = $sign_up['status2']==0?1:2;
+                    $status3 = 0;
+                } elseif($invite_num>38 && $invite_num<200) {
+                    $status1 = $sign_up['status1']==0?1:2;
+                    $status2 = 0;
+                    $status3 = 0;
+                } else {
+                    $status1 = 0;
+                    $status2 = 0;
+                    $status3 = 0;
+                } 
+            } else {
+                $status1 = 0;
+                $status2 = 0;
+                $status3 = 0;
+            }
+            
         } else {
             $invite_num = 0;
             $list = [];
             $signed = 0;
+            $status1 = 0;
+            $status2 = 0;
+            $status3 = 0;
         }
         $chance = floor($invite_num/3);
+        $status = array('0'=>'未达成','1'=>'可领取','2'=>'已领取');
+        
+        $this->assign("status1", $status1);
+        $this->assign("status2", $status2);
+        $this->assign("status3", $status3);
+        $this->assign("status", $status);
         $this->assign("chance", $chance);
         $this->assign("signed", $signed);
         $this->assign("invite_num", $invite_num);

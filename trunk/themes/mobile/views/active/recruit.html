@@ -25,6 +25,16 @@
     .can-get{
         background-color: #f06834; 
     }
+    #signup{
+        background-color: #f06834;
+        margin-left: 24%;
+        width: 50%;
+        height: 40px;
+        color: white !important;
+        border-radius: 6px;
+        line-height: 40px;
+        text-align: center;
+    }
     </style>
     <title>会员招募</title>
 </head>
@@ -111,17 +121,17 @@
     <section class="section_3">
         <div class="cell">
             <a href="//www.baidu.com" class="detail">查看<br>详情<br>>></a>
-            <a href="" class="status1 had-get">已领取</a>
+            <a href="" class="status1 had-get">{$status[$status3]}</a>
             <span class="count">累积邀请{$invite_num}人</span>
         </div>
         <div class="cell">
             <a href="//www.baidu.com" class="detail">查看<br>详情<br>>></a>
-            <a href="" class="status1 had-get">已领取</a>
+            <a href="" class="status1 had-get">{$status[$status2]}</a>
             <span class="count">累积邀请{$invite_num}人</span>
         </div>
         <div class="cell">
             <a href="//www.baidu.com" class="detail">查看<br>详情<br>>></a>
-            <a href="" class="status1 had-get">已领取</a>
+            <a href="" class="status1 had-get">{$status[$status1]}</a>
             <span class="count">累积邀请{$invite_num}人</span>
         </div>
     </section>
@@ -154,13 +164,15 @@
         {else:}
         <div class="invite">
            <div id="signup">
-            <a href="javascript:;" id="signup_act" style="color: #fff;">报名</a>
+            <a href="javascript:;" id="signup_act" style="color: #fff;">立即参与</a>
            </div> 
         </div>
         {/if}
     {else:}
         <div class="invite">
-            <a href="/active/login/redirect/sign_up">请先登录</a>
+            <div id="signup">
+             <a href="/active/login/redirect/recruit" style="color: #fff;">立即参与</a>
+          </div>
         </div>
     {/if}
 
