@@ -187,9 +187,10 @@
         var invite_num = {$invite_num};
         var num = {$num};
         var rate;
-        rate = invite_num/num;
-        console.log(rate);
+        // rate = invite_num/num;
+        rate = 0.1;
         progress = rate*100+'%';
+        console.log(progress);
         $('.plan-arrow__content').delay(500).animate({'margin-left': progress}, 2000);
 
         //  抽红包的点击事件
