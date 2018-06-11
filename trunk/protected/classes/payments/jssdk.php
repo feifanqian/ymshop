@@ -1,7 +1,11 @@
 <?php
+define('TICKET_PATH', dirname(__FILE__) . '/jsapi_ticket.json');
+define('TOKEN_PATH', dirname(__FILE__) . '/access_token.json');
 class JSSDK {
   private $appId;
   private $appSecret;
+  private $ticketPath = TICKET_PATH;
+  private $tokenPath = TOKEN_PATH;
 
   public function __construct($appId, $appSecret) {
     $this->appId = $appId;
@@ -45,7 +49,7 @@ class JSSDK {
 
   private function getJsApiTicket() {
     // jsapi_ticket 应该全局存储与更新，以下代码以写入到文件中做示例
-    $data = json_decode(file_get_contents("./jsapi_ticket.json"));
+    $data = json_decode(file_get_contents($this->ticketPath));
     if ($data->expire_time < time()) {
       $accessToken = $this->getAccessToken();
       // 如果是企业号用以下 URL 获取 ticket
@@ -69,7 +73,7 @@ class JSSDK {
 
   private function getAccessToken() {
     // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
-    $data = json_decode(file_get_contents("./access_token.json"));
+    $data = json_decode(file_get_contents($this->tokenPath));
     if ($data->expire_time < time()) {
       // 如果是企业号用以下URL获取access_token
       // $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$this->appId&corpsecret=$this->appSecret";
