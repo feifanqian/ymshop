@@ -120,7 +120,6 @@ class ActiveController extends Controller
             'sign_time'=>date('Y-m-d H:i:s'),
             'end_time'=>date("Y-m-d",strtotime('+ 30 days'))
             );
-        var_dump($data);die;
         $this->model->table('invite_active')->data($data)->insert();
         echo JSON::encode(array('status' => 'success'));
     }
