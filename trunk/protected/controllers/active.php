@@ -93,6 +93,8 @@ class ActiveController extends Controller
 
     public function login() {
         $redirectURL = Filter::str(Req::args("redirect"));
+        $inviter = Filter::int(Req::args("inviter"));
+        $this->assign("inviter", $inviter);
         $this->assign("redirectURL", $redirectURL);
         $this->safebox->clear('user');
         $cookie = new Cookie();
@@ -103,6 +105,7 @@ class ActiveController extends Controller
 
     public function login_act() {
         $redirectURL = Filter::str(Req::args("redirect"));
+        $inviter = Filter::int(Req::args("inviter"));
         $this->assign("redirectURL", $redirectURL);
         $account = Filter::str(Req::args('account'));
         $passWord = Filter::str(Req::args('password'));
@@ -124,7 +127,9 @@ class ActiveController extends Controller
                         $this->safebox->set('user', $obj, 1800);
                     }
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
-
+                    if($inviter) {
+                        Common::buildInviteShip($inviter, $obj['id'], 'active');
+                    } 
                     if ($redirectURL=='recruit'){
                         $this->redirect("/active/recruit");
                     } elseif ($redirectURL=='sign_up'){
@@ -184,8 +189,10 @@ class ActiveController extends Controller
         $user_id = $this->user['id'];
         if($user_id) {
             $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where("i.from='active' and i.user_id=".$user_id)->findAll();
+            $this->assign("user_id", $user_id);
         } else {
             $list = [];
+            $this->redirect('/active/login/redirect/recruit');
         }
         $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
         $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');

@@ -12,6 +12,7 @@
 <div id="app">
     <form class="main" id="loginsubmit" action="{url:/active/login_act}" method="post">
         <input type="hidden" value="{$redirectURL}" name="redirect">
+        <input type="hidden" value="{$inviter}" name="inviter">
         <div class="main-content">
             <div class="cell">
                 <label>手机号</label>
@@ -30,7 +31,7 @@
         </div>
         <a class="find" href="javascript:alert('找回密码');">找回密码</a>
         <button class="weui_btn weui_btn_primary" id="submit">登录</button>
-        <a class="register" href="javascript:alert('注册');">注册</a>
+        <a class="register" href="/simple/register/back/active/inviter/{$inviter}">注册</a>
     </form>
 </div>
 </body>

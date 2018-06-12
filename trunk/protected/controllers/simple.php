@@ -164,6 +164,10 @@ class SimpleController extends Controller {
         $this->redirect("reg", false, Req::args());
     }
     public function reg(){
+        $back = Filter::str(Req::args("back"));
+        $inviter = Filter::int(Req::args("inviter"));
+        $this->assign("back", $back);
+        $this->assign("inviter", $inviter);
         $this->redirect("register");
     }
     public function register_act(){
@@ -173,6 +177,8 @@ class SimpleController extends Controller {
             $passWord = Req::post('password');
             $rePassWord = Req::post('repassword');
             $mobile_code = Req::args('mobile_code');
+            $back = Filter::str(Req::args("back"));
+            $inviter_id = Filter::int(Req::args("inviter"));
             $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
             $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
             if($checkFlag){
@@ -210,6 +216,12 @@ class SimpleController extends Controller {
                                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile,cu.real_name")->where("cu.mobile='{$mobile}'")->find();
                                             $this->safebox->set('user', $obj, 1800);
                                             Common::sendPointCoinToNewComsumer($last_id);
+                                            if($back=='active') {
+                                                if($inviter_id) {
+                                                    Common::buildInviteShip($inviter_id, $last_id, 'active');
+                                                }
+                                                $this->redirect("/active/login/redirect/recruit");
+                                            }
                                             $this->redirect("/ucenter/index",true);
                                             exit();
                                         }else{
