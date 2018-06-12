@@ -210,5 +210,9 @@ class ActiveController extends Controller
     public function travel_detail() {
         $this->redirect();
     }
+
+    public function watch_detail() {
+        $this->redirect();
+    }
 }
 ?>
