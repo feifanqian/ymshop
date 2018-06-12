@@ -114,7 +114,7 @@
     <section class="section_2">
         <p class="title">拆红包&nbsp;看手气</p>
         <p class="sub-title">你还有{$chance}次抽奖机会</p>
-        <img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p12.png" alt="">
+        <img class="redbag" src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p12.png" alt="">
     </section>
 
     <!--邀用户 得豪礼-->
@@ -189,12 +189,17 @@
         var rate;
         rate = invite_num/num;
         progress = rate*100+'%';
-        // console.log(progress);
+        var chance = {$chance};
         $('.plan-arrow__content').delay(500).animate({'margin-left': progress}, 2000);
 
         //  抽红包的点击事件
         $('.section_2').click((e) => {
-            alert('抽红包咯!');
+            if(chance==0) {
+                alert('您还没有抽奖机会，赶紧去邀请小伙伴们吧!');
+            } else {
+                $(this).$('.redbag').attr('src','http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png')
+                // alert('抽红包咯!');
+            }   
         })
 
     });
