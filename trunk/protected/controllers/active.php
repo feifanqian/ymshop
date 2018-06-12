@@ -68,6 +68,7 @@ class ActiveController extends Controller
             }
             
         } else {
+            $this->redirect('/active/sign_up');
             $invite_num = 0;
             $list = [];
             $signed = 0;
@@ -133,7 +134,7 @@ class ActiveController extends Controller
                     if ($redirectURL=='recruit'){
                         $this->redirect("/active/recruit");
                     } elseif ($redirectURL=='sign_up'){
-                        $this->redirect("/active/sign_up");
+                        $this->redirect("/active/recruit");
                     } else {
                         $url = Cookie::get('url');
                         $url = $url!=NULL?$url:'/ucenter/index';
