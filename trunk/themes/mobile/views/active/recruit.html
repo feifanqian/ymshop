@@ -198,7 +198,7 @@
             if(chance==0) {
                 alert('您还没有抽奖机会，赶紧去邀请小伙伴们吧!');
             } else {
-                $(this).$('.redbag').attr('src','http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png');
+                $('.redbag').attr('src','http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png');
                 $.ajax({
                     url: "{url:/active/open_redbag}",
                     data: {user_id: user_id},
