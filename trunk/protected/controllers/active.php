@@ -61,6 +61,7 @@ class ActiveController extends Controller
                     $num = 38;
                 } 
             } else {
+                $this->redirect('/active/sign_up');
                 $status1 = 0;
                 $status2 = 0;
                 $status3 = 0;
@@ -203,6 +204,10 @@ class ActiveController extends Controller
         $signPackage = $jssdk->GetSignPackage();
         $this->assign("list", $list);
         $this->assign("signPackage", $signPackage);
+        $this->redirect();
+    }
+
+    public function travel_detail() {
         $this->redirect();
     }
 }
