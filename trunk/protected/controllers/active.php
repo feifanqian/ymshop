@@ -35,8 +35,9 @@ class ActiveController extends Controller
             $customer = $this->model->table("customer as cu")->fields("cu.*,u.avatar")->join("left join user as u on cu.user_id = u.id")->where("cu.user_id = $user_id")->find();
             $this->assign("user", $customer);
             $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where("i.from='active' and i.user_id=".$user_id)->limit(4)->findAll();
-            $invite_num = count($list);
+            // $invite_num = count($list);
             $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
+            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
             $signed = $sign_up?1:0;
             if($sign_up) {
                if($invite_num>=800) {
@@ -131,6 +132,19 @@ class ActiveController extends Controller
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
                     if($inviter) {
                         Common::buildInviteShip($inviter, $obj['id'], 'active');
+                        $active = $this->model->table('invite_active')->where('user_id='.$obj['id'])->find();
+                        if($active) {
+                            $this->model->table('invite_active')->data(['invite_num'=>$active['invite_num']+1])->where('user_id='.$obj['id'])->update();
+                        } else {
+                            $data = array(
+                                'user_id'=>$obj['id'],
+                                'invite_num'=>1,
+                                'sign_time'=>date('Y-m-d H:i:s'),
+                                'end_time'=>date("Y-m-d",strtotime('+ 30 days'))
+                                );
+                            $this->model->table('invite_active')->data($data)->insert();
+                        }
+                        
                     } 
                     if ($redirectURL=='recruit'){
                         $this->redirect("/active/recruit");
@@ -213,6 +227,13 @@ class ActiveController extends Controller
 
     public function watch_detail() {
         $this->redirect();
+    }
+
+    public function open_redbag() {
+        $user_id = Filter::int(Req::args("user_id"));
+        $active = $this->model->table('invite_active')->where('user_id='.$user_id)->find();
+        $this->model->table('invite_active')->data(['invite_num'=>$active['invite_num']-3])->where('user_id='.$user_id)->update();
+        echo JSON::encode(array('status' => 'success'));
     }
 }
 ?>

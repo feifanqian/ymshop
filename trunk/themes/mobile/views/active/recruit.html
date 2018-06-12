@@ -190,6 +190,7 @@
         rate = invite_num/num;
         progress = rate*100+'%';
         var chance = {$chance};
+        var user_id = {$user['user_id']};
         $('.plan-arrow__content').delay(500).animate({'margin-left': progress}, 2000);
 
         //  抽红包的点击事件
@@ -197,7 +198,23 @@
             if(chance==0) {
                 alert('您还没有抽奖机会，赶紧去邀请小伙伴们吧!');
             } else {
-                $(this).$('.redbag').attr('src','http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png')
+                $(this).$('.redbag').attr('src','http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png');
+                $.ajax({
+                    url: "{url:/active/open_redbag}",
+                    data: {user_id: user_id},
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (ret) { 
+                        if (ret.status == "success") {                  
+                            alert('恭喜！');
+                            window.location.reload();
+                        }                    
+                    }, 
+                    error: function (e) {
+                        console.log(e);
+                        alert("服务器繁忙!");
+                    }
+            });
                 // alert('抽红包咯!');
             }   
         })
