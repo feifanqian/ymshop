@@ -284,6 +284,11 @@ class CashierAction extends Controller
                 $this->code = 1252;
                 return;
             }
+            $had_used = $this->model->table('cashier_attendance')->where("desk_id=".$desk['id']." and work_on_date='$today' and user_id !=".$this->user['id'])->find();
+            if($had_used) {
+                $this->code = 1261;
+                return;
+            }
             $data = array(
             'cashier_id'=>$cashier['id'],
             'user_id'=>$this->user['id'],
