@@ -618,7 +618,7 @@ class AddressAction extends Controller
             $list['road'] = '';
         }
         if($list['picture']==null){
-            $list['picture'] = '';
+            $list['picture'] = 'http://www.ymlypt.com/themes/mobile/images/logo-new.png';
         }
         if($list['info']==null){
             $list['info'] = '';
