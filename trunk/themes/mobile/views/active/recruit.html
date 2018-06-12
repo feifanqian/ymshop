@@ -180,6 +180,7 @@
 </body>
 <script src="http://www.ymlypt.com/static/yuanmeng/activity_a/js/main.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
 <script>
     $(function ($) {
         //  试试动态的进度动画
@@ -198,7 +199,12 @@
             if(chance==0) {
                 alert('您还没有抽奖机会，赶紧去邀请小伙伴们吧!');
             } else {
-                $('.redbag').attr('src','http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png');
+                layer.open({
+                    type: 3,
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['100%', '200px'], //宽高
+                    content: '<img class="redbag" src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png" alt="">'
+                });
                 $.ajax({
                     url: "{url:/active/open_redbag}",
                     data: {user_id: user_id},
@@ -206,7 +212,7 @@
                     dataType: 'json',
                     success: function (ret) { 
                         if (ret.status == "success") {                  
-                            alert('恭喜！');
+                            // alert('恭喜！');
                             window.location.reload();
                         }                    
                     }, 
