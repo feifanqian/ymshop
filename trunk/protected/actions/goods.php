@@ -96,9 +96,11 @@ class GoodsAction extends Controller {
         if($form=='android') { //安卓
             $appkey = '24875594';
             $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
+            $AdzoneId = '513416107';
         } else { //ios
             $appkey = '24876667';
             $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
+            $AdzoneId = '582570496';
         }
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;
@@ -106,9 +108,9 @@ class GoodsAction extends Controller {
         $c->format = 'json';
         $c->v = '2.0';
         $req = new TbkDgItemCouponGetRequest;
-        $req->setAdzoneId("513416107");
+        $req->setAdzoneId($AdzoneId);
         $req->setPlatform("2");
-        $req->setPageSize(10);
+        $req->setPageSize(20);
         if($type==1){
             $req->setQ($q);
         } else {
