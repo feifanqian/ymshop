@@ -131,20 +131,7 @@ class ActiveController extends Controller
                     }
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
                     if($inviter) {
-                        Common::buildInviteShip($inviter, $obj['id'], 'active');
-                        $active = $this->model->table('invite_active')->where('user_id='.$obj['id'])->find();
-                        if($active) {
-                            $this->model->table('invite_active')->data(['invite_num'=>$active['invite_num']+1])->where('user_id='.$obj['id'])->update();
-                        } else {
-                            $data = array(
-                                'user_id'=>$obj['id'],
-                                'invite_num'=>1,
-                                'sign_time'=>date('Y-m-d H:i:s'),
-                                'end_time'=>date("Y-m-d",strtotime('+ 30 days'))
-                                );
-                            $this->model->table('invite_active')->data($data)->insert();
-                        }
-                        
+                        Common::buildInviteShip($inviter, $obj['id'], 'active');    
                     } 
                     if ($redirectURL=='recruit'){
                         $this->redirect("/active/recruit");
