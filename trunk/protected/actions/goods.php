@@ -107,7 +107,7 @@ class GoodsAction extends Controller {
         $c->v = '2.0';
         $req = new TbkDgItemCouponGetRequest;
         $req->setAdzoneId("513416107");
-        $req->setPlatform("1");
+        $req->setPlatform("2");
         $req->setPageSize(10);
         if($type==1){
             $req->setQ($q);
@@ -146,7 +146,7 @@ class GoodsAction extends Controller {
                         array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_DESC,$resp['results']['tbk_coupon']);
                         break;        
                 }
-                $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
+                // $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
             }
         }
         
