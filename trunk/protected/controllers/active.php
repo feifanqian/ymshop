@@ -217,7 +217,9 @@ class ActiveController extends Controller
             $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
         } else {
             $invite_num = 0;
+            $user_id = 0;
         }
+        $this->assign("user_id", $user_id);
         $status = $invite_num>=38?1:0;
         $this->assign("status", $status);
         $this->redirect();
@@ -227,11 +229,12 @@ class ActiveController extends Controller
         $user_id = $this->user['id'];
         if($user_id) {
             $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
-            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
-            $this->assign("user_id", $user_id);
+            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];     
         } else {
             $invite_num = 0;
+            $user_id = 0;
         }
+        $this->assign("user_id", $user_id);
         $status = $invite_num>=800?1:0;
         $this->assign("status", $status);
         $this->redirect();
