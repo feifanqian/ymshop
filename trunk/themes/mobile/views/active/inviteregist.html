@@ -39,15 +39,15 @@
         {if:$is_weixin==true}
         <a href="javascript:;" id="shareWechat"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a>
         {else:}
-        <a href="javascript:;" id="shareWechat"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a>
-        <!-- <a href="javascript:;" onclick="call('wechatFriend')"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a> -->
+        <!-- <a href="javascript:;" id="shareWechat"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a> -->
+        <a href="javascript:;" onclick="call('wechatFriend')"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a>
         {/if}
     </div>
     <div class="weui_msg" style="display: none;">
         <div class="weui_icon_area"><i class="weui_icon_info weui_icon_msg"></i></div>
         <div class="weui_text_area">
-            <h2 class="weui_msg_title">温馨提示</h2>
-            <p class="weui_msg_desc">请点击选择右上角“发送给朋友”或“分享到朋友圈”完成分享</p>
+            <h2 class="weui_msg_title" style="color: #f06834;">温馨提示</h2>
+            <p class="weui_msg_desc" style="font-size: 26px;color: #f06834;">请点击选择右上角“发送给朋友”或“分享到朋友圈”完成分享</p>
         </div>
     </div>
 </div>
@@ -84,7 +84,7 @@
         })();
 </script>
 <script type="text/javascript" src="https://fa-ge.github.io/NativeShare/NativeShare.js"></script>
-{if:$is_weixin==false} 
+{if:$is_weixin==true} 
 <script>
  wx.config({
    debug:  false,  //调式模式，设置为ture后会直接在网页上弹出调试信息，用于排查问题
