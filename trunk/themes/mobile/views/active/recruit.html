@@ -35,8 +35,19 @@
         line-height: 40px;
         text-align: center;
     }
-    .layui-m-layerchild{
-        margin-left: -50%;
+    .layui-m-layercont{
+     text-align: left !important;
+     padding: 20px 20px !important;
+    }
+    .layui-m-layerchild h3{
+        height: 50px;
+        line-height: 74px;
+    }
+    .layui-m-layercont p{
+    float: right;
+    }
+    .layui-m-layercont img{
+        width: 100% !important;
     }
     </style>
     <title>会员招募</title>
@@ -203,9 +214,9 @@
                 alert('您还没有抽奖机会，赶紧去邀请小伙伴们吧!');
             } else {
                 layer.open({
-                    type: 2,
+                    type: 3,
                     skin: 'layui-layer-rim', //加上边框
-                    area: ['50%', '250px'], //宽高
+                    area: ['100%', '250px'], //宽高
                     content: '<img class="redbag" src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png" alt="">'
                 });
                 $.ajax({
