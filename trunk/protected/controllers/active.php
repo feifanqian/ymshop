@@ -211,10 +211,28 @@ class ActiveController extends Controller
     }
 
     public function travel_detail() {
+        $user_id = $this->user['id'];
+        if($user_id) {
+            $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
+            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+        } else {
+            $invite_num = 0;
+        }
+        $status = $invite_num>=38?1:0;
+        $this->assign("status", $status);
         $this->redirect();
     }
 
     public function watch_detail() {
+        $user_id = $this->user['id'];
+        if($user_id) {
+            $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
+            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+        } else {
+            $invite_num = 0;
+        }
+        $status = $invite_num>=800?1:0;
+        $this->assign("status", $status);
         $this->redirect();
     }
 
@@ -222,6 +240,15 @@ class ActiveController extends Controller
         $user_id = Filter::int(Req::args("user_id"));
         $active = $this->model->table('invite_active')->where('user_id='.$user_id)->find();
         $this->model->table('invite_active')->data(['invite_num'=>$active['invite_num']-3])->where('user_id='.$user_id)->update();
+        $data = array(
+            'user_id'=>$user_id,
+            'type'=>1,
+            'amount'=>12.00,
+            'create_time'=>date('Y-m-d H:i:s'),
+            'end_time'=>date("Y-m-d",strtotime('+ 30 days')),
+            'status'=>1
+            );
+        $this->model->table('active_voucher')->data($data)->insert();
         echo JSON::encode(array('status' => 'success'));
     }
 }
