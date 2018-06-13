@@ -121,13 +121,6 @@ class GoodsAction extends Controller {
 
         $resp = Common::objectToArray($resp);
         
-        // $cache = CacheFactory::getInstance();
-        // $tbk_coupon = $cache->get("_TbkCoupon");
-        // if ($cache->get("_TbkCoupon") === null) {
-        //     $tbk_coupon = $resp['results']['tbk_coupon'];
-        //     $cache->set("_TbkCoupon", $items, 60*60);
-        // }
-        // $resp['results']['tbk_coupon'] = $tbk_coupon;
         if(isset($resp['results']['tbk_coupon'])) {
             if($resp['results']['tbk_coupon']) {
                 foreach ($resp['results']['tbk_coupon'] as $k => $v) {
@@ -149,8 +142,15 @@ class GoodsAction extends Controller {
                         break;        
                 }
                 // $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
+                $cache = CacheFactory::getInstance();
+                $tbk_coupon = $cache->get("_TbkCoupon");
+                if ($cache->get("_TbkCoupon") === null) {
+                    $tbk_coupon = $resp['results']['tbk_coupon'];
+                    $cache->set("_TbkCoupon", $items, 60*60);
+                }
+                $resp['results']['tbk_coupon'] = $tbk_coupon;
             }
-        }
+        }           
         
         $this->code = 0;
         $this->content = $resp;
