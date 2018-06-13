@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
     <link rel="stylesheet" href="http://www.ymlypt.com/static/yuanmeng1/activity_a/css/inviteregist.css">
+    <link rel="stylesheet" href="{url:#css/weui.min.css}">
+    <link rel="stylesheet" href="{url:#css/jquery.weui.min.css}">
     <title>邀请列表</title>
 </head>
 <body>
@@ -34,8 +36,18 @@
         </div>
     </div>
     <div class="invite">
-        <!-- <a href="javascript:;" id="shareWechat" onclick="call('wechatFriend')"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a> -->
+        {if:$is_weixin==true}
         <a href="javascript:;" id="shareWechat"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a>
+        {ese:}
+        <a href="javascript:;" onclick="call('wechatFriend')"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p5.png" alt=""></a>
+        {/if}
+    </div>
+    <div class="weui_msg" style="display: none;">
+        <div class="weui_icon_area"><i class="weui_icon_info weui_icon_msg"></i></div>
+        <div class="weui_text_area">
+            <h2 class="weui_msg_title">温馨提示</h2>
+            <p class="weui_msg_desc">请点击选择右上角“发送给朋友”</p>
+        </div>
     </div>
 </div>
 </body>
@@ -70,7 +82,8 @@
             s.parentNode.insertBefore(hm, s);
         })();
 </script>
-<script type="text/javascript" src="https://fa-ge.github.io/NativeShare/NativeShare.js"></script> 
+<script type="text/javascript" src="https://fa-ge.github.io/NativeShare/NativeShare.js"></script>
+{if:$is_weixin==true} 
 <script>
  wx.config({
    debug:  false,  //调式模式，设置为ture后会直接在网页上弹出调试信息，用于排查问题
@@ -96,22 +109,41 @@
 //       alert(JSON.stringify(res));
 //     }
 // });
- // $('#shareWechat').on("click",function(){
+$('#shareWechat').on("click",function(){
+   $('.weui_msg').show();
+});
     var user_id = {$user_id};
+    var imgUrl = "http://www.ymlypt.com/static/yuanmeng1/activity_a/img/recruit/header.jpg";
+    var lineLink = 'http://www.ymlypt.com/active/login/redirect/recruit/inviter/'+user_id;
+    var descContent = "NativeShare是一个整合了各大移动端浏览器调用原生分享的插件";
+    var shareTitle = '圆梦共享网';
     // alert('share');
     wx.ready(function () {   //ready函数用于调用API，如果你的网页在加载后就需要自定义分享和回调功能，需要在此调用分享函数。//如果是微信游戏结束后，需要点击按钮触发得到分值后分享，这里就不需要调用API了，可以在按钮上绑定事件直接调用。因此，微信游戏由于大多需要用户先触发获取分值，此处请不要填写如下所示的分享API
         wx.onMenuShareAppMessage({  //例如分享到朋友圈的API  
-           title: '圆梦共享网', // 分享标题
-           desc:'NativeShare是一个整合了各大移动端浏览器调用原生分享的插件', 
-           link: 'http://www.ymlypt.com/active/login/redirect/recruit/inviter/'+user_id, // 分享链接
-           imgUrl: 'http://www.ymlypt.com/static/yuanmeng1/activity_a/img/recruit/header.jpg', // 分享图标
+           title: shareTitle, // 分享标题
+           desc: descContent, 
+           link: lineLink, // 分享链接
+           imgUrl: imgUrl, // 分享图标
            success: function () {
-               alert(666);
+               alert('分享成功');
            },
            cancel: function () {
                // 用户取消分享后执行的回调函数
-               alert(333);
+               alert('取消分享');
            }
+        });
+        wx.onMenuShareTimeline({
+            title: shareTitle, // 分享标题
+            desc: descContent, 
+            link: lineLink, // 分享链接
+            imgUrl: imgUrl, // 分享图标
+            success: function () {
+                alert('分享成功');
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+                alert('取消分享');
+            }
         });
         // WeixinJSBridge.invoke('sendAppMessage',{   
         // //"appid":appId,   
@@ -123,50 +155,48 @@
         // "title":'圆梦共享网'   
         // });  
     });
- // });
   
 wx.error(function (res) {
  alert(res.errMsg);  //打印错误消息。及把 debug:false,设置为debug:ture就可以直接在网页上看到弹出的错误提示
 });
+</script>
+{else:}
+<script type="text/javascript">
+        var nativeShare = new NativeShare();
+        var user_id = {$user_id};
+        var shareData = {
+            title: '圆梦共享网',
+            desc: 'NativeShare是一个整合了各大移动端浏览器调用原生分享的插件',
+            // 如果是微信该link的域名必须要在微信后台配置的安全域名之内的。
+            link: 'http://www.ymlypt.com/active/login/redirect/recruit/inviter/'+user_id,
+            icon: 'http://www.ymlypt.com/static/yuanmeng1/activity_a/img/recruit/header.jpg',
+            // 不要过于依赖以下两个回调，很多浏览器是不支持的
+            success: function() {
+                alert('success');
+            },
+            fail: function() {
+                alert('cancel');
+            }
+        }
+        nativeShare.setShareData(shareData);
 
-        // var nativeShare = new NativeShare();
-        // var user_id = {$user_id};
-        // var shareData = {
-        //     title: '圆梦共享网',
-        //     desc: 'NativeShare是一个整合了各大移动端浏览器调用原生分享的插件',
-        //     // 如果是微信该link的域名必须要在微信后台配置的安全域名之内的。
-        //     link: 'http://www.ymlypt.com/active/login/redirect/recruit/inviter/'+user_id,
-        //     icon: 'http://www.ymlypt.com/static/yuanmeng1/activity_a/img/recruit/header.jpg',
-        //     // 不要过于依赖以下两个回调，很多浏览器是不支持的
-        //     success: function() {
-        //         alert('success');
-        //     },
-        //     fail: function() {
-        //         alert('fail');
-        //     }
-        // }
-        // nativeShare.setShareData(shareData);
+        function call(command) {
+            try {
+                nativeShare.call(command);
+            } catch (err) {
+                // 如果不支持，你可以在这里做降级处理
+                alert(err.message);
+            }
+        }
 
-        // function call(command) {
-        //     try {
-        //         nativeShare.call(command);
-        //     } catch (err) {
-        //         // 如果不支持，你可以在这里做降级处理
-        //         alert(err.message);
-        //     }
-        // }
-
-        // function setTitle(title) {
-        //     nativeShare.setShareData({
-        //         title: title,
-        //     })
-        // }
-        
-        // var user_id = {$user_id}; 
-        // var imgUrl = "http://www.ymlypt.com/static/yuanmeng1/activity_a/img/recruit/header.jpg";
-        // var lineLink = 'http://www.ymlypt.com/active/login/redirect/recruit/inviter/'+user_id;
-        // var descContent = "NativeShare是一个整合了各大移动端浏览器调用原生分享的插件";
-        // var shareTitle = '圆梦共享网';
+        function setTitle(title) {
+            nativeShare.setShareData({
+                title: title,
+            })
+        }
+</script>
+{/if}
+<script type="text/javascript">     
         // var appid = '{$signPackage["appId"]}';
           
         // function shareFriend() {

@@ -216,6 +216,8 @@ class ActiveController extends Controller
 
         $jssdk = new JSSDK($wechatcfg['app_key'], $wechatcfg['app_secret']);
         $signPackage = $jssdk->GetSignPackage();
+        $is_weixin = Common::checkInWechat();
+        $this->assign("is_weixin", $is_weixin);
         $this->assign("list", $list);
         $this->assign("signPackage", $signPackage);
         $this->redirect();
