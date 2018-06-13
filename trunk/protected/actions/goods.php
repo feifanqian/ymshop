@@ -146,7 +146,7 @@ class GoodsAction extends Controller {
                 $tbk_coupon = $cache->get("_TbkCoupon");
                 if ($cache->get("_TbkCoupon") === null) {
                     $tbk_coupon = $resp['results']['tbk_coupon'];
-                    $cache->set("_TbkCoupon", $items, 60*60);
+                    $cache->set("_TbkCoupon", $tbk_coupon, 60*60);
                 }
                 $resp['results']['tbk_coupon'] = $tbk_coupon;
             }
