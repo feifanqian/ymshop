@@ -82,6 +82,20 @@ class ActiveController extends Controller
         $chance = floor($invite_num/3);
         $status = array('0'=>'未达成','1'=>'可领取','2'=>'已领取');
         
+        //判断设备
+        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+         $type ='other';
+         //分别进行判断
+         if(strpos($agent,'iphone') || strpos($agent,'ipad'))
+        {
+         $type ='ios';
+         }
+          
+         if(strpos($agent,'android'))
+        {
+         $type ='android';
+         }
+        $this->assign("type", $type);
         $this->assign("status1", $status1);
         $this->assign("status2", $status2);
         $this->assign("status3", $status3);
