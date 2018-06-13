@@ -70,4 +70,30 @@
 </body>
 <script src="js/main.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+var status = {$status};
+        $('.invite1 a').on('click',function(){
+            if(status==0) {
+                alert('您还未完成任务，赶紧去邀请小伙伴们吧!');
+            } else {
+                var user_id = {$user_id};
+                $.ajax({
+                    url: "{url:/active/get_voucher}",
+                    data: {user_id: user_id,type:3},
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (ret) { 
+                        if (ret.status == "success") {                  
+                            alert('领取成功！');
+                            window.location.reload();
+                        }                    
+                    }, 
+                    error: function (e) {
+                        console.log(e);
+                        alert("服务器繁忙!请稍后重试");
+                    }
+                });
+            }
+        });
+</script>
 </html>

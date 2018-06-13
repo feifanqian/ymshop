@@ -130,8 +130,14 @@ class CashierAction extends Controller
     	} else {
             $where = "cashier_id={$id} and pay_status=1";
     	}
-    	$list = $this->model->table('order_offline')->fields("pay_time as pay_date,payable_amount, case dayofweek(pay_time)  when 1 then '星期日' when 2 then '星期一' when 3 then '星期二' when 4 then '星期三' when 5 then '星期四' when 6 then '星期五' when 7 then '星期六' end as  weekday")->where($where)->order('pay_time desc')->findAll();
-
+    	$list = $this->model->table('order_offline')->fields("pay_time as pay_date,payable_amount,remark, case dayofweek(pay_time)  when 1 then '星期日' when 2 then '星期一' when 3 then '星期二' when 4 then '星期三' when 5 then '星期四' when 6 then '星期五' when 7 then '星期六' end as  weekday")->where($where)->order('pay_time desc')->findAll();
+        if($list) {
+            foreach ($list as $k => $v) {
+                if($list[$k]['remark']==null) {
+                    $list[$k]['remark']=='';
+                }
+            }
+        }
         $this->code = 0;
     	$this->content = $list;
         return;

@@ -72,33 +72,28 @@
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
 var status = {$status};
-$('.invite1 a').on('click',function(){
+        $('.invite1 a').on('click',function(){
             if(status==0) {
                 alert('您还未完成任务，赶紧去邀请小伙伴们吧!');
             } else {
-                layer.open({
-                    type: 3,
-                    skin: 'layui-layer-rim', //加上边框
-                    area: ['100%', '450px'], //宽高
-                    content: '<img class="redbag" src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png" alt="">'
-                });
+                var user_id = {$user_id};
                 $.ajax({
                     url: "{url:/active/get_voucher}",
-                    data: {user_id: user_id},
+                    data: {user_id: user_id,type:4},
                     type: 'post',
                     dataType: 'json',
                     success: function (ret) { 
                         if (ret.status == "success") {                  
-                            // alert('恭喜！');
-                            // window.location.reload();
+                            alert('领取成功！');
+                            window.location.reload();
                         }                    
                     }, 
                     error: function (e) {
                         console.log(e);
-                        alert("服务器繁忙!");
+                        alert("服务器繁忙!请稍后重试");
                     }
                 });
             }
-});
+        });
 </script>
 </html>

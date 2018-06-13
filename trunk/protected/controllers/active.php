@@ -228,6 +228,7 @@ class ActiveController extends Controller
         if($user_id) {
             $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
             $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $this->assign("user_id", $user_id);
         } else {
             $invite_num = 0;
         }
@@ -249,6 +250,32 @@ class ActiveController extends Controller
             'status'=>1
             );
         $this->model->table('active_voucher')->data($data)->insert();
+        echo JSON::encode(array('status' => 'success'));
+    }
+
+    public function get_voucher() {
+        $user_id = Filter::int(Req::args("user_id"));
+        $type = Filter::int(Req::args("type"));
+        $data = array(
+            'user_id'=>$user_id,
+            'type'=>$type,
+            'amount'=>0.00,
+            'create_time'=>date('Y-m-d H:i:s'),
+            'end_time'=>date("Y-m-d",strtotime('+ 30 days')),
+            'status'=>1
+            );
+        $this->model->table('active_voucher')->data($data)->insert();
+        if($type==3) {
+            $this->model->table('invite_active')->data(['status3'=>1])->where('user_id='.$user_id)->update();
+        }
+        if($type==4) {
+            $this->model->table('invite_active')->data(['status1'=>1])->where('user_id='.$user_id)->update();
+        }
+        if($type==2) {
+            $this->model->table('invite_active')->data(['status2'=>1])->where('user_id='.$user_id)->update();
+        }
+        //清零邀请人数
+        $this->model->table('invite_active')->data(['invite_num'=>0])->where('user_id='.$user_id)->update();
         echo JSON::encode(array('status' => 'success'));
     }
 }

@@ -708,8 +708,11 @@ class Common {
             $inviter_info = self::getMyPromoteInfo($inviter_id);
             $result = $model->table("invite")->data(array('user_id'=>$inviter_id,'invite_user_id'=>$new_user_id,'from'=>$way,'district_id'=>$inviter_info['district_id'],'createtime'=>time()))->insert();
             if($way=='active') {
-                $active = $model->table("invite as i")->fields("i.id")->where("i.from='active' and i.user_id={$inviter_id}")->findAll();
-                $num = count($active);
+                // $active = $model->table("invite as i")->fields("i.id")->where("i.from='active' and i.user_id={$inviter_id}")->findAll();
+                // $num = count($active);
+                $active = $model->table("invite_active")->fields("invite_num")->where("user_id={$inviter_id}")->find();
+                $num = $active==null?0:$active['invite_num'];
+                $num = $num+1;
                 $model->table('invite_active')->data(['invite_num'=>$num])->where('user_id='.$inviter_id)->update();
             }
             if($result){
