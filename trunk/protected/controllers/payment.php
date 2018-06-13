@@ -946,7 +946,7 @@ class PaymentController extends Controller {
         if($payment_id==6){
             $this->assign('biz_content',$myParams['biz_content']);
         }
-        if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])) {
+        if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info']) && $payment_id==6) {
             $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => $ret['ysepay_online_jsapi_pay_response']['sub_msg']));
             exit();
         }
