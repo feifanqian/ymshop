@@ -34,11 +34,6 @@ class CashierAction extends Controller
         	$this->code = 1159;
             return;
         }
-        $exist = $this->model->table('cashier')->where("user_id=".$cashier['user_id']." and hire_user_id !=".$this->user['id']." and status=1")->find();
-        if($exist) {
-        	$this->code = 1243;
-            return;
-        }
         $has_be = $this->model->table('cashier')->where("user_id=".$cashier['user_id']." and hire_user_id =".$this->user['id']." and status=1")->find();
         if($has_be) {
             $this->code = 1254;
