@@ -4045,4 +4045,11 @@ class UcenterController extends Controller
 
     }
 
+    public function my_voucher() {
+        $list = $this->model->table('active_voucher')->where('user_id='.$this->user['id'])->findAll();
+        $this->assign('list',$list);
+        $this->assign('seo_title', '我的卡券');
+        $this->redirect();
+    }
+
 }

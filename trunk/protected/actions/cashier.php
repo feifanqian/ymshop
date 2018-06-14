@@ -499,7 +499,9 @@ class CashierAction extends Controller
         } elseif($status==0) { //停用
             $this->model->table('cashier')->data(array('status'=>2))->where('id='.$id)->update();
         } else {
+            $cashier = $this->model->table('cashier')->where('id='.$id)->find();
             $this->model->table('cashier')->where('id='.$id)->delete();
+            $this->model->table('customer')->data(array('is_cashier'=>0))->where('user_id='.$cashier['user_id'])->update();
         }
         $this->code = 0;
         return;
