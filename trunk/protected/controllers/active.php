@@ -260,6 +260,7 @@ class ActiveController extends Controller
         $this->model->table('invite_active')->data(['invite_num'=>$active['invite_num']-3])->where('user_id='.$user_id)->update();
         $data = array(
             'user_id'=>$user_id,
+            'title'=>'拉新活动积分奖',
             'type'=>1,
             'amount'=>12.00,
             'create_time'=>date('Y-m-d H:i:s'),
@@ -273,8 +274,10 @@ class ActiveController extends Controller
     public function get_voucher() {
         $user_id = Filter::int(Req::args("user_id"));
         $type = Filter::int(Req::args("type"));
+        $title = $type==3?'港澳游':'手表';
         $data = array(
             'user_id'=>$user_id,
+            'title'=>$title,
             'type'=>$type,
             'amount'=>0.00,
             'create_time'=>date('Y-m-d H:i:s'),

@@ -1,0 +1,92 @@
+
+<link type="text/css" rel="stylesheet" href="{url:#css/ucenter.css}" />
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    .weui_dialog_visible{
+        top:10%;
+    }
+    .weui_panel1 {
+        background-color: #fff;
+        overflow: hidden;
+        width: 100%;
+        margin-top: 10%;
+    }
+</style>
+{if:count($list['data'])>0}
+<div class="weui_panel1">
+    <div class="weui_panel_bd">
+        {list:items=$list['data']}
+        <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg user_voucher" data-id="{$item['id']}">
+            <div class="weui_media_hd">
+            {if:$item['type']==1}
+                <img class="weui_media_appmsg_thumb" src="/static/images/jifen_voucher.png" alt="">
+            {elseif:$item['type']==2}}
+                <img class="weui_media_appmsg_thumb" src="/static/images/yue_voucher.png" alt="">
+            {elseif:$item['type']==3}}
+                <img class="weui_media_appmsg_thumb" src="/static/images/lvyou_voucher.png" alt="">
+            {else:}
+                <img class="weui_media_appmsg_thumb" src="/static/images/shiwu_voucher.png" alt="">
+            {/if}          
+            </div>
+            <div class="weui_media_bd" style="margin-left: 16px;">
+                <h4 class="weui_media_title">{$item['title']}</h4>
+                <p class="weui_media_desc">过期时间：{$item['end_time']}</p>
+                
+            </div>
+        </a>
+        {/list}
+    </div>
+</div>
+<div class="page-nav tc">{$list['html']}</div>
+<div style="width: 100%;height: 20px;"></div>
+{else:}
+<div class="ma20 bg-white p20">
+    <p class="p20">没有邀请记录！</p>
+</div>
+{/if}
+
+<script>
+    $(function () {
+        $(document).on("click", ".invite_main", function () {
+            $(".invite_bg").css("visibility", "");
+        });
+        $(document).on("click", "#invitenow", function () {
+            $(".invite_bg").removeClass("invite_bg1");
+            if (Math.random() * 1000 < 500) {
+                $(".invite_bg").addClass("invite_bg1");
+            }
+            $(".invite_main").height($(".invite_main").width() / 0.6344);
+            $(".invite_bg").css("visibility", "visible");
+            $(".invite_bg").height($(document).height() - 98);
+            return;
+            $.modal({
+            title: "邀请好友",
+                    text: '<img src="/user/buildinvite?uid={$user['id']|0}" width="100%" /><div><input type="text" value="{echo:Url::fullUrlFormat("/index/invite")}?uid={$user['id']|0}" onFocus="this.select();" class="input" style="width:100%;"/></div>',
+                    buttons: [
+                        {text: "关闭", onClick: function () {
+
+                            }}
+                    ]
+        });
+    });
+    });
+    $('.user_voucher').click(function(){
+        $.confirm("你确定要使用该券吗吗?", "提示", function () {
+            var id = $(this).attr("data-id");
+            $.post("{url:/ucenter/user_voucher}", {id: id}, function (data) {
+                if (data['status'] == 'success') {
+                     $.toast("删除成功", "success",function () {
+                        location.reload();
+                    });
+                } else {
+                    $.toast("操作失败", "forbidden");
+                }
+            }, 'json');
+        }, function () {
+            //点击取消后的回调函数
+        });
+    });
+</script>
