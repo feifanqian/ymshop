@@ -397,11 +397,11 @@ class GoodsAction extends Controller {
         // $req->setStartTkRate("1234");
         if($endPrice) {
             $req->setEndPrice($endPrice);
+        } else {
+            $req->setEndPrice('20');
         }
         if($startPrice) {
             $req->setStartPrice($startPrice);
-        } else {
-            $req->setStartPrice('20');
         }
         $req->setIsOverseas("false");
         $req->setIsTmall("false");
