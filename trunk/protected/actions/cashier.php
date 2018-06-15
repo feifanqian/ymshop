@@ -108,6 +108,13 @@ class CashierAction extends Controller
     public function cashier_list()
     {
     	$list = $this->model->table('cashier as ca')->fields('cu.real_name,ca.name,ca.mobile,ca.job_no,ca.id,ca.status')->join('customer as cu on cu.user_id=ca.user_id')->where("ca.hire_user_id=".$this->user['id']." and ca.status in(1,2)")->findAll();
+        if($list) {
+            foreach ($list as $k=>$value) {
+                if($list[$k]['name']==null) {
+                    $list[$k]['name']=='';
+                }
+            }
+        }
     	$this->code = 0;
     	$this->content = $list;
         return;
