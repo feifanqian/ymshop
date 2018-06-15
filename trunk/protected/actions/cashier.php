@@ -513,14 +513,15 @@ class CashierAction extends Controller
     //收银员我的详情
     public function cashier_my_info() {
         $user_id = $this->user['id'];
-        var_dump($user_id);
-        $cashier = $this->model->table('cashier as c')->join('left join district_promoter as dp on dp.user_id=c.hire_user_id left join customer as cu on cu.user_id=c.hire_user_id left join user as u on u.id=c.hire_user_id')->fields('c.id,c.create_time,c.job_no,dp.shop_name,cu.real_name,u.nickname')->where('c.user_id={$user_id} and c.status=1')->find();
-        var_dump(123);die;
+        $cashier = $this->model->table('cashier')->fields('id,create_time,job_no,hire_user_id')->where('user_id={$user_id} and status=1')->find();
         if(!$cashier) {
             $this->code = 1250;
             return;
         }
-        $info['shop_name'] = $cashier['shop_name']!=null?$cashier['shop_name']:($cashier['real_name']!=null?$cashier['real_name']:$cashier['nickname']);
+        $promoter = $this->model->table('district_promoter')->fields('shop_name')->where('user_id='.$cashier['hire_user_id'])->find();
+        $customer = $this->model->table('customer')->fields('real_name')->where('user_id='.$cashier['hire_user_id'])->find();
+        $user = $this->model->table('user')->fields('nickname')->where('id='.$cashier['hire_user_id'])->find();
+        $info['shop_name'] = $promoter['shop_name']!=null?$promoter['shop_name']:($customer['real_name']!=null?$customer['real_name']:$user['nickname']);
         $info['create_time'] = $cashier['create_time'];
         $info['job_no'] = $$cashier['job_no'];
         $info['id'] = $cashier['id'];
