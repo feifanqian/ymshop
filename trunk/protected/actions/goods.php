@@ -435,6 +435,7 @@ class GoodsAction extends Controller {
                     $resp['result_list']['map_data'][$k]['final_price'] = $v['zk_final_price'] - $resp['result_list']['map_data'][$k]['decrease_price'];
                     $resp['result_list']['map_data'][$k]['nick'] = $v['shop_title'];
                     $resp['result_list']['map_data'][$k]['coupon_click_url'] = $v['coupon_share_url'];
+                    $resp['result_list']['map_data'][$k]['item_description'] = $v['coupon_info'];
                 }
                 if($sort) {
                     switch ($sort) {
