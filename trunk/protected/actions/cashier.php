@@ -514,23 +514,17 @@ class CashierAction extends Controller
     public function cashier_my_info() {
         $user_id = $this->user['id'];
         $cashier = $this->model->table('cashier')->fields('id,job_no,create_time,hire_user_id')->where('status=1 and user_id='.$user_id)->find();
-        var_dump($cashier);
         if(!$cashier) {
             $this->code = 1250;
             return;
         }
-        var_dump(111);
         $promoter = $this->model->table('district_promoter')->fields('shop_name')->where('user_id='.$cashier['hire_user_id'])->find();
-        var_dump(222);
         $customer = $this->model->table('customer')->fields('real_name')->where('user_id='.$cashier['hire_user_id'])->find();
-        var_dump(333);
         $user = $this->model->table('user')->fields('nickname')->where('id='.$cashier['hire_user_id'])->find();
-        var_dump(444);
         $info['shop_name'] = $promoter['shop_name']!=null?$promoter['shop_name']:($customer['real_name']!=null?$customer['real_name']:$user['nickname']);
         $info['create_time'] = $cashier['create_time'];
         $info['job_no'] = $cashier['job_no'];
         $info['id'] = $cashier['id'];
-        var_dump($info);
         $this->code = 0;
         $this->content = $info;
     }
