@@ -395,8 +395,8 @@ class GoodsAction extends Controller {
         $req->setPageSize("20");
         // $req->setEndTkRate("1234");
         // $req->setStartTkRate("1234");
-        $req->setEndPrice('200');
-        $req->setStartPrice('20');
+        // $req->setEndPrice('200');
+        $req->setStartPrice('200');
         // if($endPrice) {
         //     $req->setEndPrice($endPrice);
         // } else {
@@ -412,10 +412,10 @@ class GoodsAction extends Controller {
         $req->setHasCoupon("true");
         // $req->setIp("13.2.33.4");
         // $req->setNeedFreeShipment("true");
-        // $req->setNeedPrepay("true");
+        $req->setNeedPrepay("true");
         // $req->setIncludePayRate30("true");
-        // $req->setIncludeGoodRate("true");
-        // $req->setIncludeRfdRate("true");
+        $req->setIncludeGoodRate("true");
+        $req->setIncludeRfdRate("true");
         // $req->setNpxLevel("2");
         
         $req->setQ('女装');
@@ -436,7 +436,7 @@ class GoodsAction extends Controller {
                     $resp['result_list']['map_data'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
                     $resp['result_list']['map_data'][$k]['final_price'] = $v['zk_final_price'] - $resp['result_list']['map_data'][$k]['decrease_price'];
                     $resp['result_list']['map_data'][$k]['nick'] = $v['shop_title'];
-                    $resp['result_list']['map_data'][$k]['coupon_click_url'] = $v['coupon_share_url'];
+                    $resp['result_list']['map_data'][$k]['coupon_click_url'] = strpos($v['coupon_share_url'],'http')==false?'https:'.$v['coupon_share_url']:$v['coupon_share_url'];
                     $resp['result_list']['map_data'][$k]['item_description'] = $v['coupon_info'];
                     $resp['result_list']['map_data'][$k]['category'] = 30;
                 }
