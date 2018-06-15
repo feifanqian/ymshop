@@ -388,7 +388,7 @@ class GoodsAction extends Controller {
         $c->sign_method = 'md5';
         $c->format = 'json';
         $c->v = '2.0';
-        $req = new TbkDgItemCouponGetRequest;
+        $req = new TbkDgMaterialOptionalRequest;
         $req->setAdzoneId($AdzoneId);
         $req->setPlatform("2");
         $req->setStartDsr("10");
