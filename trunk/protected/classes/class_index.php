@@ -147,6 +147,7 @@ return array(
     "TopLogger"=>"taobao/TopLogger.php",
     "TbkItemGetRequest"=>"taobao/request/TbkItemGetRequest.php",
     "TbkDgItemCouponGetRequest"=>"taobao/request/TbkDgItemCouponGetRequest.php",
+    "TbkDgMaterialOptionalRequest"=>"taobao/request/TbkDgMaterialOptionalRequest.php",
     "ItemDetailGetRequest"=>"taobao/request/ItemDetailGetRequest.php",
     "TbkTpwdCreateRequest"=>"taobao/request/TbkTpwdCreateRequest.php",
     "ResultSet"=>"taobao/ResultSet.php",
