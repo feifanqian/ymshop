@@ -395,14 +395,16 @@ class GoodsAction extends Controller {
         $req->setPageSize("20");
         // $req->setEndTkRate("1234");
         // $req->setStartTkRate("1234");
-        if($endPrice) {
-            $req->setEndPrice($endPrice);
-        } else {
-            $req->setEndPrice('20');
-        }
-        if($startPrice) {
-            $req->setStartPrice($startPrice);
-        }
+        $req->setEndPrice('200');
+        $req->setStartPrice('20');
+        // if($endPrice) {
+        //     $req->setEndPrice($endPrice);
+        // } else {
+        //     $req->setEndPrice('20');
+        // }
+        // if($startPrice) {
+        //     $req->setStartPrice($startPrice);
+        // }
         $req->setIsOverseas("false");
         $req->setIsTmall("false");
         $req->setSort("tk_rate_des");
