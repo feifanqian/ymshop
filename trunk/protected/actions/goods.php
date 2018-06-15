@@ -77,87 +77,87 @@ class GoodsAction extends Controller {
     }
     
     //淘宝客好券清单API【导购】
-    // public function tbk_item_coupon_get(){
-    //     $q = Filter::str(Req::args("q")); //商品分类标题或分类id
-    //     $page = Filter::int(Req::args("page"));
-    //     $form = Filter::str(Req::args("form"));
-    //     $type = Filter::int(Req::args("type"));
-    //     $sort = Filter::str(Req::args("sort"));
-    //     // if(!$page) {
-    //     //     $page = 1;
-    //     // }
-    //     if(!$type) {
-    //         $type = 1;
-    //     }
-    //     if(!$form) {
-    //         $form = 'android';
-    //     }
-    //     $c = new TopClient;  
-    //     if($form=='android') { //安卓
-    //         $appkey = '24875594';
-    //         $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
-    //         $AdzoneId = '513416107';
-    //     } else { //ios
-    //         $appkey = '24876667';
-    //         $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
-    //         $AdzoneId = '582570496';
-    //     }
-    //     $c->appkey = $appkey;
-    //     $c->secretKey = $secretKey;
-    //     $c->sign_method = 'md5';
-    //     $c->format = 'json';
-    //     $c->v = '2.0';
-    //     $req = new TbkDgItemCouponGetRequest;
-    //     $req->setAdzoneId($AdzoneId);
-    //     $req->setPlatform("2");
-    //     $req->setPageSize(20);
-    //     if($type==1){
-    //         $req->setQ($q);
-    //     } else {
-    //         $req->setCat($q);
-    //     }
-    //     $req->setPageNo($page);
-    //     $resp = $c->execute($req);
+    public function tbk_dg_material_optional(){
+        $q = Filter::str(Req::args("q")); //商品分类标题或分类id
+        $page = Filter::int(Req::args("page"));
+        $form = Filter::str(Req::args("form"));
+        $type = Filter::int(Req::args("type"));
+        $sort = Filter::str(Req::args("sort"));
+        // if(!$page) {
+        //     $page = 1;
+        // }
+        if(!$type) {
+            $type = 1;
+        }
+        if(!$form) {
+            $form = 'android';
+        }
+        $c = new TopClient;  
+        if($form=='android') { //安卓
+            $appkey = '24875594';
+            $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
+            $AdzoneId = '513416107';
+        } else { //ios
+            $appkey = '24876667';
+            $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
+            $AdzoneId = '582570496';
+        }
+        $c->appkey = $appkey;
+        $c->secretKey = $secretKey;
+        $c->sign_method = 'md5';
+        $c->format = 'json';
+        $c->v = '2.0';
+        $req = new TbkDgItemCouponGetRequest;
+        $req->setAdzoneId($AdzoneId);
+        $req->setPlatform("2");
+        $req->setPageSize(20);
+        if($type==1){
+            $req->setQ($q);
+        } else {
+            $req->setCat($q);
+        }
+        $req->setPageNo($page);
+        $resp = $c->execute($req);
 
-    //     $resp = Common::objectToArray($resp);
+        $resp = Common::objectToArray($resp);
         
-    //     if(isset($resp['results']['tbk_coupon'])) {
-    //         if($resp['results']['tbk_coupon']) {
-    //             foreach ($resp['results']['tbk_coupon'] as $k => $v) {
-    //                 $resp['results']['tbk_coupon'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
-    //                 $resp['results']['tbk_coupon'][$k]['final_price'] = $v['zk_final_price'] - $resp['results']['tbk_coupon'][$k]['decrease_price'];
-    //             }
-    //             if($sort) {
-    //                 switch ($sort) {
-    //                     case 'price_asc': 
-    //                         array_multisort(array_column($resp['results']['tbk_coupon'],'final_price'),SORT_ASC,$resp['results']['tbk_coupon']);
-    //                         break;
-    //                     case 'price_desc':
-    //                         array_multisort(array_column($resp['results']['tbk_coupon'],'final_price'),SORT_DESC,$resp['results']['tbk_coupon']);
-    //                         break;
-    //                     case 'volume_asc':
-    //                         array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_ASC,$resp['results']['tbk_coupon']);
-    //                         break;
-    //                     case 'volume_desc':
-    //                         array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_DESC,$resp['results']['tbk_coupon']);
-    //                         break;        
-    //                 }
-    //             }
-    //             array_multisort(array_column($resp['results']['tbk_coupon'],'decrease_price'),SORT_DESC,$resp['results']['tbk_coupon']);
-    //             // $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
-    //             // $cache = CacheFactory::getInstance();
-    //             // $tbk_coupon = $cache->get("_TbkCoupon");
-    //             // if ($cache->get("_TbkCoupon") === null) {
-    //             //     $tbk_coupon = $resp['results']['tbk_coupon'];
-    //             //     $cache->set("_TbkCoupon", $tbk_coupon, 60*60);
-    //             // }
-    //             // $resp['results']['tbk_coupon'] = $tbk_coupon;
-    //         }
-    //     }           
+        if(isset($resp['results']['tbk_coupon'])) {
+            if($resp['results']['tbk_coupon']) {
+                foreach ($resp['results']['tbk_coupon'] as $k => $v) {
+                    $resp['results']['tbk_coupon'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
+                    $resp['results']['tbk_coupon'][$k]['final_price'] = $v['zk_final_price'] - $resp['results']['tbk_coupon'][$k]['decrease_price'];
+                }
+                if($sort) {
+                    switch ($sort) {
+                        case 'price_asc': 
+                            array_multisort(array_column($resp['results']['tbk_coupon'],'final_price'),SORT_ASC,$resp['results']['tbk_coupon']);
+                            break;
+                        case 'price_desc':
+                            array_multisort(array_column($resp['results']['tbk_coupon'],'final_price'),SORT_DESC,$resp['results']['tbk_coupon']);
+                            break;
+                        case 'volume_asc':
+                            array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_ASC,$resp['results']['tbk_coupon']);
+                            break;
+                        case 'volume_desc':
+                            array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_DESC,$resp['results']['tbk_coupon']);
+                            break;        
+                    }
+                }
+                array_multisort(array_column($resp['results']['tbk_coupon'],'decrease_price'),SORT_DESC,$resp['results']['tbk_coupon']);
+                // $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
+                // $cache = CacheFactory::getInstance();
+                // $tbk_coupon = $cache->get("_TbkCoupon");
+                // if ($cache->get("_TbkCoupon") === null) {
+                //     $tbk_coupon = $resp['results']['tbk_coupon'];
+                //     $cache->set("_TbkCoupon", $tbk_coupon, 60*60);
+                // }
+                // $resp['results']['tbk_coupon'] = $tbk_coupon;
+            }
+        }           
         
-    //     $this->code = 0;
-    //     $this->content = $resp;
-    // }
+        $this->code = 0;
+        $this->content = $resp;
+    }
 
     public function taobao_item_detail_get(){
         $form = Filter::str(Req::args("form"));
