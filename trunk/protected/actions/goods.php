@@ -127,20 +127,23 @@ class GoodsAction extends Controller {
                     $resp['results']['tbk_coupon'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
                     $resp['results']['tbk_coupon'][$k]['final_price'] = $v['zk_final_price'] - $resp['results']['tbk_coupon'][$k]['decrease_price'];
                 }
-                switch ($sort) {
-                    case 'price_asc': 
-                        array_multisort(array_column($resp['results']['tbk_coupon'],'final_price'),SORT_ASC,$resp['results']['tbk_coupon']);
-                        break;
-                    case 'price_desc':
-                        array_multisort(array_column($resp['results']['tbk_coupon'],'final_price'),SORT_DESC,$resp['results']['tbk_coupon']);
-                        break;
-                    case 'volume_asc':
-                        array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_ASC,$resp['results']['tbk_coupon']);
-                        break;
-                    case 'volume_desc':
-                        array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_DESC,$resp['results']['tbk_coupon']);
-                        break;        
+                if($sort) {
+                    switch ($sort) {
+                        case 'price_asc': 
+                            array_multisort(array_column($resp['results']['tbk_coupon'],'final_price'),SORT_ASC,$resp['results']['tbk_coupon']);
+                            break;
+                        case 'price_desc':
+                            array_multisort(array_column($resp['results']['tbk_coupon'],'final_price'),SORT_DESC,$resp['results']['tbk_coupon']);
+                            break;
+                        case 'volume_asc':
+                            array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_ASC,$resp['results']['tbk_coupon']);
+                            break;
+                        case 'volume_desc':
+                            array_multisort(array_column($resp['results']['tbk_coupon'],'volume'),SORT_DESC,$resp['results']['tbk_coupon']);
+                            break;        
+                    }
                 }
+                array_multisort(array_column($resp['results']['tbk_coupon'],'decrease_price'),SORT_DESC,$resp['results']['tbk_coupon']);
                 // $resp['results']['tbk_coupon'] = array_slice($resp['results']['tbk_coupon'], ($page-1)*10, 10);
                 // $cache = CacheFactory::getInstance();
                 // $tbk_coupon = $cache->get("_TbkCoupon");
