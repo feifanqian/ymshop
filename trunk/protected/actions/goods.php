@@ -415,14 +415,14 @@ class GoodsAction extends Controller {
         // $req->setIncludeGoodRate("true");
         // $req->setIncludeRfdRate("true");
         // $req->setNpxLevel("2");
-        if(!$q) {
-            $req->setQ('女装');
-        }
-        if($type==1){
-            $req->setQ($q);
-        } else {
-            $req->setCat($q);
-        }
+        
+        $req->setQ('女装');
+        
+        // if($type==1){
+        //     $req->setQ($q);
+        // } else {
+        //     $req->setCat($q);
+        // }
         $req->setPageNo($page);
         $resp = $c->execute($req);
 
