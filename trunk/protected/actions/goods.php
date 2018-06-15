@@ -431,6 +431,8 @@ class GoodsAction extends Controller {
                 foreach ($resp['result_list']['map_data'] as $k => $v) {
                     $resp['result_list']['map_data'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
                     $resp['result_list']['map_data'][$k]['final_price'] = $v['zk_final_price'] - $resp['result_list']['map_data'][$k]['decrease_price'];
+                    $resp['result_list']['map_data'][$k]['nick'] = $v['shop_title'];
+                    $resp['result_list']['map_data'][$k]['coupon_click_url'] = $v['coupon_share_url'];
                 }
                 if($sort) {
                     switch ($sort) {
