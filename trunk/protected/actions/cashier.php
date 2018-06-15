@@ -513,6 +513,7 @@ class CashierAction extends Controller
     //收银员我的详情
     public function cashier_my_info() {
         $user_id = $this->user['id'];
+        var_dump($user_id);
         $cashier = $this->model->table('cashier')->fields('id,create_time,job_no,hire_user_id')->where('user_id={$user_id} and status=1')->find();
         var_dump(123);
         if(!$cashier) {
