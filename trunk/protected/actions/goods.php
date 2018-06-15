@@ -426,39 +426,39 @@ class GoodsAction extends Controller {
 
         $resp = Common::objectToArray($resp);
         
-        if(isset($resp['results']['map_data'])) {
-            if($resp['results']['map_data']) {
-                foreach ($resp['results']['map_data'] as $k => $v) {
-                    $resp['results']['map_data'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
-                    $resp['results']['map_data'][$k]['final_price'] = $v['zk_final_price'] - $resp['results']['map_data'][$k]['decrease_price'];
+        if(isset($resp['result_list']['map_data'])) {
+            if($resp['result_list']['map_data']) {
+                foreach ($resp['result_list']['map_data'] as $k => $v) {
+                    $resp['result_list']['map_data'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
+                    $resp['result_list']['map_data'][$k]['final_price'] = $v['zk_final_price'] - $resp['result_list']['map_data'][$k]['decrease_price'];
                 }
                 if($sort) {
                     switch ($sort) {
                         case 'price_asc': 
-                            array_multisort(array_column($resp['results']['map_data'],'final_price'),SORT_ASC,$resp['results']['map_data']);
+                            array_multisort(array_column($resp['result_list']['map_data'],'final_price'),SORT_ASC,$resp['result_list']['map_data']);
                             break;
                         case 'price_desc':
-                            array_multisort(array_column($resp['results']['map_data'],'final_price'),SORT_DESC,$resp['results']['map_data']);
+                            array_multisort(array_column($resp['result_list']['map_data'],'final_price'),SORT_DESC,$resp['result_list']['map_data']);
                             break;
                         case 'volume_asc':
-                            array_multisort(array_column($resp['results']['map_data'],'volume'),SORT_ASC,$resp['results']['map_data']);
+                            array_multisort(array_column($resp['result_list']['map_data'],'volume'),SORT_ASC,$resp['result_list']['map_data']);
                             break;
                         case 'volume_desc':
-                            array_multisort(array_column($resp['results']['map_data'],'volume'),SORT_DESC,$resp['results']['map_data']);
+                            array_multisort(array_column($resp['result_list']['map_data'],'volume'),SORT_DESC,$resp['result_list']['map_data']);
                             break;        
                     }
                 }
-                array_multisort(array_column($resp['results']['map_data'],'decrease_price'),SORT_DESC,$resp['results']['map_data']);
-                $resp['results']['tbk_coupon'] = $resp['results']['map_data'];
-                unset($resp['results']['map_data']);
-                // $resp['results']['map_data'] = array_slice($resp['results']['map_data'], ($page-1)*10, 10);
+                array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
+                $resp['result']['tbk_coupon'] = $resp['result_list']['map_data'];
+                unset($resp['result_list']);
+                // $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'], ($page-1)*10, 10);
                 // $cache = CacheFactory::getInstance();
                 // $map_data = $cache->get("_TbkCoupon");
                 // if ($cache->get("_TbkCoupon") === null) {
-                //     $map_data = $resp['results']['map_data'];
+                //     $map_data = $resp['result_list']['map_data'];
                 //     $cache->set("_TbkCoupon", $map_data, 60*60);
                 // }
-                // $resp['results']['map_data'] = $map_data;
+                // $resp['result_list']['map_data'] = $map_data;
             }
         }           
         
