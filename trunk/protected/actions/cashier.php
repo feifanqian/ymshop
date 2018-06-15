@@ -111,7 +111,10 @@ class CashierAction extends Controller
         if($list) {
             foreach ($list as $k=>$value) {
                 if($list[$k]['name']==null) {
-                    $list[$k]['name']=='';
+                    $list[$k]['name']='';
+                }
+                if($list[$k]['real_name']==null) {
+                    $list[$k]['real_name']='';
                 }
             }
         }
