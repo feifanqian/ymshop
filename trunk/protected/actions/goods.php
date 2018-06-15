@@ -417,7 +417,7 @@ class GoodsAction extends Controller {
         // $req->setNpxLevel("2");
         
         $req->setQ('女装');
-        
+        $req->setCat("16,18");
         // if($type==1){
         //     $req->setQ($q);
         // } else {
