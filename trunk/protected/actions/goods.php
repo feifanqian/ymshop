@@ -364,12 +364,12 @@ class GoodsAction extends Controller {
         $sort = Filter::str(Req::args("sort"));
         $startPrice = Req::args("startPrice");
         $endPrice = Req::args("endPrice");
-        // if(!$page) {
-        //     $page = 1;
-        // }
-        // if(!$type) {
-        //     $type = 0;
-        // }
+        if(!$page) {
+            $page = 1;
+        }
+        if(!$type) {
+            $type = 1;
+        }
         if(!$form) {
             $form = 'android';
         }
