@@ -460,8 +460,9 @@ class GoodsAction extends Controller {
                             array_multisort(array_column($resp['result_list']['map_data'],'volume'),SORT_DESC,$resp['result_list']['map_data']);
                             break;        
                     }
-                }
-                array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
+                } else {
+                    array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
+                }       
                 $resp['results']['tbk_coupon'] = $resp['result_list']['map_data'];
                 unset($resp['result_list']);
                 // $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'], ($page-1)*10, 10);
