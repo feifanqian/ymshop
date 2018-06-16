@@ -420,13 +420,13 @@ class GoodsAction extends Controller {
 
 
 //        $req->setQ('女装');
-//        $req->setCat("16,18");
+         $req->setCat("16,18");
          if($type==1){
              $req->setQ($q);
          } else if($type==2) {
              $req->setCat($q);
          }else{
-             $req->setCat("16,18");
+             $req->setCat("11,16,30,14,1801,21,50002766");
          }
         $req->setPageNo($page);
         $resp = $c->execute($req);
