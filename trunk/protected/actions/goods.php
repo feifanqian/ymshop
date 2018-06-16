@@ -391,7 +391,7 @@ class GoodsAction extends Controller {
         $req = new TbkDgMaterialOptionalRequest;
         $req->setAdzoneId($AdzoneId);
         $req->setPlatform("2");
-        $req->setStartDsr("10");
+//        $req->setStartDsr("10");
         $req->setPageSize("20");
         // $req->setEndTkRate("1234");
         // $req->setStartTkRate("1234");
@@ -417,14 +417,15 @@ class GoodsAction extends Controller {
         $req->setIncludeGoodRate("true");
         $req->setIncludeRfdRate("true");
         // $req->setNpxLevel("2");
-        
-        $req->setQ('女装');
-        $req->setCat("16,18");
-        // if($type==1){
-        //     $req->setQ($q);
-        // } else {
-        //     $req->setCat($q);
-        // }
+
+
+//        $req->setQ('女装');
+//        $req->setCat("16,18");
+         if($type==1){
+             $req->setQ($q);
+         } else {
+             $req->setCat($q);
+         }
         $req->setPageNo($page);
         $resp = $c->execute($req);
 
