@@ -368,7 +368,7 @@ class GoodsAction extends Controller {
         //     $page = 1;
         // }
         if(!$type) {
-            $type = 1;
+            $type = 0;
         }
         if(!$form) {
             $form = 'android';
@@ -423,8 +423,10 @@ class GoodsAction extends Controller {
 //        $req->setCat("16,18");
          if($type==1){
              $req->setQ($q);
-         } else {
+         } else if($type==2) {
              $req->setCat($q);
+         }else{
+             $req->setCat("16,18");
          }
         $req->setPageNo($page);
         $resp = $c->execute($req);
