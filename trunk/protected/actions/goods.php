@@ -420,7 +420,7 @@ class GoodsAction extends Controller {
 
 
 //        $req->setQ('女装');
-         $req->setCat("16,18");
+//         $req->setCat("16,18");
          if($type==1){
              $req->setQ($q);
          } else if($type==2) {
