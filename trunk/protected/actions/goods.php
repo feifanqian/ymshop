@@ -396,7 +396,7 @@ class GoodsAction extends Controller {
         // $req->setEndTkRate("1234");
         // $req->setStartTkRate("1234");
         // $req->setEndPrice('200');
-        $req->setStartPrice('200');
+//        $req->setStartPrice('100');
         // if($endPrice) {
         //     $req->setEndPrice($endPrice);
         // } else {
@@ -405,18 +405,18 @@ class GoodsAction extends Controller {
         // if($startPrice) {
         //     $req->setStartPrice($startPrice);
         // }
-        $req->setIsOverseas("false");
-        $req->setIsTmall("false");
-        $req->setSort("tk_rate_des");
+//        $req->setIsOverseas("false");
+//        $req->setIsTmall("false");
+//        $req->setSort("tk_rate_des");
         // $req->setItemloc("杭州");
         $req->setHasCoupon("true");
         // $req->setIp("13.2.33.4");
         // $req->setNeedFreeShipment("true");
-        $req->setNeedPrepay("true");
-        $req->setIncludePayRate30("true");
-        $req->setIncludeGoodRate("true");
-        $req->setIncludeRfdRate("true");
-        $req->setNpxLevel("2");
+//        $req->setNeedPrepay("true");
+//        $req->setIncludePayRate30("true");
+//        $req->setIncludeGoodRate("true");
+//        $req->setIncludeRfdRate("true");
+//        $req->setNpxLevel("2");
 
 
 //        $req->setQ('女装');
