@@ -413,10 +413,10 @@ class GoodsAction extends Controller {
         // $req->setIp("13.2.33.4");
         // $req->setNeedFreeShipment("true");
         $req->setNeedPrepay("true");
-        // $req->setIncludePayRate30("true");
+        $req->setIncludePayRate30("true");
         $req->setIncludeGoodRate("true");
         $req->setIncludeRfdRate("true");
-        // $req->setNpxLevel("2");
+        $req->setNpxLevel("2");
 
 
 //        $req->setQ('女装');
