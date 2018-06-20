@@ -298,5 +298,19 @@ class ActiveController extends Controller
         $this->model->table('invite_active')->data(['invite_num'=>0])->where('user_id='.$user_id)->update();
         echo JSON::encode(array('status' => 'success'));
     }
+
+    public function user_voucher() {
+        $id = Filter::int(Req::args("id"));
+        $voucher = $this->model->table('active_voucher')->where('id='.$id)->find();
+        if($voucher['type']==1) {
+            $point = $voucher['amount'];
+            $this->model->table('customer')->data(array('point_coin'=>"`point_coin`+({$point})"))->where('user_id='.$voucher['user_id'])->update();
+            Log::pointcoin_log($point,$voucher['user_id'], '', "积分卡券兑换", 13);
+        } elseif($voucher['type']==2) {
+            $point = $voucher['amount'];
+            $this->model->table('customer')->data(array('balance'=>"`balance`+({$point})"))->where('user_id='.$voucher['user_id'])->update();
+            Log::balance($point,$voucher['user_id'], '', "余额卡券兑换", 16);
+        }
+    }
 }
 ?>
