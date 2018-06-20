@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e7286e1-8ea1-416a-afb0-c86e85802771" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/protected/controllers/ucenter.php" afterPath="$PROJECT_DIR$/trunk/protected/controllers/ucenter.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,17 +24,48 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="ucenter.php" pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="ucenter.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/ucenter.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="543">
-              <caret line="3883" column="35" lean-forward="true" selection-start-line="3883" selection-start-column="35" selection-end-line="3883" selection-end-column="35" />
+            <state relative-caret-position="0">
+              <caret line="3904" column="9" lean-forward="false" selection-start-line="3904" selection-start-column="9" selection-end-line="3904" selection-end-column="9" />
               <folding>
-                <marker date="1525952192876" expanded="true" signature="82249:82312" ph="update tiny_... " />
-                <marker date="1525952192876" expanded="true" signature="105763:105856" ph="select SUM(c... " />
-                <marker date="1525952192876" expanded="true" signature="144072:144136" ph="update tiny_... " />
+                <marker date="1529030540848" expanded="true" signature="86071:86134" ph="update tiny_... " />
+                <marker date="1529030540848" expanded="true" signature="109624:109717" ph="select SUM(c... " />
+                <marker date="1529030540848" expanded="true" signature="147933:147997" ph="update tiny_... " />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="goods.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/trunk/protected/actions/goods.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="430">
+              <caret line="419" column="0" lean-forward="true" selection-start-line="419" selection-start-column="0" selection-end-line="419" selection-end-column="0" />
+              <folding>
+                <element signature="n#taobao_item_detail_get#0;n#GoodsAction#0;n#!!top" expanded="false" />
+                <element signature="n#taobao_rebate_order_get#0;n#GoodsAction#0;n#!!top" expanded="false" />
+                <element signature="n#tbk_item_guess_like#0;n#GoodsAction#0;n#!!top" expanded="false" />
+                <element signature="n#tbk_index_banner#0;n#GoodsAction#0;n#!!top" expanded="false" />
+                <element signature="n#tbk_cat_nav#0;n#GoodsAction#0;n#!!top" expanded="false" />
+                <element signature="n#tbk_cat_title_to_id#0;n#GoodsAction#0;n#!!top" expanded="false" />
+                <element signature="n#make_shop_qrcode_no#0;n#GoodsAction#0;n#!!top" expanded="false" />
+                <element signature="n#tbk_tpwd_create#0;n#GoodsAction#0;n#!!top" expanded="false" />
+                <element signature="n#cut#0;n#GoodsAction#0;n#!!top" expanded="false" />
+                <element signature="n#promoter_upload_goods#0;n#GoodsAction#0;n#!!top" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="request_class.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/trunk/framework/lib/util/request_class.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-543">
+              <caret line="36" column="20" lean-forward="false" selection-start-line="36" selection-start-column="20" selection-end-line="36" selection-end-column="20" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -50,8 +81,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>交易中心</find>
-      <find>get_review</find>
       <find>购买量</find>
       <find>buy-num</find>
       <find>tools_s</find>
@@ -80,6 +109,8 @@
       <find>yinpay_callback</find>
       <find>alipaylo</find>
       <find>shop_check_dop</find>
+      <find>dg</find>
+      <find>args</find>
     </findStrings>
     <replaceStrings>
       <replace>id</replace>
@@ -97,7 +128,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/trunk/protected/views/order/order_view.html" />
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/ucenter/index.html" />
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/ucenter/order.html" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/index.php" />
@@ -148,6 +178,7 @@
         <option value="$PROJECT_DIR$/trunk/protected/controllers/payment.php" />
         <option value="$PROJECT_DIR$/trunk/protected/classes/Common.php" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/ucenter.php" />
+        <option value="$PROJECT_DIR$/trunk/protected/actions/goods.php" />
       </list>
     </option>
   </component>
@@ -203,8 +234,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -222,6 +251,13 @@
               <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ymshop" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="trunk" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="protected" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="actions" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="ymshop" type="b2602c69:ProjectViewProjectNode" />
@@ -256,6 +292,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -365,11 +403,13 @@
       <workItem from="1519790156982" duration="233000" />
       <workItem from="1524451045278" duration="652000" />
       <workItem from="1525950605621" duration="1976000" />
+      <workItem from="1529112987349" duration="2480000" />
+      <workItem from="1529372991373" duration="3683000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="499810000" />
+    <option name="totallyTimeSpent" value="505973000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -385,12 +425,12 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16302083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.07551241" sideWeight="0.50208336" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.07551241" sideWeight="0.50625" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298913" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.07551241" sideWeight="0.49791667" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.07551241" sideWeight="0.49375" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -430,32 +470,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="5" />
+      <option name="time" value="6" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/error.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/count.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3428">
-          <caret line="1565" column="62" lean-forward="false" selection-start-line="1565" selection-start-column="62" selection-end-line="1565" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/classes/Menu.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="118" column="37" lean-forward="false" selection-start-line="118" selection-start-column="37" selection-end-line="118" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/views/marketing/voucher_template_edit.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -661,7 +680,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-209">
           <caret line="968" column="24" lean-forward="true" selection-start-line="968" selection-start-column="24" selection-end-line="968" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -669,18 +687,52 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="582">
           <caret line="1582" column="9" lean-forward="true" selection-start-line="1582" selection-start-column="9" selection-end-line="1582" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/ucenter.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="543">
-          <caret line="3883" column="35" lean-forward="true" selection-start-line="3883" selection-start-column="35" selection-end-line="3883" selection-end-column="35" />
+        <state relative-caret-position="0">
+          <caret line="3904" column="9" lean-forward="false" selection-start-line="3904" selection-start-column="9" selection-end-line="3904" selection-end-column="9" />
           <folding>
-            <marker date="1525952192876" expanded="true" signature="82249:82312" ph="update tiny_... " />
-            <marker date="1525952192876" expanded="true" signature="105763:105856" ph="select SUM(c... " />
-            <marker date="1525952192876" expanded="true" signature="144072:144136" ph="update tiny_... " />
+            <marker date="1529030540848" expanded="true" signature="86071:86134" ph="update tiny_... " />
+            <marker date="1529030540848" expanded="true" signature="109624:109717" ph="select SUM(c... " />
+            <marker date="1529030540848" expanded="true" signature="147933:147997" ph="update tiny_... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/Core/Core.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="19" column="9" lean-forward="false" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/framework/lib/util/request_class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-543">
+          <caret line="36" column="20" lean-forward="false" selection-start-line="36" selection-start-column="20" selection-end-line="36" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/actions/goods.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="419" column="0" lean-forward="true" selection-start-line="419" selection-start-column="0" selection-end-line="419" selection-end-column="0" />
+          <folding>
+            <element signature="n#taobao_item_detail_get#0;n#GoodsAction#0;n#!!top" expanded="false" />
+            <element signature="n#taobao_rebate_order_get#0;n#GoodsAction#0;n#!!top" expanded="false" />
+            <element signature="n#tbk_item_guess_like#0;n#GoodsAction#0;n#!!top" expanded="false" />
+            <element signature="n#tbk_index_banner#0;n#GoodsAction#0;n#!!top" expanded="false" />
+            <element signature="n#tbk_cat_nav#0;n#GoodsAction#0;n#!!top" expanded="false" />
+            <element signature="n#tbk_cat_title_to_id#0;n#GoodsAction#0;n#!!top" expanded="false" />
+            <element signature="n#make_shop_qrcode_no#0;n#GoodsAction#0;n#!!top" expanded="false" />
+            <element signature="n#tbk_tpwd_create#0;n#GoodsAction#0;n#!!top" expanded="false" />
+            <element signature="n#cut#0;n#GoodsAction#0;n#!!top" expanded="false" />
+            <element signature="n#promoter_upload_goods#0;n#GoodsAction#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
