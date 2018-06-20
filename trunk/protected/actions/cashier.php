@@ -76,7 +76,7 @@ class CashierAction extends Controller
         $push_data = array(
             'to_id'=>$cashier['user_id'],
             'type'=>'be_cashier',
-            'conten'=>$content,
+            'content'=>$content,
             'create_time'=>date('Y-m-d H:i:s'),
             'status'=>'unread',
             'value'=>$res
