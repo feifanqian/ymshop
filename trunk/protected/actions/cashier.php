@@ -442,6 +442,8 @@ class CashierAction extends Controller
         $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no')->where('user_id='.$cashier['hire_user_id'])->find();
         $this->code = 0;
         $this->content['url'] = $url;
+        $this->content['cashier_id'] = $cashier['id'];
+        $this->content['desk_id'] = $sign['desk_id'];
         $this->content['qrcode_no'] = $promoter?$promoter['qrcode_no']:'0000';
     }
 
