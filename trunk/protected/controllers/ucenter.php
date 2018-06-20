@@ -3341,6 +3341,14 @@ class UcenterController extends Controller
         if (!$inviter_id) {
             $inviter_id = Session::get('seller_id');
         }
+        $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
+        if(!$cashier_id) {
+            $cashier_id = 0;
+        }
+        $desk_id = Filter::int(Req::args('desk_id'));//收银员id
+        if(!$desk_id) {
+            $desk_id = 0;
+        }
         if(in_array($inviter_id, [101738,87455,55568,8158,25795,31751]) && date('Y-m-d H:i:s')>'2018-05-15 12:00:00' && date('Y-m-d H:i:s')<'2018-06-15 12:00:00'){
             $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
             exit;
@@ -3372,6 +3380,8 @@ class UcenterController extends Controller
         // $this->assign("jsApiParameters",$jsApiParameters);
         $this->assign("seo_title", "向商家付款");
         $this->assign('seller_id', $inviter_id);
+        $this->assign('cashier_id', $cashier_id);
+        $this->assign('desk_id', $desk_id);
         $this->assign('seller_ids', Session::get('seller_id'));
         $this->assign('order_no', $order_no);
         $this->assign('user_id', $user_id);
