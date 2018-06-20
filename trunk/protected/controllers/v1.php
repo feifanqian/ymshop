@@ -68,6 +68,7 @@ class V1Controller extends Controller {
         "my_review" => array("ucenter/my_review", 1,1), //我的评论
         "post_review" => array("ucenter/post_review", 1,1), //发表评论
         "get_message" => array("ucenter/get_message", 1,1), //消息接口
+        "push_message" => array("ucenter/push_message", 1,1), //推送消息接口
         "del_message" => array("ucenter/del_message", 1,1), //删除消息
         "read_message" => array("ucenter/read_message", 1,1), //将消息标记为已读
         "sign_all_message" => array("ucenter/sign_all_message", 1,1),

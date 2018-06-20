@@ -865,6 +865,12 @@ class UcenterAction extends Controller {
         }
     }
 
+    public function push_message() {
+        $list = $this->model->table("push_message")->where("to_id=" . $this->user['id'])->findAll();
+        $this->code = 0;
+        $this->content = $list;
+    }
+
     //将消息标为已读
     public function read_message() {
         $id = Filter::int(Req::args("id"));

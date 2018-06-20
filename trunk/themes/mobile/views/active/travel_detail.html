@@ -53,7 +53,7 @@
         <img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/details/travel-8.png" alt="" class="sizeFitImg">
     </section>
     <div style="height: 50px;margin-top: 16px;">
-        {if:$status==1}
+        {if:$status==1} 
         <div class="invite1" style="background-color: #f06834;">
             <a href="javascript:;" style="color: white;font-size: 20px;">领取</a>   
         </div>
@@ -76,23 +76,28 @@ var status = {$status};
             if(status==0) {
                 alert('您还未完成任务，赶紧去邀请小伙伴们吧!');
             } else {
-                var user_id = {$user_id};
-                $.ajax({
-                    url: "{url:/active/get_voucher}",
-                    data: {user_id: user_id,type:3},
-                    type: 'post',
-                    dataType: 'json',
-                    success: function (ret) { 
-                        if (ret.status == "success") {                  
-                            alert('领取成功！');
-                            window.location.reload();
-                        }                    
-                    }, 
-                    error: function (e) {
-                        console.log(e);
-                        alert("服务器繁忙!请稍后重试");
-                    }
-                });
+                var get_status = {$get_status};
+                if(get_status==1){
+                   alert('您已领取过了!');
+                } else{
+                    var user_id = {$user_id};
+                    $.ajax({
+                        url: "{url:/active/get_voucher}",
+                        data: {user_id: user_id,type:3},
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (ret) { 
+                            if (ret.status == "success") {                  
+                                alert('领取成功！');
+                                window.location.reload();
+                            }                    
+                        }, 
+                        error: function (e) {
+                            console.log(e);
+                            alert("服务器繁忙!请稍后重试");
+                        }
+                    });
+                }    
             }
         });
 </script>

@@ -229,13 +229,16 @@ class ActiveController extends Controller
         if($user_id) {
             $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
             $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $get_status = empty($sign_up)?0:$sign_up['status3'];
         } else {
             $invite_num = 0;
             $user_id = 0;
+            $get_status = 0;
         }
         $this->assign("user_id", $user_id);
         $status = $invite_num>=38?1:0;
         $this->assign("status", $status);
+        $this->assign("get_status", $get_status);
         $this->redirect();
     }
 
@@ -243,14 +246,17 @@ class ActiveController extends Controller
         $user_id = $this->user['id'];
         if($user_id) {
             $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
-            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];     
+            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $get_status = empty($sign_up)?0:$sign_up['status1'];     
         } else {
             $invite_num = 0;
             $user_id = 0;
+            $get_status = 0;
         }
         $this->assign("user_id", $user_id);
         $status = $invite_num>=800?1:0;
         $this->assign("status", $status);
+        $this->assign("get_status", $get_status);
         $this->redirect();
     }
 
@@ -311,6 +317,8 @@ class ActiveController extends Controller
             $this->model->table('customer')->data(array('balance'=>"`balance`+({$point})"))->where('user_id='.$voucher['user_id'])->update();
             Log::balance($point,$voucher['user_id'], '', "余额卡券兑换", 16);
         }
+        $this->model->table('active_voucher')->data(array('status'=>0))->where('id='.$id)->update();
+        echo JSON::encode(array('status' => 'success'));
     }
 }
 ?>

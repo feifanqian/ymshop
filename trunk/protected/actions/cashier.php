@@ -73,6 +73,15 @@ class CashierAction extends Controller
         	$this->code = 1242;
             return;
         }
+        $push_data = array(
+            'to_id'=>$cashier['user_id'],
+            'type'=>'be_cashier',
+            'conten'=>$content,
+            'create_time'=>date('Y-m-d H:i:s'),
+            'status'=>'unread',
+            'value'=>$res
+            );
+        $this->model->table('push_message')->data($push_data)->insert();
         if($res) {
         	$this->code = 0;
             $this->content['jpush_type'] = 'cashier_invite';
