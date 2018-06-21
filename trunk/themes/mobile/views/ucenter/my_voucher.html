@@ -19,7 +19,7 @@
 <div class="weui_panel1">
     <div class="weui_panel_bd">
         {list:items=$list['data']}
-        <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg user_voucher" data-id="{$item['id']}" data-type="{$item['type']}">
+        <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg user_voucher" data-id="{$item['id']}" data-type="{$item['type']}" data-status="{$item['status']}">
             <div class="weui_media_hd">
             {if:$item['type']==1}
                 <img class="weui_media_appmsg_thumb" src="/static/images/jifen_voucher.png" alt="">
@@ -33,6 +33,13 @@
             </div>
             <div class="weui_media_bd" style="margin-left: 16px;">
                 <h4 class="weui_media_title">{$item['title']}</h4>
+                {if:$item['status']==1}
+                <p class="weui_media_desc">未使用</p>
+                {elseif:$item['status']==0}
+                <p class="weui_media_desc">已使用</p>
+                {elseif:$item['status']==-1}
+                <p class="weui_media_desc">已过期</p>
+                {/if}
                 <p class="weui_media_desc">过期时间：{$item['end_time']}</p>
                 
             </div>
@@ -76,23 +83,26 @@
     $('.user_voucher').click(function(){
         var id = $(this).attr("data-id");
         var type = $(this).attr("data-type");
-        $.confirm("你确定要使用该券吗?", "提示", function () {   
-            if(type==4) {
-                var url = "{url:/active/address/id/}"+id;
-                window.location.href = url;
-            }else{
-                $.post("{url:/active/use_voucher}", {id: id}, function (data) {
-                    if (data['status'] == 'success') {
-                         $.toast("使用成功", "success",function () {
-                            location.reload();
-                        });
-                    } else {
-                        $.toast("失败", "forbidden");
-                    }
-                }, 'json');
-            }  
-        }, function () {
-            //点击取消后的回调函数
-        });
+        var status = $(this).attr("data-status");
+        if(status==1) {
+            $.confirm("你确定要使用该券吗?", "提示", function () {   
+                if(type==4) {
+                    var url = "{url:/active/address/id/}"+id;
+                    window.location.href = url;
+                }else{
+                    $.post("{url:/active/use_voucher}", {id: id}, function (data) {
+                        if (data['status'] == 'success') {
+                             $.toast("使用成功", "success",function () {
+                                location.reload();
+                            });
+                        } else {
+                            $.toast("失败", "forbidden");
+                        }
+                    }, 'json');
+                }  
+            }, function () {
+                //点击取消后的回调函数
+            });
+        }   
     });
 </script>

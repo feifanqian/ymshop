@@ -322,10 +322,14 @@ class ActiveController extends Controller
     }
 
     public function address() {
+        $id = Filter::int(Req::args("id"));
+        $this->assign("id", $id);
         $this->redirect();
     }
 
     public function address_save() {
+        $id = Filter::int(Req::args("id"));
+        $this->model->table('active_voucher')->data(array('status'=>0))->where('id='.$id)->update();
         $data = array(
             'user_id'=>$this->user['id'],
             'accept_name'=>Filter::str(Req::args('accept_name')),
