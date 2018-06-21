@@ -320,5 +320,77 @@ class ActiveController extends Controller
         $this->model->table('active_voucher')->data(array('status'=>0))->where('id='.$id)->update();
         echo JSON::encode(array('status' => 'success'));
     }
+
+    public function address() {
+        $this->redirect();
+    }
+
+    public function address_save() {
+        $data = array(
+            'user_id'=>$this->user['id'],
+            'accept_name'=>Filter::str(Req::args('accept_name')),
+            'mobile'=>Filter::str(Req::args('mobile')),
+            'province'=>Filter::int(Req::args('province')),
+            'city'=>Filter::int(Req::args('city')),
+            'country'=>Filter::int(Req::args('country')),
+            'addr'=>Filter::str(Req::args('addr')),
+            'is_default'=>0
+            );
+        $address_id = $this->model->table("address")->data($data)->insert();
+        $gift_product = 2729;
+        $gift_num = 1;
+        $product = $this->model->table('products as p')->where("p.id = $gift_product")->join("left join goods as g on p.goods_id = g.id")->fields("p.*,g.shop_id")->find();
+
+        $datas['type']=0;
+        $datas['order_no'] = Common::createOrderNo();
+        $datas['user_id'] = $this->user['id'];
+        $datas['payment'] = 1;
+        $datas['status'] = 3; 
+        $datas['pay_status'] = 1;
+        $datas['accept_name'] = $data['accept_name'];
+        $datas['phone'] = $data['mobile'];
+        $datas['mobile'] = $data['mobile'];
+        $datas['province'] = $data['province'];
+        $datas['city'] = $data['city'];
+        $datas['county'] = $data['county'];
+        $datas['addr'] = Filter::text($data['addr']);
+        $datas['zip'] = '';
+        $datas['payable_amount'] = $product['sell_price']*$gift_num;
+        $datas['payable_freight'] = 0;
+        $datas['real_freight'] = 0;
+        $datas['create_time'] = date('Y-m-d H:i:s');
+        $datas['pay_time'] = date("Y-m-d H:i:s");
+        $datas['is_invoice'] = 0;
+        $datas['handling_fee'] = 0;
+        $datas['invoice_title'] = '';
+        $datas['taxes'] = 0;
+        $datas['discount_amount'] = 0;
+        $datas['order_amount'] = $product['sell_price']*$gift_num;
+        $datas['real_amount'] = $product['sell_price']*$gift_num;
+        $datas['point'] = 0;
+        $datas['voucher_id'] = 0;
+        $datas['voucher'] = serialize(array());
+        $datas['prom_id']=0;
+        $datas['admin_remark']="自动创建订单，来自于拉新活动奖励";
+        $datas['shop_ids']=$product['shop_id'];
+        $order_id =$this->model->table('order')->data($datas)->insert();
+
+        $tem_data['order_id'] = $order_id;
+        $tem_data['goods_id'] = $product['goods_id'];
+        $tem_data['product_id'] = $product['id'];
+        $tem_data['shop_id'] = $product['shop_id'];
+        $tem_data['goods_price'] = $product['sell_price'];
+        $tem_data['real_price'] = $product['sell_price'];
+        $tem_data['goods_nums'] = $gift_num;
+        $tem_data['goods_weight'] = $product['weight'];
+        $tem_data['prom_goods'] = serialize(array());
+        $tem_data['spec'] = serialize($product['spec']);
+        $this->model->table("order_goods")->data($tem_data)->insert();
+
+        $this->model->table("products")->where("id=" . $gift_product)->data(array('store_nums' => "`store_nums`-" . $gift_num))->update();//更新库存
+        $this->model->table('goods')->data(array('store_nums' => "`store_nums`-" . $gift_num))->where('id=' . $product['goods_id'])->update();
+
+        $this->redirect("/ucenter/my_voucher");
+    }
 }
 ?>

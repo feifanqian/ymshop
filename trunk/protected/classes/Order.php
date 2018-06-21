@@ -701,7 +701,7 @@ class Order {
         $data['county'] = $address['county'];
         $data['addr'] = Filter::text($address['addr']);
         $data['zip'] = $address['zip'];
-        $data['payable_amount'] = $product['sell_price']*$gift_num;;
+        $data['payable_amount'] = $product['sell_price']*$gift_num;
         $data['payable_freight'] = 0;
         $data['real_freight'] = 0;
         $data['create_time'] = date('Y-m-d H:i:s');

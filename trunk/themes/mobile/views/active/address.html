@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="http://www.ymlypt.com/static/yuanmeng1/activity_a/css/recruit.css">
+    <style type="text/css">
+    .status1{
+        position: absolute;
+        top: 62px;
+        right: 25px;
+        width: 20%;
+        height: 36px;      
+        color: #fff !important;
+        font-size: 22px;
+        border-radius: 16px;
+        line-height: 36px;
+        text-align: center;
+    }
+    .had-get{
+        background-color: #aa8475;
+    }
+    .can-get{
+        background-color: #f06834; 
+    }
+    #signup{
+        background-color: #f06834;
+        margin-left: 24%;
+        width: 50%;
+        height: 40px;
+        color: white !important;
+        border-radius: 6px;
+        line-height: 40px;
+        text-align: center;
+    }
+    .layui-m-layercont{
+     text-align: left !important;
+     padding: 20px 20px !important;
+    }
+    .layui-m-layerchild h3{
+        height: 50px;
+        line-height: 74px;
+    }
+    .layui-m-layercont p{
+    float: right;
+    }
+    .layui-m-layercont img{
+        width: 60% !important;
+        margin-left: 20%;
+    }
+    </style>
+    <title>收货地址</title>
+</head>
+<body>
+<div id="app">
+    <section class="section_1">
+        <form id="address-form" class="simple" action="{url:/active/address_save}" method="post">
+        <input type="hidden" name="province" id="province" value="" />
+        <input type="hidden" name="city" id="city" value="" />
+        <input type="hidden" name="county" id="county" value="" />
+        <div class="weui_cells weui_cells_form">
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label for="" class="weui_label">收货人姓名</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input type="text" name="accept_name" maxlen="10" placeholder="请输入收货人姓名" class="weui_input" value="" alt="不为空，且长度不得超过10个字" />
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label for="" class="weui_label">手机号码</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input type="text" name="mobile" maxlen="10" placeholder="请输入手机号码" class="weui_input" value="" alt="不为空" />
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label for="" class="weui_label">电话号码</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input type="text" name="phone" maxlen="10" placeholder="请输入电话号码" class="weui_input" value="" alt="不为空" />
+                </div>
+            </div>
+           
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label for="name" class="weui_label">收货地址</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" id="address" name="address" type="text" value="" placeholder="请选择收货地址" />
+                </div>
+            </div>
+        </div>
+        <div class="weui_cells_title">街道地址</div>
+        <div class="weui_cells weui_cells_form">
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <textarea class="weui_textarea" name="addr" placeholder="请输入街道地址" rows="3"></textarea>
+                    <div class="weui_textarea_counter"><span>0</span>/200</div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="weui_cell">
+            <input type="submit" value="保存" class="weui_btn weui_btn_primary">
+        </div>
+    </form>
+    </section>
+</div>
+</body>
+<script src="http://www.ymlypt.com/static/yuanmeng/activity_a/js/main.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/city-picker.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
+<script>
+    $(function () {
+        $("#address").cityPicker({
+            title: "请选择收货地址", 
+            province:"#province",
+            city:"#city",
+            district:"#county",
+        });
+    });
+</script>
+</html>
