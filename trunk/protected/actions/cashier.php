@@ -585,9 +585,10 @@ class CashierAction extends Controller
                             $amount = 12;
                             break;
                     }
-                    $list['data']['alias'] = $amount.'元'.$title;
+                    $list['data'][$k]['alias'] = $amount.'元'.$title;
                 }
             }
+            unset($list['html']);
         }
         $this->code = 0;
         $this->content = $list;
