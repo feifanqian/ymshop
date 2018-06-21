@@ -58,9 +58,15 @@
             <a href="javascript:;" style="color: white;font-size: 20px;">领取</a>   
         </div>
         {else:}
-        <div class="invite1" style="background-color: #aa8475;">
+          {if:$get_status==1}
+          <div class="invite1" style="background-color: #aa8475;">
+            <a href="javascript:;" style="color: white;font-size: 20px;">已领取</a>   
+          </div>
+          {else:}
+          <div class="invite1" style="background-color: #aa8475;">
             <a href="javascript:;" style="color: white;font-size: 20px;">未达成</a>   
-        </div>
+           </div>
+          {/if}
         {/if}
         <div class="invite2">
             <a href="javascript:;" style="color: white;font-size: 20px;">取消</a>
