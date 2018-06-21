@@ -530,6 +530,7 @@ class CashierAction extends Controller
         } else {
             $cashier = $this->model->table('cashier')->where('id='.$id)->find();
             $this->model->table('cashier')->where('id='.$id)->delete();
+            $this->model->table('push_message')->where('value='.$id)->delete();
             $this->model->table('customer')->data(array('is_cashier'=>0))->where('user_id='.$cashier['user_id'])->update();
         }
         $this->code = 0;

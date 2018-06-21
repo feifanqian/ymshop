@@ -390,7 +390,7 @@ class ActiveController extends Controller
         $this->model->table("products")->where("id=" . $gift_product)->data(array('store_nums' => "`store_nums`-" . $gift_num))->update();//更新库存
         $this->model->table('goods')->data(array('store_nums' => "`store_nums`-" . $gift_num))->where('id=' . $product['goods_id'])->update();
 
-        $this->redirect("/ucenter/my_voucher");
+        $this->redirect("/ucenter/order/status/undelivery");
     }
 }
 ?>
