@@ -32,13 +32,10 @@
                 <th style="width:200px">用户名</th>
                 <th style="width:100px">邀请人数</th>
                 <th style="width:200px">报名时间</th>
-                <th style="width:200px">信息</th>
-                <th style="width:100px">距离</th>
-                <th style="width:100px">创建时间</th>
-                <th style="width:100px">打开时间</th>
+                <th style="width:50px">第几轮</th>
                 <th style="width:60px">状态</th>   
             </tr>
-                {query:name=invite_active as i join=left join customer as c on b.user_id eq c.user_id fields=b.*,c.real_name order=b.id desc id=$obj page=1}
+                {query:name=invite_active as i join=left join customer as c on b.user_id eq c.user_id fields=i.*,c.real_name order=i.id desc id=$obj page=1}
             <tr>
                 <td style="width:50px" class="btn_min">
                 <div class="operat hidden">
@@ -55,8 +52,8 @@
                 </div> 
                 </td>
                 <td>{$item['real_name']}</td>
-                <td>{$item['amount']}</td>
-                <td>{$item['location']|'未知'}</td>
+                <td>{$item['invite_num']}</td>
+                <td>{$item['sign_time']}</td>
                 <td>{$item['info']}</td>
                 <td>{$item['distance']}</td>
                 <td>{$item['create_time']}</td>

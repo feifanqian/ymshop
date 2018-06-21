@@ -53,6 +53,10 @@ class Jpush{
                 )
             )
         );
+        $data['options'] = array(
+                  // 'time_to_live'=>$time_to_live,
+                  'apns_production'=>false
+            );
         $this->push_content = json_encode($data,JSON_UNESCAPED_UNICODE);
     }
     public function setSingleScheduleData($schedule_name,$trigger_time,$platfrom,$audience,$type,$type_value,$alert,$time_to_live=60){
