@@ -39,6 +39,11 @@ class CashierAction extends Controller
             $this->code = 1254;
             return;
         }
+        $has_be_other = $this->model->table('cashier')->where("user_id=".$cashier['user_id']." and hire_user_id !=".$this->user['id']." and status=1")->find();
+        if($has_be_other) {
+            $this->code = 1243;
+            return;
+        }
         $invited = $this->model->table('cashier')->where("user_id=".$cashier['user_id']." and hire_user_id =".$this->user['id']." and status=0")->find();
         if($invited) {
         	$this->code = 1244;

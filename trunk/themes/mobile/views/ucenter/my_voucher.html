@@ -19,7 +19,7 @@
 <div class="weui_panel1">
     <div class="weui_panel_bd">
         {list:items=$list['data']}
-        <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg user_voucher" data-id="{$item['id']}">
+        <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg user_voucher" data-id="{$item['id']}" data-type="{$item['type']}">
             <div class="weui_media_hd">
             {if:$item['type']==1}
                 <img class="weui_media_appmsg_thumb" src="/static/images/jifen_voucher.png" alt="">
@@ -76,6 +76,11 @@
     $('.user_voucher').click(function(){
         $.confirm("你确定要使用该券吗吗?", "提示", function () {
             var id = $(this).attr("data-id");
+            var type = $(this).attr("data-type");
+            if(type==4) {
+                var url = "{url:/active/address/id/}"+id;
+                window.location.href = url;
+            }
             $.post("{url:/active/use_voucher}", {id: id}, function (data) {
                 if (data['status'] == 'success') {
                      $.toast("使用成功", "success",function () {
