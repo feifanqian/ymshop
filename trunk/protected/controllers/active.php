@@ -332,7 +332,7 @@ class ActiveController extends Controller
             'mobile'=>Filter::str(Req::args('mobile')),
             'province'=>Filter::int(Req::args('province')),
             'city'=>Filter::int(Req::args('city')),
-            'country'=>Filter::int(Req::args('country')),
+            'county'=>Filter::int(Req::args('county')),
             'addr'=>Filter::str(Req::args('addr')),
             'is_default'=>0
             );
