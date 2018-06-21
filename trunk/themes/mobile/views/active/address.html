@@ -58,8 +58,12 @@
 <body>
 <div id="app">
     <section class="section_1">
-        <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+        <!-- <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script> -->
+        <script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
+        <script type="text/javascript" src="/runtime/systemjs/jquery.min.js"></script>
         <script type="text/javascript" src="/themes/mobile/js/city-picker.js"></script>
+        <script type="text/javascript" src="/themes/mobile/js/common.js"></script>
+        <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
         <form id="address-form" class="simple" action="{url:/active/address_save}" method="post">
         <input type="hidden" name="province" id="province" value="" />
         <input type="hidden" name="city" id="city" value="" />
@@ -108,8 +112,7 @@
     </section>
 </div>
 </body>
-<script src="http://www.ymlypt.com/static/yuanmeng/activity_a/js/main.js"></script>
-<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
+<!-- <script src="http://www.ymlypt.com/static/yuanmeng/activity_a/js/main.js"></script> -->
 <script>
     $(function () {
         $("#address").cityPicker({
