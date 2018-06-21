@@ -144,6 +144,7 @@ class Menu {
             '/marketing/index_notice' => array('name' => '通知公告', 'parent' => 'welfare'),
             '/marketing/redbag_edit' => array('name' => '编辑红包', 'parent' => 'welfare', 'hidden'=>true),
             '/marketing/point_sale_edit' => array('name' => '积分购编辑', 'parent' => 'promotions'),
+            '/marketing/invite_active' => array('name' => '拉新活动', 'parent' => 'welfare'),
             '/wxmanager/wx_public_list' => array('name' => '公众号列表', 'parent' => 'weixin'),
             '/wxmanager/wx_public_edit' => array('name' => '公众号编辑', 'parent' => 'weixin'),
             '/wxmanager/menu' => array('name' => '公众号菜单', 'parent' => 'weixin', 'hidden'=>1),

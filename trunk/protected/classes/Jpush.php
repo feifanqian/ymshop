@@ -90,7 +90,8 @@ class Jpush{
                   'msg_content'=>$type                      
             ),
             'options'=>array(
-                  'time_to_live'=>$time_to_live
+                  'time_to_live'=>$time_to_live,
+                  'apns_production'=>false
             )
         );
          $this->schedule_content = json_encode($data);
