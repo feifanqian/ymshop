@@ -77,6 +77,7 @@
         $.confirm("你确定要使用该券吗?", "提示", function () {
             var id = $(this).attr("data-id");
             var type = $(this).attr("data-type");
+            console.log(id);
             console.log(type);return false;
             if(type==4) {
                 var url = "{url:/active/address/id/}"+id;
