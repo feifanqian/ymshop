@@ -628,6 +628,15 @@ class CashierAction extends Controller
 
     public function voucher_address() {
         $id = Filter::int(Req::args("id"));
+        $voucher = $this->model->table('active_voucher')->where('id='.$id)->find();
+        if(!$voucher) {
+            $this->code = 1262;
+            return;
+        }
+        if($voucher['status']==0) {
+            $this->code = 1263;
+            return;
+        }
         $this->model->table('active_voucher')->data(array('status'=>0))->where('id='.$id)->update();
         $data = array(
             'user_id'=>$this->user['id'],
