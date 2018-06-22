@@ -10,7 +10,7 @@
   ),
   'theme' => '_default',
   'urlFormat' => 'path',
-  'db' => 
+  'db2' => 
   array (
     'type' => 'mysqli',
     'tablePre' => 'tiny_',
@@ -18,6 +18,16 @@
     'user' => 'root',
     'password' => '',
     'name' => 'ymshop',
+    'port' => '3306',
+  ),
+    'db' => 
+  array (
+    'type' => 'mysqli',
+    'tablePre' => 'tiny_',
+    'host' => '39.108.165.0',
+    'user' => 'dallon',
+    'password' => 'ym123456',
+    'name' => 'shop',
     'port' => '3306',
   ),
   'route' => 

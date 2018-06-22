@@ -1411,6 +1411,7 @@ class DistrictadminController extends Controller
 
               $ret = Common::httpRequest($url, 'POST', $myParams);
               $ret = json_decode($ret, true);
+              
               $file_name = time().$shop_check['user_id'];
               $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
               $save_path = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name.'.'.$file_ext;
@@ -1421,42 +1422,13 @@ class DistrictadminController extends Controller
                     "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
                     "superUsercode"=>'yuanmeng',
                     "upload" => new CURLFile($save_path),
-                    // "upload" => '@'.$shop_check['positive_idcard'],
                 );
                 $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
                 $http_url="http://39.108.165.0";
 
 
-                // $ret = $this->curl_form($post_data,$sumbit_url,$http_url);
-
-        $ch = curl_init();
-        //设置变量
-        curl_setopt($ch, CURLOPT_URL, $sumbit_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);//执行结果是否被返回，0是返回，1是不返回
-        curl_setopt($ch, CURLOPT_HEADER, 0);//参数设置，是否显示头部信息，1为显示，0为不显示
-        curl_setopt($ch, CURLOPT_REFERER, $http_url);
-        //表单数据，是正规的表单设置值为非0
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);//设置curl执行超时时间最大是多少
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-
-        //使用数组提供post数据时，CURL组件大概是为了兼容@filename这种上传文件的写法，
-        //默认把content_type设为了multipart/form-data。虽然对于大多数web服务器并
-        //没有影响，但是还是有少部分服务器不兼容。本文得出的结论是，在没有需要上传文件的
-        //情况下，尽量对post提交的数据进行http_build_query，然后发送出去，能实现更好的兼容性，更小的请求数据包。
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-        //执行并获取结果
-        $result = $output = curl_exec($ch);
-
-        if($output === FALSE) {
-            echo "<br/>","cUrl Error:".curl_error($ch);
-        }
-        //    释放cURL句柄
-        curl_close($ch);
-
-                
-                $res = json_decode($result,true);
+                $ret = $this->curl_form($post_data,$sumbit_url,$http_url);
+                $res = json_decode($ret,true);
                 if($res['isSuccess']==true) {
                     unlink($save_path); 
                 }
@@ -1520,7 +1492,7 @@ class DistrictadminController extends Controller
         }
         //    释放cURL句柄
         curl_close($ch);
-        return $result;
+        // return $result;
     }
 
     public function shop_check_dos(){
