@@ -1411,7 +1411,7 @@ class DistrictadminController extends Controller
 
               $ret = Common::httpRequest($url, 'POST', $myParams);
               $ret = json_decode($ret, true);
-              
+
               $file_name = time().$shop_check['user_id'];
               $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
               $save_path = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name.'.'.$file_ext;
@@ -1430,7 +1430,9 @@ class DistrictadminController extends Controller
                 $ret = $this->curl_form($post_data,$sumbit_url,$http_url);
                 $res = json_decode($ret,true);
                 if($res['isSuccess']==true) {
-                    unlink($save_path); 
+                    unlink($save_path);
+                    echo json_encode(array("status" => 'success', 'msg' => '成功'));
+                    exit(); 
                 }
           }      
 
