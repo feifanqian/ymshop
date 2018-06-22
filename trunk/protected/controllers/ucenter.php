@@ -3934,24 +3934,24 @@ class UcenterController extends Controller
         $shop_photo = Req::args('shop_photo_url'); //门店照
         $hand_idcard = Req::args('hand_idcard_url'); //手持身份证照
         
-        if ($this->user['id'] == 42608) {
-            $data = array(
-                'picType'=>'00',
-                'picFile'=>curl_file_create($positive_idcard),
-                'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                'superUsercode'=>'yuanmeng'
-                );
-            $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-            // $header = array(
-            //     'Content-Type:multipart/form-data'
-            //     );
-            $result = Common::httpRequest($act,'POST',$data);
-            // var_dump($data);
-            echo "<pre>";
-            print_r($result);
-            echo "<pre>";
-            die;
-        }
+        // if ($this->user['id'] == 42608) {
+        //     $data = array(
+        //         'picType'=>'00',
+        //         'picFile'=>curl_file_create($positive_idcard),
+        //         'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+        //         'superUsercode'=>'yuanmeng'
+        //         );
+        //     $act = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+        //     // $header = array(
+        //     //     'Content-Type:multipart/form-data'
+        //     //     );
+        //     $result = Common::httpRequest($act,'POST',$data);
+        //     // var_dump($data);
+        //     echo "<pre>";
+        //     print_r($result);
+        //     echo "<pre>";
+        //     die;
+        // }
 
         $this->model->table('district_promoter')->data(array('shop_type' => $type))->where('user_id=' . $this->user['id'])->update();
 
