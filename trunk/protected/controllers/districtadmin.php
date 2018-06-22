@@ -1411,13 +1411,16 @@ class DistrictadminController extends Controller
 
               $ret = Common::httpRequest($url, 'POST', $myParams);
               $ret = json_decode($ret, true);
-
+              $file_name = time().$shop_check['user_id'];
+              $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
+              $save_path = dirname(dirname(dirname(dirname(__FILE__)))).'/static/temp_path/'.$file_name.'.'.$file_ext;
+              file_put_contents($save_path, file_get_contents($shop_check['positive_idcard']));
               $post_data = array (
                     // "name"=>'picFile',
                     "picType"=>'00',
                     "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
                     "superUsercode"=>'yuanmeng',
-                    "upload" => new CURLFile(file_get_contents($shop_check['positive_idcard'])),
+                    "upload" => new CURLFile($save_path),
                     // "upload" => '@'.$shop_check['positive_idcard'],
                 );
                 $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
