@@ -1417,7 +1417,7 @@ class DistrictadminController extends Controller
                     "picType"=>'00',
                     "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
                     "superUsercode"=>'yuanmeng',
-                    "upload" => new CURLFile($shop_check['positive_idcard']),
+                    "upload" => new CURLFile(file_get_contents($shop_check['positive_idcard'])),
                     // "upload" => '@'.$shop_check['positive_idcard'],
                 );
                 $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
