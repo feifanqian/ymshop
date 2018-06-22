@@ -1433,6 +1433,28 @@ class DistrictadminController extends Controller
         }
     }
 
+    public function sign_encrypt($input)
+    {
+        // $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        $pfxpath = "./protected/classes/yinpay/certs/yuanmeng.pfx";
+        $pfxpassword = '008596';
+        $return = array('success' => 0, 'msg' => '', 'check' => '');
+        $pkcs12 = file_get_contents($pfxpath); //私钥
+        if (openssl_pkcs12_read($pkcs12, $certs, $pfxpassword)) {
+            $privateKey = $certs['pkey'];
+            $publicKey = $certs['cert'];
+            $signedMsg = "";
+            if (openssl_sign($input['data'], $signedMsg, $privateKey, OPENSSL_ALGO_SHA1)) {
+                $return['success'] = 1;
+                $return['check'] = base64_encode($signedMsg);
+                $return['msg'] = base64_encode($input['data']);
+
+            }
+        }
+
+        return $return;
+    }
+
     public function curl_form($post_data,$sumbit_url,$http_url){
 
         //初始化
