@@ -1430,6 +1430,7 @@ class DistrictadminController extends Controller
                 $ret = $this->curl_form($post_data,$sumbit_url,$http_url);
                 $res = json_decode($ret,true);
                 if($res['isSuccess']==true) {
+                    var_dump(123);die;
                     unlink($save_path);
                     echo json_encode(array("status" => 'success', 'msg' => '成功'));
                     exit(); 
