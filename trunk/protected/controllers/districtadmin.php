@@ -1427,8 +1427,9 @@ class DistrictadminController extends Controller
                 $http_url="http://39.108.165.0";
 
 
-                $ret = $this->curl_form($post_data,$sumbit_url,$http_url);
-                $res = json_decode($ret,true);
+                $re = $this->curl_form($post_data,$sumbit_url,$http_url);
+                $res = json_decode($re,true);
+                var_dump($res);die;
                 if($res['isSuccess']==true) {
                     var_dump(123);die;
                     unlink($save_path);
