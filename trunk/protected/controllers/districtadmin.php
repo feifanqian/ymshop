@@ -1426,7 +1426,10 @@ class DistrictadminController extends Controller
                 $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
                 $http_url="http://39.108.165.0";
                 $ret = $this->curl_form($post_data,$sumbit_url,$http_url);
-                var_dump($ret);die;
+                $res = json_decode($ret,true);
+                if($res['isSuccess']==true) {
+                    unlink($save_path); 
+                }
           }      
 
           echo json_encode(array("status" => 'success', 'msg' => '成功'));
