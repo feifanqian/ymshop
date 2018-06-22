@@ -1380,12 +1380,88 @@ class DistrictadminController extends Controller
             }
         }elseif($status==1){
           $model->table("shop_check")->data(array("status" =>1,'check_date'=> date("Y-m-d H:i:s")))->where("id=" . $id)->update();
+          
+          $shop_check = $model->table("shop_check")->where("id=" . $id)->find();
+          if($shop_check['user_id']==42608) {
+            //上传银盛
+              $myParams = array();
+
+              $myParams['method'] = 'ysepay.merchant.register.token.get';
+              $myParams['partner_id'] = 'yuanmeng';
+              // $myParams['partner_id'] = $this->user['id'];
+              $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+              $myParams['charset'] = 'GBK';
+              $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';
+              $myParams['sign_type'] = 'RSA';
+
+              $myParams['version'] = '3.0';
+              $biz_content_arr = array();
+
+              $myParams['biz_content'] = '{}';
+              ksort($myParams);
+
+              $signStr = "";
+              foreach ($myParams as $key => $val) {
+                 $signStr .= $key . '=' . $val . '&';
+              }
+              $signStr = rtrim($signStr, '&');
+              $sign = $this->sign_encrypt(array('data' => $signStr));
+              $myParams['sign'] = trim($sign['check']);
+              $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
+
+              $ret = Common::httpRequest($url, 'POST', $myParams);
+              $ret = json_decode($ret, true);
+
+              $post_data = array (
+                    // "name"=>'picFile',
+                    "picType"=>'00',
+                    "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                    "superUsercode"=>'yuanmeng',
+                    "upload" => new CURLFile($shop_check['positive_idcard']),
+                );
+                $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+                $http_url="http://39.108.165.0";
+                $ret = $this->curl_form($post_data,$sumbit_url,$http_url);
+                var_dump($ret);die;
+          }      
+
           echo json_encode(array("status" => 'success', 'msg' => '成功'));
           exit();
         }else{
             echo json_encode(array("status" => 'success', 'msg' => '成功'));
             exit();
         }
+    }
+
+    public function curl_form($post_data,$sumbit_url,$http_url){
+
+        //初始化
+        $ch = curl_init();
+        //设置变量
+        curl_setopt($ch, CURLOPT_URL, $sumbit_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);//执行结果是否被返回，0是返回，1是不返回
+        curl_setopt($ch, CURLOPT_HEADER, 0);//参数设置，是否显示头部信息，1为显示，0为不显示
+        curl_setopt($ch, CURLOPT_REFERER, $http_url);
+        //表单数据，是正规的表单设置值为非0
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);//设置curl执行超时时间最大是多少
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+
+        //使用数组提供post数据时，CURL组件大概是为了兼容@filename这种上传文件的写法，
+        //默认把content_type设为了multipart/form-data。虽然对于大多数web服务器并
+        //没有影响，但是还是有少部分服务器不兼容。本文得出的结论是，在没有需要上传文件的
+        //情况下，尽量对post提交的数据进行http_build_query，然后发送出去，能实现更好的兼容性，更小的请求数据包。
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        //执行并获取结果
+        $result = $output = curl_exec($ch);
+
+        if($output === FALSE) {
+            echo "<br/>","cUrl Error:".curl_error($ch);
+        }
+        //    释放cURL句柄
+        curl_close($ch);
+        return $result;
     }
 
     public function shop_check_dos(){
