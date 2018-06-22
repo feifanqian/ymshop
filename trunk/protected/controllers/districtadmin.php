@@ -1413,7 +1413,7 @@ class DistrictadminController extends Controller
               $ret = json_decode($ret, true);
               $file_name = time().$shop_check['user_id'];
               $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
-              $save_path = dirname(dirname(dirname(dirname(__FILE__)))).'/static/temp_path/'.$file_name.'.'.$file_ext;
+              $save_path = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name.'.'.$file_ext;
               file_put_contents($save_path, file_get_contents($shop_check['positive_idcard']));
               $post_data = array (
                     // "name"=>'picFile',
