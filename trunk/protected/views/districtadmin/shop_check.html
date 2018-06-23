@@ -91,7 +91,6 @@ function cancel(id){
      var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
      $.post("{url:/districtadmin/shop_check_do}",{id:id,status:2,reason:text},function(data){
             layer.close(index);
-            console.log(data);return false;
             if(data.status=='success'){
             layer.msg('您拒绝了认证申请，理由是：'+text, {icon: 6},function(){
                 tools_reload();
@@ -110,6 +109,7 @@ function pass(id){
         var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
         $.post("{url:/districtadmin/shop_check_do}",{id:id,status:1},function(data){
              layer.close(index);
+             console.log(data);return false;
             if(data.status=='success'){
             layer.msg('操作成功', {icon: 6},function(){
                 tools_reload();
