@@ -585,6 +585,11 @@ class CashierAction extends Controller
                             $amount = 12;
                             break;
                     }
+                    if(date('Y-m-d',strtotime($v['end_time']))==date('Y-m-d','+1 day')) {
+                        $list['data'][$k]['endline'] = '明天即将过期';
+                    } else {
+                        $list['data'][$k]['endline'] = '';
+                    }
                     $list['data'][$k]['alias'] = $amount.'元'.$title;
                 }
             }
