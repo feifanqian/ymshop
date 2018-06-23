@@ -1428,8 +1428,8 @@ class DistrictadminController extends Controller
 
 
                 $re = $this->curl_form($post_data,$sumbit_url,$http_url);
-                $res = json_decode($re,true);
-                var_dump($res);die;
+                // $res = json_decode($re,true);
+                var_dump($re);die;
                 if($res['isSuccess']==true) {
                     var_dump(123);die;
                     unlink($save_path);
@@ -1489,14 +1489,14 @@ class DistrictadminController extends Controller
         //情况下，尽量对post提交的数据进行http_build_query，然后发送出去，能实现更好的兼容性，更小的请求数据包。
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
         //执行并获取结果
-        $result = $output = curl_exec($ch);
+        $output = curl_exec($ch);
 
         if($output === FALSE) {
             echo "<br/>","cUrl Error:".curl_error($ch);
         }
         //    释放cURL句柄
         curl_close($ch);
-        return $result;
+        // return $output;
     }
 
     public function shop_check_dos(){
