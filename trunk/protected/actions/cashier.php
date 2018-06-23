@@ -559,7 +559,7 @@ class CashierAction extends Controller
     public function voucher_list() {
         $user_id = $this->user['id'];
         $page = Filter::int(Req::args('p'));
-        $list = $this->model->table('active_voucher')->where('user_id='.$user_id)->findPage($page,10);
+        $list = $this->model->table('active_voucher')->where('status=1 and user_id='.$user_id)->findPage($page,10);
         if($list) {
             if(isset($list['data']) && $list['data']!=null) {
                 foreach ($list['data'] as $k => $v) {

@@ -479,4 +479,8 @@ class GoodsAction extends Controller {
         $this->code = 0;
         $this->content = $resp;
     }
+
+    public function upload_goods() {
+        
+    }
 }
