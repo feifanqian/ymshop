@@ -461,7 +461,8 @@ class GoodsAction extends Controller {
                             break;        
                     }
                 } else {
-                    array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
+                    // array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
+                    array_multisort(array_column($resp['result_list']['map_data'],'volume'),SORT_DESC,$resp['result_list']['map_data'],array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
                 }       
                 $resp['results']['tbk_coupon'] = $resp['result_list']['map_data'];
                 unset($resp['result_list']);
@@ -488,6 +489,10 @@ class GoodsAction extends Controller {
             'goods_no'=>$goods_no,
             'pro_no'=>$goods_no,
             'type_id'=>0,
+            'shop_id'=>$shop_id,
+            'brand_id'=>0,
+            'unit'=>'件',
+
             );
     }
 }
