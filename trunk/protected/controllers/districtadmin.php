@@ -1428,14 +1428,16 @@ class DistrictadminController extends Controller
 
 
                 $re = $this->curl_form($post_data,$sumbit_url,$http_url);
+                unlink($save_path);
+                exit();
                 // $res = json_decode($re,true);
-                var_dump($re);die;
-                if($res['isSuccess']==true) {
-                    var_dump(123);die;
-                    unlink($save_path);
-                    echo json_encode(array("status" => 'success', 'msg' => '成功'));
-                    exit(); 
-                }
+                // var_dump($re);die;
+                // if($res['isSuccess']==true) {
+                //     var_dump(123);die;
+                //     unlink($save_path);
+                //     echo json_encode(array("status" => 'success', 'msg' => '成功'));
+                //     exit(); 
+                // }
           }      
 
           echo json_encode(array("status" => 'success', 'msg' => '成功'));
