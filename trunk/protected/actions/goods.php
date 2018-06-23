@@ -482,7 +482,54 @@ class GoodsAction extends Controller {
     }
 
     public function upload_goods() {
+        $shop = $this->model->table('shop')->where('user_id='.$this->uer['id'])->find();
+        $promoter = $this->model->table('district_promoter')->where('user_id='.$this->uer['id'])->find();
+        if(!$promoter) {
+            $this->code = 1264;
+            return;
+        }
+        $salt = CHash::random(6);
+        if(!$shop) {
+            $shop_data = array(
+                'name'=>$promoter['shop_name']!=''?$promoter['shop_name']:$this->user['nickname'],
+                'user_id'=>$this->user['id'],
+                'category_id'=>40,
+                'freeshipping'=>Filter::int(Req::args('freeshipping')),
+                'star'=>0,
+                'img'=>$promoter['picture']!=null?$promoter['picture']:'http://www.ymlypt.com/themes/mobile/images/logo-new.png',
+                'imgs'=>serialize(array()),
+                'username'=>$promoter['shop_name']!=''?$promoter['shop_name']:$this->user['nickname'],
+                'password'=>md5(md5('123456') . $salt),
+                'salt'=>$salt,
+                'create_time'=>date('Y-m-d H:i:s'),
+                'up_time'=>date('Y-m-d H:i:s'),
+                'state'=>0
+                );
+            $shop_id = $this->model->table('shop')->data($shop_data)->insert();
+        } else {
+            $shop_id = $shop['id'];
+        }
         $goods_no = '000'.rand(1111,9999);
+        $content_imgs = Filter::str(Req::args('content_imgs'));
+        $imgs = Filter::str(Req::args('imgs'));
+        $content_imgs_array = explode(',',$content_imgs);
+        $content_imgs_str = '';
+        if($content_imgs_array) {
+            if(is_array($content_imgs_array)) {
+                foreach ($content_imgs_array as @$v) {
+                    $content_imgs_str .= "<img src=".$v." alt="" />";
+                }
+            }
+        }
+        $imgs_array = explode(',',$imgs);
+        $imgs_str = '';
+        $img = '';
+        if($imgs_array) {
+            if(is_array($imgs_array)) {
+                $img = $imgs_array[0];
+                $imgs_str = serialize($imgs_array);
+            }
+        }
         $goods_data = array(
             'name'=>Filter::str(Req::args('name')),
             'category_id'=>Filter::int(Req::args('category_id')),
@@ -492,7 +539,30 @@ class GoodsAction extends Controller {
             'shop_id'=>$shop_id,
             'brand_id'=>0,
             'unit'=>'件',
-
+            'content'=>$content_imgs_str,
+            'img'=>$img,
+            'imgs'=> $imgs_str,
+            'sell_price'=>Filter::float(Req::args('sell_price')),
+            'market_price'=>Filter::float(Req::args('sell_price')),
+            'cost_price'=>Filter::float(Req::args('cost_price')),
+            'create_time'=>date('Y-m-d H:i:s'),
+            'store_nums'=>1000,
+            'warning_line'=>2,
+            'weight'=>Filter::int(Req::args('weight')),
+            'point'=>0,
+            'visit'=>0,
+            'favorite'=>0,
+            'sort'=>1,
+            'spec'=>serialize(array()),
+            'attr'=>serialize(array()),
+            'prom_id'=>0,
+            'is_online'=>0,
+            'freeshipping'=>Filter::int(Req::args('freeshipping')),
+            'user_id'=>$this->user['id'],
+            'type'=>2
             );
+        $this->model->table('goods')->data($goods_data)->insert();
+        $this->code = 0;
+        return; 
     }
 }
