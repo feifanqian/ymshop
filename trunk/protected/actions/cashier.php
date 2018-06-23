@@ -709,5 +709,26 @@ class CashierAction extends Controller
         $this->code = 0;
         $this->content = $order;
     }
+
+    public function voucher_user() {
+        $id = Filter::int(Req::args("id"));
+        $voucher = $this->model->table('active_voucher')->where('id='.$id)->find();
+        if(!$voucher) {
+            $this->code = 1262;
+            return;
+        }
+        if($voucher['type']==1) {
+            $point = $voucher['amount'];
+            $this->model->table('customer')->data(array('point_coin'=>"`point_coin`+({$point})"))->where('user_id='.$voucher['user_id'])->update();
+            Log::pointcoin_log($point,$voucher['user_id'], '', "积分卡券兑换", 13);
+        } elseif($voucher['type']==2) {
+            $point = $voucher['amount'];
+            $this->model->table('customer')->data(array('balance'=>"`balance`+({$point})"))->where('user_id='.$voucher['user_id'])->update();
+            Log::balance($point,$voucher['user_id'], '', "余额卡券兑换", 16);
+        }
+        $this->model->table('active_voucher')->data(array('status'=>0))->where('id='.$id)->update();
+        $this->code = 0;
+        return; 
+    }
 }
 ?>
