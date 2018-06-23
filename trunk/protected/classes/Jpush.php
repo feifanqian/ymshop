@@ -55,7 +55,7 @@ class Jpush{
         );
         $data['options'] = array(
                   // 'time_to_live'=>$time_to_live,
-                  'apns_production'=>false
+                  'apns_production'=>true
             );
         $this->push_content = json_encode($data,JSON_UNESCAPED_UNICODE);
     }
@@ -95,7 +95,7 @@ class Jpush{
             ),
             'options'=>array(
                   'time_to_live'=>$time_to_live,
-                  'apns_production'=>false
+                  'apns_production'=>true
             )
         );
          $this->schedule_content = json_encode($data);
