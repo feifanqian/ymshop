@@ -428,7 +428,7 @@ class GoodsAction extends Controller {
                  $req->setCat($q);
              }
          }else{
-             $req->setCat("11,16,30,14,1801,21,50002766");
+             $req->setCat("21,11,122852001,5002372,16,30,14,1801,500027664");
          }
         $req->setPageNo($page);
         $resp = $c->execute($req);
@@ -481,6 +481,13 @@ class GoodsAction extends Controller {
     }
 
     public function upload_goods() {
-        
+        $goods_no = '000'.rand(1111,9999);
+        $goods_data = array(
+            'name'=>Filter::str(Req::args('name')),
+            'category_id'=>Filter::int(Req::args('category_id')),
+            'goods_no'=>$goods_no,
+            'pro_no'=>$goods_no,
+            'type_id'=>0,
+            );
     }
 }
