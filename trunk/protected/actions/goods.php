@@ -516,7 +516,7 @@ class GoodsAction extends Controller {
         $content_imgs_str = '';
         if($content_imgs_array) {
             if(is_array($content_imgs_array)) {
-                foreach ($content_imgs_array as @$v) {
+                foreach ($content_imgs_array as $k=>$v) {
                     $content_imgs_str .= "<img src=".$v." alt="" />";
                 }
             }
