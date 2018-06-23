@@ -1496,7 +1496,7 @@ class DistrictadminController extends Controller
         }
         //    释放cURL句柄
         curl_close($ch);
-        // return $result;
+        return $result;
     }
 
     public function shop_check_dos(){
