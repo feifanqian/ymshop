@@ -580,4 +580,16 @@ class GoodsAction extends Controller {
         $this->code = 0;
         return; 
     }
+
+    public function get_all_category() {
+       $cache = CacheFactory::getInstance();  
+       if ($cache->get("_GoodsAllCategory") === null) {
+            $result = $this->model->table('goods_category')->fields('id,name')->order("sort desc")->findAll();
+            $cache->set("_GoodsAllCategory", $result, 3600);
+        }
+       $result = $cache->get("_GoodsAllCategory");
+       $this->code = 0;
+       $this->content = $result;
+       return; 
+    }
 }
