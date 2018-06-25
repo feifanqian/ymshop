@@ -551,6 +551,7 @@ class GoodsAction extends Controller {
             'content'=>$content_imgs_str,
             'img'=>$img,
             'imgs'=> $imgs_str,
+            'tag_ids'=>'',
             'sell_price'=>Filter::float(Req::args('sell_price')),
             'market_price'=>Filter::float(Req::args('sell_price')),
             'cost_price'=>Filter::float(Req::args('cost_price')),
