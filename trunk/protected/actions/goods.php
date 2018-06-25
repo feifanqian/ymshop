@@ -569,6 +569,7 @@ class GoodsAction extends Controller {
             'attrs'=>serialize(array()),
             'prom_id'=>0,
             'is_online'=>0,
+            'sale_protection'=>'',
             'freeshipping'=>Filter::int(Req::args('freeshipping')),
             'personal_shop_id'=>0,
             'user_id'=>$this->user['id'],
