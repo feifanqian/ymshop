@@ -556,7 +556,7 @@ class GoodsAction extends Controller {
             'market_price'=>Filter::float(Req::args('sell_price')),
             'cost_price'=>Filter::float(Req::args('cost_price')),
             'create_time'=>date('Y-m-d H:i:s'),
-            'store_nums'=>1000,
+            'store_nums'=>Filter::int(Req::args('store_nums')),
             'warning_line'=>2,
             'seo_title'=>'',
             'seo_keywords'=>'',
@@ -569,7 +569,7 @@ class GoodsAction extends Controller {
             'specs'=>serialize(array()),
             'attrs'=>serialize(array()),
             'prom_id'=>0,
-            'is_online'=>0,
+            'is_online'=>Filter::int(Req::args('is_online')),
             'sale_protection'=>'',
             'freeshipping'=>Filter::int(Req::args('freeshipping')),
             'personal_shop_id'=>0,
@@ -584,12 +584,24 @@ class GoodsAction extends Controller {
     public function get_all_category() {
        $cache = CacheFactory::getInstance();  
        if ($cache->get("_GoodsAllCategory") === null) {
-            $result = $this->model->table('goods_category')->fields('id,name')->order("sort desc")->findAll();
+            $result = $this->model->table('goods_category')->fields('id,name')->where('id!=1')->order("sort desc")->findAll();
             $cache->set("_GoodsAllCategory", $result, 3600);
         }
        $result = $cache->get("_GoodsAllCategory");
        $this->code = 0;
        $this->content = $result;
        return; 
+    }
+
+    public function fare_list() {
+        $fare = $this->model->table('fare')->where('is_default=1')->findAll();
+        foreach ($fare as $k => $v) {
+            $zone = unserialize($v['zone']);
+            $fare[$k]['zone_name'] = $zone;
+            $fare[$k]['desc'] = "默认运费：".$v['first_weight']."(g)内,".$v['first_price']."元；每增加".$v['second_weight']."(g)，增加运费" .$v['second_price']."元";
+        }
+        $this->code = 0;
+        $this->content = $fare;
+        return;
     }
 }

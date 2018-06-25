@@ -251,8 +251,9 @@ class V1Controller extends Controller {
         "voucher_address"=>array('cashier/voucher_address',1,1), //卡券添加收货地址
         "voucher_user"=>array('cashier/voucher_user',1,1), //卡券使用
         //商家上传商品
-        "upload_goods"=>array('goods/upload_goods',1,1),
-        "get_all_category"=>array('goods/get_all_category',0,1),
+        "upload_goods"=>array('goods/upload_goods',1,1), //商家上传商品
+        "get_all_category"=>array('goods/get_all_category',0,1), //所有分类
+        "fare_list"=>array('goods/fare_list',0,1), //运费模板
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息
