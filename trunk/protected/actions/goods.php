@@ -490,6 +490,7 @@ class GoodsAction extends Controller {
         }
         $salt = CHash::random(6);
         if(!$shop) {
+            var_dump(111);
             $shop_data = array(
                 'name'=>$promoter['shop_name']!=''?$promoter['shop_name']:$this->user['nickname'],
                 'user_id'=>$this->user['id'],
@@ -506,6 +507,7 @@ class GoodsAction extends Controller {
                 'state'=>0
                 );
             $shop_id = $this->model->table('shop')->data($shop_data)->insert();
+            var_dump(123);die;
         } else {
             $shop_id = $shop['id'];
         }
