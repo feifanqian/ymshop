@@ -1676,7 +1676,7 @@ class UcenterController extends Controller
         $id = $this->user['id'];
         $customer = $this->model->table("customer as cu")->fields("cu.*,gr.name as gname")->join("left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = $id")->find();
         if(!$customer) {
-            var_dump($id);die;
+            var_dump($this->user);die;
         }
         $orders = $this->model->table("order")->where("user_id = $id and is_del = 0 and type !=8")->findAll();
         $order = array('amount' => 0, 'todayamount' => 0, 'pending' => 0, 'undelivery' => 0, 'unreceived' => 0, 'uncomment' => 0);
