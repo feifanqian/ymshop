@@ -304,7 +304,7 @@ class CashierAction extends Controller
             //     $this->code = 1247;
             //     return;
             // }
-            $desk = $this->model->table('cashier_desk')->fields('id')->where("hire_user_id=".$cashier['hire_user_id']." and desk_no like '$desk_no'")->find();
+            $desk = $this->model->table('cashier_desk')->fields('id')->where("hire_user_id=".$cashier['hire_user_id']." and desk_no like '%$desk_no%'")->find();
             if(!$desk) {
                 $this->code = 1252;
                 return;
