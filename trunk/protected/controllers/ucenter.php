@@ -1678,6 +1678,8 @@ class UcenterController extends Controller
         if(!$customer) {
             $open_id = $this->user['open_id'];
             $oauth_user = $this->model->table('oauth_user')->fields('user_id')->where("open_id='$open_id'")->find();
+            var_dump($open_id);
+            var_dump($oauth_user);die;
             $customer = $this->model->table("customer as cu")->fields("cu.*,gr.name as gname")->join("left join grade as gr on cu.group_id = gr.id")->where("cu.user_id = ".$oauth_user['user_id'])->find();
         }
         $orders = $this->model->table("order")->where("user_id = $id and is_del = 0 and type !=8")->findAll();
