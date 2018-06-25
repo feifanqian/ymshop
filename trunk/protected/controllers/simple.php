@@ -528,6 +528,7 @@ class SimpleController extends Controller {
                 Log::pointcoin_log(200, $last_id, '', '微信新用户积分奖励', 10);
                 //记录登录信息
                 $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id='$last_id'")->find();
+                $obj['open_id'] = $userinfo['open_id'];
                 $this->safebox->set('user', $obj, 1800);
                 $this->model->table('oauth_user')->where("oauth_type='{$userinfo['oauth_type']}' and open_id='{$userinfo['open_id']}'")->data(array('user_id' => $last_id))->update();
                 //记录邀请人
