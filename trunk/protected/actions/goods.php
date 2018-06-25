@@ -482,8 +482,8 @@ class GoodsAction extends Controller {
     }
 
     public function upload_goods() {
-        $shop = $this->model->table('shop')->where('user_id='.$this->uer['id'])->find();
-        $promoter = $this->model->table('district_promoter')->where('user_id='.$this->uer['id'])->find();
+        $shop = $this->model->table('shop')->where('user_id='.$this->user['id'])->find();
+        $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
         if(!$promoter) {
             $this->code = 1264;
             return;
