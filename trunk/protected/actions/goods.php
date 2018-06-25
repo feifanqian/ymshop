@@ -540,6 +540,7 @@ class GoodsAction extends Controller {
         }
         $goods_data = array(
             'name'=>Filter::str(Req::args('name')),
+            'subtitle'=>'',
             'category_id'=>Filter::int(Req::args('category_id')),
             'goods_no'=>$goods_no,
             'pro_no'=>$goods_no,
@@ -556,16 +557,20 @@ class GoodsAction extends Controller {
             'create_time'=>date('Y-m-d H:i:s'),
             'store_nums'=>1000,
             'warning_line'=>2,
+            'seo_title'=>'',
+            'seo_keywords'=>'',
+            'seo_description'=>'',
             'weight'=>Filter::int(Req::args('weight')),
             'point'=>0,
             'visit'=>0,
             'favorite'=>0,
             'sort'=>1,
-            'spec'=>serialize(array()),
-            'attr'=>serialize(array()),
+            'specs'=>serialize(array()),
+            'attrs'=>serialize(array()),
             'prom_id'=>0,
             'is_online'=>0,
             'freeshipping'=>Filter::int(Req::args('freeshipping')),
+            'personal_shop_id'=>0,
             'user_id'=>$this->user['id'],
             'type'=>2
             );
