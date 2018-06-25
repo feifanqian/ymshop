@@ -594,11 +594,15 @@ class GoodsAction extends Controller {
     }
 
     public function fare_list() {
-        $fare = $this->model->table('fare')->where('is_default=1')->findAll();
+        $fare = $this->model->table('fare')->fields('id,name,zoning')->where('id=1 or is_default=1')->findAll();
         foreach ($fare as $k => $v) {
-            $zone = unserialize($v['zone']);
-            $fare[$k]['zone_name'] = $zone;
-            $fare[$k]['desc'] = "默认运费：".$v['first_weight']."(g)内,".$v['first_price']."元；每增加".$v['second_weight']."(g)，增加运费" .$v['second_price']."元";
+            $zone = unserialize($v['zoning']);
+            $fare[$k]['zone_name'] = $zone;   
+            if($v['id']==1) {
+                $fare[$k]['desc'] = '全国所有地区免邮费';
+            } else {
+                $fare[$k]['desc'] = "默认运费：".$v['first_weight']."(g)内,".$v['first_price']."元；每增加".$v['second_weight']."(g)，增加运费" .$v['second_price']."元";
+            }
         }
         $this->code = 0;
         $this->content = $fare;
