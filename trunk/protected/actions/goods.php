@@ -594,7 +594,7 @@ class GoodsAction extends Controller {
     }
 
     public function fare_list() {
-        $fare = $this->model->table('fare')->fields('id,name,zoning')->where('id=1 or is_default=1')->findAll();
+        $fare = $this->model->table('fare')->where('id=1 or is_default=1')->findAll();
         foreach ($fare as $k => $v) {
             $zone = unserialize($v['zoning']);
             $fare[$k]['zone_name'] = $zone;   
