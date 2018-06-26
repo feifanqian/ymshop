@@ -59,7 +59,7 @@
     <!--header-->
     <section class="header">
         <img src="img/recruit/header.jpg" alt="" class="sizeFitImg">
-        <span class="count-down">活动倒计时: <span>29天23时34分</span></span>
+        <span class="count-down">活动倒计时: <div class="count" id="qiangtimer" data-remainseconds="{echo:(strtotime('tomorrow')-time())*1000}"><span class="hour-node">00</span>:<span class="minute-node">00</span>:<span class="second-node">00</span></div></span>
     </section>
 
     <!--我的信息-->
@@ -196,6 +196,7 @@
 <script src="http://www.ymlypt.com/static/yuanmeng/activity_a/js/main.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/common.js"></script>
 <script>
     $(function ($) {
         //  试试动态的进度动画
