@@ -919,7 +919,7 @@ $(function () {
         localStorage.setItem("recentlysearch", JSON.stringify(recentlysearch));
     });
     initSwiper().initPageSwiper(document.body);
-    if ($("#qiangtimer").length() > 0) {
+    if ($("#qiangtimer").size() > 0) {
         $("#qiangtimer").countdown({remainseconds: $("#qiangtimer").data("remainseconds"), format: '<span class="hour-node">{h}</span>:<span class="minute-node">{m}</span>:<span class="second-node">{s}</span>', callback: function () {
                 //location.reload();
             }});
