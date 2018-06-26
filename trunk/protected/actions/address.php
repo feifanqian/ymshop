@@ -1003,11 +1003,11 @@ class AddressAction extends Controller
                 $info_sql[$key]['is_district'] = $is_district;
                 if($info_sql[$key]['shop_name']==null){
                     $user = $this->model->table('customer as c')->fields('c.real_name,u.nickname')->join("left join user as u on c.user_id = u.id")->where('c.user_id='.$value['user_id'])->find();
-                    if(!$user) {
-                        unset($info_sql[$key]);
+                    if($user) {
+                        $info_sql[$key]['shop_name'] = empty($user['real_name'])?$user['nickname']:$user['real_name'];           
+                    } else {
+                      unset($info_sql[$key]);
                     }
-                    $info_sql[$key]['shop_name'] = empty($user['real_name'])?$user['nickname']:$user['real_name'];  
-                    // $this->model->table('district_promoter')->data(array('shop_name'=>$user['real_name']))->where('user_id='.$value['user_id'])->update();
                 }
                 $info_sql[$key]['dist'] = sprintf('%.3f',$value['dist']);
                 if($distance && $info_sql[$key]['dist']>$distance){
