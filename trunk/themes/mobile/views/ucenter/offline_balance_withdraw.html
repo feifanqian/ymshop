@@ -127,6 +127,12 @@
                         <input class="input" type="file" name="native_idcard" value="" >
                    </div>
                 </div>
+                <div class="weui-cell" id="hand_idcard">
+                   <div class="weui-cell__hd" style="width:40%"><label class="weui-label">本人手持身份证照</label></div>
+                   <div class="weui-cell__bd">
+                        <input class="input" type="file" name="hand_idcard" value="" >
+                   </div>
+                </div>
                 <div class="weui-cell" style="display: none;" id="native_idcard_preview">
                    <div class="weui-cell__bd"  >
                         <img src='' width="200" height="100" alt="" >
@@ -164,12 +170,6 @@
                    <div class="weui-cell__bd"  >
                         <img src='' width="200" height="100" alt="" >
                    </div> 
-                </div>
-                <div class="weui-cell" style="display: none;" id="hand_idcard">
-                   <div class="weui-cell__hd" style="width:40%"><label class="weui-label">本人手持身份证照</label></div>
-                   <div class="weui-cell__bd">
-                        <input class="input" type="file" name="hand_idcard" value="" >
-                   </div>
                 </div>
                 <div class="weui-cell" style="display: none;" id="hand_idcard_preview">
                    <div class="weui-cell__bd"  >
@@ -314,7 +314,17 @@
                 $.toast("身份证反面照大小超过8MB", "text");
                 return false;
               };
-            } 
+            }
+            if (!$("input[name=hand_idcard]").val()) {
+                  $.toast("请上传手持身份证照", "text");
+                  return false;
+              }else{
+                var file5 = $("input[name='hand_idcard']").get(0).files[0];
+                if(file5.size>8000*1024){
+                  $.toast("手持身份证照大小超过8MB", "text");
+                  return false;
+                };
+              } 
             if(!$("input[name=account_card]").val()){
               $.toast("请输入结算银行卡号", "text");
                 return false;
@@ -347,17 +357,6 @@
                   return false;
                 };
               }
-            }else if($("#shop_type option:selected").val()==2){
-              if (!$("input[name=hand_idcard]").val()) {
-                  $.toast("请上传手持身份证照", "text");
-                  return false;
-              }else{
-                var file5 = $("input[name='hand_idcard']").get(0).files[0];
-                if(file5.size>8000*1024){
-                  $.toast("门店照大小超过8MB", "text");
-                  return false;
-                };
-              }  
             }
             if(!$("input[name=bank_name]").val()){
               $.toast("请完善银行信息", "text");
@@ -370,10 +369,10 @@
             $("#business_licence").show();
             // $("#account_picture").show();
             $("#shop_photo").show();
-            $("#hand_idcard").hide();
+            // $("#hand_idcard").hide();
             $("#hand_idcard_preview").hide();
         }else if(shop_type==2){
-          $("#hand_idcard").show();
+          // $("#hand_idcard").show();
           $("#business_licence").hide();
           // $("#account_picture").hide();
           $("#shop_photo").hide();

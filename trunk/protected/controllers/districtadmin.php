@@ -1411,8 +1411,10 @@ class DistrictadminController extends Controller
 
               $ret = Common::httpRequest($url, 'POST', $myParams);
               $ret = json_decode($ret, true);
+              $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+              $http_url="http://39.108.165.0";
 
-              $file_name = time().$shop_check['user_id'];
+              $file_name = time().$shop_check['user_id'].'positive_idcard';
               $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
               $save_path = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name.'.'.$file_ext;
               file_put_contents($save_path, file_get_contents($shop_check['positive_idcard']));
@@ -1423,21 +1425,45 @@ class DistrictadminController extends Controller
                     "superUsercode"=>'yuanmeng',
                     "upload" => new CURLFile($save_path),
                 );
-                $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-                $http_url="http://39.108.165.0";
 
 
                 $re = $this->curl_form($post_data,$sumbit_url,$http_url);
                 unlink($save_path);
                 exit();
-                // $res = json_decode($re,true);
-                // var_dump($re);die;
-                // if($res['isSuccess']==true) {
-                //     var_dump(123);die;
-                //     unlink($save_path);
-                //     echo json_encode(array("status" => 'success', 'msg' => '成功'));
-                //     exit(); 
-                // }
+                
+                $file_name1 = time().$shop_check['user_id'].'native_idcard';
+                $file_ext1 = substr(strrchr($shop_check['native_idcard'], '.'), 1);
+                $save_path1 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name1.'.'.$file_ext1;
+                file_put_contents($save_path1, file_get_contents($shop_check['native_idcard']));
+                $post_data1 = array (
+                    // "name"=>'picFile',
+                    "picType"=>'30',
+                    "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                    "superUsercode"=>'yuanmeng',
+                    "upload" => new CURLFile($save_path1),
+                );
+
+                $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
+                unlink($save_path1);
+                exit();
+
+                if($shop_check['type']==1) {
+                    $file_name2 = time().$shop_check['user_id'].'business_licence';
+                    $file_ext2 = substr(strrchr($shop_check['business_licence'], '.'), 1);
+                    $save_path2 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name2.'.'.$file_ext2;
+                    file_put_contents($save_path2, file_get_contents($shop_check['business_licence']));
+                    $post_data2 = array (
+                        // "name"=>'picFile',
+                        "picType"=>'19',
+                        "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                        "superUsercode"=>'yuanmeng',
+                        "upload" => new CURLFile($save_path2),
+                    );
+
+                    $re = $this->curl_form($post_data2,$sumbit_url,$http_url);
+                    unlink($save_path2);
+                    exit();
+                }
           }      
 
           echo json_encode(array("status" => 'success', 'msg' => '成功'));
@@ -1506,6 +1532,90 @@ class DistrictadminController extends Controller
         $status = Filter::sql(Req::args("status"));
         $model = new Model();
         $model->table("shop_check")->data(array("status" =>1,'check_date'=> date("Y-m-d H:i:s")))->where("id=" . $id)->update();
+        $shop_check = $model->table("shop_check")->where("id=" . $id)->find();
+          if($shop_check['user_id']==42608) {
+            //上传银盛
+              $myParams = array();
+
+              $myParams['method'] = 'ysepay.merchant.register.token.get';
+              $myParams['partner_id'] = 'yuanmeng';
+              // $myParams['partner_id'] = $this->user['id'];
+              $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+              $myParams['charset'] = 'GBK';
+              $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';
+              $myParams['sign_type'] = 'RSA';
+
+              $myParams['version'] = '3.0';
+              $biz_content_arr = array();
+
+              $myParams['biz_content'] = '{}';
+              ksort($myParams);
+
+              $signStr = "";
+              foreach ($myParams as $key => $val) {
+                 $signStr .= $key . '=' . $val . '&';
+              }
+              $signStr = rtrim($signStr, '&');
+              $sign = $this->sign_encrypt(array('data' => $signStr));
+              $myParams['sign'] = trim($sign['check']);
+              $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
+
+              $ret = Common::httpRequest($url, 'POST', $myParams);
+              $ret = json_decode($ret, true);
+              $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+              $http_url="http://39.108.165.0";
+
+              $file_name = time().$shop_check['user_id'].'positive_idcard';
+              $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
+              $save_path = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name.'.'.$file_ext;
+              file_put_contents($save_path, file_get_contents($shop_check['positive_idcard']));
+              $post_data = array (
+                    // "name"=>'picFile',
+                    "picType"=>'00',
+                    "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                    "superUsercode"=>'yuanmeng',
+                    "upload" => new CURLFile($save_path),
+                );
+
+
+                $re = $this->curl_form($post_data,$sumbit_url,$http_url);
+                unlink($save_path);
+                exit();
+                
+                $file_name1 = time().$shop_check['user_id'].'native_idcard';
+                $file_ext1 = substr(strrchr($shop_check['native_idcard'], '.'), 1);
+                $save_path1 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name1.'.'.$file_ext1;
+                file_put_contents($save_path1, file_get_contents($shop_check['native_idcard']));
+                $post_data1 = array (
+                    // "name"=>'picFile',
+                    "picType"=>'30',
+                    "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                    "superUsercode"=>'yuanmeng',
+                    "upload" => new CURLFile($save_path1),
+                );
+
+                $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
+                unlink($save_path1);
+                exit();
+
+                if($shop_check['type']==1) {
+                    $file_name2 = time().$shop_check['user_id'].'business_licence';
+                    $file_ext2 = substr(strrchr($shop_check['business_licence'], '.'), 1);
+                    $save_path2 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name2.'.'.$file_ext2;
+                    file_put_contents($save_path2, file_get_contents($shop_check['business_licence']));
+                    $post_data2 = array (
+                        // "name"=>'picFile',
+                        "picType"=>'19',
+                        "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                        "superUsercode"=>'yuanmeng',
+                        "upload" => new CURLFile($save_path2),
+                    );
+
+                    $re = $this->curl_form($post_data2,$sumbit_url,$http_url);
+                    unlink($save_path2);
+                    exit();
+                }
+          }
         $this->redirect('shop_check');
     }
 
