@@ -613,10 +613,13 @@ class GoodsAction extends Controller {
         $is_online = Filter::int(Req::args('is_sale'));
         $sort = Filter::int(Req::args('sort'));
         $page = Filter::int(Req::args('page'));
+        if(!$page) {
+            $page = 1;
+        }
         if(!$is_online) {
             $is_online = 0;
         }
-        $where = 'user_id='.$this->user['id'].' and is_online='.$is_online;
+        $where = "user_id=".$this->user['id']." and is_online=".$is_online;
         $sort = 'id desc';
         if($sort == 1) {
             $sort = 'create_time desc';
@@ -625,11 +628,11 @@ class GoodsAction extends Controller {
             $sort = 'create_time asc';
         }
         
-        $list = $this->model->table('goods')->fields('id,name,category_id,img,sell_price,create_time,store_nums,is_online,base_sales_volume')->where($where)->findPage($page,10);
+        $list = $this->model->table('goods')->fields('id,name,category_id,img,sell_price,create_time,store_nums,is_online,base_sales_volume')->where($where)->order($sort)->findPage($page,10);
         if($list) {
             if(isset($list['data']) && $list['data']!=null) {
                 foreach ($list['data'] as $k => $v) {
-                    $sales_volume = $this->model->table("order_goods as og")->join("left join order as o on og.order_id = o.id")->where("og.goods_id = ".$v['id']." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->order($sort)->find();
+                    $sales_volume = $this->model->table("order_goods as og")->join("left join order as o on og.order_id = o.id")->where("og.goods_id = ".$v['id']." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->find();
                     $sales_volume = $sales_volume['sell_volume']==NULL?0:$sales_volume['sell_volume'];
                     $list['data'][$k]['sales_volume'] = $v['base_sales_volume']+$sales_volume;
                 }
@@ -662,8 +665,9 @@ class GoodsAction extends Controller {
 
     public function goods_detail() {
         $id = Filter::int(Req::args('id'));
-        $info = $this->model->table('goods')->fields('id,name,category_id,img,sell_price,create_time,store_nums,is_online,content,freeshipping,base_sales_volume')->where('id='.$id)->find();
+        $info = $this->model->table('goods')->fields('id,name,category_id,img,imgs,sell_price,create_time,store_nums,is_online,content,freeshipping,base_sales_volume')->where('id='.$id)->find();
         if($info) {
+            $info['imgs'] = unserialize($info['imgs']);
             $sales_volume = $this->model->table("order_goods as og")->join("left join order as o on og.order_id = o.id")->where("og.goods_id = ".$info['id']." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->find();
             $sales_volume = $sales_volume['sell_volume']==NULL?0:$sales_volume['sell_volume'];
             $info['sales_volume'] = $info['base_sales_volume']+$sales_volume;
