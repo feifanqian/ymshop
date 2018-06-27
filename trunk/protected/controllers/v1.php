@@ -254,6 +254,8 @@ class V1Controller extends Controller {
         "upload_goods"=>array('goods/upload_goods',1,1), //商家上传商品
         "get_all_category"=>array('goods/get_all_category',0,1), //所有分类
         "fare_list"=>array('goods/fare_list',0,1), //运费模板
+        "my_goods_list"=>array('goods/my_goods_list',1,1), //商品列表
+        "manage_my_goods"=>array('goods/manage_my_goods',1,1), //商品上下架、删除
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息

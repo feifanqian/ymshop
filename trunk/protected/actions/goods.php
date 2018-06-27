@@ -608,4 +608,55 @@ class GoodsAction extends Controller {
         $this->content = $fare;
         return;
     }
+
+    public function my_goods_list() {
+        $is_online = Filter::int(Req::args('is_sale'));
+        $sort = Filter::int(Req::args('sort'));
+        $page = Filter::int(Req::args('page'));
+        if(!$is_online) {
+            $is_online = 0;
+        }
+        $where = 'user_id='.$this->user['id'].' and is_online='.$is_online;
+        $sort = 'id desc';
+        if($sort == 1) {
+            $sort = 'create_time desc';
+        }
+        if($sort == 2) {
+            $sort = 'create_time asc';
+        }
+        
+        $list = $this->model->table('goods')->fields('id,name,category_id,img,sell_price,create_time,store_nums')->where($where)->findPage($page,10);
+        if($list) {
+            if(isset($list['data']) && $list['data']!=null) {
+                foreach ($list['data'] as $k => $v) {
+                    $sales_volume = $this->model->table("order_goods as og")->join("left join order as o on og.order_id = o.id")->where("og.goods_id = ".$v['id']." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->order($sort)->find();
+                    $sales_volume = $sales_volume['sell_volume']==NULL?0:$sales_volume['sell_volume'];
+                    $list['data'][$k]['sales_volume'] = $goods['base_sales_volume']+$sales_volume;
+                }
+                if($sort==3) {
+                    array_multisort(array_column($list['data'],'sales_volume'),SORT_DESC,$resp['data']);
+                }
+                if($sort==4) {
+                    array_multisort(array_column($list['data'],'sales_volume'),SORT_ASC,$resp['data']);
+                }
+            }
+            unset($list['html']);    
+        }
+        $this->code = 0;
+        $this->content = $list;
+        return;
+    }
+
+    public function manage_my_goods() {
+        $type = Filter::int(Req::args('type'));
+        $id = Filter::int(Req::args('id'));
+        if($type==0 || $type==1) {
+            $this->model->table('goods')->data(['is_online'=>$type])->where('id='.$id)->update();
+        } else {
+            $this->model->table('goods')->where('id='.$id)->delete();
+            $this->model->table('product')->where('goods_id='.$id)->delete();
+        }
+        $this->code = 0;
+        return;
+    }
 }
