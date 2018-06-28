@@ -395,7 +395,7 @@ class GoodsAction extends Controller {
         $req->setAdzoneId($AdzoneId);
         $req->setPlatform("2");
 //        $req->setStartDsr("10");
-        $req->setPageSize("100");
+        $req->setPageSize("500");
         // $req->setEndTkRate("1234");
         // $req->setStartTkRate("1234");
         // $req->setEndPrice('200');
@@ -433,15 +433,16 @@ class GoodsAction extends Controller {
          }else{
              $req->setCat("21,11,122852001,5002372,16,30,14,1801,500027664");
          }
-        $req->setPageNo($page);
+        // $req->setPageNo($page);
+         $req->setPageNo(1);
         $resp = $c->execute($req);
 
         $resp = Common::objectToArray($resp);
         
         if(isset($resp['result_list']['map_data'])) {
             if($resp['result_list']['map_data']) {
-                $resp['result_list']['map_data'] = $this->super_unique($resp['result_list']['map_data']);
-                $resp['result_list']['map_data'] = array_values($resp['result_list']['map_data']);
+                // $resp['result_list']['map_data'] = $this->super_unique($resp['result_list']['map_data']);
+                // $resp['result_list']['map_data'] = array_values($resp['result_list']['map_data']);
                 foreach ($resp['result_list']['map_data'] as $k => $v) {
                     $resp['result_list']['map_data'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
                     $resp['result_list']['map_data'][$k]['final_price'] = $v['zk_final_price'] - $resp['result_list']['map_data'][$k]['decrease_price'];
@@ -469,17 +470,20 @@ class GoodsAction extends Controller {
                     // array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
                     array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data'],array_column($resp['result_list']['map_data'],'volume'),SORT_DESC,$resp['result_list']['map_data']);
                 }
-                $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'],1,20);       
+                // $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'],1,20);       
                 // $resp['results']['tbk_coupon'] = $resp['result_list']['map_data'];
-                // $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'], ($page-1)*10, 10);
+                $resp['result_list']['map_data'] = $this->super_unique($resp['result_list']['map_data']);
+                $resp['result_list']['map_data'] = array_values($resp['result_list']['map_data']);
+                $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'], ($page-1)*10, 10);
                 
-                $cache = CacheFactory::getInstance();
-                $map_data = $cache->get("_TbkCoupons".$q.$page);
-                if ($cache->get("_TbkCoupons".$q.$page) === null) {
-                    $map_data = $resp['result_list']['map_data'];
-                    $cache->set("_TbkCoupons".$q.$page, $map_data, 60*60*2);
-                }
-                $resp['results']['tbk_coupon'] = $map_data;
+                // $cache = CacheFactory::getInstance();
+                // $map_data = $cache->get("_TbkCoupons".$q.$page);
+                // if ($cache->get("_TbkCoupons".$q.$page) === null) {
+                //     $map_data = $resp['result_list']['map_data'];
+                //     $cache->set("_TbkCoupons".$q.$page, $map_data, 60*60*2);
+                // }
+                // $resp['results']['tbk_coupon'] = $map_data;
+                $resp['results']['tbk_coupon'] = $resp['result_list']['map_data'];
                 unset($resp['result_list']);
             }
         }           
