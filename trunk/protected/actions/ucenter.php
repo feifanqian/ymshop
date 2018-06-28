@@ -2072,15 +2072,29 @@ class UcenterAction extends Controller {
     //获取我邀请的推广员列表
     public function getMyInvitePromoter(){
         $page = Filter::int(Req::args('page'));
-        // $promoter = Promoter::getPromoterInstance($this->user['id']);
-        
-        // $this->code = 0;
-        // $this->content = $promoter->getMyInviteList($page);
-        
+        $start_time = Filter::str(Req::args('start_time'));
+        $end_time = Filter::str(Req::args('end_time'));
+        $from = Filter::str(Req::args('from'));
+        $level = Filter::int(Req::args('level'));
+        if(!$level) {
+            $level = 0;
+        }
+        $where = "do.user_id=".$this->user['id'];
+        if($start_time) {
+            $start = strtotime($start_time);
+            $where .= ' and createtime>'.$start;
+        }
+        if($end_time) {
+            $end = strtotime($end_time);
+            $where .= ' and createtime<'.$end;
+        }
+        if($from) {
+            $where .= 'from='.$from;
+        }    
         $record = $this->model->table('invite as do')
                 ->join('left join user as u on do.invite_user_id = u.id')
                 ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
-                ->where("do.user_id=".$this->user['id'])
+                ->where($where)
                 ->order("do.id desc")
                 ->findPage($page, 10);        
         if (empty($record)) {
@@ -2101,10 +2115,19 @@ class UcenterAction extends Controller {
                     $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
                     if($shop && $promoter){
                         $record['data'][$k]['role_type'] = 2;
+                        if($level!=0 && $level!=3) {
+                            unset($record['data'][$k]);
+                        }
                     }elseif(!$shop && $promoter){
                         $record['data'][$k]['role_type'] = 1;
+                        if($level!=0 && $level!=2) {
+                            unset($record['data'][$k]);
+                        }
                     }else{
                         $record['data'][$k]['role_type'] = 0;
+                        if($level!=0 && $level!=1) {
+                            unset($record['data'][$k]);
+                        }
                     }
                 }
             }

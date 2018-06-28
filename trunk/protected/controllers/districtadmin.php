@@ -1414,6 +1414,7 @@ class DistrictadminController extends Controller
               $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
               $http_url="http://39.108.165.0";
 
+              //身份证正面
               $file_name = time().$shop_check['user_id'].'positive_idcard';
               $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
               $save_path = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name.'.'.$file_ext;
@@ -1431,6 +1432,7 @@ class DistrictadminController extends Controller
                 unlink($save_path);
                 exit();
                 
+                //身份证反面
                 $file_name1 = time().$shop_check['user_id'].'native_idcard';
                 $file_ext1 = substr(strrchr($shop_check['native_idcard'], '.'), 1);
                 $save_path1 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name1.'.'.$file_ext1;
@@ -1447,14 +1449,15 @@ class DistrictadminController extends Controller
                 unlink($save_path1);
                 exit();
 
-                if($shop_check['type']==1) {
-                    $file_name2 = time().$shop_check['user_id'].'business_licence';
-                    $file_ext2 = substr(strrchr($shop_check['business_licence'], '.'), 1);
+                if($shop_check['hand_idcard']!=null) {
+                    //手持身份证正扫面照
+                    $file_name2 = time().$shop_check['user_id'].'hand_idcard';
+                    $file_ext2 = substr(strrchr($shop_check['hand_idcard'], '.'), 1);
                     $save_path2 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name2.'.'.$file_ext2;
-                    file_put_contents($save_path2, file_get_contents($shop_check['business_licence']));
+                    file_put_contents($save_path2, file_get_contents($shop_check['hand_idcard']));
                     $post_data2 = array (
                         // "name"=>'picFile',
-                        "picType"=>'19',
+                        "picType"=>'33',
                         "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
                         "superUsercode"=>'yuanmeng',
                         "upload" => new CURLFile($save_path2),
@@ -1462,6 +1465,42 @@ class DistrictadminController extends Controller
 
                     $re = $this->curl_form($post_data2,$sumbit_url,$http_url);
                     unlink($save_path2);
+                    exit();
+                }
+
+                if($shop_check['type']==1) {
+                    //营业执照
+                    $file_name3 = time().$shop_check['user_id'].'business_licence';
+                    $file_ext3 = substr(strrchr($shop_check['business_licence'], '.'), 1);
+                    $save_path3 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name3.'.'.$file_ext3;
+                    file_put_contents($save_path3, file_get_contents($shop_check['business_licence']));
+                    $post_data3 = array (
+                        // "name"=>'picFile',
+                        "picType"=>'19',
+                        "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                        "superUsercode"=>'yuanmeng',
+                        "upload" => new CURLFile($save_path3),
+                    );
+
+                    $re = $this->curl_form($post_data3,$sumbit_url,$http_url);
+                    unlink($save_path3);
+                    exit();
+                    
+                    //门店照
+                    $file_name4 = time().$shop_check['user_id'].'shop_photo';
+                    $file_ext4 = substr(strrchr($shop_check['shop_photo'], '.'), 1);
+                    $save_path4 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name4.'.'.$file_ext4;
+                    file_put_contents($save_path4, file_get_contents($shop_check['shop_photo']));
+                    $post_data4 = array (
+                        // "name"=>'picFile',
+                        "picType"=>'34',
+                        "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                        "superUsercode"=>'yuanmeng',
+                        "upload" => new CURLFile($save_path4),
+                    );
+
+                    $re = $this->curl_form($post_data4,$sumbit_url,$http_url);
+                    unlink($save_path4);
                     exit();
                 }
           }      
@@ -1564,7 +1603,8 @@ class DistrictadminController extends Controller
               $ret = json_decode($ret, true);
               $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
               $http_url="http://39.108.165.0";
-
+              
+              //身份证正面
               $file_name = time().$shop_check['user_id'].'positive_idcard';
               $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
               $save_path = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name.'.'.$file_ext;
@@ -1582,6 +1622,7 @@ class DistrictadminController extends Controller
                 unlink($save_path);
                 exit();
                 
+                //身份证反面
                 $file_name1 = time().$shop_check['user_id'].'native_idcard';
                 $file_ext1 = substr(strrchr($shop_check['native_idcard'], '.'), 1);
                 $save_path1 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name1.'.'.$file_ext1;
@@ -1598,14 +1639,15 @@ class DistrictadminController extends Controller
                 unlink($save_path1);
                 exit();
 
-                if($shop_check['type']==1) {
-                    $file_name2 = time().$shop_check['user_id'].'business_licence';
-                    $file_ext2 = substr(strrchr($shop_check['business_licence'], '.'), 1);
+                if($shop_check['hand_idcard']!=null) {
+                    //手持身份证正扫面照
+                    $file_name2 = time().$shop_check['user_id'].'hand_idcard';
+                    $file_ext2 = substr(strrchr($shop_check['hand_idcard'], '.'), 1);
                     $save_path2 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name2.'.'.$file_ext2;
-                    file_put_contents($save_path2, file_get_contents($shop_check['business_licence']));
+                    file_put_contents($save_path2, file_get_contents($shop_check['hand_idcard']));
                     $post_data2 = array (
                         // "name"=>'picFile',
-                        "picType"=>'19',
+                        "picType"=>'33',
                         "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
                         "superUsercode"=>'yuanmeng',
                         "upload" => new CURLFile($save_path2),
@@ -1615,6 +1657,44 @@ class DistrictadminController extends Controller
                     unlink($save_path2);
                     exit();
                 }
+
+                if($shop_check['type']==1) {
+                    //营业执照
+                    $file_name3 = time().$shop_check['user_id'].'business_licence';
+                    $file_ext3 = substr(strrchr($shop_check['business_licence'], '.'), 1);
+                    $save_path3 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name3.'.'.$file_ext3;
+                    file_put_contents($save_path3, file_get_contents($shop_check['business_licence']));
+                    $post_data3 = array (
+                        // "name"=>'picFile',
+                        "picType"=>'19',
+                        "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                        "superUsercode"=>'yuanmeng',
+                        "upload" => new CURLFile($save_path3),
+                    );
+
+                    $re = $this->curl_form($post_data3,$sumbit_url,$http_url);
+                    unlink($save_path3);
+                    exit();
+                    
+                    //门店照
+                    $file_name4 = time().$shop_check['user_id'].'shop_photo';
+                    $file_ext4 = substr(strrchr($shop_check['shop_photo'], '.'), 1);
+                    $save_path4 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name4.'.'.$file_ext4;
+                    file_put_contents($save_path4, file_get_contents($shop_check['shop_photo']));
+                    $post_data4 = array (
+                        // "name"=>'picFile',
+                        "picType"=>'34',
+                        "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                        "superUsercode"=>'yuanmeng',
+                        "upload" => new CURLFile($save_path4),
+                    );
+
+                    $re = $this->curl_form($post_data4,$sumbit_url,$http_url);
+                    unlink($save_path4);
+                    exit();
+                }
+
+
           }
         $this->redirect('shop_check');
     }
@@ -1716,5 +1796,9 @@ class DistrictadminController extends Controller
         $this->assign("info", $info);
         $this->redirect();
         
+    }
+
+    public function shop_check_register() {
+
     }
 }

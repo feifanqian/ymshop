@@ -61,7 +61,7 @@
     <section class="header">
       <div class="swiper-container swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 0,'freeMode': true,'pagination': '','slidesPerColumn':'1'}">
         <img src="img/recruit/header.jpg" alt="" class="sizeFitImg">
-        <span class="count-down" style="font-size: 18px;">活动倒计时: <div class="count" id="qiangtimer" data-remainseconds="{echo:(strtotime('tomorrow')-time())*1000}"><span class="hour-node">00</span>:<span class="minute-node">00</span>:<span class="second-node">00</span></div></span>
+        <span class="count-down" style="font-size: 18px;"><div class="count" id="qiangtimer" data-remainseconds="{echo:(strtotime('tomorrow')-time())*1000}">活动倒计时: <span class="hour-node">00</span>:<span class="minute-node">00</span></div></span>
       </div>  
     </section>
 
@@ -77,7 +77,7 @@
         </div>
         <!--实时进度-->
         <div class="plan">
-            <span class="tip">就差<i>{echo:$num-$invite_num}</i>个又可以拆红包啦</span>
+            <span class="tip">就差<i>{echo:($num-$invite_num)%3}</i>个又可以拆红包啦</span>
             <div class="plan-content">
                 <div class="plan-content__pin plan-content__left">
                     <span class="number" style="margin-left: 50px;text-align: left;">0</span>
@@ -139,17 +139,17 @@
     <section class="section_3">
         <div class="cell">
             <a href="/active/travel_detail" class="detail">查看<br>详情<br>>></a>
-            <a href="" class="status1 had-get">{$status[$status1]}</a>
+            <a href="" class="status1 {if:$status1==1}can-get{else:}had-get{/if}">{$status[$status1]}</a>
             <span class="count">累积邀请{$invite_num}人</span>
         </div>
         <div class="cell">
             <a href="//www.baidu.com" class="detail">查看<br>详情<br>>></a>
-            <a href="" class="status1 had-get">{$status[$status2]}</a>
+            <a href="" class="status1 {if:$status1==1}can-get{else:}had-get{/if}">{$status[$status2]}</a>
             <span class="count">累积邀请{$invite_num}人</span>
         </div>
         <div class="cell">
             <a href="/active/watch_detail" class="detail">查看<br>详情<br>>></a>
-            <a href="" class="status1 had-get">{$status[$status2]}</a>
+            <a href="" class="status1 {if:$status1==1}can-get{else:}had-get{/if}">{$status[$status2]}</a>
             <span class="count">累积邀请{$invite_num}人</span>
         </div>
     </section>
