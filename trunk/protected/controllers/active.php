@@ -61,7 +61,10 @@ class ActiveController extends Controller
                     $status3 = 0;
                     $num = 38;
                 }
-                $end_time = $sign_up['end_time']; 
+                $end_time = $sign_up['end_time'];
+                if($user_id==42608) {
+                    var_dump($end_time);die;
+                } 
             } else {
                 $end_time = date('Y-m-d H:i:s',strtotime('+1 day'));
                 $this->redirect('/active/sign_up');
