@@ -653,7 +653,7 @@ class GoodsAction extends Controller {
                     $sales_volume = $this->model->table("order_goods as og")->join("left join order as o on og.order_id = o.id")->where("og.goods_id = ".$v['id']." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->find();
                     $sales_volume = $sales_volume['sell_volume']==NULL?0:$sales_volume['sell_volume'];
                     $list['data'][$k]['sales_volume'] = $v['base_sales_volume']+$sales_volume;
-                    $list['data'][$k]['share_url'] = 'http://www.ymlypt.com/product-'.$v['id'].'.html'
+                    $list['data'][$k]['share_url'] = 'http://www.ymlypt.com/product-'.$v['id'].'.html';
                 }
                 if($sort==3) {
                     array_multisort(array_column($list['data'],'sales_volume'),SORT_DESC,$resp['data']);
