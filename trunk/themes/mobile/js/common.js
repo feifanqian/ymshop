@@ -925,7 +925,7 @@ $(function () {
             }});
     }
     if ($("#qiangtimers").size() > 0) {
-        $("#qiangtimers").countdown({remainseconds: $("#qiangtimers").data("remainseconds"), format: '活动倒计时:<span class="hour-node">{h}</span>小时<span class="minute-node">{m}</span>分钟', callback: function () {
+        $("#qiangtimers").countdown({remainseconds: $("#qiangtimers").data("remainseconds"), format: '活动倒计时:<span class="day-node">{d}</span>天<span class="hour-node">{h}</span>时<span class="minute-node">{m}</span>分', callback: function () {
                 //location.reload();
             }});
     }

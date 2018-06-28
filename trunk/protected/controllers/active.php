@@ -60,8 +60,10 @@ class ActiveController extends Controller
                     $status2 = 0;
                     $status3 = 0;
                     $num = 38;
-                } 
+                }
+                $end_time = $sign_up['end_time']; 
             } else {
+                $end_time = date('Y-m-d H:i:s',strtotime('+1 day'));
                 $this->redirect('/active/sign_up');
                 $status1 = 0;
                 $status2 = 0;
@@ -78,6 +80,7 @@ class ActiveController extends Controller
             $status2 = 0;
             $status3 = 0;
             $num = 38;
+            $end_time = date('Y-m-d H:i:s',strtotime('+1 day'));
         }
         $chance = floor($invite_num/3);
         $status = array('0'=>'未达成','1'=>'可领取','2'=>'已领取');
@@ -105,6 +108,7 @@ class ActiveController extends Controller
         $this->assign("invite_num", $invite_num);
         $this->assign("num", $num);
         $this->assign("list", $list);
+        $this->assign("end_time", $end_time);
     	$this->redirect();
     }
 
