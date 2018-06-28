@@ -211,6 +211,22 @@ class AjaxController extends Controller {
         }
     }
 
+    public function accounts() {
+        $account = Req::args('account');
+        if (Validator::mobi($account)!=true) {
+            $info = array('status' => false, 'msg' => '手机号格式错误');
+            echo JSON::encode($info);
+        } 
+        $model = new Model('customer');
+        $obj = $model->where("mobile='$account'")->find();
+        if ($obj) {
+            $info = array('status' => true, 'msg' => 'success');
+        } else {
+            $info = array('status' => false, 'msg' => '此账号不存在');
+        }
+        echo JSON::encode($info);
+    }
+
     public function verifyCode() {
         $info = array('status' => false, 'msg' => '验证码错误！');
         $this->safebox = Safebox::getInstance();

@@ -19,6 +19,7 @@
                 <div class="line"></div>
                 <div class="input_content">
                     <input type="tel" name="account" id="account" pattern="required" placeholder="请输入" maxlength="11" required>
+                    <label class="valid-msg" style="display: block;"></label>
                 </div>
             </div>
             <div class="cell">
@@ -26,6 +27,7 @@
                 <div class="line"></div>
                 <div class="input_content">
                     <input type="password" id="password" name="password" pattern="required" placeholder="请输入" maxlength="20" required>
+                    <label class="valid-msg" style="display: block;"></label>
                 </div>
             </div>
         </div>
@@ -73,10 +75,10 @@
         }
         if (result) {
             if (current_input.attr('id') == 'account') {
-                $.post("{url:/ajax/account/account/}" + $(this).val(), function (data) {
+                $.post("{url:/ajax/account/accounts/}" + $(this).val(), function (data) {
                     var msg = '合法用户';
                     if (!data['status']) {
-                        msg = '用户不存在';
+                        msg = data['msg'];
                         current_input.next().show();
                         current_input.parent().removeClass('valid').addClass('invalid');
                         autoValidate.showMsg({id: document.getElementById('account'), error: data['status'], msg: msg});
