@@ -576,6 +576,24 @@ class GoodsAction extends Controller {
             'user_id'=>$this->user['id'],
             'type'=>2
             );
+        $goods_id = $this->model->table('goods')->data($goods_data)->insert();
+        $product = $this->model->table('products')->where('goods_id='.$goods_id)->find();
+        if(!$product) {
+            $product_data = array(
+                'goods_id'=>$goods_id,         
+                'pro_no'=>$goods_no,  
+                'specs'=>serialize(array()),
+                'store_nums'=>$goods_data['store_nums'],
+                'warning_line'=>2,
+                'market_price'=>$goods_data['market_price'],
+                'sell_price'=>$goods_data['sell_price'],
+                'cost_price'=>$goods_data['cost_price'],
+                'weight'=>Filter::int(Req::args('weight')),
+                'specs_key'=>''
+                );
+            $this->model->table('products')->data($product_data)->insert();
+        }
+        
         $this->model->table('goods')->data($goods_data)->insert();
         $this->code = 0;
         return; 
@@ -635,6 +653,7 @@ class GoodsAction extends Controller {
                     $sales_volume = $this->model->table("order_goods as og")->join("left join order as o on og.order_id = o.id")->where("og.goods_id = ".$v['id']." and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->find();
                     $sales_volume = $sales_volume['sell_volume']==NULL?0:$sales_volume['sell_volume'];
                     $list['data'][$k]['sales_volume'] = $v['base_sales_volume']+$sales_volume;
+                    $list['data'][$k]['share_url'] = 'http://www.ymlypt.com/product-'.$v['id'].'.html'
                 }
                 if($sort==3) {
                     array_multisort(array_column($list['data'],'sales_volume'),SORT_DESC,$resp['data']);
