@@ -27,40 +27,28 @@
         float: right;
     } 
     </style>
-    <title>手表奖励详情</title>
+    <title>现金奖励详情</title>
 </head>
 <body>
 <div>
     <section class="header">
-        <img src="https://ymlypt.b0.upaiyun.com/data/uploads/2018/06/28/2719e7cee2bd25ba9391c5a104af02f5.png" alt="" class="sizeFitImg">
-    </section>
-    <section class="header">
-        <img src="https://ymlypt.b0.upaiyun.com/data/uploads/2018/06/28/e37ed66b997ec0234d962f2d63b3e523.png" alt="" class="sizeFitImg">
-    </section>
-    <section class="header">
-        <img src="https://ymlypt.b0.upaiyun.com/data/uploads/2018/06/28/f52a4e6b070ecd854585dfd9a3b1bc22.png" alt="" class="sizeFitImg">
-    </section>
-    <section class="header">
-        <img src="https://ymlypt.b0.upaiyun.com/data/uploads/2018/06/28/fd420e6156cc071f542387a640811554.png" alt="" class="sizeFitImg">
-    </section>
-    <section class="header">
-        <img src="https://ymlypt.b0.upaiyun.com/data/uploads/2018/06/28/99bdfc4dfec7a6ee5d9bb3742cce1fa9.png" alt="" class="sizeFitImg">
-    </section>
-    <section class="header">
-        <img src="https://ymlypt.b0.upaiyun.com/data/uploads/2018/06/28/d737b4c704301490008c45ad71ebb171.png" alt="" class="sizeFitImg">
-    </section>
-    <section class="header">
-        <img src="https://ymlypt.b0.upaiyun.com/data/uploads/2018/06/28/38b3038e81cbf0acaae1fec4dec21844.png" alt="" class="sizeFitImg">
+        <img src="https://ymlypt.b0.upaiyun.com/data/uploads/2018/06/28/8b9f4a663552e4a39889f205ddee3643.jpg" alt="" class="sizeFitImg">
     </section>
     <div style="height: 50px;margin-top: 16px;">
-        {if:$status==1}
+        {if:$status==1} 
         <div class="invite1" style="background-color: #f06834;">
             <a href="javascript:;" style="color: white;font-size: 20px;">领取</a>   
         </div>
         {else:}
-        <div class="invite1" style="background-color: #aa8475;">
+          {if:$get_status==1}
+          <div class="invite1" style="background-color: #aa8475;">
+            <a href="javascript:;" style="color: white;font-size: 20px;">已领取</a>   
+          </div>
+          {else:}
+          <div class="invite1" style="background-color: #aa8475;">
             <a href="javascript:;" style="color: white;font-size: 20px;">未达成</a>   
-        </div>
+           </div>
+          {/if}
         {/if}
         <div class="invite2">
             <a href="javascript:history.back();" style="color: white;font-size: 20px;">取消</a>
@@ -80,7 +68,7 @@ var status = {$status};
                 if(get_status==1){
                    alert('您已领取过了!');
                 } else{
-                var user_id = {$user_id};
+                    var user_id = {$user_id};
                     $.ajax({
                         url: "{url:/active/get_voucher}",
                         data: {user_id: user_id,type:4},
@@ -97,7 +85,7 @@ var status = {$status};
                             alert("服务器繁忙!请稍后重试");
                         }
                     });
-                }
+                }    
             }
         });
 </script>

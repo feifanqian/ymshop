@@ -268,6 +268,24 @@ class ActiveController extends Controller
         $this->redirect();
     }
 
+    public function six_detail() {
+        $user_id = $this->user['id'];
+        if($user_id) {
+            $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
+            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $get_status = empty($sign_up)?0:$sign_up['status2'];     
+        } else {
+            $invite_num = 0;
+            $user_id = 0;
+            $get_status = 0;
+        }
+        $this->assign("user_id", $user_id);
+        $status = $invite_num>=200?1:0;
+        $this->assign("status", $status);
+        $this->assign("get_status", $get_status);
+        $this->redirect();
+    }
+
     public function open_redbag() {
         $user_id = Filter::int(Req::args("user_id"));
         $active = $this->model->table('invite_active')->where('user_id='.$user_id)->find();
