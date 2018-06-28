@@ -90,16 +90,32 @@
                     var url = "{url:/active/address/id/}"+id;
                     window.location.href = url;
                 }else{
-                    $.post("{url:/active/use_voucher}", {id: id}, function (data) {
-                        console.log(data);
-                        if (data['status'] == 'success') {
-                             $.toast("使用成功", "success",function () {
+                    console.log(type);
+                    var posturl = "{url:/active/use_voucher}";
+                    $.ajax({
+                        url: posturl,
+                        type: 'POST',
+                        data: {id: id},
+                        dataType: 'json',
+                        success: function (data) {
+                            $.toast("使用成功", "success",function () {
                                 location.reload();
                             });
-                        } else {
+                        },
+                        error: function (e) {
                             $.toast("失败", "forbidden");
-                        }
-                    }, 'json');
+                        },
+                    });
+                    // $.post("{url:/active/use_voucher}", {id: id}, function (data) {
+                    //     console.log(data);
+                    //     if (data['status'] == 'success') {
+                    //          $.toast("使用成功", "success",function () {
+                    //             location.reload();
+                    //         });
+                    //     } else {
+                    //         $.toast("失败", "forbidden");
+                    //     }
+                    // }, 'json');
                 }  
             }, function () {
                 //点击取消后的回调函数
