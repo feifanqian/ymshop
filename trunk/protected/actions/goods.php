@@ -593,8 +593,6 @@ class GoodsAction extends Controller {
                 );
             $this->model->table('products')->data($product_data)->insert();
         }
-        
-        $this->model->table('goods')->data($goods_data)->insert();
         $this->code = 0;
         return; 
     }
