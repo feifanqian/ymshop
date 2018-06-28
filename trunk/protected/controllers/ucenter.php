@@ -4070,22 +4070,5 @@ class UcenterController extends Controller
         $this->redirect();
     }
 
-    public function user_voucher() {
-        var_dump(111);die;
-        $id = Filter::int(Req::args("id"));
-        $voucher = $this->model->table('active_voucher')->where('id='.$id)->find();
-        if($voucher['type']==1) {
-            $point = $voucher['amount'];
-            $this->model->table('customer')->data(array('point_coin'=>"`point_coin`+({$point})"))->where('user_id='.$voucher['user_id'])->update();
-            Log::pointcoin_log($point,$voucher['user_id'], '', "积分卡券兑换", 13);
-        } elseif($voucher['type']==2) {
-            $point = $voucher['amount'];
-            $this->model->table('customer')->data(array('balance'=>"`balance`+({$point})"))->where('user_id='.$voucher['user_id'])->update();
-            Log::balance($point,$voucher['user_id'], '', "余额卡券兑换", 16);
-        }
-        $ret = $this->model->table('active_voucher')->data(array('status'=>0))->where('id='.$id)->update();
-        var_dump($ret);die;
-        exit(json_encode(array('status' => 'success', 'msg' => '成功')));
-    }
 
 }

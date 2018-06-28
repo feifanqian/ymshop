@@ -91,10 +91,10 @@
                     window.location.href = url;
                 }else{
                     console.log(type);
-                    var posturl = "{url:/ucenter/use_voucher}";
+                    var posturl = "{url:/ajx/userVoucher}";
                     $.ajax({
                         url: posturl,
-                        type: 'GET',
+                        type: 'POST',
                         data: {id: id},
                         dataType: 'json',
                         success: function (data) {
