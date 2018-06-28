@@ -62,9 +62,7 @@ class ActiveController extends Controller
                     $num = 38;
                 }
                 $end_time = $sign_up['end_time'];
-                if($user_id==42608) {
-                    var_dump($end_time);die;
-                } 
+                 
             } else {
                 $end_time = date('Y-m-d H:i:s',strtotime('+1 day'));
                 $this->redirect('/active/sign_up');
@@ -101,6 +99,7 @@ class ActiveController extends Controller
         {
          $type ='android';
          }
+        $out_time = (strtotime($end_time)-time())*1000; 
         $this->assign("type", $type);
         $this->assign("status1", $status1);
         $this->assign("status2", $status2);
@@ -111,7 +110,7 @@ class ActiveController extends Controller
         $this->assign("invite_num", $invite_num);
         $this->assign("num", $num);
         $this->assign("list", $list);
-        $this->assign("end_time", $end_time);
+        $this->assign("out_time", $out_time);
     	$this->redirect();
     }
 
