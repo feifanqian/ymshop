@@ -395,7 +395,7 @@ class GoodsAction extends Controller {
         $req->setAdzoneId($AdzoneId);
         $req->setPlatform("2");
 //        $req->setStartDsr("10");
-        $req->setPageSize("50");
+        $req->setPageSize("100");
         // $req->setEndTkRate("1234");
         // $req->setStartTkRate("1234");
         // $req->setEndPrice('200');
@@ -474,10 +474,10 @@ class GoodsAction extends Controller {
                 // $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'], ($page-1)*10, 10);
                 
                 $cache = CacheFactory::getInstance();
-                $map_data = $cache->get("_TbkCoupon".$q.$page);
-                if ($cache->get("_TbkCoupon".$q.$page) === null) {
+                $map_data = $cache->get("_TbkCoupons".$q.$page);
+                if ($cache->get("_TbkCoupons".$q.$page) === null) {
                     $map_data = $resp['result_list']['map_data'];
-                    $cache->set("_TbkCoupon".$q.$page, $map_data, 60*60*2);
+                    $cache->set("_TbkCoupons".$q.$page, $map_data, 60*60*2);
                 }
                 $resp['results']['tbk_coupon'] = $map_data;
                 unset($resp['result_list']);
