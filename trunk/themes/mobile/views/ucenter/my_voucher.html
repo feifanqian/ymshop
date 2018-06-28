@@ -91,6 +91,7 @@
                     window.location.href = url;
                 }else{
                     $.post("{url:/active/use_voucher}", {id: id}, function (data) {
+                        console.log(data);
                         if (data['status'] == 'success') {
                              $.toast("使用成功", "success",function () {
                                 location.reload();

@@ -354,6 +354,7 @@ class ActiveController extends Controller
     }
 
     public function user_voucher() {
+        var_dump(111);die;
         $id = Filter::int(Req::args("id"));
         $voucher = $this->model->table('active_voucher')->where('id='.$id)->find();
         if($voucher['type']==1) {
