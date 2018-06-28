@@ -99,7 +99,8 @@ class ActiveController extends Controller
         {
          $type ='android';
          }
-        $out_time = (strtotime($end_time)-time())*1000; 
+        $out_time = (strtotime($end_time)-time())*1000;
+        $rest_num = 3-$invite_num%3; 
         $this->assign("type", $type);
         $this->assign("status1", $status1);
         $this->assign("status2", $status2);
@@ -111,6 +112,7 @@ class ActiveController extends Controller
         $this->assign("num", $num);
         $this->assign("list", $list);
         $this->assign("out_time", $out_time);
+        $this->assign("rest_num", $rest_num);
     	$this->redirect();
     }
 
