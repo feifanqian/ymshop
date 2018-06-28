@@ -582,7 +582,7 @@ class GoodsAction extends Controller {
             $product_data = array(
                 'goods_id'=>$goods_id,         
                 'pro_no'=>$goods_no,  
-                'specs'=>serialize(array()),
+                'spec'=>serialize(array()),
                 'store_nums'=>$goods_data['store_nums'],
                 'warning_line'=>2,
                 'market_price'=>$goods_data['market_price'],
