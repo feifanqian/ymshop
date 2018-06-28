@@ -401,7 +401,6 @@ class AjaxController extends Controller {
     }
 
     public function userVoucher() {
-        var_dump(111);die;
         $id = Filter::int(Req::args("id"));
         $voucher = $this->model->table('active_voucher')->where('id='.$id)->find();
         if($voucher['type']==1) {
@@ -414,7 +413,6 @@ class AjaxController extends Controller {
             Log::balance($point,$voucher['user_id'], '', "余额卡券兑换", 16);
         }
         $ret = $this->model->table('active_voucher')->data(array('status'=>0))->where('id='.$id)->update();
-        var_dump($ret);die;
         exit(json_encode(array('status' => 'success', 'msg' => '成功')));
     }
 }
