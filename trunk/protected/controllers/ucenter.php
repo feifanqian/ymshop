@@ -4085,7 +4085,7 @@ class UcenterController extends Controller
         }
         $ret = $this->model->table('active_voucher')->data(array('status'=>0))->where('id='.$id)->update();
         var_dump($ret);die;
-        echo JSON::encode(array('status' => 'success'));
+        exit(json_encode(array('status' => 'success', 'msg' => '成功')));
     }
 
 }
