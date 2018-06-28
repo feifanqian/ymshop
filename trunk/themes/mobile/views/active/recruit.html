@@ -61,7 +61,7 @@
     <section class="header">
       <div class="swiper-container swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 0,'freeMode': true,'pagination': '','slidesPerColumn':'1'}">
         <img src="img/recruit/header.jpg" alt="" class="sizeFitImg">
-        <span class="count-down" style="font-size: 18px;"><div class="count" id="qiangtimer" data-remainseconds="{echo:(strtotime('tomorrow')-time())*1000}">活动倒计时: <span class="hour-node">00</span>:<span class="minute-node">00</span></div></span>
+        <span class="count-down" style="font-size: 18px;"><div class="count" id="qiangtimers" data-remainseconds="{echo:(strtotime('tomorrow')-time())*1000}">活动倒计时: <span class="hour-node">00</span>:<span class="minute-node">00</span></div></span>
       </div>  
     </section>
 
@@ -71,7 +71,7 @@
         <div class="info">
             <img src='{echo:Url::urlFormat("@".$user['avatar']."?v=".time())}' alt="" class="avatar">
             <span class="nickname">{$user['real_name']}</span>
-            <span class="bonus">累积: <i>XXX</i>元</span>
+            <!-- <span class="bonus">累积: <i>XXX</i>元</span> -->
             <a href="/active/login/redirect/recruit" class="cut"><img src="/themes/mobile/images/p3.png" alt=""></a>
             <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.yidu.yuanmeng&channel=0002160650432d595942&fromcase=60001" class="app" id="J-call-app"><img src="/themes/mobile/images/p2.png" alt=""></a>
         </div>

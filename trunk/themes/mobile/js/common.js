@@ -920,7 +920,12 @@ $(function () {
     });
     initSwiper().initPageSwiper(document.body);
     if ($("#qiangtimer").size() > 0) {
-        $("#qiangtimer").countdown({remainseconds: $("#qiangtimer").data("remainseconds"), format: '<span class="hour-node">{h}</span>小时<span class="minute-node">{m}</span>分钟<span class="second-node">{s}秒</span>', callback: function () {
+        $("#qiangtimer").countdown({remainseconds: $("#qiangtimer").data("remainseconds"), format: '<span class="hour-node">{h}</span>:<span class="minute-node">{m}</span>:<span class="second-node">{s}</span>', callback: function () {
+                //location.reload();
+            }});
+    }
+    if ($("#qiangtimers").size() > 0) {
+        $("#qiangtimers").countdown({remainseconds: $("#qiangtimers").data("remainseconds"), format: '<span class="hour-node">{h}</span>小时<span class="minute-node">{m}</span>分钟', callback: function () {
                 //location.reload();
             }});
     }
