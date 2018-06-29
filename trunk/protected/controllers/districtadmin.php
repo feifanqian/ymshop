@@ -1429,7 +1429,7 @@ class DistrictadminController extends Controller
 
 
                 $re = $this->curl_form($post_data,$sumbit_url,$http_url);
-                var_dump(111);
+                
                 unlink($save_path);
                 exit();
                 
@@ -1447,7 +1447,7 @@ class DistrictadminController extends Controller
                 );
 
                 $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
-                var_dump(222);
+                
                 unlink($save_path1);
                 exit();
 
@@ -1466,7 +1466,7 @@ class DistrictadminController extends Controller
                     );
 
                     $re = $this->curl_form($post_data2,$sumbit_url,$http_url);
-                    var_dump(333);
+                    
                     unlink($save_path2);
                     exit();
                 }
