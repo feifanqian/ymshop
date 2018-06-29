@@ -1891,6 +1891,7 @@ class DistrictadminController extends Controller
             );
         $url1 = 'https:// register.ysepay.com:2443/gateway.do';
         $res = Common::httpRequest($url1,'POST',$data);
+        var_dump($res);die;
         $res = json_decode($res,true);
         var_dump($res);die;
     }
