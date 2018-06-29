@@ -1429,6 +1429,7 @@ class DistrictadminController extends Controller
 
 
                 $re = $this->curl_form($post_data,$sumbit_url,$http_url);
+                var_dump(111);
                 unlink($save_path);
                 exit();
                 
@@ -1446,6 +1447,7 @@ class DistrictadminController extends Controller
                 );
 
                 $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
+                var_dump(222);
                 unlink($save_path1);
                 exit();
 
@@ -1464,6 +1466,7 @@ class DistrictadminController extends Controller
                     );
 
                     $re = $this->curl_form($post_data2,$sumbit_url,$http_url);
+                    var_dump(333);
                     unlink($save_path2);
                     exit();
                 }
@@ -1834,7 +1837,7 @@ class DistrictadminController extends Controller
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
         $promoter = $model->table('district_promoter')->fields('shop_name,province_id,city_id,location')->where('user_id='.$shop_check['user_id'])->find();
-        $customer = $model->table('customer as c')->fields('c.real_name,c.realname,c.mobile,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$shop_check['user_id'])->find();
+        $customer = $model->table('customer as c')->fields('c.real_name,c.realname,c.mobile,c.id_no,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$shop_check['user_id'])->find();
         $name = $promoter['shop_name']!=null?$promoter['shop_name']:($customer['nickname']!=null?$customer['nickname']:$customer['real_name']);
         if($shop_check['type']==1) {
             $cust_type = 'C';
