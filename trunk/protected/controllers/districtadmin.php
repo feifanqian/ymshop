@@ -1891,6 +1891,7 @@ class DistrictadminController extends Controller
             'bank_telephone_no'=>$customer['mobile']
             );
         $url1 = 'https:// register.ysepay.com:2443/gateway.do';
+        var_dump($data);die;
         $res = Common::httpRequest($url1,'POST',$data);
         var_dump($res);die;
         $res = json_decode($res,true);
