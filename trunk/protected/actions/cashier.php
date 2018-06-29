@@ -29,9 +29,13 @@ class CashierAction extends Controller
         	$this->code = 1240;
             return;
         }
-        $cashier = $this->model->table('customer')->fields('user_id')->where('mobile='.$mobile)->find();
+        $cashier = $this->model->table('customer')->fields('user_id')->where('status=1 and mobile='.$mobile)->find();
         if(!$cashier) {
         	$this->code = 1159;
+            return;
+        }
+        if($cashier['user_id']==$this->user['id']) {
+            $this->code = 1265;
             return;
         }
         $has_be = $this->model->table('cashier')->where("user_id=".$cashier['user_id']." and hire_user_id =".$this->user['id']." and status=1")->find();
