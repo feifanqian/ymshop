@@ -647,15 +647,15 @@ class GoodsAction extends Controller {
             $is_online = 0;
         }
         $where = "user_id=".$this->user['id']." and is_online=".$is_online;
-        $sort = 'id desc';
+        $order = 'id desc';
         if($sort == 1) {
-            $sort = 'create_time desc';
+            $order = 'create_time desc';
         }
         if($sort == 2) {
-            $sort = 'create_time asc';
+            $order = 'create_time asc';
         }
         
-        $list = $this->model->table('goods')->fields('id,name,category_id,img,sell_price,create_time,store_nums,is_online,base_sales_volume')->where($where)->order($sort)->findPage($page,10);
+        $list = $this->model->table('goods')->fields('id,name,category_id,img,sell_price,create_time,store_nums,is_online,base_sales_volume')->where($where)->order($order)->findPage($page,10);
         if($list) {
             if(isset($list['data']) && $list['data']!=null) {
                 foreach ($list['data'] as $k => $v) {
