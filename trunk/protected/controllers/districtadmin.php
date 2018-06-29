@@ -1869,8 +1869,9 @@ class DistrictadminController extends Controller
         // $params['partner_id'] = $this->user['id'];
         $params['timestamp'] = date('Y-m-d H:i:s', time());
         $params['charset'] = 'GBK';
+        $params['sign_type'] = 'RSA';
         $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
-        $params['sign_type'] = 'RSA';  
+          
           
         $params['version'] = '3.0';
         $biz_content_arr = array(
@@ -1913,7 +1914,7 @@ class DistrictadminController extends Controller
         $signStr = rtrim($signStr, '&');
         $sign = $this->sign_encrypt(array('data' => $signStr));
         $params['sign'] = trim($sign['check']);
-        
+        var_dump($params);
         $url1 = 'https:// register.ysepay.com:2443/gateway.do';
         $res = Common::httpRequest($url1,'POST',$params);
         var_dump($res);die;
