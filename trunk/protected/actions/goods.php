@@ -615,8 +615,9 @@ class GoodsAction extends Controller {
             $cache->set("_GoodsAllCategory", $result, 3600);
         }
        $result = $cache->get("_GoodsAllCategory");
+       $ret = $result;
        $this->code = 0;
-       $this->content = $result;
+       $this->content = $ret;
        return; 
     }
 
