@@ -1861,8 +1861,20 @@ class DistrictadminController extends Controller
 
         $bankcard = $model->table('bankcard')->where('user_id='.$shop_check['user_id'])->find();
         $legal_cert_no = bin2hex($this->des_encrypt($customer['id_no'],'yuanmeng'));
-        $data = array(
-            'merchant_no'=>'yuanmeng',
+
+        $params = array();  
+        
+        $params['method'] = 'ysepay.merchant.register.accept';
+        $params['partner_id'] = 'yuanmeng';
+        // $params['partner_id'] = $this->user['id'];
+        $params['timestamp'] = date('Y-m-d H:i:s', time());
+        $params['charset'] = 'GBK';
+        $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+        $params['sign_type'] = 'RSA';  
+          
+        $params['version'] = '3.0';
+        $biz_content_arr = array(
+            'merchant_no'=>'yuanmeng'.$shop_check['user_id'],
             'cust_type'=>$cust_type,
             'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
             'another_name'=>$name,
@@ -1890,6 +1902,18 @@ class DistrictadminController extends Controller
             'cert_no'=>$legal_cert_no,
             'bank_telephone_no'=>$customer['mobile']
             );
+        $params['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+        // $params['biz_content'] = '{}';
+        ksort($params);
+        
+        $signStr = "";
+        foreach ($params as $key => $val) {
+            $signStr .= $key . '=' . $val . '&';
+        }
+        $signStr = rtrim($signStr, '&');
+        $sign = $this->sign_encrypt(array('data' => $signStr));
+        $params['sign'] = trim($sign['check']);
+        
         $url1 = 'https:// register.ysepay.com:2443/gateway.do';
         var_dump($data);
         $res = Common::httpRequest($url1,'POST',$data);
