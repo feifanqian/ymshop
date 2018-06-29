@@ -537,7 +537,19 @@ class CashierAction extends Controller
             $this->model->table('push_message')->where('value='.$id)->delete();
             $this->model->table('customer')->data(array('is_cashier'=>0))->where('user_id='.$cashier['user_id'])->update();
         }
+        switch ($status) {
+            case 0:
+                $state = '已停用';
+                break;
+            case 1:
+                $state = '已启用';
+                break;
+            case 2:
+                $state = '已删除';
+                break;    
+        }
         $this->code = 0;
+        $this->content['state'] = $state;
         return;
     }
 
