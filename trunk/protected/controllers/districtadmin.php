@@ -1860,7 +1860,7 @@ class DistrictadminController extends Controller
         $city = $model->table('area')->where('id='.$promoter['city_id'])->find();
 
         $bankcard = $model->table('bankcard')->where('user_id='.$shop_check['user_id'])->find();
-        $legal_cert_no = $this->des_encrypt($customer['id_no'],'Srcyuanmeng');
+        $legal_cert_no = $this->des_encrypt($customer['id_no'],'yuanmeng');
         $data = array(
             'merchant_no'=>'yuanmeng',
             'cust_type'=>$cust_type,
