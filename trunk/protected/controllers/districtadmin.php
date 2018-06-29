@@ -1375,7 +1375,7 @@ class DistrictadminController extends Controller
                     exit();
                 
             } else {
-                echo json_encode(array("status" => 'fail', 'msg' => '理由不能为空'));
+                echo json_encode(array("status" => 'fail', 'errorMsg' => '理由不能为空'));
                 exit();
             }
         }elseif($status==1){
