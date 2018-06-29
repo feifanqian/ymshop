@@ -12,10 +12,11 @@ class TestAction extends Controller
         $this->model = new Model();
     }
 
-    public function test() {
+    public function test() {   		
+    	$taobao_pid = $this->model->table('taoke_pid')->where('user_id is NULL')->order('id desc')->find();
     	$this->code = 0;
-    	$this->content = null;
-        $this->time = time();
+    	$this->content = $taobao_pid;
+        // $this->time = time();
         return;
     }
 }    
