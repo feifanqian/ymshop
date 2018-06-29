@@ -1860,6 +1860,7 @@ class DistrictadminController extends Controller
         $city = $model->table('area')->where('id='.$promoter['city_id'])->find();
 
         $bankcard = $model->table('bankcard')->where('user_id='.$shop_check['user_id'])->find();
+        $legal_cert_no = $this->des_encrypt($customer['id_no'],'Srcyuanmeng');
         $data = array(
             'merchant_no'=>'yuanmeng',
             'cust_type'=>$cust_type,
@@ -1874,7 +1875,7 @@ class DistrictadminController extends Controller
             'legal_name'=>$customer['realname'],
             'legal_tel'=>$customer['mobile'],
             'legal_cert_type'=>'00',
-            'legal_cert_no'=>$this->des_encrypt($customer['id_no'],8),
+            'legal_cert_no'=>$legal_cert_no,
             'notify_type'=>2,
             'settle_type'=>'1',
             'bank_account_no'=>$shop_check['account_card'],
@@ -1886,7 +1887,7 @@ class DistrictadminController extends Controller
             'bank_province'=>$bankcard['province']!=null?$bankcard['province']:$province['name'],
             'bank_city'=>$bankcard['city']!=null?$bankcard['city']:$city['name'],
             'cert_type'=>'00',
-            'cert_no'=>md5($customer['id_no']),
+            'cert_no'=>$legal_cert_no,
             'bank_telephone_no'=>$customer['mobile']
             );
         $url1 = 'https:// register.ysepay.com:2443/gateway.do';
