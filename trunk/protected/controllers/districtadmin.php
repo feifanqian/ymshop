@@ -1799,6 +1799,103 @@ class DistrictadminController extends Controller
     }
 
     public function shop_check_register() {
+        $myParams = array();  
+        
+        $myParams['method'] = 'ysepay.merchant.register.token.get';
+        $myParams['partner_id'] = 'yuanmeng';
+        // $myParams['partner_id'] = $this->user['id'];
+        $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+        $myParams['charset'] = 'GBK';
+        $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+        $myParams['sign_type'] = 'RSA';  
+          
+        $myParams['version'] = '3.0';
+        $biz_content_arr = array(
+        );
+        // $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+        $myParams['biz_content'] = '{}';
+        ksort($myParams);
+        
+        $signStr = "";
+        foreach ($myParams as $key => $val) {
+            $signStr .= $key . '=' . $val . '&';
+        }
+        $signStr = rtrim($signStr, '&');
+        $sign = $this->sign_encrypt(array('data' => $signStr));
+        $myParams['sign'] = trim($sign['check']);
+        $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
+        // echo "<pre>";
+        // print_r($myParams);
+        // echo "<pre>";
+        $ret = Common::httpRequest($url,'POST',$myParams);
+        $ret = json_decode($ret,true);
+        
+        $id = Filter::int(Req::args('id'));
+        $model = new Model();
+        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        $promoter = $model->table('district_promoter')->fields('shop_name,province_id,city_id,location')->where('user_id='.$shop_check['user_id'])->find();
+        $customer = $model->table('customer as c')->fields('c.real_name,c.realname,c.mobile,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$shop_check['user_id'])->find();
+        $name = $promoter['shop_name']!=null?$promoter['shop_name']:($customer['nickname']!=null?$customer['nickname']:$customer['real_name']);
+        if($shop_check['type']==1) {
+            $cust_type = 'C';
+        } else {
+            $cust_type = 'O';
+        }
+        if($promoter['province_id']==0 || $promoter['city_id']==0) {
+            echo json_encode(array("status" => 'error', 'msg' => '请先完善省份城市信息'));
+            exit();
+        }
+        if($promoter['location']==null) {
+            echo json_encode(array("status" => 'error', 'msg' => '请先完善详细地址信息'));
+            exit();
+        }
+        if($customer['realname']==null) {
+            echo json_encode(array("status" => 'error', 'msg' => '请先完成实名认证'));
+            exit();
+        }
+        $province = $model->table('area')->where('id='.$promoter['province_id'])->find();
+        $city = $model->table('area')->where('id='.$promoter['city_id'])->find();
 
+        $bankcard = $model->table('bankcard')->where('user_id='.$shop_check['user_id'])->find();
+        $data = array(
+            'merchant_no'=>'yuanmeng',
+            'cust_type'=>$cust_type,
+            'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            'another_name'=>$name,
+            'cust_name'=>$name,
+            'mer_flag'=>'11',
+            'industry'=>'58',
+            'province'=>$province['name'],
+            'city'=>$city['name'],
+            'company_addr'=>$promoter['location'],
+            'legal_name'=>$customer['realname'],
+            'legal_tel'=>$customer['mobile'],
+            'legal_cert_type'=>'00',
+            'legal_cert_no'=>$this->des_encrypt($customer['id_no'],8),
+            'notify_type'=>2,
+            'settle_type'=>'1',
+            'bank_account_no'=>$shop_check['account_card'],
+            'bank_account_name'=>$bankcard['open_name'],
+            'bank_account_type'=>'personal',
+            'bank_card_type'=>'debit',
+            'bank_name'=>$shop_check['bank_name'],
+            'bank_type'=>$bankcard['bank_name'],
+            'bank_province'=>$bankcard['province']!=null?$bankcard['province']:$province['name'],
+            'bank_city'=>$bankcard['city']!=null?$bankcard['city']:$city['name'],
+            'cert_type'=>'00',
+            'cert_no'=>md5($customer['id_no']),
+            'bank_telephone_no'=>$customer['mobile']
+            );
+        $url1 = 'https:// register.ysepay.com:2443/gateway.do';
+        $res = Common::httpRequest($url1,'POST',$data);
+        $res = json_decode($res,true);
+        var_dump($res);die;
+    }
+
+  public function des_encrypt($str, $key) {
+      $block = mcrypt_get_block_size('des', 'ecb');
+      $pad = $block - (strlen($str) % $block);
+      $str .= str_repeat(chr($pad), $pad);
+      return mcrypt_encrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
     }
 }

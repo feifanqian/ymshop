@@ -35,7 +35,7 @@
                             <li><a class="icon-remove" href="javascript:;" onclick="cancel({$item['id']})"> 作废该请求</a></li>
                             {/if}
                             {if:$item['status']==1}
-                            <li><a class="icon-key" href="javascript:;" onclick="register({$item['user_id']})">注册银盛账户</a></li>
+                            <li><a class="icon-key" href="javascript:;" onclick="register({$item['id']})">注册银盛账户</a></li>
                             {/if}
                             <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/shop_check_delete/id/$item[id]}')">删除</a></li>
                         </ul>
@@ -124,13 +124,13 @@ function pass(id){
           layer.msg("您取消了操作"); 
         });
 }
-function register(user_id){
+function register(id){
     layer.confirm('您确定要注册吗？', {
         btn: ['确定','取消'] //按钮
       }, function(index){
         layer.close(index);
         var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-        $.post("{url:/districtadmin/shop_check_register}",{user_id:user_id},function(data){
+        $.post("{url:/districtadmin/shop_check_register}",{id:id},function(data){
              layer.close(index);
             if(data.status=='success'){
             layer.msg('操作成功', {icon: 6},function(){
