@@ -1898,6 +1898,7 @@ class DistrictadminController extends Controller
     }
 
   public function des_encrypt($str, $key) {
+      var_dump(strlen($key));die;
       $block = mcrypt_get_block_size('des', 'ecb');
       $pad = $block - (strlen($str) % $block);
       $str .= str_repeat(chr($pad), $pad);
