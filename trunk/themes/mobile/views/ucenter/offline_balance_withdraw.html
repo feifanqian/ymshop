@@ -89,7 +89,7 @@
 <div class="apply_form"  style="display: none;font-size:15px;">    
 <div class="ma20 bg-white p20 ">
             {if:$need_check==-1 || $need_check==2}
-              <form id="shop_check_form" action="{url:/ucenter/shop_check_do}" method="post" enctype="multipart/form-data" onsubmit="return false;">
+              <form id="shop_check_form" action="{url:/ucenter/shop_check_do}" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="picType" value="" />
                     <input type="hidden" name="token" value="{$yin_token}">
                     <input type="hidden" name="superUsercode" value="yuanmeng">
