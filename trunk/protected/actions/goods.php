@@ -445,10 +445,10 @@ class GoodsAction extends Controller {
                 // $resp['result_list']['map_data'] = array_values($resp['result_list']['map_data']);
                 foreach ($resp['result_list']['map_data'] as $k => $v) {
                     $decrease_price = $this->cut('减','元',$v['coupon_info']);
-                    $decrease_price_float = floatval($decrease_price);
-                    if($decrease_price_float < 10){
-                        continue;
-                    }
+                    // $decrease_price_float = floatval($decrease_price);
+                    // if($decrease_price_float < 10){
+                    //     continue;
+                    // }
                     $resp['result_list']['map_data'][$k]['decrease_price'] = $decrease_price;
                     $resp['result_list']['map_data'][$k]['final_price'] = $v['zk_final_price'] - $resp['result_list']['map_data'][$k]['decrease_price'];
                     $resp['result_list']['map_data'][$k]['nick'] = $v['shop_title'];
