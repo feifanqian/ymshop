@@ -410,7 +410,7 @@ class GoodsAction extends Controller {
         // }
 //        $req->setIsOverseas("false");
 //        $req->setIsTmall("false");
-//        $req->setSort("tk_rate_des");
+       $req->setSort("total_sales_des");
         // $req->setItemloc("杭州");
         $req->setHasCoupon("true");
         // $req->setIp("13.2.33.4");
