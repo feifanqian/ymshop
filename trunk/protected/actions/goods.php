@@ -410,7 +410,7 @@ class GoodsAction extends Controller {
         // }
 //        $req->setIsOverseas("false");
 //        $req->setIsTmall("false");
-		$req->setSort("total_sales_des");
+//        $req->setSort("tk_rate_des");
         // $req->setItemloc("杭州");
         $req->setHasCoupon("true");
         // $req->setIp("13.2.33.4");
@@ -433,7 +433,7 @@ class GoodsAction extends Controller {
          }else{
              $req->setCat("21,11,122852001,5002372,16,30,14,1801,500027664");
          }
-        // $req->setPageNo($page * 2);
+        // $req->setPageNo($page);
          $req->setPageNo(1);
         $resp = $c->execute($req);
 
@@ -444,10 +444,6 @@ class GoodsAction extends Controller {
                 // $resp['result_list']['map_data'] = $this->super_unique($resp['result_list']['map_data']);
                 // $resp['result_list']['map_data'] = array_values($resp['result_list']['map_data']);
                 foreach ($resp['result_list']['map_data'] as $k => $v) {
-					// $decrease_price = $this->cut('减','元',$v['coupon_info']);
-					// if($decrease_price < 10){
-						// continue;
-					// }
                     $resp['result_list']['map_data'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
                     $resp['result_list']['map_data'][$k]['final_price'] = $v['zk_final_price'] - $resp['result_list']['map_data'][$k]['decrease_price'];
                     $resp['result_list']['map_data'][$k]['nick'] = $v['shop_title'];
