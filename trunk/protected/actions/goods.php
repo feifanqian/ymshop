@@ -395,7 +395,7 @@ class GoodsAction extends Controller {
         $req->setAdzoneId($AdzoneId);
         $req->setPlatform("2");
 //        $req->setStartDsr("10");
-        $req->setPageSize("500");
+        $req->setPageSize("50");
         // $req->setEndTkRate("1234");
         // $req->setStartTkRate("1234");
         // $req->setEndPrice('200');
@@ -410,7 +410,7 @@ class GoodsAction extends Controller {
         // }
 //        $req->setIsOverseas("false");
 //        $req->setIsTmall("false");
-//        $req->setSort("tk_rate_des");
+        $req->setSort("total_sales_des");
         // $req->setItemloc("杭州");
         $req->setHasCoupon("true");
         // $req->setIp("13.2.33.4");
@@ -433,8 +433,8 @@ class GoodsAction extends Controller {
          }else{
              $req->setCat("21,11,122852001,5002372,16,30,14,1801,500027664");
          }
-        // $req->setPageNo($page);
-         $req->setPageNo(1);
+        $req->setPageNo($page * 2);
+         // $req->setPageNo(1);
         $resp = $c->execute($req);
 
         $resp = Common::objectToArray($resp);
@@ -444,7 +444,11 @@ class GoodsAction extends Controller {
                 // $resp['result_list']['map_data'] = $this->super_unique($resp['result_list']['map_data']);
                 // $resp['result_list']['map_data'] = array_values($resp['result_list']['map_data']);
                 foreach ($resp['result_list']['map_data'] as $k => $v) {
-                    $resp['result_list']['map_data'][$k]['decrease_price'] = $this->cut('减','元',$v['coupon_info']);
+                    $decrease_price = $this->cut('减','元',$v['coupon_info']);
+                    if($decrease_price < 10){
+                        continue;
+                    }
+                    $resp['result_list']['map_data'][$k]['decrease_price'] = $decrease_price;
                     $resp['result_list']['map_data'][$k]['final_price'] = $v['zk_final_price'] - $resp['result_list']['map_data'][$k]['decrease_price'];
                     $resp['result_list']['map_data'][$k]['nick'] = $v['shop_title'];
                     $resp['result_list']['map_data'][$k]['coupon_click_url'] = strpos($v['coupon_share_url'],'http')==false?'https:'.$v['coupon_share_url']:$v['coupon_share_url'];
@@ -468,14 +472,18 @@ class GoodsAction extends Controller {
                     }
                 } else {
                     // array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
-                    array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data'],array_column($resp['result_list']['map_data'],'volume'),SORT_DESC,$resp['result_list']['map_data']);
+                    array_multisort(array_column($resp['result_list']['map_data'],'final_price'),SORT_DESC,$resp['result_list']['map_data'],array_column($resp['result_list']['map_data'],'volume'),SORT_DESC,$resp['result_list']['map_data']);
                 }
                 // $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'],1,20);       
                 // $resp['results']['tbk_coupon'] = $resp['result_list']['map_data'];
                 $resp['result_list']['map_data'] = $this->super_unique($resp['result_list']['map_data']);
                 $resp['result_list']['map_data'] = array_values($resp['result_list']['map_data']);
-                $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'], ($page-1)*10, 10);
-                
+                // $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'], ($page-1)*10, 10);
+                $resultsCount = count($resp['result_list']['map_data']);
+                if($resultsCount % 2 == 1){
+                    $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'], 0, $resultsCount - 1);
+                }
+
                 // $cache = CacheFactory::getInstance();
                 // $map_data = $cache->get("_TbkCoupons".$q.$page);
                 // if ($cache->get("_TbkCoupons".$q.$page) === null) {
