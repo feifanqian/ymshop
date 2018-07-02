@@ -892,7 +892,7 @@ class GoodsAction extends Controller {
 
     public function goods_detail() {
         $id = Filter::int(Req::args('id'));
-        $info = $this->model->table('goods')->fields('id,name,category_id,img,imgs,sell_price,create_time,store_nums,is_online,content,freeshipping,base_sales_volume')->where('id=' . $id)->find();
+        $info = $this->model->table('goods')->fields('id,name,category_id,img,imgs,sell_price,create_time,store_nums,is_online,content,freeshipping,base_sales_volume,weight')->where('id=' . $id)->find();
         if ($info) {
             $info['imgs'] = unserialize($info['imgs']);
             $sales_volume = $this->model->table("order_goods as og")->join("left join order as o on og.order_id = o.id")->where("og.goods_id = " . $info['id'] . " and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->find();
