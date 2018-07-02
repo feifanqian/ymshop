@@ -896,6 +896,10 @@ class GoodsAction extends Controller {
             $sales_volume = $this->model->table("order_goods as og")->join("left join order as o on og.order_id = o.id")->where("og.goods_id = " . $info['id'] . " and o.status in (3,4)")->fields("SUM(og.goods_nums) as sell_volume")->find();
             $sales_volume = $sales_volume['sell_volume'] == NULL ? 0 : $sales_volume['sell_volume'];
             $info['sales_volume'] = $info['base_sales_volume'] + $sales_volume;
+            $html = '<!DOCTYPE html><html><head><title></title><meta charset="UTF-8">';
+            $html.='<meta name="viewport" content="width=device-width, initial-scale=1.0"></head>';
+            $html.='<body><div>'.$goods['content'].'</div></body></html>';
+            $info['content']= $html;
         }
         $this->code = 0;
         $this->content = $info;
