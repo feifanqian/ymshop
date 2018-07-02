@@ -621,6 +621,16 @@ class GoodsAction extends Controller {
             if (isset($tbk_data['result_list']['map_data'])) {
                 foreach ($tbk_data['result_list']['map_data'] as $itm) {
                     if (!isset($save_data[$itm['coupon_id']])) {
+                        $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
+                        if ($decrease_price < 5) {
+                            continue;
+                        }
+                        $itm['decrease_price'] = $decrease_price;
+                        $itm['final_price'] = $itm['zk_final_price'] - $itm['decrease_price'];
+                        $itm['nick'] = $itm['shop_title'];
+                        $itm['coupon_click_url'] = strpos($itm['coupon_share_url'], 'http') == false ? 'https:' . $itm['coupon_share_url'] : $itm['coupon_share_url'];
+                        $itm['item_description'] = $itm['coupon_info'];
+                        $itm['category'] = 30;
                         $save_data[$itm['coupon_id']] = $itm;
                     }
                 }
@@ -640,8 +650,18 @@ class GoodsAction extends Controller {
                 $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page);
                 $new_data = [];
                 if (isset($tbk_data['result_list']['map_data'])) {
-                    foreach ($tbk_data['result_list']['map_data'] as $itm) {
+                    foreach ($tbk_data['result_list']['map_data'] as $key=> $itm) {
                         if (!isset($new_data[$itm['coupon_id']])) {
+                            $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
+                            if ($decrease_price < 5) {
+                                continue;
+                            }
+                            $itm['decrease_price'] = $decrease_price;
+                            $itm['final_price'] = $itm['zk_final_price'] - $itm['decrease_price'];
+                            $itm['nick'] = $itm['shop_title'];
+                            $itm['coupon_click_url'] = strpos($itm['coupon_share_url'], 'http') == false ? 'https:' . $itm['coupon_share_url'] : $itm['coupon_share_url'];
+                            $itm['item_description'] = $itm['coupon_info'];
+                            $itm['category'] = 30;
                             $new_data[$itm['coupon_id']] = $itm;
                         }
                     }
@@ -658,18 +678,18 @@ class GoodsAction extends Controller {
             }
         }
 
-        foreach ($save_data as $key => &$itm) {
-            $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
-//            if ($decrease_price < 10) {
-//                unset($save_data[$key]);
-//            }
-            $itm['decrease_price'] = $decrease_price;
-            $itm['final_price'] = $itm['zk_final_price'] - $itm['decrease_price'];
-            $itm['nick'] = $itm['shop_title'];
-            $itm['coupon_click_url'] = strpos($itm['coupon_share_url'], 'http') == false ? 'https:' . $itm['coupon_share_url'] : $itm['coupon_share_url'];
-            $itm['item_description'] = $itm['coupon_info'];
-            $itm['category'] = 30;
-        }
+//        foreach ($save_data as $key => &$itm) {
+//            $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
+////            if ($decrease_price < 10) {
+////                unset($save_data[$key]);
+////            }
+//            $itm['decrease_price'] = $decrease_price;
+//            $itm['final_price'] = $itm['zk_final_price'] - $itm['decrease_price'];
+//            $itm['nick'] = $itm['shop_title'];
+//            $itm['coupon_click_url'] = strpos($itm['coupon_share_url'], 'http') == false ? 'https:' . $itm['coupon_share_url'] : $itm['coupon_share_url'];
+//            $itm['item_description'] = $itm['coupon_info'];
+//            $itm['category'] = 30;
+//        }
         if ($sort) {
             switch ($sort) {
                 case 'price_asc':
