@@ -314,9 +314,7 @@ class CashierAction extends Controller
     public function cashier_sign_in()
     {
         $desk_no = Filter::str(Req::args('desk_no'));
-        if($this->user['id']==42608) {
-            var_dump($desk_no);die;
-        }
+
         $cashier = $this->model->table('cashier')->where("user_id=".$this->user['id']." and status=1")->find();
         if(!$cashier) {
             $this->code = 1250;
@@ -356,6 +354,9 @@ class CashierAction extends Controller
             'work_on_time'=>date('H:i:s'),
             'status'=>1
             );
+            if($this->user['id']==42608) {
+                var_dump($data);die;
+            }
             $res = $this->model->table('cashier_attendance')->data($data)->insert();
             $sign_time = $data['work_on_time'];
             $type = 'on';
