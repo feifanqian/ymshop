@@ -2099,60 +2099,94 @@ class UcenterAction extends Controller {
         if($from) {
             $where.=" and `from` like '%$from%'";
         }
-           
-        $record = $this->model->table('invite as do')
-                ->join('left join user as u on do.invite_user_id = u.id')
-                ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
-                ->where($where)
-                ->order("do.id desc")
-                ->findPage($page, 10);        
-        if (empty($record)) {
-            $this->code = 0;
-            $this->content['data'] = array();
-            return;
-        }
-        if (isset($record['html'])) {
-            unset($record['html']);
-        }
-        $list = $this->model->table('invite as do')
-                ->join('left join user as u on do.invite_user_id = u.id')
-                ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
-                ->where($where)
-                ->order("do.id desc")
-                ->findAll();
-        $total = $list!=null?count($list):0;            
-        if($record['data']){
-            foreach($record['data'] as $k=>$v){
-                if($v['id']==null){
-                    unset($record['data'][$k]);
-                }else{
-                    $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                    $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
-                    if($shop && $promoter){
-                        $record['data'][$k]['role_type'] = 2;
-                        if($level==1 || $level ==2) {
-                            unset($record['data'][$k]);
-                            $total = $total-1;
-                        }
-                    }elseif(!$shop && $promoter){
-                        $record['data'][$k]['role_type'] = 1;
-                        if($level==1 || $level ==3) {
-                            unset($record['data'][$k]);
-                            $total = $total-1;
-                        }
+        if(!$level) {
+            $record = $this->model->table('invite as do')
+                    ->join('left join user as u on do.invite_user_id = u.id')
+                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
+                    ->where($where)
+                    ->order("do.id desc")
+                    ->findPage($page, 10);        
+            if (empty($record)) {
+                $this->code = 0;
+                $this->content['data'] = array();
+                return;
+            }
+            if (isset($record['html'])) {
+                unset($record['html']);
+            }
+            $list = $this->model->table('invite as do')
+                    ->join('left join user as u on do.invite_user_id = u.id')
+                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
+                    ->where($where)
+                    ->order("do.id desc")
+                    ->findAll();
+            $total = $list!=null?count($list):0;            
+            if($record['data']){
+                foreach($record['data'] as $k=>$v){
+                    if($v['id']==null){
+                        unset($record['data'][$k]);
                     }else{
-                        $record['data'][$k]['role_type'] = 0;
-                        if($level==2 || $level ==3) {
-                            unset($record['data'][$k]);
-                            $total = $total-1;
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
+                        if($shop && $promoter){
+                            $record['data'][$k]['role_type'] = 2;
+                            
+                        }elseif(!$shop && $promoter){
+                            $record['data'][$k]['role_type'] = 1;
+                            
+                        }else{
+                            $record['data'][$k]['role_type'] = 0;
+                            
                         }
                     }
                 }
+                $record['data'] = array_values($record['data']);
+                $record['page']['current_num'] = $total;
+                $record['page']['total'] = $this->model->table('invite')->where("user_id=".$this->user['id'])->count();
             }
-            $record['data'] = array_values($record['data']);
-            $record['page']['current_num'] = $total;
-            $record['page']['total'] = $this->model->table('invite')->where("user_id=".$this->user['id'])->count();
-        }
+        } else {
+            $list = $this->model->table('invite as do')
+                    ->join('left join user as u on do.invite_user_id = u.id')
+                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
+                    ->where($where)
+                    ->order("do.id desc")
+                    ->findAll();
+            if($list) {
+                foreach($list as $k=>$v){
+                    if($v['id']==null){
+                        unset($list[$k]);
+                    }else{
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
+                        if($shop && $promoter){
+                            $list[$k]['role_type'] = 2;
+                            if($level==1 || $level ==2) {
+                                unset($list[$k]);
+                            }
+                        }elseif(!$shop && $promoter){
+                            $list[$k]['role_type'] = 1;
+                            if($level==1 || $level ==3) {
+                                unset($list[$k]);
+                            }
+                        }else{
+                            $list[$k]['role_type'] = 0;
+                            if($level==2 || $level ==3) {
+                                unset($list[$k]);
+                            }
+                        }
+                    }
+                }
+                $total = count($list);
+                $sum = $this->model->table('invite')->where("user_id=".$this->user['id'])->count();
+                $record['data'] = $list;
+                $record['page']['totalPage'] = ceil($sum / 10);
+                $record['page']['pageSize'] = 10;
+                $record['page']['page'] = $page;
+                $record['page']['current_num'] = $total;
+                $record['page']['total'] = $sum;
+            }        
+        }  
+        
         
         
         $this->code = 0;
