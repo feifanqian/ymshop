@@ -126,15 +126,13 @@ class UcenterAction extends Controller {
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
                     $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+7 days'))))->where('id=' . $obj['id'])->update();
                     //淘宝客分配广告位和用户id
-                    if($obj['id']==42608) {
-                        if($obj['adzoneid']==null) {
-                            $taobao_pid = $this->model->table('taoke_pid')->where('user_id is NULL')->order('id desc')->find();
-                            if($taobao_pid) {
-                                $this->model->table('taoke_pid')->data(['user_id'=>$obj['id']])->where('id='.$taobao_pid['id'])->update();
-                                $this->model->table('user')->data(['adzoneid'=>$taobao_pid['adzoneid']])->where('id='.$obj['id'])->update();
-                            }
+                    if($obj['adzoneid']==null) {
+                        $taobao_pid = $this->model->table('taoke_pid')->where('user_id is NULL')->order('id desc')->find();
+                        if($taobao_pid) {
+                            $this->model->table('taoke_pid')->data(['user_id'=>$obj['id']])->where('id='.$taobao_pid['id'])->update();
+                            $this->model->table('user')->data(['adzoneid'=>$taobao_pid['adzoneid']])->where('id='.$obj['id'])->update();
                         }
-                    }
+                    }        
                     $this->code = 0;
                     $this->content = array(
                         'user_id' => $obj['id'],
