@@ -783,5 +783,14 @@ class CashierAction extends Controller
         $this->code = 0;
         return; 
     }
+
+    public function cashier_off_duty() {
+        $id = Filter::int(Req::args("id"));
+        $data = array(
+                'work_off_date'=>date('Y-m-d'),
+                'work_off_time'=>date('H:i:s'),
+                );
+        $res = $this->model->table('cashier_attendance')->data($data)->where('id='.$exist1['id'])->update();
+    }
 }
 ?>
