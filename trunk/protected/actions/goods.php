@@ -635,7 +635,6 @@ class GoodsAction extends Controller {
 
             $count = count($cache_data);
             $tb_page = ceil($count / 100)+1;
-//            var_dump("count:".$count."--tb_page".$tb_page);
 
             if ($count < $page * $size) {
                 $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page);
@@ -646,7 +645,6 @@ class GoodsAction extends Controller {
                             $new_data[$itm['coupon_id']] = $itm;
                         }
                     }
-                    var_dump($new_data);
                     $save_data = array_merge($cache_data, $new_data);
                     $redis->set($key, json_encode($save_data), 600);
                 } else {
@@ -693,8 +691,8 @@ class GoodsAction extends Controller {
         }
 
 
-        // $resp['results']['tbk_coupon'] = array_slice(array_values($save_data), ($page - 1) * $size, $size);
-        $resp['results']['tbk_coupon'] = array_values($save_data);
+         $resp['results']['tbk_coupon'] = array_slice(array_values($save_data), ($page - 1) * $size, $size);
+//        $resp['results']['tbk_coupon'] = array_values($save_data);
 
         $this->code = 0;
         $this->content = $resp;
