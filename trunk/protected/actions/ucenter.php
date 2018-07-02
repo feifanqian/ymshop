@@ -2118,7 +2118,13 @@ class UcenterAction extends Controller {
         if (isset($record['html'])) {
             unset($record['html']);
         }
-            
+        $list = $record = $this->model->table('invite as do')
+                ->join('left join user as u on do.invite_user_id = u.id')
+                ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
+                ->where($where)
+                ->order("do.id desc")
+                ->findAll();
+        $total = $list!=null?count($list):0;            
         if($record['data']){
             foreach($record['data'] as $k=>$v){
                 if($v['id']==null){
@@ -2130,22 +2136,25 @@ class UcenterAction extends Controller {
                         $record['data'][$k]['role_type'] = 2;
                         if($level!=0 && $level!=3) {
                             unset($record['data'][$k]);
+                            $total = $total-1;
                         }
                     }elseif(!$shop && $promoter){
                         $record['data'][$k]['role_type'] = 1;
                         if($level!=0 && $level!=2) {
                             unset($record['data'][$k]);
+                            $total = $total-1;
                         }
                     }else{
                         $record['data'][$k]['role_type'] = 0;
                         if($level!=0 && $level!=1) {
                             unset($record['data'][$k]);
+                            $total = $total-1;
                         }
                     }
                 }
             }
             $record['data'] = array_values($record['data']);
-            $record['page']['current_num'] = $this->model->table('invite')->where($where1)->count();
+            $record['page']['current_num'] = $total;
             $record['page']['total'] = $this->model->table('invite')->where("user_id=".$this->user['id'])->count();
         }
         
