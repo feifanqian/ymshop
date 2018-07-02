@@ -2178,12 +2178,19 @@ class UcenterAction extends Controller {
                 }
                 $total = count($list);
                 $sum = $this->model->table('invite')->where("user_id=".$this->user['id'])->count();
-                $record['data'] = $list;
+                $record['data'] = array_slice($list, ($page - 1) * 10, 10);
                 $record['page']['totalPage'] = ceil($sum / 10);
                 $record['page']['pageSize'] = 10;
                 $record['page']['page'] = $page;
                 $record['page']['current_num'] = $total;
                 $record['page']['total'] = $sum;
+            } else {
+                $record['data'] = [];
+                $record['page']['totalPage'] = 0;
+                $record['page']['pageSize'] = 10;
+                $record['page']['page'] = $page;
+                $record['page']['current_num'] = 0;
+                $record['page']['total'] = 0;
             }        
         }  
         
