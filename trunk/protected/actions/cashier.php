@@ -407,6 +407,7 @@ class CashierAction extends Controller
                 }
             }
         }
+        $list = array_values($list);
         $this->code = 0;
         $this->content = $list;
         return;
