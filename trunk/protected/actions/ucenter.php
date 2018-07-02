@@ -2097,6 +2097,7 @@ class UcenterAction extends Controller {
             $where .= ' and createtime<'.$end;
         }
         if($from) {
+            var_dump($from);die;
             $where.=" and from like '%$from%'";
             // $where .= " and from ='$from'";
             // var_dump($where);die;
