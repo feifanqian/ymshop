@@ -406,6 +406,8 @@ class CashierAction extends Controller
                     } else {
                         $list[$k]['status'] = '无人在上班';
                     }  
+                } else {
+                        $list[$k]['status'] = '无人在上班';
                 }
             }
         }
