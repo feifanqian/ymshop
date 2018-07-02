@@ -44,7 +44,9 @@ class CacheFactory {
 
         if ($type == 'db') {
             $obj = new DbCache();
-        } else {
+        } else if($type =='redis') {
+            $obj = new RedisCache();
+        } {
             $obj = new FileCache();
         }
 
