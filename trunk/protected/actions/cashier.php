@@ -239,7 +239,7 @@ class CashierAction extends Controller
         $today = date('Y-m-d');
         if($list) {
             foreach ($list as $k => $v) {
-                $sign = $this->model->table('cashier_attendance as ca')->fields('ca.*,c.name,u.nickname')->join('left join cashier as c on ca.cashier_id=c.id left join user as u on ca.user_id=u.id')->where('ca.desk_id='.$v['id']." and `work_on_date` = '$today'")->order('ca.id desc')->find();
+                $sign = $this->model->table('cashier_attendance as ca')->fields('ca.*,c.name,u.nickname')->join('left join cashier as c on ca.cashier_id=c.id left join user as u on ca.user_id=u.id')->where('ca.hire_user_id ='.$this->user['id'].' and ca.desk_id='.$v['id']." and `work_on_date` = '$today'")->order('ca.id desc')->find();
                 if($sign) {
                     $name = $sign['name']!=null?$sign['name']:$sign['nickname'];
                     if($sign['work_off_time']==null) {
