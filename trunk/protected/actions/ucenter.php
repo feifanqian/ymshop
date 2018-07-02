@@ -2178,7 +2178,8 @@ class UcenterAction extends Controller {
                 }
                 $total = count($list);
                 $sum = $this->model->table('invite')->where("user_id=".$this->user['id'])->count();
-                $record['data'] = array_slice($list, ($page - 1) * 10, 10);
+                $data = array_values($list);
+                $record['data'] = array_slice($data, ($page - 1) * 10, 10);
                 $record['page']['totalPage'] = ceil($sum / 10);
                 $record['page']['pageSize'] = 10;
                 $record['page']['page'] = $page;
