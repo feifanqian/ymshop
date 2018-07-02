@@ -391,6 +391,10 @@ class CashierAction extends Controller
     public function cashier_desk_sign_list()
     {
         $cashier = $this->model->table('cashier')->fields('hire_user_id')->where("user_id=".$this->user['id']." and status=1")->find();
+        if(!$cashier) {
+            $this->code = 1250;
+            return;
+        }
         $list = $this->model->table('cashier_desk')->fields('id,desk_no,cashier_id')->where('hire_user_id='.$cashier['hire_user_id'])->findAll();
         $today = date('Y-m-d');
         if($list) {
