@@ -126,6 +126,7 @@ class CashierAction extends Controller
     public function cashier_list()
     {
     	$list = $this->model->table('cashier as ca')->fields('cu.real_name,ca.name,ca.mobile,ca.job_no,ca.id,ca.status')->join('customer as cu on cu.user_id=ca.user_id')->where("ca.hire_user_id=".$this->user['id']." and ca.status in(1,2)")->findAll();
+        $today = date('Y-m-d');
         if($list) {
             foreach ($list as $k=>$value) {
                 if($list[$k]['name']==null) {
@@ -133,6 +134,16 @@ class CashierAction extends Controller
                 }
                 if($list[$k]['real_name']==null) {
                     $list[$k]['real_name']='';
+                }
+                $sign = $this->model->table('cashier_attendance')->where('cashier_id='.$value['id']." and `work_on_date` = '$today'")->order('id desc')->find();
+                if($sign) {
+                    if($sign['work_off_time']==null){
+                        $list[$k]['status'] = '正在上班';
+                    } else {
+                        $list[$k]['status'] = '已下班';
+                    }
+                } else {
+                    $list[$k]['status'] = '未上班';
                 }
             }
         }
@@ -225,7 +236,7 @@ class CashierAction extends Controller
         $today = date('Y-m-d');
         if($list) {
             foreach ($list as $k => $v) {
-                $sign = $this->model->table('cashier_attendance as ca')->fields('ca.*,c.name,u.nickname')->join('left join cashier as c on ca.cashier_id=c.id left join user as u on ca.user_id=u.id')->where('ca.desk_id='.$v['id']." and `work_on_date` = '$today'")->order('id desc')->find();
+                $sign = $this->model->table('cashier_attendance as ca')->fields('ca.*,c.name,u.nickname')->join('left join cashier as c on ca.cashier_id=c.id left join user as u on ca.user_id=u.id')->where('ca.desk_id='.$v['id']." and `work_on_date` = '$today'")->order('ca.id desc')->find();
                 if($sign) {
                     $name = $sign['name']!=null?$sign['name']:$sign['nickname'];
                     $list[$k]['status'] = '收银员'.$name.'正在上班';
@@ -786,6 +797,7 @@ class CashierAction extends Controller
 
     public function cashier_off_duty() {
         $id = Filter::int(Req::args("id"));
+        $cashier = $this->model->table('cashier')->where('id='.$id)->find();
         $data = array(
                 'work_off_date'=>date('Y-m-d'),
                 'work_off_time'=>date('H:i:s'),
