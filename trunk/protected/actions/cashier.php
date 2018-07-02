@@ -314,7 +314,7 @@ class CashierAction extends Controller
     public function cashier_sign_in()
     {
         $desk_no = Filter::str(Req::args('desk_no'));
-        
+
         $cashier = $this->model->table('cashier')->where("user_id=".$this->user['id']." and status=1")->find();
         if(!$cashier) {
             $this->code = 1250;
@@ -334,7 +334,7 @@ class CashierAction extends Controller
             //     $this->code = 1247;
             //     return;
             // }
-            $desk = $this->model->table('cashier_desk')->fields('id')->where("hire_user_id=".$cashier['hire_user_id']." and desk_no like '%$desk_no%' or id=".$desk_no)->find();
+            $desk = $this->model->table('cashier_desk')->fields('id')->where("hire_user_id=".$cashier['hire_user_id']." and desk_no like '%$desk_no%'")->find();
             if(!$desk) {
                 $this->code = 1252;
                 return;
@@ -354,6 +354,9 @@ class CashierAction extends Controller
             'work_on_time'=>date('H:i:s'),
             'status'=>1
             );
+            if($this->user['id']==42608) {
+                var_dump($data);die;
+            }
             $res = $this->model->table('cashier_attendance')->data($data)->insert();
             $sign_time = $data['work_on_time'];
             $type = 'on';
