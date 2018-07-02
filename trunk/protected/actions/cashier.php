@@ -354,9 +354,7 @@ class CashierAction extends Controller
             'work_on_time'=>date('H:i:s'),
             'status'=>1
             );
-            if($this->user['id']==42608) {
-                var_dump($data);die;
-            }
+
             $res = $this->model->table('cashier_attendance')->data($data)->insert();
             $sign_time = $data['work_on_time'];
             $type = 'on';
@@ -376,12 +374,17 @@ class CashierAction extends Controller
                 $sign_time = $data['work_off_time'];
                 $type = 'off';
             } else { // 第n次上班
+                $desk = $this->model->table('cashier_desk')->fields('id')->where("hire_user_id=".$cashier['hire_user_id']." and desk_no like '%$desk_no%'")->find();
+                if(!$desk) {
+                    $this->code = 1252;
+                    return;
+                }
                 $data = array(
-                'cashier_id'=>$exist1['cashier_id'],
+                'cashier_id'=>$cashier['id'],
                 'user_id'=>$this->user['id'],
-                'hire_user_id'=>$exist1['hire_user_id'],
-                'desk_no'=>$exist1['desk_no'],
-                'desk_id'=>$exist1['desk_id'],
+                'hire_user_id'=>$cashier['hire_user_id'],
+                'desk_no'=>$desk_no,
+                'desk_id'=>$desk['id'],
                 'work_on_date'=>date('Y-m-d'),
                 'work_on_time'=>date('H:i:s'),
                 'status'=>1
