@@ -325,7 +325,7 @@ class CashierAction extends Controller
                 $this->code = 1252;
                 return;
             }
-            $had_used = $this->model->table('cashier_attendance')->where("desk_id=".$desk['id']." and work_on_date='$today' and user_id !=".$this->user['id'])->find();
+            $had_used = $this->model->table('cashier_attendance')->where("desk_no like '%$desk_no%' and hire_user_id=".$cashier['hire_user_id']." and work_on_date='$today' and user_id !=".$this->user['id'])->find();
             if($had_used) {
                 $this->code = 1261;
                 return;
@@ -399,7 +399,7 @@ class CashierAction extends Controller
         $today = date('Y-m-d');
         if($list) {
             foreach ($list as $k => $v) {
-                $sign = $this->model->table('cashier_attendance')->where('desk_id='.$v['id']." and `work_on_date` = '$today'")->order('id desc')->find();
+                $sign = $this->model->table('cashier_attendance')->where('hire_user_id='.$cashier['hire_user_id'].' and desk_no='.$v['desk_no']." and `work_on_date` = '$today'")->order('id desc')->find();
                 if($sign) {
                     if($sign['work_off_time']==null) {
                         $list[$k]['status'] = '有人在上班';
