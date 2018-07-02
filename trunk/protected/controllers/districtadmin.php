@@ -1913,9 +1913,7 @@ class DistrictadminController extends Controller
         // var_dump($signStr);die;
         $sign = $this->sign_encrypt(array('data' => $signStr));
         $params['sign'] = trim($sign['check']);
-        echo "<pre>";
         print_r($params);
-        echo "<pre>";
         $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
         $res = Common::httpRequest($url1,'POST',$params);
         // var_dump($res);die;
