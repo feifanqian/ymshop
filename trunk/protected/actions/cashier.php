@@ -402,8 +402,10 @@ class CashierAction extends Controller
                 $sign = $this->model->table('cashier_attendance')->where('desk_id='.$v['id']." and `work_on_date` = '$today'")->order('id desc')->find();
                 if($sign) {
                     if($sign['work_off_time']==null) {
-                        unset($list[$k]);
-                    }   
+                        $list[$k]['status'] = '有人在上班';
+                    } else {
+                        $list[$k]['status'] = '无人在上班';
+                    }  
                 }
             }
         }
