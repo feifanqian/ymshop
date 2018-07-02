@@ -1827,10 +1827,10 @@ class DistrictadminController extends Controller
         $sign = $this->sign_encrypt(array('data' => $signStr));
         $myParams['sign'] = trim($sign['check']);
         $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
-        var_dump($myParams);
+        // var_dump($myParams);
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
-        var_dump($ret);die;
+        // var_dump($ret);die;
         $id = Filter::int(Req::args('id'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
