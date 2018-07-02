@@ -2140,6 +2140,7 @@ class UcenterAction extends Controller {
                 }
             }
             $record['data'] = array_values($record['data']);
+            $record['page']['current_num'] = count($record['data']);
         }
         
         
