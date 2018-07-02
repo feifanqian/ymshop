@@ -245,6 +245,7 @@ class V1Controller extends Controller {
         "cashier_my_income_log"=>array("cashier/cashier_my_income_log",1,1), // 收银员我的收款记录
         "cashier_manage"=>array("cashier/cashier_manage",0,1), //商家启用或删除收银员
         "cashier_my_info"=>array('cashier/cashier_my_info',1,1), //收银员详情
+        "cashier_off_duty"=>array('cashier/cashier_off_duty',1,1), //商家操作收银员下班
         //拉新活动
         "voucher_list"=>array('cashier/voucher_list',1,1), //卡券列表
         "voucher_detail"=>array('cashier/voucher_detail',0,1), //卡券详细

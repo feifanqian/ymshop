@@ -138,12 +138,15 @@ class CashierAction extends Controller
                 $sign = $this->model->table('cashier_attendance')->where('cashier_id='.$value['id']." and `work_on_date` = '$today'")->order('id desc')->find();
                 if($sign) {
                     if($sign['work_off_time']==null){
-                        $list[$k]['status'] = '正在上班';
+                        $list[$k]['status'] = '正在上班中';
+                        $list[$k]['desk_no'] = $sign['desk_no'];
                     } else {
                         $list[$k]['status'] = '已下班';
+                        $list[$k]['desk_no'] = '';
                     }
                 } else {
                     $list[$k]['status'] = '未上班';
+                    $list[$k]['desk_no'] = '';
                 }
             }
         }
@@ -797,12 +800,16 @@ class CashierAction extends Controller
 
     public function cashier_off_duty() {
         $id = Filter::int(Req::args("id"));
+        $today = date('Y-m-d');
         $cashier = $this->model->table('cashier')->where('id='.$id)->find();
+        $sign = $this->model->table('cashier_attendance')->where('hire_user_id='.$this->user['id'].' and cashier_id='.$id." and `work_on_date` = '$today'")->order('id desc')->find();
         $data = array(
                 'work_off_date'=>date('Y-m-d'),
                 'work_off_time'=>date('H:i:s'),
                 );
-        $res = $this->model->table('cashier_attendance')->data($data)->where('id='.$exist1['id'])->update();
+        $res = $this->model->table('cashier_attendance')->data($data)->where('id='.$sign['id'])->update();
+        $this->code = 0;
+        return; 
     }
 }
 ?>
