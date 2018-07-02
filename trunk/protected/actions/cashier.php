@@ -314,7 +314,9 @@ class CashierAction extends Controller
     public function cashier_sign_in()
     {
         $desk_no = Filter::str(Req::args('desk_no'));
-        
+        if($this->user['id']==42608) {
+            var_dump($desk_no);die;
+        }
         $cashier = $this->model->table('cashier')->where("user_id=".$this->user['id']." and status=1")->find();
         if(!$cashier) {
             $this->code = 1250;
