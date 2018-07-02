@@ -474,7 +474,7 @@ class GoodsAction extends Controller {
                     // array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
                     array_multisort(array_column($resp['result_list']['map_data'], 'decrease_price'), SORT_DESC, $resp['result_list']['map_data'], array_column($resp['result_list']['map_data'], 'volume'), SORT_DESC, $resp['result_list']['map_data']);
                 }
-                // $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'],1,20);       
+                // $resp['result_list']['map_data'] = array_<sli></sli>ce($resp['result_list']['map_data'],1,20);       
                 // $resp['results']['tbk_coupon'] = $resp['result_list']['map_data'];
                 $resp['result_list']['map_data'] = $this->super_unique($resp['result_list']['map_data']);
                 $resp['result_list']['map_data'] = array_values($resp['result_list']['map_data']);
@@ -680,7 +680,9 @@ class GoodsAction extends Controller {
             // array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
             array_multisort(array_column($save_data, 'decrease_price'), SORT_DESC, $save_data, array_column($save_data, 'volume'), SORT_DESC, $save_data);
         }
-        $resp['results']['tbk_coupon'] = array_values($save_data);
+
+
+        $resp['results']['tbk_coupon'] = array_slice(array_values($save_data), ($page - 1) * $size, $size);
 
         $this->code = 0;
         $this->content = $resp;
