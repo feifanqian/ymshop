@@ -2097,7 +2097,8 @@ class UcenterAction extends Controller {
             $where .= ' and createtime<'.$end;
         }
         if($from) {
-            $where .= ' and `from` = "$from"';
+            // $where .= ' and `from` = "$from"';
+            $where .= " and from ='$from'";
             // var_dump($where);die;
         }    
         $record = $this->model->table('invite as do')
