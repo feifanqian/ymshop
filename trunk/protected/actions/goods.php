@@ -567,18 +567,17 @@ class GoodsAction extends Controller {
 //         $req->setCat("16,18");
         if ($type && $q) {
             if ($type == 1) {
-                $req->setQ($q);
+                $req->setQ((string)$q);
             } else if ($type == 2) {
-                $req->setCat($q);
+                $req->setCat((string)$q);
             }
         } else {
             $req->setCat("21,11,122852001,5002372,16,30,14,1801,500027664");
         }
         // $req->setPageNo($page);
-        $req->setPageNo($pageno);
+        $req->setPageNo((string)$pageno);
 
         $resp = $c->execute($req);
-
 
 
         $result = Common::objectToArray($resp);
@@ -635,7 +634,8 @@ class GoodsAction extends Controller {
         } else {
 
             $count = count($cache_data);
-            $tb_page = floor($count / 100)+1;
+            $tb_page = ceil($count / 100)+1;
+//            var_dump("count:".$count."--tb_page".$tb_page);
 
             if ($count < $page * $size) {
                 $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page);
@@ -646,6 +646,7 @@ class GoodsAction extends Controller {
                             $new_data[$itm['coupon_id']] = $itm;
                         }
                     }
+                    var_dump($new_data);
                     $save_data = array_merge($cache_data, $new_data);
                     $redis->set($key, json_encode($save_data), 600);
                 } else {
