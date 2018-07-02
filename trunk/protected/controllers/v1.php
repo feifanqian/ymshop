@@ -141,7 +141,7 @@ class V1Controller extends Controller {
         "pay_pwd_valid"=>array("ucenter/payPwdValid",1,1),
         //淘宝客
         "tbk_item_get"=>array("goods/tbk_item_get",0,1),
-        "tbk_item_coupon_get"=>array("goods/tbk_item_coupon_get",0,1),
+        "tbk_item_coupon_get"=>array("goods/tbk_item_coupon_get2",0,1),
         "taobao_item_detail_get"=>array("goods/taobao_item_detail_get",0,1),
         "tbk_cat_nav"=>array("goods/tbk_cat_nav",0,1),
         "tbk_item_guess_like"=>array("goods/tbk_item_guess_like",0,1),
