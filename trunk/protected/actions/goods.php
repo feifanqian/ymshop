@@ -537,7 +537,7 @@ class GoodsAction extends Controller {
         $req->setAdzoneId($AdzoneId);
         $req->setPlatform("2");
 //        $req->setStartDsr("10");
-        $req->setPageSize(100);
+        $req->setPageSize("100");
         // $req->setEndTkRate("1234");
         // $req->setStartTkRate("1234");
         // $req->setEndPrice('200');
@@ -625,6 +625,7 @@ class GoodsAction extends Controller {
                         $save_data[$itm['coupon_id']] = $itm;
                     }
                 }
+
                 $redis->set($key, json_encode($save_data), 600);
             } else {
                 $this->code = 0;
