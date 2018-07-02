@@ -1912,7 +1912,7 @@ class DistrictadminController extends Controller
             $signStr .= $key . '=' . $val . '&';
         }
         $signStr = rtrim($signStr, '&');
-        var_dump($signStr);die;
+        // var_dump($signStr);die;
         $sign = $this->sign_encrypt(array('data' => $signStr));
         $params['sign'] = trim($sign['check']);
         var_dump($params);
