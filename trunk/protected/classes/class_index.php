@@ -153,5 +153,6 @@ return array(
     "ResultSet"=>"taobao/ResultSet.php",
     "RequestCheckUtil"=>"taobao/RequestCheckUtil.php",
     "JSSDK"=>"payments/jssdk.php",
+    "MyRedis"=>"redis/MyRedis.php",
 );
 ?>
