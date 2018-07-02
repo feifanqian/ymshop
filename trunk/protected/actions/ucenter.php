@@ -2141,6 +2141,7 @@ class UcenterAction extends Controller {
             }
             $record['data'] = array_values($record['data']);
             $record['page']['current_num'] = count($record['data']);
+            $record['page']['total'] = $this->model->table('invite')->where("user_id=".$this->user['id'])->count();
         }
         
         
