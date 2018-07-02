@@ -2097,7 +2097,7 @@ class UcenterAction extends Controller {
             $where .= ' and createtime<'.$end;
         }
         if($from) {
-            $where .= "`from` like '%$from%'";
+            $where .= " `from` like '%$from%'";
         }    
         $record = $this->model->table('invite as do')
                 ->join('left join user as u on do.invite_user_id = u.id')
