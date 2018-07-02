@@ -898,7 +898,7 @@ class GoodsAction extends Controller {
             $info['sales_volume'] = $info['base_sales_volume'] + $sales_volume;
             $html = '<!DOCTYPE html><html><head><title></title><meta charset="UTF-8">';
             $html.='<meta name="viewport" content="width=device-width, initial-scale=1.0"></head>';
-            $html.='<body><div>'.$goods['content'].'</div></body></html>';
+            $html.='<body><div>'.$info['content'].'</div></body></html>';
             $info['content']= $html;
         }
         $this->code = 0;
