@@ -2087,21 +2087,17 @@ class UcenterAction extends Controller {
         if(!$level) {
             $level = 0;
         }
-        $where = "do.user_id=".$this->user['id'];
-        $where1 = "user_id=".$this->user['id'];
+        $where = "do.user_id=".$this->user['id'];    
         if($start_time) {
             $start = strtotime($start_time);
             $where .= ' and createtime>'.$start;
-            $where1 .= ' and createtime>'.$start;
         }
         if($end_time) {
             $end = strtotime($end_time);
-            $where .= ' and createtime<'.$end;
-            $where1 .= ' and createtime<'.$end;
+            $where .= ' and createtime<'.$end;      
         }
         if($from) {
             $where.=" and `from` like '%$from%'";
-            $where1.=" and `from` like '%$from%'";
         }
            
         $record = $this->model->table('invite as do')
@@ -2134,19 +2130,19 @@ class UcenterAction extends Controller {
                     $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
                     if($shop && $promoter){
                         $record['data'][$k]['role_type'] = 2;
-                        if($level!=0 && $level!=3) {
+                        if($level==1 || $level ==2) {
                             unset($record['data'][$k]);
                             $total = $total-1;
                         }
                     }elseif(!$shop && $promoter){
                         $record['data'][$k]['role_type'] = 1;
-                        if($level!=0 && $level!=2) {
+                        if($level==1 || $level ==3) {
                             unset($record['data'][$k]);
                             $total = $total-1;
                         }
                     }else{
                         $record['data'][$k]['role_type'] = 0;
-                        if($level!=0 && $level!=1) {
+                        if($level==2 || $level ==3) {
                             unset($record['data'][$k]);
                             $total = $total-1;
                         }
