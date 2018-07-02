@@ -1914,8 +1914,8 @@ class DistrictadminController extends Controller
         $signStr = rtrim($signStr, '&');
         $sign = $this->sign_encrypt(array('data' => $signStr));
         $params['sign'] = trim($sign['check']);
-        var_dump($params);
-        $url1 = 'https:// register.ysepay.com:2443/gateway.do';
+        // var_dump($params);
+        $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
         $res = Common::httpRequest($url1,'POST',$params);
         var_dump($res);die;
         $res = json_decode($res,true);
