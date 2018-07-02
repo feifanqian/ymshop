@@ -222,6 +222,18 @@ class CashierAction extends Controller
     public function cashier_desk_list()
     {
     	$list = $this->model->table('cashier_desk')->fields('id,desk_no,cashier_id')->where('hire_user_id='.$this->user['id'])->findAll();
+        $today = date('Y-m-d');
+        if($list) {
+            foreach ($list as $k => $v) {
+                $sign = $this->model->table('cashier_attendance as ca')->fields('ca.*,c.name,u.nickname')->join('left join cashier as c on ca.cashier_id=c.id left join user as u on ca.user_id=u.id')->where('ca.desk_id='.$v['id']." and `work_on_date` = '$today'")->order('id desc')->find();
+                if($sign) {
+                    $name = $sign['name']!=null?$sign['name']:$sign['nickname'];
+                    $list[$k]['status'] = '收银员'.$name.'正在上班';
+                } else {
+                    $list[$k]['status'] = '无人上班';
+                }
+            }
+        }
     	$this->code = 0;
     	$this->content = $list;
         return;
@@ -380,6 +392,17 @@ class CashierAction extends Controller
     {
         $cashier = $this->model->table('cashier')->fields('hire_user_id')->where("user_id=".$this->user['id']." and status=1")->find();
         $list = $this->model->table('cashier_desk')->fields('id,desk_no,cashier_id')->where('hire_user_id='.$cashier['hire_user_id'])->findAll();
+        $today = date('Y-m-d');
+        if($list) {
+            foreach ($list as $k => $v) {
+                $sign = $this->model->table('cashier_attendance')->where('desk_id='.$v['id']." and `work_on_date` = '$today'")->order('id desc')->find();
+                if($sign) {
+                    if($sign['work_off_time']=null) {
+                        unset($list[$k]);
+                    }   
+                }
+            }
+        }
         $this->code = 0;
         $this->content = $list;
         return;
