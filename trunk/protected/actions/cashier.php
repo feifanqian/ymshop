@@ -242,7 +242,11 @@ class CashierAction extends Controller
                 $sign = $this->model->table('cashier_attendance as ca')->fields('ca.*,c.name,u.nickname')->join('left join cashier as c on ca.cashier_id=c.id left join user as u on ca.user_id=u.id')->where('ca.desk_id='.$v['id']." and `work_on_date` = '$today'")->order('ca.id desc')->find();
                 if($sign) {
                     $name = $sign['name']!=null?$sign['name']:$sign['nickname'];
-                    $list[$k]['status'] = '收银员'.$name.'正在上班';
+                    if($sign['work_off_time']==null) {
+                        $list[$k]['status'] = '收银员'.$name.'正在上班';
+                    } else {
+                        $list[$k]['status'] = '收银员'.$name.'已经下班';
+                    }
                 } else {
                     $list[$k]['status'] = '无人上班';
                 }
