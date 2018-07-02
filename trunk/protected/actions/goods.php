@@ -682,7 +682,8 @@ class GoodsAction extends Controller {
         }
 
 
-        $resp['results']['tbk_coupon'] = array_slice(array_values($save_data), ($page - 1) * $size, $size);
+        // $resp['results']['tbk_coupon'] = array_slice(array_values($save_data), ($page - 1) * $size, $size);
+        $resp['results']['tbk_coupon'] = array_values($save_data);
 
         $this->code = 0;
         $this->content = $resp;
