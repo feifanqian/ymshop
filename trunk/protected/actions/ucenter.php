@@ -2088,17 +2088,22 @@ class UcenterAction extends Controller {
             $level = 0;
         }
         $where = "do.user_id=".$this->user['id'];
+        $where1 = "user_id=".$this->user['id'];
         if($start_time) {
             $start = strtotime($start_time);
             $where .= ' and createtime>'.$start;
+            $where1 .= ' and createtime>'.$start;
         }
         if($end_time) {
             $end = strtotime($end_time);
             $where .= ' and createtime<'.$end;
+            $where1 .= ' and createtime<'.$end;
         }
         if($from) {
             $where.=" and `from` like '%$from%'";
-        }    
+            $where1.=" and `from` like '%$from%'";
+        }
+           
         $record = $this->model->table('invite as do')
                 ->join('left join user as u on do.invite_user_id = u.id')
                 ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
@@ -2140,7 +2145,7 @@ class UcenterAction extends Controller {
                 }
             }
             $record['data'] = array_values($record['data']);
-            $record['page']['current_num'] = count($record['data']);
+            $record['page']['current_num'] = $this->model->table('invite')->where($where1)->count();
             $record['page']['total'] = $this->model->table('invite')->where("user_id=".$this->user['id'])->count();
         }
         
