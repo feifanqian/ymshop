@@ -6,20 +6,20 @@ class TestAction extends Controller
     public $code = 1000;
     public $content = NULL;
     public $time = NULL;
+    public $redis;
 
     public function __construct()
     {
         $this->model = new Model();
     }
 
-    public function test() {   		
-    	$taobao_pid = $this->model->table('taoke_pid')->where('user_id is NULL')->order('id desc')->find();
-        if($taobao_pid) {
-            $this->model->table('taoke_pid')->data(['user_id'=>42608])->where('id='.$taobao_pid['id'])->update();
-        }
+    public function test() {
+        $this->redis   = new \Redis();
+        $this->redis->connect('127.0.0.1', 6379);
+        $this->redis->set("say","hello world");  
+        $content = $this->redis->get("say");   		
     	$this->code = 0;
-    	// $this->content = $taobao_pid;
-        // $this->time = time();
+    	$this->content = $content;
         return;
     }
 }    
