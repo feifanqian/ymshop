@@ -576,9 +576,14 @@ class GoodsAction extends Controller {
         }
         // $req->setPageNo($page);
         $req->setPageNo($pageno);
+
         $resp = $c->execute($req);
 
-        return Common::objectToArray($resp);
+
+
+        $result = Common::objectToArray($resp);
+
+        return $result;
     }
 
     public function tbk_item_coupon_get2() {
@@ -604,10 +609,12 @@ class GoodsAction extends Controller {
         }
 
         $size = empty($size) ? 20 : $size;
-        $redis = CacheFactory::getInstance('redis');
+//        $redis = CacheFactory::getInstance('redis');
+        $redis = new MyRedis();
 
         $key = "cat_".(empty($q) ? "all" : $q);
-        $cache_data = $redis->get($key);
+        $cache_data = json_decode($redis->get($key), true);
+
         $save_data = [];
 
         if (empty($cache_data)) {
@@ -618,15 +625,17 @@ class GoodsAction extends Controller {
                         $save_data[$itm['coupon_id']] = $itm;
                     }
                 }
-                $redis->set($key, $save_data, 600);
+                $redis->set($key, json_encode($save_data), 600);
             } else {
                 $this->code = 0;
                 $this->content = [];
                 return;
             }
         } else {
+
             $count = count($cache_data);
             $tb_page = floor($count / 100)+1;
+
             if ($count < $page * $size) {
                 $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page);
                 $new_data = [];
@@ -637,7 +646,7 @@ class GoodsAction extends Controller {
                         }
                     }
                     $save_data = array_merge($cache_data, $new_data);
-                    $redis->set($key, $save_data, 600);
+                    $redis->set($key, json_encode($save_data), 600);
                 } else {
                     $this->code = 0;
                     $this->content = [];
