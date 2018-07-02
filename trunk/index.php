@@ -11,4 +11,9 @@ $configPath = "protected/config/config.php";
 $config = is_file($configPath) ? include($configPath) : null;
 //运行应用程序
 
+//add by dallon 2018.07.02
+if(!defined('START_TIME')) {
+    define('START_TIME', microtime(true));
+}
+
 Tiny::createWebApp($config)->run();

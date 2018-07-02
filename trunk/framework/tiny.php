@@ -699,6 +699,7 @@ class Tiny {
         'CacheFactory' => 'cache/cachefactory_class.php',
         'FileCache' => 'cache/filecache_class.php',
         'DbCache' => 'cache/dbcache_class.php',
+        'RedisCache' => 'cache/rediscache_class.php',
         'ExtensionCollection' => 'base/extension_collection_class.php',
         'ExtensionFactory' => 'base/extension_factory_class.php',
         'Debug' => 'lib/util/debug_class.php',
