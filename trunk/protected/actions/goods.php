@@ -522,17 +522,17 @@ class GoodsAction extends Controller {
         if ($form == 'android') { //安卓
             $appkey = '24875594';
             $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
-            if($user_id) {
-               $user = $this->model->table('user')->fields('adzoneid')->where('id='.$user_id)->find();
-               $AdzoneId = $user['adzoneid'];
+            if ($user_id) {
+                $user = $this->model->table('user')->fields('adzoneid')->where('id=' . $user_id)->find();
+                $AdzoneId = $user['adzoneid'];
             } else {
                 $AdzoneId = '513416107';
-            } 
+            }
         } else { //ios
             $appkey = '24876667';
             $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
-            if($user_id) {
-                $user = $this->model->table('user')->fields('adzoneid')->where('id='.$user_id)->find();
+            if ($user_id) {
+                $user = $this->model->table('user')->fields('adzoneid')->where('id=' . $user_id)->find();
                 $AdzoneId = $user['adzoneid'];
             } else {
                 $AdzoneId = '582570496';
@@ -587,6 +587,7 @@ class GoodsAction extends Controller {
         }
         // $req->setPageNo($page);
         $req->setPageNo((string)$pageno);
+//        var_dump($req);
 
         $resp = $c->execute($req);
 
@@ -622,13 +623,13 @@ class GoodsAction extends Controller {
 //        $redis = CacheFactory::getInstance('redis');
         $redis = new MyRedis();
 
-        $key = "cat_".(empty($q) ? "all" : $q);
+        $key = "cat_" . (empty($q) ? "all" : $q);
         $cache_data = json_decode($redis->get($key), true);
 
         $save_data = [];
-        $user_id = $this->user['id']==null?0:$this->user['id'];
+        $user_id = $this->user['id'] == null ? 0 : $this->user['id'];
         if (empty($cache_data)) {
-            $tbk_data = $this->tbk_req_get($form, $q, $type, 1,$user_id);
+            $tbk_data = $this->tbk_req_get($form, $q, $type, 1, 'total_sales_des', $user_id);
             if (isset($tbk_data['result_list']['map_data'])) {
                 foreach ($tbk_data['result_list']['map_data'] as $itm) {
                     if (!isset($save_data[$itm['coupon_id']])) {
@@ -655,13 +656,13 @@ class GoodsAction extends Controller {
         } else {
 
             $count = count($cache_data);
-            $tb_page = ceil($count / 100)+1;
+            $tb_page = ceil($count / 100) + 1;
 
             if ($count < $page * $size) {
-                $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page,$user_id);
+                $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page, 'total_sales_des', $user_id);
                 $new_data = [];
                 if (isset($tbk_data['result_list']['map_data'])) {
-                    foreach ($tbk_data['result_list']['map_data'] as $key=> $itm) {
+                    foreach ($tbk_data['result_list']['map_data'] as $key => $itm) {
                         if (!isset($new_data[$itm['coupon_id']])) {
                             $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
                             if ($decrease_price < 5) {
@@ -722,12 +723,13 @@ class GoodsAction extends Controller {
         }
 
 
-         $resp['results']['tbk_coupon'] = array_slice(array_values($save_data), ($page - 1) * $size, $size);
+        $resp['results']['tbk_coupon'] = array_slice(array_values($save_data), ($page - 1) * $size, $size);
 //        $resp['results']['tbk_coupon'] = array_values($save_data);
 
         $this->code = 0;
         $this->content = $resp;
     }
+
 //通用物料搜索API（导购）====add by dallon end============================================================================
 
 
@@ -940,9 +942,9 @@ class GoodsAction extends Controller {
             $sales_volume = $sales_volume['sell_volume'] == NULL ? 0 : $sales_volume['sell_volume'];
             $info['sales_volume'] = $info['base_sales_volume'] + $sales_volume;
             $html = '<!DOCTYPE html><html><head><title></title><meta charset="UTF-8">';
-            $html.='<meta name="viewport" content="width=device-width, initial-scale=1.0"></head>';
-            $html.='<body><div>'.$info['content'].'</div></body></html>';
-            $info['content']= $html;
+            $html .= '<meta name="viewport" content="width=device-width, initial-scale=1.0"></head>';
+            $html .= '<body><div>' . $info['content'] . '</div></body></html>';
+            $info['content'] = $html;
         }
         $this->code = 0;
         $this->content = $info;
