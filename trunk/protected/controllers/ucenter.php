@@ -1139,8 +1139,11 @@ class UcenterController extends Controller
                             $invite['data'][$k]['from'] = 'APP支付宝支付';
                             break;
                         case 'admin':
-                            $invite['data'][$k]['from'] = '系统平台';
+                            $invite['data'][$k]['from'] = '系统生成';
                             break;
+                        case 'web':
+                            $invite['data'][$k]['from'] = '系统生成';
+                            break;    
                         case 'jihuo':
                             $invite['data'][$k]['from'] = '激活码';
                             break;

@@ -2111,7 +2111,7 @@ class UcenterAction extends Controller {
                     $where.=" and `from` in ('android_weixin','android_alipay','ios_weixin','ios_alipay')";
                     break;
                 case 'E':
-                    $where.=" and `from` in ('admin')";
+                    $where.=" and `from` in ('admin','web')";
                     break;
                 case 'F':
                     $where.=" and `from` in ('jihuo')";
@@ -2172,6 +2172,13 @@ class UcenterAction extends Controller {
                 $record['data'] = array_values($record['data']);
                 $record['page']['current_num'] = $total;
                 $record['page']['total'] = $sum;
+            } else {
+                $record['data'] = [];
+                $record['page']['totalPage'] = 0;
+                $record['page']['pageSize'] = 10;
+                $record['page']['page'] = $page;
+                $record['page']['current_num'] = 0;
+                $record['page']['total'] = 0;
             }
         } else {
             $list = $this->model->table('invite as do')
