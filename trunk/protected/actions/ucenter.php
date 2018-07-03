@@ -2100,7 +2100,7 @@ class UcenterAction extends Controller {
             $where.=" and `from` like '%$from%'";
         }
         $sums=$this->model->table('invite as do')->join('left join user as u on do.invite_user_id = u.id')->fields('count(do.id) as total')->where("user_id=".$this->user['id'])->findAll();
-        $sum = !empty($sum)?$sum[0]['total']:0;
+        $sum = !empty($sums)?$sums[0]['total']:0;
         if(!$level) {
             $record = $this->model->table('invite as do')
                     ->join('left join user as u on do.invite_user_id = u.id')
