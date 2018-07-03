@@ -2099,7 +2099,7 @@ class UcenterAction extends Controller {
         if($from) {
             $where.=" and `from` like '%$from%'";
         }
-        $sums=$this->model->table('invite as do')->join('left join user as u on do.invite_user_id = u.id')->fields('sum(do.id) as total')->where("user_id=".$this->user['id'])->findAll();
+        $sums=$this->model->table('invite as do')->join('left join user as u on do.invite_user_id = u.id')->fields('count(do.id) as total')->where("user_id=".$this->user['id'])->findAll();
         $sum = !empty($sum)?$sum[0]['total']:0;
         if(!$level) {
             $record = $this->model->table('invite as do')
@@ -2116,7 +2116,7 @@ class UcenterAction extends Controller {
             if (isset($record['html'])) {
                 unset($record['html']);
             }
-            $list = $this->model->table('invite as do')->join('left join user as u on do.invite_user_id = u.id')->fields('sum(do.id) as total')->where($where)->findAll();
+            $list = $this->model->table('invite as do')->join('left join user as u on do.invite_user_id = u.id')->fields('count(do.id) as total')->where($where)->findAll();
             $total = $list!=null?$list[0]['total']:0;            
             if($record['data']){
                 foreach($record['data'] as $k=>$v){
