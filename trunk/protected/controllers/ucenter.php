@@ -1149,7 +1149,10 @@ class UcenterController extends Controller
                             break;
                         case 'active':
                             $invite['data'][$k]['from'] = 'H5拉新活动';
-                            break;                                    
+                            break;
+                        case 'goods_qrcode':
+                            $invite['data'][$k]['from'] = '商品二维码';
+                            break;                                        
                         default:
                             $invite['data'][$k]['from'] = '微信支付';
                             break;
