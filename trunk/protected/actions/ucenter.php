@@ -2139,11 +2139,6 @@ class UcenterAction extends Controller {
                     ->where($where)
                     ->order("do.id desc")
                     ->findPage($page, 10);        
-            if (empty($record)) {
-                $this->code = 0;
-                $this->content['data'] = array();
-                return;
-            }
             if (isset($record['html'])) {
                 unset($record['html']);
             }
