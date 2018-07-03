@@ -2097,8 +2097,39 @@ class UcenterAction extends Controller {
             $where .= ' and createtime<'.$end;      
         }
         if($from) {
-            $where.=" and `from` like '%$from%'";
-        }
+           switch (strtoupper($from)) {
+                case 'A':
+                    $where.=" and `from` in ('second-wap')";
+                    break;
+                case 'B':
+                    $where.=" and `from` in ('alipay')";
+                    break;
+                case 'C':
+                    $where.=" and `from` in ('wechat','wap')";
+                    break;
+                case 'D':
+                    $where.=" and `from` in ('android_weixin','android_alipay','ios_weixin','ios_alipay')";
+                    break;
+                case 'E':
+                    $where.=" and `from` in ('admin')";
+                    break;
+                case 'F':
+                    $where.=" and `from` in ('jihuo')";
+                    break;
+                case 'G':
+                    $where.=" and `from` in ('active')";
+                    break;
+                case 'H':
+                    $where.=" and `from` in ('goods_qrcode')";
+                    break;                        
+                default:
+                    $where.=" and `from` like '%$from%'";
+                    break;
+            } 
+        } 
+        // if($from) {
+        //     $where.=" and `from` like '%$from%'";
+        // }
         $sums=$this->model->table('invite as do')->join('left join user as u on do.invite_user_id = u.id')->fields('count(do.id) as total')->where("user_id=".$this->user['id'])->findAll();
         $sum = !empty($sums)?$sums[0]['total']:0;
         if(!$level) {
