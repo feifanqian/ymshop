@@ -78,7 +78,7 @@ class IndexController extends Controller {
         Session::set('jump_index',1);
         if (isset($this->user['id'])) {
             // var_dump(123);die;
-            Common::buildInviteShip($inviter_id, $this->user['id'], "second-wap");
+            Common::buildInviteShip($inviter_id, $this->user['id'], "wechat");
             $this->redirect('index');
         } else {
             Cookie::set("inviter", $inviter_id);
