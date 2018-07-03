@@ -601,7 +601,7 @@ class CashierAction extends Controller
             case 1:
                 $state = '已启用';
                 break;
-            case 2:
+            case -1:
                 $state = '已删除';
                 break;    
         }
