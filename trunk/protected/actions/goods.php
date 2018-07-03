@@ -503,7 +503,7 @@ class GoodsAction extends Controller {
         return $str2[0];
     }
 
-    public function tbk_req_get($form, $q, $type, $pageno, $sort = 'total_sales_des') {
+    public function tbk_req_get($form, $q, $type, $pageno, $sort = 'total_sales_des', $user_id = 0) {
         if (!$q) {
             $q = 0;
         }
@@ -522,11 +522,21 @@ class GoodsAction extends Controller {
         if ($form == 'android') { //安卓
             $appkey = '24875594';
             $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
-            $AdzoneId = '513416107';
+            if($user_id==42608) {
+               $user = $this->model->table('user')->fields('adzoneid')->where('id='.$user_id)->find();
+               $AdzoneId = $user['adzoneid'];
+            } else {
+                $AdzoneId = '513416107';
+            } 
         } else { //ios
             $appkey = '24876667';
             $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
-            $AdzoneId = '582570496';
+            if($user_id==42608) {
+                $user = $this->model->table('user')->fields('adzoneid')->where('id='.$user_id)->find();
+                $AdzoneId = $user['adzoneid'];
+            } else {
+                $AdzoneId = '582570496';
+            }
         }
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;
@@ -615,9 +625,9 @@ class GoodsAction extends Controller {
         $cache_data = json_decode($redis->get($key), true);
 
         $save_data = [];
-
+        $user_id = $this->user['id']==null?0:$this->user['id'];
         if (empty($cache_data)) {
-            $tbk_data = $this->tbk_req_get($form, $q, $type, 1);
+            $tbk_data = $this->tbk_req_get($form, $q, $type, 1,$user_id);
             if (isset($tbk_data['result_list']['map_data'])) {
                 foreach ($tbk_data['result_list']['map_data'] as $itm) {
                     if (!isset($save_data[$itm['coupon_id']])) {
@@ -647,7 +657,7 @@ class GoodsAction extends Controller {
             $tb_page = ceil($count / 100)+1;
 
             if ($count < $page * $size) {
-                $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page);
+                $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page,$user_id);
                 $new_data = [];
                 if (isset($tbk_data['result_list']['map_data'])) {
                     foreach ($tbk_data['result_list']['map_data'] as $key=> $itm) {
