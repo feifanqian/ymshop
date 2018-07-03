@@ -964,4 +964,22 @@ class GoodsAction extends Controller {
         }
         return $result;
     }
+
+    public function build_inviteship_goods_qrcode() {
+        $goods_id = Filter::int(Req::args('goods_id'));
+        $flag = Filter::int(Req::args('flag'));
+        if(!$flag) {
+            $this->code = 1270;
+            return;
+        }
+        $qr_info = $this->model->table("promote_qrcode")->where("id=$flag")->find();
+        if($qr_info){
+            $inviter_id=$qr_info['user_id'];
+            Common::buildInviteShip($inviter_id, $this->user['id'], "goods_qrcode");
+            $this->model->query("update tiny_promote_qrcode set scan_times = scan_times + 1 where id = $flag");
+        }
+        $this->code = 0;
+        $this->content['goods_id'] = $goods_id;
+        return;
+    }
 }

@@ -3111,4 +3111,29 @@ class UcenterAction extends Controller {
             return;
         }
     }
+
+    public function build_inviteship_qrcode() {
+        $inviter_id = Filter::int(Req::args('inviter_id'));
+        if(!$inviter_id) {
+            $this->code = 1266;
+            return;
+        }
+        $invite = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
+        if($invite) {
+            $this->code = 1267;
+            return;
+        }
+        if($inviter_id==$this->user['id']) {
+            $this->code = 1268;
+            return;
+        }
+        $invited = $this->model->table('invite')->where('user_id = '.$this->user['id'].' and invite_user_id='.$inviter_id)->find();
+        if($invited) {
+            $this->code = 1269;
+            return;
+        }
+        Common::buildInviteShip($inviter_id, $this->user['id'], "wechat");
+        $this->code = 0;
+        return;
+    }
 }

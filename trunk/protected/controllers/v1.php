@@ -177,6 +177,8 @@ class V1Controller extends Controller {
         "promoter_code_list"=>array("district/promoterCodeList",1,1), //激活码列表
         "input_code"=>array("district/inputCode",1,1), //激活码输入
         "send_active_code"=>array("district/sendActiveCode",1,1), //经销商互赠激活码数量
+        "build_inviteship_qrcode"=>array("ucenter/build_inviteship_qrcode",1,1), //app扫个人邀请码
+        "build_inviteship_goods_qrcode"=>array("ucenter/build_inviteship_goods_qrcode",1,1), //app扫商品邀请码
         //提现
         "get_withdraw_set"=>array("index/getWithdrawSet",0,1),//提现设置
         "get_merchant_balance"=>array("ucenter/getMerchantBalance",1,1),//商家余额提现
