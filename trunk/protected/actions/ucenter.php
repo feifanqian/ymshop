@@ -2173,7 +2173,7 @@ class UcenterAction extends Controller {
                 $record['page']['pageSize'] = 10;
                 $record['page']['page'] = $page;
                 $record['page']['current_num'] = 0;
-                $record['page']['total'] = 0;
+                $record['page']['total'] = $sum;
             }
         } else {
             $list = $this->model->table('invite as do')
