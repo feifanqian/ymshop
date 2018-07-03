@@ -525,6 +525,7 @@ class GoodsAction extends Controller {
             if($user_id==42608) {
                $user = $this->model->table('user')->fields('adzoneid')->where('id='.$user_id)->find();
                $AdzoneId = $user['adzoneid'];
+               var_dump($AdzoneId);die;
             } else {
                 $AdzoneId = '513416107';
             } 
