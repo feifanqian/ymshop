@@ -523,22 +523,23 @@ class GoodsAction extends Controller {
         if ($form == 'android') { //安卓
             $appkey = '24875594';
             $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
-            if ($user_id) {
-                $user = $this->model->table('user')->fields('adzoneid')->where('id=' . $user_id)->find();
-                $AdzoneId = $user['adzoneid'];
-            } else {
-                $AdzoneId = '513416107';
-            }
+            $AdzoneId = '513416107';
+            // if ($user_id) {
+            //     $user = $this->model->table('user')->fields('adzoneid')->where('id=' . $user_id)->find();
+            //     $AdzoneId = $user['adzoneid'];
+            // } else {
+            //     $AdzoneId = '513416107';
+            // }
         } else { //ios
             $appkey = '24876667';
             $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
-            if ($user_id) {
-                $user = $this->model->table('user')->fields('adzoneid')->where('id=' . $user_id)->find();
-                $AdzoneId = $user['adzoneid'];
-            } else {
-                $AdzoneId = '582570496';
-                // $AdzoneId = '1207042504';
-            }
+            $AdzoneId = '582570496';
+            // if ($user_id) {
+            //     $user = $this->model->table('user')->fields('adzoneid')->where('id=' . $user_id)->find();
+            //     $AdzoneId = $user['adzoneid'];
+            // } else {
+            //     $AdzoneId = '582570496';
+            // }
         }
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;
