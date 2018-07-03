@@ -968,11 +968,11 @@ class GoodsAction extends Controller {
     public function build_inviteship_goods_qrcode() {
         $goods_id = Filter::int(Req::args('goods_id'));
         $flag = Filter::int(Req::args('flag'));
-        if(!$flag) {
+        if(!$goods_id || !$flag) {
             $this->code = 1270;
             return;
         }
-        $qr_info = $this->model->table("promote_qrcode")->where("id=$flag")->find();
+        $qr_info = $this->model->table("promote_qrcode")->where("id=".$flag)->find();
         if($qr_info){
             $inviter_id=$qr_info['user_id'];
             Common::buildInviteShip($inviter_id, $this->user['id'], "goods_qrcode");
