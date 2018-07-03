@@ -535,8 +535,8 @@ class GoodsAction extends Controller {
                 $user = $this->model->table('user')->fields('adzoneid')->where('id='.$user_id)->find();
                 $AdzoneId = $user['adzoneid'];
             } else {
-                // $AdzoneId = '582570496';
-                $AdzoneId = '1207042504';
+                $AdzoneId = '582570496';
+                // $AdzoneId = '1207042504';
             }
         }
         $c->appkey = $appkey;
