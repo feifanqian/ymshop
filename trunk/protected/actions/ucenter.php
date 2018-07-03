@@ -2099,6 +2099,8 @@ class UcenterAction extends Controller {
         if($from) {
             $where.=" and `from` like '%$from%'";
         }
+        $sums=$this->model->table('invite as do')->join('left join user as u on do.invite_user_id = u.id')->fields('sum(do.id) as total')->where("user_id=".$this->user['id'])->findAll();
+        $sum = !empty($sum)?$sum[0]['total']:0;
         if(!$level) {
             $record = $this->model->table('invite as do')
                     ->join('left join user as u on do.invite_user_id = u.id')
@@ -2114,17 +2116,13 @@ class UcenterAction extends Controller {
             if (isset($record['html'])) {
                 unset($record['html']);
             }
-            $list = $this->model->table('invite as do')
-                    ->join('left join user as u on do.invite_user_id = u.id')
-                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
-                    ->where($where)
-                    ->order("do.id desc")
-                    ->findAll();
-            $total = $list!=null?count($list):0;            
+            $list = $this->model->table('invite as do')->join('left join user as u on do.invite_user_id = u.id')->fields('sum(do.id) as total')->where($where)->findAll();
+            $total = $list!=null?$list[0]['total']:0;            
             if($record['data']){
                 foreach($record['data'] as $k=>$v){
                     if($v['id']==null){
                         unset($record['data'][$k]);
+                        $total = $total-1;
                     }else{
                         $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
                         $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
@@ -2142,7 +2140,7 @@ class UcenterAction extends Controller {
                 }
                 $record['data'] = array_values($record['data']);
                 $record['page']['current_num'] = $total;
-                $record['page']['total'] = $this->model->table('invite')->where("user_id=".$this->user['id'])->count();
+                $record['page']['total'] = $sum;
             }
         } else {
             $list = $this->model->table('invite as do')
@@ -2177,7 +2175,6 @@ class UcenterAction extends Controller {
                     }
                 }
                 $total = count($list);
-                $sum = $this->model->table('invite')->where("user_id=".$this->user['id'])->count();
                 $data = array_values($list);
                 $record['data'] = array_slice($data, ($page - 1) * 10, 10);
                 $record['page']['totalPage'] = ceil($sum / 10);
