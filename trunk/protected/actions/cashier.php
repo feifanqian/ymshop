@@ -845,8 +845,8 @@ class CashierAction extends Controller
 
         $total_income             = !empty($log1)?$log1[0]['total']:0;
         $last_month_settle_income = !empty($log2)?$log2[0]['total']:0;
-        $this_month_expect_income = !empty($log3)?$log3[0]['total']:0;
-        $last_month_expect_income = !empty($log4)?$log4[0]['total']:0;
+        $this_month_expect_income = $log3==null?0:$log3[0]['total'];
+        $last_month_expect_income = $log4==null?0:$log4[0]['total'];
 
         $this->code = 0;
         $this->content['total_income'] = $total_income;
