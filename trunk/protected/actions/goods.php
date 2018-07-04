@@ -909,10 +909,10 @@ class GoodsAction extends Controller {
                     $list['data'][$k]['share_url'] = 'http://www.ymlypt.com/product-' . $v['id'] . '.html';
                 }
                 if ($sort == 3) {
-                    array_multisort(array_column($list['data'], 'sales_volume'), SORT_DESC, $resp['data']);
+                    array_multisort(array_column($list['data'], 'sales_volume'), SORT_DESC, $list['data']);
                 }
                 if ($sort == 4) {
-                    array_multisort(array_column($list['data'], 'sales_volume'), SORT_ASC, $resp['data']);
+                    array_multisort(array_column($list['data'], 'sales_volume'), SORT_ASC, $list['data']);
                 }
             }    
             
