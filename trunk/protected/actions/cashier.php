@@ -835,6 +835,18 @@ class CashierAction extends Controller
     }
 
     public function my_benefit_income() {
+        $this_month = date('Y-m');
+        $last_month = date('Y-m',strtotime('-1 month'));
+        var_dump($last_month);die;
+        $log1 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1")->findAll();
+        $log2 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1 and month = '{$last_month}'")->findAll();
+        $log3 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=2 and month = '{$this_month}'")->findAll();
+        $log4 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=2 and month = '{$last_month}'")->findAll();
+
+        $total_income             = $log1!=null?$log1[0]['total']:0;
+        $last_month_settle_income = $log2!=null?$log2[0]['total']:0;
+        $this_month_expect_income = $log3!=null?$log3[0]['total']:0;
+        $last_month_expect_income = $log4!=null?$log4[0]['total']:0;
 
         $this->code = 0;
         $this->content['total_income'] = $total_income;

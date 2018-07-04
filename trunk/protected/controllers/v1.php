@@ -263,6 +263,8 @@ class V1Controller extends Controller {
         "goods_detail"=>array('goods/goods_detail',0,1), //商品详情
         "test"=>array('test/test',0,1),
         "test2"=>array('test/test2',0,1),
+        //收益
+        "my_benefit_income"=>array("cashier/my_benefit_income",1,1), // 收益
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息
