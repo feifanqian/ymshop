@@ -904,7 +904,7 @@ class CashierAction extends Controller
     public function income_withdraw_balance() {
         $amount = Filter::float(Req::args("amount"));
         $log = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1")->findAll();
-        $total_income = $log[0]['total']==null?0:$log1[0]['total'];
+        $total_income = $log[0]['total']==null?0:$log[0]['total'];
         // if($amount<100) {
         //     $this->code = 1181;
         //     return;
