@@ -1,0 +1,51 @@
+@charset "UTF-8";
+@import "base";
+
+#app {
+  background: #f0f4f6;
+}
+
+.pay-type {
+  margin-top: 12px;
+  background: #fff;
+  .pay-type-cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 85px;
+    padding: 0 20px;
+    & + .pay-type-cell {
+      border-top: 1px solid #e5e5e5;
+    }
+    span {
+      flex: 1;
+      margin-left: 28px;
+    }
+    img {
+      display: block;
+      height: 34px;
+      width: auto;
+    }
+  }
+}
+
+p.prc {
+  font-size: 24px;
+  margin-top: 80px;
+  text-align: center;
+  letter-spacing: 1px;
+  b {
+    font-size: 32px;
+    color: #ff5544;
+  }
+}
+a.pay {
+  display: block;
+  margin-top: 120px;
+  text-align: center;
+  padding: 22px;
+  color: #fff;
+  background: #38ceff;
+  font-size: 26px;
+  text-decoration: none;
+}

@@ -1,0 +1,81 @@
+*, *::before, *::after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+#app {
+  margin: 0 auto;
+  width: 640px;
+  min-height: 100vh;
+  box-shadow: 0 0 16px #eee;
+  overflow: hidden;
+  font-size: 24px; }
+
+img.size-fit {
+  display: block;
+  width: 100%;
+  height: auto; }
+
+.way {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0; }
+  .way .cell {
+    width: 620px;
+    height: 344px;
+    background-color: #e5e5e5;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto; }
+    .way .cell + .cell {
+      margin-top: 10px; }
+    .way .cell .cell-bg {
+      display: block;
+      width: 100%;
+      height: auto;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0; }
+    .way .cell .detail {
+      position: relative;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 100px;
+      margin-top: 244px;
+      background-color: rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      color: #fff;
+      padding: 0 16px; }
+      .way .cell .detail h2 {
+        position: absolute;
+        margin: 0;
+        font-size: 30px;
+        top: 6px;
+        font-weight: bold; }
+      .way .cell .detail span.time {
+        position: absolute;
+        font-size: 20px;
+        top: 44px; }
+      .way .cell .detail span.address {
+        position: absolute;
+        font-size: 20px;
+        top: 70px; }
+      .way .cell .detail span.price {
+        position: absolute;
+        display: block;
+        top: calc(50% - 24px);
+        right: 22px;
+        font-size: 28px;
+        color: #ff811a;
+        border: 2px solid #828282;
+        border-radius: 6px;
+        padding: 8px;
+        letter-spacing: 1px; }
+        .way .cell .detail span.price::before {
+          content: '$';
+          margin-right: 2px; }
+
+/*# sourceMappingURL=allway.css.map */

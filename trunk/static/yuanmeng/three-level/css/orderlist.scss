@@ -1,0 +1,89 @@
+@charset "UTF-8";
+@import "base";
+
+//  顶部订单ID高度
+$order-id-h: 40px;
+//  项目高度
+$item-h: 145px;
+//  项目图片尺寸
+$item-img-h: 110px;
+$item-img-w: 162px;
+//  详情
+$detail-h: 65px;
+//  分割线颜色
+$line-color: #eaeaea;
+
+.order {
+  &-cell {
+    border-bottom: 10px $line-color solid;
+    //  订单ID
+    &-id {
+      font-size: 28px;
+      height: $order-id-h;
+      line-height: $order-id-h;
+      padding: 22px;
+      color: #858585;
+      border-bottom: 1px $line-color solid;
+    }
+    .item {
+      position: relative;
+      height: 145px;
+      border-bottom: 1px $line-color solid;
+      //  项目图片
+      &-img {
+        display: block;
+        height: 110px;
+        width: 162px;
+        background-color: #e5e5e5;
+        position: absolute;
+        top: 17.5px;
+        left: 20px;
+      }
+      //  项目名称
+      &-title {
+        position: absolute;
+        top: 20px;
+        left: 210px;
+        font-size: 28px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      //  子标题
+      &-subtitle {
+        position: absolute;
+        top: 60px;
+        left: 210px;
+        font-size: 22px;
+      }
+    }
+
+    //  订单详情
+    .order-detail {
+      padding: 0 20px;
+      height: $detail-h;
+      line-height: $detail-h;
+      display: flex;
+      justify-content: space-between;
+      .order-detail__look {
+        font-size: 26px;
+        color: #333;
+      }
+      .order-detail__price {
+        font-size: 24px;
+        color: #a3a3a3;
+
+        span {
+          color: #ff811a;
+          font-size: 26px;
+          letter-spacing: 1px;
+          margin-left: 4px;
+          &::before {
+            content: '$';
+            font-size: 24px;
+          }
+        }
+      }
+    }
+  }
+}

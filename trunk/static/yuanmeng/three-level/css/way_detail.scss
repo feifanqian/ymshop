@@ -1,0 +1,97 @@
+@charset "UTF-8";
+@import "base";
+
+$main-w: 600px;
+
+#app {
+  background: url("../img/st22.jpg") #fff no-repeat top center / contain;
+  padding-bottom: 20px;
+  .main {
+    width: $main-w;
+    margin: 360px auto 0;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 8px #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 26px 12px;
+    span.title {
+      display: inline-block;
+      font-size: 24px;
+      margin: -24px auto 0;
+      color: #fff;
+      padding: 16px 24px;
+      border-radius: 59px;
+      background: #2BC0FF;
+      box-shadow: 0 3px 12px #e5e5e5;
+      position: relative;
+      &::before {
+        position: absolute;
+        content: '';
+        width: 0;
+        height: 0;
+        bottom: -10px;
+        left: calc(50% - 10px);
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid #2BC0FF;
+      }
+    }
+    p.detail {
+      margin: 12px auto;
+    }
+    .price, .time, .address, .num {
+      margin: 4px 0;
+    }
+    .price {
+      color: #ff811a;
+      font-size: 28px;
+      &::before {
+        content: '$';
+        font-size: 24px;
+      }
+      &::after {
+        content: '起';
+        font-size: 24px;
+        color: #676767;
+      }
+    }
+    .time {
+    }
+    .address {
+    }
+    .num {
+    }
+
+  }
+  .way_title {
+    text-align: center;
+    font-size: 30px;
+    color: #686868;
+  }
+  .way_detail {
+    padding: 0 36px;
+    h3 {
+      margin: 12px 0;
+      color: #666;
+    }
+    .way_detail--a {
+      padding: 6px 0;
+      border-bottom: 1px dotted #e5e5e5;
+    }
+    p {
+      margin: 8px 0
+    }
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
+.line {
+  height: 16px;
+  background: url("../img/Oval.png") repeat-x left / 12px 12px;
+}

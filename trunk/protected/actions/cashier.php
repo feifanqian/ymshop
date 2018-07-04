@@ -345,7 +345,7 @@ class CashierAction extends Controller
                 $this->code = 1252;
                 return;
             }
-            $had_used = $this->model->table('cashier_attendance')->where("desk_no like '%$desk_no%' and hire_user_id=".$cashier['hire_user_id']." and work_on_date='$today' and user_id !=".$this->user['id'])->find();
+            $had_used = $this->model->table('cashier_attendance')->where("desk_no like '%$desk_no%' and hire_user_id=".$cashier['hire_user_id']." and work_on_date='$today'")->find();
             if($had_used) {
                 $this->code = 1261;
                 return;
@@ -822,6 +822,16 @@ class CashierAction extends Controller
         $res = $this->model->table('cashier_attendance')->data($data)->where('id='.$sign['id'])->update();
         $this->code = 0;
         return; 
+    }
+
+    public function my_benefit_income() {
+
+        $this->code = 0;
+        $this->content['total_income'] = $total_income;
+        $this->content['last_month_settle_income'] = $last_month_settle_income;
+        $this->content['this_month_expect_income'] = $this_month_expect_income;
+        $this->content['last_month_expect_income'] = $last_month_expect_income;
+        return;
     }
 }
 ?>
