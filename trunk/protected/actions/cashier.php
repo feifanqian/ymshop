@@ -842,11 +842,17 @@ class CashierAction extends Controller
         $log2 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1 and month = '{$last_month}'")->findAll();
         $log3 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=2 and month = '{$this_month}'")->findAll();
         $log4 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=2 and month = '{$last_month}'")->findAll();
+        $log5 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=3 and month = '{$last_month}'")->findAll();
     
         $total_income             = $log1[0]['total']==null?0:$log1[0]['total'];
         $last_month_settle_income = $log2[0]['total']==null?0:$log2[0]['total'];
         $this_month_expect_income = $log3[0]['total']==null?0:$log3[0]['total'];
         $last_month_expect_income = $log4[0]['total']==null?0:$log4[0]['total'];
+        $last_withdraw_income     = $log5[0]['total']==null?0:$log5[0]['total'];
+        $user = $this->model->table('user')->fields('settled_income')->where('user_id='.$this->user['id'])->find();
+
+        $total_income = $total_income - $user['settled_income'];
+        $last_month_settle_income = $last_month_settle_income - $last_withdraw_income;
 
         $this->code = 0;
         $this->content['total_income'] = $total_income;
@@ -924,6 +930,7 @@ class CashierAction extends Controller
         $benefit_id = $this->model->table('benefit_log')->data($benefit_data)->insert();
         $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where('user_id='.$this->user['id'])->update();
         Log::balance($amount,$this->user['id'],$benefit_id,'结算佣金提现到余额',5);
+        $this->model->table('user')->data(array('settled_income'=>"`settled_income`+{$amount}"))->where('user_id='.$this->user['id'])->update();
         $this->code = 0;
         return;  
     }
