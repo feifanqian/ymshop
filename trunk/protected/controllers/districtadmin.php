@@ -1922,10 +1922,17 @@ class DistrictadminController extends Controller
         var_dump($res);die;
     }
 
-  public function des_encrypt($str, $key) {
-      $block = mcrypt_get_block_size('des', 'ecb');
-      $pad = $block - (strlen($str) % $block);
-      $str .= str_repeat(chr($pad), $pad);
-      return mcrypt_encrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
-    }
+  // public function des_encrypt($str, $key) {
+  //     $block = mcrypt_get_block_size('des', 'ecb');
+  //     $pad = $block - (strlen($str) % $block);
+  //     $str .= str_repeat(chr($pad), $pad);
+  //     return mcrypt_encrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
+  //   }
+
+   public function des_encrypt($encrypt,$key="") {
+        $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
+        $passcrypt = mcrypt_encrypt ( MCRYPT_RIJNDAEL_256, $key, $encrypt, MCRYPT_MODE_ECB, $iv );
+        $encode = base64_encode ( $passcrypt );
+        return $encode;
+    } 
 }
