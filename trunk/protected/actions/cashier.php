@@ -837,7 +837,7 @@ class CashierAction extends Controller
     public function my_benefit_income() {
         $this_month = date('Y-m');
         $last_month = date('Y-m',strtotime('-1 month'));
-        var_dump($last_month);die;
+    
         $log1 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1")->findAll();
         $log2 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1 and month = '{$last_month}'")->findAll();
         $log3 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=2 and month = '{$this_month}'")->findAll();
