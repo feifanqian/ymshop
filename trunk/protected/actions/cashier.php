@@ -866,7 +866,7 @@ class CashierAction extends Controller
             $status = 1;
         }
 
-        $user = $this->model->table('user')->fields('adzoneid')->where('user_id='.$this->user['id'])->find();
+        $user = $this->model->table('user')->fields('adzoneid')->where('id='.$this->user['id'])->find();
         $where = 'adv_id='.$user['adzoneid'];
         switch ($status) {
             case 1:
@@ -879,7 +879,7 @@ class CashierAction extends Controller
                 $where.=" and order_status in ('订单失效')";
                 break;    
         }
-        var_dump($where);die;
+        // var_dump($where);die;
         $list = $this->model->table('taoke')->fields('id,order_sn,goods_name,order_amount,effect_prediction,create_time,order_status')->where($where)->findPage($page,10);
         if($list) {
             if(isset($list['data']) && $list['data']!=null) {
