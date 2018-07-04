@@ -1858,8 +1858,8 @@ class DistrictadminController extends Controller
         $city = $model->table('area')->where('id='.$promoter['city_id'])->find();
 
         $bankcard = $model->table('bankcard')->where('user_id='.$shop_check['user_id'])->find();
-        $legal_cert_no = bin2hex($this->des_encrypt($customer['id_no'],'yuanmeng'));
-
+        // $legal_cert_no = bin2hex($this->des_encrypt($customer['id_no'],'yuanmeng'));
+        $legal_cert_no = $this->des_encrypt($customer['id_no'],'yuanmeng');
         $params = array();  
         
         $params['method'] = 'ysepay.merchant.register.accept';
