@@ -246,7 +246,8 @@ class CashierAction extends Controller
                     if($sign['work_off_time']==null) {
                         $list[$k]['status'] = '收银员'.$name.'正在上班';
                     } else {
-                        $list[$k]['status'] = '收银员'.$name.'已经下班';
+                        // $list[$k]['status'] = '收银员'.$name.'已经下班';
+                        $list[$k]['status'] = '无人上班';
                     }
                 } else {
                     $list[$k]['status'] = '无人上班';
