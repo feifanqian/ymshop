@@ -842,11 +842,11 @@ class CashierAction extends Controller
         $log2 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1 and month = '{$last_month}'")->findAll();
         $log3 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=2 and month = '{$this_month}'")->findAll();
         $log4 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=2 and month = '{$last_month}'")->findAll();
-        var_dump($log3);die;
-        $total_income             = !empty($log1)?$log1[0]['total']:0;
-        $last_month_settle_income = !empty($log2)?$log2[0]['total']:0;
-        $this_month_expect_income = $log3==null?0:$log3[0]['total'];
-        $last_month_expect_income = $log4==null?0:$log4[0]['total'];
+    
+        $total_income             = $log1[0]['total']==null?0:$log1[0]['total'];
+        $last_month_settle_income = $log2[0]['total']==null?0:$log2[0]['total'];
+        $this_month_expect_income = $log3[0]['total']==null?0:$log3[0]['total'];
+        $last_month_expect_income = $log4[0]['total']==null?0:$log4[0]['total'];
 
         $this->code = 0;
         $this->content['total_income'] = $total_income;
