@@ -855,5 +855,93 @@ class CashierAction extends Controller
         $this->content['last_month_expect_income'] = $last_month_expect_income;
         return;
     }
+
+    public function my_order_list() {
+        $status = Filter::int(Req::args("status"));
+        $page = Filter::int(Req::args("page"));
+        if(!$page) {
+            $page = 1;
+        }
+        if(!$status) {
+            $status = 1;
+        }
+
+        $user = $this->model->table('user')->fields('adzoneid')->where('user_id='.$this->user['id'])->find();
+        $where = 'adv_id='.$user['adzoneid'];
+        switch ($status) {
+            case 1:
+                $where.=" and order_status in ('订单付款')";
+                break;
+            case 2:
+                $where.=" and order_status in ('订单结算')";
+                break;
+            case 3:
+                $where.=" and order_status in ('订单失效')";
+                break;    
+        }
+        $list = $this->model->table('taoke')->fields('id,order_sn,goods_name,order_amount,effect_prediction,create_time,order_status')->where($where)->findPage($page,10);
+        if($list) {
+            if(isset($list['data'] && $list['data']!=null)) {
+                unset($list['html']);
+            } else {
+                $list['data'] = [];
+            } 
+        } else {
+            $list['data'] = [];
+        }
+        $this->code = 0;
+        $this->content = $list['data'];
+        return;
+    }
+
+    public function income_withdraw_balance() {
+        $amount = Filter::float(Req::args("amount"));
+        $log = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1")->findAll();
+        $total_income = $log[0]['total']==null?0:$log1[0]['total'];
+        // if($amount<100) {
+        //     $this->code = 1181;
+        //     return;
+        // }
+        if($amount<=0) {
+            $this->code = 1238;
+            return;
+        }
+        if($amount>$total_income) {
+            $this->code = 1107;
+            return;
+        }
+        $user = $this->model->table('user')->fields('adzoneid')->where('user_id='.$this->user['id'])->find();
+        $benefit_data = array(
+            'user_id'=>$this->user['id'],
+            'order_id'=>'',
+            'amount'=>$amount,
+            'create_time'=>date('Y-m-d H:i:s'),
+            'month'=>date('Y-m'),
+            'type'=>3,
+            'adzoneid'=>$user['adzoneid']
+            );
+        $benefit_id = $this->model->table('benefit_log')->data($benefit_data)->insert();
+        $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where('user_id='.$this->user['id'])->update();
+        Log::balance($amount,$this->user['id'],$benefit_id,'结算佣金提现到余额',5);
+        $this->code = 0;
+        return;  
+    }
+
+    public function my_withdraw_log() {
+        $page = Filter::int(Req::args("page"));
+        if(!$page) {
+            $page = 1;
+        }
+        $log = $this->model->table('benefit_log')->fields('id,user_id,amount,create_time')->where('user_id='.$this->user['id'].' and type=3')->findPage($page,10);
+        if($log) {
+            if(isset($log['data']) && $log['data']!=null) {
+                unset($log['html']);
+            }
+        } else {
+            $log['data'] = [];
+        }
+        $this->code = 0;
+        $this->content = $log['data'];
+    }
 }
 ?>

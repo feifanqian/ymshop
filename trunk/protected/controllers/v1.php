@@ -265,6 +265,9 @@ class V1Controller extends Controller {
         "test2"=>array('test/test2',0,1),
         //收益
         "my_benefit_income"=>array("cashier/my_benefit_income",1,1), // 收益
+        "my_order_list"=>array("cashier/my_order_list",1,1), // 订单明细
+        "income_withdraw_balance"=>array("cashier/income_withdraw_balance",1,1), //结算佣金提现到余额
+        "my_withdraw_log"=>array("cashier/my_withdraw_log",1,1), //提现记录
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息
