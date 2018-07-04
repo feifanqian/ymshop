@@ -856,43 +856,43 @@ class CashierAction extends Controller
         return;
     }
 
-    public function my_order_list() {
-        $status = Filter::int(Req::args("status"));
-        $page = Filter::int(Req::args("page"));
-        if(!$page) {
-            $page = 1;
-        }
-        if(!$status) {
-            $status = 1;
-        }
+    // public function my_order_list() {
+    //     $status = Filter::int(Req::args("status"));
+    //     $page = Filter::int(Req::args("page"));
+    //     if(!$page) {
+    //         $page = 1;
+    //     }
+    //     if(!$status) {
+    //         $status = 1;
+    //     }
 
-        $user = $this->model->table('user')->fields('adzoneid')->where('user_id='.$this->user['id'])->find();
-        $where = 'adv_id='.$user['adzoneid'];
-        switch ($status) {
-            case 1:
-                $where.=" and order_status in ('订单付款')";
-                break;
-            case 2:
-                $where.=" and order_status in ('订单结算')";
-                break;
-            case 3:
-                $where.=" and order_status in ('订单失效')";
-                break;    
-        }
-        $list = $this->model->table('taoke')->fields('id,order_sn,goods_name,order_amount,effect_prediction,create_time,order_status')->where($where)->findPage($page,10);
-        if($list) {
-            if(isset($list['data'] && $list['data']!=null)) {
-                unset($list['html']);
-            } else {
-                $list['data'] = [];
-            } 
-        } else {
-            $list['data'] = [];
-        }
-        $this->code = 0;
-        $this->content = $list['data'];
-        return;
-    }
+    //     $user = $this->model->table('user')->fields('adzoneid')->where('user_id='.$this->user['id'])->find();
+    //     $where = 'adv_id='.$user['adzoneid'];
+    //     switch ($status) {
+    //         case 1:
+    //             $where.=" and order_status in ('订单付款')";
+    //             break;
+    //         case 2:
+    //             $where.=" and order_status in ('订单结算')";
+    //             break;
+    //         case 3:
+    //             $where.=" and order_status in ('订单失效')";
+    //             break;    
+    //     }
+    //     $list = $this->model->table('taoke')->fields('id,order_sn,goods_name,order_amount,effect_prediction,create_time,order_status')->where($where)->findPage($page,10);
+    //     if($list) {
+    //         if(isset($list['data'] && $list['data']!=null)) {
+    //             unset($list['html']);
+    //         } else {
+    //             $list['data'] = [];
+    //         } 
+    //     } else {
+    //         $list['data'] = [];
+    //     }
+    //     $this->code = 0;
+    //     $this->content = $list['data'];
+    //     return;
+    // }
 
     public function income_withdraw_balance() {
         $amount = Filter::float(Req::args("amount"));
