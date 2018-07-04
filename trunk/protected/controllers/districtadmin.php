@@ -1859,7 +1859,7 @@ class DistrictadminController extends Controller
 
         $bankcard = $model->table('bankcard')->where('user_id='.$shop_check['user_id'])->find();
         // $legal_cert_no = bin2hex($this->des_encrypt($customer['id_no'],'yuanmeng'));
-        $legal_cert_no = base64_encode($this->des_encrypt($customer['id_no'],'yuanmeng'));
+        $legal_cert_no = $this->des_encrypt($customer['id_no'],'yuanmeng');
         var_dump($legal_cert_no);
         $params = array();  
         
@@ -1929,10 +1929,16 @@ class DistrictadminController extends Controller
   //     return mcrypt_encrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
   //   }
 
-   public function des_encrypt($encrypt,$key="") {
-        $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
-        $passcrypt = mcrypt_encrypt ( MCRYPT_RIJNDAEL_256, $key, $encrypt, MCRYPT_MODE_ECB, $iv );
-        $encode = base64_encode ( $passcrypt );
-        return $encode;
+   // public function des_encrypt($encrypt,$key="") {
+   //      $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
+   //      $passcrypt = mcrypt_encrypt ( MCRYPT_RIJNDAEL_256, $key, $encrypt, MCRYPT_MODE_ECB, $iv );
+   //      $encode = base64_encode ( $passcrypt );
+   //      return $encode;
+   //  }
+    
+    public function des_encrypt($data, $key)
+    {
+        $encrypted = openssl_encrypt($data, 'DES-ECB', $key, 1);
+        return base64_encode($encrypted);
     } 
 }
