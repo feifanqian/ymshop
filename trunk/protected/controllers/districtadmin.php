@@ -1860,6 +1860,7 @@ class DistrictadminController extends Controller
         $bankcard = $model->table('bankcard')->where('user_id='.$shop_check['user_id'])->find();
         // $legal_cert_no = bin2hex($this->des_encrypt($customer['id_no'],'yuanmeng'));
         $legal_cert_no = $this->des_encrypt($customer['id_no'],'yuanmeng');
+        var_dump($legal_cert_no);
         $params = array();  
         
         $params['method'] = 'ysepay.merchant.register.accept';
