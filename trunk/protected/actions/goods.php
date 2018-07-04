@@ -914,7 +914,8 @@ class GoodsAction extends Controller {
                 if ($sort == 4) {
                     array_multisort(array_column($list['data'], 'sales_volume'), SORT_ASC, $resp['data']);
                 }
-            }
+            }    
+            
             unset($list['html']);
         }
         $this->code = 0;
