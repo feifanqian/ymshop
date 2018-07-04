@@ -388,6 +388,13 @@ class CashierAction extends Controller
                     $this->code = 1252;
                     return;
                 }
+                $had_used = $this->model->table('cashier_attendance')->where("desk_id = ".$desk['id']." and hire_user_id=".$cashier['hire_user_id']." and work_on_date='$today'")->order('id desc')->find();
+                if($had_used) {
+                    if($had_used['work_off_time']==null) {
+                        $this->code = 1261;
+                        return;
+                    }
+                }
                 $data = array(
                 'cashier_id'=>$cashier['id'],
                 'user_id'=>$this->user['id'],
