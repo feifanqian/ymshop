@@ -32,7 +32,7 @@
           <dd id="img-show" >
             {if:isset($travel_way['img']) && $travel_way['img']!=''}
              {set:$img = $travel_way['img'];}
-              <img height="100" src="{url:@$img}">
+              <img height="100" src="{$img}">
             {/if}
           </dd>
         </dl>
