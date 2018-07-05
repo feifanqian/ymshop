@@ -4,7 +4,7 @@
 
 <h1 class="page_title">编辑/添加旅游路线</h1>
 <form action="{url:/marketing/travel_way_save}" method="post" >
-{if:isset($id)}<input type="hidden" name="id" id="objId" value="{$travel_way['id']}">{/if}
+{if:isset($travel_way['id'])}<input type="hidden" name="id" id="objId" value="{$travel_way['id']}">{/if}
 <div id="obj_form" class="form2">
       <dl class="lineD">
         <dt><b class="red">*</b> 旅游路线名称：</dt>
