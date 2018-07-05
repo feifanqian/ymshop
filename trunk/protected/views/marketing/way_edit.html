@@ -90,7 +90,7 @@ $(".select_button").on("click",function(){
       return false;
     });
 function uploadFile(){
-  art.dialog.open('{url:/admin/photoshop?type=travel}',{id:'upimg_dialog',title:'选择图片',width:613,height:380});
+  art.dialog.open('{url:/admin/photoshop?type=goods}',{id:'upimg_dialog',title:'选择图片',width:613,height:380});
 }
 function setImg(value,needclose){
   var show_src = value.substr(0,4)!="http" ? ADMIN.upyuncfg.upyun_cdnurl + value : value;
