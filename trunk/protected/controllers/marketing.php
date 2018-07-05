@@ -1029,7 +1029,7 @@ class MarketingController extends Controller {
 
         if ($id) {
             $model = new Model("travel_way");
-            $travel_way = $model->fields('*')->where("d.id=" . $id)->find();
+            $travel_way = $model->fields('*')->where("id=" . $id)->find();
             $this->assign('travel_way',$travel_way);
         }
         
