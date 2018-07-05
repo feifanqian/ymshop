@@ -69,6 +69,8 @@
     form.setValue('account', '{$account}');
     autoValidate.showMsg({id: $("input[name='{$invalid['field']}']").get(0), error: true, msg: "{$invalid['msg']}"});
     $(".invalid-msg").show();
+    console.log("{$invalid['msg']}");
+    return false;
     {/if}
     //         $("input[pattern]").on("blur", function (event) {
     //     $(".invalid-msg , .valid-msg").hide();

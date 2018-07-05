@@ -1017,4 +1017,9 @@ class MarketingController extends Controller {
         }
         $this->redirect("discount_list");
     }
+
+    public function travel_way()
+    {
+        
+    }
 }
