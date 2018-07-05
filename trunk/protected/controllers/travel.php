@@ -36,8 +36,23 @@ class TravelController extends Controller
     public function all_way() {
         $page = Filter::int(Req::args('p'));
         $list = $this->model->table('travel_way')->where('status=1')->findPage($page,10);
-        
+
         $this->assign('list',$list);
+        $this->redirect();
+    }
+
+    public function way_detail() {
+        $id = Filter::int(Req::args("id"));
+        $info = $this->model->table('travel_way')->where('id='.$id)->find();
+        if($this->user['id']) {
+            $sign = $this->model->table('travel_sign')->where('user_id='.$this->user['id'].' and way_id='.$id)->find();
+            $sign_status = empty($sign)?0:1;
+        } else {
+            $sign_status = 0;
+        }
+        
+        $this->assign('info',$info);
+        $this->assign('sign_status',$sign_status);
         $this->redirect();
     }
 }    

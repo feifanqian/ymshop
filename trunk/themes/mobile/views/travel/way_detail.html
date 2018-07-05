@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="/static/yuanmeng/three-level/css/way_detail.css">
+    <style type="text/css">
+      .sign{
+        position: fixed;
+        width: 100%;
+        height: 60px;
+        opacity: 
+      }
+      .button{
+        width: 85%;
+        height: 50px;
+        margin-left: 7%;
+        border-radius: 6px;
+        background-color:#169bd5;
+        color:white;
+        line-height: 50px;
+        text-align: center; 
+      }
+    </style>
+    <title>路线详情</title>
+</head>
+<body>
+<div id="app">
+    <div class="main">
+        <span class="title">{$info['title']}</span>
+        <p class="detail">{$info['desc']}</p>
+        <p class="price">{$info['price']}</p>
+        <p class="time">{$info['date']}</p>
+        <p class="address">{$info['city']}</p>
+        <p class="num">{if:$sign_status==1}已报名{else:}未报名{/if}</p>
+        <div class="line"></div>
+    </div>
+    <h2 class="way_title">行程介绍</h2>
+    <div class="way_detail">
+        {$info['content']}
+        <!-- <h3>第一天 出发地-> 深圳</h3>
+        <div class="way_detail--a"><span>用餐: 不含</span> <span>住宿: 深圳星级标准酒店</span></div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate dignissimos maxime mollitia nobis
+            pariatur. Autem et ipsam nemo nostrum suscipit, vel voluptates? Maiores odio qui reiciendis. Corporis ipsa
+            laborum nulla!</p>
+        <img src="./img/st.jpg" alt=""> -->
+    </div>
+    <!--自由活动-->
+    <div class="active">
+
+    </div>
+    <div class="sign">
+      <div class="button">立即报名</div>
+    </div>
+</div>
+</body>
+</html>
