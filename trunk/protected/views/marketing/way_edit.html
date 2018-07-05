@@ -1,7 +1,7 @@
 {echo:JS::import('form');}
 {echo:JS::import('date');}
 {echo:JS::import('editor');}
-
+{echo:JS::import('dialog?skin=brief');}
 <h1 class="page_title">编辑/添加旅游路线</h1>
 <form action="{url:/marketing/travel_way_save}" method="post" >
 {if:isset($travel_way['id'])}<input type="hidden" name="id" id="objId" value="{$travel_way['id']}">{/if}
