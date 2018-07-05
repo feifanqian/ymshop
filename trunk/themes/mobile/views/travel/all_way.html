@@ -15,12 +15,12 @@
     {if:count($list['data'])>0}
         {list:items=$list['data']}
         <div class="cell">
-            <img src="{item['img']}" alt="" class="cell-bg">
+            <img src="{$item['img']}" alt="" class="cell-bg">
             <div class="detail">
-                <h2>{item['name']}</h2>
-                <span class="time">{item['date']}</span>
-                <span class="address">{item['city']}</span>
-                <span class="price">{item['price']}</span>
+                <h2>{$item['name']}</h2>
+                <span class="time">{$item['date']}</span>
+                <span class="address">{$item['city']}</span>
+                <span class="price">{$item['price']}</span>
             </div>
         </div>
         {/list}
