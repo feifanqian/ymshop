@@ -36,7 +36,7 @@ class TravelController extends Controller
     public function all_way() {
         $page = Filter::int(Req::args('p'));
         $list = $this->model->table('travel_way')->where('status=1')->findPage($page,10);
-        var_dump($list);die;
+        
         $this->assign('list',$list);
         $this->redirect();
     }
