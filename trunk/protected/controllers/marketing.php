@@ -1020,6 +1020,6 @@ class MarketingController extends Controller {
 
     public function travel_way()
     {
-        
+        $this->redirect();
     }
 }
