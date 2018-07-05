@@ -987,4 +987,25 @@ class GoodsAction extends Controller {
         $this->content['goods_id'] = $goods_id;
         return;
     }
+
+    public function tbk_get_height_url() {
+        $item_id = Filter::str(Req::args('item_id'));
+        $taoke = $this->model->table('taoke_pid')->fields('adzoneid,memberid,siteid')->where('user_id='.$this->user['id'])->find();
+        if(!$taoke) {
+            $this->code = 1271;
+            return;
+        }
+        $access_token = "70002100d344971b38bb4ec170446b28016e769809dfb91a3aaa725e2c567fed261d6f381773797";
+        $main_hightapi_url = 'http://193.112.121.99/xiaocao/hightapi.action';
+        $bak_hightapi_url = 'http://119.29.94.164/xiaocao/hightapi.action';
+  
+        $params = ['token' => $access_token, 'item_id' => $item_id, 'adzone_id' => $taoke['adzoneid'], 'site_id' => $taoke['siteid'], 'qq' => '2116177952'];
+
+        $req_url = $main_hightapi_url . "?" . http_build_query($params);
+
+        $return = json_decode(file_get_contents($req_url), true);
+        $this->code = 0;
+        $this->content = $return;
+        return;
+    }
 }

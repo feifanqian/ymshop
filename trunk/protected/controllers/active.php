@@ -185,6 +185,10 @@ class ActiveController extends Controller
 
     public function sign_up() {
         $user_id = $this->user['id'];
+        $inviter = Filter::int(Req::args("inviter"));
+        if(!$inviter) {
+            $inviter = 0;
+        }
         if($user_id) {
             $customer = $this->model->table("customer as cu")->fields("cu.*,u.avatar")->join("left join user as u on cu.user_id = u.id")->where("cu.user_id = $user_id")->find();
             $this->assign("user", $customer);
@@ -193,7 +197,7 @@ class ActiveController extends Controller
         } else {
             $signed = 0;
         } 
-        
+        $this->assign("inviter", $inviter);
         $this->assign("signed", $signed);
         $this->redirect();
     }
