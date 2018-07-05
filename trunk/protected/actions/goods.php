@@ -991,6 +991,7 @@ class GoodsAction extends Controller {
     public function tbk_get_height_url() {
         $item_id = Filter::str(Req::args('item_id'));
         $taoke = $this->model->table('taoke_pid')->fields('adzoneid,memberid,siteid')->where('user_id='.$this->user['id'])->find();
+        var_dump($taoke);
         if(!$taoke) {
             $this->code = 1271;
             return;
