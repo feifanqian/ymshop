@@ -6,6 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
     <link rel="stylesheet" href="http://www.ymlypt.com/static/yuanmeng1/activity_a/css/login.css">
+    <style type="text/css">
+    .main .mobile_phone .invalid-msg{
+        position: absolute;
+        top: 120px;
+    }
+    </style>
     <title>登录</title>
 </head>
 <body>
@@ -17,7 +23,7 @@
             <div class="cell">
                 <label style="margin-left: 3%;">账号</label>
                 <div class="line"></div>
-                <div class="input_content">
+                <div class="input_content mobile_phone" style="position: relative;">
                     <input type="tel" name="account" id="account" pattern="required" placeholder="请输入手机号" maxlength="11" required>
                     <!-- <label class="valid-msg" style="display: block;"></label> -->
                 </div>
@@ -25,7 +31,7 @@
             <div class="cell">
                 <label style="margin-left: 3%;">密码</label>
                 <div class="line"></div>
-                <div class="input_content">
+                <div class="input_content pwd">
                     <input type="password" id="password" name="password" pattern="required" placeholder="请输入密码" maxlength="20" required>
                     <!-- <label class="valid-msg" style="display: block;"></label> -->
                 </div>
