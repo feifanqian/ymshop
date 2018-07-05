@@ -651,8 +651,9 @@ class GoodsAction extends Controller {
 
                 $redis->set($key, json_encode($save_data), 600);
             } else {
+                $resp['results']['tbk_coupon'] = [];
                 $this->code = 0;
-                $this->content = [];
+                $this->content = $resp;
                 return;
             }
         } else {
@@ -682,8 +683,9 @@ class GoodsAction extends Controller {
                     $save_data = array_merge($cache_data, $new_data);
                     $redis->set($key, json_encode($save_data), 600);
                 } else {
+                    $resp['results']['tbk_coupon'] = [];
                     $this->code = 0;
-                    $this->content = [];
+                    $this->content = $resp;
                     return;
                 }
 
