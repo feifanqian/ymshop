@@ -1022,4 +1022,22 @@ class MarketingController extends Controller {
     {
         $this->redirect();
     }
+
+    public function way_edit()
+    {
+        $this->redirect();
+    }
+
+    public function travel_way_save() {
+        $id = Req::args("id");
+        $model = new Model('travel_way');
+        if ($id) {
+            $model->where("id=$id")->update();
+            Log::op($this->manager['id'], "修改旅游路线", "管理员[" . $this->manager['name'] . "]:修改了旅游路线 " . Req::args('name'));
+        } else {
+            $model->where("id=$id")->insert();
+            Log::op($this->manager['id'], "添加旅游路线", "管理员[" . $this->manager['name'] . "]:添加了旅游路线 " . Req::args('name'));
+        }
+        $this->redirect("travel_way");
+    }
 }

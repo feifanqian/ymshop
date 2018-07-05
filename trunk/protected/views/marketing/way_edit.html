@@ -1,0 +1,105 @@
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+{echo:JS::import('editor');}
+
+<h1 class="page_title">编辑/添加旅游路线</h1>
+<form action="{url:/marketing/travel_way_save}" method="post" >
+{if:isset($id)}<input type="hidden" name="id" id="objId" value="{$id}">{/if}
+<div id="obj_form" class="form2">
+      <dl class="lineD">
+        <dt><b class="red">*</b> 旅游路线名称：</dt>
+        <dd>
+          <input name="name" type="text" pattern="required" value="{$name}" class="big"/>
+          <label> </label>
+        </dd>
+        </dl>
+        <dl class="lineD">
+        <dt><b class="red">*</b>标题：</dt>
+        <dd>
+          <input name="title" type="text" pattern="required" value="{$title}" class="big"/>
+          <label> </label>
+        </dd>
+        </dl>
+        <dl class="lineD">
+          <dt><b class="red">*</b>图片：</dt>
+          <dd>
+            {set:$path = Tiny::getPath('uploads_url');}
+            <input name="img" type="hidden" id="img" value="{$img}" /><label></label><button class="button select_button">选择图片</button>
+          </dd>
+        </dl>
+        <dl >
+          <dt></dt>
+          <dd id="img-show" >
+            {if:isset($img) && $img!=''}
+              <img height="100" src="{url:@$img}">
+            {/if}
+          </dd>
+        </dl>
+        <dl class="lineD">
+        <dt><b class="red">*</b>介绍：</dt>
+        <dd>
+          <textarea style="width:700px;height:240px;" name="desc" pattern="required">{$desc}</textarea>
+          <input name="desc" type="text" pattern="required" value="" class="big"/>
+          <label> </label>
+        </dd>
+        </dl>
+        <dl class="lineD">
+        <dt><b class="red">*</b> 价钱：</dt>
+        <dd>
+          <input name="price" type="text" class="small" pattern="float" value="{$price}" />
+          <label> 元</label>
+        </dd>
+        </dl>
+        <dl class="lineD">
+        <dt><b class="red">*</b> 时间：</dt>
+        <dd>
+          <input name="date" type="text" class="small" pattern="float" value="{$date}" />
+          <label> </label>
+        </dd>
+        </dl>
+        
+        <dl class="lineD">
+        <dt><b class="red">*</b>内容描述：</dt>
+        <dd>
+            <textarea id="contentdetail" class="kindeditor" pattern="required" name="content" style="width:700px;height:360px;visibility:hidden;">{$content}</textarea>
+          <label></label>
+        </dd>
+        </dl>
+      </div>
+      <!--活动描述 end-->
+      <div style="text-align:center"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
+</form>
+<script type="text/javascript">
+// var form = new Form();
+// form.setValue('type', {$type|0});
+// FireEvent(document.getElementById('prom_type'),'change');
+// form.setValue('expression', '{$expression}');
+// form.setValue('group[]', '{$group}');
+
+$(".select_button").on("click",function(){
+      uploadFile();
+      return false;
+    });
+function uploadFile(){
+  art.dialog.open('{url:/admin/photoshop?type=travel}',{id:'upimg_dialog',title:'选择图片',width:613,height:380});
+}
+function setImg(value,needclose){
+  var show_src = value.substr(0,4)!="http" ? ADMIN.upyuncfg.upyun_cdnurl + value : value;
+  $("#img").val(value);
+  $("#img-show").html("<img height='100' src='"+show_src+"'>");
+      needclose = needclose==undefined ? 1 : needclose;
+      if(needclose){
+        art.dialog({id:'upimg_dialog'}).close();
+      }
+}
+function check_invalid(e){
+  if(e==null){
+    return true;
+  }
+  else{
+    var index = $('.tab-body > *').has(e).index();
+    tabs_select(0,index);
+    return false;
+  }  
+}
+</script> 
