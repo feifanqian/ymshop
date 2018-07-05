@@ -28,7 +28,12 @@ class TravelController extends Controller
         $this->assign("cart", $this->cart);
 
     }
+
     public function travel() {
+        $this->redirect();
+    }
+
+    public function all_way() {
         $this->redirect();
     }
 }    
