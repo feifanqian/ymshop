@@ -991,12 +991,12 @@ class GoodsAction extends Controller {
     public function tbk_get_height_url() {
         $item_id = Filter::str(Req::args('item_id'));
         $taoke = $this->model->table('taoke_pid')->fields('adzoneid,memberid,siteid')->where('user_id='.$this->user['id'])->find();
-        var_dump($taoke);
+        
         if(!$taoke) {
             $this->code = 1271;
             return;
         }
-        $access_token = "70002100d344971b38bb4ec170446b28016e769809dfb91a3aaa725e2c567fed261d6f381773797";
+        $access_token = "7000210123803564aae498a99fb58350b65cecb4325cfb9cab198d7fa567716587b0c903870059548";
         $main_hightapi_url = 'http://193.112.121.99/xiaocao/hightapi.action';
         $bak_hightapi_url = 'http://119.29.94.164/xiaocao/hightapi.action';
   
