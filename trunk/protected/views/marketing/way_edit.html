@@ -4,19 +4,19 @@
 
 <h1 class="page_title">编辑/添加旅游路线</h1>
 <form action="{url:/marketing/travel_way_save}" method="post" >
-{if:isset($id)}<input type="hidden" name="id" id="objId" value="{$id}">{/if}
+{if:isset($id)}<input type="hidden" name="id" id="objId" value="{$travel_way['id']}">{/if}
 <div id="obj_form" class="form2">
       <dl class="lineD">
         <dt><b class="red">*</b> 旅游路线名称：</dt>
         <dd>
-          <input name="name" type="text" pattern="required" value="{$name}" class="big"/>
+          <input name="name" type="text" pattern="required" value="{$travel_way['name']}" class="big"/>
           <label> </label>
         </dd>
         </dl>
         <dl class="lineD">
         <dt><b class="red">*</b>标题：</dt>
         <dd>
-          <input name="title" type="text" pattern="required" value="{$title}" class="big"/>
+          <input name="title" type="text" pattern="required" value="{$travel_way['title']}" class="big"/>
           <label> </label>
         </dd>
         </dl>
@@ -24,35 +24,35 @@
           <dt><b class="red">*</b>图片：</dt>
           <dd>
             {set:$path = Tiny::getPath('uploads_url');}
-            <input name="img" type="hidden" id="img" value="{$img}" /><label></label><button class="button select_button">选择图片</button>
+            <input name="img" type="hidden" id="img" value="{$travel_way['img']}" /><label></label><button class="button select_button">选择图片</button>
           </dd>
         </dl>
         <dl >
           <dt></dt>
           <dd id="img-show" >
-            {if:isset($img) && $img!=''}
-              <img height="100" src="{url:@$img}">
+            {if:isset($travel_way['img']) && $travel_way['img']!=''}
+              <img height="100" src="{url:@$travel_way['img']}">
             {/if}
           </dd>
         </dl>
         <dl class="lineD">
         <dt><b class="red">*</b>介绍：</dt>
         <dd>
-          <textarea style="width:700px;height:240px;" name="desc" pattern="required">{$desc}</textarea>
+          <textarea style="width:700px;height:240px;" name="desc" pattern="required">{$travel_way['desc']}</textarea>
           <label> </label>
         </dd>
         </dl>
         <dl class="lineD">
         <dt><b class="red">*</b> 价钱：</dt>
         <dd>
-          <input name="price" type="text" class="small" pattern="float" value="{$price}" />
+          <input name="price" type="text" class="small" pattern="float" value="{$travel_way['price']}" />
           <label> 元</label>
         </dd>
         </dl>
         <dl class="lineD">
         <dt><b class="red">*</b> 时间：</dt>
         <dd>
-          <input name="date" type="text" class="small" pattern="float" value="{$date}" />
+          <input name="date" type="text" class="small" pattern="float" value="{$travel_way['date']}" />
           <label> </label>
         </dd>
         </dl>
@@ -60,7 +60,7 @@
         <dl class="lineD">
         <dt><b class="red">*</b>内容描述：</dt>
         <dd>
-            <textarea id="contentdetail" class="kindeditor" pattern="required" name="content" style="width:700px;height:360px;visibility:hidden;">{$content}</textarea>
+            <textarea id="contentdetail" class="kindeditor" pattern="required" name="content" style="width:700px;height:360px;visibility:hidden;">{$travel_way['content']}</textarea>
           <label></label>
         </dd>
         </dl>
