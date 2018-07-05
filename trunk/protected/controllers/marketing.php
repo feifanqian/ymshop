@@ -1028,10 +1028,11 @@ class MarketingController extends Controller {
         $id = Req::args("id");
 
         if ($id) {
-            $model = new Model("travel_way as d");
-            $travel_way = $model->join("customer as c on c.user_id = d.user_id")->fields('d.*,c.real_name')->where("d.id=" . $id)->find();
+            $model = new Model("travel_way");
+            $travel_way = $model->fields('*')->where("d.id=" . $id)->find();
+            $this->assign('travel_way',$travel_way);
         }
-        $this->assign('travel_way',$travel_way);
+        
         $this->redirect();
     }
 
