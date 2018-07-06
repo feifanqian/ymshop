@@ -144,9 +144,11 @@ class ActiveController extends Controller
         $obj = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile,cu.real_name")->where("cu.mobile='$account' and cu.status=1")->find();
         if ($obj) {
             if ($obj['status'] == 1) {
+                $token = CHash::random(32, 'char');
                 if ($obj['password'] == CHash::md5($passWord, $obj['validcode'])) {
                     $cookie = new Cookie();
                     $cookie->setSafeCode(Tiny::app()->getSafeCode());
+                    $obj['token'] = $token;
                     if ($autologin == 1) {
                         $this->safebox->set('user', $obj, $this->cookie_time);
                         $cookie->set('autologin', array('account' => $account, 'password' => $obj['password']), $this->cookie_time);
@@ -155,7 +157,7 @@ class ActiveController extends Controller
                         $this->safebox->set('user', $obj, 1800);
                     }
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
-                    $token = CHash::random(32, 'char');
+
                     $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $obj['id'])->update();
                     if($inviter) {
                         Common::buildInviteShip($inviter, $obj['id'], 'active');    
@@ -168,7 +170,7 @@ class ActiveController extends Controller
                         $this->redirect("/travel/fill_info");
                     } else {
                         $url = Cookie::get('url');
-                        $url = $url!=NULL?$url:'/ucenter/index';
+                        $url = $url!=NULL?$url:'/active/recruit';
                         if(strpos($url, '/')!==0){
                             $url = "/".$url;
                         }
