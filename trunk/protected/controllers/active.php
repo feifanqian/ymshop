@@ -470,7 +470,7 @@ class ActiveController extends Controller
         } else {
             $status = 'error';
         }
-        echo JSON::encode(array('status' => $status));
+        echo JSON::encode(array('status' => $status,'token'=>$token,'tokens'=>$user['token']));
     }
 }
 ?>

@@ -281,6 +281,9 @@
              if(data.status!='success') {
                 alert('登录超时或已在其它地方登录');
              }
+             console.log(data.token);
+             console.log(data.tokens);
+             return false;
              var login_url = "{url:/active/login}";
              window.location.href = login_url;
           },
