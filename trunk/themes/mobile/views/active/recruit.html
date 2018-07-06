@@ -277,7 +277,8 @@
           data : data,
           // timeout:1000,
           success:function(data){
-             console.log('check');
+             console.log(data);
+             return false;
              if(data.status!='success') {
                 alert('登录超时或已在其它地方登录');
              }
