@@ -47,7 +47,7 @@
     </form>
 </div>
 </body>
-<script src="js/main.js"></script>
+<!-- <script src="js/main.js"></script> -->
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script>
     $(function ($) {
@@ -74,7 +74,6 @@
     autoValidate.showMsg({id: $("input[name='{$invalid['field']}']").get(0), error: true, msg: "{$invalid['msg']}"});
     $(".invalid-msg").show();
     console.log("{$invalid['msg']}");
-    return false;
     {/if}
     //         $("input[pattern]").on("blur", function (event) {
     //     $(".invalid-msg , .valid-msg").hide();
