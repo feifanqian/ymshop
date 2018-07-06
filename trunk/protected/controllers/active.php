@@ -155,6 +155,8 @@ class ActiveController extends Controller
                         $this->safebox->set('user', $obj, 1800);
                     }
                     $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['id'])->update();
+                    $token = CHash::random(32, 'char');
+                    $this->model->table("user")->data(array('token' => $token, 'expire_time' => date('Y-m-d H:i:s', strtotime('+1 day'))))->where('id=' . $obj['id'])->update();
                     if($inviter) {
                         Common::buildInviteShip($inviter, $obj['id'], 'active');    
                     } 
