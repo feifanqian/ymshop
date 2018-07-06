@@ -124,11 +124,10 @@ function upyun_upload(type,file) {
           request.send(data);
       request.onload = function(e) {
         var res = JSON.parse(request.response)
-        console.log(res);
       };
           
       var path = "https://ymlypt.b0.upaiyun.com"+save_as;
-          // console.log(path);
+          
       if(type==1){
         $("input[name='idcard_url']").val(path);
       } else if(type==2){
