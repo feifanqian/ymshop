@@ -33,9 +33,9 @@ class ActiveController extends Controller
         $user_id = $this->user['id'];
         if($user_id) {
             $this->assign("token", $this->user['token']);
-            if($user_id==42608){
-                var_dump($this->user);die;
-            }
+            // if($user_id==42608){
+            //     var_dump($this->user);die;
+            // }
             $customer = $this->model->table("customer as cu")->fields("cu.*,u.avatar")->join("left join user as u on cu.user_id = u.id")->where("cu.user_id = $user_id")->find();
             $this->assign("user", $customer);
             $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where("i.from='active' and i.user_id=".$user_id)->limit(4)->findAll();
