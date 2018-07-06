@@ -69,7 +69,7 @@ class TravelController extends Controller
                 'expiration' => time() + $upyun['upyun_expiration'],
                 // 'notify-url' => $upyun['upyun_notify-url'],
                 // 'ext-param' => "",
-                'save-key' => "/data/uploads/head/" . $this->user['id'] . ".jpg",
+                // 'save-key' => "/data/uploads/head/" . $this->user['id'] . ".jpg",
             );
             $policy = base64_encode(json_encode($options));
             $signature = md5($policy . '&' . $upyun['upyun_formkey']);

@@ -104,10 +104,12 @@ function upyun_upload(type,file) {
           data.append('file', file);
       var request = new XMLHttpRequest();
           request.open('POST', config.api + options.bucket);
-      request.onload = function(e) {
-          console.log(request.response);
-      };
           request.send(data);
+      request.onload = function(e) {
+        var res = JSON.parse(request.response)
+        console.log(res);
+      };
+          
       var path = "https://ymlypt.b0.upaiyun.com"+save_as;
           // console.log(path);
       if(type==1){
