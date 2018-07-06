@@ -264,6 +264,38 @@
                 }
         });
     });
+
+    function check_token(){
+         var url = "{url:/active/auto_check_token}";
+         var token = "{$token}";
+         var user_id = {$user['user_id']};
+         var data = {user_id:user_id,token:token};
+         $.ajax({
+          type : "POST",
+          // async : false, //同步请求
+          url : url,
+          data : data,
+          // timeout:1000,
+          success:function(data){
+             console.log('check');
+             if(data.status!='success') {
+                alert('登录超时或已在其它地方登录');
+             }
+             var login_url = "{url:/active/login}";
+             window.location.href = login_url;
+          },
+          error: function() {
+                // alert("失败，请稍后再试！");
+              }
+         });
+    }
+    function auto_load_check(){
+        setInterval("check_token()",6000);
+    }
+    
+    window.onload = function () {
+        auto_load_check();
+    }
 </script>
 <!-- <script>
 var form = {$type};

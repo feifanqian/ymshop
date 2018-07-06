@@ -32,6 +32,7 @@ class ActiveController extends Controller
     public function recruit() {
         $user_id = $this->user['id'];
         if($user_id) {
+            $this->assign("token", $this->user['token']);
             if($user_id==42608){
                 var_dump($this->user);die;
             }
@@ -458,6 +459,18 @@ class ActiveController extends Controller
         $this->model->table('goods')->data(array('store_nums' => "`store_nums`-" . $gift_num))->where('id=' . $product['goods_id'])->update();
 
         $this->redirect("/ucenter/order/status/undelivery");
+    }
+
+    public function auto_check_token() {
+        $user_id = Filter::int(Req::args("user_id"));
+        $token = Filter::str(Req::args("token"));
+        $user = $this->model->table('user')->fields('token')->where('id='.$user_id)->find();
+        if($user['token']==$token) {
+            $status = 'success';
+        } else {
+            $status = 'error';
+        }
+        echo JSON::encode(array('status' => $status));
     }
 }
 ?>
