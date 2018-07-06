@@ -278,7 +278,6 @@
           // timeout:1000,
           success:function(res){
              var data = JSON.parse(res);
-             console.log(data.status);
              if(data.status!='success') {
                 alert('登录超时或已在其它地方登录');
                 var login_url = "{url:/active/login}";
