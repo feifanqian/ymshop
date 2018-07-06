@@ -55,4 +55,13 @@ class TravelController extends Controller
         $this->assign('sign_status',$sign_status);
         $this->redirect();
     }
+
+    public function fill_info()
+    {
+        if($this->user['id']) {
+            $this->redirect();
+        } else {
+            $this->redirect('/active/login/redirect/fill_info');
+        }
+    } 
 }    

@@ -159,6 +159,8 @@ class ActiveController extends Controller
                         $this->redirect("/active/recruit");
                     } elseif ($redirectURL=='sign_up'){
                         $this->redirect("/active/recruit");
+                    } elseif ($redirectURL=='fill_info'){
+                        $this->redirect("/travel/fill_info");
                     } else {
                         $url = Cookie::get('url');
                         $url = $url!=NULL?$url:'/ucenter/index';
