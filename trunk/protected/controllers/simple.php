@@ -163,9 +163,11 @@ class SimpleController extends Controller {
         $this->assign("invalid", $info);
         $this->redirect("reg", false, Req::args());
     }
-    public function reg(){
-        $back = Filter::str(Req::args("back"));
-        $inviter = Filter::int(Req::args("inviter"));
+    public function register(){
+        // $back = Filter::str(Req::args("back"));
+        // $inviter = Filter::int(Req::args("inviter"));
+        $back = $_GET['back'];
+        $inviter = $_GET['inviter'];
         $this->assign("back", $back);
         $this->assign("inviter", $inviter);
         $this->redirect("register");
