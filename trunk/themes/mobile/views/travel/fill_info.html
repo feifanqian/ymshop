@@ -105,7 +105,7 @@ function upyun_upload(type,file) {
       var request = new XMLHttpRequest();
           request.open('POST', config.api + options.bucket);
       request.onload = function(e) {
-              // console.log(request.response);
+          console.log(request.response);
       };
           request.send(data);
       var path = "https://ymlypt.b0.upaiyun.com"+save_as;
