@@ -181,7 +181,7 @@ class SimpleController extends Controller {
             $inviter_id = Filter::int(Req::args("inviter"));
             $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
             $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
-            if($checkFlag){
+            if($checkFlag || $back=='active'){
                     SMS::getInstance()->flushCode($mobile);
                     if($realname==""){
                         $info = array('field' => 'realname', 'msg' => ' 姓名不得为空！');

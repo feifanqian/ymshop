@@ -12,13 +12,12 @@
     <title></title>
 <body>
 <div id="app">
-    <form action="" class="form">
-        <input type="hidden" name="front_card_url" value="">
-        <input type="hidden" name="back_card_url" value="">
+    <form action="{url:/travel/travel_sign_save}" class="form">
+        <input type="hidden" name="idcard_url" value="">
         <div class="input_cell">
             <label class="input_cell--label" for="">请选择路线:</label>
             <div class="input_cell--content" style="border: 1px solid #555;">
-                <select title="way" name="way">
+                <select title="way" name="way" id="way">
                     {list:items=$way}
                     <option value="{$item['id']}">{$item['name']}</option>
                     {/list}
@@ -53,25 +52,25 @@
             </div>
         </div>
         <p class="tips">备注:请上传清晰图片身份证及其其他证件照片.(境外游需要上传港澳通信证及护照)</p>
-        <img class="idfy" id="positive_preview" src="/static/yuanmeng/three-level/img/id_2.png" alt="">
-        <img class="idfy" id="native_preview" src="/static/yuanmeng/three-level/img/id_1.png" alt="">
+        <div class="preview">
+            <img class="idfy" id="positive_preview" src="/static/yuanmeng/three-level/img/id_2.png" alt="">
+            <img class="idfy" id="native_preview" src="/static/yuanmeng/three-level/img/id_1.png" alt="">
+        </div>
         <p class="tips2">温馨提示: 如有消息错误请联系客服进行修改<br>客服电话: 400-8715-988</p>
-        <button type="submit">前往支付</button>
+        <button type="submit" id="submit_do">前往支付</button>
     </form>
 
 </div>
 <script type="text/javascript">
+$('#submit_do').on('click',function(){
+   if(!$("#way option:selected").val()) {
+
+   }
+});
+var type = 0;
 $("input[name='upload_idcard']").change(function(){
    var file = $(this).get(0).files[0];
-   var type;
-   var src = $("#positive_preview")[0].src;
-   if(src=='/static/yuanmeng/three-level/img/id_2.png') {
-    type = 'positive_idcard';
-   } else if(src=='/static/yuanmeng/three-level/img/id_2.png') {
-    type = 'native_idcard';
-   } else {
-    type = 'positive_idcard';
-   }
+   type = type+1; 
    upyun_upload(type,file);
 });
 function upyun_upload(type,file) {
@@ -90,7 +89,7 @@ function upyun_upload(type,file) {
       // 计算 policy 和 signature 所需的参数
       // 详情见： http://docs.upyun.com/api/form_api/#表单API接口简介
       var time = new Date().getTime();
-      var save_as = "/data/uploads/shop_check/"+type+"/" +time+ ".jpg";
+      var save_as = "/data/uploads/shop_check/positive_idcard/" +time+ ".jpg";
       var options = {
           bucket: config.bucket,
           expiration: Math.floor(new Date().getTime() / 1000) + 86400,
@@ -111,12 +110,17 @@ function upyun_upload(type,file) {
           request.send(data);
       var path = "https://ymlypt.b0.upaiyun.com"+save_as;
           // console.log(path);
-      if(type=='positive_idcard'){
+      if(type==1){
         $("#positive_preview").attr('src',path);
-        $("input[name='front_card_url']").val(path);
-      } else {
+        $("input[name='idcard_url']").val(path);
+      } else if(type==2){
         $("#native_preview").attr('src',path);
-        $("input[name='back_card_url']").val(path);
+        var idcard_url = $("input[name='idcard_url']").val();
+        $("input[name='idcard_url']").val(idcard_url+','+path);
+      } else {
+        $('.preview').append('<img class="idfy" src="'+path+'" alt="">');
+        var idcard_url = $("input[name='idcard_url']").val();
+        $("input[name='idcard_url']").val(idcard_url+','+path);
       }
       
       return true;
