@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=640, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
-    <link rel="stylesheet" href="http://www.ymlypt.com/static/yuanmeng1/activity_a/css/login.css">
+    <link rel="stylesheet" href="http://www.ymlypt.com/static/yuanmeng1/activity_a/css/find_pwd.css">
     <style type="text/css">
     .main .mobile_phone .invalid-msg{
         position: absolute;
@@ -28,20 +28,20 @@
 </head>
 <body>
 <div id="app">
-    <form class="main" id="loginsubmit" action="{url:/active/find_password}" method="post">
+    <form class="main" id="loginsubmit" action="{url:/active/find_password}" method="post" style="width: 560px;">
         <div class="main-content">
-            <div class="cell" >找回密码</div>
+            <div class="cell" style="margin-left: 3%;color: #f06834;margin-bottom:1px;">找回密码</div>
             <div class="cell">
-                <label style="margin-left: 3%;">验证身份</label>
-                <div class="line"></div>
+                <label style="margin-left: 3%;color: #f06834;">验证身份</label>
+                
                 <div class="input_content mobile_phone" style="position: relative;">
                     <input type="tel" name="mobile" id="mobile" pattern="required" placeholder="请输入注册手机号" maxlength="11" required>
                     <!-- <label class="valid-msg" style="display: block;"></label> -->
                 </div>
             </div>
             <div class="cell">
-                <label style="margin-left: 3%;">验证码</label>
-                <div class="line"></div>
+                <label style="margin-left: 3%;color: #f06834;">验证码</label>
+                
                 <div class="input_content pwd">
                     <input type="text" id="code" name="code" pattern="required" placeholder="请输入收到的短信验证码" maxlength="6" required>
                     <!-- <label class="valid-msg" style="display: block;"></label> -->
@@ -49,18 +49,18 @@
             </div>
             <input type="button" class="send_code" value="发送验证码">
         </div>
-        <div class="main-content">
+        <div class="main-content" style="margin: 80px;">
             <div class="cell">
-                <label style="margin-left: 3%;">重置密码</label>
-                <div class="line"></div>
+                <label style="margin-left: 3%;color: #f06834;">重置密码</label>
+                
                 <div class="input_content mobile_phone" style="position: relative;">
                     <input type="password" name="password" id="password" pattern="required" placeholder="请输入新密码" maxlength="16" required>
                     <!-- <label class="valid-msg" style="display: block;"></label> -->
                 </div>
             </div>
             <div class="cell">
-                <label style="margin-left: 3%;">再次输入</label>
-                <div class="line"></div>
+                <label style="margin-left: 3%;color: #f06834;">再次输入</label>
+                
                 <div class="input_content pwd">
                     <input type="password" id="repassword" name="repassword" pattern="required" placeholder="请确认您的密码" maxlength="16" required>
                     <!-- <label class="valid-msg" style="display: block;"></label> -->
