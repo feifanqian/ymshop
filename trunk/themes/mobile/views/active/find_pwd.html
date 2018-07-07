@@ -15,13 +15,16 @@
         display: none!important;
     }
     .send_code{
-        width: 100px;
+        width: 110px;
         height: 40px;
         text-align: center;
         line-height: 40px;
         border-color: #feec34;
         color: #f06834;
         float: right;
+    }
+    input:: -webkit-input-placeholder{
+        color: #fce1d6;
     }
     </style>
     <title>找回密码</title>
@@ -47,7 +50,7 @@
                     <!-- <label class="valid-msg" style="display: block;"></label> -->
                 </div>
             </div>
-            <input type="button" class="send_code" value="发送验证码">
+            <div class="cell"><input type="button" class="send_code" value="发送验证码"></div>
         
             <div class="cell" style="margin-top: 80px;">
                 <label style="margin-left: 3%;color: #f06834;">重置密码</label>
@@ -65,7 +68,7 @@
                     <!-- <label class="valid-msg" style="display: block;"></label> -->
                 </div>
             </div>
-            <button class="weui_btn weui_btn_primary" id="submit">确认提交</button>
+            <button class="weui_btn weui_btn_primary" id="submit" style="margin-left: 25%;">确认提交</button>
         </div>
         
     </form>
