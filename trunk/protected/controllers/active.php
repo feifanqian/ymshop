@@ -496,7 +496,7 @@ class ActiveController extends Controller
                $info = array('field' => 'mobile', 'msg' => '手机号错误！');
             } else {
                 $validcode = CHash::random(8);
-                $this->model->table('user')->data(array('password' => CHash::md5($pass, $validcode), 'validcode' => $validcode))->where('id=' . $customer['user_id'])->update();
+                $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $customer['user_id'])->update();
                 $info = array('field' => '', 'msg' => 'success');
             }  
             // $this->redirect('/active/login');
