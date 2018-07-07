@@ -110,7 +110,10 @@ class TravelController extends Controller
     {
         if($this->user['id']) {
             $page = Filter::int(Req::args('p'));
-            $list = $this->model->table('travel_order as to')->fields('to.id,to.order_no,tw.name,tw.city,tw.desc,tw.order_amount')->join('left join travel_way as tw on to.way_id=tw.id')->where('to.user_id='.$this->user['id'])->findPage($page,10);
+            if(!$page) {
+                $page = 1;
+            }
+            $list = $this->model->table('travel_order as to')->fields('to.id,to.order_no,tw.name,tw.city,tw.desc,tw.order_amount,tw.img')->join('left join travel_way as tw on to.way_id=tw.id')->where('to.user_id='.$this->user['id'])->findPage($page,10);
             $this->assign('list',$list); 
             $this->redirect();
         } else {
