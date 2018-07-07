@@ -170,13 +170,14 @@ class ActiveController extends Controller
                     } elseif ($redirectURL=='fill_info'){
                         $this->redirect("/travel/fill_info");
                     } else {
-                        $url = Cookie::get('url');
-                        $url = $url!=NULL?$url:'/active/recruit';
-                        if(strpos($url, '/')!==0){
-                            $url = "/".$url;
-                        }
-                        header("Location:$url");
-                        exit;
+                        $this->redirect("/active/recruit");
+                        // $url = Cookie::get('url');
+                        // $url = $url!=NULL?$url:'/active/recruit';
+                        // if(strpos($url, '/')!==0){
+                        //     $url = "/".$url;
+                        // }
+                        // header("Location:$url");
+                        // exit;
                     }    
                 }else {
                     $info = array('field' => 'password', 'msg' => '密码错误！');

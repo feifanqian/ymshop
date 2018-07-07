@@ -75,7 +75,7 @@ img.size-fit {
         padding: 8px;
         letter-spacing: 1px; }
         .way .cell .detail span.price::before {
-          content: '$';
+          content: '￥';
           margin-right: 2px; }
 
 /*# sourceMappingURL=allway.css.map */

@@ -58,7 +58,7 @@ img.size-fit {
       color: #ff811a;
       font-size: 28px; }
       #app .main .price::before {
-        content: '$';
+        content: '￥';
         font-size: 24px; }
       #app .main .price::after {
         content: '起';
