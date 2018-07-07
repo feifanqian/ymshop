@@ -472,5 +472,15 @@ class ActiveController extends Controller
         }
         echo JSON::encode(array('status' => $status,'token'=>$token,'tokens'=>$user['token']));
     }
+
+    public function find_pwd()
+    {
+        $this->redirect();
+    }
+
+    public function find_password()
+    {
+        
+    }
 }
 ?>
