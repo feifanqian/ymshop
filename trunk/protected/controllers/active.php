@@ -492,10 +492,11 @@ class ActiveController extends Controller
             $customer = $this->model->table('customer')->where('mobile='.$mobile)->find();
             if(!$customer) {
                $info = array('field' => 'mobile', 'msg' => '手机号错误！');
-            }
-            $validcode = CHash::random(8);
-            $this->model->table('user')->data(array('password' => CHash::md5($pass, $validcode), 'validcode' => $validcode))->where('id=' . $customer['user_id'])->update();
-            $info = array('field' => '', 'msg' => 'success');
+            } else {
+                $validcode = CHash::random(8);
+                $this->model->table('user')->data(array('password' => CHash::md5($pass, $validcode), 'validcode' => $validcode))->where('id=' . $customer['user_id'])->update();
+                $info = array('field' => '', 'msg' => 'success');
+            }  
             // $this->redirect('/active/login');
         } else {
             $info = array('field' => 'code', 'msg' => '验证码错误！');
@@ -552,6 +553,29 @@ class ActiveController extends Controller
         } else {
             return false;
         }
+    }
+
+    public function postRequest($api, array $params = array(), $timeout = 30) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $api);
+        // 以返回的形式接收信息
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // 设置为POST方式
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        // 不验证https证书
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/x-www-form-urlencoded;charset=UTF-8',
+            'Accept: application/json',
+        ));
+        // 发送数据
+        $response = curl_exec($ch);
+        // 不要忘记释放资源
+        curl_close($ch);
+        return $response;
     }
 }
 ?>
