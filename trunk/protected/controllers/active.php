@@ -548,6 +548,7 @@ class ActiveController extends Controller
             'code' => $code,
         ));
         $flag = json_decode($return, true);
+        var_dump($flag);die;
         if ($flag['status'] == 200) {
             return true;
         } else {

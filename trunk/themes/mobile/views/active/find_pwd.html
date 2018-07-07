@@ -12,7 +12,7 @@
         top: 120px;
     }
     label.valid-msg{
-        display: none!important;
+        display: none !important;
     }
     .send_code{
         width: 140px;
@@ -25,7 +25,10 @@
         margin-right: 16%;
         border-radius: 6px;
     }
-    
+    label.invalid-msg{
+        padding-right: 40% !important;
+        background-position: -20px;
+    }
     </style>
     <title>找回密码</title>
 </head>
@@ -105,6 +108,7 @@
     form.setValue('mobile', '{$mobile}');
     var msg = "{$invalid['msg']}";
     if(msg=='success') {
+        alert('修改成功，即将跳转');
         var url = "{url:/active/login}";
         window.location.href = url;
     } else {
@@ -134,10 +138,10 @@
         send_sms.attr("disabled", true);
         send_sms.addClass("btn-disable");
         var i = haveTime;
-        send_sms.val(i + '秒后重新获取');
+        send_sms.val(i + '秒');
         var timer = setInterval(function() {
         i--;
-        send_sms.val(i + '秒后重新获取');
+        send_sms.val(i + '秒');
         if (i <= 0) {
         clearInterval(timer);
         send_sms.val('获取验证码');
