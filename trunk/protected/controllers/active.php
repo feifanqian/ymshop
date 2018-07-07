@@ -487,8 +487,10 @@ class ActiveController extends Controller
         if($password!=$repassword) {
             $info = array('field' => 'password', 'msg' => '两次密码输入不一致！');
         }
-        $pass = $this->sms_verify($code, $mobile);
-        if($pass) {
+        $verifiedInfos = Session::get("verifiedInfos");
+        if (isset($verifiedInfos['code']) && $code == $verifiedInfos['code']) {
+        // $pass = $this->sms_verify($code, $mobile);
+        // if($pass) {
             $customer = $this->model->table('customer')->where('mobile='.$mobile)->find();
             if(!$customer) {
                $info = array('field' => 'mobile', 'msg' => '手机号错误！');
