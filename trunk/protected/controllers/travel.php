@@ -73,12 +73,48 @@ class TravelController extends Controller
             );
             $policy = base64_encode(json_encode($options));
             $signature = md5($policy . '&' . $upyun['upyun_formkey']);
+            $this->assign('user_id',$this->user['id']);
             $this->assign('secret', md5('ym123456'));
             $this->assign('policy', $policy);
             $this->assign('way',$way);
             $this->redirect();
         } else {
             $this->redirect('/active/login/redirect/fill_info');
+        }
+    }
+
+    public function travel_sign_save()
+    {
+        $way_id = Filter::int(Req::args("way_id"));
+        $way = $this->model->table('travel_way')->fields('name,price')->where('id='.$way_id)->find();
+        $data = array(
+            'user_id'=>Filter::int(Req::args("user_id")),
+            'order_no'=>Common::createOrderNo();
+            'way_id'=>$way_id,
+            'contact_name'=>Filter::str(Req::args("contact_name")),
+            'contact_phone'=>Filter::str(Req::args("contact_phone")),
+            'id_no'=>Filter::str(Req::args("id_no")),
+            'sex'=>Filter::int(Req::args("sex")),
+            'idcard_url'=>Filter::str(Req::args("idcard_url")),
+            'sign_time'=>date('Y-m-d H:i:s'),
+            'order_name'=>$way['name'],
+            'order_amount'=>$way['price'],
+            'order_status'=>0,
+            'pay_status'=>0
+            );
+        $this->model->table('travel_order')->data($data)->insert();
+        $this->redirect('pay');
+    }
+
+    public function order_list()
+    {
+        if($this->user['id']) {
+            $page = Filter::int(Req::args('p'));
+            $list = $this->model->table('travel_order as to')->fields('to.id,to.order_no,tw.name,tw.city,tw.desc,tw.order_amount')->join('left join travel_way as tw on to.way_id=tw.id')->where('to.user_id='.$this->user['id'])->findPage($page,10);
+            $this->assign('list',$list); 
+            $this->redirect();
+        } else {
+            $this->redirect('/active/login/redirect/order_list');
         }
     } 
 }    

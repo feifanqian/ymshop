@@ -12,12 +12,13 @@
     <title></title>
 <body>
 <div id="app">
-    <form action="{url:/travel/travel_sign_save}" class="form">
+    <form action="{url:/travel/travel_sign_save}" id="fill_submit" class="form">
         <input type="hidden" name="idcard_url" value="">
+        <input type="hidden" name="user_id" value="{$user_id}">
         <div class="input_cell">
             <label class="input_cell--label" for="">请选择路线:</label>
             <div class="input_cell--content" style="border: 1px solid #555;">
-                <select title="way" name="way" id="way">
+                <select title="way" name="way_id" id="way">
                     {list:items=$way}
                     <option value="{$item['id']}">{$item['name']}</option>
                     {/list}
@@ -42,13 +43,14 @@
         <div class="input_cell">
             <label class="input_cell--label" for="">身份证号码:</label>
             <div class="input_cell--content">
-                <input type="number" name="contact_id_no" placeholder="必填">
+                <input type="number" name="id_no" placeholder="必填">
             </div>
         </div>
         <div class="input_cell">
             <label class="input_cell--label" for="">性&nbsp;&nbsp;&nbsp;&nbsp;别:</label>
             <div class="input_cell--content">
-                <input type="number" name="sex" placeholder="必填">
+                <input type="radio" name="sex" value="1">男
+                <input type="radio" name="sex" value="0">女
             </div>
         </div>
         <p class="tips">备注:请上传清晰图片身份证及其其他证件照片.(境外游需要上传港澳通信证及护照)</p>
@@ -64,8 +66,26 @@
 <script type="text/javascript">
 $('#submit_do').on('click',function(){
    if(!$("#way option:selected").val()) {
-
+         alert('请选择路线');
+         return;
    }
+   if(!$("input[name='contact_name']").val()) {
+         alert('请输入名字');
+         return;
+   }
+   if(!$("input[name='contact_phone']").val()) {
+         alert('请输入手机号');
+         return;
+   }
+   if(!$("input[name='id_no']").val()) {
+         alert('请输入身份证号');
+         return;
+   }
+   if(!$("input[name='idcard_url']").val()) {
+         alert('请上传证件照');
+         return;
+   }
+   document.forms['fill_submit'].submit();
 });
 var type = 0;
 $("input[name='upload_idcard']").change(function(){

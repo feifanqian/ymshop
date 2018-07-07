@@ -169,7 +169,9 @@ class ActiveController extends Controller
                         $this->redirect("/active/recruit");
                     } elseif ($redirectURL=='fill_info'){
                         $this->redirect("/travel/fill_info");
-                    } else {
+                    } elseif ($redirectURL=='order_list'){
+                        $this->redirect("/travel/order_list");
+                    }else {
                         $this->redirect("/active/recruit");
                         // $url = Cookie::get('url');
                         // $url = $url!=NULL?$url:'/active/recruit';
@@ -492,7 +494,7 @@ class ActiveController extends Controller
         if (isset($verifiedInfos['code']) && $code == $verifiedInfos['code']) {
         // $pass = $this->sms_verify($code, $mobile);
         // if($pass) {
-            $customer = $this->model->table('customer')->where('mobile='.$mobile)->find();
+            $customer = $this->model->table('customer')->where('status=1 and mobile='.$mobile)->find();
             if(!$customer) {
                $info = array('field' => 'mobile', 'msg' => '手机号错误！');
             } else {

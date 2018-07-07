@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="./css/orderlist.css">
+    <title>订单</title>
+</head>
+<body>
+<div id="app" class="order">
+    {list:items=$list['data']}
+    <div class="order-cell">
+        <div class="order-cell-id">订单编号: {$item['order_no']}</div>
+        <div class="item">
+            <img src="{$item['img']}" alt="" class="item-img">
+            <span class="item-title">{$item['name']}</span>
+            <span class="item-subtitle">{$item['city']}</span>
+        </div>
+        <div class="order-detail">
+            <a href="/travel/order_detail/id/{$item['id']}" class="order-detail__look">查看订单详情</a>
+            <span class="order-detail__price">合计金额<span>{$item['order_amount']}</span></span>
+        </div>
+    </div>
+    {/list}
+</div>
+</body>
+</html>
