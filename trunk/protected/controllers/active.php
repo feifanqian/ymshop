@@ -480,7 +480,73 @@ class ActiveController extends Controller
 
     public function find_password()
     {
+        $mobile = Filter::str(Req::args("mobile"));
+        $password = Filter::str(Req::args("password"));
+        $repassword = Filter::str(Req::args("repassword"));
+        $pass = $this->sms_verify($code, $mobile);
+        if($pass) {
+            $customer = $this->model->table('customer')->where('mobile='.$mobile)->find();
+            if(!$customer) {
+               $info = array('field' => 'mobile', 'msg' => '手机号错误！');
+            }
+            $validcode = CHash::random(8);
+            $this->model->table('user')->data(array('password' => CHash::md5($pass, $validcode), 'validcode' => $validcode))->where('id=' . $customer['user_id'])->update();
+            $this->redirect('/active/login');
+        } else {
+            $info = array('field' => 'code', 'msg' => '验证码错误！');
+        }
+        $this->assign("invalid", $info);
+        $this->redirect("find_pwd", false, Req::args());
+    }
+
+    public function send_code()
+    {
+        $mobile = Filter::str(Req::args("mobile"));
+        $code = CHash::random(6, 'int');
+        $info = array('status' => 'fail', 'msg' => '');
+        $random = CHash::random(20, 'char');
+        $verifiedInfos = Session::get('verifiedInfos');
+        $sendAble = true;
+        $haveTime = 120;
+
+        if (isset($verifiedInfos['time'])) {
+            $time = $verifiedInfos['time'];
+            $haveTime = time() - $time;
+            if ($haveTime <= 120) {
+                $sendAble = false;
+            }
+        }
+        if ($sendAble) {
+            $verifiedInfos = array('code' => $code, 'time' => time(), 'random' => $random);
+            $sms = SMS::getInstance();
+            $result = $sms->sendCode($mobile, $code);
+            if ($result['status'] == 'success') {
+                $info = array('status' => 'success', 'msg' => $result['message']);
+                Session::set('verifiedInfos', $verifiedInfos);
+                $info = array('status' => 'success');
+            } else {
+                $info = array('status' => 'fail', 'msg' => $result['message']);
+            }
+        }
         
+        $info['haveTime'] = (120 - $haveTime);
+        echo JSON::encode($info);
+    }
+
+    public function sms_verify($code, $mobile) {
+        $url = "https://webapi.sms.mob.com/sms/verify";
+        $appkey = "1f4d2d20dd266";
+        $return = $this->postRequest($url, array('appkey' => $appkey,
+            'phone' => $mobile,
+            'zone' => '86',
+            'code' => $code,
+        ));
+        $flag = json_decode($return, true);
+        if ($flag['status'] == 200) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 ?>

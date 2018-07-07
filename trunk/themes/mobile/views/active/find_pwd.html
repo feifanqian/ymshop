@@ -26,7 +26,7 @@
         border-radius: 6px;
     }
     .cell input::-webkit-input-placeholder{
-        color: #fce1d6;
+        color: #fce1d6!important;
     }
     ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
         color: #fce1d6;
@@ -44,6 +44,9 @@
     <title>找回密码</title>
 </head>
 <body>
+{echo:JS::import('form');}
+{echo:JS::import('dialog?skin=tinysimple');}
+{echo:JS::import('dialogtools');}
 <div id="app">
     <form class="main" id="loginsubmit" action="{url:/active/find_password}" method="post" style="width: 560px;border-radius: 5px;">
         <div class="main-content">
@@ -95,7 +98,7 @@
     $(function ($) {
         //  点击登录
         $('#submit').click((e) => {
-            let mobile = $('#account').val();
+            let mobile = $('#mobile').val();
             let password = $('#password').val();
 
             if (mobile.length === 0 || password.length === 0) {
@@ -112,37 +115,43 @@
 <script type="text/javascript">
     {if:isset($invalid)}
     var form = new Form();
-    form.setValue('account', '{$account}');
+    form.setValue('mobile', '{$mobile}');
     autoValidate.showMsg({id: $("input[name='{$invalid['field']}']").get(0), error: true, msg: "{$invalid['msg']}"});
     $(".invalid-msg").show();
     console.log("{$invalid['msg']}");
     {/if}
-    //         $("input[pattern]").on("blur", function (event) {
-    //     $(".invalid-msg , .valid-msg").hide();
-    //     var current_input = $(this);
-    //     var result = autoValidate.validate(event);
-    //     if (result) {
-    //         current_input.parent().removeClass('invalid').addClass('valid');
-    //     } else {
-    //         current_input.parent().removeClass('valid').addClass('invalid');
-    //     }
-    //     if (result) {
-    //         if (current_input.attr('id') == 'account') {
-    //             $.post("{url:/ajax/account/accounts/}" + $(this).val(), function (data) {
-    //                 var msg = '合法用户';
-    //                 if (!data['status']) {
-    //                     msg = data['msg'];
-    //                     current_input.next().show();
-    //                     current_input.parent().removeClass('valid').addClass('invalid');
-    //                     autoValidate.showMsg({id: document.getElementById('account'), error: data['status'], msg: msg});
-    //                 }
-                    
-    //             }, 'json');
-    //         }
-    //         $(".invalid-msg").show();
-    //     } else {
-    //         current_input.next().show();
-    //     }
-    // });
+    $(".send_code").click(function() {
+        var mobile = $("input[name='mobile']").val();
+        if(mobile=='') {
+            alert('请输入手机号!');
+            return;
+        }
+        $.post("{url:/active/send_code}", {mobile:mobile}, function(result) {
+            var data = JSON.parse(result);
+        if (data['status'] == 'success') {
+        lockSendButton($(".send_code"), 120);
+        } else {
+        art.dialog.tips("<p class='fail'>" + data['msg'] + "</p>");
+        lockSendButton($(".send_code"), data['haveTime']);
+        }
+        }, 'json');
+    });
+    function lockSendButton(obj, haveTime){
+        var send_sms = obj;
+        send_sms.attr("disabled", true);
+        send_sms.addClass("btn-disable");
+        var i = haveTime;
+        send_sms.val(i + '秒后重新获取');
+        var timer = setInterval(function() {
+        i--;
+        send_sms.val(i + '秒后重新获取');
+        if (i <= 0) {
+        clearInterval(timer);
+        send_sms.val('获取验证码');
+        send_sms.removeClass("btn-disable");
+        send_sms.attr("disabled", false);
+        }
+        }, 1000);
+    }
 </script>
 </html>
