@@ -89,7 +89,7 @@ class TravelController extends Controller
         $way = $this->model->table('travel_way')->fields('name,price')->where('id='.$way_id)->find();
         $data = array(
             'user_id'=>Filter::int(Req::args("user_id")),
-            'order_no'=>Common::createOrderNo();
+            'order_no'=>Common::createOrderNo(),
             'way_id'=>$way_id,
             'contact_name'=>Filter::str(Req::args("contact_name")),
             'contact_phone'=>Filter::str(Req::args("contact_phone")),
