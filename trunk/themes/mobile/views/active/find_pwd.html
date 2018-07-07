@@ -16,14 +16,16 @@
     }
     .send_code{
         width: 110px;
-        height: 40px;
+        height: 50px;
         text-align: center;
-        line-height: 40px;
-        border-color: #feec34;
+        line-height: 50px;
+        background-color: #feec34;
         color: #f06834;
         float: right;
+        margin-right: 18%;
+        border-radius: 6px;
     }
-    input:: -webkit-input-placeholder{
+    input::-webkit-input-placeholder{
         color: #fce1d6;
     }
     </style>
@@ -33,7 +35,7 @@
 <div id="app">
     <form class="main" id="loginsubmit" action="{url:/active/find_password}" method="post" style="width: 560px;border-radius: 5px;">
         <div class="main-content">
-            <div class="cell" style="margin-bottom:1px;"><label style="margin-left: 3%;color: #f06834;">找回密码</label></div>
+            <div class="cell" style="border-bottom:1px solid #f06834;"><label style="margin-left: 3%;color: #f06834;">找回密码</label></div>
             <div class="cell">
                 <label style="margin-left: 3%;color: #f06834;">验证身份</label>
                 
@@ -43,7 +45,7 @@
                 </div>
             </div>
             <div class="cell">
-                <label style="margin-left: 3%;color: #f06834;">验证码</label>
+                <label style="margin-left: 3%;color: #f06834;">验证码：</label>
                 
                 <div class="input_content pwd">
                     <input type="text" id="code" name="code" pattern="required" placeholder="请输入收到的短信验证码" maxlength="6" required>
