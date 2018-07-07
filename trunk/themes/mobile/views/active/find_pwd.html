@@ -102,9 +102,15 @@
     {if:isset($invalid)}
     var form = new Form();
     form.setValue('mobile', '{$mobile}');
-    autoValidate.showMsg({id: $("input[name='{$invalid['field']}']").get(0), error: true, msg: "{$invalid['msg']}"});
-    $(".invalid-msg").show();
-    console.log("{$invalid['msg']}");
+    var msg = "{$invalid['msg']}";
+    if(msg=='success') {
+        var url = "{url:/active/login}";
+        window.location.href = url;
+    } else {
+        autoValidate.showMsg({id: $("input[name='{$invalid['field']}']").get(0), error: true, msg: msg});
+        $(".invalid-msg").show();
+        console.log("{$invalid['msg']}");
+    }
     {/if}
     $(".send_code").click(function() {
         var mobile = $("input[name='mobile']").val();
@@ -114,12 +120,12 @@
         }
         $.post("{url:/active/send_code}", {mobile:mobile}, function(result) {
             // var data = JSON.parse(result);
-        if (result['status'] == 'success') {
-        lockSendButton($(".send_code"), 120);
-        } else {
-        art.dialog.tips("<p class='fail'>" + result['msg'] + "</p>");
-        lockSendButton($(".send_code"), result['haveTime']);
-        }
+            if (result['status'] == 'success') {
+            lockSendButton($(".send_code"), 120);
+            } else {
+            art.dialog.tips("<p class='fail'>" + result['msg'] + "</p>");
+            lockSendButton($(".send_code"), result['haveTime']);
+            }
         }, 'json');
     });
     function lockSendButton(obj, haveTime){
