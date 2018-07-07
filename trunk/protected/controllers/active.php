@@ -481,8 +481,12 @@ class ActiveController extends Controller
     public function find_password()
     {
         $mobile = Filter::str(Req::args("mobile"));
+        $code = Filter::str(Req::args("code"));
         $password = Filter::str(Req::args("password"));
         $repassword = Filter::str(Req::args("repassword"));
+        if($password!=$repassword) {
+            $info = array('field' => 'password', 'msg' => '两次密码输入不一致！');
+        }
         $pass = $this->sms_verify($code, $mobile);
         if($pass) {
             $customer = $this->model->table('customer')->where('mobile='.$mobile)->find();

@@ -113,12 +113,12 @@
             return;
         }
         $.post("{url:/active/send_code}", {mobile:mobile}, function(result) {
-            var data = JSON.parse(result);
-        if (data['status'] == 'success') {
+            // var data = JSON.parse(result);
+        if (result['status'] == 'success') {
         lockSendButton($(".send_code"), 120);
         } else {
-        art.dialog.tips("<p class='fail'>" + data['msg'] + "</p>");
-        lockSendButton($(".send_code"), data['haveTime']);
+        art.dialog.tips("<p class='fail'>" + result['msg'] + "</p>");
+        lockSendButton($(".send_code"), result['haveTime']);
         }
         }, 'json');
     });
