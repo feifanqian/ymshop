@@ -508,7 +508,7 @@ class ActiveController extends Controller
     public function send_code()
     {
         $mobile = Filter::str(Req::args("mobile"));
-        $code = CHash::random(6, 'int');
+        $code = CHash::random(4, 'int');
         $info = array('status' => 'fail', 'msg' => '');
         $random = CHash::random(20, 'char');
         $verifiedInfos = Session::get('verifiedInfos');
@@ -548,7 +548,7 @@ class ActiveController extends Controller
             'code' => $code,
         ));
         $flag = json_decode($return, true);
-        var_dump($flag);die;
+        // var_dump($flag);die;
         if ($flag['status'] == 200) {
             return true;
         } else {
