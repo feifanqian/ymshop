@@ -15,18 +15,30 @@
         display: none!important;
     }
     .send_code{
-        width: 110px;
+        width: 140px;
         height: 50px;
         text-align: center;
         line-height: 50px;
         background-color: #feec34;
         color: #f06834;
         float: right;
-        margin-right: 18%;
+        margin-right: 16%;
         border-radius: 6px;
     }
-    input::-webkit-input-placeholder{
+    .cell input::-webkit-input-placeholder{
         color: #fce1d6;
+    }
+    ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+        color: #fce1d6;
+    }
+    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+       color: #fce1d6;
+    }
+    ::-moz-placeholder { /* Mozilla Firefox 19+ */
+       color: #fce1d6;
+    }
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+       color: #fce1d6;
     }
     </style>
     <title>找回密码</title>
@@ -37,15 +49,15 @@
         <div class="main-content">
             <div class="cell" style="border-bottom:1px solid #f06834;"><label style="margin-left: 3%;color: #f06834;">找回密码</label></div>
             <div class="cell">
-                <label style="margin-left: 3%;color: #f06834;">验证身份</label>
+                <label style="margin-left: 5%;color: #f06834;">验证身份</label>
                 
                 <div class="input_content mobile_phone" style="position: relative;">
                     <input type="tel" name="mobile" id="mobile" pattern="required" placeholder="请输入注册手机号" maxlength="11" required>
                     <!-- <label class="valid-msg" style="display: block;"></label> -->
                 </div>
             </div>
-            <div class="cell">
-                <label style="margin-left: 3%;color: #f06834;">验证码：</label>
+            <div class="cell" style="margin-top:10px;">
+                <label style="margin-left: 5%;color: #f06834;">验证码：</label>
                 
                 <div class="input_content pwd">
                     <input type="text" id="code" name="code" pattern="required" placeholder="请输入收到的短信验证码" maxlength="6" required>
@@ -55,16 +67,16 @@
             
             <button class="send_code">发送验证码</button>
         
-            <div class="cell" style="margin-top: 80px;">
-                <label style="margin-left: 3%;color: #f06834;">重置密码</label>
+            <div class="cell" style="margin-top: 80px;margin-top:10px;">
+                <label style="margin-left: 5%;color: #f06834;">重置密码</label>
                 
                 <div class="input_content mobile_phone" style="position: relative;">
                     <input type="password" name="password" id="password" pattern="required" placeholder="请输入新密码" maxlength="16" required>
                     <!-- <label class="valid-msg" style="display: block;"></label> -->
                 </div>
             </div>
-            <div class="cell">
-                <label style="margin-left: 3%;color: #f06834;">再次输入</label>
+            <div class="cell" style="margin-top:10px;">
+                <label style="margin-left: 5%;color: #f06834;">再次输入</label>
                 
                 <div class="input_content pwd">
                     <input type="password" id="repassword" name="repassword" pattern="required" placeholder="请确认您的密码" maxlength="16" required>
