@@ -164,7 +164,7 @@ class TravelController extends Controller
                     'open_id' => $token['openid']
                 ))->insert();
         }
-        var_dump(444);die;
+        var_dump(444);
         if($oauth_user) {
             // $openid = $oauth->getOpenid($code);
             $openid = $oauth_user['open_id'];
