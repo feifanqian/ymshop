@@ -154,7 +154,7 @@ class TravelController extends Controller
             $input->SetGoods_tag("test");
             $input->SetNotify_url($notify_url);
             $input->SetTrade_type("JSAPI");
-            $input->SetOpenid($openId);
+            $input->SetOpenid($openid);
 
             $order_input = WxPayApi::unifiedOrder($input);
             
