@@ -102,7 +102,6 @@
             // var jsApiParameters = '{$jsApiParameters}';
             var jsapi='{$jsApiParameters}';
             jsonapi=JSON.parse(jsapi);
-            alert(jsonapi.appId);
             WeixinJSBridge.invoke(
                     'getBrandWCPayRequest',
                     {
@@ -124,7 +123,7 @@
                                     location.href = "{$success_url}";
                                 });
                         } else {
-                                alert(res.err_msg);
+                                alert(res);
                                 $.toast('支付失败!', 'forbidden', function () {
                                     location.href = "{$success_url}";
                                 });
