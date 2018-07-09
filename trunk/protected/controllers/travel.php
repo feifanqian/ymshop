@@ -134,9 +134,10 @@ class TravelController extends Controller
         $id = Filter::int(Req::args("id"));
         $order = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.date,tw.desc,t.order_amount,tw.img,tw.price,t.way_id,t.contact_name,t.contact_phone,t.id_no,t.idcard_url,t.sex,t.pay_status')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.id='.$id)->find();
         $oauth = new WechatOAuth();
-        $openid = $oauth->getOpenid($id);
-        var_dump($openid);die;
+        $url = $oauth->getOpenid($id);
+
         $this->assign('order',$order);
+        $this->assign('url',$url);
         $this->redirect();
     } 
 }    

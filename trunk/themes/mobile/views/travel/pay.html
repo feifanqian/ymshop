@@ -55,9 +55,11 @@
             $("input[name='pay_type']").val('10');
         })
     })
-    $('.class').on('click',function(){
+    $('.pay').on('click',function(){
         var pay_type = $("input[name='pay_type']").val();
         if(pay_type==6) {
+            var url = {$url};
+            window.location.href = url;
             callpay();
             console.log('wx');
         } 

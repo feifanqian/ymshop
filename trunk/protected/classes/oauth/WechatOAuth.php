@@ -178,11 +178,11 @@ class WechatOAuth extends OAuth2 {
         );
         
         $url = "https://open.weixin.qq.com/connect/oauth2/authorize".'?' . http_build_query($params) . "&state=1#wechat_redirect";
-        $ret = file_get_contents($url);
-        var_dump($ret);die;
-        $result = json_decode($ret,true);
+        // $ret = file_get_contents($url);
+        // var_dump($ret);die;
+        // $result = json_decode($ret,true);
 
-        return $result;
+        return $url;
     }
 
     // public function getUserInfos($access_token,$openid){
