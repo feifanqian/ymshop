@@ -136,17 +136,20 @@ class TravelController extends Controller
         if(!$this->user['id']) {
             $this->redirect('/active/login?redirect=pay&id={$id}');
         }
-        var_dump(111);die;
+        
         $order = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.date,tw.desc,t.order_amount,tw.img,tw.price,t.way_id,t.contact_name,t.contact_phone,t.id_no,t.idcard_url,t.sex,t.pay_status,t.pay_type')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.id='.$id)->find();
+        var_dump(111);
         if(!$order) {
             $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息啦"));
             exit();
         }
+        var_dump(222);
         $notify_url = "http://www.ymlypt.com/travel/callback";
         $oauth = new WechatOAuth();
         $url = $oauth->getCode($id);
         $oauth_user = $this->model->table('oauth_user')->fields('open_id')->where("oauth_type='wechat' AND user_id=".$this->user['id'])->find();
         $need_code = empty($oauth_user)?1:0;
+        var_dump(333);
         if(!$oauth_user && $code) {
             $extend = null;
             $token = $oauth->getAccessToken($code, $extend);
@@ -161,7 +164,7 @@ class TravelController extends Controller
                     'open_id' => $token['openid']
                 ))->insert();
         }
-        var_dump(222);die;
+        var_dump(444);die;
         if($oauth_user) {
             // $openid = $oauth->getOpenid($code);
             $openid = $oauth_user['open_id'];
@@ -183,14 +186,14 @@ class TravelController extends Controller
             $jsApiParameters = $tools->GetJsApiParameters($order_input);
             $this->assign("jsApiParameters", $jsApiParameters);
         }
-        var_dump(333);die;
+        var_dump(555);die;
         $success_url = Url::urlFormat("/travel/order_detail/id/{$id}");
         $this->assign("need_code", $need_code);
         $this->assign("success_url", $success_url);
         $this->assign('code',$code);
         $this->assign('order',$order);
         $this->assign('url',$url);
-        var_dump(444);die;
+        var_dump(666);die;
         $this->redirect();
     }
 
