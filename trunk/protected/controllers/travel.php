@@ -217,11 +217,11 @@ class TravelController extends Controller
             $order = $this->model->table('travel_order')->where("order_no='{$order_no}'")->find();
             if($order) {
                 if ($order['order_amount'] > $money) {
-                    file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
+                    file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$order_no}|{$order['order_amount']}元|{$money}元|========|\n", FILE_APPEND);
                     echo 'fail';
                     exit;
                 }
-                $this->model->table('travel_order')->data(array('pay_status'=>1))->where('id='.$id)->update();
+                $this->model->table('travel_order')->data(array('pay_status'=>1))->where('order_no='.$order_no)->update();
             }
             echo "success";
             exit();
