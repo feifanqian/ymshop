@@ -157,7 +157,7 @@ class TravelController extends Controller
             $input->SetOpenid($openid);
 
             $order_input = WxPayApi::unifiedOrder($input);
-            
+            $tools = new JsApiPay();
             $jsApiParameters = $tools->GetJsApiParameters($order_input);
             $this->assign("jsApiParameters", $jsApiParameters);
         }
