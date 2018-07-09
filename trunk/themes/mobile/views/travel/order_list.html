@@ -11,7 +11,7 @@
 </head>
 <body>
 <div id="app" class="order">
- {if:{if:count($list['data'])>0}}
+ {if:count($list['data'])>0}}
     {list:items=$list['data']}
     <div class="order-cell">
         <div class="order-cell-id">订单编号: {$item['order_no']}</div>
