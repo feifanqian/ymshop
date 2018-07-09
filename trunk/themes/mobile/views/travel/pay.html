@@ -123,7 +123,7 @@
                                     location.href = "{$success_url}";
                                 });
                         } else {
-                                alert(res);
+                                alert(JSON.stringify(res));
                                 $.toast('支付失败!', 'forbidden', function () {
                                     location.href = "{$success_url}";
                                 });
