@@ -69,23 +69,23 @@
 $('#submit_do').on('click',function(){
    if(!$("#way option:selected").val()) {
          alert('请选择路线');
-         return;
+         return false;
    }
    if(!$("input[name='contact_name']").val()) {
          alert('请输入名字');
-         return;
+         return false;
    }
    if(!$("input[name='contact_phone']").val()) {
          alert('请输入手机号');
-         return;
+         return false;
    }
    if(!$("input[name='id_no']").val()) {
          alert('请输入身份证号');
-         return;
+         return false;
    }
    if(!$("input[name='idcard_url']").val()) {
          alert('请上传证件照');
-         return;
+         return false;
    }
    document.forms['fill_submit'].submit();
 });

@@ -43,20 +43,6 @@
      
      <div><p class="black" style="font-size:20px;text-align: center;color:#fff;margin-top: 10px;">{$currency_symbol}{$order['order_amount']}</p></div>
   </div>
-  <div class="bg-content1">
-    <div class="line-text">
-        <p style="float: left;">收款方</p>
-        <p style="float: right;">{$shopname}</p>
-    </div>
-    <div class="line-text">
-        <p style="float: left;">收款时间</p>
-        <p style="float: right;">{$order['pay_time']}</p>
-    </div>
-    <div class="line-text">
-        <p style="float: left;">订单号</p>
-        <p style="float: right;">{$order['order_no']}</p>
-    </div>
-  </div>
   <div style="position: relative;left: 20%;top:60%;width: 60%;">
     <a href=""><img src="/themes/mobile/images/anniu.png" width="280" height="40"></a>
   </div>
@@ -65,7 +51,7 @@
        var color_list = {0:'url(/themes/mobile/images/anzhuo1.jpg)',1:'url(/themes/mobile/images/anzhuo2.jpg)',2:'url(/themes/mobile/images/anzhuo3.jpg)'};
        var index = parseInt(2*Math.random());
         $('.bg-content').css('background',color_list[index]);
-    }  
+    });  
   </script>
   {else:}
   <div class="bg-content">
