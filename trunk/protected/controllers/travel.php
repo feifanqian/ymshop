@@ -164,7 +164,7 @@ class TravelController extends Controller
                     'open_id' => $token['openid']
                 ))->insert();
         }
-        var_dump(444);
+        
         if($oauth_user) {
             // $openid = $oauth->getOpenid($code);
             $openid = $oauth_user['open_id'];
@@ -210,6 +210,7 @@ class TravelController extends Controller
     public function callback() {
         $xml = @file_get_contents('php://input');
         $array=Common::xmlToArray($xml);
+        file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
         if($array['result_code']=='SUCCESS'){
             $money = round(intval($array['total_fee'])/100,2);
             $order_no = $array['attach'];
