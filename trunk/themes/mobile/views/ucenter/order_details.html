@@ -31,7 +31,6 @@
 {if:$pay_status==1}
   {if:$order['user_id']==42608}
   <div class="bg-content">
-     
      <div style="width:80%;text-align: center;padding-top:10px;background: url(/themes/mobile/images/kuang.png) no-repeat center">
         <div style="position: relative;top: 10px;left: 10%;">
            <img src="/themes/mobile/images/success.png">
@@ -41,9 +40,7 @@
            <p style="left: 10%">订单号{$order['order_no']}</p> 
         </div>
      </div>
-     <div>
-        <p style="font-size:24px;text-align: center;color:#fff;margin-top: 10px;">欧耶,支付成功了</p>
-     </div>
+     
      <div><p class="black" style="font-size:20px;text-align: center;color:#fff;margin-top: 10px;">{$currency_symbol}{$order['order_amount']}</p></div>
   </div>
   <div class="bg-content1">
@@ -60,9 +57,16 @@
         <p style="float: right;">{$order['order_no']}</p>
     </div>
   </div>
-  <div style="position: relative;left: 20%;top:60%;">
+  <div style="position: relative;left: 20%;top:60%;width: 60%;">
     <a href=""><img src="/themes/mobile/images/anniu.png" width="280" height="40"></a>
   </div>
+  <script type="text/javascript">
+    $(function () {
+       var color_list = {0:'url(/themes/mobile/images/anzhuo1.jpg)',1:'url(/themes/mobile/images/anzhuo2.jpg)',2:'url(/themes/mobile/images/anzhuo3.jpg)'};
+       var index = parseInt(2*Math.random());
+        $('.bg-content').css('background',color_list[index]);
+    }  
+  </script>
   {else:}
   <div class="bg-content">
      <div style="padding-top:10px; ">
@@ -161,9 +165,7 @@
                     $("input[name='payment_id']").val($("#paytype").attr("data-values"));
                 }
             });
-        var color_list = {0:'url(/themes/mobile/images/anzhuo1.jpg)',1:'url(/themes/mobile/images/anzhuo2.jpg)',2:'url(/themes/mobile/images/anzhuo3.jpg)'};
-        var index = parseInt(2*Math.random());
-        $('.bg-content').css('background',color_list[index]);
+        
       });  
 </script>
 {/if}
