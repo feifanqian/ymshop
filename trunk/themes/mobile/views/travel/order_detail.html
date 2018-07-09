@@ -30,8 +30,8 @@
       <span><p>身份证&nbsp;&nbsp;&nbsp;{echo: substr($order['id_no'],0,1).'**************'.substr($order['id_no'],-1)}</p></span><br/>
       <span><p>姓&nbsp;&nbsp;&nbsp;别&nbsp;&nbsp;&nbsp;{if:$order['sex']==1}男{else:}女{/if}</p></span><br/>
       {list:$items=$order['idcard_url']}
-      <div>
-         <img src="{$item}" />
+      <div class="idcard_url">
+         <img src="{$item}" width="140" height="100" />
       </div>
       {/if}
       
@@ -45,16 +45,15 @@
 </body>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script>
-    $(function ($) {
-        $('#wxpay').click(e => {
-            $al = $('#alipay img:last-child')[0].src = './img/fu.png';
-            $wx = $('#wxpay img:last-child')[0].src = './img/zhen.png'
-        });
-        $('#alipay').click(e => {
-            $al = $('#wxpay img:last-child')[0].src = './img/fu.png';
-            $wx = $('#alipay img:last-child')[0].src = './img/zhen.png'
-        })
-    })
-
+   $('.idcard_url img').on('click',function(){
+      var wValue=1.5 * $(this).width();  
+      var hValue=1.5 * $(this).height();        
+      $(this).stop().animate({
+        width: wValue,  
+        height: hValue,  
+        left:("-"+(0.5 * $(this).width())/2),  
+        top:("-"+(0.5 * $(this).height())/2)
+      }, 1000);
+   }); 
 </script>
 </html>
