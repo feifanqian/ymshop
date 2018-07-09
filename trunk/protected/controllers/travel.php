@@ -180,22 +180,22 @@ class TravelController extends Controller
             $input->SetNotify_url($notify_url);
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($openid);
-            var_dump(123);
+            
             $order_input = WxPayApi::unifiedOrder($input);
             $tools = new JsApiPay();
-            var_dump(345);
+            
             $jsApiParameters = $tools->GetJsApiParameters($order_input);
-            var_dump(567);die;
+            
             $this->assign("jsApiParameters", $jsApiParameters);
         }
-        var_dump(555);die;
+        
         $success_url = Url::urlFormat("/travel/order_detail/id/{$id}");
         $this->assign("need_code", $need_code);
         $this->assign("success_url", $success_url);
         $this->assign('code',$code);
         $this->assign('order',$order);
         $this->assign('url',$url);
-        var_dump(666);die;
+        
         $this->redirect();
     }
 
