@@ -49,9 +49,11 @@
   
   <script type="text/javascript">
     $(function () {
-       var color_list = {0:'url(/themes/mobile/images/anzhuo1.jpg) no-repeat center',1:'url(/themes/mobile/images/anzhuo2.jpg) no-repeat center',2:'url(/themes/mobile/images/anzhuo3.jpg) no-repeat center'};
+       var color_list = {0:'url(/themes/mobile/images/anzhuo1.jpg) center no-repeat',1:'url(/themes/mobile/images/anzhuo2.jpg) no-repeat center',2:'url(/themes/mobile/images/anzhuo3.jpg) no-repeat center'};
        var index = parseInt(2*Math.random());
         $('.bg-content').css('background',color_list[index]);
+        $('.bg-content').css('background-size',"auto");
+        $('.bg-content').css('background-repeat',"no-repeat");
     });  
   </script>
   {else:}
