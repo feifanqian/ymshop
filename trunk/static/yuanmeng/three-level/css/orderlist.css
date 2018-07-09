@@ -68,7 +68,7 @@ img.size-fit {
         letter-spacing: 1px;
         margin-left: 4px; }
         .order-cell .order-detail .order-detail__price span::before {
-          content: '$';
+          content: '￥';
           font-size: 24px; }
 
 /*# sourceMappingURL=orderlist.css.map */

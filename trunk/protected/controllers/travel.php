@@ -45,7 +45,7 @@ class TravelController extends Controller
         $id = Filter::int(Req::args("id"));
         $info = $this->model->table('travel_way')->where('id='.$id)->find();
         if($this->user['id']) {
-            $sign = $this->model->table('travel_sign')->where('user_id='.$this->user['id'].' and way_id='.$id)->find();
+            $sign = $this->model->table('travel_order')->where('user_id='.$this->user['id'].' and way_id='.$id)->find();
             $sign_status = empty($sign)?0:1;
         } else {
             $sign_status = 0;
