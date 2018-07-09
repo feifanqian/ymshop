@@ -31,10 +31,10 @@
       <span><p>姓&nbsp;&nbsp;&nbsp;别&nbsp;&nbsp;&nbsp;{if:$order['sex']==1}男{else:}女{/if}</p></span><br/>
       {list:$items=$order['idcard_url']}
       <div>
-         <img src="{$item['idcard_url']}" />
-         {$item['idcard_url']}
+         <img src="{$item[key]}" />
       </div>
       {/if}
+      
     </div> 
     {if:$order['pay_status']==0}
     <a class="pay" href="/travel/pay/id/{$order['id']}">确认支付</a>
