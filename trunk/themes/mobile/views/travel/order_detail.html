@@ -25,10 +25,10 @@
         </div>
     </div>
     <div style="width: 80%;height: auto;margin-left: 10%;">
-      <span><p>姓&nbsp;&nbsp;&nbsp;名</p>{$order['contact_name']}</span><br/>
-      <span><p>手机号</p>{$order['contact_phone']}</span><br/>
-      <span><p>身份证</p>{echo: substr($order['id_no'],0,1).'**************'.substr($order['id_no'],-1)}</span><br/>
-      <span><p>姓&nbsp;&nbsp;&nbsp;别</p>{if:$order['sex']==1}男{else:}女{/if}</span><br/>
+      <span><p>姓&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;{$order['contact_name']}</p></span><br/>
+      <span><p>手机号&nbsp;&nbsp;&nbsp;{$order['contact_phone']}</p></span><br/>
+      <span><p>身份证&nbsp;&nbsp;&nbsp;{echo: substr($order['id_no'],0,1).'**************'.substr($order['id_no'],-1)}</p></span><br/>
+      <span><p>姓&nbsp;&nbsp;&nbsp;别&nbsp;&nbsp;&nbsp;{if:$order['sex']==1}男{else:}女{/if}</p></span><br/>
       {list:$items=$order['idcard_url']}
       <div>
          <img src="{$item['idcard_url']}" />
