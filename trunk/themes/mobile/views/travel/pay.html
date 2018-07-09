@@ -76,10 +76,12 @@
             });
         }
         if(pay_type==1) {
+            alert(123);
             if(code == '') {
                 var url = "{$url}";
                 window.location.href = url;
             } else {
+                alert(000);
                 callpay();
             }    
         } 
