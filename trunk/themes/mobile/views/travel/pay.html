@@ -99,10 +99,19 @@
     }
 
     function jsApiCall() {
-            var jsApiParameters = '{$jsApiParameters}';
+            // var jsApiParameters = '{$jsApiParameters}';
+            var jsapi={$jsApiParameters};
+            jsonapi=JSON.parse(jsapi);
             WeixinJSBridge.invoke(
                     'getBrandWCPayRequest',
-                    jsApiParameters,
+                    {
+                        "appId":jsonapi.appId,
+                        "nonceStr":jsonapi.nonceStr,
+                        "package": jsonapi.package,
+                        "paySign": jsonapi.paySign,
+                        "signType": jsonapi.signType,
+                        "timeStamp": jsonapi.timeStamp
+                    },
                     function (res) {
                         if (res.err_msg == "get_brand_wcpay_request:ok") {
                                 $.toast('微信支付成功!', function () {
@@ -114,6 +123,7 @@
                                     location.href = "{$success_url}";
                                 });
                         } else {
+                                alert(res.err_msg);
                                 $.toast('支付失败!', 'forbidden', function () {
                                     location.href = "{$success_url}";
                                 });
