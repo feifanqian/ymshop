@@ -2084,7 +2084,7 @@ class UcenterAction extends Controller {
         $end_time = Filter::str(Req::args('end_time'));
         $from = Filter::str(Req::args('from'));
         $level = Filter::int(Req::args('level'));
-        $date_sort = Filter::int(Req::args('date_sort'));
+        $date_sort = Filter::str(Req::args('date_sort'));
         if(!$level) {
             $level = 0;
         }
