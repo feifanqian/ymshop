@@ -170,6 +170,15 @@ class WechatOAuth extends OAuth2 {
         }
     }
 
+    public function getOpenid($id) {
+        $appid = $this->appKey;
+        $redirect_uri = "http://www.ymlypt.com/travel/pay/id/{$id}";
+
+        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
+        $result = json_decode(file_get_contents($url),true);
+        return $result;
+    }
+
     // public function getUserInfos($access_token,$openid){
     //   $userinfo = array();  
     //   $url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";

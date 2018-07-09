@@ -13,43 +13,79 @@
 <div id="app">
     <div class="way">
         <div class="cell">
-            <img src="/static/yuanmeng/three-level/img/st22.jpg" alt="" class="cell-bg">
+          <a href="/travel/way_detail/id/{$order['way_id']}">
+            <img src="{$order['img']}" alt="" class="cell-bg">
             <div class="detail">
-                <h2>深港澳珠5天4晚观光体验之旅</h2>
-                <span class="time">06.12(周二) - 06.12(周二)</span>
-                <span class="address">香港</span>
-                <span class="price">3980</span>
-            </div>
+                <h2>{$order['name']}</h2>
+                <span class="time">{$order['date']}</span>
+                <span class="address">{$order['city']}</span>
+                <span class="price">{$order['price']}</span>
+            </div> 
+          </a>  
         </div>
     </div>
     <div class="pay-type">
-        <div class="pay-type-cell" id="alipay">
-            <img src="/static/yuanmeng/three-level/img/zhi.png" alt="">
-            <span>支付宝支付</span>
-            <img src="/static/yuanmeng/three-level/img/zhen.png" alt="">
-        </div>
-        <div class="pay-type-cell" id="wxpay">
-            <img src="/static/yuanmeng/three-level/img/wei.png" alt="">
-            <span>支付宝支付</span>
-            <img src="/static/yuanmeng/three-level/img/fu.png" alt="">
-        </div>
+        <select name="pay_type">
+           <option value="10">
+               <div class="pay-type-cell" id="alipay">
+                 <img src="/static/yuanmeng/three-level/img/zhi.png" alt="">
+                 <span>支付宝支付</span>
+                 <img src="/static/yuanmeng/three-level/img/zhen.png" alt="">
+               </div>
+           </option>
+           <option value="6">
+               <div class="pay-type-cell" id="wxpay">
+                  <img src="/static/yuanmeng/three-level/img/wei.png" alt="">
+                  <span>微信支付</span>
+                  <img src="/static/yuanmeng/three-level/img/fu.png" alt="">
+               </div>
+           </option>
+        </select>
     </div>
-    <p class="prc">总金额: <b>$3980</b></p>
-    <a class="pay" href="javascript:alert('确认支付');">确认支付</a>
+    <p class="prc">总金额: <b>${$order['amount']}</b></p>
+    <a class="pay">确认支付</a>
 </div>
 </body>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script>
-    $(function ($) {
-        $('#wxpay').click(e => {
-            $al = $('#alipay img:last-child')[0].src = './img/fu.png';
-            $wx = $('#wxpay img:last-child')[0].src = './img/zhen.png'
-        });
-        $('#alipay').click(e => {
-            $al = $('#wxpay img:last-child')[0].src = './img/fu.png';
-            $wx = $('#alipay img:last-child')[0].src = './img/zhen.png'
-        })
-    })
+    $('.class').on('click',function(){
+        callpay();
+    });
 
+    function callpay() {
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            } else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+            }
+        } else {
+            jsApiCall();
+        }
+    }
+
+    function jsApiCall() {
+            WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',
+                    {$jsApiParameters},
+                    function (res) {
+                        if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                $.toast('微信支付成功!', function () {
+                                    location.href = "{$success_url}";
+                                });
+                                    
+                        } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                                $.toast('用户取消支付!', 'cancel', function () {
+                                    location.href = "{$cancel_url}";
+                                });
+                        } else {
+                                $.toast('支付失败!', 'forbidden', function () {
+                                    location.href = "{$error_url}";
+                                });
+                        }
+                    }
+            );
+    }
 </script>
 </html>
