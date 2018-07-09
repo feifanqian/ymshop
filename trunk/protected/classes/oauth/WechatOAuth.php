@@ -194,7 +194,7 @@ class WechatOAuth extends OAuth2 {
             'code' => $code
         );
         $data = $this->http($this->accessTokenURL, $params, 'post');
-        $data = JSON::decode($result);
+        $data = JSON::decode($data);
         if (isset($data['openid'])) {
             return $data['openid'];
         } else {
