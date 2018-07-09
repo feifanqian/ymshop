@@ -86,7 +86,6 @@
     });
 
     function callpay() {
-        alert(111);
         if (typeof WeixinJSBridge == "undefined") {
             if (document.addEventListener) {
                 document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
@@ -101,12 +100,10 @@
 
     function jsApiCall() {
             var jsApiParameters = '{$jsApiParameters}';
-            alert(jsApiParameters);
             WeixinJSBridge.invoke(
                     'getBrandWCPayRequest',
                     jsApiParameters,
                     function (res) {
-                        alert(res)
                         if (res.err_msg == "get_brand_wcpay_request:ok") {
                                 $.toast('微信支付成功!', function () {
                                     location.href = "{$success_url}";
