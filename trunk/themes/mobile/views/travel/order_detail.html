@@ -29,8 +29,8 @@
       <p>手机号</p><span>{$order['contact_phone']}</span><br/>
       <p>身份证</p><span>{echo: substr($order['id_no'],0,1).'**************'.substr($order['id_no'],-1)}</span><br/>
       <p>姓  别</p><span>{if:$order['sex']==1}男{else:}女{/if}</span><br/>
-      {list:$items=$order['img']}
-      <img src="{$item['img']}">
+      {list:$items=$order['idcard_url']}
+      <img src="{$item['idcard_url']}">
       {/if}
     </div> 
     {if:$order['pay_status']==0}
