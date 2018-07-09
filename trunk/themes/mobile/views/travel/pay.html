@@ -57,7 +57,7 @@
     })
     $('.pay').on('click',function(){
         var pay_type = $("input[name='pay_type']").val();
-        var code = "{$code}";
+        var need_code = "{$need_code}";
         var order_id = "{$order['id']}";
         var type = "{$order['pay_type']}";
         if(pay_type!=type) {
@@ -76,12 +76,10 @@
             });
         }
         if(pay_type==1) {
-            alert(code);
-            if(code == '') {
+            if(need_code == 1) {
                 var url = "{$url}";
                 window.location.href = url;
             } else {
-                alert(000);
                 callpay();
             }    
         } 

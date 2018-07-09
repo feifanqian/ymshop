@@ -132,6 +132,7 @@ class TravelController extends Controller
     }
     public function pay() {
         $id = Filter::int(Req::args("id"));
+        $code = Filter::sql(Req::args('code'));
         $order = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.date,tw.desc,t.order_amount,tw.img,tw.price,t.way_id,t.contact_name,t.contact_phone,t.id_no,t.idcard_url,t.sex,t.pay_status,t.pay_type')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.id='.$id)->find();
         if(!$order) {
             $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息啦"));
@@ -140,9 +141,26 @@ class TravelController extends Controller
         $notify_url = "http://www.ymlypt.com/travel/callback";
         $oauth = new WechatOAuth();
         $url = $oauth->getCode($id);
-        $code = Filter::sql(Req::args('code'));
-        if($code) {
-            $openid = $oauth->getOpenid($code);
+        $oauth_user = $this->model->table('oauth_user')->fields('open_id')->where("oauth_type='wechat' AND user_id=".$this->user['id'])->find();
+        $need_code = empty($oauth_user)?1:0;
+        if(!$oauth_user && $code) {
+            $extend = null;
+            $token = $oauth->getAccessToken($code, $extend);
+            $userinfo = $oauth->getUserInfo();
+            $this->model->table('oauth_user')->data(array(
+                    'user_id' => $this->user['id'], 
+                    'open_name' => $userinfo['open_name'],
+                    'oauth_type' => "wechat",
+                    'posttime' => time(),
+                    'token' => $token['access_token'],
+                    'expires' => $token['expires_in'],
+                    'open_id' => $token['openid']
+                ))->insert();
+        }
+        
+        if($oauth_user) {
+            // $openid = $oauth->getOpenid($code);
+            $openid = $oauth_user['open_id'];
             //②、统一下单
             $input = new WxPayUnifiedOrder();
             $input->SetBody("圆梦旅游");
@@ -162,6 +180,7 @@ class TravelController extends Controller
             $this->assign("jsApiParameters", $jsApiParameters);
         }
         $success_url = Url::urlFormat("/travel/order_detail/id/{$id}");
+        $this->assign("need_code", $need_code);
         $this->assign("success_url", $success_url);
         $this->assign('code',$code);
         $this->assign('order',$order);
