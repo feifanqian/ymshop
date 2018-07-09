@@ -25,31 +25,42 @@
         </div>
     </div>
     <div class="pay-type">
-        <select name="pay_type">
-           <option value="10">
-               <div class="pay-type-cell" id="alipay">
-                 <img src="/static/yuanmeng/three-level/img/zhi.png" alt="">
-                 <span>支付宝支付</span>
-                 <img src="/static/yuanmeng/three-level/img/zhen.png" alt="">
-               </div>
-           </option>
-           <option value="6">
-               <div class="pay-type-cell" id="wxpay">
-                  <img src="/static/yuanmeng/three-level/img/wei.png" alt="">
-                  <span>微信支付</span>
-                  <img src="/static/yuanmeng/three-level/img/fu.png" alt="">
-               </div>
-           </option>
-        </select>
+        <div class="pay-type-cell" id="wxpay">
+            <img src="/static/yuanmeng/three-level/img/wei.png" alt="">
+            <span>微信支付</span>
+            <img src="/static/yuanmeng/three-level/img/fu.png" alt="">
+        </div>
+        <div class="pay-type-cell" id="alipay">
+            <img src="/static/yuanmeng/three-level/img/zhi.png" alt="">
+            <span>支付宝支付</span>
+            <img src="/static/yuanmeng/three-level/img/zhen.png" alt="">
+        </div>
     </div>
-    <p class="prc">总金额: <b>${$order['amount']}</b></p>
+    <input type="hidden" name="pay_type" value="6">  
+    <p class="prc">总金额: <b>￥{$order['order_amount']}</b></p>
     <a class="pay">确认支付</a>
 </div>
 </body>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script>
+    $(function ($) {
+        $('#wxpay').click(e => {
+            $('#alipay img:last-child')[0].src = '/static/yuanmeng/three-level/img/fu.png';
+            $('#wxpay img:last-child')[0].src = '/static/yuanmeng/three-level/img/zhen.png';
+            $("input[name='pay_type']").val('6');
+        });
+        $('#alipay').click(e => {
+            $('#wxpay img:last-child')[0].src = '/static/yuanmeng/three-level/img/fu.png';
+            $('#alipay img:last-child')[0].src = '/static/yuanmeng/three-level/img/zhen.png';
+            $("input[name='pay_type']").val('10');
+        })
+    })
     $('.class').on('click',function(){
-        callpay();
+        var pay_type = $("input[name='pay_type']").val();
+        if(pay_type==6) {
+            callpay();
+            console.log('wx');
+        } 
     });
 
     function callpay() {
