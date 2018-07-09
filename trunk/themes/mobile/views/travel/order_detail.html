@@ -48,6 +48,7 @@
    $('.idcard_url img').on('click',function(){
       var wValue=1.5 * $(this).width();  
       var hValue=1.5 * $(this).height();
+      var src = $(this).attr("src");
       $('#bigimg').attr("src", src);
       $('#bigimg').css("width",wValue);
       $('#bigimg').css("height",hValue);
