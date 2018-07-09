@@ -131,6 +131,7 @@ class TravelController extends Controller
         $this->redirect();
     }
     public function pay() {
+        var_dump(123);die;
         $id = Filter::int(Req::args("id"));
         $code = Filter::sql(Req::args('code'));
         if(!$this->user['id']) {

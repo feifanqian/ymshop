@@ -3,7 +3,7 @@
 	width:100%;
 	height:300px;
 	/*background-color: #f2764a;*/
-  background:url(/themes/mobile/images/anzhuo.png) no-repeat center;
+  /*background:url(/themes/mobile/images/anzhuo.jpg) no-repeat center;*/
 	padding-left: 20px;
   padding-right: 20px; 
 }
@@ -29,32 +29,68 @@
 }
 </style>
 {if:$pay_status==1}
-<div class="bg-content">
-   <div style="padding-top:10px; ">
-      <p style="font-size:20px;text-align: center;color:#fff;">支付成功</p>
-   </div>
-   <div style="text-align: center;">
-      <img src="/themes/mobile/images/cat.png" width="150" height="150">
-   </div>
-   <div>
-      <p style="font-size:24px;text-align: center;color:#fff;margin-top: 10px;">欧耶,支付成功了</p>
-   </div>
-   <div><p class="black" style="font-size:20px;text-align: center;color:#fff;margin-top: 10px;">{$currency_symbol}{$order['order_amount']}</p></div>
-</div>
-<div class="bg-content1">
-  <div class="line-text">
-      <p style="float: left;">收款方</p>
-      <p style="float: right;">{$shopname}</p>
+  {if:$order['user_id']==42608}
+  <div class="bg-content">
+     
+     <div style="width:80%;text-align: center;padding-top:10px;background: url(/themes/mobile/images/kuang.jpg) no-repeat center">
+        <div style="position: relative;top: 10px;left: 10%;">
+           <img src="/themes/mobile/images/success.png">
+           <p>成功支付{$order['order_amount']}元</p>
+           <p style="left: 10%">收款方：{$shopname}</p>
+           <p style="left: 10%">收款时间：{$order['pay_time']}</p> 
+           <p style="left: 10%">订单号{$order['order_no']}</p> 
+        </div>
+     </div>
+     <div>
+        <p style="font-size:24px;text-align: center;color:#fff;margin-top: 10px;">欧耶,支付成功了</p>
+     </div>
+     <div><p class="black" style="font-size:20px;text-align: center;color:#fff;margin-top: 10px;">{$currency_symbol}{$order['order_amount']}</p></div>
   </div>
-  <div class="line-text">
-      <p style="float: left;">收款时间</p>
-      <p style="float: right;">{$order['pay_time']}</p>
+  <div class="bg-content1">
+    <div class="line-text">
+        <p style="float: left;">收款方</p>
+        <p style="float: right;">{$shopname}</p>
+    </div>
+    <div class="line-text">
+        <p style="float: left;">收款时间</p>
+        <p style="float: right;">{$order['pay_time']}</p>
+    </div>
+    <div class="line-text">
+        <p style="float: left;">订单号</p>
+        <p style="float: right;">{$order['order_no']}</p>
+    </div>
   </div>
-  <div class="line-text">
-      <p style="float: left;">订单号</p>
-      <p style="float: right;">{$order['order_no']}</p>
+  <div style="position: relative;left: 20%;top:60%;">
+    <a href=""><img src="/themes/mobile/images/anniu.png"></a>
   </div>
-</div>
+  {else:}
+  <div class="bg-content">
+     <div style="padding-top:10px; ">
+        <p style="font-size:20px;text-align: center;color:#fff;">支付成功</p>
+     </div>
+     <div style="text-align: center;">
+        <img src="/themes/mobile/images/cat.png" width="150" height="150">
+     </div>
+     <div>
+        <p style="font-size:24px;text-align: center;color:#fff;margin-top: 10px;">欧耶,支付成功了</p>
+     </div>
+     <div><p class="black" style="font-size:20px;text-align: center;color:#fff;margin-top: 10px;">{$currency_symbol}{$order['order_amount']}</p></div>
+  </div>
+  <div class="bg-content1">
+    <div class="line-text">
+        <p style="float: left;">收款方</p>
+        <p style="float: right;">{$shopname}</p>
+    </div>
+    <div class="line-text">
+        <p style="float: left;">收款时间</p>
+        <p style="float: right;">{$order['pay_time']}</p>
+    </div>
+    <div class="line-text">
+        <p style="float: left;">订单号</p>
+        <p style="float: right;">{$order['order_no']}</p>
+    </div>
+  </div>
+  {/if}
 {else:}
 <style>
     .weui-select-modal{
@@ -125,6 +161,9 @@
                     $("input[name='payment_id']").val($("#paytype").attr("data-values"));
                 }
             });
-        });
+        var color_list = {0:'url(/themes/mobile/images/anzhuo1.jpg)',1:'url(/themes/mobile/images/anzhuo2.jpg)',2:'url(/themes/mobile/images/anzhuo3.jpg)'};
+        var index = parseInt(2*Math.random());
+        $('.bg-content').css('background',color_list[index]);
+      });  
 </script>
 {/if}
