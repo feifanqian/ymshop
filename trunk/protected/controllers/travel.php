@@ -133,6 +133,9 @@ class TravelController extends Controller
     public function pay() {
         $id = Filter::int(Req::args("id"));
         $code = Filter::sql(Req::args('code'));
+        if(!$this->user['id']) {
+            $this->redirect('/active/login?redirect=pay&id={$id}');
+        }
         $order = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.date,tw.desc,t.order_amount,tw.img,tw.price,t.way_id,t.contact_name,t.contact_phone,t.id_no,t.idcard_url,t.sex,t.pay_status,t.pay_type')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.id='.$id)->find();
         if(!$order) {
             $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息啦"));
