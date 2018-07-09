@@ -175,6 +175,7 @@ class WechatOAuth extends OAuth2 {
             'appid' => $this->appKey,
             'redirect_uri' => "http://www.ymlypt.com/travel/pay/id/{$id}",
             'response_type' => "code",
+            'scope' => "snsapi_userinfo"
         );
         
         $url = "https://open.weixin.qq.com/connect/oauth2/authorize".'?' . http_build_query($params) . "&state=1#wechat_redirect";
