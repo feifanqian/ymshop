@@ -1,0 +1,57 @@
+﻿<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="/static/yuanmeng/three-level/css/allway.css">
+    <link rel="stylesheet" href="/static/yuanmeng/three-level/css/pay.css">
+    <title>订单详情</title>
+</head>
+<body>
+<div id="app">
+    <div class="way">
+        <div class="cell">
+          <a href="/travel/way_detail/id/{$order['way_id']}">
+            <img src="{$order['img']}" alt="" class="cell-bg">
+            <div class="detail">
+                <h2>{$order['name']}</h2>
+                <span class="time">{$order['date']}</span>
+                <span class="address">{$order['city']}</span>
+                <span class="price">{$order['price']}</span>
+            </div> 
+          </a>  
+        </div>
+    </div>
+    <div style="width: 80%;height: auto;margin-left: 10%;">
+      <p>姓  名</p><span>{$order['contact_name']}</span><br/>
+      <p>手机号</p><span>{$order['contact_phone']}</span><br/>
+      <p>身份证</p><span>{echo: substr($order['id_no'],0,1).'**************'.substr($order['id_no'],-1)}</span><br/>
+      <p>姓  别</p><span>{if:$order['sex']==1}男{else:}女{/if}</span><br/>
+      {list:$items=$order['img']}
+      <img src="{$item['img']}">
+      {/if}
+    </div> 
+    {if:$order['pay_status']==0}
+    <a class="pay" href="/travel/pay/id/{$order['id']}">确认支付</a>
+    {else:}
+    <a class="pay" href="">已支付</a>
+    {/if}
+</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(function ($) {
+        $('#wxpay').click(e => {
+            $al = $('#alipay img:last-child')[0].src = './img/fu.png';
+            $wx = $('#wxpay img:last-child')[0].src = './img/zhen.png'
+        });
+        $('#alipay').click(e => {
+            $al = $('#wxpay img:last-child')[0].src = './img/fu.png';
+            $wx = $('#alipay img:last-child')[0].src = './img/zhen.png'
+        })
+    })
+
+</script>
+</html>

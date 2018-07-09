@@ -119,5 +119,14 @@ class TravelController extends Controller
         } else {
             $this->redirect('/active/login/redirect/order_list');
         }
+    }
+
+    public function order_detail()
+    {
+        $id = Filter::int(Req::args("id"));
+        $order = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.date,tw.desc,t.order_amount,tw.img,tw.price,t.way_id,t.contact_name,t.id_no')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.id='.$id)->find();
+        $order['img'] = explode(',', $order['img']);
+        $this->assign('order',$order);
+        $this->redirect();
     } 
 }    
