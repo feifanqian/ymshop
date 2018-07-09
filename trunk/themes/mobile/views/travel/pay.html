@@ -102,6 +102,7 @@
             // var jsApiParameters = '{$jsApiParameters}';
             var jsapi={$jsApiParameters};
             jsonapi=JSON.parse(jsapi);
+            alert(jsonapi.appId);
             WeixinJSBridge.invoke(
                     'getBrandWCPayRequest',
                     {
