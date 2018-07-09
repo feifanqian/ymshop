@@ -103,8 +103,8 @@ class TravelController extends Controller
             'pay_status'=>0
             );
         $id = $this->model->table('travel_order')->data($data)->insert();
-
-        $this->redirect('/travel/pay/id/{$id}');
+        var_dump($id);die;
+        $this->redirect('/travel/pay/id/'.$id);
     }
 
     public function order_list()
