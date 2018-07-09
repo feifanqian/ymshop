@@ -28,15 +28,15 @@
         <div class="pay-type-cell" id="wxpay">
             <img src="/static/yuanmeng/three-level/img/wei.png" alt="">
             <span>微信支付</span>
-            <img src="/static/yuanmeng/three-level/img/fu.png" alt="">
+            <img src="/static/yuanmeng/three-level/img/zhen.png" alt="">
         </div>
         <div class="pay-type-cell" id="alipay">
             <img src="/static/yuanmeng/three-level/img/zhi.png" alt="">
             <span>支付宝支付</span>
-            <img src="/static/yuanmeng/three-level/img/zhen.png" alt="">
+            <img src="/static/yuanmeng/three-level/img/fu.png" alt="">
         </div>
     </div>
-    <input type="hidden" name="pay_type" value="6">  
+    <input type="hidden" name="pay_type" value="1">  
     <p class="prc">总金额: <b>￥{$order['order_amount']}</b></p>
     <a class="pay">确认支付</a>
 </div>
@@ -47,21 +47,41 @@
         $('#wxpay').click(e => {
             $('#alipay img:last-child')[0].src = '/static/yuanmeng/three-level/img/fu.png';
             $('#wxpay img:last-child')[0].src = '/static/yuanmeng/three-level/img/zhen.png';
-            $("input[name='pay_type']").val('6');
+            $("input[name='pay_type']").val('1');
         });
         $('#alipay').click(e => {
             $('#wxpay img:last-child')[0].src = '/static/yuanmeng/three-level/img/fu.png';
             $('#alipay img:last-child')[0].src = '/static/yuanmeng/three-level/img/zhen.png';
-            $("input[name='pay_type']").val('10');
+            $("input[name='pay_type']").val('2');
         })
     })
     $('.pay').on('click',function(){
         var pay_type = $("input[name='pay_type']").val();
-        if(pay_type==6) {
-            var url = "{$url}";
-            window.location.href = url;
-            callpay();
-            console.log('wx');
+        var code = "{$code}";
+        var order_id = "{$order['id']}";
+        var type = "{$order['pay_type']}";
+        if(pay_type!=type) {
+            $.ajax({
+                url: "{url:/travel/modify_pay_type}",
+                data: {order_id: order_id,pay_type:pay_type},
+                type: 'post',
+                dataType: 'json',
+                success: function (ret) { 
+                    console.log('success');                    
+                }, 
+                error: function (e) {
+                    console.log(e);
+                    alert("服务器繁忙!");
+                }
+            });
+        }
+        if(pay_type==1) {
+            if(code == '') {
+                var url = "{$url}";
+                window.location.href = url;
+            } else {
+                callpay();
+            }    
         } 
     });
 

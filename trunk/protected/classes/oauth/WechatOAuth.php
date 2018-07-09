@@ -170,7 +170,7 @@ class WechatOAuth extends OAuth2 {
         }
     }
 
-    public function getOpenid($id) {
+    public function getCode($id) {
         $params = array(
             'appid' => $this->appKey,
             'redirect_uri' => "http://www.ymlypt.com/travel/pay/id/{$id}",
@@ -184,6 +184,22 @@ class WechatOAuth extends OAuth2 {
         // $result = json_decode($ret,true);
 
         return $url;
+    }
+
+    public function getOpenid($code) {
+       $params = array(
+            'appid' => $this->appKey,
+            'secret' => $this->appSecret,
+            'grant_type' => $this->grantType,
+            'code' => $code
+        );
+        $data = $this->http($this->accessTokenURL, $params, 'post');
+        $data = JSON::decode($result);
+        if (isset($data['openid'])) {
+            return $data['openid'];
+        } else {
+            throw new Exception("获取用户openid出错：{$data['error_description']}");
+        }
     }
 
     // public function getUserInfos($access_token,$openid){

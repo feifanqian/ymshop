@@ -133,11 +133,70 @@ class TravelController extends Controller
     public function pay() {
         $id = Filter::int(Req::args("id"));
         $order = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.date,tw.desc,t.order_amount,tw.img,tw.price,t.way_id,t.contact_name,t.contact_phone,t.id_no,t.idcard_url,t.sex,t.pay_status')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.id='.$id)->find();
+        if(!$order) {
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息啦"));
+            exit();
+        }
+        $notify_url = "http://www.ymlypt.com/travel/callback";
         $oauth = new WechatOAuth();
-        $url = $oauth->getOpenid($id);
+        $url = $oauth->getCode($id);
+        $code = Filter::sql(Req::args('code'));
+        if($code) {
+            $openid = $oauth->getOpenid($code);
+            //②、统一下单
+            $input = new WxPayUnifiedOrder();
+            $input->SetBody("圆梦旅游");
+            $input->SetAttach($order['order_no']);
+            $input->SetOut_trade_no($order['order_no']);
+            $input->SetTotal_fee(intval(bcmul($order['order_amount'],100)));
+            $input->SetTime_start(date("YmdHis"));
+            $input->SetTime_expire(date("YmdHis", time() + 3600));
+            $input->SetGoods_tag("test");
+            $input->SetNotify_url($notify_url);
+            $input->SetTrade_type("JSAPI");
+            $input->SetOpenid($openId);
 
+            $order_input = WxPayApi::unifiedOrder($input);
+            
+            $jsApiParameters = $tools->GetJsApiParameters($order_input);
+            $this->assign("jsApiParameters", $jsApiParameters);
+        }
+        $success_url = Url::urlFormat("/travel/order_detail/id/{$id}");
+        $this->assign("success_url", $success_url);
+        $this->assign('code',$code);
         $this->assign('order',$order);
         $this->assign('url',$url);
         $this->redirect();
+    }
+
+    public function modify_pay_type () {
+        $id = Filter::int(Req::args("order_id"));
+        $pay_type = Filter::int(Req::args("pay_type"));
+        $this->model->table('travel_order')->data(array('pay_type'=>$pay_type))->where('id='.$id)->update();
+
+        echo JSON::encode(array('status' => 'success'));
+    }
+
+    public function callback() {
+        $xml = @file_get_contents('php://input');
+        $array=Common::xmlToArray($xml);
+        if($array['result_code']=='SUCCESS'){
+            $money = round(intval($array['total_fee'])/100,2);
+            $order_no = $array['attach'];
+            $order = $this->model->table('travel_order')->where("order_no='{$order_no}'")->find();
+            if($order) {
+                if ($order['order_amount'] > $money) {
+                    file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
+                    echo 'fail';
+                    exit;
+                }
+                $this->model->table('travel_order')->data(array('pay_status'=>1))->where('id='.$id)->update();
+            }
+            echo "success";
+            exit();
+        }else{
+            echo "fail";
+            exit();
+        }
     } 
 }    

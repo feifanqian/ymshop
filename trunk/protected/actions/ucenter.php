@@ -2084,6 +2084,7 @@ class UcenterAction extends Controller {
         $end_time = Filter::str(Req::args('end_time'));
         $from = Filter::str(Req::args('from'));
         $level = Filter::int(Req::args('level'));
+        $date_sort = Filter::int(Req::args('date_sort'));
         if(!$level) {
             $level = 0;
         }
@@ -2095,6 +2096,13 @@ class UcenterAction extends Controller {
         if($end_time) {
             $end = strtotime($end_time);
             $where .= ' and createtime<'.$end;      
+        }
+        $sort = "do.id desc";
+        if($date_sort=='desc') {
+            $sort = "do.createtime desc";
+        }
+        if($date_sort=='asc') {
+            $sort = "do.createtime asc";
         }
         if($from) {
            switch (strtoupper($from)) {
@@ -2137,7 +2145,7 @@ class UcenterAction extends Controller {
                     ->join('left join user as u on do.invite_user_id = u.id')
                     ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
                     ->where($where)
-                    ->order("do.id desc")
+                    ->order($sort)
                     ->findPage($page, 10);        
             if (isset($record['html'])) {
                 unset($record['html']);
@@ -2180,7 +2188,7 @@ class UcenterAction extends Controller {
                     ->join('left join user as u on do.invite_user_id = u.id')
                     ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
                     ->where($where)
-                    ->order("do.id desc")
+                    ->order($sort)
                     ->findAll();
             if($list) {
                 foreach($list as $k=>$v){
