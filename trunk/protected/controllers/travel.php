@@ -124,7 +124,7 @@ class TravelController extends Controller
     public function order_detail()
     {
         $id = Filter::int(Req::args("id"));
-        $order = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.date,tw.desc,t.order_amount,tw.img,tw.price,t.way_id,t.contact_name,t.id_no,t.idcard_url')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.id='.$id)->find();
+        $order = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.date,tw.desc,t.order_amount,tw.img,tw.price,t.way_id,t.contact_name,t.id_no,t.idcard_url,t.sex')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.id='.$id)->find();
         $order['idcard_url'] = explode(',', $order['idcard_url']);
 
         $this->assign('order',$order);
