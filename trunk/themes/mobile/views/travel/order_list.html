@@ -99,12 +99,12 @@
             // },
             success: function (res) {
                 data = JSON.stringify(res);
-                alert(data.data);
+                // alert(data);
                 layer.close(index);
-                if (data.data.length == 0) {
+                if (data.length == 0) {
                     layer.msg('已经到底!',{time:500});
                 }  else {
-                    $.each(data.data, function (i, item) {
+                    $.each(data, function (i, item) {
 
                         html += '<div class="order-cell">';
                         html += '<div class="order-cell-id">订单编号:'+item.order_no+'</div>';

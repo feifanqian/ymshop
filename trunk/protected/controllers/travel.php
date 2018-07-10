@@ -441,7 +441,7 @@ class TravelController extends Controller
                 $page = 1;
             }
         $list = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.desc,t.order_amount,tw.img')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.user_id='.$user_id)->findPage($page,5);
-        $list = array('status' => 'success', 'data'=>$list['data']);
+        $list = array('data'=>$list['data']);
         echo JSON::encode($list);
     } 
 }    
