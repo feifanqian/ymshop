@@ -10,7 +10,7 @@
     <style type="text/css">
     .tips {
         display: block;
-        width: 90%;
+        width: 100%;
         font-size: 18px;
         color: #4f4f4f;
         /*padding: 0 44px;*/
@@ -29,7 +29,7 @@
     <title>订单详情</title>
 </head>
 <body>
-<div id="app">
+<div id="app" style="background: #fff;">
     <div class="way">
         <div class="cell">
           <a href="/travel/way_detail/id/{$order['way_id']}">
@@ -43,11 +43,11 @@
           </a>  
         </div>
     </div>
-    <div style="width: 80%;height: auto;margin-left: 10%;">
-        <div style="height: 54px;margin-bottom: -30px;"><p>联&nbsp;&nbsp;&nbsp;系&nbsp;&nbsp;&nbsp;人&nbsp;&nbsp;&nbsp;姓&nbsp;&nbsp;&nbsp;名:&nbsp;&nbsp;&nbsp;{$order['contact_name']}</p></div><br/>
-        <div style="height: 54px;margin-bottom: -30px;"><p>联&nbsp;&nbsp;&nbsp;系&nbsp;&nbsp;&nbsp;人&nbsp;&nbsp;&nbsp;手&nbsp;&nbsp;&nbsp;机:&nbsp;&nbsp;&nbsp;{$order['contact_phone']}</p></div><br/>
-        <div style="height: 54px;margin-bottom: -30px;"><p>身&nbsp;&nbsp;&nbsp;份&nbsp;&nbsp;&nbsp;证&nbsp;&nbsp;&nbsp;号&nbsp;&nbsp;&nbsp;码:&nbsp;&nbsp;&nbsp;{echo: substr($order['id_no'],0,1).'**************'.substr($order['id_no'],-1)}</p></div><br/>
-        <div style="height: 54px;margin-bottom: -30px;"><p>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:&nbsp;&nbsp;&nbsp;{if:$order['sex']==1}男{else:}女{/if}</p></div><br/>
+    <div style="width: 80%;height: auto;margin-left: 8%;">
+        <div style="height: 54px;margin-bottom: -30px;"><p>联&nbsp;&nbsp;系&nbsp;&nbsp;人&nbsp;&nbsp;姓&nbsp;&nbsp;名:&nbsp;&nbsp;{$order['contact_name']}</p></div><br/>
+        <div style="height: 54px;margin-bottom: -30px;"><p>联&nbsp;&nbsp;系&nbsp;&nbsp;人&nbsp;&nbsp;手&nbsp;&nbsp;机:&nbsp;&nbsp;{$order['contact_phone']}</p></div><br/>
+        <div style="height: 54px;margin-bottom: -30px;"><p>身&nbsp;&nbsp;份&nbsp;&nbsp;证&nbsp;&nbsp;号&nbsp;&nbsp;码:&nbsp;&nbsp;{echo: substr($order['id_no'],0,1).'**************'.substr($order['id_no'],-1)}</p></div><br/>
+        <div style="height: 54px;margin-bottom: -30px;"><p>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:&nbsp;&nbsp;{if:$order['sex']==1}男{else:}女{/if}</p></div><br/>
         <p class="tips">备注:请上传清晰图片身份证及其其他证件照片.(境外游需要上传港澳通信证及护照)</p>
     </div>
 
