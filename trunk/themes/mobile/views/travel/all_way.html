@@ -11,6 +11,8 @@
     <title>所有路线</title>
 </head>
 <body>
+<script src="/runtime/systemjs/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
 <div id="app" class="way">
     {if:count($list['data'])>0}
         {list:items=$list['data']}
@@ -27,9 +29,18 @@
         <div class="page-nav tc">{$list['html']}</div>    
     {else:}
     <div class="ma20 bg-white p20">
-        <p class="p20">没有邀请记录！</p>
+        <p class="p20">没有线路记录！</p>
     </div>
     {/if}    
 </div>
 </body>
+<script type="text/javascript">
+$(window).scroll(function(){
+　　//判断是否滑动到页面底部
+     if($(window).scrollTop() === $(document).height() - $(window).height()){
+        alert('下一页');
+           // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
+     }
+});
+</script>
 </html>

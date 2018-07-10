@@ -73,10 +73,7 @@
     var page = $('#page').val();
     $(window).bind('scroll', function () {
         if (getScrollHeight() == getWindowHeight() + getDocumentTop())
-        // if ($(document).scrollTop() == $(document).height() - $(window).height()) 
         {
-            console.log('page');
-            alert(111);
             page++;
             ajaxRead();
         }
