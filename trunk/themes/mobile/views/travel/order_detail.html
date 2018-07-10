@@ -7,6 +7,24 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
     <link rel="stylesheet" href="/static/yuanmeng/three-level/css/allway.css">
     <link rel="stylesheet" href="/static/yuanmeng/three-level/css/pay.css">
+    <style type="text/css">
+    .tips {
+        display: block;
+        font-size: 18px;
+        color: #4f4f4f;
+        padding: 0 44px;
+    }
+    .tips2 {
+      display: block;
+      text-align: center;
+      color: #ff4141;
+      font-size: 26px;
+      line-height: 150%;
+      background: #edecf6;
+      margin: 0;
+      padding: 66px 0;
+    }
+    </style>
     <title>订单详情</title>
 </head>
 <body>
@@ -24,18 +42,23 @@
           </a>  
         </div>
     </div>
+    <div style="width: 60%;height: auto;margin-left: 10%;">
+        <div style="height: 54px;"><p>联系人姓名:{$order['contact_name']}</p></div><br/>
+        <div style="height: 54px;"><p>联系人手机:{$order['contact_phone']}</p></div><br/>
+        <div style="height: 54px;"><p>身份证号码:{echo: substr($order['id_no'],0,1).'**************'.substr($order['id_no'],-1)}</p></div><br/>
+        <div style="height: 54px;"><p>性&nbsp;&nbsp;&nbsp;&nbsp;别:{if:$order['sex']==1}男{else:}女{/if}</p></div><br/>
+        <p class="tips">备注:请上传清晰图片身份证及其其他证件照片.(境外游需要上传港澳通信证及护照)</p>
+    </div>
+
     <div style="width: 60%;height: auto;margin-left: 20%;">
-      <span><p>姓&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;{$order['contact_name']}</p></span><br/>
-      <span><p>手机号&nbsp;&nbsp;&nbsp;{$order['contact_phone']}</p></span><br/>
-      <span><p>身份证&nbsp;&nbsp;&nbsp;{echo: substr($order['id_no'],0,1).'**************'.substr($order['id_no'],-1)}</p></span><br/>
-      <span><p>姓&nbsp;&nbsp;&nbsp;别&nbsp;&nbsp;&nbsp;{if:$order['sex']==1}男{else:}女{/if}</p></span><br/>
       {list:$items=$order['idcard_url']}
       <div class="idcard_url">
          <img src="{$item}" width="280" height="200" />
       </div>
       {/if}
       <div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;"><div id="innerdiv" style="position:absolute;top:30%;left: 20%;"><img id="bigimg" style="border:5px solid #fff;" src="" /></div></div>
-    </div> 
+    </div>
+    <p class="tips2">温馨提示: 如有消息错误请联系客服进行修改<br>客服电话: 400-8715-988</p> 
     {if:$order['pay_status']==0}
     <a class="pay" href="/travel/pay/id/{$order['id']}">确认支付</a>
     {else:}

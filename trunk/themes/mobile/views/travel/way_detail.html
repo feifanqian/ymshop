@@ -30,6 +30,9 @@
         line-height: 60px;
         text-align: center; 
       }
+      .main p{
+        color:#696969;
+      }
     </style>
     <title>路线详情</title>
 </head>
@@ -39,9 +42,9 @@
         <span class="title">{$info['title']}</span>
         <p class="detail">{$info['desc']}</p>
         <p class="price">{$info['price']}</p>
-        <p class="time">{$info['date']}</p>
-        <p class="address">{$info['city']}</p>
-        <p class="num">{if:$sign_status==1}已报名{else:}未报名{/if}</p>
+        <img src="/static/yuanmeng/three-level/img/date.png" /><p class="time">{$info['date']}</p>
+        <img src="/static/yuanmeng/three-level/img/city.png" /><p class="address">{$info['city']}</p>
+        <img src="/static/yuanmeng/three-level/img/sign.png" /><p class="num">已报名{$sign_num}人/限报:{$info['limit_num']}人</p>
         <div class="line"></div>
     </div>
     <h2 class="way_title">行程介绍</h2>

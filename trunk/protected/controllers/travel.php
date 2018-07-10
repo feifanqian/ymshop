@@ -52,15 +52,16 @@ class TravelController extends Controller
     public function way_detail() {
         $id = Filter::int(Req::args("id"));
         $info = $this->model->table('travel_way')->where('id='.$id)->find();
-        if($this->user['id']) {
-            $sign = $this->model->table('travel_order')->where('user_id='.$this->user['id'].' and way_id='.$id)->find();
-            $sign_status = empty($sign)?0:1;
-        } else {
-            $sign_status = 0;
-        }
-        
+        // if($this->user['id']) {
+        //     $sign = $this->model->table('travel_order')->where('user_id='.$this->user['id'].' and way_id='.$id)->find();
+        //     $sign_status = empty($sign)?0:1;
+        // } else {
+        //     $sign_status = 0;
+        // }
+        $num = $this->model->table('travel_order')->fields('count(id) as num')->where('order_status!=-1 and id='.$id)->group('user_id')->findAll();
+        $sign_num = isset($num[0]) && $num[0]['num']!=null?$num[0]['num']:0;
         $this->assign('info',$info);
-        $this->assign('sign_status',$sign_status);
+        $this->assign('sign_num',$sign_num);
         $this->redirect();
     }
 
