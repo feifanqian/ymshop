@@ -32,12 +32,11 @@
   {if:$order['user_id']==42608}
   <div class="bg-content" style="height: 800px;">
      <div style="width:80%;text-align: center;padding-top:10px;background: url(/themes/mobile/images/kuang.png) no-repeat center">
-        <div style="position: relative;top: 10px;left: 10%;">
-           <img src="/themes/mobile/images/success.png">
-           <p>成功支付{$order['order_amount']}元</p>
-           <p style="left: 10%">收款方：{$shopname}</p>
-           <p style="left: 10%">收款时间：{$order['pay_time']}</p> 
-           <p style="left: 10%">订单号{$order['order_no']}</p> 
+        <div style="position: relative;top: 10px;">  
+           <p style="color:#f3be1e;"><img src="/themes/mobile/images/success.png" width="30" height="30">成功支付<b style="color: #d4737f;">{$order['order_amount']}</b>元</p>
+           <p style="left: 10%;color: #999;">收款方：{$shopname}</p>
+           <p style="left: 10%;color: #999;">收款时间：{$order['pay_time']}</p> 
+           <p style="left: 10%;color: #999;">订单号{$order['order_no']}</p> 
         </div>
      </div>
      
