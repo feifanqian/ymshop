@@ -85,20 +85,22 @@
         var user_id = "{$user_id}";
         var data = {page: page,user_id:user_id};
         var index;
+        alert(111);
         $.ajax({
             type: 'post',
             dataType: 'json',
             url: url,
             data: data,
-            beforeSend: function () {
-                //loading层
-                index = layer.load(1, {
-                    shade: [0.1, '#fff'], //0.1透明度的白色背景
-                    time:500
-                });
-            },
+            // beforeSend: function () {
+            //     //loading层
+            //     index = layer.load(1, {
+            //         shade: [0.1, '#fff'], //0.1透明度的白色背景
+            //         time:500
+            //     });
+            // },
             success: function (data) {
                 alert(data);
+                return false;
                 layer.close(index);
                 if (data.data.length == 0) {
                     layer.msg('已经到底!',{time:500});
