@@ -72,11 +72,16 @@
 
     var page = $('#page').val();
     $(window).bind('scroll', function () {
-        if (getScrollHeight() == getWindowHeight() + getDocumentTop())
-        {
+        // if (getScrollHeight() == getWindowHeight() + getDocumentTop())
+        // {
+        //     page++;
+        //     ajaxRead();
+        // }
+        if($(window).scrollTop() === $(document).height() - $(window).height()){
+            alert(111);
             page++;
             ajaxRead();
-        }
+         }
     });
 
     function ajaxRead() {
