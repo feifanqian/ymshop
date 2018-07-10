@@ -85,7 +85,6 @@
         var user_id = "{$user_id}";
         var data = {page: page,user_id:user_id};
         var index;
-        alert(111);
         $.ajax({
             type: 'post',
             dataType: 'json',
@@ -98,9 +97,8 @@
             //         time:500
             //     });
             // },
-            success: function (data) {
-                alert(data);
-                return false;
+            success: function (res) {
+                data = JSON.stringify(res)
                 layer.close(index);
                 if (data.data.length == 0) {
                     layer.msg('已经到底!',{time:500});
