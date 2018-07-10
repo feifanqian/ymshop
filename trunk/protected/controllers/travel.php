@@ -35,7 +35,7 @@ class TravelController extends Controller
 
     public function all_way() {
         $page = Filter::int(Req::args('p'));
-        $list = $this->model->table('travel_way')->where('status=1')->findPage($page,10);
+        $list = $this->model->table('travel_way')->where('status=1')->findPage($page,5);
 
         $this->assign('list',$list);
         $this->redirect();
@@ -441,7 +441,18 @@ class TravelController extends Controller
                 $page = 1;
             }
         $list = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.desc,t.order_amount,tw.img')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.user_id='.$user_id)->findPage($page,5);
-        // $list = array('status' => 'success', 'data'=>$list['data']);
-        echo JSON::encode($list['data']);
+        $result = !empty($list)?$list['data']:[];
+        echo JSON::encode($result);
+    }
+
+    public function travel_way_list() {
+        $page = Filter::int(Req::args("page"));
+        $user_id = Filter::int(Req::args("user_id"));
+        if(!$page) {
+                $page = 1;
+            }
+        $list = $this->model->table('travel_way')->where('status=1')->findPage($page,5);
+        $result = !empty($list)?$list['data']:[];
+        echo JSON::encode($result);
     } 
 }    

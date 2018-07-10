@@ -61,12 +61,14 @@ function ajaxRead() {
                     time:500
                 });
             },
-            success: function (data) {
+            success: function (res) {
+                data = JSON.stringify(res);
+                var jsonarray= $.parseJSON(data);
                 layer.close(index);
-                if (data.data.length == 0) {
+                if (jsonarray.length == 0) {
                     layer.msg('已经到底!',{time:500});
                 }  else {
-                    $.each(data.data, function (i, item) {
+                    $.each(jsonarray, function (i, item) {
 
                         html += '<div class="cell">';
                         html += '<a href="/travel/way_detail/id/'+item.id+'"><img src="'+item.img+'" alt="" class="cell-bg"></a>';
