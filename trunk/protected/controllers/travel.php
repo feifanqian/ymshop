@@ -472,5 +472,36 @@ class TravelController extends Controller
         $list = $this->model->table('travel_way')->where('is_new=1 and status=1')->order('id desc')->findPage($page,5);
         $result = !empty($list)?$list['data']:[];
         echo JSON::encode($result);
+    }
+
+    public function order_details() {
+        $id = Filter::int(Req::args("id"));
+        $user_id = Filter::int($this->user['id']);
+        $order = $this->model->table("order_offline")->where("id = $id and user_id= $user_id")->find();
+        if (!$order) {
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
+            exit();
+        }
+        $shop = $this->model->table('customer')->fields('real_name')->where('user_id=' . $order['shop_ids'])->find();
+        if ($shop) {
+            $shopname = $shop['real_name'];
+        } else {
+            $shopname = '未知商家';
+        }
+        $paytypelist = $this->model->table('payment as pa')->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")->where("pa.status = 0 and pa.plugin_id=9 and pa.client_type =2")->order("pa.sort desc")->findAll();
+        if ($paytypelist) {
+            $paytype['payment'] = $paytypelist[0]['id'];
+            $paytype['payname'] = $paytypelist[0]['pay_name'];
+            $this->assign("paytype", $paytype);
+        }
+
+        $pay_status = $order['pay_status'];
+
+        $this->assign("paytypelist", $paytypelist);
+        $this->assign('pay_status', $pay_status);
+        $this->assign('shopname', $shopname);
+        $this->assign("order", $order);
+        $this->assign("seo_title", "支付成功");
+        $this->redirect();
     } 
 }    

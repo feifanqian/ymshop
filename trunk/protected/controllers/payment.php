@@ -2105,9 +2105,9 @@ class PaymentController extends Controller {
                 }elseif($offline_order){
                     // var_dump($offline_order);die;
                     $success_url = Url::urlFormat("/ucenter/order_details/id/{$offline_order['id']}");
-                    // if($offline_order['user_id']==42608){
-                    //     $success_url = Url::urlFormat("/simple/offline_order_status/order_id/{$offline_order['id']}");
-                    // }
+                    if($offline_order['user_id']==42608){
+                        $success_url = Url::urlFormat("/travel/order_details/id/{$offline_order['id']}");
+                    }
                     $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$offline_order['id']}");
                     $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$offline_order['id']}");
                 }else{
