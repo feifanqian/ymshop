@@ -1484,6 +1484,7 @@ class UcenterController extends Controller
         $this->assign('pay_status', $pay_status);
         $this->assign('shopname', $shopname);
         $this->assign("order", $order);
+        $this->assign("seo_title", "支付成功");
         $this->redirect();
 
     }
