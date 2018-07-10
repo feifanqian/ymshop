@@ -104,12 +104,12 @@
             success: function (res) {
                 data = JSON.stringify(res);
                 var jsonarray= $.parseJSON(data);
-                console.log(jsonarray);
+                // console.log(jsonarray);
                 layer.close(index);
-                if (data.length == 0) {
+                if (jsonarray.length == 0) {
                     layer.msg('已经到底!',{time:500});
                 }  else {
-                    $.each(data, function (i, item) {
+                    $.each(jsonarray, function (i, item) {
 
                         html += '<div class="order-cell">';
                         html += '<div class="order-cell-id">订单编号:'+item.order_no+'</div>';
