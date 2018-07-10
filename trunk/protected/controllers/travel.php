@@ -120,7 +120,7 @@ class TravelController extends Controller
                                 ))->insert();
 
                             //记录登录信息
-                            $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
+                            $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
                             $obj['open_id'] = $token['open_id'];
                             $this->safebox->set('user', $obj, 1800);
                         } else { //已注册
@@ -236,7 +236,7 @@ class TravelController extends Controller
                                 ))->insert();
 
                             //记录登录信息
-                            $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
+                            $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
                             $obj['open_id'] = $token['open_id'];
                             $this->safebox->set('user', $obj, 31622400);
                             $this->user['id'] = $oauth_user['user_id'];
