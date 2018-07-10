@@ -74,7 +74,6 @@
     $(window).bind('scroll', function () {
         if (getScrollHeight() == getWindowHeight() + getDocumentTop())
         {
-            alert('下一页');
             page++;
             ajaxRead();
         }
@@ -99,6 +98,7 @@
                 });
             },
             success: function (data) {
+                alert(data);
                 layer.close(index);
                 if (data.data.length == 0) {
                     layer.msg('已经到底!',{time:500});
