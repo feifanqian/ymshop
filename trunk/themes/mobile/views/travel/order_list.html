@@ -37,9 +37,9 @@
 <script type="text/javascript">
     var page = $('#page').val();
     $(window).bind('scroll', function () {
-        console.log('page');
-        alert(111);
         if ($(document).scrollTop() == $(document).height() - $(window).height()) {
+            console.log('page');
+            alert(111);
             page++;
             ajaxRead();
         }
