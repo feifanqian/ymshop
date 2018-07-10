@@ -113,8 +113,10 @@ class CashierAction extends Controller
         if($status==1) {
             $this->model->table('customer')->data(array('is_cashier'=>1))->where("user_id=".$this->user['id'])->update();
         }
+        $state = $status==1?'同意':'拒绝';
     	if($res) {
         	$this->code = 0;
+            $this->content['state'] = $state;
             return;
         } else {
             $this->code = 1241;

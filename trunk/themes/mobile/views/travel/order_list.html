@@ -35,39 +35,64 @@
 </div>
 </body>
 <script type="text/javascript">
-    function getDocumentTop() {
-        var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
-        if (document.body) {
-            bodyScrollTop = document.body.scrollTop;
-        }
-        if (document.documentElement) {
-            documentScrollTop = document.documentElement.scrollTop;
-        }
-        scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
-        return scrollTop;
-    }
-    //可视窗口高度
+    // function getDocumentTop() {
+    //     var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
+    //     if (document.body) {
+    //         bodyScrollTop = document.body.scrollTop;
+    //     }
+    //     if (document.documentElement) {
+    //         documentScrollTop = document.documentElement.scrollTop;
+    //     }
+    //     scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+    //     return scrollTop;
+    // }
+    // //可视窗口高度
 
-    function getWindowHeight() {
-        var windowHeight = 0;
-        if (document.compatMode == "CSS1Compat") {
-            windowHeight = document.documentElement.clientHeight;
-        } else {
-            windowHeight = document.body.clientHeight;
-        }
-        return windowHeight;
+    // function getWindowHeight() {
+    //     var windowHeight = 0;
+    //     if (document.compatMode == "CSS1Compat") {
+    //         windowHeight = document.documentElement.clientHeight;
+    //     } else {
+    //         windowHeight = document.body.clientHeight;
+    //     }
+    //     return windowHeight;
+    // }
+    // //滚动条滚动高度
+    // function getScrollHeight() {
+    //     var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
+    //     if (document.body) {
+    //         bodyScrollHeight = document.body.scrollHeight;
+    //     }
+    //     if (document.documentElement) {
+    //         documentScrollHeight = document.documentElement.scrollHeight;
+    //     }
+    //     scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
+    //     return scrollHeight;
+    // }
+    
+    function getScrollTop() { 
+        var scrollTop = 0; 
+        if (document.documentElement && document.documentElement.scrollTop) { 
+            scrollTop = document.documentElement.scrollTop; 
+        } else if (document.body) { 
+            scrollTop = document.body.scrollTop; 
+        } 
+        return scrollTop; 
+    } 
+    // 获取当前可视范围的高度 
+    function getClientHeight() { 
+        var clientHeight = 0; 
+        if (document.body.clientHeight && document.documentElement.clientHeight) { 
+            clientHeight = Math.min(document.body.clientHeight, document.documentElement.clientHeight); 
+        } 
+        else { 
+            clientHeight = Math.max(document.body.clientHeight, document.documentElement.clientHeight); 
+        } 
+        return clientHeight; 
     }
-    //滚动条滚动高度
-    function getScrollHeight() {
-        var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
-        if (document.body) {
-            bodyScrollHeight = document.body.scrollHeight;
-        }
-        if (document.documentElement) {
-            documentScrollHeight = document.documentElement.scrollHeight;
-        }
-        scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
-        return scrollHeight;
+    // 获取文档完整的高度 
+    function getScrollHeight() { 
+        return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight); 
     }
 
     var page = $('#page').val();
@@ -77,11 +102,16 @@
         //     page++;
         //     ajaxRead();
         // }
-        if($(window).scrollTop() === $(document).height() - $(window).height()){
+        // if($(window).scrollTop() === $(document).height() - $(window).height()){
+        //     alert(111);
+        //     page++;
+        //     ajaxRead();
+        //  }
+        if (getScrollTop() + getClientHeight() == getScrollHeight()) {
             alert(111);
             page++;
             ajaxRead();
-         }
+        }
     });
 
     function ajaxRead() {
