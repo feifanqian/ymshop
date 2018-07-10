@@ -88,6 +88,7 @@ img.size-fit {
       height: auto; }
 
 .line {
+  margin-top: 10px;
   height: 16px;
   background: url("../img/Oval.png") repeat-x left/12px 12px; }
 
