@@ -30,18 +30,20 @@
             <span>微信支付</span>
             <img src="/static/yuanmeng/three-level/img/zhen.png" alt="">
         </div>
-        <div class="pay-type-cell" id="alipay">
+        <!-- <div class="pay-type-cell" id="alipay">
             <img src="/static/yuanmeng/three-level/img/zhi.png" alt="">
             <span>支付宝支付</span>
             <img src="/static/yuanmeng/three-level/img/fu.png" alt="">
-        </div>
+        </div> -->
     </div>
     <input type="hidden" name="pay_type" value="1">  
     <p class="prc">总金额: <b>￥{$order['order_amount']}</b></p>
     <a class="pay">确认支付</a>
 </div>
 </body>
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<!-- <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script> -->
+<script type="text/javascript" src="{url:#js/jquery.weui.min.js}"></script>
+<script type="text/javascript" src="{url:#js/common.js}"></script>
 <script>
     $(function ($) {
         $('#wxpay').click(e => {
@@ -101,6 +103,7 @@
     function jsApiCall() {
             // var jsApiParameters = '{$jsApiParameters}';
             var jsapi='{$jsApiParameters}';
+            var id = "{$order['id']}";
             jsonapi=JSON.parse(jsapi);
             WeixinJSBridge.invoke(
                     'getBrandWCPayRequest',
@@ -115,17 +118,17 @@
                     function (res) {
                         if (res.err_msg == "get_brand_wcpay_request:ok") {
                                 $.toast('微信支付成功!', function () {
-                                    location.href = "{$success_url}";
+                                    window.location.href = "http://www.ymlypt.com/travel/order_detail/id/"+id;
                                 });
                                     
                         } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
                                 $.toast('用户取消支付!', 'cancel', function () {
-                                    location.href = "{$success_url}";
+                                    window.location.href = "http://www.ymlypt.com/travel/order_detail/id/"+id;
                                 });
                         } else {
                                 alert(JSON.stringify(res));
                                 $.toast('支付失败!', 'forbidden', function () {
-                                    location.href = "{$success_url}";
+                                    window.location.href = "http://www.ymlypt.com/travel/order_detail/id/"+id;
                                 });
                         }
                     }
