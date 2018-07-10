@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="/static/yuanmeng/three-level/css/allway.css">
+    <link rel="stylesheet" type="text/css" href="/themes/mobile/css/common.css">
+    <title>最新路线</title>
+</head>
+<body>
+<script src="/runtime/systemjs/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
+<div id="app" class="way">
+    {if:count($list['data'])>0}
+        {list:items=$list['data']}
+        <div class="cell">
+            <a href="/travel/way_detail/id/{$item['id']}"><img src="{$item['img']}" alt="" class="cell-bg"></a>
+            <div class="detail">
+                <h2>{$item['name']}</h2>
+                <span class="time">{$item['date']}</span>
+                <span class="address">{$item['city']}</span>
+                <span class="price">{$item['price']}</span>
+            </div>
+        </div>
+        {/list}
+        <!-- <div class="page-nav tc">{$list['html']}</div>     -->
+    {else:}
+    <div class="ma20 bg-white p20">
+        <p class="p20">没有线路记录！</p>
+    </div>
+    {/if}
+    <input type="hidden" name="page" id="page" value="{$page}"/>    
+</div>
+</body>
+<script type="text/javascript">
+var page = $('#page').val();
+$(window).scroll(function(){
+　　//判断是否滑动到页面底部
+     if($(window).scrollTop() === $(document).height() - $(window).height()){
+        page++;
+        ajaxRead();
+     }
+});
+function ajaxRead() {
+        var html = "";
+        var url = "{url:/travel/new_way_list}";
+        var data = {page: page};
+        var index;
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: url,
+            data: data,
+            beforeSend: function () {
+                //loading层
+                index = layer.load(1, {
+                    shade: [0.1, '#fff'], //0.1透明度的白色背景
+                    time:500
+                });
+            },
+            success: function (res) {
+                data = JSON.stringify(res);
+                var jsonarray= $.parseJSON(data);
+                layer.close(index);
+                if (jsonarray.length == 0) {
+                    layer.msg('已经到底!',{time:500});
+                }  else {
+                    $.each(jsonarray, function (i, item) {
+
+                        html += '<div class="cell">';
+                        html += '<a href="/travel/way_detail/id/'+item.id+'"><img src="'+item.img+'" alt="" class="cell-bg"></a>';
+                        html += '<div class="detail">';
+                        html += '<h2>'+item.name+'</h2>'
+                        html += '<span class="time">'+item.date+'</span>';
+                        html += '<span class="address">'+item.city+'</span>';
+                        html += '<span class="price">'+item.price+'</span>';
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                    $("#app").append($(html));
+                }
+            },
+        });
+    }
+</script>
+</html>

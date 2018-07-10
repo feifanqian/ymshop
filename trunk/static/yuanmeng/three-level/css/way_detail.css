@@ -18,7 +18,7 @@ img.size-fit {
   height: auto; }
 
 #app {
-  background: url("../img/st22.jpg") #fff no-repeat top center/contain;
+  /*background: url("../img/st22.jpg") #fff no-repeat top center/contain;*/
   padding-bottom: 20px; }
   #app .main {
     width: 600px;
