@@ -60,10 +60,12 @@
   <script type="text/javascript">
     $(function () {
        var color_list = {0:'url(/themes/mobile/images/anzhuo1.jpg)',1:'url(/themes/mobile/images/anzhuo2.jpg)',2:'url(/themes/mobile/images/anzhuo3.jpg)'};
-       var index = parseInt(2*Math.random());
+       // var index = parseInt(2*Math.random());
+       var index = Math.floor(Math.random() * 2);
         $('.bg-content').css('background-image',color_list[index]);
         $('.bg-content').css('background-size',"cover");
         $('.bg-content').css('background-repeat',"no-repeat");
+        $('.bg-content').css('background-position',"center");
     });  
   </script>
   {else:}
