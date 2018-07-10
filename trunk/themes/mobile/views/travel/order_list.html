@@ -74,6 +74,7 @@
     $(window).bind('scroll', function () {
         if (getScrollHeight() == getWindowHeight() + getDocumentTop())
         {
+            alert('下一页');
             page++;
             ajaxRead();
         }
@@ -117,7 +118,7 @@
                         html += '</div>';
                         html += '</div>';
                     });
-                    $("#app").append($(html));
+                    $("#app").append(html);
                 }
             },
         });

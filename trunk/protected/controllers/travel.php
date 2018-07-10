@@ -191,7 +191,7 @@ class TravelController extends Controller
             if(!$page) {
                 $page = 1;
             }
-            $list = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.desc,t.order_amount,tw.img')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.user_id='.$this->user['id'])->findPage($page,10);
+            $list = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.desc,t.order_amount,tw.img')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.user_id='.$this->user['id'])->findPage($page,5);
             $this->assign('list', $list);
             $this->assign('user_id',$this->user['id']);
             $this->assign('page',$page); 
@@ -440,7 +440,7 @@ class TravelController extends Controller
         if(!$page) {
                 $page = 1;
             }
-        $list = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.desc,t.order_amount,tw.img')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.user_id='.$user_id)->findPage($page,10);
+        $list = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.desc,t.order_amount,tw.img')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.user_id='.$user_id)->findPage($page,5);
         $list = array('status' => 'success', 'data'=>$list['data']);
         echo JSON::encode($list);
     } 
