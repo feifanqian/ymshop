@@ -26,21 +26,62 @@
             </div>
         </div>
         {/list}
-        <div class="page-nav tc">{$list['html']}</div>    
+        <!-- <div class="page-nav tc">{$list['html']}</div>     -->
     {else:}
     <div class="ma20 bg-white p20">
         <p class="p20">没有线路记录！</p>
     </div>
-    {/if}    
+    {/if}
+    <input type="hidden" name="page" id="page" value="{$page}"/>    
 </div>
 </body>
 <script type="text/javascript">
+var page = $('#page').val();
 $(window).scroll(function(){
 　　//判断是否滑动到页面底部
      if($(window).scrollTop() === $(document).height() - $(window).height()){
-        alert('下一页');
-           // TODO 滑动到底部时可请求下一页的数据并加载，加载可使用append方法
+        page++;
+        ajaxRead();
      }
 });
+function ajaxRead() {
+        var html = "";
+        var url = "{url:/travel/travel_way_list}";
+        var data = {page: page};
+        var index;
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: url,
+            data: data,
+            beforeSend: function () {
+                //loading层
+                index = layer.load(1, {
+                    shade: [0.1, '#fff'], //0.1透明度的白色背景
+                    time:500
+                });
+            },
+            success: function (data) {
+                layer.close(index);
+                if (data.data.length == 0) {
+                    layer.msg('已经到底!',{time:500});
+                }  else {
+                    $.each(data.data, function (i, item) {
+
+                        html += '<div class="cell">';
+                        html += '<a href="/travel/way_detail/id/'+item.id+'"><img src="'+item.img+'" alt="" class="cell-bg"></a>';
+                        html += '<div class="detail">';
+                        html += '<h2>'+item.name+'</h2>'
+                        html += '<span class="time">'+item.date+'</span>';
+                        html += '<span class="address">'+item.city+'</span>';
+                        html += '<span class="price">'+item.price+'</span>';
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                    $("#app").append($(html));
+                }
+            },
+        });
+    }
 </script>
 </html>
