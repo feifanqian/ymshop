@@ -35,10 +35,6 @@
 </div>
 </body>
 <script type="text/javascript">
-    window.onload = function () {
-        var page = 2;
-        ajaxRead();
-    }
     function getDocumentTop() {
         var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
         if (document.body) {
@@ -94,17 +90,9 @@
             dataType: 'json',
             url: url,
             data: data,
-            // beforeSend: function () {
-            //     //loading层
-            //     index = layer.load(1, {
-            //         shade: [0.1, '#fff'], //0.1透明度的白色背景
-            //         time:500
-            //     });
-            // },
             success: function (res) {
                 data = JSON.stringify(res);
                 var jsonarray= $.parseJSON(data);
-                // console.log(jsonarray);
                 layer.close(index);
                 if (jsonarray.length == 0) {
                     layer.msg('已经到底!',{time:500});
