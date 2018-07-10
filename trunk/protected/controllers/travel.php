@@ -127,9 +127,10 @@ class TravelController extends Controller
                             $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
                             $this->safebox->set('user', $obj, 31622400);
-                        }   
+                        }
+                        $this->redirect();   
                     }
-                    return true;
+                    // return true;
                 } else {
                     header("Location: {$url}"); 
                     // $this->redirect($url);
