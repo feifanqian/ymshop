@@ -186,6 +186,22 @@ class WechatOAuth extends OAuth2 {
         return $url;
     }
 
+    public function getCodes($redirect_uri) {
+        $params = array(
+            'appid' => $this->appKey,
+            'redirect_uri' => $redirect_uri,
+            'response_type' => "code",
+            'scope' => "snsapi_userinfo"
+        );
+        
+        $url = "https://open.weixin.qq.com/connect/oauth2/authorize".'?' . http_build_query($params) . "&state=1#wechat_redirect";
+        // $ret = file_get_contents($url);
+        // var_dump($ret);die;
+        // $result = json_decode($ret,true);
+
+        return $url;
+    }
+
     public function getOpenid($code) {
        $params = array(
             'appid' => $this->appKey,
