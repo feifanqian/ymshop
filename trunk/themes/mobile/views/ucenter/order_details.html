@@ -40,7 +40,7 @@
 }
 </style>
 {if:$pay_status==1}
-  {if:$order['user_id']==42608}
+
   <div class="bg-content" style="height: 800px;">
      <div class="kuang">
         <div style="position: relative;top: 4px;">  
@@ -68,34 +68,7 @@
         $('.bg-content').css('background-position',"center");
     });  
   </script>
-  {else:}
-  <div class="bg-content">
-     <div style="padding-top:10px; ">
-        <p style="font-size:20px;text-align: center;color:#fff;">支付成功</p>
-     </div>
-     <div style="text-align: center;">
-        <img src="/themes/mobile/images/cat.png" width="150" height="150">
-     </div>
-     <div>
-        <p style="font-size:24px;text-align: center;color:#fff;margin-top: 10px;">欧耶,支付成功了</p>
-     </div>
-     <div><p class="black" style="font-size:20px;text-align: center;color:#fff;margin-top: 10px;">{$currency_symbol}{$order['order_amount']}</p></div>
-  </div>
-  <div class="bg-content1">
-    <div class="line-text">
-        <p style="float: left;">收款方</p>
-        <p style="float: right;">{$shopname}</p>
-    </div>
-    <div class="line-text">
-        <p style="float: left;">收款时间</p>
-        <p style="float: right;">{$order['pay_time']}</p>
-    </div>
-    <div class="line-text">
-        <p style="float: left;">订单号</p>
-        <p style="float: right;">{$order['order_no']}</p>
-    </div>
-  </div>
-  {/if}
+  
 {else:}
 <style>
     .weui-select-modal{
