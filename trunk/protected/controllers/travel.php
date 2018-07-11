@@ -534,9 +534,10 @@ class TravelController extends Controller
         $req->setIp($_SERVER['REMOTE_ADDR']);
         $resp = $c->execute($req);
         $resp = Common::objectToArray($resp);
-        var_dump($resp);die;
-        if(isset($resp['tbk_item_info_get_response']['results']['n_tbk_item'])) {
-            $info = $resp['tbk_item_info_get_response']['results']['n_tbk_item'];
+        // print_r($resp);die;
+        if(isset($resp['results']['n_tbk_item'])) {
+            $info = $resp['results']['n_tbk_item'];
+            $info['tao_str'] = $tao_str;
             $this->assign("info", $info);
             $this->redirect();
         } else {
