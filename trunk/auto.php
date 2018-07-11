@@ -255,7 +255,7 @@ class LinuxCliTask{
                     $district_id = Common::getFirstDistrictId($user_id);
 
                     if($inviter_id) {
-                        $log = array(
+                        $log1 = array(
                             'goods_name'   => $v['goods_name'],
                             'goods_id'     => $v['goods_id'],
                             'goods_num'    => $v['goods_number'],
@@ -271,11 +271,11 @@ class LinuxCliTask{
                             'type'         => $type,
                             'adzoneid'     => $v['adv_id'] 
                             );
-                        $this->model->table('benefit_log')->data($data)->insert();
+                        $this->model->table('benefit_log')->data($log1)->insert();
                     }
 
                     if($promoter_id) {
-                        $log = array(
+                        $log2 = array(
                             'goods_name'   => $v['goods_name'],
                             'goods_id'     => $v['goods_id'],
                             'goods_num'    => $v['goods_number'],
@@ -291,11 +291,11 @@ class LinuxCliTask{
                             'type'         => $type,
                             'adzoneid'     => $v['adv_id'] 
                             );
-                        $this->model->table('benefit_log')->data($data)->insert();
+                        $this->model->table('benefit_log')->data($log2)->insert();
                     }
 
                     if($district_id) {
-                        $log = array(
+                        $log3 = array(
                             'goods_name'   => $v['goods_name'],
                             'goods_id'     => $v['goods_id'],
                             'goods_num'    => $v['goods_number'],
@@ -311,7 +311,7 @@ class LinuxCliTask{
                             'type'         => $type,
                             'adzoneid'     => $v['adv_id'] 
                             );
-                        $this->model->table('benefit_log')->data($data)->insert();
+                        $this->model->table('benefit_log')->data($log3)->insert();
                     }
                 }
             $this->model->table('taoke')->data(array('is_handle'=>1))->where('id='.$v['id'])->update();    
