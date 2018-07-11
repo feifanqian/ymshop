@@ -1691,7 +1691,8 @@ class Common {
 
     static function getFirstDistrictId($user_id)
     {
-        $inviter_info = $model->table("invite")->where("invite_user_id=".$inviter_id)->find();
+        $model = new Model();
+        $inviter_info = $model->table("invite")->where("invite_user_id=".$user_id)->find();
 
         if($inviter_info) {
             $district = $model->table('district_shop')->fields('owner_id')->where('id='.$inviter_info['district_id'])->find();
