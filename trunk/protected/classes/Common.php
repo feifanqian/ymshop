@@ -1688,4 +1688,21 @@ class Common {
         $result['num'] = count($inviter_info);
         return $result;    
     }
+
+    static function getFirstDistrictId($user_id)
+    {
+        $inviter_info = $model->table("invite")->where("invite_user_id=".$inviter_id)->find();
+
+        if($inviter_info) {
+            $district = $model->table('district_shop')->fields('owner_id')->where('id='.$inviter_info['district_id'])->find();
+            if($district) {
+                $district_id = $district['owner_id'];
+            } else {
+                $district_id = 1;
+            }
+        } else {
+            $district_id = 1;
+        }
+        return $district_id;
+    }
 }

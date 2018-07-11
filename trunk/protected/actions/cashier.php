@@ -874,8 +874,9 @@ class CashierAction extends Controller
             $status = 1;
         }
 
-        $user = $this->model->table('user')->fields('adzoneid')->where('id='.$this->user['id'])->find();
-        $where = 'adv_id='.$user['adzoneid'];
+        // $user = $this->model->table('user')->fields('adzoneid')->where('id='.$this->user['id'])->find();
+        // $where = 'adv_id='.$user['adzoneid'];
+        $where = 'user_id='.$this->user['id'];
         switch ($status) {
             case 1:
                 $where.=" and order_status in ('订单付款')";
@@ -888,7 +889,8 @@ class CashierAction extends Controller
                 break;    
         }
         // var_dump($where);die;
-        $list = $this->model->table('taoke')->fields('id,order_sn,goods_name,order_amount,effect_prediction,create_time,order_status')->where($where)->findPage($page,10);
+        // $list = $this->model->table('taoke')->fields('id,order_sn,goods_name,order_amount,effect_prediction,create_time,order_status')->where($where)->findPage($page,10);
+        $list = $this->model->table('benefit_log')->fields('order_id as id,goods_name,price as order_amount,amount as effect_prediction,order_time as create_time,order_status')->where($where)->findPage($page,10);
         if($list) {
             if(isset($list['data']) && $list['data']!=null) {
                 unset($list['html']);
@@ -922,7 +924,7 @@ class CashierAction extends Controller
         $user = $this->model->table('user')->fields('adzoneid')->where('id='.$this->user['id'])->find();
         $benefit_data = array(
             'user_id'=>$this->user['id'],
-            'order_id'=>'',
+            'order_sn'=>'',
             'amount'=>$amount,
             'create_time'=>date('Y-m-d H:i:s'),
             'month'=>date('Y-m'),
