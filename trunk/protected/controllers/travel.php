@@ -528,9 +528,10 @@ class TravelController extends Controller
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;
         $req = new TbkItemInfoGetRequest;
+        $req->setFields("num_iid,title,pict_url,small_images,reserve_price,zk_final_price,user_type,provcity,item_url,seller_id,volume,nick");
         $req->setNumIids($num_iid);
         $req->setPlatform("2");
-        // $req->setIp($_SERVER['REMOTE_ADDR']);
+        $req->setIp($_SERVER['REMOTE_ADDR']);
         $resp = $c->execute($req);
         $resp = Common::objectToArray($resp);
         var_dump($resp);die;
