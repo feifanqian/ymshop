@@ -503,5 +503,9 @@ class TravelController extends Controller
         $this->assign("order", $order);
         $this->assign("seo_title", "支付成功");
         $this->redirect();
+    }
+
+    public function tao_share() {
+        $this->redirect();
     } 
 }    
