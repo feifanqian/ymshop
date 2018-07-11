@@ -1009,4 +1009,15 @@ class GoodsAction extends Controller {
         $this->content = $return;
         return;
     }
+
+    public function taobao_tpwd_share() {
+        $num_iid = Filter::str(Req::args("num_iid"));
+        if(!$num_iid) {
+            $num_iid = '553057896190';
+        }
+        $tao_str = Filter::str(Req::args("tao_str"));
+        $this->code = 0;
+        $this->content['url'] = "http://www.ymlypt.com/travel/tao_share?num_iid={$num_iid}&tao_str={$tao_str}";
+        return;
+    }
 }

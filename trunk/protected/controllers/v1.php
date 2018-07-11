@@ -148,6 +148,7 @@ class V1Controller extends Controller {
         "tbk_item_guess_like"=>array("goods/tbk_item_guess_like",0,1),
         "tbk_tpwd_create"=>array("goods/tbk_tpwd_create",0,1),
         "tbk_get_height_url"=>array("goods/tbk_get_height_url",1,1),
+        "taobao_tpwd_share"=>array("goods/taobao_tpwd_share",0,1),
         //小区相关接口
         'apply_for_district' => array("district/applyForDistrict", 1,1), //申请小区
         'get_district_list' => array("district/getDistrictList", 1,1), //获取小区列表
