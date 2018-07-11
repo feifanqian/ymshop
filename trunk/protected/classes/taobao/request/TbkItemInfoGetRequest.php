@@ -23,6 +23,11 @@ class TbkItemInfoGetRequest
 	private $platform;
 	
 	private $apiParas = array();
+
+	/** 
+	 * ip参数影响邮费获取，如果不传或者传入不准确，邮费无法精准提供
+	 **/
+	private $ip;
 	
 	public function setFields($fields)
 	{
@@ -65,6 +70,17 @@ class TbkItemInfoGetRequest
 	public function getApiParas()
 	{
 		return $this->apiParas;
+	}
+
+	public function setIp($ip)
+	{
+		$this->ip = $ip;
+		$this->apiParas["ip"] = $ip;
+	}
+
+	public function getIp()
+	{
+		return $this->ip;
 	}
 	
 	public function check()
