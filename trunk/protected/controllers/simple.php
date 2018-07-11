@@ -220,8 +220,8 @@ class SimpleController extends Controller {
                                             
                                             if($back=='active') {
                                                 if(!$inviter_id) {
-                                                    $inviter_id = Session::get('active_inviter');
-                                                    Session::clear('active_inviter');
+                                                    $inviter_id = Cookie::get('active_inviter');
+                                                    Cookie::clear('active_inviter');
                                                 }
                                                 if($inviter_id) {
                                                     Common::buildInviteShip($inviter_id, $last_id, 'active');

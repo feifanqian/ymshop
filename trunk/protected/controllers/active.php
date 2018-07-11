@@ -136,8 +136,8 @@ class ActiveController extends Controller
         $redirectURL = Filter::str(Req::args("redirect"));
         $inviter = Filter::int(Req::args("inviter"));
         if(!$inviter) {
-            $inviter = Session::get('active_inviter');
-            Session::clear('active_inviter');
+            $inviter = Cookie::get('active_inviter');
+            Cookie::clear('active_inviter');
         }
         $this->assign("redirectURL", $redirectURL);
         $account = Filter::str(Req::args('account'));
@@ -207,7 +207,7 @@ class ActiveController extends Controller
         $user_id = $this->user['id'];
         $inviter = Filter::int(Req::args("inviter"));
         if($inviter) {
-            Session::set('active_inviter',$inviter);
+            Cookie::set('active_inviter',$inviter);
         } else {
             $inviter = 0;
         }
