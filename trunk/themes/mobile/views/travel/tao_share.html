@@ -13,24 +13,26 @@
               <img src="../static/img/logo.dccbbac.png" alt="">
              </div> 
             <div class="center">
-               <div class="tt">花生日记</div> 
-               <div class="bot">少花钱，多生钱，更多优惠券等你发现</div>
+               <div class="tt">圆梦共享网</div> 
+               <div class="bot">共享无形资源，获取跨界收益，振兴传统商业的共享经济平台</div>
             </div> 
-            <div class="btn"><a href="http://wx.qianqunke.com/reg?code=undefined">APP下载</a></div>
+            <div class="btn"><a href="http://sj.qq.com/myapp/detail.htm?apkName=com.yidu.yuanmeng">APP下载</a></div>
         </div> 
-        <div class="proImg"><img alt=""></div> 
+        <div class="proImg">
+           <img alt="" src="{$info['pict_url']}">
+        </div> 
         <div class="container">
             <div>
-                <div class="proname"></div> 
+                <div class="proname">{$info['title']}</div> 
                 <div class="price_box">
                     <div class="price">
-                       <div class="price_after">券后价 ￥<span class="strongF"> </span> <span class="price_before">￥</span>
+                       <div class="price_after">券后价 ￥<span class="strongF">{$info['zk_final_price']}</span> <span class="price_before">￥{$info['reserve_price']}</span>
                        </div>
-                    </div> <div class="coupon"></div>
+                    </div> <div class="coupon">{echo:$info['reserve_price']-$info['zk_final_price']}</div>
                 </div>
             </div> 
             <div class="clipboard">
-                  <div class="top">￥￥<p>长按复制框内文字，启动手机【<i class="icon_tao"><img src="../static/img/tao.aed96c4.png" alt=""></i>】即可领券购买</p>
+                  <div class="top">￥{$info['tao_str']}<p>长按复制框内文字，启动手机【<i class="icon_tao"><img src="../static/img/tao.aed96c4.png" alt=""></i>】即可领券购买</p>
                   </div> 
                   <div class="bot">
                         <button id="buttoncopy">

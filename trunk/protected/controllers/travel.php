@@ -506,6 +506,41 @@ class TravelController extends Controller
     }
 
     public function tao_share() {
-        $this->redirect();
+        $num_iid = Filter::str(Req::args("num_iid"));
+        if(!$num_iid) {
+            $num_iid = '553057896190';
+        }
+        $tao_str = Filter::str(Req::args("tao_str"));
+        $form = Filter::str(Req::args("form"));
+        if (!$form) {
+            $form = 'android';
+        }
+        if ($form == 'android') { //安卓
+            $appkey = '24875594';
+            $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
+            $AdzoneId = '513416107';
+        } else { //ios
+            $appkey = '24876667';
+            $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
+            $AdzoneId = '582570496';
+        }
+        $c = new TopClient;
+        $c->appkey = $appkey;
+        $c->secretKey = $secretKey;
+        $req = new TbkItemInfoGetRequest;
+        $req->setNumIids($num_iid);
+        $req->setPlatform("2");
+        $req->setIp($_SERVER['REMOTE_ADDR']);
+        $resp = $c->execute($req);
+        $resp = Common::objectToArray($resp);
+        if(isset($resp['tbk_item_info_get_response']['results']['n_tbk_item'])) {
+            $info = $resp['tbk_item_info_get_response']['results']['n_tbk_item'];
+            $this->assign("info", $info);
+            $this->redirect();
+        } else {
+            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '信息错误', "content" => "抱歉，找不到该商品信息啦"));
+            exit();
+        }
+        
     } 
 }    

@@ -150,6 +150,7 @@ return array(
     "TbkDgMaterialOptionalRequest"=>"taobao/request/TbkDgMaterialOptionalRequest.php",
     "ItemDetailGetRequest"=>"taobao/request/ItemDetailGetRequest.php",
     "TbkTpwdCreateRequest"=>"taobao/request/TbkTpwdCreateRequest.php",
+    "TbkItemInfoGetRequest"=>"taobao/request/TbkItemInfoGetRequest.php",
     "ResultSet"=>"taobao/ResultSet.php",
     "RequestCheckUtil"=>"taobao/RequestCheckUtil.php",
     "JSSDK"=>"payments/jssdk.php",
