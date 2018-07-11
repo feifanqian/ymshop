@@ -51,6 +51,9 @@
     background-repeat: no-repeat;
 }
 </style>
+<script type="text/javascript" charset="UTF-8" src="/themes/_default/js/jquery.iframe-post-form.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
 {if:$pay_status==1}
 
   <div class="bg-content" style="height: 800px;">
@@ -129,9 +132,6 @@
         <p class="tc"><input class="weui_btn weui_btn_primary" type="button" id="submitForm" value="立即支付"></p>
     </div>
 </form>
-<script type="text/javascript" charset="UTF-8" src="/themes/_default/js/jquery.iframe-post-form.js"></script>
-<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
-<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
 {widget:name=tabbar action=item cart=$cart current=ucenter}
 {set:$paydict = array();}
 {list:items=$paytypelist}
