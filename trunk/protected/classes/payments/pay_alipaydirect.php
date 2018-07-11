@@ -104,7 +104,8 @@ class pay_alipaydirect extends PaymentPlugin {
         $return['partner'] = $return['seller_id'] = $payment['M_PartnerId'];
         $return['_input_charset'] = 'utf-8';
         $return['payment_type'] = 1;
-        $return['return_url'] = $this->callbackUrl;
+        // $return['return_url'] = $this->callbackUrl;
+        $return['return_url'] = "http://www.ymlypt.com/travel/order_details/id/".$payment['M_OrderId'];
         $return['notify_url'] = $this->asyncCallbackUrl;
         
         //业务参数
