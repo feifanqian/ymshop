@@ -135,6 +135,10 @@ class ActiveController extends Controller
     public function login_act() {
         $redirectURL = Filter::str(Req::args("redirect"));
         $inviter = Filter::int(Req::args("inviter"));
+        if(!$inviter) {
+            $inviter = Session::get('active_inviter');
+            Session::clear('active_inviter');
+        }
         $this->assign("redirectURL", $redirectURL);
         $account = Filter::str(Req::args('account'));
         $passWord = Filter::str(Req::args('password'));
@@ -202,7 +206,9 @@ class ActiveController extends Controller
     public function sign_up() {
         $user_id = $this->user['id'];
         $inviter = Filter::int(Req::args("inviter"));
-        if(!$inviter) {
+        if($inviter) {
+            Session::set('active_inviter',$inviter);
+        } else {
             $inviter = 0;
         }
         if($user_id) {

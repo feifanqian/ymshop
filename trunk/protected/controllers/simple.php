@@ -219,6 +219,10 @@ class SimpleController extends Controller {
                                             Common::sendPointCoinToNewComsumer($last_id);
                                             
                                             if($back=='active') {
+                                                if(!$inviter_id) {
+                                                    $inviter_id = Session::get('active_inviter');
+                                                    Session::clear('active_inviter');
+                                                }
                                                 if($inviter_id) {
                                                     Common::buildInviteShip($inviter_id, $last_id, 'active');
                                                 }

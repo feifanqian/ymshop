@@ -330,6 +330,7 @@ class LinuxCliTask{
                     $amount = $v['amount'];
                     $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where('user_id='.$v['user_id'])->update();
                     Log::balance($amount,$v['user_id'],$v['id'],'淘客订单佣金自动结算',5);
+                    $this->model->table('user')->data(array('settle_income'=>"`settle_income`+{$amount}"))->where('id='.$v['user_id'])->update();
                     $this->model->table('benefit_log')->data(array('type'=>1))->where('id='.$v['id'])->update();
                 }
             }
