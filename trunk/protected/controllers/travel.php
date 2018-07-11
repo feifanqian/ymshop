@@ -530,7 +530,7 @@ class TravelController extends Controller
         $req = new TbkItemInfoGetRequest;
         $req->setNumIids($num_iid);
         $req->setPlatform("2");
-        $req->setIp($_SERVER['REMOTE_ADDR']);
+        // $req->setIp($_SERVER['REMOTE_ADDR']);
         $resp = $c->execute($req);
         $resp = Common::objectToArray($resp);
         if(isset($resp['tbk_item_info_get_response']['results']['n_tbk_item'])) {
