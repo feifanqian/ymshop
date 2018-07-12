@@ -5,7 +5,7 @@
 		<tr><td width="100">线路</td><td>线路名</td><td width="140">城市</td><td width="60">价格</td><td width="60">日期</td></tr>
 		{query:name=travel_way as od fields=* where=id eq $way_id}
 		
-		<tr><td><img src="{$item['img']}" width="100"></td><td>{$item['name']}</td><td>{$item['city']}</td><td>{$item['price']}</td>{$item['date']}</tr>
+		<tr><td><img src="{$item['img']}" width="100"></td><td>{$item['name']}</td><td>{$item['city']}</td><td>{$item['price']}</td><td>{$item['date']}</td></tr>
 		{/query}
 	</table>
 	<h3 class="lineD mt10">购买人信息：</h3>
