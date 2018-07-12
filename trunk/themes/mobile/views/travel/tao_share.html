@@ -35,7 +35,7 @@
                   <div class="top">￥{$info['tao_str']}<p>长按复制框内文字，启动手机【<i class="icon_tao"><img src="../static/img/tao.aed96c4.png" alt=""></i>】即可领券购买</p>
                   </div> 
                   <div class="bot">
-                        <button id="buttoncopy">
+                        <button class="buttoncopy">
                             <i class="icon_copy">
                               <img src="../static/img/copy.1e307a6.png" alt="">
                             </i> 一键复制淘口令
@@ -44,7 +44,7 @@
             </div>
         </div> 
         <div class="fixbox">
-            <button id="buttoncopy">
+            <button class="buttoncopy">
                 <i class="icon_copy">
                     <img src="../static/img/copy.1e307a6.png" alt="">
                 </i> 一键复制淘口令
@@ -59,4 +59,16 @@
          <div class="g-loading-str">正在加载 </div>
     </div> -->
 </body>
+<script type="text/javascript">
+$(function(){
+    var clipboard = new Clipboard('.buttoncopy',{ 
+       text: function(trigger) { 
+          alert("复制成功！");
+          return trigger.getAttribute('data-text'); 
+ 
+       }
+ 
+    });
+});
+</script>
 </html>
