@@ -55,12 +55,12 @@ class ActiveController extends Controller
                     $status2 = $sign_up['status2']==0?1:2;
                     $status3 = $sign_up['status3']==0?1:2;
                     $num = 1000;
-                } elseif($invite_num>$num2 && $invite_num<$num3) {
+                } elseif($invite_num>=$num2 && $invite_num<$num3) {
                     $status1 = $sign_up['status1']==0?1:2;
                     $status2 = $sign_up['status2']==0?1:2;
                     $status3 = 0;
                     $num = $num3;
-                } elseif($invite_num>$num1 && $invite_num<$num2) {
+                } elseif($invite_num>=$num1 && $invite_num<$num2) {
                     $status1 = $sign_up['status1']==0?1:2;
                     $status2 = 0;
                     $status3 = 0;
