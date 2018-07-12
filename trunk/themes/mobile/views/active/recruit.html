@@ -215,21 +215,21 @@
 
         //  抽红包的点击事件
         $('.section_2').click((e) => {
-            if(chance==0) {
+            if(chance<=0) {
                 alert('您还没有抽奖机会，赶紧去邀请小伙伴们吧!');
             } else {
-                layer.open({
-                    type: 3,
-                    skin: 'layui-layer-rim', //加上边框
-                    area: ['100%', '450px'], //宽高
-                    content: '<img class="redbag" src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png" alt="">'
-                });
                 $.ajax({
                     url: "{url:/active/open_redbag}",
                     data: {user_id: user_id},
                     type: 'post',
                     dataType: 'json',
                     success: function (ret) {
+                       layer.open({
+                        type: 3,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['100%', '450px'], //宽高
+                        content: '<img class="redbag" src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png" alt="">'
+                    }); 
                        window.location.reload(); 
                         // if (ret.status == "success") {                  
                         // }                    
