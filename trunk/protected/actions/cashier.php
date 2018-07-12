@@ -842,8 +842,8 @@ class CashierAction extends Controller
 
         $log1 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1")->findAll();
         $log2 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1 and month = '{$last_month}'")->findAll();
-        $log3 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=2 and month = '{$this_month}'")->findAll();
-        $log4 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=2 and month = '{$last_month}'")->findAll();
+        $log3 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type in(0,2) and month = '{$this_month}'")->findAll();
+        $log4 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type in(0,2) and month = '{$last_month}'")->findAll();
         $log5 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=3 and month = '{$last_month}'")->findAll();
     
         $total_income             = $log1[0]['total']==null?0:$log1[0]['total'];
@@ -907,8 +907,10 @@ class CashierAction extends Controller
 
     public function income_withdraw_balance() {
         $amount = Filter::float(Req::args("amount"));
-        $log = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1")->findAll();
-        $total_income = $log[0]['total']==null?0:$log[0]['total'];
+        // $log = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1")->findAll();
+        // $total_income = $log[0]['total']==null?0:$log[0]['total'];
+        $user = $this->model->table('user')->fields('settle_income')->where('id='.$this->user['id'])->find();
+        $total_income = $user['settle_income'];
         // if($amount<100) {
         //     $this->code = 1181;
         //     return;
