@@ -68,6 +68,7 @@ class TravelController extends Controller
     public function fill_info()
     {
         if($this->user['id']) {
+            $way_id = Filter::int(Req::args("way_id"));
             $way = $this->model->table('travel_way')->fields('id,name')->findAll();
 
             $upyun = Config::getInstance()->get("upyun");
@@ -82,6 +83,7 @@ class TravelController extends Controller
             );
             $policy = base64_encode(json_encode($options));
             $signature = md5($policy . '&' . $upyun['upyun_formkey']);
+            $this->assign('way_id', $way_id);
             $this->assign('user_id',$this->user['id']);
             $this->assign('secret', md5('ym123456'));
             $this->assign('policy', $policy);
