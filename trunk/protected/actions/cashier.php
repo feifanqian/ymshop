@@ -890,7 +890,7 @@ class CashierAction extends Controller
         }
         // var_dump($where);die;
         // $list = $this->model->table('taoke')->fields('id,order_sn,goods_name,order_amount,effect_prediction,create_time,order_status')->where($where)->findPage($page,10);
-        $list = $this->model->table('benefit_log')->fields('order_id as id,goods_name,price as order_amount,amount as effect_prediction,order_time as create_time,order_status')->where($where)->findPage($page,10);
+        $list = $this->model->table('benefit_log')->fields('order_id as id,goods_name,price as order_amount,amount as effect_prediction,order_time as create_time,order_status')->where($where)->order('order_time desc')->findPage($page,10);
         if($list) {
             if(isset($list['data']) && $list['data']!=null) {
                 unset($list['html']);
@@ -944,7 +944,7 @@ class CashierAction extends Controller
         if(!$page) {
             $page = 1;
         }
-        $log = $this->model->table('benefit_log')->fields('id,user_id,amount,create_time')->where('user_id='.$this->user['id'].' and type=3')->findPage($page,10);
+        $log = $this->model->table('benefit_log')->fields('id,user_id,amount,create_time')->where('user_id='.$this->user['id'].' and type=3')->order('id desc')->findPage($page,10);
         if($log) {
             if(isset($log['data']) && $log['data']!=null) {
                 unset($log['html']);

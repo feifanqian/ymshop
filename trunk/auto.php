@@ -225,7 +225,7 @@ class LinuxCliTask{
 
     #淘宝订单定时分佣
     public function autoMaidByAdzoneid() {
-        $order = $this->model->table('taoke')->fields('id,create_time,goods_name,goods_id,goods_number,order_status,order_amount,goods_price,estimated_revenue,order_sn,adv_id')->where("is_handle=0")->findAll();
+        $order = $this->model->table('taoke')->fields('id,create_time,goods_name,goods_id,goods_number,order_status,order_amount,goods_price,effect_prediction,estimated_revenue,order_sn,adv_id')->where("is_handle=0")->findAll();
         if($order) {
             foreach ($order as $k => $v) {
                 $price = $v['order_status'] =='订单结算'?$v['order_amount']:$v['goods_price'];
@@ -263,7 +263,7 @@ class LinuxCliTask{
                             'order_sn'     => $v['order_sn'],
                             'user_id'      => $inviter_id,
                             'price'        => $price,
-                            'amount'       => $v['estimated_revenue']*0.4,
+                            'amount'       => $v['effect_prediction']*0.4,
                             'order_time'   => $v['create_time'],
                             'create_time'  => date('Y-m-d H:i:s'),
                             'order_status' => $v['order_status'],
@@ -283,7 +283,7 @@ class LinuxCliTask{
                             'order_sn'     => $v['order_sn'],
                             'user_id'      => $promoter_id,
                             'price'        => $price,
-                            'amount'       => $v['estimated_revenue']*0.2,
+                            'amount'       => $v['effect_prediction']*0.2,
                             'order_time'   => $v['create_time'],
                             'create_time'  => date('Y-m-d H:i:s'),
                             'order_status' => $v['order_status'],
@@ -303,7 +303,102 @@ class LinuxCliTask{
                             'order_sn'     => $v['order_sn'],
                             'user_id'      => $district_id,
                             'price'        => $price,
-                            'amount'       => $v['estimated_revenue']*0.1,
+                            'amount'       => $v['effect_prediction']*0.1,
+                            'order_time'   => $v['create_time'],
+                            'create_time'  => date('Y-m-d H:i:s'),
+                            'order_status' => $v['order_status'],
+                            'month'        => date('Y-m'),
+                            'type'         => $type,
+                            'adzoneid'     => $v['adv_id'] 
+                            );
+                        $this->model->table('benefit_log')->data($log3)->insert();
+                    }
+                }
+            $this->model->table('taoke')->data(array('is_handle'=>1))->where('id='.$v['id'])->update();    
+            }
+        }
+    }
+
+     public function autoMaidByAdzoneids() {
+        $order = $this->model->table('taoke')->fields('id,create_time,goods_name,goods_id,goods_number,order_status,order_amount,goods_price,effect_prediction,estimated_revenue,order_sn,adv_id')->where("`order_status`='订单付款'")->findAll();
+        if($order) {
+            foreach ($order as $k => $v) {
+                $price = $v['order_status'] =='订单结算'?$v['order_amount']:$v['goods_price'];
+                $user = $this->model->table('user')->fields('id')->where('adzoneid='.$v['adv_id'])->find();
+                switch ($v['order_status']) {
+                    case '订单失效':
+                        $type = -1;
+                        break;
+                    case '订单结算':
+                        $type = 0;
+                        break;    
+                    case '订单付款':
+                        $type = 2;
+                        break;
+                    default:
+                        $type = -1;
+                        break;
+                }
+                if($user) {
+                    //买家id
+                    $user_id = $user['id'];
+                    //邀请人id
+                    $inviter_id = Common::getInviterId($user_id);
+                    //上级代理商
+                    $promoter_id = Common::getFirstPromoter($user_id);
+                    //上级经销商
+                    $district_id = Common::getFirstDistrictId($user_id);
+
+                    if($inviter_id) {
+                        $log1 = array(
+                            'goods_name'   => $v['goods_name'],
+                            'goods_id'     => $v['goods_id'],
+                            'goods_num'    => $v['goods_number'],
+                            'order_id'     => $v['id'],
+                            'order_sn'     => $v['order_sn'],
+                            'user_id'      => $inviter_id,
+                            'price'        => $price,
+                            'amount'       => $v['effect_prediction']*0.4,
+                            'order_time'   => $v['create_time'],
+                            'create_time'  => date('Y-m-d H:i:s'),
+                            'order_status' => $v['order_status'],
+                            'month'        => date('Y-m'),
+                            'type'         => $type,
+                            'adzoneid'     => $v['adv_id'] 
+                            );
+                        $this->model->table('benefit_log')->data($log1)->insert();
+                    }
+
+                    if($promoter_id) {
+                        $log2 = array(
+                            'goods_name'   => $v['goods_name'],
+                            'goods_id'     => $v['goods_id'],
+                            'goods_num'    => $v['goods_number'],
+                            'order_id'     => $v['id'],
+                            'order_sn'     => $v['order_sn'],
+                            'user_id'      => $promoter_id,
+                            'price'        => $price,
+                            'amount'       => $v['effect_prediction']*0.2,
+                            'order_time'   => $v['create_time'],
+                            'create_time'  => date('Y-m-d H:i:s'),
+                            'order_status' => $v['order_status'],
+                            'month'        => date('Y-m'),
+                            'type'         => $type,
+                            'adzoneid'     => $v['adv_id'] 
+                            );
+                        $this->model->table('benefit_log')->data($log2)->insert();
+                    }
+
+                    if($district_id) {
+                        $log3 = array(
+                            'goods_name'   => $v['goods_name'],
+                            'goods_id'     => $v['goods_id'],
+                            'goods_num'    => $v['goods_number'],
+                            'order_id'     => $v['id'],
+                            'order_sn'     => $v['order_sn'],
+                            'user_id'      => $district_id,
+                            'price'        => $price,
+                            'amount'       => $v['effect_prediction']*0.1,
                             'order_time'   => $v['create_time'],
                             'create_time'  => date('Y-m-d H:i:s'),
                             'order_status' => $v['order_status'],
