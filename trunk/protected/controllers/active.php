@@ -41,7 +41,9 @@ class ActiveController extends Controller
             $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where("i.from='active' and i.user_id=".$user_id)->limit(4)->findAll();
             // $invite_num = count($list);
             $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
-            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $invite = $this->model->table("invite")->fields('count(id) as num')->where("from = 'active' and user_id = ".$user_id)->findAll();
+            // $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $invite_num = $invite[0]['num'];
             $signed = $sign_up?1:0;
             if($sign_up) {
                if($invite_num>=800) {
