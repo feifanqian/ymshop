@@ -42,8 +42,8 @@ class ActiveController extends Controller
             // $invite_num = count($list);
             $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
             $invite = $this->model->table("invite")->fields('count(id) as num')->where("`from` = 'active' and user_id = ".$user_id)->findAll();
-            // $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
-            $invite_num = $invite[0]['num'];
+            $invite_nums = empty($sign_up)?0:$sign_up['invite_num']; //邀请人数，随开红包次数变化
+            $invite_num = $invite[0]['num']; //真实邀请人数
             $signed = $sign_up?1:0;
             if($sign_up) {
                if($invite_num>=800) {
@@ -89,7 +89,7 @@ class ActiveController extends Controller
             $num = 38;
             $end_time = date('Y-m-d H:i:s',strtotime('+1 day'));
         }
-        $chance = floor($invite_num/3);
+        $chance = floor($invite_nums/3);
         $status = array('0'=>'未达成','1'=>'可领取','2'=>'已领取');
         
         //判断设备
