@@ -5,7 +5,7 @@
 		<tr><td width="40"></td><td width="120">线路id</td><td>线路名</td><td width="140">城市</td><td width="60">价格</td><td width="60">日期</td><td width="60">小计</td></tr>
 		{query:name=travel_way as od fields=* where=id eq $way_id}
 		
-		<tr><td><img src="{echo:Common::thumb($item['img'],100,100);}" width="40"></td><td>{$item['id']}</td><td>{$item['name']}</td><td>{$item['city']}</td><td>{$item['price']}</td>{$item['date']}</tr>
+		<tr><td><img src="{$item['img']}" width="40"></td><td>{$item['id']}</td><td>{$item['name']}</td><td>{$item['city']}</td><td>{$item['price']}</td>{$item['date']}</tr>
 		{/query}
 	</table>
 	<h3 class="lineD mt10">购买人信息：</h3>
@@ -41,19 +41,3 @@
 		{/query}
 
 </div>
-
-<script type="text/javascript">
- $("#areas").Linkage({ url:"{url:/ajax/area_data}",selected:[{$item['province']},{$item['city']},{$item['county']}],callback:function(data){
-    var text = new Array();
-    var value = new Array();
-    for(i in data[0]){
-      if(data[0][i]!=0){
-        text.push(data[1][i]);
-        value.push(data[0][i]);
-      }
-    }
-    $("#area").val(value.join(','));
-    FireEvent(document.getElementById("area"),"change");
-    }});
-
-</script>
