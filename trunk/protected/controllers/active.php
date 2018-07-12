@@ -45,27 +45,31 @@ class ActiveController extends Controller
             $invite_nums = empty($sign_up)?0:$sign_up['invite_num']; //邀请人数，随开红包次数变化
             $invite_num = $invite[0]['num']; //真实邀请人数
             $signed = $sign_up?1:0;
+            $number = $this->model->table("active_num")->where("id=1")->find();
+            $num1 = $number['num1'];
+            $num2 = $number['num2'];
+            $num3 = $number['num3'];
             if($sign_up) {
-               if($invite_num>=800) {
+               if($invite_num>=$num3) {
                     $status1 = $sign_up['status1']==0?1:2;
                     $status2 = $sign_up['status2']==0?1:2;
                     $status3 = $sign_up['status3']==0?1:2;
                     $num = 1000;
-                } elseif($invite_num>200 && $invite_num<800) {
+                } elseif($invite_num>$num2 && $invite_num<$num3) {
                     $status1 = $sign_up['status1']==0?1:2;
                     $status2 = $sign_up['status2']==0?1:2;
                     $status3 = 0;
-                    $num = 800;
-                } elseif($invite_num>4 && $invite_num<200) {
+                    $num = $num3;
+                } elseif($invite_num>$num1 && $invite_num<$num2) {
                     $status1 = $sign_up['status1']==0?1:2;
                     $status2 = 0;
                     $status3 = 0;
-                    $num = 200;
+                    $num = $num2;
                 } else {
                     $status1 = 0;
                     $status2 = 0;
                     $status3 = 0;
-                    $num = 4;
+                    $num = $num1;
                 }
                 $end_time = $sign_up['end_time'];
                  
@@ -75,7 +79,7 @@ class ActiveController extends Controller
                 $status1 = 0;
                 $status2 = 0;
                 $status3 = 0;
-                $num = 4;
+                $num = $num1;
             }
             
         } else {
@@ -86,7 +90,7 @@ class ActiveController extends Controller
             $status1 = 0;
             $status2 = 0;
             $status3 = 0;
-            $num = 4;
+            $num = $num1;
             $end_time = date('Y-m-d H:i:s',strtotime('+1 day'));
         }
         $chance = floor($invite_nums/3);
@@ -116,6 +120,9 @@ class ActiveController extends Controller
         $this->assign("signed", $signed);
         $this->assign("invite_num", $invite_num);
         $this->assign("num", $num);
+        $this->assign("num1", $num1);
+        $this->assign("num2", $num2);
+        $this->assign("num3", $num3);
         $this->assign("list", $list);
         $this->assign("out_time", $out_time);
         $this->assign("rest_num", $rest_num);
@@ -264,15 +271,21 @@ class ActiveController extends Controller
         $user_id = $this->user['id'];
         if($user_id) {
             $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
-            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $invite = $this->model->table("invite")->fields('count(id) as num')->where("`from` = 'active' and user_id = ".$user_id)->findAll();
+            // $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $invite_num = $invite[0]['num'];
             $get_status = empty($sign_up)?0:$sign_up['status3'];
         } else {
             $invite_num = 0;
             $user_id = 0;
             $get_status = 0;
         }
+        $number = $this->model->table("active_num")->where("id=1")->find();
+        $num1 = $number['num1'];
+        $num2 = $number['num2'];
+        $num3 = $number['num3'];
         $this->assign("user_id", $user_id);
-        $status = $invite_num>=38?1:0;
+        $status = $invite_num>=$num1?1:0;
         $this->assign("status", $status);
         $this->assign("get_status", $get_status);
         $this->redirect();
@@ -282,15 +295,21 @@ class ActiveController extends Controller
         $user_id = $this->user['id'];
         if($user_id) {
             $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
-            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $invite = $this->model->table("invite")->fields('count(id) as num')->where("`from` = 'active' and user_id = ".$user_id)->findAll();
+            // $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $invite_num = $invite[0]['num'];
             $get_status = empty($sign_up)?0:$sign_up['status1'];     
         } else {
             $invite_num = 0;
             $user_id = 0;
             $get_status = 0;
         }
+        $number = $this->model->table("active_num")->where("id=1")->find();
+        $num1 = $number['num1'];
+        $num2 = $number['num2'];
+        $num3 = $number['num3'];
         $this->assign("user_id", $user_id);
-        $status = $invite_num>=800?1:0;
+        $status = $invite_num>=$num3?1:0;
         $this->assign("status", $status);
         $this->assign("get_status", $get_status);
         $this->redirect();
@@ -300,15 +319,21 @@ class ActiveController extends Controller
         $user_id = $this->user['id'];
         if($user_id) {
             $sign_up = $this->model->table("invite_active")->where("user_id = ".$user_id)->find();
-            $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $invite = $this->model->table("invite")->fields('count(id) as num')->where("`from` = 'active' and user_id = ".$user_id)->findAll();
+            // $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
+            $invite_num = $invite[0]['num'];
             $get_status = empty($sign_up)?0:$sign_up['status2'];     
         } else {
             $invite_num = 0;
             $user_id = 0;
             $get_status = 0;
         }
+        $number = $this->model->table("active_num")->where("id=1")->find();
+        $num1 = $number['num1'];
+        $num2 = $number['num2'];
+        $num3 = $number['num3'];
         $this->assign("user_id", $user_id);
-        $status = $invite_num>=200?1:0;
+        $status = $invite_num>=$num2?1:0;
         $this->assign("status", $status);
         $this->assign("get_status", $get_status);
         $this->redirect();
@@ -382,7 +407,7 @@ class ActiveController extends Controller
     }
 
     public function user_voucher() {
-        var_dump(111);die;
+        // var_dump(111);die;
         $id = Filter::int(Req::args("id"));
         $voucher = $this->model->table('active_voucher')->where('id='.$id)->find();
         if($voucher['type']==1) {
