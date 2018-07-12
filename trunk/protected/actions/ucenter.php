@@ -3177,4 +3177,13 @@ class UcenterAction extends Controller {
         $this->code = 0;
         return;
     }
+
+    public function get_my_inviter() {
+        $inviter_id = Common::getInviterId($this->user['id']);
+        $inviter_name = Common::getInviterName($this->user['id']);
+        $this->code = 0;
+        $this->content['inviter_id'] = $inviter_id;
+        $this->content['inviter_name'] = $inviter_name;
+        return;
+    }
 }
