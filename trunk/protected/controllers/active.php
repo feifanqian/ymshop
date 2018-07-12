@@ -56,7 +56,7 @@ class ActiveController extends Controller
                     $status2 = $sign_up['status2']==0?1:2;
                     $status3 = 0;
                     $num = 800;
-                } elseif($invite_num>38 && $invite_num<200) {
+                } elseif($invite_num>4 && $invite_num<200) {
                     $status1 = $sign_up['status1']==0?1:2;
                     $status2 = 0;
                     $status3 = 0;
@@ -65,7 +65,7 @@ class ActiveController extends Controller
                     $status1 = 0;
                     $status2 = 0;
                     $status3 = 0;
-                    $num = 38;
+                    $num = 4;
                 }
                 $end_time = $sign_up['end_time'];
                  
@@ -75,7 +75,7 @@ class ActiveController extends Controller
                 $status1 = 0;
                 $status2 = 0;
                 $status3 = 0;
-                $num = 38;
+                $num = 4;
             }
             
         } else {
@@ -86,7 +86,7 @@ class ActiveController extends Controller
             $status1 = 0;
             $status2 = 0;
             $status3 = 0;
-            $num = 38;
+            $num = 4;
             $end_time = date('Y-m-d H:i:s',strtotime('+1 day'));
         }
         $chance = floor($invite_nums/3);
