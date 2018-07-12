@@ -1053,4 +1053,20 @@ class MarketingController extends Controller {
     {
         $this->redirect();
     }
+
+    public function travel_order_detail()
+    {
+        $this->layout = "blank";
+        $id = Req::args("id");
+        $model = new Model("travel_order");
+        if($id){
+            $order = $model->where("id=$id")->find();
+        }
+        
+        if ($order) {
+            $this->assign("id", $order['id']);
+            $this->assign("way_id", $order['way_id']);
+            $this->redirect();
+        }
+    }
 }

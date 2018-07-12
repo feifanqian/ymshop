@@ -48,8 +48,7 @@
                    <a  class="icon-cog action" href="javascript:;"> 处理</a>
                    <div class="menu_select">
                      <ul>
-                      <!-- <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看</a></li> -->
-                      <li><a class="icon-pencil" href="{url:/marketing/travel_order_detail/id/$item[id]}"> 编辑</a></li>        
+                      <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看</a></li>      
                       <!-- <li><a class="icon-switch"  href="javascript:;" onclick="change_status({$item['id']},4,null)"> 完成</a></li>               
                       <li><a class="icon-remove" href="javascript:;" onclick="change_status({$item['id']},6,null)"> 作废</a></li>            
                       <li><a class="icon-attachment"  href="javascript:;" onclick="change_status({$item['id']},null,'note')"> 备注</a></li> -->
@@ -74,3 +73,8 @@
     <div class="page_nav">
         {echo:$obj->pageBar()}
     </div>
+<script type="text/javascript">
+function view(id){
+        art.dialog.open("{url:/marketing/travel_order_detail/id/}"+id,{id:'view_dialog',title:'查看订单',resize:false,width:900,height:450});
+    }
+</script>    
