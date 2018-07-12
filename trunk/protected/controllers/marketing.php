@@ -1048,4 +1048,9 @@ class MarketingController extends Controller {
         }
         $this->redirect("travel_way");
     }
+
+    public function travel_order()
+    {
+        $this->redirect();
+    }
 }

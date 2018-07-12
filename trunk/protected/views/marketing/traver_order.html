@@ -1,0 +1,77 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+<style>
+    #add table{
+        width:100%;
+    }
+    #add th{
+        text-align: center;
+        width:70px;
+        background-color: #eee;
+    }
+    #add td{
+        padding-top: 30px;
+        text-align: center;
+    }
+    #add textarea{
+        margin:10px auto;
+        margin-left:10px;
+    }
+ 
+</style>
+<form action="" method="post">
+    <div class="tools_bar clearfix">
+        <a  class="icon-plus" href="{url:/marketing/way_edit}"> 添加</a>
+        <a href="javascript:;" class="icon-loop-2"
+        onclick="tools_reload()"> 刷新</a></div>
+        <table class="default" >
+            <tr>
+                <th style="width:50px">操作</th>
+                <th style="width:80px">用户名</th>
+                <th style="width:80px">订单号</th>
+                <th style="width:120px">路线</th>
+                <th style="width:80px">价钱</th>
+                <th style="width:80px">联系人</th>
+                <th style="width:80px">联系电话</th>
+                <th style="width:80px">性别</th>
+                <th style="width:80px">出行状态</th>
+                <th style="width:80px">支付状态</th>
+                <th style="width:100px">报名时间</th>
+            </tr>
+                {set:$order_status=array("-1"=>"<span class='red'>已取消</span>","0"=>"<span>已下单</span>","1"=>"<span class='green'>进行中</span>","2"=>"<span class='green'>已完成</span>")}
+                {set:$pay_status=array("0"=>"<span class='red'>未支付</span>","1"=>"<span class='green'>已支付</span>")}
+                {query:name=travel_order as o fields=o.*,u.nickname join=left join user as u on o.user_id eq u.id order=o.id desc id=$obj page=1}
+            <tr>
+                <td style="width:50px" class="btn_min">
+                <div class="operat hidden">
+                   <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                   <div class="menu_select">
+                     <ul>
+                      <!-- <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看</a></li> -->
+                      <li><a class="icon-pencil" href="{url:/marketing/way_edit/id/$item[id]}"> 编辑</a></li>        
+                      <!-- <li><a class="icon-switch"  href="javascript:;" onclick="change_status({$item['id']},4,null)"> 完成</a></li>               
+                      <li><a class="icon-remove" href="javascript:;" onclick="change_status({$item['id']},6,null)"> 作废</a></li>            
+                      <li><a class="icon-attachment"  href="javascript:;" onclick="change_status({$item['id']},null,'note')"> 备注</a></li> -->
+                    </ul>
+                  </div>
+                </div> 
+                </td>
+                <td>{$item['nickname']}</td>
+                <td>{$item['order_no']}</td>
+                <td>{$item['order_name']}</td>
+                <td>{$item['order_amount']}</td>
+                <td>{$item['contact_name']}</td>
+                <td>{$item['contact_phone']}</td>
+                <td>{echo:$item['sex']==1?'男':'女'}</td>
+                <td>{$order_status[$item['order_status']]}</td>
+                <td>{$pay_status[$item['pay_status']]}</td>
+                <td>{$item['sign_time']}</td>
+            </tr>
+                {/query}
+            </table>
+    </form>
+    <div class="page_nav">
+        {echo:$obj->pageBar()}
+    </div>

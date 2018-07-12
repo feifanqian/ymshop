@@ -147,6 +147,8 @@ class Menu {
             '/marketing/invite_active' => array('name' => '拉新活动', 'parent' => 'welfare'),
             '/marketing/travel_way' => array('name' => '旅游路线', 'parent' => 'travel'),
             '/marketing/way_edit' => array('name' => '旅游路线', 'parent' => 'travel','hidden'=>true),
+            '/marketing/travel_order' => array('name' => '出行订单', 'parent' => 'travel'),
+            '/marketing/travel_order_detail' => array('name' => '出行订单详情', 'parent' => 'travel','hidden'=>true),
             '/wxmanager/wx_public_list' => array('name' => '公众号列表', 'parent' => 'weixin'),
             '/wxmanager/wx_public_edit' => array('name' => '公众号编辑', 'parent' => 'weixin'),
             '/wxmanager/menu' => array('name' => '公众号菜单', 'parent' => 'weixin', 'hidden'=>1),
