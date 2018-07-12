@@ -379,7 +379,7 @@ class TravelController extends Controller
                     echo 'fail';
                     exit;
                 }
-                $this->model->table('travel_order')->data(array('pay_status'=>1))->where('order_no='.$order_no)->update();
+                $this->model->table('travel_order')->data(array('pay_status'=>1,'pay_time'=>date('Y-m-d H:i:s')))->where('order_no='.$order_no)->update();
             }
             echo "success";
             exit();
