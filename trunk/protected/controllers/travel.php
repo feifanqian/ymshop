@@ -539,7 +539,7 @@ class TravelController extends Controller
         // print_r($resp);die;
         if(isset($resp['results']['n_tbk_item'])) {
             $info = $resp['results']['n_tbk_item'];
-            $info['tao_str'] = $tao_str.'￥';
+            $info['tao_str'] = '￥'.$tao_str.'￥';
             $this->assign("info", $info);
             $this->redirect();
         } else {
