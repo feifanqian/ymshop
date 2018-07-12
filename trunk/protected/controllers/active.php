@@ -227,7 +227,14 @@ class ActiveController extends Controller
             $signed = $sign_up?1:0;
         } else {
             $signed = 0;
-        } 
+        }
+        $number = $this->model->table("active_num")->where("id=1")->find();
+        $num1 = $number['num1'];
+        $num2 = $number['num2'];
+        $num3 = $number['num3'];
+        $this->assign("num1", $num1);
+        $this->assign("num2", $num2);
+        $this->assign("num3", $num3); 
         $this->assign("inviter", $inviter);
         $this->assign("signed", $signed);
         $this->redirect();
