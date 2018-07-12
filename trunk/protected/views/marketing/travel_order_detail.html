@@ -2,10 +2,10 @@
 <div style="overflow: auto;width:1000px;height: 600px;">
 	<h3 class="lineD">路线信息：</h3>
 	<table class="default" id="attr_values">
-		<tr><td width="100">线路</td><td>线路名</td><td width="140">城市</td><td width="60">价格</td><td width="60">日期</td></tr>
+		<tr><td width="100">线路</td><td width="120">线路名</td><td width="100">城市</td><td width="60">价格</td><td width="60">日期</td></tr>
 		{query:name=travel_way as od fields=* where=id eq $way_id}
 		
-		<tr><td><img src="{$item['img']}" width="100"></td><td>{$item['name']}</td><td>{$item['city']}</td><td>{$item['price']}</td><td>{$item['date']}</td></tr>
+		<tr><td><img src="{$item['img']}" width="100"></td><td width="120">{$item['name']}</td><td width="100">{$item['city']}</td><td width="60">{$item['price']}</td><td width="60">{$item['date']}</td></tr>
 		{/query}
 	</table>
 	<h3 class="lineD mt10">购买人信息：</h3>
