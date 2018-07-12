@@ -223,16 +223,18 @@
                     data: {user_id: user_id},
                     type: 'post',
                     dataType: 'json',
-                    success: function (ret) {
-                       layer.open({
-                        type: 3,
-                        skin: 'layui-layer-rim', //加上边框
-                        area: ['100%', '450px'], //宽高
-                        content: '<img class="redbag" src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png" alt="">'
-                    }); 
-                       window.location.reload(); 
-                        // if (ret.status == "success") {                  
-                        // }                    
+                    success: function (ret) { 
+                        if (ret.status == "success") {
+                            layer.open({
+                                type: 3,
+                                skin: 'layui-layer-rim', //加上边框
+                                area: ['100%', '450px'], //宽高
+                                content: '<img class="redbag" src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/recruit/p13.png" alt="">',
+                                end: function () {
+                                    window.location.reload();
+                                }
+                            }); 
+                        }                    
                     }, 
                     error: function (e) {
                         console.log(e);
