@@ -281,7 +281,7 @@ class ActiveController extends Controller
             $invite = $this->model->table("invite")->fields('count(id) as num')->where("`from` = 'active' and user_id = ".$user_id)->findAll();
             // $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
             $invite_num = $invite[0]['num'];
-            $get_status = empty($sign_up)?0:$sign_up['status3'];
+            $get_status = empty($sign_up)?0:$sign_up['status1'];
         } else {
             $invite_num = 0;
             $user_id = 0;
@@ -305,7 +305,7 @@ class ActiveController extends Controller
             $invite = $this->model->table("invite")->fields('count(id) as num')->where("`from` = 'active' and user_id = ".$user_id)->findAll();
             // $invite_num = empty($sign_up)?0:$sign_up['invite_num'];
             $invite_num = $invite[0]['num'];
-            $get_status = empty($sign_up)?0:$sign_up['status1'];     
+            $get_status = empty($sign_up)?0:$sign_up['status3'];     
         } else {
             $invite_num = 0;
             $user_id = 0;
