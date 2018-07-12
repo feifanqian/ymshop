@@ -60,9 +60,10 @@
     </div> -->
 </body>
 <script src="/runtime/systemjs/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>  
 <!-- <script type="text/javascript" src="/themes/mobile/js/manifest.8b0de467449e57b9cea9.js"></script> -->
-<script type="text/javascript" src="/themes/mobile/js/vendor.ddd2819fa865f87e1a02.js"></script>
-<script type="text/javascript" src="/themes/mobile/js/wxpro.4fd9259e794c2b7f2bad.js"></script>
+<!-- <script type="text/javascript" src="/themes/mobile/js/vendor.ddd2819fa865f87e1a02.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/wxpro.4fd9259e794c2b7f2bad.js"></script> -->
 <script type="text/javascript">
 $(function(){
     var clipboard = new Clipboard('.buttoncopy',{ 
@@ -73,5 +74,18 @@ $(function(){
  
     });
 });
+// $(document).ready(function(){    
+//         var targetText=$(".buttoncopy").attr('data-text');    
+//         var clipboard = new Clipboard('.buttoncopy');    
+    
+//         clipboard.on('success', function(e) {    
+//             console.info('Action:', e.action);    
+//             console.info('Text:', e.text);    
+//             console.info('Trigger:', e.trigger);    
+//             alert("复制成功");    
+    
+//             e.clearSelection();    
+//         });    
+//     });
 </script>
 </html>
