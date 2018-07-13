@@ -35,20 +35,18 @@
         <img src="https://ymlypt.b0.upaiyun.com/data/uploads/2018/06/28/8b9f4a663552e4a39889f205ddee3643.jpg" alt="" class="sizeFitImg">
     </section>
     <div style="height: 50px;margin-top: 16px;">
-        {if:$status==1} 
+        {if:$status==1 && $get_status==0} 
         <div class="invite1" style="background-color: #f06834;">
             <a href="javascript:;" style="color: white;font-size: 20px;">领取</a>   
         </div>
-        {else:}
-          {if:$get_status==1}
-          <div class="invite1" style="background-color: #aa8475;">
+        {elseif:$status==1 && $get_status==1}
+        <div class="invite1" style="background-color: #aa8475;">
             <a href="javascript:;" style="color: white;font-size: 20px;">已领取</a>   
-          </div>
-          {else:}
-          <div class="invite1" style="background-color: #aa8475;">
+        </div>
+        {else:}  
+        <div class="invite1" style="background-color: #aa8475;">
             <a href="javascript:;" style="color: white;font-size: 20px;">未达成</a>   
-           </div>
-          {/if}
+        </div> 
         {/if}
         <div class="invite2">
             <a href="javascript:history.back();" style="color: white;font-size: 20px;">取消</a>
