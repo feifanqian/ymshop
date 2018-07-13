@@ -2477,7 +2477,7 @@ class UcenterAction extends Controller {
                 // $getMyAllPromoter = Common::getMyAllPromoter($v['id']);
                 // $record['data'][$k]['promoter_num'] = $getMyAllPromoter['num'];
             }
-            // $record['data'] = array_values($record['data']);
+            $record['data'] = array_values($record['data']);
         } else {
             $record['data'] = [];
         }
