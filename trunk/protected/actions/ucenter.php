@@ -2458,7 +2458,7 @@ class UcenterAction extends Controller {
         }
         $record = $this->model->table('district_shop as ds')
                 ->join('left join user as u on ds.owner_id = u.id')
-                ->fields('u.id,u.avatar,u.nickname,ds.linkman,ds.create_time as createtime')
+                ->fields('u.id,u.avatar,u.nickname,ds.linkman,ds.create_time')
                 ->where("ds.invite_shop_id=".$district['id'])
                 ->order("ds.id desc")
                 ->findPage($page, 10);
