@@ -2455,19 +2455,23 @@ class UcenterAction extends Controller {
                 ->fields('u.id,u.avatar,u.nickname,ds.linkman,ds.create_time as createtime')
                 ->where("ds.invite_shop_id=".$district['id'])
                 ->order("ds.id desc")
-                ->findPage($page, 10);            
-        if (empty($record)) {
-            return array('data'=>array());
-        }
+                ->findPage($page, 10);
+
         if (isset($record['html'])) {
             unset($record['html']);
         }
-        foreach ($record['data'] as $k => $v) {
-            if($v['id']==null){
-                unset($record['data'][$k]);
+        if($record) {
+            foreach ($record['data'] as $k => $v) {
+                if($v['id']==null){
+                    unset($record['data'][$k]);
+                }
+                $record['data'][$k]['createtime'] = strtotime($v['createtime']);
             }
-            $record['data'][$k]['createtime'] = strtotime($v['createtime']);
+            $record['data'] = array_values($record['data']);
+        } else {
+            $record['data'] = [];
         }
+        
 
         $this->code = 0;
         $this->content = $record;
