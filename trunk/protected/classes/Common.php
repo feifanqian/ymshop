@@ -1730,9 +1730,13 @@ class Common {
     {
         //获取所有邀请的会员
         $model = new Model();
+        var_dump(111);
         $district = $model->table('district_shop')->fields('id')->where('owner_id='.$user_id)->find();
+        var_dump(222);
         $invite = $model->table('district_promoter')->fields('user_id')->where('hirer_id='.$district['id'])->findAll();
+        var_dump(333);
         $num = $model->table('district_promoter')->fields('count(id) as num')->where('hirer_id='.$district['id'])->findAll();
+        var_dump(444);die;
         $idstr = '';
         $ids = array();
         if($invite) {
