@@ -403,10 +403,10 @@ class ActiveController extends Controller
             $this->model->table('invite_active')->data(['status1'=>1])->where('user_id='.$user_id)->update();
         }
         if($type==4) {
-            $this->model->table('invite_active')->data(['status1'=>1])->where('user_id='.$user_id)->update();
+            $this->model->table('invite_active')->data(['status3'=>1])->where('user_id='.$user_id)->update();
         }
         if($type==2) {
-            $this->model->table('invite_active')->data(['status3'=>1])->where('user_id='.$user_id)->update();
+            $this->model->table('invite_active')->data(['status2'=>1])->where('user_id='.$user_id)->update();
         }
         //清零邀请人数
         $this->model->table('invite_active')->data(['invite_num'=>0])->where('user_id='.$user_id)->update();
