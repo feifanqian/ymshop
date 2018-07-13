@@ -2407,6 +2407,9 @@ class UcenterAction extends Controller {
      */
     public function getPromoterList(){   
         $page = Filter::int(Req::args('page'));
+        if(!$page) {
+            $page = 1;
+        }
         $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
         if(!$district){
             $this->code = 1131;
@@ -2444,7 +2447,10 @@ class UcenterAction extends Controller {
         // $this->code = 0;
         // $this->content = $this->hirer->getMySubordinate();
         $page = Filter::int(Req::args('page'));
-        $page = $page==1?0:$page;
+        if(!$page) {
+            $page = 1;
+        }
+        // $page = $page==1?0:$page;
         $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
         if(!$district){
             $this->code = 1131;
@@ -2466,6 +2472,10 @@ class UcenterAction extends Controller {
                     unset($record['data'][$k]);
                 }
                 $record['data'][$k]['createtime'] = strtotime($v['createtime']);
+                $getMyAllInviters = Common::getMyAllInviters($v['id']);
+                $record['data'][$k]['member_num'] = $getMyAllInviters['num'];
+                $getMyAllPromoter = Common::getMyAllPromoter($v['id']);
+                $record['data'][$k]['promoter_num'] = $getMyAllPromoter['num'];
             }
             $record['data'] = array_values($record['data']);
         } else {

@@ -1725,4 +1725,24 @@ class Common {
         $result['idstr'] = $idstr;
         return $result;
     }
+
+    static function getMyAllPromoter($user_id)
+    {
+        //获取所有邀请的会员
+        $model = new Model();
+        $district = $model->table('district_shop')->fields('id')->where('owner_id='.$user_id)->find();
+        $invite = $model->table('district_promoter')->fields('user_id')->where('hirer_id='.$district['id'])->findAll();
+        $num = $model->table('district_promoter')->fields('count(id) as num')->where('hirer_id='.$district['id'])->findAll();
+        $idstr = '';
+        $ids = array();
+        if($invite) {
+            foreach($invite as $k =>$v) {
+               $ids[] = $v['user_id'];
+            }
+        }
+        $idstr = $ids!=null?implode(',', $ids):'';
+        $result['num'] = $num[0]['num'];
+        $result['idstr'] = $idstr;
+        return $result;
+    }
 }
