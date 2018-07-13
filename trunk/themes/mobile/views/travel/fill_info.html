@@ -81,7 +81,6 @@ $("#way").change(function(){
             success: function (res) {
                 data = JSON.stringify(res);
                 var jsonstr= $.parseJSON(data);
-                console.log(jsonstr);
                 $('.tips').html(jsonstr.data);
             },
             error: function (e) {
