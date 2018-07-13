@@ -601,6 +601,10 @@ class AddressAction extends Controller
             $this->code = 1000;
             return;
         }
+        $page = Filter::int(Req::args('page'));
+        if (!$page) {
+            $page = 1;
+        }
         $model = new Model();
         
         $list = $model->table('district_promoter as d')->join('left join customer as c on d.user_id = c.user_id left join user as u on d.user_id=u.id')->fields('d.*,c.real_name,u.avatar')->where('d.id=' . $id)->find();
@@ -665,6 +669,8 @@ class AddressAction extends Controller
         }else{
             $list['is_district'] = 0;
         }
+        $goods_list = $this->model->table('goods')->fields('id,name,category_id,img,sell_price,create_time,store_nums,is_online,base_sales_volume')->where('user_id='.$list['user_id'].' and is_online=0')->order('id desc')->findPage($page, 10);
+        $list['goods_list'] = isset($goods_list['data']) && $goods_list['data']!=null?$goods_list['data']:[];
         $this->code = 0;
         $this->content = $list;
     }

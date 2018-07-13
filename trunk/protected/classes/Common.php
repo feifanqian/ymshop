@@ -1668,7 +1668,7 @@ class Common {
     static function getAllChildPromotersIds($user_id)
     {
         $model = new Model();
-        //根据所属上级关系找到下级所有经销商
+        //根据所属上级关系找到下级所有代理商
         $is_break = false; //false继续 true停止
         $promoter_user_id = '';
         $num = 0;
