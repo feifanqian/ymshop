@@ -2407,9 +2407,10 @@ class UcenterAction extends Controller {
      */
     public function getPromoterList(){   
         $page = Filter::int(Req::args('page'));
-        if(!$page) {
-            $page = 1;
-        }
+        $page = $page==1?0:$page;
+        // if(!$page) {
+        //     $page = 1;
+        // }
         $district = $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->find();
         if(!$district){
             $this->code = 1131;
