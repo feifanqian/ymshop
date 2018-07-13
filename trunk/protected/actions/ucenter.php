@@ -2471,7 +2471,7 @@ class UcenterAction extends Controller {
                 // if($v['id']==null){
                 //     unset($record['data'][$k]);
                 // }
-                $record['data'][$k]['createtime'] = strtotime($v['createtime']);
+                $record['data'][$k]['createtime'] = strtotime($v['create_time']);
                 $getMyAllInviters = Common::getMyAllInviters($v['id']);
                 $record['data'][$k]['member_num'] = $getMyAllInviters['num'];
                 $getMyAllPromoter = Common::getMyAllPromoter($v['id']);
