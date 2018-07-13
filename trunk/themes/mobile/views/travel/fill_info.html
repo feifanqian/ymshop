@@ -80,8 +80,9 @@ $("#way").change(function(){
             data: data,
             success: function (res) {
                 data = JSON.stringify(res);
-                console.log(data);
-                $('.tips').html(data.data);
+                var jsonstr= $.parseJSON(data);
+                console.log(jsonstr);
+                $('.tips').html(jsonstr.data);
             },
             error: function (e) {
                     console.log(e);
