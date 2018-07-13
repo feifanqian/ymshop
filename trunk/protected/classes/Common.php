@@ -1706,4 +1706,23 @@ class Common {
         }
         return $district_id;
     }
+
+    static function getMyAllInviters($user_id)
+    {
+        //获取所有邀请的会员
+        $model = new Model();
+        $invite = $model->table('invite')->fields('invite_user_id')->where('user_id='.$user_id)->findAll();
+        $num = $model->table('invite')->fields('count(id) as num')->where('user_id='.$user_id)->findAll();
+        $idstr = '';
+        $ids = array();
+        if($invite) {
+            foreach($invite as $k =>$v) {
+               $ids[] = $v['invite_user_id'];
+            }
+        }
+        $idstr = $ids!=null?implode(',', $ids):'';
+        $result['num'] = $num[0]['num'];
+        $result['idstr'] = $idstr;
+        return $result;
+    }
 }

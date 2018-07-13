@@ -139,17 +139,17 @@
     <section class="section_3">
         <div class="cell">
             <a href="/active/travel_detail" class="detail">查看<br>详情<br>>></a>
-            <a href="/active/travel_detail" class="status1 {if:$status1==1}can-get{else:}had-get{/if}">{$status[$status1]}</a>
+            <a href="javascript:;" data-type="3" data-status="{$status1}" class="status1 {if:$status1==1}can-get{else:}had-get{/if}">{$status[$status1]}</a>
             <span class="count">累积邀请{$num1}人</span>
         </div>
         <div class="cell">
             <a href="/active/six_detail" class="detail">查看<br>详情<br>>></a>
-            <a href="/active/six_detail" class="status1 {if:$status2==1}can-get{else:}had-get{/if}">{$status[$status2]}</a>
+            <a href="javascript:;" data-type="2" data-status="{$status2}" class="status1 {if:$status2==1}can-get{else:}had-get{/if}">{$status[$status2]}</a>
             <span class="count">累积邀请{$num2}人</span>
         </div>
         <div class="cell">
             <a href="/active/watch_detail" class="detail">查看<br>详情<br>>></a>
-            <a href="/active/watch_detail" class="status1 {if:$status3==1}can-get{else:}had-get{/if}">{$status[$status3]}</a>
+            <a href="javascript:;" data-type="4" data-status="{$status3}" class="status1 {if:$status3==1}can-get{else:}had-get{/if}">{$status[$status3]}</a>
             <span class="count">累积邀请{$num3}人</span>
         </div>
     </section>
@@ -297,54 +297,34 @@
     window.onload = function () {
         auto_load_check();
     }
-</script>
-<!-- <script>
-var form = {$type};
-var download_url = '';
-if(form=='android') {
-   download_url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.yidu.yuanmeng';
-} else {
-    download_url = 'https://itunes.apple.com/cn/app/%E5%9C%86%E6%A2%A6%E5%85%B1%E4%BA%AB%E7%BD%91/id1330161083?mt=8';
-}
-            (function(){
-                var ua = navigator.userAgent.toLowerCase();
-                var t;
-                var config = {
-                    /*scheme:必须*/
-                    scheme_IOS: 'rong://',
-                    scheme_Adr: 'rong://com.yidu.yuanmeng',
-                    download_url: download_url,
-                    timeout: 600
-                };
-
-                function openclient() {
-                    var startTime = Date.now();
-
-                    var ifr = document.createElement('iframe');
-
-
-                    ifr.src = ua.indexOf('os') > 0 ? config.scheme_IOS : config.scheme_Adr;
-                    ifr.style.display = 'none';
-                    document.body.appendChild(ifr);
-
-                    var t = setTimeout(function() {
-                        var endTime = Date.now();
-
-                        if (!startTime || endTime - startTime < config.timeout + 200) { 
-                            window.location = config.download_url;
-                        } else {
-
+    $('.status1 a').on('click',function(){
+        var type = $(this).data('type');
+        var status = $(this).data('status');
+            if(status==0) {
+                alert('您还未完成任务，赶紧去邀请小伙伴们吧!');
+            } else {
+                if(status==2){
+                   alert('您已领取过了!');
+                } else{
+                    var user_id = {$user['user_id']};
+                    $.ajax({
+                        url: "{url:/active/get_voucher}",
+                        data: {user_id: user_id,type:type},
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (ret) { 
+                            if (ret.status == "success") {                  
+                                alert('领取成功！');
+                                window.location.reload();
+                            }                    
+                        }, 
+                        error: function (e) {
+                            console.log(e);
+                            alert("服务器繁忙!请稍后重试");
                         }
-                    }, config.timeout);
-
-                    window.onblur = function() {
-                        clearTimeout(t);
-                    }
-                }
-                window.addEventListener("DOMContentLoaded", function(){
-                    document.getElementById("J-call-app").addEventListener('click',openclient,false);
-
-                }, false);
-            })()
-</script> -->
+                    });
+                }    
+            }
+        });
+</script>
 </html>
