@@ -2412,12 +2412,6 @@ class UcenterAction extends Controller {
             $this->code = 1131;
             return;
         }
-        // $record = $this->model->table('district_promoter as dp')
-        //         ->join('left join user as u on dp.user_id = u.id left join invite as i on dp.user_id=i.invite_user_id')
-        //         ->fields('u.id,u.avatar,u.nickname,i.createtime')
-        //         ->where("i.user_id=".$this->user['id'])
-        //         ->order("i.id desc")
-        //         ->findPage($page, 10);
         $record = $this->model->table('district_promoter as dp')
                 ->join('left join user as u on dp.user_id = u.id')
                 ->fields('u.id,u.avatar,u.nickname,dp.create_time')
@@ -2434,24 +2428,10 @@ class UcenterAction extends Controller {
             // $record['data'] = array_values($record['data']);
             foreach($record['data'] as $k=>$v){
                 $record['data'][$k]['createtime'] = strtotime($v['create_time']);
+                $getMyAllInviters = Common::getMyAllInviters($v['id']);
+                $record['data'][$k]['member_num'] = $getMyAllInviters['num'];
             }    
         }
-        // if($record['data']){
-        //     foreach($record['data'] as $k=>$v){
-        //         $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-        //         $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
-        //         if(!$promoter){
-        //             unset($record['data'][$k]);
-        //             $record['page']['total'] = $record['page']['total']-1;
-        //             $record['page']['totalPage'] = ceil($record['page']['total']/10);
-        //         }
-        //         if($shop){
-        //             unset($record['data'][$k]);
-        //             $record['page']['total'] = $record['page']['total']-1;
-        //             $record['page']['totalPage'] = ceil($record['page']['total']/10);
-        //         }
-        //     }
-        // }
 
         $this->code = 0;
         $this->content = $record;
