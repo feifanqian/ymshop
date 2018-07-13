@@ -2472,10 +2472,10 @@ class UcenterAction extends Controller {
                     unset($record['data'][$k]);
                 }
                 $record['data'][$k]['createtime'] = strtotime($v['createtime']);
-                $getMyAllInviters = Common::getMyAllInviters($v['id']);
-                $record['data'][$k]['member_num'] = $getMyAllInviters['num'];
-                $getMyAllPromoter = Common::getMyAllPromoter($v['id']);
-                $record['data'][$k]['promoter_num'] = $getMyAllPromoter['num'];
+                // $getMyAllInviters = Common::getMyAllInviters($v['id']);
+                // $record['data'][$k]['member_num'] = $getMyAllInviters['num'];
+                // $getMyAllPromoter = Common::getMyAllPromoter($v['id']);
+                // $record['data'][$k]['promoter_num'] = $getMyAllPromoter['num'];
             }
             // $record['data'] = array_values($record['data']);
         } else {
