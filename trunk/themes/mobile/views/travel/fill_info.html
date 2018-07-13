@@ -118,7 +118,6 @@ $("input[name='upload_idcard']").change(function(){
    var file = $(this).get(0).files[0];
    type = type+1;
    if(type==6) {
-    console.log(type);
       $('.upload').hide();
    } 
    upyun_upload(type,file);
