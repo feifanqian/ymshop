@@ -90,85 +90,86 @@ class TravelController extends Controller
             $this->assign('way',$way);
             $this->redirect();
         } else {
-            if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-                $redirect = "http://www.ymlypt.com/travel/fill_info";
-                // $this->autologin($redirect);
-                $code = Filter::sql(Req::args('code'));
-                $oauth = new WechatOAuth();
+            $this->redirect('/active/login/redirect/fill_info');
+            // if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+            //     $redirect = "http://www.ymlypt.com/travel/fill_info";
+            //     // $this->autologin($redirect);
+            //     $code = Filter::sql(Req::args('code'));
+            //     $oauth = new WechatOAuth();
                 
-                $url = $oauth->getCodes($redirect);
-                if($code) {
-                    $extend = null;
-                    $token = $oauth->getAccessToken($code, $extend);
-                    $userinfo = $oauth->getUserInfo();
-                    if(!empty($userinfo)) {
-                        $openid = $token['openid'];
-                        $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
+            //     $url = $oauth->getCodes($redirect);
+            //     if($code) {
+            //         $extend = null;
+            //         $token = $oauth->getAccessToken($code, $extend);
+            //         $userinfo = $oauth->getUserInfo();
+            //         if(!empty($userinfo)) {
+            //             $openid = $token['openid'];
+            //             $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
 
-                        if(!$oauth_user) { //未注册
-                            //插入user表
-                            $passWord = CHash::random(6);
-                            $validcode = CHash::random(8);
-                            $user_id = $this->model->table("user")->data(array('nickname' => $userinfo['open_name'], 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
-                            $name = "u" . sprintf("%09d", $user_id);
-                            $email = $name . "@no.com";
-                            $time = date('Y-m-d H:i:s');
-                            $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
+            //             if(!$oauth_user) { //未注册
+            //                 //插入user表
+            //                 $passWord = CHash::random(6);
+            //                 $validcode = CHash::random(8);
+            //                 $user_id = $this->model->table("user")->data(array('nickname' => $userinfo['open_name'], 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+            //                 $name = "u" . sprintf("%09d", $user_id);
+            //                 $email = $name . "@no.com";
+            //                 $time = date('Y-m-d H:i:s');
+            //                 $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
 
-                            //插入customer表
-                            $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
-                            Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
+            //                 //插入customer表
+            //                 $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+            //                 Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
 
-                            //插入oauth_user表
-                            $this->model->table('oauth_user')->data(array(
-                                    'user_id' => $user_id, 
-                                    'open_name' => $userinfo['open_name'],
-                                    'oauth_type' => "wechat",
-                                    'posttime' => time(),
-                                    'token' => $token['access_token'],
-                                    'expires' => $token['expires_in'],
-                                    'open_id' => $token['openid']
-                                ))->insert();
+            //                 //插入oauth_user表
+            //                 $this->model->table('oauth_user')->data(array(
+            //                         'user_id' => $user_id, 
+            //                         'open_name' => $userinfo['open_name'],
+            //                         'oauth_type' => "wechat",
+            //                         'posttime' => time(),
+            //                         'token' => $token['access_token'],
+            //                         'expires' => $token['expires_in'],
+            //                         'open_id' => $token['openid']
+            //                     ))->insert();
 
-                            //记录登录信息
-                            $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
-                            $obj['open_id'] = $token['openid'];
-                            $this->safebox->set('user', $obj, 1800);
-                        } else { //已注册
-                            $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
-                            $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
-                            $this->safebox->set('user', $obj, 31622400);
-                        }
+            //                 //记录登录信息
+            //                 $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
+            //                 $obj['open_id'] = $token['openid'];
+            //                 $this->safebox->set('user', $obj, 1800);
+            //             } else { //已注册
+            //                 $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
+            //                 $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
+            //                 $this->safebox->set('user', $obj, 31622400);
+            //             }
 
-                        $way = $this->model->table('travel_way')->fields('id,name')->findAll();
+            //             $way = $this->model->table('travel_way')->fields('id,name')->findAll();
 
-                        $upyun = Config::getInstance()->get("upyun");
+            //             $upyun = Config::getInstance()->get("upyun");
 
-                        $options = array(
-                            'bucket' => $upyun['upyun_bucket'],
-                            // 'allow-file-type' => 'jpg,gif,png,jpeg', // 文件类型限制，如：jpg,gif,png
-                            'expiration' => time() + $upyun['upyun_expiration'],
-                            // 'notify-url' => $upyun['upyun_notify-url'],
-                            // 'ext-param' => "",
-                            // 'save-key' => "/data/uploads/head/" . $this->user['id'] . ".jpg",
-                        );
-                        $policy = base64_encode(json_encode($options));
-                        $signature = md5($policy . '&' . $upyun['upyun_formkey']);
-                        $this->assign('way_id', $way_id);
-                        $this->assign('user_id',$this->user['id']);
-                        $this->assign('secret', md5('ym123456'));
-                        $this->assign('policy', $policy);
-                        $this->assign('way',$way);
-                        $this->redirect();   
-                    }
-                    // return true;
-                } else {
-                    header("Location: {$url}"); 
-                    // $this->redirect($url);
-                }        
-            } else {
-               $this->redirect('/active/login/redirect/fill_info');
-            } 
+            //             $options = array(
+            //                 'bucket' => $upyun['upyun_bucket'],
+            //                 // 'allow-file-type' => 'jpg,gif,png,jpeg', // 文件类型限制，如：jpg,gif,png
+            //                 'expiration' => time() + $upyun['upyun_expiration'],
+            //                 // 'notify-url' => $upyun['upyun_notify-url'],
+            //                 // 'ext-param' => "",
+            //                 // 'save-key' => "/data/uploads/head/" . $this->user['id'] . ".jpg",
+            //             );
+            //             $policy = base64_encode(json_encode($options));
+            //             $signature = md5($policy . '&' . $upyun['upyun_formkey']);
+            //             $this->assign('way_id', $way_id);
+            //             $this->assign('user_id',$this->user['id']);
+            //             $this->assign('secret', md5('ym123456'));
+            //             $this->assign('policy', $policy);
+            //             $this->assign('way',$way);
+            //             $this->redirect();   
+            //         }
+            //         // return true;
+            //     } else {
+            //         header("Location: {$url}"); 
+            //         // $this->redirect($url);
+            //     }        
+            // } else {
+            //    $this->redirect('/active/login/redirect/fill_info');
+            // } 
         }
     }
 
@@ -208,77 +209,78 @@ class TravelController extends Controller
             $this->assign('user_id',$this->user['id']);
             $this->assign('page',$page); 
             $this->redirect();
-        } else { 
-            if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-                $redirect = "http://www.ymlypt.com/travel/order_list";
-                // $this->autologin($redirect);
-                $code = Filter::sql(Req::args('code'));
-                $oauth = new WechatOAuth();
+        } else {
+            $this->redirect('/active/login/redirect/order_list'); 
+            // if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+            //     $redirect = "http://www.ymlypt.com/travel/order_list";
+            //     // $this->autologin($redirect);
+            //     $code = Filter::sql(Req::args('code'));
+            //     $oauth = new WechatOAuth();
                 
-                $url = $oauth->getCodes($redirect);
-                if($code) {
-                    $extend = null;
-                    $token = $oauth->getAccessToken($code, $extend);
-                    $userinfo = $oauth->getUserInfo();
-                    if(!empty($userinfo)) {
-                        $openid = $token['openid'];
-                        $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
+            //     $url = $oauth->getCodes($redirect);
+            //     if($code) {
+            //         $extend = null;
+            //         $token = $oauth->getAccessToken($code, $extend);
+            //         $userinfo = $oauth->getUserInfo();
+            //         if(!empty($userinfo)) {
+            //             $openid = $token['openid'];
+            //             $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
 
-                        if(!$oauth_user) { //未注册
-                            //插入user表
-                            $passWord = CHash::random(6);
-                            $validcode = CHash::random(8);
-                            $user_id = $this->model->table("user")->data(array('nickname' => $userinfo['open_name'], 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
-                            $name = "u" . sprintf("%09d", $user_id);
-                            $email = $name . "@no.com";
-                            $time = date('Y-m-d H:i:s');
-                            $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
+            //             if(!$oauth_user) { //未注册
+            //                 //插入user表
+            //                 $passWord = CHash::random(6);
+            //                 $validcode = CHash::random(8);
+            //                 $user_id = $this->model->table("user")->data(array('nickname' => $userinfo['open_name'], 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+            //                 $name = "u" . sprintf("%09d", $user_id);
+            //                 $email = $name . "@no.com";
+            //                 $time = date('Y-m-d H:i:s');
+            //                 $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
 
-                            //插入customer表
-                            $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
-                            Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
+            //                 //插入customer表
+            //                 $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+            //                 Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
 
-                            //插入oauth_user表
-                            $this->model->table('oauth_user')->data(array(
-                                    'user_id' => $user_id, 
-                                    'open_name' => $userinfo['open_name'],
-                                    'oauth_type' => "wechat",
-                                    'posttime' => time(),
-                                    'token' => $token['access_token'],
-                                    'expires' => $token['expires_in'],
-                                    'open_id' => $token['openid']
-                                ))->insert();
+            //                 //插入oauth_user表
+            //                 $this->model->table('oauth_user')->data(array(
+            //                         'user_id' => $user_id, 
+            //                         'open_name' => $userinfo['open_name'],
+            //                         'oauth_type' => "wechat",
+            //                         'posttime' => time(),
+            //                         'token' => $token['access_token'],
+            //                         'expires' => $token['expires_in'],
+            //                         'open_id' => $token['openid']
+            //                     ))->insert();
 
-                            //记录登录信息
-                            $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
-                            $obj['open_id'] = $token['open_id'];
-                            $this->safebox->set('user', $obj, 31622400);
-                            $this->user['id'] = $oauth_user['user_id'];
-                        } else { //已注册
-                            $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
-                            $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
-                            $this->safebox->set('user', $obj, 31622400);
-                            $this->user['id'] = $oauth_user['user_id'];
-                        }
+            //                 //记录登录信息
+            //                 $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
+            //                 $obj['open_id'] = $token['open_id'];
+            //                 $this->safebox->set('user', $obj, 31622400);
+            //                 $this->user['id'] = $oauth_user['user_id'];
+            //             } else { //已注册
+            //                 $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
+            //                 $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
+            //                 $this->safebox->set('user', $obj, 31622400);
+            //                 $this->user['id'] = $oauth_user['user_id'];
+            //             }
 
-                        $page = Filter::int(Req::args('p'));
-                        if(!$page) {
-                            $page = 1;
-                        }
-                        $list = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.desc,t.order_amount,tw.img')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.user_id='.$this->user['id'])->order('t.id desc')->findPage($page,5);
-                        $this->assign('user_id',$this->user['id']);
-                        $this->assign('page',$page);
-                        $this->assign('list',$list); 
-                        $this->redirect();   
-                    }
-                    // return true;
-                } else {
-                    header("Location: {$url}"); 
-                    // $this->redirect($url);
-                }        
-            } else {
-               $this->redirect('/active/login/redirect/order_list');
-            }
+            //             $page = Filter::int(Req::args('p'));
+            //             if(!$page) {
+            //                 $page = 1;
+            //             }
+            //             $list = $this->model->table('travel_order as t')->fields('t.id,t.order_no,tw.name,tw.city,tw.desc,t.order_amount,tw.img')->join('left join travel_way as tw on t.way_id=tw.id')->where('t.user_id='.$this->user['id'])->order('t.id desc')->findPage($page,5);
+            //             $this->assign('user_id',$this->user['id']);
+            //             $this->assign('page',$page);
+            //             $this->assign('list',$list); 
+            //             $this->redirect();   
+            //         }
+            //         // return true;
+            //     } else {
+            //         header("Location: {$url}"); 
+            //         // $this->redirect($url);
+            //     }        
+            // } else {
+            //    $this->redirect('/active/login/redirect/order_list');
+            // }
         }
     }
 
@@ -546,7 +548,12 @@ class TravelController extends Controller
         } else {
             $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '信息错误', "content" => "抱歉，找不到该商品信息啦"));
             exit();
-        }
-        
+        }      
+    }
+
+    public function get_way_remark() {
+        $id = Filter::int(Req::args("id"));
+        $way = $this->model->table('travel_way')->fields('remark')->where('id='.$id)->find();
+        echo JSON::encode(array('data' => $way['remark']));
     } 
 }    
