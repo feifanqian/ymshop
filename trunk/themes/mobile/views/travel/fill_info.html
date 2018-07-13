@@ -113,13 +113,13 @@ $('#submit_do').on('click',function(){
    document.forms['fill_submit'].submit();
 });
 var type = 0;
+var img_num = $('.preview').children('img').length;
+if(img_num>=6) {
+  $('.upload').hide();
+}
 $("input[name='upload_idcard']").change(function(){
    var file = $(this).get(0).files[0];
-   type = type+1;
-   if(type>=7) {
-        alert('最多上传6张证件照');
-        return false;
-   } 
+   type = type+1; 
    upyun_upload(type,file);
    var reader = new FileReader();
    reader.readAsDataURL(file);
