@@ -2468,9 +2468,9 @@ class UcenterAction extends Controller {
         }
         if($record) {
             foreach ($record['data'] as $k => $v) {
-                if($v['id']==null){
-                    unset($record['data'][$k]);
-                }
+                // if($v['id']==null){
+                //     unset($record['data'][$k]);
+                // }
                 $record['data'][$k]['createtime'] = strtotime($v['createtime']);
                 // $getMyAllInviters = Common::getMyAllInviters($v['id']);
                 // $record['data'][$k]['member_num'] = $getMyAllInviters['num'];
