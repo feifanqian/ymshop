@@ -2436,14 +2436,15 @@ class UcenterAction extends Controller {
         //         $record['data'][$k]['member_num'] = $getMyAllInviters['num'];
         //     }    
         // }
-
+        
+        var_dump(111);
         $list = $this->model->table('district_promoter as dp')
                 ->join('left join user as u on dp.user_id = u.id')
                 ->fields('u.id,u.avatar,u.nickname,dp.create_time')
                 ->where("dp.hirer_id=".$district['id'])
                 ->order("dp.id desc")
                 ->findAll();
-
+        var_dump(222);die;
         if($list) {
             foreach($list as $k=>$v){
                 $list[$k]['createtime'] = strtotime($v['create_time']);
