@@ -2437,14 +2437,14 @@ class UcenterAction extends Controller {
         //     }    
         // }
         
-        var_dump(111);
+        
         $list = $this->model->table('district_promoter as dp')
                 ->join('left join user as u on dp.user_id = u.id')
                 ->fields('u.id,u.avatar,u.nickname,dp.create_time')
                 ->where("dp.hirer_id=".$district['id'])
                 ->order("dp.id desc")
                 ->findAll();
-        var_dump(222);die;
+        
         if($list) {
             foreach($list as $k=>$v){
                 $list[$k]['createtime'] = strtotime($v['create_time']);
@@ -2453,7 +2453,7 @@ class UcenterAction extends Controller {
             }
         }        
 
-        $count = count($list);
+        $count = $list!=null?count($list):0;
         $totalPage = ceil($count / 100) + 1;
         $pageSize = 10;
 
