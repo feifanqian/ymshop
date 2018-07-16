@@ -426,8 +426,13 @@ class ActiveController extends Controller
             $this->model->table('customer')->data(array('balance'=>"`balance`+({$point})"))->where('user_id='.$voucher['user_id'])->update();
             Log::balance($point,$voucher['user_id'], '', "余额卡券兑换", 16);
         }
-        $ret = $this->model->table('active_voucher')->data(array('status'=>0))->where('id='.$id)->update();
-        var_dump($ret);die;
+        if($voucher['type']==3) {
+            $status = 2; //旅游券专用激活状态
+        } else {
+            $status = 0;
+        }
+        $ret = $this->model->table('active_voucher')->data(array('status'=>$status))->where('id='.$id)->update();
+        // var_dump($ret);die;
         echo JSON::encode(array('status' => 'success'));
     }
 

@@ -817,7 +817,12 @@ class CashierAction extends Controller
             $this->model->table('customer')->data(array('balance'=>"`balance`+({$point})"))->where('user_id='.$voucher['user_id'])->update();
             Log::balance($point,$voucher['user_id'], '', "余额卡券兑换", 16);
         }
-        $this->model->table('active_voucher')->data(array('status'=>0))->where('id='.$id)->update();
+        if($voucher['type']==3) {
+            $status = 2; //旅游券专用激活状态
+        } else {
+            $status = 0;
+        }
+        $this->model->table('active_voucher')->data(array('status'=>$status))->where('id='.$id)->update();
         $this->code = 0;
         return; 
     }
