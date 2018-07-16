@@ -34,11 +34,12 @@
                 <th style="width:140px">金额</th>
                 <th style="width:100px">时间</th>
                 <th style="width:100px">有效期</th>
+                <th style="width:100px">状态</th>
             </tr>
                 {set:$status=array("-1"=>"<span style='color:red;'>已过期</span>","0"=>"已使用","1"=>"<span style='color:green;'>已支付</span>")}
                 {query:name=active_voucher as av join=left join customer as c on av.user_id eq c.user_id fields=av.*,c.real_name where=av.type in (2,3,4) order=av.id desc id=$obj page=1}
             <tr>
-                <td style="width:50px" class="btn_min">
+                <td style="width:80px" class="btn_min">
                 <div class="operat hidden">
                    <a  class="icon-cog action" href="javascript:;"> 处理</a>
                    <div class="menu_select">
@@ -57,7 +58,7 @@
                 <td>￥{$item['amount']}</td>
                 <td>{$item['create_time']}</td>
                 <td>{$item['end_time']}</td>
-                <td>{$status[$item['end_time']]}</td>
+                <td>{$status[$item['status']]}</td>
             </tr>
                 {/query}
             </table>
