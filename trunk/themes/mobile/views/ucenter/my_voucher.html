@@ -98,6 +98,8 @@
                         data: {id: id},
                         dataType: 'json',
                         success: function (data) {
+                            console.log(data);
+                            return false;
                             $.toast("使用成功", "success",function () {
                                 location.reload();
                             });
