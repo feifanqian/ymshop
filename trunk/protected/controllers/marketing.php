@@ -1069,4 +1069,9 @@ class MarketingController extends Controller {
             $this->redirect();
         }
     }
+
+    public function active_voucher()
+    {
+        $this->redirect();
+    }
 }

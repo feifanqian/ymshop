@@ -1,0 +1,67 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+<style>
+    #add table{
+        width:100%;
+    }
+    #add th{
+        text-align: center;
+        width:70px;
+        background-color: #eee;
+    }
+    #add td{
+        padding-top: 30px;
+        text-align: center;
+    }
+    #add textarea{
+        margin:10px auto;
+        margin-left:10px;
+    }
+ 
+</style>
+<form action="" method="post">
+    <div class="tools_bar clearfix">
+        <!-- <a  class="icon-plus" href="{url:/marketing/way_edit}"> 添加</a> -->
+        <a href="javascript:;" class="icon-loop-2"
+        onclick="tools_reload()"> 刷新</a></div>
+        <table class="default" >
+            <tr>
+                <th style="width:50px">操作</th>
+                <th style="width:200px">用户名</th>
+                <th style="width:200px">卡券类型</th>
+                <th style="width:140px">金额</th>
+                <th style="width:100px">时间</th>
+                <th style="width:100px">有效期</th>
+            </tr>
+                {set:$status=array('-1'=>'<span style="color:red;">已过期'</span>,'0'=>'已使用','1'=>'<span style="color: green;">未使用'</span>)}
+                {query:name=active_voucher as av join=left join customer as c on av.user_id eq c.user_id fields=av.*,c.real_name where=av.type neq 1 order=av.id desc id=$obj page=1}
+            <tr>
+                <td style="width:50px" class="btn_min">
+                <div class="operat hidden">
+                   <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                   <div class="menu_select">
+                     <ul>
+                      <!-- <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看</a></li> -->
+                      <li><a class="icon-pencil" href="{url:/marketing/way_edit/id/$item[id]}"> 编辑</a></li>        
+                      <!-- <li><a class="icon-switch"  href="javascript:;" onclick="change_status({$item['id']},4,null)"> 完成</a></li>               
+                      <li><a class="icon-remove" href="javascript:;" onclick="change_status({$item['id']},6,null)"> 作废</a></li>            
+                      <li><a class="icon-attachment"  href="javascript:;" onclick="change_status({$item['id']},null,'note')"> 备注</a></li> -->
+                    </ul>
+                  </div>
+                </div> 
+                </td>
+                <td>{$item['real_name']}</td>
+                <td>{$item['title']}</td>
+                <td>￥{$item['amount']}</td>
+                <td>{$item['create_time']}</td>
+                <td>{$item['end_time']}</td>
+                <td>{$status[$item['end_time']]}</td>
+            </tr>
+                {/query}
+            </table>
+    </form>
+    <div class="page_nav">
+        {echo:$obj->pageBar()}
+    </div>

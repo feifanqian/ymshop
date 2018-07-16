@@ -145,6 +145,7 @@ class Menu {
             '/marketing/redbag_edit' => array('name' => '编辑红包', 'parent' => 'welfare', 'hidden'=>true),
             '/marketing/point_sale_edit' => array('name' => '积分购编辑', 'parent' => 'promotions'),
             '/marketing/invite_active' => array('name' => '拉新活动', 'parent' => 'welfare'),
+            '/marketing/active_voucher' => array('name' => '活动卡券', 'parent' => 'welfare'),
             '/marketing/travel_way' => array('name' => '旅游路线', 'parent' => 'travel'),
             '/marketing/way_edit' => array('name' => '旅游路线', 'parent' => 'travel','hidden'=>true),
             '/marketing/travel_order' => array('name' => '出行订单', 'parent' => 'travel'),
