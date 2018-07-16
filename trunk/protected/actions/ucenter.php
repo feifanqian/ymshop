@@ -2447,6 +2447,11 @@ class UcenterAction extends Controller {
         
         if($list) {
             foreach($list as $k=>$v){
+                if($v['id']==null){
+                    unset($list[$k]);
+                }
+            }    
+            foreach($list as $k=>$v){
                 $list[$k]['createtime'] = strtotime($v['create_time']);
                 $getMyAllInviters = Common::getMyAllInviters($v['id']);
                 $list[$k]['member_num'] = $getMyAllInviters['num'];
