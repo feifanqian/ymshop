@@ -98,11 +98,13 @@
                         data: {id: id},
                         dataType: 'json',
                         success: function (data) {
-                            console.log(data);
-                            return false;
-                            $.toast("使用成功", "success",function () {
-                                location.reload();
-                            });
+                            if(data.status=='success') {
+                                $.toast("使用成功", "success",function () {
+                                    location.reload();
+                                });
+                            } else {
+                                $.toast(data.msg, "forbidden");
+                            }  
                         },
                         error: function (e) {
                             $.toast("失败", "forbidden");
