@@ -1086,4 +1086,12 @@ class MarketingController extends Controller {
         $model->where($where)->delete();
         $this->redirect("active_voucher");
     }
+
+    public function change_voucher_status()
+    {
+        $id = Req::args("id");
+        $model = new Model();
+        $model->table('active_voucher')->data(['status'=>0])->where('id='.$id)->update();
+        exit(json_encode(array('status' => 'success', 'msg' => '成功')));
+    }
 }

@@ -45,7 +45,10 @@
                    <div class="menu_select">
                      <ul>
                       <!-- <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看</a></li> -->
-                      <li><a class="icon-pencil" href="{url:/marketing/voucher_del/id/$item[id]}"> 删除</a></li>        
+                      <li><a class="icon-pencil" href="{url:/marketing/voucher_del/id/$item[id]}"> 删除</a></li>
+                      {if:$item['type']==3 and $item['status']==2}
+                      <li><a class="icon-switch"  href="javascript:;" onclick="change_status({$item['id']})"> 完成</a></li>
+                      {/if}        
                       <!-- <li><a class="icon-switch"  href="javascript:;" onclick="change_status({$item['id']},4,null)"> 完成</a></li>               
                       <li><a class="icon-remove" href="javascript:;" onclick="change_status({$item['id']},6,null)"> 作废</a></li>            
                       <li><a class="icon-attachment"  href="javascript:;" onclick="change_status({$item['id']},null,'note')"> 备注</a></li> -->
@@ -66,3 +69,16 @@
     <div class="page_nav">
         {echo:$obj->pageBar()}
     </div>
+    <script type="text/javascript">
+    function change_status(id,status){
+         $.post('{url:/marketing/change_voucher_status}',{id:id},function(data){
+                if(data['status']=='success'){
+                    art.dialog.tips("<p class='"+ data['status']+"'>"+"成功！</p>");
+                    window.location.reload();
+                }else{
+                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"失败！</p>");
+                }
+                setTimeout("tools_reload()",2000);
+            },'json');
+    }
+    </script>
