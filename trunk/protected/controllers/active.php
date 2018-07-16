@@ -126,6 +126,12 @@ class ActiveController extends Controller
         $this->assign("list", $list);
         $this->assign("out_time", $out_time);
         $this->assign("rest_num", $rest_num);
+        $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+        $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+        $token = $wechat->getAccessToken();
+        $jssdk = new JSSDK($wechatcfg['app_key'], $wechatcfg['app_secret']);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign("signPackage", $signPackage);
     	$this->redirect();
     }
 
