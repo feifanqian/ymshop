@@ -425,12 +425,12 @@ class ActiveController extends Controller
             $travel = $this->model->table('active_voucher')->where('user_id='.$voucher['user_id'].' and type=3')->find();
             if($travel) {
                 if($travel['status']==1) {    
-                    echo JSON::encode(array('status' => 'success','msg'=>'请先激活旅游券'));
+                    echo JSON::encode(array('status' => 'error','msg'=>'请先激活旅游券'));
                 } elseif($travel['status']==2) {
-                    echo JSON::encode(array('status' => 'success','msg'=>'请先完成港澳游之旅'));
+                    echo JSON::encode(array('status' => 'error','msg'=>'请先完成港澳游之旅'));
                 }
             } else {
-                echo JSON::encode(array('status' => 'success','msg'=>'请先领取旅游券'));
+                echo JSON::encode(array('status' => 'error','msg'=>'请先领取旅游券'));
             }
             $point = $voucher['amount'];
             $this->model->table('customer')->data(array('balance'=>"`balance`+({$point})"))->where('user_id='.$voucher['user_id'])->update();

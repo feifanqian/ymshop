@@ -424,11 +424,26 @@ class AjaxController extends Controller {
             $this->model->table('customer')->data(array('point_coin'=>"`point_coin`+({$point})"))->where('user_id='.$voucher['user_id'])->update();
             Log::pointcoin_log($point,$voucher['user_id'], '', "积分卡券兑换", 13);
         } elseif($voucher['type']==2) {
+            $travel = $this->model->table('active_voucher')->where('user_id='.$voucher['user_id'].' and type=3')->find();
+            if($travel) {
+                if($travel['status']==1) {
+                    exit(json_encode(array('status' => 'error', 'msg' => '请先激活旅游券')));    
+                } elseif($travel['status']==2) {
+                    exit(json_encode(array('status' => 'error', 'msg' => '请先完成港澳游之旅')));
+                }
+            } else {
+                exit(json_encode(array('status' => 'error', 'msg' => '请先领取旅游券')));
+            }
             $point = $voucher['amount'];
             $this->model->table('customer')->data(array('balance'=>"`balance`+({$point})"))->where('user_id='.$voucher['user_id'])->update();
             Log::balance($point,$voucher['user_id'], '', "余额卡券兑换", 16);
         }
-        $ret = $this->model->table('active_voucher')->data(array('status'=>0))->where('id='.$id)->update();
+        if($voucher['type']==3) {
+            $status = 2; //旅游券专用激活状态
+        } else {
+            $status = 0;
+        }
+        $ret = $this->model->table('active_voucher')->data(array('status'=>$status))->where('id='.$id)->update();
         exit(json_encode(array('status' => 'success', 'msg' => '成功')));
     }
 }
