@@ -2415,28 +2415,7 @@ class UcenterAction extends Controller {
         if(!$district){
             $this->code = 1131;
             return;
-        }
-        // $record = $this->model->table('district_promoter as dp')
-        //         ->join('left join user as u on dp.user_id = u.id')
-        //         ->fields('u.id,u.avatar,u.nickname,dp.create_time')
-        //         ->where("dp.hirer_id=".$district['id'])
-        //         ->order("dp.id desc")
-        //         ->findPage($page, 10);                
-        // if (empty($record)) {
-        //     $record['data'] = array();
-        // }
-        // if (isset($record['html'])) {
-        //     unset($record['html']);
-        // }
-        // if($record['data']){
-        //     // $record['data'] = array_values($record['data']);
-        //     foreach($record['data'] as $k=>$v){
-        //         $record['data'][$k]['createtime'] = strtotime($v['create_time']);
-        //         $getMyAllInviters = Common::getMyAllInviters($v['id']);
-        //         $record['data'][$k]['member_num'] = $getMyAllInviters['num'];
-        //     }    
-        // }
-        
+        }      
         
         $list = $this->model->table('district_promoter as dp')
                 ->join('left join user as u on dp.user_id = u.id')
