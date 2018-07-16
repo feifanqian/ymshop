@@ -1074,4 +1074,16 @@ class MarketingController extends Controller {
     {
         $this->redirect();
     }
+
+    public function voucher_del() {
+        $model = new Model("active_voucher");
+        $id = Req::args("id");
+        if (is_array($id)) {
+            $where = 'id in (' . implode(",", $id) . ')';
+        } else {
+            $where = 'id='.$id;
+        }
+        $model->where($where)->delete();
+        $this->redirect("active_voucher");
+    }
 }
