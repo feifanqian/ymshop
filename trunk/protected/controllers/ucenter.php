@@ -4071,7 +4071,7 @@ class UcenterController extends Controller
 
     public function my_voucher() {
         $page = Filter::int(Req::args('p'));
-        $list = $this->model->table('active_voucher')->where('user_id='.$this->user['id'])->findPage($page,10);
+        $list = $this->model->table('active_voucher')->where('user_id='.$this->user['id'])->order('id desc')->findPage($page,10);
         $this->assign('list',$list);
         $this->assign('seo_title', '我的卡券');
         $this->redirect();
