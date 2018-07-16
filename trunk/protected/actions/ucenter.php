@@ -2457,7 +2457,7 @@ class UcenterAction extends Controller {
         $pageSize = 10;
 
         if($list) {
-            $list = array_slice($list,($page - 1) * $pageSize, $pageSize)
+            $list = array_slice($list,($page - 1) * $pageSize, $pageSize);
         }
 
         $record['data'] = $list;
