@@ -228,7 +228,7 @@ class LinuxCliTask{
         $order = $this->model->table('taoke')->fields('id,create_time,goods_name,goods_id,goods_number,order_status,order_amount,goods_price,effect_prediction,estimated_revenue,order_sn,adv_id')->where("is_handle=0")->findAll();
         if($order) {
             foreach ($order as $k => $v) {
-                $price = $v['order_status'] =='订单结算'?$v['order_amount']:$v['goods_price'];
+                $price = $v['order_status'] =='订单失效'?$v['goods_price']:$v['order_amount'];
                 $user = $this->model->table('user')->fields('id')->where('adzoneid='.$v['adv_id'])->find();
                 switch ($v['order_status']) {
                     case '订单失效':
