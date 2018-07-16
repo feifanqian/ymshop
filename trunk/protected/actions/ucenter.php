@@ -2416,26 +2416,57 @@ class UcenterAction extends Controller {
             $this->code = 1131;
             return;
         }
-        $record = $this->model->table('district_promoter as dp')
+        // $record = $this->model->table('district_promoter as dp')
+        //         ->join('left join user as u on dp.user_id = u.id')
+        //         ->fields('u.id,u.avatar,u.nickname,dp.create_time')
+        //         ->where("dp.hirer_id=".$district['id'])
+        //         ->order("dp.id desc")
+        //         ->findPage($page, 10);                
+        // if (empty($record)) {
+        //     $record['data'] = array();
+        // }
+        // if (isset($record['html'])) {
+        //     unset($record['html']);
+        // }
+        // if($record['data']){
+        //     // $record['data'] = array_values($record['data']);
+        //     foreach($record['data'] as $k=>$v){
+        //         $record['data'][$k]['createtime'] = strtotime($v['create_time']);
+        //         $getMyAllInviters = Common::getMyAllInviters($v['id']);
+        //         $record['data'][$k]['member_num'] = $getMyAllInviters['num'];
+        //     }    
+        // }
+
+        $list = $this->model->table('district_promoter as dp')
                 ->join('left join user as u on dp.user_id = u.id')
                 ->fields('u.id,u.avatar,u.nickname,dp.create_time')
                 ->where("dp.hirer_id=".$district['id'])
                 ->order("dp.id desc")
-                ->findPage($page, 10);                
-        if (empty($record)) {
-            $record['data'] = array();
-        }
-        if (isset($record['html'])) {
-            unset($record['html']);
-        }
-        if($record['data']){
-            // $record['data'] = array_values($record['data']);
-            foreach($record['data'] as $k=>$v){
-                $record['data'][$k]['createtime'] = strtotime($v['create_time']);
+                ->findAll();
+
+        if($list) {
+            foreach($list as $k=>$v){
+                $list[$k]['createtime'] = strtotime($v['create_time']);
                 $getMyAllInviters = Common::getMyAllInviters($v['id']);
-                $record['data'][$k]['member_num'] = $getMyAllInviters['num'];
-            }    
+                $list[$k]['member_num'] = $getMyAllInviters['num'];
+            }
+        }        
+
+        $count = count($list);
+        $totalPage = ceil($count / 100) + 1;
+        $pageSize = 10;
+
+        if($list) {
+            $list = array_slice($list,($page - 1) * $pageSize, $pageSize)
         }
+
+        $record['data'] = $list;
+        $record['page'] = array(
+            'total'=>$count,
+            'totalPage'=>$totalPage,
+            'pageSize'=>$pageSize,
+            'page'=>$page
+            );        
 
         $this->code = 0;
         $this->content = $record;
