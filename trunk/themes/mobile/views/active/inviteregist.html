@@ -8,6 +8,25 @@
     <link rel="stylesheet" href="http://www.ymlypt.com/static/yuanmeng1/activity_a/css/inviteregist.css">
     <link rel="stylesheet" href="{url:#css/weui.min.css}">
     <link rel="stylesheet" href="{url:#css/jquery.weui.min.css}">
+    <style type="text/css">
+    .layui-m-layermain{
+        height: 15% !important;
+    }
+    .layui-m-layercont{
+     text-align: left !important;
+     padding: 20px 20px !important;
+    }
+    .layui-m-layerchild h3{
+        height: 50px;
+        line-height: 74px;
+    }
+    .layui-m-layercont p{
+    float: right;
+    }
+    .layui-m-layercont img{
+        width: 100% !important;
+    }
+    </style>
     <title>邀请列表</title>
 </head>
 <body>
@@ -73,6 +92,7 @@
     })
 </script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
 <script type="text/javascript" src="https://hm.baidu.com/hm.js?d69321757dcfbfbe09dbddd4dca87b28"></script>
 <script type="text/javascript">
         var _hmt = _hmt || [];
@@ -111,7 +131,12 @@
 //     }
 // });
 $('#shareWechat').on("click",function(){
-   $('.weui_msg').show();
+   layer.open({
+            type: 3,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['100%', '400px'], //宽高
+            content: "<img src='/themes/mobile/images/share.jpg'>"
+    });
 });
     var user_id = {$user_id};
     var imgUrl = "http://www.ymlypt.com/static/yuanmeng1/activity_a/img/recruit/header.jpg";
