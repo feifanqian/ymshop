@@ -169,10 +169,10 @@ class GroupbuyAction extends Controller
             }
         }
         if($info['had_join_num']>=$info['min_num']) {
-            $info['status'] = '成功';
+            $info['status'] = '拼团成功';
         } else {
             if($info['had_join_num']<$info['min_num'] && time()>$info['end_time']) {
-              $info['status'] = '失败';
+              $info['status'] = '拼团失败';
             }
             if($info['had_join_num']<$info['min_num'] && time()<$info['end_time']) {
               $info['status'] = '拼团进行中';
