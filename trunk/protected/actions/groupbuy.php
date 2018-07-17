@@ -30,33 +30,66 @@ class GroupbuyAction extends Controller
     public function groupbuy_join()
     {
         $groupbuy_id = Filter::int(Req::args('groupbuy_id'));
+        $join_id = Filter::int(Req::args('join_id'));
+        $type = Filter::int(Req::args('type')); // 1开团 2参团
         $groupbuy = $this->model->table('groupbuy')->where('id='.$groupbuy_id)->find();
         if(!$groupbuy_id) {
             $this->code = 1275;
             return;
         }
         $remain_time = strtotime($groupbuy['end_time'])-time();
-        $now_num = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->count();
-        // if($now_num>=$groupbuy['min_num']) {
-        //     $this->code = 1275;
-        //     return;
-        // }
-        $join = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->find();
-        $data = array(
-            'groupbuy_id' => $groupbuy_id,
-            'user_id'     => $this->user['id'],
-            'goods_id'    => $groupbuy['goods_id'],
-            'join_time'   => date('Y-m-d H:i:s'),
-            'need_num'    => $groupbuy-$now_num,
-            'remain_time' => $remain_time,
-            'status'      => 0
-            );
+        // $now_num = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id)->count();
         $exist = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and user_id='.$this->user['id'].' and status in (0,1)')->find();
         if($exist) {
             $this->code = 1276;
             return;
         }
-        $this->model->table('groupbuy_join')->data($data)->insert();
+        // if($now_num>=$groupbuy['min_num']) {
+        //     $this->code = 1275;
+        //     return;
+        // }
+        // $join = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->find();
+        
+        if($type==1) { //第一个开启拼团
+             $data = array(
+            'groupbuy_id' => $groupbuy_id,
+            'user_id'     => $this->user['id'],
+            'goods_id'    => $groupbuy['goods_id'],
+            'join_time'   => date('Y-m-d H:i:s'),
+            'end_time'    => date('Y-m-d H:i:s',strtotime('+1 day')),
+            'need_num'    => $groupbuy['min_num']-1,
+            'remain_time' => $remain_time,
+            'status'      => 0
+            );
+        
+           $last_id = $this->model->table('groupbuy_join')->data($data)->insert();
+           $log = array(
+            'join_id'     => $last_id,
+            'groupbuy_id' => $groupbuy_id,
+            'user_id'     => $this->user['id'],
+            'join_time'   => date('Y-m-d H:i:s')
+            );
+        } else {  //拼单
+            if(!$join_id) {
+                $this->code = 1280;
+                return;
+            } else {
+                $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$join_id)->find();
+                $data = array(
+                    'user_id'  => $groupbuy_join['user_id'].','.$this->user['id'],
+                    'need_num' => $groupbuy_join['need_num']-1
+                    );
+                $this->model->table('groupbuy_join')->data($data)->where('id='.$join_id)->update();
+                $log = array(
+                    'join_id'     => $join_id,
+                    'groupbuy_id' => $groupbuy_id,
+                    'user_id'     => $this->user['id'],
+                    'join_time'   => date('Y-m-d H:i:s')
+                    );
+            }
+        }
+        $this->model->table('groupbuy_log')->data($log)->insert();
+        
         $this->code = 0;
         $this->content = null;
         return;
@@ -83,8 +116,16 @@ class GroupbuyAction extends Controller
         $info['sell_price'] = $goods['sell_price'];
         $info['price'] = $groupbuy['price'];
         $info['end_time'] = $groupbuy['end_time'];
-        $info['join_num'] = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->count();
-        $info['groupbuy_join_list'] = $this->model->table('groupbuy_join as gj')->fields('gj.id as join_id,gj.groupbuy_id,gj.remain_time,gj.need_num,u.nickname,u.avatar')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->findAll();
+        $info['join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id)->count();
+        $info['groupbuy_join_list'] = $this->model->table('groupbuy_join')->fields('id as join_id,user_id,need_num,end_time')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->findAll();
+        if($info['groupbuy_join_list']) {
+            foreach ($info['groupbuy_join_list'] as $k => $v) {
+                // $user_id = explode(',',$v['user_id']);
+                $info['groupbuy_join_list'][$k]['users'] = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$v['user_id'].")")->findAll();
+                $info['groupbuy_join_list'][$k]['remain_time'] = $this->timediff(time(),strtotime($v['end_time']));
+                unset($info['groupbuy_join_list'][$k]['end_time']);
+            }
+        }
         $info['comment_list'] = $this->model->table("review as re")
                         ->join("left join user as us on re.user_id = us.id")
                         ->fields("re.id,us.nickname,us.avatar,re.content,re.comment_time")
@@ -101,6 +142,7 @@ class GroupbuyAction extends Controller
     public function  groupbuy_join_detail()
     {
         $groupbuy_id = Filter::int(Req::args('groupbuy_id'));
+        $join_id = Filter::int(Req::args('join_id'));
         $groupbuy = $this->model->table('groupbuy')->where('id='.$groupbuy_id)->find();
         if(!$groupbuy_id) {
             $this->code = 1275;
@@ -113,13 +155,58 @@ class GroupbuyAction extends Controller
         $info['img'] = $goods['img'];
         $info['price'] = $groupbuy['price'];
         $info['min_num'] = $groupbuy['min_num'];
-        $info['had_join_num'] = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->count();
+        $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id)->count();
         $info['start_time'] = $first['join_time'];
         $info['need_num'] = $info['min_num'] - $info['had_join_num'];
-        $info['end_time'] = $groupbuy['end_time'];
-        $info['groupbuy_join_list'] = $this->model->table('groupbuy_join as gj')->fields('gj.groupbuy_id,u.nickname,u.avatar')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->findAll();
+        $info['end_time'] = $first['end_time'];
+        $info['groupbuy_join_list'] = $this->model->table('groupbuy_join')->fields('id as join_id,user_id,need_num,end_time')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->findAll();
+        if($info['groupbuy_join_list']) {
+            foreach ($info['groupbuy_join_list'] as $k => $v) {
+                // $user_id = explode(',',$v['user_id']);
+                $info['groupbuy_join_list'][$k]['users'] = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$v['user_id'].")")->findAll();
+                $info['groupbuy_join_list'][$k]['remain_time'] = $this->timediff(time(),strtotime($v['end_time']));
+                unset($info['groupbuy_join_list'][$k]['end_time']);
+            }
+        }
+        if($info['had_join_num']>=$info['min_num']) {
+            $info['status'] = '成功';
+        } else {
+            if($info['had_join_num']<$info['min_num'] && time()>$info['end_time']) {
+              $info['status'] = '失败';
+            }
+            if($info['had_join_num']<$info['min_num'] && time()<$info['end_time']) {
+              $info['status'] = '拼团进行中';
+            }
+        }
+
 
         $this->code = 0;
         $this->content = $info;
+    }
+
+    public function timediff($begin_time,$end_time)
+    {
+        if($begin_time < $end_time){
+        $starttime = $begin_time;
+        $endtime = $end_time;
+        }else{
+        $starttime = $end_time;
+        $endtime = $begin_time;
+        }
+
+        //计算天数
+        $timediff = $endtime-$starttime;
+        $days = intval($timediff/86400);
+        //计算小时数
+        $remain = $timediff%86400;
+        $hours = intval($remain/3600);
+        //计算分钟数
+        $remain = $remain%3600;
+        $mins = intval($remain/60);
+        //计算秒数
+        $secs = $remain%60;
+        // $res = array("day" => $days,"hour" => $hours,"min" => $mins,"sec" => $secs);
+        $res = $hours.':'.$mins.':'.$secs;
+        return $res;
     }
 }       
