@@ -273,6 +273,9 @@ class V1Controller extends Controller {
         "my_withdraw_log"=>array("cashier/my_withdraw_log",1,1), //提现记录
         //拼团
         "groupbuy_list"=>array("groupbuy/groupbuy_list",0,1), //团购专区商品列表
+        "groupbuy_join"=>array("groupbuy/groupbuy_join",1,1), //开团
+        "groupbuy_detail"=>array("groupbuy/groupbuy_detail",0,1), //拼团详细页面
+        "groupbuy_join_detail"=>array("groupbuy/groupbuy_join_detail",1,1), //拼团详情
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息

@@ -366,6 +366,11 @@ class DistrictAction extends Controller {
             $this->code = 1259;
             return;
         }
+        $count2 = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->count();
+        if($count2>=$myself['code_num']) {
+            $this->code = 1278;
+            return;
+        }
         $num1 = $myself['code_num'] - $num;
         $num2 = $is_shop['code_num'] + $num;
         $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->data(['code_num'=>$num1])->update();
