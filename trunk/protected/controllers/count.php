@@ -2117,6 +2117,7 @@ class CountController extends Controller
         $withdrawed_amounts = $model->table('balance_withdraw')->fields('sum(real_amount) as sum')->where($where7)->query();
         $withdrawing_amounts = $model->table('balance_withdraw')->fields('sum(amount) as sum')->where($where8)->query();
         $new_come_count = $model->table('customer')->fields('count(user_id) as num')->where($where)->query();
+        $reward = $model->table('reward')->where('id=1')->find();
         
         $this->assign('s_time', $s_time);
         $this->assign("order_num", $order_num[0]['num']);
@@ -2135,6 +2136,7 @@ class CountController extends Controller
         $this->assign("withdrawed_amounts", $withdrawed_amounts[0]['sum']);
         $this->assign("withdrawing_amounts", $withdrawing_amounts[0]['sum']);
         $this->assign("new_come_count", $new_come_count[0]['num']);
+        $this->assign("reward",$reward);
         $this->redirect();
     }
 

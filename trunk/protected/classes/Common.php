@@ -841,10 +841,39 @@ class Common {
                 $base_balance = round($order['order_amount']*$goods['inviter_rate']/100,2);
                 $config = Config::getInstance()->get("district_set");
                 
-                $balance1 = round($base_balance*$config['promoter_rate']/100,2);
-                $balance2 = round($base_balance*$config['district_rate']/100,2);
-                $balance3 = round($base_balance*$config['promoter2_rate']/100,2);
-                $balance4 = round($base_balance*$config['plat_rate']/100,2);
+                $inviter_inviter = $model->table("invite")->where("invite_user_id=".$inviter_info['user_id'])->find(); //上级邀请人的邀请人
+                if($inviter_inviter) {
+                    // 判断是不是超级vip
+                    $user = $model->table('user')->fields('is_vip')->where('id='.$inviter_inviter['user_id'])->find();
+                    if($user['is_vip']==1) {
+                        $promoter_rate = $config['promoter_rate1'];
+                        $district_rate = $config['district_rate1'];
+                        $promoter2_rate = $config['promoter2_rate1'];    
+                    } else {
+                        $promoter_rate = $config['promoter_rate'];
+                        $district_rate = $config['district_rate'];
+                        $promoter2_rate = $config['promoter2_rate'];
+                    }
+                } else {
+                    $promoter_rate = $config['promoter_rate'];
+                    $district_rate = $config['district_rate'];
+                    $promoter2_rate = $config['promoter2_rate']; 
+                }
+                $plat_rate = $config['plat_rate1'];
+                $encourage = $config['encourage1'];
+                $reward1 = $config['reward3'];
+                $reward2 = $config['reward4'];
+                $ready_rate = $config['ready_rate1'];
+
+                $balance1 = round($base_balance*$promoter_rate/100,2);
+                $balance2 = round($base_balance*$district_rate/100,2);
+                $balance3 = round($base_balance*$promoter2_rate/100,2);
+                $balance4 = round($base_balance*$plat_rate/100,2);
+                
+                $balance5 = round($base_balance*$encourage/100,2); //激励金
+                $balance6 = round($base_balance*$reward1/100,2); //2%奖金池
+                $balance7 = round($base_balance*$reward2/100,2); //3%奖金池
+                $balance8 = round($base_balance*$ready_rate/100,2); //5%预备金
 
                 $district = $model->table('district_shop')->fields('owner_id')->where('id='.$inviter_info['district_id'])->find();
                  if($district) {
@@ -876,6 +905,22 @@ class Common {
              if($balance4>0) {
                 $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance4})"))->update();
                 Log::balance($balance4, 1, $order['order_no'],'下级消费分成(平台)', 5);
+             }
+
+             if($balance5>0) {
+                $model->table("reward")->data(array("encourage_amount"=>"`encourage_amount`+({$balance5})"))->where("id=1")->update();
+             }
+
+             if($balance6>0) {
+                $model->table("reward")->data(array("reward3"=>"`reward3`+({$balance6})"))->where("id=1")->update();
+             }
+
+             if($balance7>0) {
+                $model->table("reward")->data(array("reward4"=>"`reward4`+({$balance7})"))->where("id=1")->update();
+             }
+
+             if($balance8>0) {
+                $model->table("reward")->data(array("ready_amounts"=>"`ready_amounts`+({$balance8})"))->where("id=1")->update();
              } 
          }else{
              return false;
@@ -1072,6 +1117,9 @@ class Common {
          $balance3 = round($base_balance*$config['promoter2_rate']/100,2);
          $balance4 = round($base_balance*$config['plat_rate']/100,2);
          $balance5 = round($base_balance*$config['redbag_rate']/100,2); //红包金额
+         $balance6 = round($base_balance*$config['reward1']/100,2); //2%奖金池
+         $balance7 = round($base_balance*$config['reward2']/100,2); //3%奖金池
+         $balance8 = round($base_balance*$config['ready_rate']/100,2); //5%预备金
          $user_id = $order['user_id']; 
          $promoter_id = self::getFirstPromoter($user_id);
          
@@ -1140,6 +1188,18 @@ class Common {
                    $model->table('redbag')->data(array('amount'=>$balance5,'total_amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand1,'lat'=>$seller['lat']+$rand2,'pay_status'=>1))->insert();
                }   
             }
+         }
+
+         if($balance6>0) {
+            $model->table("reward")->data(array("reward1"=>"`reward1`+({$balance6})"))->where("id=1")->update();
+         }
+
+         if($balance7>0) {
+            $model->table("reward")->data(array("reward2"=>"`reward2`+({$balance7})"))->where("id=1")->update();
+         }
+
+         if($balance8>0) {
+            $model->table("reward")->data(array("ready_amount"=>"`ready_amount`+({$balance8})"))->where("id=1")->update();
          }
      }
 
