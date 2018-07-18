@@ -248,22 +248,15 @@ class LinuxCliTask{
                     //买家id
                     $user_id = $user['id'];
                     //邀请人id
-                    $inviter_id = Common::getInviterId($user_id);
-                    //上级代理商
-                    $promoter_id = Common::getFirstPromoter($user_id);
-                    //上级经销商
-                    $district_id = Common::getFirstDistrictId($user_id);
+                    // $inviter_id = Common::getInviterId($user_id);
 
-                    if($inviter_id) {
-                        $log1 = array(
+                    $log = array(
                             'goods_name'   => $v['goods_name'],
                             'goods_id'     => $v['goods_id'],
                             'goods_num'    => $v['goods_number'],
                             'order_id'     => $v['id'],
-                            'order_sn'     => $v['order_sn'],
-                            'user_id'      => $inviter_id,
-                            'price'        => $price,
-                            'amount'       => $v['effect_prediction']*0.4,
+                            'order_sn'     => $v['order_sn'], 
+                            'price'        => $price,  
                             'order_time'   => $v['create_time'],
                             'create_time'  => date('Y-m-d H:i:s'),
                             'order_status' => $v['order_status'],
@@ -271,48 +264,53 @@ class LinuxCliTask{
                             'type'         => $type,
                             'adzoneid'     => $v['adv_id'] 
                             );
-                        $this->model->table('benefit_log')->data($log1)->insert();
-                    }
+                    
+                    if($v['order_status']=='订单失效') {
+                        $log['user_id'] = $user_id;
+                        $log['amount'] = $v['effect_prediction'];
+                        $this->model->table('benefit_log')->data($log)->insert();
+                    } else {
+                        //上级代理商
+                        $promoter_id = Common::getFirstPromoter($user_id);
+                        //上级经销商
+                        $district_id = Common::getFirstDistrictId($user_id);
+                        
+                        if($user_id == $promoter_id) {
+                            if($district_id == $user_id) {
+                                $log['user_id'] = $user_id;
+                                $log['amount'] = $v['effect_prediction']*0.7;
+                                $this->model->table('benefit_log')->data($log)->insert();
+                            }else{
+                                $log['user_id'] = $user_id;
+                                $log['amount'] = $v['effect_prediction']*0.6;
+                                $this->model->table('benefit_log')->data($log)->insert();
 
-                    if($promoter_id) {
-                        $log2 = array(
-                            'goods_name'   => $v['goods_name'],
-                            'goods_id'     => $v['goods_id'],
-                            'goods_num'    => $v['goods_number'],
-                            'order_id'     => $v['id'],
-                            'order_sn'     => $v['order_sn'],
-                            'user_id'      => $promoter_id,
-                            'price'        => $price,
-                            'amount'       => $v['effect_prediction']*0.2,
-                            'order_time'   => $v['create_time'],
-                            'create_time'  => date('Y-m-d H:i:s'),
-                            'order_status' => $v['order_status'],
-                            'month'        => date('Y-m'),
-                            'type'         => $type,
-                            'adzoneid'     => $v['adv_id'] 
-                            );
-                        $this->model->table('benefit_log')->data($log2)->insert();
-                    }
+                                $log['user_id'] = $district_id;
+                                $log['amount'] = $v['effect_prediction']*0.1;
+                                $this->model->table('benefit_log')->data($log)->insert();
+                            }
+                        } else {
+                            $log['user_id'] = $user_id;
+                            $log['amount'] = $v['effect_prediction']*0.4;
+                            $this->model->table('benefit_log')->data($log)->insert();
 
-                    if($district_id) {
-                        $log3 = array(
-                            'goods_name'   => $v['goods_name'],
-                            'goods_id'     => $v['goods_id'],
-                            'goods_num'    => $v['goods_number'],
-                            'order_id'     => $v['id'],
-                            'order_sn'     => $v['order_sn'],
-                            'user_id'      => $district_id,
-                            'price'        => $price,
-                            'amount'       => $v['effect_prediction']*0.1,
-                            'order_time'   => $v['create_time'],
-                            'create_time'  => date('Y-m-d H:i:s'),
-                            'order_status' => $v['order_status'],
-                            'month'        => date('Y-m'),
-                            'type'         => $type,
-                            'adzoneid'     => $v['adv_id'] 
-                            );
-                        $this->model->table('benefit_log')->data($log3)->insert();
+                            if($district_id == $promoter_id){
+                                $log['user_id'] = $promoter_id;
+                                $log['amount'] = $v['effect_prediction']*0.3;
+                                $this->model->table('benefit_log')->data($log)->insert();
+                            }else{
+                                $log['user_id'] = $promoter_id;
+                                $log['amount'] = $v['effect_prediction']*0.2;
+                                $this->model->table('benefit_log')->data($log)->insert();
+
+                                $log['user_id'] = $district_id;
+                                $log['amount'] = $v['effect_prediction']*0.1;
+                                $this->model->table('benefit_log')->data($log)->insert();
+                            }
+                            
+                        }
                     }
+                    
                 }
             $this->model->table('taoke')->data(array('is_handle'=>1))->where('id='.$v['id'])->update();    
             }
