@@ -159,25 +159,36 @@ class GroupbuyAction extends Controller
         $info['start_time'] = $first['join_time'];
         $info['need_num'] = $info['min_num'] - $info['had_join_num'];
         $info['end_time'] = $first['end_time'];
-        $info['groupbuy_join_list'] = $this->model->table('groupbuy_join')->fields('id as join_id,user_id,need_num,end_time')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->findAll();
+        $info['groupbuy_join_list'] = $this->model->table('groupbuy_join')->fields('id as join_id,user_id,need_num,end_time')->where('groupbuy_id='.$groupbuy_id.' and id='.$join_id.' and status in (0,1)')->find();
         if($info['groupbuy_join_list']) {
-            foreach ($info['groupbuy_join_list'] as $k => $v) {
-                // $user_id = explode(',',$v['user_id']);
-                $info['groupbuy_join_list'][$k]['users'] = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$v['user_id'].")")->findAll();
-                $info['groupbuy_join_list'][$k]['remain_time'] = $this->timediff(time(),strtotime($v['end_time']));
-                unset($info['groupbuy_join_list'][$k]['end_time']);
-            }
+            // foreach ($info['groupbuy_join_list'] as $k => $v) {
+            //     $info['groupbuy_join_list'][$k]['users'] = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$v['user_id'].")")->findAll();
+            //     $info['groupbuy_join_list'][$k]['remain_time'] = $this->timediff(time(),strtotime($v['end_time']));
+            //     unset($info['groupbuy_join_list'][$k]['end_time']);
+            // }
+
+            $info['groupbuy_join_list']['users'] = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$info['groupbuy_join_list']['user_id'].")")->findAll();
+            $info['groupbuy_join_list']['remain_time'] = $this->timediff(time(),strtotime($info['groupbuy_join_list']['end_time']));
+            unset($info['groupbuy_join_list']['end_time']);
+            
         }
-        if($info['had_join_num']>=$info['min_num']) {
+        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'])->find();
+        if($joined && $info['had_join_num']>=$info['min_num']) {
             $info['status'] = '拼团成功';
+        } elseif ($joined && $info['had_join_num']<$info['min_num'] && time()>=strtotime($info['end_time'])) {
+            $info['status'] = '拼团失败';
+        } elseif ($joined && $info['had_join_num']<$info['min_num'] && time()<strtotime($info['end_time'])) {
+            $info['status'] = '邀请好友';
+        } elseif ($joined==null && $info['had_join_num']>=$info['min_num'] && time()>=strtotime($info['end_time'])) {
+            $info['status'] = '活动已结束';
+        } elseif ($joined==null && $info['had_join_num']>=$info['min_num'] && time()<strtotime($info['end_time'])) {
+            $info['status'] = '拼团人数已满';
+        } elseif ($joined==null && $info['had_join_num']<$info['min_num'] && time()<strtotime($info['end_time'])) {
+            $info['status'] = '我要参团';
         } else {
-            if($info['had_join_num']<$info['min_num'] && time()>$info['end_time']) {
-              $info['status'] = '拼团失败';
-            }
-            if($info['had_join_num']<$info['min_num'] && time()<$info['end_time']) {
-              $info['status'] = '拼团进行中';
-            }
+            $info['status'] = '拼团中';
         }
+        
 
 
         $this->code = 0;
@@ -208,5 +219,55 @@ class GroupbuyAction extends Controller
         // $res = array("day" => $days,"hour" => $hours,"min" => $mins,"sec" => $secs);
         $res = $hours.':'.$mins.':'.$secs;
         return $res;
+    }
+
+    public function myGroupbuyActive()
+    {
+        $page = Filter::int(Req::args('page'));
+        if(!$page) {
+            $page = 1;
+        }
+        $log = $this->model->table('groupbuy_log')->fields('join_id,groupbuy_id')->where('user_id='.$this->user['id'])->findAll();
+        $ids = array();
+        $idss = array();
+        if($log) {
+            foreach($log as $k =>$v) {
+               $ids[] = $v['groupbuy_id'];
+               $idss[] = $v['join_id'];
+            }
+        }
+        $groupbuy_ids = $ids!=null?implode(',', $ids):'';
+        $join_ids = $idss!=null?implode(',', $idss):'';
+        if($groupbuy_ids) {
+            $list = $this->model->table('groupbuy as g')->fields('g.id,gj.id as join_id,go.name,go.img,g.min_num,g.price,g.end_time,gj.status')->join('left join goods as go on g.goods_id=go.id')->join('left join groupbuy_join as gj on g.id=gj.groupbuy_id')->where('g.id in ('.$groupbuy_ids.')')->findPage($page,10);
+            if($list) {
+                if($list['data']) {
+                    foreach ($list['data'] as $k => $v) {
+                        switch ($v['status']) {
+                            case -1:
+                                $list['data'][$k]['join_status'] = '拼团失败';
+                                break;
+                            case 0:
+                                $list['data'][$k]['join_status'] = '拼团中';
+                                break;
+                            case 1:
+                                $list['data'][$k]['join_status'] = '拼团成功';
+                                break;
+                            case 2:
+                                $list['data'][$k]['join_status'] = '拼团失败';
+                                break;    
+                            default:
+                                $list['data'][$k]['join_status'] = '拼团中';
+                                break;
+                        }
+                        
+                    }
+                    unset($list['html']);
+                }
+            }
+        }
+        $list = $this->
+        $this->code = 0;
+        $this->content = $list;
     }
 }       
