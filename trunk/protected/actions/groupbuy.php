@@ -246,20 +246,13 @@ class GroupbuyAction extends Controller
             if($list) {
                 if($list['data']) {
                     foreach ($list['data'] as $k => $v) {
-                        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$v['id'].' and join_id='.$v['join_id'].' and user_id='.$this->user['id'])->find();
                         $had_join_num = $this->model->table('groupbuy_log')->where('groupbuy_id='.$v['id'].' and join_id='.$v['join_id'])->count();
-                        if($joined && $had_join_num>=$v['min_num']) {
+                        if($had_join_num>=$v['min_num']) {
                             $list['data'][$k]['join_status'] = '拼团成功';
-                        } elseif ($joined && $had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
+                        } elseif ($had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
                             $list['data'][$k]['join_status'] = '拼团失败';
-                        } elseif ($joined && $had_join_num<$v['min_num'] && time()<strtotime($v['end_time'])) {
-                            $list['data'][$k]['join_status'] = '邀请好友';
-                        } elseif ($joined==null && $had_join_num>=$v['min_num'] && time()>=strtotime($v['end_time'])) {
-                            $list['data'][$k]['join_status'] = '活动已结束';
-                        } elseif ($joined==null && $had_join_num>=$v['min_num'] && time()<strtotime($v['end_time'])) {
-                            $list['data'][$k]['join_status'] = '拼团人数已满';
-                        } elseif ($joined==null && $had_join_num<$v['min_num'] && time()<strtotime($v['end_time'])) {
-                            $list['data'][$k]['join_status'] = '我要参团';
+                        } elseif ($had_join_num<$v['min_num'] && time()<strtotime($v['end_time'])) {
+                            $list['data'][$k]['join_status'] = '拼团中';
                         } else {
                             $list['data'][$k]['join_status'] = '拼团中';
                         }               
