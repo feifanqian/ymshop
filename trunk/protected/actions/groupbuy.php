@@ -242,7 +242,8 @@ class GroupbuyAction extends Controller
         $join_ids = $idss!=null?implode(',', $idss):'';
 
         if($groupbuy_ids) {
-            $list = $this->model->table('groupbuy as g')->fields('g.id,gj.id as join_id,go.name,go.img,g.min_num,g.price,g.end_time,gj.status')->join('left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on g.id=gj.groupbuy_id')->where("g.id in (".$groupbuy_ids.")")->findPage($page,10);
+            // $list = $this->model->table('groupbuy as g')->fields('g.id,gj.id as join_id,go.name,go.img,g.min_num,g.price,g.end_time,gj.status')->join('left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on g.id=gj.groupbuy_id')->where("g.id in (".$groupbuy_ids.")")->order('g.id desc')->findPage($page,10);
+            $list = $this->model->table('groupbuy_join as gj')->fields('g.id,gj.id as join_id,go.name,go.img,g.min_num,g.price,g.end_time,gj.status')->join('left join goods as go on gj.goods_id=go.id left join groupbuy as g on gj.groupbuy_id=g.id')->where("gj.groupbuy_id in (".$groupbuy_ids.") or gj.id in (".$join_ids.")")->order('gj.id desc')->findPage($page,10);
             if($list) {
                 if($list['data']) {
                     foreach ($list['data'] as $k => $v) {
