@@ -265,8 +265,10 @@ class GroupbuyAction extends Controller
                     unset($list['html']);
                 }
             }
+        } else {
+            $list = [];
         }
-        $list = $this->
+        
         $this->code = 0;
         $this->content = $list;
     }
