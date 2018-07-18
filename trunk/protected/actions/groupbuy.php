@@ -229,7 +229,7 @@ class GroupbuyAction extends Controller
         if(!$page) {
             $page = 1;
         }
-        $log = $this->model->table('groupbuy_log')->fields('join_id,groupbuy_id')->where('user_id='.$this->user['id'])->findAll();
+        $log = $this->model->table('groupbuy_log')->fields('join_id,groupbuy_id')->where('user_id='.$this->user['id'])->order('id desc')->findAll();
         $ids = array();
         $idss = array();
         if($log) {
