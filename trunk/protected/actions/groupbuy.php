@@ -238,30 +238,31 @@ class GroupbuyAction extends Controller
         }
         $groupbuy_ids = $ids!=null?implode(',', $ids):'';
         $join_ids = $idss!=null?implode(',', $idss):'';
-        var_dump($groupbuy_ids);die;
+
         if($groupbuy_ids) {
+            var_dump(111);
             $list = $this->model->table('groupbuy as g')->fields('g.id,gj.id as join_id,go.name,go.img,g.min_num,g.price,g.end_time,gj.status')->join('left join goods as go on g.goods_id=go.id')->join('left join groupbuy_join as gj on g.id=gj.groupbuy_id')->where('g.id in ('.$groupbuy_ids.')')->findPage($page,10);
+            var_dump($list);die;
             if($list) {
                 if($list['data']) {
                     foreach ($list['data'] as $k => $v) {
-                        switch ($v['status']) {
-                            case -1:
-                                $list['data'][$k]['join_status'] = '拼团失败';
-                                break;
-                            case 0:
-                                $list['data'][$k]['join_status'] = '拼团中';
-                                break;
-                            case 1:
-                                $list['data'][$k]['join_status'] = '拼团成功';
-                                break;
-                            case 2:
-                                $list['data'][$k]['join_status'] = '拼团失败';
-                                break;    
-                            default:
-                                $list['data'][$k]['join_status'] = '拼团中';
-                                break;
-                        }
-                        
+                        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$v['id'].' and join_id='.$v['join_id'].' and user_id='.$this->user['id'])->find();
+                        $had_join_num = $this->model->table('groupbuy_log')->where('groupbuy_id='.$v['id'].' and join_id='.$v['join_id'])->count();
+                        if($joined && $had_join_num>=$v['min_num']) {
+                            $list['data'][$k]['join_status'] = '拼团成功';
+                        } elseif ($joined && $had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
+                            $list['data'][$k]['join_status'] = '拼团失败';
+                        } elseif ($joined && $had_join_num<$v['min_num'] && time()<strtotime($v['end_time'])) {
+                            $list['data'][$k]['join_status'] = '邀请好友';
+                        } elseif ($joined==null && $had_join_num>=$v['min_num'] && time()>=strtotime($v['end_time'])) {
+                            $list['data'][$k]['join_status'] = '活动已结束';
+                        } elseif ($joined==null && $had_join_num>=$v['min_num'] && time()<strtotime($v['end_time'])) {
+                            $list['data'][$k]['join_status'] = '拼团人数已满';
+                        } elseif ($joined==null && $had_join_num<$v['min_num'] && time()<strtotime($v['end_time'])) {
+                            $list['data'][$k]['join_status'] = '我要参团';
+                        } else {
+                            $list['data'][$k]['join_status'] = '拼团中';
+                        }               
                     }
                     unset($list['html']);
                 }
