@@ -18,7 +18,7 @@ class GroupbuyAction extends Controller
         if(!$page) {
             $page = 1;
         }
-        $list = $this->model->table('groupbuy as g')->fields('g.id,g.goods_id,o.name,o.img,o.sell_price,g.price,g.min_num')->join('left join goods as o on g.goods_id = o.id')->where('g.is_end = 0')->findPage($page,10);
+        $list = $this->model->table('groupbuy as g')->fields('g.id,g.goods_id,o.name,o.img,o.sell_price,g.price,g.min_num')->join('left join goods as o on g.goods_id = o.id')->where('g.is_end = 0')->order('g.id desc')->findPage($page,10);
         if($list) {
             unset($list['html']);
         }
@@ -159,6 +159,7 @@ class GroupbuyAction extends Controller
         $info['start_time'] = $first['join_time'];
         $info['need_num'] = $info['min_num'] - $info['had_join_num'];
         $info['end_time'] = $first['end_time'];
+        $info['current_time'] = date('Y-m-d H:i:s');
         $info['groupbuy_join_list'] = $this->model->table('groupbuy_join')->fields('id as join_id,user_id,need_num,end_time')->where('groupbuy_id='.$groupbuy_id.' and id='.$join_id.' and status in (0,1)')->find();
         if($info['groupbuy_join_list']) {
             // foreach ($info['groupbuy_join_list'] as $k => $v) {
