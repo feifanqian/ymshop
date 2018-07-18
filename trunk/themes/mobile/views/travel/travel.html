@@ -19,9 +19,12 @@
     <!--四个item-->
     <div class="entrance clearfix">
         <a href="http://www.ggtravel.net/mobile/category.php?id=338"><img src="/static/yuanmeng/img/travel/3.png" alt=""></a>
-        <a href="/travel/new_way"><img src="/static/yuanmeng/img/travel/4.png" alt=""></a> 
+        <!-- <a href="/travel/new_way"><img src="/static/yuanmeng/img/travel/4.png" alt=""></a> 
         <a href="/travel/fill_info"><img src="/static/yuanmeng/img/travel/2.png" alt=""></a>
-        <a href="/travel/order_list"><img src="/static/yuanmeng/img/travel/5.png" alt=""></a>
+        <a href="/travel/order_list"><img src="/static/yuanmeng/img/travel/5.png" alt=""></a> -->
+        <a class="notice" href="javascript:;"><img src="/static/yuanmeng/img/travel/4.png" alt=""></a> 
+        <a class="notice" href="javascript:;"><img src="/static/yuanmeng/img/travel/2.png" alt=""></a>
+        <a class="notice" href="javascript:;"><img src="/static/yuanmeng/img/travel/5.png" alt=""></a>
     </div>
 
     <!--介绍-->
@@ -38,5 +41,26 @@
 
 </div>
 </body>
+<script src="/runtime/systemjs/jquery.min.js"></script>
 <script src="/static/yuanmeng/js/main.js"></script>
+<script type="text/javascript">
+ $(function(){
+            //先判断是否为微信浏览器
+            var ua = window.navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+                //重写alert方法，alert()方法重写，不能传多余参数
+                window.alert = function(name){
+                    var iframe = document.createElement("IFRAME");
+                    iframe.style.display="none";
+                    iframe.setAttribute("src", 'data:text/plain');
+                    document.documentElement.appendChild(iframe);
+                    window.frames[0].window.alert(name);
+                    iframe.parentNode.removeChild(iframe);
+                }
+            }
+        });
+ $('.notice').on('click',function (){
+    alert('暂未开放，敬请期待');
+ });
+</script>
 </html>
