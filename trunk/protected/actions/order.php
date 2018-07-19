@@ -754,7 +754,7 @@ class OrderAction extends Controller {
 
     //打包团购订单商品信息
     private function packGroupbuyProducts($item, $num = 1) {
-        $store_nums = $item['store_nums'];
+        $store_nums = isset($item['store_nums'])?$item['store_nums']:$item['max_num'];
         $have_num = $item['max_num'] - $item['goods_num'];
         if ($have_num > $store_nums)
             $have_num = $store_nums;
