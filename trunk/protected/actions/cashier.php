@@ -943,7 +943,7 @@ class CashierAction extends Controller
         $amount = Filter::float(Req::args("amount"));
         // $log = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1")->findAll();
         // $total_income = $log[0]['total']==null?0:$log[0]['total'];
-        $user = $this->model->table('user')->fields('settle_income')->where('id='.$this->user['id'])->find();
+        $user = $this->model->table('user')->fields('total_income')->where('id='.$this->user['id'])->find();
         $total_income = $user['total_income'];
         // if($amount<100) {
         //     $this->code = 1181;
