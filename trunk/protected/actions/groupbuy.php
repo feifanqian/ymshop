@@ -156,7 +156,7 @@ class GroupbuyAction extends Controller
             $this->code = 1275;
             return;
         }
-        $goods = $this->model->table('goods as g')->fields('g.id,g.name,g.imgs,g.sell_price,g.content,g.specs,p.id as product_id')->join('left join products as p on g.id = p.goods_id')->where('g.id='.$groupbuy['goods_id'])->find();
+        $goods = $this->model->table('goods as g')->fields('g.id,g.name,g.img,g.imgs,g.sell_price,g.content,g.specs,p.id as product_id')->join('left join products as p on g.id = p.goods_id')->where('g.id='.$groupbuy['goods_id'])->find();
         $first = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->order('id asc')->find();
         $info['groupbuy_id'] = $groupbuy_id;
         $info['goods_id'] = $groupbuy['goods_id'];
