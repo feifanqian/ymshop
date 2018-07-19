@@ -857,12 +857,13 @@ class CashierAction extends Controller
     public function my_benefit_income() {
         $this_month = date('Y-m');
         $last_month = date('Y-m',strtotime('-1 month'));
+        $BeginDate=date('Y-m-01', strtotime(date("Y-m-d"))); //当前月份第一天
 
-        $log1 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1")->findAll();
-        $log2 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1 and month = '{$last_month}'")->findAll();
-        $log3 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type in(0,2) and month = '{$this_month}'")->findAll();
-        $log4 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type in(0,2) and month = '{$last_month}'")->findAll();
-        $log5 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=3 and month = '{$last_month}'")->findAll();
+        $log1 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1")->findAll(); //累计收益
+        $log2 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1 and order_time < '{$BeginDate}'")->findAll(); //上个月结算收益
+        $log3 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type in(0,2) and order_time >= '{$BeginDate}'")->findAll(); //当前月预估收益
+        $log4 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type in(0,2) and order_time < '{$BeginDate}'")->findAll(); //上个月预估收益
+        $log5 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=3 and create_time < '{$BeginDate}'")->findAll(); //上个月提现金额
     
         $total_income             = $log1[0]['total']==null?0:$log1[0]['total'];
         $last_month_settle_income = $log2[0]['total']==null?0:$log2[0]['total'];
@@ -872,7 +873,8 @@ class CashierAction extends Controller
         $user = $this->model->table('user')->fields('settle_income')->where('id='.$this->user['id'])->find();
 
         $total_income = $total_income - $user['settle_income'];
-        $last_month_settle_income = $last_month_settle_income - $last_withdraw_income;
+        // $last_month_settle_income = $last_month_settle_income - $last_withdraw_income;
+        $last_month_settle_income = $last_month_settle_income;
 
         $this->code = 0;
         $this->content['total_income'] = $total_income;
