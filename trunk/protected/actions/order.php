@@ -269,7 +269,7 @@ class OrderAction extends Controller {
             $num = isset($buy_num[0])?Filter::int($buy_num[0]):1;
             if ($num < 1)
                 $num = 1;
-            $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("*,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
+            $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("fb.*,go.name,go.sell_price,go.img,go.freeshipping,go.point,go.shop_id,go.weight,go.store_nums,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
             $this->flashStatus($id, $item['quota_num'], $this->user['id']);
             $order_products = $this->packFlashbuyProducts($item, $num);
             $flashbuy = $model->table("flash_sale")->where("id=$id")->find();
@@ -776,6 +776,7 @@ class OrderAction extends Controller {
 
     //打包抢购订单商品信息
     private function packFlashbuyProducts($item, $num = 1) {
+        var_dump($item);die;
         $store_nums = $item['store_nums'];
         $quota_num = $item['quota_num'];
         $have_num = $item['max_num'] - $item['goods_num'];
