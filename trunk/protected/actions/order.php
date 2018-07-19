@@ -251,7 +251,7 @@ class OrderAction extends Controller {
         //团购处理
         if ($type == "groupbuy") {
             $product_id = Filter::int($product_id[0]);
-            $num = Filter::int($buy_num[0]);
+            $num = isset($buy_num[0])?Filter::int($buy_num[0]):1;
             if ($num < 1)
                 $num = 1;
             
