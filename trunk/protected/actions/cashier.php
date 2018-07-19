@@ -862,7 +862,7 @@ class CashierAction extends Controller
         $log1 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1")->findAll(); //累计收益
         $log2 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=1 and order_time < '{$BeginDate}'")->findAll(); //上个月结算收益
         $log3 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type in(0,2) and order_time >= '{$BeginDate}'")->findAll(); //当前月预估收益
-        $log4 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type in(0,2) and order_time < '{$BeginDate}'")->findAll(); //上个月预估收益
+        $log4 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and order_status in('订单付款','订单结算') and order_time < '{$BeginDate}'")->findAll(); //上个月预估收益
         $log5 = $this->model->table('benefit_log')->fields('sum(amount) as total')->where("user_id=".$this->user['id']." and type=3 and create_time < '{$BeginDate}'")->findAll(); //上个月提现金额
     
         $total_income             = $log1[0]['total']==null?0:$log1[0]['total'];
