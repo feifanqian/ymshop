@@ -897,20 +897,36 @@ class CashierAction extends Controller
         $where = 'user_id='.$this->user['id'];
         switch ($status) {
             case 1:
-                $where.=" and order_status in ('订单付款')";
+                $where.=" and type = 2";
                 break;
             case 2:
-                $where.=" and order_status in ('订单结算')";
+                $where.=" and type in ('0,1')";
                 break;
             case 3:
-                $where.=" and order_status in ('订单失效')";
+                $where.=" and type = -1";
                 break;    
         }
         // var_dump($where);die;
         // $list = $this->model->table('taoke')->fields('id,order_sn,goods_name,order_amount,effect_prediction,create_time,order_status')->where($where)->findPage($page,10);
-        $list = $this->model->table('benefit_log')->fields('order_id as id,order_sn,goods_name,price as order_amount,amount as effect_prediction,order_time as create_time,order_status')->where($where)->order('order_time desc')->findPage($page,10);
+        $list = $this->model->table('benefit_log')->fields('order_id as id,order_sn,goods_name,price as order_amount,amount as effect_prediction,order_time as create_time')->where($where)->order('order_time desc')->findPage($page,10);
         if($list) {
             if(isset($list['data']) && $list['data']!=null) {
+                foreach ($list['data'] as $key => $value) {
+                    switch ($value['type']) {
+                        case 2:
+                            $list['data'][$k]['order_status'] = '订单付款';
+                            break;
+                        case 1:
+                            $list['data'][$k]['order_status'] = '订单结算';
+                            break;
+                        case 0:
+                            $list['data'][$k]['order_status'] = '订单结算';
+                            break;
+                        case -1:
+                            $list['data'][$k]['order_status'] = '订单失效';
+                            break;        
+                    }
+                }
                 unset($list['html']);
             } else {
                 $list['data'] = [];

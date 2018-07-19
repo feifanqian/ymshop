@@ -260,7 +260,7 @@ class LinuxCliTask{
                             'order_time'   => $v['create_time'],
                             'create_time'  => date('Y-m-d H:i:s'),
                             'order_status' => $v['order_status'],
-                            'month'        => date('Y-m'),
+                            'month'        => date('Y-m',strtotime($v['create_time'])),
                             'type'         => $type,
                             'adzoneid'     => $v['adv_id'] 
                             );
@@ -325,13 +325,13 @@ class LinuxCliTask{
             foreach ($log as $k => $v) {
                 $this_month = date('Y-m');
                 $time = strtotime($v['order_time']);
-                if($this_month!=date('Y-m',$time)) {
+                // if($this_month!=date('Y-m',$time)) {
                     $amount = $v['amount'];
                     // $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where('user_id='.$v['user_id'])->update();
                     // Log::balance($amount,$v['user_id'],$v['id'],'淘客订单佣金自动结算',5);
                     $this->model->table('user')->data(array('total_income'=>"`total_income`+{$amount}"))->where('id='.$v['user_id'])->update();
                     $this->model->table('benefit_log')->data(array('type'=>1))->where('id='.$v['id'])->update();
-                }
+                // }
             }
         }
     }
