@@ -914,16 +914,16 @@ class CashierAction extends Controller
                 foreach ($list['data'] as $key => $value) {
                     switch ($value['type']) {
                         case 2:
-                            $list['data'][$k]['order_status'] = '订单付款';
+                            $list['data'][$key]['order_status'] = '订单付款';
                             break;
                         case 1:
-                            $list['data'][$k]['order_status'] = '订单结算';
+                            $list['data'][$key]['order_status'] = '订单结算';
                             break;
                         case 0:
-                            $list['data'][$k]['order_status'] = '订单结算';
+                            $list['data'][$key]['order_status'] = '订单结算';
                             break;
                         case -1:
-                            $list['data'][$k]['order_status'] = '订单失效';
+                            $list['data'][$key]['order_status'] = '订单失效';
                             break;        
                     }
                 }
