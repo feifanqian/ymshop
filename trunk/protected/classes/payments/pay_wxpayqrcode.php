@@ -161,8 +161,8 @@ class pay_wxpayqrcode extends PaymentPlugin {
             if($queryResult!=false && $queryResult['return_code']=="SUCCESS" && $queryResult['result_code']=="SUCCESS"){
                 $refund_info = "钱款已经退至".$queryResult['refund_recv_accout_0'].",系统可能会有延迟，若超过三个工作日未收到请与客服联系";
                 $refund->data(array('bank_handle_time'=>date("Y-m-d H:i:s"),"refund_no"=>$refund_no,'refund_info'=>$refund_info))->where("id =$refund_id")->update();
-                $ordermodel = new Model("order");
-                $order_model = $ordermodel->fields('user_id,order_amount,id')->where('order_no='.$order_no)->find();
+                $ordermodel = new Model("order as o");
+                   $order_model = $ordermodel->fields('o.user_id,o.order_amount,o.id,og.goods_id')->join('left join order_goods as og on o.id=og.order_id')->where('o.order_no='.$order_no)->find();
                 if($order_model){
                    Common::backIncomeByInviteShip($order_model); //收回收益
                 }
