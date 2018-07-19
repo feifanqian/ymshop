@@ -115,8 +115,8 @@ class GroupbuyAction extends Controller
         $info['imgs'] = unserialize($goods['imgs']);
         $info['sell_price'] = $goods['sell_price'];
         $info['price'] = $groupbuy['price'];
-        $info['specs'] = array_values(unserialize($info['specs']));
-        if($info['specs']!=nul && is_array($info['specs'])) {
+        $info['specs'] = array_values(unserialize($goods['specs']));
+        if($info['specs']!=null && is_array($info['specs'])) {
             foreach ($info['specs'] as $k => &$v) {
                 $v['value'] = array_values($v['value']);
             }
