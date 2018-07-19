@@ -104,7 +104,7 @@ class GroupbuyAction extends Controller
             $this->code = 1275;
             return;
         }
-        $goods = $this->model->table('goods')->fields('id,name,imgs,sell_price,content')->where('id='.$groupbuy['goods_id'])->find();
+        $goods = $this->model->table('goods as g')->fields('g.id,g.name,g.imgs,g.sell_price,g.content,g.specs,p.id as product_id')->join('left join products as p on g.id = p.goods_id')->where('g.id='.$groupbuy['goods_id'])->find();
         if(!$goods) {
             $this->code = 1040;
             return;
@@ -115,6 +115,12 @@ class GroupbuyAction extends Controller
         $info['imgs'] = unserialize($goods['imgs']);
         $info['sell_price'] = $goods['sell_price'];
         $info['price'] = $groupbuy['price'];
+        $info['specs'] = array_values(unserialize($info['specs']));
+        if($info['specs']!=nul && is_array($info['specs'])) {
+            foreach ($info['specs'] as $k => &$v) {
+                $v['value'] = array_values($v['value']);
+            }
+        }
         $info['end_time'] = $groupbuy['end_time'];
         $info['current_time'] = date('Y-m-d H:i:s');
         $info['join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id)->count();
