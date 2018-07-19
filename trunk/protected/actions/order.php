@@ -266,8 +266,7 @@ class OrderAction extends Controller {
             $order_type = 1;
         }else if ($type == "flashbuy") {//抢购处理
             $product_id = Filter::int($product_id[0]);
-            var_dump($buy_num);die;
-            $num = Filter::int($buy_num[0]);
+            $num = isset($buy_num[0])?Filter::int($buy_num[0]):1;
             if ($num < 1)
                 $num = 1;
             $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("*,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
