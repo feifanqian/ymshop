@@ -860,7 +860,7 @@ class Common {
                     $promoter2_rate = $config['promoter2_rate']; 
                 }
                 $plat_rate = $config['plat_rate1'];
-                $encourage = $config['encourage1'];
+                $encourage = $config['encourage'];
                 $reward1 = $config['reward3'];
                 $reward2 = $config['reward4'];
                 $ready_rate = $config['ready_rate1'];
