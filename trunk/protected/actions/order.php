@@ -776,7 +776,6 @@ class OrderAction extends Controller {
 
     //打包抢购订单商品信息
     private function packFlashbuyProducts($item, $num = 1) {
-        var_dump($item);die;
         $store_nums = $item['store_nums'];
         $quota_num = $item['quota_num'];
         $have_num = $item['max_num'] - $item['goods_num'];
