@@ -254,7 +254,9 @@ class OrderAction extends Controller {
             $num = Filter::int($buy_num[0]);
             if ($num < 1)
                 $num = 1;
+            var_dump(111);
             $item = $model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("*,pr.id as product_id,pr.spec")->where("gb.id=$id")->find();
+            var_dump($item);die;
             
             $order_products = $this->packGroupbuyProducts($item, $num);
             $groupbuy = $model->table("groupbuy")->where("id=$id")->find();
