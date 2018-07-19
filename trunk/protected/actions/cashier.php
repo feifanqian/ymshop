@@ -908,7 +908,7 @@ class CashierAction extends Controller
         }
         // var_dump($where);die;
         // $list = $this->model->table('taoke')->fields('id,order_sn,goods_name,order_amount,effect_prediction,create_time,order_status')->where($where)->findPage($page,10);
-        $list = $this->model->table('benefit_log')->fields('order_id as id,order_sn,goods_name,price as order_amount,amount as effect_prediction,order_time as create_time')->where($where)->order('order_time desc')->findPage($page,10);
+        $list = $this->model->table('benefit_log')->fields('order_id as id,order_sn,goods_name,price as order_amount,amount as effect_prediction,order_time as create_time,type')->where($where)->order('order_time desc')->findPage($page,10);
         if($list) {
             if(isset($list['data']) && $list['data']!=null) {
                 foreach ($list['data'] as $key => $value) {
