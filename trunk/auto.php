@@ -317,21 +317,17 @@ class LinuxCliTask{
         }
     }
 
-    #淘客订单定期结算
+    #定期结算上个月淘客订单
     public function autoSettleTaoke(){
-        // $log = $this->model->table('benefit_log')->fields('id,user_id,amount,order_time,create_time')->where("type in (0,2)")->findAll();
-        $log = $this->model->table('benefit_log')->fields('id,user_id,amount,order_time,create_time')->where("user_id=1 and type in (0,2)")->findAll();
+        $BeginDate=date('Y-m-01', strtotime(date("Y-m-d"))); //当前月份第一天
+        $log = $this->model->table('benefit_log')->fields('id,user_id,amount,order_time,create_time')->where("user_id=1 and type in (0,2) and order_time<'{$BeginDate}'")->findAll();
         if($log) {
             foreach ($log as $k => $v) {
-                $this_month = date('Y-m');
-                $time = strtotime($v['order_time']);
-                // if($this_month!=date('Y-m',$time)) {
-                    $amount = $v['amount'];
-                    // $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where('user_id='.$v['user_id'])->update();
-                    // Log::balance($amount,$v['user_id'],$v['id'],'淘客订单佣金自动结算',5);
-                    $this->model->table('user')->data(array('total_income'=>"`total_income`+{$amount}"))->where('id='.$v['user_id'])->update();
-                    $this->model->table('benefit_log')->data(array('type'=>1))->where('id='.$v['id'])->update();
-                // }
+                $amount = $v['amount'];
+                // $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where('user_id='.$v['user_id'])->update();
+                // Log::balance($amount,$v['user_id'],$v['id'],'淘客订单佣金自动结算',5);
+                $this->model->table('user')->data(array('total_income'=>"`total_income`+{$amount}"))->where('id='.$v['user_id'])->update();
+                $this->model->table('benefit_log')->data(array('type'=>1))->where('id='.$v['id'])->update();
             }
         }
     }
