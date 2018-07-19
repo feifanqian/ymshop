@@ -320,7 +320,7 @@ class LinuxCliTask{
     #定期结算上个月淘客订单
     public function autoSettleTaoke(){
         $BeginDate=date('Y-m-01', strtotime(date("Y-m-d"))); //当前月份第一天
-        $log = $this->model->table('benefit_log')->fields('id,user_id,amount,order_time,create_time')->where("user_id=1 and type in (0,2) and order_time<'{$BeginDate}'")->findAll();
+        $log = $this->model->table('benefit_log')->fields('id,user_id,amount,order_time,create_time')->where("user_id=42608 and type in (0,2) and order_time<'{$BeginDate}'")->findAll();
         if($log) {
             foreach ($log as $k => $v) {
                 $amount = $v['amount'];
