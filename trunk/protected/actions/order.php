@@ -254,9 +254,9 @@ class OrderAction extends Controller {
             $num = Filter::int($buy_num[0]);
             if ($num < 1)
                 $num = 1;
-            var_dump(111);
-            $item = $model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("*,pr.id as product_id,pr.spec")->where("gb.id=$id")->find();
-            var_dump($item);die;
+            
+            $item = $model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("gb.*,go.name,go.store_nums,go.img,go.sell_price,go.weight,go.shop_id,go.point,pr.id as product_id,pr.spec")->where("gb.id=$id")->find();
+            // var_dump($item);die;
             
             $order_products = $this->packGroupbuyProducts($item, $num);
             $groupbuy = $model->table("groupbuy")->where("id=$id")->find();
@@ -760,7 +760,8 @@ class OrderAction extends Controller {
     //打包团购订单商品信息
     private function packGroupbuyProducts($item, $num = 1) {
         $store_nums = isset($item['store_nums'])?$item['store_nums']:$item['max_num'];
-        $have_num = $item['max_num'] - $item['goods_num'];
+        // $have_num = $item['max_num'] - $item['goods_num'];
+        $have_num = $item['max_num'];
         if ($have_num > $store_nums)
             $have_num = $store_nums;
         if ($num > $have_num)
