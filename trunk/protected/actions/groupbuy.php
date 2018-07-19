@@ -156,12 +156,20 @@ class GroupbuyAction extends Controller
             $this->code = 1275;
             return;
         }
-        $goods = $this->model->table('goods')->fields('id,name,img,sell_price,content')->where('id='.$groupbuy['goods_id'])->find();
+        $goods = $this->model->table('goods as g')->fields('g.id,g.name,g.imgs,g.sell_price,g.content,g.specs,p.id as product_id')->join('left join products as p on g.id = p.goods_id')->where('g.id='.$groupbuy['goods_id'])->find();
         $first = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->order('id asc')->find();
         $info['groupbuy_id'] = $groupbuy_id;
+        $info['goods_id'] = $groupbuy['goods_id'];
+        $info['product_id'] = $goods['product_id'];
         $info['name'] = $goods['name'];
         $info['img'] = $goods['img'];
         $info['price'] = $groupbuy['price'];
+        $info['specs'] = array_values(unserialize($goods['specs']));
+        if($info['specs']!=null && is_array($info['specs'])) {
+            foreach ($info['specs'] as $k => &$v) {
+                $v['value'] = array_values($v['value']);
+            }
+        }
         $info['min_num'] = $groupbuy['min_num'];
         $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id)->count();
         $info['start_time'] = $first['join_time'];
