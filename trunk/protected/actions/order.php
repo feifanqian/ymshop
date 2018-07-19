@@ -266,6 +266,7 @@ class OrderAction extends Controller {
             $order_type = 1;
         }else if ($type == "flashbuy") {//抢购处理
             $product_id = Filter::int($product_id[0]);
+            var_dump($buy_num);die;
             $num = Filter::int($buy_num[0]);
             if ($num < 1)
                 $num = 1;
