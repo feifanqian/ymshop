@@ -487,6 +487,9 @@ class TravelController extends Controller
             $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
             exit();
         }
+        if($order['pay_status']==0) {
+            $this->redirect("/simple/offline_order_status/order_id/{$id}");
+        }
         $shop = $this->model->table('customer')->fields('real_name')->where('user_id=' . $order['shop_ids'])->find();
         if ($shop) {
             $shopname = $shop['real_name'];

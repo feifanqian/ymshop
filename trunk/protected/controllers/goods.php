@@ -453,6 +453,13 @@ class GoodsController extends Controller {
         $gdata = Req::args();
         $gdata['name'] = Filter::sql($gdata['name']);
         $gdata['category_id'] = isset($_POST['category_type'])?$_POST['category_type']:$_POST['category_id'];
+        $gdata['shop_id'] = Req::args("shop_id");
+        $shop_model = new Model();
+        $shop = $shop_model->table('shop')->where('id='.$gdata['shop_id'])->find();
+        if($shop['user_id']!=null) {
+            $promoter = $shop_model->table('district_promoter')->fields('base_rate')->where('user_id='.$shop['user_id'])->find();
+            $gdata['inviter_rate'] = $promoter['base_rate'];
+        }
         if (is_array($gdata['pro_no']))
             $gdata['pro_no'] = $gdata['pro_no'][0];
         if ($id == 0) {

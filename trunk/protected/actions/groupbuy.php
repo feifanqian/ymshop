@@ -271,7 +271,8 @@ class GroupbuyAction extends Controller
                             $list['data'][$k]['join_status'] = '拼团中';
                         } else {
                             $list['data'][$k]['join_status'] = '拼团中';
-                        }               
+                        }
+                        $list['data'][$k]['current_time'] = date('Y-m-d H:i:s');               
                     }
                     unset($list['html']);
                 }
