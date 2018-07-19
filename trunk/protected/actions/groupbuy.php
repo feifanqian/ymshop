@@ -111,6 +111,7 @@ class GroupbuyAction extends Controller
         }
         $info['groupbuy_id'] = $groupbuy_id;
         $info['goods_id'] = $groupbuy['goods_id'];
+        $info['product_id'] = $goods['product_id'];
         $info['name'] = $goods['name'];
         $info['imgs'] = unserialize($goods['imgs']);
         $info['sell_price'] = $goods['sell_price'];
