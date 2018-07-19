@@ -256,7 +256,6 @@ class OrderAction extends Controller {
                 $num = 1;
             
             $item = $model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("gb.*,go.name,go.store_nums,go.img,go.sell_price,go.weight,go.shop_id,go.point,pr.id as product_id,pr.spec")->where("gb.id=$id")->find();
-            // var_dump($item);die;
             
             $order_products = $this->packGroupbuyProducts($item, $num);
             $groupbuy = $model->table("groupbuy")->where("id=$id")->find();
@@ -288,7 +287,7 @@ class OrderAction extends Controller {
             }
 
             $product_ids = implode(',', $product_id);
-            $num = Filter::int($buy_num[0]);
+            $num = isset($buy_num[0])?Filter::int($buy_num[0]):1;
 
             $model = new Model("bundling");
             $bund = $model->where("id=$id")->find();

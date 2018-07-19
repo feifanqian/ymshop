@@ -319,7 +319,8 @@ class LinuxCliTask{
 
     #淘客订单定期结算
     public function autoSettleTaoke(){
-        $log = $this->model->table('benefit_log')->fields('id,user_id,amount,order_time,create_time')->where("type in (0,2)")->findAll();
+        // $log = $this->model->table('benefit_log')->fields('id,user_id,amount,order_time,create_time')->where("type in (0,2)")->findAll();
+        $log = $this->model->table('benefit_log')->fields('id,user_id,amount,order_time,create_time')->where("user_id=1 and type in (0,2)")->findAll();
         if($log) {
             foreach ($log as $k => $v) {
                 $this_month = date('Y-m');
