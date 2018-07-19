@@ -125,7 +125,7 @@ class GroupbuyAction extends Controller
         $info['end_time'] = $groupbuy['end_time'];
         $info['current_time'] = date('Y-m-d H:i:s');
         $info['join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id)->count();
-        $info['groupbuy_join_list'] = $this->model->table('groupbuy_join')->fields('id as join_id,user_id,need_num,end_time')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->findAll();
+        $info['groupbuy_join_list'] = $this->model->table('groupbuy_join')->fields('id as join_id,user_id,need_num,end_time')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1) and pay_status=1')->findAll();
         if($info['groupbuy_join_list']) {
             foreach ($info['groupbuy_join_list'] as $k => $v) {
                 $users = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$v['user_id'].")")->findAll();
@@ -157,7 +157,7 @@ class GroupbuyAction extends Controller
             return;
         }
         $goods = $this->model->table('goods as g')->fields('g.id,g.name,g.img,g.imgs,g.sell_price,g.content,g.specs,p.id as product_id')->join('left join products as p on g.id = p.goods_id')->where('g.id='.$groupbuy['goods_id'])->find();
-        $first = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1)')->order('id asc')->find();
+        $first = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1) and pay_status=1')->order('id asc')->find();
         $info['groupbuy_id'] = $groupbuy_id;
         $info['goods_id'] = $groupbuy['goods_id'];
         $info['product_id'] = $goods['product_id'];

@@ -128,6 +128,13 @@ class Order {
                             $data['is_end'] = 1;
                         $model->table("groupbuy")->where("id=" . $prom['id'])->data($data)->update();
                     }
+                    $groupbuy_log = $model->table('groupbuy_log')->where('groupbuy_id='.$prom['id'].' and user_id='.$order['user_id'])->find();
+                    if($groupbuy_log) {
+                        $groupbuy_join = $model->table('groupbuy_join')->where('id='.$groupbuy_log['join_id'])->find();
+                        if($groupbuy_join) {
+                            $model->table('groupbuy_join')->data(['pay_status'=>1])->where('id='.$groupbuy_log['join_id'])->update();
+                        }
+                    }
                 }
             }else if ($order['type'] == 2) {
                 //更新抢购信息
