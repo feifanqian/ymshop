@@ -209,6 +209,9 @@ class OrderAction extends Controller {
         $id = Filter::int(Req::args('id'));
         $product_id = Req::args('product_id');
         $buy_num = Req::args('buy_num');
+        if(!$buy_num) {
+            $buy_num = Req::args('buynums');
+        }
 
         if (!$address_id || !$payment_id || ($is_invoice == 1 && $invoice_title == '')) {
 
