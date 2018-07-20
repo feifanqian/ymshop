@@ -263,7 +263,7 @@ class OrderAction extends Controller {
             unset($groupbuy['description']);
             $data['prom'] = serialize($groupbuy);
             $data['prom_id'] = $id;
-            $data['invite_id'] = $join_id;
+            $data['join_id'] = $join_id;
             $order_type = 1;
         }else if ($type == "flashbuy") {//抢购处理
             $product_id = Filter::int($product_id[0]);
