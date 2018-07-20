@@ -176,7 +176,7 @@ class GroupbuyAction extends Controller
         $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id)->count();
         $info['start_time'] = $first['join_time'];
         $info['need_num'] = $info['min_num'] - $info['had_join_num'];
-        $info['end_time'] = date("Y-m-d H:i:s",strtotime('+1 day',$first['join_time']));
+        $info['end_time'] = date("Y-m-d H:i:s",intval(strtotime('+1 day',$first['join_time'])));
         $info['current_time'] = date('Y-m-d H:i:s');
         $groupbuy_join_list = $this->model->table('groupbuy_log')->fields('user_id')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->findAll();
         $ids = array();
