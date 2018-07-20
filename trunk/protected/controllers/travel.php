@@ -519,6 +519,10 @@ class TravelController extends Controller
             $num_iid = '553057896190';
         }
         $tao_str = Filter::str(Req::args("tao_str"));
+        $coupon_price = Filter::float(Req::args("coupon_price"));
+        if(!$coupon_price) {
+            $coupon_price = 0.00;
+        }
         $form = Filter::str(Req::args("form"));
         if (!$form) {
             $form = 'android';
@@ -546,6 +550,7 @@ class TravelController extends Controller
         if(isset($resp['results']['n_tbk_item'])) {
             $info = $resp['results']['n_tbk_item'];
             $info['tao_str'] = '￥'.$tao_str.'￥';
+            $info['coupon_price'] = $coupon_price;
             $this->assign("info", $info);
             $this->redirect();
         } else {

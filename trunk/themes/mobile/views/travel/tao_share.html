@@ -26,9 +26,9 @@
                 <div class="proname">{$info['title']}</div> 
                 <div class="price_box">
                     <div class="price">
-                       <div class="price_after">券后价 ￥<span class="strongF">{$info['zk_final_price']}</span> <span class="price_before">￥{$info['reserve_price']}</span>
+                       <div class="price_after">券后价 ￥<span class="strongF">{echo:$info['zk_final_price']-$info['coupon_price']}</span> <span class="price_before">￥{$info['zk_final_price']}</span>
                        </div>
-                    </div> <div class="coupon">{echo:$info['reserve_price']-$info['zk_final_price']}</div>
+                    </div> <div class="coupon">{$info['coupon_price']}</div>
                 </div>
             </div> 
             <div class="clipboard">

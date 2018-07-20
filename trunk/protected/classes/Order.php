@@ -129,6 +129,7 @@ class Order {
                         $model->table("groupbuy")->where("id=" . $prom['id'])->data($data)->update();
                     }
                     $groupbuy_log = $model->table('groupbuy_log')->where('groupbuy_id='.$prom['id'].' and user_id='.$order['user_id'])->find();
+                    $model->table('groupbuy_log')->data(['pay_status'=>1])->where('groupbuy_id='.$prom['id'].' and user_id='.$order['user_id'])->update();
                     if($groupbuy_log) {
                         $groupbuy_join = $model->table('groupbuy_join')->where('id='.$groupbuy_log['join_id'])->find();
                         if($groupbuy_join) {
