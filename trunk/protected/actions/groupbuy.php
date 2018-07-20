@@ -188,22 +188,22 @@ class GroupbuyAction extends Controller
         $info['need_num'] = $info['min_num'] - $info['had_join_num'];
         $info['end_time'] = date("Y-m-d H:i:s",strtotime('+1 day',strtotime($first['join_time'])));
         $info['current_time'] = date('Y-m-d H:i:s');
-        $groupbuy_join_list = $this->model->table('groupbuy_log')->fields('user_id')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->findAll();
-        $ids = array();
-        if($groupbuy_join_list) {
-            foreach($groupbuy_join_list as $k =>$v) {
-               $ids[] = $v['user_id'];
-            }
-        }
-        $user_ids = $ids!=null?implode(',', $ids):'';
+        // $groupbuy_join_list = $this->model->table('groupbuy_log')->fields('user_id')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->findAll();
+        // $ids = array();
+        // if($groupbuy_join_list) {
+        //     foreach($groupbuy_join_list as $k =>$v) {
+        //        $ids[] = $v['user_id'];
+        //     }
+        // }
+        // $user_ids = $ids!=null?implode(',', $ids):'';
         $info['groupbuy_join_list']['join_id'] = $join_id;
         $info['groupbuy_join_list']['need_num'] = $info['min_num'] - $info['had_join_num'];
-        if($user_ids!='') {
-            $users = $this->model->table('groupbuy_log as gl')->join('left join user as u on gl.user_id=u.id')->fields('u.nickname,u.avatar')->where("u.id in (".$user_ids.")")->order('gl.join_time asc')->findAll();
-        } else {
-            $users = [];
-        }
-        
+        // if($user_ids!='') {
+        //     $users = $this->model->table('groupbuy_log as gl')->join('left join user as u on gl.user_id=u.id')->fields('u.nickname,u.avatar')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.join_id='.$join_id.' and gl.pay_status=1')->order('gl.join_time asc')->findAll();
+        // } else {
+        //     $users = [];
+        // }
+        $users = $this->model->table('groupbuy_log as gl')->join('left join user as u on gl.user_id=u.id')->fields('u.nickname,u.avatar')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.join_id='.$join_id.' and gl.pay_status=1')->order('gl.join_time asc')->findAll();
         $info['groupbuy_join_list']['users'] = $users;
         $info['groupbuy_join_list']['remain_time'] = $this->timediff(time(),strtotime($info['end_time']));
         
