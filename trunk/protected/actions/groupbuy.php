@@ -127,9 +127,10 @@ class GroupbuyAction extends Controller
         
         $now = time();
         // $info['groupbuy_join_list'] = $this->model->table('groupbuy_log as gl')->fields('gl.join_id,gj.user_id,gj.need_num,gj.end_time')->join('left join groupbuy_join as gj on gl.join_id=gj.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
-        $info['groupbuy_join_list'] = $this->model->table('groupbuy_join as gj')->fields('gl.join_id,gj.user_id,gj.need_num,gj.end_time')->join('left join groupbuy_log as gl on gl.join_id=gj.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
+        $groupbuy_join_list = $this->model->table('groupbuy_join as gj')->fields('gl.join_id,gj.user_id,gj.need_num,gj.end_time')->join('left join groupbuy_log as gl on gl.join_id=gj.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
         
-        if($info['groupbuy_join_list']) {
+        if($groupbuy_join_list) {
+            $info['groupbuy_join_list'] = $this->super_unique($groupbuy_join_list);
             foreach ($info['groupbuy_join_list'] as $k => $v) {
                 $users = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$v['user_id'].")")->findAll();
                 $info['groupbuy_join_list'][$k]['users'] = $users[0];
@@ -298,5 +299,19 @@ class GroupbuyAction extends Controller
         
         $this->code = 0;
         $this->content = $list;
+    }
+
+    public function super_unique($array, $recursion = false){
+        // 序列化数组元素,去除重复
+        $result = array_map('unserialize', array_unique(array_map('serialize', $array)));
+        // 递归调用
+        if ($recursion) {
+            foreach ($result as $key => $value) {
+                if (is_array($value)) {
+                    $result[ $key ] = super_unique($value);
+                }
+            }
+        }
+        return $result;
     }
 }       
