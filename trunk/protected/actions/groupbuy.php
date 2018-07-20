@@ -75,6 +75,10 @@ class GroupbuyAction extends Controller
                 return;
             } else {
                 $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$join_id)->find();
+                if(time()>$groupbuy_join['end_time']) {
+                    $this->code = 1281;
+                    return;
+                }
                 $data = array(
                     'user_id'  => $groupbuy_join['user_id'].','.$this->user['id'],
                     'need_num' => $groupbuy_join['need_num']
@@ -126,7 +130,8 @@ class GroupbuyAction extends Controller
         $info['current_time'] = date('Y-m-d H:i:s');
         $info['join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and pay_status=1')->count();
         // $info['groupbuy_join_list'] = $this->model->table('groupbuy_join')->fields('id as join_id,user_id,need_num,end_time')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1) and pay_status=1')->findAll();
-        $info['groupbuy_join_list'] = $this->model->table('groupbuy_log as gl')->fields('gl.join_id,gj.user_id,gj.need_num,gj.end_time')->join('left join groupbuy_join as gj on gl.join_id=gj.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1 and gj.need_num>0')->findAll();
+        $now = time();
+        $info['groupbuy_join_list'] = $this->model->table('groupbuy_log as gl')->fields('gl.join_id,gj.user_id,gj.need_num,gj.end_time')->join('left join groupbuy_join as gj on gl.join_id=gj.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
         
         if($info['groupbuy_join_list']) {
             foreach ($info['groupbuy_join_list'] as $k => $v) {

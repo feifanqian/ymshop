@@ -187,6 +187,16 @@ class OrderController extends Controller {
         //$delivery_status = Req::args("delivery_status");
         //同步发货信息
         $order_info = $model->table("order")->where("id=$order_id")->find();
+        if($order_info['type']==1) {
+            //判断团购订单是否满足发货要求，需在规定时间满足达到最小组团人数
+            $groupbuy_join = $model->table('groupbuy_join')->where('groupbuy_id='.$order_info['prom_id'])->find();
+            if($groupbuy_join) {
+                if($groupbuy_join['need_num']>0) {
+                    echo "<script>alert('还未达到拼团人数需求');</script>";
+                    exit();
+                }
+            }
+        }
         $model = new Model("doc_invoice");
         if ($order_info['delivery_status'] == 3) {
             $model->where("order_id=$order_id")->insert();

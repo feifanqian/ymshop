@@ -128,10 +128,20 @@ class Order {
                             $data['is_end'] = 1;
                         $model->table("groupbuy")->where("id=" . $prom['id'])->data($data)->update();
                     }
-                    $groupbuy_log = $model->table('groupbuy_log')->where('groupbuy_id='.$prom['id'].' and user_id='.$order['user_id'])->find();
-                    $model->table('groupbuy_log')->data(['pay_status'=>1])->where('groupbuy_id='.$prom['id'].' and user_id='.$order['user_id'])->update();
+                    if($order['join_id']==0) {
+                        $where = "groupbuy_id={$prom['id']} and user_id={$order['user_id']}";
+                    } else {
+                        $where = "id=".$order['join_id'];
+                    }
+                    $groupbuy_log = $model->table('groupbuy_log')->where($where)->find();
+                    $model->table('groupbuy_log')->data(['pay_status'=>1])->where($where)->update();
                     if($groupbuy_log) {
-                        $groupbuy_join = $model->table('groupbuy_join')->where('id='.$groupbuy_log['join_id'])->find();
+                        if($order['join_id']==0) {
+                            $wh = 'id='.$groupbuy_log['join_id'];
+                        } else {
+                            $wh = "id=".$order['join_id'];
+                        }
+                        $groupbuy_join = $model->table('groupbuy_join')->where($wh)->find();
                         if($groupbuy_join) {
                             // $model->table('groupbuy_join')->data(['pay_status'=>1])->where('id='.$groupbuy_log['join_id'])->update();
                             $model->table('groupbuy_join')->data(['need_num'=>"`need_num`-1"])->where('id='.$groupbuy_log['join_id'])->update();

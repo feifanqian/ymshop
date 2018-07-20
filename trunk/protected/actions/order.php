@@ -202,6 +202,7 @@ class OrderAction extends Controller {
         $invoice_title = Filter::text(Req::args('invoice_title'));
         $user_remark = Filter::txt(Req::args('user_remark'));
         $voucher_id = Filter::int(Req::args('voucher'));
+        $join_id = Filter::int(Req::args('join_id'));
         $cart_type = Req::args('cart_type');
 
         //非普通促销信息
@@ -262,6 +263,7 @@ class OrderAction extends Controller {
             unset($groupbuy['description']);
             $data['prom'] = serialize($groupbuy);
             $data['prom_id'] = $id;
+            $data['invite_id'] = $join_id;
             $order_type = 1;
         }else if ($type == "flashbuy") {//抢购处理
             $product_id = Filter::int($product_id[0]);
