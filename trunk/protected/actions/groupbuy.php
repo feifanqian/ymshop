@@ -77,7 +77,7 @@ class GroupbuyAction extends Controller
                 $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$join_id)->find();
                 $data = array(
                     'user_id'  => $groupbuy_join['user_id'].','.$this->user['id'],
-                    'need_num' => $groupbuy_join['need_num']-1
+                    'need_num' => $groupbuy_join['need_num']
                     );
                 $this->model->table('groupbuy_join')->data($data)->where('id='.$join_id)->update();
                 $log = array(
