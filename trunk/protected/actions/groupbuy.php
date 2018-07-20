@@ -120,12 +120,7 @@ class GroupbuyAction extends Controller
         $info['imgs'] = unserialize($goods['imgs']);
         $info['sell_price'] = $goods['sell_price'];
         $info['price'] = $groupbuy['price'];
-        $info['specs'] = array_values(unserialize($goods['specs']));
-        if($info['specs']!=null && is_array($info['specs'])) {
-            foreach ($info['specs'] as $k => &$v) {
-                $v['value'] = array_values($v['value']);
-            }
-        }
+        
         $info['end_time'] = $groupbuy['end_time'];
         $info['current_time'] = date('Y-m-d H:i:s');
         $info['join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and pay_status=1')->count();
@@ -139,6 +134,12 @@ class GroupbuyAction extends Controller
                 $info['groupbuy_join_list'][$k]['users'] = $users[0];
                 $info['groupbuy_join_list'][$k]['remain_time'] = $this->timediff(time(),strtotime($v['end_time']));
                 unset($info['groupbuy_join_list'][$k]['end_time']);
+            }
+        }
+        $info['specs'] = array_values(unserialize($goods['specs']));
+        if($info['specs']!=null && is_array($info['specs'])) {
+            foreach ($info['specs'] as $k => &$v) {
+                $v['value'] = array_values($v['value']);
             }
         }
         $info['comment_list'] = $this->model->table("review as re")
