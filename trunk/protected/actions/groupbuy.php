@@ -199,7 +199,7 @@ class GroupbuyAction extends Controller
         $info['groupbuy_join_list']['join_id'] = $join_id;
         $info['groupbuy_join_list']['need_num'] = $info['min_num'] - $info['had_join_num'];
         if($user_ids!='') {
-            $users = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$user_ids.")")->findAll();
+            $users = $this->model->table('groupbuy_log as gl')->join('left join user as u on gl.user_id=u.id')->fields('u.nickname,u.avatar')->where("u.id in (".$user_ids.")")->order('gl.join_time asc')->findAll();
         } else {
             $users = [];
         }
