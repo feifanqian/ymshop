@@ -138,6 +138,7 @@ class GroupbuyAction extends Controller
                 $info['groupbuy_join_list'][$k]['remain_time'] = $this->timediff(time(),strtotime($v['end_time']));
                 unset($info['groupbuy_join_list'][$k]['end_time']);
             }
+            $info['groupbuy_join_list'] = array_values($info['groupbuy_join_list']);
         }
         $info['specs'] = array_values(unserialize($goods['specs']));
         if($info['specs']!=null && is_array($info['specs'])) {
