@@ -125,7 +125,8 @@ class GroupbuyAction extends Controller
         $info['end_time'] = $groupbuy['end_time'];
         $info['current_time'] = date('Y-m-d H:i:s');
         $info['join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and pay_status=1')->count();
-        $info['groupbuy_join_list'] = $this->model->table('groupbuy_join')->fields('id as join_id,user_id,need_num,end_time')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1) and pay_status=1')->findAll();
+        // $info['groupbuy_join_list'] = $this->model->table('groupbuy_join')->fields('id as join_id,user_id,need_num,end_time')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1) and pay_status=1')->findAll();
+        $info['groupbuy_join_list'] = $this->model->table('groupbuy_log as gl')->fields('gl.join_id,gj.user_id,gj.need_num,gj.end_time')->join('groupbuy_join as gj on gl.join_id=gj.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1')->findAll();
         if($info['groupbuy_join_list']) {
             foreach ($info['groupbuy_join_list'] as $k => $v) {
                 $users = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$v['user_id'].")")->findAll();
@@ -157,7 +158,7 @@ class GroupbuyAction extends Controller
             return;
         }
         $goods = $this->model->table('goods as g')->fields('g.id,g.name,g.img,g.imgs,g.sell_price,g.content,g.specs,p.id as product_id')->join('left join products as p on g.id = p.goods_id')->where('g.id='.$groupbuy['goods_id'])->find();
-        $first = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and status in (0,1) and pay_status=1')->order('id asc')->find();
+        $first = $this->model->table('groupbuy_log')->fields('join_time')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->order('id asc')->find();
         $info['groupbuy_id'] = $groupbuy_id;
         $info['goods_id'] = $groupbuy['goods_id'];
         $info['product_id'] = $goods['product_id'];
@@ -174,22 +175,28 @@ class GroupbuyAction extends Controller
         $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id)->count();
         $info['start_time'] = $first['join_time'];
         $info['need_num'] = $info['min_num'] - $info['had_join_num'];
-        $info['end_time'] = $first['end_time'];
+        $info['end_time'] = date("Y-m-d H:i:s",strtotime('+1 day',$first['join_time']));
         $info['current_time'] = date('Y-m-d H:i:s');
-        $info['groupbuy_join_list'] = $this->model->table('groupbuy_join')->fields('id as join_id,user_id,need_num,end_time')->where('groupbuy_id='.$groupbuy_id.' and id='.$join_id.' and status in (0,1)')->find();
-        if($info['groupbuy_join_list']) {
-            // foreach ($info['groupbuy_join_list'] as $k => $v) {
-            //     $info['groupbuy_join_list'][$k]['users'] = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$v['user_id'].")")->findAll();
-            //     $info['groupbuy_join_list'][$k]['remain_time'] = $this->timediff(time(),strtotime($v['end_time']));
-            //     unset($info['groupbuy_join_list'][$k]['end_time']);
-            // }
-
-            $info['groupbuy_join_list']['users'] = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$info['groupbuy_join_list']['user_id'].")")->findAll();
-            $info['groupbuy_join_list']['remain_time'] = $this->timediff(time(),strtotime($info['groupbuy_join_list']['end_time']));
-            unset($info['groupbuy_join_list']['end_time']);
-            
+        $groupbuy_join_list = $this->model->table('groupbuy_log')->fields('user_id')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->findAll();
+        $ids = array();
+        if($groupbuy_join_list) {
+            foreach($groupbuy_join_list as $k =>$v) {
+               $ids[] = $v['user_id'];
+            }
         }
-        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'])->find();
+        $user_ids = $ids!=null?implode(',', $ids):'';
+        $info['groupbuy_join_list']['join_id'] = $join_id;
+        $info['groupbuy_join_list']['need_num'] = $info['min_num'] - $info['had_join_num'];
+        if($user_ids!='') {
+            $users = $this->model->table('user')->fields('nickname,avatar')->where("id in (".$user_ids.")")->findAll();
+        } else {
+            $users = [];
+        }
+        
+        $info['groupbuy_join_list']['users'] = $users;
+        $info['groupbuy_join_list']['remain_time'] = $this->timediff(time(),strtotime($info['end_time']));
+        
+        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status=1')->find();
         if($joined && $info['had_join_num']>=$info['min_num']) {
             $info['status'] = '拼团成功';
         } elseif ($joined && $info['had_join_num']<$info['min_num'] && time()>=strtotime($info['end_time'])) {
@@ -244,7 +251,7 @@ class GroupbuyAction extends Controller
         if(!$page) {
             $page = 1;
         }
-        $log = $this->model->table('groupbuy_log')->fields('join_id,groupbuy_id')->where('user_id='.$this->user['id'])->order('id desc')->findAll();
+        $log = $this->model->table('groupbuy_log')->fields('join_id,groupbuy_id')->where('user_id='.$this->user['id'].' and pay_status=1')->order('id desc')->findAll();
         $ids = array();
         $idss = array();
         if($log) {
