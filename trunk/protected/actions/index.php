@@ -519,6 +519,7 @@ class IndexAction extends Controller {
                 $groupbuy[$k]['listorder'] = $k;
                 $groupbuy[$k]['subtitle'] = '';
                 $groupbuy[$k]['cost_point'] = 0;   
+                $groupbuy = array_values($groupbuy);
             }
         }
         $groupbuy=array(
