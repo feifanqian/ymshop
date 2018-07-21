@@ -176,7 +176,7 @@ class GroupbuyAction extends Controller
             $this->code = 1275;
             return;
         }
-        $goods = $this->model->table('goods as g')->fields('g.id,g.name,g.img,g.imgs,g.sell_price,g.content,g.specs,p.id as product_id')->join('left join products as p on g.id = p.goods_id')->where('g.id='.$groupbuy['goods_id'])->find();
+        $goods = $this->model->table('goods as g')->fields('g.id,g.name,g.img,g.imgs,g.sell_price,g.content,g.specs,p.id as product_id,g.store_nums')->join('left join products as p on g.id = p.goods_id')->where('g.id='.$groupbuy['goods_id'])->find();
         $first = $this->model->table('groupbuy_log')->fields('join_time')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->order('id asc')->find();
         $info['groupbuy_id'] = $groupbuy_id;
         $info['goods_id'] = $groupbuy['goods_id'];
@@ -184,6 +184,7 @@ class GroupbuyAction extends Controller
         $info['name'] = $goods['name'];
         $info['img'] = $goods['img'];
         $info['price'] = $groupbuy['price'];
+        $info['store_nums'] = $goods['store_nums'];
         $info['specs'] = array_values(unserialize($goods['specs']));
         if($info['specs']!=null && is_array($info['specs'])) {
             foreach ($info['specs'] as $k => &$v) {
