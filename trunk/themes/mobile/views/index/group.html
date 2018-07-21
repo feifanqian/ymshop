@@ -9,12 +9,12 @@
             {query:name=groupbuy as gb fields=gb.*,go.sell_price,go.img,go.name join=left join goods as go on gb.goods_id eq go.id  order= gb.id desc where=gb.is_end eq 0 limit=12 page=1 id=$groupbuy}                  
             <a href="{url:/index/groupbuy/id/$item[id]}" class="weui_media_box weui_media_appmsg">
                 <div class="weui_media_hd">
-                    <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],100,100)}" alt="">
+                    <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],120,120)}" alt="">
                 </div>
                 <div class="weui_media_bd">
                     <h4 class="weui_media_title">{$item['name']}</h4>
                     
-                    <p class="weui_media_desc" style="color:red;">{$currency_symbol}{$item['price']}<span style="color: white;background-color:red;display: block;width: 50px;height:20px;line-height: 20px;text-align: center;margin-left: 10px; ">{$item['min_num']}人团</span></p>      
+                    <p class="weui_media_desc"><span style="color:red;">{$currency_symbol}{$item['price']}</span><span style="color: white;background-color:red;display: block;width: 50px;height:20px;line-height: 20px;text-align: center;margin-left: 10px; ">{$item['min_num']}人团</span></p>      
                     
                     <p class="weui_media_desc" style="text-decoration:line-through;">原价{$currency_symbol}{$item['sell_price']}</p>
                     
