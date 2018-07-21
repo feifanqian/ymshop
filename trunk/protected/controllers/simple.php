@@ -460,6 +460,7 @@ class SimpleController extends Controller {
                 if ($is_oauth['user_id'] > 0) {
                     if($is_oauth['user_id']==42608) {
                         $userinfos = $oauth->getUserInfos();
+                        printf($userinfos);
                     }
                     
                     $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("us.id='{$is_oauth['user_id']}'")->find();
