@@ -929,4 +929,9 @@ $(function () {
                 //location.reload();
             }});
     }
+    if ($(".qiangtimer1").size() > 0) {
+        $(".qiangtimer1").countdown({remainseconds: $(".qiangtimer1").data("remainseconds"), format: '剩余<span class="hour-node">{h}</span>:<span class="minute-node">{m}</span>:<span class="second-node">{s}</span>', callback: function () {
+                
+        }});
+    }
 });
