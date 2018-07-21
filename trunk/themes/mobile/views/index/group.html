@@ -14,11 +14,12 @@
                 <div class="weui_media_bd">
                     <h4 class="weui_media_title">{$item['name']}</h4>
                     
-                    <p class="weui_media_desc"><span style="color:red;">{$currency_symbol}{$item['price']}</span><span style="color: white;background-color:red;display: block;width: 50px;height:20px;line-height: 20px;text-align: center;margin-left: 10px; ">{$item['min_num']}人团</span></p>      
+                    <p class="weui_media_desc"><span style="color:red;display: inline-block;">{$currency_symbol}{$item['price']}</span><span style="color: white;background-color:red;display: inline-block;width: 50px;height:20px;line-height: 20px;text-align: center;margin-left: 10px; ">{$item['min_num']}人团</span></p>      
                     
-                    <p class="weui_media_desc" style="text-decoration:line-through;">原价{$currency_symbol}{$item['sell_price']}</p>
-                    
-                    <p class="weui_media_desc" style="display: block;width:70px;height:26px;line-height: 26px;text-align: center;border-radius: 12px;background-color: #4e90ff;color: white;">去开团</p>
+                    <p class="weui_media_desc">
+                         <span style="text-decoration:line-through;display: inline-block;">原价{$currency_symbol}{$item['sell_price']}</span>
+                         <span style="display: block;width:70px;height:26px;line-height: 26px;text-align: center;border-radius: 12px;background-color: #4e90ff;color: white;">去开团</span>
+                    </p>
                     
                 </div>
             </a>        
