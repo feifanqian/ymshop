@@ -172,7 +172,6 @@ class WechatOAuth extends OAuth2 {
 
     public function getUserInfos() {
         $data = $this->call('sns/userinfo');
-        var_dump($data);die;
         $userInfo = array();
         if (!isset($data['ret']) || $data['ret'] == 0) {
             $userInfo['type'] = 'Wechat';
