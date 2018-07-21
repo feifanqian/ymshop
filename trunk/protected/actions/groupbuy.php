@@ -146,6 +146,14 @@ class GroupbuyAction extends Controller
                 $v['value'] = array_values($v['value']);
             }
         }
+        $skumap = array();
+        $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = ".$groupbuy['goods_id'])->findAll();
+        if ($products) {
+            foreach ($products as $product) {
+                $skumap[$product['specs_key']] = $product;
+            }
+        }
+        $info['skumap'] = array_values($skumap);
         $info['comment_list'] = $this->model->table("review as re")
                         ->join("left join user as us on re.user_id = us.id")
                         ->fields("re.id,us.nickname,us.avatar,re.content,re.comment_time")
