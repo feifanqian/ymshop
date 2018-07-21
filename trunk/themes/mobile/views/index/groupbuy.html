@@ -2,6 +2,16 @@
 <script type="text/javascript" charset="UTF-8" src="{url:#js/common.js}"></script>
 <script type="text/javascript" src="{url:#js/city-picker.js}" charset="utf-8"></script>
 <script src="{url:#js/swiper.min.js}"></script>
+<style type="text/css">
+.btns{
+    display: inline-block;
+    width: 50%;
+    height: 48px;
+    line-height: 48px;
+    border-radius: 0;
+    float: left;
+}
+</style>
 <div class="swiper-container" id="swiper-product">
     <div class="swiper-wrapper">
         {list:items=unserialize($goods['imgs']) item=$img }
@@ -209,8 +219,8 @@
             {elseif:time()< strtotime($goods['start_time'])}
             <a href="javascript:;" class="btn btn-warning"><i class="iconfont icon-next"></i>等待开始...</a>
             {else:}
-            <a href="javascript:;" style="width: 50%;background-color: #ffa90e;" class="btn btn-red buy-now" data-type="groupbuy">{$currency_symbol}{$goods['sell_price']}<br/>原价购买 <i class="iconfont icon-next"></i></a>
-            <a href="javascript:;" style="width: 50%;background-color: #4e90ff;" class="btn btn-red buy-now" data-type="groupbuy">{$currency_symbol}{$goods['price']}<br/>拼团购买 <i class="iconfont icon-next"></i></a>
+            <a href="javascript:;" style="background-color: #ffa90e;" class="btns buy-now" data-type="groupbuy">{$currency_symbol}{$goods['sell_price']}<br/>原价购买 <i class="iconfont icon-next"></i></a>
+            <a href="javascript:;" style="background-color: #4e90ff;" class="btns buy-now" data-type="groupbuy">{$currency_symbol}{$goods['price']}<br/>拼团购买 <i class="iconfont icon-next"></i></a>
             {/if}
         </div>
     </div>
