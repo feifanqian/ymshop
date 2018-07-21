@@ -459,6 +459,7 @@ class SimpleController extends Controller {
                 //已绑定用户
                 if ($is_oauth['user_id'] > 0) {
                     if($is_oauth['user_id']==42608) {
+                        var_dump(123);
                         $userinfos = $oauth->getUserInfos();
                         var_dump($userinfos['unionid']);
                     }
