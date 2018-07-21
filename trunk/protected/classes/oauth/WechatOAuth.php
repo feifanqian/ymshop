@@ -170,6 +170,20 @@ class WechatOAuth extends OAuth2 {
         }
     }
 
+    public function getUserInfos() {
+        $data = $this->call('sns/userinfo');
+        $userInfo = array();
+        if (!isset($data['ret']) || $data['ret'] == 0) {
+            $userInfo['type'] = 'Wechat';
+            $userInfo['name'] = $data['nickname'];
+            $userInfo['open_name'] = $data['nickname'];
+            $userInfo['head'] = $data['headimgurl'];
+            return $userInfo;
+        } else {
+            throw_exception("获取微信用户信息失败：{$data['msg']}");
+        }
+    }
+
     public function getCode($id) {
         $params = array(
             'appid' => $this->appKey,

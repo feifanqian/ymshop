@@ -97,10 +97,10 @@ class GroupbuyAction extends Controller
                     );
             }
         }
-        $this->model->table('groupbuy_log')->data($log)->insert();
+        $log_id = $this->model->table('groupbuy_log')->data($log)->insert();
         
         $this->code = 0;
-        $this->content = null;
+        $this->content['log_id'] = $log_id;
         return;
     }
 
