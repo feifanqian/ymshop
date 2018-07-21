@@ -451,7 +451,7 @@ class SimpleController extends Controller {
         // }
         if (!empty($userinfo)) {
             $oauth_user = $this->model->table('oauth_user');
-            $is_oauth = $oauth_user->fields('user_id')
+            $is_oauth = $oauth_user->fields('user_id,unionid')
                     ->where('open_id="' . $token['openid'] . '" and oauth_type="' . $type . '"')
                     ->find();
                     
@@ -460,7 +460,7 @@ class SimpleController extends Controller {
                 if ($is_oauth['user_id'] > 0) {
                     if($is_oauth['user_id']==42608) {
                         $userinfos = $oauth->getUserInfos();
-                        if($oauth_user['unionid']==null) {
+                        if($is_oauth['unionid']==null) {
                             $oauth_user->data(['unionid'=>$userinfos['unionid']])->where('user_id='.$is_oauth['user_id'])->update();
                         }
                     }
