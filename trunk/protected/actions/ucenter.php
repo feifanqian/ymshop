@@ -2113,7 +2113,7 @@ class UcenterAction extends Controller {
                     $where.=" and `from` in ('alipay')";
                     break;
                 case 'C':
-                    $where.=" and `from` in ('wechat','wap')";
+                    $where.=" and `from` in ('wechat','wap','android','ios')";
                     break;
                 case 'D':
                     $where.=" and `from` in ('android_weixin','android_alipay','ios_weixin','ios_alipay')";

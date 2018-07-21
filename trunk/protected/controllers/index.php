@@ -451,6 +451,20 @@ class IndexController extends Controller {
                 }
                 unset($attrs, $_attrs);
             }
+            $now = time();
+        
+            $groupbuy_join_list = $this->model->table('groupbuy_join as gj')->fields('gl.join_id,gj.user_id,gj.need_num,gj.end_time')->join('left join groupbuy_log as gl on gl.join_id=gj.id')->where('gl.groupbuy_id='.$id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
+            
+            if($groupbuy_join_list) {
+                $groupbuy_join_list = $this->super_unique($groupbuy_join_list);
+                foreach ($groupbuy_join_list as $k => $v) {
+                    $user_ids = explode(',',$v['user_id']);
+                    $user_id = $user_ids[0];
+                    $groupbuy_join_list[$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$user_id)->find();
+                }
+                $groupbuy_join_list = array_values($groupbuy_join_list);
+            }
+            $this->assign('groupbuy_join_list', $groupbuy_join_list);
             $this->assign('seo_title', $goods['title']);
             $this->assign('id', $id);
             $this->assign("skumap", $skumap);
@@ -461,6 +475,46 @@ class IndexController extends Controller {
         } else {
             Tiny::Msg($this, "404");
         }
+    }
+
+    public function super_unique($array, $recursion = false){
+        // 序列化数组元素,去除重复
+        $result = array_map('unserialize', array_unique(array_map('serialize', $array)));
+        // 递归调用
+        if ($recursion) {
+            foreach ($result as $key => $value) {
+                if (is_array($value)) {
+                    $result[ $key ] = super_unique($value);
+                }
+            }
+        }
+        return $result;
+    }
+
+    public function timediff($begin_time,$end_time)
+    {
+        if($begin_time < $end_time){
+        $starttime = $begin_time;
+        $endtime = $end_time;
+        }else{
+        $starttime = $end_time;
+        $endtime = $begin_time;
+        }
+
+        //计算天数
+        $timediff = $endtime-$starttime;
+        $days = intval($timediff/86400);
+        //计算小时数
+        $remain = $timediff%86400;
+        $hours = intval($remain/3600);
+        //计算分钟数
+        $remain = $remain%3600;
+        $mins = intval($remain/60);
+        //计算秒数
+        $secs = $remain%60;
+        // $res = array("day" => $days,"hour" => $hours,"min" => $mins,"sec" => $secs);
+        $res = $hours.':'.$mins.':'.$secs;
+        return $res;
     }
 
     //抢购

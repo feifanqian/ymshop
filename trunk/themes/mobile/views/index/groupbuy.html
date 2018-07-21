@@ -30,7 +30,17 @@
         <p><span class="f18"><i class="iconfont icon-my1"></i> 共有<b class="red">{$goods['order_num']}</b></span>人购买</p>
         {elseif:time()>strtotime($goods['start_time'])}
         <p><span class="red f16"><i class="iconfont icon-my1"></i> <b>{$goods['order_num']}</b></span>人已购买</p>
-        
+        {/if}
+        {if:$groupbuy_join_list!=null}
+        <p><span class="f18">以下小伙伴正在发起拼团</span></p>
+        {list:$items=$groupbuy_join_list}
+        <div>
+           <div style="width: 60px;height: 60px;border-radius: 50%;">
+              <img src="{echo:Common::thumb($item['users']['avatar'],60,60)}" width="60" height="60">
+              <span>还差{$item['need_num']}人</span>
+            </div>
+        </div>
+        {/if}
         {if:$goods['order_num']>=$goods['min_num']}
         <p><i class="iconfont icon-favourite"></i>团购成功，可继续购买!</p>
         {else:}

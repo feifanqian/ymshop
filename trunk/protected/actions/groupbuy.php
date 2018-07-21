@@ -126,7 +126,7 @@ class GroupbuyAction extends Controller
         $info['join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and pay_status=1')->count();
         
         $now = time();
-        // $info['groupbuy_join_list'] = $this->model->table('groupbuy_log as gl')->fields('gl.join_id,gj.user_id,gj.need_num,gj.end_time')->join('left join groupbuy_join as gj on gl.join_id=gj.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
+        
         $groupbuy_join_list = $this->model->table('groupbuy_join as gj')->fields('gl.join_id,gj.user_id,gj.need_num,gj.end_time')->join('left join groupbuy_log as gl on gl.join_id=gj.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
         
         if($groupbuy_join_list) {
@@ -202,7 +202,7 @@ class GroupbuyAction extends Controller
         }
         $info['skumap'] = array_values($skumap);
         $info['min_num'] = $groupbuy['min_num'];
-        $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id)->count();
+        $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->count();
         $info['start_time'] = $first['join_time'];
         $info['need_num'] = $info['min_num'] - $info['had_join_num'];
         $info['end_time'] = date("Y-m-d H:i:s",strtotime('+1 day',strtotime($first['join_time'])));
@@ -299,7 +299,7 @@ class GroupbuyAction extends Controller
             if($list) {
                 if($list['data']) {
                     foreach ($list['data'] as $k => $v) {
-                        $had_join_num = $this->model->table('groupbuy_log')->where('groupbuy_id='.$v['id'].' and join_id='.$v['join_id'])->count();
+                        $had_join_num = $this->model->table('groupbuy_log')->where('groupbuy_id='.$v['id'].' and join_id='.$v['join_id'].' and pay_status=1')->count();
                         if($had_join_num>=$v['min_num']) {
                             $list['data'][$k]['join_status'] = '拼团成功';
                         } elseif ($had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
