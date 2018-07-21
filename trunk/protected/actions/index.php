@@ -513,13 +513,13 @@ class IndexAction extends Controller {
             );
         $groupbuy = $this->model->table('groupbuy as g')->fields('g.id,g.goods_id,o.name,o.img,o.sell_price,g.price,g.min_num')->join('left join goods as o on g.goods_id = o.id')->where('g.is_end = 0')->order('g.id desc')->limit(10)->findAll();
         if($groupbuy) {
-            foreach ($groupbuy as $key => $value) {
+            foreach ($groupbuy as $k => $v) {
                 $groupbuy[$k]['price_set'] = [];
                 $groupbuy[$k]['is_adjustable'] = 0;
                 $groupbuy[$k]['listorder'] = $k;
                 $groupbuy[$k]['subtitle'] = '';
                 $groupbuy[$k]['cost_point'] = 0;   
-                $groupbuy = array_values($groupbuy);
+                // $groupbuy = array_values($groupbuy);
             }
         }
         $groupbuy=array(
