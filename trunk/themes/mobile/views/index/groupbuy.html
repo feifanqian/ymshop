@@ -61,11 +61,11 @@
             </script>
             {/list}
             {/if}
-            {if:$goods['order_num']>=$goods['min_num']}
+            <!-- {if:$goods['order_num']>=$goods['min_num']}
             <p><i class="iconfont icon-favourite"></i>团购成功，可继续购买!</p>
             {else:}
             <p><i class="iconfont icon-favourite"></i>团购数量有限，下单要快哟!</p>
-            {/if}
+            {/if} -->
             <span class="f14"> <i class="iconfont icon-clock"></i> 剩余时间：</span><strong class="f14"><span id="countdown1"  style="color:#666; "></span></strong>
 
             <script type="text/javascript">
@@ -209,7 +209,8 @@
             {elseif:time()< strtotime($goods['start_time'])}
             <a href="javascript:;" class="btn btn-warning"><i class="iconfont icon-next"></i>等待开始...</a>
             {else:}
-            <a href="javascript:;" class="btn btn-red buy-now" data-type="groupbuy">立即团购 <i class="iconfont icon-next"></i></a>
+            <a href="javascript:;" style="width: 50%;background-color: #ffa90e;" class="btn btn-red buy-now" data-type="groupbuy">{$currency_symbol}{$goods['sell_price']}<br/>原价购买 <i class="iconfont icon-next"></i></a>
+            <a href="javascript:;" style="width: 50%;background-color: #4e90ff;" class="btn btn-red buy-now" data-type="groupbuy">{$currency_symbol}{$goods['price']}<br/>拼团购买 <i class="iconfont icon-next"></i></a>
             {/if}
         </div>
     </div>
