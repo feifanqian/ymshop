@@ -190,6 +190,14 @@ class GroupbuyAction extends Controller
                 $v['value'] = array_values($v['value']);
             }
         }
+        $skumap = array();
+        $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = ".$groupbuy['goods_id'])->findAll();
+        if ($products) {
+            foreach ($products as $product) {
+                $skumap[$product['specs_key']] = $product;
+            }
+        }
+        $info['skumap'] = array_values($skumap);
         $info['min_num'] = $groupbuy['min_num'];
         $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id)->count();
         $info['start_time'] = $first['join_time'];
