@@ -483,6 +483,9 @@ class IndexAction extends Controller {
         $ad2 = $this->model->table('ad')->fields('content')->where('id=53')->find();
         $imgs2 = unserialize($ad2['content']);
         $imgs2[0]['url'] = json_decode($imgs2[0]['url'],true);
+        $ad3 = $this->model->table('ad')->fields('content')->where('id=53')->find();
+        $imgs3 = unserialize($ad3['content']);
+        $imgs3[0]['url'] = json_decode($imgs3[0]['url'],true);
         $flash=array(
             'imgs'=>$imgs1[0],
             'list'=>$flashlist,
@@ -508,9 +511,17 @@ class IndexAction extends Controller {
             'imgs'=>$imgs2[0],
             'list'=>$point_list
             );
+        $groupbuy = $this->model->table('groupbuy as g')->fields('g.id,g.goods_id,o.name,o.img,o.sell_price,g.price,g.min_num')->join('left join goods as o on g.goods_id = o.id')->where('g.is_end = 0')->order('g.id desc')->limit(10)->findAll();
+        $groupbuy=array(
+            'imgs'=>$imgs3[0],
+            'list'=>$groupbuy,
+            'end_time'=>isset($groupbuy[0]['end_time'])?$groupbuy[0]['end_time']:date('Y-m-d H:i:s'),
+            'now'=>date('Y-m-d H:i:s')
+            );
         $content = array(
             'flash'=>$flash,
-            'point'=>$point
+            'point'=>$point,
+            'groupbuy'=>$groupbuy
             );
         $this->code = 0;
         $this->content = $content;
