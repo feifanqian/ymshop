@@ -3,17 +3,28 @@
 {echo:JS::import('dialogtools');}
 {echo:JS::import('form');}
 <!--S 产品展示-->
-{query:name=groupbuy as gb fields=*,gb.id as id join=left join goods as go on gb.goods_id eq go.id  order=is_end , goods_num desc limit=12 page=1 id=$groupbuy}
-<div class=" bg-white m_20 mt20">
-        <div class="img tc box-header mb20"><a href="{url:/index/groupbuy/id/$item[id]}"><img src="{echo:Common::thumb($item['img'],367,367)}" width="100%" ></a></div>
-        <div class="p20 ">
-            <ul class="list">
-                <li class=" item plr20"><a href="{url:/index/product/id/$item[id]}">{$item['name']}</a></li>
-                <li class="clearfix"><span class="price fl">团购价：<b class="red">{$currency_symbol}{$item['price']}</b></span><span class="market_price fr">{$item['order_num']}人已购买</span></li>
-                <li class="tr">{if:$item['is_end']==0}<a href="{url:/index/groupbuy/id/$item[id]}" class="btn btn-mini">团购</a>{else:}<span class="btn btn-mini btn-disable">已结束</span>{/if}</li>
-            </ul>
-        </div>
+<div class="weui_panel weui_panel_access product-list">
+    <div class="weui_panel_bd">
+        
+            {query:name=groupbuy as gb fields=gb.*,go.sell_price join=left join goods as go on gb.goods_id eq go.id  order=is_end , goods_num desc where=gb.is_end eq 1 limit=12 page=1 id=$groupbuy}                  
+            <a href="{url:/index/groupbuy/id/$item[id]}" class="weui_media_box weui_media_appmsg">
+                <div class="weui_media_hd">
+                    <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],100,100)}" alt="">
+                </div>
+                <div class="weui_media_bd">
+                    <h4 class="weui_media_title">{$item['name']}</h4>
+                    
+                    <p class="weui_media_desc" style="color:red;">{$currency_symbol}{$item['price']}<span style="color: white;background-color:red; ">{$item['min_num']}人团</span></p>      
+                    
+                    <p class="weui_media_desc" style="text-decoration:line-through;">{$currency_symbol}{$item['sell_price']}</p>
+                    
+                    <p class="weui_media_desc" style="display: block;width:40px;border-radius: 8px;background-color: #4e90ff;color: white;">团购</p>
+                    
+                </div>
+            </a>        
+         {/query}
+    </div>
 </div>
-{/list} 
+
 <div class=" plr20 pb20 tc page-nav">{echo:$groupbuy->pageBar(5);}</div>
 <!--E 产品展示-->
