@@ -75,6 +75,11 @@ class GroupbuyAction extends Controller
                 return;
             } else {
                 $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$join_id)->find();
+                $joined = $this->model->table('groupbuy_log')->where('join_id='.$join_id.' and pay_status=1')->find();
+                if($joined) {
+                    $this->code = 1282;
+                    return;
+                }
                 if(time()>strtotime($groupbuy_join['end_time'])) {
                     $this->code = 1281;
                     return;

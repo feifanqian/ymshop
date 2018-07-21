@@ -38,8 +38,11 @@
            <div style="width: 60px;height: 60px;border-radius: 50%;">
               <img src="{echo:Common::thumb($item['users']['avatar'],60,60)}" width="60" height="60">
               <span>还差{$item['need_num']}人</span>
+              <span>剩余<div class="count" id="qiangtimer" data-remainseconds="{echo:(strtotime($item['end_time'])-time())*1000}"><span class="hour-node">00</span>:<span class="minute-node">00</span>:<span class="second-node">00</span></div></span>
             </div>
         </div>
+        {/list}
+        
         {/if}
         {if:$goods['order_num']>=$goods['min_num']}
         <p><i class="iconfont icon-favourite"></i>团购成功，可继续购买!</p>

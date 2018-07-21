@@ -877,7 +877,7 @@ class CashierAction extends Controller
         $last_month_settle_income = $last_month_settle_income;
 
         $this->code = 0;
-        $this->content['total_income'] = $total_income;
+        $this->content['total_income'] = sprintf('%.2f',$total_income);
         $this->content['last_month_settle_income'] = $last_month_settle_income;
         $this->content['this_month_expect_income'] = $this_month_expect_income;
         $this->content['last_month_expect_income'] = $last_month_expect_income;
