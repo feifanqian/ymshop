@@ -139,6 +139,8 @@ class GroupbuyAction extends Controller
                 unset($info['groupbuy_join_list'][$k]['end_time']);
             }
             $info['groupbuy_join_list'] = array_values($info['groupbuy_join_list']);
+        } else {
+            $info['groupbuy_join_list'] = [];
         }
         $info['specs'] = array_values(unserialize($goods['specs']));
         if($info['specs']!=null && is_array($info['specs'])) {
