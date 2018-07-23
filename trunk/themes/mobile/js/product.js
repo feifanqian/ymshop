@@ -86,9 +86,9 @@ $(function () {
                 var product = currentProduct();
                 var num = parseInt($("#buy-num").val());
                 var type = $(this).attr("data-type");
-                // console.log(type);return false;
                 if (type == "groupbuy") {
-                    var url = Product.groupBuyUrl + product['id'];
+                    var target = $(this).attr("data-target");
+                    var url = Product.groupBuyUrl + product['id']+'/target/'+target;
                     location.href = url;
                 } else if (type == "flashbuy") {
                     var url = Product.flashBuyUrl + product['id'];

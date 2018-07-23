@@ -1122,6 +1122,10 @@ class SimpleController extends Controller {
                     $start_diff = time() - strtotime($item['start_time']);
                     $end_diff = time() - strtotime($item['end_time']);
                     if ($item['is_end'] == 0 && $start_diff >= 0 && $end_diff < 0 && $item['store_nums'] > 0) {
+                        $target = Filter::int(Req::args('target'));
+                        if($target==1) {
+                            $item['price'] = $item['sell_price']; //原价
+                        }
                         $product = $this->packGroupbuyProducts($item);
                         $this->assign("product", $product);
                     } else {
