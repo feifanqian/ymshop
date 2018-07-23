@@ -2155,7 +2155,7 @@ class IndexController extends Controller {
         }
 
         $img_default = array();
-        for($i=0;$i = $info['min_num']-$info['need_num'];$i++) {
+        for($i=0;$i <$info['need_num'];$i++) {
             $img_default[$i]['src'] = '/themes/mobile/images/group_default_avatar.png';  
         }
         $this->assign('img_default', $img_default);
