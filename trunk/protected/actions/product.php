@@ -1016,19 +1016,21 @@ class ProductAction extends Controller {
                         ->fields("re.*,re.id as id,us.name as uname,us.avatar,og.spec")
                         ->where($where)->order("re.id desc")->findPage($page, 10, $pagetype, true);
         $data = $review['data'];
-        foreach ($data as $key => $value) {
-            $data[$key]['point'] = round($data[$key]['point'] / 5, 2) * 100;
-            $data[$key]['avatar'] = $value['avatar'] != '' ? (substr($value['avatar'], 0, 4) == 'http' ? $value['avatar'] : Url::urlFormat("@" . $value['avatar'])) : "https://unsplash.it/200/200?image=".$value['id'];
-            $data[$key]['uname'] = $value['uname']!=''?TString::msubstr($value['uname'], 0, 3, 'utf-8', '***'):"u00****";
-            $spec = unserialize($value['spec']);
-            $speclist = array();
-            if (is_array($spec)) {  
-                foreach ($spec as $sp) {
-                    $speclist[] = $sp['value'][2];
+        if($data!=null && is_array($data)) {
+            foreach ($data as $key => $value) {
+                $data[$key]['point'] = round($data[$key]['point'] / 5, 2) * 100;
+                $data[$key]['avatar'] = $value['avatar'] != '' ? (substr($value['avatar'], 0, 4) == 'http' ? $value['avatar'] : Url::urlFormat("@" . $value['avatar'])) : "https://unsplash.it/200/200?image=".$value['id'];
+                $data[$key]['uname'] = $value['uname']!=''?TString::msubstr($value['uname'], 0, 3, 'utf-8', '***'):"u00****";
+                $spec = unserialize($value['spec']);
+                $speclist = array();
+                if (is_array($spec)) {  
+                    foreach ($spec as $sp) {
+                        $speclist[] = $sp['value'][2];
+                    }
                 }
+                $data[$key]['spec'] = implode(' / ', $speclist);
             }
-            $data[$key]['spec'] = implode(' / ', $speclist);
-        }
+        }   
 
         $this->code = 0;
         $this->content = array(

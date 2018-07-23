@@ -2155,6 +2155,7 @@ class IndexController extends Controller {
         $this->assign('info', $info);
         $this->assign('skumap', $skumap);
         $this->assign('groupbuy_id', $groupbuy_id);
+        $this->assign('seo_title', "拼单详情");
         $this->redirect();
     }
 }
