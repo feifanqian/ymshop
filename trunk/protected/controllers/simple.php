@@ -1428,7 +1428,7 @@ class SimpleController extends Controller {
                        $last_id = $model->table('groupbuy_join')->data($data)->insert();
                        $log = array(
                         'join_id'     => $last_id,
-                        'groupbuy_id' => $groupbuy_id,
+                        'groupbuy_id' => $id,
                         'user_id'     => $this->user['id'],
                         'join_time'   => date('Y-m-d H:i:s')
                         );
