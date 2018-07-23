@@ -2154,6 +2154,7 @@ class IndexController extends Controller {
         }
         $this->assign('info', $info);
         $this->assign('skumap', $skumap);
+        $this->assign('groupbuy_id', $groupbuy_id);
         $this->redirect();
     }
 }

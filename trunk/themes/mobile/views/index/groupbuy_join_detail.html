@@ -27,7 +27,7 @@
 </div>
 
 <script>
-    var groupbuy_id = "{$info['groupbuy_id']}";
+    // var groupbuy_id = "{$info['groupbuy_id']}";
     var Product = {
     skuMap : {echo:JSON::encode($skumap)},
             cartUrl : "{url:/simple/cart}",
@@ -36,8 +36,8 @@
             addGoodsCartUrl : "{url:/index/goods_add}",
             goodsOrderUrl : "{url:/simple/order/cart_type/goods}",
             directUrl : "{url:/simple/order_info/type/direct}",
-            groupBuyUrl : "{url:/simple/order_info/type/groupbuy/id/"+groupbuy_id+"/pid/}",
-            id : groupbuy_id,
+            groupBuyUrl : "{url:/simple/order_info/type/groupbuy/id/$groupbuy_id/pid/}",
+            id : "{$groupbuy_id}",
             currency : "{$currency_symbol}",
     };
 </script>
