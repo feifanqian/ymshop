@@ -2087,4 +2087,72 @@ class IndexController extends Controller {
         $this->assign('seo_title', "圆梦共享网");
         $this->redirect();
     }
+
+    public function groupbuy_join_detail()
+    {
+        if($this->user['id']==null) {
+            $this->redirect('/simple/login');
+        }
+        $groupbuy_id = Filter::int(Req::args('groupbuy_id'));
+        $join_id = Filter::int(Req::args('join_id'));
+        $groupbuy = $this->model->table('groupbuy')->where('id='.$groupbuy_id)->find();
+        if(!$groupbuy_id) {
+            $this->redirect("msg", false, array('type' => 'fail', 'msg' => '未找到该拼团商品'));
+        }
+        $goods = $this->model->table('goods as g')->fields('g.id,g.name,g.img,g.imgs,g.sell_price,g.content,g.specs,p.id as product_id,g.store_nums')->join('left join products as p on g.id = p.goods_id')->where('g.id='.$groupbuy['goods_id'])->find();
+        $first = $this->model->table('groupbuy_log')->fields('join_time')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->order('id asc')->find();
+        $info['groupbuy_id'] = $groupbuy_id;
+        $info['goods_id'] = $groupbuy['goods_id'];
+        $info['product_id'] = $goods['product_id'];
+        $info['name'] = $goods['name'];
+        $info['img'] = $goods['img'];
+        $info['price'] = $groupbuy['price'];
+        $info['store_nums'] = $goods['store_nums'];
+        $info['specs'] = array_values(unserialize($goods['specs']));
+        if($info['specs']!=null && is_array($info['specs'])) {
+            foreach ($info['specs'] as $k => &$v) {
+                $v['value'] = array_values($v['value']);
+            }
+        }
+        $skumap = array();
+        $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = ".$groupbuy['goods_id'])->findAll();
+        if ($products) {
+            foreach ($products as $product) {
+                $skumap[$product['specs_key']] = $product;
+            }
+        }
+        $info['skumap'] = array_values($skumap);
+        $info['min_num'] = $groupbuy['min_num'];
+        $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->count();
+        $info['start_time'] = $first['join_time'];
+        $info['need_num'] = $info['min_num'] - $info['had_join_num'];
+        $info['end_time'] = date("Y-m-d H:i:s",strtotime('+1 day',strtotime($first['join_time'])));
+        $info['current_time'] = date('Y-m-d H:i:s');
+        
+        $info['groupbuy_join_list']['join_id'] = $join_id;
+        $info['groupbuy_join_list']['need_num'] = $info['min_num'] - $info['had_join_num'];
+        
+        $users = $this->model->table('groupbuy_log as gl')->join('left join user as u on gl.user_id=u.id')->fields('u.nickname,u.avatar')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.join_id='.$join_id.' and gl.pay_status=1')->order('gl.join_time asc')->findAll();
+        $info['groupbuy_join_list']['users'] = $users;
+        $info['groupbuy_join_list']['remain_time'] = $this->timediff(time(),strtotime($info['end_time']));
+        
+        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status=1')->find();
+        if($joined && $info['had_join_num']>=$info['min_num']) {
+            $info['status'] = '拼团成功';
+        } elseif ($joined && $info['had_join_num']<$info['min_num'] && time()>=strtotime($info['end_time'])) {
+            $info['status'] = '拼团失败';
+        } elseif ($joined && $info['had_join_num']<$info['min_num'] && time()<strtotime($info['end_time'])) {
+            $info['status'] = '邀请好友';
+        } elseif ($joined==null && $info['had_join_num']>=$info['min_num'] && time()>=strtotime($info['end_time'])) {
+            $info['status'] = '活动已结束';
+        } elseif ($joined==null && $info['had_join_num']>=$info['min_num'] && time()<strtotime($info['end_time'])) {
+            $info['status'] = '拼团人数已满';
+        } elseif ($joined==null && $info['had_join_num']<$info['min_num'] && time()<strtotime($info['end_time'])) {
+            $info['status'] = '我要参团';
+        } else {
+            $info['status'] = '拼团中';
+        }
+        $this->assign('info', $info);
+        $this->redirect();
+    }
 }

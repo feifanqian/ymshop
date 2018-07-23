@@ -141,6 +141,7 @@ class GroupbuyAction extends Controller
                 $user_id = $user_ids[0];
                 $info['groupbuy_join_list'][$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$user_id)->find();
                 $info['groupbuy_join_list'][$k]['remain_time'] = $this->timediff(time(),strtotime($v['end_time']));
+                $info['groupbuy_join_list'][$k]['remain_seconds'] = strtotime($v['end_time'])-time();
                 unset($info['groupbuy_join_list'][$k]['end_time']);
             }
             $info['groupbuy_join_list'] = array_values($info['groupbuy_join_list']);
@@ -230,6 +231,7 @@ class GroupbuyAction extends Controller
         $users = $this->model->table('groupbuy_log as gl')->join('left join user as u on gl.user_id=u.id')->fields('u.nickname,u.avatar')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.join_id='.$join_id.' and gl.pay_status=1')->order('gl.join_time asc')->findAll();
         $info['groupbuy_join_list']['users'] = $users;
         $info['groupbuy_join_list']['remain_time'] = $this->timediff(time(),strtotime($info['end_time']));
+        $info['groupbuy_join_list']['remain_seconds'] = strtotime($info['end_time'])-time();
         
         $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status=1')->find();
         if($joined && $info['had_join_num']>=$info['min_num']) {

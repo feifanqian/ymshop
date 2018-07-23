@@ -1,0 +1,43 @@
+<link type="text/css" rel="stylesheet" href="{url:#css/product.css}" />
+<script type="text/javascript" charset="UTF-8" src="{url:#js/common.js}"></script>
+<script type="text/javascript" src="{url:#js/city-picker.js}" charset="utf-8"></script>
+<script src="{url:#js/swiper.min.js}"></script>
+<style type="text/css">
+
+</style>
+<div class="weui_panel weui_panel_access product-list">
+    <div class="weui_panel_bd">               
+        <a href="{url:/index/groupbuy/id/$info['groupbuy_id']}" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd" style="width: 120px;height: 120px;">
+                <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($info['img'],120,120)}" alt="">
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">{$info['name']}</h4>
+                    
+                <p class="weui_media_desc"><span style="color:red;display: inline-block;">￥{$info['price']}</span><span style="color: white;background-color:red;display: inline-block;width: 50px;height:20px;line-height: 20px;text-align: center;margin-left: 10px; ">{$info['min_num']}人团</span></p>      
+                    
+                <!-- <p class="weui_media_desc">
+                         <span style="text-decoration:line-through;display: inline-block;">原价￥{$info['sell_price']}</span>
+                         <span style="display: inline-block;width:70px;height:26px;line-height: 26px;text-align: center;border-radius: 12px;background-color: #4e90ff;color: white;float: right;margin-right: 10%;">去开团</span>
+                </p> -->
+                    
+            </div>
+        </a>        
+    </div>
+</div>
+
+<script>
+    var Product = {
+    skuMap : {echo:JSON::encode($skumap)},
+            cartUrl : "{url:/simple/cart}",
+            attentionUrl : "{url:/index/attention}",
+            addCartUrl : "{url:/index/cart_add}",
+            addGoodsCartUrl : "{url:/index/goods_add}",
+            goodsOrderUrl : "{url:/simple/order/cart_type/goods}",
+            directUrl : "{url:/simple/order_info/type/direct}",
+            groupBuyUrl : "{url:/simple/order_info/type/groupbuy/id/$id/pid/}",
+            id : "{$id}",
+            currency : "{$currency_symbol}",
+    };
+</script>
+<script type="text/javascript" src="{url:#js/product.js}" charset="utf-8"></script>
