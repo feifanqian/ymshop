@@ -2121,7 +2121,7 @@ class IndexController extends Controller {
                 $skumap[$product['specs_key']] = $product;
             }
         }
-        $info['skumap'] = array_values($skumap);
+        // $info['skumap'] = array_values($skumap);
         $info['min_num'] = $groupbuy['min_num'];
         $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->count();
         $info['start_time'] = $first['join_time'];
@@ -2153,6 +2153,7 @@ class IndexController extends Controller {
             $info['status'] = '拼团中';
         }
         $this->assign('info', $info);
+        $this->assign('skumap', $info['skumap']);
         $this->redirect();
     }
 }
