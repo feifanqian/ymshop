@@ -49,6 +49,7 @@
         {/if}
         {if:time()>strtotime($goods['start_time'])}
             <p><span class="red f16"><i class="iconfont icon-my1"></i> <b>{$goods['order_num']}</b></span>人已购买</p>
+            <span class="f14"> <i class="iconfont icon-clock"></i> 剩余时间：</span><strong class="f14"><span id="countdown1"  style="color:#666; "></span></strong>
             {if:$groupbuy_join_list!=null}
             <p><span class="f18">以下小伙伴正在发起拼团</span></p>
             {list:$items=$groupbuy_join_list}
@@ -84,7 +85,6 @@
             {else:}
             <p><i class="iconfont icon-favourite"></i>团购数量有限，下单要快哟!</p>
             {/if} -->
-            <span class="f14"> <i class="iconfont icon-clock"></i> 剩余时间：</span><strong class="f14"><span id="countdown1"  style="color:#666; "></span></strong>
 
             <script type="text/javascript">
                 $("#countdown1").countdown({remainseconds:"{echo:(strtotime($goods['end_time'])-time())*1000}", callback:function(){

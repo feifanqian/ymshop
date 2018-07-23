@@ -1113,6 +1113,7 @@ class SimpleController extends Controller {
         $id = Filter::int(Req::args('id'));
         $product_id = Req::args('pid');
         $type = Req::args("type");
+        $target = Filter::int(Req::args('target'));
         if ($this->checkOnline()) {
             if ($type == 'groupbuy') {
                 $product_id = Filter::int($product_id);
@@ -1122,7 +1123,7 @@ class SimpleController extends Controller {
                     $start_diff = time() - strtotime($item['start_time']);
                     $end_diff = time() - strtotime($item['end_time']);
                     if ($item['is_end'] == 0 && $start_diff >= 0 && $end_diff < 0 && $item['store_nums'] > 0) {
-                        $target = Filter::int(Req::args('target'));
+                        
                         if($target==1) {
                             $item['price'] = $item['sell_price']; //原价
                         }
@@ -1245,6 +1246,7 @@ class SimpleController extends Controller {
             $this->assign("paytypelist", $paytypelist);
             $this->assign("id", $id);
             $this->assign("order_type", $type);
+            $this->assign("target", $target);
             $this->assign("pid", $product_id);
             $this->parserOrder();
             $this->redirect();
@@ -1347,12 +1349,13 @@ class SimpleController extends Controller {
             $user_remark = Filter::txt(Req::args('user_remark'));
             $voucher_id = Filter::int(Req::args('voucher'));
             $cart_type = Req::args('cart_type');
-            
+            $target = Filter::int(Req::args('target'));
             //非普通促销信息
             $type = Req::args("type");
             $id = Filter::int(Req::args('id'));
             $product_id = Req::args('product_id');
             $buy_num = Req::args('buy_num');
+            $log_id = 0;
             if (!$address_id || !$payment_id || ($is_invoice == 1 && $invoice_title == '')) {
                 if (is_array($product_id)) {
                     foreach ($product_id as $key => $val) {
@@ -1408,6 +1411,30 @@ class SimpleController extends Controller {
                     $data['prom'] = serialize($groupbuy);
                     $data['prom_id'] = $id;
                     $order_type = 1;
+                    if($target==2) {
+                        //开团
+                        $remain_time = strtotime($groupbuy['end_time'])-time();
+                        $data = array(
+                        'groupbuy_id' => $id,
+                        'user_id'     => $this->user['id'],
+                        'goods_id'    => $groupbuy['goods_id'],
+                        'join_time'   => date('Y-m-d H:i:s'),
+                        'end_time'    => date('Y-m-d H:i:s',strtotime('+1 day')),
+                        'need_num'    => $groupbuy['min_num']-1,
+                        'remain_time' => $remain_time,
+                        'status'      => 0
+                        );
+                    
+                       $last_id = $model->table('groupbuy_join')->data($data)->insert();
+                       $log = array(
+                        'join_id'     => $last_id,
+                        'groupbuy_id' => $groupbuy_id,
+                        'user_id'     => $this->user['id'],
+                        'join_time'   => date('Y-m-d H:i:s')
+                        );
+                       $log_id = $this->model->table('groupbuy_log')->data($log)->insert();
+                    }
+
                 }else if ($type == "flashbuy") {//抢购处理
                     $product_id = Filter::int($product_id[0]);
                     $num = Filter::int($buy_num[0]);
@@ -1749,6 +1776,7 @@ class SimpleController extends Controller {
                     Cookie::clear('flag');
                 }
                 //===============================================
+                $data['join_id'] = $log_id;
                 //写入订单数据
                 $order_id = $model->table("order")->data($data)->insert();
                 //扣除能使用的积分
