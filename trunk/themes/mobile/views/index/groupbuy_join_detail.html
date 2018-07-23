@@ -5,7 +5,7 @@
 <style type="text/css">
 
 </style>
-<div class="weui_panel weui_panel_access product-list">
+<div class="weui_panel weui_panel_access product-list" style="margin-top: 10%;">
     <div class="weui_panel_bd">               
         <a href="/index/groupbuy/id/{$info['groupbuy_id']}" class="weui_media_box weui_media_appmsg">
             <div class="weui_media_hd" style="width: 120px;height: 120px;">
@@ -14,7 +14,10 @@
             <div class="weui_media_bd">
                 <h4 class="weui_media_title">{$info['name']}</h4>
                     
-                <p class="weui_media_desc"><span style="color:red;display: inline-block;">￥{$info['price']}</span><span style="color: white;background-color:red;display: inline-block;width: 50px;height:20px;line-height: 20px;text-align: center;margin-left: 10px; ">{$info['min_num']}人团</span></p>      
+                <p class="weui_media_desc">
+                   <span style="color: white;background-color:#4e90ff;display: inline-block;width: 50px;height:20px;line-height: 20px;text-align: center;margin-left: 10px; ">{$info['min_num']}人团</span>
+                   <span style="color:#d1470a;display: inline-block;float: right;">拼团价格￥{$info['price']}</span>
+                </p>      
                     
                 <!-- <p class="weui_media_desc">
                          <span style="text-decoration:line-through;display: inline-block;">原价￥{$info['sell_price']}</span>
