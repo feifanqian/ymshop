@@ -2153,7 +2153,7 @@ class IndexController extends Controller {
             $info['status'] = '拼团中';
         }
         $this->assign('info', $info);
-        $this->assign('skumap', $info['skumap']);
+        $this->assign('skumap', $skumap);
         $this->redirect();
     }
 }
