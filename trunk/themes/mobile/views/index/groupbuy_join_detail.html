@@ -32,11 +32,11 @@
 </div>
 <div style="width: 100%;height: 10px;background-color: #f3f3f3;"></div>
 <div style="width: 90%;margin-left: 4%;">
-    <h3 style="display: inline-block;color:#666;">拼团说明</h3><span style="color: #4e90ff;float: right;margin-right: 10px;">详细规则</span><br/>
+    <h3 style="display: inline-block;color:#666;margin-top: 10px;">拼团说明</h3><span style="color: #4e90ff;float: right;margin-right: 10px;margin-top: 10px;">详细规则</span><br/>
     {if:$info['need_num']>0}
-    <img src="/themes/mobile/images/group_invite_friends.png" style="width: 100%;">
+    <img src="/themes/mobile/images/group_invite_friends.png" style="width: 100%;margin-top: 20px;">
     {else:}
-    <img src="/themes/mobile/images/group_step_description.png" style="width: 100%;">
+    <img src="/themes/mobile/images/group_step_description.png" style="width: 100%;margin-top: 20px;">
     {/if}
 </div>
 
@@ -54,7 +54,7 @@
    <span>已结束</span>
    {/if}
 </div>
-<div>
+<div style="margin-top: 30px;">
   {if:$info['groupbuy_join_list']['users']!=null}
   {list:items = $info['groupbuy_join_list']['users']}
   <span style="display: inline-block;width:60px;height: 60px;margin-left:20px;float: left;">
