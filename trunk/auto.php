@@ -343,7 +343,7 @@ class LinuxCliTask{
                 if($order['join_id']!=0) {
                     $where = 'gl.join_id='.$v['join_id'].' and gj.need_num=0 and gj.status!=3 and gl.pay_status=1 and UNIX_TIMESTAMP(gj.end_time)>'.$now;
                 } else {
-                    $where = 'gl.groupbuy_id='.$v['prom_id'].' and gl.user_id='.$v['user_id']' and gj.need_num=0 and gj.status!=3 and gl.pay_status=1 and UNIX_TIMESTAMP(gj.end_time)>'.$now;
+                    $where = 'gl.groupbuy_id='.$v['prom_id'].' and gl.user_id='.$v['user_id'].' and gj.need_num=0 and gj.status!=3 and gl.pay_status=1 and UNIX_TIMESTAMP(gj.end_time)>'.$now;
                 }
                 $groupbuy_join = $this->model->table('groupbuy_log as gl')->fields('gl.join_id,gj.user_id')->join('left join groupbuy_join as gj on gl.join_id=gj.id')->where($where)->findAll();
                 if($groupbuy_join) {
