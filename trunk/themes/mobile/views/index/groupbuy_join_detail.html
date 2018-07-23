@@ -7,7 +7,7 @@
 </style>
 <div class="weui_panel weui_panel_access product-list" style="margin-top: 10%;">
     <div class="weui_panel_bd">               
-        <a href="/index/groupbuy/id/{$info['groupbuy_id']}" class="weui_media_box weui_media_appmsg">
+        <a href="/index/groupbuy/id/{$info['groupbuy_id']}" class="weui_media_box weui_media_appmsg" style="background-color: #f3f3f3;">
             <div class="weui_media_hd" style="width: 120px;height: 120px;">
                 <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($info['img'],120,120)}" alt="">
             </div>
@@ -25,25 +25,25 @@
 </div>
 
 <div>
-  <p class="weui_media_desc" style="margin-top: 10%;">
-        <span style="color: black;">参团人数：{$info['had_join_num']}</span><br/>
-        <span style="color: black;">开团时间：{$info['start_time']}</span>
+  <p class="weui_media_desc" style="margin-top: 10%;margin-left: 4%;">
+        <span style="color: black;font-size: 16px;">参团人数：{$info['had_join_num']}人</span><br/>
+        <span style="color: black;font-size: 16px;">开团时间：{$info['start_time']}</span>
   </p>
 </div>
-
-<div>
-<h3>拼团说明</h3><span style="color: #4e90ff;float: right;margin-right: 10px;">详细规则</span><br/>
-{if:$info['need_num']>0}
-<img src="/themes/mobile/images/group_invite_friends.png" style="width: 100%;">
-{else:}
-<img src="/themes/mobile/images/group_step_description.png" style="width: 100%;">
-{/if}
+<div style="width: 100%;height: 10px;background-color: #f3f3f3;"></div>
+<div style="width: 90%;margin-left: 4%;">
+    <h3 style="display: inline-block;color:#666;">拼团说明</h3><span style="color: #4e90ff;float: right;margin-right: 10px;">详细规则</span><br/>
+    {if:$info['need_num']>0}
+    <img src="/themes/mobile/images/group_invite_friends.png" style="width: 100%;">
+    {else:}
+    <img src="/themes/mobile/images/group_step_description.png" style="width: 100%;">
+    {/if}
 </div>
 
 <div>
-   <span style="display:inline-block;color: black;margin-top: 30%;">还差<b style="color: #d1470a;font-size: 30px;">{echo:$info['min_num']-$info['had_join_num']}</b>人拼团成功</span><br/>
+   <span style="display:inline-block;color: black;margin-left: 30%;">还差<b style="color: #d1470a;font-size: 30px;">{echo:$info['min_num']-$info['had_join_num']}</b>人拼团成功</span><br/>
    {if:strtotime($info['end_time'])-time()>0}
-   <span class="count" id="qiangtimer1" data-remainseconds="{echo:(strtotime($info['end_time'])-time())*1000}">剩余<span class="hour-node">00</span>:<span class="minute-node">00</span>:<span class="second-node">00</span>结束</span>
+   <span class="count" id="qiangtimer1" style="margin-left: 25%;font-size: 20px;" data-remainseconds="{echo:(strtotime($info['end_time'])-time())*1000}">剩余<span class="hour-node">00</span>:<span class="minute-node">00</span>:<span class="second-node">00</span>结束</span>
    <script type="text/javascript">
         if ( $("#qiangtimer1").data("remainseconds")> 0) {
                 $("#qiangtimer1").countdown({remainseconds: $("#qiangtimer1").data("remainseconds"), format: '剩余<span class="hour-node">{h}</span>:<span class="minute-node">{m}</span>:<span class="second-node">{s}</span>结束', callback: function () {
@@ -57,11 +57,15 @@
 <div>
   {if:$info['groupbuy_join_list']['users']!=null}
   {list:items = $info['groupbuy_join_list']['users']}
-  <span style="display: inline-block;width:60px;height: 60px;margin-left:10px;float: left;">
+  <span style="display: inline-block;width:60px;height: 60px;margin-left:20px;float: left;">
       <img src="{echo:Common::thumb($item['avatar'],60,60)}" width="60" height="60" style="border-radius: 60px;">
   </span>
   {/list}
-  
+  {foreach:items=$img_default key=$k item=$item}
+     <span style="display: inline-block;width:60px;height: 60px;margin-left:20px;float: left;">
+      <img src="{echo:Common::thumb($item['src'],60,60)}" width="60" height="60" style="border-radius: 60px;">
+    </span>       
+  {/foreach}
   {/if}
 </div>
 <script>

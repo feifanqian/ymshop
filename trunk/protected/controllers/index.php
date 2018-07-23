@@ -463,6 +463,7 @@ class IndexController extends Controller {
                     $groupbuy_join_list[$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$user_id)->find();
                 }
                 $groupbuy_join_list = array_values($groupbuy_join_list);
+                $groupbuy_join_list = array_slice($groupbuy_join_list,0,2);
             }
             $this->assign('groupbuy_join_list', $groupbuy_join_list);
             $this->assign('seo_title', $goods['title']);
@@ -2152,6 +2153,12 @@ class IndexController extends Controller {
         } else {
             $info['status'] = '拼团中';
         }
+
+        $img_default = array();
+        for($i=0;$i = $info['min_num']-$info['need_num'];$i++) {
+            $img_default[$i]['src'] = '/themes/mobile/images/group_default_avatar.png';  
+        }
+        $this->assign('img_default', $img_default);
         $this->assign('info', $info);
         $this->assign('skumap', $skumap);
         $this->assign('groupbuy_id', $groupbuy_id);
