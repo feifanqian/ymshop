@@ -449,16 +449,16 @@ class SimpleController extends Controller {
         // if($type!='wechat'){
         //     var_dump($type);die;
         // }
-        if (!empty($userinfo)) {
+        if (!empty($userinfo) && isset($userinfo['unionid'])) {
             $oauth_user = $this->model->table('oauth_user');
             $is_oauth = $oauth_user->fields('user_id,unionid')
-                    ->where('open_id="' . $token['openid'] . '" and oauth_type="' . $type . '"')
+                    ->where('open_id="' . $token['openid'] . '" or  unionid="'.$userinfo['unionid'].'" and oauth_type="' . $type . '"')
                     ->find();
                     
             if ($is_oauth) {
                 //已绑定用户
                 if ($is_oauth['user_id'] > 0) {
-                    if($is_oauth['unionid']==null && isset($userinfo['unionid'])) {
+                    if($is_oauth['unionid']==null) {
                         $oauth_user->data(['unionid'=>$userinfo['unionid']])->where('user_id='.$is_oauth['user_id'])->update();
                     } 
                     
