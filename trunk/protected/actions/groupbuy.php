@@ -323,7 +323,7 @@ class GroupbuyAction extends Controller
         //     $list = [];
         // }
 
-        $list = $this->model->table('groupbuy_log as gl')->fields('gl.id as log_id,gl.join_id,gl.groupbuy_id as id,go.name,go.img,g.min_num,g.price,gj.end_time,gj.status,o.id as order_id,og.product_id')->join('left join groupbuy as g on gl.groupbuy_id=g.id left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on gl.join_id=gj.id left join order as o on gl.id=o.join_id left join order_goods as og on o.id=og.order_id')->where('gl.user_id='.$this->user['id'].' and gl.pay_status=1')->order('id desc')->findPage($page,10);
+        $list = $this->model->table('order as o')->fields('gl.id as log_id,gl.join_id,gl.groupbuy_id as id,go.name,go.img,g.min_num,g.price,gj.end_time,gj.status,o.id as order_id,og.product_id')->join('left join groupbuy_log as gl on o.join_id=gl.id left join order_goods as og on o.id=og.order_id left join groupbuy as g on gl.groupbuy_id=g.id left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on gl.join_id=gj.id')->where('gl.user_id='.$this->user['id'].' and gl.pay_status=1')->order('id desc')->findPage($page,10);
         if($list) {
             if($list['data']!=null) {
                 foreach ($list['data'] as $k => $v) {
@@ -340,6 +340,7 @@ class GroupbuyAction extends Controller
                         $list['data'][$k]['current_time'] = date('Y-m-d H:i:s');
                 }
             }
+            unset($list['html']);
         }
         
         $this->code = 0;
