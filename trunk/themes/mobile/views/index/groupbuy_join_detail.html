@@ -14,21 +14,56 @@
             <div class="weui_media_bd">
                 <h4 class="weui_media_title">{$info['name']}</h4>
                     
-                <p class="weui_media_desc">
+                <p class="weui_media_desc" style="margin-top: 20%;">
                    <span style="color: white;background-color:#4e90ff;display: inline-block;width: 50px;height:20px;line-height: 20px;text-align: center;margin-left: 10px; ">{$info['min_num']}人团</span>
-                   <span style="color:#d1470a;display: inline-block;float: right;">拼团价格￥{$info['price']}</span>
+                   <span style="color:#d1470a;display: inline-block;float: right;margin-right: 20px;">拼团价格￥{$info['price']}</span>
                 </p>      
-                    
-                <!-- <p class="weui_media_desc">
-                         <span style="text-decoration:line-through;display: inline-block;">原价￥{$info['sell_price']}</span>
-                         <span style="display: inline-block;width:70px;height:26px;line-height: 26px;text-align: center;border-radius: 12px;background-color: #4e90ff;color: white;float: right;margin-right: 10%;">去开团</span>
-                </p> -->
                     
             </div>
         </a>        
     </div>
 </div>
 
+<div>
+  <p class="weui_media_desc" style="margin-top: 10%;">
+        <span style="color: black;">参团人数：{$info['had_join_num']}</span><br/>
+        <span style="color: black;">开团时间：{$info['start_time']}</span>
+  </p>
+</div>
+
+<div>
+<h3>拼团说明</h3><span style="color: #4e90ff;float: right;margin-right: 10px;">详细规则</span><br/>
+{if:$info['need_num']>0}
+<img src="/themes/mobile/images/group_invite_friends.png" style="width: 100%;">
+{else:}
+<img src="/themes/mobile/images/group_step_description.png" style="width: 100%;">
+{/if}
+</div>
+
+<div>
+   <span style="display:inline-block;color: black;margin-top: 30%;">还差<b style="color: #d1470a;font-size: 30px;">{echo:$info['min_num']-$info['had_join_num']}</b>人拼团成功</span><br/>
+   {if:strtotime($info['end_time'])-time()>0}
+   <span class="count" id="qiangtimer1" data-remainseconds="{echo:(strtotime($info['end_time'])-time())*1000}">剩余<span class="hour-node">00</span>:<span class="minute-node">00</span>:<span class="second-node">00</span>结束</span>
+   <script type="text/javascript">
+        if ( $("#qiangtimer1").data("remainseconds")> 0) {
+                $("#qiangtimer1").countdown({remainseconds: $("#qiangtimer1").data("remainseconds"), format: '剩余<span class="hour-node">{h}</span>:<span class="minute-node">{m}</span>:<span class="second-node">{s}</span>结束', callback: function () {
+                    }});
+            }
+    </script>
+   {else:}
+   <span>已结束</span>
+   {/if}
+</div>
+<div>
+  {if:$info['groupbuy_join_list']['users']!=null}
+  {list:items = $info['groupbuy_join_list']['users']}
+  <span style="display: inline-block;width:60px;height: 60px;margin-left:10px;float: left;">
+      <img src="{echo:Common::thumb($item['avatar'],60,60)}" width="60" height="60" style="border-radius: 60px;">
+  </span>
+  {/list}
+  
+  {/if}
+</div>
 <script>
     // var groupbuy_id = "{$info['groupbuy_id']}";
     var Product = {

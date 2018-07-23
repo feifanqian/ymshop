@@ -356,6 +356,10 @@ class DistrictAction extends Controller {
             $this->code = 1257;
             return;
         }
+        if($exist['user_id']==$this->user['id']) {
+            $this->code = 1283;
+            return;
+        }
         $is_shop = $this->model->table('district_shop')->where('owner_id='.$exist['user_id'])->find();
         if(!$is_shop) {
             $this->code = 1258;
