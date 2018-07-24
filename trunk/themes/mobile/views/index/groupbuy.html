@@ -49,7 +49,16 @@
         {/if}
         {if:time()>strtotime($goods['start_time'])}
             <p><span class="red f16"><i class="iconfont icon-my1"></i> <b>{$goods['order_num']}</b></span>人已购买</p>
+            {if:time()>strtotime($goods['end_time'])}
             <span class="f14"> <i class="iconfont icon-clock"></i> 剩余时间：</span><strong class="f14"><span id="countdown1"  style="color:#666; "></span></strong>
+            <script type="text/javascript">
+                $("#countdown1").countdown({remainseconds:"{echo:(strtotime($goods['end_time'])-time())*1000}", callback:function(){
+                $.post("{url:/ajax/groupbuy_end}", {id:{$id}}, function(){
+                location.reload();
+                });
+                }});
+            </script>
+            {/if}
             {if:$groupbuy_join_list!=null}
             <div style="width: 100%;height: 10px;background-color: #f3f3f3;"></div>
             <p style="display: inline-block;margin-top: 14px;width: 100%;">
@@ -92,13 +101,6 @@
             <p><i class="iconfont icon-favourite"></i>团购数量有限，下单要快哟!</p>
             {/if} -->
 
-            <script type="text/javascript">
-                $("#countdown1").countdown({remainseconds:"{echo:(strtotime($goods['end_time'])-time())*1000}", callback:function(){
-                $.post("{url:/ajax/groupbuy_end}", {id:{$id}}, function(){
-                location.reload();
-                });
-                }});
-            </script>
         {else:}
         <p><i class="iconfont icon-remind"></i> 团购还没开始，请耐心等待...</p>
         <span class="f14"> <i class="iconfont icon-clock"></i> 距开始：</span><strong class="f14"><span id="countdown2"  style="color:#666; "></span></strong>
