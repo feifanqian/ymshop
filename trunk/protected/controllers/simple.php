@@ -1114,6 +1114,13 @@ class SimpleController extends Controller {
         $product_id = Req::args('pid');
         $type = Req::args("type");
         $target = Filter::int(Req::args('target'));
+        $join_id = Filter::int(Req::args('join_id'));
+        if(!$target) {
+            $target = 0;
+        }
+        if(!$join_id) {
+            $join_id = 0;
+        }
         if ($this->checkOnline()) {
             if ($type == 'groupbuy') {
                 $product_id = Filter::int($product_id);
@@ -1247,6 +1254,7 @@ class SimpleController extends Controller {
             $this->assign("id", $id);
             $this->assign("order_type", $type);
             $this->assign("target", $target);
+            $this->assign("join_id", $join_id);
             $this->assign("pid", $product_id);
             $this->parserOrder();
             $this->redirect();
