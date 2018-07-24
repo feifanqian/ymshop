@@ -1,0 +1,114 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+<!--S 产品展示-->
+<div class="weui_panel weui_panel_access product-list">
+    <div class="weui_panel_bd">
+        {if:count($list)>0}
+            {list:$items=$list}
+            <div>                  
+                <a href="{url:/index/groupbuy/id/$item[id]}" class="weui_media_box weui_media_appmsg">
+                    <div class="weui_media_hd" style="width: 120px;height: 120px;">
+                        <img class="weui_media_appmsg_thumb" src="{echo:Common::thumb($item['img'],120,120)}" alt="">
+                    </div>
+                    <div class="weui_media_bd">
+                        <h4 class="weui_media_title">{$item['name']}</h4>
+                        
+                        <p class="weui_media_desc">
+                           <span style="color:red;display: inline-block;">{$currency_symbol}{$item['price']}</span>
+                           <span style="color: white;background-color:red;display: inline-block;width: 50px;height:20px;line-height: 20px;text-align: center;margin-left: 10px; ">{$item['min_num']}人团</span>
+                           <span style="color:#4e90ff;float: right;margin-right: 2%;">{$item['join_status']}</span>
+                        </p>       
+                        
+                        
+                    </div>
+                </a>
+                <div>
+                   {if:$item['join_status']=='拼团中'}
+                   <span class="count" style="display: inline-block;" id="qiangtimer1-{$item['join_id']}" data-remainseconds="{echo:(strtotime($item['end_time'])-time())*1000}">剩余<span class="hour-node">00</span>:<span class="minute-node">00</span>:<span class="second-node">00结束</span></span>
+                   <script type="text/javascript">
+                   if ( $("#qiangtimer1-{$item['join_id']}").data("remainseconds")> 0) {
+                        $("#qiangtimer1-{$item['join_id']}").countdown({remainseconds: $("#qiangtimer1-{$item['join_id']}").data("remainseconds"), format: '剩余<span class="hour-node">{h}</span>:<span class="minute-node">{m}</span>:<span class="second-node">{s}结束</span>', callback: function () {
+                                
+                        }});
+                    }
+                   </script>
+                   <span style="display: inline-block;width: 200px;height: 40px;float:right;margin-right:4%;line-height: 40px;background-color:#4e90ff;border-radius:6px;color: white;text-align: center;font-size: 14px;" class="shareWechat" data-id="{$item['id']}" data-name="{$item['name']}">邀请好友参团</span>
+                   {else:}
+                   <a href="/index/groupbuy_join_detail/id/{$item['id']}" style="display: inline-block;width: 200px;height: 40px;float:right;margin-right:4%;line-height: 40px;background-color:white;border:1px solid #4e90ff;border-radius:6px;color: white;text-align: center;font-size: 14px;">查看拼团详情</a>
+                   {/if}
+                </div>
+            </div>        
+           {/list}
+        {/if}   
+    </div>
+</div>
+
+<div class=" plr20 pb20 tc page-nav">{echo:$groupbuy->pageBar(5);}</div>
+<!--E 产品展示-->
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
+<script>
+ wx.config({
+   debug:  false,  //调式模式，设置为ture后会直接在网页上弹出调试信息，用于排查问题
+   appId: '{$signPackage["appId"]}',
+   timestamp: '{$signPackage["timestamp"]}',
+   nonceStr: '{$signPackage["nonceStr"]}',
+   signature: '{$signPackage["signature"]}',
+   jsApiList: [  //需要使用的网页服务接口
+       // 'checkJsApi',  //判断当前客户端版本是否支持指定JS接口
+       'onMenuShareTimeline', //分享给好友
+       'onMenuShareAppMessage', //分享到朋友圈
+       'onMenuShareQQ',  //分享到QQ
+       'onMenuShareWeibo' //分享到微博
+   ]
+ });
+$('.shareWechat').on("click",function(){
+     layer.open({
+            type: 3,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['100%', '400px'], //宽高
+            content: "<img src='/themes/mobile/images/share.jpg'>"
+    });
+
+    var id = $(this).attr('data-id');
+    var name = $(this).attr('data-name');
+    var imgUrl = "http://www.ymlypt.com/static/yuanmeng1/activity_a/img/recruit/header.jpg";
+    // var lineLink = 'http://www.ymlypt.com/active/login/redirect/recruit/inviter/'+user_id;
+     var lineLink = 'http://www.ymlypt.com/index/groupbuy/id/'+id;
+    var descContent = name;
+    var shareTitle = '圆梦共享网';
+    // alert('share');
+    wx.ready(function () {   //ready函数用于调用API，如果你的网页在加载后就需要自定义分享和回调功能，需要在此调用分享函数。//如果是微信游戏结束后，需要点击按钮触发得到分值后分享，这里就不需要调用API了，可以在按钮上绑定事件直接调用。因此，微信游戏由于大多需要用户先触发获取分值，此处请不要填写如下所示的分享API
+        wx.onMenuShareAppMessage({  //例如分享到朋友圈的API  
+           title: shareTitle, // 分享标题
+           desc: descContent, 
+           link: lineLink, // 分享链接
+           imgUrl: imgUrl, // 分享图标
+           success: function () {
+               alert('分享成功');
+           },
+           cancel: function () {
+               // 用户取消分享后执行的回调函数
+               alert('取消分享');
+           }
+        });
+        wx.onMenuShareTimeline({
+            title: shareTitle, // 分享标题
+            desc: descContent, 
+            link: lineLink, // 分享链接
+            imgUrl: imgUrl, // 分享图标
+            success: function () {
+                alert('分享成功');
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+                alert('取消分享');
+            }
+        });
+    });
+});  
+wx.error(function (res) {
+ alert(res.errMsg);  //打印错误消息。及把 debug:false,设置为debug:ture就可以直接在网页上看到弹出的错误提示
+});
+</script>

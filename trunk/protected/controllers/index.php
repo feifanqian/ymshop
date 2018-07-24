@@ -2204,4 +2204,43 @@ class IndexController extends Controller {
         $this->assign('seo_title', "拼团中心");
         $this->redirect();
     }
+
+    public function my_active()
+    {
+        if($this->user['id']==null) {
+            $this->redirect('/simple/login');
+        }
+        $page = Filter::int(Req::args('page'));
+        if(!$page) {
+            $page = 1;
+        }
+        $list = $this->model->table('order as o')->fields('gl.id as log_id,gl.join_id,gl.groupbuy_id as id,go.name,go.img,g.min_num,g.price,gj.end_time,gj.status,o.id as order_id,og.product_id')->join('left join groupbuy_log as gl on o.join_id=gl.id left join order_goods as og on o.id=og.order_id left join groupbuy as g on gl.groupbuy_id=g.id left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on gl.join_id=gj.id')->where('gl.user_id='.$this->user['id'].' and gl.pay_status=1 and o.pay_status=1')->order('id desc')->findPage($page,10);
+        if($list) {
+            if($list['data']!=null) {
+                foreach ($list['data'] as $k => $v) {
+                    $had_join_num = $this->model->table('groupbuy_log')->where('id='.$v['log_id'].' and pay_status=1')->count();
+                        if($had_join_num>=$v['min_num']) {
+                            $list['data'][$k]['join_status'] = '拼团成功';
+                        } elseif ($had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
+                            $list['data'][$k]['join_status'] = '拼团失败';
+                        } elseif ($had_join_num<$v['min_num'] && time()<strtotime($v['end_time'])) {
+                            $list['data'][$k]['join_status'] = '拼团中';
+                        } else {
+                            $list['data'][$k]['join_status'] = '拼团中';
+                        }
+                        $list['data'][$k]['current_time'] = date('Y-m-d H:i:s');
+                        $list['data'][$k]['share_url'] = 'http://www.ymlypt.com/index/groupbuy/id/'.$v['id'];
+                }
+            }
+            unset($list['html']);
+        }
+        $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+        // $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+        // $token = $wechat->getAccessToken();
+        $jssdk = new JSSDK($wechatcfg['app_key'], $wechatcfg['app_secret']);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign("signPackage", $signPackage);
+        $this->assign('list', $list);
+        $this->redirect();
+    }
 }
