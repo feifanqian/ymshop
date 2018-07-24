@@ -356,6 +356,7 @@ class LinuxCliTask{
                         }
                     } 
                 }
+                $this->model->table('order')->data(['status'=>5,'pay_status'=>3])->where('id='.$v['id'])->update();
             }
         }
     }
