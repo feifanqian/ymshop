@@ -64,6 +64,9 @@ class CartAction extends Controller {
         $cart->modNum($id, $num);
        }
        if($uid) {
+        if($uid==42608) {
+        var_dump($uid);die;
+        }
          $products = $cart->all($uid);
        }else {
          $products = $cart->all();
