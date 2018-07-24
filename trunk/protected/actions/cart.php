@@ -62,7 +62,12 @@ class CartAction extends Controller {
        }else{
         $cart->modNum($id, $num);
        }
-        $products = $cart->all();
+       if($uid) {
+         $products = $cart->all($uid);
+       }else {
+         $products = $cart->all();
+       }
+        
         if($products){
              foreach ($products as $k =>$v){
             $products[$k]['spec'] =  array_values($products[$k]['spec']);

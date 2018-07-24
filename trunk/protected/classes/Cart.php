@@ -103,13 +103,13 @@ class Cart {
         return $sum;
     }
 
-    public function all() {
+    public function all($uid=0) {
         $products = array();
         if ($this->getCnt() > 0) {
             $model = new Model("products as pr");
             $ids = array_keys($this->items);
             $ids = trim(implode(",", $ids), ',');
-            $uid = $this->uid;
+            // $uid = $this->uid;
             $cart_model = new Model('cart');
             $idarr = $cart_model->fields('goods_id')->where('user_id='.$uid)->findAll();
             $idstr = '';

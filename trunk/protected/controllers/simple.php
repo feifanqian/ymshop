@@ -679,9 +679,14 @@ class SimpleController extends Controller {
         // if($this->user['id']==42608){
         //         var_dump($type);die;
         //     }
+        $uid = isset($this->user['id'])?$this->user['id']:0;
         if ($type == 'goods') {
             $cart = Cart::getCart('goods');
-            $this->cart = $cart->all();
+            if($uid) {
+                $this->cart = $cart->all($uid);
+            } else {
+                $this->cart = $cart->all();
+            }
             // if($this->user['id']==42608){
             //     var_dump($this->cart);die;
             // }
@@ -689,7 +694,12 @@ class SimpleController extends Controller {
             $this->assign("cart", $this->cart);
         }else{
             $cart = Cart::getCart();
-            $this->cart = $cart->all();
+            if($uid) {
+                $this->cart = $cart->all($uid);
+            } else {
+                $this->cart = $cart->all();
+            }
+            
             // if($this->user['id']==42608){
             //     var_dump($this->cart);die;
             // }
