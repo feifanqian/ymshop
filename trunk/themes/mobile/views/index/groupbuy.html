@@ -223,15 +223,15 @@
 </div>
 <div class="btn-bar ">
     <div class="weui-row weui-no-gutter">
-        <div class="weui-col-20" style="text-align: center;">
+        <!-- <div class="weui-col-20" style="text-align: center;">
             <a href="{url:/simple/cart}" id="view-cart">
                 <div class="product-cart">
                     <span class="cart-num tip">{echo:count($cart)}</span>
                     <i class="iconfont icon-cart"></i>
                 </div>
             </a>
-        </div>
-        <div class="weui-col-80">
+        </div> -->
+        <div class="weui-col-100">
             {if:$goods['is_end']==1}
             <a href="javascript:;" class="btn btn-gray"><i class="iconfont icon-next"></i>团购已结束</a>
             {elseif:time()< strtotime($goods['start_time'])}
