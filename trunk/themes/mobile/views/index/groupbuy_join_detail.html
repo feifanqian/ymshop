@@ -3,7 +3,34 @@
 <script type="text/javascript" src="{url:#js/city-picker.js}" charset="utf-8"></script>
 <script src="{url:#js/swiper.min.js}"></script>
 <style type="text/css">
-
+    .btns{
+      width: 100%;
+      height: 50px;
+      background-color:#4e90ff;
+      color: white;
+      line-height: 50px;
+      text-align: center; 
+    }
+   .layui-m-layermain{
+        height: 15% !important;
+    }
+    /*.layui-m-layershade{
+        height: 20% !important;
+    }*/
+    .layui-m-layercont{
+     text-align: left !important;
+     padding: 20px 20px !important;
+    }
+    .layui-m-layerchild h3{
+        height: 50px;
+        line-height: 74px;
+    }
+    .layui-m-layercont p{
+    float: right;
+    }
+    .layui-m-layercont img{
+        width: 100% !important;
+    }
 </style>
 <div class="weui_panel weui_panel_access product-list" style="margin-top: 10%;">
     <div class="weui_panel_bd">               
@@ -68,6 +95,19 @@
   {/foreach}
   {/if}
 </div>
+<div style="margin-bottom: 0px;">
+ {if:$info['status']=='拼团成功'}
+ <a href="/ucenter/order_detail/id/{$info['order_id']}" style="background-color: #4e90ff;" class="btns">查看订单详情</a>
+ {elseif:$info['status'] = '邀请好友'}
+ <a href="javascript:;" style="background-color: #4e90ff;" class="btns" id="shareWechat">邀请好友</a>
+ {elseif:$info['status'] = '活动已结束' or $info['status'] = '拼团人数已满' or $info['status'] = '拼团失败'}
+
+ {elseif:$info['status'] = '我要参团'}
+ <a href="javascript:;" style="background-color: #4e90ff;" class="btns buy-now" data-type="groupbuy" data-target="3">我要参团</a>
+ {else:}
+ <a href="javascript:;" style="background-color: #4e90ff;" class="btns buy-now" data-type="groupbuy" data-target="3">拼团购买</a>
+ {/if}
+</div>
 <script>
     // var groupbuy_id = "{$info['groupbuy_id']}";
     var Product = {
@@ -84,3 +124,68 @@
     };
 </script>
 <script type="text/javascript" src="{url:#js/product.js}" charset="utf-8"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
+<script>
+ wx.config({
+   debug:  false,  //调式模式，设置为ture后会直接在网页上弹出调试信息，用于排查问题
+   appId: '{$signPackage["appId"]}',
+   timestamp: '{$signPackage["timestamp"]}',
+   nonceStr: '{$signPackage["nonceStr"]}',
+   signature: '{$signPackage["signature"]}',
+   jsApiList: [  //需要使用的网页服务接口
+       // 'checkJsApi',  //判断当前客户端版本是否支持指定JS接口
+       'onMenuShareTimeline', //分享给好友
+       'onMenuShareAppMessage', //分享到朋友圈
+       'onMenuShareQQ',  //分享到QQ
+       'onMenuShareWeibo' //分享到微博
+   ]
+ });
+$('#shareWechat').on("click",function(){
+     layer.open({
+            type: 3,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['100%', '400px'], //宽高
+            content: "<img src='/themes/mobile/images/share.jpg'>"
+    });
+});
+    var id = {$info['groupbuy_id']};
+    var imgUrl = "http://www.ymlypt.com/static/yuanmeng1/activity_a/img/recruit/header.jpg";
+    // var lineLink = 'http://www.ymlypt.com/active/login/redirect/recruit/inviter/'+user_id;
+     var lineLink = 'http://www.ymlypt.com/index/groupbuy/id/'+id;
+    var descContent = "{$info['name']}";
+    var shareTitle = '圆梦共享网';
+    // alert('share');
+    wx.ready(function () {   //ready函数用于调用API，如果你的网页在加载后就需要自定义分享和回调功能，需要在此调用分享函数。//如果是微信游戏结束后，需要点击按钮触发得到分值后分享，这里就不需要调用API了，可以在按钮上绑定事件直接调用。因此，微信游戏由于大多需要用户先触发获取分值，此处请不要填写如下所示的分享API
+        wx.onMenuShareAppMessage({  //例如分享到朋友圈的API  
+           title: shareTitle, // 分享标题
+           desc: descContent, 
+           link: lineLink, // 分享链接
+           imgUrl: imgUrl, // 分享图标
+           success: function () {
+               alert('分享成功');
+           },
+           cancel: function () {
+               // 用户取消分享后执行的回调函数
+               alert('取消分享');
+           }
+        });
+        wx.onMenuShareTimeline({
+            title: shareTitle, // 分享标题
+            desc: descContent, 
+            link: lineLink, // 分享链接
+            imgUrl: imgUrl, // 分享图标
+            success: function () {
+                alert('分享成功');
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+                alert('取消分享');
+            }
+        });
+    });
+  
+wx.error(function (res) {
+ alert(res.errMsg);  //打印错误消息。及把 debug:false,设置为debug:ture就可以直接在网页上看到弹出的错误提示
+});
+</script>

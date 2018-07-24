@@ -2139,6 +2139,8 @@ class IndexController extends Controller {
         
         $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status=1')->find();
         if($joined && $info['had_join_num']>=$info['min_num']) {
+            $order = $this->model->table('order')->fields('id')->where('join_id='.$joined['id'].' and user_id='.$this->user['id'].' and pay_status=1')->find();
+            $info['order_id'] = $order['id'];
             $info['status'] = '拼团成功';
         } elseif ($joined && $info['had_join_num']<$info['min_num'] && time()>=strtotime($info['end_time'])) {
             $info['status'] = '拼团失败';
@@ -2158,6 +2160,12 @@ class IndexController extends Controller {
         for($i=0;$i <$info['need_num'];$i++) {
             $img_default[$i]['src'] = 'themes/mobile/images/group_default_avatar.png';  
         }
+        $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+        // $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+        // $token = $wechat->getAccessToken();
+        $jssdk = new JSSDK($wechatcfg['app_key'], $wechatcfg['app_secret']);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->assign("signPackage", $signPackage);
         $this->assign('img_default', $img_default);
         $this->assign('info', $info);
         $this->assign('skumap', $skumap);

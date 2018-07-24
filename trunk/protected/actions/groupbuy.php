@@ -113,7 +113,7 @@ class GroupbuyAction extends Controller
             $this->code = 1275;
             return;
         }
-        $goods = $this->model->table('goods as g')->fields('g.id,g.name,g.imgs,g.sell_price,g.content,g.specs,p.id as product_id')->join('left join products as p on g.id = p.goods_id')->where('g.id='.$groupbuy['goods_id'])->find();
+        $goods = $this->model->table('goods as g')->fields('g.id,g.name,g.imgs,g.sell_price,g.content,g.specs,p.id as product_id,g.store_nums')->join('left join products as p on g.id = p.goods_id')->where('g.id='.$groupbuy['goods_id'])->find();
         if(!$goods) {
             $this->code = 1040;
             return;
@@ -125,7 +125,7 @@ class GroupbuyAction extends Controller
         $info['imgs'] = unserialize($goods['imgs']);
         $info['sell_price'] = $goods['sell_price'];
         $info['price'] = $groupbuy['price'];
-        
+        $info['store_nums'] = $goods['store_nums'];
         $info['end_time'] = $groupbuy['end_time'];
         $info['current_time'] = date('Y-m-d H:i:s');
         $info['join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and pay_status=1')->count();
@@ -168,7 +168,7 @@ class GroupbuyAction extends Controller
                         ->where('re.status=1 and re.goods_id = '.$groupbuy['goods_id'])->order("re.id desc")->findAll();
         $info['comment_num'] = count($info['comment_list']);
         $info['content'] = $goods['content'];                
-
+        $info['share_url'] = 'http://www.ymlypt.com/index/groupbuy/id/'.$groupbuy_id;
         $this->code = 0;
         $this->content = $info;
         return; 
@@ -249,6 +249,7 @@ class GroupbuyAction extends Controller
         } else {
             $info['status'] = '拼团中';
         }
+        $info['share_url'] = 'http://www.ymlypt.com/index/groupbuy/id/'.$groupbuy_id;
         
 
 
