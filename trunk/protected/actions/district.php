@@ -351,7 +351,7 @@ class DistrictAction extends Controller {
         //     $this->code = 0;
         //     return;
         // }
-        $exist = $this->model->table('customer')->fields('user_id')->where('mobile='.$mobile)->find();
+        $exist = $this->model->table('customer')->fields('user_id')->where('mobile='.$mobile.' and status=1')->find();
         if(!$exist) {
             $this->code = 1257;
             return;
