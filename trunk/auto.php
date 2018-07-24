@@ -340,11 +340,12 @@ class LinuxCliTask{
             foreach($order as $k=>$v) {
                 $now = time();
                 $amount = $v['order_amount']; 
-                if($v['join_id!=0']) {
-                    $groupbuy_join = $this->model->table('groupbuy_log')->fields('id,join_id,user_id')->where('id='.$v['join_id'].' and pay_status=1')->findAll();
-                    if($groupbuy_join) {
-                        foreach ($groupbuy_join as $key => $value) {
-                            if(strtotime('+1 day',strtotime($value['join_time']))<time()) {
+                if($v['join_id']!=0) {
+                    $groupbuy_log = $this->model->table('groupbuy_log')->fields('id,join_id,user_id')->where('id='.$v['join_id'].' and pay_status=1')->findAll();
+                    if($groupbuy_log) {
+                        foreach ($groupbuy_log as $key => $value) {
+                            $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
+                            if(strtotime('+1 day',strtotime($value['join_time']))<time() && $groupbuy_join['need_num']>0) {
                                 $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where("user_id=".$value['user_id'])->update();
                                 Log::balance($amount,$value['user_id'],$v['id'],'拼团失败订单自动退回到余额',4);
                                 $this->model->table('groupbuy_join')->data(array('status'=>3))->where('id='.$value['join_id'])->update();
@@ -353,23 +354,6 @@ class LinuxCliTask{
                         }
                     }
                 }
-                // if($v['join_id']!=0) {
-                //     $where = 'gl.join_id='.$v['join_id'].' and gj.need_num=0 and gj.status!=3 and gl.pay_status=1 and UNIX_TIMESTAMP(gj.end_time)<'.$now;
-                // } else {
-                //     $where = 'gl.groupbuy_id='.$v['prom_id'].' and gl.user_id='.$v['user_id'].' and gj.need_num=0 and gj.status!=3 and gl.pay_status=1 and UNIX_TIMESTAMP(gj.end_time)<'.$now;
-                // }
-                // $groupbuy_join = $this->model->table('groupbuy_log as gl')->fields('gl.id,gl.join_id,gj.user_id')->join('left join groupbuy_join as gj on gl.join_id=gj.id')->where($where)->findAll();
-                // if($groupbuy_join) {
-                //     foreach ($groupbuy_join as $key => $value) {
-                //         $this->model->table('groupbuy_join')->data(array('status'=>3))->where('id='.$value['join_id'])->update();
-                //         $this->model->table('groupbuy_log')->data(array('pay_status'=>3))->where('id='.$value['id'])->update();
-                //         $user_ids = explode(',',$value['user_id']);
-                //         for($i=0;$i<count($user_ids);$i++) {
-                //             $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where("user_id=".$user_ids[$i])->update();
-                //             Log::balance($amount,$user_ids[$i],$v['id'],'拼团失败订单自动退回到余额',4);
-                //         }
-                //     } 
-                // }
                 $this->model->table('order')->data(['status'=>5,'pay_status'=>3])->where('id='.$v['id'])->update();
             }
         }
