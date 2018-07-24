@@ -49,7 +49,7 @@
         {/if}
         {if:time()>strtotime($goods['start_time'])}
             <p><span class="red f16"><i class="iconfont icon-my1"></i> <b>{$goods['order_num']}</b></span>人已购买</p>
-            {if:time()>strtotime($goods['end_time'])}
+            {if:time() < strtotime($goods['end_time'])}
             <span class="f14"> <i class="iconfont icon-clock"></i> 剩余时间：</span><strong class="f14"><span id="countdown1"  style="color:#666; "></span></strong>
             <script type="text/javascript">
                 $("#countdown1").countdown({remainseconds:"{echo:(strtotime($goods['end_time'])-time())*1000}", callback:function(){
@@ -59,41 +59,43 @@
                 }});
             </script>
             {/if}
-            {if:$groupbuy_join_list!=null}
-            <div style="width: 100%;height: 10px;background-color: #f3f3f3;"></div>
-            <p style="display: inline-block;margin-top: 14px;width: 100%;">
-                <span class="f14" style="display: inline-block;">拼团中心</span><a href="/index/groupbuy_center/id/{$id}" style="color:#4e90ff;text-decoration: none;font-size:16px;float: right; margin-right:5%;">查看全部></a>
-            </p>
-            <p style="display: inline-block;margin-top: 10px;">
-               <span class="f18" style="color: #979797;">以下小伙伴正在发起拼团,您可以直接参与：</span>
-            </p>
-            {list:$items=$groupbuy_join_list}
-            <div>
-               <div style="width: 90%;margin-left: 5%;height: 60px;margin-top: 20px;background-color: #e8f5fe;border-radius: 8px;">
-                    <div style="width: 50%;padding-left: 5%;float: left;">
-                       <span style="display: inline-block;width:60px;height: 60px;"><img src="{echo:Common::thumb($item['users']['avatar'],60,60)}" width="60" height="60" style="border-radius: 60px;"></span><span style="margin-left: 10px;">{$item['users']['nickname']}</span>
-                    </div>
-                    <div style="width: 30%;float: left;height: 60px;margin-top: 10px;">
-                       <span style="">还差{$item['need_num']}人成团</span><br/>
-                       {if:strtotime($item['end_time'])-time()>0}
-                       <span class="count" id="qiangtimer1-{$item['join_id']}" data-remainseconds="{echo:(strtotime($item['end_time'])-time())*1000}">剩余<span class="hour-node">00</span>:<span class="minute-node">00</span>:<span class="second-node">00</span></span>
-                       {else:}
-                       <span>已结束</span>
-                       {/if}
-                    </div>  
-                    <div style="width: 20%;float: left;background-color:#4e90ff; height: 60px;line-height: 60px;border-top-right-radius: 8px;border-bottom-right-radius: 8px;">
-                       <span><a href="/index/groupbuy_join_detail/groupbuy_id/{$id}/join_id/{$item['join_id']}" style="display: block;width:80px;height:60px;line-height: 60px;color: white;text-align: center;">{if:strtotime($item['end_time'])-time()>0}去参团{else:}已结束{/if}</a></span>
-                    </div>
-               </div>
-            </div>
-            <script type="text/javascript">
-               if ( $("#qiangtimer1-{$item['join_id']}").data("remainseconds")> 0) {
-                    $("#qiangtimer1-{$item['join_id']}").countdown({remainseconds: $("#qiangtimer1-{$item['join_id']}").data("remainseconds"), format: '剩余<span class="hour-node">{h}</span>:<span class="minute-node">{m}</span>:<span class="second-node">{s}</span>', callback: function () {
-                            
-                    }});
-                }
-            </script>
-            {/list}
+            {if:time() < strtotime($goods['end_time'])}
+                {if:$groupbuy_join_list!=null}
+                <div style="width: 100%;height: 10px;background-color: #f3f3f3;"></div>
+                <p style="display: inline-block;margin-top: 14px;width: 100%;">
+                    <span class="f14" style="display: inline-block;">拼团中心</span><a href="/index/groupbuy_center/id/{$id}" style="color:#4e90ff;text-decoration: none;font-size:16px;float: right; margin-right:5%;">查看全部></a>
+                </p>
+                <p style="display: inline-block;margin-top: 10px;">
+                   <span class="f18" style="color: #979797;">以下小伙伴正在发起拼团,您可以直接参与：</span>
+                </p>
+                {list:$items=$groupbuy_join_list}
+                <div>
+                   <div style="width: 90%;margin-left: 5%;height: 60px;margin-top: 20px;background-color: #e8f5fe;border-radius: 8px;">
+                        <div style="width: 50%;padding-left: 5%;float: left;">
+                           <span style="display: inline-block;width:60px;height: 60px;"><img src="{echo:Common::thumb($item['users']['avatar'],60,60)}" width="60" height="60" style="border-radius: 60px;"></span><span style="margin-left: 10px;">{$item['users']['nickname']}</span>
+                        </div>
+                        <div style="width: 30%;float: left;height: 60px;margin-top: 10px;">
+                           <span style="">还差{$item['need_num']}人成团</span><br/>
+                           {if:strtotime($item['end_time'])-time()>0}
+                           <span class="count" id="qiangtimer1-{$item['join_id']}" data-remainseconds="{echo:(strtotime($item['end_time'])-time())*1000}">剩余<span class="hour-node">00</span>:<span class="minute-node">00</span>:<span class="second-node">00</span></span>
+                           {else:}
+                           <span>已结束</span>
+                           {/if}
+                        </div>  
+                        <div style="width: 20%;float: left;background-color:#4e90ff; height: 60px;line-height: 60px;border-top-right-radius: 8px;border-bottom-right-radius: 8px;">
+                           <span><a href="/index/groupbuy_join_detail/groupbuy_id/{$id}/join_id/{$item['join_id']}" style="display: block;width:80px;height:60px;line-height: 60px;color: white;text-align: center;">{if:strtotime($item['end_time'])-time()>0}去参团{else:}已结束{/if}</a></span>
+                        </div>
+                   </div>
+                </div>
+                <script type="text/javascript">
+                   if ( $("#qiangtimer1-{$item['join_id']}").data("remainseconds")> 0) {
+                        $("#qiangtimer1-{$item['join_id']}").countdown({remainseconds: $("#qiangtimer1-{$item['join_id']}").data("remainseconds"), format: '剩余<span class="hour-node">{h}</span>:<span class="minute-node">{m}</span>:<span class="second-node">{s}</span>', callback: function () {
+                                
+                        }});
+                    }
+                </script>
+                {/list}
+                {/if}
             {/if}
             <!-- {if:$goods['order_num']>=$goods['min_num']}
             <p><i class="iconfont icon-favourite"></i>团购成功，可继续购买!</p>
