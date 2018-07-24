@@ -57,16 +57,14 @@ class CartAction extends Controller {
         // var_dump($uid);die;
         // var_dump($session_id);die;
         $num = $num > 0 ? $num : 1;
-        $cart = $this->getCart();
+        // $cart = $this->getCart();
+        $cart = Cart::getCart();
         if($uid){
            $cart->modNum($id, $num,$uid); 
        }else{
         $cart->modNum($id, $num);
        }
        if($uid) {
-        if($uid==42608) {
-        var_dump($uid);die;
-        }
          $products = $cart->all($uid);
        }else {
          $products = $cart->all();

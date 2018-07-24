@@ -104,9 +104,6 @@ class Cart {
     }
 
     public function all($uid=0) {
-        if($uid==42608) {
-        var_dump($uid);die;
-        }
         $products = array();
         if ($this->getCnt() > 0) {
             $model = new Model("products as pr");
@@ -123,12 +120,9 @@ class Cart {
                 $idstr = implode(',', $areaid);
             }
             if($uid!=0){ //已登录
-                if($uid==42608) {
-                        var_dump($uid);
-                    }
                 if ($idstr != '') {
                     if($uid==42608) {
-                        var_dump($idstr);die;
+                        var_dump($idstr);
                     }
                     $prom = new Prom();
                     $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();  
