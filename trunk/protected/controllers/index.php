@@ -419,6 +419,7 @@ class IndexController extends Controller {
     public function groupbuy() {
         $id = Filter::int(Req::args("id"));
         $goods = $this->model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id = go.id")->where("gb.id=$id")->find();
+        $groupbuy = $this->model->table('groupbuy')->where('id='.$groupbuy_id)->find();
         if (isset($goods['id'])) {
             //检测团购是否结束
             if ($goods['store_nums'] <= 0 || $goods['goods_num'] >= $goods['max_num'] || time() >= strtotime($goods['end_time'])) {
@@ -426,7 +427,7 @@ class IndexController extends Controller {
                 $goods['is_end'] = 1;
             }
             $skumap = array();
-            $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = $goods[id]")->findAll();
+            $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = $goods['id']")->findAll();
             if ($products) {
                 foreach ($products as $product) {
                     $skumap[$product['specs_key']] = $product;
@@ -453,7 +454,7 @@ class IndexController extends Controller {
             }
             $now = time();
         
-            $groupbuy_join_list = $this->model->table('groupbuy_join as gj')->fields('gl.join_id,gj.user_id,gj.need_num,gj.end_time')->join('left join groupbuy_log as gl on gl.join_id=gj.id')->where('gl.groupbuy_id='.$id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
+            $groupbuy_join_list = $this->model->table('groupbuy_join as gj')->fields('gl.join_id,gj.user_id,gj.end_time')->join('left join groupbuy_log as gl on gl.join_id=gj.id')->where('gl.groupbuy_id='.$id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
             
             if($groupbuy_join_list) {
                 $groupbuy_join_list = $this->super_unique($groupbuy_join_list);
@@ -461,6 +462,8 @@ class IndexController extends Controller {
                     $user_ids = explode(',',$v['user_id']);
                     $user_id = $user_ids[0];
                     $groupbuy_join_list[$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$user_id)->find();
+                    $had_join_num = $this->model->table('groupbuy_log')->where('groupbuy_id='.$id.' and join_id='.$v['join_id'].' and pay_status=1')->count();
+                    $groupbuy_join_list[$k]['need_num'] = $groupbuy['min_num']-$had_join_num;
                 }
                 $groupbuy_join_list = array_values($groupbuy_join_list);
                 $groupbuy_join_list = array_slice($groupbuy_join_list,0,2);
