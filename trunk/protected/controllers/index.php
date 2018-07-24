@@ -2199,6 +2199,7 @@ class IndexController extends Controller {
             }
             $groupbuy_join_list = array_values($groupbuy_join_list);
         }
+        $this->assign('id', $id);
         $this->assign('groupbuy_join_list', $groupbuy_join_list);
         $this->assign('seo_title', "拼团中心");
         $this->redirect();
