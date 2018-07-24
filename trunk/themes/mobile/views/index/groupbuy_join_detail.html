@@ -99,11 +99,11 @@
 <div style="width: 100%;height: 50px;position: fixed;bottom: 0;">
  {if:$info['status']=='拼团成功'}
  <a href="/ucenter/order_detail/id/{$info['order_id']}" style="background-color: #4e90ff;" class="btns">查看订单详情</a>
- {elseif:$info['status'] = '邀请好友'}
+ {elseif:$info['status'] == '邀请好友'}
  <a href="javascript:;" style="background-color: #4e90ff;" class="btns" id="shareWechat">邀请好友</a>
- {elseif:$info['status'] = '活动已结束' or $info['status'] = '拼团人数已满' or $info['status'] = '拼团失败'}
-
- {elseif:$info['status'] = '我要参团'}
+ {elseif:$info['status'] == '活动已结束' or $info['status'] = '拼团人数已满' or $info['status'] = '拼团失败'}
+ <a href=""></a> 
+ {elseif:$info['status'] == '我要参团'}
  <a href="javascript:;" style="background-color: #4e90ff;" class="btns buy-now" data-type="groupbuy" data-target="3" data-join="{$join_id}">我要参团</a>
  {else:}
  <a href="javascript:;" style="background-color: #4e90ff;" class="btns buy-now" data-type="groupbuy" data-target="3">拼团购买</a>
