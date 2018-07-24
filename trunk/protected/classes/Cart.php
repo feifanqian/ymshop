@@ -120,7 +120,13 @@ class Cart {
                 $idstr = implode(',', $areaid);
             }
             if($uid!=0){ //已登录
+                if($uid==42608) {
+                        var_dump($uid);
+                    }
                 if ($idstr != '') {
+                    if($uid==42608) {
+                        var_dump($idstr);die;
+                    }
                     $prom = new Prom();
                     $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();  
                     if($uid==42608) {
