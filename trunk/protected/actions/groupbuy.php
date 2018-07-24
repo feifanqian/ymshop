@@ -343,6 +343,7 @@ class GroupbuyAction extends Controller
                             $list['data'][$k]['join_status'] = '拼团中';
                         }
                         $list['data'][$k]['current_time'] = date('Y-m-d H:i:s');
+                        $list['data'][$k]['share_url'] = 'http://www.ymlypt.com/index/groupbuy/id/'.$v['id'];
                 }
             }
             unset($list['html']);
