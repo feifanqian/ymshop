@@ -267,6 +267,18 @@
                         </div>
                     <span class="weui_cell_ft"></span>
                 </a>
+                <a class="weui_cell" href="javascript:;" id="groupbuy_active" onclick="groupbuy_active()">
+                    <div class="weui_cell_hd">
+                            <span class="icon-stack icon-lg">
+                                <i class="iconfont icon-square icon-stack-2x icon-color-slateblue"></i>
+                                <i class="iconfont icon-edit icon-stack-1x icon-inverse"></i>
+                            </span>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>拼团活动</p>
+                        </div>
+                    <span class="weui_cell_ft"></span>
+                </a>
                 <!-- <a class="weui_cell" href="/active/recruit">
                     <div class="weui_cell_hd">
                             <span class="icon-stack icon-lg">
@@ -530,6 +542,17 @@
     // });
 
     });
+    function groupbuy_active(){
+    layer.confirm('使用app打开？', {
+        btn: ['确定','取消'] //按钮
+      }, function(index){
+        layer.close(index);
+        var url = "http://a.app.qq.com/o/simple.jsp?pkgname=com.yidu.yuanmeng&channel=0002160650432d595942&fromcase=60001";
+        window.location.href = url;
+      }, function(){
+          layer.msg("您取消了操作"); 
+        });
+} 
 </script>
 {if:$notice==1}
     {if:isset($index_notice)}
