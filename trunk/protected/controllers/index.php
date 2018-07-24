@@ -2232,7 +2232,6 @@ class IndexController extends Controller {
                         $list['data'][$k]['share_url'] = 'http://www.ymlypt.com/index/groupbuy/id/'.$v['id'];
                 }
             }
-            unset($list['html']);
         }
         $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
         // $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');

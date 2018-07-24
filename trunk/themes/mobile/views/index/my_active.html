@@ -4,7 +4,7 @@
 <!--S 产品展示-->
 <div class="weui_panel weui_panel_access product-list">
     <div class="weui_panel_bd">
-        {if:count($list)>0}
+        {if:count($list['data'])>0}
             {list:$items=$list}
             <div>                  
                 <a href="{url:/index/groupbuy/id/$item[id]}" class="weui_media_box weui_media_appmsg">
@@ -44,7 +44,7 @@
     </div>
 </div>
 
-<div class=" plr20 pb20 tc page-nav">{echo:$groupbuy->pageBar(5);}</div>
+<div class=" plr20 pb20 tc page-nav">{$list['html']}</div>
 <!--E 产品展示-->
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
