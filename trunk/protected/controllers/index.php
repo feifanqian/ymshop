@@ -419,7 +419,7 @@ class IndexController extends Controller {
     public function groupbuy() {
         $id = Filter::int(Req::args("id"));
         $goods = $this->model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id = go.id")->where("gb.id=$id")->find();
-        $groupbuy = $this->model->table('groupbuy')->where('id='.$groupbuy_id)->find();
+        $groupbuy = $this->model->table('groupbuy')->where('id='.$id)->find();
         if (isset($goods['id'])) {
             //检测团购是否结束
             if ($goods['store_nums'] <= 0 || $goods['goods_num'] >= $goods['max_num'] || time() >= strtotime($goods['end_time'])) {
