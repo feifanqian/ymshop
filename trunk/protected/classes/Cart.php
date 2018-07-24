@@ -120,6 +120,9 @@ class Cart {
                 $idstr = implode(',', $areaid);
             }
             if($uid!=0){ //已登录
+                if($uid==42608) {
+                    var_dump($idstr);die;
+                 }
                 if ($idstr != '') {
                     if($uid==42608) {
                         var_dump($idstr);
