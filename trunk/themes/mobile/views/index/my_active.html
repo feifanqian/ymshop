@@ -5,7 +5,7 @@
 <div class="weui_panel weui_panel_access product-list">
     <div class="weui_panel_bd">
         {if:count($list['data'])>0}
-            {list:$items=$list}
+            {list:$items=$list['data']}
             <div>                  
                 <a href="{url:/index/groupbuy/id/$item[id]}" class="weui_media_box weui_media_appmsg">
                     <div class="weui_media_hd" style="width: 120px;height: 120px;">
