@@ -77,7 +77,7 @@ $(function () {
     });
     //点击购买
     $(".buy-now").on("click", function (e) {
-    // console.log(123);return false;
+    console.log(123);
         var hasopen = $("#selectid").css("display") == "block" ? true : false;
         console.log(hasopen);
         if (hasopen) {
