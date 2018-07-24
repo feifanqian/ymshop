@@ -2184,6 +2184,7 @@ class IndexController extends Controller {
     {
         $id = Filter::int(Req::args('id'));
         $now = time();
+        $groupbuy = $this->model->table('groupbuy')->where('id='.$id)->find();
         
         $groupbuy_join_list = $this->model->table('groupbuy_join as gj')->fields('gl.join_id,gj.user_id,gj.end_time')->join('left join groupbuy_log as gl on gl.join_id=gj.id')->where('gl.groupbuy_id='.$id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
             
