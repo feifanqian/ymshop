@@ -2138,7 +2138,7 @@ class IndexController extends Controller {
         $info['groupbuy_join_list']['remain_time'] = $this->timediff(time(),strtotime($info['end_time']));
         
         $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status=1')->find();
-        var_dump($joined);die;
+
         if($joined && $info['had_join_num']>=$info['min_num']) {
             $order = $this->model->table('order')->fields('id')->where('join_id='.$joined['id'].' and user_id='.$this->user['id'].' and pay_status=1')->find();
             $info['order_id'] = $order['id'];
@@ -2156,7 +2156,7 @@ class IndexController extends Controller {
         } else {
             $info['status'] = '拼团中';
         }
-
+        var_dump($info['status']);die; 
         $img_default = array();
         for($i=0;$i <$info['need_num'];$i++) {
             $img_default[$i]['src'] = 'themes/mobile/images/group_default_avatar.png';  
