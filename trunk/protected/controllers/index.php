@@ -427,7 +427,7 @@ class IndexController extends Controller {
                 $goods['is_end'] = 1;
             }
             $skumap = array();
-            $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = $goods['id']")->findAll();
+            $products = $this->model->table("products")->fields("sell_price,market_price,store_nums,specs_key,pro_no,id")->where("goods_id = ".$goods['id'])->findAll();
             if ($products) {
                 foreach ($products as $product) {
                     $skumap[$product['specs_key']] = $product;
