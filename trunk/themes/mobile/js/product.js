@@ -88,7 +88,8 @@ $(function () {
                 var type = $(this).attr("data-type");
                 if (type == "groupbuy") {
                     var target = $(this).attr("data-target");
-                    var url = Product.groupBuyUrl + product['id']+'/target/'+target;
+                    var join_id = $(this).attr("data-join");
+                    var url = Product.groupBuyUrl + product['id']+'/target/'+target+'/join_id/'+join_id;
                     location.href = url;
                 } else if (type == "flashbuy") {
                     var url = Product.flashBuyUrl + product['id'];

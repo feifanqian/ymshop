@@ -1434,6 +1434,38 @@ class SimpleController extends Controller {
                         );
                        $log_id = $this->model->table('groupbuy_log')->data($log)->insert();
                     }
+                    if($target==3) {
+                        //参团
+                        $remain_time = strtotime($groupbuy['end_time'])-time();
+                        $join_id = Filter::int(Req::args('join_id'));
+                        if(!$join_id) {
+                            $this->redirect("/index/msg", true, array('msg' => '缺少拼单人信息', 'type' => 'error'));
+                            exit();
+                        } else {
+                            $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$join_id)->find();
+                            $joined = $this->model->table('groupbuy_log')->where('join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status=1')->find();
+                            if($joined) {
+                                $this->redirect("/index/msg", true, array('msg' => '您已经参加过该拼团了', 'type' => 'error'));
+                                exit();
+                            }
+                            if(time()>strtotime($groupbuy_join['end_time'])) {
+                                $this->redirect("/index/msg", true, array('msg' => '您来晚了，拼图时间已结束', 'type' => 'error'));
+                                exit();
+                            }
+                            $data = array(
+                                'user_id'  => $groupbuy_join['user_id'].','.$this->user['id'],
+                                'need_num' => $groupbuy_join['need_num']
+                                );
+                            $this->model->table('groupbuy_join')->data($data)->where('id='.$join_id)->update();
+                            $log = array(
+                                'join_id'     => $join_id,
+                                'groupbuy_id' => $id,
+                                'user_id'     => $this->user['id'],
+                                'join_time'   => date('Y-m-d H:i:s')
+                                );
+                        }
+                       $log_id = $this->model->table('groupbuy_log')->data($log)->insert();
+                    }
 
                 }else if ($type == "flashbuy") {//抢购处理
                     $product_id = Filter::int($product_id[0]);

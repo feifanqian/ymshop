@@ -104,7 +104,7 @@
  {elseif:$info['status'] = '活动已结束' or $info['status'] = '拼团人数已满' or $info['status'] = '拼团失败'}
 
  {elseif:$info['status'] = '我要参团'}
- <a href="javascript:;" style="background-color: #4e90ff;" class="btns buy-now" data-type="groupbuy" data-target="3">我要参团</a>
+ <a href="javascript:;" style="background-color: #4e90ff;" class="btns buy-now" data-type="groupbuy" data-target="3" data-join="{$join_id}">我要参团</a>
  {else:}
  <a href="javascript:;" style="background-color: #4e90ff;" class="btns buy-now" data-type="groupbuy" data-target="3">拼团购买</a>
  {/if}

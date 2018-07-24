@@ -2138,6 +2138,7 @@ class IndexController extends Controller {
         $info['groupbuy_join_list']['remain_time'] = $this->timediff(time(),strtotime($info['end_time']));
         
         $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status=1')->find();
+        var_dump($joined);die;
         if($joined && $info['had_join_num']>=$info['min_num']) {
             $order = $this->model->table('order')->fields('id')->where('join_id='.$joined['id'].' and user_id='.$this->user['id'].' and pay_status=1')->find();
             $info['order_id'] = $order['id'];
@@ -2168,6 +2169,7 @@ class IndexController extends Controller {
         $this->assign("signPackage", $signPackage);
         $this->assign('img_default', $img_default);
         $this->assign('info', $info);
+        $this->assign('join_id', $join_id);
         $this->assign('skumap', $skumap);
         $this->assign('groupbuy_id', $groupbuy_id);
         $this->assign('seo_title', "拼单详情");
