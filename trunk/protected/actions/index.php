@@ -219,7 +219,7 @@ class IndexAction extends Controller {
     }
      //APP端广告
     public function ad(){
-        $ad = $this->model->query("select content from tiny_ad where id in (52,53)  and is_open = 1");
+        $ad = $this->model->query("select content from tiny_ad where id in (52,53,81)  and is_open = 1");
         $arr = array();
         foreach ($ad as $kk => $vv){
              $ad[$kk]['content'] = unserialize($ad[$kk]['content']);
@@ -483,7 +483,7 @@ class IndexAction extends Controller {
         $ad2 = $this->model->table('ad')->fields('content')->where('id=53')->find();
         $imgs2 = unserialize($ad2['content']);
         $imgs2[0]['url'] = json_decode($imgs2[0]['url'],true);
-        $ad3 = $this->model->table('ad')->fields('content')->where('id=53')->find();
+        $ad3 = $this->model->table('ad')->fields('content')->where('id=81')->find();
         $imgs3 = unserialize($ad3['content']);
         $imgs3[0]['url'] = json_decode($imgs3[0]['url'],true);
         $flash=array(

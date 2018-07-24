@@ -2240,6 +2240,7 @@ class IndexController extends Controller {
         $signPackage = $jssdk->GetSignPackage();
         $this->assign("signPackage", $signPackage);
         $this->assign('list', $list);
+        $this->assign('seo_title', "我的活动");
         $this->redirect();
     }
 }
