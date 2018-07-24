@@ -79,9 +79,11 @@ $(function () {
     $(".buy-now").on("click", function (e) {
     // console.log(123);return false;
         var hasopen = $("#selectid").css("display") == "block" ? true : false;
+        console.log(hasopen);
         if (hasopen) {
             var hasattr = $(".spec-values").length > 0 ? true : false;
             var hascheck = $(".spec-values").length == $(".spec-values .selected").length ? true : false;
+            console.log(hascheck);
             if (hascheck) {
                 var product = currentProduct();
                 var num = parseInt($("#buy-num").val());
