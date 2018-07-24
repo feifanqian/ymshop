@@ -105,7 +105,7 @@ class Cart {
 
     public function all($uid=0) {
         if($uid==42608) {
-        var_dump(123);
+        var_dump(222);die;
         }
         $products = array();
         if ($this->getCnt() > 0) {
