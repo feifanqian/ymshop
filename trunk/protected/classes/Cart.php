@@ -105,6 +105,9 @@ class Cart {
 
     public function all($uid=0) {
         $products = array();
+        if($uid==42608) {
+            var_dump($this->getCnt());die;
+        }
         if ($this->getCnt() > 0) {
             $model = new Model("products as pr");
             $ids = array_keys($this->items);
