@@ -42,12 +42,14 @@ class Cart {
         $this->items[$id] = $num;
         $this->uid = $uid;
         $model = new Model();
-        $exist = $model->table('cart')->where('goods_id='.$id.' and user_id='.$uid)->find();
-        if($exist){
-            $model->table('cart')->data(array('num'=>"`num`+({$num})"))->where('goods_id='.$id.' and user_id='.$uid)->update();
-        }else{
-            $model->table('cart')->data(array('user_id'=>$uid,'goods_id'=>$id,'num'=>$num))->insert();
-        }  
+        if($uid) {
+           $exist = $model->table('cart')->where('goods_id='.$id.' and user_id='.$uid)->find();
+            if($exist){
+                $model->table('cart')->data(array('num'=>"`num`+({$num})"))->where('goods_id='.$id.' and user_id='.$uid)->update();
+            }else{
+                $model->table('cart')->data(array('user_id'=>$uid,'goods_id'=>$id,'num'=>$num))->insert();
+            } 
+        } 
     }
 
     public function hasItem($id) {
@@ -106,9 +108,6 @@ class Cart {
     public function all($uid=0) {
         $products = array();
         if ($this->getCnt() > 0) {
-            if($uid==42608) {
-                var_dump(111);die;
-            }
             $model = new Model("products as pr");
             $ids = array_keys($this->items);
             $ids = trim(implode(",", $ids), ',');
@@ -175,6 +174,9 @@ class Cart {
                 }
             }
             
+        }
+        if($uid==42608) {
+            var_dump($products);die;
         }
         return $products;
     }
