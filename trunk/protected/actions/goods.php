@@ -16,9 +16,19 @@ class GoodsAction extends Controller {
         $cart->clear();
         $id = Filter::int(Req::args("id"));
         $num = intval(Req::args("num"));
+        $session_id = Req::args("session_id");
+        $uid = Filter::int(Req::args("user_id"));
         $num = $num > 0 ? $num : 1;
-        $result = $cart->addItem($id, $num);
-        $cartlist = $cart->all();
+        if($uid || $session_id){
+           $result = $cart->addItem($id, $num,$uid,$session_id); 
+        }else{
+           $result = $cart->addItem($id, $num);
+        }
+        if($uid || $session_id) {    
+            $cartlist = $cart->all($uid,$session_id);
+        }else {
+            $cartlist = $cart->all();
+        }
         foreach ($cartlist as $k => &$v) {
             $v['spec'] = array_values($v['spec']);
         }
