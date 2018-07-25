@@ -139,6 +139,7 @@ class Cart {
             }
             
             $idstr = '';
+            $idarr = [];
             if($idarr){
                 foreach ($idarr as $key => $v) {
                     $areaid[$key] = $v['goods_id'];
