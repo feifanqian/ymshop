@@ -125,7 +125,32 @@ class Cart {
 
     public function all($uid=0,$session_id='') {
         $products = array();
-        // if ($this->getCnt() > 0) {
+        if ($this->getCnt() > 0) {
+            $model = new Model("products as pr");
+            $ids = array_keys($this->items);
+            $ids = trim(implode(",", $ids), ',');
+            if ($ids != '') {
+                $prom = new Prom();
+                $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id")->join("left join goods as go on pr.goods_id = go.id ")->where("pr.id in($ids)")->findAll();
+                foreach ($items as $item) {
+                    $num = $this->items[$item['id']];
+                    if ($num > $item['store_nums']) {
+                        $num = $item['store_nums'];
+                        $this->modNum($item['id'], $num);
+                    }
+
+                    if ($num <= 0) {
+                        $this->delItem($item['id']);
+                    } else {
+                        $item['goods_nums'] = $num;
+                        $prom_goods = $prom->prom_goods($item);
+                        $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
+                        $sell_total = $item['sell_price'] * $num;
+                        $products[$item['id']] = array('id' => $item['id'], 'goods_id' => $item['goods_id'], 'shop_id' => $item['shop_id'], 'name' => $item['name'], 'img' => $item['img'], 'num' => $num, 'store_nums' => $item['store_nums'], 'price' => $item['sell_price'], 'freeshipping'=>$item['freeshipping'], 'prom_id' => $item['prom_id'], 'real_price' => $prom_goods['real_price'], 'sell_price' => $item['sell_price'], 'spec' => unserialize($item['spec']), 'amount' => $amount, 'prom' => $prom_goods['note'], 'weight' => $item['weight'], 'point' => $item['point'], 'sell_total' => $sell_total, "prom_goods" => $prom_goods);
+                    }
+                }
+            }
+        }
         if($uid || $session_id) {
             $model = new Model("products as pr");
             $ids = array_keys($this->items);
@@ -171,7 +196,7 @@ class Cart {
                         $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
                         $sell_total = $item['sell_price'] * $num;
                         $products[$item['id']] = array('id' => $item['id'], 'goods_id' => $item['goods_id'], 'shop_id' => $item['shop_id'], 'name' => $item['name'], 'img' => $item['img'], 'num' => $num, 'store_nums' => $item['store_nums'], 'price' => $item['sell_price'], 'freeshipping'=>$item['freeshipping'], 'prom_id' => $item['prom_id'], 'real_price' => $prom_goods['real_price'], 'sell_price' => $item['sell_price'], 'spec' => unserialize($item['spec']), 'amount' => $amount, 'prom' => $prom_goods['note'], 'weight' => $item['weight'], 'point' => $item['point'], 'sell_total' => $sell_total, "prom_goods" => $prom_goods);
-                        array_push($products,$products[$item['id']]);
+                        // array_push($products,$products[$item['id']]);
                     }
                 }
             } else {
