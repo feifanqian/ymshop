@@ -29,9 +29,14 @@ class CartAction extends Controller {
         $cart = $this->getCart();
         if($uid || $session_id){
            $cart->addItem($id, $num,$uid,$session_id); 
-       }else{
+        }else{
            $cart->addItem($id, $num);
-       }
+        }
+        if($uid || $session_id){
+           $cart->alls($uid,$session_id); 
+        }else{
+           $cart->alls();
+        }
         $products = $cart->all();
         $this->code = 0;
         $this->content = array(
@@ -72,9 +77,9 @@ class CartAction extends Controller {
        //  $cart->modNum($id, $num);
        // }
        if($uid || $session_id) {    
-         $products = $cart->all($uid,$session_id);
+         $products = $cart->alls($uid,$session_id);
        }else {
-         $products = $cart->all();
+         $products = $cart->alls();
        }
         
         if($products){
