@@ -81,9 +81,9 @@ class CartAction extends Controller {
        }else {
          $products = $cart->alls();
        }
-       if($uid==42608) {
-        var_dump($products);die;
-       } 
+       // if($uid==42608) {
+       //  var_dump($products);die;
+       // } 
         if($products){
              foreach ($products as $k =>$v){
             $products[$k]['spec'] =  array_values($products[$k]['spec']);
