@@ -37,11 +37,12 @@ class OrderAction extends Controller {
         //直接购买类
         if ($type == 'goods') {
             $cart = Cart::getCart('goods');
-            if($uid || $session_id) {    
-              $this->cart = $cart->all($uid,$session_id);
-            }else {
-              $this->cart = $cart->all();
-            }
+            // if($uid || $session_id) {    
+            //   $this->cart = $cart->all($uid,$session_id);
+            // }else {
+            //   $this->cart = $cart->all();
+            // }
+            $this->cart = $cart->all();
             $this->selectcart = $this->cart;
         } else {
             
