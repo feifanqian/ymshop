@@ -40,7 +40,7 @@ class Cart {
             return;
         }
         $this->items[$id] = $num;
-        $this->uid = $uid;
+        // $this->uid = $uid;
         $model = new Model();
         if($uid) {
            $exist = $model->table('cart')->where('goods_id='.$id.' and user_id='.$uid)->find();
