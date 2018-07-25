@@ -89,7 +89,7 @@ class CartAction extends Controller {
         }
         $this->code = 0;
         $this->content = array(
-            'productlist' => array_values($products)
+            'productlist' => is_array($products)?array_values($products):[]
         );
         
     }
