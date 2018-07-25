@@ -24,10 +24,11 @@ class CartAction extends Controller {
         $id = Filter::int(Req::args("id"));
         $num = intval(Req::args("num"));
         $uid = Filter::int(Req::args("user_id"));
+        $session_id = Req::args("session_id");
         $num = $num > 0 ? $num : 1;
         $cart = $this->getCart();
-        if($uid){
-           $cart->addItem($id, $num,$uid); 
+        if($uid || $session_id){
+           $cart->addItem($id, $num,$uid,$session_id); 
        }else{
            $cart->addItem($id, $num);
        }
@@ -41,7 +42,13 @@ class CartAction extends Controller {
     public function del() {
         $id = Filter::int(Req::args("id"));
         $cart = $this->getCart();
-        $cart->delItem($id);
+        $uid = Filter::int(Req::args("user_id"));
+        $session_id = Req::args("session_id");
+        if($uid || $session_id){
+           $cart->delItem($id,$uid,$session_id); 
+        }else{
+           $cart->delItem($id);
+        }
         if (!$cart->hasItem($id)) {
             $this->code = 0;
         } else {
@@ -64,8 +71,8 @@ class CartAction extends Controller {
        // }else{
        //  $cart->modNum($id, $num);
        // }
-       if($uid) {    
-         $products = $cart->all($uid);
+       if($uid || $session_id) {    
+         $products = $cart->all($uid,$session_id);
        }else {
          $products = $cart->all();
        }
