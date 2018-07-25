@@ -125,7 +125,7 @@ class Cart {
 
     public function all($uid=0,$session_id='') {
         $products = array();
-        // if ($this->getCnt() > 0) {
+        if ($this->getCnt() > 0) {
             $model = new Model("products as pr");
             $ids = array_keys($this->items);
             $ids = trim(implode(",", $ids), ',');
@@ -177,7 +177,7 @@ class Cart {
             } else {
                 $products = [];
             } 
-        // }
+        }
         return $products;
     }
 
