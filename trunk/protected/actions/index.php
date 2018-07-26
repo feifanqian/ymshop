@@ -605,7 +605,7 @@ class IndexAction extends Controller {
         $arr = array();
         foreach ($ad as $k => $v){
              $content = unserialize($v['content']);
-             $arr[$k] = $content['path'][0];
+             $arr[$k] = $content[0]['path'];
         }
        
         $this->code = 0;
