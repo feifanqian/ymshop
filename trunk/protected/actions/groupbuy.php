@@ -214,7 +214,7 @@ class GroupbuyAction extends Controller
         }
         $info['skumap'] = array_values($skumap);
         $info['min_num'] = $groupbuy['min_num'];
-        $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->count();
+        $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status in (1,3)')->count();
         $info['start_time'] = $first['join_time'];
         $info['need_num'] = $info['min_num'] - $info['had_join_num'];
         $info['end_time'] = date("Y-m-d H:i:s",strtotime('+1 day',strtotime($first['join_time'])));
@@ -310,7 +310,7 @@ class GroupbuyAction extends Controller
         if($list) {
             if($list['data']!=null) {
                 foreach ($list['data'] as $k => $v) {
-                    $had_join_num = $this->model->table('groupbuy_log')->where('id='.$v['log_id'].' and pay_status in (1,3)')->count();
+                    $had_join_num = $this->model->table('groupbuy_log')->where('join_id='.$v['join_id'].' and pay_status in (1,3)')->count();
                         if($had_join_num>=$v['min_num']) {
                             $list['data'][$k]['join_status'] = '拼团成功';
                         } elseif ($had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
