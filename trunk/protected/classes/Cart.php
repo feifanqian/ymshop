@@ -35,12 +35,6 @@ class Cart {
     }
 
     public function addItem($id, $num = 1,$uid = 0,$session_id='') {
-        // if ($this->hasItem($id)) {
-        //     $this->incNum($id, $num);
-        //     return;
-        // }
-        // $this->items[$id] = $num;
-        // $this->uid = $uid;
         $model = new Model();
         if($uid) {
            $exist = $model->table('cart')->where('goods_id='.$id.' and user_id='.$uid)->find();
@@ -101,13 +95,6 @@ class Cart {
     }
 
     public function modNums($id, $num = 1,$uid = 0,$session_id='') {
-        // if (!$this->hasItem($id)) {
-        //     return false;
-        // }
-        // if($uid){
-        //     $this->uid = $uid;
-        // }
-        // $this->items[$id] = $num;
         $model = new Model();
         if($uid) {
             $model->table('cart')->data(array('num'=>$num))->where('goods_id='.$id.' and user_id='.$uid)->update();
