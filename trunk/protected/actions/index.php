@@ -601,7 +601,7 @@ class IndexAction extends Controller {
 
     //APP端邀请页banner
     public function invite_bg_banner(){
-        $ad = $this->model->query("select content from tiny_ad where id=85  and is_open = 1");
+        $ad = $this->model->table('ad')->where("id=85 and is_open = 1")->find();
         $arr = array();
         $ads = unserialize($ad['content']);
         var_dump($ads);die;
