@@ -75,22 +75,16 @@ class CartAction extends Controller {
         if ($id && $session_id && $num){
           $cart->modNum($id, $num,0,$session_id);
         }
-        // if($num){
-        //    $cart->modNum($id, $num); 
-        // }
        if($uid || $session_id) {    
          $products = $cart->alls($uid,$session_id);
        }else {
          $products = $cart->alls();
        }
-       // if($uid==42608) {
-       //  var_dump($products);die;
-       // } 
-        // if($products){
-        //     foreach ($products as $k =>$v){
-        //         $products[$k]['spec'] =  array_values($products[$k]['spec']);
-        //     }
-        // }
+        if($products){
+            foreach ($products as $k =>$v){
+                $products[$k]['spec'] =  array_values($products[$k]['spec']);
+            }
+        }
         $this->code = 0;
         $this->content = array(
             'productlist' => is_array($products)?$products:[]
