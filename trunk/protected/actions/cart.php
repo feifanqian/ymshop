@@ -70,10 +70,10 @@ class CartAction extends Controller {
         // $cart = $this->getCart();
         $cart = Cart::getCart();
         if($id && $uid && $num){
-           $cart->modNum($id, $num,$uid); 
+           $cart->modNums($id, $num,$uid); 
         }
         if ($id && $session_id && $num){
-          $cart->modNum($id, $num,0,$session_id);
+          $cart->modNums($id, $num,0,$session_id);
         }
        if($uid || $session_id) {    
          $products = $cart->alls($uid,$session_id);

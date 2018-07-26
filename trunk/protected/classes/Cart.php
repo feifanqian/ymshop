@@ -100,6 +100,23 @@ class Cart {
         }
     }
 
+    public function modNums($id, $num = 1,$uid = 0,$session_id='') {
+        // if (!$this->hasItem($id)) {
+        //     return false;
+        // }
+        // if($uid){
+        //     $this->uid = $uid;
+        // }
+        // $this->items[$id] = $num;
+        $model = new Model();
+        if($uid) {
+            $model->table('cart')->data(array('num'=>$num))->where('goods_id='.$id.' and user_id='.$uid)->update();
+        }
+        if($session_id) {
+            $model->table('cart')->data(array('num'=>$num))->where("goods_id=".$id." and session_id='{$session_id}'")->update();
+        }
+    }
+
     public function incNum($id, $num = 1) {
         if ($this->hasItem($id)) {
             $this->items[$id] += $num;
