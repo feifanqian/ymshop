@@ -178,29 +178,19 @@ class Cart {
             }
             if ($idstr != '') {
                 $prom = new Prom();
-                $items = $model->fields("pr.id,pr.goods_id,pr.store_nums,pr.spec,go.weight,go.point,go.sell_price,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num as cart_num")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();
-                foreach ($items as $k => $item) {
-                      $num = $item['cart_num'];
-                      // $num = $num!=null?$num:1;
-                      // if ($num > $item['store_nums']) {
-                      //       $num = $item['store_nums'];
-                      //       if($uid || $session_id) {
-                      //          $this->modNum($item['id'], $num,$uid,$session_id); 
-                      //       } else {
-                      //          $this->modNum($item['id'], $num);
-                      //       }
-                      //  }   
-                    $item['goods_nums'] = $num;
+                $items = $model->fields("pr.id,pr.goods_id,pr.store_nums,pr.spec,go.weight,go.point,go.sell_price,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num as cart_num")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.id=c.goods_id")->where("pr.id in($idstr)")->findAll();
+                foreach ($items as $k => $item) { 
+                    $item['goods_nums'] = $item['cart_num'];
                     $prom_goods = $prom->prom_goods($item);
-                    $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
-                    $sell_total = $item['sell_price'] * $num;
+                    $amount = sprintf("%01.2f", $prom_goods['real_price'] * $item['cart_num']);
+                    $sell_total = $item['sell_price'] * $item['cart_num'];
                     $products[$k] = array(
                         'id' => $item['id'], 
                         'goods_id' => $item['goods_id'], 
                         'shop_id' => $item['shop_id'], 
                         'name' => $item['name'], 
                         'img' => $item['img'], 
-                        'num' => $num, 
+                        'num' => $item['cart_num'], 
                         'store_nums' => $item['store_nums'], 
                         'price' => $item['sell_price'], 
                         'freeshipping'=>$item['freeshipping'],
