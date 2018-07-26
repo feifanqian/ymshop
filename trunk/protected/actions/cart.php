@@ -69,10 +69,10 @@ class CartAction extends Controller {
         // $num = $num > 0 ? $num : 1;
         // $cart = $this->getCart();
         $cart = Cart::getCart();
-        if($uid && $num){
+        if($id && $uid && $num){
            $cart->modNum($id, $num,$uid); 
         }
-        if ($session_id && $num){
+        if ($id && $session_id && $num){
           $cart->modNum($id, $num,0,$session_id);
         }
         // if($num){
