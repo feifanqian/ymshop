@@ -234,51 +234,51 @@ class Cart {
                 // if($uid==42608) {
                 //     var_dump($items);
                 // }
-                // for($i=0;$<count($items);$i++) {
-                //     $num = $items[$i]['num'];
-                //     $prom_goods = $prom->prom_goods($items[$i]);
-                //     $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
-                //     $sell_total = $items[$i]['sell_price'] * $num;
+                for($i=0;$i<count($items);$i++) {
+                    $num = $items[$i]['num'];
+                    $prom_goods = $prom->prom_goods($items[$i]);
+                    $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
+                    $sell_total = $items[$i]['sell_price'] * $num;
 
-                //     $products[$i]['goods_nums'] = $items[$i]['num'];
-                //     $products[$i]['id'] = $items[$i]['id'];
-                //     $products[$i]['goods_id'] = $items[$i]['goods_id'];
-                //     $products[$i]['shop_id'] = $items[$i]['shop_id'];
-                //     $products[$i]['name'] = $items[$i]['name'];
-                //     $products[$i]['img'] = $items[$i]['img'];
-                //     $products[$i]['num'] = $items[$i]['num'];
-                //     $products[$i]['store_nums'] = $items[$i]['store_nums'];
-                //     $products[$i]['price'] = $items[$i]['sell_price'];
-                //     $products[$i]['freeshipping'] = $items[$i]['freeshipping'];
-                //     $products[$i]['prom_id'] = $items[$i]['prom_id'];
-                //     $products[$i]['real_price'] = $items[$i]['real_price'];
-                //     $products[$i]['sell_price'] = $items[$i]['sell_price'];
-                //     $products[$i]['spec'] = unserialize($items[$i]['spec']);
-                //     $products[$i]['amount'] = $amount;
-                //     $products[$i]['prom'] = $prom_goods['note'];
-                //     $products[$i]['weight'] = $items[$i]['weight'];
-                //     $products[$i]['point'] = $items[$i]['point'];
-                //     $products[$i]['sell_total'] = $sell_total;
-                //     $products[$i]['prom_goods'] = $prom_goods;
-                // }  
-                foreach ($items as $k=>$item) {
-                    $num = $item['num'];
-                    if ($num > $item['store_nums']) {
-                        $num = $item['store_nums'];
-                        $this->modNum($item['id'], $num,$uid);
-                    }
+                    $products[$i]['goods_nums'] = $items[$i]['num'];
+                    $products[$i]['id'] = $items[$i]['id'];
+                    $products[$i]['goods_id'] = $items[$i]['goods_id'];
+                    $products[$i]['shop_id'] = $items[$i]['shop_id'];
+                    $products[$i]['name'] = $items[$i]['name'];
+                    $products[$i]['img'] = $items[$i]['img'];
+                    $products[$i]['num'] = $items[$i]['num'];
+                    $products[$i]['store_nums'] = $items[$i]['store_nums'];
+                    $products[$i]['price'] = $items[$i]['sell_price'];
+                    $products[$i]['freeshipping'] = $items[$i]['freeshipping'];
+                    $products[$i]['prom_id'] = $items[$i]['prom_id'];
+                    $products[$i]['real_price'] = $items[$i]['real_price'];
+                    $products[$i]['sell_price'] = $items[$i]['sell_price'];
+                    $products[$i]['spec'] = unserialize($items[$i]['spec']);
+                    $products[$i]['amount'] = $amount;
+                    $products[$i]['prom'] = $prom_goods['note'];
+                    $products[$i]['weight'] = $items[$i]['weight'];
+                    $products[$i]['point'] = $items[$i]['point'];
+                    $products[$i]['sell_total'] = $sell_total;
+                    $products[$i]['prom_goods'] = $prom_goods;
+                }  
+                // foreach ($items as $k=>$item) {
+                //     $num = $item['num'];
+                //     if ($num > $item['store_nums']) {
+                //         $num = $item['store_nums'];
+                //         $this->modNum($item['id'], $num,$uid);
+                //     }
 
-                    if ($num <= 0) {
-                        $this->delItem($item['id']);
-                    } else {
-                        $item['goods_nums'] = $num;
-                        $prom_goods = $prom->prom_goods($item);
-                        $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
-                        $sell_total = $item['sell_price'] * $num;
-                        $products[$k] = array('id' => $item['id'], 'goods_id' => $item['goods_id'], 'shop_id' => $item['shop_id'], 'name' => $item['name'], 'img' => $item['img'], 'num' => $num, 'store_nums' => $item['store_nums'], 'price' => $item['sell_price'], 'freeshipping'=>$item['freeshipping'], 'prom_id' => $item['prom_id'], 'real_price' => $prom_goods['real_price'], 'sell_price' => $item['sell_price'], 'spec' => unserialize($item['spec']), 'amount' => $amount, 'prom' => $prom_goods['note'], 'weight' => $item['weight'], 'point' => $item['point'], 'sell_total' => $sell_total, "prom_goods" => $prom_goods);
-                        // array_push($products,$products[$item['id']]);
-                    }
-                }
+                //     if ($num <= 0) {
+                //         $this->delItem($item['id']);
+                //     } else {
+                //         $item['goods_nums'] = $num;
+                //         $prom_goods = $prom->prom_goods($item);
+                //         $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
+                //         $sell_total = $item['sell_price'] * $num;
+                //         $products[$k] = array('id' => $item['id'], 'goods_id' => $item['goods_id'], 'shop_id' => $item['shop_id'], 'name' => $item['name'], 'img' => $item['img'], 'num' => $num, 'store_nums' => $item['store_nums'], 'price' => $item['sell_price'], 'freeshipping'=>$item['freeshipping'], 'prom_id' => $item['prom_id'], 'real_price' => $prom_goods['real_price'], 'sell_price' => $item['sell_price'], 'spec' => unserialize($item['spec']), 'amount' => $amount, 'prom' => $prom_goods['note'], 'weight' => $item['weight'], 'point' => $item['point'], 'sell_total' => $sell_total, "prom_goods" => $prom_goods);
+                //         // array_push($products,$products[$item['id']]);
+                //     }
+                // }
                 // if($uid==42608) {
                 //     var_dump($products);die;
                 // }
