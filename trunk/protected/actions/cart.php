@@ -66,16 +66,18 @@ class CartAction extends Controller {
         $num = intval(Req::args("num"));
         $session_id = Req::args("session_id");
         $uid = Filter::int(Req::args("user_id"));
-        // var_dump($uid);die;
-        // var_dump($session_id);die;
-        $num = $num > 0 ? $num : 1;
+        // $num = $num > 0 ? $num : 1;
         // $cart = $this->getCart();
         $cart = Cart::getCart();
-       //  if($uid){
-       //     $cart->modNum($id, $num,$uid); 
-       // }else{
-       //  $cart->modNum($id, $num);
-       // }
+        if($uid && $num){
+           $cart->modNum($id, $num,$uid); 
+        }
+        if ($session_id && $num){
+          $cart->modNum($id, $num,0,$session_id);
+        }
+        // if($num){
+        //    $cart->modNum($id, $num); 
+        // }
        if($uid || $session_id) {    
          $products = $cart->alls($uid,$session_id);
        }else {
