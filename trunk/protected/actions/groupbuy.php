@@ -214,7 +214,7 @@ class GroupbuyAction extends Controller
         }
         $info['skumap'] = array_values($skumap);
         $info['min_num'] = $groupbuy['min_num'];
-        $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status in (1,3)')->count();
+        $info['had_join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and pay_status=1')->count();
         $info['start_time'] = $first['join_time'];
         $info['need_num'] = $info['min_num'] - $info['had_join_num'];
         $info['end_time'] = date("Y-m-d H:i:s",strtotime('+1 day',strtotime($first['join_time'])));
@@ -239,7 +239,7 @@ class GroupbuyAction extends Controller
         $info['groupbuy_join_list']['remain_time'] = $this->timediff(time(),strtotime($info['end_time']));
         $info['groupbuy_join_list']['remain_seconds'] = strtotime($info['end_time'])-time();
         
-        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status in (1,3)')->find();
+        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status=1')->find();
         if($joined && $info['had_join_num']>=$info['min_num']) {
             $info['status'] = '拼团成功';
         } elseif ($joined && $info['had_join_num']<$info['min_num'] && time()>=strtotime($info['end_time'])) {
@@ -306,11 +306,11 @@ class GroupbuyAction extends Controller
         //     }
         // }
 
-        $list = $this->model->table('order as o')->fields('gl.id as log_id,gl.join_id,gl.groupbuy_id as id,go.name,go.img,g.min_num,g.price,gj.end_time,gj.status,o.id as order_id,og.product_id')->join('left join groupbuy_log as gl on o.join_id=gl.id left join order_goods as og on o.id=og.order_id left join groupbuy as g on gl.groupbuy_id=g.id left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on gl.join_id=gj.id')->where('gl.user_id='.$this->user['id'].' and gl.pay_status in (1,3) and o.pay_status in (1,3)')->order('id desc')->findPage($page,10);
+        $list = $this->model->table('order as o')->fields('gl.id as log_id,gl.join_id,gl.groupbuy_id as id,go.name,go.img,g.min_num,g.price,gj.end_time,gj.status,o.id as order_id,og.product_id')->join('left join groupbuy_log as gl on o.join_id=gl.id left join order_goods as og on o.id=og.order_id left join groupbuy as g on gl.groupbuy_id=g.id left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on gl.join_id=gj.id')->where('gl.user_id='.$this->user['id'].' and gl.pay_status=1 and o.pay_status=1')->order('id desc')->findPage($page,10);
         if($list) {
             if($list['data']!=null) {
                 foreach ($list['data'] as $k => $v) {
-                    $had_join_num = $this->model->table('groupbuy_log')->where('join_id='.$v['join_id'].' and pay_status in (1,3)')->count();
+                    $had_join_num = $this->model->table('groupbuy_log')->where('join_id='.$v['join_id'].' and pay_status=1')->count();
                         if($had_join_num>=$v['min_num']) {
                             $list['data'][$k]['join_status'] = '拼团成功';
                         } elseif ($had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
