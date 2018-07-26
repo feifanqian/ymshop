@@ -35,11 +35,11 @@ class Cart {
     }
 
     public function addItem($id, $num = 1,$uid = 0,$session_id='') {
-        if ($this->hasItem($id)) {
-            $this->incNum($id, $num);
-            return;
-        }
-        $this->items[$id] = $num;
+        // if ($this->hasItem($id)) {
+        //     $this->incNum($id, $num);
+        //     return;
+        // }
+        // $this->items[$id] = $num;
         // $this->uid = $uid;
         $model = new Model();
         if($uid) {
