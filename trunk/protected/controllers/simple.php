@@ -695,9 +695,9 @@ class SimpleController extends Controller {
         }else{
             $cart = Cart::getCart();
             if($uid) {
-                $this->cart = $cart->all($uid);
+                $this->cart = $cart->alls($uid);
             } else {
-                $this->cart = $cart->all();
+                $this->cart = $cart->alls();
             }
             
             // if($this->user['id']==42608){

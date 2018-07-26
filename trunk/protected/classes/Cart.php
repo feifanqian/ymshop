@@ -51,10 +51,9 @@ class Cart {
             } 
         }
         if($session_id) {
-            var_dump($session_id);die;
-           $exist = $model->table('cart')->where("goods_id=".$id." and session_id='{$session_id}'")->find();
+           $exist = $model->table('cart')->where("goods_id=".$id." and session_id='".$session_id."'")->find();
             if($exist){
-                $model->table('cart')->data(array('num'=>"`num`+({$num})"))->where("goods_id=".$id." and session_id='{$session_id}'")->update();
+                $model->table('cart')->data(array('num'=>"`num`+({$num})"))->where("goods_id=".$id." and session_id='".$session_id."'")->update();
             }else{
                 $model->table('cart')->data(array('session_id'=>$session_id,'goods_id'=>$id,'num'=>$num))->insert();
             } 
