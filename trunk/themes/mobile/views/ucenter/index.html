@@ -545,15 +545,18 @@
 
     });
     $('#groupbuy_active').click(function(){
-        layer.confirm('使用app打开？', {
-        btn: ['确定','取消'] //按钮
-      }, function(index){
-        layer.close(index);
+        alert('使用app打开？');
         var url = "http://a.app.qq.com/o/simple.jsp?pkgname=com.yidu.yuanmeng&channel=0002160650432d595942&fromcase=60001";
         window.location.href = url;
-      }, function(){
-          layer.msg("您取消了操作"); 
-        });
+      //   layer.confirm('使用app打开？', {
+      //   btn: ['确定','取消'] //按钮
+      // }, function(index){
+      //   layer.close(index);
+      //   var url = "http://a.app.qq.com/o/simple.jsp?pkgname=com.yidu.yuanmeng&channel=0002160650432d595942&fromcase=60001";
+      //   window.location.href = url;
+      // }, function(){
+      //     layer.msg("您取消了操作"); 
+      //   });
     })
     function groupbuy_active(){
     layer.confirm('使用app打开？', {
