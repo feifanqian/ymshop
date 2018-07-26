@@ -598,4 +598,17 @@ class IndexAction extends Controller {
         $this->content['status'] = $notice;
         $this->content['index_notice'] = $index_notice;
     }
+
+    //APP端邀请页banner
+    public function invite_bg_banner(){
+        $ad = $this->model->query("select content from tiny_ad where id in (82,83,84)  and is_open = 1");
+        $arr = array();
+        foreach ($ad as $k => $v){
+             $content = unserialize($v['content']);
+             $arr[$k] = $content['path'];
+        }
+       
+        $this->code = 0;
+        $this->content['path'] = $arr;
+    }
 }

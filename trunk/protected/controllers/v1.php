@@ -59,6 +59,7 @@ class V1Controller extends Controller {
         "make_shop_qrcode_no"=>array("goods/make_shop_qrcode_no",0,1),
         "get_all_child_shop_id"=>array("district/getAllChildShopId",0,1),
         "get_all_child_promoters_ids"=>array("district/getAllChildPromotersIds",0,1),
+        "invite_bg_banner"=>array("index/invite_bg_banner",0,1),
         //TODO tian
         "order" => array("ucenter/order", 1,1), //查询订单
         "offline_order" => array("order/offlineorder_list",1,1), //线下订单
