@@ -219,9 +219,9 @@ class Cart {
                         "prom_goods" => $prom_goods
                           );
                 }  
-                if($uid==42608) {
-                    var_dump($products);die;
-                }
+                // if($uid==42608) {
+                //     var_dump($products);die;
+                // }
             } else {
                 $products = [];
             } 
