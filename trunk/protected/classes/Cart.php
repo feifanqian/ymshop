@@ -199,7 +199,7 @@ class Cart {
                         'prom_id' => $item['prom_id'], 
                         'real_price' => $prom_goods['real_price'], 
                         'sell_price' => $item['sell_price'], 
-                        'spec' => array_values(unserialize($item['spec'])), 
+                        'spec' => $item['spec']!=null?array_values(unserialize($item['spec'])):[], 
                         'amount' => $amount, 
                         'prom' => $prom_goods['note'], 
                         'weight' => $item['weight'], 
