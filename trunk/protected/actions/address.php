@@ -369,7 +369,37 @@ class AddressAction extends Controller
                 }
                 $lng = $promoter['lng']+$rand1;
                 $lat = $promoter['lat']+$rand2;
-                break;           
+                break;
+            case 15:
+                $rand1 = rand(-135,135)/10000;
+                if($rand1>0){
+                    $rand2 = 0.0135-$rand1;
+                }else{
+                    $rand2 = 0-(0.0135-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case 20:
+                $rand1 = rand(-180,180)/10000;
+                if($rand1>0){
+                    $rand2 = 0.018-$rand1;
+                }else{
+                    $rand2 = 0-(0.018-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;
+            case 30:
+                $rand1 = rand(-270,270)/10000;
+                if($rand1>0){
+                    $rand2 = 0.027-$rand1;
+                }else{
+                    $rand2 = 0-(0.027-abs($rand1));
+                }
+                $lng = $promoter['lng']+$rand1;
+                $lat = $promoter['lat']+$rand2;
+                break;                       
             default:
                 $rand1 = rand(-9,9)/1000;
                 if($rand1>0){
