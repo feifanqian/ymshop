@@ -336,6 +336,7 @@ class LinuxCliTask{
     public function autoBackGroupbuyMoney()
     {
         $order = $this->model->table('order')->where('pay_status=1 and type=1 and delivery_status=0 and status!=4')->findAll();
+        var_dump($order);die;
         if($order) {
             foreach($order as $k=>$v) {
                 $now = time();
@@ -353,7 +354,7 @@ class LinuxCliTask{
                             } 
                         }
                     }
-                }
+                }   
                 $this->model->table('order')->data(['status'=>5,'pay_status'=>3])->where('id='.$v['id'])->update();
             }
         }
