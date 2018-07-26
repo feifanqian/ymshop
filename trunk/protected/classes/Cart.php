@@ -193,6 +193,7 @@ class Cart {
                                $this->modNum($item['id'], $num);
                             }
                        }
+                    $num = $num!=null?$num:1;   
                     $item['goods_nums'] = $num;
                     $prom_goods = $prom->prom_goods($item);
                     $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
