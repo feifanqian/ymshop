@@ -180,9 +180,9 @@ class Cart {
                 $prom = new Prom();
                 // $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();
                 $items = $model->fields("pr.id,pr.goods_id,pr.store_nums,pr.spec,go.weight,go.point,go.sell_price,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();
-                if($uid==42608) {
-                    var_dump($items);die;
-                }
+                // if($uid==42608) {
+                //     var_dump($items);die;
+                // }
                 foreach ($items as $k => $item) {
                       $num = $item['num'];
                       if ($num > $item['store_nums']) {
@@ -219,9 +219,9 @@ class Cart {
                         "prom_goods" => $prom_goods
                           );
                 }  
-                // if($uid==42608) {
-                //     var_dump($products);die;
-                // }
+                if($uid==42608) {
+                    var_dump($products);die;
+                }
             } else {
                 $products = [];
             } 
