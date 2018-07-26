@@ -604,7 +604,6 @@ class IndexAction extends Controller {
         $ad = $this->model->table('ad')->where("id=85 and is_open = 1")->find();
         $arr = array();
         $ads = unserialize($ad['content']);
-        var_dump($ads);die;
         foreach ($ads as $k => $v){
              $arr[$k] = $v['path'];
         }
