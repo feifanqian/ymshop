@@ -226,6 +226,7 @@ class Cart {
                 $products = [];
             } 
         }
+        return $products;
     }
 
     public function clear() {
