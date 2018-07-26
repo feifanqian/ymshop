@@ -151,58 +151,6 @@ class Cart {
                 }
             }
         }
-        // if($uid || $session_id) {
-        //     $model = new Model("products as pr");
-        //     $ids = array_keys($this->items);
-        //     $ids = trim(implode(",", $ids), ',');
-        //     // $uid = $this->uid;
-        //     $cart_model = new Model('cart');
-        //     if($uid) {
-        //         $idarr = $cart_model->fields('goods_id')->where('user_id='.$uid)->findAll();
-        //     }
-        //     if($session_id) {
-        //         $idarr = $cart_model->fields('goods_id')->where("session_id='{$session_id}'")->findAll();
-        //     }
-            
-        //     $idstr = '';
-        //     if($idarr){
-        //         foreach ($idarr as $key => $v) {
-        //             $areaid[$key] = $v['goods_id'];
-        //         }
-        //         $idstr = implode(',', $areaid);
-        //     }
-        //     if ($idstr != '') {
-        //         $prom = new Prom();
-        //         $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();  
-        //         foreach ($items as $item) {
-        //             // $cart = $cart_model->fields('num')->where('goods_id='.$item['id'].' and user_id='.$uid.'')->find();
-        //             // if($cart){
-        //             //     $num = $cart['num'];
-        //             // }else{
-        //             //     $num = 0;
-        //             // }
-        //             $num = $item['num'];
-        //             // $num = $areaid[$item['id']];
-        //             if ($num > $item['store_nums']) {
-        //                 $num = $item['store_nums'];
-        //                 $this->modNum($item['id'], $num,$uid);
-        //             }
-
-        //             if ($num <= 0) {
-        //                 $this->delItem($item['id']);
-        //             } else {
-        //                 $item['goods_nums'] = $num;
-        //                 $prom_goods = $prom->prom_goods($item);
-        //                 $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
-        //                 $sell_total = $item['sell_price'] * $num;
-        //                 $products[$item['id']] = array('id' => $item['id'], 'goods_id' => $item['goods_id'], 'shop_id' => $item['shop_id'], 'name' => $item['name'], 'img' => $item['img'], 'num' => $num, 'store_nums' => $item['store_nums'], 'price' => $item['sell_price'], 'freeshipping'=>$item['freeshipping'], 'prom_id' => $item['prom_id'], 'real_price' => $prom_goods['real_price'], 'sell_price' => $item['sell_price'], 'spec' => unserialize($item['spec']), 'amount' => $amount, 'prom' => $prom_goods['note'], 'weight' => $item['weight'], 'point' => $item['point'], 'sell_total' => $sell_total, "prom_goods" => $prom_goods);
-        //                 // array_push($products,$products[$item['id']]);
-        //             }
-        //         }
-        //     } else {
-        //         $products = [];
-        //     } 
-        // }
         return $products;
     }
 
@@ -230,55 +178,44 @@ class Cart {
             }
             if ($idstr != '') {
                 $prom = new Prom();
-                $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();
-                // if($uid==42608) {
-                //     var_dump($items);
-                // }
-                for($i=0;$i<count($items);$i++) {
-                    $num = $items[$i]['num'];
-                    $prom_goods = $prom->prom_goods($items[$i]);
+                // $items = $model->fields("pr.*,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();
+                $items = $model->fields("pr.id,pr.goods_id,pr.store_nums,pr.spec,go.weight,go.point,go.sell_price,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.goods_id=c.goods_id")->where("pr.id in($idstr)")->findAll();
+                foreach ($items as $k => $item) {
+                      $num = $item['num'];
+                      if ($num > $item['store_nums']) {
+                            $num = $item['store_nums'];
+                            if($uid || $session_id) {
+                               $this->modNum($item['id'], $num,$uid,$session_id); 
+                            } else {
+                               $this->modNum($item['id'], $num);
+                            }
+                       }
+                    $item['goods_nums'] = $num;
+                    $prom_goods = $prom->prom_goods($item);
                     $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
-                    $sell_total = $items[$i]['sell_price'] * $num;
-
-                    $products[$i]['goods_nums'] = $items[$i]['num'];
-                    $products[$i]['id'] = $items[$i]['id'];
-                    $products[$i]['goods_id'] = $items[$i]['goods_id'];
-                    $products[$i]['shop_id'] = $items[$i]['shop_id'];
-                    $products[$i]['name'] = $items[$i]['name'];
-                    $products[$i]['img'] = $items[$i]['img'];
-                    $products[$i]['num'] = $items[$i]['num'];
-                    $products[$i]['store_nums'] = $items[$i]['store_nums'];
-                    $products[$i]['price'] = $items[$i]['sell_price'];
-                    $products[$i]['freeshipping'] = $items[$i]['freeshipping'];
-                    $products[$i]['prom_id'] = $items[$i]['prom_id'];
-                    $products[$i]['real_price'] = $items[$i]['real_price'];
-                    $products[$i]['sell_price'] = $items[$i]['sell_price'];
-                    $products[$i]['spec'] = unserialize($items[$i]['spec']);
-                    $products[$i]['amount'] = $amount;
-                    $products[$i]['prom'] = $prom_goods['note'];
-                    $products[$i]['weight'] = $items[$i]['weight'];
-                    $products[$i]['point'] = $items[$i]['point'];
-                    $products[$i]['sell_total'] = $sell_total;
-                    $products[$i]['prom_goods'] = $prom_goods;
+                    $sell_total = $item['sell_price'] * $num;
+                    $products[$k] = array(
+                        'id' => $item['id'], 
+                        'goods_id' => $item['goods_id'], 
+                        'shop_id' => $item['shop_id'], 
+                        'name' => $item['name'], 
+                        'img' => $item['img'], 
+                        'num' => $num, 
+                        'store_nums' => $item['store_nums'], 
+                        'price' => $item['sell_price'], 
+                        'freeshipping'=>$item['freeshipping'],
+                        'prom_id' => $item['prom_id'], 
+                        'real_price' => $prom_goods['real_price'], 
+                        'sell_price' => $item['sell_price'], 
+                        'spec' => unserialize($item['spec']), 
+                        'amount' => $amount, 
+                        'prom' => $prom_goods['note'], 
+                        'weight' => $item['weight'], 
+                        'point' => $item['point'],
+                        'sell_total' => $sell_total,
+                        "prom_goods" => $prom_goods
+                          );
                 }  
-                // foreach ($items as $k=>$item) {
-                //     $num = $item['num'];
-                //     if ($num > $item['store_nums']) {
-                //         $num = $item['store_nums'];
-                //         $this->modNum($item['id'], $num,$uid);
-                //     }
-
-                //     if ($num <= 0) {
-                //         $this->delItem($item['id']);
-                //     } else {
-                //         $item['goods_nums'] = $num;
-                //         $prom_goods = $prom->prom_goods($item);
-                //         $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
-                //         $sell_total = $item['sell_price'] * $num;
-                //         $products[$k] = array('id' => $item['id'], 'goods_id' => $item['goods_id'], 'shop_id' => $item['shop_id'], 'name' => $item['name'], 'img' => $item['img'], 'num' => $num, 'store_nums' => $item['store_nums'], 'price' => $item['sell_price'], 'freeshipping'=>$item['freeshipping'], 'prom_id' => $item['prom_id'], 'real_price' => $prom_goods['real_price'], 'sell_price' => $item['sell_price'], 'spec' => unserialize($item['spec']), 'amount' => $amount, 'prom' => $prom_goods['note'], 'weight' => $item['weight'], 'point' => $item['point'], 'sell_total' => $sell_total, "prom_goods" => $prom_goods);
-                //         // array_push($products,$products[$item['id']]);
-                //     }
-                // }
                 // if($uid==42608) {
                 //     var_dump($products);die;
                 // }
