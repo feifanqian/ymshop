@@ -157,16 +157,18 @@ class Cart {
     public function alls($uid=0,$session_id='') {
         $products = array();
         if($uid || $session_id) {
-            $model = new Model("products as pr");
+            $model = new Model();
             $ids = array_keys($this->items);
             $ids = trim(implode(",", $ids), ',');
             // $uid = $this->uid;
             $cart_model = new Model('cart');
             if($uid) {
                 $idarr = $cart_model->fields('goods_id')->where('user_id='.$uid)->findAll();
+                $where = "c.user_id=".$uid;
             }
             if($session_id) {
                 $idarr = $cart_model->fields('goods_id')->where("session_id='{$session_id}'")->findAll();
+                $where = "c.session_id='{$session_id}'";
             }
             
             $idstr = '';
@@ -178,7 +180,8 @@ class Cart {
             }
             if ($idstr != '') {
                 $prom = new Prom();
-                $items = $model->fields("pr.id,pr.goods_id,pr.store_nums,pr.spec,go.weight,go.point,go.sell_price,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num as cart_num")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.id=c.goods_id")->where("pr.id in($idstr)")->findAll();
+                // $items = $model->fields("pr.id,pr.goods_id,pr.store_nums,pr.spec,go.weight,go.point,go.sell_price,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num as cart_num")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.id=c.goods_id")->where("pr.id in($idstr)")->findAll();
+                $items = $model->table('cart as c')->fields("pr.id,pr.goods_id,pr.store_nums,pr.spec,go.weight,go.point,go.sell_price,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num as cart_num")->join("left join products as pr on c.goods_id=pr.id left join goods as go on pr.goods_id = go.id")->where($where)->findAll();
                 foreach ($items as $k => $item) { 
                     $item['goods_nums'] = $item['cart_num'];
                     $prom_goods = $prom->prom_goods($item);
