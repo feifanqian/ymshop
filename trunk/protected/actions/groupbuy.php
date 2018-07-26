@@ -310,7 +310,7 @@ class GroupbuyAction extends Controller
         if($list) {
             if($list['data']!=null) {
                 foreach ($list['data'] as $k => $v) {
-                    $had_join_num = $this->model->table('groupbuy_log')->where('id='.$v['log_id'].' and pay_status=1')->count();
+                    $had_join_num = $this->model->table('groupbuy_log')->where('id='.$v['log_id'].' and pay_status in (1,3)')->count();
                         if($had_join_num>=$v['min_num']) {
                             $list['data'][$k]['join_status'] = '拼团成功';
                         } elseif ($had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
