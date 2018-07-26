@@ -186,14 +186,14 @@ class Cart {
                 foreach ($items as $k => $item) {
                       $num = $item['num'];
                       $num = $num!=null?$num:1;
-                      if ($num > $item['store_nums']) {
-                            $num = $item['store_nums'];
-                            if($uid || $session_id) {
-                               $this->modNum($item['id'], $num,$uid,$session_id); 
-                            } else {
-                               $this->modNum($item['id'], $num);
-                            }
-                       }   
+                      // if ($num > $item['store_nums']) {
+                      //       $num = $item['store_nums'];
+                      //       if($uid || $session_id) {
+                      //          $this->modNum($item['id'], $num,$uid,$session_id); 
+                      //       } else {
+                      //          $this->modNum($item['id'], $num);
+                      //       }
+                      //  }   
                     $item['goods_nums'] = $num;
                     $prom_goods = $prom->prom_goods($item);
                     $amount = sprintf("%01.2f", $prom_goods['real_price'] * $num);
