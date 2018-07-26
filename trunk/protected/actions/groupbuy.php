@@ -256,9 +256,11 @@ class GroupbuyAction extends Controller
             $info['status'] = '拼团中';
         }
         $info['share_url'] = 'http://www.ymlypt.com/index/groupbuy/id/'.$groupbuy_id;
+        if($joined) {
+            $order = $this->model->table('order')->fields('id')->where('join_id='.$joined['id'])->find();
+            $info['order_id'] = $order['id'];
+        }
         
-
-
         $this->code = 0;
         $this->content = $info;
     }
