@@ -654,6 +654,7 @@ class GoodsAction extends Controller {
                         $itm['decrease_price'] = $decrease_price;
                         $itm['final_price'] = $itm['zk_final_price'] - $itm['decrease_price'];
                         $itm['nick'] = $itm['shop_title'];
+                        $itm['rate_price'] = $itm['final_price']*$itm['commission_rate'];
                         $itm['coupon_click_url'] = strpos($itm['coupon_share_url'], 'http') == false ? 'https:' . $itm['coupon_share_url'] : $itm['coupon_share_url'];
                         $itm['item_description'] = $itm['coupon_info'];
                         $itm['category'] = 30;
@@ -686,6 +687,7 @@ class GoodsAction extends Controller {
                             $itm['decrease_price'] = $decrease_price;
                             $itm['final_price'] = $itm['zk_final_price'] - $itm['decrease_price'];
                             $itm['nick'] = $itm['shop_title'];
+                            $itm['rate_price'] = $itm['final_price']*$itm['commission_rate'];
                             $itm['coupon_click_url'] = strpos($itm['coupon_share_url'], 'http') == false ? 'https:' . $itm['coupon_share_url'] : $itm['coupon_share_url'];
                             $itm['item_description'] = $itm['coupon_info'];
                             $itm['category'] = 30;
@@ -706,18 +708,6 @@ class GoodsAction extends Controller {
             }
         }
 
-//        foreach ($save_data as $key => &$itm) {
-//            $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
-////            if ($decrease_price < 10) {
-////                unset($save_data[$key]);
-////            }
-//            $itm['decrease_price'] = $decrease_price;
-//            $itm['final_price'] = $itm['zk_final_price'] - $itm['decrease_price'];
-//            $itm['nick'] = $itm['shop_title'];
-//            $itm['coupon_click_url'] = strpos($itm['coupon_share_url'], 'http') == false ? 'https:' . $itm['coupon_share_url'] : $itm['coupon_share_url'];
-//            $itm['item_description'] = $itm['coupon_info'];
-//            $itm['category'] = 30;
-//        }
         if ($sort) {
             switch ($sort) {
                 case 'price_asc':
@@ -735,7 +725,7 @@ class GoodsAction extends Controller {
             }
         } else {
             // array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
-            array_multisort(array_column($save_data, 'decrease_price'), SORT_DESC, $save_data, array_column($save_data, 'volume'), SORT_DESC, $save_data);
+            array_multisort(array_column($save_data, 'decrease_price'), SORT_DESC, $save_data, array_column($save_data, 'rate_price'), SORT_DESC, $save_data);
         }
 
 
