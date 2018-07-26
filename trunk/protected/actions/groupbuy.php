@@ -239,7 +239,7 @@ class GroupbuyAction extends Controller
         $info['groupbuy_join_list']['remain_time'] = $this->timediff(time(),strtotime($info['end_time']));
         $info['groupbuy_join_list']['remain_seconds'] = strtotime($info['end_time'])-time();
         
-        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status=1')->find();
+        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status in (1,3)')->find();
         if($joined && $info['had_join_num']>=$info['min_num']) {
             $info['status'] = '拼团成功';
         } elseif ($joined && $info['had_join_num']<$info['min_num'] && time()>=strtotime($info['end_time'])) {
