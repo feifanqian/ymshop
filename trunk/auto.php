@@ -342,7 +342,6 @@ class LinuxCliTask{
                 $amount = $v['order_amount']; 
                 if($v['join_id']!=0) {
                     $groupbuy_log = $this->model->table('groupbuy_log')->fields('id,join_id,user_id,join_time')->where('id='.$v['join_id'].' and pay_status=1')->findAll();
-                    var_dump($groupbuy_log);die;
                     if($groupbuy_log) {
                         foreach ($groupbuy_log as $key => $value) {
                             $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
