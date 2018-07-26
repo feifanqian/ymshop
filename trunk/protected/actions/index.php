@@ -601,11 +601,12 @@ class IndexAction extends Controller {
 
     //APP端邀请页banner
     public function invite_bg_banner(){
-        $ad = $this->model->query("select content from tiny_ad where id in (82,83,84)  and is_open = 1");
+        $ad = $this->model->query("select content from tiny_ad where id=85  and is_open = 1");
         $arr = array();
-        foreach ($ad as $k => $v){
-             $content = unserialize($v['content']);
-             $arr[$k] = $content[0]['path'];
+        $ads = unserialize($ad['content']);
+        var_dump($ads);die;
+        foreach ($ads as $k => $v){
+             $arr[$k] = $v['path'];
         }
        
         $this->code = 0;
