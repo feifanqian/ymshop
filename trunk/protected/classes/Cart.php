@@ -51,6 +51,7 @@ class Cart {
             } 
         }
         if($session_id) {
+            var_dump($session_id);die;
            $exist = $model->table('cart')->where("goods_id=".$id." and session_id='{$session_id}'")->find();
             if($exist){
                 $model->table('cart')->data(array('num'=>"`num`+({$num})"))->where("goods_id=".$id." and session_id='{$session_id}'")->update();
@@ -180,8 +181,7 @@ class Cart {
             }
             if ($idstr != '') {
                 $prom = new Prom();
-                // $items = $model->fields("pr.id,pr.goods_id,pr.store_nums,pr.spec,go.weight,go.point,go.sell_price,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num as cart_num")->join("left join goods as go on pr.goods_id = go.id left join cart as c on pr.id=c.goods_id")->where("pr.id in($idstr)")->findAll();
-                $items = $model->table('cart as c')->fields("pr.id,pr.goods_id,pr.store_nums,pr.spec,go.weight,go.point,go.sell_price,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num as cart_num")->join("left join products as pr on c.goods_id=pr.id left join goods as go on pr.goods_id = go.id")->where($where)->findAll();
+                $items = $model->table('cart as c')->fields("pr.id,pr.goods_id,pr.store_nums,pr.spec,go.weight,go.point,go.sell_price,go.img,go.name,go.prom_id,go.point,go.freeshipping,go.shop_id,c.num as cart_num")->join("left join products as pr on c.goods_id=pr.id left join goods as go on pr.goods_id = go.id")->where($where)->order('c.id desc')->findAll();
                 foreach ($items as $k => $item) { 
                     $item['goods_nums'] = $item['cart_num'];
                     $prom_goods = $prom->prom_goods($item);
