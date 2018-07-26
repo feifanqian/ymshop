@@ -469,7 +469,7 @@ class IndexController extends Controller {
                 $groupbuy_join_list = array_slice($groupbuy_join_list,0,2);
             }
             $this->assign('groupbuy_join_list', $groupbuy_join_list);
-            $this->assign('seo_title', $goods['title']);
+            $this->assign('seo_title', $goods['name']);
             $this->assign('id', $id);
             $this->assign("skumap", $skumap);
             $this->assign("attr_array", $attr_array);

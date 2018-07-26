@@ -24,7 +24,7 @@ class GoodsAction extends Controller {
         // }else{
         //    $result = $cart->addItem($id, $num);
         // }
-        $result = $cart->addItem($id, $num);
+        $result = $cart->addItems($id, $num);
         // if($uid || $session_id) {    
         //     $cartlist = $cart->all($uid,$session_id);
         // }else {

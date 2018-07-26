@@ -60,6 +60,14 @@ class Cart {
         } 
     }
 
+    public function addItems($id, $num = 1) {
+        if ($this->hasItem($id)) {
+            $this->incNum($id, $num);
+            return;
+        }
+        $this->items[$id] = $num;
+    }
+
     public function hasItem($id) {
         return isset($this->items[$id]);
     }
