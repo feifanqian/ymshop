@@ -604,7 +604,7 @@ class IndexAction extends Controller {
         $ad = $this->model->query("select content from tiny_ad where id in (82,83,84)  and is_open = 1");
         $arr = array();
         foreach ($ad as $k => $v){
-             $content = unserialize($v['content']);
+             $content = json_decode(unserialize($v['content']),true);
              $arr[$k] = $content['path'];
         }
        
