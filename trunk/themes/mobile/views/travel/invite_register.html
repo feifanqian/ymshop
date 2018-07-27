@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
     <link rel="stylesheet" href="/static/yuanmeng/three-level/css/allway.css">
-    <title>支付成功</title>
+    <title>注册</title>
 </head>
 <body>
 <style type="text/css">
@@ -71,6 +71,15 @@
 }
 .input-area input{
   width:80%;
+  background-color: #fddae3;
+  border: none;
+}
+.input-area img{
+    margin-left: 16pt;
+    margin-right: 12pt;
+    margin-bottom: 4pt;
+    position: relative;
+    top: 10px;
 }
 </style>
 <script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
@@ -83,21 +92,21 @@
               <input type="hidden" name="inviter" value="{$inviter}">
             <div><span style="display: inline-block;width: 100%;margin-top: 18pt;text-align: center;color:#f3be1e;font-size: 17pt;">注册</span></div>  
             <div class="input-area">
-                <img src="/themes/mobile/images/__mobile_phone.png" width="24" height="24" style="margin-left:16pt;margin-right: 12pt;margin-bottom: 4pt;"><input name="mobile" id="mobile" value="{$mobile}" class="input" pattern="mobi" placeholder="请输入手机号" alt="手机格式不正确!">
+                <img src="/themes/mobile/images/__mobile_phone.png" width="24" height="24"><input name="mobile" id="mobile" value="{$mobile}" class="input" pattern="mobi" placeholder="请输入手机号" alt="手机格式不正确!">
             </div>
             
             <div class="input-area">
-                <img src="/themes/mobile/images/__verification_code.png" width="24" height="24" style="margin-left:16pt;margin-right: 12pt;margin-bottom: 4pt;">
+                <img src="/themes/mobile/images/__verification_code.png" width="24" height="24">
                 <input type="text" class="input input-sm" name="mobile_code" pattern="\d{6}" placeholder="验证码" alt="6位短信验证码" style="display: inline-block;width: 50%;"><label></label><a id="sendSMS" style="width: 30%;display: inline-block;text-decoration: none;width: 80pt;color: #f5c34e;font-size: 13pt;" class="btn btn-default btn-mini">发送验证码</a>
             </div>
              
             <div class="input-area">
-                <img src="/themes/mobile/images/__password.png" width="24" height="24" style="margin-left:16pt;margin-right: 12pt;margin-bottom: 4pt;">
+                <img src="/themes/mobile/images/__password.png" width="24" height="24">
                 <input bind="repassword" minlen=6 value="{$password}" maxlen=20 class="input" type="password" name="password" pattern="required" placeholder="输入密码" alt="6-20任意字符组合">
             </div>
                      
             <div class="input-area">
-                <img src="/themes/mobile/images/__confirm_password.png" width="24" height="24" style="margin-left:16pt;margin-right: 12pt;margin-bottom: 4pt;">
+                <img src="/themes/mobile/images/__confirm_password.png" width="24" height="24">
                 <input bind="password" minlen=6 maxlen=20 value="{$repassword}" class="input" type="password"  name="repassword" pattern="required" placeholder="确认密码" alt="6-20任意字符组合">
             </div>
             
