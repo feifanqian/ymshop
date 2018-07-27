@@ -29,7 +29,7 @@
                         <div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a>
                             <div class="menu_select">
                                 <ul>
-                                    <li><a class="icon-pencil" href="{url:/marketing/groupbuy_edit/id/$item[id]}"> 查看</a></li>
+                                    <li><a class="icon-pencil" href="javascript:;" onclick="view({$item['order_id']})"> 查看</a></li>
                                     <!-- <li><a class="icon-close" href="javascript:;" onclick="confirm_action('{url:/marketing/groupbuy_del/id/$item[id]}')"> 删除</a></li> -->
                                 </ul>
                             </div>
@@ -50,3 +50,8 @@
     <div class="page_nav">
         {echo:$list['html']}
     </div>
+    <script type="text/javascript">
+    function view(id){
+        art.dialog.open("{url:/order/order_view/id/}"+id,{id:'view_dialog',title:'查看订单',resize:false,width:900,height:450});
+    }
+    </script>
