@@ -519,7 +519,7 @@ class OrderAction extends Controller {
         }
         $real_freight = $payable_freight;
         if($this->user['id']==42608) {
-            var+dump($weight);
+            var_dump($weight);
             var_dump($payable_freight);die;
         }
         //计算订单优惠
