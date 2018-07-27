@@ -223,15 +223,22 @@ class OrderAction extends Controller {
         if (!$address_id || !$payment_id || ($is_invoice == 1 && $invoice_title == '')) {
 
             if (is_array($product_id)) {
+                if($this->user['id']==42608) {
+                    var_dump(111);
+                }
                 foreach ($product_id as $key => $val) {
                     $product_id[$key] = Filter::int($val);
                 }
                 if($this->user['id']==42608) {
-                    var_dump($product_id);die;
+                    var_dump($product_id);
                 }
                 $product_id = implode('-', $product_id);
             } else {
                 $product_id = Filter::int($product_id);
+                if($this->user['id']==42608) {
+                    var_dump(222);
+                    var_dump($product_id);
+                }
             }
             $data = Req::args();
             $data['is_invoice'] = $is_invoice;
