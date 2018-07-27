@@ -677,6 +677,7 @@ class UcenterAction extends Controller {
                 $parse_area[$area['id']] = $area['name'];
             }
             $content['parse_area'] = $parse_area;
+            $content['area'] = array_values($parse_area);
             $content['order_goods'] = $order_goods;
             $content['invoice'] = $invoice;
             $content['order'] = $order;
