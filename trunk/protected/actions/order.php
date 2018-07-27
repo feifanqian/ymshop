@@ -259,7 +259,7 @@ class OrderAction extends Controller {
             if(is_array($product_id)) {
                 $product_id = Filter::int($product_id[0]);
             } else {
-                $product_id = $this->cut('[',']',$product_id);
+                $product_id = substr($product_id,1,strlen($product_id)-2);
                 $product_id = Filter::int($product_id);
             }
             
