@@ -254,13 +254,15 @@ class OrderAction extends Controller {
         //订单类型: 0普通订单 1团购订单 2限时抢购 3捆绑促销
         $order_type = 0;
         $model = new Model('');
-        if($this->user['id']==42608) {
-            var_dump($product_id);
-            var_dump(intval($product_id));die;
-        }
         //团购处理
         if ($type == "groupbuy") {
-            $product_id = Filter::int($product_id[0]);
+            if(is_array($product_id)) {
+                $product_id = Filter::int($product_id[0]);
+            } else {
+                $product_id = $this->cut('[',']',$product_id);
+                $product_id = Filter::int($product_id);
+            }
+            
             $num = isset($buy_num[0])?Filter::int($buy_num[0]):1;
             if ($num < 1)
                 $num = 1;
@@ -1074,6 +1076,13 @@ class OrderAction extends Controller {
             'point'=>$point
         );
         return $product;
+    }
+
+    public function cut($begin, $end, $str) {
+        $t1 = mb_strpos($str, $begin);
+        $t2 = mb_strpos($str, $end);
+        $ret = mb_substr($str, $t1 + 3, $t2 - $t1);
+        return $ret;
     }
 
 }
