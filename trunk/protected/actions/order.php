@@ -495,6 +495,9 @@ class OrderAction extends Controller {
         $weight = 0;
         $point = 0;
         $productarr = array();
+        if($this->user['id']==42608) {
+            var_dump($order_products);die;
+        }
         foreach ($order_products as $item) {
             $payable_amount+=$item['sell_total'];
             $real_amount+=$item['amount'];
