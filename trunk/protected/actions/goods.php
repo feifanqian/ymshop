@@ -643,7 +643,7 @@ class GoodsAction extends Controller {
         $save_data = [];
         $user_id = $this->user['id'] == null ? 0 : $this->user['id'];
         if (empty($cache_data)) {
-            $tbk_data = $this->tbk_req_get($form, $q, $type, 1, 'total_sales_des', $user_id);
+            $tbk_data = $this->tbk_req_get($form, $q, $type, 1, 'tk_total_sales_des', $user_id);
             if (isset($tbk_data['result_list']['map_data'])) {
                 foreach ($tbk_data['result_list']['map_data'] as $itm) {
                     if (!isset($save_data[$itm['coupon_id']])) {
@@ -675,7 +675,7 @@ class GoodsAction extends Controller {
             $tb_page = ceil($count / 100) + 1;
 
             if ($count < $page * $size) {
-                $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page, 'total_sales_des', $user_id);
+                $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page, 'tk_total_sales_des', $user_id);
                 $new_data = [];
                 if (isset($tbk_data['result_list']['map_data'])) {
                     foreach ($tbk_data['result_list']['map_data'] as $key => $itm) {
