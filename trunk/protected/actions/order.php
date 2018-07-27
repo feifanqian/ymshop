@@ -220,14 +220,14 @@ class OrderAction extends Controller {
         if(!$buy_num) {
             $buy_num = Req::args('buynums');
         }
-        if($this->user['id']==42608) {
-            var_dump($product_id);die;
-        }
         if (!$address_id || !$payment_id || ($is_invoice == 1 && $invoice_title == '')) {
 
             if (is_array($product_id)) {
                 foreach ($product_id as $key => $val) {
                     $product_id[$key] = Filter::int($val);
+                }
+                if($this->user['id']==42608) {
+                    var_dump($product_id);die;
                 }
                 $product_id = implode('-', $product_id);
             } else {
