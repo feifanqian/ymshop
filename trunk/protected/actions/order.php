@@ -268,9 +268,8 @@ class OrderAction extends Controller {
                 $num = 1;
             
             $item = $model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("gb.*,go.name,go.store_nums,go.img,go.sell_price,go.weight,go.shop_id,go.point,pr.id as product_id,pr.spec,go.freeshipping")->where("gb.id=$id")->find();
-            // $item = $model->table("goods as go")->join("left join groupbuy as gb on gb.goods_id=go.id left join products as pr on pr.goods_id=go.id")->fields("gb.*,go.name,go.store_nums,go.img,go.sell_price,go.weight,go.shop_id,go.point,pr.id as product_id,pr.spec,go.freeshipping")->where("gb.id=$id and pr.id=$product_id")->find();
             if($this->user['id']==42608) {
-                var_dump($product_id);
+                $item = $model->table("goods as go")->join("left join groupbuy as gb on gb.goods_id=go.id left join products as pr on pr.goods_id=go.id")->fields("gb.*,go.name,go.store_nums,go.img,go.sell_price,go.weight,go.shop_id,go.point,pr.id as product_id,pr.spec,go.freeshipping")->where("gb.id=$id and pr.id=$product_id")->find();
                 var_dump($item);die;
             }
             $order_products = $this->packGroupbuyProducts($item, $num);
