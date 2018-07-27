@@ -18,8 +18,16 @@ class GroupbuyAction extends Controller
         if(!$page) {
             $page = 1;
         }
-        $list = $this->model->table('groupbuy as g')->fields('g.id,g.goods_id,o.name,o.img,o.sell_price,g.price,g.min_num')->join('left join goods as o on g.goods_id = o.id')->where('g.is_end = 0')->order('g.id desc')->findPage($page,10);
+        $list = $this->model->table('groupbuy as g')->fields('g.id,g.goods_id,o.name,o.img,o.sell_price,g.price,g.min_num,o.store_nums,g.end_time')->join('left join goods as o on g.goods_id = o.id')->where('g.is_end = 0')->order('g.id desc')->findPage($page,10);
         if($list) {
+            if($list['data']) {
+                foreach ($list['data'] as $key => $value) {
+                    if ($value['store_nums'] <= 0 || time() >= strtotime($value['end_time'])) {
+                        $this->model->table('groupbuy')->data(array('is_end' => 1))->where("id=".$value['id'])->update();
+                        unset($list['data'][$key]);
+                    }
+                }
+            }
             unset($list['html']);
         }
         $this->code = 0;
