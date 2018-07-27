@@ -1108,9 +1108,9 @@ class MarketingController extends Controller {
                 foreach ($list['data'] as $k => $v) {
                     $had_join_num = $model->table('groupbuy_log')->where('join_id='.$v['join_id'].' and pay_status=1')->count();
                         if($had_join_num>=$v['min_num']) {
-                            $list['data'][$k]['join_status'] = '拼团成功';
+                            $list['data'][$k]['join_status'] = '<span style="color:green;">拼团成功</span>';
                         } elseif ($had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
-                            $list['data'][$k]['join_status'] = '拼团失败';
+                            $list['data'][$k]['join_status'] = '<span style="color:red;">拼团失败</span>';
                         } elseif ($had_join_num<$v['min_num'] && time()<strtotime($v['end_time'])) {
                             $list['data'][$k]['join_status'] = '拼团中';
                         } elseif ($v['gl_status']==3 && time()>strtotime($v['end_time'])) {
