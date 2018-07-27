@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="/static/yuanmeng/three-level/css/allway.css">
+    <title>支付成功</title>
+</head>
+<body>
+<style type="text/css">
+.bg-content{
+  width:100%;
+  height:300px;
+  /*background-color: #f2764a;*/
+  /*background:url(/themes/mobile/images/anzhuo.jpg) no-repeat center;*/
+  padding-left: 20px;
+  padding-right: 20px; 
+}
+.bg-content1{
+  width: 100%;
+  height: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 10px;
+}
+.line-text{
+  width:100%;
+  height: 50px;
+  /*margin-top: 10px;*/
+  border-bottom: 1px solid #ccc;
+}
+.line-text p{
+   line-height: 50px;
+   font-size: 16px;
+   color:#494949;
+   font-family: "Microsoft YaHei";
+   font-weight: 800;
+}
+.kuang{
+    width: 90%;
+    height: 400px;
+    text-align: center;
+    position: relative;
+    padding-top: 10px;
+    top: 44px;
+    left: 5%;
+    background-image: url(/themes/mobile/images/kuang.png);
+    background-size: 100% 400px;
+    background-repeat: no-repeat;
+}
+.register_act{
+  display: block;
+  width:30%;
+  margin-left: 33%
+  height:40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 8px;
+  background-color: #ffdb31;
+  color: #544946;
+}
+</style>
+<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+  <div style="width: 100%;height: 100px;background-color:#f51a52; "></div>
+  <div class="bg-content" style="height: 1000px;">
+     <div class="kuang">
+        <div style="position: relative;">
+          <form action="{url:/simple/register_act}" method="post">
+              <input type="hidden" name="back" value="{$back}">
+              <input type="hidden" name="inviter" value="{$inviter}">
+            <div class="">
+                <div class="input-area"><img src="/themes/mobile/images/__mobile_phone.png" width="30" height="30"><input name="mobile" id="mobile" value="{$mobile}" class="input" pattern="mobi" placeholder="请输入手机号" alt="手机格式不正确!"></div>
+            </div>
+            <div class="">
+                <div class="input-area"><img src="/themes/mobile/images/__verification_code.png" width="30" height="30"><input type="text" class="input input-sm" name="mobile_code" pattern="\d{6}" placeholder="验证码" alt="6位短信验证码"><label></label><input id="sendSMS" type="button" class="btn btn-default btn-mini" value="获取短信验证码"></div>
+            </div>
+            <div class="">
+                <div class="input-area"><img src="/themes/mobile/images/__password.png" width="30" height="30"><input bind="repassword" minlen=6 value="{$password}" maxlen=20 class="input" type="password" name="password" pattern="required" placeholder="输入密码" alt="6-20任意字符组合"></div>
+            </div>
+            <div class="">
+                <div class="input-area"><img src="/themes/mobile/images/__confirm_password.png" width="30" height="30"><input bind="password" minlen=6 maxlen=20 value="{$repassword}" class="input" type="password"  name="repassword" pattern="required" placeholder="确认密码" alt="6-20任意字符组合"></div>
+            </div>
+            
+            <!-- <div class=" s_checkbox" style="padding:0px;">
+                <label class=" weui_check_label" for="s11">
+                    <div class="_hd">
+                        <input type="checkbox" class="weui_check" name="checkbox1" id="readme" checked="checked">
+                        <i class="weui_icon_checked"></i>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>我已阅读并同意《<a  href="javascript:;" class="open-popup" data-target="#license">{$site_title}用户注册协议</a>》</p>
+                    </div>
+                </label>
+            </div> -->
+            <div class="">
+                <button class="register_act">立即注册</button>
+            </div>
+          </form>  
+        </div>
+     </div>
+     
+     <!-- <div><p class="black" style="font-size:20px;text-align: center;color:#fff;margin-top: 10px;">{$currency_symbol}{$order['order_amount']}</p></div> -->
+     <div style="position: relative;left: 28%;top:66%;width: 60%;">
+      <a href="http://sj.qq.com/myapp/detail.htm?apkName=com.yidu.yuanmeng"><img src="/themes/mobile/images/anniu.png" width="280" height="60"></a>
+    </div>
+  </div>
+  
+  <script type="text/javascript">
+    $(function () {
+       var color_list = {0:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/11/bb0d505e571b8cbfd787c39f7fc66cb3.jpg)',1:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/11/92582a7071a77fc06b81568b897e678b.jpg)',2:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/11/7d4e51514c502dcc1628bc1bf5efab6b.jpg)'};
+       // var index = parseInt(2*Math.random());
+       var index = Math.floor(Math.random() * 3);
+        $('.bg-content').css('background-image',color_list[index]);
+        $('.bg-content').css('background-size',"cover");
+        $('.bg-content').css('background-repeat',"no-repeat");
+        $('.bg-content').css('background-position',"center");
+    });  
+  </script>
+</body>
+</html>

@@ -563,5 +563,10 @@ class TravelController extends Controller
         $id = Filter::int(Req::args("id"));
         $way = $this->model->table('travel_way')->fields('remark')->where('id='.$id)->find();
         echo JSON::encode(array('data' => $way['remark']));
-    } 
+    }
+
+    public function  invite_register()
+    {
+        $this->redirect();
+    }
 }    

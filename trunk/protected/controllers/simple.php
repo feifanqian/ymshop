@@ -184,6 +184,9 @@ class SimpleController extends Controller {
             $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
             if($checkFlag || $mobile_code=='000000'){
                     SMS::getInstance()->flushCode($mobile);
+                    if($realname=='') {
+                        $realname = $mobile;
+                    }
                     if($realname==""){
                         $info = array('field' => 'realname', 'msg' => ' 姓名不得为空！');
                     }else{
