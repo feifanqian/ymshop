@@ -567,6 +567,8 @@ class TravelController extends Controller
 
     public function invite_register()
     {
+        $inviter = Filter::int(Req::args("inviter_id"));
+        $this->assign('inviter',$inviter);
         $this->redirect();
     }
 

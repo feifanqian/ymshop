@@ -89,27 +89,27 @@
   <div class="bg-content" style="height: 1000px;">
      <div class="kuang">
         <div style="position: relative;">
-          <form action="{url:/simple/register_act}" method="post">
-              <input type="hidden" name="back" value="{$back}">
+          <form action="{url:/simple/register_act}" method="post" id="reg_submit" name="reg_submit">
+              <input type="hidden" name="back" value="invite_register">
               <input type="hidden" name="inviter" value="{$inviter}">
             <div><span style="display: inline-block;width: 100%;margin-top: 18pt;text-align: center;color:#f3be1e;font-size: 17pt;">注册</span></div>  
             <div class="input-area">
-                <img src="/themes/mobile/images/__mobile_phone.png" width="24" height="24"><input name="mobile" id="mobile" value="{$mobile}" class="input" pattern="mobi" placeholder="请输入手机号" alt="手机格式不正确!">
+                <img src="/themes/mobile/images/__mobile_phone.png" width="24" height="24"><input name="mobile" id="mobile" value="" class="input" pattern="mobi" placeholder="请输入手机号" alt="手机格式不正确!">
             </div>
             
             <div class="input-area">
                 <img src="/themes/mobile/images/__verification_code.png" width="24" height="24" style="margin-left: 0px;">
-                <input type="text" class="input input-sm" name="mobile_code" pattern="\d{6}" placeholder="验证码" alt="6位短信验证码" style="display: inline-block;width: 50%;"><label></label><a id="sendSMS" style="width: 30%;display: inline-block;text-decoration: none;width: 80pt;color: #f5c34e;font-size: 13pt;" class="btn btn-default btn-mini">发送验证码</a>
+                <input type="text" class="input input-sm" name="mobile_code" pattern="\d{6}" placeholder="验证码" alt="6位短信验证码" style="display: inline-block;width: 50%;"><label></label><input type="button" id="sendSMS" style="width: 30%;display: inline-block;text-decoration: none;width: 80pt;color: #f5c34e;font-size: 13pt;" class="btn btn-default btn-mini" value="发送验证码">
             </div>
              
             <div class="input-area">
                 <img src="/themes/mobile/images/__password.png" width="24" height="24">
-                <input bind="repassword" minlen=6 value="{$password}" maxlen=20 class="input" type="password" name="password" pattern="required" placeholder="输入密码" alt="6-20任意字符组合">
+                <input bind="repassword" minlen=6 value="" maxlen=20 class="input" type="password" name="password" pattern="required" placeholder="输入密码" alt="6-20任意字符组合">
             </div>
                      
             <div class="input-area">
                 <img src="/themes/mobile/images/__confirm_password.png" width="24" height="24">
-                <input bind="password" minlen=6 maxlen=20 value="{$repassword}" class="input" type="password"  name="repassword" pattern="required" placeholder="确认密码" alt="6-20任意字符组合">
+                <input bind="password" minlen=6 maxlen=20 value="" class="input" type="password"  name="repassword" pattern="required" placeholder="确认密码" alt="6-20任意字符组合">
             </div>
             
             <div class="" style="margin-top:12pt;">
@@ -123,7 +123,7 @@
       <a href="http://sj.qq.com/myapp/detail.htm?apkName=com.yidu.yuanmeng"><img src="/themes/mobile/images/anniu.png" width="280" height="60"></a>
     </div>
   </div>
-  
+  <script type="text/javascript" charset="UTF-8" src="{url:#js/reg.js}"></script>
   <script type="text/javascript">
     $(function () {
        var color_list = {0:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/27/8c31ed9ac7b221d2b5be035cd6d4f4b3.jpg)',1:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/27/260ed5b808c52430d277a84d7513e4ef.jpg)',2:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/27/5661e0760ce08873a8512413d25f0d85.jpg)'};
@@ -132,6 +132,25 @@
         $('.bg-content').css('background-size',"cover");
         $('.bg-content').css('background-repeat',"no-repeat");
         $('.bg-content').css('background-position',"center");
+    });
+    $('.register_act').on('click',function(){
+         if($("input[name='mobile']").val()=='') {
+            alert('手机号不能为空');
+            return false;
+         }
+         if($("input[name='mobile_code']").val()=='') {
+            alert('验证码不能为空');
+            return false;
+         }
+         if($("input[name='password']").val()=='') {
+            alert('密码不能为空');
+            return false;
+         }
+         if($("input[name='repassword']").val()=='') {
+            alert('确认密码不能为空');
+            return false;
+         } 
+         document.forms['reg_submit'].submit();
     });  
   </script>
 </body>
