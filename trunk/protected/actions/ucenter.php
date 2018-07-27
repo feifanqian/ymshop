@@ -1603,7 +1603,8 @@ class UcenterAction extends Controller {
     //获取我的邀请二维码
     public function myInviteQRCodeUrl() {
         $uid = $this->user['id'];
-        $url = Url::fullUrlFormat("/index/invite") . "?uid=" . $uid;
+        // $url = Url::fullUrlFormat("/index/invite") . "?uid=" . $uid;
+        $url = Url::fullUrlFormat("/travel/invite_register") . "?uid=" . $uid;
         $this->code = 0;
         $this->content['url'] = $url;
     }
