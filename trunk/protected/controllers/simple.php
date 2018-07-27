@@ -232,6 +232,9 @@ class SimpleController extends Controller {
                                                 $this->redirect("/active/login/redirect/recruit");
                                             }
                                             if($back=='invite_register') {
+                                                if($inviter_id) {
+                                                    Common::buildInviteShip($inviter_id, $last_id, 'wechat');
+                                                }
                                                 $this->redirect("/travel/register_success");
                                             }
                                             $this->redirect("/ucenter/index",true);
