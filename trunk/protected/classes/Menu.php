@@ -134,6 +134,7 @@ class Menu {
             '/marketing/bundling_edit' => array('name' => '编辑捆绑促销', 'parent' => 'promotions'),
             '/marketing/groupbuy_list' => array('name' => '团购', 'parent' => 'promotions'),
             '/marketing/groupbuy_edit' => array('name' => '团购', 'parent' => 'promotions'),
+            '/marketing/groupbuy_active_list' => array('name' => '团购活动', 'parent' => 'promotions'),
             '/marketing/flash_sale_list' => array('name' => '限时抢购', 'parent' => 'promotions'),
             '/marketing/flash_sale_edit' => array('name' => '编辑限时抢购', 'parent' => 'promotions'),
             '/marketing/point_sale_list' => array('name' => '积分购', 'parent' => 'promotions'),

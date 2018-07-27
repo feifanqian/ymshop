@@ -1094,4 +1094,34 @@ class MarketingController extends Controller {
         $model->table('active_voucher')->data(['status'=>0])->where('id='.$id)->update();
         exit(json_encode(array('status' => 'success', 'msg' => '成功')));
     }
+
+    public function groupbuy_active_list()
+    {
+        $page = Filter::int(Req::args('page'));
+        if(!$page) {
+            $page = 1;
+        }
+
+        $list = $this->model->table('order as o')->fields('gl.id as log_id,gl.join_id,gl.groupbuy_id as id,go.name,go.img,g.min_num,g.price,gj.end_time,gj.status,o.id as order_id,og.product_id,gl.status as gl_status,u.nickname,g.title')->join('left join groupbuy_log as gl on o.join_id=gl.id left join order_goods as og on o.id=og.order_id left join groupbuy as g on gl.groupbuy_id=g.id left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on gl.join_id=gj.id left join user as u on o.user_id=u.id')->where('gl.pay_status in (1,3) and o.pay_status in (1,3)')->order('id desc')->findPage($page,10);
+        if($list) {
+            if($list['data']!=null) {
+                foreach ($list['data'] as $k => $v) {
+                    $had_join_num = $this->model->table('groupbuy_log')->where('join_id='.$v['join_id'].' and pay_status=1')->count();
+                        if($had_join_num>=$v['min_num']) {
+                            $list['data'][$k]['join_status'] = '拼团成功';
+                        } elseif ($had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
+                            $list['data'][$k]['join_status'] = '拼团失败';
+                        } elseif ($had_join_num<$v['min_num'] && time()<strtotime($v['end_time'])) {
+                            $list['data'][$k]['join_status'] = '拼团中';
+                        } elseif ($v['gl_status']==3 && time()>strtotime($v['end_time'])) {
+                            $list['data'][$k]['join_status'] = '已退款';
+                        } else {
+                            $list['data'][$k]['join_status'] = '拼团中';
+                        }
+                }
+            }
+        }
+        $this->assign('list',$list);
+        $this->redirect();
+    }
 }
