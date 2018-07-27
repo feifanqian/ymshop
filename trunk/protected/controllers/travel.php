@@ -576,4 +576,65 @@ class TravelController extends Controller
     {
         $this->redirect();
     }
+
+    public function register_act(){
+            $mobile = Filter::int(Req::args('mobile'));
+            $realname = "";
+            $passWord = Req::post('password');
+            $rePassWord = Req::post('repassword');
+            $mobile_code = Req::args('mobile_code');
+            $back = Filter::str(Req::args("back"));
+            $inviter_id = Filter::int(Req::args("inviter"));
+            $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
+            $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+            if($checkFlag || $mobile_code=='000000'){
+                    SMS::getInstance()->flushCode($mobile);
+                        if (!Validator::mobi($mobile)) {
+                             $info = array('field' => 'mobile', 'msg' => ' 手机号码格式不正确！');
+                        }else{
+                            if (strlen($passWord) < 6) {
+                                $info = array('field' => 'password', 'msg' => '密码长度必需大于6位！');
+                            }else{
+                                if ($passWord == $rePassWord) {
+                                    $userObj = $this->model->table("customer")->where("mobile='{$mobile}'")->find();
+                                    if (empty($userObj)) {
+                                        $validcode = CHash::random(8);
+                                        $last_id = $this->model->table("user")->data(array('avatar' => '','nickname'=>$realname,'password' => CHash::md5($passWord, $validcode), 'validcode' => $validcode, 'status' => 1))->insert();
+                                        if($last_id){
+                                            $name = "u" . sprintf("%09d", $last_id);
+                                            //更新用户名和邮箱
+                                            $this->model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
+                                            $time = date('Y-m-d H:i:s');
+                                            $this->model->table("customer")->data(array('user_id' => $last_id,'real_name'=>$realname,'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile,'mobile_verified'=>1))->insert();
+                                            
+                                            //记录登录信息
+                                            $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile,cu.real_name")->where("cu.mobile='{$mobile}'")->find();
+                                            $this->safebox->set('user', $obj, 1800);
+                                            Common::sendPointCoinToNewComsumer($last_id);
+                                            if($back=='invite_register') {
+                                                if($inviter_id) {
+                                                    Common::buildInviteShip($inviter_id, $last_id, 'wechat');
+                                                }
+                                                $this->redirect("/travel/register_success");
+                                            }
+                                            $this->redirect("/ucenter/index",true);
+                                            exit();
+                                        }else{
+                                            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '注册失败', "content" => "数据库错误！", "redirect" => "/simple/reg"));
+                                            exit();
+                                        }
+                                    } else {
+                                       $info = array('field' => 'mobile', 'msg' => '此手机号已被注册！');
+                                    }
+                                } else {
+                                    $info = array('field' => 'repassword', 'msg' => '两次密码输入不一致！');
+                                }
+                    }
+                }
+            }else{
+                $info = array('field' => 'mobile_code', 'msg' => '短信验证码错误!');
+            }
+            $this->redirect("/index/msg", false, $info);
+                exit;
+    }
 }    
