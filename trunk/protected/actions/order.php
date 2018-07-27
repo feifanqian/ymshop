@@ -267,11 +267,8 @@ class OrderAction extends Controller {
             if ($num < 1)
                 $num = 1;
             
-            $item = $model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("gb.*,go.name,go.store_nums,go.img,go.sell_price,go.weight,go.shop_id,go.point,pr.id as product_id,pr.spec,go.freeshipping")->where("gb.id=$id")->find();
-            if($this->user['id']==42608) {
-                $item = $model->table("goods as go")->join("left join groupbuy as gb on gb.goods_id=go.id left join products as pr on pr.goods_id=go.id")->fields("gb.*,go.name,go.store_nums,go.img,go.sell_price,go.weight,go.shop_id,go.point,pr.id as product_id,pr.spec,go.freeshipping")->where("gb.id=$id and pr.id=$product_id")->find();
-                var_dump($item);die;
-            }
+            // $item = $model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("gb.*,go.name,go.store_nums,go.img,go.sell_price,go.weight,go.shop_id,go.point,pr.id as product_id,pr.spec,go.freeshipping")->where("gb.id=$id")->find();
+            $item = $model->table("goods as go")->join("left join groupbuy as gb on gb.goods_id=go.id left join products as pr on pr.goods_id=go.id")->fields("gb.*,go.name,go.store_nums,go.img,go.sell_price,go.weight,go.shop_id,go.point,pr.id as product_id,pr.spec,go.freeshipping")->where("gb.id=$id and pr.id=$product_id")->find();
             $order_products = $this->packGroupbuyProducts($item, $num);
             $groupbuy = $model->table("groupbuy")->where("id=$id")->find();
             unset($groupbuy['description']);
@@ -502,9 +499,9 @@ class OrderAction extends Controller {
         $weight = 0;
         $point = 0;
         $productarr = array();
-        if($this->user['id']==42608) {
-            var_dump($order_products);die;
-        }
+        // if($this->user['id']==42608) {
+        //     var_dump($order_products);die;
+        // }
         foreach ($order_products as $item) {
             $payable_amount+=$item['sell_total'];
             $real_amount+=$item['amount'];
