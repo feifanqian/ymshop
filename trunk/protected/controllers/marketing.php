@@ -1097,7 +1097,7 @@ class MarketingController extends Controller {
 
     public function groupbuy_active_list()
     {
-        $page = Filter::int(Req::args('page'));
+        $page = Filter::int(Req::args('p'));
         if(!$page) {
             $page = 1;
         }
