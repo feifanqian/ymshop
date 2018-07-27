@@ -231,6 +231,9 @@ class SimpleController extends Controller {
                                                 }
                                                 $this->redirect("/active/login/redirect/recruit");
                                             }
+                                            if($back=='invite_register') {
+                                                $this->redirect("/travel/register_success");
+                                            }
                                             $this->redirect("/ucenter/index",true);
                                             exit();
                                         }else{

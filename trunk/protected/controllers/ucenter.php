@@ -223,7 +223,8 @@ class UcenterController extends Controller
         //         exit;
         //     }
         // }
-        $url = Url::fullUrlFormat("/index/invite/inviter_id/" . $this->user['id']);
+        // $url = Url::fullUrlFormat("/index/invite/inviter_id/" . $this->user['id']);
+        $url = Url::fullUrlFormat("/travel/invite_register/inviter_id/" . $this->user['id']);
         $qrCode = new QrCode();
         $qrCode
             ->setText($url)

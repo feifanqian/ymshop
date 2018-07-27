@@ -73,17 +73,16 @@ class IndexController extends Controller {
 
     //邀请注册
     public function invite() {
-        // var_dump(111);die;
         $inviter_id = Filter::int(Req::args('inviter_id'));
         Session::set('jump_index',1);
-        if (isset($this->user['id'])) {
-            // var_dump(123);die;
-            Common::buildInviteShip($inviter_id, $this->user['id'], "wechat");
-            $this->redirect('index');
-        } else {
-            Cookie::set("inviter", $inviter_id);
-            $this->noRight();
-        }
+        // if (isset($this->user['id'])) {
+        //     Common::buildInviteShip($inviter_id, $this->user['id'], "wechat");
+        //     $this->redirect('index');
+        // } else {
+        //     Cookie::set("inviter", $inviter_id);
+        //     $this->noRight();
+        // }
+        $this->redirect('/travel/invite_register?inviter_id={$inviter_id}');
         return;
     }
     public function myinvite() {
