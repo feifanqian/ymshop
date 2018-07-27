@@ -255,7 +255,8 @@ class OrderAction extends Controller {
         $order_type = 0;
         $model = new Model('');
         if($this->user['id']==42608) {
-            var_dump($product_id);die;
+            var_dump($product_id);
+            var_dump(is_array($product_id));die;
         }
         //团购处理
         if ($type == "groupbuy") {
