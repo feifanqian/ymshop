@@ -473,25 +473,6 @@ class OrderAction extends Controller {
                         return;
                     }
                 }
-          //======================================
-//        //商品总金额,重量,积分计算
-//        $payable_amount = 0.00;
-//        $real_amount = 0.00;
-//        $weight = 0;
-//        $point = 0;
-//        foreach ($order_products as $item) {
-//            $payable_amount+=$item['sell_total'];
-//            $real_amount+=$item['amount'];
-//            $weight += $item['weight'] * $item['num'];
-//            $point += $item['point'] * $item['num'];
-//        }
-//        if ($order_type == 3)
-//            $real_amount = $bundbuy_amount;
-//
-//        //计算运费
-//        $fare = new Fare($weight);
-//        $payable_freight = $fare->calculate($address_id);
-//        $real_freight = $payable_freight;
         
         //多物流商品总金额,重量,积分计算
         $payable_amount = 0.00;
@@ -499,9 +480,6 @@ class OrderAction extends Controller {
         $weight = 0;
         $point = 0;
         $productarr = array();
-        // if($this->user['id']==42608) {
-        //     var_dump($order_products);die;
-        // }
         foreach ($order_products as $item) {
             $payable_amount+=$item['sell_total'];
             $real_amount+=$item['amount'];
@@ -525,10 +503,6 @@ class OrderAction extends Controller {
             $payable_freight = '0.00';
         }
         $real_freight = $payable_freight;
-        if($this->user['id']==42608) {
-            var_dump($weight);
-            var_dump($payable_freight);die;
-        }
         //计算订单优惠
         $prom_order = array();
         $discount_amount = 0;
@@ -1074,12 +1048,6 @@ class OrderAction extends Controller {
         return $product;
     }
 
-    public function cut($begin, $end, $str) {
-        $t1 = mb_strpos($str, $begin);
-        $t2 = mb_strpos($str, $end);
-        $ret = mb_substr($str, $t1 + 3, $t2 - $t1);
-        return $ret;
-    }
 
 }
 
