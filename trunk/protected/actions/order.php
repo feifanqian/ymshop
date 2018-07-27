@@ -518,7 +518,7 @@ class OrderAction extends Controller {
             $payable_freight = '0.00';
         }
         $real_freight = $payable_freight;
-        if($this->user['id']==42608 && $order_type==1) {
+        if($this->user['id']==42608) {
             var_dump($payable_freight);die;
         }
         //计算订单优惠
