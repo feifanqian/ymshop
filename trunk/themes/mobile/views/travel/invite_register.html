@@ -125,6 +125,15 @@
   </div>
   <script type="text/javascript" charset="UTF-8" src="{url:#js/reg.js}"></script>
   <script type="text/javascript">
+    var REG = {
+        invalid: {echo: isset($invalid) ? 1 : 0},
+        send_sms_url: "{url:/ajax/send_sms}",
+        ajax_email_chk_url: "{url:/ajax/email/email}",
+        ajax_mobile_chk_url: "{url:/ajax/mobile/mobile}",
+        ajax_valide_code_url: "{url:/ajax/verifyCode/verifyCode/}",
+    };
+</script>
+  <script type="text/javascript">
     $(function () {
        var color_list = {0:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/27/8c31ed9ac7b221d2b5be035cd6d4f4b3.jpg)',1:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/27/260ed5b808c52430d277a84d7513e4ef.jpg)',2:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/27/5661e0760ce08873a8512413d25f0d85.jpg)'};
        var index = Math.floor(Math.random() * 3);
