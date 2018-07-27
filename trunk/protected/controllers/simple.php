@@ -172,7 +172,7 @@ class SimpleController extends Controller {
         $this->redirect("register");
     }
     public function register_act(){
-        if ($this->getModule()->checkToken('reg')) {
+        // if ($this->getModule()->checkToken('reg')) {
             $mobile = Filter::int(Req::args('mobile'));
             $realname = Filter::str(Req::args('realname'));
             $passWord = Req::post('password');
@@ -252,10 +252,10 @@ class SimpleController extends Controller {
             }else{
                 $info = array('field' => 'mobile_code', 'msg' => '短信验证码错误!');
             }
-        } else {
-            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '注册无效', "content" => "非法进入注册页面！", "redirect" => "/simple/reg"));
-            exit();
-        }
+        // } else {
+        //     $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '注册无效', "content" => "非法进入注册页面！", "redirect" => "/simple/reg"));
+        //     exit();
+        // }
         $this->assign("invalid", $info);
         $this->redirect("register", false, Req::args());
     }
