@@ -263,7 +263,7 @@ class OrderAction extends Controller {
             if ($num < 1)
                 $num = 1;
             
-            $item = $model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("gb.*,go.name,go.store_nums,go.img,go.sell_price,go.weight,go.shop_id,go.point,pr.id as product_id,pr.spec")->where("gb.id=$id")->find();
+            $item = $model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("gb.*,go.name,go.store_nums,go.img,go.sell_price,go.weight,go.shop_id,go.point,pr.id as product_id,pr.spec,go.freeshipping")->where("gb.id=$id")->find();
             
             $order_products = $this->packGroupbuyProducts($item, $num);
             $groupbuy = $model->table("groupbuy")->where("id=$id")->find();
@@ -781,7 +781,25 @@ class OrderAction extends Controller {
         $sell_total = $item['sell_price'] * $num;
         $product_id = $item['product_id'];
 
-        $product[$product_id] = array('id' => $product_id, 'goods_id' => $item['goods_id'], 'name' => $item['name'], 'img' => $item['img'], 'num' => $num, 'store_nums' => $have_num, 'price' => $item['price'], 'spec' => unserialize($item['spec']), 'amount' => $amount, 'sell_total' => $sell_total, 'weight' => $item['weight'], 'point' => $item['point'], "prom_goods" => array(), "sell_price" => $item['sell_price'], "real_price" => $item['price'],"shop_id"=>$item['shop_id']);
+        $product[$product_id] = array(
+            'id' => $product_id, 
+            'goods_id' => $item['goods_id'], 
+            'name' => $item['name'], 
+            'img' => $item['img'], 
+            'num' => $num, 
+            'store_nums' => $have_num, 
+            'price' => $item['price'], 
+            'spec' => unserialize($item['spec']), 
+            'amount' => $amount, 
+            'sell_total' => $sell_total, 
+            'weight' => $item['weight'], 
+            'point' => $item['point'],
+            'freeshipping' => $item['freeshipping'], 
+            "prom_goods" => array(), 
+            "sell_price" => $item['sell_price'], 
+            "real_price" => $item['price'],
+            "shop_id"=>$item['shop_id']
+            );
         return $product;
     }
 
