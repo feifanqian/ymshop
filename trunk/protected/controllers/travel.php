@@ -565,7 +565,12 @@ class TravelController extends Controller
         echo JSON::encode(array('data' => $way['remark']));
     }
 
-    public function  invite_register()
+    public function invite_register()
+    {
+        $this->redirect();
+    }
+
+    public function register_success()
     {
         $this->redirect();
     }
