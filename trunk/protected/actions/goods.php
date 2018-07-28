@@ -389,7 +389,7 @@ class GoodsAction extends Controller {
             $form = 'android';
         }
 
-        $resp = $this->tbk_req_get($form, $q, $type, $page, '10', 'total_sales_des');
+        $resp = $this->tbk_req_get($form, $q, $type, $page, '60', 'total_sales_des');
 
         $size = empty($size) ? 20 : $size;
         $save_data = [];
@@ -431,6 +431,7 @@ class GoodsAction extends Controller {
                     array_multisort(array_column($save_data, 'rate_price'), SORT_DESC, $save_data, array_column($save_data, 'decrease_price'), SORT_DESC, $save_data);
                 }
 
+                //使结果是偶数
                 $count = count($save_data);
                 if($count < $size){
                     $size = $count - ($count % 2);
@@ -584,7 +585,7 @@ class GoodsAction extends Controller {
                     }
                 }
 
-                $redis->set($key, json_encode($save_data), 60);
+                $redis->set($key, json_encode($save_data), 600);
             } else {
                 $resp['results']['tbk_coupon'] = [];
                 $this->code = 0;
@@ -617,7 +618,7 @@ class GoodsAction extends Controller {
                         }
                     }
                     $save_data = array_merge($cache_data, $new_data);
-                    $redis->set($key, json_encode($save_data), 60);
+                    $redis->set($key, json_encode($save_data), 600);
                 } else {
                     $resp['results']['tbk_coupon'] = [];
                     $this->code = 0;
