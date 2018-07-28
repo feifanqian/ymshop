@@ -725,7 +725,7 @@ class GoodsAction extends Controller {
             }
         } else {
             // array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
-            array_multisort(array_column($save_data, 'decrease_price'), SORT_DESC, $save_data, array_column($save_data, 'rate_price'), SORT_DESC, $save_data);
+            array_multisort(array_column($save_data, 'rate_price'), SORT_DESC, $save_data, array_column($save_data, 'decrease_price'), SORT_DESC, $save_data);
         }
 
 
