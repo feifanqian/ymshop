@@ -388,71 +388,8 @@ class GoodsAction extends Controller {
         if (!$form) {
             $form = 'android';
         }
-//         $c = new TopClient;
-//         if ($form == 'android') { //安卓
-//             $appkey = '24875594';
-//             $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
-//             $AdzoneId = '513416107';
-//             // $AdzoneId = '1207042504';     
-//         } else { //ios
-//             $appkey = '24876667';
-//             $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
-//             $AdzoneId = '582570496';
-//         }
-//         $c->appkey = $appkey;
-//         $c->secretKey = $secretKey;
-//         $c->sign_method = 'md5';
-//         $c->format = 'json';
-//         $c->v = '2.0';
-//         $req = new TbkDgMaterialOptionalRequest;
-//         $req->setAdzoneId($AdzoneId);
-//         $req->setPlatform("2");
-// //        $req->setStartDsr("10");
-//         $req->setPageSize("50");
-//         // $req->setEndTkRate("1234");
-//         // $req->setStartTkRate("1234");
-//         // $req->setEndPrice('200');
-// //        $req->setStartPrice('100');
-//         // if($endPrice) {
-//         //     $req->setEndPrice($endPrice);
-//         // } else {
-//         //     $req->setEndPrice('20');
-//         // }
-//         // if($startPrice) {
-//         //     $req->setStartPrice($startPrice);
-//         // }
-// //        $req->setIsOverseas("false");
-// //        $req->setIsTmall("false");
-//         $req->setSort("total_sales_des");
-//         // $req->setItemloc("杭州");
-//         $req->setHasCoupon("true");
-//         // $req->setIp("13.2.33.4");
-//         // $req->setNeedFreeShipment("true");
-// //        $req->setNeedPrepay("true");
-// //        $req->setIncludePayRate30("true");
-// //        $req->setIncludeGoodRate("true");
-// //        $req->setIncludeRfdRate("true");
-// //        $req->setNpxLevel("2");
 
-
-// //        $req->setQ('女装');
-// //         $req->setCat("16,18");
-//         if ($type && $q) {
-//             if ($type == 1) {
-//                 $req->setQ($q);
-//             } else if ($type == 2) {
-//                 $req->setCat($q);
-//             }
-//         } else {
-//             $req->setCat("21,11,122852001,5002372,16,30,14,1801,500027664");
-//         }
-//         $req->setPageNo($page);
-//         // $req->setPageNo(1);
-//         $resp = $c->execute($req);
-
-//         $resp = Common::objectToArray($resp);
-
-        $resp = $this->tbk_req_get($form, $q, $type, $page, '50', 'total_sales_des');
+        $resp = $this->tbk_req_get($form, $q, $type, $page, '10', 'total_sales_des');
 
         $size = empty($size) ? 20 : $size;
         $save_data = [];
@@ -475,19 +412,6 @@ class GoodsAction extends Controller {
                     }
                 }
 
-                // foreach ($resp['result_list']['map_data'] as $k => $v) {
-                //     $decrease_price = $this->cut('减', '元', $v['coupon_info']);
-                //     // $decrease_price_float = floatval($decrease_price);
-                //     // if($decrease_price_float < 10){
-                //     //     continue;
-                //     // }
-                //     $resp['result_list']['map_data'][$k]['decrease_price'] = $decrease_price;
-                //     $resp['result_list']['map_data'][$k]['final_price'] = $v['zk_final_price'] - $resp['result_list']['map_data'][$k]['decrease_price'];
-                //     $resp['result_list']['map_data'][$k]['nick'] = $v['shop_title'];
-                //     $resp['result_list']['map_data'][$k]['coupon_click_url'] = strpos($v['coupon_share_url'], 'http') == false ? 'https:' . $v['coupon_share_url'] : $v['coupon_share_url'];
-                //     $resp['result_list']['map_data'][$k]['item_description'] = $v['coupon_info'];
-                //     $resp['result_list']['map_data'][$k]['category'] = 30;
-                // }
                 if ($sort) {
                     switch ($sort) {
                         case 'price_asc':
@@ -506,29 +430,11 @@ class GoodsAction extends Controller {
                 } else {
                     array_multisort(array_column($save_data, 'rate_price'), SORT_DESC, $save_data, array_column($save_data, 'decrease_price'), SORT_DESC, $save_data);
                 }
-                // if ($sort) {
-                //     switch ($sort) {
-                //         case 'price_asc':
-                //             array_multisort(array_column($resp['result_list']['map_data'], 'final_price'), SORT_ASC, $resp['result_list']['map_data']);
-                //             break;
-                //         case 'price_desc':
-                //             array_multisort(array_column($resp['result_list']['map_data'], 'final_price'), SORT_DESC, $resp['result_list']['map_data']);
-                //             break;
-                //         case 'volume_asc':
-                //             array_multisort(array_column($resp['result_list']['map_data'], 'volume'), SORT_ASC, $resp['result_list']['map_data']);
-                //             break;
-                //         case 'volume_desc':
-                //             array_multisort(array_column($resp['result_list']['map_data'], 'volume'), SORT_DESC, $resp['result_list']['map_data']);
-                //             break;
-                //     }
-                // } else {
-                //     // array_multisort(array_column($resp['result_list']['map_data'],'decrease_price'),SORT_DESC,$resp['result_list']['map_data']);
-                //     array_multisort(array_column($resp['result_list']['map_data'], 'decrease_price'), SORT_DESC, $resp['result_list']['map_data'], array_column($resp['result_list']['map_data'], 'volume'), SORT_DESC, $resp['result_list']['map_data']);
-                // }
 
-                // $resp['result_list']['map_data'] = $this->super_unique($resp['result_list']['map_data']);
-                // $resp['result_list']['map_data'] = array_values($resp['result_list']['map_data']);
-                // $resp['result_list']['map_data'] = array_slice($resp['result_list']['map_data'], ($page - 1) * 10, 10);
+                $count = count($save_data);
+                if($count < $size){
+                    $size = $count - ($count % 2);
+                }
 
                 $resp['results']['tbk_coupon'] = array_slice(array_values($save_data), 0, $size);
                 unset($resp['result_list']);
