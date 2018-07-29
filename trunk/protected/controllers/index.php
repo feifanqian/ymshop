@@ -2144,28 +2144,7 @@ class IndexController extends Controller {
                             $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
                             $this->safebox->set('user', $obj, 31622400);
-                        }
-
-                        $way = $this->model->table('travel_way')->fields('id,name')->findAll();
-
-                        $upyun = Config::getInstance()->get("upyun");
-
-                        $options = array(
-                            'bucket' => $upyun['upyun_bucket'],
-                            // 'allow-file-type' => 'jpg,gif,png,jpeg', // 文件类型限制，如：jpg,gif,png
-                            'expiration' => time() + $upyun['upyun_expiration'],
-                            // 'notify-url' => $upyun['upyun_notify-url'],
-                            // 'ext-param' => "",
-                            // 'save-key' => "/data/uploads/head/" . $this->user['id'] . ".jpg",
-                        );
-                        $policy = base64_encode(json_encode($options));
-                        $signature = md5($policy . '&' . $upyun['upyun_formkey']);
-                        $this->assign('way_id', $way_id);
-                        $this->assign('user_id',$this->user['id']);
-                        $this->assign('secret', md5('ym123456'));
-                        $this->assign('policy', $policy);
-                        $this->assign('way',$way);
-                        $this->redirect();   
+                        }   
                     }
                     // return true;
                 } else {
