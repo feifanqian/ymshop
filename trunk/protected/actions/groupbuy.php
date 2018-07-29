@@ -160,7 +160,7 @@ class GroupbuyAction extends Controller
                 $info['groupbuy_join_list'][$k]['remain_seconds'] = strtotime($v['end_time'])-time();
                 $had_join_num = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$v['join_id'].' and pay_status=1')->count();
                 $info['groupbuy_join_list'][$k]['need_num'] = $groupbuy['min_num']-$had_join_num;
-                if($info['groupbuy_join_list'][$k]['need_num']==0) {
+                if($info['groupbuy_join_list'][$k]['need_num']<=0) {
                     unset($info['groupbuy_join_list'][$k]);
                 }
                 unset($info['groupbuy_join_list'][$k]['end_time']);
