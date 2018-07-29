@@ -269,7 +269,7 @@ class DistrictAction extends Controller {
                 $this->code = 1177;
                 return;
             }
-            $district_id = Common::getFirstDistrictId($user_id);
+            $district_id = Common::getFirstDistrictId($this->user['id']);
             if($district_id!=$promoter_code['user_id']) {
                 $this->code = 1285;
                 return;
