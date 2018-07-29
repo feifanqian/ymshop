@@ -49,6 +49,10 @@ class GroupbuyAction extends Controller
             $this->code = 1284;
             return;
         }
+        if(time()<strtotime($groupbuy['start_time'])) {
+            $this->code = 1286;
+            return;
+        }
         $remain_time = strtotime($groupbuy['end_time'])-time();
         // $now_num = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id)->count();
         // $exist = $this->model->table('groupbuy_join')->where('groupbuy_id='.$groupbuy_id.' and user_id='.$this->user['id'].' and status in (0,1)')->find();
