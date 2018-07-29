@@ -2158,7 +2158,7 @@ class IndexController extends Controller {
         }
         $groupbuy_id = Filter::int(Req::args('groupbuy_id'));
         $join_id = Filter::int(Req::args('join_id'));
-        $uid = $this->user['id']!=null?$this->user['id']?$user_id;
+        $uid = $this->user['id']!=null?$this->user['id']:$user_id;
         $groupbuy = $this->model->table('groupbuy')->where('id='.$groupbuy_id)->find();
         if(!$groupbuy_id) {
             $this->redirect("msg", false, array('type' => 'fail', 'msg' => '未找到该拼团商品'));
