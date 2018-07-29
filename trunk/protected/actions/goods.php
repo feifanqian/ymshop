@@ -577,6 +577,9 @@ class GoodsAction extends Controller {
                         if ($decrease_price < 5) {
                             continue;
                         }
+                        if(!isset($itm['small_images'])){
+                            $itm['small_images']['string'] = array($itm['pict_url']);
+                        }
                         $itm['decrease_price'] = $decrease_price;
                         $itm['final_price'] = $itm['zk_final_price'] - $itm['decrease_price'];
                         $itm['nick'] = $itm['shop_title'];
@@ -609,6 +612,9 @@ class GoodsAction extends Controller {
                             $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
                             if ($decrease_price < 5) {
                                 continue;
+                            }
+                            if(!isset($itm['small_images'])){
+                                $itm['small_images']['string'] = array($itm['pict_url']);
                             }
                             $itm['decrease_price'] = $decrease_price;
                             $itm['final_price'] = $itm['zk_final_price'] - $itm['decrease_price'];
