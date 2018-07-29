@@ -1434,6 +1434,9 @@ class SimpleController extends Controller {
                     $item = $model->table("groupbuy as gb")->join("left join goods as go on gb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("*,pr.id as product_id,pr.spec")->where("gb.id=$id")->find();
                     $order_products = $this->packGroupbuyProducts($item, $num);
                     $groupbuy = $model->table("groupbuy")->where("id=$id")->find();
+                    if($this->user['id']==42608){
+                        var_dump($id);die;
+                    }
                     unset($groupbuy['description']);
                     $data['prom'] = serialize($groupbuy);
                     $data['prom_id'] = $id;
