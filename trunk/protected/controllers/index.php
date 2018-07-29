@@ -2140,12 +2140,11 @@ class IndexController extends Controller {
                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
                             $obj['open_id'] = $token['openid'];
                             $this->safebox->set('user', $obj, 1800);
-                            $this->user['id'] = $user_id;
                         } else { //已注册
                             $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
                             $this->safebox->set('user', $obj, 31622400);
-                            $this->user['id'] = $oauth_user['user_id'];
+                            $user_id = $oauth_user['user_id'];
                         }   
                     }
                     // return true;
@@ -2159,6 +2158,7 @@ class IndexController extends Controller {
         }
         $groupbuy_id = Filter::int(Req::args('groupbuy_id'));
         $join_id = Filter::int(Req::args('join_id'));
+        $uid = $this->user['id']!=null?$this->user['id']?$user_id;
         $groupbuy = $this->model->table('groupbuy')->where('id='.$groupbuy_id)->find();
         if(!$groupbuy_id) {
             $this->redirect("msg", false, array('type' => 'fail', 'msg' => '未找到该拼团商品'));
@@ -2200,10 +2200,10 @@ class IndexController extends Controller {
         $info['groupbuy_join_list']['users'] = $users;
         $info['groupbuy_join_list']['remain_time'] = $this->timediff(time(),strtotime($info['end_time']));
         
-        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status=1')->find();
+        $joined = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$join_id.' and user_id='.$uid.' and pay_status=1')->find();
 
         if($joined && $info['had_join_num']>=$info['min_num']) {
-            $order = $this->model->table('order')->fields('id')->where('join_id='.$joined['id'].' and user_id='.$this->user['id'].' and pay_status=1')->find();
+            $order = $this->model->table('order')->fields('id')->where('join_id='.$joined['id'].' and user_id='.$uid.' and pay_status=1')->find();
             $info['order_id'] = $order['id'];
             $info['status'] = '拼团成功';
         } elseif ($joined && $info['had_join_num']<$info['min_num'] && time()>=strtotime($info['end_time'])) {
