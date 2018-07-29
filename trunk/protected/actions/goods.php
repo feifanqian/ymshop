@@ -915,6 +915,16 @@ class GoodsAction extends Controller {
 
     public function tbk_get_height_url() {
         $item_id = Filter::str(Req::args('item_id'));
+
+        $objs = $this->model->table('user')->where('id='.$this->user['id'])->find();
+        if($objs['adzoneid']==null) {
+            $taobao_pid = $this->model->table('taoke_pid')->where('user_id is NULL')->order('id desc')->find();
+            if($taobao_pid) {
+                $this->model->table('taoke_pid')->data(['user_id'=>$obj['user_id']])->where('id='.$taobao_pid['id'])->update();
+                $this->model->table('user')->data(['adzoneid'=>$taobao_pid['adzoneid']])->where('id='.$obj['user_id'])->update();
+            }
+        }
+
         $taoke = $this->model->table('taoke_pid')->fields('adzoneid,memberid,siteid')->where('user_id='.$this->user['id'])->find();
         
         if(!$taoke) {
