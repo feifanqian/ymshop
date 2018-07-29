@@ -463,6 +463,9 @@ class IndexController extends Controller {
                     $groupbuy_join_list[$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$user_id)->find();
                     $had_join_num = $this->model->table('groupbuy_log')->where('groupbuy_id='.$id.' and join_id='.$v['join_id'].' and pay_status=1')->count();
                     $groupbuy_join_list[$k]['need_num'] = $groupbuy['min_num']-$had_join_num;
+                    if($groupbuy_join_list[$k]['need_num']<=0) {
+                        unset($info['groupbuy_join_list'][$k]);
+                    }
                 }
                 $groupbuy_join_list = array_values($groupbuy_join_list);
                 $groupbuy_join_list = array_slice($groupbuy_join_list,0,2);
