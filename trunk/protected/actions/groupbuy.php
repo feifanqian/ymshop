@@ -148,7 +148,7 @@ class GroupbuyAction extends Controller
         
         $now = time();
         
-        $groupbuy_join_list = $this->model->table('groupbuy_join as gj')->fields('gl.join_id,gj.user_id,gj.end_time')->join('left join groupbuy_log as gl on gl.join_id=gj.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
+        $groupbuy_join_list = $this->model->table('groupbuy_join as gj')->fields('gl.join_id,gj.user_id,gj.end_time')->join('left join groupbuy_log as gl on gl.join_id=gj.id left join groupbuy as g on gj.groupbuy_id=g.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(g.start_time)<='.$now.' and UNIX_TIMESTAMP(gj.end_time)>'.$now)->findAll();
         
         if($groupbuy_join_list) {
             $info['groupbuy_join_list'] = $this->super_unique($groupbuy_join_list);
