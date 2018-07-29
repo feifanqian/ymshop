@@ -112,11 +112,12 @@ class Order {
                 }
             } else if ($order['type'] == 1) {
                 //更新团购信息
-                $prom = unserialize($order['prom']);
-                if (isset($prom['id'])) {
+                // $prom = unserialize($order['prom']);
+                // if (isset($prom['id'])) {
                     // $groupbuy = $model->table("groupbuy")->where("id=" . $prom['id'])->find();
                     $groupbuy_log = $model->table('groupbuy_log')->where('id='.$order['join_id'])->find();
                     $groupbuy = $model->table("groupbuy")->where("id=" . $groupbuy_log['groupbuy_id'])->find();
+                    $model->table('groupbuy_log')->data(['pay_status'=>1])->where('id='.$order['join_id'])->update();
                     if ($groupbuy) {
                         $goods_num = $groupbuy['goods_num'];
                         $order_num = $groupbuy['order_num'];
@@ -128,23 +129,19 @@ class Order {
                         }
                         if ($time_diff >= 0 || $max_num <= $data['goods_num'])
                             $data['is_end'] = 1;
-                        $model->table("groupbuy")->where("id=" . $prom['id'])->data($data)->update();
-                    }
+                        $model->table("groupbuy")->where("id=" . $groupbuy_log['groupbuy_id'])->data($data)->update();
+                    }         
                     
-                    $model->table('groupbuy_log')->data(['pay_status'=>1])->where($where)->update();
                     if($groupbuy_log) {
-                        if($order['join_id']==0) {
-                            $wh = 'id='.$groupbuy_log['join_id'];
-                        } else {
-                            $wh = "id=".$order['join_id'];
-                        }
+                        $wh = "id=".$groupbuy_log['join_id'];
+                        
                         $groupbuy_join = $model->table('groupbuy_join')->where($wh)->find();
                         if($groupbuy_join) {
                             // $model->table('groupbuy_join')->data(['pay_status'=>1])->where('id='.$groupbuy_log['join_id'])->update();
                             $model->table('groupbuy_join')->data(['need_num'=>"`need_num`-1"])->where('id='.$groupbuy_log['join_id'])->update();
                         }
                     }
-                }
+                // }
             }else if ($order['type'] == 2) {
                 //更新抢购信息
                 $prom = unserialize($order['prom']);
