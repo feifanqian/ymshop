@@ -105,6 +105,7 @@ $(function () {
                 }else {
                     $.post(Product.addGoodsCartUrl, {id: product['id'], num: num}, function (data) {
                         if (data.length < 1) {
+                            console.log(data);
                             showMsgBar('stop', "库存不足！");
                         } else {
                             location.href = Product.goodsOrderUrl;

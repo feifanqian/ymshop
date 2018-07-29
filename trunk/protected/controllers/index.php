@@ -176,7 +176,7 @@ class IndexController extends Controller {
         $id = Filter::int(Req::args("id"));
         $num = intval(Req::args("num"));
         $num = $num > 0 ? $num : 1;
-        $result = $cart->addItem($id, $num);
+        $result = $cart->addItems($id, $num);
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
             $products = $cart->all();
             echo JSON::encode($products);
