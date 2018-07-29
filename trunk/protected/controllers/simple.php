@@ -1836,9 +1836,6 @@ class SimpleController extends Controller {
                 }
                 //===============================================
                 $data['join_id'] = $log_id;
-                if($this->user['id']==42608) {
-                    var_dump($log_id);die;
-                }
                 //写入订单数据
                 $order_id = $model->table("order")->data($data)->insert();
                 //扣除能使用的积分
