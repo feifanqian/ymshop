@@ -266,7 +266,7 @@ class GroupbuyAction extends Controller
         } else {
             $info['status'] = '拼团中';
         }
-        $info['share_url'] = 'http://www.ymlypt.com/index/groupbuy/id/'.$groupbuy_id;
+        $info['share_url'] = 'http://www.ymlypt.com/index/groupbuy_join_detail/groupbuy_id/'.$groupbuy_id.'/join_id/'.$join_id;
         if($joined) {
             $order = $this->model->table('order')->fields('id')->where('join_id='.$joined['id'])->find();
             $info['order_id'] = $order['id'];
@@ -332,7 +332,7 @@ class GroupbuyAction extends Controller
                             $list['data'][$k]['join_status'] = '拼团中';
                         }
                         $list['data'][$k]['current_time'] = date('Y-m-d H:i:s');
-                        $list['data'][$k]['share_url'] = 'http://www.ymlypt.com/index/groupbuy/id/'.$v['id'];
+                        $list['data'][$k]['share_url'] = 'http://www.ymlypt.com/index/groupbuy_join_detail/groupbuy_id/'.$v['id'].'/join_id/'.$v['join_id'];
                 }
             }
             unset($list['html']);
