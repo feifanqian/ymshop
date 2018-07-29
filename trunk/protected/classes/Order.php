@@ -114,7 +114,9 @@ class Order {
                 //更新团购信息
                 $prom = unserialize($order['prom']);
                 if (isset($prom['id'])) {
-                    $groupbuy = $model->table("groupbuy")->where("id=" . $prom['id'])->find();
+                    // $groupbuy = $model->table("groupbuy")->where("id=" . $prom['id'])->find();
+                    $groupbuy_log = $model->table('groupbuy_log')->where('id='.$order['join_id'])->find();
+                    $groupbuy = $model->table("groupbuy")->where("id=" . $groupbuy_log['groupbuy_id'])->find();
                     if ($groupbuy) {
                         $goods_num = $groupbuy['goods_num'];
                         $order_num = $groupbuy['order_num'];
@@ -128,12 +130,7 @@ class Order {
                             $data['is_end'] = 1;
                         $model->table("groupbuy")->where("id=" . $prom['id'])->data($data)->update();
                     }
-                    if($order['join_id']==0) {
-                        $where = "groupbuy_id={$prom['id']} and user_id={$order['user_id']}";
-                    } else {
-                        $where = "id=".$order['join_id'];
-                    }
-                    $groupbuy_log = $model->table('groupbuy_log')->where($where)->find();
+                    
                     $model->table('groupbuy_log')->data(['pay_status'=>1])->where($where)->update();
                     if($groupbuy_log) {
                         if($order['join_id']==0) {
