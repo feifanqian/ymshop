@@ -324,7 +324,6 @@ class UcenterAction extends Controller {
         if ($platform && $openid && $token) {
             $model = $this->model->table("oauth_user as ou");
             $obj = $model->join("left join user as us on us.id = ou.user_id")->fields("ou.*,us.adzoneid")->where("ou.oauth_type='$platform' and ou.open_id='{$openid}'")->find();
- 
             // $obj = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and open_id='{$openid}'")->find();
             if ($obj) {
                 $token = CHash::random(32, 'char');
