@@ -47,8 +47,12 @@ class OrderAction extends Controller {
             $this->selectcart = $this->cart;
         } else {
             $cart = Cart::getCart('cart');
-            $selectids = (string)$selectids;
-            $product_ids = substr($selectids,1,strlen($selectids)-2);
+            if(is_array($selectids)) {
+                $product_ids = implode(',',$selectids);
+            } else {
+                $product_ids = substr($selectids,1,strlen($selectids)-2);
+            }
+            
             if($uid || $session_id) {    
               $this->cart = $cart->alls($uid,$session_id,$product_ids);
             }else {
