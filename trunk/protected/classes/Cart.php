@@ -166,7 +166,7 @@ class Cart {
         return $products;
     }
 
-    public function alls($uid=0,$session_id='') {
+    public function alls($uid=0,$session_id='',$product_ids='') {
         $products = array();
         if($uid || $session_id) {
             $model = new Model();
@@ -181,6 +181,9 @@ class Cart {
             if($session_id) {
                 $idarr = $cart_model->fields('goods_id')->where("session_id='{$session_id}'")->findAll();
                 $where = "c.session_id='{$session_id}'";
+            }
+            if($product_ids) {
+                $where.=" and c.goods_id in (".$product_ids.")";
             }
             
             $idstr = '';

@@ -34,6 +34,7 @@ class OrderAction extends Controller {
         $type = Req::args('cart_type');
         $uid = Filter::int(Req::args("user_id"));
         $session_id = Req::args("session_id");
+        $selectids = Req::args("selectids");
         //直接购买类
         if ($type == 'goods') {
             $cart = Cart::getCart('goods');
@@ -46,8 +47,9 @@ class OrderAction extends Controller {
             $this->selectcart = $this->cart;
         } else {
             $cart = Cart::getCart('cart');
+            $product_ids = substr($selectids,1,strlen($selectids)-2);
             if($uid || $session_id) {    
-              $this->cart = $cart->alls($uid,$session_id);
+              $this->cart = $cart->alls($uid,$session_id,$product_ids);
             }else {
               $this->cart = $cart->all();
             }
