@@ -224,7 +224,7 @@ class OrderAction extends Controller {
         $voucher_id = Filter::int(Req::args('voucher'));
         $join_id = Filter::int(Req::args('join_id'));
         $cart_type = Req::args('cart_type');
-
+        $selectids = Req::args('selectids');
         //非普通促销信息
         $type = Req::args("type");
         $id = Filter::int(Req::args('id'));
@@ -453,8 +453,23 @@ class OrderAction extends Controller {
                 $cart = Cart::getCart('goods');
                 $order_products = $cart->all();
             } else {
-                $cart = Cart::getCart();
-                $order_products = $this->selectcart;
+                // $cart = Cart::getCart();
+                // $order_products = $this->selectcart;
+                if(!$selectids) {
+                    $this->code = 1287;
+                    return;
+                }
+                $cart = Cart::getCart('cart');
+                if(is_array($selectids)) {
+                    $product_ids = implode(',',$selectids);
+                } else {
+                    $product_ids = substr($selectids,1,strlen($selectids)-2);
+                }
+                if($uid || $session_id) {    
+                  $order_products = $cart->alls($uid,$session_id,$product_ids);
+                }else {
+                  $order_products = $cart->all();
+                }
             }
             $data['prom_id'] = $prom_id;
         }
