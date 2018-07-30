@@ -45,7 +45,13 @@ class OrderAction extends Controller {
             $this->cart = $cart->all();
             $this->selectcart = $this->cart;
         } else {
-            
+            $cart = Cart::getCart('cart');
+            if($uid || $session_id) {    
+              $this->cart = $cart->alls($uid,$session_id);
+            }else {
+              $this->cart = $cart->all();
+            }
+            $this->selectcart = $this->cart;
         }
         //如果选择的商品为空
         if (!$this->selectcart) {
