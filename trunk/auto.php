@@ -213,7 +213,7 @@ class LinuxCliTask{
 
     #自动清理24小时后没人抢的红包
     public function autoClearRedbag(){
-        $redbag = $this->model->table('redbag')->fields('id,user_id,create_time,amount,order_no')->where("lat!='' and lng!='' and status!=2 and pay_status=1")->findAll();
+        $redbag = $this->model->table('redbag')->fields('id,user_id,create_time,amount,order_no')->where("lat!='' and lng!='' and status!=2 and pay_status=1 and amount>0")->findAll();
         foreach ($redbag as $k => $v) {
             if(time()-strtotime($v['create_time'])>24*60*60){
                 $this->model->table('redbag')->data(['status'=>2,'remark'=>'1天未领取完自动清除'])->where('id='.$v['id'])->update();

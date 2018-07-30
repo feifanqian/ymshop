@@ -269,11 +269,16 @@ class DistrictAction extends Controller {
                 $this->code = 1177;
                 return;
             }
-            $district_id = Common::getFirstDistrictId($this->user['id']);
-            if($district_id!=$promoter_code['user_id']) {
-                $this->code = 1285;
-                return;
-            }
+            // $district_id = Common::getFirstDistrictId($this->user['id']);
+            // if($district_id!=$promoter_code['user_id']) {
+            //     $this->code = 1285;
+            //     return;
+            // }
+            // $district_arr = $this->getMyAllDistricters($this->user['id']);
+            // if(!in_array($promoter_code['user_id'],$district_arr)) {
+            //     $this->code = 1285;
+            //     return;
+            // }
             $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id'],'shop_type'=>$type))->insert();
             $point = 3600.00;
             $this->model->table('customer')->data(array('point_coin'=>"`point_coin`+({$point})"))->where('user_id='.$this->user['id'])->update();
@@ -412,5 +417,35 @@ class DistrictAction extends Controller {
         $this->code = 0;
         $this->content['promoter_ids'] = $promoter_ids;
         $this->content['num'] = count($inviter_info);
+    }
+
+    public function getMyAllDistricters($user_id)
+    {
+        $inviter_info = $this->model->table("invite")->where("invite_user_id=".$user_id)->find();
+        $is_break = false;
+        $district_id = '1';
+        if($inviter_info) {
+            $now_district_id = $inviter_info['district_id'];
+            while (!$is_break) {
+                if($inviter_info) {
+                    $district = $model->table('district_shop')->fields('owner_id')->where('id='.$now_district_id)->find();
+                    if($district) {
+                        $district_id .=','. $district['owner_id'];
+                        $inviter = $this->model->table("invite")->where("invite_user_id=".$district['owner_id'])->find();
+                        if($inviter) {
+                            $now_district_id = $inviter['district_id'];
+                            $is_break = false;
+                        } else {
+                            $is_break = true;
+                        }
+                    }
+                } else {
+                    $district_id = '1';
+                    $is_break = true;
+                }
+            }
+        }
+        $district_arr = explode(',',$district_id);
+        return $district_arr;
     }     
 }
