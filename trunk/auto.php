@@ -217,8 +217,8 @@ class LinuxCliTask{
         foreach ($redbag as $k => $v) {
             if(time()-strtotime($v['create_time'])>24*60*60){
                 $this->model->table('redbag')->data(['status'=>2,'remark'=>'1天未领取完自动清除'])->where('id='.$v['id'])->update();
-                $this->model->table('customer')->data(array('balance' => "`balance`+" . $redbag['amount']))->where('user_id=' . $redbag['user_id'])->update();
-                Log::balance($redbag['amount'], $redbag['user_id'],$redbag['order_no'],"红包一天未领取余额退回", 15, 1);
+                $this->model->table('customer')->data(array('balance' => "`balance`+" . $v['amount']))->where('user_id=' . $v['user_id'])->update();
+                Log::balance($v['amount'], $v['user_id'],$v['order_no'],"红包一天未领取余额退回", 15, 1);
             }
         }
     }
