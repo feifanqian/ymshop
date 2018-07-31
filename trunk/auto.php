@@ -344,7 +344,7 @@ class LinuxCliTask{
                     if($logs) {
                         foreach ($logs as $key => $value) {
                             $this->model->table('benefit_log')->data(['order_status'=>'订单失效','type'=>-1])->where('id='.$value['id'])->update();
-                            $this->model->table('user')->data(array('total_income'=>"`total_income`-{$value['amount']}"))->where('id='.$v['user_id'])->update();
+                            $this->model->table('user')->data(array('total_income'=>"`total_income`-{$value['amount']}"))->where('id='.$value['user_id'])->update();
                         }
                     }
                  }
