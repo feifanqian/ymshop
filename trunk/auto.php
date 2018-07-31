@@ -332,6 +332,26 @@ class LinuxCliTask{
         }
     }
 
+    #定时结算退回退款淘客订单
+    public function autoBackTaokeOrder()
+    {
+        $log = $this->model->table('benefit_log')->fields('order_sn')->where("type=2 and order_status='订单付款'")->findAll();
+        if($log) {
+            foreach ($log as $k => $v) {
+                 $order = $this->model->table("taoke")->where("order_sn ='" . $v['order_sn'] . "'")->find();
+                 if($order['order_status']=='订单失效') {
+                    $logs = $this->model->table('benefit_log')->fields('id,user_id,amount')->where("order_sn ='" . $v['order_sn'] . "'")->findAll();
+                    if($logs) {
+                        foreach ($logs as $key => $value) {
+                            $this->model->table('benefit_log')->data(['order_status'=>'订单失效','type'=>-1])->where('id='.$value['id'])->update();
+                            $this->model->table('user')->data(array('total_income'=>"`total_income`-{$value['amount']}"))->where('id='.$v['user_id'])->update();
+                        }
+                    }
+                 }
+            }
+        }
+    }
+
     #定时退回拼团失败余额
     public function autoBackGroupbuyMoney()
     {

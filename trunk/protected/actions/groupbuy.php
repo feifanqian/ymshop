@@ -182,12 +182,28 @@ class GroupbuyAction extends Controller
                 $skumap[$product['specs_key']] = $product;
             }
         }
+        $comment = array();
+        $review = array('1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0);
+        $rows = $this->model->table("review")->fields("count(id) as num,point")->where("status=1 and goods_id = ".$groupbuy['goods_id'])->group("point")->findAll();
+        foreach ($rows as $row) {
+            $review[$row['point']] = intval($row['num']);
+        }
+        $a = ($review[4] + $review[5]);
+        $b = ($review[3]);
+        $c = ($review[1] + $review[2]);
+        $total = $a + $b + $c;
+        if ($total == 0)
+            $total = 1;
+        $comment['a'] = array('num' => $a, 'percent' => round((100 * $a / $total)));
+        $comment['b'] = array('num' => $b, 'percent' => round((100 * $b / $total)));
+        $comment['c'] = array('num' => $c, 'percent' => round((100 * $c / $total)));
         $info['skumap'] = array_values($skumap);
         $info['comment_list'] = $this->model->table("review as re")
                         ->join("left join user as us on re.user_id = us.id")
                         ->fields("re.id,us.nickname,us.avatar,re.content,re.comment_time")
                         ->where('re.status=1 and re.goods_id = '.$groupbuy['goods_id'])->order("re.id desc")->findAll();
         $info['comment_num'] = count($info['comment_list']);
+        $info['comment'] = $comment;
         $info['content'] = $goods['content'];                
         $info['share_url'] = 'http://www.ymlypt.com/index/groupbuy/id/'.$groupbuy_id;
         $this->code = 0;
