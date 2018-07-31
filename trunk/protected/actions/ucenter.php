@@ -1661,11 +1661,11 @@ class UcenterAction extends Controller {
     //================================申请退款相关接口start========================
     //判断是否能够申请退款
     public function _isCanApplyRefund($order_id) {
-        $isset = $this->model->table("refund")->where("order_id =$order_id and user_id =".$this->user['id'])->find();
-       if($isset){
-         // return false;
-         $this->model->table("refund")->where("order_id =$order_id and user_id =".$this->user['id'])->delete();
-       }
+       //  $isset = $this->model->table("refund")->where("order_id =$order_id and user_id =".$this->user['id'])->find();
+       // if($isset){
+       //   return false;
+       //   $this->model->table("refund")->where("order_id =$order_id and user_id =".$this->user['id'])->delete();
+       // }
        $orderInfo = $this->model->table("order")->where("id = $order_id and user_id =".$this->user['id'])->find();
        if(empty($orderInfo)){
           return false;
