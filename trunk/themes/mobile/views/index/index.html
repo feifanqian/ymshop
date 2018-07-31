@@ -152,6 +152,25 @@
 {set:$point_sale_limit_2 = $point_sale_limit_1+10;}
 <div id="swiper-point" >
 <div class="swiper-container swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 0,'freeMode': true,'pagination': '','slidesPerColumn':'1'}">
+    <div class="swiper-title"> <div class="logo">团购专区</div> 
+        <a class="more" href="{url:/index/group}"><span>拼团购专区</span><i class="iconfont icon-next"></i></a> 
+    </div>
+    <div class="swiper-wrapper">
+        {query:name=groupbuy as gb fields=gb.*,go.sell_price,go.img,go.name join=left join goods as go on gb.goods_id eq go.id where=gb.is_end eq 0 order=gb.id desc limit=8}
+        <div class="swiper-slide">
+            <a href="{url:/index/groupbuy/id/$item[id]}">
+                <div class="thumbs"><img src="{echo:Common::thumb($item['img'],220,220);}" alt=""></div>
+                <div class="title"><p>{$item['name']}</p></div>
+                <div class="prices">
+                     <del class="tag-price">{$currency_symbol}{$item['sell_price']}</del>
+                    <span class="gb-price">{$currency_symbol}{$item['price']}</span>
+                </div>
+            </a>
+        </div>
+        {/query}
+    </div>
+</div>
+<div class="swiper-container swiper-init" data-swiper="{'slidesPerView': 'auto','paginationClickable': false,'spaceBetween': 0,'freeMode': true,'pagination': '','slidesPerColumn':'1'}">
     <div class="swiper-title"> <div class="logo">积分专区</div> 
         <a class="more" href="{url:/index/point}"><span>积分购专区</span><i class="iconfont icon-next"></i></a> 
     </div>
