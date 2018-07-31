@@ -1664,7 +1664,7 @@ class UcenterAction extends Controller {
         $isset = $this->model->table("refund")->where("order_id =$order_id and user_id =".$this->user['id'])->find();
        if($isset){
          // return false;
-         $this->model->table("refund")->where("order_id =$order_id and user_id =".$this->user['id'])->delete()
+         $this->model->table("refund")->where("order_id =$order_id and user_id =".$this->user['id'])->delete();
        }
        $orderInfo = $this->model->table("order")->where("id = $order_id and user_id =".$this->user['id'])->find();
        if(empty($orderInfo)){
