@@ -66,6 +66,7 @@ class V1Controller extends Controller {
         "order_detail" => array("ucenter/order_detail", 1,1), //查询单个订单的详情 
         "order_sign" => array("ucenter/order_sign", 1,1), //签收订单
         "order_express_detail" => array("ucenter/order_express_detail", 1,1), //查询订单分包
+        "shop_order_list" => array("order/shop_order_list",1,1), //商家订单列表
         "my_review" => array("ucenter/my_review", 1,1), //我的评论
         "post_review" => array("ucenter/post_review", 1,1), //发表评论
         "get_message" => array("ucenter/get_message", 1,1), //消息接口
