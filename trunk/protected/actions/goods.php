@@ -398,7 +398,7 @@ class GoodsAction extends Controller {
                 foreach ($resp['result_list']['map_data'] as $itm) {
                     if (!isset($save_data[$itm['coupon_id']])) {
                         $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
-                        if ($decrease_price < 5) {
+                        if ($decrease_price < 5 || ($itm['zk_final_price'] - $itm['decrease_price']>=5000)) {
                             continue;
                         }
                         if(!isset($itm['small_images'])){
@@ -574,7 +574,7 @@ class GoodsAction extends Controller {
                 foreach ($tbk_data['result_list']['map_data'] as $itm) {
                     if (!isset($save_data[$itm['coupon_id']])) {
                         $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
-                        if ($decrease_price < 5) {
+                        if ($decrease_price < 5 || ($itm['zk_final_price'] - $itm['decrease_price']>=5000)) {
                             continue;
                         }
                         if(!isset($itm['small_images'])){
@@ -610,7 +610,7 @@ class GoodsAction extends Controller {
                     foreach ($tbk_data['result_list']['map_data'] as $key => $itm) {
                         if (!isset($new_data[$itm['coupon_id']])) {
                             $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
-                            if ($decrease_price < 5) {
+                            if ($decrease_price < 5 || ($itm['zk_final_price'] - $itm['decrease_price']>=5000)) {
                                 continue;
                             }
                             if(!isset($itm['small_images'])){

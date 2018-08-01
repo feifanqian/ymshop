@@ -1078,6 +1078,24 @@ class OrderAction extends Controller {
         return $product;
     }
 
+    public function shop_order_list()
+    {
+        $page = Filter::int(Req::args('page'));
+        if(!$page){
+            $page = 1;
+        }
+        $shop = $this->model->table('shop')->fields('id')->where('user_id='.$this->user['id'])->find();
+        if(!$shop) {
+           $this->code = 0;
+           $this->content = [];
+           return;
+        }
+        $order = $this->model->table('order_goods as og')->fields('u.nickname,og.order_id,og.goods_nums,g.name,g.sell_price')->join('left join order as o on o.id=og.order_id left join user as u on o.user_id=u.id left join goods as g on og.goods_id=g.id')->where('o.shop_ids='.$shop['id'])->findPage($page,10);
+        $this->code = 0;
+        $this->content = $order;
+        return;
+    }
+
 
 }
 
