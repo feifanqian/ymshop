@@ -483,10 +483,13 @@ class AddressAction extends Controller
                    if($redbag['redbag_type']==1){ //拼手气红包随机分配金额
                        //计算理论可领取最大红包金额，以分为最小单位
                        // $max_money = ($redbag['amount']-$num*0.01)*100; //单位分
-
-                       $max_money = intval($redbag['amount']*100 / $num) * 2; //单位分
-                       //随机分配红包金额
-                       $get_money = rand(1,$max_money)/100; // 单位元
+                       if($redbag['amount']*100 > $num){
+                            $max_money = intval($redbag['amount']*100 / $num) * 2; //单位分
+                            //随机分配红包金额
+                            $get_money =  rand(1,$max_money)/100; // 单位元
+                       } else {
+                            $get_money = 0.01;
+                       }      
                    }else{ //普通红包每人等额
                       $get_money = round($redbag['total_amount']/$redbag['num'],2);
                    }    
