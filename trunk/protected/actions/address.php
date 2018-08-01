@@ -985,6 +985,8 @@ class AddressAction extends Controller
          * */
         $arr = array();
         $info_sql = $info_sql['data'];
+        $info_sql = $this->super_unique($info_sql);
+        $info_sql = array_values($info_sql);
         foreach ($info_sql as $key => $value) {
             if($info_sql[$key]['picture']==null){
                     $info_sql[$key]['picture'] = 'http://www.ymlypt.com/themes/mobile/images/logo-new.png';
@@ -1080,6 +1082,20 @@ class AddressAction extends Controller
         // $info_sql = array_slice($info_sql, ($page-1)*10, 10);
         $this->code = 0;
         $this->content = $info_sql; 
+    }
+
+    public function super_unique($array, $recursion = false) {
+        // 序列化数组元素,去除重复
+        $result = array_map('unserialize', array_unique(array_map('serialize', $array)));
+        // 递归调用
+        if ($recursion) {
+            foreach ($result as $key => $value) {
+                if (is_array($value)) {
+                    $result[$key] = super_unique($value);
+                }
+            }
+        }
+        return $result;
     }
 
     //按地铁线查找
