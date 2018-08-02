@@ -82,7 +82,9 @@ class CartAction extends Controller {
        }
         if($products){
             foreach ($products as $k =>$v){
-                $products[$k]['spec'] =  array_values($products[$k]['spec']);
+                if(is_array($v['spec'])) {
+                    $products[$k]['spec'] =  array_values($v['spec']);
+                } 
             }
         }
         $this->code = 0;
