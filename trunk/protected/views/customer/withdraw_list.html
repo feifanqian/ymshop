@@ -37,6 +37,7 @@
                 {elseif:$item['status']==1}
                 <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
                 {elseif:$item['status']==2}
+                <li><a class="icon-pencil" href="javascript:withdrawAction({$item['id']});"> 再次审批</a></li>
                 <li><a class="icon-credit" href="javascript:balanceBack({$item['id']});"> 余额退回</a></li>
                 <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
                 {elseif:$item['status']==3}
