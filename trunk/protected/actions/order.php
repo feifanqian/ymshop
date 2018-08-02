@@ -1094,14 +1094,14 @@ class OrderAction extends Controller {
         if($order) {
             unset($order['html']);
             foreach ($order['data'] as $key => $value) {
-                $order['data']['specs'] = array_values(unserialize($value['specs']));
-                if($order['data']['specs']!=null && is_array($order['data']['specs'])) {
-                    foreach ($order['data']['specs'] as $k => &$v) {
+                $order['data'][$key]['specs'] = array_values(unserialize($value['specs']));
+                if($order['data'][$key]['specs']!=null && is_array($order['data'][$key]['specs'])) {
+                    foreach ($order['data'][$key]['specs'] as $k => &$v) {
                         $v['value'] = array_values($v['value']);
                     }
                 }
             }
-            $order['data'] = array_values($order['data']);
+            // $order['data'] = array_values($order['data']);
         }
         $this->code = 0;
         $this->content = $order;
