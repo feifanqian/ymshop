@@ -189,7 +189,7 @@ class OrderController extends Controller {
         $order_info = $model->table("order")->where("id=$order_id")->find();
         if($order_info['type']==1) {
             //判断团购订单是否满足发货要求，需在规定时间满足达到最小组团人数
-            $groupbuy_log = $model->table('groupbuy_log')->where('id='.$order_info['join_id'];)->find();
+            $groupbuy_log = $model->table('groupbuy_log')->where('id='.$order_info['join_id'])->find();
             if($groupbuy_log) {
                 $groupbuy_join = $model->table('groupbuy_join')->where('id='.$groupbuy_log['join_id'])->find();
                 if($groupbuy_join) {
