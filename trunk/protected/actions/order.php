@@ -1090,7 +1090,7 @@ class OrderAction extends Controller {
            $this->content = [];
            return;
         }
-        $order = $this->model->table('order_goods as og')->fields('u.nickname,og.order_id,og.goods_nums,g.name,g.sell_price')->join('left join order as o on o.id=og.order_id left join user as u on o.user_id=u.id left join goods as g on og.goods_id=g.id')->where('o.shop_ids='.$shop['id'].' and o.pay_status>0')->findPage($page,10);
+        $order = $this->model->table('order_goods as og')->fields('o.order_no,u.nickname,og.order_id,og.goods_nums,g.name,g.sell_price')->join('left join order as o on o.id=og.order_id left join user as u on o.user_id=u.id left join goods as g on og.goods_id=g.id')->where('o.shop_ids='.$shop['id'].' and o.pay_status>0')->findPage($page,10);
         if($order) {
             unset($order['html']);
         }

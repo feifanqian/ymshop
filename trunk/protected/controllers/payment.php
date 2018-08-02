@@ -2061,8 +2061,8 @@ class PaymentController extends Controller {
     //微信jsapi提交处理
     public function pay_wxpayjsapi_submit() {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-            $out_trade_no = Filter::sql($_POST['out_trade_no']);
-            $return_url = Filter::sql($_POST['return_url']);
+            $out_trade_no = isset($_POST['out_trade_no'])?Filter::sql($_POST['out_trade_no']):$_GET['out_trade_no'];
+            $return_url = isset($_POST['return_url'])?Filter::sql($_POST['return_url']):'';
             //获取真实订单号 exp :5567_promoter2017050514260743
             if (stripos($out_trade_no, 'promoter') !== false) {//推广员入驻订单
                 $order_no = substr($out_trade_no, 5);
