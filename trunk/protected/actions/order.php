@@ -1101,6 +1101,7 @@ class OrderAction extends Controller {
                     }
                 }
             }
+            $order['data'] = array_values($order['data']);
         }
         $this->code = 0;
         $this->content = $order;
