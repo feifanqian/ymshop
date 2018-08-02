@@ -1108,6 +1108,60 @@ class OrderAction extends Controller {
         return;
     }
 
+    public function order_send()
+    {
+        $order_id = Filter::int(Req::args("order_id"));
+        $express_no = Filter::str(Req::args("express_no"));
+        $express_company_id = Filter::int(Req::args('express_company_id'));
+        //$delivery_status = Req::args("delivery_status");
+        //同步发货信息
+        $order_info = $this->model->table("order")->where("id=$order_id")->find();
+        if($order_info['type']==1) {
+            //判断团购订单是否满足发货要求，需在规定时间满足达到最小组团人数
+            $groupbuy_log = $this->model->table('groupbuy_log')->where('id='.$order_info['join_id'];)->find();
+            if($groupbuy_log) {
+                $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$groupbuy_log['join_id'])->find();
+                if($groupbuy_join) {
+                    if($groupbuy_join['need_num']>0) {
+                        $this->code = 1289;
+                        return;
+                    }
+                }
+            }
+        }
+        if ($order_info['delivery_status'] == 3) {
+            $this->model->table('doc_invoice')->where("order_id=$order_id")->insert();
+        } else if($order_info['delivery_status']==0){
+             $this->model->table('doc_invoice')->where("order_id=$order_id")->insert();
+        }
+        
+        if ($order_info) {
+            if ($order_info['trading_info'] != '') {
+                $payment_id = $order_info['payment'];
+                $payment = new Payment($payment_id);
+                $payment_plugin = $payment->getPaymentPlugin();
+                $express_company = $this->model->table('express_company')->where('id=' . $express_company_id)->find();
+                if ($express_company)
+                    $express = $express_company['name'];
+                else
+                    $express = $express_company_id;
+                //处理同步发货
+                $delivery = $payment_plugin->afterAsync();
+                if ($delivery != null && method_exists($delivery, "send"))
+                    $delivery->send($order_info['order_no'], $express, $express_no);
+            }
+        }
+        $this->model->table("order")->where("id=$order_id")->data(array('delivery_status' => 1, 'send_time' => date('Y-m-d H:i:s')))->update();
+        //变全部物流，防止商户重复发货
+        $this->model->table('order_goods')->data(array('express_no' => $express_no, 'express_company_id' => $express_company_id,'express_time'=>date("Y-m-d H:i:s")))
+                ->where("order_id='{$order_info['id']}' and (express_no IS NULL or express_no ='')")
+                ->update();
+        Log::op($this->manager['id'], "订单发货", "管理员[" . $this->manager['name'] . "]:对订单进行系统发货，订单号： " . $order_info['order_no']);
+        $this->code = 0;
+        $this->content = [];
+        return;
+    }
+
 
 }
 

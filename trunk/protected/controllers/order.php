@@ -189,18 +189,16 @@ class OrderController extends Controller {
         $order_info = $model->table("order")->where("id=$order_id")->find();
         if($order_info['type']==1) {
             //判断团购订单是否满足发货要求，需在规定时间满足达到最小组团人数
-            if($order_info['join_id']==0) {
-                $where = 'groupbuy_id='.$order_info['prom_id'];
-            } else {
-                $where = 'id='.$order_info['join_id'];
-            }
-            $groupbuy_join = $model->table('groupbuy_join')->where($where)->find();
-            if($groupbuy_join) {
-                if($groupbuy_join['need_num']>0) {
-                    echo "<script>alert('还未达到拼团人数需求');</script>";
-                    exit();
+            $groupbuy_log = $model->table('groupbuy_log')->where('id='.$order_info['join_id'];)->find();
+            if($groupbuy_log) {
+                $groupbuy_join = $model->table('groupbuy_join')->where('id='.$groupbuy_log['join_id'])->find();
+                if($groupbuy_join) {
+                    if($groupbuy_join['need_num']>0) {
+                        echo "<script>alert('还未达到拼团人数需求');</script>";
+                        exit();
+                    }
                 }
-            }
+            }   
         }
         $model = new Model("doc_invoice");
         if ($order_info['delivery_status'] == 3) {
