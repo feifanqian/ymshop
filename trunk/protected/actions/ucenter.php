@@ -678,6 +678,7 @@ class UcenterAction extends Controller {
             $order_goods = $this->model->table("order_goods as og ")->join("left join goods as go on og.goods_id = go.id left join products as pr on og.product_id = pr.id")->where("og.order_id=" . $id)->findAll();
             foreach ($order_goods as $k => $v) {
                 unset($order_goods[$k]['content']);
+                $order_goods[$k]['specs_value'] = array_values(unserialize($v['specs']));
             }
             $area_ids = $order['province'] . ',' . $order['city'] . ',' . $order['county'];
             if ($area_ids != '')
