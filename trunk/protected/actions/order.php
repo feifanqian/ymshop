@@ -1113,6 +1113,12 @@ class OrderAction extends Controller {
         $order_id = Filter::int(Req::args("order_id"));
         $express_no = Filter::str(Req::args("express_no"));
         $express_company_id = Filter::int(Req::args('express_company_id'));
+        $province_id = Filter::int(Req::args('province_id'));
+        $city_id = Filter::int(Req::args('city_id'));
+        $county_id = Filter::int(Req::args('county_id'));
+        $mobile = Filter::sql(Req::args('mobile'));
+        $addr = Filter::text(Req::args('addr'));
+        $remark = Filter::text(Req::args('remark'));
         //$delivery_status = Req::args("delivery_status");
         //同步发货信息
         $order_info = $this->model->table("order")->where("id=$order_id")->find();
@@ -1129,10 +1135,27 @@ class OrderAction extends Controller {
                 }
             }
         }
-        if ($order_info['delivery_status'] == 3) {
-            $this->model->table('doc_invoice')->where("order_id=$order_id")->insert();
-        } else if($order_info['delivery_status']==0){
-             $this->model->table('doc_invoice')->where("order_id=$order_id")->insert();
+        if ($order_info['delivery_status'] == 3 || $order_info['delivery_status']==0) {
+            $invoice = array(
+                'invoice_no'         => "A".date('YmdHis') . rand(100, 999),
+                'order_id'           => $order_id,
+                'order_no'           => $order_info['order_no'],
+                'admin'              => $this->user['nickname'],
+                'accept_name'        => $order_info['accept_name'],
+                'province'           => $province_id,
+                'city'               => $city_id,
+                'county'             => $county_id,
+                'addr'               => $addr,
+                'phone'              => $mobile,
+                'mobile'             => $mobile,
+                'create_time'        => date('Y-m-d H:i:s'),
+                'express_no'         => $express_no,
+                'express_company_id' => $express_company_id,
+                'remark'             => $remark
+                );
+            $this->model->table('doc_invoice')->where("order_id=$order_id")->data($invoice)->insert();
+        } else {
+            $invoice = [];
         }
         
         if ($order_info) {
@@ -1141,14 +1164,17 @@ class OrderAction extends Controller {
                 $payment = new Payment($payment_id);
                 $payment_plugin = $payment->getPaymentPlugin();
                 $express_company = $this->model->table('express_company')->where('id=' . $express_company_id)->find();
-                if ($express_company)
+                if ($express_company) {
                     $express = $express_company['name'];
-                else
+                }
+                else{
                     $express = $express_company_id;
+                }
                 //处理同步发货
                 $delivery = $payment_plugin->afterAsync();
-                if ($delivery != null && method_exists($delivery, "send"))
+                if ($delivery != null && method_exists($delivery, "send")) {
                     $delivery->send($order_info['order_no'], $express, $express_no);
+                }
             }
         }
         $this->model->table("order")->where("id=$order_id")->data(array('delivery_status' => 1, 'send_time' => date('Y-m-d H:i:s')))->update();
@@ -1156,9 +1182,17 @@ class OrderAction extends Controller {
         $this->model->table('order_goods')->data(array('express_no' => $express_no, 'express_company_id' => $express_company_id,'express_time'=>date("Y-m-d H:i:s")))
                 ->where("order_id='{$order_info['id']}' and (express_no IS NULL or express_no ='')")
                 ->update();
-        Log::op($this->manager['id'], "订单发货", "管理员[" . $this->manager['name'] . "]:对订单进行系统发货，订单号： " . $order_info['order_no']);
+        Log::op($this->user['id'], "订单发货", "商家[" . $this->user['nickname'] . "]:对订单进行系统发货，订单号： " . $order_info['order_no']);
         $this->code = 0;
-        $this->content = [];
+        $this->content = $invoice;
+        return;
+    }
+
+    public function express_company_list()
+    {
+        $list = $this->model->table('express_company')->findAll();
+        $this->code = 0;
+        $this->content = $list;
         return;
     }
 

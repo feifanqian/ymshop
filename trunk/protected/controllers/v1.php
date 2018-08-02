@@ -47,6 +47,8 @@ class V1Controller extends Controller {
         'order_submit' => array('order/submit', 1,1),
         'order_calculate_fare' => array('order/calculate_fare', 0,1),
         'order_express' => array('order/express', 0,1),
+        "order_send" => array("order/order_send",1,1), //商家订单发货
+        "express_company_list" => array("order/express_company_list",0,1), //快递公司列表
         'address_list' => array('address/lists', 1,1),
         'address_info' => array('address/info', 1,1),
         'address_del' => array('address/del', 1,1),
