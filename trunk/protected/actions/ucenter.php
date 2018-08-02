@@ -679,6 +679,11 @@ class UcenterAction extends Controller {
             foreach ($order_goods as $k => $v) {
                 unset($order_goods[$k]['content']);
                 $order_goods[$k]['specs_value'] = array_values(unserialize($v['specs']));
+                if($order_goods[$k]['specs_value']!=null && is_array($order_goods[$k]['specs_value'])) {
+                    foreach ($order_goods[$k]['specs_value'] as $key => &$value) {
+                        $value['value'] = array_values($value['value']);
+                    }
+                }
             }
             $area_ids = $order['province'] . ',' . $order['city'] . ',' . $order['county'];
             if ($area_ids != '')
