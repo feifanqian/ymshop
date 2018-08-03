@@ -142,6 +142,7 @@ class GroupbuyAction extends Controller
         $info['sell_price'] = $goods['sell_price'];
         $info['price'] = $groupbuy['price'];
         $info['store_nums'] = $goods['store_nums'];
+        $info['start_time'] = $groupbuy['start_time'];
         $info['end_time'] = $groupbuy['end_time'];
         $info['current_time'] = date('Y-m-d H:i:s');
         $info['join_num'] = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and pay_status=1')->count();
