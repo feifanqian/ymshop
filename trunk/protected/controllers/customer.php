@@ -252,7 +252,10 @@ class CustomerController extends Controller {
                             $result = $ChinapayDf->DFAllinpay($params);
                         }
                     } else {
-                       $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口 
+                       $result = $ChinapayDf->DFAllinpay($params); //使用通联代付接口
+                       if($result['status']!=1) {
+                           $result = $ChinapayDf->DfYinsheng($params);
+                       } 
                     }
                     
                     if($result['status']==1){
