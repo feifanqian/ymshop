@@ -619,7 +619,7 @@ class TravelController extends Controller
                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
                             $obj['open_id'] = $token['openid'];
                             $this->safebox->set('user', $obj, 31622400);
-                            $this->user['id'] = $oauth_user['user_id'];
+                            $this->user['id'] = $user_id;
                         } else { //已注册
                             $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
