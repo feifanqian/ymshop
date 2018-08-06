@@ -468,9 +468,6 @@ class SimpleController extends Controller {
                 //已绑定用户
                 if ($is_oauth['user_id'] > 0) {
                     if($is_oauth['unionid']==null) {
-                        if($is_oauth['user_id']==42608) {
-                            var_dump($userinfo['unionid']);die;
-                        }
                         $oauth_user->data(['unionid'=>$userinfo['unionid']])->where('user_id='.$is_oauth['user_id'])->update();
                     } 
                     
