@@ -630,7 +630,7 @@ class TravelController extends Controller
                             Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
                         }
                         $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
-                        if($customer['mobile']=='' && $customer['mobile_verified']==0) {
+                        if($customer['mobile']=='' || $customer['mobile_verified']==0) {
                             $this->redirect(); 
                         } else {
                             $this->redirect('/travel/register_success');
