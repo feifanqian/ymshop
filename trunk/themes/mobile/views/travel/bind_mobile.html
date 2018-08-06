@@ -184,7 +184,9 @@ input:-ms-input-placeholder {font-size: 15pt}
                     var link = "{url:/travel/register_success}";
                     window.location.href = link;
                 } else {
-                    $.toast('验证码错误','forbidden');
+                    // $.toast('验证码错误','forbidden');
+                    alert('验证码错误');
+                    return false;
                 }
             }
         });
