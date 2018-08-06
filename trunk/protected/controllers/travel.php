@@ -655,8 +655,11 @@ class TravelController extends Controller
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
         if($checkFlag || $mobile_code=='000000') {
              $this->model->table('customer')->where('user_id='.$this->user['id'])->data(['mobile'=>$mobile,'mobile_verified'=>1])->update();
+             $info = array('status' => 'success', 'msg' => '成功');
+        } else {
+            $info = array('status' => 'fail', 'msg' => '验证码错误！');
         }
-        $this->redirect('/travel/register_success');
+        echo JSON::encode($info);
     }
 
     public function register_success()
