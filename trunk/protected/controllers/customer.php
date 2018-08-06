@@ -207,7 +207,7 @@ class CustomerController extends Controller {
         $status = Req::args('status');
         $note = Filter::text(Req::args('note'));
         $model = new Model('balance_withdraw as wd');
-        $obj = $model->fields("wd.*,cu.balance,cu.offline_balance")->join("left join customer as cu on wd.user_id = cu.user_id")->where("wd.id=$id and wd.status=0")->find();
+        $obj = $model->fields("wd.*,cu.balance,cu.offline_balance")->join("left join customer as cu on wd.user_id = cu.user_id")->where("wd.id=$id")->find();
         if ($obj) {
             // $can_withdraw = Common::getCanWithdrawAmount4GoldCoin($obj['user_id']);
             // if($obj['type']==0){
