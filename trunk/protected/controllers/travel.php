@@ -575,9 +575,8 @@ class TravelController extends Controller
     public function bind_mobile()
     {
         $inviter = Filter::int(Req::args("inviter_id"));
-        var_dump($inviter);die;
          if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-                $redirect = "http://www.ymlypt.com/travel/bind_mobile";
+                $redirect = "http://www.ymlypt.com/travel/bind_mobile?inviter_id=".$inviter;
                 // $this->autologin($redirect);
                 $code = Filter::sql(Req::args('code'));
                 $oauth = new WechatOAuth();
@@ -630,7 +629,6 @@ class TravelController extends Controller
                         if($inviter){
                             Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
                         }
-                        var_dump($inviter);die;
                         $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
                         if($customer['mobile']=='' && $customer['mobile_verified']==0) {
                             $this->redirect(); 
