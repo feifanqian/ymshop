@@ -572,14 +572,101 @@ class TravelController extends Controller
         $this->redirect();
     }
 
+    public function bind_mobile()
+    {
+        $inviter = Filter::int(Req::args("inviter_id"));
+         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+                $redirect = "http://www.ymlypt.com/travel/bind_mobile";
+                // $this->autologin($redirect);
+                $code = Filter::sql(Req::args('code'));
+                $oauth = new WechatOAuth();
+                
+                $url = $oauth->getCodes($redirect);
+                if($code) {
+                    $extend = null;
+                    $token = $oauth->getAccessToken($code, $extend);
+                    $userinfo = $oauth->getUserInfo();
+                    if(!empty($userinfo)) {
+                        $openid = $token['openid'];
+                        $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
+
+                        if(!$oauth_user) { //未注册
+                            //插入user表
+                            $passWord = CHash::random(6);
+                            $validcode = CHash::random(8);
+                            $user_id = $this->model->table("user")->data(array('nickname' => $userinfo['open_name'], 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+                            $name = "u" . sprintf("%09d", $user_id);
+                            $email = $name . "@no.com";
+                            $time = date('Y-m-d H:i:s');
+                            $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
+
+                            //插入customer表
+                            $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                            Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
+
+                            //插入oauth_user表
+                            $this->model->table('oauth_user')->data(array(
+                                    'user_id' => $user_id, 
+                                    'open_name' => $userinfo['open_name'],
+                                    'oauth_type' => "wechat",
+                                    'posttime' => time(),
+                                    'token' => $token['access_token'],
+                                    'expires' => $token['expires_in'],
+                                    'open_id' => $token['openid']
+                                ))->insert();
+
+                            //记录登录信息
+                            $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
+                            $obj['open_id'] = $token['open_id'];
+                            $this->safebox->set('user', $obj, 31622400);
+                            $this->user['id'] = $oauth_user['user_id'];
+                        } else { //已注册
+                            $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
+                            $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
+                            $this->safebox->set('user', $obj, 31622400);
+                            $this->user['id'] = $oauth_user['user_id'];
+                        }
+                        if($inviter){
+                            Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
+                        }
+                        $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
+                        if($customer['mobile']=='' && $customer['mobile_verified']==0) {
+                            $this->redirect(); 
+                        } else {
+                            $this->redirect('/travel/register_success');
+                        }      
+                    }
+                    // return true;
+                } else {
+                    header("Location: {$url}"); 
+                    // $this->redirect($url);
+                }        
+            } else {
+               $this->redirect('/travel/invite_register/inviter_id/{$inviter}');
+            }
+    }
+
+    public function bind_mobile_act()
+    {
+        $mobile = Filter::str(Req::args('mobile'));
+        $mobile_code = Req::args('mobile_code');
+        $inviter_id = Filter::int(Req::args("inviter"));
+        $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
+        $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+        if($checkFlag || $mobile_code=='000000') {
+             $this->model->table('customer')->where('user_id='.$this->user['id'])->data(['mobile'=>$mobile,'mobile_verified'=>1])->update();
+        }
+        $this->redirect('/travel/register_success');
+    }
+
     public function register_success()
     {
         $this->redirect();
     }
 
     public function register_act(){
-            $mobile = Filter::int(Req::args('mobile'));
-            $realname = "";
+            $mobile = Filter::str(Req::args('mobile'));
+            $realname = $mobile;
             $passWord = Req::post('password');
             $rePassWord = Req::post('repassword');
             $mobile_code = Req::args('mobile_code');

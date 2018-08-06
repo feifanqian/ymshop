@@ -324,7 +324,7 @@ class UcenterAction extends Controller {
         if ($platform && $openid && $token) {
             $model = $this->model->table("oauth_user as ou");
             // $obj = $model->join("left join user as us on us.id = ou.user_id")->fields("ou.*,us.adzoneid")->where("ou.oauth_type='$platform' and ou.open_id='{$openid}'")->find();
-            $obj = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and open_id='{$openid}'")->find();
+            $obj = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and open_id='{$openid}' or unionid = '{$openid}'")->find();
             if ($obj) {
                 $token = CHash::random(32, 'char');
                 $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['user_id'])->update();
@@ -369,7 +369,7 @@ class UcenterAction extends Controller {
         $head = Filter::str(Req::args('head'));
         
         $inviter_id = Filter::int(Req::args("inviter_id"));
-        $oauthuser = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and open_id='{$openid}'")->find();
+        $oauthuser = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and open_id='{$openid}' or unionid = '{$openid}'")->find();
         if ($oauthuser && $oauthuser['user_id']) {
             $this->code = 1059;
             return;
@@ -415,7 +415,8 @@ class UcenterAction extends Controller {
                 'posttime' => time(),
                 'token' => $token,
                 'expires' => 7200,
-                'open_id' => $openid
+                'open_id' => $openid,
+                'unionid' => $openid
             ))->insert();
             
             $this->code = 0;

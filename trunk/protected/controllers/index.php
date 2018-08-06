@@ -82,7 +82,8 @@ class IndexController extends Controller {
         //     Cookie::set("inviter", $inviter_id);
         //     $this->noRight();
         // }
-        $this->redirect('/travel/invite_register?inviter_id='.$inviter_id);
+        // $this->redirect('/travel/invite_register?inviter_id='.$inviter_id);
+        $this->redirect('/travel/bind_mobile?inviter_id='.$inviter_id);
         return;
     }
     public function myinvite() {
