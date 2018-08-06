@@ -629,6 +629,7 @@ class TravelController extends Controller
                         if($inviter){
                             Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
                         }
+                        var_dump($inviter);die;
                         $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
                         if($customer['mobile']=='' && $customer['mobile_verified']==0) {
                             $this->redirect(); 
