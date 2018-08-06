@@ -14,10 +14,10 @@ class TravelController extends Controller
         $this->model = new Model();
         $this->safebox = Safebox::getInstance();
         $this->user = $this->safebox->get('user');
-        if ($this->user == null) {
-            $this->user = Common::autoLoginUserInfo();
-            $this->safebox->set('user', $this->user);
-        }
+        // if ($this->user == null) {
+        //     $this->user = Common::autoLoginUserInfo();
+        //     $this->safebox->set('user', $this->user);
+        // }
         $config = Config::getInstance();
         $site_config = $config->get("globals");
         $this->assign('seo_title', $site_config['site_name']);
