@@ -91,7 +91,7 @@
                     <tr>   
 
                         <td colspan="2">
-                            {query:name=attention as gb join=left join goods as go on gb.goods_id eq go.id limit=4 where=user_id eq $user[id] }
+                            {query:name=attention as gb join=left join goods as go on gb.goods_id eq go.id limit=4 where=gb.user_id eq $user[id] }
                             <a href="{url:/index/product/id/$item[goods_id]}"><img src="{echo:Common::thumb($item['img'],100,100);}" style='width:60px;height:60px;float:left;'></a>
                             {/query}
                         </td>  
