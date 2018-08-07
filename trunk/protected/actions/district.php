@@ -444,5 +444,11 @@ class DistrictAction extends Controller {
         }
         $district_arr = explode(',',$district_id);
         return $district_arr;
+    }
+
+    public function get_my_districters()
+    {
+        $this->code = 0;
+        $this->content['district_arr'] = $this->getMyAllDistricters($this->user['id']);
     }     
 }
