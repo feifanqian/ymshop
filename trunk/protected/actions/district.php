@@ -418,7 +418,8 @@ class DistrictAction extends Controller {
         $this->content['promoter_ids'] = $promoter_ids;
         $this->content['num'] = count($inviter_info);
     }
-
+    
+    //获取上级所有经销商
     public function getMyAllDistricters($user_id)
     {
         $inviter_info = $this->model->table("invite")->where("invite_user_id=".$user_id)->find();
@@ -446,10 +447,39 @@ class DistrictAction extends Controller {
         return $district_arr;
     }
 
+    //获取上级3个经销商
+    public function getMyThreeDistricters($user_id)
+    {
+        $district_id = '1';
+        $inviter_info1 = $this->model->table("invite")->where("invite_user_id=".$user_id)->find();
+        if($inviter_info1) {
+            $district1 = $this->model->table('district_shop')->fields('owner_id')->where('id='.$inviter_info1['district_id'])->find();
+            if($district1) {
+                $district_id .=','. $district1['owner_id'];
+                $inviter_info2 = $this->model->table("invite")->where("invite_user_id=".$district1['owner_id'])->find();
+                if($inviter_info2) {
+                    $district2 = $this->model->table('district_shop')->fields('owner_id')->where('id='.$inviter_info2['district_id'])->find();
+                    if($district2) {
+                        $district_id .=','. $district2['owner_id'];
+                        $inviter_info3 = $this->model->table("invite")->where("invite_user_id=".$district2['owner_id'])->find();
+                        if($inviter_info3) {
+                            $district3 = $this->model->table('district_shop')->fields('owner_id')->where('id='.$inviter_info3['district_id'])->find();
+                            if($district3) {
+                                $district_id .=','. $district3['owner_id'];
+                            }    
+                        }
+                    }    
+                }
+            }    
+        }
+        $district_arr = explode(',',$district_id);
+        return $district_arr;
+    }
+
     public function get_my_districters()
     {
         $user_id = Filter::int(Req::args('user_id'));
         $this->code = 0;
-        $this->content['district_arr'] = $this->getMyAllDistricters($user_id);
+        $this->content['district_arr'] = $this->getMyThreeDistricters($user_id);
     }     
 }
