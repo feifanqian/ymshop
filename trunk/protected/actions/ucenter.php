@@ -2162,8 +2162,8 @@ class UcenterAction extends Controller {
         $sum = !empty($sums)?$sums[0]['total']:0;
         if(!$level) {
             $record = $this->model->table('invite as do')
-                    ->join('left join user as u on do.invite_user_id = u.id')
-                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
+                    ->join('left join user as u on do.invite_user_id = u.id left join customer as c on do.invite_user_id = c.user_id')
+                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from,c.mobile')
                     ->where($where)
                     ->order($sort)
                     ->findPage($page, 10);        
@@ -2190,6 +2190,9 @@ class UcenterAction extends Controller {
                             $record['data'][$k]['role_type'] = 0;
                             
                         }
+                        if($v['nickname']=='') {
+                            $record['data'][$k]['nickname'] = $v['mobile'];
+                        }
                     }
                 }
                 $record['data'] = array_values($record['data']);
@@ -2205,8 +2208,8 @@ class UcenterAction extends Controller {
             }
         } else {
             $list = $this->model->table('invite as do')
-                    ->join('left join user as u on do.invite_user_id = u.id')
-                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from')
+                    ->join('left join user as u on do.invite_user_id = u.id left join customer as c on do.invite_user_id = c.user_id')
+                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from,c.mobile')
                     ->where($where)
                     ->order($sort)
                     ->findAll();
@@ -2232,6 +2235,9 @@ class UcenterAction extends Controller {
                             if($level==2 || $level ==3) {
                                 unset($list[$k]);
                             }
+                        }
+                        if($v['nickname']=='') {
+                            $list[$k]['nickname'] = $v['mobile'];
                         }
                     }
                 }
