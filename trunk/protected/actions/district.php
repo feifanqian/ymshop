@@ -269,16 +269,11 @@ class DistrictAction extends Controller {
                 $this->code = 1177;
                 return;
             }
-            // $district_id = Common::getFirstDistrictId($this->user['id']);
-            // if($district_id!=$promoter_code['user_id']) {
-            //     $this->code = 1285;
-            //     return;
-            // }
-            // $district_arr = $this->getMyAllDistricters($this->user['id']);
-            // if(!in_array($promoter_code['user_id'],$district_arr)) {
-            //     $this->code = 1285;
-            //     return;
-            // }
+            $district_arr = $this->getMyThreeDistricters($this->user['id']);
+            if(!in_array($promoter_code['user_id'],$district_arr)) {
+                $this->code = 1285;
+                return;
+            }
             $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id'],'shop_type'=>$type))->insert();
             $point = 3600.00;
             $this->model->table('customer')->data(array('point_coin'=>"`point_coin`+({$point})"))->where('user_id='.$this->user['id'])->update();
