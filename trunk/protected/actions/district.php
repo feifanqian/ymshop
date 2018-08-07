@@ -473,6 +473,7 @@ class DistrictAction extends Controller {
             }    
         }
         $district_arr = explode(',',$district_id);
+        $district_arr = array_unique($district_arr);
         return $district_arr;
     }
 
