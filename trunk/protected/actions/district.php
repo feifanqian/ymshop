@@ -448,7 +448,8 @@ class DistrictAction extends Controller {
 
     public function get_my_districters()
     {
+        $user_id = Filter::int(Req::args('user_id'));
         $this->code = 0;
-        $this->content['district_arr'] = $this->getMyAllDistricters($this->user['id']);
+        $this->content['district_arr'] = $this->getMyAllDistricters($user_id);
     }     
 }
