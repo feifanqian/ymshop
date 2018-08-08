@@ -2097,6 +2097,7 @@ class IndexController extends Controller {
 
     public function groupbuy_join_detail()
     {
+        $inviter = Filter::int(Req::args("inviter_id"));
         if($this->user['id']==null) {
             $groupbuy_id = Filter::int(Req::args('groupbuy_id'));
             $join_id = Filter::int(Req::args('join_id'));
@@ -2149,6 +2150,9 @@ class IndexController extends Controller {
                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
                             $this->safebox->set('user', $obj, 31622400);
                             $user_id = $oauth_user['user_id'];
+                        }
+                        if($inviter){
+                            Common::buildInviteShip($inviter, $user_id, 'wechat');
                         }   
                     }
                     // return true;
