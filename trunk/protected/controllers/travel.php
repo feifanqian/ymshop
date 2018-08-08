@@ -554,9 +554,13 @@ class TravelController extends Controller
             $this->assign("info", $info);
             $this->redirect();
         } else {
-            $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '信息错误', "content" => "抱歉，找不到该商品信息啦"));
-            exit();
+            $this->redirect("/travel/tao_fail");
         }      
+    }
+
+    public function tao_fail()
+    {
+        $this->redirect();
     }
 
     public function get_way_remark() {
