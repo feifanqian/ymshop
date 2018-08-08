@@ -375,9 +375,12 @@ class DistrictAction extends Controller {
             $this->code = 1259;
             return;
         }
-        $count2 = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->count();
-        if($count2>=$myself['code_num']) {
-            $this->code = 1278;
+        //已生成数量
+        $has_made_count = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->count();
+        //剩余激活码数量
+        $available_num = $myself['code_num'] - $has_made_count;
+        if($num > $available_num) {
+            $this->code = 1290;
             return;
         }
         $num1 = $myself['code_num'] - $num;
