@@ -654,9 +654,14 @@ class TravelController extends Controller
     {
         $mobile = Filter::str(Req::args('mobile'));
         $mobile_code = Req::args('mobile_code');
+        $password = Req::args('password');
+        $repassword = Req::args('repassword');
         $inviter_id = Filter::int(Req::args("inviter"));
         $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+        if($password!=$repassword) {
+            $info = array('status' => 'fail', 'msg' => '两次密码输入不一致！');
+        }
         if($checkFlag || $mobile_code=='000000') {
              $this->model->table('customer')->where('user_id='.$this->user['id'])->data(['mobile'=>$mobile,'mobile_verified'=>1])->update();
              $info = array('status' => 'success', 'msg' => '成功');

@@ -40,14 +40,14 @@
 }
 .kuang{
     width: 90%;
-    height: 180pt;
+    height: 260pt;
     text-align: center;
     position: relative;
     padding-top: 10px;
     top: 44px;
     left: 5%;
     background-image: url(/themes/mobile/images/kuang.png);
-    background-size: 100% 180pt;
+    background-size: 100% 260pt;
     background-repeat: no-repeat;
 }
 .bind_act{
@@ -100,6 +100,16 @@ input:-ms-input-placeholder {font-size: 15pt}
             <div class="input-area">
                 <img src="/themes/mobile/images/__verification_code.png" width="24" height="24" style="margin-left: 4%;">
                 <input type="text" class="input input-sm" name="mobile_code" pattern="\d{6}" placeholder="验证码" alt="6位短信验证码" style="display: inline-block;width: 50%;"><label></label><input type="button" id="sendSMS" style="width: 30%;display: inline-block;text-decoration: none;color: #f5c34e;font-size: 13pt;" class="btn btn-default btn-mini" value="发送验证码">
+            </div>
+
+            <div class="input-area">
+                <img src="/themes/mobile/images/__password.png" width="24" height="24">
+                <input bind="repassword" minlen=6 value="" maxlen=20 class="input" type="password" name="password" placeholder="输入密码" alt="6-20任意字符组合">
+            </div>
+                     
+            <div class="input-area">
+                <img src="/themes/mobile/images/__confirm_password.png" width="24" height="24">
+                <input bind="password" minlen=6 maxlen=20 value="" class="input" type="password"  name="repassword" placeholder="确认密码" alt="6-20任意字符组合">
             </div>
             
             <div class="" style="margin-top:12pt;">
@@ -174,10 +184,12 @@ input:-ms-input-placeholder {font-size: 15pt}
          // document.forms['reg_submit'].submit();
          var mobile = $("input[name='mobile']").val();
          var mobile_code = $("input[name='mobile_code']").val();
+         var password = $("input[name='password']").val();
+         var repassword = $("input[name='repassword']").val();
          $.ajax({
             type: "post",
             url: "{url:/travel/bind_mobile_act}",
-            data: {mobile:mobile,mobile_code:mobile_code},
+            data: {mobile:mobile,mobile_code:mobile_code,password:password,repassword:repassword},
             dataType: 'json',
             success: function (result) {
                 if (result['status'] == 'success') {
