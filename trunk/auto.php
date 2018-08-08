@@ -370,11 +370,11 @@ class LinuxCliTask{
                                 Log::balance($amount,$value['user_id'],$v['id'],'拼团失败订单自动退回到余额',4);
                                 $this->model->table('groupbuy_join')->data(array('status'=>3))->where('id='.$value['join_id'])->update();
                                 $this->model->table('groupbuy_log')->data(array('pay_status'=>3))->where('id='.$value['id'])->update();
+                                $this->model->table('order')->data(['status'=>5,'pay_status'=>3])->where('id='.$v['id'])->update();
                             } 
                         }
                     }
-                }   
-                $this->model->table('order')->data(['status'=>5,'pay_status'=>3])->where('id='.$v['id'])->update();
+                }     
             }
         }
     }
