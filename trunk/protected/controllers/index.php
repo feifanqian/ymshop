@@ -2102,7 +2102,7 @@ class IndexController extends Controller {
             $groupbuy_id = Filter::int(Req::args('groupbuy_id'));
             $join_id = Filter::int(Req::args('join_id'));
             if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-                $redirect = "http://www.ymlypt.com/index/groupbuy_join_detail/groupbuy_id/".$groupbuy_id."/join_id/".$join_id;
+                $redirect = "http://www.ymlypt.com/index/groupbuy_join_detail?groupbuy_id=".$groupbuy_id."&join_id=".$join_id."&inviter_id=".$inviter;
                 // $this->autologin($redirect);
                 $code = Filter::sql(Req::args('code'));
                 $oauth = new WechatOAuth();
