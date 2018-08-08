@@ -142,7 +142,7 @@ class Order {
                             $need_num = $groupbuy_join['need_num']-1;
                             if($need_num==0) {
                                 // 拼团成功参与分账
-                                $logs = $model->table('groupbuy_log')->fields('id')->where('join_id='.$groupbuy_log['join_id'].' and pay_status==1')->findAll();
+                                $logs = $model->table('groupbuy_log')->fields('id')->where('join_id='.$groupbuy_log['join_id'].' and pay_status=1')->findAll();
                                 if($logs) {
                                     $ids = array();
                                     foreach($logs as $key =>$value) {
