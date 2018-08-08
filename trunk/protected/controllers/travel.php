@@ -664,6 +664,8 @@ class TravelController extends Controller
         }
         if($checkFlag || $mobile_code=='000000') {
              $this->model->table('customer')->where('user_id='.$this->user['id'])->data(['mobile'=>$mobile,'mobile_verified'=>1])->update();
+             $validcode = CHash::random(8);
+             $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $this->user['id'])->update();
              $info = array('status' => 'success', 'msg' => '成功');
         } else {
             $info = array('status' => 'fail', 'msg' => '验证码错误！');
