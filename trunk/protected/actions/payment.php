@@ -426,8 +426,8 @@ class PaymentAction extends Controller {
             "seller_id"=>'yuanmeng',
             "seller_name"=>'圆梦互联网科技（深圳）有限公司',
             "timeout_express"=>'1d',
-            "business_code"=>'3010001',
-            // "sub_openid"=>$sub_openid,
+            // "business_code"=>'3010001',
+            "business_code" => "01000010",
             'appid'=>'wx167f2c4da1f798b0'
             );
             if($payment_id==7 || $payment_id==18) {
@@ -467,8 +467,8 @@ class PaymentAction extends Controller {
             $ret = json_decode($ret,true);
             // var_dump($ret);die;
             if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])){
-                var_dump($myParams);
-                var_dump($ret);die;
+                // var_dump($myParams);
+                // var_dump($ret);die;
                $this->code = 1228;
                return;
             }
