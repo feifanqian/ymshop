@@ -955,7 +955,8 @@ class PaymentController extends Controller {
             // print_r($myParams);
             // echo "<pre>";
             // die;
-            var_dump($signStr);die;
+            var_dump($signStr);
+            var_dump($ret['ysepay_online_jsapi_pay_response']);die;
             $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => $ret['ysepay_online_jsapi_pay_response']['sub_msg']));
             exit();
         }
