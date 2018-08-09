@@ -3036,7 +3036,7 @@ class UcenterAction extends Controller {
     {
         // $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
         $pfxpath = "./protected/classes/yinpay/certs/yuanmeng.pfx";
-        $pfxpassword = '008596';
+        $pfxpassword = 'lc008596';
         $return = array('success' => 0, 'msg' => '', 'check' => '');
         $pkcs12 = file_get_contents($pfxpath); //私钥
         if (openssl_pkcs12_read($pkcs12, $certs, $pfxpassword)) {

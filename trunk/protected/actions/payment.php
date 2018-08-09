@@ -501,7 +501,7 @@ class PaymentAction extends Controller {
    public function sign_encrypt($input)
     {
         $pfxpath = "./protected/classes/yinpay/certs/yuanmeng.pfx";
-        $pfxpassword = '008596';
+        $pfxpassword = 'lc008596';
         $return = array('success' => 0, 'msg' => '', 'check' => '');
         $pkcs12 = file_get_contents($pfxpath); //私钥
         if (openssl_pkcs12_read($pkcs12, $certs, $pfxpassword)) {
