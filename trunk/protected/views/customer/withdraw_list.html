@@ -37,7 +37,7 @@
                 {elseif:$item['status']==1}
                 <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
                 {elseif:$item['status']==2}
-                <li><a class="icon-pencil" href="javascript:withdrawAction({$item['id']});"> 再次审批</a></li>
+                <li><a class="icon-pencil" href="javascript:reWithdrawAction({$item['id']});"> 再次审批</a></li>
                 <li><a class="icon-credit" href="javascript:balanceBack({$item['id']});"> 余额退回</a></li>
                 <li><a class="icon-eye" href="javascript:queryPayStatus({$item['id']});"> 查询代付状态</a></li>
                 {elseif:$item['status']==3}
@@ -113,6 +113,24 @@
             }
           });
     }
+
+    function reWithdrawAction(id)
+    {
+        layer.open({
+            type: 2,
+            title:"再次审核提现请求",
+            area: ['700px', '400px'],
+            fixed: false, //不固定
+            maxmin: false,
+            content: '{url:/customer/re_withdraw_view/id/}'+id,
+            end:function(){
+                if(refresh){
+                    window.location.reload();
+                }
+            }
+          });
+    }
+
     function close_dialog()
     {
         art.dialog({id:"withdraw-dialog"}).close();

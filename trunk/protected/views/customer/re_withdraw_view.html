@@ -1,0 +1,50 @@
+<script type="text/javascript" src="{url:@static/js/layer/layer.js}"></script>
+<div id="card_box" style="width:700px;">
+    <h2 class="page_title tc" style="border:none">提现申请</h2>
+    <div class="form2">
+        <input type="hidden" name="id" value="{$withdraw['id']}">
+        <table class="default mt10" style="border-left:0;border-right:0;">
+            <tr>
+                <th style="width:100px">用户名：</th> <td>{$withdraw['uname']}</td> 
+                <!-- <th style="width:100px">总余额：</th> <td class="red"><span class="currency-symbol">{$currency_symbol}</span>{$withdraw['balance']}</td> -->
+            </tr>
+            <tr>
+                <th>提现金额：</th> <td>{$withdraw['amount']}</td> <th>开户名：</th> <td>{$withdraw['open_name']}</td>
+            </tr>
+            <tr>
+                <th>开户行：</th> <td>{$withdraw['open_bank']}</td> <th>银行卡号：</th> <td>{$withdraw['card_no']}</td>
+            </tr>
+            <tr>
+                <th>处理结果：</th> <td colspan="3"><input type="radio" checked="checked" name="status" value="1" ><label>同意</label> <input type="radio" name="status" value="-1" ><label>拒绝</label> <label  class="red">(注:同意后系统将发起代付，并自动扣除用户金点。)</label></td>
+            </tr>
+            <tr>
+                <th>处理意见：</th> <td colspan="3"><textarea name="note" placeholder="此栏将显示在用户的提现记录的备注与说明中  "></textarea></td>
+            </tr>
+        </table>
+        <div class="tc mt10"><button class="button submit-withdraw">提 交 处 理</button></div>
+    </div>
+</div>
+<script>
+    $(".submit-withdraw").click(function(){
+        var id=$("input[name='id']").val();
+        var status=$("input[name='status']:checked").val();
+        var note=$("textarea[name='note']").val();
+        if(status=='-1'&& (note==""||note==undefined)){
+            layer.msg("请填写拒绝理由");
+            $("textarea[name='note']").focus();
+            return false;
+        }
+         var load = layer.load();
+        $.post("{url:/customer/re_withdraw_act}",{id:id,status:status,note:note},function(result){
+            layer.close(load);
+            if(result.status=='success'){
+                layer.msg("操作成功",{icon:6},function(){
+                    parent.location.reload(); 
+                })
+            }else{
+                layer.msg(result.msg,{icon:5});
+            }
+        },'json');
+        return false;
+    });
+</script>
