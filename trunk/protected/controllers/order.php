@@ -726,6 +726,24 @@ class OrderController extends Controller {
     * 发起实际退款操作
     */
    public function doRefund($payment_id,$order_no,$refund_amount,$pay_time,$user_id,$refund_id){
+        $Model = new Model();
+        $order = $Model->table('order')->where('order_no='.$order_no)->find();
+        if($order) {
+            if($order['type'] == 1) {
+                $groupbuy_log = $Model->table('groupbuy_log')->where('id='.$order['join_id'])->find();
+                if($groupbuy_log) {
+                    $groupbuy_join = $Model->table('groupbuy_join')->where('id='.$groupbuy_log['join_id'])->find();
+                    if($groupbuy_join) {
+                        if($groupbuy_join['need_num']>0 && strtotime($groupbuy_join['end_time'])>time()) {
+                              echo json_encode(array('status' => 'fail', 'msg' => '暂时不能退款，待拼团截止时间过后将自动退款至用户账户'));
+                              exit;
+                        }
+                        $Model->table('groupbuy_log')->data(['pay_status'=>3])->where('id='.$order['join_id'])->update();
+                        $Model->table('groupbuy_join')->data(['need_num'=>$groupbuy_join['need_num']+1])->where('id='.$groupbuy_log['join_id'])->update();
+                    }
+                }
+            }
+        }
         if($refund_amount==0||$refund_amount==0.00){
              $result = Order::refunded($refund_id);
                if($result){
