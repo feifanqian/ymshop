@@ -865,16 +865,15 @@ class PaymentController extends Controller {
 
            $myParams = array();
             $myParams['charset'] = 'utf-8';
-            $myParams['method'] = 'ysepay.online.jsapi.pay';
-            $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
+            $myParams['method'] = 'ysepay.online.jsapi.pay';   
             $myParams['partner_id'] = 'yuanmeng';
             // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
-            $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
+            // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
             // $myParams['return_url'] = 'http://www.ymlypt.com/travel/order_details';
             $myParams['sign_type'] = 'RSA';
             $myParams['timestamp'] = date('Y-m-d H:i:s', time());
             $myParams['version'] = '3.0';
-            
+            $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
             $biz_content_arr = array(
             "out_trade_no"=>$order_no,
             "subject"=>'圆梦共享网',
