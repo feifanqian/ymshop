@@ -869,8 +869,8 @@ class PaymentController extends Controller {
             $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
             $myParams['partner_id'] = 'yuanmeng';
             // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
-            // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
-            $myParams['return_url'] = 'http://www.ymlypt.com/travel/order_details';
+            $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
+            // $myParams['return_url'] = 'http://www.ymlypt.com/travel/order_details';
             $myParams['sign_type'] = 'RSA';
             $myParams['timestamp'] = date('Y-m-d H:i:s', time());
             $myParams['version'] = '3.0';
@@ -922,8 +922,8 @@ class PaymentController extends Controller {
         // print_r($myParams);
         // echo "<pre>";
         // var_dump($ret);die;
-        // $success_url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
-        $success_url = Url::urlFormat("/travel/order_details/id/{$order_id}");
+        $success_url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
+        // $success_url = Url::urlFormat("/travel/order_details/id/{$order_id}");
         $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
         $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
         $this->assign("success_url", $success_url);
@@ -949,7 +949,6 @@ class PaymentController extends Controller {
             $this->assign('biz_content',$myParams['biz_content']);
         }
         if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info']) && $payment_id==6) {
-            print_r($ret['ysepay_online_jsapi_pay_response']);die;
             $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => $ret['ysepay_online_jsapi_pay_response']['sub_msg']));
             exit();
         }
