@@ -879,10 +879,12 @@ class PaymentController extends Controller {
             "out_trade_no"=>$order_no,
             "subject"=>'圆梦共享网',
             "total_amount"=>$order_amount,
+            "currency"=>"CNY",
             "seller_id"=>'yuanmeng',
             "seller_name"=>'圆梦互联网科技（深圳）有限公司',
-            "timeout_express"=>'1d',
-            "business_code"=>'3010001',
+            "timeout_express"=>'24h',
+            // "business_code"=>'3010001',
+            "business_code" => "01000010",
             "sub_openid"=>$sub_openid,
             );
           if($payment_id==8){
