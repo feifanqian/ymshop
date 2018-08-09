@@ -1029,6 +1029,8 @@ class PaymentController extends Controller {
                 $return['msg'] = base64_encode($input['data']);
 
             }
+        } else {
+            var_dump('证书密码错误');
         }
 
         return $return;
