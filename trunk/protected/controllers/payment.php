@@ -927,6 +927,7 @@ class PaymentController extends Controller {
         // $success_url = Url::urlFormat("/travel/order_details/id/{$order_id}");
         $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
         $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
+        $return_url = 'http://www.ymlypt.com/ucenter/order_details';
         $this->assign("success_url", $success_url);
         $this->assign("cancel_url", $cancel_url);
         $this->assign("error_url", $error_url);
@@ -936,7 +937,7 @@ class PaymentController extends Controller {
         $this->assign('notify_url',$myParams['notify_url']);
         $this->assign('out_trade_no',$biz_content_arr['out_trade_no']);
         $this->assign('partner_id',$myParams['partner_id']);
-        $this->assign('return_url',$myParams['return_url']);
+        $this->assign('return_url',$return_url);
         $this->assign('seller_id',$biz_content_arr['seller_id']);
         $this->assign('seller_name',$biz_content_arr['seller_name']);
         $this->assign('sign_type',$myParams['sign_type']);
