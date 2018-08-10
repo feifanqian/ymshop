@@ -540,7 +540,7 @@ class TravelController extends Controller
         if(!$this->user) {
             if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
                 //微信授权登录
-                $redirect = "http://www.ymlypt.com/travel/tao_share?num_iid=".$num_iid."&tao_str=".$tao_str."&coupon_price=".$coupon_price;
+                $redirect = "http://www.ymlypt.com/travel/tao_share?num_iid=".$num_iid."&tao_str=".$tao_str."&coupon_price=".$coupon_price."&inviter_id=".$inviter;
                 $code = Filter::sql(Req::args('code'));
                 $oauth = new WechatOAuth();
                 
@@ -588,9 +588,10 @@ class TravelController extends Controller
                             $this->safebox->set('user', $obj, 31622400);
                             $user_id = $oauth_user['user_id'];
                         }
-                        // if($inviter){
-                        //     Common::buildInviteShip($inviter, $user_id, 'wechat');
-                        // }   
+                        $inviter = Filter::int(Req::args("inviter_id"));
+                        if($inviter){
+                            Common::buildInviteShip($inviter, $user_id, 'wechat');
+                        }   
                     }
                 } else {
                     header("Location: {$url}"); 
@@ -598,7 +599,7 @@ class TravelController extends Controller
             }
         }
         //淘宝转链，获取分享url
-        $user_id = $this->user['id'];
+        $user_id = Common::getInviterId($this->user['id']); //上级用户id
         $objs = $this->model->table('user')->where('id='.$user_id)->find();
         if($objs['adzoneid']==null) {
             $taobao_pid = $this->model->table('taoke_pid')->where('user_id is NULL')->order('id desc')->find();
