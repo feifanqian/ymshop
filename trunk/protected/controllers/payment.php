@@ -1740,6 +1740,55 @@ class PaymentController extends Controller {
         }
     }
 
+    public function yin_fz_test($order_no){
+        $order = $this->model->table('order_offline')->fields('order_amount,shop_ids')->where('order_no='.$order_no)->find();
+        $shop = $this->model->table('district_promoter')->fields('partner_id,base_rate')->where('user_id='.$order['shop_ids'])->find();
+        $rate = 1.0;
+        $myParams = array();
+        $myParams['method'] = 'ysepay.single.division.online.accept';
+        $myParams['partner_id'] = 'yuanmeng';
+        $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+        $myParams['charset'] = 'GBK';
+        $myParams['sign_type'] = 'RSA';
+        $myParams['version'] = '3.0';
+        $div_list = array();
+        $div_list[0] = array(
+                'division_mer_usercode'=>$shop['partner_id'],
+                'div_amount'=>sprintf('%.2f',$order['order_amount']*(100-$shop['base_rate'])/100),
+                'div_ratio'=>$rate,
+                'is_chargeFee'=>'01'
+                );
+        $biz_content_arr = array(
+            "out_batch_no" =>'S'.substr($order_no,0,15),
+            "out_trade_no" => $order_no,
+            'payee_usercode' => 'yuanmeng',
+            // "org_no" => "6584000000",
+            // "org_no" => "",
+            "division_mode" => "01",
+            "total_amount" => $order['order_amount'],
+            "is_divistion" => "01",
+            "is_again_division" => "N",
+            "div_list" => $div_list
+        );
+        $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+        ksort($myParams);
+        $signStr = "";
+        foreach ($myParams as $key => $val) {
+            $signStr .= $key . '=' . $val . '&';
+        }
+        $signStr = rtrim($signStr, '&');
+        $sign = $this->sign_encrypt(array('data' => $signStr));
+        $myParams['sign'] = trim($sign['check']);
+        $act = "https://commonapi.ysepay.com/gateway.do";
+        $result = Common::httpRequest($act,'POST',$myParams);
+        $result = json_decode($result,true);
+        if(isset($result['ysepay_single_division_online_accept_response']) && $result['ysepay_single_division_online_accept_response']['msg']=='Success') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function dinpay_callback(){
         $model = new Model();
         $array = $_POST;
