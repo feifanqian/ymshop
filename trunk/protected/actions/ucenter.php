@@ -3004,6 +3004,8 @@ class UcenterAction extends Controller {
             $params['sign_type'] = 'RSA';  
               
             $params['version'] = '3.0';
+            $legal_cert_no = $this->des_encrypt($_POST['legal_cert_no'],'yuanmeng');
+            $cert_no = $this->des_encrypt($_POST['cert_no'],'yuanmeng');
           $biz_content_arr = array(
             'merchant_no'=>'yuanmeng',
             'cust_type'=>$_POST['cust_type'],
@@ -3018,7 +3020,7 @@ class UcenterAction extends Controller {
             'legal_name'=>$_POST['legal_name'],
             'legal_tel'=>$_POST['legal_tel'],
             'legal_cert_type'=>'00',
-            'legal_cert_no'=>md5($_POST['legal_cert_no']),
+            'legal_cert_no'=>$legal_cert_no,
             'settle_type'=>'1',
             'bank_account_no'=>$_POST['bank_account_no'],
             'bank_account_name'=>$_POST['bank_account_name'],
@@ -3029,7 +3031,7 @@ class UcenterAction extends Controller {
             'bank_province'=>$_POST['bank_province'],
             'bank_city'=>$_POST['bank_city'],
             'cert_type'=>'00',
-            'cert_no'=>md5($_POST['cert_no']),
+            'cert_no'=>$cert_no,
             'bank_telephone_no'=>$_POST['bank_telephone_no']
             );
             $params['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
@@ -3041,7 +3043,7 @@ class UcenterAction extends Controller {
             $signStrs = rtrim($signStrs, '&');
             $sign = $this->sign_encrypt(array('data' => $signStrs));
             $params['sign'] = trim($sign['check']);
-            $url1 = 'https:// register.ysepay.com:2443/gateway.do';
+            $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
             $res = Common::httpRequest($url1,'POST',$params);
             var_dump($res);die;
             $this->code = 0;
@@ -3050,6 +3052,12 @@ class UcenterAction extends Controller {
             $this->code = 1229;
             return;
         }
+    }
+
+    public function des_encrypt($data, $key)
+    {
+        $encrypted = openssl_encrypt($data, 'DES-ECB', $key, 1);
+        return base64_encode($encrypted);
     }
 
     public function sign_encrypt($input)
