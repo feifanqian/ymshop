@@ -928,17 +928,25 @@ class GoodsAction extends Controller {
 
     public function tbk_get_height_url() {
         $item_id = Filter::str(Req::args('item_id'));
-
-        $objs = $this->model->table('user')->where('id='.$this->user['id'])->find();
+        $type = Filter::str(Req::args('type'));
+        if(!$type) {
+            $type = 1;
+        }
+        if($type == 1) {
+            $user_id = Common::getInviterId($this->user['id']); //自己领券用上级id
+        } else {
+            $user_id = $this->user['id']; //分享给别人领券用自己id
+        }
+        $objs = $this->model->table('user')->where('id='.$user_id)->find();
         if($objs['adzoneid']==null) {
             $taobao_pid = $this->model->table('taoke_pid')->where('user_id is NULL')->order('id desc')->find();
             if($taobao_pid) {
-                $this->model->table('taoke_pid')->data(['user_id'=>$this->user['id']])->where('id='.$taobao_pid['id'])->update();
-                $this->model->table('user')->data(['adzoneid'=>$taobao_pid['adzoneid']])->where('id='.$this->user['id'])->update();
+                $this->model->table('taoke_pid')->data(['user_id'=>$user_id])->where('id='.$taobao_pid['id'])->update();
+                $this->model->table('user')->data(['adzoneid'=>$taobao_pid['adzoneid']])->where('id='.$user_id)->update();
             }
         }
 
-        $taoke = $this->model->table('taoke_pid')->fields('adzoneid,memberid,siteid')->where('user_id='.$this->user['id'])->find();
+        $taoke = $this->model->table('taoke_pid')->fields('adzoneid,memberid,siteid')->where('user_id='.$user_id)->find();
         
         if(!$taoke) {
             $this->code = 1271;
