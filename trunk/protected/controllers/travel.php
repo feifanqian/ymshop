@@ -536,8 +536,10 @@ class TravelController extends Controller
             $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
             $AdzoneId = '582570496';
         }
+        $inviter = Filter::int(Req::args("inviter_id"));
         if(!$this->user) {
             if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+                //微信授权登录
                 $redirect = "http://www.ymlypt.com/travel/tao_share?num_iid=".$num_iid."&tao_str=".$tao_str."&coupon_price=".$coupon_price;
                 $code = Filter::sql(Req::args('code'));
                 $oauth = new WechatOAuth();
@@ -595,6 +597,33 @@ class TravelController extends Controller
                 }        
             }
         }
+        //淘宝转链，获取分享url
+        $user_id = $this->user['id'];
+        $objs = $this->model->table('user')->where('id='.$user_id)->find();
+        if($objs['adzoneid']==null) {
+            $taobao_pid = $this->model->table('taoke_pid')->where('user_id is NULL')->order('id desc')->find();
+            if($taobao_pid) {
+                $this->model->table('taoke_pid')->data(['user_id'=>$user_id])->where('id='.$taobao_pid['id'])->update();
+                $this->model->table('user')->data(['adzoneid'=>$taobao_pid['adzoneid']])->where('id='.$user_id)->update();
+            }
+        }
+
+        $taoke = $this->model->table('taoke_pid')->fields('adzoneid,memberid,siteid')->where('user_id='.$user_id)->find();
+        
+        if(!$taoke) {
+            $this->redirect("/travel/tao_fail");
+            exit();
+        }
+        $access_token = "70002100a248544ba6f55cd68d83a8cef0b3177d2e2fa71144663dcff407facfe749c1e3870059548";
+        $main_hightapi_url = 'http://193.112.121.99/xiaocao/hightapi.action';
+        $bak_hightapi_url = 'http://119.29.94.164/xiaocao/hightapi.action';
+  
+        $params = ['token' => $access_token, 'item_id' => $item_id, 'adzone_id' => $taoke['adzoneid'], 'site_id' => $taoke['siteid'], 'qq' => '1223354181'];
+        $req_url = $main_hightapi_url . "?" . http_build_query($params);
+
+        $return = json_decode(file_get_contents($req_url), true);
+        $share_url = $return['result']['data']['coupon_click_url'];
+
         $c = new TopClient;
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;
@@ -605,9 +634,24 @@ class TravelController extends Controller
         $req->setIp($_SERVER['REMOTE_ADDR']);
         $resp = $c->execute($req);
         $resp = Common::objectToArray($resp);
-        // print_r($resp);die;
+        
         if(isset($resp['results']['n_tbk_item'])) {
             $info = $resp['results']['n_tbk_item'];
+            //重新获取淘口令
+            $cs = new TopClient;
+            $cs->appkey = $appkey;
+            $cs->secretKey = $secretKey;
+            $cs->format = 'json';
+            $reqs = new TbkTpwdCreateRequest;
+            $reqs->setText($info['title']);
+            $reqs->setUrl($share_url);
+            $logo = "http://www.ymlypt.com/themes/mobile/images/logo-new.png";
+            $reqs->setLogo($logo);
+            $reqs->setExt("{}");
+            $resps = $cs->execute($reqs);
+            if(isset($resps['data']['model'])) {
+                $tao_str = $resps['data']['model'];
+            }
             $info['tao_str'] = '￥'.$tao_str.'￥';
             $info['coupon_price'] = $coupon_price;
             $this->assign("info", $info);
