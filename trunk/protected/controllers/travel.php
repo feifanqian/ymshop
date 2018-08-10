@@ -621,7 +621,7 @@ class TravelController extends Controller
         $main_hightapi_url = 'http://193.112.121.99/xiaocao/hightapi.action';
         $bak_hightapi_url = 'http://119.29.94.164/xiaocao/hightapi.action';
   
-        $params = ['token' => $access_token, 'item_id' => $item_id, 'adzone_id' => $taoke['adzoneid'], 'site_id' => $taoke['siteid'], 'qq' => '1223354181'];
+        $params = ['token' => $access_token, 'item_id' => $num_iid, 'adzone_id' => $taoke['adzoneid'], 'site_id' => $taoke['siteid'], 'qq' => '1223354181'];
         $req_url = $main_hightapi_url . "?" . http_build_query($params);
 
         $return = json_decode(file_get_contents($req_url), true);
