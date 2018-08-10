@@ -582,15 +582,17 @@ class TravelController extends Controller
                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
                             $obj['open_id'] = $token['openid'];
                             $this->safebox->set('user', $obj, 1800);
+                            $this->user['id'] = $user_id;
                         } else { //已注册
                             $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
                             $this->safebox->set('user', $obj, 31622400);
                             $user_id = $oauth_user['user_id'];
+                            $this->user['id'] = $user_id;
                         }
                         $inviter = Filter::int(Req::args("inviter_id"));
                         if($inviter){
-                            Common::buildInviteShip($inviter, $user_id, 'wechat');
+                            Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
                         }   
                     }
                 } else {
@@ -599,17 +601,17 @@ class TravelController extends Controller
             }
         }
         //淘宝转链，获取分享url
-        $user_id = Common::getInviterId($this->user['id']); //上级用户id
-        $objs = $this->model->table('user')->where('id='.$user_id)->find();
+        $uid = Common::getInviterId($this->user['id']); //上级用户id
+        $objs = $this->model->table('user')->where('id='.$uid)->find();
         if($objs['adzoneid']==null) {
             $taobao_pid = $this->model->table('taoke_pid')->where('user_id is NULL')->order('id desc')->find();
             if($taobao_pid) {
-                $this->model->table('taoke_pid')->data(['user_id'=>$user_id])->where('id='.$taobao_pid['id'])->update();
-                $this->model->table('user')->data(['adzoneid'=>$taobao_pid['adzoneid']])->where('id='.$user_id)->update();
+                $this->model->table('taoke_pid')->data(['user_id'=>$uid])->where('id='.$taobao_pid['id'])->update();
+                $this->model->table('user')->data(['adzoneid'=>$taobao_pid['adzoneid']])->where('id='.$uid)->update();
             }
         }
 
-        $taoke = $this->model->table('taoke_pid')->fields('adzoneid,memberid,siteid')->where('user_id='.$user_id)->find();
+        $taoke = $this->model->table('taoke_pid')->fields('adzoneid,memberid,siteid')->where('user_id='.$uid)->find();
         
         if(!$taoke) {
             $this->redirect("/travel/tao_fail");
