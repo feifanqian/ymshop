@@ -3007,10 +3007,10 @@ class UcenterAction extends Controller {
           $biz_content_arr = array(
             'merchant_no'=>'yuanmeng',
             'cust_type'=>$_POST['cust_type'],
-            'token'=>'',
+            'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
             'another_name'=>$_POST['another_name'],
             'cust_name'=>$_POST['cust_name'],
-            'mer_flag'=>'12',
+            'mer_flag'=>'11',
             'industry'=>$_POST['industry'],
             'province'=>$_POST['province'],
             'city'=>$_POST['city'],
