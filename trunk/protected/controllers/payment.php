@@ -923,11 +923,12 @@ class PaymentController extends Controller {
         // print_r($myParams);
         // echo "<pre>";
         // var_dump($ret);die;
-        $success_url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
-        // $success_url = Url::urlFormat("/travel/order_details/id/{$order_id}");
+        // $success_url = Url::urlFormat("/ucenter/order_details/id/{$order_id}");
+        $success_url = Url::urlFormat("/travel/order_details/id/{$order_id}");
         $cancel_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
         $error_url = Url::urlFormat("/simple/offline_order_status/order_id/{$order_id}");
-        $return_url = 'http://www.ymlypt.com/ucenter/order_details';
+        // $return_url = 'http://www.ymlypt.com/ucenter/order_details';
+        $return_url = 'http://www.ymlypt.com/travel/order_details';
         $this->assign("success_url", $success_url);
         $this->assign("cancel_url", $cancel_url);
         $this->assign("error_url", $error_url);
@@ -951,12 +952,6 @@ class PaymentController extends Controller {
             $this->assign('biz_content',$myParams['biz_content']);
         }
         if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info']) && $payment_id==6) {
-            // echo "<pre>";
-            // print_r($myParams);
-            // echo "<pre>";
-            // die;
-            var_dump($signStr);
-            var_dump($ret['ysepay_online_jsapi_pay_response']);die;
             $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => $ret['ysepay_online_jsapi_pay_response']['sub_msg']));
             exit();
         }
