@@ -3024,7 +3024,7 @@ class UcenterAction extends Controller {
             'settle_type'=>'1',
             'bank_account_no'=>$_POST['bank_account_no'],
             'bank_account_name'=>$_POST['bank_account_name'],
-            'bank_account_type'=>'corporate',
+            'bank_account_type'=>'personal',
             'bank_card_type'=>'debit',
             'bank_name'=>$_POST['bank_name'],
             'bank_type'=>$_POST['bank_type'],

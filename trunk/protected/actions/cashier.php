@@ -186,33 +186,40 @@ class CashierAction extends Controller
     public function add_cashier_desk()
     {
     	$count = $this->model->table('cashier_desk')->where('hire_user_id='.$this->user['id'])->count();
-    	if($count==6) {
-    		$this->code = 1245;
-            return;
-    	}
-    	switch ($count) {
-    		case 0:
-    			$desk_no = '01';
-    			break;
-    		case 1:
-    			$desk_no = '02';
-    			break;
-    		case 2:
-    			$desk_no = '03';
-    			break;
-    		case 3:
-    			$desk_no = '04';
-    			break;
-    		case 4:
-    			$desk_no = '05';
-    			break;
-    		case 5:
-    			$desk_no = '06';
-    			break;
-    		default :
-    		    $desk_no = '01';
-    			break;					
-    	}
+    	// if($count==6) {
+    	// 	$this->code = 1245;
+     //        return;
+    	// }
+        if($count==0) {
+            $desk_no = '01';
+        } elseif($count>0 && $count<=8) {
+            $desk_no = '0'.($count+1);
+        } else {
+            $desk_no = $count+1;
+        }
+    	// switch ($count) {
+    	// 	case 0:
+    	// 		$desk_no = '01';
+    	// 		break;
+    	// 	case 1:
+    	// 		$desk_no = '02';
+    	// 		break;
+    	// 	case 2:
+    	// 		$desk_no = '03';
+    	// 		break;
+    	// 	case 3:
+    	// 		$desk_no = '04';
+    	// 		break;
+    	// 	case 4:
+    	// 		$desk_no = '05';
+    	// 		break;
+    	// 	case 5:
+    	// 		$desk_no = '06';
+    	// 		break;
+    	// 	default :
+    	// 	    $desk_no = '01';
+    	// 		break;					
+    	// }
     	$promoter = $this->model->table('district_promoter as dp')->fields('dp.id,dp.user_id,c.real_name')->join("customer AS c ON dp.user_id=c.user_id")->where('dp.user_id='.$this->user['id'])->find();
         if(!$promoter) {
         	$this->code = 1159;
