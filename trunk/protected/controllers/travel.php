@@ -624,8 +624,7 @@ class TravelController extends Controller
         $params = ['token' => $access_token, 'item_id' => $num_iid, 'adzone_id' => $taoke['adzoneid'], 'site_id' => $taoke['siteid'], 'qq' => '1223354181'];
         $req_url = $main_hightapi_url . "?" . http_build_query($params);
 
-        $return = json_decode(file_get_contents($req_url), true);
-        $share_url = $return['result']['data']['coupon_click_url'];
+        $return = json_decode(file_get_contents($req_url), true);    
 
         $c = new TopClient;
         $c->appkey = $appkey;
@@ -641,21 +640,25 @@ class TravelController extends Controller
         if(isset($resp['results']['n_tbk_item'])) {
             $info = $resp['results']['n_tbk_item'];
             //重新获取淘口令
-            $cs = new TopClient;
-            $cs->appkey = $appkey;
-            $cs->secretKey = $secretKey;
-            $cs->format = 'json';
-            $reqs = new TbkTpwdCreateRequest;
-            $reqs->setText($info['title']);
-            $reqs->setUrl($share_url);
-            $logo = "http://www.ymlypt.com/themes/mobile/images/logo-new.png";
-            $reqs->setLogo($logo);
-            $reqs->setExt("{}");
-            $resps = $cs->execute($reqs);
-            $resps = Common::objectToArray($resps);
-            if(isset($resps['data']['model'])) {
-                $tao_str = $resps['data']['model'];
+            if(isset($return['result']['data']['coupon_click_url'])) {
+                $share_url = $return['result']['data']['coupon_click_url'];
+                $cs = new TopClient;
+                $cs->appkey = $appkey;
+                $cs->secretKey = $secretKey;
+                $cs->format = 'json';
+                $reqs = new TbkTpwdCreateRequest;
+                $reqs->setText($info['title']);
+                $reqs->setUrl($share_url);
+                $logo = "http://www.ymlypt.com/themes/mobile/images/logo-new.png";
+                $reqs->setLogo($logo);
+                $reqs->setExt("{}");
+                $resps = $cs->execute($reqs);
+                $resps = Common::objectToArray($resps);
+                if(isset($resps['data']['model'])) {
+                    $tao_str = $resps['data']['model'];
+                }
             }
+    
             $info['tao_str'] = '￥'.$tao_str.'￥';
             $info['coupon_price'] = $coupon_price;
             $this->assign("info", $info);
