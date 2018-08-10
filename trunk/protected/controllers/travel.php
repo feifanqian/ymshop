@@ -652,7 +652,7 @@ class TravelController extends Controller
             $reqs->setLogo($logo);
             $reqs->setExt("{}");
             $resps = $cs->execute($reqs);
-            $resps = json_decode($resps,true);
+            $resps = Common::objectToArray($resps);
             if(isset($resps['data']['model'])) {
                 $tao_str = $resps['data']['model'];
             }
