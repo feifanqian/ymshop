@@ -141,8 +141,10 @@ class Order {
                             $model->table('groupbuy_join')->data(['need_num'=>"`need_num`-1"])->where('id='.$groupbuy_log['join_id'])->update();
                             $need_num = $groupbuy_join['need_num']-1;
                             if($need_num==0) {
+                                var_dump(111);
                                 // 拼团成功参与分账
                                 $logs = $model->table('groupbuy_log')->fields('id')->where('join_id='.$groupbuy_log['join_id'].' and pay_status=1')->findAll();
+                                var_dump(222);
                                 if($logs) {
                                     $ids = array();
                                     foreach($logs as $key =>$value) {
@@ -150,6 +152,7 @@ class Order {
                                     }
                                     $log_ids = implode(',',$ids);
                                     $groupbuy_order = $model->table('order')->where('type=1 and pay_status=1 and join_id in ({$log_ids})')->findAll();
+                                    var_dump(333);die;
                                     // if($groupbuy_order) {
                                     //     foreach ($groupbuy_order as $key=>$value) {
                                     //         Common::setIncomeByInviteShipEachGoods($value);
