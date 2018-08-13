@@ -1004,8 +1004,38 @@ class CashierAction extends Controller
     //收银员主动解除绑定关系
     public function cashier_ship_remove()
     {
+        $cashier = $this->model->table('cashier')->where('user_id='.$this->user['id'].' and status=1')->find();
+        if(!$cashier) {
+            $this->code = 1250;
+            return;
+        }
         $this->model->table('cashier')->data(['status'=>2])->where('user_id='.$this->user['id'].' and status=1')->update();
         $this->model->table('customer')->data(['is_cashier'=>0])->where('user_id='.$this->user['id'])->update();
+        
+        $type = 'cashier_invite';
+        $name = $this->user['nickname'];
+        $content = "收银员{$name}已主动解除与您的雇佣关系";
+        $platform = 'all';
+        if (!$this->jpush) {
+            $NoticeService = new NoticeService();
+            $this->jpush = $NoticeService->getNotice('jpush');
+        }
+        $audience['alias'] = array($cashier['hire_user_id']);
+        $this->jpush->setPushData($platform, $audience, $content, $type, $cashier['id']);
+        $ret = $this->jpush->push();
+        if(!$ret) {
+            $this->code = 1242;
+            return;
+        }
+        $push_data = array(
+            'to_id'=>$cashier['hire_user_id'],
+            'type'=>'cashier_ship_remove',
+            'content'=>$content,
+            'create_time'=>date('Y-m-d H:i:s'),
+            'status'=>'unread',
+            'value'=>$cashier['id']
+            );
+        $this->model->table('push_message')->data($push_data)->insert();
         $this->code = 0;
         return;
     }
