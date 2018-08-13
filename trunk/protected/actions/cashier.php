@@ -543,7 +543,7 @@ class CashierAction extends Controller
         $promoter_user_id = $cashier['hire_user_id'];
         $promoter = $this->model->table('district_promoter')->fields('shop_name')->where('user_id='.$promoter_user_id)->find();
         $seller = $this->model->table('customer')->fields('real_name')->where('user_id='.$promoter_user_id)->find();
-        $user = $this->model->table('user')->fields('nickname')->where('id='.$promoter_user_id)->find();
+        $user = $this->model->table('user')->fields('nickname,avatar')->where('id='.$promoter_user_id)->find();
         if(!$promoter || !$seller || !$user){
           $this->code = 1159;
           return;
@@ -564,6 +564,7 @@ class CashierAction extends Controller
         $this->content['on_duty_time'] = empty($log)?'':$log['work_on_time'];
         $this->content['off_duty'] = empty($log)?0:($log['work_off_time']==''?0:1);
         $this->content['off_duty_time'] = empty($log)?'':($log['work_off_time']==''?'':$log['work_off_time']);
+        $this->content['avatar'] = $user['avatar'];
     }
 
     //收银员我的收款记录
