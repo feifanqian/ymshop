@@ -151,7 +151,7 @@ class Order {
                                     $log_ids = implode(',',$ids);
                                     $groupbuy_order = $model->table('order')->where('type=1 and pay_status=1 and join_id in ({$log_ids})')->findAll();
                                     if($groupbuy_order) {
-                                        foreach ($groupbuy_order as $value) {
+                                        foreach ($groupbuy_order as $key=>$value) {
                                             Common::setIncomeByInviteShipEachGoods($value);
                                         }
                                     }
