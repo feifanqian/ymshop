@@ -1009,8 +1009,9 @@ class CashierAction extends Controller
             $this->code = 1250;
             return;
         }
-        $this->model->table('cashier')->data(['status'=>2])->where('user_id='.$this->user['id'].' and status=1')->update();
+        // $this->model->table('cashier')->data(['status'=>2])->where('user_id='.$this->user['id'].' and status=1')->update();
         $this->model->table('customer')->data(['is_cashier'=>0])->where('user_id='.$this->user['id'])->update();
+        $this->model->table('cashier')->where('user_id='.$this->user['id'].' and status=1')->delete();
         
         $type = 'cashier_invite';
         $name = $this->user['nickname'];
