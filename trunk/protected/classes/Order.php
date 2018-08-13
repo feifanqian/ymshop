@@ -149,7 +149,8 @@ class Order {
                                         $ids[] = $value['id'];
                                     }
                                     $log_ids = implode(',',$ids);
-                                    $where = 'type=1 and pay_status=1 and join_id in ({$log_ids})';
+                                    var_dump($log_ids);
+                                    $where = 'type=1 and pay_status=1 and join_id in ('.$log_ids.')';
                                     var_dump($where);
                                     $groupbuy_order = $model->table('order')->where($where)->findAll();
                                     var_dump(333);die;
