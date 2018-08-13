@@ -149,6 +149,7 @@ class Order {
                                         $ids[] = $value['id'];
                                     }
                                     $log_ids = implode(',',$ids);
+                                    var_dump($log_ids);die;
                                     $groupbuy_order = $model->table('order')->where('type=1 and pay_status=1 and join_id in ({$log_ids})')->findAll();
                                     if($groupbuy_order) {
                                         foreach ($groupbuy_order as $key=>$value) {
