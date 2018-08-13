@@ -149,7 +149,7 @@ class Order {
                                         $ids[] = $value['id'];
                                     }
                                     $log_ids = implode(',',$ids);
-                                    $groupbuy_order = $model->table('order')->where('type==1 and pay_status=1 and join_id in ({$log_ids})')->findAll();
+                                    $groupbuy_order = $model->table('order')->where('type=1 and pay_status=1 and join_id in ({$log_ids})')->findAll();
                                     if($groupbuy_order) {
                                         foreach ($groupbuy_order as $value) {
                                             Common::setIncomeByInviteShipEachGoods($value);
