@@ -930,7 +930,7 @@ class GoodsAction extends Controller {
         $item_id = Filter::str(Req::args('item_id'));
         $type = Filter::str(Req::args('type'));
         if(!$type) {
-            $type = 1;
+            $type = 2;
         }
         if($type == 1) {
             $user_id = Common::getInviterId($this->user['id']); //自己领券用上级id
