@@ -1000,5 +1000,14 @@ class CashierAction extends Controller
         $this->code = 0;
         $this->content = $log['data'];
     }
+
+    //收银员主动解除绑定关系
+    public function cashier_ship_remove()
+    {
+        $this->model->table('cashier')->data(['status'=>2])->where('user_id='.$this->user['id'].' and status=1')->update();
+        $this->model->table('customer')->data(['is_cashier'=>0])->where('user_id='.$this->user['id'])->update();
+        $this->code = 0;
+        return;
+    }
 }
 ?>
