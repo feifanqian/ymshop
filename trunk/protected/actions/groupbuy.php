@@ -73,7 +73,7 @@ class GroupbuyAction extends Controller
             'goods_id'    => $groupbuy['goods_id'],
             'join_time'   => date('Y-m-d H:i:s'),
             'end_time'    => date('Y-m-d H:i:s',strtotime('+1 day')),
-            'need_num'    => $groupbuy['min_num']-1,
+            'need_num'    => $groupbuy['min_num'],
             'remain_time' => $remain_time,
             'status'      => 0
             );
@@ -102,7 +102,7 @@ class GroupbuyAction extends Controller
                 }
                 $data = array(
                     'user_id'  => $groupbuy_join['user_id'].','.$this->user['id'],
-                    'need_num' => $groupbuy_join['need_num']
+                    // 'need_num' => $groupbuy_join['need_num']
                     );
                 $this->model->table('groupbuy_join')->data($data)->where('id='.$join_id)->update();
                 $log = array(
