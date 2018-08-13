@@ -1013,21 +1013,21 @@ class CashierAction extends Controller
         $this->model->table('customer')->data(['is_cashier'=>0])->where('user_id='.$this->user['id'])->update();
         $this->model->table('cashier')->where('user_id='.$this->user['id'].' and status=1')->delete();
         
-        $type = 'cashier_invite';
+        $type = 'cashier_ship_remove';
         $name = $this->user['nickname'];
         $content = "收银员{$name}已主动解除与您的雇佣关系";
         $platform = 'all';
-        if (!$this->jpush) {
-            $NoticeService = new NoticeService();
-            $this->jpush = $NoticeService->getNotice('jpush');
-        }
-        $audience['alias'] = array($cashier['hire_user_id']);
-        $this->jpush->setPushData($platform, $audience, $content, $type, $cashier['id']);
-        $ret = $this->jpush->push();
-        if(!$ret) {
-            $this->code = 1242;
-            return;
-        }
+        // if (!$this->jpush) {
+        //     $NoticeService = new NoticeService();
+        //     $this->jpush = $NoticeService->getNotice('jpush');
+        // }
+        // $audience['alias'] = array($cashier['hire_user_id']);
+        // $this->jpush->setPushData($platform, $audience, $content, $type, $cashier['id']);
+        // $ret = $this->jpush->push();
+        // if(!$ret) {
+        //     $this->code = 1242;
+        //     return;
+        // }
         $push_data = array(
             'to_id'=>$cashier['hire_user_id'],
             'type'=>'cashier_ship_remove',
