@@ -624,7 +624,7 @@ class PaymentAction extends Controller {
                       if ($flag) {
                           $this->model->table("redbag")->data(array('pay_status'=>1))->where("order_no='".$order_no."' and user_id=".$user_id)->update();
                           //记录余额 日志
-                          Log::balance((0 - $total_fee), $user_id, $order_no, '发红包');
+                          Log::balance((0 - $total_fee), $user_id, $order_no, '发红包',17);
                       }
                       $this->code = 0;
                       return;
