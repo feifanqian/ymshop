@@ -74,7 +74,8 @@ class MapAction extends Controller
         $black = imagecolorallocate($image_1, 0, 0, 0);
         $font = 'http://www.ymlypt.com/static/fonts/Dejavusans_0.ttf';
 
-        imagettftext($image_1, 16, 0, imagesx($image_1)-160, imagesy($image_1)-20, $black, $font, 'MKTK-HELOO');
+        // imagettftext($image_1, 16, 0, imagesx($image_1)-160, imagesy($image_1)-20, $black, $font, 'MKTK-HELOO');
+        imagestring($image_1, 3, imagesx($image_1)-160, imagesy($image_1)-20, "MKTK-HELOO", $black);
         // 输出合成图片
         var_dump(imagepng($image_1, APP_ROOT.'static/images/temp/'.time().'.png'));
     }
