@@ -476,6 +476,9 @@ class SimpleController extends Controller {
                     // 用户头像bug修复
                     if($obj){
                         if($obj['avatar']=='/0' || $obj['avatar']==''){
+                            if($userinfo['head']=='') {
+                                $userinfo['head'] = '/0.png';
+                            }
                             if($userinfo){
                                 if(isset($userinfo['head'])){
                                     $this->model->table('user')->data(array('avatar'=>$userinfo['head']))->where('id='.$is_oauth['user_id'])->update();
