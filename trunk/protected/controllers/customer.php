@@ -732,6 +732,7 @@ class CustomerController extends Controller {
         $name = Req::args("name");
         $email = Req::args("email");
         $password = Req::args("password");
+        $mobile = Req::args("mobile");
         $birthday = Req::post("birthday");
         $huabi_account = Req::post("huabi_account");
         $userModel = new Model("user");
@@ -753,7 +754,8 @@ class CustomerController extends Controller {
                 $where = "name='{$name}' or email ='{$email}'";
             }
             $user = $userModel->where($where)->find();
-            if ($user) {
+            $customer = $customerModel->where("mobile='{$mobile}' and status = 1")->find();
+            if ($user || $customer) {
                 $this->msg = array("error", "用户名或邮箱已经存在！");
                 $this->redirect("customer_edit", false);
                 exit;
