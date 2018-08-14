@@ -66,7 +66,7 @@ class MapAction extends Controller
     public function image_merge_test()
     {
         // 图片一
-        $path_1 = 'http://www.ymlypt.com/static/images/0001.jpg';
+        $path_1 = 'http://www.ymlypt.com/static/images/0001.png';
         $image_1 = imagecreatefrompng($path_1);
         // 合成图片
         // imagecopymerge($image_1, $image_2, 0, 0, 0, 0, imagesx($image_2), imagesy($image_2), 100);
