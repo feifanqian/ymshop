@@ -82,7 +82,7 @@ class MapAction extends Controller
         imagepng($image_1, APP_ROOT.'static/images/temp/'.$time.'.png');
         // var_dump(imagepng($image_1, APP_ROOT.'static/images/temp/'.$time.'.png'));
         $this->code = 0;
-        $this->content['url1'] = APP_ROOT.'static/images/temp/'.$time.'.png';
+        $this->content['url1'] = 'http://www.ymlypt.com/static/images/temp/'.$time.'.png';
     }
 
 }
