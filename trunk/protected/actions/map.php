@@ -67,7 +67,8 @@ class MapAction extends Controller
     {
         // 图片一
         $path_1 = 'http://www.ymlypt.com/static/images/0001.png';
-        $image_1 = imagecreatefrompng($path_1);
+        // $image_1 = imagecreatefrompng($path_1);
+        $image_1 = imagecreatefromstring(file_get_contents($path_1));
         // 合成图片
         // imagecopymerge($image_1, $image_2, 0, 0, 0, 0, imagesx($image_2), imagesy($image_2), 100);
         $black = imagecolorallocate($image_1, 0, 0, 0);
