@@ -411,6 +411,7 @@ class GoodsAction extends Controller {
                         $itm['coupon_click_url'] = strpos($itm['coupon_share_url'], 'http') == false ? 'https:' . $itm['coupon_share_url'] : $itm['coupon_share_url'];
                         $itm['item_description'] = $itm['coupon_info'];
                         $itm['category'] = 30;
+                        $itm['volume'] = isset($itm['volume'])?$itm['volume']:$itm['tk_total_sales'];
                         $save_data[$itm['coupon_id']] = $itm;
                     }
                 }
@@ -587,6 +588,7 @@ class GoodsAction extends Controller {
                         $itm['coupon_click_url'] = strpos($itm['coupon_share_url'], 'http') == false ? 'https:' . $itm['coupon_share_url'] : $itm['coupon_share_url'];
                         $itm['item_description'] = $itm['coupon_info'];
                         $itm['category'] = 30;
+                        $itm['volume'] = isset($itm['volume'])?$itm['volume']:$itm['tk_total_sales'];
                         $save_data[$itm['coupon_id']] = $itm;
                     }
                 }
@@ -623,6 +625,7 @@ class GoodsAction extends Controller {
                             $itm['coupon_click_url'] = strpos($itm['coupon_share_url'], 'http') == false ? 'https:' . $itm['coupon_share_url'] : $itm['coupon_share_url'];
                             $itm['item_description'] = $itm['coupon_info'];
                             $itm['category'] = 30;
+                            $itm['volume'] = isset($itm['volume'])?$itm['volume']:$itm['tk_total_sales'];
                             $new_data[$itm['coupon_id']] = $itm;
                         }
                     }

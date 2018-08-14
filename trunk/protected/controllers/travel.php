@@ -640,7 +640,7 @@ class TravelController extends Controller
         if(isset($resp['results']['n_tbk_item'])) {
             $info = $resp['results']['n_tbk_item'];
             //重新获取淘口令
-            if(isset($return['result']['data']['coupon_click_url'])) {
+            if($inviter &&  $inviter!=$uid && isset($return['result']['data']['coupon_click_url'])) {
                 $share_url = $return['result']['data']['coupon_click_url'];
                 $cs = new TopClient;
                 $cs->appkey = $appkey;
