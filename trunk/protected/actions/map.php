@@ -72,7 +72,7 @@ class MapAction extends Controller
         // 合成图片
         // imagecopymerge($image_1, $image_2, 0, 0, 0, 0, imagesx($image_2), imagesy($image_2), 100);
         $black = imagecolorallocate($image_1, 0, 0, 0);
-        $font = 'http://www.ymlypt.com/static/fonts/fontawesome-webfont.ttf';
+        $font = '/static/fonts/fontawesome-webfont.ttf';
 
         imagettftext($image_1, 16, 0, imagesx($image_1)-160, imagesy($image_1)-20, $black, $font, 'MKTK-HELOO');
         // imagestring($image_1, 3, imagesx($image_1)-160, imagesy($image_1)-20, "MKTK-HELOO", $black);
