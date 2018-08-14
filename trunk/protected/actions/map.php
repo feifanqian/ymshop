@@ -73,7 +73,7 @@ class MapAction extends Controller
         // imagecopymerge($image_1, $image_2, 0, 0, 0, 0, imagesx($image_2), imagesy($image_2), 100);
         $black = imagecolorallocate($image_1, 0, 0, 0);
         // $font = '/static/fonts/fontawesome-webfont.ttf';
-        $font = '/var/www/shop/static/fonts/fontawesome-webfont.ttf';
+        $font = '/var/www/shop/static/fonts/Dejavusans_0.ttf';
         $text = '潜非凡';
 
         imagettftext($image_1, 16, 0, imagesx($image_1)-160, imagesy($image_1)-20, $black, $font, $text);
