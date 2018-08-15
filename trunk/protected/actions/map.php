@@ -67,14 +67,15 @@ class MapAction extends Controller
     {
         // 图片一
         $path_1 = 'http://www.ymlypt.com/static/images/0001.png';
-        // $image_1 = imagecreatefrompng($path_1);
+        
         $image_1 = imagecreatefromstring(file_get_contents($path_1));
-        // 合成图片
-        // imagecopymerge($image_1, $image_2, 0, 0, 0, 0, imagesx($image_2), imagesy($image_2), 100);
+        
         $black = imagecolorallocate($image_1, 0, 0, 0);
-        // $font = '/static/fonts/fontawesome-webfont.ttf';
-        $font = '/var/www/shop/static/fonts/Dejavusans_0.ttf';
-        $text = 'qianfeifan';
+        
+        // $font = '/var/www/shop/static/fonts/Dejavusans_0.ttf';
+        $font = '/var/www/shop/static/fonts/simhei.ttf';
+        
+        $text = '潜非凡';
         // $str = iconv('utf-8','GBK',$text);
         $str=mb_convert_encoding($text, "html-entities", "utf-8");
         imagettftext($image_1, 16, 0, imagesx($image_1)-160, imagesy($image_1)-20, $black, $font, $str);
@@ -82,7 +83,7 @@ class MapAction extends Controller
         // 输出合成图片
         $time = time();
         imagepng($image_1, APP_ROOT.'static/images/temp/'.$time.'.png');
-        // var_dump(imagepng($image_1, APP_ROOT.'static/images/temp/'.$time.'.png'));
+        
         $this->code = 0;
         $this->content['url1'] = 'http://www.ymlypt.com/static/images/temp/'.$time.'.png';
     }
