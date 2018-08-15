@@ -876,10 +876,13 @@ class AddressAction extends Controller
         $which_station = Filter::int(Req::args('which_station'));//哪个站
         $customer = Req::args('customer');//等于1筛选出经销商
         $distance = Req::args('distance');//距离
-
+        $size = Filter::int(Req::args('size'));
         $page = Filter::int(Req::args('page'));
         if(!$page){
             $page = 1;
+        }
+        if(!$size){
+            $size = 30;
         }
         $radius = 5; //默认5公里
         
@@ -970,7 +973,7 @@ class AddressAction extends Controller
         //     $order = 'dist asc';
         // }
 
-        $info_sql = $this->model->table('district_promoter')->fields("id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type,(6378.138 * 2 * asin(sqrt(pow(sin((lat * pi() / 180 - ".$lat." * pi() / 180) / 2),2) + cos(lat * pi() / 180) * cos(".$lat." * pi() / 180) * pow(sin((lng * pi() / 180 - ".$lng." * pi() / 180) / 2),2)))) as dist")->where($where)->order($order)->findPage($page, 30);
+        $info_sql = $this->model->table('district_promoter')->fields("id,user_id,shop_name,type,status,base_rate,location,province_id,city_id,region_id,road,lng,lat,picture,info,classify_id,hot,evaluate,taste,environment,quality_service,price,shop_type,(6378.138 * 2 * asin(sqrt(pow(sin((lat * pi() / 180 - ".$lat." * pi() / 180) / 2),2) + cos(lat * pi() / 180) * cos(".$lat." * pi() / 180) * pow(sin((lng * pi() / 180 - ".$lng." * pi() / 180) / 2),2)))) as dist")->where($where)->order($order)->findPage($page, $size);
         if(!$info_sql){
             $this->code = 0;
             $this->content = [];
