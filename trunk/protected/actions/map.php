@@ -93,7 +93,7 @@ class MapAction extends Controller
         $black2 = imagecolorallocate($image_2, 0, 0, 0);
         
         $str2 = $mobile;
-        imagettftext($image_2, 18, 0, imagesx($image_2)-890, imagesy($image_2)-960, $black2, $font, $str2);
+        imagettftext($image_2, 18, 0, imagesx($image_2)-870, imagesy($image_2)-950, $black2, $font, $str2);
         
         // 输出合成图片
         imagepng($image_2, APP_ROOT.'static/images/temp/'.$time.'2.png');
@@ -106,7 +106,7 @@ class MapAction extends Controller
         $black3 = imagecolorallocate($image_3, 0, 0, 0);
         
         $str3 = $rate.'%';
-        imagettftext($image_3, 18, 0, imagesx($image_3)-590, imagesy($image_3)-460, $black3, $font, $str3);
+        imagettftext($image_3, 18, 0, imagesx($image_3)-600, imagesy($image_3)-440, $black3, $font, $str3);
         
         // 输出合成图片
         imagepng($image_3, APP_ROOT.'static/images/temp/'.$time.'3.png');
