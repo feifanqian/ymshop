@@ -147,6 +147,17 @@ class PaymentAction extends Controller {
                             }
                         }
                     }
+                    if($order['type']==1) {
+                        $groupbuy_log = $this->model->table('groupbuy_log')->where('id='.$order['join_id'])->find();
+                        if($groupbuy_log) {
+                            $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$groupbuy_log['join_id'])->find();
+                            if($groupbuy_join['need_num']==0) {
+                                $this->model->table('order')->data(['status'=>5])->where('id='.$order['id'])->update();
+                                $this->code = 1293; //人数已凑满
+                                return;
+                            }
+                        }
+                    }
                     if ($order['order_amount'] == 0 && $payment_info['class_name'] != 'balance') {
                         $this->code = 1066;
                         exit();
