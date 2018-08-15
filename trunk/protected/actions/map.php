@@ -80,7 +80,7 @@ class MapAction extends Controller
         
         // $str = iconv('utf-8','GBK',$name);
         $str=mb_convert_encoding($name, "html-entities", "utf-8");
-        imagettftext($image_1, 16, 0, imagesx($image_1)-880, imagesy($image_1)-940, $black, $font, $str);
+        imagettftext($image_1, 16, 0, imagesx($image_1)-900, imagesy($image_1)-960, $black, $font, $str);
         // imagestring($image_1, 3, imagesx($image_1)-160, imagesy($image_1)-20, "MKTK-HELOO", $black);
         // 输出合成图片
         $time = time();
