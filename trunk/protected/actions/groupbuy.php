@@ -91,6 +91,10 @@ class GroupbuyAction extends Controller
                 return;
             } else {
                 $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$join_id)->find();
+                if($groupbuy_join['need_num'] == 0) {
+                    $this->code = 1293; //人数已凑满
+                    return;
+                }
                 $joined = $this->model->table('groupbuy_log')->where('join_id='.$join_id.' and user_id='.$this->user['id'].' and pay_status=1')->find();
                 if($joined) {
                     $this->code = 1282;
