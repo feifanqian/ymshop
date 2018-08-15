@@ -79,7 +79,7 @@ class MapAction extends Controller
         $black1 = imagecolorallocate($image_1, 0, 0, 0);
         
         $str1 = mb_convert_encoding($name, "html-entities", "utf-8");
-        imagettftext($image_1, 18, 0, imagesx($image_1)-882, imagesy($image_1)-987, $black1, $font, $str1);
+        imagettftext($image_1, 18, 0, imagesx($image_1)-882, imagesy($image_1)-980, $black1, $font, $str1);
         
         // 输出合成图片
         $time = time();
@@ -93,7 +93,7 @@ class MapAction extends Controller
         $black2 = imagecolorallocate($image_2, 0, 0, 0);
         
         $str2 = $mobile;
-        imagettftext($image_2, 18, 0, imagesx($image_2)-854, imagesy($image_2)-947, $black2, $font, $str2);
+        imagettftext($image_2, 18, 0, imagesx($image_2)-854, imagesy($image_2)-940, $black2, $font, $str2);
         
         // 输出合成图片
         imagepng($image_2, APP_ROOT.'static/images/temp/'.$time.'2.png');
@@ -119,7 +119,7 @@ class MapAction extends Controller
         $black4 = imagecolorallocate($image_4, 0, 0, 0);
         
         $str4 = date('Y.m.d');
-        imagettftext($image_4, 22, 0, imagesx($image_4)-800, imagesy($image_4)-740, $black4, $font, $str4);
+        imagettftext($image_4, 22, 0, imagesx($image_4)-800, imagesy($image_4)-730, $black4, $font, $str4);
         
         // 输出合成图片
         imagepng($image_4, APP_ROOT.'static/images/temp/'.$time.'4.png');
