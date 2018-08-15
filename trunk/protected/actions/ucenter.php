@@ -3045,6 +3045,7 @@ class UcenterAction extends Controller {
             $params['sign'] = trim($sign['check']);
             $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
             $res = Common::httpRequest($url1,'POST',$params);
+            var_dump($signStrs);
             var_dump($res);die;
             $this->code = 0;
             return;

@@ -145,4 +145,14 @@ class MapAction extends Controller
         $this->content['url3'] = $url4;
     }
 
+    public function save_contract_image()
+    {
+        $url = Filter::str(Req::args('url'));
+        $data = array(
+            'url4'    => $url
+            );
+        $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
+        $this->code = 0;
+    }
+
 }
