@@ -612,6 +612,11 @@ class PaymentAction extends Controller {
                             Log::balance((0 - $total_fee), $user_id, $order_no, '购物下单');
                         }
                         $this->code = 0;
+                        $this->content['type'] = $order['type'];
+                        if($order['type']==1) {
+                            $groupbuy_log = $this->model->table('groupbuy_log')->where('id='.$order['join_id'])->find();
+                            $this->content['type'] = $order['type'];
+                        }
                         return;
                     } else {
                         $this->code = 1062;
