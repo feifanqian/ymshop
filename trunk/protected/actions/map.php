@@ -112,11 +112,24 @@ class MapAction extends Controller
         imagepng($image_3, APP_ROOT.'static/images/temp/'.$time.'3.png');
 
         $url3 = 'http://www.ymlypt.com/static/images/temp/'.$time.'3.png';
+        
+        //四、合成签约日期
+        $image_4 = imagecreatefromstring(file_get_contents($url3));
+        
+        $black4 = imagecolorallocate($image_4, 0, 0, 0);
+        
+        $str4 = date('Y.m.d');
+        imagettftext($image_4, 22, 0, imagesx($image_4)-800, imagesy($image_4)-640, $black4, $font, $str4);
+        
+        // 输出合成图片
+        imagepng($image_4, APP_ROOT.'static/images/temp/'.$time.'4.png');
+
+        $url4 = 'http://www.ymlypt.com/static/images/temp/'.$time.'4.png';
 
         $this->code = 0;
         $this->content['url1'] = $url2;
         $this->content['url2'] = $path_2;
-        $this->content['url3'] = $url3;
+        $this->content['url3'] = $url4;
     }
 
 }
