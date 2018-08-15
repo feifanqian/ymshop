@@ -3044,8 +3044,8 @@ class UcenterAction extends Controller {
             $sign = $this->sign_encrypt(array('data' => $signStrs));
             $params['sign'] = trim($sign['check']);
             $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
-            $params['biz_content'] = base64_encode($params['biz_content']);
-            $params['sign'] = base64_encode($params['sign']);
+            $params['biz_content'] = urlencode($params['biz_content']);
+            $params['sign'] = urlencode($params['sign']);
             $res = Common::httpRequest($url1,'POST',$params);
             var_dump($signStrs);
             var_dump($res);die;
