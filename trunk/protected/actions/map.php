@@ -65,6 +65,9 @@ class MapAction extends Controller
 
     public function image_merge_test()
     {
+        $name = Filter::str(Req::args('name')); //乙方名字
+        $mobile = Filter::str(Req::args('mobile')); //乙方电话
+        $rate = Filter::str(Req::args('rate')); //甲方收取服务费比例
         // 图片一
         $path_1 = 'http://www.ymlypt.com/static/images/0001.png';
         
@@ -75,17 +78,21 @@ class MapAction extends Controller
         // $font = '/var/www/shop/static/fonts/Dejavusans_0.ttf';
         $font = '/var/www/shop/static/fonts/simhei.ttf';
         
-        $text = '潜非凡';
-        // $str = iconv('utf-8','GBK',$text);
-        $str=mb_convert_encoding($text, "html-entities", "utf-8");
-        imagettftext($image_1, 16, 0, imagesx($image_1)-160, imagesy($image_1)-20, $black, $font, $str);
+        // $str = iconv('utf-8','GBK',$name);
+        $str=mb_convert_encoding($name, "html-entities", "utf-8");
+        imagettftext($image_1, 16, 0, imagesx($image_1)-360, imagesy($image_1)-40, $black, $font, $str);
         // imagestring($image_1, 3, imagesx($image_1)-160, imagesy($image_1)-20, "MKTK-HELOO", $black);
         // 输出合成图片
         $time = time();
         imagepng($image_1, APP_ROOT.'static/images/temp/'.$time.'.png');
         
+        $url1 = 'http://www.ymlypt.com/static/images/temp/'.$time.'.png';
+        $url2 = 'http://www.ymlypt.com/static/images/0002.png';
+
         $this->code = 0;
-        $this->content['url1'] = 'http://www.ymlypt.com/static/images/temp/'.$time.'.png';
+        $this->content['url1'] = $url1;
+        $this->content['url2'] = $url2;
+        // $this->content['url3'] = $url3;
     }
 
 }
