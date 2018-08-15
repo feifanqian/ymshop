@@ -118,6 +118,7 @@ class GroupbuyAction extends Controller
         $this->code = 0;
         $this->content['log_id'] = $log_id;
         $this->content['join_id'] = !empty($join_id)?$join_id:$last_id;
+        $this->content['groupbuy_id'] = $groupbuy_id;
         return;
     }
 

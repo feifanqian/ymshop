@@ -227,10 +227,28 @@ class PaymentAction extends Controller {
                                      if(isset($sendData['tn'])){
                                         $this->code =0;
                                         $this->content['tn']= $sendData['tn'];
+                                        $this->content['type'] = $order['type'];
+                                        if($order['type']==1) {
+                                            $groupbuy_log = $this->model->table('groupbuy_log')->where('id='.$order['join_id'])->find();
+                                            if($groupbuy_log) {
+                                                $this->content['join_id'] = $groupbuy_log['join_id'];
+                                                $this->content['groupbuy_id'] = $groupbuy_log['groupbuy_id'];
+                                            }
+                                            
+                                        }
                                         return;
                                      }else{
                                         $this->code =0;
                                         $this->content['senddata']=$sendData;
+                                        $this->content['type'] = $order['type'];
+                                        if($order['type']==1) {
+                                            $groupbuy_log = $this->model->table('groupbuy_log')->where('id='.$order['join_id'])->find();
+                                            if($groupbuy_log) {
+                                                $this->content['join_id'] = $groupbuy_log['join_id'];
+                                                $this->content['groupbuy_id'] = $groupbuy_log['groupbuy_id'];
+                                            }
+                                            
+                                        }
                                         exit();
                                      }
                              }
@@ -279,6 +297,14 @@ class PaymentAction extends Controller {
                     }
                 }
                 $this->code = 0;
+                $this->content['type'] = $order['type'];
+                if($order['type']==1) {
+                    $groupbuy_log = $this->model->table('groupbuy_log')->where('id='.$order['join_id'])->find();
+                    if($groupbuy_log) {
+                        $this->content['join_id'] = $groupbuy_log['join_id'];
+                        $this->content['groupbuy_id'] = $groupbuy_log['groupbuy_id'];
+                    }                       
+                }
             } else {
                 $this->code = 1063;
             }
