@@ -337,6 +337,9 @@ class GoodsAction extends Controller {
             $this->code = 1249;
             return;
         }
+        if(!$logo) {
+            $logo = 'http://www.ymlypt.com/themes/mobile/images/logo-new.png';
+        }
         $c = new TopClient;
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;

@@ -75,8 +75,8 @@ class MapAction extends Controller
         // $font = '/static/fonts/fontawesome-webfont.ttf';
         $font = '/var/www/shop/static/fonts/Dejavusans_0.ttf';
         $text = '潜非凡';
-
-        imagettftext($image_1, 16, 0, imagesx($image_1)-160, imagesy($image_1)-20, $black, $font, $text);
+        $str = iconv('gb2312','utf-8',$text);
+        imagettftext($image_1, 16, 0, imagesx($image_1)-160, imagesy($image_1)-20, $black, $font, $str);
         // imagestring($image_1, 3, imagesx($image_1)-160, imagesy($image_1)-20, "MKTK-HELOO", $black);
         // 输出合成图片
         $time = time();
