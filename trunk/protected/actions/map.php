@@ -74,7 +74,7 @@ class MapAction extends Controller
         $black = imagecolorallocate($image_1, 0, 0, 0);
         // $font = '/static/fonts/fontawesome-webfont.ttf';
         $font = '/var/www/shop/static/fonts/Dejavusans_0.ttf';
-        $text = '潜非凡';
+        $text = 'qianfeifan';
         // $str = iconv('utf-8','GBK',$text);
         $str=mb_convert_encoding($text, "html-entities", "utf-8");
         imagettftext($image_1, 16, 0, imagesx($image_1)-160, imagesy($image_1)-20, $black, $font, $str);
