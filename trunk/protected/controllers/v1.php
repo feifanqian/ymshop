@@ -283,7 +283,7 @@ class V1Controller extends Controller {
         "groupbuy_detail"=>array("groupbuy/groupbuy_detail",0,1), //拼团详细页面
         "groupbuy_join_detail"=>array("groupbuy/groupbuy_join_detail",1,1), //拼团详情
         "my_groupbuy_active"=>array("groupbuy/myGroupbuyActive",1,1), //我的活动
-        "image_merge_test"=>array("map/image_merge_test",0,1), //图片合成测试
+        "image_merge_test"=>array("map/image_merge_test",1,1), //图片合成测试
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息

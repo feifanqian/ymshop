@@ -125,7 +125,20 @@ class MapAction extends Controller
         imagepng($image_4, APP_ROOT.'static/images/temp/'.$time.'4.png');
 
         $url4 = 'http://www.ymlypt.com/static/images/temp/'.$time.'4.png';
-
+        
+        //保存至数据库
+        $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
+        $data = array(
+            'user_id' => $this->user['id'],
+            'url1'    => $url2,
+            'url3'    => $url4
+            );
+        if(!$contract) {
+            $this->model->table('promoter_contract')->data($data)->insert();
+        } else {
+            $this->model->table('promoter_contract')->data($data)->where('id='.$contract['id'])->update();
+        }
+        
         $this->code = 0;
         $this->content['url1'] = $url2;
         $this->content['url2'] = $path_2;
