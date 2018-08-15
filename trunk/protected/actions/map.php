@@ -67,32 +67,56 @@ class MapAction extends Controller
     {
         $name = Filter::str(Req::args('name')); //乙方名字
         $mobile = Filter::str(Req::args('mobile')); //乙方电话
-        $rate = Filter::str(Req::args('rate')); //甲方收取服务费比例
-        // 图片一
-        $path_1 = 'http://www.ymlypt.com/static/images/0001.png';
-        
+        $rate = Filter::float(Req::args('rate')); //甲方收取服务费比例
+         
+        $path_1 = 'http://www.ymlypt.com/static/images/0001.png'; // 图片一
+        $path_2 = 'http://www.ymlypt.com/static/images/0002.png'; // 图片二
+        $path_3 = 'http://www.ymlypt.com/static/images/0003.png'; // 图片三
+        $font = '/var/www/shop/static/fonts/simhei.ttf'; //中文字体
+        //一、合成乙方签名
         $image_1 = imagecreatefromstring(file_get_contents($path_1));
         
-        $black = imagecolorallocate($image_1, 0, 0, 0);
+        $black1 = imagecolorallocate($image_1, 0, 0, 0);
         
-        // $font = '/var/www/shop/static/fonts/Dejavusans_0.ttf';
-        $font = '/var/www/shop/static/fonts/simhei.ttf';
+        $str1 = mb_convert_encoding($name, "html-entities", "utf-8");
+        imagettftext($image_1, 18, 0, imagesx($image_1)-900, imagesy($image_1)-980, $black1, $font, $str1);
         
-        // $str = iconv('utf-8','GBK',$name);
-        $str=mb_convert_encoding($name, "html-entities", "utf-8");
-        imagettftext($image_1, 16, 0, imagesx($image_1)-900, imagesy($image_1)-980, $black, $font, $str);
-        // imagestring($image_1, 3, imagesx($image_1)-160, imagesy($image_1)-20, "MKTK-HELOO", $black);
         // 输出合成图片
         $time = time();
-        imagepng($image_1, APP_ROOT.'static/images/temp/'.$time.'.png');
+        imagepng($image_1, APP_ROOT.'static/images/temp/'.$time.'1.png');
         
-        $url1 = 'http://www.ymlypt.com/static/images/temp/'.$time.'.png'; 
-        $url2 = 'http://www.ymlypt.com/static/images/0002.png';
+        $url1 = 'http://www.ymlypt.com/static/images/temp/'.$time.'1.png'; 
+        
+        //二、合成乙方手机号
+        $image_2 = imagecreatefromstring(file_get_contents($url1));
+        
+        $black2 = imagecolorallocate($image_2, 0, 0, 0);
+        
+        $str2 = $mobile;
+        imagettftext($image_2, 18, 0, imagesx($image_2)-890, imagesy($image_2)-960, $black2, $font, $str2);
+        
+        // 输出合成图片
+        imagepng($image_2, APP_ROOT.'static/images/temp/'.$time.'2.png');
+
+        $url2 = 'http://www.ymlypt.com/static/images/temp/'.$time.'2.png';
+        
+        //三、合成服务费比例
+        $image_3 = imagecreatefromstring(file_get_contents($path_3));
+        
+        $black3 = imagecolorallocate($image_3, 0, 0, 0);
+        
+        $str3 = $rate.'%';
+        imagettftext($image_3, 18, 0, imagesx($image_3)-590, imagesy($image_3)-460, $black3, $font, $str3);
+        
+        // 输出合成图片
+        imagepng($image_3, APP_ROOT.'static/images/temp/'.$time.'3.png');
+
+        $url3 = 'http://www.ymlypt.com/static/images/temp/'.$time.'3.png';
 
         $this->code = 0;
-        $this->content['url1'] = $url1;
-        $this->content['url2'] = $url2;
-        // $this->content['url3'] = $url3;
+        $this->content['url1'] = $url2;
+        $this->content['url2'] = $path_2;
+        $this->content['url3'] = $url3;
     }
 
 }
