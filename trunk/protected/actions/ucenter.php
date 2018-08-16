@@ -3006,8 +3006,8 @@ class UcenterAction extends Controller {
             $params['version'] = '3.0';
             $legal_cert_no = $this->des_encrypt($_POST['legal_cert_no'],'yuanmeng');
             $cert_no = $this->des_encrypt($_POST['cert_no'],'yuanmeng');
-            $legal_cert_no = str_replace('+','%2B',$legal_cert_no);
-            $cert_no = str_replace('+','%2B',$cert_no);
+            // $legal_cert_no = str_replace('+','%2B',$legal_cert_no);
+            // $cert_no = str_replace('+','%2B',$cert_no);
           $biz_content_arr = array(
             'merchant_no'=>'yuanmeng',
             'cust_type'=>$_POST['cust_type'],
@@ -3046,8 +3046,8 @@ class UcenterAction extends Controller {
             $sign = $this->sign_encrypt(array('data' => $signStrs));
             $params['sign'] = trim($sign['check']);
             $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
-            // $params['biz_content'] = urlencode($params['biz_content']);
-            // $params['sign'] = urlencode($params['sign']);
+            $params['biz_content'] = rawurldecode($params['biz_content']);
+            $params['sign'] = rawurldecode($params['sign']);
             $res = Common::httpRequest($url1,'POST',$params);
             var_dump($params);
             var_dump($res);die;
