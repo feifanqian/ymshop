@@ -155,4 +155,16 @@ class MapAction extends Controller
         $this->code = 0;
     }
 
+    public function business_center_list()
+    {
+        $list = $this->model->table('business_center')->findAll();
+        if($list) {
+            foreach ($list as $key => $value) {
+                $list[$key]['dynamic'] = $this->model->table('center_share')->where('center_id='.$value['id'])->count();
+            }
+        }
+        $this->code = 0;
+        $this->content['list'] = $list;
+    }
+
 }
