@@ -2065,12 +2065,33 @@ class UcenterController extends Controller
                         exit;
                     } else {
                         // $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
-
-                        //将当前微信注册账号与APP端该手机注册的新号绑定
-                        // $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' and user_id=" . $result['user_id'])->find();
-                        // if ($oauth_user) {
-                        //     $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
-                        // } else {
+                        $promoter1 = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+                        $promoter2 = $this->model->table('district_promoter')->where('user_id='.$result['user_id'])->find();
+                        //智能分配微信账号
+                        if($promoter1 || $promoter2) {
+                           if($promoter1) { //分配$this->user['id']账号
+                              $customer = $this->model->table('customer')->where('user_id=' . $result['user_id'])->find();
+                              $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $this->user['id'])->update();
+                              $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $result['user_id'])->update();
+                              $this->model->table('oauth_user')->data(array('other_user_id' => $result['user_id']))->where('user_id=' . $this->user['id'])->update();
+                              Session::clear('verifiedInfo');
+                              Session::clear('activateObj');
+                              $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
+                              exit;
+                           } else { //分配$result['user_id']账号
+                              $customer = $this->model->table('customer')->where('user_id=' . $this->user['id'])->find();
+                              $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $result['user_id'])->update();
+                              $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $this->user['id'])->update();
+                              $this->model->table('oauth_user')->data(array('other_user_id' => $this->user['id']))->where('user_id=' . $this->user['id'])->update();
+                              $this->model->table('oauth_user')->data(array('user_id' => $result['user_id']))->where('other_user_id=' . $this->user['id'])->update();
+                              Session::clear('verifiedInfo');
+                              Session::clear('activateObj');
+                              $objs = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id left join oauth_user as ou on us.id=ou.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile,ou.open_id")->where("us.id=".$result['user_id'])->find();
+                              $this->safebox->set('user', $objs, 1800);
+                              $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
+                              exit;
+                           }
+                        } else {
                             $customer = $this->model->table('customer')->where('user_id=' . $result['user_id'])->find();
                             $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $this->user['id'])->update();
                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $result['user_id'])->update();
@@ -2082,8 +2103,7 @@ class UcenterController extends Controller
                             Session::clear('activateObj');
                             $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
                             exit;
-                        // }
-
+                        }
                     }
                 }
             } else {
