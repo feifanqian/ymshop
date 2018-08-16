@@ -3047,7 +3047,7 @@ class UcenterAction extends Controller {
             // $params['biz_content'] = urlencode($params['biz_content']);
             // $params['sign'] = urlencode($params['sign']);
             $res = Common::httpRequest($url1,'POST',$params);
-            // var_dump($params);
+            var_dump($params);
             var_dump($res);die;
             $this->code = 0;
             return;
