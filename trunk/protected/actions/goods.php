@@ -392,7 +392,7 @@ class GoodsAction extends Controller {
             $form = 'android';
         }
 
-        $resp = $this->tbk_req_get($form, $q, $type, $page, '60', 'total_sales_des');
+        $resp = $this->tbk_req_get($form, $q, $type, $page, '40', 'total_sales_des');
 
         $size = empty($size) ? 20 : $size;
         $save_data = [];
@@ -573,7 +573,7 @@ class GoodsAction extends Controller {
         $save_data = [];
         $user_id = $this->user['id'] == null ? 0 : $this->user['id'];
         if (empty($cache_data)) {
-            $tbk_data = $this->tbk_req_get($form, $q, $type, 1, '100', 'total_sales_des');
+            $tbk_data = $this->tbk_req_get($form, $q, $type, 1, '40', 'total_sales_des');
             if (isset($tbk_data['result_list']['map_data'])) {
                 foreach ($tbk_data['result_list']['map_data'] as $itm) {
                     if (!isset($save_data[$itm['coupon_id']])) {
@@ -609,7 +609,7 @@ class GoodsAction extends Controller {
             $tb_page = ceil($count / 100) + 1;
 
             if ($count < $page * $size) {
-                $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page, '100', 'total_sales_des');
+                $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page, '40', 'total_sales_des');
                 $new_data = [];
                 if (isset($tbk_data['result_list']['map_data'])) {
                     foreach ($tbk_data['result_list']['map_data'] as $key => $itm) {
