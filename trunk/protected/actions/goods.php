@@ -492,7 +492,7 @@ class GoodsAction extends Controller {
         $c->v = '2.0';
         $req = new TbkDgMaterialOptionalRequest;
         $req->setAdzoneId($AdzoneId);
-        $req->setPlatform("2");
+        // $req->setPlatform("2");
 //        $req->setStartDsr("10");
         $req->setPageSize($pageSize);
         // $req->setEndTkRate("1234");
