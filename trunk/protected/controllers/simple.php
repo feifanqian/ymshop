@@ -460,7 +460,7 @@ class SimpleController extends Controller {
         // }
         if (!empty($userinfo) && isset($userinfo['unionid'])) {
             $oauth_user = $this->model->table('oauth_user');
-            $is_oauth = $oauth_user->fields('user_id,unionid')
+            $is_oauth = $oauth_user->fields('user_id,unionid,other_user_id')
                     ->where('open_id="' . $token['openid'] . '" or  unionid="'.$userinfo['unionid'].'" and oauth_type="' . $type . '"')
                     ->find();
                     
@@ -470,8 +470,20 @@ class SimpleController extends Controller {
                     if($is_oauth['unionid']==null) {
                         $oauth_user->data(['unionid'=>$userinfo['unionid']])->where('user_id='.$is_oauth['user_id'])->update();
                     } 
-                    
-                    $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("us.id='{$is_oauth['user_id']}'")->find();
+                    if($is_oauth['other_user_id']==null) {
+                        $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("us.id='{$is_oauth['user_id']}'")->find(); 
+                    } else {
+                        $customer1 = $this->model->table('customer')->where('user_id='.$is_oauth['user_id'].' and status=1')->find();
+                        $customer2 = $this->model->table('customer')->where('user_id='.$is_oauth['other_user_id'].' and status=1')->find();
+                        if($customer1 && !$customer2) {
+                            $user_id = $is_oauth['user_id'];
+                        } elseif(!$customer1 && $customer2) {
+                            $user_id = $is_oauth['other_user_id'];
+                        } else {
+                            $user_id = $is_oauth['user_id'];
+                        }
+                        $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("us.id='{$user_id}'")->find();
+                    } 
                     $this->safebox->set('user', $obj, $this->cookie_time);
                     // 用户头像bug修复
                     if($obj){
