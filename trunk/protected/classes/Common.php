@@ -883,14 +883,14 @@ class Common {
              if($balance1>0) {
                    // Log::incomeLog($balance1, 1, $inviter_info['user_id'], $order['id'], 0,"下级消费分成(上级邀请者)");
                    $model->table('customer')->where('user_id='.$inviter_info['user_id'])->data(array("balance"=>"`balance`+({$balance1})"))->update();
-                   Log::balance($balance1, $inviter_info['user_id'], $order['order_no'],'下级消费分成(上级邀请者)', 5); 
+                   Log::balance($balance1, $inviter_info['user_id'], $order['order_no'],'线上消费收益(上级邀请者)', 5); 
              }
              $first_promoter_user_id = self::getFirstPromoter($inviter_info['user_id']);
              if($first_promoter_user_id){   
                 if($balance2>0) {
                     // Log::incomeLog($balance2, 2, $first_promoter_user_id, $order['id'], 0,"下级消费分成(上级第一个代理商)");
                     $model->table('customer')->where('user_id='.$first_promoter_user_id)->data(array("balance"=>"`balance`+({$balance2})"))->update();
-                    Log::balance($balance2, $first_promoter_user_id, $order['order_no'],'下级消费分成(上级第一个代理商)', 5);
+                    Log::balance($balance2, $first_promoter_user_id, $order['order_no'],'线上消费收益(上级第一个代理商)', 5);
                 }
              }
              
@@ -898,13 +898,13 @@ class Common {
                 // Log::incomeLog($balance3, 3, $inviter_info['district_id'], $order['id'], 0,"下级消费分成(所属专区)");
                 if($district_id) {
                     $model->table('customer')->where('user_id='.$district_id)->data(array("balance"=>"`balance`+({$balance3})"))->update();
-                    Log::balance($balance3, $district_id, $order['order_no'],'下级消费分成(所属专区)', 5);
+                    Log::balance($balance3, $district_id, $order['order_no'],'线上消费收益(所属专区)', 5);
                 }
              }
 
              if($balance4>0) {
                 $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`+({$balance4})"))->update();
-                Log::balance($balance4, 1, $order['order_no'],'下级消费分成(平台)', 5);
+                Log::balance($balance4, 1, $order['order_no'],'线上消费收益(平台)', 5);
              }
 
              if($balance5>0) {
