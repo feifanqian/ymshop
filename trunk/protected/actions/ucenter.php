@@ -3028,7 +3028,7 @@ class UcenterAction extends Controller {
             'legal_name'=>$_POST['legal_name'],
             'legal_tel'=>$_POST['legal_tel'],
             'legal_cert_type'=>'00',
-            "legal_cert_expire":"20250825",
+            "legal_cert_expire"=>"20250825",
             // 'legal_cert_no'=>$legal_cert_no,
             'legal_cert_no'=>'CRZlyoFPZgcIffVvx04XBisuo9tvo60Z',  
             'settle_type'=>'1',
