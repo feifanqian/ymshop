@@ -3051,7 +3051,8 @@ class UcenterAction extends Controller {
             $res = Common::httpRequest($url1,'POST',$params);
             // var_dump($params);
             $res = json_decode($res,true);
-            $this->sign_check($res['sign'], $signStrs);
+            $ret = $this->sign_check($res['sign'], $signStrs);
+            var_dump($ret);
             var_dump($res);die;
             $this->code = 0;
             return;
