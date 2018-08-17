@@ -3006,8 +3006,8 @@ class UcenterAction extends Controller {
             $params['version'] = '3.0';
             $legal_cert_no = $this->des_encrypt($_POST['legal_cert_no'],'yuanmeng');
             $cert_no = $this->des_encrypt($_POST['cert_no'],'yuanmeng');
-            // $legal_cert_no = str_replace('+','%2B',$legal_cert_no);
-            // $cert_no = str_replace('+','%2B',$cert_no);
+            $legal_cert_no = str_replace('+','%2B',$legal_cert_no);
+            $cert_no = str_replace('+','%2B',$cert_no);
           $biz_content_arr = array(
             'merchant_no'=>'yuanmeng',
             'cust_type'=>$_POST['cust_type'],
@@ -3052,6 +3052,8 @@ class UcenterAction extends Controller {
             // var_dump($params);
             $res = json_decode($res,true);
             $ret = $this->sign_check($res['sign'], $signStrs);
+            var_dump($res['sign']);
+            var_dump($signStrs);
             var_dump($ret);
             var_dump($res);die;
             $this->code = 0;
