@@ -282,6 +282,17 @@ class DistrictAction extends Controller {
             if(!$invite){
                 $this->model->table('invite')->data(array('user_id'=>$promoter_code['user_id'],'invite_user_id'=>$this->user['id'],'from'=>'jihuo','district_id'=>$promoter_code['district_id'],'createtime'=>time()))->insert();
             }
+
+            //添加记录
+            $data = array(
+                'code'     => $code,
+                'user_id'  => $promoter_code['user_id'],
+                'to_id'    => $this->user['id'],
+                'num'      => 1,
+                'datetime' => date('Y-m-d H:i:s'),
+                'type'     => 2
+                );
+            $this->model->table('code_log')->data($data)->insert();
             if($result){
                 $this->model->table('promoter_code')->data(array('status'=>0))->where("code ='{$code}'")->update();
                 $promoter = $this->model->table('district_promoter')->where('id='.$result)->find();
@@ -306,13 +317,13 @@ class DistrictAction extends Controller {
             return;
         }
         $code = $this->model->table('promoter_code')->where('status=1 and user_id='.$this->user['id'])->findAll();
-        if($code){
-            foreach($code as $k => $v){
-                if(time()>strtotime($v['end_date'])){
-                    $this->model->table('promoter_code')->data(array('status'=>-1))->where('id='.$v['id'])->update();
-                }
-            }
-        }
+        // if($code){
+        //     foreach($code as $k => $v){
+        //         if(time()>strtotime($v['end_date'])){
+        //             $this->model->table('promoter_code')->data(array('status'=>-1))->where('id='.$v['id'])->update();
+        //         }
+        //     }
+        // }
         $list = $this->model->table('promoter_code')->where('user_id='.$this->user['id'])->order('id desc')->findPage($page,10);
         if($list){
             unset($list['html']);
@@ -327,6 +338,7 @@ class DistrictAction extends Controller {
         $count3 = $this->model->table('promoter_code')->where('status=0 and user_id='.$this->user['id'])->count();
         $count4 = $this->model->table('promoter_code')->where('status=1 and user_id='.$this->user['id'])->count();
         $count5 = $this->model->table('promoter_code')->where('status=-1 and user_id='.$this->user['id'])->count();
+        $count6 = $district['had_send_num'];
 
         $count = array(
              'max_num'       => $count1, //允许生成激活码的数量,默认100
@@ -334,12 +346,28 @@ class DistrictAction extends Controller {
              'remaining_num' => $count1-$count2, //剩余数量
              'used_num'      => $count3, //已使用
              'unused_num'    => $count4, //未使用
-             'expired_num'   => $count5 //已过期
+             'expired_num'   => 0, //已过期
+             'had_send_num'  => $count6 //已赠送数量
             );
 
         $this->code = 0;
         $this->content['list'] = $list;
         $this->content['count'] = $count;
+    }
+    
+    //激活码使用日志
+    public function code_log()
+    {
+       $page = Filter::int(Req::args('page'));
+        if(!$page){
+            $page = 1;
+        }
+        $list = $this->model->table('code_log as cl')->join('left join customer as c on cl.to_id=c.user_id')->fields('cl.*,c.real_name,c.mobile')->where('cl.user_id='.$this->user['id'])->findPage($page,10);
+        if($list) {
+            unset($list['html']);
+        }
+        $this->code = 0;
+        $this->content['list'] = $list;
     }
 
     public function getAllChildShopId(){
@@ -385,8 +413,20 @@ class DistrictAction extends Controller {
         }
         $num1 = $myself['code_num'] - $num;
         $num2 = $is_shop['code_num'] + $num;
-        $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->data(['code_num'=>$num1])->update();
+        $had_send_num = $myself['had_send_num']+1;
+        $this->model->table('district_shop')->where('owner_id='.$this->user['id'])->data(['code_num'=>$num1,'had_send_num'=>$had_send_num])->update();
         $this->model->table('district_shop')->where('owner_id='.$exist['user_id'])->data(['code_num'=>$num2])->update();
+
+        //添加记录
+        $data = array(
+            'code'     => '',
+            'user_id'  => $this->user['id'],
+            'to_id'    => $exist['user_id'],
+            'num'      => $num,
+            'datetime' => date('Y-m-d H:i:s'),
+            'type'     => 1
+            );
+        $this->model->table('code_log')->data($data)->insert();
 
         $this->code = 0;
         $this->content['myself_code_num'] = $num1;

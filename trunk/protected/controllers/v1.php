@@ -185,6 +185,7 @@ class V1Controller extends Controller {
         "promoter_code_list"=>array("district/promoterCodeList",1,1), //激活码列表
         "input_code"=>array("district/inputCode",1,1), //激活码输入
         "send_active_code"=>array("district/sendActiveCode",1,1), //经销商互赠激活码数量
+        "code_log"=>array("district/code_log",1,1), //激活码使用记录
         "build_inviteship_qrcode"=>array("ucenter/build_inviteship_qrcode",1,1), //app扫个人邀请码
         "build_inviteship_goods_qrcode"=>array("goods/build_inviteship_goods_qrcode",1,1), //app扫商品邀请码
         "get_my_inviter"=>array("ucenter/get_my_inviter",1,1), //获取上级邀请人信息
