@@ -609,7 +609,7 @@ class GoodsAction extends Controller {
             $tb_page = ceil($count / 40) + 1;
 
             if ($count < $page * $size) {
-                $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page, '40', 'total_sales_des');
+                $tbk_data = $this->tbk_req_get($form, $q, $type, $page, '40', 'total_sales_des');
                 $new_data = [];
                 if (isset($tbk_data['result_list']['map_data'])) {
                     foreach ($tbk_data['result_list']['map_data'] as $key => $itm) {
