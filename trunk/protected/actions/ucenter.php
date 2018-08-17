@@ -2999,7 +2999,8 @@ class UcenterAction extends Controller {
             // $params['partner_id'] = 'yuanmeng';
             $myParams['partner_id'] = 'js_test';
             // $params['partner_id'] = $this->user['id'];
-            $params['timestamp'] = date('Y-m-d H:i:s', time());
+            // $params['timestamp'] = date('Y-m-d H:i:s', time());
+            $params['timestamp'] = '2018-08-17 18:02:23';
             // $params['charset'] = 'GBK';
              $myParams['charset'] = 'utf-8';
             // $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';
