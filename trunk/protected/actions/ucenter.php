@@ -3051,7 +3051,7 @@ class UcenterAction extends Controller {
                 $signStrs .= $key . '=' . $val . '&';
             }
             $signStrs = rtrim($signStrs, '&');
-            $sign = $this->sign_encrypt(array('data' => $signStrs));
+            $sign = $this->sign_encrypts(array('data' => $signStrs));
             $params['sign'] = trim($sign['check']);
             $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
             // $params['biz_content'] = rawurlencode($params['biz_content']);
@@ -3095,6 +3095,28 @@ class UcenterAction extends Controller {
         // $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
         $pfxpath = "./protected/classes/yinpay/certs/yuanmeng.pfx";
         $pfxpassword = 'lc008596';
+        $return = array('success' => 0, 'msg' => '', 'check' => '');
+        $pkcs12 = file_get_contents($pfxpath); //私钥
+        if (openssl_pkcs12_read($pkcs12, $certs, $pfxpassword)) {
+            $privateKey = $certs['pkey'];
+            $publicKey = $certs['cert'];
+            $signedMsg = "";
+            if (openssl_sign($input['data'], $signedMsg, $privateKey, OPENSSL_ALGO_SHA1)) {
+                $return['success'] = 1;
+                $return['check'] = base64_encode($signedMsg);
+                $return['msg'] = base64_encode($input['data']);
+
+            }
+        }
+
+        return $return;
+    }
+
+    public function sign_encrypts($input)
+    {
+        // $pfxpath = 'http://' . $_SERVER['HTTP_HOST'] . "/trunk/protected/classes/yinpay/certs/shanghu_test.pfx";
+        $pfxpath = "./protected/classes/yinpay/certs/js_test.pfx";
+        $pfxpassword = '123456';
         $return = array('success' => 0, 'msg' => '', 'check' => '');
         $pkcs12 = file_get_contents($pfxpath); //私钥
         if (openssl_pkcs12_read($pkcs12, $certs, $pfxpassword)) {
