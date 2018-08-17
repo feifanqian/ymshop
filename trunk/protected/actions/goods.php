@@ -527,7 +527,7 @@ class GoodsAction extends Controller {
                 $req->setCat((string)$q);
             }
         } else {
-            $req->setCat("21,11,122852001,5002372,16,30,14,1801,500027664");
+            $req->setCat("21,11,122852001,50023724,16,30,14,1801,50002766");
         }
         // $req->setPageNo($page);
         $req->setPageNo((string)$pageno);
