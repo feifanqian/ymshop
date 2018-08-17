@@ -3049,7 +3049,9 @@ class UcenterAction extends Controller {
             // $params['biz_content'] = rawurlencode($params['biz_content']);
             // $params['sign'] = rawurlencode($params['sign']);
             $res = Common::httpRequest($url1,'POST',$params);
-            var_dump($params);
+            // var_dump($params);
+            $res = json_decode($res,true);
+            $this->sign_check($res['sign'], $signStrs);
             var_dump($res);die;
             $this->code = 0;
             return;
@@ -3131,6 +3133,18 @@ class UcenterAction extends Controller {
         return $myParams;
     }
 
+    public function sign_check($sign, $data)
+    {
+        $businessgatecerpath = "./protected/classes/yinpay/certs/businessgate.cer";
+        $publickeyFile = $businessgatecerpath; //公钥
+        $certificateCAcerContent = file_get_contents($publickeyFile);
+        $certificateCApemContent = '-----BEGIN CERTIFICATE-----' . PHP_EOL . chunk_split(base64_encode($certificateCAcerContent), 64, PHP_EOL) . '-----END CERTIFICATE-----' . PHP_EOL;
+        // 签名验证
+        $success = openssl_verify($data, base64_decode($sign), openssl_get_publickey($certificateCApemContent), OPENSSL_ALGO_SHA1);
+
+        return $success;
+    }
+
     public function yin_fz_test(){
         $order_no = $_POST['order_no'];
         $order = $this->model->table('order_offline')->fields('order_amount,shop_ids')->where('order_no='.$order_no)->find();
@@ -3177,6 +3191,7 @@ class UcenterAction extends Controller {
         $act = "https://commonapi.ysepay.com/gateway.do";
         $result = Common::httpRequest($act,'POST',$myParams);
         $result = json_decode($result,true);
+        var_dump($result['sign']);
         var_dump($result);die;
         return $myParams;
     }
