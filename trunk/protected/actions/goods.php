@@ -606,7 +606,7 @@ class GoodsAction extends Controller {
         } else {
 
             $count = count($cache_data);
-            $tb_page = ceil($count / 100) + 1;
+            $tb_page = ceil($count / 40) + 1;
 
             if ($count < $page * $size) {
                 $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page, '40', 'total_sales_des');
