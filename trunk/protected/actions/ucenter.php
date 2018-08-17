@@ -2954,8 +2954,8 @@ class UcenterAction extends Controller {
         $myParams['partner_id'] = 'yuanmeng';
         // $myParams['partner_id'] = $this->user['id'];
         $myParams['timestamp'] = date('Y-m-d H:i:s', time());
-        $myParams['charset'] = 'GBK';
-        $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+        $myParams['charset'] = 'GBK'; 
+        $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';
         $myParams['sign_type'] = 'RSA';  
           
         $myParams['version'] = '3.0';
@@ -2996,11 +2996,14 @@ class UcenterAction extends Controller {
             $params = array();  
         
             $params['method'] = 'ysepay.merchant.register.accept';
-            $params['partner_id'] = 'yuanmeng';
+            // $params['partner_id'] = 'yuanmeng';
+            $myParams['partner_id'] = 'js_test';
             // $params['partner_id'] = $this->user['id'];
             $params['timestamp'] = date('Y-m-d H:i:s', time());
-            $params['charset'] = 'GBK';
-            $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+            // $params['charset'] = 'GBK';
+             $myParams['charset'] = 'utf-8';
+            // $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';
+            $myParams['notify_url'] = 'http://127.0.0.1';      
             $params['sign_type'] = 'RSA';  
               
             $params['version'] = '3.0';
@@ -3009,9 +3012,11 @@ class UcenterAction extends Controller {
             $legal_cert_no = str_replace('+','%2B',$legal_cert_no);
             $cert_no = str_replace('+','%2B',$cert_no);
           $biz_content_arr = array(
-            'merchant_no'=>'yuanmeng',
+            // 'merchant_no'=>'yuanmeng',
+            'merchant_no'=>'test',
             'cust_type'=>$_POST['cust_type'],
-            'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            // 'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            'token'=>'1',
             'another_name'=>$_POST['another_name'],
             'cust_name'=>$_POST['cust_name'],
             'mer_flag'=>'11',
@@ -3022,7 +3027,9 @@ class UcenterAction extends Controller {
             'legal_name'=>$_POST['legal_name'],
             'legal_tel'=>$_POST['legal_tel'],
             'legal_cert_type'=>'00',
-            'legal_cert_no'=>$legal_cert_no,
+            "legal_cert_expire":"20250825",
+            // 'legal_cert_no'=>$legal_cert_no,
+            'legal_cert_no'=>'CRZlyoFPZgcIffVvx04XBisuo9tvo60Z',  
             'settle_type'=>'1',
             'bank_account_no'=>$_POST['bank_account_no'],
             'bank_account_name'=>$_POST['bank_account_name'],
@@ -3033,7 +3040,8 @@ class UcenterAction extends Controller {
             'bank_province'=>$_POST['bank_province'],
             'bank_city'=>$_POST['bank_city'],
             'cert_type'=>'00',
-            'cert_no'=>$cert_no,
+            // 'cert_no'=>$cert_no,
+            'cert_no'=>'CRZlyoFPZgcIffVvx04XBisuo9tvo60Z',
             'bank_telephone_no'=>$_POST['bank_telephone_no']
             );
             $params['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
