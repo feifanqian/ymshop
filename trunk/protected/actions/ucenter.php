@@ -2997,14 +2997,14 @@ class UcenterAction extends Controller {
         
             $params['method'] = 'ysepay.merchant.register.accept';
             // $params['partner_id'] = 'yuanmeng';
-            $myParams['partner_id'] = 'js_test';
+            $params['partner_id'] = 'js_test';
             // $params['partner_id'] = $this->user['id'];
             // $params['timestamp'] = date('Y-m-d H:i:s', time());
             $params['timestamp'] = '2018-08-17 18:02:23';
             // $params['charset'] = 'GBK';
-             $myParams['charset'] = 'utf-8';
+            $params['charset'] = 'utf-8';
             // $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';
-            $myParams['notify_url'] = 'http://127.0.0.1';      
+            $params['notify_url'] = 'http://127.0.0.1';      
             $params['sign_type'] = 'RSA';  
               
             $params['version'] = '3.0';
