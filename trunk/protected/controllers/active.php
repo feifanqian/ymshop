@@ -262,9 +262,14 @@ class ActiveController extends Controller
     }
 
     public function inviteregist() {
+        $keyword = Filter::str(Req::args("keyword"));
         $user_id = $this->user['id'];
+        $where = "i.from='active' and i.user_id=".$user_id;
+        if($keyword) {
+            $where.=" and cu.mobile like '%$keyword%' or cu.real_name like '%$keyword%'";
+        }
         if($user_id) {
-            $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name,cu.mobile")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where("i.from='active' and i.user_id=".$user_id)->findAll();
+            $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name,cu.mobile")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where($where)->findAll();
             if($list) {
                 foreach ($list as $key => $value) {
                     $list[$key]['mobile'] = '手机号'.substr($value['mobile'],0,3).'****'.substr($value['mobile'],-4);

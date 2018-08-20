@@ -32,7 +32,7 @@
 <body>
 <div id="app">
     <div class="search">
-        <input type="text" id="keyword" name="" title="" required>
+        <input type="text" id="keyword" name="keyword" title="" required>
         <a href="" class="go"><img src="http://www.ymlypt.com/static/yuanmeng/activity_a/img/inviteregist/p1.png" alt=""></a>
     </div>
     <div class="list">
@@ -82,7 +82,9 @@
                 alert('请输入搜索内容');
                 return;
             }
-            alert(`搜索:${keyword}`);
+            var url = "{url:/active/inviteregist/keyword/}"+keyword;
+            window.location.href = url;
+            // alert(`搜索:${keyword}`);
         });
 
         // 加载更多
