@@ -41,8 +41,7 @@
         {if:$list!=null}
             {foreach:items=$list key=$k item=$item}
             <div class="cell">
-                <!-- <img src='{echo:Url::urlFormat("@".$item['avatar'])}' alt="" class="avatar"> -->
-                <img src="{$item['avatar']}" alt="" class="avatar">
+                <img src='{echo:Url::urlFormat("@".$item['avatar'])}' alt="" class="avatar">
                 <span class="nickname">{$item['mobile']}</span>
                 <span class="time">{$item['create_time']}</span>
                 <span class="status">注册成功</span>
