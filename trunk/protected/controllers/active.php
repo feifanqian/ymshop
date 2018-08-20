@@ -269,7 +269,7 @@ class ActiveController extends Controller
                 foreach ($list as $key => $value) {
                     $list[$key]['mobile'] = '手机号'.substr($value['mobile'],0,3).'****'.substr($value['mobile'],-4);
                     if($value['avatar']==null) {
-                        $list[$key]['avatar'] = '0.png';
+                        $list[$key]['avatar'] = 'themes/mobile/images/logo-new.png';
                     }
                 }
             }
