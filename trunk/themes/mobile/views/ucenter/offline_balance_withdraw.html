@@ -95,6 +95,8 @@
                     <input type="hidden" name="superUsercode" value="yuanmeng">
                     <input type="hidden" name="positive_idcard_url" value="">
                     <input type="hidden" name="native_idcard_url" value="">
+                    <input type="hidden" name="positive_bankcard_url" value="">
+                    <input type="hidden" name="native_bankcard_url" value="">
                     <input type="hidden" name="business_licence_url" value="">
                     <input type="hidden" name="shop_photo_url" value="">
                     <input type="hidden" name="hand_idcard_url" value="">
@@ -139,6 +141,28 @@
                    </div>
                 </div>
                 <div class="weui-cell" style="display: none;" id="hand_idcard_preview">
+                   <div class="weui-cell__bd"  >
+                        <img src='' width="200" height="100" alt="" >
+                   </div> 
+                </div>
+                <div class="weui-cell">
+                   <div class="weui-cell__hd" style="width:40%"><label class="weui-label">结算银行卡正面照</label></div>
+                   <div class="weui-cell__bd">
+                        <input class="input" type="file" name="positive_bankcard" value="" >
+                   </div> 
+                </div>
+                <div class="weui-cell" style="display: none;" id="positive_bankcard_preview">
+                   <div class="weui-cell__bd"  >
+                        <img src='' width="200" height="100" alt="" >
+                   </div> 
+                </div>
+                <div class="weui-cell">
+                   <div class="weui-cell__hd" style="width:40%"><label class="weui-label">结算银行卡反面照</label></div>
+                   <div class="weui-cell__bd">
+                        <input class="input" type="file" name="native_bankcard" value="" >
+                   </div>
+                </div>
+                <div class="weui-cell" style="display: none;" id="native_bankcard_preview">
                    <div class="weui-cell__bd"  >
                         <img src='' width="200" height="100" alt="" >
                    </div> 
@@ -317,6 +341,26 @@
                 return false;
               };
             }
+            if(!$("input[name=positive_bankcard]").val()){
+              $.toast("请上传银行卡正面照", "text");
+                return false;
+            }else{
+              var file1 = $("input[name='positive_bankcard']").get(0).files[0];
+              if(file1.size>8000*1024){
+                $.toast("银行卡正面照大小超过8MB", "text");
+                return false;
+              };
+            }
+            if(!$("input[name=native_bankcard]").val()){
+              $.toast("请上传银行卡反面照", "text");
+                return false;
+            }else{
+              var file1 = $("input[name='native_bankcard']").get(0).files[0];
+              if(file1.size>8000*1024){
+                $.toast("银行卡反面照大小超过8MB", "text");
+                return false;
+              };
+            }
             if (!$("input[name=hand_idcard]").val()) {
                   $.toast("请上传手持身份证照", "text");
                   return false;
@@ -416,6 +460,34 @@
       reader.readAsDataURL(file);
       reader.onload=function(e){
         $("#native_idcard_preview img").get(0).src = e.target.result;
+      } 
+    });
+    $("input[name='positive_bankcard']").change(function(){
+      $("#positive_bankcard_preview").show();
+      var file = $("input[name='positive_bankcard']").get(0).files[0];
+      if(file.size>8000*1024){
+        $.toast("图片最大不超过8MB", "text");
+        return false;
+      };
+      upyun_upload('positive_bankcard',file);
+      var reader = new FileReader(); 
+      reader.readAsDataURL(file);
+      reader.onload=function(e){
+        $("#positive_bankcard_preview img").get(0).src = e.target.result;
+      } 
+    });
+    $("input[name='native_bankcard']").change(function(){
+      $("#native_bankcard_preview").show();
+      var file = $("input[name='native_bankcard']").get(0).files[0];
+      if(file.size>8000*1024){
+        $.toast("图片最大不超过8MB", "text");
+        return false;
+      };
+      upyun_upload('native_bankcard',file);
+      var reader = new FileReader(); 
+      reader.readAsDataURL(file);
+      reader.onload=function(e){
+        $("#native_bankcard_preview img").get(0).src = e.target.result;
       } 
     });
     $("input[name='business_licence']").change(function(){
@@ -599,6 +671,12 @@ function upyun_upload(type,file) {
       }
       if(type=='native_idcard'){
         $("input[name='native_idcard_url']").val(path);
+      }
+      if(type=='positive_bankcard'){
+        $("input[name='positive_bankcard_url']").val(path);
+      }
+      if(type=='native_bankcard'){
+        $("input[name='native_bankcard_url']").val(path);
       }
       if(type=='business_licence'){
         $("input[name='business_licence_url']").val(path);
