@@ -1867,7 +1867,7 @@ class DistrictadminController extends Controller
         $params['partner_id'] = 'yuanmeng';
         // $params['partner_id'] = $this->user['id'];
         $params['timestamp'] = date('Y-m-d H:i:s', time());
-        $params['charset'] = 'GBK';
+        $params['charset'] = 'utf-8';
         $params['sign_type'] = 'RSA';
         $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
           
@@ -1887,8 +1887,9 @@ class DistrictadminController extends Controller
             'legal_name'=>$customer['realname'],
             'legal_tel'=>$customer['mobile'],
             'legal_cert_type'=>'00',
+            "legal_cert_expire"=>"20250825",
             'legal_cert_no'=>$legal_cert_no,
-            'notify_type'=>2,
+            // 'notify_type'=>2,
             'settle_type'=>'1',
             'bank_account_no'=>$shop_check['account_card'],
             'bank_account_name'=>$bankcard['open_name'],
