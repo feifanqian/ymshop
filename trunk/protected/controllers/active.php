@@ -264,7 +264,15 @@ class ActiveController extends Controller
     public function inviteregist() {
         $user_id = $this->user['id'];
         if($user_id) {
-            $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where("i.from='active' and i.user_id=".$user_id)->findAll();
+            $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name,cu.mobile")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where("i.from='active' and i.user_id=".$user_id)->findAll();
+            if($list) {
+                foreach ($list as $key => $value) {
+                    $list[$key]['mobile'] = substr($value['mobile'],0,3).'****'.substr($value['mobile'],-4);
+                    if($value['avatar']==null) {
+                        $list[$key]['avatar'] = '/0.png';
+                    }
+                }
+            }
             $this->assign("user_id", $user_id);
         } else {
             $list = [];
