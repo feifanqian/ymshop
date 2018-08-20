@@ -268,7 +268,7 @@ class ActiveController extends Controller
             if($list) {
                 foreach ($list as $key => $value) {
                     $list[$key]['mobile'] = '手机号'.substr($value['mobile'],0,3).'****'.substr($value['mobile'],-4);
-                    if($value['avatar']=='/0.png') {
+                    if($value['avatar']=='/0.png' || $value['avatar']==null) {
                         $list[$key]['avatar'] = '0.png';
                     }
                 }
