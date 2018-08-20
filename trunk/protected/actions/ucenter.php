@@ -3029,8 +3029,8 @@ class UcenterAction extends Controller {
             'legal_tel'=>$_POST['legal_tel'],
             'legal_cert_type'=>'00',
             "legal_cert_expire"=>"20250825",
-            // 'legal_cert_no'=>$legal_cert_no,
-            'legal_cert_no'=>'CRZlyoFPZgcIffVvx04XBisuo9tvo60Z',  
+            'legal_cert_no'=>$legal_cert_no,
+            // 'legal_cert_no'=>'CRZlyoFPZgcIffVvx04XBisuo9tvo60Z',  
             'settle_type'=>'1',
             'bank_account_no'=>$_POST['bank_account_no'],
             'bank_account_name'=>$_POST['bank_account_name'],
@@ -3041,8 +3041,8 @@ class UcenterAction extends Controller {
             'bank_province'=>$_POST['bank_province'],
             'bank_city'=>$_POST['bank_city'],
             'cert_type'=>'00',
-            // 'cert_no'=>$cert_no,
-            'cert_no'=>'CRZlyoFPZgcIffVvx04XBisuo9tvo60Z',
+            'cert_no'=>$cert_no,
+            // 'cert_no'=>'CRZlyoFPZgcIffVvx04XBisuo9tvo60Z',
             'bank_telephone_no'=>$_POST['bank_telephone_no']
             );
             $params['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
