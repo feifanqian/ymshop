@@ -266,6 +266,7 @@ class ActiveController extends Controller
         $user_id = $this->user['id'];
         $where = "i.from='active' and i.user_id=".$user_id;
         if($keyword) {
+            var_dump(111);die;
             $where.=" and cu.mobile like '%$keyword%' or cu.real_name like '%$keyword%'";
         }
         if($user_id) {
