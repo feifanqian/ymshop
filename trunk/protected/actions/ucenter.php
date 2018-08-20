@@ -2996,15 +2996,15 @@ class UcenterAction extends Controller {
             $params = array();  
         
             $params['method'] = 'ysepay.merchant.register.accept';
-            // $params['partner_id'] = 'yuanmeng';
-            $params['partner_id'] = 'js_test';
+            $params['partner_id'] = 'yuanmeng';
+            // $params['partner_id'] = 'js_test';
             // $params['partner_id'] = $this->user['id'];
-            // $params['timestamp'] = date('Y-m-d H:i:s', time());
-            $params['timestamp'] = '2018-08-17 18:02:23';
+            $params['timestamp'] = date('Y-m-d H:i:s', time());
+            // $params['timestamp'] = '2018-08-17 18:02:23';
             // $params['charset'] = 'GBK';
             $params['charset'] = 'utf-8';
-            // $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';
-            $params['notify_url'] = 'http://127.0.0.1';      
+            $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';
+            // $params['notify_url'] = 'http://127.0.0.1';      
             $params['sign_type'] = 'RSA';  
               
             $params['version'] = '3.0';
@@ -3013,11 +3013,11 @@ class UcenterAction extends Controller {
             $legal_cert_no = str_replace('+','%2B',$legal_cert_no);
             $cert_no = str_replace('+','%2B',$cert_no);
           $biz_content_arr = array(
-            // 'merchant_no'=>'yuanmeng',
-            'merchant_no'=>'test',
+            'merchant_no'=>'yuanmeng',
+            // 'merchant_no'=>'test',
             'cust_type'=>$_POST['cust_type'],
-            // 'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
-            'token'=>'1',
+            'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            // 'token'=>'1',
             'another_name'=>$_POST['another_name'],
             'cust_name'=>$_POST['cust_name'],
             'mer_flag'=>'11',
@@ -3052,7 +3052,7 @@ class UcenterAction extends Controller {
                 $signStrs .= $key . '=' . $val . '&';
             }
             $signStrs = rtrim($signStrs, '&');
-            $sign = $this->sign_encrypts(array('data' => $signStrs));
+            $sign = $this->sign_encrypt(array('data' => $signStrs));
             $params['sign'] = trim($sign['check']);
             $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
             // $params['biz_content'] = rawurlencode($params['biz_content']);
