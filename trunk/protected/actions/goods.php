@@ -527,7 +527,7 @@ class GoodsAction extends Controller {
                 $req->setCat((string)$q);
             }
         } else {
-            $req->setCat("21,11,122852001,5002372,16,30,14,1801,500027664");
+            $req->setCat("30,14,1801,50002766");
         }
         // $req->setPageNo($page);
         $req->setPageNo((string)$pageno);
@@ -606,7 +606,7 @@ class GoodsAction extends Controller {
         } else {
 
             $count = count($cache_data);
-            $tb_page = ceil($count / 100) + 1;
+            $tb_page = ceil($count / 40) + 1;
 
             if ($count < $page * $size) {
                 $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page, '40', 'total_sales_des');
