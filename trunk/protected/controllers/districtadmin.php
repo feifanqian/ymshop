@@ -1430,7 +1430,7 @@ class DistrictadminController extends Controller
 
 
                 $re = $this->curl_form($post_data,$sumbit_url,$http_url);
-                var_dump($re);
+                // var_dump($re);
                 unlink($save_path);
                 // exit();
                 
@@ -1448,7 +1448,7 @@ class DistrictadminController extends Controller
                 );
 
                 $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
-                var_dump($re);
+                // var_dump($re);
                 unlink($save_path1);
                 // exit();
             
@@ -1468,7 +1468,7 @@ class DistrictadminController extends Controller
 
 
                 $re = $this->curl_form($post_data5,$sumbit_url,$http_url);
-                var_dump($re);
+                // var_dump($re);
                 unlink($save_path5);
                 // exit();
                 
@@ -1486,7 +1486,7 @@ class DistrictadminController extends Controller
                 );
              
                 $re = $this->curl_form($post_data6,$sumbit_url,$http_url);
-                var_dump($re);
+                // var_dump($re);
                 unlink($save_path6);
                 // exit();
             }
@@ -1563,7 +1563,7 @@ class DistrictadminController extends Controller
                 );
              
                 $re = $this->curl_form($post_data7,$sumbit_url,$http_url);
-                var_dump($re);
+                // var_dump($re);
                 unlink($save_path7);
           }      
 
@@ -1956,7 +1956,7 @@ class DistrictadminController extends Controller
         $bankcard = $model->table('bankcard')->where('user_id='.$shop_check['user_id'])->find();
         // $legal_cert_no = bin2hex($this->des_encrypt($customer['id_no'],'yuanmeng'));
         $legal_cert_no = $this->des_encrypt($customer['id_no'],'yuanmeng');
-        var_dump($legal_cert_no);
+        // var_dump($legal_cert_no);
         $params = array();  
         
         $params['method'] = 'ysepay.merchant.register.accept';
@@ -2012,27 +2012,53 @@ class DistrictadminController extends Controller
         // var_dump($signStr);die;
         $sign = $this->sign_encrypt(array('data' => $signStr));
         $params['sign'] = trim($sign['check']);
-        print_r($params);
+        // print_r($params);
         $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
         $res = Common::httpRequest($url1,'POST',$params);
         // var_dump($res);die;
         $res = json_decode($res,true);
-        var_dump($res);die;
+        // var_dump($res);
+        if($res['ysepay_merchant_register_accept_response']['code']==10000) {
+           $model->table("shop_check")->data(array("usercode" =>$res['ysepay_merchant_register_accept_response']['usercode']))->where("id=" . $id)->update();
+        }
     }
 
-  // public function des_encrypt($str, $key) {
-  //     $block = mcrypt_get_block_size('des', 'ecb');
-  //     $pad = $block - (strlen($str) % $block);
-  //     $str .= str_repeat(chr($pad), $pad);
-  //     return mcrypt_encrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
-  //   }
+    public function shop_check_query()
+    {
+        $id = Filter::int(Req::args('id'));
+        $model = new Model();
+        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
 
-   // public function des_encrypt($encrypt,$key="") {
-   //      $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
-   //      $passcrypt = mcrypt_encrypt ( MCRYPT_RIJNDAEL_256, $key, $encrypt, MCRYPT_MODE_ECB, $iv );
-   //      $encode = base64_encode ( $passcrypt );
-   //      return $encode;
-   //  }
+        $params = array();  
+        
+        $params['method'] = 'ysepay.merchant.register.query';
+        $params['partner_id'] = 'yuanmeng';
+        $params['timestamp'] = date('Y-m-d H:i:s', time());
+        $params['charset'] = 'utf-8';
+        $params['sign_type'] = 'RSA';
+        $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+        $params['version'] = '3.0';
+        $biz_content_arr = array(
+            'usercode'=>$shop_check['usercode'],
+            'merchant_no'=>'yuanmeng'.$shop_check['user_id']
+            );
+        $params['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+        // $params['biz_content'] = '{}';
+        ksort($params);
+        
+        $signStr = "";
+        foreach ($params as $key => $val) {
+            $signStr .= $key . '=' . $val . '&';
+        }
+        $signStr = rtrim($signStr, '&');
+        $sign = $this->sign_encrypt(array('data' => $signStr));
+        $params['sign'] = trim($sign['check']);
+        $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
+        $res = Common::httpRequest($url1,'POST',$params);
+        $res = json_decode($res,true);
+        var_dump($res);die;
+        exit(json_encode(array('status'=>'success','msg'=>$res['ysepay_merchant_register_query_response']['msg'])));
+    }
     
     public function des_encrypt($data, $key)
     {

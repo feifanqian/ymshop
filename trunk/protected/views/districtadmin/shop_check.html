@@ -36,6 +36,7 @@
                             {/if}
                             {if:$item['status']==1}
                             <li><a class="icon-key" href="javascript:;" onclick="register({$item['id']})">注册银盛账户</a></li>
+                            <li><a class="icon-key" href="javascript:;" onclick="check({$item['id']})">查询银盛账户</a></li>
                             {/if}
                             <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/shop_check_delete/id/$item[id]}')">删除</a></li>
                         </ul>
@@ -143,6 +144,22 @@ function register(id){
       }, function(){
           layer.msg("您取消了操作"); 
         });
+}
+function check(id){
+    var load = layer.load();
+        $.post("{url:/districtadmin/shop_check_query}",{id:id},function(result){
+            layer.close(load);
+            if(result.status){
+                layer.confirm("银盛注册状态："+result.msg, {
+                    btn: ['我知道啦'] //按钮
+                    ,title:"注册状态查询"
+                  }, function(){
+                      layer.closeAll();
+                  });
+            }else{
+                layer.msg(result.msg);
+            }
+        },'json'); 
 }
 function export_excel_dialog(){
     art.dialog({id:'export_excel_dialog',title:'Excel导出',lock:true,opacity:0.1,width:600,height:200,content:document.getElementById("excel_box")});
