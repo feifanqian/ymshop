@@ -361,16 +361,16 @@
                 return false;
               };
             }
-            if (!$("input[name=hand_idcard]").val()) {
-                  $.toast("请上传手持身份证照", "text");
-                  return false;
-              }else{
-                var file5 = $("input[name='hand_idcard']").get(0).files[0];
-                if(file5.size>8000*1024){
-                  $.toast("手持身份证照大小超过8MB", "text");
-                  return false;
-                };
-              } 
+            // if (!$("input[name=hand_idcard]").val()) {
+            //       $.toast("请上传手持身份证照", "text");
+            //       return false;
+            //   }else{
+            //     var file5 = $("input[name='hand_idcard']").get(0).files[0];
+            //     if(file5.size>8000*1024){
+            //       $.toast("手持身份证照大小超过8MB", "text");
+            //       return false;
+            //     };
+            //   } 
             if(!$("input[name=account_card]").val()){
               $.toast("请输入结算银行卡号", "text");
                 return false;
