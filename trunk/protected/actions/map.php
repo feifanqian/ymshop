@@ -147,9 +147,25 @@ class MapAction extends Controller
 
     public function save_contract_image()
     {
+        $upfile_path = Tiny::getPath("uploads") . "/head/";
+        $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
+        $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile->save();
+        $info = $upfile->getInfo();
+        $result = array();
+        $picture = "";
+
+        if ($info[0]['status'] == 1) {
+            $result = array('error' => 0, 'url' => $upfile_url . $info[0]['path']);
+            $image_url = $upfile_url . $info[0]['path'];
+            $image = new Image();
+            $image->suffix = '';
+            $image->thumb(APP_ROOT . $image_url, 100, 100);
+            $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
+        }
         $url = Filter::str(Req::args('url'));
         $data = array(
-            'url4'    => $url
+            'url4'    => $picture
             );
         $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
         $this->code = 0;
