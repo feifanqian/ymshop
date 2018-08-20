@@ -1430,9 +1430,9 @@ class DistrictadminController extends Controller
 
 
                 $re = $this->curl_form($post_data,$sumbit_url,$http_url);
-                
+                var_dump($re);
                 unlink($save_path);
-                exit();
+                // exit();
                 
                 //身份证反面
                 $file_name1 = time().$shop_check['user_id'].'native_idcard';
@@ -1448,10 +1448,11 @@ class DistrictadminController extends Controller
                 );
 
                 $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
-                
+                var_dump($re);
                 unlink($save_path1);
-                exit();
-
+                // exit();
+            
+            if($shop_check['type']!=3) {
                 //银行卡正面
               $file_name5 = time().$shop_check['user_id'].'positive_bankcard';
               $file_ext5 = substr(strrchr($shop_check['positive_bankcard'], '.'), 1);
@@ -1467,8 +1468,9 @@ class DistrictadminController extends Controller
 
 
                 $re = $this->curl_form($post_data5,$sumbit_url,$http_url);
+                var_dump($re);
                 unlink($save_path5);
-                exit();
+                // exit();
                 
                 //银行卡反面
                 $file_name6 = time().$shop_check['user_id'].'native_bankcard';
@@ -1482,12 +1484,13 @@ class DistrictadminController extends Controller
                     "superUsercode"=>'yuanmeng',
                     "upload" => new CURLFile($save_path6),
                 );
-
+             
                 $re = $this->curl_form($post_data6,$sumbit_url,$http_url);
+                var_dump($re);
                 unlink($save_path6);
-                exit();
-
-                if($shop_check['hand_idcard']!=null) {
+                // exit();
+            }
+                if($shop_check['type']!=2) {
                     //手持身份证正扫面照
                     $file_name2 = time().$shop_check['user_id'].'hand_idcard';
                     $file_ext2 = substr(strrchr($shop_check['hand_idcard'], '.'), 1);
@@ -1504,10 +1507,8 @@ class DistrictadminController extends Controller
                     $re = $this->curl_form($post_data2,$sumbit_url,$http_url);
                     
                     unlink($save_path2);
-                    exit();
-                }
-
-                if($shop_check['type']==1) {
+                    // exit();
+                
                     //营业执照
                     $file_name3 = time().$shop_check['user_id'].'business_licence';
                     $file_ext3 = substr(strrchr($shop_check['business_licence'], '.'), 1);
@@ -1523,7 +1524,7 @@ class DistrictadminController extends Controller
 
                     $re = $this->curl_form($post_data3,$sumbit_url,$http_url);
                     unlink($save_path3);
-                    exit();
+                    // exit();
                     
                     //门店照
                     $file_name4 = time().$shop_check['user_id'].'shop_photo';
@@ -1540,8 +1541,30 @@ class DistrictadminController extends Controller
 
                     $re = $this->curl_form($post_data4,$sumbit_url,$http_url);
                     unlink($save_path4);
+                    // exit();
+                }
+
+                //客户协议
+                $contract = $model->table('promoter_contract')->where('user_id='.$shop_check['user_id'])->find();
+                if(!$contract) {
+                    echo json_encode(array("status" => 'error', 'msg' => '缺少客户协议'));
                     exit();
                 }
+                $file_name7 = time().$shop_check['user_id'].'contract';
+                $file_ext7 = substr(strrchr($contract['url4'], '.'), 1);
+                $save_path7 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name7.'.'.$file_ext7;
+                file_put_contents($save_path7, file_get_contents($contract['url4']));
+                $post_data7 = array (
+                    // "name"=>'picFile',
+                    "picType"=>'31',
+                    "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                    "superUsercode"=>'yuanmeng',
+                    "upload" => new CURLFile($save_path7),
+                );
+             
+                $re = $this->curl_form($post_data7,$sumbit_url,$http_url);
+                var_dump($re);
+                unlink($save_path7);
           }      
 
           echo json_encode(array("status" => 'success', 'msg' => '成功'));
@@ -1909,9 +1932,11 @@ class DistrictadminController extends Controller
         $customer = $model->table('customer as c')->fields('c.real_name,c.realname,c.mobile,c.id_no,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$shop_check['user_id'])->find();
         $name = $promoter['shop_name']!=null?$promoter['shop_name']:($customer['nickname']!=null?$customer['nickname']:$customer['real_name']);
         if($shop_check['type']==1) {
-            $cust_type = 'C';
+            $cust_type = 'C'; //小微
+        } elseif($shop_check['type']==2) {
+            $cust_type = 'O'; //个体
         } else {
-            $cust_type = 'O';
+            $cust_type = 'B'; //企业
         }
         if($promoter['province_id']==0 || $promoter['city_id']==0) {
             echo json_encode(array("status" => 'error', 'msg' => '请先完善省份城市信息'));
