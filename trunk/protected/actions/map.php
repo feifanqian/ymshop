@@ -293,15 +293,13 @@ class MapAction extends Controller
         }
         $center = $this->model->table('business_center')->where($where)->find();
         $center['dynamic_num'] = $this->model->table('center_dynamic')->where('center_id='.$center_id.' and report_num < 5')->count();
-        var_dump(111);
+        
         $list = $this->model->table('center_dynamic as cd')->join('left join user as u on cd.user_id=u.id left join district_promoter as dp on cd.user_id=dp.user_id')->fields('u.nickname,u.avatar,dp.id as promoter_id,dp.shop_type,cd.*')->where('cd.center_id = '.$center_id.' and cd.report_num < 5')->findAll();
-        var_dump(222);
+        
         if($list) {
             foreach ($list as $key => $value) {
-                if($value['goods_id']) {
-                    var_dump(333);
-                    $goods = $this->model->table('goods')->fields('id,name,sell_price,img')->where('id = '.$value['goods_id'])->find();
-                    var_dump(444);
+                if($value['goods_id']) {  
+                    $goods = $this->model->table('goods')->fields('id,name,sell_price,img')->where('id = '.$value['goods_id'])->find(); 
                     $list[$key]['goods_id'] = $goods['id'];
                     $list[$key]['goods_name'] = $goods['name'];
                     $list[$key]['sell_price'] = $goods['sell_price'];
@@ -316,12 +314,9 @@ class MapAction extends Controller
                     $list[$key]['imgs'] = explode(',',$value['imgs']);
                 }
                 $had_laud = $this->model->table('dynamic_laud')->where('dynamic_id='.$value['id'].' and user_id='.$this->user['id'])->find();
-                var_dump(555);
                 $list[$key]['had_laud'] = empty($had_laud)?0:1; //是否已点赞
                 $list[$key]['comment_list'] = $this->model->table('dynamic_comment as dc')->join('left join user as u on dc.user_id=u.id')->fields('u.nickname,u.avatar,dc.*')->where('dc.dynamic_id='.$value['id'])->findAll();
-                var_dump(666);
-                $list[$key]['comment_num'] = $this->model->table('dynamic_comment')->where('dynamic_id='.$value['id'])->count();
-                var_dump(777);
+                $list[$key]['comment_num'] = count($list[$key]['comment_list']);
             }
         }
 
