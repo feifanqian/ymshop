@@ -283,7 +283,11 @@ class ActiveController extends Controller
             $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name,cu.mobile")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where($where)->findAll();
             if($list) {
                 foreach ($list as $key => $value) {
-                    $list[$key]['mobile'] = substr($value['mobile'],0,3).'****'.substr($value['mobile'],-4);
+                    if($value['mobile']!='') {
+                        $list[$key]['mobile'] = substr($value['mobile'],0,3).'****'.substr($value['mobile'],-4);
+                    } else {
+                        $list[$key]['mobile'] = $value['real_name'];
+                    }
                     if($value['avatar']=='/0.png' || $value['avatar']==null) {
                         $list[$key]['avatar'] = '0.png';
                     }
@@ -311,14 +315,18 @@ class ActiveController extends Controller
     {
         $user_id = Filter::int(Req::args("user_id"));
         $keyword = Filter::str(Req::args("keyword"));
-        $where = "i.from='active' and i.user_id=".$user_id;
-        if($keyword) {
-            $where.=" and cu.mobile like '%$keyword%' or cu.real_name like '%$keyword%'";
-        }
+        $where = "i.from='active' and i.user_id=".$user_id." and cu.mobile like '%$keyword%' or i.from='active' and i.user_id={$user_id} and cu.real_name like '%$keyword%'";
+        // if($keyword) {
+        //     $where.=" and cu.mobile like '%$keyword%' or cu.real_name like '%$keyword%'";
+        // }
         $list = $this->model->table("invite as i")->fields("FROM_UNIXTIME(i.createtime) as create_time,u.nickname,u.avatar,cu.real_name,cu.mobile")->join("left join user as u on i.invite_user_id = u.id LEFT JOIN customer AS cu ON i.invite_user_id=cu.user_id")->where($where)->findAll();
             if($list) {
                 foreach ($list as $key => $value) {
-                    $list[$key]['mobile'] = substr($value['mobile'],0,3).'****'.substr($value['mobile'],-4);
+                    if($value['mobile']!='') {
+                        $list[$key]['mobile'] = substr($value['mobile'],0,3).'****'.substr($value['mobile'],-4);
+                    } else {
+                        $list[$key]['mobile'] = $value['real_name'];
+                    }
                     if($value['avatar']=='/0.png' || $value['avatar']==null) {
                         $value['avatar'] = '0.png';
                     }
