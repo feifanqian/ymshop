@@ -324,8 +324,7 @@ class ActiveController extends Controller
                     }
                 }
             }
-        var_dump($list);die;
-        return JSON::encode($list);    
+        echo JSON::encode($list);    
     }
 
     public function travel_detail() {

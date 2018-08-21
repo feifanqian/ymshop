@@ -95,7 +95,7 @@
             url: url,
             data: data,
             success: function (res) {
-                console.log(res);return false;
+                console.log(res);
                 data = JSON.stringify(res);
                 var jsonarray= $.parseJSON(data);
                 layer.close(index);
