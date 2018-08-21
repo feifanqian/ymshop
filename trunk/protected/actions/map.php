@@ -176,17 +176,186 @@ class MapAction extends Controller
         $this->code = 0;
         $this->content['picture'] = $picture;
     }
-
+    
+    //商圈列表
     public function business_center_list()
     {
         $list = $this->model->table('business_center')->findAll();
         if($list) {
             foreach ($list as $key => $value) {
-                $list[$key]['dynamic'] = $this->model->table('center_share')->where('center_id='.$value['id'])->count();
+                $list[$key]['dynamic_num'] = $this->model->table('center_dynamic')->where('center_id='.$value['id'].' and report_num < 5')->count();
             }
         }
         $this->code = 0;
         $this->content['list'] = $list;
+    }
+
+    //发布动态
+    public function publish_dynamic()
+    {
+        $region_id = Filter::int(Req::args("region_id"));
+        $goods_id = Filter::int(Req::args("goods_id"));
+        $content = Filter::text(Req::args("content"));
+        $imgs = Filter::str(Req::args("imgs"));
+        $location = Filter::str(Req::args("location"));
+        if(!$region_id) {
+            $this->code = 1295;
+            return;
+        }
+        $center = $this->model->table('business_center')->where('region_id = '.$region_id)->find();
+        if(!$center) {
+            $this->code = 1296;
+            return;
+        }
+        if($goods_id) {
+            $goods = $this->model->table('goods')->where('id = '.$goods_id)->find();
+            if(!$goods) {
+                $this->code = 1040;
+                return;
+            }
+            $shop_id = $goods['shop_id'];
+        } else {
+            $shop_id = 0;
+        }
+        
+        $data = array(
+            'center_id'   => $center['id'],
+            'user_id'     => $this->user['id'],
+            'goods_id'    => $goods_id,
+            'shop_id'     => $shop_id,
+            'content'     => $content,
+            'imgs'        => $imgs,
+            'location'    => $location,
+            'create_time' => date('Y-m-d H:i:s')
+            );
+        $this->model->table('center_dynamic')->data($data)->insert();
+        $list = $this->model->table('center_dynamic')->where('center_id = '.$center['id'].' and report_num < 5')->findAll();
+        if($list) {
+            foreach ($list as $key => $value) {
+                if($value['goods_id']) {
+                    $goods = $this->model->table('goods')->fields('id,name,sell_price,img')->where('id = '.$value['goods_id'])->find();
+                    $list[$key]['goods_id'] = $goods['id'];
+                    $list[$key]['goods_name'] = $goods['name'];
+                    $list[$key]['sell_price'] = $goods['sell_price'];
+                    $list[$key]['goods_img'] = $goods['img'];
+                } else {
+                    $list[$key]['goods_id'] = 0;
+                    $list[$key]['goods_name'] = '';
+                    $list[$key]['sell_price'] = 0.00;
+                    $list[$key]['goods_img'] = '';
+                }
+            }
+        }
+        $this->code = 0;
+        $this->content['list'] = $list;
+        return;
+    }
+
+    //推荐商品列表
+    public function recommend_goods_list()
+    {
+        $list = $this->model->table('goods')->fields('id,name,sell_price,img')->where('user_id = '.$this->user['id'].' and type = 2')->findAll();
+        $this->code = 0;
+        $this->content['list'] = $list;
+        return;
+    }
+
+    //动态举报
+    public function dynamic_report()
+    {
+        $id = Filter::int(Req::args("id"));
+        $type = Filter::str(Req::args("type"));
+        $content = Filter::str(Req::args("content"));
+        if(!$type) {
+            $this->code = 1297;
+            return;
+        }
+        $this->model->table('center_dynamic')->data(['status'=>2,'report_num'=>"`report_num`+1"])->where('id = '.$id)->update();
+        $dynamic = $this->model->table('center_dynamic')->where('id = '.$id)->find();
+        if($dynamic['report_num']>=5) {
+            $this->model->table('center_dynamic')->where('id = '.$id)->delete();
+        }
+        $this->model->table('dynamic_report')->data(['dynamic_id'=>$id,'type'=>$type,'content'=>$content])->insert();
+        $this->code = 0;
+    }
+
+    //商圈动态列表
+    public function center_dynamic_list()
+    {  
+        $center_id = Filter::int(Req::args("center_id"));
+        $region_id = Filter::int(Req::args("region_id"));
+        $where = '';
+        if($center_id) {
+            $where = 'id = '.$center_id;
+        }
+        if($region_id) {
+            $where = 'region_id = '.$region_id;
+        }
+        $center = $this->model->table('business_center')->where($where)->find();
+        $center['dynamic_num'] = $this->model->table('center_dynamic')->where('center_id='.$center_id.' and report_num < 5')->count();
+
+        $list = $this->model->table('center_dynamic as cd')->join('left join user as u on cd.user_id=u.id left join district_promoter as dp on cd.user_id=dp.user_id')->fields('u.nickname,u.avatar,dp.id as promoter_id,dp.shop_type,cd.*')->where('cd.center_id = '.$center_id.' and cd.report_num < 5')->findAll();
+        if($list) {
+            foreach ($list as $key => $value) {
+                if($value['goods_id']) {
+                    $goods = $this->model->table('goods')->fields('id,name,sell_price,img')->where('id = '.$value['goods_id'])->find();
+                    $list[$key]['goods_id'] = $goods['id'];
+                    $list[$key]['goods_name'] = $goods['name'];
+                    $list[$key]['sell_price'] = $goods['sell_price'];
+                    $list[$key]['goods_img'] = $goods['img'];
+                } else {
+                    $list[$key]['goods_id'] = 0;
+                    $list[$key]['goods_name'] = '';
+                    $list[$key]['sell_price'] = 0.00;
+                    $list[$key]['goods_img'] = '';
+                }
+                if($value['imgs']!='') {
+                    $list[$key]['imgs'] = explode(',',$value['imgs']);
+                }
+                $had_laud = $this->model->table('dynamic_laud')->where('dynamic_id='.$value['id'].' and user_id='.$this->user['id'])->find();
+                $list[$key]['had_laud'] = empty($had_laud)?0:1; //是否已点赞
+                $list[$key]['comment_list'] = $this->model->table('dynamic_comment as dc')->join('left join user as u on dc.user_id=u.id')->fields('u.nickname,u.avatar,dc.*')->where('dc.dynamic_id='.$value['id'])->findAll();
+                $list[$key]['comment_num'] = $this->model->table('dynamic_comment as dc')->join('left join user as u on dc.user_id=u.id')->where('dc.dynamic_id='.$value['id'])->count();
+            }
+        }
+
+        $this->code = 0;
+        $this->content['center'] = $center;
+        $this->content['list'] = $list;
+        return;
+    }
+
+    //商圈动态点赞
+    public function dynamic_click_laud()
+    {
+        $id = Filter::int(Req::args("id"));
+        $had_laud = $this->model->table('dynamic_laud')->where('dynamic_id='.$id.' and user_id='.$this->user['id'])->find();
+        if(!$had_laud) {
+            $this->model->table('center_dynamic')->data(['laud_num'=>"`laud_num`+1"])->where('id = '.$id)->update();
+            $this->model->table('dynamic_laud')->data(['dynamic_id'=>$id,'user_id'=>$this->user['id']])->insert();
+        } else {
+            $this->model->table('center_dynamic')->data(['laud_num'=>"`laud_num`-1"])->where('id = '.$id)->update();
+            $this->model->table('dynamic_laud')->where('id='.$had_laud['id'])->delete();
+        }
+        
+        $this->code = 0;
+    }
+
+    //商圈动态发布评论
+    public function dynamic_comment()
+    {
+        $id = Filter::int(Req::args("id"));
+        $content = Filter::str(Req::args("content"));
+        $imgs = Filter::str(Req::args("imgs"));
+        $data = array(
+            'dynamic_id'   => $id,
+            'user_id'      => $this->user['id'],
+            'content'      => $content,
+            'imgs'         => $imgs,
+            'comment_time' => date('Y-m-d H:i:s')
+            );
+        $this->model->table('dynamic_comment')->data($data)->insert();
+        $this->code = 0;
     }
 
 }

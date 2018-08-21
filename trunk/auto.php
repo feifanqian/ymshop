@@ -324,9 +324,9 @@ class LinuxCliTask{
         if($log) {
             foreach ($log as $k => $v) {
                 $amount = $v['amount'];
-                // $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where('user_id='.$v['user_id'])->update();
-                // Log::balance($amount,$v['user_id'],$v['id'],'淘客订单佣金自动结算',5);
-                $this->model->table('user')->data(array('total_income'=>"`total_income`+{$amount}"))->where('id='.$v['user_id'])->update();
+                $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where('user_id='.$v['user_id'])->update();
+                Log::balance($amount,$v['user_id'],$v['id'],'淘客订单佣金自动结算',21);
+                // $this->model->table('user')->data(array('total_income'=>"`total_income`+{$amount}"))->where('id='.$v['user_id'])->update();
                 $this->model->table('benefit_log')->data(array('type'=>1))->where('id='.$v['id'])->update();
             }
         }

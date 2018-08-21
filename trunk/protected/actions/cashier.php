@@ -979,7 +979,7 @@ class CashierAction extends Controller
             );
         $benefit_id = $this->model->table('benefit_log')->data($benefit_data)->insert();
         $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where('user_id='.$this->user['id'])->update();
-        Log::balance($amount,$this->user['id'],$benefit_id,'结算佣金提现到余额',5);
+        Log::balance($amount,$this->user['id'],$benefit_id,'结算佣金提现到余额',21);
         $this->model->table('user')->data(array('settle_income'=>"`settle_income`+{$amount}"))->where('id='.$this->user['id'])->update();
         $this->code = 0;
         return;  

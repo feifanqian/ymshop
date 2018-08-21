@@ -1108,13 +1108,13 @@ class PaymentController extends Controller {
                                         $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
                                     }     
                                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
-                                    Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
+                                    Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 20);
                                     Common::offlineBeneficial($order_no,$invite_id,$seller_id);
                                     $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('payable_amount'=>$amount))->update();
                                     $money = $amount;
                                 }else{
                                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
-                                     Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
+                                     Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 20);
                                      $money = $order['order_amount'];
                                 }
                                  //微信公众号消息推送
@@ -1467,13 +1467,13 @@ class PaymentController extends Controller {
                         $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
                     }     
                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
-                    Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
+                    Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 20);
                     Common::offlineBeneficial($order_no,$invite_id,$seller_id);
                     $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('payable_amount'=>$amount))->update();
                     $money = $amount;
                 }else{
                     $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
-                     Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
+                     Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 20);
                      $money = $order['order_amount'];
                 }
                 #*****************推送消息***************
@@ -1687,13 +1687,13 @@ class PaymentController extends Controller {
                                     $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
                                 }     
                                 $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
-                                Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
+                                Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 20);
                                 Common::offlineBeneficial($order_no,$invite_id,$seller_id);
                                 $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('payable_amount'=>$amount))->update();
                                 $money = $amount;
                             }else{
                                 $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
-                                 Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
+                                 Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 20);
                                  $money = $order['order_amount'];
                             }
                              //微信公众号消息推送
@@ -2001,13 +2001,13 @@ class PaymentController extends Controller {
                                     $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
                                 }     
                                 $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
-                                Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 8);
+                                Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 20);
                                 Common::offlineBeneficial($order_no,$invite_id,$seller_id);
                                 $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('payable_amount'=>$amount))->update();
                                 $money = $amount;
                             }else{
                                 $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
-                                 Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 8);
+                                 Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 20);
                                  $money = $order['order_amount'];
                             }
                              //微信公众号消息推送
