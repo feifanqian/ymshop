@@ -290,7 +290,7 @@ class V1Controller extends Controller {
         "business_center_list"=>array("map/business_center_list",0,1), //商圈列表
         "publish_dynamic"=>array("map/publish_dynamic",1,1), //发布动态
         "recommend_goods_list"=>array("map/recommend_goods_list",1,1), //推荐商品列表
-        "dynamic_report"=>array("map/dynamic_report",0,1), //动态举报
+        "dynamic_report"=>array("map/dynamic_report",1,1), //动态举报
         "center_dynamic_list"=>array("map/center_dynamic_list",1,1), //商圈动态列表
         "dynamic_click_laud"=>array("map/dynamic_click_laud",1,1), //商圈动态点赞
         "dynamic_comment"=>array("map/dynamic_comment",1,1), //商圈动态发布评论

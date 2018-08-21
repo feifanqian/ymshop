@@ -254,7 +254,7 @@ class MapAction extends Controller
     //推荐商品列表
     public function recommend_goods_list()
     {
-        $list = $this->model->table('goods')->fields('id,name,sell_price,img')->where('user_id = '.$this->user['id'].' and type = 2')->findAll();
+        $list = $this->model->table('goods')->fields('id,name,sell_price,img')->where('user_id = '.$this->user['id'].' and is_online=0 and type = 2')->findAll();
         $this->code = 0;
         $this->content['list'] = $list;
         return;
