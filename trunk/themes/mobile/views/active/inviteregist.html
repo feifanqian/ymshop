@@ -82,9 +82,30 @@
                 alert('请输入搜索内容');
                 return;
             }
-            alert(111);
-            var url = "{url:/active/inviteregist/keyword/}"+keyword;
-            window.location.href = url;
+            var url = "{url:/active/ajax_inviteregist}";
+            $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: url,
+            data: data,
+            success: function (res) {
+                data = JSON.stringify(res);
+                var jsonarray= $.parseJSON(data);
+                layer.close(index);
+                $(".list-content").empty();
+                
+                $.each(jsonarray, function (i, item) {
+                    html += '<div class="cell">';
+                    html += '<img src='+item.avatar+' alt="" class="avatar">';
+                    html += '<span class="nickname">'+item.mobile+'</span>';
+                    html += '<span class="time">'+item.create_time+'</span>';
+                    html += '<span class="status">注册成功</span>'
+                    html += '</div>';
+                });
+                $(".list-content").append(html);
+                
+            },
+        });
             // alert(`搜索:${keyword}`);
         });
 
