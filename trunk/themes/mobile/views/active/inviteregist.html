@@ -105,7 +105,7 @@
                 
                 $.each(jsonarray, function (i, item) {
                     html += '<div class="cell">';
-                    html += '<img src='+item.avatar+' alt="" class="avatar">';
+                    html += '<img src="{echo:Url::urlFormat("@"'+item.avatar+')}" alt="" class="avatar">';
                     html += '<span class="nickname">'+item.mobile+'</span>';
                     html += '<span class="time">'+item.create_time+'</span>';
                     html += '<span class="status">注册成功</span>'
