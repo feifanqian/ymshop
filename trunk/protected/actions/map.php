@@ -147,6 +147,10 @@ class MapAction extends Controller
 
     public function save_contract_image()
     {
+        if(!isset($_FILES['picture'])) {
+            $this->code = 1294;
+            return;
+        }
         $upfile_path = Tiny::getPath("uploads") . "/head/";
         $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "head/", 1);
         $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
@@ -160,11 +164,11 @@ class MapAction extends Controller
             $image_url = $upfile_url . $info[0]['path'];
             $image = new Image();
             $image->suffix = '';
-            $image->thumb(APP_ROOT . $image_url, 100, 100);
+            $image->thumb(APP_ROOT . $image_url, 1080, 1527);
             $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
         }
-        var_dump($picture);die;
-        $url = Filter::str(Req::args('url'));
+        // var_dump($picture);die;
+        // $url = Filter::str(Req::args('url'));
         $data = array(
             'url4'    => $picture
             );
