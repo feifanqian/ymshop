@@ -320,7 +320,7 @@ class MapAction extends Controller
                 $list[$key]['had_laud'] = empty($had_laud)?0:1; //是否已点赞
                 $list[$key]['comment_list'] = $this->model->table('dynamic_comment as dc')->join('left join user as u on dc.user_id=u.id')->fields('u.nickname,u.avatar,dc.*')->where('dc.dynamic_id='.$value['id'])->findAll();
                 var_dump(666);
-                $list[$key]['comment_num'] = $this->model->table('dynamic_comment as dc')->join('left join user as u on dc.user_id=u.id')->where('dc.dynamic_id='.$value['id'])->count();
+                $list[$key]['comment_num'] = $this->model->table('dynamic_comment')->where('dynamic_id='.$value['id'])->count();
                 var_dump(777);
             }
         }
