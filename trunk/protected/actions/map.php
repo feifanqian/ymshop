@@ -163,6 +163,7 @@ class MapAction extends Controller
             $image->thumb(APP_ROOT . $image_url, 100, 100);
             $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
         }
+        var_dump($picture);die;
         $url = Filter::str(Req::args('url'));
         $data = array(
             'url4'    => $picture
