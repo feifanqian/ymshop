@@ -198,7 +198,7 @@ class MapAction extends Controller
         $content = Filter::text(Req::args("content"));
         $imgs = Filter::str(Req::args("imgs"));
         $location = Filter::str(Req::args("location"));
-        if(!$region_id) {
+        if(!$region) {
             $this->code = 1295;
             return;
         }
