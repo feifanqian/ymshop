@@ -104,7 +104,7 @@
                 $(".list-content").empty();
                 
                 $.each(jsonarray, function (i, item) {
-                    var img_url = "{echo:Url::urlFormat('@'"+item.avatar+")}";
+                    var img_url = '{echo:Url::urlFormat(@'+item.avatar+')}';
                     html += '<div class="cell">';
                     html += '<img src='+img_url+' alt="" class="avatar">';
                     html += '<span class="nickname">'+item.mobile+'</span>';
