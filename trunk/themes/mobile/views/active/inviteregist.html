@@ -97,7 +97,7 @@
             url: url,
             data: data,
             success: function (res) {
-                console.log(res);
+                // console.log(res);
                 data = JSON.stringify(res);
                 var jsonarray= $.parseJSON(data);
                 layer.close(index);
@@ -105,6 +105,7 @@
                 
                 $.each(jsonarray, function (i, item) {
                     var img_url = '{echo:Url::urlFormat(@'+item.avatar+')}';
+                    console.log(img_url);
                     html += '<div class="cell">';
                     html += '<img src='+img_url+' alt="" class="avatar">';
                     html += '<span class="nickname">'+item.mobile+'</span>';
