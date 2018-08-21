@@ -85,33 +85,33 @@
                 alert('请输入搜索内容');
                 return;
             }
-            document.forms['searchfor'].submit();
-            // var url = "{url:/active/ajax_inviteregist}";
-            // var user_id = "{$user_id}";
-            // var data = {keyword: keyword,user_id:user_id};
-            // $.ajax({
-            // type: 'post',
-            // dataType: 'json',
-            // url: url,
-            // data: data,
-            // success: function (res) {
-            //     console.log(res);return false;
-            //     data = JSON.stringify(res);
-            //     var jsonarray= $.parseJSON(data);
-            //     layer.close(index);
-            //     $(".list-content").empty();
+            // document.forms['searchfor'].submit();
+            var url = "{url:/active/ajax_inviteregist}";
+            var user_id = "{$user_id}";
+            var data = {keyword: keyword,user_id:user_id};
+            $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: url,
+            data: data,
+            success: function (res) {
+                console.log(res);return false;
+                data = JSON.stringify(res);
+                var jsonarray= $.parseJSON(data);
+                layer.close(index);
+                $(".list-content").empty();
                 
-            //     $.each(jsonarray, function (i, item) {
-            //         html += '<div class="cell">';
-            //         html += '<img src='+item.avatar+' alt="" class="avatar">';
-            //         html += '<span class="nickname">'+item.mobile+'</span>';
-            //         html += '<span class="time">'+item.create_time+'</span>';
-            //         html += '<span class="status">注册成功</span>'
-            //         html += '</div>';
-            //     });
-            //     $(".list-content").append(html);   
-            //   },
-            // });
+                $.each(jsonarray, function (i, item) {
+                    html += '<div class="cell">';
+                    html += '<img src='+item.avatar+' alt="" class="avatar">';
+                    html += '<span class="nickname">'+item.mobile+'</span>';
+                    html += '<span class="time">'+item.create_time+'</span>';
+                    html += '<span class="status">注册成功</span>'
+                    html += '</div>';
+                });
+                $(".list-content").append(html);   
+              },
+            });
             // alert(`搜索:${keyword}`);
         });
 
