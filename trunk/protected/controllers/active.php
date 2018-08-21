@@ -320,8 +320,9 @@ class ActiveController extends Controller
                 foreach ($list as $key => $value) {
                     $list[$key]['mobile'] = substr($value['mobile'],0,3).'****'.substr($value['mobile'],-4);
                     if($value['avatar']=='/0.png' || $value['avatar']==null) {
-                        $list[$key]['avatar'] = '0.png';
+                        $value['avatar'] = '0.png';
                     }
+                    $list[$key]['avatar'] = Url::urlFormat("@".$value['avatar']);
                 }
             }
         echo JSON::encode($list);    
