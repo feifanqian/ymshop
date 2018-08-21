@@ -1382,7 +1382,7 @@ class DistrictadminController extends Controller
           $model->table("shop_check")->data(array("status" =>1,'check_date'=> date("Y-m-d H:i:s")))->where("id=" . $id)->update();
           
           $shop_check = $model->table("shop_check")->where("id=" . $id)->find();
-          if($shop_check['user_id']==42608) {
+
             //上传银盛
               $myParams = array();
 
@@ -1565,7 +1565,7 @@ class DistrictadminController extends Controller
                 $re = $this->curl_form($post_data7,$sumbit_url,$http_url);
                 // var_dump($re);
                 unlink($save_path7);
-          }      
+
 
           echo json_encode(array("status" => 'success', 'msg' => '成功'));
           exit();
@@ -1634,7 +1634,7 @@ class DistrictadminController extends Controller
         $model = new Model();
         $model->table("shop_check")->data(array("status" =>1,'check_date'=> date("Y-m-d H:i:s")))->where("id=" . $id)->update();
         $shop_check = $model->table("shop_check")->where("id=" . $id)->find();
-          if($shop_check['user_id']==42608) {
+          
             //上传银盛
               $myParams = array();
 
@@ -1792,7 +1792,7 @@ class DistrictadminController extends Controller
                 }
 
 
-          }
+          
         $this->redirect('shop_check');
     }
 

@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e7286e1-8ea1-416a-afb0-c86e85802771" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/protected/controllers/customer.php" afterPath="$PROJECT_DIR$/trunk/protected/controllers/customer.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/protected/views/customer/withdraw_list.html" afterPath="$PROJECT_DIR$/trunk/protected/views/customer/withdraw_list.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/protected/controllers/districtadmin.php" afterPath="$PROJECT_DIR$/trunk/protected/controllers/districtadmin.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -36,7 +35,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>buy-num</find>
       <find>tools_s</find>
       <find>change_status</find>
       <find>status_dialog</find>
@@ -66,6 +64,7 @@
       <find>dg</find>
       <find>args</find>
       <find>redbag</find>
+      <find>shop_check_do</find>
     </findStrings>
     <replaceStrings>
       <replace>id</replace>
@@ -83,7 +82,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/trunk/themes/_default/views/ucenter/order.html" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/index.php" />
         <option value="$PROJECT_DIR$/trunk/themes/_default/views/ucenter/review.html" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/order.php" />
@@ -134,6 +132,7 @@
         <option value="$PROJECT_DIR$/trunk/protected/actions/goods.php" />
         <option value="$PROJECT_DIR$/trunk/protected/classes/Common.php" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/customer.php" />
+        <option value="$PROJECT_DIR$/trunk/protected/controllers/districtadmin.php" />
       </list>
     </option>
   </component>
@@ -189,6 +188,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -240,8 +241,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -355,11 +354,12 @@
       <workItem from="1529372991373" duration="3683000" />
       <workItem from="1533113386822" duration="409000" />
       <workItem from="1533806045933" duration="84000" />
+      <workItem from="1534829745866" duration="175000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="506466000" />
+    <option name="totallyTimeSpent" value="506641000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -375,12 +375,12 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16302083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.074433655" sideWeight="0.5104167" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.074433655" sideWeight="0.5125" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298913" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.074433655" sideWeight="0.48958334" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.074433655" sideWeight="0.4875" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -425,13 +425,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/trunk/protected/views/marketing/voucher_template_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="51" column="214" lean-forward="false" selection-start-line="51" selection-start-column="214" selection-end-line="51" selection-end-column="214" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/runtime/_default/marketing/prom_goods_edit.php" />
     <entry file="file://$PROJECT_DIR$/trunk/protected/views/marketing/prom_goods_edit.html">
       <provider selected="true" editor-type-id="text-editor">
@@ -666,29 +659,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
           <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/districtadmin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="1386" column="32" lean-forward="false" selection-start-line="1386" selection-start-column="32" selection-end-line="1386" selection-end-column="32" />
           <folding>
-            <marker date="1533805947146" expanded="true" signature="15379:15587" ph="update tiny_... " />
-            <marker date="1533805947146" expanded="true" signature="15972:16044" ph="update tiny_... " />
-            <marker date="1533805947146" expanded="true" signature="16204:16276" ph="update tiny_... " />
-            <marker date="1533805947146" expanded="true" signature="16782:16868" ph="update tiny_... " />
-            <marker date="1533805947146" expanded="true" signature="21080:21288" ph="update tiny_... " />
-            <marker date="1533805947146" expanded="true" signature="21697:21769" ph="update tiny_... " />
-            <marker date="1533805947146" expanded="true" signature="21941:22013" ph="update tiny_... " />
-            <marker date="1533805947146" expanded="true" signature="22692:22778" ph="update tiny_... " />
-            <marker date="1533805947146" expanded="true" signature="33411:33456" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="33503:33548" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="33595:33628" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="33689:33722" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="33786:33819" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="33881:33914" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="33976:34009" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="34232:34265" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="34339:34370" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="34447:34478" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="34551:34582" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="34659:34690" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="34769:34800" ph="..." />
-            <marker date="1533805947146" expanded="true" signature="34881:34912" ph="..." />
+            <marker date="1534829912759" expanded="true" signature="11891:12018" ph="update tiny_... " />
+            <marker date="1534829912759" expanded="true" signature="21251:21380" ph="update tiny_... " />
+            <marker date="1534829912759" expanded="true" signature="33340:33436" ph="update tiny_... " />
+            <marker date="1534829912759" expanded="true" signature="34899:34995" ph="update tiny_... " />
           </folding>
         </state>
       </provider>
