@@ -368,7 +368,7 @@ class MapAction extends Controller
     {
         $province = $this->model->table('area')->where('parent_id=0')->order('sort asc')->findAll();
         foreach ($province as $key => $value) {
-            $province[$key]['children'] = $this->model->table('area')->where('parent_id='.$value['id'])->findAll()
+            $province[$key]['children'] = $this->model->table('area')->where('parent_id='.$value['id'])->findAll();
         }
         $this->code = 0;
         $this->content['region'] = $province;
