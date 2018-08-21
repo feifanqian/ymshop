@@ -193,7 +193,7 @@ class MapAction extends Controller
     //发布动态
     public function publish_dynamic()
     {
-        $region_id = Filter::int(Req::args("region_id"));
+        $region = Req::args("region");
         $goods_id = Filter::int(Req::args("goods_id"));
         $content = Filter::text(Req::args("content"));
         $imgs = Filter::str(Req::args("imgs"));
@@ -202,7 +202,17 @@ class MapAction extends Controller
             $this->code = 1295;
             return;
         }
-        $center = $this->model->table('business_center')->where('region_id = '.$region_id)->find();
+        if(is_numeric($region)) {
+            $where = 'region_id = '.$region;
+        } else {
+            $area = $this->model->table('area')->where("name like '%{$region}%'")->find();
+            if(!$area) {
+                $this->code = 1298;
+                return;
+            }
+            $where = 'region_id = '.$area['id'];
+        }
+        $center = $this->model->table('business_center')->where($where)->find();
         if(!$center) {
             $this->code = 1296;
             return;
@@ -299,17 +309,11 @@ class MapAction extends Controller
         if($list) {
             foreach ($list as $key => $value) {
                 if($value['goods_id']) {  
-                    $goods = $this->model->table('goods')->fields('id,name,sell_price,img')->where('id = '.$value['goods_id'])->find(); 
-                    $list[$key]['goods_id'] = $goods['id'];
-                    $list[$key]['goods_name'] = $goods['name'];
-                    $list[$key]['sell_price'] = $goods['sell_price'];
-                    $list[$key]['goods_img'] = $goods['img'];
+                    $goods = $this->model->table('goods')->fields('id as goods_id,name as goods_name,sell_price,img as goods_img')->where('id = '.$value['goods_id'])->find(); 
                 } else {
-                    $list[$key]['goods_id'] = 0;
-                    $list[$key]['goods_name'] = '';
-                    $list[$key]['sell_price'] = 0.00;
-                    $list[$key]['goods_img'] = '';
+                    $goods = null;
                 }
+                $list[$key]['goods'] = $goods;
                 if($value['imgs']!='') {
                     $list[$key]['imgs'] = explode(',',$value['imgs']);
                 }
@@ -357,6 +361,17 @@ class MapAction extends Controller
             );
         $this->model->table('dynamic_comment')->data($data)->insert();
         $this->code = 0;
+    }
+
+    //地区列表
+    public function area_list()
+    {
+        $province = $this->model->table('area')->where('parent_id=0')->order('sort asc')->findAll();
+        foreach ($province as $key => $value) {
+            $province[$key]['children'] = $this->model->table('area')->where('parent_id='.$value['id'])->findAll()
+        }
+        $this->code = 0;
+        $this->content['region'] = $province;
     }
 
 }
