@@ -174,6 +174,7 @@ class MapAction extends Controller
             );
         $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
         $this->code = 0;
+        $this->content['picture'] = $picture;
     }
 
     public function business_center_list()
