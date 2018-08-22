@@ -150,7 +150,7 @@ class MapAction extends Controller
         $black6 = imagecolorallocate($image_6, 0, 0, 0);
         
         $str6 = date('Y.m.d');
-        imagettftext($image_6, 22, 0, imagesx($image_6)-837, imagesy($image_6)-644, $black6, $font, $str6);
+        imagettftext($image_6, 22, 0, imagesx($image_6)-837, imagesy($image_6)-640, $black6, $font, $str6);
         
         // 输出合成图片
         imagepng($image_6, APP_ROOT.'static/images/temp/'.$time.'6.png');
