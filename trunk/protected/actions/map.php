@@ -67,11 +67,16 @@ class MapAction extends Controller
     {
         $name = Filter::str(Req::args('name')); //乙方名字
         $mobile = Filter::str(Req::args('mobile')); //乙方电话
+        $id_no = Filter::str(Req::args('id_no')); //乙方证件号
+        $address = Filter::str(Req::args('address')); //乙方地址
         $rate = Filter::float(Req::args('rate')); //甲方收取服务费比例
          
-        $path_1 = 'http://www.ymlypt.com/static/images/0001.png'; // 图片一
-        $path_2 = 'http://www.ymlypt.com/static/images/0002.png'; // 图片二
-        $path_3 = 'http://www.ymlypt.com/static/images/0003.png'; // 图片三
+        // $path_1 = 'http://www.ymlypt.com/static/images/0001.png'; // 图片一
+        // $path_2 = 'http://www.ymlypt.com/static/images/0002.png'; // 图片二
+        // $path_3 = 'http://www.ymlypt.com/static/images/0003.png'; // 图片三
+         
+        $path_1 = "http://www.ymlypt.com/static/images/0004.png";
+
         $font = '/var/www/shop/static/fonts/simhei.ttf'; //中文字体
         //一、合成乙方签名
         $image_1 = imagecreatefromstring(file_get_contents($path_1));
@@ -79,7 +84,7 @@ class MapAction extends Controller
         $black1 = imagecolorallocate($image_1, 0, 0, 0);
         
         $str1 = mb_convert_encoding($name, "html-entities", "utf-8");
-        imagettftext($image_1, 18, 0, imagesx($image_1)-882, imagesy($image_1)-980, $black1, $font, $str1);
+        imagettftext($image_1, 18, 0, imagesx($image_1)-887, imagesy($image_1)-4037, $black1, $font, $str1);
         
         // 输出合成图片
         $time = time();
@@ -93,45 +98,70 @@ class MapAction extends Controller
         $black2 = imagecolorallocate($image_2, 0, 0, 0);
         
         $str2 = $mobile;
-        imagettftext($image_2, 18, 0, imagesx($image_2)-854, imagesy($image_2)-940, $black2, $font, $str2);
+        imagettftext($image_2, 18, 0, imagesx($image_2)-854, imagesy($image_2)-3908, $black2, $font, $str2);
         
         // 输出合成图片
         imagepng($image_2, APP_ROOT.'static/images/temp/'.$time.'2.png');
 
         $url2 = 'http://www.ymlypt.com/static/images/temp/'.$time.'2.png';
-        
-        //三、合成服务费比例
-        $image_3 = imagecreatefromstring(file_get_contents($path_3));
+
+        //三、合成乙方证件号
+        $image_3 = imagecreatefromstring(file_get_contents($url2));
         
         $black3 = imagecolorallocate($image_3, 0, 0, 0);
         
-        $str3 = $rate.'%';
-        imagettftext($image_3, 18, 0, imagesx($image_3)-424, imagesy($image_3)-434, $black3, $font, $str3);
+        $str3 = $id_no;
+        imagettftext($image_3, 18, 0, imagesx($image_3)-872, imagesy($image_3)-3993, $black3, $font, $str3);
         
         // 输出合成图片
         imagepng($image_3, APP_ROOT.'static/images/temp/'.$time.'3.png');
 
         $url3 = 'http://www.ymlypt.com/static/images/temp/'.$time.'3.png';
-        
-        //四、合成签约日期
+
+        //四、合成乙方地址
         $image_4 = imagecreatefromstring(file_get_contents($url3));
         
         $black4 = imagecolorallocate($image_4, 0, 0, 0);
         
-        $str4 = date('Y.m.d');
-        imagettftext($image_4, 22, 0, imagesx($image_4)-800, imagesy($image_4)-730, $black4, $font, $str4);
+        $str4 = $address;
+        imagettftext($image_4, 18, 0, imagesx($image_4)-887, imagesy($image_4)-3949, $black4, $font, $str4);
         
         // 输出合成图片
         imagepng($image_4, APP_ROOT.'static/images/temp/'.$time.'4.png');
 
         $url4 = 'http://www.ymlypt.com/static/images/temp/'.$time.'4.png';
         
+        //五、合成服务费比例
+        $image_5 = imagecreatefromstring(file_get_contents($url4));
+        
+        $black5 = imagecolorallocate($image_5, 0, 0, 0);
+        
+        $str5 = $rate.'%';
+        imagettftext($image_5, 18, 0, imagesx($image_5)-411, imagesy($image_5)-342, $black5, $font, $str5);
+        
+        // 输出合成图片
+        imagepng($image_5, APP_ROOT.'static/images/temp/'.$time.'5.png');
+
+        $url5 = 'http://www.ymlypt.com/static/images/temp/'.$time.'5.png';
+        
+        //六、合成签约日期
+        $image_6 = imagecreatefromstring(file_get_contents($url5));
+        
+        $black6 = imagecolorallocate($image_6, 0, 0, 0);
+        
+        $str6 = date('Y.m.d');
+        imagettftext($image_6, 22, 0, imagesx($image_6)-837, imagesy($image_6)-652, $black6, $font, $str6);
+        
+        // 输出合成图片
+        imagepng($image_6, APP_ROOT.'static/images/temp/'.$time.'6.png');
+
+        $url6 = 'http://www.ymlypt.com/static/images/temp/'.$time.'6.png';
+        
         //保存至数据库
         $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
         $data = array(
             'user_id' => $this->user['id'],
-            'url1'    => $url2,
-            'url3'    => $url4
+            'url3'    => $url6
             );
         if(!$contract) {
             $this->model->table('promoter_contract')->data($data)->insert();
@@ -140,9 +170,7 @@ class MapAction extends Controller
         }
 
         $this->code = 0;
-        $this->content['url1'] = $url2;
-        $this->content['url2'] = $path_2;
-        $this->content['url3'] = $url4;
+        $this->content['url'] = $url6;
     }
 
     public function save_contract_image()
