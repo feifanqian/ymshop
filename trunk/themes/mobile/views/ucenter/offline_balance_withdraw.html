@@ -390,6 +390,31 @@
                   return false;
                 };
               }
+              if (!$("input[name=positive_bankcard]").val() || !$("input[name=native_bankcard]").val()) {
+                  $.toast("请上传结算银行卡照", "text");
+                  return false;
+              }
+              if (!$("input[name=shop_photo]").val()) {
+                  $.toast("请上传门店照", "text");
+                  return false;
+              }else{
+                var file4 = $("input[name='shop_photo']").get(0).files[0];
+                if(file4.size>8000*1024){
+                  $.toast("门店照大小超过8MB", "text");
+                  return false;
+                };
+              }
+            }else if($("#shop_type option:selected").val()==3){
+              if (!$("input[name=business_licence]").val()) {
+                  $.toast("请上传营业执照", "text");
+                  return false;
+              }else{
+                var file3 = $("input[name='business_licence']").get(0).files[0];
+                if(file3.size>8000*1024){
+                  $.toast("营业执照大小超过8MB", "text");
+                  return false;
+                };
+              }
               // if (!$("input[name=account_picture]").val()) {
               //     $.toast("请上传开户许可证照", "text");
               //     return false;
