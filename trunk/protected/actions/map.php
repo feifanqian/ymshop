@@ -339,7 +339,10 @@ class MapAction extends Controller
                 if($value['goods_id']) {  
                     $goods = $this->model->table('goods')->fields('id as goods_id,name as goods_name,sell_price,img as goods_img')->where('id = '.$value['goods_id'])->find(); 
                 } else {
-                    $goods = null;
+                    $goods['goods_id'] = 0;
+                    $goods['goods_name'] = '';
+                    $goods['sell_price'] = 0;
+                    $goods['goods_img'] = '';
                 }
                 $list[$key]['goods'] = $goods;
                 if($value['imgs']!='') {
