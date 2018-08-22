@@ -990,7 +990,8 @@ class CashierAction extends Controller
         if(!$page) {
             $page = 1;
         }
-        $log = $this->model->table('benefit_log')->fields('id,user_id,amount,create_time')->where('user_id='.$this->user['id'].' and type=3')->order('id desc')->findPage($page,10);
+        // $log = $this->model->table('benefit_log')->fields('id,user_id,amount,create_time')->where('user_id='.$this->user['id'].' and type=3')->order('id desc')->findPage($page,10);
+        $log = $this->model->table('balance_log')->fields('id,user_id,amount,time as create_time')->where('user_id='.$this->user['id'].' and type=21')->order('id desc')->findPage($page,10);
         if($log) {
             if(isset($log['data']) && $log['data']!=null) {
                 unset($log['html']);
