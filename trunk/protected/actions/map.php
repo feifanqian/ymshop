@@ -347,6 +347,8 @@ class MapAction extends Controller
                 $list[$key]['goods'] = $goods;
                 if($value['imgs']!='') {
                     $list[$key]['imgs'] = explode(',',$value['imgs']);
+                } else {
+                    $list[$key]['imgs'] = [];
                 }
                 $had_laud = $this->model->table('dynamic_laud')->where('dynamic_id='.$value['id'].' and user_id='.$this->user['id'])->find();
                 $list[$key]['had_laud'] = empty($had_laud)?0:1; //是否已点赞
