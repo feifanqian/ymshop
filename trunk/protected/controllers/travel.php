@@ -601,7 +601,12 @@ class TravelController extends Controller
             }
         }
         //淘宝转链，获取分享url
-        $uid = Common::getInviterId($this->user['id']); //上级用户id
+        if($this->user['id']) {
+           $uid = Common::getInviterId($this->user['id']); //上级用户id 
+       } else {
+           $uid = Common::getInviterId($inviter); //上级用户id
+       }
+        
         $objs = $this->model->table('user')->where('id='.$uid)->find();
         if($objs['adzoneid']==null) {
             $taobao_pid = $this->model->table('taoke_pid')->where('user_id is NULL')->order('id desc')->find();
