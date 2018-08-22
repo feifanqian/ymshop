@@ -84,7 +84,7 @@ class MapAction extends Controller
         $black1 = imagecolorallocate($image_1, 0, 0, 0);
         
         $str1 = mb_convert_encoding($name, "html-entities", "utf-8");
-        imagettftext($image_1, 18, 0, imagesx($image_1)-887, imagesy($image_1)-4037, $black1, $font, $str1);
+        imagettftext($image_1, 18, 0, imagesx($image_1)-887, imagesy($image_1)-4030, $black1, $font, $str1);
         
         // 输出合成图片
         $time = time();
@@ -98,7 +98,7 @@ class MapAction extends Controller
         $black2 = imagecolorallocate($image_2, 0, 0, 0);
         
         $str2 = $mobile;
-        imagettftext($image_2, 18, 0, imagesx($image_2)-854, imagesy($image_2)-3908, $black2, $font, $str2);
+        imagettftext($image_2, 18, 0, imagesx($image_2)-854, imagesy($image_2)-3900, $black2, $font, $str2);
         
         // 输出合成图片
         imagepng($image_2, APP_ROOT.'static/images/temp/'.$time.'2.png');
@@ -111,7 +111,7 @@ class MapAction extends Controller
         $black3 = imagecolorallocate($image_3, 0, 0, 0);
         
         $str3 = $id_no;
-        imagettftext($image_3, 18, 0, imagesx($image_3)-872, imagesy($image_3)-3993, $black3, $font, $str3);
+        imagettftext($image_3, 18, 0, imagesx($image_3)-872, imagesy($image_3)-3985, $black3, $font, $str3);
         
         // 输出合成图片
         imagepng($image_3, APP_ROOT.'static/images/temp/'.$time.'3.png');
@@ -124,7 +124,7 @@ class MapAction extends Controller
         $black4 = imagecolorallocate($image_4, 0, 0, 0);
         
         $str4 = $address;
-        imagettftext($image_4, 18, 0, imagesx($image_4)-887, imagesy($image_4)-3949, $black4, $font, $str4);
+        imagettftext($image_4, 18, 0, imagesx($image_4)-887, imagesy($image_4)-3941, $black4, $font, $str4);
         
         // 输出合成图片
         imagepng($image_4, APP_ROOT.'static/images/temp/'.$time.'4.png');
@@ -150,7 +150,7 @@ class MapAction extends Controller
         $black6 = imagecolorallocate($image_6, 0, 0, 0);
         
         $str6 = date('Y.m.d');
-        imagettftext($image_6, 22, 0, imagesx($image_6)-837, imagesy($image_6)-652, $black6, $font, $str6);
+        imagettftext($image_6, 22, 0, imagesx($image_6)-837, imagesy($image_6)-644, $black6, $font, $str6);
         
         // 输出合成图片
         imagepng($image_6, APP_ROOT.'static/images/temp/'.$time.'6.png');
