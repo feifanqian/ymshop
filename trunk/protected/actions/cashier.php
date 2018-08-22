@@ -880,7 +880,7 @@ class CashierAction extends Controller
         $last_withdraw_income     = $log5[0]['total']==null?0:$log5[0]['total'];
         $user = $this->model->table('user')->fields('settle_income')->where('id='.$this->user['id'])->find();
 
-        $total_income = $total_income - $user['settle_income'];
+        // $total_income = $total_income - $user['settle_income'];
         // $last_month_settle_income = $last_month_settle_income - $last_withdraw_income;
         $last_month_settle_income = $last_month_settle_income;
 
