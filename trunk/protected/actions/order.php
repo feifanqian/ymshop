@@ -486,9 +486,13 @@ class OrderAction extends Controller {
                     $buy_goods_id = $v['goods_id'];
                     $buy_goods_num = $v['num'];
                     //查询限购数量
-                    $limit_info = $model->table("goods")->where("id=$buy_goods_id")->fields("limit_buy_num,name")->find();
+                    $limit_info = $model->table("goods")->where("id=$buy_goods_id")->fields("limit_buy_num,name,type")->find();
                     if($limit_info['limit_buy_num']<=0){
                         break;
+                    }
+                    if($limit_info['type']==2) {
+                        $this->code = 1300;
+                        return;
                     }
                     
                     //查询用户购买此商品的数量

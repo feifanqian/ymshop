@@ -1692,9 +1692,14 @@ class SimpleController extends Controller {
                     $buy_goods_id = $v['goods_id'];
                     $buy_goods_num = $v['num'];
                     //查询限购数量
-                    $limit_info = $this->model->table("goods")->where("id=$buy_goods_id")->fields("limit_buy_num,name")->find();
+                    $limit_info = $this->model->table("goods")->where("id=$buy_goods_id")->fields("limit_buy_num,name,type")->find();
                     if($limit_info['limit_buy_num']<=0){
                         break;
+                    }
+                    if($limit_info['type']==2) {
+                        $msg = array('type' => 'fail', 'msg' => '该商品暂未开售，请耐心等候');
+                        $this->redirect('/index/msg', false, $msg);
+                        return;
                     }
                     //查询用户购买此商品的数量
                     $buyed = $this->model->table("order as o")
