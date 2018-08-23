@@ -580,6 +580,7 @@ class GoodsAction extends Controller {
         $request_filler_count = 0;
         $cache_count = 0;
         $request_type = 0;
+        $request_page = 1;
         if (empty($cache_data)) {
             $tbk_data = $this->tbk_req_get($form, $q, $type, 1, '100', 'total_sales_des');
             if (isset($tbk_data['result_list']['map_data'])) {
@@ -693,7 +694,7 @@ class GoodsAction extends Controller {
         $resp['results']['cache_count'] = $cache_count;
         $resp['results']['now_count'] = count($save_data);
         $resp['results']['request_type'] = $request_type;
-        $resp['results']['redis_key'] = $redis_key;
+        $resp['results']['request_page'] = $request_page;
         $this->code = 0;
         $this->content = $resp;
     }
