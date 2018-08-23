@@ -579,6 +579,7 @@ class GoodsAction extends Controller {
         $request_count = 0;
         $request_filler_count = 0;
         $cache_count = 0;
+        $request_type = 0;
         if (empty($cache_data)) {
             $tbk_data = $this->tbk_req_get($form, $q, $type, 1, '100', 'total_sales_des');
             if (isset($tbk_data['result_list']['map_data'])) {
@@ -604,9 +605,11 @@ class GoodsAction extends Controller {
                     }
                 }
 
+                $request_type = 1;
                 $request_filler_count = count($save_data);
                 $redis->set($key, json_encode($save_data), 60);
             } else {
+                $request_type = 2;
                 $resp['results']['tbk_coupon'] = [];
                 $this->code = 0;
                 $this->content = $resp;
@@ -643,10 +646,13 @@ class GoodsAction extends Controller {
                             $new_data[$itm['coupon_id']] = $itm;
                         }
                     }
+
+                    $request_type = 3;
                     $request_filler_count = count($new_data);
                     $save_data = array_merge($cache_data, $new_data);
                     $redis->set($key, json_encode($save_data), 60);
                 } else {
+                    $request_type = 4;
                     $resp['results']['tbk_coupon'] = [];
                     $this->code = 0;
                     $this->content = $resp;
@@ -654,6 +660,7 @@ class GoodsAction extends Controller {
                 }
 
             } else {
+                $request_type = 5;
                 $save_data = $cache_data;
             }
         }
@@ -685,6 +692,7 @@ class GoodsAction extends Controller {
         $resp['results']['request_filler_count'] = $request_filler_count;
         $resp['results']['cache_count'] = $cache_count;
         $resp['results']['now_count'] = count($save_data);
+        $resp['results']['request_type'] = $request_type;
         $this->code = 0;
         $this->content = $resp;
     }
