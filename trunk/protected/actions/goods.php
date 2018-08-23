@@ -392,7 +392,7 @@ class GoodsAction extends Controller {
             $form = 'android';
         }
 
-        $resp = $this->tbk_req_get($form, $q, $type, $page, '40', 'total_sales_des');
+        $resp = $this->tbk_req_get($form, $q, $type, $page, '50', 'total_sales_des');
 
         $size = empty($size) ? 20 : $size;
         $save_data = [];
@@ -401,9 +401,9 @@ class GoodsAction extends Controller {
                 foreach ($resp['result_list']['map_data'] as $itm) {
                     if (!isset($save_data[$itm['coupon_id']])) {
                         $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
-                        if ($decrease_price < 5 || ($itm['zk_final_price'] - $decrease_price>=5000)) {
-                            continue;
-                        }
+                        // if ($decrease_price < 5 || ($itm['zk_final_price'] - $decrease_price>=5000)) {
+                        //     continue;
+                        // }
                         if(!isset($itm['small_images'])){
                             $itm['small_images']['string'] = array($itm['pict_url']);
                         }
@@ -476,15 +476,19 @@ class GoodsAction extends Controller {
         }
 
         $c = new TopClient;
-        if ($form == 'android') { //安卓
-            $appkey = '24875594';
-            $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
-            $AdzoneId = '513416107';
-        } else { //ios
-            $appkey = '24876667';
-            $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
-            $AdzoneId = '582570496';
-        }
+        // if ($form == 'android') { //安卓
+        //     $appkey = '24875594';
+        //     $secretKey = '8aac26323a65d4e887697db01ad7e7a8';
+        //     $AdzoneId = '513416107';
+        // } else { //ios
+        //     $appkey = '24876667';
+        //     $secretKey = 'a5f423bd8c6cf5e8518ff91e7c12dcd2';
+        //     $AdzoneId = '582570496';
+        // }
+        $appkey = '24874156';
+        $secretKey = 'a5e3998f3225cc0c673a5025845acd51';
+        $AdzoneId = '502162923';
+
         $c->appkey = $appkey;
         $c->secretKey = $secretKey;
         $c->sign_method = 'md5';
@@ -572,9 +576,14 @@ class GoodsAction extends Controller {
 
         $save_data = [];
         $user_id = $this->user['id'] == null ? 0 : $this->user['id'];
+        $request_count = 0;
+        $request_filler_count = 0;
+        $cache_count = 0;
+        $request_type = 0;
         if (empty($cache_data)) {
-            $tbk_data = $this->tbk_req_get($form, $q, $type, 1, '40', 'total_sales_des');
+            $tbk_data = $this->tbk_req_get($form, $q, $type, 1, '100', 'total_sales_des');
             if (isset($tbk_data['result_list']['map_data'])) {
+                $request_count = count($tbk_data['result_list']['map_data']);
                 foreach ($tbk_data['result_list']['map_data'] as $itm) {
                     if (!isset($save_data[$itm['coupon_id']])) {
                         $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元'); 
@@ -596,8 +605,11 @@ class GoodsAction extends Controller {
                     }
                 }
 
-                $redis->set($key, json_encode($save_data), 600);
+                $request_type = 1;
+                $request_filler_count = count($save_data);
+                $redis->set($key, json_encode($save_data), 60);
             } else {
+                $request_type = 2;
                 $resp['results']['tbk_coupon'] = [];
                 $this->code = 0;
                 $this->content = $resp;
@@ -606,12 +618,14 @@ class GoodsAction extends Controller {
         } else {
 
             $count = count($cache_data);
-            $tb_page = ceil($count / 40) + 1;
+            $cache_count = $count;
+            $tb_page = ceil($count / 100) * 2 + 1;
 
             if ($count < $page * $size) {
-                $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page, '40', 'total_sales_des');
+                $tbk_data = $this->tbk_req_get($form, $q, $type, $tb_page, '100', 'total_sales_des');
                 $new_data = [];
                 if (isset($tbk_data['result_list']['map_data'])) {
+                    $request_count = count($tbk_data['result_list']['map_data']);
                     foreach ($tbk_data['result_list']['map_data'] as $key => $itm) {
                         if (!isset($new_data[$itm['coupon_id']])) {
                             $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');   
@@ -632,9 +646,13 @@ class GoodsAction extends Controller {
                             $new_data[$itm['coupon_id']] = $itm;
                         }
                     }
+
+                    $request_type = 3;
+                    $request_filler_count = count($new_data);
                     $save_data = array_merge($cache_data, $new_data);
-                    $redis->set($key, json_encode($save_data), 600);
+                    $redis->set($key, json_encode($save_data), 60);
                 } else {
+                    $request_type = 4;
                     $resp['results']['tbk_coupon'] = [];
                     $this->code = 0;
                     $this->content = $resp;
@@ -642,6 +660,7 @@ class GoodsAction extends Controller {
                 }
 
             } else {
+                $request_type = 5;
                 $save_data = $cache_data;
             }
         }
@@ -669,7 +688,11 @@ class GoodsAction extends Controller {
 
         $resp['results']['tbk_coupon'] = array_slice(array_values($save_data), ($page - 1) * $size, $size);
 //        $resp['results']['tbk_coupon'] = array_values($save_data);
-
+        $resp['results']['request_count'] = $request_count;
+        $resp['results']['request_filler_count'] = $request_filler_count;
+        $resp['results']['cache_count'] = $cache_count;
+        $resp['results']['now_count'] = count($save_data);
+        $resp['results']['request_type'] = $request_type;
         $this->code = 0;
         $this->content = $resp;
     }
