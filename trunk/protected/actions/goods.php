@@ -693,6 +693,7 @@ class GoodsAction extends Controller {
         $resp['results']['cache_count'] = $cache_count;
         $resp['results']['now_count'] = count($save_data);
         $resp['results']['request_type'] = $request_type;
+        $resp['results']['redis_key'] = $key;
         $this->code = 0;
         $this->content = $resp;
     }
