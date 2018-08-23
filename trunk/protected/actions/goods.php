@@ -571,8 +571,8 @@ class GoodsAction extends Controller {
 //        $redis = CacheFactory::getInstance('redis');
         $redis = new MyRedis();
 
-        $key = "cat_" . (empty($q) ? "all" : $q);
-        $cache_data = json_decode($redis->get($key), true);
+        $redis_key = "cat_" . (empty($q) ? "all" : $q);
+        $cache_data = json_decode($redis->get($redis_key), true);
 
         $save_data = [];
         $user_id = $this->user['id'] == null ? 0 : $this->user['id'];
@@ -607,7 +607,7 @@ class GoodsAction extends Controller {
 
                 $request_type = 1;
                 $request_filler_count = count($save_data);
-                $redis->set($key, json_encode($save_data), 60);
+                $redis->set($redis_key, json_encode($save_data), 60);
             } else {
                 $request_type = 2;
                 $resp['results']['tbk_coupon'] = [];
@@ -650,7 +650,7 @@ class GoodsAction extends Controller {
                     $request_type = 3;
                     $request_filler_count = count($new_data);
                     $save_data = array_merge($cache_data, $new_data);
-                    $redis->set($key, json_encode($save_data), 60);
+                    $redis->set($redis_key, json_encode($save_data), 60);
                 } else {
                     $request_type = 4;
                     $resp['results']['tbk_coupon'] = [];
@@ -693,7 +693,7 @@ class GoodsAction extends Controller {
         $resp['results']['cache_count'] = $cache_count;
         $resp['results']['now_count'] = count($save_data);
         $resp['results']['request_type'] = $request_type;
-        $resp['results']['redis_key'] = $key;
+        $resp['results']['redis_key'] = $redis_key;
         $this->code = 0;
         $this->content = $resp;
     }
