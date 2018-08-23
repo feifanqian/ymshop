@@ -389,7 +389,7 @@ class MapAction extends Controller
         $had_laud = $this->model->table('dynamic_laud')->where('dynamic_id='.$info['id'].' and user_id='.$this->user['id'])->find();
         $info['had_laud'] = empty($had_laud)?0:1; //是否已点赞
         $info['comment_list'] = $this->model->table('dynamic_comment as dc')->join('left join user as u on dc.user_id=u.id')->fields('u.nickname,u.avatar,dc.*')->where('dc.dynamic_id='.$info['id'])->findAll();
-        $info['comment_num'] = count($list[$key]['comment_list']);
+        $info['comment_num'] = count($info['comment_list']);
         $this->code = 0;
         $this->content['detail'] = $info;
     }
