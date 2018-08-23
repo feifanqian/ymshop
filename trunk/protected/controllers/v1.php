@@ -292,6 +292,7 @@ class V1Controller extends Controller {
         "recommend_goods_list"=>array("map/recommend_goods_list",1,1), //推荐商品列表
         "dynamic_report"=>array("map/dynamic_report",1,1), //动态举报
         "center_dynamic_list"=>array("map/center_dynamic_list",1,1), //商圈动态列表
+        "center_dynamic_detail"=>array("map/center_dynamic_detail",1,1), //商圈动态详情
         "dynamic_click_laud"=>array("map/dynamic_click_laud",1,1), //商圈动态点赞
         "dynamic_comment"=>array("map/dynamic_comment",1,1), //商圈动态发布评论
         "area_list"=>array("map/area_list",0,1), //地区列表
