@@ -363,6 +363,37 @@ class MapAction extends Controller
         return;
     }
 
+    //商圈动态详情
+    public function center_dynamic_detail()
+    {
+        $id = Filter::int(Req::args("id"));
+        $info = $this->model->table('center_dynamic as cd')->join('left join user as u on cd.user_id=u.id left join district_promoter as dp on cd.user_id=dp.user_id')->fields('u.nickname,u.avatar,dp.id as promoter_id,dp.shop_type,cd.*')->where('cd.id = '.$id)->find();
+        if(!$info) {
+            $this->code = 1299;
+            return;
+        }
+        if($info['goods_id']) {  
+            $goods = $this->model->table('goods')->fields('id as goods_id,name as goods_name,sell_price,img as goods_img')->where('id = '.$info['goods_id'])->find(); 
+        } else {
+            $goods['goods_id'] = 0;
+            $goods['goods_name'] = '';
+            $goods['sell_price'] = 0;
+            $goods['goods_img'] = '';
+        }
+        $info['goods'] = $goods;
+        if($info['imgs']!='') {
+            $info['imgs'] = explode(',',$info['imgs']);
+        } else {
+            $info['imgs'] = [];
+        }
+        $had_laud = $this->model->table('dynamic_laud')->where('dynamic_id='.$info['id'].' and user_id='.$this->user['id'])->find();
+        $info['had_laud'] = empty($had_laud)?0:1; //是否已点赞
+        $info['comment_list'] = $this->model->table('dynamic_comment as dc')->join('left join user as u on dc.user_id=u.id')->fields('u.nickname,u.avatar,dc.*')->where('dc.dynamic_id='.$info['id'])->findAll();
+        $info['comment_num'] = count($list[$key]['comment_list']);
+        $this->code = 0;
+        $this->content['detail'] = $info;
+    }
+
     //商圈动态点赞
     public function dynamic_click_laud()
     {
