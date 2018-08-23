@@ -2069,5 +2069,15 @@ class DistrictadminController extends Controller
     {
         $encrypted = openssl_encrypt($data, 'DES-ECB', $key, 1);
         return base64_encode($encrypted);
+    }
+
+    public function contract_view()
+    {
+        $id = Filter::int(Req::args('id'));
+        $model = new Model();
+        $contract = $model->table('promoter_contract')->fields('*')->where('id='.$id)->find();
+        
+        $this->assign('contract',$contract);
+        $this->redirect();
     } 
 }

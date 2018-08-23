@@ -31,6 +31,22 @@
                 <input type="text" value="{$shop_check['bank_name']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
+        {if:$shop_check['positive_bankcard']!=null}
+        <dl class="lineD">
+            <dt>银行卡正面照：</dt>
+            <dd>
+                <img src="{$shop_check['positive_bankcard']}" width="300" height="180"> 
+            </dd>
+        </dl>
+        {/if}
+        {if:$shop_check['native_bankcard']!=null}
+        <dl class="lineD">
+            <dt>银行卡反面照：</dt>
+            <dd>
+                <img src="{$shop_check['native_bankcard']}" width="300" height="180"> 
+            </dd>
+        </dl>
+        {/if}
         {if:$shop_check['type']==1}
         <dl class="lineD">
             <dt>营业执照：</dt>
@@ -38,12 +54,7 @@
                 <img src="{$shop_check['business_licence']}" width="300" height="180">      
             </dd>
         </dl>
-        <!-- <dl class="lineD">
-            <dt>开户许可证：</dt>
-            <dd>
-                <img src="{$shop_check['account_picture']}" width="300" height="180"> 
-            </dd>
-        </dl> -->
+        
         <dl class="lineD">
             <dt>门店照：</dt>
             <dd>
