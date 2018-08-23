@@ -192,7 +192,7 @@ class MapAction extends Controller
             $image_url = $upfile_url . $info[0]['path'];
             $image = new Image();
             $image->suffix = '';
-            $image->thumb(APP_ROOT . $image_url, 1080, 1527);
+            $image->thumb(APP_ROOT . $image_url, 1080, 4574);
             $picture = "http://" . $_SERVER['HTTP_HOST'] . '/' . $image_url;
         }
         // var_dump($picture);die;
