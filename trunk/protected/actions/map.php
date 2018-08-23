@@ -181,7 +181,7 @@ class MapAction extends Controller
         }
         $upfile_path = Tiny::getPath("uploads") . "/contract/";
         $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "contract/", 1);
-        $upfile = new UploadFile('picture', $upfile_path, '500k', '', 'hash', $this->user['id']);
+        $upfile = new UploadFile('picture', $upfile_path, '4000k', '', 'hash', $this->user['id']);
         $upfile->save();
         $info = $upfile->getInfo();
         $result = array();
