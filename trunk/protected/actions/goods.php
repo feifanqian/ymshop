@@ -580,9 +580,8 @@ class GoodsAction extends Controller {
         $request_filler_count = 0;
         $cache_count = 0;
         $request_type = 0;
-        $request_page = 1;
         if (empty($cache_data)) {
-            $tbk_data = $this->tbk_req_get($form, $q, $type, 1, '100', 'total_sales_des');
+            $tbk_data = $this->tbk_req_get($form, $q, $type, 1, '80', 'total_sales_des');
             if (isset($tbk_data['result_list']['map_data'])) {
                 $request_count = count($tbk_data['result_list']['map_data']);
                 foreach ($tbk_data['result_list']['map_data'] as $itm) {
@@ -620,11 +619,9 @@ class GoodsAction extends Controller {
 
             $count = count($cache_data);
             $cache_count = $count;
-            $tb_page = ceil($count / 100) + 2;
-            $request_page = $tb_page;
 
             if ($count < $page * $size) {
-                $tbk_data = $this->tbk_req_get($form, $q, $type, $page, '100', 'total_sales_des');
+                $tbk_data = $this->tbk_req_get($form, $q, $type, $page, '80', 'total_sales_des');
                 $new_data = [];
                 if (isset($tbk_data['result_list']['map_data'])) {
                     $request_count = count($tbk_data['result_list']['map_data']);
@@ -695,7 +692,6 @@ class GoodsAction extends Controller {
         $resp['results']['cache_count'] = $cache_count;
         $resp['results']['now_count'] = count($save_data);
         $resp['results']['request_type'] = $request_type;
-        $resp['results']['request_page'] = $request_page;
         $this->code = 0;
         $this->content = $resp;
     }
