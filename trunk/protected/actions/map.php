@@ -75,7 +75,7 @@ class MapAction extends Controller
         // $path_2 = 'http://www.ymlypt.com/static/images/0002.png'; // 图片二
         // $path_3 = 'http://www.ymlypt.com/static/images/0003.png'; // 图片三
          
-        $path_1 = "http://www.ymlypt.com/static/images/0004.png";
+        $path_1 = "https://ymlypt.b0.upaiyun.com/data/uploads/2018/08/23/522c0a7538e94fd84678e1d565c2d156.png";
 
         $font = '/var/www/shop/static/fonts/simhei.ttf'; //中文字体
         //一、合成乙方签名
