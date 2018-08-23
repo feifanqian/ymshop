@@ -607,7 +607,7 @@ class GoodsAction extends Controller {
 
                 $request_type = 1;
                 $request_filler_count = count($save_data);
-                $redis->set($redis_key, json_encode($save_data), 60);
+                $redis->set($redis_key, json_encode($save_data), 600);
             } else {
                 $request_type = 2;
                 $resp['results']['tbk_coupon'] = [];
@@ -649,7 +649,7 @@ class GoodsAction extends Controller {
                     $request_type = 3;
                     $request_filler_count = count($new_data);
                     $save_data = array_merge($cache_data, $new_data);
-                    $redis->set($redis_key, json_encode($save_data), 60);
+                    $redis->set($redis_key, json_encode($save_data), 600);
                 } else {
                     $request_type = 4;
                     $resp['results']['tbk_coupon'] = [];
