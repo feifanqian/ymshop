@@ -179,6 +179,7 @@ class MapAction extends Controller
             $this->code = 1294;
             return;
         }
+        var_dump(getimagesize($_FILES['picture']['tmp_name']));die;
         $upfile_path = Tiny::getPath("uploads") . "/contract/";
         $upfile_url = preg_replace("|" . APP_URL . "|", '', Tiny::getPath("uploads_url") . "contract/", 1);
         $upfile = new UploadFile('picture', $upfile_path, '4000k', '', 'hash', $this->user['id']);
