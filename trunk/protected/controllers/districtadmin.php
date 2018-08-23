@@ -2075,7 +2075,7 @@ class DistrictadminController extends Controller
     {
         $id = Filter::int(Req::args('id'));
         $model = new Model();
-        $contract = $model->table('promoter_contract')->fields('*')->where('id='.$id)->find();
+        $contract = $model->table('promoter_contract')->fields('*')->where('user_id='.$id)->find();
         
         $this->assign('contract',$contract);
         $this->redirect();
