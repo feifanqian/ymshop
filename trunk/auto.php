@@ -367,7 +367,7 @@ class LinuxCliTask{
                             $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
                             if(strtotime('+1 day',strtotime($value['join_time']))<time() && $groupbuy_join['need_num']>0) {
                                 $this->model->table('customer')->data(array('balance'=>"`balance`+{$amount}"))->where("user_id=".$value['user_id'])->update();
-                                Log::balance($amount,$value['user_id'],$v['id'],'拼团失败订单自动退回到余额',18);
+                                Log::balance($amount,$value['user_id'],$v['order_no'],'拼团失败订单自动退回到余额',18);
                                 $this->model->table('groupbuy_join')->data(array('status'=>3))->where('id='.$value['join_id'])->update();
                                 $this->model->table('groupbuy_log')->data(array('pay_status'=>3))->where('id='.$value['id'])->update();
                                 $this->model->table('order')->data(['status'=>5,'pay_status'=>3])->where('id='.$v['id'])->update();
