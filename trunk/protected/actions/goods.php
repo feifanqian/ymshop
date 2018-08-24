@@ -1005,7 +1005,8 @@ class GoodsAction extends Controller {
         }
         $parse_url = parse_url($return['result']['data']['coupon_click_url']);
         $query = $parse_url['query'];
-        $return['e'] = $query;
+        $e = substr($query,2);
+        $return['e'] = $e;
         $this->code = 0;
         $this->content = $return;
         return;
