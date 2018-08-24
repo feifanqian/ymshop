@@ -980,7 +980,7 @@ class GoodsAction extends Controller {
             $this->code = 1271;
             return;
         }
-        $access_token = "70002100a248544ba6f55cd68d83a8cef0b3177d2e2fa71144663dcff407facfe749c1e3870059548";
+        $access_token = "7000210123803564aae498aa94b9ca1602de733fbf239a967511f36d3ae5e8e7ec3777f3870059548";
         $main_hightapi_url = 'http://193.112.121.99/xiaocao/hightapi.action';
         $bak_hightapi_url = 'http://119.29.94.164/xiaocao/hightapi.action';
   
