@@ -1003,7 +1003,7 @@ class GoodsAction extends Controller {
             $coupon_click_url = $return['result']['data']['coupon_click_url'];
             
         }
-        $return['e'] = end(explode('?', $return['result']['data']['coupon_click_url']));
+        $return['e'] = explode('?', $return['result']['data']['coupon_click_url']);
         $this->code = 0;
         $this->content = $return;
         return;
