@@ -88,72 +88,72 @@ class MapAction extends Controller
         
         // 输出合成图片
         $time = time();
-        imagepng($image_1, APP_ROOT.'static/images/temp/'.$time.'1.png');
+        // imagepng($image_1, APP_ROOT.'static/images/temp/'.$time.'1.png');
         
-        $url1 = 'http://www.ymlypt.com/static/images/temp/'.$time.'1.png'; 
+        // $url1 = 'http://www.ymlypt.com/static/images/temp/'.$time.'1.png'; 
         
         //二、合成乙方手机号
-        $image_2 = imagecreatefromstring(file_get_contents($url1));
+        // $image_2 = imagecreatefromstring(file_get_contents($url1));
         
-        $black2 = imagecolorallocate($image_2, 0, 0, 0);
+        // $black2 = imagecolorallocate($image_2, 0, 0, 0);
         
         $str2 = $mobile;
-        imagettftext($image_2, 18, 0, imagesx($image_2)-854, imagesy($image_2)-3900, $black2, $font, $str2);
+        imagettftext($image_1, 18, 0, imagesx($image_1)-854, imagesy($image_1)-3900, $black1, $font, $str2);
         
         // 输出合成图片
-        imagepng($image_2, APP_ROOT.'static/images/temp/'.$time.'2.png');
+        // imagepng($image_2, APP_ROOT.'static/images/temp/'.$time.'2.png');
 
-        $url2 = 'http://www.ymlypt.com/static/images/temp/'.$time.'2.png';
+        // $url2 = 'http://www.ymlypt.com/static/images/temp/'.$time.'2.png';
 
         //三、合成乙方证件号
-        $image_3 = imagecreatefromstring(file_get_contents($url2));
+        // $image_3 = imagecreatefromstring(file_get_contents($url2));
         
-        $black3 = imagecolorallocate($image_3, 0, 0, 0);
+        // $black3 = imagecolorallocate($image_3, 0, 0, 0);
         
         $str3 = $id_no;
-        imagettftext($image_3, 18, 0, imagesx($image_3)-872, imagesy($image_3)-3985, $black3, $font, $str3);
+        imagettftext($image_1, 18, 0, imagesx($image_1)-872, imagesy($image_1)-3985, $black1, $font, $str3);
         
         // 输出合成图片
-        imagepng($image_3, APP_ROOT.'static/images/temp/'.$time.'3.png');
+        // imagepng($image_3, APP_ROOT.'static/images/temp/'.$time.'3.png');
 
-        $url3 = 'http://www.ymlypt.com/static/images/temp/'.$time.'3.png';
+        // $url3 = 'http://www.ymlypt.com/static/images/temp/'.$time.'3.png';
 
         //四、合成乙方地址
-        $image_4 = imagecreatefromstring(file_get_contents($url3));
+        // $image_4 = imagecreatefromstring(file_get_contents($url3));
         
-        $black4 = imagecolorallocate($image_4, 0, 0, 0);
+        // $black4 = imagecolorallocate($image_4, 0, 0, 0);
         
         $str4 = $address;
-        imagettftext($image_4, 18, 0, imagesx($image_4)-887, imagesy($image_4)-3941, $black4, $font, $str4);
+        imagettftext($image_1, 18, 0, imagesx($image_1)-887, imagesy($image_1)-3941, $black1, $font, $str4);
         
         // 输出合成图片
-        imagepng($image_4, APP_ROOT.'static/images/temp/'.$time.'4.png');
+        // imagepng($image_4, APP_ROOT.'static/images/temp/'.$time.'4.png');
 
-        $url4 = 'http://www.ymlypt.com/static/images/temp/'.$time.'4.png';
+        // $url4 = 'http://www.ymlypt.com/static/images/temp/'.$time.'4.png';
         
         //五、合成服务费比例
-        $image_5 = imagecreatefromstring(file_get_contents($url4));
+        // $image_5 = imagecreatefromstring(file_get_contents($url4));
         
-        $black5 = imagecolorallocate($image_5, 0, 0, 0);
+        // $black5 = imagecolorallocate($image_5, 0, 0, 0);
         
         $str5 = $rate.'%';
-        imagettftext($image_5, 18, 0, imagesx($image_5)-411, imagesy($image_5)-342, $black5, $font, $str5);
+        imagettftext($image_1, 18, 0, imagesx($image_1)-411, imagesy($image_1)-342, $black1, $font, $str5);
         
         // 输出合成图片
-        imagepng($image_5, APP_ROOT.'static/images/temp/'.$time.'5.png');
+        // imagepng($image_5, APP_ROOT.'static/images/temp/'.$time.'5.png');
 
-        $url5 = 'http://www.ymlypt.com/static/images/temp/'.$time.'5.png';
+        // $url5 = 'http://www.ymlypt.com/static/images/temp/'.$time.'5.png';
         
         //六、合成签约日期
-        $image_6 = imagecreatefromstring(file_get_contents($url5));
+        // $image_6 = imagecreatefromstring(file_get_contents($url5));
         
-        $black6 = imagecolorallocate($image_6, 0, 0, 0);
+        // $black6 = imagecolorallocate($image_6, 0, 0, 0);
         
         $str6 = date('Y.m.d');
-        imagettftext($image_6, 22, 0, imagesx($image_6)-837, imagesy($image_6)-640, $black6, $font, $str6);
+        imagettftext($image_1, 22, 0, imagesx($image_1)-837, imagesy($image_1)-640, $black1, $font, $str6);
         
         // 输出合成图片
-        imagepng($image_6, APP_ROOT.'static/images/temp/'.$time.'6.png');
+        imagepng($image_1, APP_ROOT.'static/images/temp/'.$time.'6.png');
 
         $url6 = 'http://www.ymlypt.com/static/images/temp/'.$time.'6.png';
         
