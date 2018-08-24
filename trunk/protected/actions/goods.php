@@ -392,7 +392,7 @@ class GoodsAction extends Controller {
             $form = 'android';
         }
 
-        $resp = $this->tbk_req_get($form, $q, $type, $page, '50', 'total_sales_des');
+        $resp = $this->tbk_req_get($form, $q, $type, $page, '50', 'total_sales_des',false);
 
         $size = empty($size) ? 20 : $size;
         $save_data = [];
@@ -468,7 +468,7 @@ class GoodsAction extends Controller {
         return $str2[0];
     }
 
-    public function tbk_req_get($form, $q, $type, $pageno, $pageSize = '100', $sort = 'total_sales_des') {
+    public function tbk_req_get($form, $q, $type, $pageno, $pageSize = '100', $sort = 'total_sales_des',$has_coupon=true) {
         if (!$q) {
             $q = 0;
         }
@@ -523,7 +523,9 @@ class GoodsAction extends Controller {
 //        $req->setIsTmall("false");
         $req->setSort($sort);
         // $req->setItemloc("杭州");
-        $req->setHasCoupon("true");
+        if($has_coupon) {
+            $req->setHasCoupon("true");
+        }  
         // $req->setIp("13.2.33.4");
         // $req->setNeedFreeShipment("true");
 //        $req->setNeedPrepay("true");
@@ -999,7 +1001,7 @@ class GoodsAction extends Controller {
         $return = json_decode(file_get_contents($req_url), true);
         if(!isset($return['result']['data']['coupon_info'])) {
             $coupon_click_url = $return['result']['data']['coupon_info']['coupon_click_url'];
-            
+
         }
         $this->code = 0;
         $this->content = $return;
