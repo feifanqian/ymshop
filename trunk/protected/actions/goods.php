@@ -1000,10 +1000,10 @@ class GoodsAction extends Controller {
 
         $return = json_decode(file_get_contents($req_url), true);
         if(!isset($return['result']['data']['coupon_info'])) {
-            $coupon_click_url = $return['result']['data']['coupon_info']['coupon_click_url'];
+            $coupon_click_url = $return['result']['data']['coupon_click_url'];
             
         }
-        $return['e'] = $return['result']['data'];
+        $return['e'] = $this->parse_url_param($return['result']['data']['coupon_click_url']);
         $this->code = 0;
         $this->content = $return;
         return;
