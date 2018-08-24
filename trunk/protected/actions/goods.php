@@ -1006,6 +1006,12 @@ class GoodsAction extends Controller {
             $req_urls = "http://119.29.94.164/xiaocao/wuquan.action?e=".$e."&appkey=122335418120180705&qq=1223354181";
             $ret = json_decode(file_get_contents($req_urls), true);
             $return['result']['data']['coupon_click_url'] = $ret['iteminfo']['data']['result']['item']['clickUrl'];
+            $return['result']['data']['coupon_end_time'] = date('Y-m-d H:i:s');
+            $return['result']['data']['coupon_info'] = '';
+            $return['result']['data']['coupon_remain_count'] = 0;
+            $return['result']['data']['coupon_start_time'] = date('Y-m-d H:i:s');
+            $return['result']['data']['oupon_total_count'] = 0;
+            $return['result']['data']['coupon_type'] = 0;
         }
         
         $this->code = 0;
