@@ -400,7 +400,15 @@ class GoodsAction extends Controller {
             if ($resp['result_list']['map_data']) {
                 foreach ($resp['result_list']['map_data'] as $itm) {
                     if (!isset($save_data[$itm['coupon_id']])) {
-                        $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
+                        if($itm['coupon_info']!='') {
+                            $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
+                        } else {
+                            $decrease_price = 0.00;
+                            $itm['coupon_end_time'] = date('Y-m-d H:i:s');
+                            $itm['coupon_share_url'] = $itm['item_url'];
+                            $itm['coupon_start_time'] = date('Y-m-d H:i:s');
+                        }
+                        
                         // if ($decrease_price < 5 || ($itm['zk_final_price'] - $decrease_price>=5000)) {
                         //     continue;
                         // }
@@ -439,10 +447,10 @@ class GoodsAction extends Controller {
                 }
 
                 //使结果是偶数
-                $count = count($save_data);
-                if($count < $size){
-                    $size = $count - ($count % 2);
-                }
+                // $count = count($save_data);
+                // if($count < $size){
+                //     $size = $count - ($count % 2);
+                // }
 
                 $resp['results']['tbk_coupon'] = array_slice(array_values($save_data), 0, $size);
                 unset($resp['result_list']);
@@ -989,6 +997,10 @@ class GoodsAction extends Controller {
         $req_url = $main_hightapi_url . "?" . http_build_query($params);
 
         $return = json_decode(file_get_contents($req_url), true);
+        if(!isset($return['result']['data']['coupon_info'])) {
+            $coupon_click_url = $return['result']['data']['coupon_info']['coupon_click_url'];
+            
+        }
         $this->code = 0;
         $this->content = $return;
         return;
