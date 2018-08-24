@@ -1000,13 +1000,14 @@ class GoodsAction extends Controller {
 
         $return = json_decode(file_get_contents($req_url), true);
         if(!isset($return['result']['data']['coupon_info'])) {
-            $coupon_click_url = $return['result']['data']['coupon_click_url'];
-            
+            $parse_url = parse_url($return['result']['data']['coupon_click_url']);
+            $query = $parse_url['query'];
+            $e = substr($query,2);
+            $req_urls = "http://119.29.94.164/xiaocao/wuquan.action?e=".$e."&appkey=122335418120180705&qq=1223354181";
+            $ret = json_decode(file_get_contents($req_urls), true);
+            $return['result']['data']['coupon_click_url'] = $ret['iteminfo']['data']['result']['item']['clickUrl'];
         }
-        $parse_url = parse_url($return['result']['data']['coupon_click_url']);
-        $query = $parse_url['query'];
-        $e = substr($query,2);
-        $return['e'] = $e;
+        
         $this->code = 0;
         $this->content = $return;
         return;
