@@ -114,6 +114,20 @@
         <label>（米）距离红包离你多远可以抢的距离，默认500米</label>
       </dd>
     </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b>access_token</dt>
+      <dd>
+        <input name="access_token" type="text" class="" pattern="str" value="7000210123803564aae498aa94b9ca1602de733fbf239a967511f36d3ae5e8e7ec3777f3870059548" style="width: 250px;">
+        <label>app优惠购转链access_token</label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b>access_token设置时间</dt>
+      <dd>
+        <input name="token_date" type="text" class="small" pattern="str" value="">
+        <label>上次access_token修改时间</label>
+      </dd>
+    </dl>
     <div class="center">
       <input type="submit" name="submit" class="button action fn" value="确 定">
     </div>
@@ -121,6 +135,18 @@
 </div>
 
 <script>
+$("input[name='access_token']").change(function(){
+    var value = $(this).val();
+    var myDate = new Date;
+    var year = myDate.getFullYear();//获取当前年
+    var yue = myDate.getMonth()+1;//获取当前月
+    var date = myDate.getDate();//获取当前日
+    var h = myDate.getHours();//获取当前小时数(0-23)
+    var m = myDate.getMinutes();//获取当前分钟数(0-59)
+    var s = myDate.getSeconds();//获取当前秒
+    var token_date = year+'-'+yue+'-'+date+' '+h+':'+m+':'+s;
+   $("input[name='token_date']").val(token_date);
+});
 	{if:isset($message)}
 	art.dialog.tips('<p class="success">{$message}</p>');
 	{/if}

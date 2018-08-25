@@ -1821,6 +1821,32 @@ class Common {
         return $result;    
     }
 
+    static function getAllChildUserIds($user_id)
+    {
+       $model = new Model();
+       $is_break = false;
+       $num = 0;
+       $now_user_id = $user_id;
+       $idstr = '';
+       $ids = array();
+       while(!$is_break) {
+          $inviter_info = $model->table("invite")->where("user_id=".$now_user_id)->findAll();
+          if($inviter_info) {
+            foreach($inviter_info as $k =>$v) {
+               $ids[] = $v['invite_user_id'];
+               $num = $num+1;
+               $now_user_id = $v['invite_user_id'];
+            }
+          } else {
+            $is_break = true;
+          }
+          $idstr = $ids!=null?implode(',', $ids):'';
+       }
+       $result['user_ids'] = $idstr;
+       $result['num'] = $num;
+       return $result;
+    }
+
     static function getFirstDistrictId($user_id)
     {
         $model = new Model();
