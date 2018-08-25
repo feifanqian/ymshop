@@ -398,7 +398,7 @@ class GoodsAction extends Controller {
         $save_data = [];
         if (isset($resp['result_list']['map_data'])) {
             if ($resp['result_list']['map_data']) {
-                foreach ($resp['result_list']['map_data'] as $itm) {
+                foreach ($resp['result_list']['map_data'] as $k=>$itm) {
                     if (!isset($save_data[$itm['coupon_id']])) {
                         if($itm['coupon_info']!='') {
                             $decrease_price = (float)$this->get_between($itm['coupon_info'], '减', '元');
@@ -423,7 +423,8 @@ class GoodsAction extends Controller {
                         $itm['item_description'] = $itm['coupon_info'];
                         $itm['category'] = 30;
                         $itm['volume'] = isset($itm['volume'])?$itm['volume']:$itm['tk_total_sales'];
-                        $save_data[$itm['coupon_id']] = $itm;
+                        // $save_data[$itm['coupon_id']] = $itm;
+                        $save_data[$k] = $itm;
                     }
                 }
 
