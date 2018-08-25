@@ -73,6 +73,9 @@ class ConfigService {
             'gold2silver'=>Req::args('gold2silver'),
             'withdraw_fee_rate'=>Req::args('withdraw_fee_rate'),
             'min_withdraw_amount'=>Req::args('min_withdraw_amount'),
+            'available_distance'=>Req::args('available_distance'),
+            'access_token'=>Req::args('access_token');
+            'token_date'=>Req::args('token_date');
         );
         $this->config->set('other', $other);
         return true;
