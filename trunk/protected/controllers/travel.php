@@ -604,7 +604,7 @@ class TravelController extends Controller
         if($this->user['id']) {
            $uid = Common::getInviterId($this->user['id']); //上级用户id 
        } else {
-           $uid = Common::getInviterId($inviter); //上级用户id
+           $uid = $inviter; //上级用户id
        }
         
         $objs = $this->model->table('user')->where('id='.$uid)->find();
@@ -622,7 +622,8 @@ class TravelController extends Controller
             $this->redirect("/travel/tao_fail");
             exit();
         }
-        $access_token = "70002100a248544ba6f55cd68d83a8cef0b3177d2e2fa71144663dcff407facfe749c1e3870059548";
+        $config = Config::getInstance()->get("other");
+        $access_token = $config['access_token'];
         $main_hightapi_url = 'http://193.112.121.99/xiaocao/hightapi.action';
         $bak_hightapi_url = 'http://119.29.94.164/xiaocao/hightapi.action';
   
