@@ -1020,13 +1020,13 @@ class UcenterAction extends Controller {
         $where = '';
         switch ($type) {
             case 'in':
-                $where = ' and type in(8,13)';
+                $where = ' and type in(8,13,20)';
                 break;
             case 'out':
                 $where = ' and type = 11';
                 break;
             case 'all':
-                $where = ' and type in(8,11,13)';
+                $where = ' and type in(8,11,13,20)';
                 break;
             default:
                 break;
