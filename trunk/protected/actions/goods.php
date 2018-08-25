@@ -991,7 +991,8 @@ class GoodsAction extends Controller {
             $this->code = 1271;
             return;
         }
-        $access_token = "7000210123803564aae498aa94b9ca1602de733fbf239a967511f36d3ae5e8e7ec3777f3870059548";
+        $config = Config::getInstance()->get("other");
+        $access_token = $config['access_token'];
         $main_hightapi_url = 'http://193.112.121.99/xiaocao/hightapi.action';
         $bak_hightapi_url = 'http://119.29.94.164/xiaocao/hightapi.action';
   
