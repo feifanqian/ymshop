@@ -17,8 +17,7 @@
         <th style="width:80">价格</th>
         <th style="width:80">佣金</th>
         <th style="width:100">订单状态</th>
-        <th style="width:100">结算状态</th>
-        <th >备注 </th>   
+        <th style="width:100">结算状态</th>  
     </tr>
     {query:name=benefit_log as bl fields=bl.*,us.name,us.nickname,c.real_name,c.mobile join=left join user as us on bl.user_id eq us.id left join  customer as c on c.user_id eq bl.user_id where= $where order= bl.id desc id=$obj page=1 desc }
         <tr class="{if:$key%2==1}odd{/if}">

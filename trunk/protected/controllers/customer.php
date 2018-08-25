@@ -78,7 +78,6 @@ class CustomerController extends Controller {
         else
             $this->assign("where", "1=1");
         $this->assign("condition", $condition);
-        $this->assign("type", array('-1' => '<span class="red">未支付</span>', '0' => '结算中', '1' => '已结算', '2' => '未结算'));
         $this->redirect();
     }
 
@@ -90,6 +89,7 @@ class CustomerController extends Controller {
         else
             $this->assign("where", "1=1");
         $this->assign("condition", $condition);
+        $this->assign("type", array('-1' => '<span class="red">未支付</span>', '0' => '结算中', '1' => '已结算', '2' => '未结算'));
         $this->redirect();
     }
 
