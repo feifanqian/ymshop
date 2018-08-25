@@ -88,6 +88,7 @@ class Menu {
             '/customer/grade_edit' => array('name' => '添加会员等级', 'parent' => 'customer'),
             '/customer/withdraw_list' => array('name' => '提现申请', 'parent' => 'balance'),
             '/customer/balance_list' => array('name' => '余额日志', 'parent' => 'balance'),
+            '/customer/benefit_list' => array('name' => '收益日志', 'parent' => 'balance'),
             '/customer/pointcoin_list' => array('name' => '积分日志', 'parent' => 'balance'),
             '/customer/review_list' => array('name' => '商品评价', 'parent' => 'ask_reviews'),
             '/customer/ask_list' => array('name' => '商品咨询', 'parent' => 'ask_reviews'),
