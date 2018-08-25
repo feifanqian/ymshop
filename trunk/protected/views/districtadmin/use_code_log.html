@@ -15,12 +15,12 @@
         <th style="width:100">所属经销商</th>
         <th style="width:100">时间</th>  
     </tr>
-    {query:name=code_log as cl fields=cl.*,us.nickname,u.nickname as nick_name join=left join user as us on cl.user_id eq us.id left join user as u on cl.to_id eq u.id where= $where order= cl.id desc id=$obj page=1 desc }
+    {query:name=code_log as cl fields=cl.*,us.real_name,us.mobile,u.real_name as nick_name,u.mobile as phone join=left join customer as us on cl.user_id eq us.user_id left join customer as u on cl.to_id eq u.user_id where= $where order= cl.id desc id=$obj page=1 desc }
         <tr class="{if:$key%2==1}odd{/if}">
             <td style="width:30px;">{$item['id']}、</td>
             <td style="width:100px;">{$item['code']}</td>
-            <td style="width:100px">{$item['nick_name'] | '--'}</td>
-            <td style="width:100px">{$item['nickname'] | '--'}</td>
+            <td style="width:100px">{$item['nick_name'] | $item['phone']}</td>
+            <td style="width:100px">{$item['real_name'] | $item['mobile']}</td>
             <td style="width:100px">{$item['datetime']}</td>
         </tr>
     {/query}
