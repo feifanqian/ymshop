@@ -13,6 +13,7 @@
         <th style="width:100">订单号</th>
         <th style="width:100">商品名</th>
         <th style="width:100">收益用户</th>
+        <th style="width:100">手机号</th>
         <th style="width:100">时间</th>
         <th style="width:80">价格</th>
         <th style="width:80">佣金</th>
@@ -25,8 +26,9 @@
             <td style="width:100px">{$item['order_sn'] | '--'}</td>
             <td style="width:100px">{$item['goods_name'] | '--'}</td>
             <td style="width:100px">{$item['real_name'] | $item['nickname']}</td>
+            <td style="width:100px">{$item['mobile'] | '--'}</td>
             <td style="width:100px">{$item['create_time']}</td>
-            <td style="width:80px">{$item['price']}</td>
+            <td style="width:80px">{$item['price']}</tsd>
             <td style="width:80px">{$item['amount']}</td>
             <td style="width:100px">{$item['order_status']}</td>
             <td style="width:100px">{$type[$item['type']]}</td>

@@ -7,12 +7,21 @@
     <!-- <form action="{url:/districtadmin/shop_check_dos}" method="post" > -->
         <input type="hidden" name="id" value="{$contract['id']}">
         <input type="hidden" name="status" value="1">
+        {if:$contract['url4']!=null}
         <dl class="lineD">
             <dt>合约：</dt>
             <dd>
                 <img src="{$contract['url4']}" width="1080" height="4574">      
             </dd>
         </dl>
+        {else:}
+        <dl class="lineD">
+            <dt>合约：</dt>
+            <dd>
+                该商家暂未签约    
+            </dd>
+        </dl>
+        {/if}
     <!-- </form> -->
 </div>
 <script type="text/javascript">
