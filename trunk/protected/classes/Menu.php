@@ -161,6 +161,8 @@ class Menu {
             '/complaint/complaint_list'=>array('name'=>'投诉列表','parent'=>'complaint'),
             '/districtadmin/record_sale'=>array('name'=>'销售记录','parent'=>'record'),
             '/districtadmin/record_income'=>array('name'=>'收益记录','parent'=>'record'),
+            '/districtadmin/send_code_log'=>array('name'=>'激活码赠送记录','parent'=>'record'),
+            '/districtadmin/use_code_log'=>array('name'=>'激活码使用记录','parent'=>'record'),
             '/districtadmin/list_hirer'=>array('name'=>'经销商','parent'=>'personnel'),
             '/districtadmin/list_promoter'=>array('name'=>'代理商','parent'=>'personnel'),
             '/districtadmin/apply_withdraw'=>array('name'=>'提现申请','parent'=>'apply'),

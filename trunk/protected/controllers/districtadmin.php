@@ -2079,5 +2079,31 @@ class DistrictadminController extends Controller
         
         $this->assign('contract',$contract);
         $this->redirect();
+    }
+
+    public function send_code_log()
+    {
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str)
+            $this->assign("where", $condition_str);
+        else
+            $this->assign("where", "type=1");
+        $this->assign("condition", $condition);
+        $this->assign("type", array('-1' => '<span class="red">未支付</span>', '0' => '结算中', '1' => '已结算', '2' => '未结算'));
+        $this->redirect();
+    }
+
+    public function use_code_log()
+    {
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str)
+            $this->assign("where", $condition_str);
+        else
+            $this->assign("where", "type=2");
+        $this->assign("condition", $condition);
+        $this->assign("type", array('-1' => '<span class="red">未支付</span>', '0' => '结算中', '1' => '已结算', '2' => '未结算'));
+        $this->redirect();
     } 
 }
