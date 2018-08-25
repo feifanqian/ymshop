@@ -20,7 +20,7 @@
         <th style="width:100">结算状态</th>
         <th >备注 </th>   
     </tr>
-    {query:name=benefit_log as bl fields=bl.*,us.name,u.nickname,c.real_name,c.mobile join=left join user as us on bl.user_id eq us.id left join  customer as c on c.user_id eq bl.user_id where= $where order= bl.id desc id=$obj page=1 desc }
+    {query:name=benefit_log as bl fields=bl.*,us.name,us.nickname,c.real_name,c.mobile join=left join user as us on bl.user_id eq us.id left join  customer as c on c.user_id eq bl.user_id where= $where order= bl.id desc id=$obj page=1 desc }
         <tr class="{if:$key%2==1}odd{/if}">
             <td style="width:30px;">{$item['id']}、</td>
             <td style="width:100px">{$item['order_sn'] | '--'}</td>
@@ -82,7 +82,7 @@
       $("#export_form").submit();
     }
     function Condition(id){
-        $("body").Condition({input:id,data:{'create_time':{name:'时间'},'c.real_name':{name:'用户名'},'u.nickname':{name:'真实姓名'},'order_sn':{name:'订单号'}
+        $("body").Condition({input:id,data:{'create_time':{name:'时间'},'c.real_name':{name:'用户名'},'us.nickname':{name:'真实姓名'},'order_sn':{name:'订单号'}
         }});
     }
 </script>
