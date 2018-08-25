@@ -901,8 +901,8 @@ class GoodsAction extends Controller {
     }
 
     public function manage_my_goods() {
-        $this->code = 1291;
-        return;
+        // $this->code = 1291;
+        // return;
         $type = Filter::int(Req::args('type'));
         $id = Filter::int(Req::args('id'));
         if ($type == 0 || $type == 1) {
