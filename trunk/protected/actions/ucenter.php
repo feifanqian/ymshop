@@ -971,13 +971,15 @@ class UcenterAction extends Controller {
     public function balance_log() {
         $page = Filter::int(Req::args('page'));
         $type = Filter::str(Req::args('type'));
-        $where = '';
+        $where = '1=1';
         switch ($type) {
             case 'in':
-                $where = ' and type in(1,2,4,5,6,7,8,9,10,12,13,14,15,16,18,19,20,21)';
+                // $where = ' and type in(1,2,4,5,6,7,8,9,10,12,13,14,15,16,18,19,20,21)';
+                $where = ' and amount>0';
                 break;
             case 'out':
-                $where = ' and type in(0,3,11,17)';
+                // $where = ' and type in(0,3,11,17)';
+                $where = ' and amount<0';
                 break;
             case 'all':
                 break;
