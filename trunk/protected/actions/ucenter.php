@@ -2976,6 +2976,13 @@ class UcenterAction extends Controller {
         $this->content = $need_check;
     }
 
+    public function shop_check_info()
+    {
+        $info = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
+        $this->code = 0;
+        $this->content['info'] = $info;
+    }
+
     public function shop_register(){
 
         //获取token
