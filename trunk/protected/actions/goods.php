@@ -910,6 +910,7 @@ class GoodsAction extends Controller {
         } else {
             $this->model->table('goods')->where('id=' . $id)->delete();
             $this->model->table('products')->where('goods_id=' . $id)->delete();
+            $this->model->table('center_dynamic')->where('goods_id=' . $id)->delete();
         }
         $this->code = 0;
         return;
