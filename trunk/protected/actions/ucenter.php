@@ -2847,7 +2847,8 @@ class UcenterAction extends Controller {
        $bank_name = Req::args('bank_name'); //银行卡信息
        $shop_photo = Req::args('shop_photo'); //门店照
        $hand_idcard = Req::args('hand_idcard'); //手持身份证照
-       $legal_name = Req::args('legal_name'); //法人名字
+       $shop_name = Req::args('shop_name'); //店铺名
+       $legal_person = Req::args('legal_person'); //法人名字
        $mobile = Req::args('mobile'); //手机号
        $found_date = Req::args('found_date'); //成立时间
        $province = Req::args('province'); 
@@ -2905,18 +2906,31 @@ class UcenterAction extends Controller {
        $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
        
        $data = array(
-        'user_id'=>$this->user['id'],
-        'type'=>$type,
-        'business_licence'=>$business_licence,
-        'positive_idcard'=>$positive_idcard,
-        'native_idcard'=>$native_idcard,
-        'account_picture'=>$account_picture,
-        'account_card'=>$account_card,
-        'bank_name'=>$bank_name,
-        'shop_photo'=>$shop_photo,
-        'hand_idcard'=>$hand_idcard,
-        'status'=>0,
-        'create_date'=>date('Y-m-d H:i:s')
+        'user_id'          => $this->user['id'],
+        'type'             => $type,
+        'shop_name'        => $shop_name,
+        'legal_person'     => $legal_person,
+        'id_no'            => $id_no,
+        'mobile'           => $mobile,
+        'found_date'       => $found_date,
+        'province'         => $province,
+        'city'             => $city,
+        'county'           => $county,
+        'business_licence' => $business_licence,
+        'business_number'  => $business_number,
+        'business_addr'    => $business_addr,
+        'positive_idcard'  => $positive_idcard,
+        'native_idcard'    => $native_idcard,
+        'account_picture'  => $account_picture,
+        'account_card'     => $account_card,
+        'bank_type'        => $bank_type,
+        'bank_name'        => $bank_name,
+        'bank_phone'       => $bank_phone,
+        'bank_area'        => $bank_area,
+        'shop_photo'       => $shop_photo,
+        'hand_idcard'      => $hand_idcard,
+        'status'           => 0,
+        'create_date'      => date('Y-m-d H:i:s')
         );
        $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
        if($shop_check){

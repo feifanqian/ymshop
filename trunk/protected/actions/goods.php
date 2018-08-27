@@ -1001,13 +1001,15 @@ class GoodsAction extends Controller {
         $params = ['token' => $access_token, 'item_id' => $item_id, 'adzone_id' => $taoke['adzoneid'], 'site_id' => $taoke['siteid'], 'qq' => '1223354181'];
         $req_url = $main_hightapi_url . "?" . http_build_query($params);
 
-        $return = json_decode(file_get_contents($req_url), true);
+        // $return = json_decode(file_get_contents($req_url), true);
+        $return = json_decode(Common::httpRequest($req_url,'GET'),true);
         if(!isset($return['result']['data']['coupon_info'])) {
             $parse_url = parse_url($return['result']['data']['coupon_click_url']);
             $query = $parse_url['query'];
             $e = substr($query,2);
             $req_urls = "http://119.29.94.164/xiaocao/wuquan.action?e=".$e."&appkey=122335418120180705&qq=1223354181";
-            $ret = json_decode(file_get_contents($req_urls), true);
+            // $ret = json_decode(file_get_contents($req_urls), true);
+            $ret = json_decode(Common::httpRequest($req_urls,'GET'),true);
             if(isset($ret['iteminfo']['data']['result']['item']['clickUrl'])) {
                 $return['result']['data']['coupon_click_url'] = 'https:'.$ret['iteminfo']['data']['result']['item']['clickUrl'];
             }
