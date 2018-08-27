@@ -1045,4 +1045,11 @@ class GoodsAction extends Controller {
         $this->content['url'] = "http://www.ymlypt.com/travel/tao_share?num_iid={$num_iid}&tao_str={$tao_str}";
         return;
     }
+
+    public function industry_list()
+    {
+        $list = $this->model->table('industry')->findAll();
+        $this->code = 0;
+        $this->content = $list;
+    }
 }

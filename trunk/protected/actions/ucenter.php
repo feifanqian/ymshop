@@ -2838,7 +2838,7 @@ class UcenterAction extends Controller {
      * 商家认证接口
      */
     public function shop_check(){
-       $type = Filter::int(Req::args('type')); //1实体商家 2个人微商
+       $type = Filter::int(Req::args('type')); //1个体商户 2个人微商 3企业商户
        $business_licence = Req::args('business_licence'); //营业执照
        $positive_idcard = Req::args('positive_idcard'); //身份证正面照
        $native_idcard = Req::args('native_idcard'); //身份证反面照
@@ -2847,6 +2847,18 @@ class UcenterAction extends Controller {
        $bank_name = Req::args('bank_name'); //银行卡信息
        $shop_photo = Req::args('shop_photo'); //门店照
        $hand_idcard = Req::args('hand_idcard'); //手持身份证照
+       $legal_name = Req::args('legal_name'); //法人名字
+       $mobile = Req::args('mobile'); //手机号
+       $found_date = Req::args('found_date'); //成立时间
+       $province = Req::args('province'); 
+       $city = Req::args('city'); 
+       $county = Req::args('county'); 
+       $business_number = Req::args('business_number'); //营业执照编号
+       $business_addr = Req::args('business_addr'); //营业执照地址
+       $bank_type = Req::args('bank_type'); //银行名称
+       $bank_phone = Req::args('bank_phone'); //银行预留手机号
+       $bank_area = Req::args('bank_area'); //银行所属地区
+       $bank_type = Req::args('bank_type'); //银行名称
 
        $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
        if(!$shop){
@@ -2865,28 +2877,31 @@ class UcenterAction extends Controller {
         $this->code = 1223;
         return;
        }
-       if($type==1){
+       if(!$hand_idcard){
+        $this->code = 1225;
+        return;
+       }
+       if(!$type){
+        $this->code = 1231;
+        return;
+       }
+       if($type==1 || $type==3){
             if(!$business_licence){
                 $this->code = 1219;
                 return;
             }
-            // if(!$account_picture){
-            //     $this->code = 1222;
-            //     return;
-            // }
             if(!$shop_photo){
                 $this->code = 1224;
                 return;
             }
-       }elseif($type==2){
-          if(!$hand_idcard){
-                $this->code = 1231;
-                return;
+            if($type==3) {
+                if(!$account_picture){
+                    $this->code = 1222;
+                    return;
+                }
             }
-       }else{
-         $this->code = 1225;
-         return;
        }
+       
        $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
        
        $data = array(

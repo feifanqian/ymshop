@@ -117,9 +117,19 @@ class MapAction extends Controller
             'url3'    => $url
             );
         if(!$contract) {
-            $this->model->table('promoter_contract')->data($data)->insert();
+            $this->model->table('promoter_contract')->data($data)->insert();      
         } else {
             $this->model->table('promoter_contract')->data($data)->where('id='.$contract['id'])->update();
+        }
+
+        $shop_check = $this->model->table('shop_check')->where('user_id='.$contract['user_id'])->find();
+        if($shop_check) {
+            if($shop_check['id_no']==null) {
+                $this->model->table('shop_check')->data(['id_no'=>$id_no])->where('id='.$shop_check['id'])->update();
+            }
+            if($shop_check['mobile']==null) {
+                $this->model->table('shop_check')->data(['mobile'=>$mobile])->where('id='.$shop_check['id'])->update();
+            }
         }
 
         $this->code = 0;

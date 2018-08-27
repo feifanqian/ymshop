@@ -199,6 +199,7 @@ class V1Controller extends Controller {
         "name_verified_temp"=>array("ucenter/nameVerifiedTemp",1,1), //二要素实名认证(临时)
         "shop_check"=>array("ucenter/shop_check",1,1), // 商家信息认证申请
         "shop_checked"=>array("ucenter/shop_checked",1,1), // 判断商家是否认证过
+        "industry_list"=>array("goods/industry_list",0,1), //行业列表
 
         "pointcoin_log"=>array("ucenter/pointcoin_log",1,1),
         //充值套餐详情
