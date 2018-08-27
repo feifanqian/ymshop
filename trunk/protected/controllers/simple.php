@@ -1801,6 +1801,14 @@ class SimpleController extends Controller {
                 //计算订单总金额
                 $order_amount = $real_amount + $payable_freight + $tax_fee - $discount_amount - $voucher_value;
                 
+                foreach ($order_products as $item) {
+                    $info = $model->table("goods")->where("id=".$item['goods_id'])->fields("type")->find();
+                    if($info['type']==2) {
+                        $this->code = 1300;
+                        return;
+                    }
+                }
+                
                 //填写订单
                 $data['order_no'] = Common::createOrderNo();
                 $data['user_id'] = $this->user['id'];
