@@ -1803,11 +1803,9 @@ class SimpleController extends Controller {
                 
                 foreach ($order_products as $item) {
                     $info = $model->table("goods")->where("id=".$item['goods_id'])->fields("type")->find();
-                    if($this->user['id']==42608) {
-                        var_dump($info['type']);die;
-                    }
                     if($info['type']==2) {
-                        $this->code = 1300;
+                        $msg = array('type' => 'fail', 'msg' => '该商品暂未开售，请耐心等候');
+                        $this->redirect('/index/msg', false, $msg);
                         return;
                     }
                 }
