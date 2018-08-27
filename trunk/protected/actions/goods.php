@@ -909,7 +909,7 @@ class GoodsAction extends Controller {
             $this->model->table('goods')->data(['is_online' => $type])->where('id=' . $id)->update();
         } else {
             $this->model->table('goods')->where('id=' . $id)->delete();
-            $this->model->table('product')->where('goods_id=' . $id)->delete();
+            $this->model->table('products')->where('goods_id=' . $id)->delete();
         }
         $this->code = 0;
         return;
