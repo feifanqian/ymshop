@@ -1187,7 +1187,7 @@ class Common {
             // $rand = rand(-111,111)/100000;
             if($seller){
                 if($seller['lng'] == '' && $seller['lat'] == ''){
-                   $model->table('redbag')->data(array('amount'=>$balance5,'total_amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'pay_status'=>1))->insert(); 
+                   $model->table('redbag')->data(array('order_no'=>$order_no,'amount'=>$balance5,'total_amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'pay_status'=>1))->insert(); 
                }else{
                 $rand1 = rand(-90,90)/10000;
                 if($rand1>0){
@@ -1196,11 +1196,11 @@ class Common {
                     $rand2 = 0-(0.009-abs($rand1));
                 }
                 if($balance5>=0.01 && $balance5<=0.02) { //红包数量1
-                   $model->table('redbag')->data(array('amount'=>$balance5,'total_amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand1,'lat'=>$seller['lat']+$rand2,'pay_status'=>1))->insert();
+                   $model->table('redbag')->data(array('order_no'=>$order_no,'amount'=>$balance5,'total_amount'=>$balance5,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand1,'lat'=>$seller['lat']+$rand2,'pay_status'=>1))->insert();
                 } elseif($balance5>0.02 && $balance5<=0.05) { //红包数量2
                     $max_money = $balance5*100-1;
                     $redbag_money = rand(1,$max_money)/100;    
-                    $model->table('redbag')->data(array('amount'=>$redbag_money,'total_amount'=>$redbag_money,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand1,'lat'=>$seller['lat']+$rand2,'pay_status'=>1))->insert();
+                    $model->table('redbag')->data(array('order_no'=>$order_no,'amount'=>$redbag_money,'total_amount'=>$redbag_money,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand1,'lat'=>$seller['lat']+$rand2,'pay_status'=>1))->insert();
                     $rand3 = rand(-90,90)/10000;
                     if($rand3>0){
                         $rand4 = 0.009-$rand3;
@@ -1208,7 +1208,7 @@ class Common {
                         $rand4 = 0-(0.009-abs($rand3));
                     }
                     $redbag_money2 = $balance5 - $redbag_money;
-                    $model->table('redbag')->data(array('amount'=>$redbag_money2,'total_amount'=>$redbag_money2,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand3,'lat'=>$seller['lat']+$rand4,'pay_status'=>1))->insert();
+                    $model->table('redbag')->data(array('order_no'=>$order_no,'amount'=>$redbag_money2,'total_amount'=>$redbag_money2,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand3,'lat'=>$seller['lat']+$rand4,'pay_status'=>1))->insert();
                 } elseif($balance5>0.05 && $balance5<=0.1) { //红包数量3~5
                     $num = rand(3,5);
                     $redbag_money = sprintf('%.2f',$balance5/$num);
@@ -1219,7 +1219,7 @@ class Common {
                         }else{
                             $rand4 = 0-(0.009-abs($rand3));
                         }
-                        $model->table('redbag')->data(array('amount'=>$redbag_money,'total_amount'=>$redbag_money,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand3,'lat'=>$seller['lat']+$rand4,'pay_status'=>1))->insert();
+                        $model->table('redbag')->data(array('order_no'=>$order_no,'amount'=>$redbag_money,'total_amount'=>$redbag_money,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand3,'lat'=>$seller['lat']+$rand4,'pay_status'=>1))->insert();
                     }
                 } elseif($balance5>0.1 && $balance5<=5) { //红包数量5~10
                     $num = rand(5,10);
@@ -1231,7 +1231,7 @@ class Common {
                         }else{
                             $rand4 = 0-(0.009-abs($rand3));
                         }
-                        $model->table('redbag')->data(array('amount'=>$redbag_money,'total_amount'=>$redbag_money,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand3,'lat'=>$seller['lat']+$rand4,'pay_status'=>1))->insert();
+                        $model->table('redbag')->data(array('order_no'=>$order_no,'amount'=>$redbag_money,'total_amount'=>$redbag_money,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand3,'lat'=>$seller['lat']+$rand4,'pay_status'=>1))->insert();
                     }
                 } elseif($balance5>5 && $balance5<=10) { //红包数量10~20
                     $num = rand(10,20);
@@ -1243,7 +1243,7 @@ class Common {
                         }else{
                             $rand4 = 0-(0.009-abs($rand3));
                         }
-                        $model->table('redbag')->data(array('amount'=>$redbag_money,'total_amount'=>$redbag_money,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand3,'lat'=>$seller['lat']+$rand4,'pay_status'=>1))->insert();
+                        $model->table('redbag')->data(array('order_no'=>$order_no,'amount'=>$redbag_money,'total_amount'=>$redbag_money,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand3,'lat'=>$seller['lat']+$rand4,'pay_status'=>1))->insert();
                     }
                 } else { //红包数量20~50
                     $num = rand(20,50);
@@ -1255,7 +1255,7 @@ class Common {
                         }else{
                             $rand4 = 0-(0.009-abs($rand3));
                         }
-                        $model->table('redbag')->data(array('amount'=>$redbag_money,'total_amount'=>$redbag_money,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand3,'lat'=>$seller['lat']+$rand4,'pay_status'=>1))->insert();
+                        $model->table('redbag')->data(array('order_no'=>$order_no,'amount'=>$redbag_money,'total_amount'=>$redbag_money,'order_id'=>$order['id'],'user_id'=>$seller_id,'create_time'=>date('Y-m-d H:i:s'),'location'=>$seller['location'],'lng'=>$seller['lng']+$rand3,'lat'=>$seller['lat']+$rand4,'pay_status'=>1))->insert();
                     }
                 }
                }   

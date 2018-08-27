@@ -512,7 +512,7 @@ class AddressAction extends Controller
                  $this->model->table('redbag_get')->data(array('redbag_id'=>$id,'get_user_id'=>$this->user['id'],'amount'=>$get_money,'get_date'=>date('Y-m-d H:i:s')))->insert();
                
                  $this->model->table('customer')->data(array('balance'=>"`balance`+({$get_money})"))->where('user_id='.$this->user['id'])->update();
-                 Log::balance($get_money,$this->user['id'],$redbag['order_id'],'抢红包收益',14);
+                 Log::balance($get_money,$this->user['id'],$redbag['order_no'],'抢红包收益',14);
                
                  $result = $this->newredbag($id);
                 $this->code = 0;
