@@ -44,14 +44,18 @@ class OperationController extends Controller
             $order_total = $this->model->table('order')->fields('sum(order_amount) as sum')->where($where1)->query();
             $order_sum = $order_total[0]['sum']!=null?$order_total[0]['sum']:0.00;
 
-            $offline_order_num = $this->model->table('order_offline')->where($where1)->count();
-            $offline_order_total = $this->model->table('order_offline')->fields('sum(order_amount) as sum')->where($where1)->query();
-            $offline_order_sum = $offline_order_total[0]['sum']!=null?$offline_order_total[0]['sum']:0.00;
-            $where2 = "user_id in ($ids) and type=21";
+            $where2 = "shop_ids = ".$user_id." and pay_status=1";
             if($date) {
-                $where2 .=" and time>= '{$date}'"; 
+                $where2.=" and pay_time >= '{$date}'";
             }
-            $benefit_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where2)->query();
+            $offline_order_num = $this->model->table('order_offline')->where($where2)->count();
+            $offline_order_total = $this->model->table('order_offline')->fields('sum(order_amount) as sum')->where($where2)->query();
+            $offline_order_sum = $offline_order_total[0]['sum']!=null?$offline_order_total[0]['sum']:0.00;
+            $where3 = "user_id in ($ids) and type=21";
+            if($date) {
+                $where3 .=" and time>= '{$date}'"; 
+            }
+            $benefit_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where3)->query();
             $benefit_sum = $benefit_total[0]['sum']!=null?$benefit_total[0]['sum']:0.00;
         } else {
             $order_num = 0;
@@ -62,11 +66,11 @@ class OperationController extends Controller
         }
         $idstr = $user['user_ids'];
         if($idstr!='') {
-            $where3 = "c.user_id in ($idstr) and c.status=1";
+            $where4 = "c.user_id in ($idstr) and c.status=1";
             if($date) {
-                $where3 .= " and c.reg_time>='{$date}'";
+                $where4 .= " and c.reg_time>='{$date}'";
             }
-            $list = $this->model->table('customer as c')->join('left join user as u on c.user_id= u.id')->fields('c.real_name,c.mobile,u.id,u.nickname,u.avatar')->where($where3)->findPage($page,10);
+            $list = $this->model->table('customer as c')->join('left join user as u on c.user_id= u.id')->fields('c.real_name,c.mobile,u.id,u.nickname,u.avatar')->where($where4)->findPage($page,10);
             if($list['data']){
                 foreach($list['data'] as $k=>$v){
                     if($v['id']==null){
