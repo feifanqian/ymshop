@@ -355,6 +355,7 @@ class LinuxCliTask{
     #定时退回拼团失败余额
     public function autoBackGroupbuyMoney()
     {
+        $NoticeService = new NoticeService();
         $order = $this->model->table('order')->where('pay_status=1 and type=1 and delivery_status=0 and status!=4')->findAll();
         if($order) {
             foreach($order as $k=>$v) {
@@ -371,6 +372,15 @@ class LinuxCliTask{
                                 $this->model->table('groupbuy_join')->data(array('status'=>3))->where('id='.$value['join_id'])->update();
                                 $this->model->table('groupbuy_log')->data(array('pay_status'=>3))->where('id='.$value['id'])->update();
                                 $this->model->table('order')->data(['status'=>5,'pay_status'=>3])->where('id='.$v['id'])->update();
+                                //推送
+                                $client_type = Common::getPayClientByPaymentID($v['payment']);
+                                if($client_type=='ios'||$client_type=='android'){
+                                    //jpush
+                                    $jpush = $NoticeService->getNotice('jpush');
+                                    $audience['alias']=array($value['user_id']);
+                                    $jpush->setPushData('all', $audience, '抱歉，人数不足拼团失败了', 'order_pay_fail', $v['order_no']);
+                                    $jpush->push();
+                                }
                             } 
                         }
                     }
