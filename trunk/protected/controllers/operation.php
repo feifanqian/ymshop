@@ -1,7 +1,7 @@
 <?php
-class TravelController extends Controller
+class OperationController extends Controller
 {
-    public $layout = 'travel';
+    public $layout = 'operation';
     public $safebox = null;
     private $user;
     private $model = null;
