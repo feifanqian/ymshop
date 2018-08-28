@@ -2933,6 +2933,8 @@ class UcenterAction extends Controller {
         'business_addr'    => $business_addr,
         'positive_idcard'  => $positive_idcard,
         'native_idcard'    => $native_idcard,
+        'positive_bankcard'=> $positive_bankcard,
+        'native_bankcard'  => $native_bankcard,
         'account_picture'  => $account_picture,
         'account_card'     => $account_card,
         'bank_type'        => $bank_type,
