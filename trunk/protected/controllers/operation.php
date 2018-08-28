@@ -77,6 +77,12 @@ class OperationController extends Controller
             }
             $shop_num = $this->model->table('district_shop')->where($where5)->count();
             $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
+            $where7 = "user_id in ($ids) and type=5";
+            if($start_date || $end_date) {
+                $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
+            }
+            $order_benefit_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where7)->query();
+            $order_benefit = $order_benefit_total[0]['sum']!=null?$order_benefit_total[0]['sum']:0.00;
         } else {
             $order_num = 0;
             $order_sum = 0.00;
@@ -86,28 +92,28 @@ class OperationController extends Controller
             $crossover_sum = 0.00;
             $shop_num = 0;
             $promoter_num = 0;
+            $order_benefit = 0.00;
         }
         $idstr = $user['user_ids'];
         if($idstr!='') {
-            $where5 = "c.user_id in ($idstr) and c.status=1";
+            $where8 = "c.user_id in ($idstr) and c.status=1";
             if($start_date || $end_date) {
-                $where5 .= " and c.reg_time between '{$start_date}' and '{$end_date}'";
+                $where8 .= " and c.reg_time between '{$start_date}' and '{$end_date}'";
             }
-            $list = $this->model->table('customer as c')->join('left join user as u on c.user_id= u.id')->fields('c.real_name,c.mobile,u.id,u.nickname,u.avatar')->where($where5)->findPage($page,10);
+            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar')->where($where8)->findPage($page,10);
             if($list['data']){
+                unset($list['html']);
+                $total = count($list['data']);
                 foreach($list['data'] as $k=>$v){
                     if($v['id']==null){
                         unset($list['data'][$k]);
                         $total = $total-1;
                     }else{
                         $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                        $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
-                        if($shop && $promoter){
-                            $list['data'][$k]['role_type'] = 2;      
-                        }elseif(!$shop && $promoter){
-                            $list['data'][$k]['role_type'] = 1;  
+                        if($shop){
+                            $list['data'][$k]['role_type'] = 2; //经销商     
                         }else{
-                            $list['data'][$k]['role_type'] = 0;      
+                            $list['data'][$k]['role_type'] = 1; //商家     
                         }
                     }
                 }
@@ -128,9 +134,9 @@ class OperationController extends Controller
         $result['order_num'] = $order_num; //线上订单总金额     
         $result['offline_order_sum'] = $offline_order_sum; //扫码订单总金额
         $result['order_benefit'] = $order_benefit; //线上订单跨界收益
-        $result['benefit_sum'] = $benefit_sum; //扫码订单跨界收益 
-        $result['crossover_sum'] = $crossover_sum;
-        $result['user_list'] = $list;
+        $result['crossover_sum'] = $crossover_sum; //扫码订单跨界收益
+        $result['benefit_sum'] = $benefit_sum; // 优惠购收益
+        $result['user_list'] = $list; //用户列表
         var_dump($result);die;
         $this->assign('result',$result);
         $this->redirect();
