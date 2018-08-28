@@ -897,7 +897,7 @@ class TravelController extends Controller
             if($date) {
                 $where3 .= " and c.reg_time>='{$date}'";
             }
-            $list = $this->model->table('customer as c')->join('left join user as u on c.user_id= u.id')->fields('c.real_name,c.mobile,u.nickname,u.avatar')->where($where3)->findPage($page,10);
+            $list = $this->model->table('customer as c')->join('left join user as u on c.user_id= u.id')->fields('c.real_name,c.mobile,u.id,u.nickname,u.avatar')->where($where3)->findPage($page,10);
             if($list['data']){
                 foreach($list['data'] as $k=>$v){
                     if($v['id']==null){
