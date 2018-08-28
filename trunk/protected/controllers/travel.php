@@ -858,8 +858,8 @@ class TravelController extends Controller
     public function operation_center()
     {
         $user_id = Filter::int(Req::args('user_id'));
-        var_dump($user_id);
-        $user = $this->getAllChildUserIds($user_id);
+        $date = Filter::str(Req::args('date'));
+        $user = $this->getAllChildUserIds($user_id,$date);
         var_dump($user);die;
     }
 
