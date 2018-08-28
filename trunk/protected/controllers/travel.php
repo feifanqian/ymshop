@@ -859,15 +859,81 @@ class TravelController extends Controller
     {
         $user_id = Filter::int(Req::args('user_id'));
         $date = Filter::str(Req::args('date'));
+        $page = Filter::int(Req::args('page'));
+        if(!$page) {
+            $page = 1;
+        }
         $user = $this->getAllChildUserIds($user_id,$date);
-        var_dump($user);die;
+        $total_user = $this->getAllChildUserIds($user_id);
+        if($total_user['user_ids']) {
+            $where1 = "user_id in ($total_user['user_ids']) and pay_status=1 and status=4";
+            if($date) {
+                $where1.=" and pay_time >= '{$date}'";
+            }
+            $order_num = $this->model->table('order')->where($where1)->count();
+            $order_total = $this->model->table('order')->fields('sum(order_amount) as sum')->where($where1)->query();
+            $order_sum = $order_total[0]['sum'];
+
+            $offline_order_num = $this->model->table('order_offline')->where($where1)->count();
+            $offline_order_total = $this->model->table('order_offline')->fields('sum(order_amount) as sum')->where($where1)->query();
+            $offline_order_sum = $offline_order_total[0]['sum'];
+            $where2 = "user_id in ($total_user['user_ids']) and type=21";
+            if($date) {
+                $where2 .=" and time>= '{$date}'"; 
+            }
+            $benefit_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where2)->query();
+            $benefit_sum = $benefit_total[0]['sum'];
+        } else {
+            $order_num = 0;
+            $order_sum = 0.00;
+            $offline_order_num = 0;
+            $offline_order_sum = 0.00;
+            $benefit_sum = 0.00;
+        }
+        $where3 = "c.user_id in ($total_user['user_ids']) and c.status=1";
+        if($date) {
+            $where3 .= " and c.reg_time>='{$date}'";
+        }
+        $list = $this->model->table('customer as c')->join('left join user as u on c.user_id= u.id')->fields('c.real_name,c.mobile,u.nickname,u.avatar')->where($where3)->findPage($page,10);
+        if($list['data']){
+            foreach($list['data'] as $k=>$v){
+                if($v['id']==null){
+                    unset($list['data'][$k]);
+                    $total = $total-1;
+                }else{
+                    $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                    $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
+                    if($shop && $promoter){
+                        $list['data'][$k]['role_type'] = 2;      
+                    }elseif(!$shop && $promoter){
+                        $list['data'][$k]['role_type'] = 1;  
+                    }else{
+                        $list['data'][$k]['role_type'] = 0;      
+                    }
+                }
+            }
+            $list['data'] = array_values($list['data']); 
+        } else {
+            $list['data'] = [];
+        }
+        $result = array();
+        $result['user_num'] = $user['num'];
+        $result['order_num'] = $order_num;
+        $result['order_sum'] = $order_sum;
+        $result['offline_order_num'] = $offline_order_num;
+        $result['offline_order_sum'] = $offline_order_sum;
+        $result['benefit_sum'] = $benefit_sum;
+        $result['user_list'] = $list;
+        var_dump($result);die;
+        $this->assign('result',$result);
+        $this->redirect();
     }
 
     public function getAllChildUserIds($user_id,$date='')
     {
-       if(!$date) {
-        $date = date('Y-m-d');
-       } 
+       // if(!$date) {
+       //  $date = date('Y-m-d');
+       // } 
        $model = new Model();
        $is_break = false;
        $num = 0;
@@ -879,7 +945,6 @@ class TravelController extends Controller
           if($date) {
             $where.=" and c.reg_time>='{$date}'";
           }
-          // var_dump($where);die;
           $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
           if($inviter_info) {
             foreach($inviter_info as $k =>$v) {
