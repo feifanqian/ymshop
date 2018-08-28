@@ -2883,7 +2883,7 @@ class UcenterAction extends Controller {
         $this->code = 1223;
         return;
        }
-       if(!$hand_idcard){
+       if(!$hand_idcard && $type!=2){
         $this->code = 1225;
         return;
        }
