@@ -866,7 +866,7 @@ class TravelController extends Controller
     public function getAllChildUserIds($user_id,$date='')
     {
        if($date) {
-        $data = date('Y-m-d');
+        $date = date('Y-m-d');
        } 
        $model = new Model();
        $is_break = false;
@@ -876,7 +876,7 @@ class TravelController extends Controller
        $ids = array();
        while(!$is_break) {
           $where = "i.user_id=".$now_user_id;
-          if($data) {
+          if($date) {
             $where.=" and c.reg_time>".$date;
           }
           $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
