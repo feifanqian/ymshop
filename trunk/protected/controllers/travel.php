@@ -866,7 +866,8 @@ class TravelController extends Controller
         $user = $this->getAllChildUserIds($user_id,$date);
         $total_user = $this->getAllChildUserIds($user_id);
         if($total_user['user_ids']) {
-            $where1 = "user_id in ($total_user['user_ids']) and pay_status=1 and status=4";
+            $ids = $total_user['user_ids'];
+            $where1 = "user_id in ($ids) and pay_status=1 and status=4";
             if($date) {
                 $where1.=" and pay_time >= '{$date}'";
             }
@@ -877,7 +878,7 @@ class TravelController extends Controller
             $offline_order_num = $this->model->table('order_offline')->where($where1)->count();
             $offline_order_total = $this->model->table('order_offline')->fields('sum(order_amount) as sum')->where($where1)->query();
             $offline_order_sum = $offline_order_total[0]['sum'];
-            $where2 = "user_id in ($total_user['user_ids']) and type=21";
+            $where2 = "user_id in ($ids) and type=21";
             if($date) {
                 $where2 .=" and time>= '{$date}'"; 
             }
@@ -890,32 +891,38 @@ class TravelController extends Controller
             $offline_order_sum = 0.00;
             $benefit_sum = 0.00;
         }
-        $where3 = "c.user_id in ($total_user['user_ids']) and c.status=1";
-        if($date) {
-            $where3 .= " and c.reg_time>='{$date}'";
-        }
-        $list = $this->model->table('customer as c')->join('left join user as u on c.user_id= u.id')->fields('c.real_name,c.mobile,u.nickname,u.avatar')->where($where3)->findPage($page,10);
-        if($list['data']){
-            foreach($list['data'] as $k=>$v){
-                if($v['id']==null){
-                    unset($list['data'][$k]);
-                    $total = $total-1;
-                }else{
-                    $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                    $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
-                    if($shop && $promoter){
-                        $list['data'][$k]['role_type'] = 2;      
-                    }elseif(!$shop && $promoter){
-                        $list['data'][$k]['role_type'] = 1;  
+        $idstr = $user['user_ids'];
+        if($idstr!='') {
+            $where3 = "c.user_id in ($idstr) and c.status=1";
+            if($date) {
+                $where3 .= " and c.reg_time>='{$date}'";
+            }
+            $list = $this->model->table('customer as c')->join('left join user as u on c.user_id= u.id')->fields('c.real_name,c.mobile,u.nickname,u.avatar')->where($where3)->findPage($page,10);
+            if($list['data']){
+                foreach($list['data'] as $k=>$v){
+                    if($v['id']==null){
+                        unset($list['data'][$k]);
+                        $total = $total-1;
                     }else{
-                        $list['data'][$k]['role_type'] = 0;      
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        $promoter = $this->model->table('district_promoter')->where('user_id='.$v['id'])->find();
+                        if($shop && $promoter){
+                            $list['data'][$k]['role_type'] = 2;      
+                        }elseif(!$shop && $promoter){
+                            $list['data'][$k]['role_type'] = 1;  
+                        }else{
+                            $list['data'][$k]['role_type'] = 0;      
+                        }
                     }
                 }
+                $list['data'] = array_values($list['data']); 
+            } else {
+                $list['data'] = [];
             }
-            $list['data'] = array_values($list['data']); 
         } else {
             $list['data'] = [];
         }
+        
         $result = array();
         $result['user_num'] = $user['num'];
         $result['order_num'] = $order_num;
