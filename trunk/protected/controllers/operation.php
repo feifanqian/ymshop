@@ -67,6 +67,16 @@ class OperationController extends Controller
             }
             $crossover_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
+            $where5 = "owner_id in ($ids)";
+            if($start_date || $end_date) {
+                $where5 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
+            }
+            $where6 = "user_id in ($ids)";
+            if($start_date || $end_date) {
+                $where6 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
+            }
+            $shop_num = $this->model->table('district_shop')->where($where5)->count();
+            $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
         } else {
             $order_num = 0;
             $order_sum = 0.00;
@@ -74,6 +84,8 @@ class OperationController extends Controller
             $offline_order_sum = 0.00;
             $benefit_sum = 0.00;
             $crossover_sum = 0.00;
+            $shop_num = 0;
+            $promoter_num = 0;
         }
         $idstr = $user['user_ids'];
         if($idstr!='') {
@@ -108,12 +120,15 @@ class OperationController extends Controller
         }
         
         $result = array();
-        $result['user_num'] = $user['num'];
-        $result['order_num'] = $order_num;
-        $result['order_sum'] = $order_sum;
-        $result['offline_order_num'] = $offline_order_num;
-        $result['offline_order_sum'] = $offline_order_sum;
-        $result['benefit_sum'] = $benefit_sum;
+        $result['order_sum'] = $order_sum; //线上总订单数
+        $result['offline_order_num'] = $offline_order_num; //扫码总订单数
+        $result['shop_num'] = $shop_num; //经销商数量
+        $result['promoter_num'] = $promoter_num; //商家数量
+        $result['user_num'] = $user['num']; //会员数量
+        $result['order_num'] = $order_num; //线上订单总金额     
+        $result['offline_order_sum'] = $offline_order_sum; //扫码订单总金额
+        $result['order_benefit'] = $order_benefit; //线上订单跨界收益
+        $result['benefit_sum'] = $benefit_sum; //扫码订单跨界收益 
         $result['crossover_sum'] = $crossover_sum;
         $result['user_list'] = $list;
         var_dump($result);die;

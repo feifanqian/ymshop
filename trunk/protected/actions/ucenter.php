@@ -2867,7 +2867,12 @@ class UcenterAction extends Controller {
        $bank_area = Req::args('bank_area'); //银行所属地区
        $positive_bankcard = Req::args('positive_bankcard'); //银行卡正面照
        $native_bankcard = Req::args('native_bankcard'); //银行卡反面照
-
+       $industry_no = Req::args('industry_no'); //行业编号
+       
+       if(!$industry_no) {
+        $this->code = 1302;
+        return;
+       }
        $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
        if(!$shop){
         $this->code = 1166;
@@ -2943,6 +2948,7 @@ class UcenterAction extends Controller {
         'bank_area'        => $bank_area,
         'shop_photo'       => $shop_photo,
         'hand_idcard'      => $hand_idcard,
+        'industry_no'      => $industry_no,
         'status'           => 0,
         'create_date'      => date('Y-m-d H:i:s')
         );
