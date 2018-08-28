@@ -879,6 +879,7 @@ class TravelController extends Controller
           if($date) {
             $where.=" and c.reg_time>".$date;
           }
+          var_dump($where);die;
           $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
           if($inviter_info) {
             foreach($inviter_info as $k =>$v) {
