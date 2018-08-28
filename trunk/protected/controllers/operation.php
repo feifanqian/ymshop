@@ -57,20 +57,27 @@ class OperationController extends Controller
             }
             $benefit_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where3)->query();
             $benefit_sum = $benefit_total[0]['sum']!=null?$benefit_total[0]['sum']:0.00;
+            $where4 = "user_id in ($ids) and type=8";
+            if($date) {
+                $where4 .=" and time>= '{$date}'"; 
+            }
+            $crossover_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
+            $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
         } else {
             $order_num = 0;
             $order_sum = 0.00;
             $offline_order_num = 0;
             $offline_order_sum = 0.00;
             $benefit_sum = 0.00;
+            $crossover_sum = 0.00;
         }
         $idstr = $user['user_ids'];
         if($idstr!='') {
-            $where4 = "c.user_id in ($idstr) and c.status=1";
+            $where5 = "c.user_id in ($idstr) and c.status=1";
             if($date) {
-                $where4 .= " and c.reg_time>='{$date}'";
+                $where5 .= " and c.reg_time>='{$date}'";
             }
-            $list = $this->model->table('customer as c')->join('left join user as u on c.user_id= u.id')->fields('c.real_name,c.mobile,u.id,u.nickname,u.avatar')->where($where4)->findPage($page,10);
+            $list = $this->model->table('customer as c')->join('left join user as u on c.user_id= u.id')->fields('c.real_name,c.mobile,u.id,u.nickname,u.avatar')->where($where5)->findPage($page,10);
             if($list['data']){
                 foreach($list['data'] as $k=>$v){
                     if($v['id']==null){
