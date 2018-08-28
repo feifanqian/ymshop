@@ -873,17 +873,17 @@ class TravelController extends Controller
             }
             $order_num = $this->model->table('order')->where($where1)->count();
             $order_total = $this->model->table('order')->fields('sum(order_amount) as sum')->where($where1)->query();
-            $order_sum = $order_total[0]['sum'];
+            $order_sum = $order_total[0]['sum']!=null?$order_total[0]['sum']:0.00;
 
             $offline_order_num = $this->model->table('order_offline')->where($where1)->count();
             $offline_order_total = $this->model->table('order_offline')->fields('sum(order_amount) as sum')->where($where1)->query();
-            $offline_order_sum = $offline_order_total[0]['sum'];
+            $offline_order_sum = $offline_order_total[0]['sum']!=null?$offline_order_total[0]['sum']:0.00;
             $where2 = "user_id in ($ids) and type=21";
             if($date) {
                 $where2 .=" and time>= '{$date}'"; 
             }
             $benefit_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where2)->query();
-            $benefit_sum = $benefit_total[0]['sum'];
+            $benefit_sum = $benefit_total[0]['sum']!=null?$benefit_total[0]['sum']:0.00;
         } else {
             $order_num = 0;
             $order_sum = 0.00;
