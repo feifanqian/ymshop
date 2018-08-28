@@ -110,6 +110,7 @@ class OperationController extends Controller
         $result['offline_order_num'] = $offline_order_num;
         $result['offline_order_sum'] = $offline_order_sum;
         $result['benefit_sum'] = $benefit_sum;
+        $result['crossover_sum'] = $crossover_sum;
         $result['user_list'] = $list;
         var_dump($result);die;
         $this->assign('result',$result);
