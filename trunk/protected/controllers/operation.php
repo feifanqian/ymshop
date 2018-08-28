@@ -144,9 +144,6 @@ class OperationController extends Controller
 
     public function getAllChildUserIds($user_id,$start_date='',$end_date='')
     {
-       // if(!$date) {
-       //  $date = date('Y-m-d');
-       // } 
        $model = new Model();
        $is_break = false;
        $num = 0;
@@ -155,7 +152,7 @@ class OperationController extends Controller
        $ids = array();
        while(!$is_break) {
           $where = "i.user_id=".$now_user_id;
-          if($date) {
+          if($start_date || $end_date) {
             $where.=" and c.reg_time between '{$start_date}' and '{$end_date}'";
           }
           $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
