@@ -28,7 +28,7 @@ class OperationController extends Controller
     {
         $user_id = Filter::int(Req::args('user_id'));
         $date = Filter::str(Req::args('date'));
-        $page = Filter::int(Req::args('page'));
+        $page = Filter::int(Req::args('p'));
         if(!$page) {
             $page = 1;
         }
