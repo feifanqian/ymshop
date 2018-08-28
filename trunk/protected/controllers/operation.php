@@ -27,39 +27,43 @@ class OperationController extends Controller
     public function operation_center()
     {
         $user_id = Filter::int(Req::args('user_id'));
-        $date = Filter::str(Req::args('date'));
+        $start_date = Filter::str(Req::args('start_date'));
+        $end_date = Filter::str(Req::args('end_date'));
         $page = Filter::int(Req::args('p'));
+        if($start_date && !$end_date) {
+            $end_date = date('Y-m-d');
+        }
         if(!$page) {
             $page = 1;
         }
-        $user = $this->getAllChildUserIds($user_id,$date);
+        $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
         $total_user = $this->getAllChildUserIds($user_id);
         if($total_user['user_ids']) {
             $ids = $total_user['user_ids'];
             $where1 = "user_id in ($ids) and pay_status=1 and status=4";
-            if($date) {
-                $where1.=" and pay_time >= '{$date}'";
+            if($start_date || $end_date) {
+                $where1.=" and pay_time between '{$start_date}' and '{$end_date}'";
             }
             $order_num = $this->model->table('order')->where($where1)->count();
             $order_total = $this->model->table('order')->fields('sum(order_amount) as sum')->where($where1)->query();
             $order_sum = $order_total[0]['sum']!=null?$order_total[0]['sum']:0.00;
 
             $where2 = "shop_ids = ".$user_id." and pay_status=1";
-            if($date) {
-                $where2.=" and pay_time >= '{$date}'";
+            if($start_date || $end_date) {
+                $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
             }
             $offline_order_num = $this->model->table('order_offline')->where($where2)->count();
             $offline_order_total = $this->model->table('order_offline')->fields('sum(order_amount) as sum')->where($where2)->query();
             $offline_order_sum = $offline_order_total[0]['sum']!=null?$offline_order_total[0]['sum']:0.00;
             $where3 = "user_id in ($ids) and type=21";
-            if($date) {
-                $where3 .=" and time>= '{$date}'"; 
+            if($start_date || $end_date) {
+                $where3 .=" and time between '{$start_date}' and '{$end_date}'"; 
             }
             $benefit_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where3)->query();
             $benefit_sum = $benefit_total[0]['sum']!=null?$benefit_total[0]['sum']:0.00;
             $where4 = "user_id in ($ids) and type=8";
-            if($date) {
-                $where4 .=" and time>= '{$date}'"; 
+            if($start_date || $end_date) {
+                $where4 .=" and time between '{$start_date}' and '{$end_date}'"; 
             }
             $crossover_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
@@ -74,8 +78,8 @@ class OperationController extends Controller
         $idstr = $user['user_ids'];
         if($idstr!='') {
             $where5 = "c.user_id in ($idstr) and c.status=1";
-            if($date) {
-                $where5 .= " and c.reg_time>='{$date}'";
+            if($start_date || $end_date) {
+                $where5 .= " and c.reg_time between '{$start_date}' and '{$end_date}'";
             }
             $list = $this->model->table('customer as c')->join('left join user as u on c.user_id= u.id')->fields('c.real_name,c.mobile,u.id,u.nickname,u.avatar')->where($where5)->findPage($page,10);
             if($list['data']){
@@ -117,7 +121,7 @@ class OperationController extends Controller
         $this->redirect();
     }
 
-    public function getAllChildUserIds($user_id,$date='')
+    public function getAllChildUserIds($user_id,$start_date='',$end_date='')
     {
        // if(!$date) {
        //  $date = date('Y-m-d');
@@ -131,7 +135,7 @@ class OperationController extends Controller
        while(!$is_break) {
           $where = "i.user_id=".$now_user_id;
           if($date) {
-            $where.=" and c.reg_time>='{$date}'";
+            $where.=" and c.reg_time between '{$start_date}' and '{$end_date}'";
           }
           $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
           if($inviter_info) {

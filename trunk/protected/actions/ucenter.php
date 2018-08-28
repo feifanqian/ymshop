@@ -2865,6 +2865,8 @@ class UcenterAction extends Controller {
        $bank_type = Req::args('bank_type'); //银行名称
        $bank_phone = Req::args('bank_phone'); //银行预留手机号
        $bank_area = Req::args('bank_area'); //银行所属地区
+       $positive_bankcard = Req::args('positive_bankcard'); //银行卡正面照
+       $native_bankcard = Req::args('native_bankcard'); //银行卡反面照
 
        $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
        if(!$shop){
@@ -2886,6 +2888,12 @@ class UcenterAction extends Controller {
        if(!$hand_idcard && $type!=2){
         $this->code = 1225;
         return;
+       }
+       if($type!=3){
+        if(!$positive_bankcard || !$native_bankcard) {
+            $this->code = 1301;
+            return;
+        }
        }
        if(!$type){
         $this->code = 1231;

@@ -180,7 +180,7 @@
                         <img src='' width="200" height="100" alt="" >
                    </div> 
                 </div>
-                <!-- <div class="weui-cell" style="display: none;" id="account_picture">
+                <div class="weui-cell" style="display: none;" id="account_picture">
                    <div class="weui-cell__hd" style="width:40%"><label class="weui-label">开户许可证照</label></div>
                    <div class="weui-cell__bd">
                         <input class="input" type="file" name="account_picture" value="" >
@@ -190,7 +190,7 @@
                    <div class="weui-cell__bd"  >
                         <img src='' width="200" height="100" alt="" >
                    </div> 
-                </div> -->
+                </div>
                 <div class="weui-cell" style="display: none;" id="shop_photo">
                    <div class="weui-cell__hd" style="width:40%"><label class="weui-label">门店照</label></div>
                    <div class="weui-cell__bd">
@@ -390,6 +390,10 @@
                   return false;
                 };
               }
+              if (!$("input[name=hand_idcard]").val()) {
+                  $.toast("请上传手持身份证照", "text");
+                  return false;
+              }
               if (!$("input[name=positive_bankcard]").val() || !$("input[name=native_bankcard]").val()) {
                   $.toast("请上传结算银行卡照", "text");
                   return false;
@@ -415,10 +419,14 @@
                   return false;
                 };
               }
-              // if (!$("input[name=account_picture]").val()) {
-              //     $.toast("请上传开户许可证照", "text");
-              //     return false;
-              // }
+              if (!$("input[name=hand_idcard]").val()) {
+                  $.toast("请上传手持身份证照", "text");
+                  return false;
+              }
+              if (!$("input[name=account_picture]").val()) {
+                  $.toast("请上传开户许可证照", "text");
+                  return false;
+              }
               if (!$("input[name=shop_photo]").val()) {
                   $.toast("请上传门店照", "text");
                   return false;
@@ -446,13 +454,21 @@
         }else if(shop_type==2){
           // $("#hand_idcard").show();
           $("#business_licence").hide();
-          // $("#account_picture").hide();
+          $("#account_picture").hide();
           $("#shop_photo").hide();
           $("#hand_idcard").hide();
           $("#business_licence_preview").hide();
-          // $("#account_picture_preview").hide();
+          $("#account_picture_preview").hide();
           $("#shop_photo_preview").hide();
           $("#hand_idcard_preview").hide();
+        } else if(shop_type==3){
+            $("#business_licence").show();
+            $("#business_licence_preview").show();
+            $("#account_picture").show();
+            $("#shop_photo").show();
+            $("#hand_idcard").show();
+            $("#hand_idcard_preview").show();
+            $("#account_picture_preview").show();
         }
     });
       
