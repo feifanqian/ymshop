@@ -854,4 +854,45 @@ class TravelController extends Controller
             $this->redirect("/index/msg", false, $info);
                 exit;
     }
+
+    public function operation_center()
+    {
+        $user_id = Filter::int(Req::args('user_id'));
+        var_dump($user_id);
+        $user = $this->getAllChildUserIds($user_id);
+        var_dump($user);die;
+    }
+
+    public function getAllChildUserIds($user_id,$date='')
+    {
+       if($date) {
+        $data = date('Y-m-d');
+       } 
+       $model = new Model();
+       $is_break = false;
+       $num = 0;
+       $now_user_id = $user_id;
+       $idstr = '';
+       $ids = array();
+       while(!$is_break) {
+          $where = "i.user_id=".$now_user_id;
+          if($data) {
+            $where.=" and c.reg_time>".$date;
+          }
+          $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
+          if($inviter_info) {
+            foreach($inviter_info as $k =>$v) {
+               $ids[] = $v['invite_user_id'];
+               $num = $num+1;
+               $now_user_id = $v['invite_user_id'];
+            }
+          } else {
+            $is_break = true;
+          }
+          $idstr = $ids!=null?implode(',', $ids):'';
+       }
+       $result['user_ids'] = $idstr;
+       $result['num'] = $num;
+       return $result;
+    }
 }    
