@@ -865,7 +865,7 @@ class TravelController extends Controller
 
     public function getAllChildUserIds($user_id,$date='')
     {
-       if($date) {
+       if(!$date) {
         $date = date('Y-m-d');
        } 
        $model = new Model();
