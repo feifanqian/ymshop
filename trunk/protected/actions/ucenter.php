@@ -1499,6 +1499,12 @@ class UcenterAction extends Controller {
         }elseif ($type == 'hand_idcard') {
             $options['save-key'] = "/data/uploads/hand_idcard/" . $this->user['id'] . ".jpg";
             $options['ext-param'] = "hand_idcard:{$this->user['id']}";
+        }elseif ($type == 'positive_bankcard') {
+            $options['save-key'] = "/data/uploads/positive_bankcard/" . $this->user['id'] . ".jpg";
+            $options['ext-param'] = "positive_bankcard:{$this->user['id']}";
+        }elseif ($type == 'native_bankcard') {
+            $options['save-key'] = "/data/uploads/native_bankcard/" . $this->user['id'] . ".jpg";
+            $options['ext-param'] = "native_bankcard:{$this->user['id']}";
         } else {
             $this->code = 1000;
             return;
