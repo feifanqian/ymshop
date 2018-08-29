@@ -43,7 +43,16 @@
 }
 .line-info{
     border-top: 0.1px solid #ccc;
-    margin-left: 5%;
+    border-bottom: 0.1px solid #ccc;
+    padding-left: 5%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.line-info span{
+    display: inline-block;
+    width: 40%;
+    float: left;
+    font-size: 16px;
 }
 .list-child a{
     text-decoration: none;
@@ -68,7 +77,8 @@
   <div class="block">
     <div class="line">数量总统计</div><br/>
     <div class="line-info">
-      <span><i><img src="/themes/mobile/images/op_center/--05.jpg" width="25" height="25"></i></i>线上总订单：{$result['order_num']}</span><span><i><img src="/themes/mobile/images/op_center/--06.jpg" width="25" height="25"></i></i>扫码总订单：{$result['offline_order_num']}</span><br/>
+      <span><i><img src="/themes/mobile/images/op_center/--05.jpg" width="25" height="25"></i></i>线上总订单：{$result['order_num']}</span>
+      <span><i><img src="/themes/mobile/images/op_center/--06.jpg" width="25" height="25"></i></i>扫码总订单：{$result['offline_order_num']}</span><br/>
       <span><i><img src="/themes/mobile/images/op_center/--09.jpg" width="25" height="25"></i></i>经销商数量：{$result['shop_num']}</span><span><i><img src="/themes/mobile/images/op_center/--07.jpg" width="25" height="25"></i></i>商家数量：{$result['promoter_num']}</span><br/>
       <span><i><img src="/themes/mobile/images/op_center/--08.jpg" width="25" height="25"></i></i>会员数量：{$result['user_num']}</span>
     </div>
