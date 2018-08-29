@@ -37,6 +37,7 @@ class OperationController extends Controller
             $page = 1;
         }
         $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
+        var_dump($user);die;
         $total_user = $this->getAllChildUserIds($user_id);
         if($total_user['user_ids']) {
             $ids = $total_user['user_ids'];
@@ -193,8 +194,6 @@ class OperationController extends Controller
        $now_user_id = $user_id;
        $idstr = '';
        $ids = array();
-       var_dump($start_date);
-       var_dump($end_date);die;
        while(!$is_break) {
           $where = "i.user_id=".$now_user_id;
           if($start_date && $end_date) {
