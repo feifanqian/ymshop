@@ -36,9 +36,7 @@
      统计时间：
      <p>
      <input name="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" onfocus="WdatePicker({minDate:'{echo:date('Y-m-d')}',dateFmt:'yyyy-MM-dd'})"><i><img src="/themes/mobile/images/op_center/--04.jpg" width="25" height="25"></i>
-     </p>
     至
-    <p>
     <input name="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker({minDate:'{echo:date('Y-m-d')}',dateFmt:'yyyy-MM-dd'})"><i><img src="/themes/mobile/images/op_center/--04.jpg" width="25" height="25"></i>
     </p>
      </span>
@@ -90,6 +88,7 @@
 <script src="/runtime/systemjs/jquery.min.js"></script>
 <script src="/static/js/datepicker.js"></script>
 <script src="/runtime/systemjs/My97DatePicker/calendar.js"></script>
+<script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 $("input[name='end_date']").change(function(){
     var start_date = $("input[name='start_date']").val();
