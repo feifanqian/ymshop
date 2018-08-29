@@ -193,6 +193,8 @@ class OperationController extends Controller
        $now_user_id = $user_id;
        $idstr = '';
        $ids = array();
+       var_dump($start_date);
+       var_dump($end_date);die;
        while(!$is_break) {
           $where = "i.user_id=".$now_user_id;
           if($start_date && $end_date) {
