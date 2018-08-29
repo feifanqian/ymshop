@@ -37,7 +37,7 @@ class OperationController extends Controller
             $page = 1;
         }
         $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
-        var_dump($user);die;
+        
         $total_user = $this->getAllChildUserIds($user_id);
         if($total_user['user_ids']) {
             $ids = $total_user['user_ids'];
@@ -125,7 +125,7 @@ class OperationController extends Controller
         } else {
             $list['data'] = [];
         }
-        // var_dump($user);die;
+        
         $result = array();
         $result['order_num'] = $order_num; //线上总订单数
         $result['offline_order_num'] = $offline_order_num; //扫码总订单数
@@ -138,7 +138,6 @@ class OperationController extends Controller
         $result['crossover_sum'] = $crossover_sum; //扫码订单跨界收益
         $result['benefit_sum'] = $benefit_sum; // 优惠购收益
         
-        // var_dump($result);die;
         $this->assign('result',$result);
         $this->assign('list',$list);
         $this->assign('user_id',$user_id);
@@ -200,7 +199,6 @@ class OperationController extends Controller
             $where.=" and c.reg_time between '{$start_date}' and '{$end_date}'";
           }
           $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
-          var_dump($inviter_info);die;
           if($inviter_info) {
             foreach($inviter_info as $k =>$v) {
                $ids[] = $v['invite_user_id'];
