@@ -186,10 +186,10 @@ class CashierAction extends Controller
     public function add_cashier_desk()
     {
     	$count = $this->model->table('cashier_desk')->where('hire_user_id='.$this->user['id'])->count();
-    	// if($count==6) {
-    	// 	$this->code = 1245;
-     //        return;
-    	// }
+    	if($count>=9) {
+    		$this->code = 1245;
+            return;
+    	}
         if($count==0) {
             $desk_no = '01';
         } elseif($count>0 && $count<=8) {
