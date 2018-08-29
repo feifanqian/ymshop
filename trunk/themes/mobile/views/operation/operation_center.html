@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <title>运营中心</title>
+</head>
+<style type="text/css">
+#app{
+
+}
+.line{
+    font-size:18px;
+    font-weight: bold; 
+}
+.line span{
+    color:#666;
+}
+.list-child a{
+    text-decoration: none;
+    color: #4eabf4;
+    float: right;
+}
+.list-child span{
+    color:#666;
+}
+</style>
+<body>
+<div id="app">
+  <input type="hidden" name="page" id="page" value="{$page}"/>
+  <div class="header">
+     <span>
+     统计时间：
+     <input name="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" onfocus="WdatePicker({minDate:'{echo:date('Y-m-d')}',dateFmt:'yyyy-MM-dd'})"><i><img src="/themes/mobile/images/op_center/--04.jpg" width="25" height="25"></i>
+    至
+    <input name="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker({minDate:'{echo:date('Y-m-d')}',dateFmt:'yyyy-MM-dd'})">
+     </span>
+  </div>
+  <div class="block">
+    <div class="line">数量总统计</div><br/>
+    <div>
+      <span><i><img src="/themes/mobile/images/op_center/--05.jpg" width="25" height="25"></i></i>线上总订单：{$result['order_num']}</span><span><i><img src="/themes/mobile/images/op_center/--06.jpg" width="25" height="25"></i></i>扫码总订单：{$result['offline_order_num']}</span><br/>
+      <span><i><img src="/themes/mobile/images/op_center/--09.jpg" width="25" height="25"></i></i>经销商数量：{$result['shop_num']}</span><span><i><img src="/themes/mobile/images/op_center/--07.jpg" width="25" height="25"></i></i>商家数量：{$result['promoter_num']}</span><br/>
+      <span><i><img src="/themes/mobile/images/op_center/--08.jpg" width="25" height="25"></i></i>会员数量：{$result['user_num']}</span>
+    </div>
+  </div>
+  <div class="block">
+    <div class="line">金额总统计</div><br/>
+    <div>
+      <span><i><img src="/themes/mobile/images/op_center/--10.jpg" width="25" height="25"></i></i>线上订单总金额：{$result['order_sum']}</span><span><i><img src="/themes/mobile/images/op_center/--13.jpg" width="25" height="25"></i></i>扫码订单总金额：{$result['offline_order_sum']}</span><br/>
+      <span><i><img src="/themes/mobile/images/op_center/--11.jpg" width="25" height="25"></i></i>线上订单跨界收益：{$result['order_benefit']}</span><span><i><img src="/themes/mobile/images/op_center/--12.jpg" width="25" height="25"></i></i>扫码订单跨界收益：{$result['crossover_sum']}</span><br/>
+      <span><i><img src="/themes/mobile/images/op_center/--14.jpg" width="25" height="25"></i></i>优惠购收益：{$result['benefit_sum']}</span>
+    </div>
+  </div>
+  <div class="block">
+   <div class="line">旗下经销商/商家</div><br/>
+   <div class="list">
+     <span>名称：{$l}</span>
+     {if:count($list['data'])>0}
+        {list:items=$list['data']}
+        <div class="list-child">
+            <span>名称：{$item['real_name'] | $item['nickname']}</span>
+            <span>{if:$item['role_type']==2}<i><img src="/themes/mobile/images/op_center/--09.jpg" width="25" height="25"></i></i>经销商{else:}<i><img src="/themes/mobile/images/op_center/--07.jpg" width="25" height="25"></i>商家{/if}</span><br/>
+            <span>手机号：{$item['mobile']}</span><br/>
+            <span>经营者：{$item['realname'] | $item['mobile']}</span><br/>
+            <span>加入时间：{$item['create_time']}</span>
+            <a href="/operation/shop_info/user_id/{$item['id']}">查看详情</a> 
+        </div>
+        {/list}
+     {else:}
+       <div class="list-child" style="text-align: center;margin-top: 10%;">暂无经销商/商家</div>  
+     {/if}
+   </div>
+  </div>
+</div>
+</body>
+<script src="/runtime/systemjs/jquery.min.js"></script>
+<script src="/static/js/datepicker.js"></script>
+<script type="text/javascript">
+$("input[name='end_date']").change(function(){
+    var start_date = $("input[name='start_date']").val();
+    var end_date = $("input[name='end_date']").val();
+    var user_id = {$user_id};
+    var url = "/operation/operation_center/"+user_id+"/start_date/"+start_date+"/end_date/"+end_date;
+    window.location.href = url;
+});
+function getScrollTop() { 
+        var scrollTop = 0; 
+        if (document.documentElement && document.documentElement.scrollTop) { 
+            scrollTop = document.documentElement.scrollTop; 
+        } else if (document.body) { 
+            scrollTop = document.body.scrollTop; 
+        } 
+        return scrollTop; 
+    } 
+    // 获取当前可视范围的高度 
+    function getClientHeight() { 
+        var clientHeight = 0; 
+        if (document.body.clientHeight && document.documentElement.clientHeight) { 
+            clientHeight = Math.min(document.body.clientHeight, document.documentElement.clientHeight); 
+        } 
+        else { 
+            clientHeight = Math.max(document.body.clientHeight, document.documentElement.clientHeight); 
+        } 
+        return clientHeight; 
+    }
+    // 获取文档完整的高度 
+    function getScrollHeight() { 
+        return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight); 
+    }
+
+    var page = $('#page').val();
+    $(window).bind('scroll', function () {
+        // if (getScrollHeight() == getWindowHeight() + getDocumentTop())
+        // {
+        //     page++;
+        //     ajaxRead();
+        // }
+        // if($(window).scrollTop() === $(document).height() - $(window).height()){
+        //     alert(111);
+        //     page++;
+        //     ajaxRead();
+        //  }
+        if (getScrollTop() + getClientHeight() == getScrollHeight()) {
+            // alert(111);
+            page++;
+            ajaxRead();
+        }
+    });
+
+    function ajaxRead() {
+        var html = "";
+        var url = "{url:/operation/ajax_operation_center}";
+        var user_id = {$user_id};
+        var start_date = $("input[name='start_date']").val();
+        var end_date = $("input[name='end_date']").val();
+        var data = {page: page,user_id:user_id,start_date:start_date,end_date:end_date};
+        var index;
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: url,
+            data: data,
+            success: function (res) {
+                data = JSON.stringify(res);
+                var jsonarray= $.parseJSON(data);
+                layer.close(index);
+                if (jsonarray.length == 0) {
+                    layer.msg('已经到底!',{time:500});
+                }  else {
+                    $.each(jsonarray, function (i, item) {
+                        html += '<div class="list-child">';
+                        if(item.real_name!=null) {
+                           html += '<span>名称：'+item.real_name+'</span>';
+                        } else {
+                           html += '<span>名称：'+item.nickname+'</span>';
+                        }
+                        if(item.role_type==2) {
+                           html += '<span><i><img src="/themes/mobile/images/op_center/--09.jpg" width="25" height="25"></i></i>经销商{/if}</span><br/>';
+                        } else {
+                           html += '<span><i><img src="/themes/mobile/images/op_center/--07.jpg" width="25" height="25"></i></i>商家{/if}</span><br/>';
+                        }
+                        html += '<span>手机号：'+item.mobile+'</span><br/>';
+                        if(item.realname!=null) {
+                           html += '<span>经营者：'+item.realname+'</span>';
+                        } else {
+                           html += '<span>经营者：'+item.mobile+'</span>';
+                        }
+                        html += '<span>加入时间：'+item.create_time+'</span>'
+                        html += '<a href="/operation/shop_info/user_id/'+item.id+'">查看详情</a>';
+                        html += '</div>';
+                    });
+                    $(".list").append(html);
+                }
+            },
+        });
+    }
+</script>
+</html>

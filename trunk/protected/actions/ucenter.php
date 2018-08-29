@@ -2869,10 +2869,10 @@ class UcenterAction extends Controller {
        $native_bankcard = Req::args('native_bankcard'); //银行卡反面照
        $industry_no = Req::args('industry_no'); //行业编号
        
-       if(!$industry_no) {
-        $this->code = 1302;
-        return;
-       }
+       // if(!$industry_no) {
+       //  $this->code = 1302;
+       //  return;
+       // }
        $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
        if(!$shop){
         $this->code = 1166;

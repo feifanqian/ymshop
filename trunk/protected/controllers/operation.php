@@ -100,7 +100,7 @@ class OperationController extends Controller
             if($start_date || $end_date) {
                 $where8 .= " and c.reg_time between '{$start_date}' and '{$end_date}'";
             }
-            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar')->where($where8)->findPage($page,10);
+            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
             if($list['data']){
                 unset($list['html']);
                 $total = count($list['data']);
@@ -126,20 +126,63 @@ class OperationController extends Controller
         }
         
         $result = array();
-        $result['order_sum'] = $order_sum; //线上总订单数
+        $result['order_num'] = $order_num; //线上总订单数
         $result['offline_order_num'] = $offline_order_num; //扫码总订单数
         $result['shop_num'] = $shop_num; //经销商数量
         $result['promoter_num'] = $promoter_num; //商家数量
         $result['user_num'] = $user['num']; //会员数量
-        $result['order_num'] = $order_num; //线上订单总金额     
+        $result['order_sum'] = $order_sum; //线上订单总金额     
         $result['offline_order_sum'] = $offline_order_sum; //扫码订单总金额
         $result['order_benefit'] = $order_benefit; //线上订单跨界收益
         $result['crossover_sum'] = $crossover_sum; //扫码订单跨界收益
         $result['benefit_sum'] = $benefit_sum; // 优惠购收益
-        $result['user_list'] = $list; //用户列表
+        
         var_dump($result);die;
         $this->assign('result',$result);
+        $this->assign('list',$list);
+        $this->assign('user_id',$user_id);
+        $this->assign('page',$page);
         $this->redirect();
+    }
+
+    public function ajax_operation_center()
+    {
+        $user_id = Filter::int(Req::args('user_id'));
+        $start_date = Filter::str(Req::args('start_date'));
+        $end_date = Filter::str(Req::args('end_date'));
+        $page = Filter::int(Req::args('page'));
+        $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
+        $idstr = $user['user_ids'];
+        if($idstr!='') {
+            $where8 = "c.user_id in ($idstr) and c.status=1";
+            if($start_date || $end_date) {
+                $where8 .= " and c.reg_time between '{$start_date}' and '{$end_date}'";
+            }
+            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
+            if($list['data']){
+                unset($list['html']);
+                $total = count($list['data']);
+                foreach($list['data'] as $k=>$v){
+                    if($v['id']==null){
+                        unset($list['data'][$k]);
+                        $total = $total-1;
+                    }else{
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if($shop){
+                            $list['data'][$k]['role_type'] = 2; //经销商     
+                        }else{
+                            $list['data'][$k]['role_type'] = 1; //商家     
+                        }
+                    }
+                }
+                $list['data'] = array_values($list['data']); 
+            } else {
+                $list['data'] = [];
+            }
+        } else {
+            $list['data'] = [];
+        }
+        echo JSON::encode($list['data']);
     }
 
     public function getAllChildUserIds($user_id,$start_date='',$end_date='')
