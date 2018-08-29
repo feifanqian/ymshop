@@ -124,7 +124,7 @@ class OperationController extends Controller
         } else {
             $list['data'] = [];
         }
-        
+        var_dump($user);die;
         $result = array();
         $result['order_num'] = $order_num; //线上总订单数
         $result['offline_order_num'] = $offline_order_num; //扫码总订单数
