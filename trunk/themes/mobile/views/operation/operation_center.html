@@ -133,7 +133,7 @@
     <p>
      统计时间：
      <input name="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" onfocus="WdatePicker({minDate:'{echo:date('Y-m-d')}',dateFmt:'yyyy-MM-dd'})">
-    至
+    &nbsp;&nbsp;至&nbsp;&nbsp;
     <input name="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker({minDate:'{echo:date('Y-m-d')}',dateFmt:'yyyy-MM-dd'})">
     </p>
   </div>
