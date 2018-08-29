@@ -63,7 +63,13 @@
         {list:items=$list['data']}
         <div class="list-child">
             <span>名称：{$item['real_name'] | $item['nickname']}</span>
-            <span>{if:$item['role_type']==2}<i><img src="/themes/mobile/images/op_center/--09.jpg" width="25" height="25"></i></i>经销商{else:}<i><img src="/themes/mobile/images/op_center/--07.jpg" width="25" height="25"></i>商家{/if}</span><br/>
+            <span>
+            {if:$item['role_type']==2}
+            <i><img src="/themes/mobile/images/op_center/--09.jpg" width="25" height="25"></i>经销商
+            {else:}
+            <i><img src="/themes/mobile/images/op_center/--07.jpg" width="25" height="25"></i>商家
+            {/if}
+            </span><br/>
             <span>手机号：{$item['mobile']}</span><br/>
             <span>经营者：{$item['realname'] | $item['mobile']}</span><br/>
             <span>加入时间：{$item['create_time']}</span>
@@ -159,9 +165,9 @@ function getScrollTop() {
                            html += '<span>名称：'+item.nickname+'</span>';
                         }
                         if(item.role_type==2) {
-                           html += '<span><i><img src="/themes/mobile/images/op_center/--09.jpg" width="25" height="25"></i></i>经销商{/if}</span><br/>';
+                           html += '<span><i><img src="/themes/mobile/images/op_center/--09.jpg" width="25" height="25"></i>经销商</span><br/>';
                         } else {
-                           html += '<span><i><img src="/themes/mobile/images/op_center/--07.jpg" width="25" height="25"></i></i>商家{/if}</span><br/>';
+                           html += '<span><i><img src="/themes/mobile/images/op_center/--07.jpg" width="25" height="25"></i>商家</span><br/>';
                         }
                         html += '<span>手机号：'+item.mobile+'</span><br/>';
                         if(item.realname!=null) {
