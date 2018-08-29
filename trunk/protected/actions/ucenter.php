@@ -2894,12 +2894,12 @@ class UcenterAction extends Controller {
         $this->code = 1225;
         return;
        }
-       if($type!=3){
-        if(!$positive_bankcard || !$native_bankcard) {
-            $this->code = 1301;
-            return;
-        }
-       }
+       // if($type!=3){
+       //  if(!$positive_bankcard || !$native_bankcard) {
+       //      $this->code = 1301;
+       //      return;
+       //  }
+       // }
        if(!$type){
         $this->code = 1231;
         return;
@@ -2913,12 +2913,12 @@ class UcenterAction extends Controller {
                 $this->code = 1224;
                 return;
             }
-            if($type==3) {
-                if(!$account_picture){
-                    $this->code = 1222;
-                    return;
-                }
-            }
+            // if($type==3) {
+            //     if(!$account_picture){
+            //         $this->code = 1222;
+            //         return;
+            //     }
+            // }
        }
        
        $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
