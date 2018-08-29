@@ -200,6 +200,7 @@ class OperationController extends Controller
             $where.=" and c.reg_time between '{$start_date}' and '{$end_date}'";
           }
           $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
+          var_dump($inviter_info);die;
           if($inviter_info) {
             foreach($inviter_info as $k =>$v) {
                $ids[] = $v['invite_user_id'];
