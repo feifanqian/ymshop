@@ -36,12 +36,13 @@
     border-left: 3px solid #4eabf4;
     font-size: 20px;
     font-weight: bold;
-    line-height: 40px; 
+    line-height: 30px; 
 }
 .line span{
-    color:#666;
+    color:#ccc;
 }
 .line-info{
+    margin-top: -10px;
     border-top: 0.1px solid #ccc;
     border-bottom: 0.1px solid #ccc;
     padding-left: 5%;
@@ -66,7 +67,7 @@
     float: right;
 }
 .list-child span{
-    color:#666;
+    color:#ccc;
 }
 </style>
 <body>
@@ -83,21 +84,21 @@
   <div class="block">
     <div class="line">数量总统计</div><br/>
     <div class="line-info">
-      <span><i><img src="/themes/mobile/images/op_center/--05.jpg" >&nbsp;&nbsp;&nbsp;线上总订单：{$result['order_num']}</i></span>
-      <span><i><img src="/themes/mobile/images/op_center/--06.jpg" >&nbsp;&nbsp;&nbsp;扫码总订单：{$result['offline_order_num']}</i></span><br/>
-      <span><i><img src="/themes/mobile/images/op_center/--09.jpg" >&nbsp;&nbsp;&nbsp;经销商数量：{$result['shop_num']}</i></span>
-      <span><i><img src="/themes/mobile/images/op_center/--07.jpg" >&nbsp;&nbsp;&nbsp;商家数量：{$result['promoter_num']}</i></span><br/>
-      <span><i><img src="/themes/mobile/images/op_center/--08.jpg" >&nbsp;&nbsp;&nbsp;会员数量：{$result['user_num']}</i></span>
+      <span><i><img src="/themes/mobile/images/op_center/--05.jpg" ></i>&nbsp;&nbsp;&nbsp;线上总订单：{$result['order_num']}</span>
+      <span><i><img src="/themes/mobile/images/op_center/--06.jpg" ></i>&nbsp;&nbsp;&nbsp;扫码总订单：{$result['offline_order_num']}</span><br/>
+      <span><i><img src="/themes/mobile/images/op_center/--09.jpg" ></i>&nbsp;&nbsp;&nbsp;经销商数量：{$result['shop_num']}</span>
+      <span><i><img src="/themes/mobile/images/op_center/--07.jpg" ></i>&nbsp;&nbsp;&nbsp;商家数量：{$result['promoter_num']}</span><br/>
+      <span><i><img src="/themes/mobile/images/op_center/--08.jpg" ></i>&nbsp;&nbsp;&nbsp;会员数量：{$result['user_num']}</span>
     </div>
   </div>
   <div class="block">
     <div class="line">金额总统计</div><br/>
     <div class="line-info">
-      <span><i><img src="/themes/mobile/images/op_center/--10.jpg" ></i></i>&nbsp;&nbsp;&nbsp;线上订单总金额：{$result['order_sum']}</span>
-      <span><i><img src="/themes/mobile/images/op_center/--13.jpg" ></i></i>&nbsp;&nbsp;&nbsp;扫码订单总金额：{$result['offline_order_sum']}</span><br/>
-      <span><i><img src="/themes/mobile/images/op_center/--11.jpg" ></i></i>&nbsp;&nbsp;&nbsp;线上订单跨界收益：{$result['order_benefit']}</span>
-      <span><i><img src="/themes/mobile/images/op_center/--12.jpg" ></i></i>&nbsp;&nbsp;&nbsp;扫码订单跨界收益：{$result['crossover_sum']}</span><br/>
-      <span><i><img src="/themes/mobile/images/op_center/--14.jpg" ></i></i>&nbsp;&nbsp;&nbsp;优惠购收益：{$result['benefit_sum']}</span>
+      <span><i><img src="/themes/mobile/images/op_center/--10.jpg" ></i>&nbsp;&nbsp;&nbsp;线上订单总金额：{$result['order_sum']}</span>
+      <span><i><img src="/themes/mobile/images/op_center/--13.jpg" ></i>&nbsp;&nbsp;&nbsp;扫码订单总金额：{$result['offline_order_sum']}</span><br/>
+      <span><i><img src="/themes/mobile/images/op_center/--11.jpg" ></i>&nbsp;&nbsp;&nbsp;线上订单跨界收益：{$result['order_benefit']}</span>
+      <span><i><img src="/themes/mobile/images/op_center/--12.jpg" ></i>&nbsp;&nbsp;&nbsp;扫码订单跨界收益：{$result['crossover_sum']}</span><br/>
+      <span><i><img src="/themes/mobile/images/op_center/--14.jpg" ></i>&nbsp;&nbsp;&nbsp;优惠购收益：{$result['benefit_sum']}</span>
     </div>
   </div>
   <div class="block">
