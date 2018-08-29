@@ -89,7 +89,7 @@
 }
 .list{
     border-top: 0.1px solid #ccc;
-    padding-top: 20px;
+    padding-top: 10px;
 }
 .list-child{
     border-bottom: 0.1px solid #ccc;
@@ -97,7 +97,7 @@
     padding-left: 5%;
     padding-right: 5%;
     padding-bottom: 20px;
-    padding-top: 10px;
+    padding-top: 14px;
 }
 .div-child{
     width: 100%;
@@ -118,7 +118,7 @@
     float: right;
     margin-right: 10%;
 }
-.line-child img{
+.list-child img{
     width: 30px;
     height: 30px;
     vertical-align: middle;
@@ -180,8 +180,7 @@
             <div class="div-child">
                 <span>加入时间：{$item['create_time']}</span>
                 <a href="/operation/shop_info/user_id/{$item['id']}">查看详情</a> 
-            </div>
-             
+            </div>    
         </div>
         {/list}
      {else:}
@@ -269,24 +268,32 @@ function getScrollTop() {
                 }  else {
                     $.each(jsonarray, function (i, item) {
                         html += '<div class="list-child">';
+                        html += '<div class="div-child">';
                         if(item.real_name!=null) {
                            html += '<span>名称：'+item.real_name+'</span>';
                         } else {
                            html += '<span>名称：'+item.nickname+'</span>';
                         }
                         if(item.role_type==2) {
-                           html += '<span class="span-right"><i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商</span><br/>';
+                           html += '<span class="span-right"><i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商</span>';
                         } else {
-                           html += '<span class="span-right"><i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家</span><br/>';
+                           html += '<span class="span-right"><i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家</span>';
                         }
+                        html += '</div>';
+                        html += '<div class="div-child">';
                         html += '<span>手机号：'+item.mobile+'</span><br/>';
+                        html += '</div>';
+                        html += '<div class="div-child">';
                         if(item.realname!=null) {
                            html += '<span>经营者：'+item.realname+'</span>';
                         } else {
                            html += '<span>经营者：'+item.mobile+'</span>';
                         }
+                        html += '</div>';
+                        html += '<div class="div-child">';
                         html += '<span>加入时间：'+item.create_time+'</span>'
                         html += '<a href="/operation/shop_info/user_id/'+item.id+'">查看详情</a>';
+                        html += '</div>';
                         html += '</div>';
                     });
                     $(".list").append(html);
