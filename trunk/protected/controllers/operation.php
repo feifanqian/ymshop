@@ -124,7 +124,7 @@ class OperationController extends Controller
         } else {
             $list['data'] = [];
         }
-        var_dump($user);die;
+        // var_dump($user);die;
         $result = array();
         $result['order_num'] = $order_num; //线上总订单数
         $result['offline_order_num'] = $offline_order_num; //扫码总订单数
@@ -195,7 +195,7 @@ class OperationController extends Controller
        $ids = array();
        while(!$is_break) {
           $where = "i.user_id=".$now_user_id;
-          if($start_date || $end_date) {
+          if($start_date && $end_date) {
             $where.=" and c.reg_time between '{$start_date}' and '{$end_date}'";
           }
           $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
