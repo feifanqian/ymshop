@@ -137,7 +137,7 @@ class OperationController extends Controller
         $result['crossover_sum'] = $crossover_sum; //扫码订单跨界收益
         $result['benefit_sum'] = $benefit_sum; // 优惠购收益
         
-        var_dump($result);die;
+        // var_dump($result);die;
         $this->assign('result',$result);
         $this->assign('list',$list);
         $this->assign('user_id',$user_id);
