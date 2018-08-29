@@ -13,13 +13,13 @@
 
 }
 .header{
-    margin-top: 2%;
+    /*margin-top: 2%;*/
     padding-left: 3%;
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
     border-bottom: 0.1px  solid #ccc;
 }
 .header p{
-    margin-top:30px;
+    margin-top:20px;
     font-size: 18px;
     font-weight: bold;
 }
@@ -75,7 +75,7 @@
   </div>
   <div class="block">
     <div class="line">金额总统计</div><br/>
-    <div>
+    <div class="line-info">
       <span><i><img src="/themes/mobile/images/op_center/--10.jpg" width="25" height="25"></i></i>线上订单总金额：{$result['order_sum']}</span><span><i><img src="/themes/mobile/images/op_center/--13.jpg" width="25" height="25"></i></i>扫码订单总金额：{$result['offline_order_sum']}</span><br/>
       <span><i><img src="/themes/mobile/images/op_center/--11.jpg" width="25" height="25"></i></i>线上订单跨界收益：{$result['order_benefit']}</span><span><i><img src="/themes/mobile/images/op_center/--12.jpg" width="25" height="25"></i></i>扫码订单跨界收益：{$result['crossover_sum']}</span><br/>
       <span><i><img src="/themes/mobile/images/op_center/--14.jpg" width="25" height="25"></i></i>优惠购收益：{$result['benefit_sum']}</span>
