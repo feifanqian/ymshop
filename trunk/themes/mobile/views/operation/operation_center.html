@@ -12,7 +12,17 @@
 #app{
 
 }
+.header{
+    margin-top: 2%;
+    padding-left: 3%;
+    padding-bottom: 10px;
+    border-bottom: 1px  solid #333;
+}
 .line{
+    width: 94%;
+    height: 60px;
+    margin-left: 3%;
+    border-left: 3px solid #4eabf4;
     font-size:18px;
     font-weight: bold; 
 }
@@ -32,14 +42,12 @@
 <div id="app">
   <input type="hidden" name="page" id="page" value="{$page}"/>
   <div class="header">
-     <span>
+    <p>
      统计时间：
-     <p>
      <input name="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" onfocus="WdatePicker({minDate:'{echo:date('Y-m-d')}',dateFmt:'yyyy-MM-dd'})"><i><img src="/themes/mobile/images/op_center/--04.jpg" width="25" height="25"></i>
     至
     <input name="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker({minDate:'{echo:date('Y-m-d')}',dateFmt:'yyyy-MM-dd'})"><i><img src="/themes/mobile/images/op_center/--04.jpg" width="25" height="25"></i>
     </p>
-     </span>
   </div>
   <div class="block">
     <div class="line">数量总统计</div><br/>
