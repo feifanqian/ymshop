@@ -182,10 +182,10 @@ iframe{
                 </span>
             </div>
             <div class="div-child">
-                <span>手机号：{$item['mobile']}</span>
+                <span>手机号：{$item['mobile'] | '--'}</span>
             </div>
             <div class="div-child">
-                <span>经营者：{$item['realname'] | $item['mobile']}</span>
+                <span>经营者：{$item['realname'] | $item['mobile'] | $item['real_name']}</span>
             </div>
             <div class="div-child">
                 <span>加入时间：{$item['create_time']}</span>
@@ -262,12 +262,9 @@ function getScrollTop() {
             success: function (res) {
                 var jsonstr = JSON.stringify(res);
                 var jsonarray= $.parseJSON(jsonstr);
-                // alert(jsonarray.length);
-                // layer.close(index);
                 if (jsonarray.length == 0) {
                     layer.msg('已经到底!',{time:500});
                 }  else {
-                    // alert(typeof(jsonarray));
                     $.each(jsonarray, function (i, item) {
                         if(i==1) {
                             alert(item);
@@ -286,13 +283,19 @@ function getScrollTop() {
                         }
                         html += '</div>';
                         html += '<div class="div-child">';
-                        html += '<span>手机号：'+item.mobile+'</span><br/>';
+                        if(item.mobile!=null) {
+                            html += '<span>手机号：'+item.mobile+'</span><br/>';
+                        } else {
+                            html += '<span>手机号：--</span><br/>';
+                        }   
                         html += '</div>';
                         html += '<div class="div-child">';
                         if(item.realname!=null) {
                            html += '<span>经营者：'+item.realname+'</span>';
-                        } else {
+                        } else if(item.mobile!=null) {
                            html += '<span>经营者：'+item.mobile+'</span>';
+                        } else {
+                           html += '<span>经营者：'+item.real_name+'</span>';
                         }
                         html += '</div>';
                         html += '<div class="div-child">';
