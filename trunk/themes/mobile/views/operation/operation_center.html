@@ -212,7 +212,7 @@ iframe{
 <script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
 <script type="text/javascript">
-$("input[name='end_date']").change(function(){
+$("input[name='end_date']").blur(function(){
     var page = $('#page').val();
     var start_date = $("input[name='start_date']").val();
     var end_date = $("input[name='end_date']").val();
