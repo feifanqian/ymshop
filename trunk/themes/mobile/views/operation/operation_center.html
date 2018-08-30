@@ -260,8 +260,8 @@ function getScrollTop() {
             url: url,
             data: data,
             success: function (res) {
-                var jsonarray = JSON.stringify(res);
-                // var jsonarray= $.parseJSON(data);
+                var jsonstr = JSON.stringify(res);
+                var jsonarray= $.parseJSON(jsonstr);
                 // alert(jsonarray.length);
                 // layer.close(index);
                 if (jsonarray.length == 0) {
