@@ -373,7 +373,7 @@ class OperationController extends Controller
         //     $list['data'] = [];
         // }
         
-        $customer = $this->model->table('customer as c')->fields('c.user_id,c.mobile,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$user_id)->find();
+        $customer = $this->model->table('customer as c')->fields('c.real_name,c.mobile,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$user_id)->find();
         $shop = $this->model->table('district_shop')->fields('create_time')->where('owner_id='.$user_id)->find();
         $promoter = $this->model->table('district_promoter')->fields('create_time')->where('user_id='.$user_id)->find();
         $seo_title = !empty($shop)?'经销商':'商家';
