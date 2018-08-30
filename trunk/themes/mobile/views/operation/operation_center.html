@@ -31,13 +31,13 @@
 .line{
     margin-top: 10px;
     width: 94%;
-    height: 30px;
+    height: 40px;
     margin-left: 4%;
     padding-left: 2%;
     border-left: 3px solid #4eabf4;
     font-size: 20px;
     font-weight: bold;
-    line-height: 30px;
+    line-height: 40px;
     color: #333; 
 }
 .line span{
@@ -46,19 +46,19 @@
 .line-info{
     margin-top: -10px;
     border-top: 0.1px solid #ccc;
-    border-bottom: 0.1px solid #ccc;
+    /*border-bottom: 0.1px solid #ccc;*/
     padding-left: 5%;
     padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     height: 100px;
 }
 .line-infos{
     margin-top: -10px;
     border-top: 0.1px solid #ccc;
-    border-bottom: 0.1px solid #ccc;
+    /*border-bottom: 0.1px solid #ccc;*/
     padding-left: 5%;
     padding-top: 10px;
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
     height: 180px;
 }
 .line-info span{
@@ -259,8 +259,8 @@ function getScrollTop() {
             url: url,
             data: data,
             success: function (res) {
-                data = JSON.stringify(res);
-                var jsonarray= $.parseJSON(data);
+                var jsonarray = JSON.stringify(res);
+                // var jsonarray= $.parseJSON(data);
                 alert(jsonarray);
                 layer.close(index);
                 if (jsonarray.length == 0) {
