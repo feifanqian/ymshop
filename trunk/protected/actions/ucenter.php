@@ -2976,6 +2976,126 @@ class UcenterAction extends Controller {
        }
     }
 
+    public function new_shop_check(){
+       $page = Filter::int(Req::args('type')); //第几步
+       $type = Filter::int(Req::args('type')); //1个体商户 2个人微商 3企业商户
+       $business_licence = Req::args('business_licence'); //营业执照
+       $positive_idcard = Req::args('positive_idcard'); //身份证正面照
+       $native_idcard = Req::args('native_idcard'); //身份证反面照
+       $account_picture = Req::args('account_picture'); //开户许可证照
+       $account_card = Req::args('account_card'); //结算银行卡号
+       $bank_name = Req::args('bank_name'); //银行卡信息
+       $shop_photo = Req::args('shop_photo'); //门店照
+       $hand_idcard = Req::args('hand_idcard'); //手持身份证照
+       $shop_name = Req::args('shop_name'); //店铺名
+       $legal_person = Req::args('legal_person'); //法人名字
+       $mobile = Req::args('mobile'); //手机号
+       $found_date = Req::args('found_date'); //成立时间
+       $province = Req::args('province'); 
+       $city = Req::args('city'); 
+       $county = Req::args('county'); 
+       $business_number = Req::args('business_number'); //营业执照编号
+       $business_addr = Req::args('business_addr'); //营业执照地址
+       $bank_type = Req::args('bank_type'); //银行名称
+       $bank_phone = Req::args('bank_phone'); //银行预留手机号
+       $bank_area = Req::args('bank_area'); //银行所属地区
+       $positive_bankcard = Req::args('positive_bankcard'); //银行卡正面照
+       $native_bankcard = Req::args('native_bankcard'); //银行卡反面照
+       $industry_no = Req::args('industry_no'); //行业编号
+       $address = Req::args('address'); //详细地址
+       $id_no = Req::args('id_no'); //证件号
+       
+       $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
+       if(!$shop){
+        $this->code = 1166;
+        return;
+       }
+
+       if($page==1) {
+            if(!$industry_no) {
+            $this->code = 1302;
+            return;
+           }
+           if(!$type){
+            $this->code = 1231;
+            return;
+           }
+       } else if($page==2) {
+        if(!$shop_name || !$legal_person || !$mobile || !$id_no || !$address || !$positive_idcard || !$native_idcard) {
+            $this->code = 1303;
+            return;
+        }
+       } else if($page==3) {
+          if(!$bank_type || !$bank_name || !$bank_phone || !$bank_area || !$positive_bankcard || !$native_bankcard || !$native_idcard) {
+            $this->code = 1303;
+            return;
+          }
+       } else if($page==4) {
+          if(!$legal_person || !$found_date || !$business_number || !$business_addr || !$business_licence) {
+            $this->code = 1303;
+            return;
+          }
+       } else if($page==5) {
+          if(!$legal_person || !$found_date || !$shop_photo || !$hand_idcard || !$positive_idcard || !$native_idcard || !$id_no) {
+            $this->code = 1303;
+            return;
+          }
+       } else {
+          if(!$bank_type || !$bank_name || !$bank_phone || !$bank_area || !$account_picture) {
+            $this->code = 1303;
+            return;
+          }
+       }
+       
+       $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
+       
+       $data = array(
+        'user_id'          => $this->user['id'],
+        'type'             => $type,
+        'shop_name'        => $shop_name,
+        'legal_person'     => $legal_person,
+        'id_no'            => $id_no,
+        'mobile'           => $mobile,
+        'found_date'       => $found_date,
+        'province'         => $province,
+        'city'             => $city,
+        'county'           => $county,
+        'business_licence' => $business_licence,
+        'business_number'  => $business_number,
+        'business_addr'    => $business_addr,
+        'positive_idcard'  => $positive_idcard,
+        'native_idcard'    => $native_idcard,
+        'positive_bankcard'=> $positive_bankcard,
+        'native_bankcard'  => $native_bankcard,
+        'account_picture'  => $account_picture,
+        'account_card'     => $account_card,
+        'bank_type'        => $bank_type,
+        'bank_name'        => $bank_name,
+        'bank_phone'       => $bank_phone,
+        'bank_area'        => $bank_area,
+        'shop_photo'       => $shop_photo,
+        'hand_idcard'      => $hand_idcard,
+        'industry_no'      => $industry_no,
+        'address'          => $address,
+        'status'           => 0,
+        'create_date'      => date('Y-m-d H:i:s')
+        );
+       $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
+       if($shop_check){
+          $result = $this->model->table('shop_check')->data($data)->where('user_id='.$this->user['id'])->update();
+       }else{
+          $result = $this->model->table('shop_check')->data($data)->insert();
+       }
+       
+       if($result){
+        $this->code = 0;
+        return;
+       }else{
+         $this->code = 1226;
+         return;
+       }
+    }
+
     public function shop_checked(){
         $shop = $this->model->table('district_promoter')->fields('id')->where('user_id='.$this->user['id'])->find();
        if(!$shop){
