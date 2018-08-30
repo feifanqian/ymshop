@@ -2954,15 +2954,15 @@ class UcenterAction extends Controller {
         );
        $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
        if($shop_check){
-          if($shop_check['status']==0){
-             $this->code = 1227;
-             return;
-          }elseif($shop_check['status']==1){
-             $this->code = 1228;
-             return;
-          }else{
+          // if($shop_check['status']==0){
+          //    $this->code = 1227;
+          //    return;
+          // }elseif($shop_check['status']==1){
+          //    $this->code = 1228;
+          //    return;
+          // }else{
              $result = $this->model->table('shop_check')->data($data)->where('user_id='.$this->user['id'])->update();
-          }
+          // }
        }else{
         $result = $this->model->table('shop_check')->data($data)->insert();
        }
