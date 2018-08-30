@@ -204,6 +204,7 @@ iframe{
 <script src="/static/js/datepicker.js"></script>
 <!-- <script src="/runtime/systemjs/My97DatePicker/calendar.js"></script> -->
 <script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
 <script type="text/javascript">
 $("input[name='end_date']").change(function(){
     var start_date = $("input[name='start_date']").val();
@@ -262,15 +263,11 @@ function getScrollTop() {
                 var jsonarray = JSON.stringify(res);
                 // var jsonarray= $.parseJSON(data);
                 // alert(jsonarray.length);
-                layer.close(index);
+                // layer.close(index);
                 if (jsonarray.length == 0) {
                     layer.msg('已经到底!',{time:500});
                 }  else {
-                    alert(typeof(jsonarray));
                     $.each(jsonarray, function (i, item) {
-                        if(i==1){
-                            alert(item.real_name);
-                        }
                         html += '<div class="list-child">';
                         html += '<div class="div-child">';
                         if(item.real_name!=null) {
@@ -300,7 +297,6 @@ function getScrollTop() {
                         html += '</div>';
                         html += '</div>';
                     });
-                    alert(html);
                     $("#list").append(html);
                 }
             },
