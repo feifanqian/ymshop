@@ -2977,7 +2977,7 @@ class UcenterAction extends Controller {
     }
 
     public function new_shop_check(){
-       $page = Filter::int(Req::args('type')); //第几步
+       $page = Filter::int(Req::args('page')); //第几步
        $type = Filter::int(Req::args('type')); //1个体商户 2个人微商 3企业商户
        $business_licence = Req::args('business_licence'); //营业执照
        $positive_idcard = Req::args('positive_idcard'); //身份证正面照
