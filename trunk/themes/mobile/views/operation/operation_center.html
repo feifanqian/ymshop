@@ -250,9 +250,7 @@ $("input[name='end_date']").blur(function(){
             success: function (res) {
                 var jsonstr = JSON.stringify(res);
                 var jsonarray= $.parseJSON(jsonstr);
-                if (jsonarray.length == 0) {
-                    layer.msg('已经到底!',{time:500});
-                }  else {
+                
                     $.each(jsonarray, function (i, item) {
                         html += '<div class="list-child">';
                         html += '<div class="div-child">';
@@ -290,7 +288,7 @@ $("input[name='end_date']").blur(function(){
                         html += '</div>';
                     });
                     $("#list").html(html);
-                }
+                
             },
         });
 });
