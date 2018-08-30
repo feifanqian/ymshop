@@ -3049,6 +3049,11 @@ class UcenterAction extends Controller {
        
        $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
        
+       if($page==3 || $page==6) {
+         $status = 0;
+       } else {
+        $status = -1;
+       }
        $data = array(
         'user_id'          => $this->user['id'],
         'type'             => $type,
@@ -3077,7 +3082,7 @@ class UcenterAction extends Controller {
         'hand_idcard'      => $hand_idcard,
         'industry_no'      => $industry_no,
         'address'          => $address,
-        'status'           => 0,
+        'status'           => $status,
         'create_date'      => date('Y-m-d H:i:s')
         );
        $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
