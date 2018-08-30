@@ -52,15 +52,6 @@
     padding-bottom: 20px;
     height: 100px;
 }
-.line-infos{
-    margin-top: -10px;
-    border-top: 0.1px solid #ccc;
-    /*border-bottom: 0.1px solid #ccc;*/
-    padding-left: 5%;
-    padding-top: 10px;
-    /*padding-bottom: 10px;*/
-    height: 180px;
-}
 .line-info span{
     display: inline-block;
     width: 40%;
@@ -70,8 +61,22 @@
     color: #666;
     margin-bottom: 4px;
 }
+.line-info img{
+    width: 33px;
+    height: 33px;
+    vertical-align: -33%;
+}
 .line-info p{
     display: inline;
+}
+.line-infos{
+    margin-top: -10px;
+    border-top: 0.1px solid #ccc;
+    /*border-bottom: 0.1px solid #ccc;*/
+    padding-left: 5%;
+    padding-top: 10px;
+    /*padding-bottom: 10px;*/
+    height: 180px;
 }
 .line-infos span{
     display: inline-block;
@@ -83,11 +88,6 @@
 }
 .line-infos p{
     display: inline;
-}
-.line-info img{
-    width: 33px;
-    height: 33px;
-    vertical-align: -33%;
 }
 .line-infos img{
     width: 30px;
@@ -153,7 +153,7 @@ iframe{
   </div>
   <div class="block">
     <div class="line">个人信息</div><br/>
-    <div class="line-infos">
+    <div class="line-infos" style="height: 100px;">
       <span>名称：{$result['real_name'] | $result['nickname']}</span>
       <span>手机号码：{$result['mobile'] | '--'}</span>
       <span>加入时间{$result['create_time']}</span>
