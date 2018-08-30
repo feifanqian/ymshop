@@ -167,7 +167,7 @@ iframe{
   </div>
   <div class="block">
    <div class="line">旗下经销商/商家</div><br/>
-   <div class="list">
+   <div class="list" id="list">
      {if:count($list['data'])>0}
         {list:items=$list['data']}
         <div class="list-child">
@@ -296,7 +296,8 @@ function getScrollTop() {
                         html += '</div>';
                         html += '</div>';
                     });
-                    $(".list").append(html);
+                    alert(html);
+                    $("#list").append(html);
                 }
             },
         });
