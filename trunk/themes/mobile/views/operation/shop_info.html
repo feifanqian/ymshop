@@ -6,7 +6,7 @@
           content="width=640, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
-    <title>运营中心</title>
+    <title>{$seo_title}</title>
 </head>
 <style type="text/css">
 #app{
@@ -146,26 +146,34 @@ iframe{
     </p>
   </div>
   <div class="block">
+    <div class="line">个人信息</div><br/>
+    <div class="line-infos">
+      <span>名称：{$result['real_name'] | $result['nickname']}</span>
+      <span>手机号码：{$result['mobile'] | '--'}</span>
+      <span>加入时间{$result['create_time']}</span>
+    </div>
+  </div>
+  <div class="block">
     <div class="line">数量总统计</div><br/>
     <div class="line-info">
-      <span><img src="/themes/mobile/images/op_center/--05.jpg" >&nbsp;&nbsp;&nbsp;线上总订单：<p id="order_num">{$result['order_num']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--06.jpg" >&nbsp;&nbsp;&nbsp;扫码总订单：<p id="offline_order_num">{$result['offline_order_num']}</p></span><br/>
-      <span><img src="/themes/mobile/images/op_center/--09.jpg" >&nbsp;&nbsp;&nbsp;经销商数量：<p id="shop_num">{$result['shop_num']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--07.jpg" >&nbsp;&nbsp;&nbsp;商家数量：<p id="promoter_num">{$result['promoter_num']}</p></span><br/>
-      <span><img src="/themes/mobile/images/op_center/--08.jpg" >&nbsp;&nbsp;&nbsp;会员数量：<p id="user_num">{$result['user_num']}</p></span>
+      <span><img src="/themes/mobile/images/op_center/--05.jpg" >&nbsp;&nbsp;&nbsp;线上总订单：{$result['order_num']}</span>
+      <span><img src="/themes/mobile/images/op_center/--06.jpg" >&nbsp;&nbsp;&nbsp;扫码总订单：{$result['offline_order_num']}</span><br/>
+      <span><img src="/themes/mobile/images/op_center/--09.jpg" >&nbsp;&nbsp;&nbsp;经销商数量：{$result['shop_num']}</span>
+      <span><img src="/themes/mobile/images/op_center/--07.jpg" >&nbsp;&nbsp;&nbsp;商家数量：{$result['promoter_num']}</span><br/>
+      <span><img src="/themes/mobile/images/op_center/--08.jpg" >&nbsp;&nbsp;&nbsp;会员数量：{$result['user_num']}</span>
     </div>
   </div>
   <div class="block">
     <div class="line">金额总统计</div><br/>
     <div class="line-infos">
-      <span><img src="/themes/mobile/images/op_center/--10.jpg" >&nbsp;&nbsp;&nbsp;线上订单总金额：<p id="order_sum">{$result['order_sum']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--13.jpg" >&nbsp;&nbsp;&nbsp;扫码订单总金额：<p id="offline_order_sum">{$result['offline_order_sum']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--11.jpg" >&nbsp;&nbsp;&nbsp;线上订单跨界收益：<p id="order_benefit">{$result['order_benefit']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--12.jpg" >&nbsp;&nbsp;&nbsp;扫码订单跨界收益：<p id="crossover_sum">{$result['crossover_sum']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--14.jpg" >&nbsp;&nbsp;&nbsp;优惠购收益：<p id="benefit_sum">{$result['benefit_sum']}</p></span>
+      <span><img src="/themes/mobile/images/op_center/--10.jpg" >&nbsp;&nbsp;&nbsp;线上订单总金额：{$result['order_sum']}</span>
+      <span><img src="/themes/mobile/images/op_center/--13.jpg" >&nbsp;&nbsp;&nbsp;扫码订单总金额：{$result['offline_order_sum']}</span>
+      <span><img src="/themes/mobile/images/op_center/--11.jpg" >&nbsp;&nbsp;&nbsp;线上订单跨界收益：{$result['order_benefit']}</span>
+      <span><img src="/themes/mobile/images/op_center/--12.jpg" >&nbsp;&nbsp;&nbsp;扫码订单跨界收益：{$result['crossover_sum']}</span>
+      <span><img src="/themes/mobile/images/op_center/--14.jpg" >&nbsp;&nbsp;&nbsp;优惠购收益：{$result['benefit_sum']}</span>
     </div>
   </div>
-  <div class="block">
+  <!-- <div class="block">
    <div class="line">旗下经销商/商家</div><br/>
    <div class="list" id="list">
      {if:count($list['data'])>0}
@@ -189,7 +197,7 @@ iframe{
             </div>
             <div class="div-child">
                 <span>加入时间：{$item['create_time']}</span>
-                <a href="/operation/shop_info?user_id={$item['id']}">查看详情</a> 
+                <a href="/operation/shop_info/user_id/{$item['id']}">查看详情</a> 
             </div>    
         </div>
         {/list}
@@ -197,7 +205,7 @@ iframe{
        <div class="list-child" style="text-align: center;margin-top: 10%;">暂无经销商/商家</div>  
      {/if}
    </div>
-  </div>
+  </div> -->
 </div>
 </body>
 <script src="/runtime/systemjs/jquery.min.js"></script>
@@ -210,29 +218,8 @@ $("input[name='end_date']").change(function(){
     var start_date = $("input[name='start_date']").val();
     var end_date = $("input[name='end_date']").val();
     var user_id = "{$user_id}";
-    var url = "/operation/ajax_operation_order";
-    var data = {page: page,user_id:user_id,start_date:start_date,end_date:end_date};
-    // window.location.href = url;
-    $.ajax({
-            type: 'post',
-            dataType: 'json',
-            url: url,
-            data: data,
-            success: function (res) {
-                var jsonstr = JSON.stringify(res);
-                var jsonarray= $.parseJSON(jsonstr);
-                $("#order_num").html(jsonarray.order_num);
-                $("#offline_order_num").html(jsonarray.offline_order_num);
-                $("#shop_num").html(jsonarray.shop_num);
-                $("#promoter_num").html(jsonarray.promoter_num);
-                $("#user_num").html(jsonarray.user_num);
-                $("#order_sum").html(jsonarray.order_sum);
-                $("#offline_order_sum").html(jsonarray.offline_order_sum);
-                $("#order_benefit").html(jsonarray.order_benefit);
-                $("#crossover_sum").html(jsonarray.crossover_sum);
-                $("#benefit_sum").html(jsonarray.benefit_sum);
-            },
-        });
+    var url = "/operation/operation_center?user_id="+user_id+"&start_date="+start_date+"&end_date="+end_date;
+    window.location.href = url;
 });
 function getScrollTop() { 
         var scrollTop = 0; 
@@ -318,7 +305,7 @@ function getScrollTop() {
                         html += '</div>';
                         html += '<div class="div-child">';
                         html += '<span>加入时间：'+item.create_time+'</span>'
-                        html += '<a href="/operation/shop_info?user_id='+item.id+'">查看详情</a>';
+                        html += '<a href="/operation/shop_info/user_id/'+item.id+'">查看详情</a>';
                         html += '</div>';
                         html += '</div>';
                     });
