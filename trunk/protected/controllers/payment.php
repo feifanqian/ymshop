@@ -1721,7 +1721,12 @@ class PaymentController extends Controller {
                                     $NoticeService = new NoticeService();
                                     $this->jpush = $NoticeService->getNotice('jpush');
                                     }
-                             $audience['alias'] = array($seller_id);
+                             if($order['cashier_id']==0) {
+                                $audience['alias'] = array($seller_id);
+                             } else {
+                                $cashier = $this->model->table('cashier')->fields('user_id')->where('id='.$order['cashier_id'])->find();
+                                $audience['alias'] = array($seller_id,$cashier['user_id']);
+                             }      
                              $this->jpush->setPushData($platform, $audience, $content, $type, "");
                              $this->jpush->push();
                                           
