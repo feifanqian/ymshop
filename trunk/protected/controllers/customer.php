@@ -773,9 +773,10 @@ class CustomerController extends Controller {
                 exit;
             } else {
                 $validcode = CHash::random(8);
-                $last_id = $userModel->data(array('name' => $name, 'password' => CHash::md5($password, $validcode), 'validcode' => $validcode, 'email' => $email))->add();
+                $last_id = $userModel->data(array('name' => $name, 'password' => CHash::md5($password, $validcode), 'validcode' => $validcode, 'email' => $email,'avatar'=>'/0.png'))->add();
                 Req::args('user_id', $last_id);
                 Req::args('reg_time',date("Y-m-d H:i:s"));
+                Req::args('real_name', $mobile);
                 if (!Validator::date(Req::post('birthday')))
                     Req::post('birthday', date('Y-m-d'));
                 $customerModel->insert();
