@@ -619,15 +619,20 @@ class IndexAction extends Controller {
         $set = array();
         foreach ($ads as $k => $v){
              $arr[$k] = $v['path'];
-             var_dump(111);
-             $list = $this->model->table('ad_preset')->where("ad_id=85 and key=".$k)->find();
-             var_dump(222);die;
+             $list = $this->model->table('ad_preset')->where("ad_id=85 and k=".$k)->find();
+
              $set[$k]['update_time'] = $list['update_time'];
              $set[$k]['width'] = $list['width'];
              $set[$k]['height'] = $list['height'];
              $set[$k]['x_coor'] = $list['x_coor'];
              $set[$k]['y_coor'] = $list['y_coor'];
-             $set[$k]['top_distance'] = $list['top_distance'];     
+             $set[$k]['top_distance'] = $list['top_distance'];
+
+             if(time()<strtotime($list['update_time'])) {
+                unset($ads[$k]);
+                unset($arr[$k]);
+                unset($set[$k]);
+             }     
         }   
        
         $this->code = 0;
