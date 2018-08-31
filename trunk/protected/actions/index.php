@@ -633,7 +633,9 @@ class IndexAction extends Controller {
                 unset($arr[$k]);
                 unset($set[$k]);
              }     
-        }   
+        }
+        $arr = array_values($arr);
+        $set = array_values($set);   
        
         $this->code = 0;
         $this->content['path'] = $arr;
