@@ -65,26 +65,27 @@ class MapAction extends Controller
 
     public function image_merge_test()
     {
-        $shop_check = $this->model->table('shop_check')->fields('legal_person,mobile,id_no,address')->where('user_id='.$this->user['id'])->find();
-        if(!$shop_check) {
-            $this->code = 1304;
-            return;
-        }
-        $promoter = $this->model->table('district_promoter')->fields('base_rate')->where('user_id='.$this->user['id'])->find();
-        if(!$promoter) {
-            $this->code = 1264;
-            return;
-        }
-        $name = $shop_check['legal_person'];
-        $mobile = $shop_check['mobile'];
-        $id_no = $shop_check['id_no'];
-        $address = $shop_check['address'];
-        $rate = $promoter['base_rate'];
-        // $name = Filter::str(Req::args('name')); //乙方名字
-        // $mobile = Filter::str(Req::args('mobile')); //乙方电话
-        // $id_no = Filter::str(Req::args('id_no')); //乙方证件号
-        // $address = Filter::str(Req::args('address')); //乙方地址
-        // $rate = Filter::float(Req::args('rate')); //甲方收取服务费比例
+        // $shop_check = $this->model->table('shop_check')->fields('legal_person,mobile,id_no,address')->where('user_id='.$this->user['id'])->find();
+        // if(!$shop_check) {
+        //     $this->code = 1304;
+        //     return;
+        // }
+        // $promoter = $this->model->table('district_promoter')->fields('base_rate')->where('user_id='.$this->user['id'])->find();
+        // if(!$promoter) {
+        //     $this->code = 1264;
+        //     return;
+        // }
+        // $name = $shop_check['legal_person'];
+        // $mobile = $shop_check['mobile'];
+        // $id_no = $shop_check['id_no'];
+        // $address = $shop_check['address'];
+        // $rate = $promoter['base_rate'];
+        
+        $name = Filter::str(Req::args('name')); //乙方名字
+        $mobile = Filter::str(Req::args('mobile')); //乙方电话
+        $id_no = Filter::str(Req::args('id_no')); //乙方证件号
+        $address = Filter::str(Req::args('address')); //乙方地址
+        $rate = Filter::float(Req::args('rate')); //甲方收取服务费比例
          
         $path_1 = "https://ymlypt.b0.upaiyun.com/data/uploads/2018/08/23/522c0a7538e94fd84678e1d565c2d156.png";
 

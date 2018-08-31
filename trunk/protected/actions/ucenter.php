@@ -3036,7 +3036,7 @@ class UcenterAction extends Controller {
             return;
           }
        } else if($page==5) {
-          if(!$legal_person || !$found_date || !$shop_photo || !$hand_idcard || !$positive_idcard || !$native_idcard || !$id_no) {
+          if(!$legal_person || !$mobile || !$shop_name || !$shop_photo || !$hand_idcard || !$positive_idcard || !$native_idcard || !$id_no) {
             $this->code = 1303;
             return;
           }
