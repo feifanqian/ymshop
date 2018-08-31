@@ -62,6 +62,7 @@ class V1Controller extends Controller {
         "get_all_child_shop_id"=>array("district/getAllChildShopId",0,1),
         "get_all_child_promoters_ids"=>array("district/getAllChildPromotersIds",0,1),
         "invite_bg_banner"=>array("index/invite_bg_banner",0,1),
+        "invite_bg_banners"=>array("index/invite_bg_banners",0,1),
         "get_my_districters"=>array("district/get_my_districters",0,1),
         //TODO tian
         "order" => array("ucenter/order", 1,1), //查询订单

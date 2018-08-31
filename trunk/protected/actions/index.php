@@ -616,13 +616,20 @@ class IndexAction extends Controller {
         $ad = $this->model->table('ad')->where("id=85 and is_open = 1")->find();
         $arr = array();
         $ads = unserialize($ad['content']);
+        $set = array();
         foreach ($ads as $k => $v){
              $arr[$k] = $v['path'];
-        }
-
-        $list = $this->model->table('ad_preset')->where("ad_id=85")->findAll();
+             $list = $this->model->table('ad_preset')->where("ad_id=85 and key=".[$k])->find();
+             $set[$k]['update_time'] = $list['update_time'];
+             $set[$k]['width'] = $list['width'];
+             $set[$k]['height'] = $list['height'];
+             $set[$k]['x_coor'] = $list['x_coor'];
+             $set[$k]['y_coor'] = $list['y_coor'];
+             $set[$k]['top_distance'] = $list['top_distance'];     
+        }   
        
         $this->code = 0;
         $this->content['path'] = $arr;
+        $this->content['set'] = $set;
     }
 }
