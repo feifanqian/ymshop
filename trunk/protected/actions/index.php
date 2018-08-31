@@ -604,18 +604,6 @@ class IndexAction extends Controller {
         $ad = $this->model->table('ad')->where("id=85 and is_open = 1")->find();
         $arr = array();
         $ads = unserialize($ad['content']);
-        foreach ($ads as $k => $v){
-             $arr[$k] = $v['path'];
-        }
-       
-        $this->code = 0;
-        $this->content['path'] = $arr;
-    }
-
-    public function invite_bg_banners(){
-        $ad = $this->model->table('ad')->where("id=85 and is_open = 1")->find();
-        $arr = array();
-        $ads = unserialize($ad['content']);
         $set = array();
         foreach ($ads as $k => $v){
              $arr[$k] = $v['path'];
