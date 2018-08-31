@@ -3126,6 +3126,8 @@ class UcenterAction extends Controller {
     public function shop_check_info()
     {
         $info = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
+        $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
+        $info['need_sign'] = empty($contract)?0:1;
         $this->code = 0;
         $this->content['info'] = $info;
     }
