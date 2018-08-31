@@ -511,7 +511,7 @@ class ContentController extends Controller {
              }     
         }
         $set = array_values($set);
-        var_dump($set);die;
+        // var_dump($set);die;
         // $list = $this->model->table('ad_preset as ap')->join('left join ad as a on ap.ad_id=a.id')->fields('ap.*,a.name')->where("ap.ad_id=85")->findAll();
         $this->assign('list',$set);
         $this->redirect();
