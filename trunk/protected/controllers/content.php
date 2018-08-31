@@ -502,7 +502,8 @@ class ContentController extends Controller {
              $set[$k]['height'] = $list['height'];
              $set[$k]['x_coor'] = $list['x_coor'];
              $set[$k]['y_coor'] = $list['y_coor'];
-             $set[$k]['top_distance'] = $list['top_distance'];     
+             $set[$k]['top_distance'] = $list['top_distance'];
+             $set[$k]['k'] = $list['k'];      
         }
         $set = array_values($set);
         // var_dump($set);die;
