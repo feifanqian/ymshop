@@ -4,9 +4,9 @@
 {echo:JS::import('validator');}
 <h2 class="page_title">{$node_index['name']}</h2>
 <div class="form2">
-	<form name="config_form" method="post" action="{url:/content/ad_preset_save}">
-  <input name="id" type="hidden" value="1" />
-   {list:items=$list} 
+   {list:items=$list}
+   <form name="config_form" method="post" action="{url:/content/ad_preset_save}">
+   <input name="k" type="hidden" value="{$item['k']}" /> 
     <dl class="lineD">
         <dt>{$item['name']}</dt>
         <dd>
@@ -53,10 +53,11 @@
           </div>
         </dd>
       </dl>
-      {/list}
       <div class="center">
-      <input type="submit" name="submit" class="button action fn" value="确 定">
-    </div>
+        <input type="submit" name="submit" class="button action fn" value="确 定">
+      </div>
+      {/list}
+      
     </form>
 </div>
 
