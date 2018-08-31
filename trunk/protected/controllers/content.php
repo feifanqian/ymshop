@@ -484,4 +484,49 @@ class ContentController extends Controller {
             exit();
         }
     }
+
+    public function ad_preset()
+    { 
+        $ad = $this->model->table('ad')->where("id=85 and is_open = 1")->find();
+        $arr = array();
+        $ads = unserialize($ad['content']);
+        $set = array();
+        foreach ($ads as $k => $v){
+             $arr[$k] = $v['path'];
+             $list = $this->model->table('ad_preset as ap')->join('left join ad as a on ap.ad_id=a.id')->fields('ap.*,a.name')->where("ad_id=85 and k=".$k)->find();
+             $set[$k]['name'] = $list['name'];
+             $set[$k]['path'] = $v['path'];
+             $set[$k]['update_time'] = $list['update_time'];
+             $set[$k]['width'] = $list['width'];
+             $set[$k]['height'] = $list['height'];
+             $set[$k]['x_coor'] = $list['x_coor'];
+             $set[$k]['y_coor'] = $list['y_coor'];
+             $set[$k]['top_distance'] = $list['top_distance'];
+
+             if(time()<strtotime($list['update_time'])) {
+                unset($ads[$k]);
+                unset($arr[$k]);
+                unset($set[$k]);
+             }     
+        }
+        $set = array_values($set);
+        var_dump($set);die;
+        // $list = $this->model->table('ad_preset as ap')->join('left join ad as a on ap.ad_id=a.id')->fields('ap.*,a.name')->where("ap.ad_id=85")->findAll();
+        $this->assign('list',$set);
+        $this->redirect();
+    }
+
+    public function ad_preset_save()
+    {
+        $data = array(
+            'update_time'=>Req::args("update_time"),
+            'width'=>Req::args("width"),
+            'height'=>Req::args("height"),
+            'x_coor'=>Req::args("x_coor"),
+            'y_coor'=>Req::args("y_coor"),
+            'top_distance'=>Req::args("top_distance"),
+            );
+        $this->model->table('ad_preset')->data($data)->where('ad_id=85')->update();
+        $this->redirect('ad_preset');
+    }
 }
