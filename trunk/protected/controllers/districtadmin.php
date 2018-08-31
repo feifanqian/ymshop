@@ -1284,9 +1284,9 @@ class DistrictadminController extends Controller
         $id = Req::args("id");
         $uid = Filter::int($id);
         $model = new Model();
-        $list = $model->table('district_shop')->fields('id,name,code_num,is_oc,had_send_num')->where('id=' . $uid)->find();
-        $list['used_num'] = $this->model->table('promoter_code')->where('status=0 and user_id='.$this->user['id'])->count();
-        $list['unused_num'] = $this->model->table('promoter_code')->where('status=1 and user_id='.$this->user['id'])->count();
+        $list = $model->table('district_shop')->fields('id,owner_id,name,code_num,is_oc,had_send_num')->where('id=' . $uid)->find();
+        $list['used_num'] = $model->table('promoter_code')->where('status=0 and user_id='.$list['owner_id'])->count();
+        $list['unused_num'] = $model->table('promoter_code')->where('status=1 and user_id='.$list['owner_id'])->count();
         $this->assign('list', $list);
         $this->redirect('hirer_edit');
     }
