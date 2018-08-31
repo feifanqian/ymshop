@@ -619,7 +619,9 @@ class IndexAction extends Controller {
         $set = array();
         foreach ($ads as $k => $v){
              $arr[$k] = $v['path'];
+             var_dump(111);
              $list = $this->model->table('ad_preset')->where("ad_id=85 and key=".$k)->find();
+             var_dump(222);die;
              $set[$k]['update_time'] = $list['update_time'];
              $set[$k]['width'] = $list['width'];
              $set[$k]['height'] = $list['height'];
