@@ -3056,13 +3056,49 @@ class UcenterAction extends Controller {
        } else {
         $status = -1;
        }
-       $data = array(
+       
+       if($page==1) {
+        $data = array(
         'user_id'          => $this->user['id'],
         'type'             => $type,
+        'industry_no'      => $industry_no,
+        'status'           => '-1',
+        'create_date'      => date('Y-m-d H:i:s')
+        );
+       } else if($page==2) {
+        $data = array(
+        'user_id'          => $this->user['id'],
         'shop_name'        => $shop_name,
         'legal_person'     => $legal_person,
         'id_no'            => $id_no,
         'mobile'           => $mobile,
+        'province'         => $province,
+        'city'             => $city,
+        'county'           => $county,
+        'address'          => $address,
+        'positive_idcard'  => $positive_idcard,
+        'native_idcard'    => $native_idcard,
+        'status'           => '-1',
+        'create_date'      => date('Y-m-d H:i:s')
+        );
+       } else if($page==3) {
+        $data = array(
+        'user_id'          => $this->user['id'],
+        'bank_type'        => $bank_type,
+        'bank_name'        => $bank_name,
+        'bank_phone'       => $bank_phone,
+        'bank_area'        => $bank_area,
+        'bank_province'    => $bank_province,
+        'bank_city'        => $bank_city,
+        'positive_bankcard'=> $positive_bankcard,
+        'native_bankcard'  => $native_bankcard,
+        'status'           => '0',
+        'create_date'      => date('Y-m-d H:i:s')
+        );
+       } else if($page==4) {
+        $data = array(
+        'user_id'          => $this->user['id'],
+        'legal_person'     => $legal_person,
         'found_date'       => $found_date,
         'province'         => $province,
         'city'             => $city,
@@ -3070,28 +3106,36 @@ class UcenterAction extends Controller {
         'business_licence' => $business_licence,
         'business_number'  => $business_number,
         'business_addr'    => $business_addr,
+        'status'           => '-1',
+        'create_date'      => date('Y-m-d H:i:s')
+        );
+       } else if($page==5) {
+        $data = array(
+        'user_id'          => $this->user['id'],
+        'legal_person'     => $legal_person,
+        'mobile'           => $mobile,
+        'id_no'            => $id_no,
+        'shop_name'        => $shop_name,
+        'shop_photo'       => $shop_photo,
+        'hand_idcard'      => $hand_idcard,
         'positive_idcard'  => $positive_idcard,
-        'native_idcard'    => $native_idcard,
-        'positive_bankcard'=> $positive_bankcard,
-        'native_bankcard'  => $native_bankcard,
-        'account_picture'  => $account_picture,
-        'account_card'     => $account_card,
+        'native_idcard'    => $native_idcard, 
+        'status'           => '-1',
+        'create_date'      => date('Y-m-d H:i:s')
+        );
+       } else {
+        $data = array(
+        'user_id'          => $this->user['id'],
         'bank_type'        => $bank_type,
         'bank_name'        => $bank_name,
         'bank_phone'       => $bank_phone,
         'bank_area'        => $bank_area,
         'bank_province'    => $bank_province,
         'bank_city'        => $bank_city,
-        'shop_photo'       => $shop_photo,
-        'hand_idcard'      => $hand_idcard,
-        'industry_no'      => $industry_no,
-        'address'          => $address,
-        'status'           => $status,
+        'account_picture'  => $account_picture,
+        'status'           => '0',
         'create_date'      => date('Y-m-d H:i:s')
         );
-       if($page!=1) {
-        unset($data['type']);
-        unset($data['industry_no']);
        }
        $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
        if($shop_check){
