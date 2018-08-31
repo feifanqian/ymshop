@@ -65,7 +65,7 @@ class MapAction extends Controller
 
     public function image_merge_test()
     {
-        // $shop_check = $this->model->table('shop_check')->fields('legal_person,mobile,id_no,address')->where('user_id='.$this->user['id'])->find();
+        $shop_check = $this->model->table('shop_check')->fields('legal_person,mobile,id_no,address')->where('user_id='.$this->user['id'])->find();
         // if(!$shop_check) {
         //     $this->code = 1304;
         //     return;
