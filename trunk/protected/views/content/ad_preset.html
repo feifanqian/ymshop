@@ -5,7 +5,7 @@
 <h2 class="page_title">{$node_index['name']}</h2>
 <div class="form2">
 	<form name="config_form" method="post" action="{url:/content/ad_preset_save}">
-  <input name="id" type="text" value="1" />
+  <input name="id" type="hidden" value="1" />
    {list:items=$list} 
     <dl class="lineD">
         <dt>{$item['name']}</dt>
@@ -15,24 +15,41 @@
               <img height='100' src="{url:@$path}">
             
           </div>
-          
+        </dd>
+        <dt>宽度</dt>
+        <dd>
           <div>
-           <input name="width" type="text" value="{$item['width']}" /><label></label>
+           <input name="width" type="text" value="{$item['width']}" /><label>px</label>
           </div>
+        </dd>
+        <dt>高度</dt>
+        <dd>
           <div>
-           <input name="height" type="text" value="{$item['height']}" /><label></label>
+           <input name="height" type="text" value="{$item['height']}" /><label>px</label>
           </div>
+        </dd>
+        <dt>x坐标</dt>
+        <dd>
           <div>
-           <input name="x_coor" type="text" value="{$item['x_coor']}" /><label></label>
+           <input name="x_coor" type="text" value="{$item['x_coor']}" /><label>距离左上角x距离（px）</label>
           </div>
+        </dd>
+        <dt>y坐标</dt>
+        <dd>
           <div>
-           <input name="y_coor" type="text" value="{$item['y_coor']}" /><label></label>
+           <input name="y_coor" type="text" value="{$item['y_coor']}" /><label>距离左上角y距离（px）</label>
           </div>
+        </dd>
+        <dt>文字位置</dt>
+        <dd>
           <div>
-           <input name="top_distance" type="text" value="{$item['top_distance']}" /><label></label>
+           <input name="top_distance" type="text" value="{$item['top_distance']}" /><label>距离顶部距离（px）</label>
           </div>
+        </dd>
+        <dt>更新时间</dt>
+        <dd>
           <div>
-           <input name="update_time" type="text" value="{$item['update_time']}" /><label></label>
+           <input name="update_time" type="text" value="{$item['update_time']}" /><label>预计更新时间</label>
           </div>
         </dd>
       </dl>
