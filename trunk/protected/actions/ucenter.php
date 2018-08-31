@@ -2999,6 +2999,8 @@ class UcenterAction extends Controller {
        $bank_type = Req::args('bank_type'); //银行名称
        $bank_phone = Req::args('bank_phone'); //银行预留手机号
        $bank_area = Req::args('bank_area'); //银行所属地区
+       $bank_province = Req::args('bank_province'); //银行所属省份
+       $bank_city = Req::args('bank_city'); //银行所属城市
        $positive_bankcard = Req::args('positive_bankcard'); //银行卡正面照
        $native_bankcard = Req::args('native_bankcard'); //银行卡反面照
        $industry_no = Req::args('industry_no'); //行业编号
@@ -3078,6 +3080,8 @@ class UcenterAction extends Controller {
         'bank_name'        => $bank_name,
         'bank_phone'       => $bank_phone,
         'bank_area'        => $bank_area,
+        'bank_province'    => $bank_province,
+        'bank_city'        => $bank_city,
         'shop_photo'       => $shop_photo,
         'hand_idcard'      => $hand_idcard,
         'industry_no'      => $industry_no,
