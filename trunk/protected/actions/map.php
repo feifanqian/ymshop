@@ -151,6 +151,85 @@ class MapAction extends Controller
         $this->content['url'] = $url;
     }
 
+    public function image_merge_tests()
+    {
+        $shop_check = $this->model->table('shop_check')->fields('id,legal_person,mobile,id_no,address')->where('user_id='.$this->user['id'])->find();
+        if(!$shop_check) {
+            $this->code = 1304;
+            return;
+        }
+        $promoter = $this->model->table('district_promoter')->fields('base_rate')->where('user_id='.$this->user['id'])->find();
+        if(!$promoter) {
+            $this->code = 1264;
+            return;
+        }
+        $name = $shop_check['legal_person'];
+        $mobile = $shop_check['mobile'];
+        $id_no = $shop_check['id_no'];
+        $address = $shop_check['address'];
+        $rate = $promoter['base_rate'];
+        
+        // $name = Filter::str(Req::args('name')); //乙方名字
+        // $mobile = Filter::str(Req::args('mobile')); //乙方电话
+        // $id_no = Filter::str(Req::args('id_no')); //乙方证件号
+        // $address = Filter::str(Req::args('address')); //乙方地址
+        // $rate = Filter::float(Req::args('rate')); //甲方收取服务费比例
+         
+        $path_1 = "https://ymlypt.b0.upaiyun.com/data/uploads/2018/08/23/522c0a7538e94fd84678e1d565c2d156.png";
+
+        $time = time();
+
+        $font = '/var/www/shop/static/fonts/simhei.ttf'; //中文字体
+        
+        $image_1 = imagecreatefromstring(file_get_contents($path_1));
+        
+        $black = imagecolorallocate($image_1, 0, 0, 0);
+
+        //一、合成乙方签名
+        $str1 = mb_convert_encoding($name, "html-entities", "utf-8");
+        imagettftext($image_1, 18, 0, imagesx($image_1)-887, imagesy($image_1)-4030, $black, $font, $str1);
+        
+        //二、合成乙方手机号  
+        $str2 = $mobile;
+        imagettftext($image_1, 18, 0, imagesx($image_1)-854, imagesy($image_1)-3900, $black, $font, $str2);
+
+        //三、合成乙方证件号
+        $str3 = $id_no;
+        imagettftext($image_1, 18, 0, imagesx($image_1)-872, imagesy($image_1)-3985, $black, $font, $str3);
+
+        //四、合成乙方地址
+        $str4 = $address;
+        imagettftext($image_1, 18, 0, imagesx($image_1)-887, imagesy($image_1)-3941, $black, $font, $str4);
+        
+        //五、合成服务费比例 
+        $str5 = $rate.'%';
+        imagettftext($image_1, 18, 0, imagesx($image_1)-411, imagesy($image_1)-342, $black, $font, $str5);
+        
+        //六、合成签约日期
+        $str6 = date('Y.m.d');
+        imagettftext($image_1, 22, 0, imagesx($image_1)-837, imagesy($image_1)-640, $black, $font, $str6);
+        
+        // 输出合成图片
+        imagepng($image_1, APP_ROOT.'static/images/temp/'.$time.'.png');
+
+        $url = 'http://www.ymlypt.com/static/images/temp/'.$time.'.png';
+        
+        //保存至数据库
+        $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
+        $data = array(
+            'user_id' => $this->user['id'],
+            'url3'    => $url
+            );
+        if(!$contract) {
+            $this->model->table('promoter_contract')->data($data)->insert();      
+        } else {
+            $this->model->table('promoter_contract')->data($data)->where('id='.$contract['id'])->update();
+        }
+
+        $this->code = 0;
+        $this->content['url'] = $url;
+    }
+
     public function save_contract_image()
     {
         if(!isset($_FILES['picture'])) {
