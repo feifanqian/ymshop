@@ -3028,7 +3028,7 @@ class UcenterAction extends Controller {
             return;
         }
        } else if($page==3) {
-          if(!$bank_type || !$bank_name || !$bank_phone || !$bank_area || !$positive_bankcard || !$native_bankcard || !$native_idcard) {
+          if(!$bank_type || !$bank_name || !$bank_phone || !$bank_area || !$positive_bankcard || !$native_bankcard) {
             $this->code = 1303;
             return;
           }
