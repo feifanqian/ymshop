@@ -3085,6 +3085,9 @@ class UcenterAction extends Controller {
         'status'           => $status,
         'create_date'      => date('Y-m-d H:i:s')
         );
+       if($page!=1) {
+        unset($data['type']);
+       }
        $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
        if($shop_check){
           $result = $this->model->table('shop_check')->data($data)->where('user_id='.$this->user['id'])->update();
