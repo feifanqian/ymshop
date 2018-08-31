@@ -11,8 +11,8 @@
         <dt>{$item['name']}</dt>
         <dd>
           <div id="img-show" >
-            
-              <img height='100' src="{url:@$item['path']}">
+            {set:$path = $item['path']}
+              <img height='100' src="{url:@$path}">
             
           </div>
           
