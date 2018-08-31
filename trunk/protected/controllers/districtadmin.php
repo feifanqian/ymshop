@@ -1284,7 +1284,9 @@ class DistrictadminController extends Controller
         $id = Req::args("id");
         $uid = Filter::int($id);
         $model = new Model();
-        $list = $model->table('district_shop')->fields('id,name,code_num')->where('id=' . $uid)->find();
+        $list = $model->table('district_shop')->fields('id,name,code_num,is_oc,had_send_num')->where('id=' . $uid)->find();
+        $list['used_num'] = $this->model->table('promoter_code')->where('status=0 and user_id='.$this->user['id'])->count();
+        $list['unused_num'] = $this->model->table('promoter_code')->where('status=1 and user_id='.$this->user['id'])->count();
         $this->assign('list', $list);
         $this->redirect('hirer_edit');
     }
@@ -1296,8 +1298,9 @@ class DistrictadminController extends Controller
         $model = new Model();
         $name = Req::args('name');
         $code_num = Filter::int(Req::args('code_num'));
+        $is_oc = Filter::int(Req::args('is_oc'));
         if ($name) {
-            $model->table('district_shop')->data(array('name' => $name,'code_num'=>$code_num))->where("id=$id")->update();
+            $model->table('district_shop')->data(array('name' => $name,'code_num'=>$code_num,'is_oc'=>$is_oc))->where("id=$id")->update();
         }
         $this->redirect("list_hirer");
     }

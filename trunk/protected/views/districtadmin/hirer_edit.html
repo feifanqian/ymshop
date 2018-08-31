@@ -20,6 +20,35 @@
                 <label>激活码数量</label>
             </dd>
         </dl>
+        <dl class="lineD">
+            <dt>已使用激活码数量：</dt>
+            <dd>
+                <input name="" type="text" pattern="required" value="{$list['used_num']}">
+                <label>已使用激活码数量：</label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>未使用激活码数量：</dt>
+            <dd>
+                <input name="" type="text" pattern="required" value="{$list['unused_num']}">
+                <label>未使用激活码数量：</label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>已赠送激活码数量：</dt>
+            <dd>
+                <input name="" type="text" pattern="required" value="{$list['had_send_num']}">
+                <label>已赠送激活码数量：</label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+          <dt>是否是运营中心:</dt>
+          <dd>
+            <input name="is_oc" type="radio"  value="1" {echo:$list['is_oc']==1?'checked="checked"':''}/>是
+            <input name="is_oc" type="radio"  value="0" {echo:$list['is_oc']==0?'checked="checked"':''} />否
+            <label></label>
+          </dd>
+        </dl>
         <div style="text-align:left;margin-left:13%;"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
     </form>
 </div>
