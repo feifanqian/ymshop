@@ -3087,6 +3087,7 @@ class UcenterAction extends Controller {
         );
        if($page!=1) {
         unset($data['type']);
+        unset($data['industry_no']);
        }
        $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
        if($shop_check){
