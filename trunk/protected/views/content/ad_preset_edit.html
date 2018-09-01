@@ -1,0 +1,88 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+{echo:JS::import('validator');}
+<h2 class="page_title">{$node_index['name']}</h2>
+<div class="form2">
+   <form name="config_form" method="post" action="{url:/content/ad_preset_save}">
+   <input name="id" type="hidden" value="{$item['id']}" /> 
+    <dl class="lineD">
+        <dt>{$item['name']}</dt>
+        <dd>
+          <div id="img-show" >
+            {set:$path = $item['path']}
+              <img height='100' src="{url:@$path}">
+            
+          </div>
+        </dd>
+        <dt>宽度</dt>
+        <dd>
+          <div>
+           <input name="width" type="text" value="{$item['width']}" /><label>px</label>
+          </div>
+        </dd>
+        <dt>高度</dt>
+        <dd>
+          <div>
+           <input name="height" type="text" value="{$item['height']}" /><label>px</label>
+          </div>
+        </dd>
+        <dt>x坐标</dt>
+        <dd>
+          <div>
+           <input name="x_coor" type="text" value="{$item['x_coor']}" /><label>距离左上角x距离（px）</label>
+          </div>
+        </dd>
+        <dt>y坐标</dt>
+        <dd>
+          <div>
+           <input name="y_coor" type="text" value="{$item['y_coor']}" /><label>距离左上角y距离（px）</label>
+          </div>
+        </dd>
+        <dt>文字位置</dt>
+        <dd>
+          <div>
+           <input name="top_distance" type="text" value="{$item['top_distance']}" /><label>距离顶部距离（px）</label>
+          </div>
+        </dd>
+        <dt>更新时间</dt>
+        <dd>
+          <div>
+           <input name="update_time" type="text" value="{$item['update_time']}" /><label>预计更新时间</label>
+          </div>
+        </dd>
+      </dl>
+      <div class="center">
+        <input type="submit" name="submit" class="button action fn" value="确 定">
+      </div> 
+    </form>
+</div>
+
+<script>
+	{if:isset($message)}
+	art.dialog.tips('<p class="success">{$message}</p>');
+	{/if}
+	var form = new Form('config_form');
+	{set:$config = Config::getInstance();}
+	var data = {echo:JSON::encode($config->get('globals'))};
+	form.init(data);
+
+  $(".select_button").on("click",function(){
+      uploadFile();
+      return false;
+    });
+function uploadFile(){
+  art.dialog.open('{url:/admin/photoshop?type=config}',{id:'upimg_dialog',title:'选择图片',width:613,height:380});
+}
+function setImg(value, needclose){
+  var show_src = ADMIN.upyuncfg.upyun_cdnurl + value;
+  $("#logo").val(value);
+  var img = value;
+  $("#img-show").html("<img height='50' src='"+show_src+"'>");
+      needclose = needclose==undefined ? 1 : needclose;
+      if(needclose){
+        art.dialog({id:'upimg_dialog'}).close();
+      }
+}
+
+</script>

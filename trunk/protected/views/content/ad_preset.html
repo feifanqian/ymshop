@@ -2,64 +2,46 @@
 {echo:JS::import('dialogtools');}
 {echo:JS::import('form');}
 {echo:JS::import('validator');}
-<h2 class="page_title">{$node_index['name']}</h2>
-<div class="form2">
-   {list:items=$list}
-   <form name="config_form" method="post" action="{url:/content/ad_preset_save}">
-   <input name="id" type="hidden" value="{$item['id']}" /> 
-    <dl class="lineD">
-        <dt>{$item['name']}</dt>
-        <dd>
-          <div id="img-show" >
-            {set:$path = $item['path']}
-              <img height='100' src="{url:@$path}">
-            
-          </div>
-        </dd>
-        <dt>宽度</dt>
-        <dd>
-          <div>
-           <input name="width" type="text" value="{$item['width']}" /><label>px</label>
-          </div>
-        </dd>
-        <dt>高度</dt>
-        <dd>
-          <div>
-           <input name="height" type="text" value="{$item['height']}" /><label>px</label>
-          </div>
-        </dd>
-        <dt>x坐标</dt>
-        <dd>
-          <div>
-           <input name="x_coor" type="text" value="{$item['x_coor']}" /><label>距离左上角x距离（px）</label>
-          </div>
-        </dd>
-        <dt>y坐标</dt>
-        <dd>
-          <div>
-           <input name="y_coor" type="text" value="{$item['y_coor']}" /><label>距离左上角y距离（px）</label>
-          </div>
-        </dd>
-        <dt>文字位置</dt>
-        <dd>
-          <div>
-           <input name="top_distance" type="text" value="{$item['top_distance']}" /><label>距离顶部距离（px）</label>
-          </div>
-        </dd>
-        <dt>更新时间</dt>
-        <dd>
-          <div>
-           <input name="update_time" type="text" value="{$item['update_time']}" /><label>预计更新时间</label>
-          </div>
-        </dd>
-      </dl>
-      <div class="center">
-        <input type="submit" name="submit" class="button action fn" value="确 定">
-      </div>
-      {/list}
-      
-    </form>
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+    <a href="javascript:;" class="icon-loop-2" onclick="tools_reload()"> 刷新</a>   
 </div>
+<table class="default" >
+    <tr>
+        <th style="width:30px">选择</th>
+        <th style="width:70px">操作</th>
+        <th>名称</th>
+        <th>预览</th>
+        <th style="width:100px">宽度(px)</th>
+        <th style="width:100px">高度(px)</th>
+        
+        <th style="width:80px">x坐标(px)</th>
+        <th style="width:80px">y坐标(px)</th>
+        <th style="width:80px">文字距顶部距离(px)</th>
+        <th style="width:100px">预计更新时间</th>
+    </tr>
+    {list:items=$list}
+        <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+          <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select">
+          <ul>
+                <li><a class="icon-pencil" href="{url:/content/ad_preset_edit/id/$item[id]}"> 编辑</a></li>
+            </ul></div></div> </td>
+          <td >{$item['name']}</td>
+          <td >
+              {set:$path = $item['path']}
+              <img height='100' src="{url:@$path}">
+          </td>
+          <td style="width:100px;">{$item['width']}</td>
+          <td style="width:100px">{$item['height']}</td>
+          <td style="width:80px">{$item['x_coor']}</td>
+          <td style="width:80px">{$item['y_coor']}</td>
+          <td style="width:80px">{$item['top_distance']}</td>
+          <td style="width:100px">{$item['update_time']}</td>
+        </tr>
+    {/list}
+</table>
+</form>
 
 <script>
 	{if:isset($message)}
