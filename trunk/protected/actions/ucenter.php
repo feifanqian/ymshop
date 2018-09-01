@@ -3052,17 +3052,16 @@ class UcenterAction extends Controller {
        $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
        
        if($page==3 || $page==6) {
-         $status = 0;
-       } else {
-        $status = -1;
-       }
+         $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
+         $status = empty($contract)?-1:0;
+       } 
        
        if($page==1) {
         $data = array(
         'user_id'          => $this->user['id'],
         'type'             => $type,
         'industry_no'      => $industry_no,
-        'status'           => '-1',
+        'status'           => -1,
         'create_date'      => date('Y-m-d H:i:s')
         );
        } else if($page==2) {
@@ -3078,7 +3077,7 @@ class UcenterAction extends Controller {
         'address'          => $address,
         'positive_idcard'  => $positive_idcard,
         'native_idcard'    => $native_idcard,
-        'status'           => '-1',
+        'status'           => -1,
         'create_date'      => date('Y-m-d H:i:s')
         );
        } else if($page==3) {
@@ -3092,7 +3091,7 @@ class UcenterAction extends Controller {
         'bank_city'        => $bank_city,
         'positive_bankcard'=> $positive_bankcard,
         'native_bankcard'  => $native_bankcard,
-        'status'           => '0',
+        'status'           => $status,
         'create_date'      => date('Y-m-d H:i:s')
         );
        } else if($page==4) {
@@ -3106,7 +3105,7 @@ class UcenterAction extends Controller {
         'business_licence' => $business_licence,
         'business_number'  => $business_number,
         'business_addr'    => $business_addr,
-        'status'           => '-1',
+        'status'           => -1,
         'create_date'      => date('Y-m-d H:i:s')
         );
        } else if($page==5) {
@@ -3120,7 +3119,7 @@ class UcenterAction extends Controller {
         'hand_idcard'      => $hand_idcard,
         'positive_idcard'  => $positive_idcard,
         'native_idcard'    => $native_idcard, 
-        'status'           => '-1',
+        'status'           => -1,
         'create_date'      => date('Y-m-d H:i:s')
         );
        } else {
@@ -3133,7 +3132,7 @@ class UcenterAction extends Controller {
         'bank_province'    => $bank_province,
         'bank_city'        => $bank_city,
         'account_picture'  => $account_picture,
-        'status'           => '0',
+        'status'           => $status,
         'create_date'      => date('Y-m-d H:i:s')
         );
        }
