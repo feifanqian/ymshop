@@ -514,7 +514,7 @@ class ContentController extends Controller {
 
     public function ad_preset_save()
     {
-        $k = Req::args("k");
+        $id = Filter::int(Req::args("id"));
         $model = new Model();
         $data = array(
             'update_time'=>Req::args("update_time"),
@@ -524,7 +524,7 @@ class ContentController extends Controller {
             'y_coor'=>Req::args("y_coor"),
             'top_distance'=>Req::args("top_distance"),
             );
-        $model->table('ad_preset')->data($data)->where('ad_id=85 and k='.$k)->update();
+        $model->table('ad_preset')->data($data)->where("id=".$id)->update();
         $this->redirect('ad_preset');
     }
 }
