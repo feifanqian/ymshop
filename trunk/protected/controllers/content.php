@@ -516,13 +516,13 @@ class ContentController extends Controller {
     {
         $id = Filter::int(Req::args("id"));
         $model = new Model();
-        $item = $model->table('ad_preset as ap')->join('left join ad as a on ap.ad_id=a.id')->fields('ap.*,a.name')->where("ap.id=".$id)->find();
+        $info = $model->table('ad_preset as ap')->join('left join ad as a on ap.ad_id=a.id')->fields('ap.*,a.name')->where("ap.id=".$id)->find();
         $ad = $model->table('ad')->where("id=85 and is_open = 1")->find();
         $ads = unserialize($ad['content']);
-        $path = $ads[$item['k']];
-        $item['path'] = $path['path'];
-        var_dump($item);die;
-        $this->assign('item',$item);
+        $path = $ads[$info['k']];
+        $info['path'] = $path['path'];
+        // var_dump($info);die;
+        $this->assign('info',$info);
         $this->redirect(); 
     }
 
