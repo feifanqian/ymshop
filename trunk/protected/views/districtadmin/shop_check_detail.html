@@ -26,21 +26,23 @@
         <dl class="lineD">
             <dt>身份证正面照：</dt>
             <dd>
-                <img src="{$shop_check['positive_idcard']}" width="300" height="180">      
+                {set:$positive_idcard = $shop_check['positive_idcard']}
+                <img src="{url:@$positive_idcard}" width="300" height="180">      
             </dd>
         </dl>
         <dl class="lineD">
             <dt>身份证反面照：</dt>
             <dd>
-                <img src="{$shop_check['native_idcard']}" width="300" height="180"> 
+                {set:$native_idcard = $shop_check['native_idcard']}
+                <img src="{url:@$native_idcard}" width="300" height="180">
             </dd>
         </dl>
         {if:$shop_check['hand_idcard']!=null}
         <dl class="lineD">
             <dt>手持身份证照：</dt>
-            <dd>
-                <img src="{$shop_check['hand_idcard']}" width="300" height="180"> 
-                
+            <dd> 
+                {set:$hand_idcard = $shop_check['hand_idcard']}
+                <img src="{url:@$hand_idcard}" width="300" height="180">
             </dd>
         </dl>
         {/if}
@@ -84,7 +86,8 @@
         <dl class="lineD">
             <dt>银行卡正面照：</dt>
             <dd>
-                <img src="{$shop_check['positive_bankcard']}" width="300" height="180"> 
+                {set:$positive_bankcard = $shop_check['positive_bankcard']}
+                <img src="{url:@$positive_bankcard}" width="300" height="180">
             </dd>
         </dl>
         {/if}
@@ -92,7 +95,8 @@
         <dl class="lineD">
             <dt>银行卡反面照：</dt>
             <dd>
-                <img src="{$shop_check['native_bankcard']}" width="300" height="180"> 
+                {set:$native_bankcard = $shop_check['native_bankcard']}
+                <img src="{url:@$native_bankcard}" width="300" height="180">
             </dd>
         </dl>
         <dl class="lineD">
@@ -106,7 +110,8 @@
         <dl class="lineD">
             <dt>营业执照：</dt>
             <dd>
-                <img src="{$shop_check['business_licence']}" width="300" height="180">      
+                {set:$business_licence = $shop_check['business_licence']}
+                <img src="{url:@$business_licence}" width="300" height="180">     
             </dd>
         </dl>
         {/if}
@@ -130,7 +135,8 @@
         <dl class="lineD">
             <dt>开户许可证：</dt>
             <dd>
-                <img src="{$shop_check['account_picture']}" width="300" height="180">      
+                {set:$account_picture = $shop_check['account_picture']}
+                <img src="{url:@$account_picture}" width="300" height="180">    
             </dd>
         </dl>
         {/if}
@@ -138,7 +144,8 @@
         <dl class="lineD">
             <dt>门店照：</dt>
             <dd>
-                <img src="{$shop_check['shop_photo']}" width="300" height="180"> 
+                {set:$shop_photo = $shop_check['shop_photo']}
+                <img src="{url:@$shop_photo}" width="300" height="180">
             </dd>
         </dl>
         {/if}
