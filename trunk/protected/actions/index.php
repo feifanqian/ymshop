@@ -608,7 +608,11 @@ class IndexAction extends Controller {
         foreach ($ads as $k => $v){
              $arr[$k] = $v['path'];
              $list = $this->model->table('ad_preset')->where("ad_id=85 and k=".$k)->find();
-             $set[$k]['path'] = $v['path'];
+             $path = strpos($v['path'],'https') !== false?$v['path']:'https://ymlypt.b0.upaiyun.com'.$v['path'];
+             $image = imagecreatefromstring(file_get_contents($path));
+             $set[$k]['path'] = $path;
+             $set[$k]['img_width'] = imagesx($image);
+             $set[$k]['img_height'] = imagesy($image);
              $set[$k]['update_time'] = $list['update_time'];
              $set[$k]['width'] = $list['width'];
              $set[$k]['height'] = $list['height'];
