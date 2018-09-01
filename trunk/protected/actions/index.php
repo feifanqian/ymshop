@@ -607,20 +607,26 @@ class IndexAction extends Controller {
         $set = array();
         foreach ($ads as $k => $v){
              $arr[$k] = $v['path'];
-             $list = $this->model->table('ad_preset')->where("ad_id=85 and k=".$k)->find();
+             // $list = $this->model->table('ad_preset')->where("ad_id=85 and k=".$k)->find();
              $path = strpos($v['path'],'https') !== false?$v['path']:'https://ymlypt.b0.upaiyun.com'.$v['path'];
              $image = imagecreatefromstring(file_get_contents($path));
              $set[$k]['path'] = $path;
              $set[$k]['img_width'] = imagesx($image);
              $set[$k]['img_height'] = imagesy($image);
-             $set[$k]['update_time'] = $list['update_time'];
-             $set[$k]['width'] = $list['width'];
-             $set[$k]['height'] = $list['height'];
-             $set[$k]['x_coor'] = $list['x_coor'];
-             $set[$k]['y_coor'] = $list['y_coor'];
-             $set[$k]['top_distance'] = $list['top_distance'];
+             // $set[$k]['update_time'] = $list['update_time'];
+             // $set[$k]['width'] = $list['width'];
+             // $set[$k]['height'] = $list['height'];
+             // $set[$k]['x_coor'] = $list['x_coor'];
+             // $set[$k]['y_coor'] = $list['y_coor'];
+             // $set[$k]['top_distance'] = $list['top_distance'];
+             $set[$k]['update_time'] = $v['update_time'];
+             $set[$k]['width'] = $v['width'];
+             $set[$k]['height'] = $v['height'];
+             $set[$k]['x_coor'] = $v['x_coor'];
+             $set[$k]['y_coor'] = $v['y_coor'];
+             $set[$k]['top_distance'] = $v['top_distance'];
 
-             if(time()<strtotime($list['update_time'])) {
+             if(time()<strtotime($v['update_time'])) {
                 unset($ads[$k]);
                 unset($arr[$k]);
                 unset($set[$k]);
