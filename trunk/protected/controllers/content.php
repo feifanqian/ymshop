@@ -517,7 +517,9 @@ class ContentController extends Controller {
         $id = Filter::int(Req::args("id"));
         $model = new Model();
         $list = $model->table('ad_preset as ap')->join('left join ad as a on ap.ad_id=a.id')->fields('ap.*,a.name')->where("ap.id=".$id)->find();
-        
+        $ad = $model->table('ad')->where("id=85 and is_open = 1")->find();
+        $ads = unserialize($ad['content']);
+        $list['path'] = $ads[$list['k']];
         $this->assign('item',$list);
         $this->redirect(); 
     }
