@@ -915,23 +915,26 @@ class DistrictadminController extends Controller
                 if (!$invite) {
                     $model->table('invite')->data(array('user_id' => $owner['owner_id'], 'invite_user_id' => $user_id, 'from' => 'admin', 'district_id' => $owner['id'], 'createtime' => time()))->insert();
                 }
+                
+                $promoter = $model->table('district_promoter')->where('user_=' . $user_id)->find();
+                if(!$promoter) {
+                    $datas['user_id'] = $user_id;
+                    $datas['type'] = 3;
+                    $datas['join_time'] = date("Y-m-d H:i:s");
+                    $datas['invitor_id'] = $owner['owner_id'];
+                    $datas['hirer_id'] = $result;
+                    $datas['create_time'] = date('Y-m-d H:i:s');
+                    // $datas['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
+                    $datas['status'] = 1;
+                    $datas['shop_type'] = 2;
+                    $datas['shop_name'] = '';
+                    $datas['unique_code'] = 0;
+                    $datas['base_rate'] = 3.00;
 
-                $datas['user_id'] = $user_id;
-                $datas['type'] = 3;
-                $datas['join_time'] = date("Y-m-d H:i:s");
-                $datas['invitor_id'] = $owner['owner_id'];
-                $datas['hirer_id'] = $result;
-                $datas['create_time'] = date('Y-m-d H:i:s');
-                // $datas['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
-                $datas['status'] = 1;
-                $datas['shop_type'] = 0;
-                $datas['shop_name'] = '';
-                $datas['unique_code'] = 0;
-                $datas['base_rate'] = 3.00;
-                $datas['location'] = '';
-        
-                $res = $model->table("district_promoter")->data($datas)->insert();
-                if ($result && $res) {
+                    $res = $model->table("district_promoter")->data($datas)->insert();
+                }
+                
+                if ($result) {
                     $logic = DistrictLogic::getInstance();
                     if (strip_tags(Url::getHost(), 'ymlypt')) {
                         $this->sendMessage($user_id, "恭喜您，成为官方经销商，快来看看吧>>>", "https://www.ymlypt.com/ucenter/index?first=1", "promoter_join_success");
