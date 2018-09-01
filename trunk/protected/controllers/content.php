@@ -415,10 +415,14 @@ class ContentController extends Controller {
             $path = Req::args('path');
             $url = Req::args('url');
             $title = Req::args('title');
+            $width = Req::args('width');
+            $height = Req::args('height');
+            $x_coor = Req::args('x_coor');
+            $y_coor = Req::args('y_coor');
             $content = array();
             if ($type == 2) {
                 foreach ($path as $key => $value) {
-                    $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key]);
+                    $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key],'width' => $width[$key],'height' => $height[$key],'x_coor' => $x_coor[$key],'y_coor' => $y_coor[$key]);
                 }
             } else {
                 $content[0] = array('path' => $path[0], 'url' => $url[0], 'title' => $title[0]);
