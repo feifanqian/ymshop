@@ -327,8 +327,8 @@ $("input[name='end_date']").blur(function(){
         var scrollHeight = $(document).height();
         var windowHeight = $(this).height();
         console.log("1="+scrollTop);
-        console.log("2="+scrollHeight);
-        console.log("3="+windowHeight);
+        console.log("2="+windowHeight);
+        console.log("3="+scrollHeight);
         if (scrollTop + windowHeight >= scrollHeight) {
         // 此处是滚动条到底部时候触发的事件，在这里写要加载的数据，或者是拉动滚动条的操作
            page++;
