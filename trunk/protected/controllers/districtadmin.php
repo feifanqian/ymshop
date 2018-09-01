@@ -916,7 +916,7 @@ class DistrictadminController extends Controller
                     $model->table('invite')->data(array('user_id' => $owner['owner_id'], 'invite_user_id' => $user_id, 'from' => 'admin', 'district_id' => $owner['id'], 'createtime' => time()))->insert();
                 }
                 
-                $promoter = $model->table('district_promoter')->where('user_=' . $user_id)->find();
+                $promoter = $model->table('district_promoter')->where('user_id=' . $user_id)->find();
                 if(!$promoter) {
                     $datas['user_id'] = $user_id;
                     $datas['type'] = 3;
