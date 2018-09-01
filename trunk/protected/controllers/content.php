@@ -519,8 +519,8 @@ class ContentController extends Controller {
         $list = $model->table('ad_preset as ap')->join('left join ad as a on ap.ad_id=a.id')->fields('ap.*,a.name')->where("ap.id=".$id)->find();
         $ad = $model->table('ad')->where("id=85 and is_open = 1")->find();
         $ads = unserialize($ad['content']);
-        $list['path'] = $ads[$list['k']];
-        var_dump($list);die;
+        $list['path'] = $ads[$list['k']]['path'];
+        var_dump($list['path']);die;
         $this->assign('item',$list);
         $this->redirect(); 
     }
