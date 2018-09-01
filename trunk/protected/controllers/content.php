@@ -516,7 +516,7 @@ class ContentController extends Controller {
     {
         $id = Filter::int(Req::args("id"));
         $model = new Model();
-        $list = $model->table('ad_preset as ap')->join('left join ad as a on ap.ad_id=a.id')->fields('ap.*,a.name')->where("id=".$id)->find();
+        $list = $model->table('ad_preset as ap')->join('left join ad as a on ap.ad_id=a.id')->fields('ap.*,a.name')->where("ap.id=".$id)->find();
         
         $this->assign('item',$list);
         $this->redirect(); 
