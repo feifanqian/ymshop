@@ -520,7 +520,7 @@ class ContentController extends Controller {
         $ad = $model->table('ad')->where("id=85 and is_open = 1")->find();
         $ads = unserialize($ad['content']);
         $path = $ads[$item['k']];
-        $item['path'] = $path['path']
+        $item['path'] = $path['path'];
         var_dump($item);die;
         $this->assign('item',$item);
         $this->redirect(); 
