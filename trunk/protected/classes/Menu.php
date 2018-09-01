@@ -56,7 +56,7 @@ class Menu {
             '/content/help_category_list' => array('name' => '帮助分类管理', 'parent' => 'help'),
             '/content/help_category_edit' => array('name' => '编辑帮助分类', 'parent' => 'help'),
             '/content/ad_list' => array('name' => '广告管理', 'parent' => 'banner'),
-            '/content/ad_preset' => array('name' => 'app邀请页背景图', 'parent' => 'banner'),
+            // '/content/ad_preset' => array('name' => 'app邀请页背景图', 'parent' => 'banner'),
             '/content/ad_preset_edit' => array('name' => 'app邀请页背景图设置', 'parent' => 'banner','hidden'=>true),
             '/content/ad_edit' => array('name' => '编辑广告', 'parent' => 'banner'),
             '/content/tags_list' => array('name' => '标签管理', 'parent' => 'banner'),
