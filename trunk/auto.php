@@ -357,8 +357,16 @@ class LinuxCliTask{
                         foreach ($logs as $key => $value) {
                             $this->model->table('benefit_log')->data(['order_status'=>'订单失效','type'=>-1])->where('id='.$value['id'])->update();
                             // $this->model->table('user')->data(array('total_income'=>"`total_income`-{$value['amount']}"))->where('id='.$value['user_id'])->update();
-                            $this->model->table('customer')->data(array('balance'=>"`balance`-{$value['amount']}"))->where('user_id='.$value['user_id'])->update();
-                            Log::balance($value['amount'],$value['user_id'],$v['order_sn'],'优惠购收益退回',22);
+                            // $this->model->table('customer')->data(array('balance'=>"`balance`-{$value['amount']}"))->where('user_id='.$value['user_id'])->update();
+                            // Log::balance($value['amount'],$value['user_id'],$v['order_sn'],'优惠购收益退回',22);
+                            $data = array(
+                                'order_sn'     => $v['order_sn'],
+                                'amount'       => $value['amount'],
+                                'user_id'      => $value['user_id'],
+                                'order_status' => '订单失效',
+                                'create_time'  => date('Y-m-d H:i:s')
+                                );
+                            $this->model->table('taoke_refund')->data($data)->insert();
                         }
                     }
                  }
