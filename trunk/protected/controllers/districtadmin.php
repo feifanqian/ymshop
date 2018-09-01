@@ -922,9 +922,14 @@ class DistrictadminController extends Controller
                 $datas['invitor_id'] = $owner['owner_id'];
                 $datas['hirer_id'] = $result;
                 $datas['create_time'] = date('Y-m-d H:i:s');
-                $datas['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
+                // $datas['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
                 $datas['status'] = 1;
                 $datas['shop_type'] = 0;
+                $datas['shop_name'] = '';
+                $datas['unique_code'] = 0;
+                $datas['base_rate'] = 3.00;
+                $datas['location'] = '';
+        
                 $res = $model->table("district_promoter")->data($datas)->insert();
                 if ($result && $res) {
                     $logic = DistrictLogic::getInstance();
