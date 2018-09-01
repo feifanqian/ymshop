@@ -323,8 +323,10 @@ $("input[name='end_date']").blur(function(){
         //     page++;
         //     ajaxRead();
         // }
+        var body = $("body");
         var scrollTop = $(this).scrollTop();
-        var scrollHeight = $(document).height();
+        // var scrollHeight = $(document).height();
+        var scrollHeight = body.height();
         var windowHeight = $(this).height();
         console.log("1="+scrollTop);
         console.log("2="+windowHeight);
