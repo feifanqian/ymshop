@@ -1,7 +1,7 @@
  {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
 {set:$status=array("-1"=>"未完善","0"=>"<span class='green icon-busy'>未处理</span>","1"=>"<span class='gray icon-coin'>已审核</span>","2"=>"<span class='red icon-remove'>未通过</span>");}
-{set:$type = array("0"=>"未知","1"=>"实体商家","2"=>"个人微商");}
+{set:$type = array("0"=>"未知","1"=>"个体商户","2"=>"小微商户","3"=>"企业商户");}
 <form action="" method="post">
 <div class="tools_bar clearfix">
     <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>

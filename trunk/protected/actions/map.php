@@ -153,7 +153,7 @@ class MapAction extends Controller
 
     public function image_merge_tests()
     {
-        $shop_check = $this->model->table('shop_check')->fields('id,legal_person,mobile,id_no,address')->where('user_id='.$this->user['id'])->find();
+        $shop_check = $this->model->table('shop_check')->fields('id,legal_person,mobile,id_no,province,city,county,address')->where('user_id='.$this->user['id'])->find();
         if(!$shop_check) {
             $this->code = 1304;
             return;
@@ -166,7 +166,7 @@ class MapAction extends Controller
         $name = $shop_check['legal_person'];
         $mobile = $shop_check['mobile'];
         $id_no = $shop_check['id_no'];
-        $address = $shop_check['address'];
+        $address = $shop_check['province'].$shop_check['city'].$shop_check['county'].$shop_check['address'];
         $rate = $promoter['base_rate'];
         
         // $name = Filter::str(Req::args('name')); //乙方名字
