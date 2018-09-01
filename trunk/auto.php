@@ -271,9 +271,21 @@ class LinuxCliTask{
                         $this->model->table('benefit_log')->data($log)->insert();
                     } else {
                         //上级代理商
-                        $promoter_id = Common::getFirstPromoter($user_id);
+                        $promoter = $this->model->table('district_promoter')->where('user_id='.$user_id)->find();
+                        if($promoter) {
+                            $promoter_id = $user_id;
+                        } else {
+                            $promoter_id = Common::getFirstPromoter($user_id);
+                        }
+                        // $promoter_id = Common::getFirstPromoter($user_id);
                         //上级经销商
-                        $district_id = Common::getFirstDistrictId($user_id);
+                        $district = $this->model->table('district_shop')->where('owner_id='.$user_id)->find();
+                        if($district) {
+                            $district_id = $user_id;
+                        } else {
+                            $district_id = Common::getFirstDistrictId($user_id);
+                        }
+                        // $district_id = Common::getFirstDistrictId($user_id);
                         
                         if($user_id == $promoter_id) {
                             if($district_id == $user_id) {
