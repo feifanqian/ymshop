@@ -624,7 +624,7 @@ class IndexAction extends Controller {
              $set[$k]['height'] = $v['height'];
              $set[$k]['x_coor'] = $v['x_coor'];
              $set[$k]['y_coor'] = $v['y_coor'];
-             $set[$k]['top_distance'] = 300;
+             // $set[$k]['top_distance'] = 300;
 
              if(time()<strtotime($v['update_time'])) {
                 unset($ads[$k]);
