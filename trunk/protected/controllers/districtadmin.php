@@ -925,6 +925,7 @@ class DistrictadminController extends Controller
                 $datas['valid_income'] = $data['frezze_income'] = $data['settled_income'] = 0.00;
                 $datas['status'] = 1;
                 $res = $model->table("district_promoter")->data($datas)->insert();
+                var_dump($res);die;
                 if ($result && $res) {
                     $logic = DistrictLogic::getInstance();
                     if (strip_tags(Url::getHost(), 'ymlypt')) {
