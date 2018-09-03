@@ -3105,6 +3105,7 @@ class UcenterAction extends Controller {
         'business_licence' => $business_licence,
         'business_number'  => $business_number,
         'business_addr'    => $business_addr,
+        'address'          => $address,
         'status'           => -1,
         'create_date'      => date('Y-m-d H:i:s')
         );
