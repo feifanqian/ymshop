@@ -109,6 +109,10 @@
             <div id="remove">删除</div>
         </div>
     </div>
+    {set:$paydict = array();}
+    {list:items=$paytypelist}
+    {set:$paydict[]=array('title'=>$item['pay_name'], 'value'=>$item['id']);}
+    {/list}
     <script type="text/javascript">
     $(function () {
        var color_list = {0:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/cd5157d1ceeb32cc2b0fa56b3570c650.png)',1:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/728315016561eb34185ca91c31d187c6.png)',2:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/d5c38558e8ce321daf8ca0bdc0dcf653.png)'};
