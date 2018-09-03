@@ -176,9 +176,20 @@
         background-color: #DEE1E9;
     }
     .weui_cell_ft{
+      margin-top: 20px;
       margin-left: 25%;
       width: 50%;
-    } 
+      font-size: 22px;
+      color: #666;
+    }
+    .weui_input{
+      text-align: center;
+      display: inline-block;
+      width: 100px;
+      font-size: 22px;
+      border: none;
+      color: #666;
+    }
 </style>
 <script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
@@ -212,10 +223,10 @@
                 <div class="weui_cell_ft">
                 付款方式:
                     {if:$pay_type=='alipay'}
-                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="支付宝支付" data-values="8" style='text-align:right;display:inline-block;width:auto;font-size:16px;' />
+                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="支付宝支付" data-values="8" />
                     {else:}
                       {if:$paytypeone}
-                        <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" style='text-align:right;display:inline-block;width:auto;font-size:16px;' />
+                        <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" />
                       {/if}
                     {/if}
                 </div>
