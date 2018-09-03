@@ -855,4 +855,73 @@ class TravelController extends Controller
                 exit;
     }
 
+    public function demo()
+    {
+        $model = new Model();
+        Session::set('demo', 2);
+
+        $inviter_id = intval(Req::args('inviter_id'));
+        if (!$inviter_id) {
+            $inviter_id = Session::get('seller_id');
+        }
+        $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
+        if(!$cashier_id) {
+            $cashier_id = 0;
+        }
+        $desk_id = Filter::int(Req::args('desk_id'));//收银员id
+        if(!$desk_id) {
+            $desk_id = 0;
+        }
+        if(in_array($inviter_id, [101738,87455,55568,8158,25795,31751]) && date('Y-m-d H:i:s')>'2018-05-15 12:00:00' && date('Y-m-d H:i:s')<'2018-06-15 12:00:00'){
+            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
+            exit;
+        } 
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false) {
+            $pay_type = 'alipay';
+            $from = 'alipay';
+        } else {
+            $pay_type = 'wechat';
+            $from = 'second-wap';
+        }
+        if (isset($this->user['id'])) {
+            Common::buildInviteShip($inviter_id, $this->user['id'], $from);
+        } else {
+            Cookie::set("inviter", $inviter_id);
+            $this->noRight();
+        }
+        $user_id = $this->user['id'];
+        $shop = $this->model->table('customer')->fields('real_name')->where('user_id=' . $inviter_id)->find();
+
+        if ($shop) {
+            $this->assign('shop_name', $shop['real_name']);
+        } else {
+            $this->assign('shop_name', '未知商家');
+        }
+
+        $order_no = date('YmdHis') . rand(1000, 9999);
+        // $jsApiParameters = Session::get('payinfo');
+        // $this->assign("jsApiParameters",$jsApiParameters);
+        $this->assign("seo_title", "向商家付款");
+        $this->assign('seller_id', $inviter_id);
+        $this->assign('cashier_id', $cashier_id);
+        $this->assign('desk_id', $desk_id);
+        $this->assign('seller_ids', Session::get('seller_id'));
+        $this->assign('order_no', $order_no);
+        $this->assign('user_id', $user_id);
+        $third_pay = 0;
+        $third_payment = $this->model->table('third_payment')->where('id=1')->find();
+        if ($third_payment) {
+            $third_pay = $third_payment['third_payment'];
+        }
+        $models = new Model("payment as pa");
+        $paytypelist = $models->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")
+            ->where("pa.id in (6,8)")->order("pa.sort desc")->findAll();
+        $paytypeone = reset($paytypelist);
+        $this->assign("paytypeone", $paytypeone);
+        $this->assign("paytypelist", $paytypelist);
+        $this->assign("pay_type", $pay_type);
+        $this->assign('third_pay', $third_pay);
+        $this->redirect();
+    }
+
 }    
