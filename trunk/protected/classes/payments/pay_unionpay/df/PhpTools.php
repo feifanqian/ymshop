@@ -261,8 +261,8 @@ class PhpTools{
 		}
 		//获取返回报文
 		$xmlResponse = $response['body'];
-     //    var_dump($params);
-	    // var_dump(Common::xmlToArray($xmlResponse));die;
+        var_dump($params);
+	    var_dump(Common::xmlToArray($xmlResponse));die;
 		 //验证返回报文
 		$result=$this->verifyXmls($xmlResponse);
 		return $result;
