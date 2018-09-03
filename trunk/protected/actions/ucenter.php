@@ -3166,7 +3166,7 @@ class UcenterAction extends Controller {
           $need_check = 1; //通过认证
         }elseif($shop_check['status']==0){
           $need_check = 2; //认证审核中
-        }elseif($shop_check['status']==-1){
+        }elseif($shop_check['status']==-1 && $shop_check['reason']==null){
           $need_check = 3; //需完善
         }else{
           $need_check = -1; //认证失败  
