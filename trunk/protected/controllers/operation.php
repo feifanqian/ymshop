@@ -475,6 +475,7 @@ class OperationController extends Controller
           } else {
             $is_break = true;
           }
+          array_push($ids, $user_id);
           $idstr = $ids!=null?implode(',', $ids):'';
        }
        $result['user_ids'] = $idstr;
