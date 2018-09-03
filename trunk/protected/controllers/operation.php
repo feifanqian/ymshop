@@ -49,7 +49,8 @@ class OperationController extends Controller
             $order_total = $this->model->table('order')->fields('sum(order_amount) as sum')->where($where1)->query();
             $order_sum = $order_total[0]['sum']!=null?$order_total[0]['sum']:0.00;
 
-            $where2 = "shop_ids = ".$user_id." and pay_status=1";
+            // $where2 = "shop_ids = ".$user_id." and pay_status=1";
+            $where2 = "shop_ids in ($ids) and pay_status=1";
             if($start_date || $end_date) {
                 $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
             }
@@ -212,7 +213,8 @@ class OperationController extends Controller
             $order_total = $this->model->table('order')->fields('sum(order_amount) as sum')->where($where1)->query();
             $order_sum = $order_total[0]['sum']!=null?$order_total[0]['sum']:0.00;
 
-            $where2 = "shop_ids = ".$user_id." and pay_status=1";
+            // $where2 = "shop_ids = ".$user_id." and pay_status=1";
+            $where2 = "shop_ids in ($ids) and pay_status=1";
             if($start_date || $end_date) {
                 $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
             }
@@ -332,7 +334,8 @@ class OperationController extends Controller
             $order_total = $this->model->table('order')->fields('sum(order_amount) as sum')->where($where1)->query();
             $order_sum = $order_total[0]['sum']!=null?$order_total[0]['sum']:0.00;
 
-            $where2 = "shop_ids = ".$user_id." and pay_status=1";
+            // $where2 = "shop_ids = ".$user_id." and pay_status=1";
+            $where2 = "shop_ids in ($ids) and pay_status=1";
             if($start_date || $end_date) {
                 $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
             }
