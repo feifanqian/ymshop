@@ -57,7 +57,7 @@ class AllinpayDf{
                 'LEVEL' => '6',
                 'USER_NAME' => '20058400001550504',
                 'USER_PASS' => '111111',
-                'REQ_SN' => $req_sn,
+                'REQ_SN' => $req_sn.rand(1000,9999),
             ),
             'QTRANSREQ' => array(
                 'QUERY_SN' => $req_sn,
