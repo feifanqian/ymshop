@@ -74,9 +74,9 @@
       height: 400px;
       margin-left: 5%;
       background: #fff;
-      padding-top: 30px;
-      padding-left: 30px;
-      padding-right: 30px;
+      padding-top: 40px;
+      padding-left: 50px;
+      padding-right: 50px;
     }
 
     .layer-content {
@@ -207,9 +207,9 @@
         <input type="hidden" name="cashier_id" value="{$cashier_id}">
         <input type="hidden" name="desk_id" value="{$desk_id}">
         <input type="hidden" name="order_amount" id="order_amount" value="">
-        <p style="font-size: 18px;font-weight: bold;">向商家付款</p><p style="width: 50px;height: 50px;float: right;margin-top: -20px;"><img src="{url:@$avatar}" width="50" height="50" style="border-radius: 50px;"></p>
-        <p style="font-size: 18px;color: #666;margin-top: 10px;">昵称：{$shop_name}</p>
-        <p style="font-size: 18px;font-weight: bold;margin-top: 20px;">金额</p>
+        <p style="font-size: 20px;font-weight: bold;">向商家付款</p><p style="width: 50px;height: 50px;float: right;margin-top: -20px;"><img src="{url:@$avatar}" width="50" height="50" style="border-radius: 50px;"></p>
+        <p style="font-size: 20px;color: #666;margin-top: 10px;">昵称：{$shop_name}</p>
+        <p style="font-size: 20px;font-weight: bold;margin-top: 20px;">金额</p>
         <div class="shuru">
             <span><b style="font-size: 60px;">&yen;&nbsp;</b><b style="color: #999;font-size: 60px;">|</b></span>
             <div id="div" style="font-size: 60px;"></div>
@@ -246,9 +246,9 @@
         <input type="hidden" name="cashier_id" value="{$cashier_id}">
         <input type="hidden" name="desk_id" value="{$desk_id}">
         <input type="hidden" name="order_amount" id="order_amount" value="">
-        <p style="font-size: 18px;font-weight: bold;">向商家付款</p><p style="width: 50px;height: 50px;float: right;margin-top: -20px;"><img src="{url:@$avatar}" width="50" height="50" style="border-radius: 50px;"></p>
-        <p style="font-size: 18px;color: #666;margin-top: 10px;">昵称：{$shop_name}</p>
-        <p style="font-size: 18px;font-weight: bold;margin-top: 20px;">金额</p>
+        <p style="font-size: 20px;font-weight: bold;">向商家付款</p><p style="width: 50px;height: 50px;float: right;margin-top: -20px;"><img src="{url:@$avatar}" width="50" height="50" style="border-radius: 50px;"></p>
+        <p style="font-size: 20px;color: #666;margin-top: 10px;">昵称：{$shop_name}</p>
+        <p style="font-size: 20px;font-weight: bold;margin-top: 20px;">金额</p>
         <div class="shuru">
             <span><b style="font-size: 60px;">&yen;&nbsp;</b><b style="color: #999;font-size: 60px;">|</b></span>
             <div id="div" style="font-size: 60px;"></div>
@@ -262,10 +262,10 @@
                 <div class="weui_cell_ft">
                 付款方式:
                     {if:$pay_type=='alipay'}
-                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="支付宝支付" data-values="8" style='text-align:right;display:inline-block;width:auto;font-size:16px;' />
+                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="支付宝支付" data-values="8" />
                     {else:}
                       {if:$paytypeone}
-                        <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" style='text-align:right;display:inline-block;width:auto;font-size:16px;' />
+                        <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" />
                       {/if}
                     {/if}
                 </div>
