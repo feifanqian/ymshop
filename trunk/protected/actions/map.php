@@ -86,6 +86,11 @@ class MapAction extends Controller
         $id_no = Filter::str(Req::args('id_no')); //乙方证件号
         $address = Filter::str(Req::args('address')); //乙方地址
         $rate = Filter::float(Req::args('rate')); //甲方收取服务费比例
+
+        if($rate<3) {
+            $this->code = 1305;
+            return;
+        }
          
         $path_1 = "https://ymlypt.b0.upaiyun.com/data/uploads/2018/08/23/522c0a7538e94fd84678e1d565c2d156.png";
 
