@@ -164,7 +164,9 @@ iframe{
     <div class="line-info">
       <span><img src="/themes/mobile/images/op_center/--05.jpg" >&nbsp;&nbsp;&nbsp;线上总订单：<p id="order_num">{$result['order_num']}</p></span>
       <span><img src="/themes/mobile/images/op_center/--06.jpg" >&nbsp;&nbsp;&nbsp;扫码总订单：<p id="offline_order_num">{$result['offline_order_num']}</p></span><br/>
+      {if:$seo_title=="经销商"}
       <span><img src="/themes/mobile/images/op_center/--09.jpg" >&nbsp;&nbsp;&nbsp;经销商数量：<p id="shop_num">{$result['shop_num']}</p></span>
+      {/if}
       <span><img src="/themes/mobile/images/op_center/--07.jpg" >&nbsp;&nbsp;&nbsp;商家数量：<p id="promoter_num">{$result['promoter_num']}</p></span><br/>
       <span><img src="/themes/mobile/images/op_center/--08.jpg" >&nbsp;&nbsp;&nbsp;会员数量：<p id="user_num">{$result['user_num']}</p></span>
     </div>

@@ -76,8 +76,8 @@ class OperationController extends Controller
             if($start_date || $end_date) {
                 $where6 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
             }
-            $shop_num = $this->model->table('district_shop')->where($where5)->count();
-            $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
+            // $shop_num = $this->model->table('district_shop')->where($where5)->count();
+            // $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
                 $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
@@ -91,10 +91,12 @@ class OperationController extends Controller
             $offline_order_sum = 0.00;
             $benefit_sum = 0.00;
             $crossover_sum = 0.00;
-            $shop_num = 0;
-            $promoter_num = 0;
+            // $shop_num = 0;
+            // $promoter_num = 0;
             $order_benefit = 0.00;
         }
+        $shop_num = 0;
+        $promoter_num = 0;
         $idstr = $user['user_ids'];
         if($idstr!='') {
             $where8 = "c.user_id in ($idstr) and c.status=1";
@@ -112,9 +114,11 @@ class OperationController extends Controller
                     }else{
                         $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
                         if($shop){
-                            $list['data'][$k]['role_type'] = 2; //经销商     
+                            $list['data'][$k]['role_type'] = 2; //经销商
+                            $shop_num = $shop_num+1;     
                         }else{
-                            $list['data'][$k]['role_type'] = 1; //商家     
+                            $list['data'][$k]['role_type'] = 1; //商家
+                            $promoter_num = $promoter_num+1;     
                         }
                     }
                 }
@@ -237,8 +241,8 @@ class OperationController extends Controller
             if($start_date || $end_date) {
                 $where6 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
             }
-            $shop_num = $this->model->table('district_shop')->where($where5)->count();
-            $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
+            // $shop_num = $this->model->table('district_shop')->where($where5)->count();
+            // $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
                 $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
@@ -252,9 +256,43 @@ class OperationController extends Controller
             $offline_order_sum = 0.00;
             $benefit_sum = 0.00;
             $crossover_sum = 0.00;
-            $shop_num = 0;
-            $promoter_num = 0;
+            // $shop_num = 0;
+            // $promoter_num = 0;
             $order_benefit = 0.00;
+        }
+        $shop_num = 0;
+        $promoter_num = 0;
+        $idstr = $user['user_ids'];
+        if($idstr!='') {
+            $where8 = "c.user_id in ($idstr) and c.status=1";
+            if($start_date || $end_date) {
+                $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
+            }
+            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
+            if($list['data']){
+                unset($list['html']);
+                $total = count($list['data']);
+                foreach($list['data'] as $k=>$v){
+                    if($v['id']==null){
+                        unset($list['data'][$k]);
+                        $total = $total-1;
+                    }else{
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if($shop){
+                            $list['data'][$k]['role_type'] = 2; //经销商
+                            $shop_num = $shop_num+1;     
+                        }else{
+                            $list['data'][$k]['role_type'] = 1; //商家
+                            $promoter_num = $promoter_num+1;     
+                        }
+                    }
+                }
+                $list['data'] = array_values($list['data']); 
+            } else {
+                $list['data'] = [];
+            }
+        } else {
+            $list['data'] = [];
         }
         $result = array();
         $result['order_num'] = $order_num; //线上总订单数
@@ -323,8 +361,8 @@ class OperationController extends Controller
             if($start_date || $end_date) {
                 $where6 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
             }
-            $shop_num = $this->model->table('district_shop')->where($where5)->count();
-            $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
+            // $shop_num = $this->model->table('district_shop')->where($where5)->count();
+            // $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
                 $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
@@ -338,8 +376,8 @@ class OperationController extends Controller
             $offline_order_sum = 0.00;
             $benefit_sum = 0.00;
             $crossover_sum = 0.00;
-            $shop_num = 0;
-            $promoter_num = 0;
+            // $shop_num = 0;
+            // $promoter_num = 0;
             $order_benefit = 0.00;
         }
         
@@ -347,8 +385,11 @@ class OperationController extends Controller
         $shop = $this->model->table('district_shop')->fields('create_time')->where('owner_id='.$user_id)->find();
         $promoter = $this->model->table('district_promoter')->fields('create_time')->where('user_id='.$user_id)->find();
         $seo_title = !empty($shop)?'经销商':'商家';
+        
+        $shop_num = 0;
+        $promoter_num = 0;
 
-        if($seo_title=='经销商') {
+        // if($seo_title=='经销商') {
             $idstr = $user['user_ids'];
             if($idstr!='') {
                 $where8 = "c.user_id in ($idstr) and c.status=1";
@@ -366,9 +407,11 @@ class OperationController extends Controller
                         }else{
                             $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
                             if($shop){
-                                $list['data'][$k]['role_type'] = 2; //经销商     
+                                $list['data'][$k]['role_type'] = 2; //经销商
+                                $shop_num = $shop_num+1;     
                             }else{
-                                $list['data'][$k]['role_type'] = 1; //商家     
+                                $list['data'][$k]['role_type'] = 1; //商家
+                                $promoter_num = $promoter_num+1;     
                             }
                         }
                     }
@@ -380,7 +423,7 @@ class OperationController extends Controller
                 $list['data'] = [];
             }
             $this->assign('list',$list);
-        }
+        // }
 
         $result = array();
         $result['order_num'] = $order_num; //线上总订单数
