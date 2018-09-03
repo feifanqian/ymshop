@@ -2069,9 +2069,10 @@ class DistrictadminController extends Controller
         $res = Common::httpRequest($url1,'POST',$params);
         $res = json_decode($res,true);
         // var_dump($res);die;
-        if(isset($res['ysepay_merchant_register_query_response'])) {
+        if(isset($res['ysepay_merchant_register_query_response']['cust_status'])) {
             exit(json_encode(array('status'=>'success','msg'=>$res['ysepay_merchant_register_query_response']['cust_status'])));
         } else {
+            var_dump($res['ysepay_merchant_register_query_response']);die;
             exit(json_encode(array('status'=>'success','msg'=>'暂未查询到结果')));
         }
         
