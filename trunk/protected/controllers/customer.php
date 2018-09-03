@@ -182,7 +182,9 @@ class CustomerController extends Controller {
                     } else {
                        $result = $ChinapayDf->DfQuery($req_sn); //使用通联代付查询接口 
                     }
-
+                    if($obj['withdraw_no']=='BW20180718111554709') {
+                        var_dump($result);die;
+                    }
                     if($result['code']==1){
                         if($obj['status']==4 || $obj['status']==0 || $obj['status']==2){
                             if($obj['type']==0){
@@ -193,9 +195,6 @@ class CustomerController extends Controller {
                                 $real_amount = $obj['amount'];
                             }
                             $model->data(array('status'=>1,'real_amount'=>$real_amount))->where("wd.id=$id")->update();
-                        }
-                        if($obj['withdraw_no']=='BW20180718111554709') {
-                            var_dump($result);die;
                         }
                         exit(json_encode(array('status'=>'success','msg'=>$result['msg'])));
                     }else{
