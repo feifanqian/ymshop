@@ -249,7 +249,8 @@ class PhpTools{
 		$xmlSignPost=str_replace("TRANS_DETAIL2", "TRANS_DETAIL",$xmlSignPost);
 		// var_dump($xmlSignPost);die;
 		$response = cURL::factory()->post(PhpTools::apiUrl, $xmlSignPost);
-	
+		var_dump($params);
+	    var_dump($response);die;
 		if (! isset($response['body'])) {
 			if(isset($response['header'])){
 				$msg = 'Bad Request:'.$response['header'];

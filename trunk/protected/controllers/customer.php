@@ -182,9 +182,6 @@ class CustomerController extends Controller {
                     } else {
                        $result = $ChinapayDf->DfQuery($req_sn); //使用通联代付查询接口 
                     }
-                    if($obj['withdraw_no']=='BW20180718111554709') {
-                        var_dump($result);die;
-                    }
                     if($result['code']==1){
                         if($obj['status']==4 || $obj['status']==0 || $obj['status']==2){
                             if($obj['type']==0){
