@@ -120,44 +120,44 @@ class ChinapayDf {
         $version = "20090501";
         $signFlag = "1";
         $plain = $this->merId . $merDate  . $merSeqId . $version;
-	//进行Base64编码
-	$data = base64_encode($plain);
-	//生成签名值，必填
-	$chkValue = $this->client->sign($data);
-	if (!$chkValue) {
-		exit(json_encode(array("status"=>'fail','msg'=>"签名失败！")));
-	}
-        $post_data = "merId=$this->merId&merDate=$merDate&merSeqId=$merSeqId&version=$version&signFlag=$signFlag&chkValue=$chkValue";
-        $output =$this->httpPost($post_data, $this->query_url); 
-	if($output){
-            $output = trim(strip_tags($output));
-            $dex = strripos($output,"|");
-            $plain = substr($output,0,$dex + 1);
-            $plaindata = base64_encode($plain);	
-            $chkValue = substr($output,$dex + 1);
-            $flag = $this->client->buildKey($this->pub_key_path);
-            if(!$flag) {
-                     exit(json_encode(array("status"=>'fail','msg'=>"导入公钥文件失败！")));
-            } else {
-                    $flag  =  $this->client->verify($plaindata, $chkValue);
-                    if($flag) {
-                           $result = explode("|", $plain);
-                           if($result[0]=="000"){
-                               exit(json_encode(array("status"=>'success','msg'=>"查询成功","pay_status"=>$this->pay_status[$result[14]])));
-                           }else if($result[0]=="001"){
-                               exit(json_encode(array("status"=>'fail','msg'=>"记录不存在")));
-                           }else if($result[0]=='002'){
-                               exit(json_encode(array("status"=>'fail','msg'=>"查询失败！")));
-                           }else{
-                               exit(json_encode(array("status"=>'fail','msg'=>"查询失败！未知错误")));
-                           }
-                    } else {
-                            exit(json_encode(array("status"=>'fail','msg'=>"验证签名失败！")));
-                    }
-           }
-	} else {
-		exit(json_encode(array("status"=>'fail','msg'=>"HTTP 请求失败！")));
-	}
+    	//进行Base64编码
+    	$data = base64_encode($plain);
+    	//生成签名值，必填
+    	$chkValue = $this->client->sign($data);
+    	if (!$chkValue) {
+    		exit(json_encode(array("status"=>'fail','msg'=>"签名失败！")));
+    	}
+            $post_data = "merId=$this->merId&merDate=$merDate&merSeqId=$merSeqId&version=$version&signFlag=$signFlag&chkValue=$chkValue";
+            $output =$this->httpPost($post_data, $this->query_url); 
+    	if($output){
+                $output = trim(strip_tags($output));
+                $dex = strripos($output,"|");
+                $plain = substr($output,0,$dex + 1);
+                $plaindata = base64_encode($plain);	
+                $chkValue = substr($output,$dex + 1);
+                $flag = $this->client->buildKey($this->pub_key_path);
+                if(!$flag) {
+                         exit(json_encode(array("status"=>'fail','msg'=>"导入公钥文件失败！")));
+                } else {
+                        $flag  =  $this->client->verify($plaindata, $chkValue);
+                        if($flag) {
+                               $result = explode("|", $plain);
+                               if($result[0]=="000"){
+                                   exit(json_encode(array("status"=>'success','msg'=>"查询成功","pay_status"=>$this->pay_status[$result[14]])));
+                               }else if($result[0]=="001"){
+                                   exit(json_encode(array("status"=>'fail','msg'=>"记录不存在")));
+                               }else if($result[0]=='002'){
+                                   exit(json_encode(array("status"=>'fail','msg'=>"查询失败！")));
+                               }else{
+                                   exit(json_encode(array("status"=>'fail','msg'=>"查询失败！未知错误")));
+                               }
+                        } else {
+                                exit(json_encode(array("status"=>'fail','msg'=>"验证签名失败！")));
+                        }
+               }
+    	} else {
+    		exit(json_encode(array("status"=>'fail','msg'=>"HTTP 请求失败！")));
+    	}
     }
     
     public function DfBalanceQuery(){

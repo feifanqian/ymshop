@@ -164,7 +164,6 @@ class CustomerController extends Controller {
             $model = new Model('balance_withdraw as wd');
             $obj = $model->where("wd.id=$id")->find();
             if($obj){
-                
                     // $ChinapayDf = new ChinapayDf();
                     $ChinapayDf = new AllinpayDf();
                     $params['merSeqId']=$obj['mer_seq_id'];
@@ -194,6 +193,9 @@ class CustomerController extends Controller {
                                 $real_amount = $obj['amount'];
                             }
                             $model->data(array('status'=>1,'real_amount'=>$real_amount))->where("wd.id=$id")->update();
+                        }
+                        if($obj['withdraw_no']=='BW20180718111554709') {
+                            var_dump($result);die;
                         }
                         exit(json_encode(array('status'=>'success','msg'=>$result['msg'])));
                     }else{

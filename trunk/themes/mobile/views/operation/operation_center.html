@@ -219,7 +219,6 @@ $("input[name='end_date']").blur(function(){
     var user_id = "{$user_id}";
     var url = "/operation/ajax_operation_order";
     var data = {page: page,user_id:user_id,start_date:start_date,end_date:end_date};
-    // window.location.href = url;
     $.ajax({
             type: 'post',
             dataType: 'json',

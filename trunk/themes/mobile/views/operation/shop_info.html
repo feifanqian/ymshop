@@ -225,11 +225,10 @@ iframe{
 <script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
 <script type="text/javascript">
 $("input[name='end_date']").change(function(){
+    var page = $('#page').val();
     var start_date = $("input[name='start_date']").val();
     var end_date = $("input[name='end_date']").val();
     var user_id = "{$user_id}";
-    // var url = "/operation/operation_center?user_id="+user_id+"&start_date="+start_date+"&end_date="+end_date;
-    // window.location.href = url;
     var url = "/operation/ajax_operation_order";
     var data = {page: page,user_id:user_id,start_date:start_date,end_date:end_date};
     $.ajax({
@@ -250,6 +249,57 @@ $("input[name='end_date']").change(function(){
                 $("#order_benefit").html(jsonarray.order_benefit);
                 $("#crossover_sum").html(jsonarray.crossover_sum);
                 $("#benefit_sum").html(jsonarray.benefit_sum);
+            },
+        });
+    var urls = "{url:/operation/ajax_operation_center}";
+    var html = "";
+    $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: urls,
+            data: data,
+            success: function (res) {
+                var jsonstr = JSON.stringify(res);
+                var jsonarray= $.parseJSON(jsonstr);
+                
+                    $.each(jsonarray, function (i, item) {
+                        html += '<div class="list-child">';
+                        html += '<div class="div-child">';
+                        if(item.real_name!=null) {
+                           html += '<span>名称：'+item.real_name+'</span>';
+                        } else {
+                           html += '<span>名称：'+item.nickname+'</span>';
+                        }
+                        if(item.role_type==2) {
+                           html += '<span class="span-right"><i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商</span>';
+                        } else {
+                           html += '<span class="span-right"><i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家</span>';
+                        }
+                        html += '</div>';
+                        html += '<div class="div-child">';
+                        if(item.mobile!=null) {
+                            html += '<span>手机号：'+item.mobile+'</span><br/>';
+                        } else {
+                            html += '<span>手机号：--</span><br/>';
+                        }   
+                        html += '</div>';
+                        html += '<div class="div-child">';
+                        if(item.realname!=null) {
+                           html += '<span>经营者：'+item.realname+'</span>';
+                        } else if(item.mobile!=null) {
+                           html += '<span>经营者：'+item.mobile+'</span>';
+                        } else {
+                           html += '<span>经营者：'+item.real_name+'</span>';
+                        }
+                        html += '</div>';
+                        html += '<div class="div-child">';
+                        html += '<span>加入时间：'+item.create_time+'</span>'
+                        html += '<a href="/operation/shop_info?user_id='+item.id+'">查看详情</a>';
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                    $("#list").html(html);
+                
             },
         });
 });
