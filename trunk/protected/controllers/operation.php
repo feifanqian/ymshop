@@ -342,41 +342,45 @@ class OperationController extends Controller
             $promoter_num = 0;
             $order_benefit = 0.00;
         }
-        // $idstr = $user['user_ids'];
-        // if($idstr!='') {
-        //     $where8 = "c.user_id in ($idstr) and c.status=1";
-        //     if($start_date || $end_date) {
-        //         $where8 .= " and c.reg_time between '{$start_date}' and '{$end_date}'";
-        //     }
-        //     $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
-        //     if($list['data']){
-        //         unset($list['html']);
-        //         $total = count($list['data']);
-        //         foreach($list['data'] as $k=>$v){
-        //             if($v['id']==null){
-        //                 unset($list['data'][$k]);
-        //                 $total = $total-1;
-        //             }else{
-        //                 $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-        //                 if($shop){
-        //                     $list['data'][$k]['role_type'] = 2; //经销商     
-        //                 }else{
-        //                     $list['data'][$k]['role_type'] = 1; //商家     
-        //                 }
-        //             }
-        //         }
-        //         $list['data'] = array_values($list['data']); 
-        //     } else {
-        //         $list['data'] = [];
-        //     }
-        // } else {
-        //     $list['data'] = [];
-        // }
         
         $customer = $this->model->table('customer as c')->fields('c.real_name,c.mobile,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$user_id)->find();
         $shop = $this->model->table('district_shop')->fields('create_time')->where('owner_id='.$user_id)->find();
         $promoter = $this->model->table('district_promoter')->fields('create_time')->where('user_id='.$user_id)->find();
         $seo_title = !empty($shop)?'经销商':'商家';
+
+        if($seo_title=='经销商') {
+            $idstr = $user['user_ids'];
+            if($idstr!='') {
+                $where8 = "c.user_id in ($idstr) and c.status=1";
+                if($start_date || $end_date) {
+                    $where8 .= " and c.reg_time between '{$start_date}' and '{$end_date}'";
+                }
+                $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
+                if($list['data']){
+                    unset($list['html']);
+                    $total = count($list['data']);
+                    foreach($list['data'] as $k=>$v){
+                        if($v['id']==null){
+                            unset($list['data'][$k]);
+                            $total = $total-1;
+                        }else{
+                            $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                            if($shop){
+                                $list['data'][$k]['role_type'] = 2; //经销商     
+                            }else{
+                                $list['data'][$k]['role_type'] = 1; //商家     
+                            }
+                        }
+                    }
+                    $list['data'] = array_values($list['data']); 
+                } else {
+                    $list['data'] = [];
+                }
+            } else {
+                $list['data'] = [];
+            }
+            $this->assign('list',$list);
+        }
 
         $result = array();
         $result['order_num'] = $order_num; //线上总订单数
@@ -395,7 +399,6 @@ class OperationController extends Controller
         $result['create_time'] = !empty($shop)?$shop['create_time']:$promoter['create_time'];
         
         $this->assign('result',$result);
-        // $this->assign('list',$list);
         $this->assign('user_id',$user_id);
         $this->assign('page',$page);
         $this->assign("seo_title", $seo_title);

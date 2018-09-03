@@ -179,7 +179,41 @@ iframe{
       <span><img src="/themes/mobile/images/op_center/--14.jpg" >&nbsp;&nbsp;&nbsp;优惠购收益：<p id="benefit_sum">{$result['benefit_sum']}</p></span>
     </div>
   </div>
-  
+  {if:$seo_title=="经销商"}
+  <div class="block">
+   <div class="line">旗下经销商/商家</div><br/>
+   <div class="list" id="list">
+     {if:count($list['data'])>0}
+        {list:items=$list['data']}
+        <div class="list-child">
+            <div class="div-child">
+                <span>名称：{$item['real_name'] | $item['nickname']}</span>
+                <span class="span-right">
+                {if:$item['role_type']==2}
+                <i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商
+                {else:}
+                <i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家
+                {/if}
+                </span>
+            </div>
+            <div class="div-child">
+                <span>手机号：{$item['mobile'] | '--'}</span>
+            </div>
+            <div class="div-child">
+                <span>经营者：{$item['realname'] | $item['mobile'] | $item['real_name']}</span>
+            </div>
+            <div class="div-child">
+                <span>加入时间：{$item['create_time']}</span>
+                <a href="/operation/shop_info?user_id={$item['id']}">查看详情</a> 
+            </div>    
+        </div>
+        {/list}
+     {else:}
+       <div class="list-child" style="text-align: center;margin-top: 10%;">暂无经销商/商家</div>  
+     {/if}
+   </div>
+  </div>
+  {/if}
 </div>
 </body>
 <script src="/runtime/systemjs/jquery.min.js"></script>
