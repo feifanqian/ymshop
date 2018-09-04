@@ -247,6 +247,8 @@
             data: data,
             dataType: 'json',
             success: function (result) {
+                console.log(result);
+                return false;
                 if (result['status'] == 'success') {
                     var url = "{url:/travel/register_success}";
                     window.location.href = url;
