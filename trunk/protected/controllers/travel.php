@@ -811,9 +811,7 @@ class TravelController extends Controller
     public function register_success()
     {
         $locked = Filter::int(Req::args('locked'));
-        if($this->user['id']==42608) {
-            var_dump($locked);die;
-        }
+        
         $this->assign('locked',$locked);
         $this->redirect();
     }
