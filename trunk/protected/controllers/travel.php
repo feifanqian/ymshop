@@ -490,16 +490,16 @@ class TravelController extends Controller
         if($order['pay_status']==0) {
             $this->redirect("/simple/offline_order_status/order_id/{$id}");
         }
-        $shop = $this->model->table('customer as c')->fields('c.real_name,u.avatar,c.mobile_verified')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $order['shop_ids'])->find();
+        $shop = $this->model->table('customer as c')->fields('c.real_name,u.avatar')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $order['shop_ids'])->find();
         if ($shop) {
             $shopname = $shop['real_name'];
             $avatar = $shop['avatar'];
-            $had_bind = $shop['mobile_verified'];
         } else {
             $shopname = '未知商家';
             $avatar = '/0.png';
-            $had_bind = 0;
         }
+        $my = $this->model->table('customer')->fields('mobile_verified')->where('user_id='.$user_id)->find();
+        $had_bind = $my['mobile_verified'];
         $paytypelist = $this->model->table('payment as pa')->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")->where("pa.status = 0 and pa.plugin_id=9 and pa.client_type =2")->order("pa.sort desc")->findAll();
         if ($paytypelist) {
             $paytype['payment'] = $paytypelist[0]['id'];
