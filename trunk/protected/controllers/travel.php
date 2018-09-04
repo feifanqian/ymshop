@@ -696,7 +696,12 @@ class TravelController extends Controller
     public function invite_register()
     {
         $inviter = Filter::int(Req::args("inviter_id"));
-        $locked = Filter::int(Req::args("locked"));
+        $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
+        if($had_locked) {
+            $locked = 1; //已锁
+        } else {
+            $locked = 2; //未锁
+        }
         var_dump($locked);die;
         $this->assign('inviter',$inviter);
         $this->assign('locked',$locked);
@@ -769,9 +774,9 @@ class TravelController extends Controller
                         $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
 
                         if($customer['mobile_verified']==0) {
-                            $this->redirect('/travel/invite_register?inviter_id={$inviter}&locked={$locked}'); 
+                            $this->redirect('/travel/invite_register?inviter_id={$inviter}'); 
                         } else {
-                            $this->redirect('/travel/register_success/locked/{$locked}');
+                            $this->redirect('/travel/register_success');
                         }      
                     }
                     // return true;
@@ -781,12 +786,7 @@ class TravelController extends Controller
                 }        
             } else {
                 $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
-                if($had_locked) {
-                    $locked = 1; //已锁
-                } else {
-                    $locked = 2; //未锁
-                }
-               $this->redirect('/travel/invite_register/inviter_id/{$inviter}/locked/{$locked}');
+               $this->redirect('/travel/invite_register/inviter_id/{$inviter}');
             }
     }
 
