@@ -952,7 +952,7 @@ class TravelController extends Controller
             $this->redirect('register_success');
         } else {
             echo "<script>alert('验证码错误');</script>";
-            $this->redirect('/travel/order_details/id/{$id}');
+            $this->redirect('/travel/order_details?id='.$id);
             // exit();
             // $info = array('status' => 'fail', 'msg' => '验证码错误!');
             // var_dump($info);die;
