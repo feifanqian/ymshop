@@ -802,6 +802,11 @@ class TravelController extends Controller
         $this->redirect();
     }
 
+    public function bind_success()
+    {
+        $this->redirect();
+    }
+
     public function register_act(){
             $mobile = Filter::str(Req::args('mobile'));
             $realname = $mobile;
@@ -949,7 +954,7 @@ class TravelController extends Controller
             $validcode = CHash::random(8);
             $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $user_id)->update();
             $info = array('status' => 'success', 'msg' => '成功');
-            $this->redirect('register_success');
+            $this->redirect('bind_success');
         } else {
             echo "<script>alert('验证码错误');</script>";
             exit();
