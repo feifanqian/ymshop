@@ -696,13 +696,18 @@ class TravelController extends Controller
     public function invite_register()
     {
         $inviter = Filter::int(Req::args("inviter_id"));
+        $locked = Filter::int(Req::args("locked"));
+        if($this->user['id']==42608) {
+            var_dump($inviter);
+            var_dump($locked);die;
+        }
         $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
         if($had_locked) {
             $locked = 1; //已锁
         } else {
             $locked = 2; //未锁
         }
-        
+
         $this->assign('inviter',$inviter);
         $this->assign('locked',$locked);
         $this->redirect();
