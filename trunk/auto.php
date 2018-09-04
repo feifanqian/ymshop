@@ -400,7 +400,8 @@ class LinuxCliTask{
                                     //jpush
                                     $jpush = $NoticeService->getNotice('jpush');
                                     $audience['alias']=array($value['user_id']);
-                                    $jpush->setPushData('all', $audience, '抱歉，人数不足拼团失败了', 'order_pay_fail', $v['order_no']);
+                                    $res = $value['groupbuy_id'].','.$value['join_id'];
+                                    $jpush->setPushData('all', $audience, '抱歉，人数不足拼团失败了', 'order_pay_fail', $res);
                                     $jpush->push();
                                 }
                             } 

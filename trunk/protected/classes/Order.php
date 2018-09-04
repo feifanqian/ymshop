@@ -146,7 +146,8 @@ class Order {
                                     //jpush
                                     $jpush = $NoticeService->getNotice('jpush');
                                     $audience['alias']=array($order['user_id']);
-                                    $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $order['order_no']);
+                                    $res = $groupbuy_log['groupbuy_id'].','.$groupbuy_log['join_id'];
+                                    $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
                                     $jpush->push();
                                 }
                                 // 拼团成功参与分账
