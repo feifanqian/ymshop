@@ -697,7 +697,7 @@ class TravelController extends Controller
     {
         $inviter = Filter::int(Req::args("inviter_id"));
         $locked = Filter::int(Req::args("locked"));
-        var_dump($locked);die
+        var_dump($locked);die;
         $this->assign('inviter',$inviter);
         $this->assign('locked',$locked);
         $this->redirect();
