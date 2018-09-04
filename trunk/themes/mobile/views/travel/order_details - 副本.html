@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="/static/yuanmeng/three-level/css/allway.css">
+    <title>支付成功</title>
+</head>
+<body>
+<style type="text/css">
+.bg-content{
+  width:100%;
+  height:300px;
+  /*background-color: #f2764a;*/
+  /*background:url(/themes/mobile/images/anzhuo.jpg) no-repeat center;*/
+  padding-left: 20px;
+  padding-right: 20px; 
+}
+.bg-content1{
+  width: 100%;
+  height: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 10px;
+}
+.line-text{
+  width:100%;
+  height: 50px;
+  /*margin-top: 10px;*/
+  border-bottom: 1px solid #ccc;
+}
+.line-text p{
+   line-height: 50px;
+   font-size: 16px;
+   color:#494949;
+   font-family: "Microsoft YaHei";
+   font-weight: 800;
+}
+.kuang{
+    width: 90%;
+    height: 200px;
+    text-align: center;
+    position: relative;
+    padding-top: 10px;
+    top: 44px;
+    left: 5%;
+    background-image: url(/themes/mobile/images/kuang.png);
+    background-size: 100% 200px;
+    background-repeat: no-repeat;
+}
+</style>
+<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+{if:$pay_status==1}
+
+  <div class="bg-content" style="height: 1000px;">
+     <div class="kuang">
+        <div style="position: relative;">  
+           <p style="color:#f3be1e;font-size: 20px;"><img src="/themes/mobile/images/success.png" width="20" height="20">&nbsp;&nbsp;成功支付<b style="color: #d4737f;">{$order['order_amount']}</b>元</p>
+           <p style="left: 10%;color: #999;font-size: 18px;">收款方：{$shopname}</p>
+           <p style="left: 10%;color: #999;font-size: 18px;">收款时间：{$order['pay_time']}</p> 
+           <p style="left: 10%;color: #999;font-size: 18px;">订单号{$order['order_no']}</p> 
+        </div>
+     </div>
+     
+     <!-- <div><p class="black" style="font-size:20px;text-align: center;color:#fff;margin-top: 10px;">{$currency_symbol}{$order['order_amount']}</p></div> -->
+     <div style="position: relative;left: 28%;top:66%;width: 60%;">
+      <a href="http://sj.qq.com/myapp/detail.htm?apkName=com.yidu.yuanmeng"><img src="/themes/mobile/images/anniu.png" width="280" height="60"></a>
+    </div>
+  </div>
+  
+  <script type="text/javascript">
+    $(function () {
+       var color_list = {0:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/11/bb0d505e571b8cbfd787c39f7fc66cb3.jpg)',1:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/11/92582a7071a77fc06b81568b897e678b.jpg)',2:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/07/11/7d4e51514c502dcc1628bc1bf5efab6b.jpg)'};
+       // var index = parseInt(2*Math.random());
+       var index = Math.floor(Math.random() * 3);
+        $('.bg-content').css('background-image',color_list[index]);
+        $('.bg-content').css('background-size',"cover");
+        $('.bg-content').css('background-repeat',"no-repeat");
+        $('.bg-content').css('background-position',"center");
+    });  
+  </script>
+  
+{else:}
+<style>
+    .weui-select-modal{
+        min-height: 250px;
+    }
+</style>
+<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
+<form action="{url:/payment/dopays}" method="post" id="payform">
+    <input type="hidden" name="order_id" value="{$order['id']}">
+    <input type="hidden" name="payment_id" value="{$order['payment']}">
+    <input type="hidden" name="seller_id" value="{$order['shop_ids']}">
+    <input type="hidden" name="order_amount"  value="{$order['order_amount']}">
+    <input type="hidden" name="order_no"  value="{$order['order_no']}">
+    <div class="mt10">
+        <div class="weui_cells weui_cells_access">
+            <a href="{url:/ucenter/order_detail/id/}{$order['id']}" class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>订单号</p>
+                </div>
+                <div class="weui_cell_ft">
+                    {$order['order_no']}
+                </div>
+            </a>
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>订单金额</p>
+                </div>
+                <div class="weui_cell_hd">
+                    {$currency_symbol}{$order['order_amount']}
+                </div>
+            </div>
+            <div class="weui_cell ">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>支付方式</p>
+                </div>
+                <div class="weui_cell_ft">
+                    <input class="weui_input" id="paytype" name='paytype' type="text" value="{$paytype['payname']}" data-values="{$paytype['payment']}" style='text-align: right;display:inline-block;width:auto;' />
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        </div>
+    </div>
+
+    <div class="ma20 clearfix">
+        <p class="tc"><input class="weui_btn weui_btn_primary" type="button" id="submitForm" value="立即支付"></p>
+    </div>
+</form>
+{widget:name=tabbar action=item cart=$cart current=ucenter}
+{set:$paydict = array();}
+{list:items=$paytypelist}
+{set:$paydict[]=array('title'=>$item['pay_name'], 'value'=>$item['id']);}
+{/list}
+<script type="text/javascript">
+    $(function () {
+        $("#submitForm").click(function(){
+             $("#payform").submit();
+        });
+        $("#paytype").select({
+            title: "选择支付方式",
+            items: {echo: json_encode($paydict); },
+            onChange: function () {
+                    var payment_id = $("#paytype").attr("data-values");
+                    var payname = $("#paytype").val();
+                    $("input[name='payment_id']").val($("#paytype").attr("data-values"));
+                }
+            });
+        
+      });  
+</script>
+{/if}
+</body>
+</html>

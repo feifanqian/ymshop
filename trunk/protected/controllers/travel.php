@@ -490,11 +490,15 @@ class TravelController extends Controller
         if($order['pay_status']==0) {
             $this->redirect("/simple/offline_order_status/order_id/{$id}");
         }
-        $shop = $this->model->table('customer')->fields('real_name')->where('user_id=' . $order['shop_ids'])->find();
+        $shop = $this->model->table('customer as c')->fields('c.real_name,u.avatar,c.mobile_verified')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $order['shop_ids'])->find();
         if ($shop) {
             $shopname = $shop['real_name'];
+            $avatar = $shop['avatar'];
+            $had_bind = $shop['mobile_verified'];
         } else {
             $shopname = '未知商家';
+            $avatar = '/0.png';
+            $had_bind = 0;
         }
         $paytypelist = $this->model->table('payment as pa')->fields("pa.*,pp.logo,pp.class_name")->join("left join pay_plugin as pp on pa.plugin_id = pp.id")->where("pa.status = 0 and pa.plugin_id=9 and pa.client_type =2")->order("pa.sort desc")->findAll();
         if ($paytypelist) {
@@ -508,6 +512,9 @@ class TravelController extends Controller
         $this->assign("paytypelist", $paytypelist);
         $this->assign('pay_status', $pay_status);
         $this->assign('shopname', $shopname);
+        $this->assign('avatar', $avatar);
+        $this->assign('had_bind', $had_bind);
+        $this->assign('user_id', $user_id);
         $this->assign("order", $order);
         $this->assign("seo_title", "支付成功");
         $this->redirect();
@@ -923,6 +930,18 @@ class TravelController extends Controller
     public function pay_success()
     {
         $this->redirect();
+    }
+
+    public function bind_act()
+    {
+        $user_id = Filter::int(Req::args('user_id'));
+        $mobile = Req::args('mobile');
+        $password = Req::args('password');
+        $repassword = Req::args('repassword');
+        $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1))->where('user_id=' . $user_id)->update();
+        $validcode = CHash::random(8);
+        $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $user_id)->update();
+        $this->redirect('register_success');
     }
 
 }    

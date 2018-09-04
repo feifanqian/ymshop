@@ -6,9 +6,232 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
     <link rel="stylesheet" href="/static/yuanmeng/three-level/css/allway.css">
-    <title>支付成功</title>
+    <title>付款成功</title>
 </head>
 <body>
+{if:$user_id==42608}
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        overflow: hidden;
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+    }
+    
+    .wrap {
+        position: relative;
+        padding-top: 20px;
+        width: 90%;
+        height: 400px;
+        margin-left: 5%;
+        margin-right: 5%;
+        overflow: hidden;
+        background: #fef8f7;
+        margin-top: 30px;
+    }
+
+    .icon{
+        width: 180px;
+        height: 60px;
+        text-align: center;
+        margin: 10px auto;
+    }
+
+    .shop_info{
+        width: 100%;
+        height: 180px;
+        margin-top: 140px;
+        padding-left: 5%;
+        padding-right: 5%;
+        padding-top: 20px;
+        border-top: 2px dashed #ccc;
+    }
+
+    .shop_name{
+        width: 80%;
+        height: 40px;
+        margin-top: 24px;
+        color: #666;
+        float: left;
+        font-size: 28px;
+    }
+
+    .avatar{
+        width: 80px;
+        height: 80px;
+        float: right;
+    }
+
+    .input-area{
+        width: 100%;
+        height: 64px;
+        border-bottom: 1px solid #ccc;
+        font-size: 40px;
+        color: #ccc;
+    }
+
+    .input-area img{
+        margin-left: 5%;
+        vertical-align: -15%;
+    }
+
+    .input-area input {
+        border: none;
+        font-size: 28px;
+    }
+
+    .button{
+        width: 60%;
+        height: 80px;
+        margin: 40px auto;
+    }
+
+    .button button{
+        display: block;
+        width: 100%;
+        height: 80px;
+        border: none;
+        background: #ea4c3a;
+        color: #fff;
+        font-size: 30px;
+        border-radius: 10px;
+    }
+
+    #payform{
+      width: 90%;
+      height: 400px;
+      margin-left: 5%;
+      background: #fff;
+      padding-top: 40px;
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+</style>
+<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+       var color_list = {0:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/cd5157d1ceeb32cc2b0fa56b3570c650.png)',1:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/728315016561eb34185ca91c31d187c6.png)',2:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/d5c38558e8ce321daf8ca0bdc0dcf653.png)'};
+       // var index = parseInt(2*Math.random());
+       var index = Math.floor(Math.random() * 3);
+        $("body").css('background-image',color_list[index]);
+    });  
+</script>
+<div class="wrap">
+    <div class="icon">
+     <img src="/themes/mobile/images/0904.png" width="60" height="60">
+     <P style="font-size:22px;">支付成功</P>
+     <P style="margin-top: 10px;font-size:70px;font-weight: 500;"><b style="font-weight: bold">￥</b>{$order['order_amount']}</P>
+    </div>
+    <div class="shop_info">
+       <div class="shop_name">收款人&nbsp;&nbsp;&nbsp;{$shopname}</div>
+       <div class="avatar">
+           <img src="{url:@$avatar}" width="80" height="80" style="border-radius: 80px;">
+       </div>
+    </div>
+</div>
+{if:$had_bind==1}
+<div class="wrap">
+   <form id="bind_form" name="bind_form" action="{url:/travel/bind_act}" method="post">
+        <input type="hidden" name="user_id" value="{$user_id}">
+        <div class="input-area">
+            <img src="/themes/mobile/images/__mobile_phone.png" width="30" height="38">&nbsp;&nbsp;|&nbsp;&nbsp;<input name="mobile" id="mobile" value="" class="input" style="display: inline-block;margin-left: 2%;" placeholder="请输入手机号" alt="手机格式不正确!">
+        </div>
+                
+        <div class="input-area">
+            <img src="/themes/mobile/images/__verification_code.png" width="30" height="38" >&nbsp;&nbsp;|&nbsp;&nbsp;
+            <input type="text" class="input input-sm" name="mobile_code" pattern="\d{6}" placeholder="验证码" alt="6位短信验证码" style="display: inline-block;width: 48%;"><label></label><input type="button" id="sendSMS" style="width: 25%;height: 46px;display: inline-block;text-decoration: none;background: #ea4c3a;color: #fff;font-size: 20px;border-radius: 8px;" class="btn btn-default btn-mini" value="发送验证码">
+        </div>
+                 
+        <div class="input-area">
+            <img src="/themes/mobile/images/__password.png" width="30" height="38">&nbsp;&nbsp;|&nbsp;&nbsp;
+            <input bind="repassword" minlen=6 value="" maxlen=20 class="input" type="password" name="password" placeholder="输入密码" alt="6-20任意字符组合">
+        </div>
+                         
+        <div class="input-area">
+            <img src="/themes/mobile/images/__confirm_password.png" width="30" height="38">&nbsp;&nbsp;|&nbsp;&nbsp;
+            <input bind="password" minlen=6 maxlen=20 value="" class="input" type="password"  name="repassword" placeholder="确认密码" alt="6-20任意字符组合">
+        </div>
+
+        <div class="button">
+            <button class="register_act">注册并下载</button>
+        </div>
+   </form>
+</div>
+{else:}
+<a style="display: inline-block;width: 80%;height:80px;margin-top: 400px;margin-left: 10%;line-height: 80px;text-decoration: none;text-align: center;background-color:#ea4c3a;color: #fff;font-size: 30px;font-family: 'Microsoft YaHei';font-weight: bold;border-radius: 20px;" href="http://sj.qq.com/myapp/detail.htm?apkName=com.yidu.yuanmeng">下载APP</a>
+{/if}   
+</body>
+<script type="text/javascript">
+    $('#sendSMS').on('click',function(){
+      var data = 'mobile=' + $("#mobile").val() + '&r=' + Math.random();
+        if ($('#mobile').val()==''){
+             alert('请先输入手机号');
+             return false;
+         }
+        $.ajax({
+            type: "get",
+            url: "{url:/ajax/send_sms}",
+            data: data,
+            dataType: 'json',
+            success: function (result) {
+                if (result['status'] == 'success') {
+                    $.toast(result['msg']);
+                    $('#mobile').attr("readonly", "readonly");
+                    var send_sms = $("#sendSMS");
+                    send_sms.attr("disabled", true);
+                    send_sms.addClass("btn-disable");
+                    var i = 120;
+                    send_sms.val(i + '秒后重新获取');
+                    var timer = setInterval(function () {
+                        i--;
+                        send_sms.val(i + '秒后重新获取');
+                        if (i <= 0) {
+                            clearInterval(timer);
+                            send_sms.val('获取短信验证码');
+                            $('#mobile').removeAttr("readonly");
+                            send_sms.removeClass("btn-disable");
+                            send_sms.attr("disabled", false);
+                        }
+                    }, 1000);
+                } else {
+                    $.toast(result['msg'],'forbidden');
+                }
+            }
+        });
+    })
+  </script>
+  <script type="text/javascript">
+    $('.register_act').on('click',function(){
+         if($("input[name='mobile']").val()=='') {
+            alert('手机号不能为空');
+            return false;
+         }
+         if($("input[name='mobile_code']").val()=='') {
+            alert('验证码不能为空');
+            return false;
+         }
+         if($("input[name='password']").val()=='') {
+            alert('密码不能为空');
+            return false;
+         }
+         if($("input[name='repassword']").val()=='') {
+            alert('确认密码不能为空');
+            return false;
+         }
+         if($("input[name='repassword']").val()==$("input[name='password']").val()) {
+            alert('密码输入不一致');
+            return false;
+         } 
+         document.forms['bind_form'].submit();
+    });  
+  </script>
+{else:}
 <style type="text/css">
 .bg-content{
   width:100%;
@@ -53,8 +276,6 @@
 </style>
 <script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
-{if:$pay_status==1}
-
   <div class="bg-content" style="height: 1000px;">
      <div class="kuang">
         <div style="position: relative;">  
@@ -82,77 +303,5 @@
         $('.bg-content').css('background-position',"center");
     });  
   </script>
-  
-{else:}
-<style>
-    .weui-select-modal{
-        min-height: 250px;
-    }
-</style>
-<link type="text/css" rel="stylesheet" href="{url:#css/weui.css}" />
-<form action="{url:/payment/dopays}" method="post" id="payform">
-    <input type="hidden" name="order_id" value="{$order['id']}">
-    <input type="hidden" name="payment_id" value="{$order['payment']}">
-    <input type="hidden" name="seller_id" value="{$order['shop_ids']}">
-    <input type="hidden" name="order_amount"  value="{$order['order_amount']}">
-    <input type="hidden" name="order_no"  value="{$order['order_no']}">
-    <div class="mt10">
-        <div class="weui_cells weui_cells_access">
-            <a href="{url:/ucenter/order_detail/id/}{$order['id']}" class="weui_cell">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>订单号</p>
-                </div>
-                <div class="weui_cell_ft">
-                    {$order['order_no']}
-                </div>
-            </a>
-            <div class="weui_cell">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>订单金额</p>
-                </div>
-                <div class="weui_cell_hd">
-                    {$currency_symbol}{$order['order_amount']}
-                </div>
-            </div>
-            <div class="weui_cell ">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>支付方式</p>
-                </div>
-                <div class="weui_cell_ft">
-                    <input class="weui_input" id="paytype" name='paytype' type="text" value="{$paytype['payname']}" data-values="{$paytype['payment']}" style='text-align: right;display:inline-block;width:auto;' />
-                </div>
-            </div>
-        </div>
-        <div class="clearfix">
-        </div>
-    </div>
-
-    <div class="ma20 clearfix">
-        <p class="tc"><input class="weui_btn weui_btn_primary" type="button" id="submitForm" value="立即支付"></p>
-    </div>
-</form>
-{widget:name=tabbar action=item cart=$cart current=ucenter}
-{set:$paydict = array();}
-{list:items=$paytypelist}
-{set:$paydict[]=array('title'=>$item['pay_name'], 'value'=>$item['id']);}
-{/list}
-<script type="text/javascript">
-    $(function () {
-        $("#submitForm").click(function(){
-             $("#payform").submit();
-        });
-        $("#paytype").select({
-            title: "选择支付方式",
-            items: {echo: json_encode($paydict); },
-            onChange: function () {
-                    var payment_id = $("#paytype").attr("data-values");
-                    var payname = $("#paytype").val();
-                    $("input[name='payment_id']").val($("#paytype").attr("data-values"));
-                }
-            });
-        
-      });  
-</script>
-{/if}
-</body>
+{/if}  
 </html>

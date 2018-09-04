@@ -18,7 +18,6 @@
     
     body {
         overflow: hidden;
-        background-image: url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/04/21b64b626e55733dd87c86f2b583397d.png);
         background-size: 100% auto;
         background-repeat: no-repeat;
     }
@@ -55,7 +54,7 @@
     .shop_name{
         width: 80%;
         height: 40px;
-        margin-top: 40px;
+        margin-top: 24px;
         color: #666;
         float: left;
         font-size: 28px;
@@ -114,21 +113,31 @@
 </style>
 <script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+       var color_list = {0:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/cd5157d1ceeb32cc2b0fa56b3570c650.png)',1:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/728315016561eb34185ca91c31d187c6.png)',2:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/d5c38558e8ce321daf8ca0bdc0dcf653.png)'};
+       // var index = parseInt(2*Math.random());
+       var index = Math.floor(Math.random() * 3);
+        $("body").css('background-image',color_list[index]);
+    });  
+</script>
 <div class="wrap">
     <div class="icon">
      <img src="/themes/mobile/images/0904.png" width="60" height="60">
      <P style="font-size:22px;">支付成功</P>
-     <P style="margin-top: 10px;font-size:70px;font-weight: 500;"><b style="font-weight: bold">￥</b>0.01{$order['order_amount']}</P>
+     <P style="margin-top: 10px;font-size:70px;font-weight: 500;"><b style="font-weight: bold">￥</b>{$order['order_amount']}</P>
     </div>
     <div class="shop_info">
-       <div class="shop_name">收款人&nbsp;&nbsp;&nbsp;圆梦共享网{$shopname}</div>
+       <div class="shop_name">收款人&nbsp;&nbsp;&nbsp;{$shopname}</div>
        <div class="avatar">
-           <img src="https://ymlypt.b0.upaiyun.com/data/uploads/head/1.jpg" width="80" height="80" style="border-radius: 80px;">
+           <img src="{url:@$avatar}" width="80" height="80" style="border-radius: 80px;">
        </div>
     </div>
 </div>
+{if:$had_bind==1}
 <div class="wrap">
    <form id="bind_form" name="bind_form" action="{url:/travel/bind_act}" method="post">
+        <input type="hidden" name="user_id" value="{$user_id}">
         <div class="input-area">
             <img src="/themes/mobile/images/__mobile_phone.png" width="30" height="38">&nbsp;&nbsp;|&nbsp;&nbsp;<input name="mobile" id="mobile" value="" class="input" style="display: inline-block;margin-left: 2%;" placeholder="请输入手机号" alt="手机格式不正确!">
         </div>
@@ -152,7 +161,10 @@
             <button class="register_act">注册并下载</button>
         </div>
    </form>
-</div>   
+</div>
+{else:}
+<a style="display: inline-block;width: 80%;height:80px;margin-top: 400px;margin-left: 10%;line-height: 80px;text-decoration: none;text-align: center;background-color:#ea4c3a;color: #fff;font-size: 30px;font-family: 'Microsoft YaHei';font-weight: bold;border-radius: 20px;" href="http://sj.qq.com/myapp/detail.htm?apkName=com.yidu.yuanmeng">下载APP</a>
+{/if}   
 </body>
 <script type="text/javascript">
     $('#sendSMS').on('click',function(){
@@ -209,6 +221,10 @@
          }
          if($("input[name='repassword']").val()=='') {
             alert('确认密码不能为空');
+            return false;
+         }
+         if($("input[name='repassword']").val()==$("input[name='password']").val()) {
+            alert('密码输入不一致');
             return false;
          } 
          document.forms['bind_form'].submit();
