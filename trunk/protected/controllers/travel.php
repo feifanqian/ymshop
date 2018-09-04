@@ -778,6 +778,12 @@ class TravelController extends Controller
                     // $this->redirect($url);
                 }        
             } else {
+                $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
+                if($had_locked) {
+                    $locked = 1; //已锁
+                } else {
+                    $locked = 2; //未锁
+                }
                $this->redirect('/travel/invite_register/inviter_id/{$inviter}/locked/{$locked}');
             }
     }
