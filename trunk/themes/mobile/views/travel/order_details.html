@@ -240,13 +240,16 @@
             password:password,
             repassword:repassword,
             mobile_code:mobile_code
-         }
+         };
          $.ajax({
             type: "post",
             url: "{url:/travel/bind_act}",
             data: data,
             dataType: 'json',
             success: function (result) {
+                var ret = JSON.stringify(result);
+                console.log(ret);
+                retuen false;
                 if (result['status'] == 'success') {
                     alert(111);
                     var url = "http://www.ymlypt.com/travel/register_success";
