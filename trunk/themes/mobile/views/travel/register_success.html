@@ -71,8 +71,13 @@
 </script>
 <div class="wrap">
     <div class="icon">
+     {if:$locked==1}
+     <img src="/themes/mobile/images/0905.png" width="60" height="60">
+     <P style="font-size:22px;margin-top: 10px;">您在之前已被锁粉</P>
+     {else:}
      <img src="/themes/mobile/images/0904.png" width="80" height="80">
      <P style="font-size:30px;margin-top: 10px;">注册成功</P>
+     {/if}
     </div>
     <div class="shop_info">
        <div class="shop_name">快去下载圆梦共享网APP赚钱吧</div>

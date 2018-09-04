@@ -226,37 +226,36 @@
             alert('密码输入不一致');
             return false;
          } 
-         document.forms['bind_form'].submit();
-        //  var user_id = $("input[name='user_id']").val();
-        //  var mobile = $("input[name='mobile']").val();
-        //  var password = $("input[name='password']").val();
-        //  var repassword = $("input[name='repassword']").val();
-        //  var mobile_code = $("input[name='mobile_code']").val();
-        //  data = {
-        //     user_id:user_id,
-        //     mobile:mobile,
-        //     password:password,
-        //     repassword:repassword,
-        //     mobile_code:mobile_code
-        //  };
-        //  $.ajax({
-        //     type: "post",
-        //     url: "{url:/travel/bind_act}",
-        //     data: data,
-        //     dataType: 'json',
-        //     success: function (result) {
-        //         var ret = JSON.stringify(result);
-        //         console.log(ret);
-        //         return false;
-        //         if (result['status'] == 'success') {
-        //             alert(111);
-        //             var url = "http://www.ymlypt.com/travel/register_success";
-        //             window.location.href = url;
-        //         } else {
-        //             $.toast(result['msg'],'forbidden');
-        //         }
-        //     }
-        // });
+         // document.forms['bind_form'].submit();
+         var user_id = $("input[name='user_id']").val();
+         var mobile = $("input[name='mobile']").val();
+         var password = $("input[name='password']").val();
+         var repassword = $("input[name='repassword']").val();
+         var mobile_code = $("input[name='mobile_code']").val();
+         var locked = "{$locked}";
+         data = {
+            user_id:user_id,
+            mobile:mobile,
+            password:password,
+            repassword:repassword,
+            mobile_code:mobile_code
+         };
+         $.ajax({
+            type: "post",
+            url: "{url:/travel/bind_mobile_act}",
+            data: {mobile:mobile,mobile_code:mobile_code,password:password,repassword:repassword},
+            dataType: 'json',
+            success: function (result) {
+                if (result['status'] == 'success') {
+                    var link = "{url:/travel/register_success/locked/}"+locked;
+                    window.location.href = link;
+                } else {
+                    // $.toast('验证码错误','forbidden');
+                    alert('验证码错误');
+                    return false;
+                }
+            }
+        });
     });  
   </script>  
 </html>

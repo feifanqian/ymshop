@@ -810,6 +810,8 @@ class TravelController extends Controller
 
     public function register_success()
     {
+        $locked = Filter::int(Req::args('locked'));
+        $this->assign('locked',$locked);
         $this->redirect();
     }
 
