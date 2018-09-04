@@ -948,9 +948,10 @@ class TravelController extends Controller
             $info = array('status' => 'success', 'msg' => '成功');
             $this->redirect('register_success');
         } else {
-            echo "<script>alert('验证码错误');</script>";
-            exit();
+            // echo "<script>alert('验证码错误');</script>";
+            // exit();
             $info = array('status' => 'fail', 'msg' => '验证码错误!');
+            var_dump($info);die;
         }
         echo JSON::encode($info);
     }
