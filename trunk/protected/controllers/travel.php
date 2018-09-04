@@ -702,8 +702,7 @@ class TravelController extends Controller
         } else {
             $locked = 2; //未锁
         }
-        var_dump($inviter);
-        var_dump($locked);die;
+        
         $this->assign('inviter',$inviter);
         $this->assign('locked',$locked);
         $this->redirect();
