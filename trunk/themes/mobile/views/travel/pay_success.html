@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=640, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="/static/yuanmeng/three-level/css/allway.css">
+    <title>付款成功</title>
+</head>
+<body>
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .clearfix:after {
+        content: "\200B";
+        display: block;
+        height: 0;
+        clear: both;
+    }
+    
+    .clearfix {
+        *zoom: 1;
+    }
+    
+    
+    /*IE/7/6*/
+    
+    .shuru div::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        -webkit-transition: 1s;
+    }
+    
+    .shuru div::-webkit-scrollbar-thumb {
+        background-color: #a7afb4;
+        background-clip: padding-box;
+        min-height: 28px;
+    }
+    
+    .shuru div::-webkit-scrollbar-thumb:hover {
+        background-color: #525252;
+        background-clip: padding-box;
+        min-height: 28px;
+    }
+    
+    .shuru div::-webkit-scrollbar-track-piece {
+        background-color: #ccd0d2;
+    }
+    
+    .wrap {
+        position: relative;
+        padding-top:20px; 
+        margin: auto;
+       /* max-width: 640px;
+        min-width: 320px;*/
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-image: url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/cd5157d1ceeb32cc2b0fa56b3570c650.png);
+    }
+
+    #payform{
+      width: 90%;
+      height: 400px;
+      margin-left: 5%;
+      background: #fff;
+      padding-top: 40px;
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+</style>
+<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+<div class="wrap">
+{if:$third_pay==0 and in_array($user_id, [42608,141585,140531])}
+    <form action="{url:/payment/yinpay}" method="post" id="payform">
+        <input type="hidden" name="order_no" value="{$order_no}">
+        {if:$pay_type=='alipay'}
+        <input type="hidden" name="payment_id" value="8">
+        {else:}
+        <input type="hidden" name="payment_id" value="6">
+        {/if}
+        <input type="hidden" name="seller_id" value="{$seller_id}">
+        <input type="hidden" name="seller_ids" value="{$seller_ids}">
+        <input type="hidden" name="cashier_id" value="{$cashier_id}">
+        <input type="hidden" name="desk_id" value="{$desk_id}">
+        <input type="hidden" name="order_amount" id="order_amount" value="">
+        <p style="font-size: 20px;font-weight: bold;">向商家付款</p><p style="width: 80px;height: 80px;float: right;margin-top: -30px;"><img src="{url:@$avatar}" width="80" height="80" style="border-radius: 80px;"></p>
+        <p style="font-size: 20px;color: #666;margin-top: 10px;">昵称：{$shop_name}</p>
+        <p style="font-size: 20px;font-weight: bold;margin-top: 20px;">金额</p>
+        <div class="shuru">
+            <span><b style="font-size: 60px;">&yen;&nbsp;</b><b style="color: #999;font-size: 60px;">|</b></span>
+            <div id="div" style="font-size: 60px;"></div>
+        </div>
+        <input type="submit" value="付款" class="submit" />
+        <div class="weui_cells weui_cells_access">
+            <div class="weui_cell ">
+                <!-- <div class="weui_cell_bd weui_cell_primary">
+                    <p><b>付款方式</b></p>
+                </div> -->
+                <div class="weui_cell_ft">
+                付款方式:
+                    {if:$pay_type=='alipay'}
+                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="支付宝支付" data-values="8" />
+                    {else:}
+                      {if:$paytypeone}
+                        <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" />
+                      {/if}
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </form>
+    {else:}
+    <form action="{url:/payment/dopays}" method="post" id="payform">
+        <input type="hidden" name="order_no" value="{$order_no}">
+        {if:$pay_type=='alipay'}
+        <input type="hidden" name="payment_id" value="8">
+        {else:}
+        <input type="hidden" name="payment_id" value="6">
+        {/if}
+        <input type="hidden" name="seller_id" value="{$seller_id}">
+        <input type="hidden" name="seller_ids" value="{$seller_ids}">
+        <input type="hidden" name="cashier_id" value="{$cashier_id}">
+        <input type="hidden" name="desk_id" value="{$desk_id}">
+        <input type="hidden" name="order_amount" id="order_amount" value="">
+        <p style="font-size: 20px;font-weight: bold;">向商家付款</p><p style="width: 80px;height: 80px;float: right;margin-top: -20px;"><img src="{url:@$avatar}" width="80" height="80" style="border-radius: 80px;"></p>
+        <p style="font-size: 20px;color: #666;margin-top: 10px;">昵称：{$shop_name}</p>
+        <p style="font-size: 20px;font-weight: bold;margin-top: 20px;">金额</p>
+        <div class="shuru">
+            <span><b style="font-size: 60px;">&yen;&nbsp;</b><b style="color: #999;font-size: 60px;">|</b></span>
+            <div id="div" style="font-size: 60px;"></div>
+        </div>
+        <input type="submit" value="付款" class="submit" />
+        <div class="weui_cells weui_cells_access">
+            <div class="weui_cell ">
+                <!-- <div class="weui_cell_bd weui_cell_primary">
+                    <p><b>付款方式</b></p>
+                </div> -->
+                <div class="weui_cell_ft">
+                付款方式:
+                    {if:$pay_type=='alipay'}
+                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="支付宝支付" data-values="8" />
+                    {else:}
+                      {if:$paytypeone}
+                        <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" />
+                      {/if}
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </form>
+    {/if}
+    </div>
+    <div class="layer"></div>
+    <div class="layer-content">
+        <div class="form_edit clearfix">
+            <div class="num">1</div>
+            <div class="num">2</div>
+            <div class="num">3</div>
+            <div class="num">4</div>
+            <div class="num">5</div>
+            <div class="num">6</div>
+            <div class="num">7</div>
+            <div class="num">8</div>
+            <div class="num">9</div>
+            <div class="num">.</div>
+            <div class="num">0</div>
+            <div id="remove">删除</div>
+        </div>
+    </div>
+    {set:$paydict = array();}
+    {list:items=$paytypelist}
+    {set:$paydict[]=array('title'=>$item['pay_name'], 'value'=>$item['id']);}
+    {/list}
+    <script type="text/javascript">
+    $(function () {
+       var color_list = {0:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/cd5157d1ceeb32cc2b0fa56b3570c650.png)',1:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/728315016561eb34185ca91c31d187c6.png)',2:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/d5c38558e8ce321daf8ca0bdc0dcf653.png)'};
+       // var index = parseInt(2*Math.random());
+       var index = Math.floor(Math.random() * 3);
+        $('.wrap').css('background-image',color_list[index]);
+        $('.wrap').css('background-size',"cover");
+        $('.wrap').css('background-repeat',"no-repeat");
+        $('.wrap').css('background-position',"center");
+    });  
+  </script>
+</body>
+<script>
+    $(function(){
+        
+        //填写信息
+        $('.infor-sub').click(function(e){
+            $('.layer').hide();
+            $('.form').hide();
+            e.preventDefault();     //阻止表单提交
+        })
+        // 监听#div内容变化，改变支付按钮的颜色
+        $('#div').bind('DOMNodeInserted', function(){
+            if($("#div").text()!="" || $("#div").text()>'0'){
+                $('.submit').removeClass('active');
+                $('.submit').attr('disabled', false);
+            }else{
+                $('.submit').addClass('active');
+                $('.submit').attr('disabled', true);
+            }
+        })
+        $('#div').trigger('DOMNodeInserted');
+        $('.shuru').click(function(e){
+            $('.layer-content').animate({
+                bottom: 0
+            }, 200)
+            e.stopPropagation();
+        })
+        $('.wrap').click(function(){
+            $('.layer-content').animate({
+                bottom: '-250px'
+            }, 200)
+        })
+        
+        $('.form_edit .num').click(function(){
+            var oDiv = document.getElementById("div");
+            oDiv.innerHTML += this.innerHTML;
+            var amount=$('#div').html();
+            $("#order_amount").val(amount);
+            // var re=/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/;
+            // if(!re.test(amount)){
+            //     console.log('error');
+            //      return false;
+            // }
+        })
+        $('#remove').click(function(){
+            var oDiv = document.getElementById("div");
+            var oDivHtml = oDiv.innerHTML;
+            oDiv.innerHTML = oDivHtml.substring(0,oDivHtml.length-1);
+            var amounts=$('#div').html();
+            $("#order_amount").val(amounts);
+        });
+        $("#paytypes").select({
+            title: "选择支付方式",
+            items: {echo: json_encode($paydict); },
+            onChange: function () {
+                    var payment_id = $("#paytypes").attr("data-values");
+                    var payname = $("#paytypes").val();
+                    $("input[name='payment_id']").val($("#paytypes").attr("data-values"));
+                }
+        }); 
+    });
+</script>
+</html>
