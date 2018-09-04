@@ -941,7 +941,7 @@ class TravelController extends Controller
         $mobile_code = Req::args('mobile_code');
         $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
-        var_dump(111);die;
+        // var_dump(111);die;
         if($checkFlag || $mobile_code=='000000') {
             $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1))->where('user_id=' . $user_id)->update();
             $validcode = CHash::random(8);
@@ -949,10 +949,10 @@ class TravelController extends Controller
             $info = array('status' => 'success', 'msg' => '成功');
             $this->redirect('register_success');
         } else {
-            // echo "<script>alert('验证码错误');</script>";
-            // exit();
+            echo "<script>alert('验证码错误');</script>";
+            exit();
             $info = array('status' => 'fail', 'msg' => '验证码错误!');
-            var_dump($info);die;
+            // var_dump($info);die;
         }
         echo JSON::encode($info);
     }
