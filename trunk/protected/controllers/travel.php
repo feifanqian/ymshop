@@ -946,7 +946,10 @@ class TravelController extends Controller
             $validcode = CHash::random(8);
             $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $user_id)->update();
             $info = array('status' => 'success', 'msg' => '成功');
+            $this->redirect('register_success');
         } else {
+            echo "<script>alert('验证码错误');</script>";
+            exit();
             $info = array('status' => 'fail', 'msg' => '验证码错误!');
         }
         echo JSON::encode($info);
