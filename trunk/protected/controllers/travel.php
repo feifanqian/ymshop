@@ -920,4 +920,9 @@ class TravelController extends Controller
         $this->redirect();
     }
 
+    public function pay_success()
+    {
+        $this->redirect();
+    }
+
 }    
