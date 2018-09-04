@@ -516,6 +516,7 @@ class TravelController extends Controller
         $this->assign('had_bind', $had_bind);
         $this->assign('user_id', $user_id);
         $this->assign("order", $order);
+        $this->assign("id", $id);
         $this->assign("seo_title", "支付成功");
         $this->redirect();
     }
@@ -934,6 +935,7 @@ class TravelController extends Controller
 
     public function bind_act()
     {
+        $id = Filter::int(Req::args('id'));
         $user_id = Filter::int(Req::args('user_id'));
         $mobile = Req::args('mobile');
         $password = Req::args('password');
@@ -950,11 +952,12 @@ class TravelController extends Controller
             $this->redirect('register_success');
         } else {
             echo "<script>alert('验证码错误');</script>";
-            exit();
-            $info = array('status' => 'fail', 'msg' => '验证码错误!');
+            $this->redirect('/travel/order_details/id/{$id}');
+            // exit();
+            // $info = array('status' => 'fail', 'msg' => '验证码错误!');
             // var_dump($info);die;
         }
-        echo JSON::encode($info);
+        // echo JSON::encode($info);
     }
 
 }    
