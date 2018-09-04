@@ -224,7 +224,7 @@
             alert('确认密码不能为空');
             return false;
          }
-         if($("input[name='repassword']").val()==$("input[name='password']").val()) {
+         if($("input[name='repassword']").val()!=$("input[name='password']").val()) {
             alert('密码输入不一致');
             return false;
          } 
