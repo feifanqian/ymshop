@@ -769,7 +769,7 @@ class TravelController extends Controller
                         $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
 
                         if($customer['mobile_verified']==0) {
-                            $this->redirect('/travel/invite_register/inviter_id/{$inviter}/locked/{$locked}'); 
+                            $this->redirect('/travel/invite_register?inviter_id={$inviter}&locked={$locked}'); 
                         } else {
                             $this->redirect('/travel/register_success/locked/{$locked}');
                         }      
