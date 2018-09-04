@@ -696,7 +696,9 @@ class TravelController extends Controller
     public function invite_register()
     {
         $inviter = Filter::int(Req::args("inviter_id"));
+        $locked = Filter::int(Req::args("locked"));
         $this->assign('inviter',$inviter);
+        $this->assign('locked',$locked);
         $this->redirect();
     }
 
@@ -754,14 +756,20 @@ class TravelController extends Controller
                             $this->safebox->set('user', $obj, 31622400);
                             $this->user['id'] = $oauth_user['user_id'];
                         }
+                        $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
+                        if($had_locked) {
+                            $locked = 1; //已锁
+                        } else {
+                            $locked = 2; //未锁
+                        }
                         if($inviter){
                             Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
                         }
                         $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
-                        if($customer['mobile']=='' || $customer['mobile_verified']==0) {
-                            $this->redirect(); 
+                        if($customer['mobile_verified']==0) {
+                            $this->redirect('/travel/invite_register/inviter_id/{$inviter}/locked/{$locked}'); 
                         } else {
-                            $this->redirect('/travel/register_success');
+                            $this->redirect('/travel/register_success/locked/{$locked}');
                         }      
                     }
                     // return true;
@@ -770,7 +778,7 @@ class TravelController extends Controller
                     // $this->redirect($url);
                 }        
             } else {
-               $this->redirect('/travel/invite_register/inviter_id/{$inviter}');
+               $this->redirect('/travel/invite_register/inviter_id/{$inviter}/locked/{$locked}');
             }
     }
 
