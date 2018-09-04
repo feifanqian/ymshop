@@ -697,6 +697,7 @@ class TravelController extends Controller
     {
         $inviter = Filter::int(Req::args("inviter_id"));
         $locked = Filter::int(Req::args("locked"));
+        var_dump($locked);die
         $this->assign('inviter',$inviter);
         $this->assign('locked',$locked);
         $this->redirect();
@@ -766,7 +767,7 @@ class TravelController extends Controller
                             Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
                         }
                         $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
-                        var_dump($locked);die;
+
                         if($customer['mobile_verified']==0) {
                             $this->redirect('/travel/invite_register/inviter_id/{$inviter}/locked/{$locked}'); 
                         } else {
