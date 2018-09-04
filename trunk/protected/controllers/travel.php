@@ -941,6 +941,7 @@ class TravelController extends Controller
         $mobile_code = Req::args('mobile_code');
         $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+        var_dump(111);die;
         if($checkFlag || $mobile_code=='000000') {
             $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1))->where('user_id=' . $user_id)->update();
             $validcode = CHash::random(8);
