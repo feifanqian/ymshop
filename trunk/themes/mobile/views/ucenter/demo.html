@@ -245,10 +245,11 @@
     }
                     //调用微信JS api 支付
 
-                    function jsApiCall(jsapi,order_id) {            
+                    function jsApiCall(jsapi,order_id) { 
+                            alert(jsapi);           
                             // var jsapi={$jsApiParameters};
-                            // var jsonapi = JSON.parse(jsapi);
-                            var jsonapi =jsapi;
+                            var jsonapi = JSON.parse(jsapi);
+                            // var jsonapi =jsapi;
                             var appid = jsonapi.appId;
                             alert(appid);
                             WeixinJSBridge.invoke(
