@@ -638,12 +638,14 @@ class PaymentController extends Controller {
                 'sign_type'      => $sendData['sign_type'],
                 );
                 echo json_encode($result);
-                exit();
+                // exit();
+            } else {
+                $this->assign("paymentPlugin", $paymentPlugin);
+                $this->assign("sendData", $sendData);
+                $this->assign("offline",1);
+                $this->redirect('pay_form', false);
             }
-            $this->assign("paymentPlugin", $paymentPlugin);
-            $this->assign("sendData", $sendData);
-            $this->assign("offline",1);
-            $this->redirect('pay_form', false);
+            
        }    
     }
 
