@@ -614,7 +614,7 @@ class PaymentController extends Controller {
                 'jsApiParameters' => $jsApiParameters,
                 'order_id'        => $order_id
                 );
-            echo json_encode($result);  
+            return json_encode($result);  
        }else{
            $payment = new Payment($payment_id);
            $paymentPlugin = $payment->getPaymentPlugin();

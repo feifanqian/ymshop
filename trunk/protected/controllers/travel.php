@@ -454,6 +454,7 @@ class TravelController extends Controller
                     header("Location: {$url}"); 
                 }
         } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false) {
+            //支付宝授权登录
             if (isset($_GET['inviter_id']) && !isset($_GET['auth_code'])) {
                 $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test&inviter_id=" . $_GET['inviter_id'];
                 $this->redirect($act);
