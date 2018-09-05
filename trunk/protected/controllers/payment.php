@@ -1535,8 +1535,9 @@ class PaymentController extends Controller {
     public function async_callback() {
         $xml = @file_get_contents('php://input');
         $array=Common::xmlToArray($xml);
-        file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
-        $payment_id = Filter::int(Req::args('payment_id')); 
+        // file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
+        $payment_id = Filter::int(Req::args('payment_id'));
+        file_put_contents('./wxpay.php',$payment_id.',' , FILE_APPEND); 
         if($payment_id==6 || $payment_id==7 || $payment_id==18){
             // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
             //从URL中获取支付方式
