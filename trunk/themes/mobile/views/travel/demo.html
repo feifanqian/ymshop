@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=640, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
-    <link rel="stylesheet" href="/static/yuanmeng/three-level/css/allway.css">
+    <link rel="stylesheet" href="/themes/mobile/css/toastr.css">
     <title>向商家付款</title>
 </head>
 <body>
@@ -193,13 +193,14 @@
 </style>
 <script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/toastr.min.js"></script>
 <div class="wrap">
 {if:$third_pay==0 and in_array($user_id, [42608,141585,140531])}
-    {if:$pay_type=='alipay'}
-    <form action="{url:/payment/dopays}" method="post" id="payform">
-    {else:}
+    <!-- {if:$pay_type=='alipay'} -->
+    <!-- <form action="{url:/payment/dopays}" method="post" id="payform"> -->
+    <!-- {else:} -->
     <form action="" method="post" id="payform">
-    {/if}
+    <!-- {/if} -->
         <input type="hidden" name="order_no" value="{$order_no}">
         {if:$pay_type=='alipay'}
         <input type="hidden" name="payment_id" value="8">
@@ -243,12 +244,19 @@
     </form>
     {if:$pay_type=='alipay'}
     <form id="paysubmit" name="paysubmit" action="https://mapi.alipay.com/gateway.do?_input_charset=utf-8" method="post">
-        <input type='hidden' name='' value='' />
-        <input type='hidden' name='' value='' />
-        <input type='hidden' name='' value='' />
-        <input type='hidden' name='' value='' />
-        <input type='hidden' name='' value='' />
-        <input type='hidden' name='' value='' />
+        <input type='hidden' name='service' id="service" value='' />
+        <input type='hidden' name='seller_id' id="seller_id" value='' />
+        <input type='hidden' name='partner' id="partner" value='' />
+        <input type='hidden' name='_input_charset' id="_input_charset" value='' />
+        <input type='hidden' name='payment_type' id="payment_type" value='' />
+        <input type='hidden' name='return_url' id="return_url" value='' />
+        <input type='hidden' name='notify_url' id="notify_url" value='' />
+        <input type='hidden' name='subject' id="subject" value='' />
+        <input type='hidden' name='out_trade_no' id="out_trade_no" value='' />
+        <input type='hidden' name='total_fee' id="total_fee" value='' />
+        <input type='hidden' name='show_url' id="show_url" value='' />
+        <input type='hidden' name='sign' id="sign" value='' />
+        <input type='hidden' name='sign_type' id="sign_type" value='' />
     </form>
     {/if}
     <script type="text/javascript">
@@ -270,6 +278,21 @@
                     return false;
                  }
             } else {
+                res = JSON.stringify(ret);
+                res = JSON.parse(res);
+                $("#service").val(res.service);
+                $("#seller_id").val(res.seller_id);
+                $("#partner").val(res.partner);
+                $("#_input_charset").val(res._input_charset);
+                $("#payment_type").val(res.payment_type);
+                $("#return_url").val(res.return_url);
+                $("#notify_url").val(res.notify_url);
+                $("#subject").val(res.subject);
+                $("#out_trade_no").val(res.out_trade_no);
+                $("#total_fee").val(res.total_fee);
+                $("#show_url").val(res.show_url);
+                $("#sign").val(res.sign);
+                $("#sign_type").val(res.sign_type);
                 document.forms['paysubmit'].submit();
             }
         },'json');
@@ -423,7 +446,7 @@
         })
         $('.wrap').click(function(){
             $('.layer-content').animate({
-                bottom: '-250px'
+                bottom: '-400px'
             }, 200)
         })
         

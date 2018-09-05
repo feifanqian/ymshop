@@ -622,7 +622,23 @@ class PaymentController extends Controller {
            $packData = $payment->getPaymentInfo('offline_order', $order_id);
             $sendData = $paymentPlugin->packData($packData);
             if($this->user['id']==140531) {
-                print_r($sendData);die;
+                $result = array(
+                'service'        => $sendData['service'],
+                'seller_id'      => $sendData['seller_id'],
+                'partner'        => $sendData['partner'],
+                '_input_charset' => $sendData['_input_charset'],
+                'payment_type'   => $sendData['payment_type'],
+                'return_url'     => $sendData['return_url'],
+                'notify_url'     => $sendData['notify_url'],
+                'subject'        => $sendData['subject'],
+                'out_trade_no'   => $sendData['out_trade_no'],
+                'total_fee'      => $sendData['total_fee'],
+                'show_url'       => $sendData['show_url'],
+                'sign'           => $sendData['sign'],
+                'sign_type'      => $sendData['sign_type'],
+                );
+                echo json_encode($result);
+                exit();
             }
             $this->assign("paymentPlugin", $paymentPlugin);
             $this->assign("sendData", $sendData);

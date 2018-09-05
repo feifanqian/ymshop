@@ -803,6 +803,10 @@ class TravelController extends Controller
             $info = array('status' => 'fail', 'msg' => '两次密码输入不一致！');
         }
         if($checkFlag || $mobile_code=='000000') {
+            $another = $this->model->table('customer')->where("mobile='$mobile' and user_id!=".$this->user['id'])->find();
+            if($another) {
+                $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $another['user_id'])->update();
+            }
              $this->model->table('customer')->where('user_id='.$this->user['id'])->data(['mobile'=>$mobile,'mobile_verified'=>1])->update();
              $validcode = CHash::random(8);
              $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $this->user['id'])->update();
@@ -974,7 +978,7 @@ class TravelController extends Controller
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
         // var_dump(111);die;
         if($checkFlag || $mobile_code=='000000') {
-            $another = $this->model->table('customer')->where("mobile='$account' and user_id!=".$user_id)->find();
+            $another = $this->model->table('customer')->where("mobile='$mobile' and user_id!=".$user_id)->find();
             if($another) {
                 $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $another['user_id'])->update();
             }
