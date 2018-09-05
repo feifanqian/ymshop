@@ -233,7 +233,7 @@
         var order_amount = $('input[name=order_amount]').val();
         $.post('{url:/payment/dopays}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
              alert(ret);
-             res=JSON.parse(ret);
+             res=JSON.stringify(ret);
              alert(res);
              if(res.status==0){
                 var jsapi = res.jsApiParameters;
