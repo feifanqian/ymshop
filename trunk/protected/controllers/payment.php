@@ -1540,9 +1540,6 @@ class PaymentController extends Controller {
         // file_put_contents('./wxpay.php',$payment_id.',' , FILE_APPEND);
         file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========支付方式：{$array['attach']}|{$payment_id}======|\n", FILE_APPEND); 
         if($payment_id==6 || $payment_id==7 || $payment_id==18){
-            // file_put_contents("./wxpay.php", $GLOBALS['HTTP_RAW_POST_DATA']);
-            //从URL中获取支付方式
-            // var_dump($payment_id);die;
             $payment = new Payment($payment_id);
             $paymentPlugin = $payment->getPaymentPlugin();
             if (!is_object($paymentPlugin)) {
@@ -1558,6 +1555,20 @@ class PaymentController extends Controller {
             $orderNo = $array['attach'];
             
             $money = round(intval($array['total_fee'])/100,2);
+            if($array['result_code']=='SUCCESS'){
+                $return=1;
+            }else{
+                $return=0;
+            }
+
+        } elseif ($payment_id==0){
+            //初始化参数
+            $money = round(intval($array['total_fee'])/100,2);
+            $message = '支付失败';
+            $orderNo = $array['attach'];
+            
+            $callbackData=$array;
+            
             if($array['result_code']=='SUCCESS'){
                 $return=1;
             }else{
