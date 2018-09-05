@@ -82,7 +82,8 @@
     .layer-content {
         position: absolute;
         left: 50%;
-        bottom: -400px;
+        display: none;
+        /*bottom: -400px;*/
         width: 100%;
         max-width: 640px;
         height: auto;
@@ -442,12 +443,16 @@
         })
         $('#div').trigger('DOMNodeInserted');
         $('.shuru').click(function(e){
+            // $('.layer-content').css('display','block');
+            $('.layer-content').show();
             $('.layer-content').animate({
                 bottom: 0
             }, 200)
             e.stopPropagation();
         })
         $('.wrap').click(function(){
+            // $('.layer-content').css('display','none');
+            $('.layer-content').show();
             $('.layer-content').animate({
                 bottom: '-400px'
             }, 200)
