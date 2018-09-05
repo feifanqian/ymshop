@@ -232,9 +232,7 @@
         var seller_id = $('input[name=seller_id]').val();
         var order_amount = $('input[name=order_amount]').val();
         $.post('{url:/payment/dopays}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
-             alert(ret);
              res=JSON.stringify(ret);
-             alert(res);
              if(res.status==0){
                 var jsapi = res.jsApiParameters;
                 var order_id = res.order_id;
@@ -249,8 +247,9 @@
 
                     function jsApiCall(jsapi,order_id) {            
                             // var jsapi={$jsApiParameters};
-
-                            jsonapi=JSON.parse(jsapi);
+                            alert(order_id);
+                            // var jsonapi = JSON.parse(jsapi);
+                            var jsonapi =jsapi;
                             WeixinJSBridge.invoke(
                                     'getBrandWCPayRequest',
                                     {
