@@ -621,7 +621,7 @@ class PaymentController extends Controller {
 
            $packData = $payment->getPaymentInfo('offline_order', $order_id);
             $sendData = $paymentPlugin->packData($packData);
-            if($this->user['id']==140531) {
+            if(in_array($this->user['id'], [140531,184659,140741])) {
                 $result = array(
                 'service'        => $sendData['service'],
                 'seller_id'      => $sendData['seller_id'],
