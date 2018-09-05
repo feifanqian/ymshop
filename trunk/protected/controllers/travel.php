@@ -895,7 +895,7 @@ class TravelController extends Controller
     public function demo()
     {
         $model = new Model();
-        Session::set('demo', 2);
+        Session::set('demo', 3);
 
         $inviter_id = intval(Req::args('inviter_id'));
         if (!$inviter_id) {

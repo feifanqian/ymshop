@@ -586,6 +586,8 @@ class SimpleController extends Controller {
                     $this->redirect("/ucenter/index");
                 }elseif($demo!=null && $demo==2){
                     $this->redirect("/ucenter/demo");
+                }elseif($demo!=null && $demo==3){
+                    $this->redirect("/travel/demo");
                 }elseif($pid!=null){
                     $this->redirect("/index/product/id/{$pid}");
                 }elseif(strpos($str,'order')){

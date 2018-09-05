@@ -263,7 +263,12 @@ class UcenterController extends Controller
         //         exit;
         //     }
         // }
-        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/" . $user_id);
+        if($user_id==1) {
+            $url = Url::fullUrlFormat("/travel/demo/inviter_id/" . $user_id);
+        } else {
+            $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/" . $user_id);
+        }
+        
         $qrCode = new QrCode();
         $qrCode
             ->setText($url)

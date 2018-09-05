@@ -195,7 +195,8 @@
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
 <div class="wrap">
 {if:$third_pay==0 and in_array($user_id, [42608,141585,140531])}
-    <form action="{url:/payment/yinpay}" method="post" id="payform">
+    <!-- <form action="{url:/payment/yinpay}" method="post" id="payform"> -->
+    <form action="" method="post" id="payform">
         <input type="hidden" name="order_no" value="{$order_no}">
         {if:$pay_type=='alipay'}
         <input type="hidden" name="payment_id" value="8">
@@ -214,7 +215,8 @@
             <span><b style="font-size: 60px;">&yen;&nbsp;</b><b style="color: #999;font-size: 60px;">|</b></span>
             <div id="div" style="font-size: 60px;"></div>
         </div>
-        <input type="submit" value="付款" class="submit" />
+        <!-- <input type="submit" value="付款" class="submit" /> -->
+        <input type="button" value="付款" class="submit" onclick="dopay()" />
         <div class="weui_cells weui_cells_access">
             <div class="weui_cell ">
                 <!-- <div class="weui_cell_bd weui_cell_primary">
@@ -233,6 +235,71 @@
             </div>
         </div>
     </form>
+    <script type="text/javascript">
+    function dopay(){
+        var order_no = $('input[name=order_no]').val();
+        var payment_id = $('input[name=payment_id]').val();
+        var seller_id = $('input[name=seller_id]').val();
+        var order_amount = $('input[name=order_amount]').val();
+        $.post('{url:/payment/dopays}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
+             res = JSON.stringify(ret);
+             res = JSON.parse(res);
+             if(res.status==0){
+                var jsapi = res.jsApiParameters;
+                var order_id = res.order_id;
+                 callpay(jsapi,order_id);
+             }else{
+                return false;
+             }
+        },'json');
+    }
+                    //调用微信JS api 支付
+
+                    function jsApiCall(jsapi,order_id) {           
+                            var jsonapi = JSON.parse(jsapi);
+                            WeixinJSBridge.invoke(
+                                    'getBrandWCPayRequest',
+                                    {
+                                         "appId":jsonapi.appId,
+                                         "nonceStr":jsonapi.nonceStr,
+                                         "package": jsonapi.package,
+                                         "paySign": jsonapi.paySign,
+                                         "signType": jsonapi.signType,
+                                         "timeStamp": jsonapi.timeStamp
+                                     },
+                                    function (res) {
+                                        if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                                $.toast('微信支付成功!', function () {
+                                                    location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
+                                               });
+                                            
+                                        } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                                                $.toast('用户取消支付!', 'cancel', function () {
+                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                });
+                                        } else if (res.err_msg == "get_brand_wcpay_request:fail"){
+                                            alert(JSON.stringify(res));
+                                                $.toast('支付失败!', 'forbidden', function () {
+                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                });
+                                        }
+                                    }
+                            );       
+                    }
+
+                    function callpay(jsapi,order_id) {
+                        if (typeof WeixinJSBridge == "undefined") {
+                            if (document.addEventListener) {
+                                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                            } else if (document.attachEvent) {
+                                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                            }
+                        } else {
+                            jsApiCall(jsapi,order_id);
+                        }
+                    }
+    </script>
     {else:}
     <form action="{url:/payment/dopays}" method="post" id="payform">
         <input type="hidden" name="order_no" value="{$order_no}">
