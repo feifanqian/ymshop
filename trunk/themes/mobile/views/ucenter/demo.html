@@ -187,7 +187,7 @@
         </div>
         <input type="submit" value="确认支付" class="submit" />
     </form>
-    {elseif:$third_pay==0 and in_array($user_id, [184302,141585,140531])}
+    {elseif:$third_pay==0 and in_array($user_id, [184302,141585])}
     <!-- <form action="{url:/payment/yinpay}" method="post" id="payform"> -->
     <form action="" method="post" id="payform">
         <input type="hidden" name="order_no" value="{$order_no}">
