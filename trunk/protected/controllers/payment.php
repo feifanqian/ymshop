@@ -621,9 +621,6 @@ class PaymentController extends Controller {
 
            $packData = $payment->getPaymentInfo('offline_order', $order_id);
             $sendData = $paymentPlugin->packData($packData);
-            if($this->user['id']==140531) {
-                var_dump($sendData['notify_url']);die;
-            }
             $this->assign("paymentPlugin", $paymentPlugin);
             $this->assign("sendData", $sendData);
             $this->assign("offline",1);
@@ -1537,13 +1534,13 @@ class PaymentController extends Controller {
 
     // 支付回调[异步]
     public function async_callback() {
-        $xml = @file_get_contents('php://input');
-        $array=Common::xmlToArray($xml);
-        // file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
         $payment_id = Filter::int(Req::args('payment_id'));
-        // file_put_contents('./wxpay.php',$payment_id.',' , FILE_APPEND);
-        // file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========支付方式：{$array['attach']}|{$payment_id}======|\n", FILE_APPEND); 
         if($payment_id==6 || $payment_id==7 || $payment_id==18){
+            $xml = @file_get_contents('php://input');
+            $array=Common::xmlToArray($xml);
+            // file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
+            // file_put_contents('./wxpay.php',$payment_id.',' , FILE_APPEND);
+            // file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========支付方式：{$array['attach']}|{$payment_id}======|\n", FILE_APPEND); 
             $payment = new Payment($payment_id);
             $paymentPlugin = $payment->getPaymentPlugin();
             if (!is_object($paymentPlugin)) {
@@ -1566,6 +1563,8 @@ class PaymentController extends Controller {
             }
 
         } elseif ($payment_id==0){
+            $xml = @file_get_contents('php://input');
+            $array=Common::xmlToArray($xml);
             //初始化参数
             $money = round(intval($array['total_fee'])/100,2);
             $message = '支付失败';
