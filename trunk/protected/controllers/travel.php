@@ -767,12 +767,17 @@ class TravelController extends Controller
                         }
                         $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
 
-                        if($customer['mobile_verified']==0) {
-                            $this->assign('locked',$locked);
-                            $this->redirect(); 
-                        } else {
-                            $this->redirect('/travel/register_success');
-                        }      
+                        // if($customer['mobile_verified']==0) {
+                        //     $this->assign('locked',$locked);
+                        //     $this->redirect(); 
+                        // } else {
+                        //     $this->redirect('/travel/register_success');
+                        // }
+                        $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
+                        $this->assign('mobile_verified',$customer['mobile_verified']);
+                        $this->assign('locked',$locked);
+                        $this->assign('seo_title',$seo_title);
+                        $this->redirect();       
                     }
                     // return true;
                 } else {
