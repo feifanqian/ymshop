@@ -235,13 +235,10 @@
              res = JSON.stringify(ret);
              res = JSON.parse(res);
              if(res.status==0){
-                alert(111);
                 var jsapi = res.jsApiParameters;
                 var order_id = res.order_id;
                  callpay(jsapi,order_id);
              }else{
-                alert(222);
-                alert(res);
                 return false;
              }
         },'json');
@@ -250,9 +247,10 @@
 
                     function jsApiCall(jsapi,order_id) {            
                             // var jsapi={$jsApiParameters};
-                            alert(order_id);
                             // var jsonapi = JSON.parse(jsapi);
                             var jsonapi =jsapi;
+                            var appid = jsonapi.appId;
+                            alert(appid);
                             WeixinJSBridge.invoke(
                                     'getBrandWCPayRequest',
                                     {
