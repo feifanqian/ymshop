@@ -621,6 +621,9 @@ class PaymentController extends Controller {
 
            $packData = $payment->getPaymentInfo('offline_order', $order_id);
             $sendData = $paymentPlugin->packData($packData);
+            if($this->user['id']==140531) {
+                var_dump($sendData);die;
+            }
             $this->assign("paymentPlugin", $paymentPlugin);
             $this->assign("sendData", $sendData);
             $this->assign("offline",1);
