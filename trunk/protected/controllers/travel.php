@@ -999,7 +999,7 @@ class TravelController extends Controller
         //     $this->noRight();
         // }
         if(!isset($this->user['id'])) {
-            // $redirect = "http://www.ymlypt.com/travel/demo?inviter_id=".$inviter_id;
+            $redirect = "http://www.ymlypt.com/travel/demo?inviter_id=".$inviter_id;
             // $this->user['id'] = $this->autologin($redirect,$inviter_id);
             if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
                //微信授权登录
