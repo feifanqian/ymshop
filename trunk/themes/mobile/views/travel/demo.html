@@ -62,8 +62,6 @@
         position: relative;
         padding-top:20px; 
         margin: auto;
-       /* max-width: 640px;
-        min-width: 320px;*/
         width: 100%;
         height: 100%;
         overflow: hidden;
@@ -199,7 +197,7 @@
     <!-- {if:$pay_type=='alipay'} -->
     <!-- <form action="{url:/payment/dopays}" method="post" id="payform"> -->
     <!-- {else:} -->
-    <form action="" method="post" id="payform">
+    <form action="" method="post" id="payform" style="width: 90%;height: 400px;margin-left: 5%;background: #fff;padding-top: 40px;padding-left: 50px;padding-right: 50px;">
     <!-- {/if} -->
         <input type="hidden" name="order_no" value="{$order_no}">
         {if:$pay_type=='alipay'}
@@ -222,7 +220,7 @@
         <!-- {if:$pay_type=='alipay'}
         <input type="submit" value="付款" class="submit" />
         {else:} -->
-        <input type="button" value="付款" class="submit" onclick="dopay()" />
+        <input type="button" value="付款" class="submit" onclick="dopay()" style="display: block;margin: 20px auto 0;width: 100%;height: 80px;font-size: 26px;color: #fff;background: #4fa9ff;border: 1px solid #4fa9ff;border-radius: 5px;" />
         <!-- {/if} -->
         <div class="weui_cells weui_cells_access">
             <div class="weui_cell ">
