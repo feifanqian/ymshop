@@ -196,7 +196,6 @@
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/toastr.min.js"></script>
 <div class="wrap">
-{if:$third_pay==0 and in_array($user_id, [42608,184659,140531])}
     <!-- {if:$pay_type=='alipay'} -->
     <!-- <form action="{url:/payment/dopays}" method="post" id="payform"> -->
     <!-- {else:} -->
@@ -347,46 +346,7 @@
                         }
                     }
     </script>
-    {else:}
-    <form action="{url:/payment/dopays}" method="post" id="payform">
-        <input type="hidden" name="order_no" value="{$order_no}">
-        {if:$pay_type=='alipay'}
-        <input type="hidden" name="payment_id" value="8">
-        {else:}
-        <input type="hidden" name="payment_id" value="6">
-        {/if}
-        <input type="hidden" name="seller_id" value="{$seller_id}">
-        <input type="hidden" name="seller_ids" value="{$seller_ids}">
-        <input type="hidden" name="cashier_id" value="{$cashier_id}">
-        <input type="hidden" name="desk_id" value="{$desk_id}">
-        <input type="hidden" name="order_amount" id="order_amount" value="">
-        <p style="font-size: 20px;font-weight: bold;">向商家付款</p><p style="width: 80px;height: 80px;float: right;margin-top: -20px;"><img src="{url:@$avatar}" width="80" height="80" style="border-radius: 80px;"></p>
-        <p style="font-size: 20px;color: #666;margin-top: 10px;">昵称：{$shop_name}</p>
-        <p style="font-size: 20px;font-weight: bold;margin-top: 20px;">金额</p>
-        <div class="shuru">
-            <span><b style="font-size: 60px;">&yen;&nbsp;</b><b style="color: #999;font-size: 60px;">|</b></span>
-            <div id="div" style="font-size: 60px;"></div>
-        </div>
-        <input type="submit" value="付款" class="submit" />
-        <div class="weui_cells weui_cells_access">
-            <div class="weui_cell ">
-                <!-- <div class="weui_cell_bd weui_cell_primary">
-                    <p><b>付款方式</b></p>
-                </div> -->
-                <div class="weui_cell_ft">
-                付款方式:
-                    {if:$pay_type=='alipay'}
-                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="支付宝支付" data-values="8" />
-                    {else:}
-                      {if:$paytypeone}
-                        <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" />
-                      {/if}
-                    {/if}
-                </div>
-            </div>
-        </div>
-    </form>
-    {/if}
+    
     </div>
     <div class="layer"></div>
     <div class="layer-content">
