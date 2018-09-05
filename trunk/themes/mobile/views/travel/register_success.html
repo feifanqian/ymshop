@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
     <link rel="stylesheet" href="/static/yuanmeng/three-level/css/allway.css">
-    <title>付款成功</title>
+    <title>{$seo_title}</title>
 </head>
 <body>
 <style type="text/css">
@@ -73,7 +73,10 @@
     <div class="icon">
      {if:$locked==1}
      <img src="/themes/mobile/images/0905.png" width="60" height="60">
-     <P style="font-size:22px;margin-top: 10px;">您在之前已被锁粉</P>
+     <P style="font-size:26px;margin-top: 10px;">您在之前已被锁粉</P>
+     {elseif:$locked==2}
+     <img src="/themes/mobile/images/0904.png" width="60" height="60">
+     <P style="font-size:26px;margin-top: 10px;">锁粉成功</P>
      {else:}
      <img src="/themes/mobile/images/0904.png" width="80" height="80">
      <P style="font-size:30px;margin-top: 10px;">注册成功</P>

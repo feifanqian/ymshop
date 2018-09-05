@@ -816,8 +816,13 @@ class TravelController extends Controller
     public function register_success()
     {
         $locked = Filter::int(Req::args('locked'));
-        
+        if($locked) {
+            $seo_title = "锁粉成功";
+        } else {
+            $seo_title = "付款成功";
+        }
         $this->assign('locked',$locked);
+        $this->assign('seo_title',$seo_title);
         $this->redirect();
     }
 
