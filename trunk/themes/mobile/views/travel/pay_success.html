@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
     <link rel="stylesheet" href="/static/yuanmeng/three-level/css/allway.css">
-    <title>付款成功</title>
+    <title>锁粉成功</title>
 </head>
 <body>
 <style type="text/css">
@@ -26,7 +26,7 @@
         position: relative;
         padding-top: 20px;
         width: 90%;
-        height: 400px;
+        /*height: 560px;*/
         margin-left: 5%;
         margin-right: 5%;
         overflow: hidden;
@@ -36,9 +36,10 @@
 
     .icon{
         width: auto;
-        height: 70px;
+        height: 120px;
         text-align: center;
         margin: 10px auto;
+        border-bottom: 2px dashed #ccc;
     }
 
     .shop_info{
@@ -48,7 +49,7 @@
         padding-left: 5%;
         padding-right: 5%;
         padding-top: 20px;
-        border-top: 2px dashed #ccc;
+        
     }
 
     .shop_name{
@@ -67,7 +68,7 @@
     }
 
     .input-area{
-        width: 100%;
+        width: 90%;
         height: 64px;
         border-bottom: 1px solid #ccc;
         font-size: 40px;
@@ -80,6 +81,7 @@
     }
 
     .input-area input {
+        width: 60%;
         border: none;
         font-size: 28px;
     }
@@ -123,48 +125,21 @@
 </script>
 <div class="wrap">
     <div class="icon">
-     <img src="/themes/mobile/images/0904.png" width="60" height="60">
-     <P style="font-size:22px;margin-top: 10px;">支付成功</P>
-     <P style="margin-top: 10px;font-size:70px;font-weight: 500;"><b style="font-weight: bold">￥</b>{$order['order_amount']}</P>
+     <img src="/themes/mobile/images/0905.png" width="60" height="60">
+     <P style="font-size:22px;margin-top: 10px;">您在之前已被锁粉</P>
     </div>
-    <div class="shop_info">
-       <div class="shop_name">收款人&nbsp;&nbsp;&nbsp;{$shopname}</div>
-       <div class="avatar">
-           <img src="{url:@$avatar}" width="80" height="80" style="border-radius: 80px;">
-       </div>
+   <div class="shop_info">
+       <div class="shop_name">快去下载圆梦共享网APP赚钱吧</div>
     </div>
+    <script type="text/javascript">
+    $(function () {
+        $(".wrap").css('height',"300px");
+    });  
+   </script>
 </div>
-{if:$had_bind==1}
-<div class="wrap">
-   <form id="bind_form" name="bind_form" action="{url:/travel/bind_act}" method="post">
-        <input type="hidden" name="user_id" value="{$user_id}">
-        <div class="input-area">
-            <img src="/themes/mobile/images/__mobile_phone.png" width="30" height="38">&nbsp;&nbsp;|&nbsp;&nbsp;<input name="mobile" id="mobile" value="" class="input" style="display: inline-block;margin-left: 2%;" placeholder="请输入手机号" alt="手机格式不正确!">
-        </div>
-                
-        <div class="input-area">
-            <img src="/themes/mobile/images/__verification_code.png" width="30" height="38" >&nbsp;&nbsp;|&nbsp;&nbsp;
-            <input type="text" class="input input-sm" name="mobile_code" pattern="\d{6}" placeholder="验证码" alt="6位短信验证码" style="display: inline-block;width: 48%;"><label></label><input type="button" id="sendSMS" style="width: 25%;height: 46px;display: inline-block;text-decoration: none;background: #ea4c3a;color: #fff;font-size: 20px;border-radius: 8px;" class="btn btn-default btn-mini" value="发送验证码">
-        </div>
-                 
-        <div class="input-area">
-            <img src="/themes/mobile/images/__password.png" width="30" height="38">&nbsp;&nbsp;|&nbsp;&nbsp;
-            <input bind="repassword" minlen=6 value="" maxlen=20 class="input" type="password" name="password" placeholder="输入密码" alt="6-20任意字符组合">
-        </div>
-                         
-        <div class="input-area">
-            <img src="/themes/mobile/images/__confirm_password.png" width="30" height="38">&nbsp;&nbsp;|&nbsp;&nbsp;
-            <input bind="password" minlen=6 maxlen=20 value="" class="input" type="password"  name="repassword" placeholder="确认密码" alt="6-20任意字符组合">
-        </div>
 
-        <div class="button">
-            <button class="register_act">注册并下载</button>
-        </div>
-   </form>
-</div>
-{else:}
-<a style="display: inline-block;width: 80%;height:80px;margin-top: 400px;margin-left: 10%;line-height: 80px;text-decoration: none;text-align: center;background-color:#ea4c3a;color: #fff;font-size: 30px;font-family: 'Microsoft YaHei';font-weight: bold;border-radius: 10px;" href="http://sj.qq.com/myapp/detail.htm?apkName=com.yidu.yuanmeng">下载APP</a>
-{/if}   
+<a style="display: inline-block;width: 80%;height:80px;margin-top: 380px;margin-left: 10%;line-height: 80px;text-decoration: none;text-align: center;background-color:#4fa9ff;color: #fff;font-size: 30px;font-family: 'Microsoft YaHei';font-weight: bold;border-radius: 20px;" href="http://sj.qq.com/myapp/detail.htm?apkName=com.yidu.yuanmeng">下载APP</a>
+   
 </body>
 <script type="text/javascript">
     $('#sendSMS').on('click',function(){
@@ -223,11 +198,40 @@
             alert('确认密码不能为空');
             return false;
          }
-         if($("input[name='repassword']").val()==$("input[name='password']").val()) {
+         if($("input[name='repassword']").val()!=$("input[name='password']").val()) {
             alert('密码输入不一致');
             return false;
          } 
-         document.forms['bind_form'].submit();
+         // document.forms['bind_form'].submit();
+         var user_id = $("input[name='user_id']").val();
+         var mobile = $("input[name='mobile']").val();
+         var password = $("input[name='password']").val();
+         var repassword = $("input[name='repassword']").val();
+         var mobile_code = $("input[name='mobile_code']").val();
+         var locked = "{$locked}";
+         data = {
+            user_id:user_id,
+            mobile:mobile,
+            password:password,
+            repassword:repassword,
+            mobile_code:mobile_code
+         };
+         $.ajax({
+            type: "post",
+            url: "{url:/travel/bind_mobile_act}",
+            data: {mobile:mobile,mobile_code:mobile_code,password:password,repassword:repassword},
+            dataType: 'json',
+            success: function (result) {
+                if (result['status'] == 'success') {
+                    var link = "{url:/travel/register_success/locked/}"+locked;
+                    window.location.href = link;
+                } else {
+                    // $.toast('验证码错误','forbidden');
+                    alert('验证码错误');
+                    return false;
+                }
+            }
+        });
     });  
-  </script>
+  </script>  
 </html>
