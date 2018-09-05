@@ -215,8 +215,11 @@
             <span><b style="font-size: 60px;">&yen;&nbsp;</b><b style="color: #999;font-size: 60px;">|</b></span>
             <div id="div" style="font-size: 60px;"></div>
         </div>
-        <!-- <input type="submit" value="付款" class="submit" /> -->
+        {if:$pay_type=='alipay'}
+        <input type="submit" value="付款" class="submit" />
+        {else:}
         <input type="button" value="付款" class="submit" onclick="dopay()" />
+        {/if}
         <div class="weui_cells weui_cells_access">
             <div class="weui_cell ">
                 <!-- <div class="weui_cell_bd weui_cell_primary">
