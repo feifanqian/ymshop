@@ -969,6 +969,10 @@ class TravelController extends Controller
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
         // var_dump(111);die;
         if($checkFlag || $mobile_code=='000000') {
+            $another = $this->model->table('customer')->where("mobile='$account' and user_id!=".$user_id)->find();
+            if($another) {
+                $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $another['user_id'])->update();
+            }
             $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1))->where('user_id=' . $user_id)->update();
             $validcode = CHash::random(8);
             $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $user_id)->update();
