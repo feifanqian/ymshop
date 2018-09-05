@@ -188,7 +188,8 @@
         <input type="submit" value="确认支付" class="submit" />
     </form>
     {elseif:$third_pay==0 and in_array($user_id, [42608,141585,140531])}
-    <form action="{url:/payment/yinpay}" method="post" id="payform">
+    <!-- <form action="{url:/payment/yinpay}" method="post" id="payform"> -->
+    <form action="" method="post" id="payform">
         <input type="hidden" name="order_no" value="{$order_no}">
         {if:$pay_type=='alipay'}
         <input type="hidden" name="payment_id" value="8">
@@ -221,8 +222,76 @@
                 </div>
             </div>
         </div>
-        <input type="submit" value="确认支付" class="submit" />
+        <!-- <input type="submit" value="确认支付" class="submit" /> -->
+        <input type="button" value="确认支付" class="submit" onclick="dopay()" />
     </form>
+    <script type="text/javascript">
+    function dopay(){
+        var order_no = $('input[name=order_no]').val();
+        var payment_id = $('input[name=payment_id]').val();
+        var seller_id = $('input[name=seller_id]').val();
+        var order_amount = $('input[name=order_amount]').val();
+        $.post('{url:/payment/dopays}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
+             res=JSON.parse(ret);
+             if(res.status==0){
+                var jsapi = res.jsApiParameters;
+                var order_id = res.order_id;
+                 callpay(jsapi,order_id);
+             }else{
+                alert(res);
+                return false;
+             }
+        },'json');
+    }
+                    //调用微信JS api 支付
+
+                    function jsApiCall(jsapi,order_id) {            
+                            // var jsapi={$jsApiParameters};
+
+                            jsonapi=JSON.parse(jsapi);
+                            WeixinJSBridge.invoke(
+                                    'getBrandWCPayRequest',
+                                    {
+                                         "appId":jsonapi.appId,
+                                         "nonceStr":jsonapi.nonceStr,
+                                         "package": jsonapi.package,
+                                         "paySign": jsonapi.paySign,
+                                         "signType": jsonapi.signType,
+                                         "timeStamp": jsonapi.timeStamp
+                                     },
+                                    function (res) {
+                                        if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                                $.toast('微信支付成功!', function () {
+                                                    location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
+                                               });
+                                            
+                                        } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                                                $.toast('用户取消支付!', 'cancel', function () {
+                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                });
+                                        } else if (res.err_msg == "get_brand_wcpay_request:fail"){
+                                            alert(JSON.stringify(res));
+                                                $.toast('支付失败!', 'forbidden', function () {
+                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                });
+                                        }
+                                    }
+                            );       
+                    }
+
+                    function callpay(jsapi,order_id) {
+                        if (typeof WeixinJSBridge == "undefined") {
+                            if (document.addEventListener) {
+                                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                            } else if (document.attachEvent) {
+                                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                            }
+                        } else {
+                            jsApiCall(jsapi,order_id);
+                        }
+                    }
+    </script>
     {else:}
     <form action="{url:/payment/dopays}" method="post" id="payform">
         <input type="hidden" name="order_no" value="{$order_no}">
@@ -259,94 +328,6 @@
         <input type="submit" value="确认支付" class="submit" />
     </form>
     {/if}
-      <!-- <form id="payform">
-        <input type="hidden" name="order_no" value="{$order_no}">
-        <input type="hidden" name="payment_id" value="6">
-        <input type="hidden" name="seller_id" value="{$seller_id}">
-        <input type="hidden" name="seller_ids" value="{$seller_ids}">
-        <input type="hidden" name="order_amount" id="order_amount" value="">
-        <p style="font-size: 16px;"><img src="/themes/mobile/images/shoplogo.png" width="26" height="26">&nbsp;&nbsp;&nbsp;{$shop_name}</p>
-        <div class="shuru">
-            <span style="color:#f1784c">&yen;</span>
-            <div id="div" style="font-size: 32px;color:#f1784d;"></div>
-        </div>
-        <div class="weui_cell ">
-            <div class="weui_cell_bd weui_cell_primary">
-                <p style="font-size:16px;">付款方式</p>
-            </div>
-            <div class="weui_cell_ft">
-                <input class="weui_input" id="paytype" name='paytype' type="text" value="微信" data-values="6" style='text-align: right;display:inline-block;width:auto;font-size:16px;' />
-            </div>
-        </div>
-        <input type="button" value="确认支付" class="submit" onclick="dopay()" />
-    </form>
-    <script type="text/javascript">
-    function dopay(){
-        var order_no = $('input[name=order_no]').val();
-        var payment_id = $('input[name=payment_id]').val();
-        var seller_id = $('input[name=seller_id]').val();
-        var order_amount = $('input[name=order_amount]').val();
-        $.post('{url:/payment/dopays}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(res){
-             // alert(res);
-             if(res.status==0){
-                var jsapi = res.jsApiParameters;
-                var order_id = res.order_id;
-                 callpay(jsapi,order_id);
-             }else{
-                alert('调起微信支付失败!');
-                return false;
-             }
-        },'json');
-    }
-                    //调用微信JS api 支付
-
-                    function jsApiCall(jsapi,order_id) {            
-                            // var jsapi={$jsApiParameters};
-
-                            jsonapi=JSON.parse(jsapi);
-                            WeixinJSBridge.invoke(
-                                    'getBrandWCPayRequest',
-                                    {
-                                         "appId":jsonapi.appId,
-                                         "nonceStr":jsonapi.nonceStr,
-                                         "package": jsonapi.package,
-                                         "paySign": jsonapi.paySign,
-                                         "signType": jsonapi.signType,
-                                         "timeStamp": jsonapi.timeStamp
-                                     },
-                                    function (res) {
-                                        if (res.err_msg == "get_brand_wcpay_request:ok") {
-                                                $.toast('微信支付成功!', function () {
-                                                    location.href = "http://www.ymlypt.com/ucenter/order_details/id/"+order_id;
-                                               });
-                                            
-                                        } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-                                                $.toast('用户取消支付!', 'cancel', function () {
-                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
-                                                });
-                                        } else if (res.err_msg == "get_brand_wcpay_request:fail"){
-                                            alert(JSON.stringify(res));
-                                                $.toast('支付失败!', 'forbidden', function () {
-                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
-                                                });
-                                        }
-                                    }
-                            );       
-                    }
-
-                    function callpay(jsapi,order_id) {
-                        if (typeof WeixinJSBridge == "undefined") {
-                            if (document.addEventListener) {
-                                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-                            } else if (document.attachEvent) {
-                                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-                                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-                            }
-                        } else {
-                            jsApiCall(jsapi,order_id);
-                        }
-                    }
-    </script> -->
 </div>
 <div class="layer"></div>
 <div class="layer-content">

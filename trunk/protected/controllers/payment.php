@@ -518,7 +518,6 @@ class PaymentController extends Controller {
     }
 
     public function dopays(){
-       if($this->user['id']!=1776){
            $payment_id = Filter::int(Req::args('payment_id'));
            $order_no = Req::args('order_no');
            $order_amount = (Req::args('order_amount'));
@@ -586,7 +585,7 @@ class PaymentController extends Controller {
                 $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "支付成功，请勿重复支付"));
               }
            }
-
+       if($this->user['id']!=42608){
            $payment = new Payment($payment_id);
            $paymentPlugin = $payment->getPaymentPlugin();
 
@@ -597,7 +596,34 @@ class PaymentController extends Controller {
             $this->assign("offline",1);
             $this->redirect('pay_form', false);
        }else{
-           exit();
+           //ajax在当前页面调起支付  
+           $notify_url = "http://www.ymlypt.com/payment/async_callback";
+           $oauth_user = $this->model->table('oauth_user')->fields('open_id')->where("oauth_type='wechat' AND user_id=".$this->user['id'])->find();
+           $openid = $oauth_user['open_id'];
+            //②、统一下单
+            $input = new WxPayUnifiedOrder();
+            $input->SetBody("圆梦线下订单支付");
+            $input->SetAttach($order_no);
+            $input->SetOut_trade_no($order_no);
+            $input->SetTotal_fee(intval(bcmul($order_amount,100)));
+            $input->SetTime_start(date("YmdHis"));
+            $input->SetTime_expire(date("YmdHis", time() + 3600));
+            $input->SetGoods_tag("test");
+            $input->SetNotify_url($notify_url);
+            $input->SetTrade_type("JSAPI");
+            $input->SetOpenid($openid);
+            
+            $order_input = WxPayApi::unifiedOrder($input);
+            $tools = new JsApiPay();
+            
+            $jsApiParameters = $tools->GetJsApiParameters($order_input);
+            
+            // $this->assign("jsApiParameters", $jsApiParameters);
+            $result = array(
+                'jsApiParameters' => $jsApiParameters,
+                'order_id'        => $order_id
+                );
+            return json_encode($result);
        }    
     }
 
