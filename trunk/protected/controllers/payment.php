@@ -1305,6 +1305,7 @@ class PaymentController extends Controller {
     public function callback() {
         //从URL中获取支付方式
         $payment_id = Filter::int(Req::get('payment_id'));
+        file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========支付方式：{$payment_id}======|\n", FILE_APPEND);
         $payment = new Payment($payment_id);
         $paymentPlugin = $payment->getPaymentPlugin();
 
@@ -1538,7 +1539,7 @@ class PaymentController extends Controller {
         // file_put_contents('./wxpay.php', json_encode($array) . PHP_EOL, FILE_APPEND);
         $payment_id = Filter::int(Req::args('payment_id'));
         // file_put_contents('./wxpay.php',$payment_id.',' , FILE_APPEND);
-        file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========支付方式：{$array['attach']}|{$payment_id}======|\n", FILE_APPEND); 
+        // file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========支付方式：{$array['attach']}|{$payment_id}======|\n", FILE_APPEND); 
         if($payment_id==6 || $payment_id==7 || $payment_id==18){
             $payment = new Payment($payment_id);
             $paymentPlugin = $payment->getPaymentPlugin();
