@@ -235,22 +235,37 @@
             </div>
         </div>
     </form>
+    {if:$pay_type=='alipay'}
+    <form id="paysubmit" name="paysubmit" action="https://mapi.alipay.com/gateway.do?_input_charset=utf-8" method="post">
+        <input type='hidden' name='' value='' />
+        <input type='hidden' name='' value='' />
+        <input type='hidden' name='' value='' />
+        <input type='hidden' name='' value='' />
+        <input type='hidden' name='' value='' />
+        <input type='hidden' name='' value='' />
+    </form>
+    {/if}
     <script type="text/javascript">
     function dopay(){
         var order_no = $('input[name=order_no]').val();
         var payment_id = $('input[name=payment_id]').val();
         var seller_id = $('input[name=seller_id]').val();
         var order_amount = $('input[name=order_amount]').val();
+        var pay_type = "{$pay_type}";
         $.post('{url:/payment/dopays}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
-             res = JSON.stringify(ret);
-             res = JSON.parse(res);
-             if(res.status==0){
-                var jsapi = res.jsApiParameters;
-                var order_id = res.order_id;
-                 callpay(jsapi,order_id);
-             }else{
-                return false;
-             }
+            if(pay_type=='wechat') {
+                 res = JSON.stringify(ret);
+                 res = JSON.parse(res);
+                 if(res.status==0){
+                    var jsapi = res.jsApiParameters;
+                    var order_id = res.order_id;
+                     callpay(jsapi,order_id);
+                 }else{
+                    return false;
+                 }
+            } else {
+                document.forms['paysubmit'].submit();
+            }
         },'json');
     }
                     //调用微信JS api 支付
