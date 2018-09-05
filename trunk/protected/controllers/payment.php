@@ -620,10 +620,11 @@ class PaymentController extends Controller {
             
             // $this->assign("jsApiParameters", $jsApiParameters);
             $result = array(
+                'status'          => 0,
                 'jsApiParameters' => $jsApiParameters,
                 'order_id'        => $order_id
                 );
-            return json_encode($result);
+            echo json_encode($result);
        }    
     }
 
