@@ -1052,8 +1052,8 @@ class TravelController extends Controller
                                 $user_id = $oauth_user['user_id'];
                                 $this->user['id'] = $user_id;
                             }
-                            if($inviter){
-                                Common::buildInviteShip($inviter, $this->user['id'], 'second-wap');
+                            if($inviter_id){
+                                Common::buildInviteShip($inviter_id, $this->user['id'], 'second-wap');
                             }   
                         }
                     } else {
@@ -1111,8 +1111,8 @@ class TravelController extends Controller
                         $this->user = $this->safebox->get('user');
                         $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
                         $this->user['id'] = $last_id;
-                        if($inviter){
-                            Common::buildInviteShip($inviter, $this->user['id'], 'alipay');
+                        if($inviter_id){
+                            Common::buildInviteShip($inviter_id, $this->user['id'], 'alipay');
                         } 
                     }
                 }
