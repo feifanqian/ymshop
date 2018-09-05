@@ -1681,6 +1681,10 @@ class PaymentController extends Controller {
                 $order_info = $model->table('order')->where("order_no='{$orderNo}'")->find();
                 $order_offline = $model->table('order_offline')->where("order_no='{$orderNo}'")->find();
                 if (!empty($order_info)) {
+                    // if ($order_info['pay_status'] == 1) {
+                    //     echo 'success';
+                    //     exit;
+                    // }
                     if ($order_info['type'] == 4 && $order_info['is_new'] == 0) {
                         if ($order_info['otherpay_amount'] > $money) {
                             file_put_contents('payErr.txt', date("Y-m-d H:i:s") . "|========订单金额不符,订单号：{$orderNo}|{$order_info['order_amount']}元|{$money}元|{$payment_id}========|\n", FILE_APPEND);
@@ -1697,8 +1701,9 @@ class PaymentController extends Controller {
                         exit;
                     } 
                 }elseif(!empty($order_offline)){
-                    // if($order_offline['user_id']==42608){
-                    //    exit;
+                    // if ($order_offline['pay_status'] == 1) {
+                    //     echo 'success';
+                    //     exit;
                     // }
                     $order_no = $orderNo;
                      $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
