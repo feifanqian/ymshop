@@ -999,8 +999,124 @@ class TravelController extends Controller
         //     $this->noRight();
         // }
         if(!isset($this->user['id'])) {
-            $redirect = "http://www.ymlypt.com/travel/demo?inviter_id=".$inviter_id;
-            $this->user['id'] = $this->autologin($redirect,$inviter_id);
+            // $redirect = "http://www.ymlypt.com/travel/demo?inviter_id=".$inviter_id;
+            // $this->user['id'] = $this->autologin($redirect,$inviter_id);
+            if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+               //微信授权登录
+                    $code = Filter::sql(Req::args('code'));
+                    $oauth = new WechatOAuth();
+                    
+                    $url = $oauth->getCodes($redirect);
+                    if($code) {
+                        $extend = null;
+                        $token = $oauth->getAccessToken($code, $extend);
+                        $userinfo = $oauth->getUserInfo();
+                        if(!empty($userinfo)) {
+                            $openid = $token['openid'];
+                            $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
+
+                            if(!$oauth_user) { //未注册
+                                //插入user表
+                                $passWord = CHash::random(6);
+                                $validcode = CHash::random(8);
+                                $user_id = $this->model->table("user")->data(array('nickname' => $userinfo['open_name'], 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+                                $name = "u" . sprintf("%09d", $user_id);
+                                $email = $name . "@no.com";
+                                $time = date('Y-m-d H:i:s');
+                                $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
+
+                                //插入customer表
+                                $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                                Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
+
+                                //插入oauth_user表
+                                $this->model->table('oauth_user')->data(array(
+                                        'user_id' => $user_id, 
+                                        'open_name' => $userinfo['open_name'],
+                                        'oauth_type' => "wechat",
+                                        'posttime' => time(),
+                                        'token' => $token['access_token'],
+                                        'expires' => $token['expires_in'],
+                                        'open_id' => $token['openid']
+                                    ))->insert();
+
+                                //记录登录信息
+                                $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
+                                $obj['open_id'] = $token['openid'];
+                                $this->safebox->set('user', $obj, 1800);
+                                $this->user['id'] = $user_id;
+                            } else { //已注册
+                                $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
+                                $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
+                                $this->safebox->set('user', $obj, 31622400);
+                                $user_id = $oauth_user['user_id'];
+                                $this->user['id'] = $user_id;
+                            }
+                            if($inviter){
+                                Common::buildInviteShip($inviter, $this->user['id'], 'second-wap');
+                            }   
+                        }
+                    } else {
+                        header("Location: {$url}"); 
+                    }
+            } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false) {
+                //支付宝授权登录
+                if (isset($_GET['inviter_id']) && !isset($_GET['auth_code'])) {
+                    $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test&inviter_id=" . $_GET['inviter_id'];
+                    $this->redirect($act);
+                    exit;
+                } else {
+                    $auth_code = $_GET['auth_code'];
+                    $seller_id = $_GET['inviter_id'];
+                    $pay_alipayapp = new pay_alipayapp();
+                    $result = $pay_alipayapp->alipayLogin($auth_code);
+                    if (!isset($result['code']) || $result['code'] != 10000) {
+                        $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '支付宝授权登录失败！'));
+                        exit;
+                    }
+                    $nick_name = isset($result['nick_name']) ? $result['nick_name'] : '';
+                    $is_oauth = $this->model->table('oauth_user')->where('open_id="' . $result['user_id'] . '" and oauth_type="alipay"')->find();
+                    if ($is_oauth) {
+                        $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id left join oauth_user as o on us.id = o.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("o.open_id='{$result['user_id']}'")->find();
+                        $this->safebox->set('user', $obj, 31622400);
+                        $this->user = $this->safebox->get('user');
+                        $this->user['id'] = $obj['id'];
+                    } else {
+                        $this->model->table('oauth_user')->data(array(
+                            'open_name' => $nick_name,
+                            'oauth_type' => 'alipay',
+                            'posttime' => time(),
+                            'token' => '',
+                            'expires' => '7200',
+                            'open_id' => $result['user_id']
+                        ))->insert();
+                        Session::set('openname', $nick_name);
+                        $passWord = CHash::random(6);
+                        $time = date('Y-m-d H:i:s');
+                        $validcode = CHash::random(8);
+                        $model = $this->model;
+                        $avatar = isset($result['avatar'])?$result['avatar']:'http://www.ymlypt.com/themes/mobile/images/logo-new.png';
+                        $last_id = $model->table("user")->data(array('nickname' => $nick_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $avatar, 'validcode' => $validcode))->insert();
+                        $name = "u" . sprintf("%09d", $last_id);
+                        $email = $name . "@no.com";
+                        //更新用户名和邮箱
+                        $model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = '{$last_id}'")->update();
+                        //更新customer表
+                        $sex = isset($result['gender']) && $result['gender']== 'm' ? 1 : 0;
+                        $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nick_name, 'sex' => $sex, 'point_coin' => 200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                        Log::pointcoin_log(200, $last_id, '', '支付宝新用户积分奖励', 10);
+                        //记录登录信息
+                        $obj = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile")->where("us.id='$last_id'")->find();
+                        $this->safebox->set('user', $obj, 31622400);
+                        $this->user = $this->safebox->get('user');
+                        $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
+                        $this->user['id'] = $last_id;
+                        if($inviter){
+                            Common::buildInviteShip($inviter, $this->user['id'], 'alipay');
+                        } 
+                    }
+                }
+            }
         }
         $user_id = $this->user['id'];
         $shop = $this->model->table('customer as c')->fields('c.real_name,u.nickname,u.avatar')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $inviter_id)->find();
