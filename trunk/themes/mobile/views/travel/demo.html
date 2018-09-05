@@ -158,7 +158,7 @@
         margin-right: 0.5%;
         float: left;
         width: 33%;
-        height: 60px;
+        height: 100px;
         text-align: center;
         color: #333;
         line-height: 60px;
@@ -195,8 +195,11 @@
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
 <div class="wrap">
 {if:$third_pay==0 and in_array($user_id, [42608,141585,140531])}
-    <!-- <form action="{url:/payment/yinpay}" method="post" id="payform"> -->
+    {if:$pay_type=='alipay'}
+    <form action="{url:/payment/dopays}" method="post" id="payform">
+    {else:}
     <form action="" method="post" id="payform">
+    {/if}
         <input type="hidden" name="order_no" value="{$order_no}">
         {if:$pay_type=='alipay'}
         <input type="hidden" name="payment_id" value="8">
