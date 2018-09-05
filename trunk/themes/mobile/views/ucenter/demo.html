@@ -232,12 +232,15 @@
         var seller_id = $('input[name=seller_id]').val();
         var order_amount = $('input[name=order_amount]').val();
         $.post('{url:/payment/dopays}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
-             res=JSON.stringify(ret);
+             res = JSON.stringify(ret);
+             res = JSON.parse(res);
              if(res.status==0){
+                alert(111);
                 var jsapi = res.jsApiParameters;
                 var order_id = res.order_id;
                  callpay(jsapi,order_id);
              }else{
+                alert(222);
                 alert(res);
                 return false;
              }
