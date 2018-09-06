@@ -232,7 +232,7 @@
         var seller_id = $('input[name=seller_id]').val();
         var order_amount = $('input[name=order_amount]').val();
         var pay_type = "{$pay_type}";
-        $.post('{url:/payment/dopays}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
+        $.post('{url:/payment/dopays_ajax}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
              if(pay_type=='wechat') {
                  res = JSON.stringify(ret);
                  res = JSON.parse(res);
