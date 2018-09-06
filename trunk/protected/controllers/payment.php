@@ -585,7 +585,7 @@ class PaymentController extends Controller {
                 $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "支付成功，请勿重复支付"));
               }
            }
-       if(in_array($this->user['id'], [42608,184659,141585,185075])){
+       if(in_array($this->user['id'], [42608,184659,141585,185075]) && $payment_id==6){
            //ajax在当前页面调起支付  
            $notify_url = "http://www.ymlypt.com/payment/async_callback";
            $oauth_user = $this->model->table('oauth_user')->fields('open_id')->where("oauth_type='wechat' AND user_id=".$this->user['id'])->find();
@@ -644,8 +644,7 @@ class PaymentController extends Controller {
                 $this->assign("sendData", $sendData);
                 $this->assign("offline",1);
                 $this->redirect('pay_form', false);
-            }
-            
+            } 
        }    
     }
 
