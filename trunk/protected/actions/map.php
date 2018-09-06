@@ -398,7 +398,7 @@ class MapAction extends Controller
         $center = $this->model->table('business_center')->where($where)->find();
         $center['dynamic_num'] = $this->model->table('center_dynamic')->where('center_id='.$center_id.' and report_num < 5')->count();
         
-        $list = $this->model->table('center_dynamic as cd')->join('left join user as u on cd.user_id=u.id left join district_promoter as dp on cd.user_id=dp.user_id')->fields('u.nickname,u.avatar,dp.id as promoter_id,dp.shop_type,cd.*')->where('cd.center_id = '.$center_id.' and cd.report_num < 5')->findAll();
+        $list = $this->model->table('center_dynamic as cd')->join('left join user as u on cd.user_id=u.id left join district_promoter as dp on cd.user_id=dp.user_id')->fields('u.nickname,u.avatar,dp.id as promoter_id,dp.shop_type,cd.*')->where('cd.center_id = '.$center_id.' and cd.report_num < 5')->order('cd.id desc')->findAll();
         
         if($list) {
             foreach ($list as $key => $value) {
