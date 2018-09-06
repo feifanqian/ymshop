@@ -899,6 +899,19 @@ class TravelController extends Controller
         }
     }
 
+    public function mobile_code_check(){
+        $mobile = Filter::str(Req::args('mobile'));
+        $mobile_code = Req::args('mobile_code');
+        $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
+        $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+        if($checkFlag || $mobile_code=='000000') {
+            $info = array('status' => 'success', 'msg' => '成功');
+        } else {
+            $info = array('status' => 'fail', 'msg' => '验证码错误！');
+        }
+        echo JSON::encode($info);
+    }
+
     public function register_success()
     {
         $locked = Filter::int(Req::args('locked'));

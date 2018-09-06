@@ -253,7 +253,31 @@
          if($("input[name='repassword']").val()!=$("input[name='password']").val()) {
             alert('密码输入不一致');
             return false;
-         } 
+         }
+         $("input[name='mobile_code']").change(function(){
+              var user_id = $("input[name='user_id']").val();
+              var mobile = $("input[name='mobile']").val();
+              var mobile_code = $("input[name='mobile_code']").val();
+              data = {
+                user_id:user_id,
+                mobile:mobile,
+                mobile_code:mobile_code
+             };
+              $.ajax({
+              type: "post",
+              url: "{url:/travel/mobile_code_check}",
+              data: {mobile:mobile,mobile_code:mobile_code,password:password,repassword:repassword},
+              dataType: 'json',
+              success: function (result) {
+                  if (result['status'] == 'success') {
+                      console.log('success');
+                  } else {
+                      alert('验证码错误');
+                      return false;
+                  }
+              }
+          });
+         }); 
          document.forms['bind_form'].submit();
         //  var user_id = $("input[name='user_id']").val();
         //  var mobile = $("input[name='mobile']").val();
