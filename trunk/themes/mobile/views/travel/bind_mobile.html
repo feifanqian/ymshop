@@ -233,28 +233,7 @@
     })
   </script>
   <script type="text/javascript">
-    $('.register_act').on('click',function(){
-         if($("input[name='mobile']").val()=='') {
-            alert('手机号不能为空');
-            return false;
-         }
-         if($("input[name='mobile_code']").val()=='') {
-            alert('验证码不能为空');
-            return false;
-         }
-         if($("input[name='password']").val()=='') {
-            alert('密码不能为空');
-            return false;
-         }
-         if($("input[name='repassword']").val()=='') {
-            alert('确认密码不能为空');
-            return false;
-         }
-         if($("input[name='repassword']").val()!=$("input[name='password']").val()) {
-            alert('密码输入不一致');
-            return false;
-         }
-         $("input[name='mobile_code']").change(function(){
+    $("input[name='mobile_code']").change(function(){
               var user_id = $("input[name='user_id']").val();
               var mobile = $("input[name='mobile']").val();
               var mobile_code = $("input[name='mobile_code']").val();
@@ -277,7 +256,29 @@
                   }
               }
           });
-         }); 
+         });
+    $('.register_act').on('click',function(){
+         if($("input[name='mobile']").val()=='') {
+            alert('手机号不能为空');
+            return false;
+         }
+         if($("input[name='mobile_code']").val()=='') {
+            alert('验证码不能为空');
+            return false;
+         }
+         if($("input[name='password']").val()=='') {
+            alert('密码不能为空');
+            return false;
+         }
+         if($("input[name='repassword']").val()=='') {
+            alert('确认密码不能为空');
+            return false;
+         }
+         if($("input[name='repassword']").val()!=$("input[name='password']").val()) {
+            alert('密码输入不一致');
+            return false;
+         }
+
          document.forms['bind_form'].submit();
         //  var user_id = $("input[name='user_id']").val();
         //  var mobile = $("input[name='mobile']").val();
