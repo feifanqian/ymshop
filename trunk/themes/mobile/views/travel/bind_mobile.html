@@ -194,6 +194,16 @@
    
 </body>
 <script type="text/javascript">
+    $(function () {
+      window.onload = function () {
+                    var msg = "{$msg}";
+                   if(msg!='') {
+                    alert(msg);
+                   }
+                }
+    });  
+</script>
+<script type="text/javascript">
     $('#sendSMS').on('click',function(){
       var data = 'mobile=' + $("#mobile").val() + '&r=' + Math.random();
         if ($('#mobile').val()==''){
