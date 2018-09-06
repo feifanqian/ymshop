@@ -901,8 +901,8 @@ class TravelController extends Controller
     public function register_success()
     {
         $locked = Filter::int(Req::args('locked'));
-        var_dump($locked);die;
-        if($locked) {
+        // var_dump($locked);die;
+        if($locked==1 || $locked==2) {
             $seo_title = "锁粉成功";
         } else {
             $seo_title = "付款成功";
