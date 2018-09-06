@@ -198,7 +198,9 @@
     let screenHeight = document.body.offsetHeight   
     // 为window绑定resize事件
     window.onresize = function () {
-          let nowHeight = document.body.offsetHeight
+          let nowHeight = document.body.offsetHeight;
+          alert(nowHeight);
+          alert(screenHeight);
           if (nowHeight < screenHeight) {
             // 将底部弹起的按钮隐藏（可使用给按钮添加相应消失类）
             $('.download').css('display','none');
