@@ -231,16 +231,36 @@
         var payment_id = $('input[name=payment_id]').val();
         var seller_id = $('input[name=seller_id]').val();
         var order_amount = $('input[name=order_amount]').val();
+        var pay_type = "{$pay_type}";
         $.post('{url:/payment/dopays}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
-             res = JSON.stringify(ret);
-             res = JSON.parse(res);
-             if(res.status==0){
-                var jsapi = res.jsApiParameters;
-                var order_id = res.order_id;
-                 callpay(jsapi,order_id);
-             }else{
-                return false;
-             }
+             if(pay_type=='wechat') {
+                 res = JSON.stringify(ret);
+                 res = JSON.parse(res);
+                 if(res.status==0){
+                    var jsapi = res.jsApiParameters;
+                    var order_id = res.order_id;
+                     callpay(jsapi,order_id);
+                 }else{
+                    return false;
+                 }
+            } else {
+                res = JSON.stringify(ret);
+                res = JSON.parse(res);
+                $("#service").val(res.service);
+                $("#seller_id").val(res.seller_id);
+                $("#partner").val(res.partner);
+                $("#_input_charset").val(res._input_charset);
+                $("#payment_type").val(res.payment_type);
+                $("#return_url").val(res.return_url);
+                $("#notify_url").val(res.notify_url);
+                $("#subject").val(res.subject);
+                $("#out_trade_no").val(res.out_trade_no);
+                $("#total_fee").val(res.total_fee);
+                $("#show_url").val(res.show_url);
+                $("#sign").val(res.sign);
+                $("#sign_type").val(res.sign_type);
+                document.forms['paysubmit'].submit();
+            }
         },'json');
     }
                     //调用微信JS api 支付
