@@ -119,10 +119,13 @@
 </script> -->
 <script type="text/javascript">
     $(function () {
-       var msg = "{$msg}";
-       if(msg!='') {
-        alert(msg);
-       }
+      window.onload = function () {
+                    var msg = "{$msg}";
+                   if(msg!='') {
+                    alert(msg);
+                   }
+                }
+       
        var mobile_verified = {$mobile_verified};
        if(mobile_verified==0) {
           $("body").css('background-image','url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/05/7f1c314a721662a6b9c8bef85e0804bb.png)');

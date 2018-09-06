@@ -890,11 +890,12 @@ class TravelController extends Controller
         } else {
             $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
             $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
+            $msg = '验证码错误！';
             $this->assign('mobile_verified',$customer['mobile_verified']);
             $this->assign('locked',$locked);
             $this->assign('seo_title',$seo_title);
-            $this->assign('msg',$info['msg']);
-            $this->redirect('bind_mobile', false,Req::args('msg',$info['msg']));
+            $this->assign('msg',$msg);
+            $this->redirect('bind_mobile', false,Req::args('msg',$msg));
         }
     }
 
