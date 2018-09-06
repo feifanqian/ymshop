@@ -1180,11 +1180,7 @@ class TravelController extends Controller
         $this->assign("paytypelist", $paytypelist);
         $this->assign("pay_type", $pay_type);
         $this->assign('third_pay', $third_pay);
-        if($pay_type=='wechat') {
-            $this->redirect();
-        } else {
-            $this->redirect('/ucenter/demo');
-        }
+        $this->redirect();
     }
 
     public function pay_success()
