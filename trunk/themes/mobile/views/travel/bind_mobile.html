@@ -268,7 +268,8 @@
             success: function (result) {
                 if (result['status'] == 'success') {
                     var link = "{url:/travel/register_success/locked/}"+locked;
-                    window.location.href = link;
+                    // window.location.href = link;
+                    window.location.href = "http://www.ymlypt.com/travel/register_success/locked/"+locked;
                 } else {
                     // $.toast('验证码错误','forbidden');
                     alert('验证码错误');
