@@ -197,14 +197,14 @@
     
     <form action="" method="post" id="payform" style="width: 90%;height: 400px;margin-left: 5%;background: #fff;padding-top: 40px;padding-left: 50px;padding-right: 50px;">
     
-        <input type="hidden" name="order_no" value="{$order_no}">
+        <input type="hidden" name="order_no" value="">
     
         <input type="hidden" name="payment_id" value="8">
     
-        <input type="hidden" name="seller_id" value="{$seller_id}">
-        <input type="hidden" name="seller_ids" value="{$seller_ids}">
-        <input type="hidden" name="cashier_id" value="{$cashier_id}">
-        <input type="hidden" name="desk_id" value="{$desk_id}">
+        <input type="hidden" name="seller_id" value="">
+        <input type="hidden" name="seller_ids" value="">
+        <input type="hidden" name="cashier_id" value="">
+        <input type="hidden" name="desk_id" value="">
         <input type="hidden" name="order_amount" id="order_amount" value="">
         <p style="font-size: 20px;font-weight: bold;">向商家付款</p><p style="width: 80px;height: 80px;float: right;margin-top: -30px;"><img src="" width="80" height="80" style="border-radius: 80px;"></p>
         <p style="font-size: 20px;color: #666;margin-top: 10px;">昵称：</p>
@@ -213,11 +213,9 @@
             <span><b style="font-size: 60px;">&yen;&nbsp;</b><b style="color: #999;font-size: 60px;">|</b></span>
             <div id="div" style="font-size: 60px;"></div>
         </div>
-        <!-- {if:$pay_type=='alipay'}
-        <input type="submit" value="付款" class="submit" />
-        {else:} -->
+       
         <input type="button" value="付款" class="submit" onclick="dopay()" style="display: block;margin: 20px auto 0;width: 100%;height: 80px;font-size: 26px;color: #fff;background: #4fa9ff;border: 1px solid #4fa9ff;border-radius: 5px;" />
-        <!-- {/if} -->
+        
         <div class="weui_cells weui_cells_access">
             <div class="weui_cell ">
                 <!-- <div class="weui_cell_bd weui_cell_primary">
@@ -249,192 +247,4 @@
         <input type='hidden' name='sign_type' id="sign_type" value='' />
     </form>
     
-    <script type="text/javascript">
-    function dopay(){
-        var order_no = $('input[name=order_no]').val();
-        var payment_id = $('input[name=payment_id]').val();
-        var seller_id = $('input[name=seller_id]').val();
-        var order_amount = $('input[name=order_amount]').val();
-        var pay_type = "{$pay_type}";
-        $.post('{url:/payment/dopays_ajax}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
-            if(pay_type=='wechat') {
-                 res = JSON.stringify(ret);
-                 res = JSON.parse(res);
-                 if(res.status==0){
-                    var jsapi = res.jsApiParameters;
-                    var order_id = res.order_id;
-                     callpay(jsapi,order_id);
-                 }else{
-                    return false;
-                 }
-            } else {
-                res = JSON.stringify(ret);
-                res = JSON.parse(res);
-                $("#service").val(res.service);
-                $("#seller_id").val(res.seller_id);
-                $("#partner").val(res.partner);
-                $("#_input_charset").val(res._input_charset);
-                $("#payment_type").val(res.payment_type);
-                $("#return_url").val(res.return_url);
-                $("#notify_url").val(res.notify_url);
-                $("#subject").val(res.subject);
-                $("#out_trade_no").val(res.out_trade_no);
-                $("#total_fee").val(res.total_fee);
-                $("#show_url").val(res.show_url);
-                $("#sign").val(res.sign);
-                $("#sign_type").val(res.sign_type);
-                document.forms['paysubmit'].submit();
-            }
-        },'json');
-    }
-                    //调用微信JS api 支付
-
-                    function jsApiCall(jsapi,order_id) {           
-                            var jsonapi = JSON.parse(jsapi);
-                            WeixinJSBridge.invoke(
-                                    'getBrandWCPayRequest',
-                                    {
-                                         "appId":jsonapi.appId,
-                                         "nonceStr":jsonapi.nonceStr,
-                                         "package": jsonapi.package,
-                                         "paySign": jsonapi.paySign,
-                                         "signType": jsonapi.signType,
-                                         "timeStamp": jsonapi.timeStamp
-                                     },
-                                    function (res) {
-                                        if (res.err_msg == "get_brand_wcpay_request:ok") {
-                                                location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
-                                               //  $.toast('微信支付成功!', function () {
-                                               //      location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
-                                               // });
-                                        } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-                                                location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
-                                                // $.toast('用户取消支付!', 'cancel', function () {
-                                                //     location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
-                                                // });
-                                        } else if (res.err_msg == "get_brand_wcpay_request:fail"){
-                                                alert('支付失败'); 
-                                                // alert(JSON.stringify(res));
-                                                // $.toast('支付失败!', 'forbidden', function () {
-                                                //     location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
-                                                // });
-                                        }
-                                    }
-                            );       
-                    }
-
-                    function callpay(jsapi,order_id) {
-                        if (typeof WeixinJSBridge == "undefined") {
-                            if (document.addEventListener) {
-                                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-                            } else if (document.attachEvent) {
-                                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
-                                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-                            }
-                        } else {
-                            jsApiCall(jsapi,order_id);
-                        }
-                    }
-    </script>
-    
-    </div>
-    <div class="layer"></div>
-    <div class="layer-content">
-        <div class="form_edit clearfix">
-            <div class="num">1</div>
-            <div class="num">2</div>
-            <div class="num">3</div>
-            <div class="num">4</div>
-            <div class="num">5</div>
-            <div class="num">6</div>
-            <div class="num">7</div>
-            <div class="num">8</div>
-            <div class="num">9</div>
-            <div class="num">.</div>
-            <div class="num">0</div>
-            <div id="remove">删除</div>
-        </div>
-    </div>
-    
-    <script type="text/javascript">
-    $(function () {
-       // var color_list = {0:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/cd5157d1ceeb32cc2b0fa56b3570c650.png)',1:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/728315016561eb34185ca91c31d187c6.png)',2:'url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/03/d5c38558e8ce321daf8ca0bdc0dcf653.png)'};
-       // // var index = parseInt(2*Math.random());
-       // var index = Math.floor(Math.random() * 3);
-       //  $('.wrap').css('background-image',color_list[index]);
-       //  $('.wrap').css('background-size',"cover");
-       //  $('.wrap').css('background-repeat',"no-repeat");
-       //  $('.wrap').css('background-position',"center");
-        $(".wrap").css('background-image','url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/05/8aeac929e1cf11cfd5b00237f4e84658.png)');
-        $(".wrap").css('background-size','cover');
-        $(".wrap").css('background-position','center');
-    });  
-  </script>
-</body>
-<script>
-    $(function(){
-        
-        //填写信息
-        $('.infor-sub').click(function(e){
-            $('.layer').hide();
-            $('.form').hide();
-            e.preventDefault();     //阻止表单提交
-        })
-        // 监听#div内容变化，改变支付按钮的颜色
-        $('#div').bind('DOMNodeInserted', function(){
-            if($("#div").text()!="" || $("#div").text()>'0'){
-                $('.submit').removeClass('active');
-                $('.submit').attr('disabled', false);
-            }else{
-                $('.submit').addClass('active');
-                $('.submit').attr('disabled', true);
-            }
-        })
-        $('#div').trigger('DOMNodeInserted');
-        $('.shuru').click(function(e){
-            // $('.layer-content').css('display','block');
-            $('.layer-content').show();
-            $('.layer-content').animate({
-                bottom: 0
-            }, 200)
-            e.stopPropagation();
-        });
-        $('.wrap').click(function(){
-            console.log(111);
-            // $('.layer-content').css('display','none');
-            $('.layer-content').hide();
-            $('.layer-content').animate({
-                bottom: '-410px'
-            }, 200)
-        })
-        
-        $('.form_edit .num').click(function(){
-            var oDiv = document.getElementById("div");
-            oDiv.innerHTML += this.innerHTML;
-            var amount=$('#div').html();
-            $("#order_amount").val(amount);
-            // var re=/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/;
-            // if(!re.test(amount)){
-            //     console.log('error');
-            //      return false;
-            // }
-        })
-        $('#remove').click(function(){
-            var oDiv = document.getElementById("div");
-            var oDivHtml = oDiv.innerHTML;
-            oDiv.innerHTML = oDivHtml.substring(0,oDivHtml.length-1);
-            var amounts=$('#div').html();
-            $("#order_amount").val(amounts);
-        });
-        $("#paytypes").select({
-            title: "选择支付方式",
-            items: {echo: json_encode($paydict); },
-            onChange: function () {
-                    var payment_id = $("#paytypes").attr("data-values");
-                    var payname = $("#paytypes").val();
-                    $("input[name='payment_id']").val($("#paytypes").attr("data-values"));
-                }
-        }); 
-    });
-</script>
 </html>
