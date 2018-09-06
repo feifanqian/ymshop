@@ -773,6 +773,9 @@ class TravelController extends Controller
     {
         $inviter = Filter::int(Req::args("inviter_id"));
         $msg = Filter::str(Req::args("msg"));
+        if($msg) {
+            var_dump($msg);die;
+        }
          if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
                 $redirect = "http://www.ymlypt.com/travel/bind_mobile?inviter_id=".$inviter;
                 // $this->autologin($redirect);
