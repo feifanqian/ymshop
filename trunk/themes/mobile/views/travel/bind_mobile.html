@@ -267,10 +267,6 @@
             dataType: 'json',
             success: function (result) {
                 if (result['status'] == 'success') {
-                    // console.log(111);
-                    // return false;
-                    var link = "{url:/travel/register_success/locked/}"+locked;
-                    // window.location.href = link;
                     location.href = "http://www.ymlypt.com/travel/register_success/locked/"+locked;
                 } else {
                     // $.toast('验证码错误','forbidden');
