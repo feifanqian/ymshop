@@ -585,7 +585,89 @@ class PaymentController extends Controller {
                 $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "支付成功，请勿重复支付"));
               }
            }
-       if(in_array($this->user['id'], [42608,184659,141585,185075]) && $payment_id==6){
+           
+           $payment = new Payment($payment_id);
+           $paymentPlugin = $payment->getPaymentPlugin();
+
+           $packData = $payment->getPaymentInfo('offline_order', $order_id);
+           $sendData = $paymentPlugin->packData($packData);
+            $this->assign("paymentPlugin", $paymentPlugin);
+            $this->assign("sendData", $sendData);
+            $this->assign("offline",1);
+            $this->redirect('pay_form', false);
+           
+    }
+
+    public function dopays_ajax()
+    {
+        $payment_id = Filter::int(Req::args('payment_id'));
+           $order_no = Req::args('order_no');
+           $order_amount = (Req::args('order_amount'));
+           $randomstr=rand(1000000000000,9999999999999);
+           $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
+           $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
+           if(!$cashier_id) {
+            $cashier_id = 0;
+           }
+           $desk_id = Filter::int(Req::args('desk_id'));//收银员id
+           if(!$desk_id) {
+            $desk_id = 0;
+           }
+           if($order_amount==0){
+            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '请输入正确的充值金额'));
+            exit();
+           }
+           if(!$seller_id || $seller_id==0){
+             $seller_id = Filter::int(Req::args('seller_ids'));
+           }
+           $user_id = $this->user['id'];
+           $invite=$this->model->table('invite')->where('invite_user_id='.$user_id)->find();
+           if($invite){
+               $invite_id=intval($invite['user_id']);//邀请人用户id
+           }else{
+               $invite_id=1;
+           }
+           Session::set('invite_id',$invite_id);
+           $user=$this->model->table('customer')->fields('mobile')->where('user_id='.$user_id)->find();
+           if($user){
+            $mobile=$user['mobile'];
+           }else{
+            $mobile='';
+           }
+           $accept_name = Session::get('openname');
+           $config = Config::getInstance()->get("district_set");
+           $data['type']=1;
+           $data['order_no'] = $order_no;
+           $data['user_id'] = $user_id;
+           $data['payment'] = $payment_id;
+           $data['status'] = 2;
+           $data['pay_status'] = 0;
+           $data['accept_name'] = $accept_name;
+           $data['mobile'] = $mobile;
+           $data['payable_amount'] = $order_amount;
+           $data['create_time'] = date('Y-m-d H:i:s');
+           $data['pay_time'] = date("Y-m-d H:i:s");
+           $data['handling_fee'] = round($order_amount*$config['handling_rate']/100,2);
+           $data['order_amount'] = $order_amount;
+           $data['real_amount'] = $order_amount;
+           $data['point'] = 0;
+           $data['voucher_id'] = 0;
+           $data['prom_id']=$invite_id;
+           $data['shop_ids']=$seller_id;
+           $data['cashier_id'] = $cashier_id;
+           $data['desk_id'] = $desk_id;
+           $model = new Model('order_offline');
+           $exist=$model->where('order_no='.$order_no)->find();
+           //防止重复生成同笔订单
+           if(!$exist){
+              $order_id=$model->data($data)->insert();
+           }else{
+              $order_id = $exist['id']; 
+              if($exist['status']==3 && $exist['pay_status']==1){
+                $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "支付成功，请勿重复支付"));
+              }
+           }
+       if($payment_id==6){
            //ajax在当前页面调起支付  
            $notify_url = "http://www.ymlypt.com/payment/async_callback";
            $oauth_user = $this->model->table('oauth_user')->fields('open_id')->where("oauth_type='wechat' AND user_id=".$this->user['id'])->find();
@@ -621,8 +703,7 @@ class PaymentController extends Controller {
 
            $packData = $payment->getPaymentInfo('offline_order', $order_id);
             $sendData = $paymentPlugin->packData($packData);
-            if(in_array($this->user['id'], [140531,184659])) {
-                $result = array(
+            $result = array(
                 'service'        => $sendData['service'],
                 'seller_id'      => $sendData['seller_id'],
                 'partner'        => $sendData['partner'],
@@ -637,15 +718,8 @@ class PaymentController extends Controller {
                 'sign'           => $sendData['sign'],
                 'sign_type'      => $sendData['sign_type'],
                 );
-                echo json_encode($result);
-                // exit();
-            } else {
-                $this->assign("paymentPlugin", $paymentPlugin);
-                $this->assign("sendData", $sendData);
-                $this->assign("offline",1);
-                $this->redirect('pay_form', false);
-            } 
-       }    
+            echo json_encode($result);
+       }
     }
 
     public function dinpay(){
