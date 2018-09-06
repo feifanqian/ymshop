@@ -772,7 +772,7 @@ class TravelController extends Controller
     public function bind_mobile()
     {
         $inviter = Filter::int(Req::args("inviter_id"));
-        // $locked = Filter::int(Req::args("locked"));
+        $msg = Filter::str(Req::args("msg"));
          if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
                 $redirect = "http://www.ymlypt.com/travel/bind_mobile?inviter_id=".$inviter;
                 // $this->autologin($redirect);
@@ -845,7 +845,7 @@ class TravelController extends Controller
                         $this->assign('mobile_verified',$customer['mobile_verified']);
                         $this->assign('locked',$locked);
                         $this->assign('seo_title',$seo_title);
-                        $this->assign('msg','');
+                        $this->assign('msg',$msg);
                         $this->redirect();       
                     }
                     // return true;
@@ -894,7 +894,7 @@ class TravelController extends Controller
             $this->assign('locked',$locked);
             $this->assign('seo_title',$seo_title);
             $this->assign('msg',$info['msg']);
-            $this->redirect("bind_mobile", false, Req::args());
+            $this->redirect("/travel/bind_mobile?msg=".$info['msg'], false);
         }
     }
 
