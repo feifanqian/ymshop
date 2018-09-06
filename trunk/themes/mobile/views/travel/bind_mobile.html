@@ -188,9 +188,9 @@
         $(".wrap").css('height',"560px");
     });
     $("input").bind('focus',function(){
-        $('.download').css('position','static');
+        $('.download').css('display','none');
     }).bind('blur',function(){
-        $('.download').css({'position':'fixed','bottom':'40px'});
+        $('.download').css({'display':'block'});
     });  
    </script>
    {else:}
