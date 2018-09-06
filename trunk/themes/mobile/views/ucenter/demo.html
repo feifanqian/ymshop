@@ -234,7 +234,7 @@
         var pay_type = "{$pay_type}";
         $.post('{url:/payment/dopays_ajax}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
              if(pay_type=='wechat') {
-                 res = JSON.stringify(ret);
+                 var res = JSON.stringify(ret);
                  res = JSON.parse(res);
                  if(res.status==0){
                     var jsapi = res.jsApiParameters;
@@ -244,8 +244,10 @@
                     return false;
                  }
             } else {
-                res = JSON.stringify(ret);
+                var res = JSON.stringify(ret);
                 res = JSON.parse(res);
+                alert(res);
+                alert(res.service);
                 $("#service").val(res.service);
                 $("#seller_id").val(res.seller_id);
                 $("#partner").val(res.partner);
@@ -255,7 +257,7 @@
                 $("#notify_url").val(res.notify_url);
                 $("#subject").val(res.subject);
                 $("#out_trade_no").val(res.out_trade_no);
-                $("#total_fee").val('250');
+                $("#total_fee").val(res.total_fee);
                 $("#show_url").val(res.show_url);
                 $("#sign").val(res.sign);
                 $("#sign_type").val(res.sign_type);
