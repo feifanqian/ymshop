@@ -773,10 +773,7 @@ class TravelController extends Controller
     {
         $inviter = Filter::int(Req::args("inviter_id"));
         $msg = Filter::str(Req::args("msg"));
-        if($msg) {
-            var_dump($msg);die;
-        }
-         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false && !isset($this->user['id'])) {
                 $redirect = "http://www.ymlypt.com/travel/bind_mobile?inviter_id=".$inviter;
                 // $this->autologin($redirect);
                 $code = Filter::sql(Req::args('code'));
@@ -837,13 +834,6 @@ class TravelController extends Controller
                             Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
                         }
                         $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
-
-                        // if($customer['mobile_verified']==0) {
-                        //     $this->assign('locked',$locked);
-                        //     $this->redirect(); 
-                        // } else {
-                        //     $this->redirect('/travel/register_success');
-                        // }
                         $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
                         $this->assign('mobile_verified',$customer['mobile_verified']);
                         $this->assign('locked',$locked);
@@ -857,8 +847,21 @@ class TravelController extends Controller
                     // $this->redirect($url);
                 }        
             } else {
+               //  $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
+               // $this->redirect('/travel/invite_register/inviter_id/{$inviter}');
+                $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
+                $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
                 $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
-               $this->redirect('/travel/invite_register/inviter_id/{$inviter}');
+                if($had_locked) {
+                    $locked = 1; //已锁
+                } else {
+                    $locked = 2; //未锁
+                }
+                $this->assign('mobile_verified',$customer['mobile_verified']);
+                $this->assign('locked',$locked);
+                $this->assign('seo_title',$seo_title);
+                $this->assign('msg',$msg);
+                $this->redirect();
             }
     }
 
