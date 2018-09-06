@@ -245,7 +245,7 @@
               $.ajax({
               type: "post",
               url: "{url:/travel/mobile_code_check}",
-              data: {mobile:mobile,mobile_code:mobile_code,password:password,repassword:repassword},
+              data: data,
               dataType: 'json',
               success: function (result) {
                   if (result['status'] == 'success') {
