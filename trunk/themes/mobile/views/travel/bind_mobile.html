@@ -119,6 +119,10 @@
 </script> -->
 <script type="text/javascript">
     $(function () {
+       var msg = "{$msg}";
+       if(msg!='') {
+        alert(msg);
+       }
        var mobile_verified = {$mobile_verified};
        if(mobile_verified==0) {
           $("body").css('background-image','url(https://ymlypt.b0.upaiyun.com/data/uploads/2018/09/05/7f1c314a721662a6b9c8bef85e0804bb.png)');
@@ -139,9 +143,10 @@
      {/if}
     </div>
     {if:$mobile_verified==0}
-    <form id="bind_form" name="bind_form" action="" method="post">
+    <form id="bind_form" name="bind_form" action="{url:/travel/bind_mobile_act}" method="post">
         <input type="hidden" name="user_id" value="{$user_id}">
         <input type="hidden" name="id" value="{$id}">
+        <input type="hidden" name="locked" value="{$locked}">
         <div class="input-area">
             <img src="/themes/mobile/images/__mobile_phone.png" width="30" height="38">&nbsp;&nbsp;|&nbsp;&nbsp;<input name="mobile" id="mobile" value="" class="input" style="display: inline-block;margin-left: 2%;" placeholder="请输入手机号" alt="手机格式不正确!">
         </div>
@@ -246,36 +251,36 @@
             alert('密码输入不一致');
             return false;
          } 
-         // document.forms['bind_form'].submit();
-         var user_id = $("input[name='user_id']").val();
-         var mobile = $("input[name='mobile']").val();
-         var password = $("input[name='password']").val();
-         var repassword = $("input[name='repassword']").val();
-         var mobile_code = $("input[name='mobile_code']").val();
-         var locked = "{$locked}";
-         data = {
-            user_id:user_id,
-            mobile:mobile,
-            password:password,
-            repassword:repassword,
-            mobile_code:mobile_code
-         };
-         $.ajax({
-            type: "post",
-            url: "{url:/travel/bind_mobile_act}",
-            data: {mobile:mobile,mobile_code:mobile_code,password:password,repassword:repassword},
-            dataType: 'json',
-            success: function (result) {
-                if (result['status'] == 'success') {
-                    alert('success');
-                    location.href = "http://www.ymlypt.com/travel/register_success/locked/"+locked;
-                } else {
-                    // $.toast('验证码错误','forbidden');
-                    alert('验证码错误');
-                    location.reload();
-                }
-            }
-        });
+         document.forms['bind_form'].submit();
+        //  var user_id = $("input[name='user_id']").val();
+        //  var mobile = $("input[name='mobile']").val();
+        //  var password = $("input[name='password']").val();
+        //  var repassword = $("input[name='repassword']").val();
+        //  var mobile_code = $("input[name='mobile_code']").val();
+        //  var locked = "{$locked}";
+        //  data = {
+        //     user_id:user_id,
+        //     mobile:mobile,
+        //     password:password,
+        //     repassword:repassword,
+        //     mobile_code:mobile_code
+        //  };
+        //  $.ajax({
+        //     type: "post",
+        //     url: "{url:/travel/bind_mobile_act}",
+        //     data: {mobile:mobile,mobile_code:mobile_code,password:password,repassword:repassword},
+        //     dataType: 'json',
+        //     success: function (result) {
+        //         if (result['status'] == 'success') {
+        //             alert('success');
+        //             location.href = "http://www.ymlypt.com/travel/register_success/locked/"+locked;
+        //         } else {
+        //             // $.toast('验证码错误','forbidden');
+        //             alert('验证码错误');
+        //             location.reload();
+        //         }
+        //     }
+        // });
     });  
   </script>  
 </html>

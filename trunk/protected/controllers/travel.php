@@ -845,6 +845,7 @@ class TravelController extends Controller
                         $this->assign('mobile_verified',$customer['mobile_verified']);
                         $this->assign('locked',$locked);
                         $this->assign('seo_title',$seo_title);
+                        $this->assign('msg','');
                         $this->redirect();       
                     }
                     // return true;
@@ -865,6 +866,7 @@ class TravelController extends Controller
         $password = Req::args('password');
         $repassword = Req::args('repassword');
         $inviter_id = Filter::int(Req::args("inviter"));
+        $locked = Filter::int(Req::args("locked"));
         $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
         if($password!=$repassword) {
@@ -882,7 +884,18 @@ class TravelController extends Controller
         } else {
             $info = array('status' => 'fail', 'msg' => '验证码错误！');
         }
-        echo JSON::encode($info);
+        // echo JSON::encode($info);
+        if($info['status']=='success') {
+            $this->redirect('/travel/register_success/locked/{$locked}');
+        } else {
+            $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
+            $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
+            $this->assign('mobile_verified',$customer['mobile_verified']);
+            $this->assign('locked',$locked);
+            $this->assign('seo_title',$seo_title);
+            $this->assign('msg',$info['msg']);
+            $this->redirect('/travel/bind_mobile/locked/{$locked}');
+        }
     }
 
     public function register_success()
