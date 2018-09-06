@@ -886,7 +886,7 @@ class TravelController extends Controller
         }
         // echo JSON::encode($info);
         if($info['status']=='success') {
-            $this->redirect('/travel/register_success/locked/{$locked}');
+            $this->redirect('/travel/register_success?locked='.$locked);
         } else {
             $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
             $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
@@ -901,7 +901,7 @@ class TravelController extends Controller
     public function register_success()
     {
         $locked = Filter::int(Req::args('locked'));
-        var_dump($locked);die;
+        // var_dump($locked);die;
         if($locked) {
             $seo_title = "锁粉成功";
         } else {
