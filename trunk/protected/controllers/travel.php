@@ -894,7 +894,7 @@ class TravelController extends Controller
             $this->assign('locked',$locked);
             $this->assign('seo_title',$seo_title);
             $this->assign('msg',$info['msg']);
-            $this->redirect('/travel/bind_mobile/locked/{$locked}');
+            $this->redirect("bind_mobile", false, Req::args());
         }
     }
 
