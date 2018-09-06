@@ -225,6 +225,23 @@
         <!-- <input type="submit" value="确认支付" class="submit" /> -->
         <input type="button" value="确认支付" class="submit" onclick="dopay()" />
     </form>
+    {if:$pay_type=='alipay'}
+    <form id="paysubmit" name="paysubmit" action="https://mapi.alipay.com/gateway.do?_input_charset=utf-8" method="post">
+        <input type='hidden' name='service' id="service" value='' />
+        <input type='hidden' name='seller_id' id="seller_id" value='' />
+        <input type='hidden' name='partner' id="partner" value='' />
+        <input type='hidden' name='_input_charset' id="_input_charset" value='' />
+        <input type='hidden' name='payment_type' id="payment_type" value='' />
+        <input type='hidden' name='return_url' id="return_url" value='' />
+        <input type='hidden' name='notify_url' id="notify_url" value='' />
+        <input type='hidden' name='subject' id="subject" value='' />
+        <input type='hidden' name='out_trade_no' id="out_trade_no" value='' />
+        <input type='hidden' name='total_fee' id="total_fee" value='' />
+        <input type='hidden' name='show_url' id="show_url" value='' />
+        <input type='hidden' name='sign' id="sign" value='' />
+        <input type='hidden' name='sign_type' id="sign_type" value='' />
+    </form>
+    {/if}
     <script type="text/javascript">
     function dopay(){
         var order_no = $('input[name=order_no]').val();
@@ -246,8 +263,6 @@
             } else {
                 var res = JSON.stringify(ret);
                 res = JSON.parse(res);
-                alert(res);
-                alert(res.service);
                 $("#service").val(res.service);
                 $("#seller_id").val(res.seller_id);
                 $("#partner").val(res.partner);
