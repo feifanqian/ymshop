@@ -617,7 +617,7 @@
 
 <div class="wrap">
    {if:$third_pay==1}
-   <form action="" method="post" id="payform">
+   <form action="{url:/payment/dinpay}" method="post" id="payform">
         <input type="hidden" name="order_no" value="{$order_no}">
         <input type="hidden" name="payment_id" value="6">
         <input type="hidden" name="seller_id" value="{$seller_id}">
@@ -865,4 +865,5 @@
     });
 </script>
 </body>
+
 {/if}

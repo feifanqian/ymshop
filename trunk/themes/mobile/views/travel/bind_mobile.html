@@ -332,18 +332,18 @@
     });  
   </script>
   <script type="text/javascript">
-   // 获取视图原始高度
-    let screenHeight = document.body.offsetHeight   
-    // 为window绑定resize事件
-    window.onresize = function () {
-          let nowHeight = document.body.offsetHeight;
-          if (nowHeight != screenHeight) {
-            // 将底部弹起的按钮隐藏（可使用给按钮添加相应消失类）
-            $('.download').css('display','none');
-          } else {
-            // 将按钮正常显示（可使用给按钮移除相应消失类）
-            $('.download').css({'display':'block'});
-          }
-        } 
+    $(document).ready(function(){
+
+        var h=$(window).height();
+        $(window).resize(function() {
+            if($(window).height()<h){
+                $('.download').hide();
+            }
+            if($(window).height()>=h){
+                $('.download').show();
+            }
+        });
+
+    }); 
    </script>  
 </html>
