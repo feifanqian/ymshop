@@ -1,3 +1,4 @@
+{if:$pay_type=='wechat'}
 <!doctype html>
 <html lang="zh">
 <head>
@@ -449,3 +450,419 @@
     });
 </script>
 </html>
+{else:}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .clearfix:after {
+        content: "\200B";
+        display: block;
+        height: 0;
+        clear: both;
+    }
+    
+    .clearfix {
+        *zoom: 1;
+    }
+    
+    
+    /*IE/7/6*/
+    
+    .shuru div::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        -webkit-transition: 1s;
+    }
+    
+    .shuru div::-webkit-scrollbar-thumb {
+        background-color: #a7afb4;
+        background-clip: padding-box;
+        min-height: 28px;
+    }
+    
+    .shuru div::-webkit-scrollbar-thumb:hover {
+        background-color: #525252;
+        background-clip: padding-box;
+        min-height: 28px;
+    }
+    
+    .shuru div::-webkit-scrollbar-track-piece {
+        background-color: #ccd0d2;
+    }
+    
+    .wrap {
+        position: relative;
+        padding-top:20px; 
+        margin: auto;
+        max-width: 640px;
+        min-width: 320px;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        overflow: hidden;
+        padding-left: 20px;
+        padding-right: 20px; 
+    }
+    
+    .layer-content {
+        position: absolute;
+        left: 50%;
+        bottom: -250px;
+        width: 100%;
+        max-width: 640px;
+        height: auto;
+        z-index: 12;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+    }
+    
+    /* 输入表单 */
+    
+    .edit_cash {
+        display: block;
+        margin-top: 15px;
+        padding: 15px;
+        margin: 0 auto;
+        width: 90%;
+        border: 1px solid #CFCFCF;
+        border-radius: 10px;
+        background-color: #fff;
+    }
+    
+    .edit_cash p {
+        font-size: 14px;
+        color: #8D8D8F;
+    }
+    
+    .shuru {
+        position: relative;
+        margin-bottom: 10px;
+    }
+    
+    .shuru div {
+        border: none;
+        width: 100%;
+        height: 50px;
+        font-size: 25px;
+        line-height: 50px;
+        border-bottom: 1px solid #CFCFCF;
+        text-indent: 30px;
+        outline: none;
+        white-space: pre;
+        overflow-x: scroll;
+    }
+    
+    .shuru span {
+        position: absolute;
+        top: 5px;
+        font-size: 25px;
+    }
+    
+    .submit {
+        display: block;
+        margin: 20px auto 0;
+        width: 100%;
+        height: 40px;
+        font-size: 16px;
+        color: #000;
+        background: #f1784c;
+        border: 1px solid #f1784c;
+        border-radius: 5px;
+    }
+    
+    
+    /* 键盘 */
+    
+    .form_edit {
+        width: 100%;
+        background: #D1D4DD;
+    }
+    
+    .form_edit> div {
+        margin-bottom: 2px;
+        margin-right: 0.5%;
+        float: left;
+        width: 33%;
+        height: 60px;
+        text-align: center;
+        color: #333;
+        line-height: 60px;
+        font-size: 18px;
+        font-weight: 600;
+        background-color: #fff;
+        border-radius: 5px;
+    }
+    
+    .form_edit> div:nth-child(3n) {
+        margin-right: 0;
+    }
+    
+    .form_edit> div:last-child {
+        background-color: #DEE1E9;
+    }
+</style>
+
+<body>
+<!-- <script src="/demos/googlegg.js"></script> -->
+
+<div class="wrap">
+   {if:$third_pay==1}
+   <form action="" method="post" id="payform">
+        <input type="hidden" name="order_no" value="{$order_no}">
+        <input type="hidden" name="payment_id" value="6">
+        <input type="hidden" name="seller_id" value="{$seller_id}">
+        <input type="hidden" name="seller_ids" value="{$seller_ids}">
+        <input type="hidden" name="cashier_id" value="{$cashier_id}">
+        <input type="hidden" name="desk_id" value="{$desk_id}">
+        <input type="hidden" name="order_amount" id="order_amount" value="">
+        <p style="font-size: 16px;"><img src="/themes/mobile/images/shoplogo.png" width="26" height="26">&nbsp;&nbsp;&nbsp;{$shop_name}</p>
+        <div class="shuru">
+            <span style="color:#f1784c">&yen;</span>
+            <div id="div" style="font-size: 32px;color:#f1784d;"></div>
+        </div>
+        <div class="weui_cell ">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p style="font-size:16px;">付款方式</p>
+            </div>
+            <div class="weui_cell_ft">
+                <input class="weui_input" id="paytype" name='paytype' type="text" readonly="readonly" value="微信支付" data-values="6" style='text-align: right;display:inline-block;width:auto;font-size:16px;' />
+            </div>
+        </div>
+        <input type="submit" value="确认支付" class="submit" />
+    </form>
+    {elseif:$third_pay==0 and in_array($user_id, [42608,184302,141585])}
+    <!-- <form action="{url:/payment/yinpay}" method="post" id="payform"> -->
+    <form action="" method="post" id="payform">
+        <input type="hidden" name="order_no" value="{$order_no}">
+        {if:$pay_type=='alipay'}
+        <input type="hidden" name="payment_id" value="8">
+        {else:}
+        <input type="hidden" name="payment_id" value="6">
+        {/if}
+        <input type="hidden" name="seller_id" value="{$seller_id}">
+        <input type="hidden" name="seller_ids" value="{$seller_ids}">
+        <input type="hidden" name="cashier_id" value="{$cashier_id}">
+        <input type="hidden" name="desk_id" value="{$desk_id}">
+        <input type="hidden" name="order_amount" id="order_amount" value="">
+        <p style="font-size: 16px;"><img src="/themes/mobile/images/shoplogo.png" width="26" height="26">&nbsp;&nbsp;&nbsp;{$shop_name}</p>
+        <div class="shuru">
+            <span style="color:#f1784c">&yen;</span>
+            <div id="div" style="font-size: 32px;color:#f1784d;"></div>
+        </div>
+        <div class="weui_cells weui_cells_access">
+            <div class="weui_cell ">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p><b>支付方式</b></p>
+                </div>
+                <div class="weui_cell_ft">
+                    {if:$pay_type=='alipay'}
+                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="支付宝支付" data-values="8" style='text-align:right;display:inline-block;width:auto;font-size:16px;' />
+                    {else:}
+                      {if:$paytypeone}
+                        <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" style='text-align:right;display:inline-block;width:auto;font-size:16px;' />
+                      {/if}
+                    {/if}
+                </div>
+            </div>
+        </div>
+        <!-- <input type="submit" value="确认支付" class="submit" /> -->
+        <input type="button" value="确认支付" class="submit" onclick="dopay()" />
+    </form>
+    <script type="text/javascript">
+    function dopay(){
+        var order_no = $('input[name=order_no]').val();
+        var payment_id = $('input[name=payment_id]').val();
+        var seller_id = $('input[name=seller_id]').val();
+        var order_amount = $('input[name=order_amount]').val();
+        $.post('{url:/payment/dopays}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
+             res = JSON.stringify(ret);
+             res = JSON.parse(res);
+             if(res.status==0){
+                var jsapi = res.jsApiParameters;
+                var order_id = res.order_id;
+                 callpay(jsapi,order_id);
+             }else{
+                return false;
+             }
+        },'json');
+    }
+                    //调用微信JS api 支付
+
+                    function jsApiCall(jsapi,order_id) {           
+                            var jsonapi = JSON.parse(jsapi);
+                            WeixinJSBridge.invoke(
+                                    'getBrandWCPayRequest',
+                                    {
+                                         "appId":jsonapi.appId,
+                                         "nonceStr":jsonapi.nonceStr,
+                                         "package": jsonapi.package,
+                                         "paySign": jsonapi.paySign,
+                                         "signType": jsonapi.signType,
+                                         "timeStamp": jsonapi.timeStamp
+                                     },
+                                    function (res) {
+                                        if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                                $.toast('微信支付成功!', function () {
+                                                    location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
+                                               });
+                                            
+                                        } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                                                $.toast('用户取消支付!', 'cancel', function () {
+                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                });
+                                        } else if (res.err_msg == "get_brand_wcpay_request:fail"){
+                                            alert(JSON.stringify(res));
+                                                $.toast('支付失败!', 'forbidden', function () {
+                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                });
+                                        }
+                                    }
+                            );       
+                    }
+
+                    function callpay(jsapi,order_id) {
+                        if (typeof WeixinJSBridge == "undefined") {
+                            if (document.addEventListener) {
+                                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                            } else if (document.attachEvent) {
+                                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                            }
+                        } else {
+                            jsApiCall(jsapi,order_id);
+                        }
+                    }
+    </script>
+    {else:}
+    <form action="{url:/payment/dopays}" method="post" id="payform">
+        <input type="hidden" name="order_no" value="{$order_no}">
+        {if:$pay_type=='alipay'}
+        <input type="hidden" name="payment_id" value="8">
+        {else:}
+        <input type="hidden" name="payment_id" value="6">
+        {/if}
+        <input type="hidden" name="seller_id" value="{$seller_id}">
+        <input type="hidden" name="seller_ids" value="{$seller_ids}">
+        <input type="hidden" name="cashier_id" value="{$cashier_id}">
+        <input type="hidden" name="desk_id" value="{$desk_id}">
+        <input type="hidden" name="order_amount" id="order_amount" value="">
+        <p style="font-size: 16px;"><img src="/themes/mobile/images/shoplogo.png" width="26" height="26">&nbsp;&nbsp;&nbsp;{$shop_name}</p>
+        <div class="shuru">
+            <span style="color:#f1784c">&yen;</span>
+            <div id="div" style="font-size: 32px;color:#f1784d;"></div>
+        </div>
+        <div class="weui_cell ">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p style="font-size:16px;">付款方式</p>
+            </div>
+            <div class="weui_cell_ft">
+                <!-- <input class="weui_input" id="paytype" name='paytype' type="text" readonly="readonly" value="微信支付" data-values="6" style='text-align: right;display:inline-block;width:auto;font-size:16px;' /> -->
+                {if:$pay_type=='alipay'}
+                <input class="weui_input" id="paytypes" name='paytype' type="text" value="支付宝支付" data-values="8" style='text-align:right;display:inline-block;width:auto;font-size:16px;' />
+                {else:}
+                  {if:$paytypeone}
+                    <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" style='text-align:right;display:inline-block;width:auto;font-size:16px;' />
+                  {/if}
+                {/if}  
+            </div>
+        </div>
+        <input type="submit" value="确认支付" class="submit" />
+    </form>
+    {/if}
+</div>
+<div class="layer"></div>
+<div class="layer-content">
+    <div class="form_edit clearfix">
+        <div class="num">1</div>
+        <div class="num">2</div>
+        <div class="num">3</div>
+        <div class="num">4</div>
+        <div class="num">5</div>
+        <div class="num">6</div>
+        <div class="num">7</div>
+        <div class="num">8</div>
+        <div class="num">9</div>
+        <div class="num">.</div>
+        <div class="num">0</div>
+        <div id="remove">删除</div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
+{set:$paydict = array();}
+{list:items=$paytypelist}
+{set:$paydict[]=array('title'=>$item['pay_name'], 'value'=>$item['id']);}
+{/list}
+<script>
+    $(function(){
+        
+        //填写信息
+        $('.infor-sub').click(function(e){
+            $('.layer').hide();
+            $('.form').hide();
+            e.preventDefault();     //阻止表单提交
+        })
+        // 监听#div内容变化，改变支付按钮的颜色
+        $('#div').bind('DOMNodeInserted', function(){
+            if($("#div").text()!="" || $("#div").text()>'0'){
+                $('.submit').removeClass('active');
+                $('.submit').attr('disabled', false);
+            }else{
+                $('.submit').addClass('active');
+                $('.submit').attr('disabled', true);
+            }
+        })
+        $('#div').trigger('DOMNodeInserted');
+        $('.shuru').click(function(e){
+            $('.layer-content').animate({
+                bottom: 0
+            }, 200)
+            e.stopPropagation();
+        })
+        $('.wrap').click(function(){
+            $('.layer-content').animate({
+                bottom: '-250px'
+            }, 200)
+        })
+        
+        $('.form_edit .num').click(function(){
+            var oDiv = document.getElementById("div");
+            oDiv.innerHTML += this.innerHTML;
+            var amount=$('#div').html();
+            $("#order_amount").val(amount);
+            // var re=/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/;
+            // if(!re.test(amount)){
+            //     console.log('error');
+            //      return false;
+            // }
+        })
+        $('#remove').click(function(){
+            var oDiv = document.getElementById("div");
+            var oDivHtml = oDiv.innerHTML;
+            oDiv.innerHTML = oDivHtml.substring(0,oDivHtml.length-1);
+            var amounts=$('#div').html();
+            $("#order_amount").val(amounts);
+        });
+        $("#paytypes").select({
+            title: "选择支付方式",
+            items: {echo: json_encode($paydict); },
+            onChange: function () {
+                    var payment_id = $("#paytypes").attr("data-values");
+                    var payname = $("#paytypes").val();
+                    $("input[name='payment_id']").val($("#paytypes").attr("data-values"));
+                }
+        }); 
+    });
+</script>
+</body>
+{/if}

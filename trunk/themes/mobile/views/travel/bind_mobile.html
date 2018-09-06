@@ -186,29 +186,7 @@
    <script type="text/javascript">
     $(function () {
         $(".wrap").css('height',"560px");
-    });
-    // $("input").bind('focus',function(){
-    //     $('.download').css('display','none');
-    // }).bind('blur',function(){
-    //     $('.download').css({'display':'block'});
-    // }); 
-   </script>
-   <script type="text/javascript">
-   // 获取视图原始高度
-    let screenHeight = document.body.offsetHeight   
-    // 为window绑定resize事件
-    window.onresize = function () {
-          let nowHeight = document.body.offsetHeight;
-          // alert(nowHeight);//560
-          // alert(screenHeight);//570
-          if (nowHeight < screenHeight) {
-            // 将底部弹起的按钮隐藏（可使用给按钮添加相应消失类）
-            $('.download').css('display','none');
-          } else {
-            // 将按钮正常显示（可使用给按钮移除相应消失类）
-            $('.download').css({'display':'block'});
-          }
-        } 
+    }); 
    </script>
    {else:}
    <div class="shop_info">
@@ -352,5 +330,20 @@
         //     }
         // });
     });  
-  </script>  
+  </script>
+  <script type="text/javascript">
+   // 获取视图原始高度
+    let screenHeight = document.body.offsetHeight   
+    // 为window绑定resize事件
+    window.onresize = function () {
+          let nowHeight = document.body.offsetHeight;
+          if (nowHeight != screenHeight) {
+            // 将底部弹起的按钮隐藏（可使用给按钮添加相应消失类）
+            $('.download').css('display','none');
+          } else {
+            // 将按钮正常显示（可使用给按钮移除相应消失类）
+            $('.download').css({'display':'block'});
+          }
+        } 
+   </script>  
 </html>
