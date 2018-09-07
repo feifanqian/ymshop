@@ -27,7 +27,6 @@
         position: relative;
         padding-top: 20px;
         width: 90%;
-        height: 420px;
         margin-left: 5%;
         margin-right: 5%;
         overflow: hidden;
@@ -128,7 +127,7 @@
        }
     });  
 </script>
-<div class="wrap">
+<div class="wrap" style="height: 370px;">
     <div class="icon">
      <img src="/themes/mobile/images/0904.png" width="60" height="60">
      <P style="font-size:22px;margin-top: 10px;">支付成功</P>
@@ -142,7 +141,7 @@
     </div>
 </div>
 {if:$had_bind==0}
-<div class="wrap">
+<div class="wrap" style="height: 420px;">
    <form id="bind_form" name="bind_form" action="{url:/travel/bind_act}" method="post">
         <input type="hidden" name="user_id" value="{$user_id}">
         <input type="hidden" name="id" value="{$id}">
