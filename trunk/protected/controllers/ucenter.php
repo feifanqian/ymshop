@@ -2145,6 +2145,10 @@ class UcenterController extends Controller
                         }
                     }
                 }
+                Session::clear('verifiedInfo');
+                Session::clear('activateObj');
+                $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
+                exit;
             } else {
                 $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
             }
