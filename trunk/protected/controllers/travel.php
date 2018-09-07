@@ -1199,22 +1199,65 @@ class TravelController extends Controller
         $payment = Filter::int(Req::args('payment'));
         $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
-
-        if($payment==8) {
-            $had_bind= $this->model->table("customer")->where("mobile='{$mobile}' and status=1")->find();
-            if($had_bind) {
-                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该手机号已被绑定过了'));
-                exit;
-            }
-        }
+        
         if($checkFlag || $mobile_code=='000000') {
-            $another = $this->model->table('customer')->where("mobile='$mobile' and user_id!=".$user_id)->find();
-            if($another) {
-                $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $another['user_id'])->update();
+            // $another = $this->model->table('customer')->where("mobile='$mobile' and user_id!=".$user_id)->find();
+            // if($another) {
+            //     $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $another['user_id'])->update();
+            // }
+            
+            $had_bind= $this->model->table("customer")->where("mobile='{$mobile}' and status=1")->findAll();
+            if($had_bind) {
+                foreach ($had_bind as $key => $value) {
+                    $wechat = $this->model->table('oauth_user')->where("user_id=".$value['user_id']." and oauth_type='wechat'")->find();
+                    if($wechat) {
+                        //微信公众号已绑定
+                        $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该手机号已被绑定过了'));
+                        exit;
+                    }
+                    $weixin = $this->model->table('oauth_user')->where("user_id=".$value['user_id']." and oauth_type='weixin'")->find();
+                    if($weixin) {
+                        //微信app已绑定
+                        $promoter1 = $this->model->table('district_promoter')->where('user_id='.$user_id)->find();
+                        $promoter2 = $this->model->table('district_promoter')->where('user_id='.$weixin['user_id'])->find();
+                        //智能分配微信账号
+                        if($promoter1 || $promoter2) {
+                            if($promoter1) { //分配$user_id账号
+                                $customer = $this->model->table('customer')->where('user_id=' . $weixin['user_id'])->find();
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $weixin['user_id'])->update();
+                                $this->model->table('oauth_user')->data(array('other_user_id' => $weixin['user_id']))->where('user_id=' . $user_id)->update();
+                                $last_id = $user_id;    
+                            } else { //分配$weixin['user_id']账号
+                                $customer = $this->model->table('customer')->where('user_id=' . $user_id)->find();
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $weixin['user_id'])->update();
+                                $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
+                                $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
+                                $this->model->table('oauth_user')->data(array('user_id' => $weixin['user_id']))->where('other_user_id=' . $user_id)->update();
+                                $last_id = $weixin['user_id'];  
+                            }
+                        } else {
+                            $customer1 = $this->model->table('customer')->where('user_id=' . $user_id)->find();
+                            $customer2 = $this->model->table('customer')->where('user_id=' . $weixin['user_id'])->find();
+                            //已注册时间早的为主
+                            if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $weixin['user_id'])->update();   
+                                $this->model->table('oauth_user')->data(array('other_user_id' => $weixin['user_id']))->where('user_id=' . $user_id)->update();
+                                $last_id = $user_id;
+                            } else {
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer1['balance']})",'offline_balance'=>"`offline_balance`+({$customer1['offline_balance']})"))->where('user_id=' . $weixin['user_id'])->update();
+                                $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
+                                $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
+                                $this->model->table('oauth_user')->data(array('user_id' => $weixin['user_id']))->where('other_user_id=' . $user_id)->update();
+                                $last_id = $weixin['user_id'];
+                            }        
+                        }
+                    }
+                } 
             }
-            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1))->where('user_id=' . $user_id)->update();
             $validcode = CHash::random(8);
-            $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $user_id)->update();
+            $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $last_id)->update();
             $info = array('status' => 'success', 'msg' => '成功');
             $this->redirect('bind_success');
         } else {
