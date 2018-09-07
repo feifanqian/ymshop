@@ -1201,9 +1201,7 @@ class TravelController extends Controller
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
 
         if($payment==8) {
-            $had_bind= $this->model->table('customer')->where('mobile="$mobile" and status=1')->find();
-            var_dump($had_bind);
-            var_dump($mobile);die;
+            $had_bind= $this->model->table("customer")->where("mobile='{$mobile}' and status=1")->find();
             if($had_bind) {
                 $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该手机号已被绑定过了'));
                 exit;
