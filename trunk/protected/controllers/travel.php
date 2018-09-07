@@ -1199,10 +1199,11 @@ class TravelController extends Controller
         $payment = Filter::int(Req::args('payment'));
         $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
-        var_dump($user_id);
-        var_dump($payment);die;
+
         if($payment==8) {
             $had_bind= $this->model->table('customer')->where('mobile="$mobile" and status=1')->find();
+            var_dump($had_bind);
+            var_dump($mobile);die;
             if($had_bind) {
                 $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该手机号已被绑定过了'));
                 exit;
