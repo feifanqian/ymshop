@@ -418,12 +418,10 @@
             e.stopPropagation();
         });
         $('.wrap').click(function(){
-            console.log(111);
-            // $('.layer-content').css('display','none');
-            $('.layer-content').hide();
             $('.layer-content').animate({
                 bottom: '-410px'
-            }, 200)
+            }, 200);
+            $('.layer-content').hide();
         })
         
         $('.form_edit .num').click(function(){
