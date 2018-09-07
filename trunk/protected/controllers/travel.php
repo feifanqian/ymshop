@@ -1202,6 +1202,9 @@ class TravelController extends Controller
         
         if($checkFlag || $mobile_code=='000000') {
             $had_bind= $this->model->table("customer")->where("mobile='{$mobile}' and status=1")->findAll();
+            // if($mobile=='18070146273') {
+            //     var_dump($had_bind);
+            // }
             if($had_bind) {
                 foreach ($had_bind as $key => $value) {
                     $wechat = $this->model->table('oauth_user')->where("user_id=".$value['user_id']." and oauth_type='wechat'")->find();
@@ -1253,14 +1256,14 @@ class TravelController extends Controller
                     if(!$oauth) {
                         $customer1 = $this->model->table('customer')->where('user_id=' . $user_id)->find();
                         $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
+                        //绑定手机号
+                        $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
                         //已注册时间早的为主
                         if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
-                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $value['user_id'])->update();   
                             $this->model->table('oauth_user')->data(array('other_user_id' => $value['user_id']))->where('user_id=' . $user_id)->update();
                             $last_id = $user_id;
                         } else {
-                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer1['balance']})",'offline_balance'=>"`offline_balance`+({$customer1['offline_balance']})"))->where('user_id=' . $value['user_id'])->update();
                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
                             $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
                             $this->model->table('oauth_user')->data(array('user_id' => $value['user_id']))->where('other_user_id=' . $user_id)->update();
