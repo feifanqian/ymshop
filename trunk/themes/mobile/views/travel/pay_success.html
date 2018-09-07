@@ -185,7 +185,7 @@
     .weui_input{
       text-align: center;
       display: inline-block;
-      width: 100px;
+      width: 110px;
       font-size: 22px;
       border: none;
       color: #666;
@@ -207,7 +207,7 @@
         <input type="hidden" name="cashier_id" value="">
         <input type="hidden" name="desk_id" value="">
         <input type="hidden" name="order_amount" id="order_amount" value="">
-        <p style="font-size: 20px;font-weight: bold;">向商家付款</p><p style="width: 80px;height: 80px;float: right;margin-top: -30px;"><img src="" width="80" height="80" style="border-radius: 80px;"></p>
+        <p style="font-size: 20px;font-weight: bold;">向商家付款</p><p style="width: 80px;height: 80px;float: right;margin-top: -30px;"><img src="/0.png" width="80" height="80" style="border-radius: 80px;"></p>
         <p style="font-size: 20px;color: #666;margin-top: 10px;">昵称：</p>
         <p style="font-size: 20px;font-weight: bold;margin-top: 20px;">金额</p>
         <div class="shuru">
@@ -247,5 +247,72 @@
         <input type='hidden' name='sign' id="sign" value='' />
         <input type='hidden' name='sign_type' id="sign_type" value='' />
     </form>
-    
+</div>
+</body>
+<script>
+    $(function(){
+        
+        //填写信息
+        $('.infor-sub').click(function(e){
+            $('.layer').hide();
+            $('.form').hide();
+            e.preventDefault();     //阻止表单提交
+        })
+        // 监听#div内容变化，改变支付按钮的颜色
+        $('#div').bind('DOMNodeInserted', function(){
+            if($("#div").text()!="" || $("#div").text()>'0'){
+                $('.submit').removeClass('active');
+                $('.submit').attr('disabled', false);
+            }else{
+                $('.submit').addClass('active');
+                $('.submit').attr('disabled', true);
+            }
+        })
+        $('#div').trigger('DOMNodeInserted');
+        $('.shuru').click(function(e){
+            // $('.layer-content').css('display','block');
+            $('.layer-content').show();
+            $('.layer-content').animate({
+                bottom: 0
+            }, 200)
+            e.stopPropagation();
+        });
+        $('.wrap').click(function(){
+            console.log(111);
+            // $('.layer-content').css('display','none');
+            $('.layer-content').hide();
+            $('.layer-content').animate({
+                bottom: '-410px'
+            }, 200)
+        })
+        
+        $('.form_edit .num').click(function(){
+            var oDiv = document.getElementById("div");
+            oDiv.innerHTML += this.innerHTML;
+            var amount=$('#div').html();
+            $("#order_amount").val(amount);
+            // var re=/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/;
+            // if(!re.test(amount)){
+            //     console.log('error');
+            //      return false;
+            // }
+        })
+        $('#remove').click(function(){
+            var oDiv = document.getElementById("div");
+            var oDivHtml = oDiv.innerHTML;
+            oDiv.innerHTML = oDivHtml.substring(0,oDivHtml.length-1);
+            var amounts=$('#div').html();
+            $("#order_amount").val(amounts);
+        });
+        $("#paytypes").select({
+            title: "选择支付方式",
+            items: {echo: json_encode($paydict); },
+            onChange: function () {
+                    var payment_id = $("#paytypes").attr("data-values");
+                    var payname = $("#paytypes").val();
+                    $("input[name='payment_id']").val($("#paytypes").attr("data-values"));
+                }
+        }); 
+    });
+</script>    
 </html>
