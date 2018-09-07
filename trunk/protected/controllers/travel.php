@@ -550,7 +550,7 @@ class TravelController extends Controller
     public function order_details() {
         $id = Filter::int(Req::args("id"));
         $user_id = Filter::int($this->user['id']);
-        $order = $this->model->table("order_offline")->where("id = $id and user_id= $user_id")->find();
+        $order = $this->model->table("order_offline")->where("id = ".$id)->find();
         if (!$order) {
             $this->redirect("/index/msg", false, array('type' => "fail", "msg" => '支付信息错误', "content" => "抱歉，找不到您的订单信息"));
             exit();
