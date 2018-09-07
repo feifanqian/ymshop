@@ -189,6 +189,12 @@
       border: none;
       color: #666;
     }
+    .test{
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+            background: #7c7eaa;
+        }
 </style>
 <script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
@@ -242,14 +248,6 @@
     </form>
     {if:$pay_type=='alipay'}
     <div class="test"></div>
-    <style type="text/css">
-       .tes{
-            width: 200px;
-            height: 200px;
-            margin: 10px auto;
-            background: #7c7eaa;
-        }
-    </style>
     <form id="paysubmit" name="paysubmit" action="https://mapi.alipay.com/gateway.do?_input_charset=utf-8" method="post">
         <input type='hidden' name='service' id="service" value='' />
         <input type='hidden' name='seller_id' id="seller_id" value='' />
