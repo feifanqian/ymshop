@@ -1196,9 +1196,17 @@ class TravelController extends Controller
         $password = Req::args('password');
         $repassword = Req::args('repassword');
         $mobile_code = Req::args('mobile_code');
+        $payment = Filter::int(Req::args('payment'));
         $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
         // var_dump(111);die;
+        if($payment==8) {
+            $had_bind= $this->model->table('customer')->where('mobile="$mobile" and status=1')->find();
+            if($had_bind) {
+                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该手机号已被绑定过了'));
+                exit;
+            }
+        }
         if($checkFlag || $mobile_code=='000000') {
             $another = $this->model->table('customer')->where("mobile='$mobile' and user_id!=".$user_id)->find();
             if($another) {
