@@ -246,8 +246,8 @@
             </div>
         </div>
     </form>
-    {if:$pay_type=='alipay'}
     <div class="test"></div>
+    {if:$pay_type=='alipay'}
     <form id="paysubmit" name="paysubmit" action="https://mapi.alipay.com/gateway.do?_input_charset=utf-8" method="post">
         <input type='hidden' name='service' id="service" value='' />
         <input type='hidden' name='seller_id' id="seller_id" value='' />

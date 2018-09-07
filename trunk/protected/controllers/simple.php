@@ -533,7 +533,8 @@ class SimpleController extends Controller {
                     'posttime' => time(),
                     'token' => $token['access_token'],
                     'expires' => $token['expires_in'],
-                    'open_id' => $token['openid']
+                    'open_id' => $token['openid'],
+                    'unionid' => $userinfo['unionid']
                 ))->insert();
             }
             Session::set('openname', $userinfo['open_name']);
