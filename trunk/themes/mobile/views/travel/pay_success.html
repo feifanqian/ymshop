@@ -304,15 +304,7 @@
             var amounts=$('#div').html();
             $("#order_amount").val(amounts);
         });
-        $("#paytypes").select({
-            title: "选择支付方式",
-            items: {echo: json_encode($paydict); },
-            onChange: function () {
-                    var payment_id = $("#paytypes").attr("data-values");
-                    var payname = $("#paytypes").val();
-                    $("input[name='payment_id']").val($("#paytypes").attr("data-values"));
-                }
-        }); 
+        
     });
 </script>    
 </html>
