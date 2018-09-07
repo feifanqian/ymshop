@@ -2073,86 +2073,80 @@ class UcenterController extends Controller
                         $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
                         exit;
                     } else {
-                        // $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
-                        $promoter1 = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
-                        $promoter2 = $this->model->table('district_promoter')->where('user_id='.$result['user_id'])->find();
-                        //智能分配微信账号
-                        if($promoter1 || $promoter2) {
-                           if($promoter1) { //分配$this->user['id']账号
-                              $customer = $this->model->table('customer')->where('user_id=' . $result['user_id'])->find();
-                              $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $this->user['id'])->update();
-                              $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $result['user_id'])->update();
-                              $this->model->table('oauth_user')->data(array('other_user_id' => $result['user_id']))->where('user_id=' . $this->user['id'])->update();
-                              Session::clear('verifiedInfo');
-                              Session::clear('activateObj');
-                              $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
-                              exit;
-                           } else { //分配$result['user_id']账号
-                              $customer = $this->model->table('customer')->where('user_id=' . $this->user['id'])->find();
-                              $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $result['user_id'])->update();
-                              $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $this->user['id'])->update();
-                              $this->model->table('oauth_user')->data(array('other_user_id' => $this->user['id']))->where('user_id=' . $this->user['id'])->update();
-                              $this->model->table('oauth_user')->data(array('user_id' => $result['user_id']))->where('other_user_id=' . $this->user['id'])->update();
-                              Session::clear('verifiedInfo');
-                              Session::clear('activateObj');
-                              $objs = $model->table("user as us")->join("left join customer as cu on us.id = cu.user_id left join oauth_user as ou on us.id=ou.user_id")->fields("us.*,cu.group_id,cu.login_time,cu.mobile,ou.open_id")->where("us.id=".$result['user_id'])->find();
-                              $this->safebox->set('user', $objs, 1800);
-                              $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
-                              exit;
-                           }
-                        } else {
-                            $customer = $this->model->table('customer')->where('user_id=' . $result['user_id'])->find();
-                            $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $this->user['id'])->update();
-                            $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $result['user_id'])->update();
-                            //将微信账号密码与手机账号密码同步，用于app端手机号登录时以微信账号登录
-                            // $user = $this->model->table('user')->fields('password,validcode')->where('id='.$result['user_id'])->find();
-                            // $this->model->table('user')->data(array('password' => $user['password'], 'validcode' => $user['validcode']))->where('id=' . $this->user['id'])->update();
-                            $this->model->table('oauth_user')->data(array('other_user_id' => $result['user_id']))->where('user_id=' . $this->user['id'])->update();
-                            Session::clear('verifiedInfo');
-                            Session::clear('activateObj');
-                            $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
-                            exit;
+                        $user_id = $this->user['id'];
+                        $had_bind= $this->model->table("customer")->where("mobile='{$mobile}' and status=1")->findAll();
+                        if($had_bind) {
+                            foreach ($had_bind as $key => $value) {
+                                $wechat = $this->model->table('oauth_user')->where("user_id=".$value['user_id']." and oauth_type='wechat'")->find();
+                                if($wechat) {
+                                    //微信公众号已绑定
+                                    $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该手机号已被绑定过了'));
+                                    exit;
+                                }
+                                $weixin = $this->model->table('oauth_user')->where("user_id=".$value['user_id']." and oauth_type='weixin'")->find();
+                                if($weixin) {
+                                    //微信app已绑定
+                                    $promoter1 = $this->model->table('district_promoter')->where('user_id='.$user_id)->find();
+                                    $promoter2 = $this->model->table('district_promoter')->where('user_id='.$weixin['user_id'])->find();
+                                    //智能分配微信账号
+                                    if($promoter1 || $promoter2) {
+                                        if($promoter1) { //分配$user_id账号
+                                            $customer = $this->model->table('customer')->where('user_id=' . $weixin['user_id'])->find();
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                            $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $weixin['user_id'])->update();
+                                            $this->model->table('oauth_user')->data(array('other_user_id' => $weixin['user_id']))->where('user_id=' . $user_id)->update();
+                                            $last_id = $user_id;    
+                                        } else { //分配$weixin['user_id']账号
+                                            $customer = $this->model->table('customer')->where('user_id=' . $user_id)->find();
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $weixin['user_id'])->update();
+                                            $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
+                                            $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
+                                            $this->model->table('oauth_user')->data(array('user_id' => $weixin['user_id']))->where('other_user_id=' . $user_id)->update();
+                                            $last_id = $weixin['user_id'];  
+                                        }
+                                    } else {
+                                        $customer1 = $this->model->table('customer')->where('user_id=' . $user_id)->find();
+                                        $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
+                                        //已注册时间早的为主
+                                        if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                            $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $value['user_id'])->update();   
+                                            $this->model->table('oauth_user')->data(array('other_user_id' => $value['user_id']))->where('user_id=' . $user_id)->update();
+                                            $last_id = $user_id;
+                                        } else {
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer1['balance']})",'offline_balance'=>"`offline_balance`+({$customer1['offline_balance']})"))->where('user_id=' . $value['user_id'])->update();
+                                            $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
+                                            $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
+                                            $this->model->table('oauth_user')->data(array('user_id' => $value['user_id']))->where('other_user_id=' . $user_id)->update();
+                                            $last_id = $value['user_id'];
+                                        }        
+                                    }
+                                }
+                                $oauth = $this->model->table('oauth_user')->where("user_id=".$value['user_id'])->find();
+                                if(!$oauth) {
+                                    $customer1 = $this->model->table('customer')->where('user_id=' . $user_id)->find();
+                                    $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
+                                    //绑定手机号
+                                    $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                    //已注册时间早的为主
+                                    if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
+                                        $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $value['user_id'])->update();   
+                                        $this->model->table('oauth_user')->data(array('other_user_id' => $value['user_id']))->where('user_id=' . $user_id)->update();
+                                        $last_id = $user_id;
+                                    } else {
+                                        $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
+                                        $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
+                                        $this->model->table('oauth_user')->data(array('user_id' => $value['user_id']))->where('other_user_id=' . $user_id)->update();
+                                        $last_id = $value['user_id'];
+                                    }
+                                }
+                            } 
                         }
                     }
                 }
             } else {
                 $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
             }
-
-            // if($obj == 'mobile' && Validator::mobi($account)){
-            //      $sms = SMS::getInstance();
-            //      $return = $sms->actionBindPhone($account,$code,$this->user['id']);
-            //      if($return['status']=='success'){
-            //         $result = $this->model->table('customer')->where("mobile ='" . $account . "'" . '  and user_id!=' . $this->user['id'])->find();
-            //         if (!$result) {
-            //             $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1))->where('user_id=' . $this->user['id'])->update();
-            //             Session::clear('verifiedInfo');
-            //             Session::clear('activateObj');
-            //             $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
-            //             exit;
-            //         } else {
-            //             $info = array('field' => 'account', 'msg' => '此手机号已被其它用户占用，无法修改为此手机号。');
-            //         }
-            //      }else{
-            //         $info = array('field' => 'account', 'msg' => $return['message']);
-            //     }
-            // }elseif($obj == 'email' && Validator::email($account)){
-            //     if ($code == $newCode && $account == $newAccount){
-            //         $result = $this->model->table('user')->where("email='" . $account . "' and id != " . $this->user['id'])->find();
-            //         if (!$result) {
-            //             $this->model->table('user')->data(array('email' => $account))->where('id=' . $this->user['id'])->update();
-            //             $this->model->table('customer')->data(array('email_verified' => 1))->where('user_id=' . $this->user['id'])->update();
-            //             Session::clear('verifiedInfo');
-            //             Session::clear('activateObj');
-            //             $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
-            //             exit;
-            //         } else {
-            //             $info = array('field' => 'account', 'msg' => '此邮箱已被其它用户占用，无法修改为此邮箱。');
-            //         }
-            //     }else{
-            //         $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
-            //     }
-            // }
         }
         $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random'], true, array('invalid' => $info, 'account' => $account));
     }

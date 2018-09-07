@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e7286e1-8ea1-416a-afb0-c86e85802771" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/protected/controllers/payment.php" afterPath="$PROJECT_DIR$/trunk/protected/controllers/payment.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/themes/mobile/views/travel/demo.html" afterPath="$PROJECT_DIR$/trunk/themes/mobile/views/travel/demo.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trunk/protected/controllers/ucenter.php" afterPath="$PROJECT_DIR$/trunk/protected/controllers/ucenter.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,13 +24,17 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="toastr.min.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/trunk/themes/mobile/js/toastr.min.js">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="ucenter.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/ucenter.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="2476" lean-forward="false" selection-start-line="0" selection-start-column="2471" selection-end-line="0" selection-end-column="2476" />
-              <folding />
+            <state relative-caret-position="-347">
+              <caret line="2083" column="41" lean-forward="true" selection-start-line="2083" selection-start-column="41" selection-end-line="2083" selection-end-column="41" />
+              <folding>
+                <marker date="1536322919256" expanded="true" signature="87378:87441" ph="update tiny_... " />
+                <marker date="1536322919256" expanded="true" signature="114556:114649" ph="select SUM(c... " />
+                <marker date="1536322919256" expanded="true" signature="152865:152929" ph="update tiny_... " />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -47,7 +50,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>change_status</find>
       <find>status_dialog</find>
       <find>goods_id</find>
       <find>remark</find>
@@ -77,6 +79,7 @@
       <find>redbag</find>
       <find>shop_check_do</find>
       <find>toast</find>
+      <find>update_obj_ac</find>
     </findStrings>
     <replaceStrings>
       <replace>id</replace>
@@ -140,11 +143,11 @@
         <option value="$PROJECT_DIR$/trunk/protected/config/config.php" />
         <option value="$PROJECT_DIR$/trunk/static/js/common.js" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/payment.php" />
-        <option value="$PROJECT_DIR$/trunk/protected/controllers/ucenter.php" />
         <option value="$PROJECT_DIR$/trunk/protected/actions/goods.php" />
         <option value="$PROJECT_DIR$/trunk/protected/classes/Common.php" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/customer.php" />
         <option value="$PROJECT_DIR$/trunk/protected/controllers/districtadmin.php" />
+        <option value="$PROJECT_DIR$/trunk/protected/controllers/ucenter.php" />
       </list>
     </option>
   </component>
@@ -200,6 +203,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -251,8 +256,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -368,11 +371,12 @@
       <workItem from="1533806045933" duration="84000" />
       <workItem from="1534829745866" duration="175000" />
       <workItem from="1536142056324" duration="37000" />
+      <workItem from="1536322860406" duration="149000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="506678000" />
+    <option name="totallyTimeSpent" value="506827000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -385,15 +389,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16302083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.074433655" sideWeight="0.51458335" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.074433655" sideWeight="0.51666665" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298913" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.074433655" sideWeight="0.48541668" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.074433655" sideWeight="0.48333332" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -652,13 +657,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/ucenter.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="3929" column="9" lean-forward="false" selection-start-line="3929" selection-start-column="9" selection-end-line="3929" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trunk/protected/classes/Common.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="580">
@@ -686,6 +684,18 @@
         <state relative-caret-position="0">
           <caret line="0" column="2476" lean-forward="false" selection-start-line="0" selection-start-column="2471" selection-end-line="0" selection-end-column="2476" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trunk/protected/controllers/ucenter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-347">
+          <caret line="2083" column="41" lean-forward="true" selection-start-line="2083" selection-start-column="41" selection-end-line="2083" selection-end-column="41" />
+          <folding>
+            <marker date="1536322919256" expanded="true" signature="87378:87441" ph="update tiny_... " />
+            <marker date="1536322919256" expanded="true" signature="114556:114649" ph="select SUM(c... " />
+            <marker date="1536322919256" expanded="true" signature="152865:152929" ph="update tiny_... " />
+          </folding>
         </state>
       </provider>
     </entry>
