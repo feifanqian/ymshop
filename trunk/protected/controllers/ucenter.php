@@ -175,7 +175,11 @@ class UcenterController extends Controller
                     $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
                 }
                 Session::set('pay_type', 'alipay');
-                $this->redirect("/ucenter/demo?inviter_id={$seller_id}");
+                if($seller_id==1) {
+                    $this->redirect("/travel/demo?inviter_id={$seller_id}");
+                } else {
+                    $this->redirect("/ucenter/demo?inviter_id={$seller_id}");
+                }  
                 exit;
             }
         } else {
