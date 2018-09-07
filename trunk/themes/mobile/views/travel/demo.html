@@ -655,15 +655,12 @@
 <div class="wrap">
     
     <form action="" method="post" id="payform" style="width: 90%;height: 400px;margin-left: 5%;background: #fff;padding-top: 40px;padding-left: 50px;padding-right: 50px;">
-    
-        <input type="hidden" name="order_no" value="">
-    
+        <input type="hidden" name="order_no" value="{$order_no}">
         <input type="hidden" name="payment_id" value="8">
-    
-        <input type="hidden" name="seller_id" value="">
-        <input type="hidden" name="seller_ids" value="">
-        <input type="hidden" name="cashier_id" value="">
-        <input type="hidden" name="desk_id" value="">
+        <input type="hidden" name="seller_id" value="{$seller_id}">
+        <input type="hidden" name="seller_ids" value="{$seller_ids}">
+        <input type="hidden" name="cashier_id" value="{$cashier_id}">
+        <input type="hidden" name="desk_id" value="{$desk_id}">
         <input type="hidden" name="order_amount" id="order_amount" value="">
         <p style="font-size: 20px;font-weight: bold;">向商家付款</p><p style="width: 80px;height: 80px;float: right;margin-top: -30px;"><img src="/0.png" width="80" height="80" style="border-radius: 80px;"></p>
         <p style="font-size: 20px;color: #666;margin-top: 10px;">昵称：</p>
