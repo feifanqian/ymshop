@@ -1199,7 +1199,9 @@ class TravelController extends Controller
         $payment = Filter::int(Req::args('payment'));
         $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
-        // var_dump(111);die;
+        if($user_id==140531) {
+            var_dump($payment);die;
+        }
         if($payment==8) {
             $had_bind= $this->model->table('customer')->where('mobile="$mobile" and status=1')->find();
             if($had_bind) {
