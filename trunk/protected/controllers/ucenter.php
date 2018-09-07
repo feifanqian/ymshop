@@ -2074,6 +2074,7 @@ class UcenterController extends Controller
                         exit;
                     } else {
                         $user_id = $this->user['id'];
+                        $mobile = $account;
                         $had_bind= $this->model->table("customer")->where("mobile='{$mobile}' and status=1")->findAll();
                         if($had_bind) {
                             foreach ($had_bind as $key => $value) {
