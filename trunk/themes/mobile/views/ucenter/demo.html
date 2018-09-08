@@ -189,7 +189,11 @@
     </form>
     {elseif:$third_pay==0}
     <!-- <form action="{url:/payment/yinpay}" method="post" id="payform"> -->
+    {if:$cash==1}
+    <form action="{url:/payment/dopays}" method="post" id="payform">
+    {else:}
     <form action="" method="post" id="payform">
+    {/if}
         <input type="hidden" name="order_no" value="{$order_no}">
         {if:$pay_type=='alipay'}
         <input type="hidden" name="payment_id" value="8">
@@ -222,8 +226,11 @@
                 </div>
             </div>
         </div>
-        <!-- <input type="submit" value="确认支付" class="submit" /> -->
+        {if:$cash==1}
+        <input type="submit" value="确认支付" class="submit" />
+        {else:}
         <input type="button" value="确认支付" class="submit" onclick="dopay()" />
+        {/if}
     </form>
     {if:$pay_type=='alipay'}
     <form id="paysubmit" name="paysubmit" action="https://mapi.alipay.com/gateway.do?_input_charset=utf-8" method="post">
