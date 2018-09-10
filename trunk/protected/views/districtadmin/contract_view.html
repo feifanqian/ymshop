@@ -9,7 +9,6 @@
         <a class="button" href="javascript:;" onclick="downloadIamge('.img1',{$contract['id']})" style="margin-right: 50px;"> 下载合约</a> 
         {if:$contract['status']==0}
         &nbsp;&nbsp;&nbsp;<a class="button" href="javascript:;" onclick="do_act({$contract['id']},1)" style="margin-right: 50px;"> 通过审核</a>
-        {else:}
         &nbsp;&nbsp;&nbsp;<a class="button" href="javascript:;" onclick="do_act({$contract['id']},-1)"> 拒绝审核</a>
         {/if}
     </div>
