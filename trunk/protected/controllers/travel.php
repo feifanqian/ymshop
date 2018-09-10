@@ -773,7 +773,8 @@ class TravelController extends Controller
     {
         $inviter = Filter::int(Req::args("inviter_id"));
         $msg = Filter::str(Req::args("msg"));
-         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false && !isset($this->user['id'])) {
+         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+            if(!isset($this->user['id'])) {
                 $redirect = "http://www.ymlypt.com/travel/bind_mobile?inviter_id=".$inviter;
                 // $this->autologin($redirect);
                 $code = Filter::sql(Req::args('code'));
@@ -823,46 +824,48 @@ class TravelController extends Controller
                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
                             $this->safebox->set('user', $obj, 31622400);
                             $this->user['id'] = $oauth_user['user_id'];
-                        }
-                        $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
-                        if($had_locked) {
-                            $locked = 1; //已锁
-                        } else {
-                            $locked = 2; //未锁
-                        }
-                        if($inviter){
-                            Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
-                        }
-                        $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
-                        $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
-                        $this->assign('mobile_verified',$customer['mobile_verified']);
-                        $this->assign('locked',$locked);
-                        $this->assign('seo_title',$seo_title);
-                        $this->assign('msg',$msg);
-                        $this->redirect();       
+                        }       
                     }
                     // return true;
                 } else {
                     header("Location: {$url}"); 
                     // $this->redirect($url);
-                }        
+                }
             } else {
-               //  $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
-               // $this->redirect('/travel/invite_register/inviter_id/{$inviter}');
-                $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
-                $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
                 $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
                 if($had_locked) {
                     $locked = 1; //已锁
                 } else {
                     $locked = 2; //未锁
                 }
+                if($inviter){
+                    Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
+                }
+                $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
+                $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
                 $this->assign('mobile_verified',$customer['mobile_verified']);
                 $this->assign('locked',$locked);
                 $this->assign('seo_title',$seo_title);
                 $this->assign('msg',$msg);
                 $this->redirect();
-            }
+            }        
+        } else {
+            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '请在微信中打开'));
+            exit;
+                // $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
+                // $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
+                // $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
+                // if($had_locked) {
+                //     $locked = 1; //已锁
+                // } else {
+                //     $locked = 2; //未锁
+                // }
+                // $this->assign('mobile_verified',$customer['mobile_verified']);
+                // $this->assign('locked',$locked);
+                // $this->assign('seo_title',$seo_title);
+                // $this->assign('msg',$msg);
+                // $this->redirect();
+        }
     }
 
     public function bind_mobile_act()
@@ -873,6 +876,7 @@ class TravelController extends Controller
         $repassword = Req::args('repassword');
         $inviter_id = Filter::int(Req::args("inviter"));
         $locked = Filter::int(Req::args("locked"));
+        $user_id = Filter::int(Req::args("user_id"));
         $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
         $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
         if($password!=$repassword) {
@@ -886,7 +890,6 @@ class TravelController extends Controller
             //  $this->model->table('customer')->where('user_id='.$this->user['id'])->data(['mobile'=>$mobile,'mobile_verified'=>1])->update();
             //  $validcode = CHash::random(8);
             //  $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $this->user['id'])->update();
-            $user_id = $this->user['id'];
             $had_bind= $this->model->table("customer")->where("mobile='{$mobile}' and status=1")->findAll();
             if($had_bind) {
                 foreach ($had_bind as $key => $value) {
@@ -955,6 +958,8 @@ class TravelController extends Controller
                     }
                 } 
             } else {
+                //绑定手机号
+                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1))->where('user_id=' . $user_id)->update();
                 $last_id = $user_id;
             }
             $validcode = CHash::random(8);
@@ -967,7 +972,7 @@ class TravelController extends Controller
         if($info['status']=='success') {
             $this->redirect('/travel/register_success?locked='.$locked);
         } else {
-            $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
+            $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$user_id)->find();
             $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
             $msg = '验证码错误！';
             $this->assign('mobile_verified',$customer['mobile_verified']);
@@ -1342,6 +1347,8 @@ class TravelController extends Controller
                     }
                 } 
             } else {
+                //绑定手机号
+                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1))->where('user_id=' . $user_id)->update();
                 $last_id=$user_id;
             }
             $validcode = CHash::random(8);
