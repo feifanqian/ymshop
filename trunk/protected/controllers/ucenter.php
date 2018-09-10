@@ -3537,14 +3537,14 @@ class UcenterController extends Controller
             }
         }
         $user_id = $this->user['id'];
-        $shop = $this->model->table('customer')->fields('real_name')->where('user_id=' . $inviter_id)->find();
+        $shop = $this->model->table('customer as c')->fields('c.real_name,u.nickname,u.avatar')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $inviter_id)->find();
 
         if ($shop) {
             $this->assign('shop_name', $shop['real_name']);
         } else {
             $this->assign('shop_name', '未知商家');
         }
-
+        $this->assign('avatar', $shop['avatar']); 
         $order_no = date('YmdHis') . rand(1000, 9999);
         // $jsApiParameters = Session::get('payinfo');
         // $this->assign("jsApiParameters",$jsApiParameters);
