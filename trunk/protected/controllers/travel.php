@@ -1341,6 +1341,8 @@ class TravelController extends Controller
                         }
                     }
                 } 
+            } else {
+                $last_id=$user_id;
             }
             $validcode = CHash::random(8);
             $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $last_id)->update();
