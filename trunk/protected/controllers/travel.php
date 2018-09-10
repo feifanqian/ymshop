@@ -960,10 +960,6 @@ class TravelController extends Controller
                     if(!$oauth) {
                         $customer1 = $this->model->table('customer')->where('user_id=' . $user_id)->find();
                         $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
-                        if(!$customer1 || !$customer2) {
-                            var_dump($user_id);
-                            var_dump($value['user_id']);die;
-                        }
                         //绑定手机号
                         $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
                         //已注册时间早的为主
@@ -1196,7 +1192,7 @@ class TravelController extends Controller
             } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false) {
                 //支付宝授权登录
                 if (isset($_GET['inviter_id']) && !isset($_GET['auth_code'])) {
-                    $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/ucenter/noRight&state=test&inviter_id=" . $_GET['inviter_id'];
+                    $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/travel/demo&state=test&inviter_id=" . $_GET['inviter_id'];
                     $this->redirect($act);
                     exit;
                 } else {
