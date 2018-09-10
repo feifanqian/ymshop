@@ -71,7 +71,7 @@
             return;
             $.modal({
             title: "邀请好友",
-                    text: '<img src="/user/buildinvite?uid={$user['id']|0}" width="100%" /><div><input type="text" value="{echo:Url::fullUrlFormat("/index/invite")}?uid={$user['id']|0}" onFocus="this.select();" class="input" style="width:100%;"/></div>',
+                    text: '<img src="/ucenter/buildinvite?uid={$user['id']|0}" width="100%" /><div><input type="text" value="{echo:Url::fullUrlFormat("/index/invite")}?uid={$user['id']|0}" onFocus="this.select();" class="input" style="width:100%;"/></div>',
                     buttons: [
                         {text: "关闭", onClick: function () {
 

@@ -12,7 +12,7 @@
         {/if}
         <div class="invite_avatar"><img src="{echo:Url::urlFormat('@'.$user['avatar'])}" /></div>
         <h3 class="invite_name">{$user['real_name']|$user['nickname']}</h3>
-        <div class="invite_qr"><img style="margin-top: -43px !important;" src="/user/buildinvite?uid={$user['id']|0}" /></div>
+        <div class="invite_qr"><img style="margin-top: -43px !important;" src="/ucenter/buildinvite?uid={$user['id']|0}" /></div>
     </div>
 </div>
 <script>

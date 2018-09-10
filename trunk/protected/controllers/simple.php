@@ -509,7 +509,7 @@ class SimpleController extends Controller {
                     $url = Cookie::get("url");//登录之前访问的页面不论有没有手机号
                     
                          // var_dump($url);die;
-                         if($url=='/user/index' || $url=='/user/order' || $url=='/ucenter/recharge_center'){
+                         if($url=='/ucenter/index' || $url=='/ucenter/order' || $url=='/ucenter/recharge_center'){
                             Session::set('notice',1);
                          }elseif($url==false){
                             Session::set('notice',1);
@@ -592,7 +592,7 @@ class SimpleController extends Controller {
                 }elseif($pid!=null){
                     $this->redirect("/index/product/id/{$pid}");
                 }elseif(strpos($str,'order')){
-                    $this->redirect("/user/order");
+                    $this->redirect("/ucenter/order");
                 }elseif(strpos($str,'district')){
                     $this->redirect("/district/login");
                 }elseif($jump_index!=null && $jump_index==1){

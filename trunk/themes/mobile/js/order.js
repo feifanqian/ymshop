@@ -148,7 +148,7 @@ $(function () {
                 function (res) {
                     if (res.err_msg == "edit_address:ok") {
                         $.ajax({
-                            url: "/user/address_wechat",
+                            url: "/ucenter/address_wechat",
                             type: 'POST',
                             data: res,
                             dataType: 'json',
