@@ -1100,6 +1100,144 @@ class PaymentController extends Controller {
        }     
     }
 
+    public function yinpay_ajax()
+    {
+        $payment_id = Filter::int(Req::args('payment_id'));
+           $order_no = Req::args('order_no');
+           $order_amount = Req::args('order_amount');
+           $randomstr=rand(1000000000000,9999999999999);
+           $seller_id = Filter::int(Req::args('seller_id'));//卖家用户id
+           $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
+           if(!$cashier_id) {
+            $cashier_id = 0;
+           }
+           $desk_id = Filter::int(Req::args('desk_id'));//收银员id
+           if(!$desk_id) {
+            $desk_id = 0;
+           }
+           if(!$seller_id || $seller_id==0){
+             $seller_id = Filter::int(Req::args('seller_ids'));
+           }
+           $user_id = $this->user['id'];
+           $invite=$this->model->table('invite')->where('invite_user_id='.$user_id)->find();
+           if($invite){
+               $invite_id=intval($invite['user_id']);//邀请人用户id
+           }else{
+               $invite_id=1;
+           }
+           Session::set('invite_id',$invite_id);
+           $user=$this->model->table('customer')->fields('mobile')->where('user_id='.$user_id)->find();
+           if($user){
+            $mobile=$user['mobile'];
+           }else{
+            $mobile='';
+           }
+           $accept_name = Session::get('openname');
+           $config = Config::getInstance()->get("district_set");
+           $data['type']=0;
+           $data['order_no'] = $order_no;
+           $data['user_id'] = $user_id;
+           $data['payment'] = $payment_id;
+           $data['status'] = 2;
+           $data['pay_status'] = 0;
+           $data['accept_name'] = $accept_name;
+           $data['mobile'] = $mobile;
+           $data['payable_amount'] = $order_amount;
+           $data['create_time'] = date('Y-m-d H:i:s');
+           $data['pay_time'] = date("Y-m-d H:i:s");
+           $data['handling_fee'] = round($order_amount*$config['handling_rate']/100,2);
+           $data['order_amount'] = $order_amount;
+           $data['real_amount'] = $order_amount;
+           $data['point'] = 0;
+           $data['voucher_id'] = 0;
+           $data['prom_id']=$invite_id;
+           $data['shop_ids']=$seller_id;
+           $data['third_pay'] = 2;
+           $data['cashier_id'] = $cashier_id;
+           $data['desk_id'] = $desk_id;
+           $model = new Model('order_offline');
+           $exist=$model->where('order_no='.$order_no)->find();
+           //防止重复生成同笔订单
+           if(!$exist){
+              $order_id=$model->data($data)->insert();
+           }else{
+              $order_id = $exist['id']; 
+           }
+           
+           $oauth_user=$this->model->table('oauth_user')->fields('open_id')->where('user_id='.$user_id)->find();
+           if($oauth_user){
+            $sub_openid=$oauth_user['open_id'];
+           }else{
+            $sub_openid='';
+           }
+
+           $myParams = array();
+            $myParams['charset'] = 'utf-8';
+            $myParams['method'] = 'ysepay.online.jsapi.pay';   
+            $myParams['partner_id'] = 'yuanmeng';
+            // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details/id/{$order_id}';
+            // $myParams['return_url'] = 'http://www.ymlypt.com/ucenter/order_details';
+            // $myParams['return_url'] = 'http://www.ymlypt.com/travel/order_details';
+            $myParams['sign_type'] = 'RSA';
+            $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+            $myParams['version'] = '3.0';
+            $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
+            $biz_content_arr = array(
+            "out_trade_no"=>$order_no,
+            "subject"=>'圆梦共享网',
+            "total_amount"=>$order_amount,
+            "currency"=>"CNY",
+            "seller_id"=>'yuanmeng',
+            "seller_name"=>'圆梦互联网科技（深圳）有限公司',
+            "timeout_express"=>'24h',
+            // "business_code"=>'3010001',
+            "business_code" => "01000010",
+            "sub_openid"=>$sub_openid,
+            );
+          if($payment_id==8){
+            $myParams['method'] = 'ysepay.online.wap.directpay.createbyuser';
+            $myParams['bank_type'] = "1903000";
+            $myParams['pay_mode'] = "native";
+            $myParams['out_trade_no'] = $order_no;
+            $myParams['subject'] = '圆梦共享网';
+            $myParams["total_amount"]=$order_amount;
+            $myParams["seller_id"]='yuanmeng';
+            $myParams["seller_name"]='圆梦互联网科技（深圳）有限公司';
+            $myParams["timeout_express"]='1d';
+            $myParams['business_code'] = '3010001'; 
+           }
+           if($payment_id==6){
+            $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+           }  
+    //        网银直连需添加以下参数
+    //        $myParams['pay_mode']           = 'internetbank';
+    //        $myParams['bank_type']           = '';
+    //        $myParams['bank_account_type']           = 'personal';
+    //        $myParams['support_card_type']           = 'debit';
+            ksort($myParams);
+            $data = $myParams;
+            $signStr = "";
+            foreach ($myParams as $key => $val) {
+                $signStr .= $key . '=' . $val . '&';
+            }
+            $signStr = rtrim($signStr, '&');
+            $sign = $this->sign_encrypt(array('data' => $signStr));
+            $myParams['sign'] = trim($sign['check']);
+        
+        $url = 'https://openapi.ysepay.com/gateway.do';
+        $ret = Common::httpRequest($url,'POST',$myParams);
+        $ret = json_decode($ret,true);
+
+        if($payment_id==6) {
+            $result = array(
+                'status'          => 0,
+                'jsApiParameters' => $ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'],
+                'order_id'        => $order_id
+                );
+            echo json_encode($result);
+        }
+    }
+
     public function yinpay_alipay(){
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
             $out_trade_no = $_GET['out_trade_no'];
