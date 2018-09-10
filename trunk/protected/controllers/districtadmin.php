@@ -2097,6 +2097,17 @@ class DistrictadminController extends Controller
         $this->redirect();
     }
 
+    public function contract_do()
+    {
+        $id = Filter::int(Req::args('id'));
+        $status = Filter::int(Req::args('status'));
+        $reason = Filter::str(Req::args('reason'));
+        $model = new Model();
+        $model->table('promoter_contract')->data(['status'=>$status,'reason'=>$reason])->where('id='.$id)->update();
+        echo json_encode(array("status" => 'success', 'msg' => '成功'));
+        exit();
+    }
+
     public function send_code_log()
     {
         $condition = Req::args("condition");

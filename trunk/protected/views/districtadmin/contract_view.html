@@ -4,6 +4,16 @@
 {echo:JS::import('dialogtools');}
 <div id="obj_form" class="form2 tab">
     <h1 class="page_title">商户合约</h1>
+    {if:isset($contract['url4']) and $contract['url4']!=null}
+    <div class="tools_bar clearfix">
+        <input type="button" value="下载合约" class="icon-print" onclick="downloadIamge('.img1',{$contract['id']})">  
+        {if:$contract['status']==0}
+        <a class="button" href="javascript:;" onclick="do_act({$contract['id']},1)"> 通过审核</a>
+        {else:}
+        <a class="button" href="javascript:;" onclick="do_act({$contract['id']},-1)"> 拒绝审核</a>
+        {/if}
+    </div>
+    {/if}
     <!-- <form action="{url:/districtadmin/shop_check_dos}" method="post" > -->
         <input type="hidden" name="id" value="{$contract['id']}">
         <input type="hidden" name="status" value="1">
@@ -11,7 +21,7 @@
         <dl class="lineD">
             <dt>合约：</dt>
             <dd>
-                <img src="{$contract['url4']}" width="1080" height="4574">      
+                <img src="{$contract['url4']}" width="540" height="2287" class="img1">      
             </dd>
         </dl>
         {else:}
@@ -25,5 +35,39 @@
     <!-- </form> -->
 </div>
 <script type="text/javascript">
+function do_act(id,status){
+    if(status==-1) {
+        layer.prompt({title: '请输入作废理由', formType: 2}, function(reason, index){
+        layer.close(index);
+    }else{
+        var reason = '';
+    }
 
+     var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+     $.post("{url:/districtadmin/contract_do}",{id:id,status:status,reason:reason},function(data){
+            layer.close(index);
+            if(data.status=='success'){
+                window.location='{url:/districtadmin/list_promoter}';
+            // layer.msg('您拒绝了认证申请，理由是：'+reason, {icon: 6},function(){
+            //     window.location='{url:/districtadmin/list_promoter}';
+            // }); 
+          }else{
+            layer.msg(data.msg, {icon: 5}); 
+          }
+        },'json');
+   });
+}
+function downloadIamge(selector, id) {
+    var name = id+".png";  
+    // 通过选择器获取img元素，  
+    var img = document.querySelector(selector);  
+    // 将图片的src属性作为URL地址  
+    var url = img.src;  
+    var a = document.createElement('a');  
+    var event = new MouseEvent('click'); 
+      
+    a.download = name || '下载图片名称';  
+    a.href = url;  
+      
+    a.dispatchEvent(event); 
 </script>
