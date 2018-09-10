@@ -836,6 +836,7 @@ class TravelController extends Controller
                         }
                         $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
                         $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
+                        $this->assign('user_id',$user_id);
                         $this->assign('mobile_verified',$customer['mobile_verified']);
                         $this->assign('locked',$locked);
                         $this->assign('seo_title',$seo_title);
@@ -859,6 +860,7 @@ class TravelController extends Controller
                 }
                 $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
                 $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
+                $this->assign('user_id',$user_id);
                 $this->assign('mobile_verified',$customer['mobile_verified']);
                 $this->assign('locked',$locked);
                 $this->assign('seo_title',$seo_title);
