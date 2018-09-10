@@ -256,7 +256,16 @@
         var seller_id = $('input[name=seller_id]').val();
         var order_amount = $('input[name=order_amount]').val();
         var pay_type = "{$pay_type}";
-        $.post('{url:/payment/dopays_ajax}',{order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},function(ret){
+        var user_id = "{$user_id}";
+        var third_pay = "{$third_pay}";
+        var url = '{url:/payment/dopays_ajax}';
+        if(user_id==42608) {
+            url = '{url:/payment/yinpay_ajax}';
+        }
+        $.post(
+            url,
+            {order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},
+            function(ret){
              if(pay_type=='wechat') {
                  var res = JSON.stringify(ret);
                  res = JSON.parse(res);
