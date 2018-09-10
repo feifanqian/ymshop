@@ -824,7 +824,23 @@ class TravelController extends Controller
                             $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
                             $this->safebox->set('user', $obj, 31622400);
                             $this->user['id'] = $oauth_user['user_id'];
-                        }       
+                        }
+                        $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
+                        if($had_locked) {
+                            $locked = 1; //已锁
+                        } else {
+                            $locked = 2; //未锁
+                        }
+                        if($inviter){
+                            Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
+                        }
+                        $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
+                        $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
+                        $this->assign('mobile_verified',$customer['mobile_verified']);
+                        $this->assign('locked',$locked);
+                        $this->assign('seo_title',$seo_title);
+                        $this->assign('msg',$msg);
+                        $this->redirect();       
                     }
                     // return true;
                 } else {
