@@ -6,11 +6,11 @@
     <h1 class="page_title">商户合约</h1>
     {if:isset($contract['url4']) and $contract['url4']!=null}
     <div class="tools_bar clearfix">
-        <input type="button" value="下载合约" class="icon-print" onclick="downloadIamge('.img1',{$contract['id']})">  
+        <a class="button" href="javascript:;" onclick="downloadIamge('.img1',{$contract['id']})"> 下载合约</a> 
         {if:$contract['status']==0}
-        <a class="button" href="javascript:;" onclick="do_act({$contract['id']},1)"> 通过审核</a>
+        &nbsp;&nbsp;&nbsp;<a class="button" href="javascript:;" onclick="do_act({$contract['id']},1)"> 通过审核</a>
         {else:}
-        <a class="button" href="javascript:;" onclick="do_act({$contract['id']},-1)"> 拒绝审核</a>
+        &nbsp;&nbsp;&nbsp;<a class="button" href="javascript:;" onclick="do_act({$contract['id']},-1)"> 拒绝审核</a>
         {/if}
     </div>
     {/if}
