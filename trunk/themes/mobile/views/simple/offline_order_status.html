@@ -122,7 +122,8 @@
     $(function () {
         $("#submitForm").click(function(){
              // $("#payform").submit();
-             location.href = "{url:/ucenter/demo/inviter_id/{$order['shop_ids']}}";
+             var shop_ids = "{$order['shop_ids']}";
+             location.href = "{url:/ucenter/demo/inviter_id/}"+shop_ids;
         });
         $("#paytype").select({
             title: "选择支付方式",
