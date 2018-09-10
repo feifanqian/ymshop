@@ -24,6 +24,7 @@ class CashierAction extends Controller
         	$this->code = 1239;
             return;
         }
+        $name = Filter::str(Req::args('name'));
         $job_no_exist = $this->model->table('cashier')->where("job_no=".$job_no." and hire_user_id=".$this->user['id']." and status=1")->find();
         if($job_no_exist) {
         	$this->code = 1240;
@@ -60,6 +61,7 @@ class CashierAction extends Controller
         }
         $data = array(
         	'user_id'=>$cashier['user_id'],
+            'name'=>$name,
         	'hire_promoter_id'=>$promoter['id'],
         	'hire_user_id'=>$this->user['id'],
         	'mobile'=>$mobile,
@@ -185,6 +187,7 @@ class CashierAction extends Controller
     //添加收银台
     public function add_cashier_desk()
     {
+        $desk_name = Filter::str(Req::args('desk_name'));
     	$count = $this->model->table('cashier_desk')->where('hire_user_id='.$this->user['id'])->count();
     	if($count>=9) {
     		$this->code = 1245;
@@ -226,6 +229,7 @@ class CashierAction extends Controller
             return;
         }
         $data = array(
+            'desk_name'=>$desk_name,
         	'hire_promoter_id'=>$promoter['id'],
         	'hire_user_id'=>$this->user['id'],
         	'desk_no'=>$desk_no,
@@ -241,10 +245,29 @@ class CashierAction extends Controller
         }
     }
 
+    //删除收银台
+    public function cashier_desk_del()
+    {
+        $id = Filter::int(Req::args('id'));
+        $this->model->table('cashier_desk')->data(['status'=>0])->where('id='.$id)->update();
+        $this->code = 0;
+        return;
+    }
+
+    //修改收银台名字
+    public function cashier_desk_edit()
+    {
+        $id = Filter::int(Req::args('id'));
+        $desk_name = Filter::str(Req::args('desk_name'));
+        $this->model->table('cashier_desk')->data(['desk_name'=>$desk_name])->where('id='.$id)->update();
+        $this->code = 0;
+        return;
+    }
+
     //收银台列表
     public function cashier_desk_list()
     {
-    	$list = $this->model->table('cashier_desk')->fields('id,desk_no,cashier_id')->where('hire_user_id='.$this->user['id'])->findAll();
+    	$list = $this->model->table('cashier_desk')->fields('id,desk_no,desk_name,cashier_id')->where('hire_user_id='.$this->user['id'].' and status=1')->findAll();
         $today = date('Y-m-d');
         if($list) {
             foreach ($list as $k => $v) {
@@ -349,7 +372,7 @@ class CashierAction extends Controller
             //     $this->code = 1247;
             //     return;
             // }
-            $desk = $this->model->table('cashier_desk')->fields('id')->where("hire_user_id=".$cashier['hire_user_id']." and desk_no like '%$desk_no%'")->find();
+            $desk = $this->model->table('cashier_desk')->fields('id')->where("hire_user_id=".$cashier['hire_user_id']." and status=1 and desk_no like '%$desk_no%'")->find();
             if(!$desk) {
                 $this->code = 1252;
                 return;
@@ -440,7 +463,7 @@ class CashierAction extends Controller
             $this->code = 1250;
             return;
         }
-        $list = $this->model->table('cashier_desk')->fields('id,desk_no,cashier_id')->where('hire_user_id='.$cashier['hire_user_id'])->findAll();
+        $list = $this->model->table('cashier_desk')->fields('id,desk_no,desk_name,cashier_id')->where('hire_user_id='.$cashier['hire_user_id'].' and status=1')->findAll();
         $today = date('Y-m-d');
         if($list) {
             foreach ($list as $k => $v) {
