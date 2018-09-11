@@ -1280,10 +1280,10 @@ class PaymentController extends Controller {
         } else {
             $sendData = $_GET;
             unset($sendData['con'], $sendData['act']);
-            echo "<pre>";
-            print_r($sendData);
-            echo "<pre>";
-            die;
+            // echo "<pre>";
+            // print_r($sendData);
+            // echo "<pre>";
+            // die;
             $this->assign("sendData", $sendData);
             $this->redirect();
         }
