@@ -3,7 +3,7 @@
 {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
 <div id="obj_form" class="form2 tab">
-    <h1 class="page_title">商户合约(状态：$status[$contract['status']])</h1>
+    <h1 class="page_title">商户合约(状态：{$status[$contract['status']]})</h1>
     {if:isset($contract['url4']) and $contract['url4']!=null}
     <div class="tools_bar clearfix">
         <a class="button" href="javascript:;" onclick="downloadIamge('.img1',{$contract['id']})" style="margin-right: 50px;"> 下载合约</a> 
