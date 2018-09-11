@@ -642,6 +642,14 @@ class IndexAction extends Controller {
 
     public function article_list()
     {
+        $url = "http://193.112.121.99/xiaocao/hightapi.action"; 
+        $array = get_headers($url,1); 
+        if(preg_match('/200/',$array[0])){ 
+            echo "<pre/>"; 
+            print_r($array); 
+        }else{ 
+            echo "无效url资源！"; 
+        }
         $category_id = Filter::int(Req::args('category_id'));
         $where = '1=1';
         if($category_id) {
