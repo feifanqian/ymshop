@@ -19,22 +19,23 @@ class CashierAction extends Controller
             $this->code = 1024;
             return;
         }
-        $job_no = Filter::str(Req::args('job_no'));
-        if(!$job_no) {
-        	$this->code = 1239;
-            return;
-        }
-        $name = Filter::str(Req::args('name'));
-        $job_no_exist = $this->model->table('cashier')->where("job_no=".$job_no." and hire_user_id=".$this->user['id']." and status=1")->find();
-        if($job_no_exist) {
-        	$this->code = 1240;
-            return;
-        }
+        // $job_no = Filter::str(Req::args('job_no'));
+        // if(!$job_no) {
+        // 	$this->code = 1239;
+        //     return;
+        // }
+        // $name = Filter::str(Req::args('name'));
+        // $job_no_exist = $this->model->table('cashier')->where("job_no=".$job_no." and hire_user_id=".$this->user['id']." and status=1")->find();
+        // if($job_no_exist) {
+        // 	$this->code = 1240;
+        //     return;
+        // }
         $cashier = $this->model->table('customer')->fields('user_id')->where('status=1 and mobile='.$mobile)->find();
         if(!$cashier) {
         	$this->code = 1159;
             return;
         }
+        $job_no = $cashier.rand(1000,9999);
         if($cashier['user_id']==$this->user['id']) {
             $this->code = 1265;
             return;
