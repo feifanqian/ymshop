@@ -563,15 +563,26 @@ class PaymentAction extends Controller {
     } else {
         $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
     }
-    $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no')->where('user_id='.$user_id)->find();
+    $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no,join_time')->where('user_id='.$user_id)->find();
     if($promoter['qrcode_no']=='') {
         $no = '0000'.$promoter['id'].rand(1000,9999);
         $this->model->table('district_promoter')->data(array('qrcode_no'=>$no))->where('id='.$promoter['id'])->update();
     }
     $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no')->where('user_id='.$user_id)->find();
+    if(strtotime($promoter['join_time'])<=strtotime(date('2018-09-11'))) {
+        $status = 1;
+    } else {
+        $contract = $this->model->table('promoter_contract')->where('user_id='.$user_id)->find();
+        if($contract) {
+            $status = $contract['status'];
+        } else {
+            $status = -1;
+        }
+    }
     $this->code = 0;
     $this->content['url'] = $url;
     $this->content['qrcode_no'] = $promoter?$promoter['qrcode_no']:'0000';
+    $this->content['status'] = $status;
    }
 
     //余额支付
