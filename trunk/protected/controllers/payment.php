@@ -1235,6 +1235,29 @@ class PaymentController extends Controller {
                 'order_id'        => $order_id
                 );
             echo json_encode($result);
+        } else {
+            $return_url = 'http://www.ymlypt.com/travel/order_details';
+            $result = array(
+                'sign'           => $myParams['sign'],
+                'business_code'  => $biz_content_arr['business_code'],
+                'charset'        => $myParams['charset'],
+                'method'         => $myParams['method'],
+                'notify_url'     => $myParams['notify_url'],
+                'out_trade_no'   => $myParams['out_trade_no'],
+                'partner_id'     => $myParams['partner_id'],
+                'return_url'     => $return_url,
+                'seller_id'      => $myParams['seller_id'],
+                'seller_name'    => $myParams['seller_name'],
+                'sign_type'      => $myParams['sign_type'],
+                'subject'        => $myParams['subject'],
+                'timeout_express'=> $myParams['timeout_express'],
+                'timestamp'      => $myParams['timestamp'],
+                'total_amount'   => $myParams['total_amount'],
+                'version'        => $myParams['version'],
+                'bank_type'      => $myParams['bank_type'],
+                'pay_mode'       => $myParams['pay_mode'],
+                );
+            echo json_encode($result);
         }
     }
 

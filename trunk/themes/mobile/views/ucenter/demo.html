@@ -233,21 +233,45 @@
         {/if}
     </form>
     {if:$pay_type=='alipay'}
-    <form id="paysubmit" name="paysubmit" action="https://mapi.alipay.com/gateway.do?_input_charset=utf-8" method="post">
-        <input type='hidden' name='service' id="service" value='' />
-        <input type='hidden' name='seller_id' id="seller_id" value='' />
-        <input type='hidden' name='partner' id="partner" value='' />
-        <input type='hidden' name='_input_charset' id="_input_charset" value='' />
-        <input type='hidden' name='payment_type' id="payment_type" value='' />
-        <input type='hidden' name='return_url' id="return_url" value='' />
-        <input type='hidden' name='notify_url' id="notify_url" value='' />
-        <input type='hidden' name='subject' id="subject" value='' />
-        <input type='hidden' name='out_trade_no' id="out_trade_no" value='' />
-        <input type='hidden' name='total_fee' id="total_fee" value='' />
-        <input type='hidden' name='show_url' id="show_url" value='' />
-        <input type='hidden' name='sign' id="sign" value='' />
-        <input type='hidden' name='sign_type' id="sign_type" value='' />
-    </form>
+        {if:$user_id!=140531}
+        <form id="paysubmit" name="paysubmit" action="https://mapi.alipay.com/gateway.do?_input_charset=utf-8" method="post">
+            <input type='hidden' name='service' id="service" value='' />
+            <input type='hidden' name='seller_id' id="seller_id" value='' />
+            <input type='hidden' name='partner' id="partner" value='' />
+            <input type='hidden' name='_input_charset' id="_input_charset" value='' />
+            <input type='hidden' name='payment_type' id="payment_type" value='' />
+            <input type='hidden' name='return_url' id="return_url" value='' />
+            <input type='hidden' name='notify_url' id="notify_url" value='' />
+            <input type='hidden' name='subject' id="subject" value='' />
+            <input type='hidden' name='out_trade_no' id="out_trade_no" value='' />
+            <input type='hidden' name='total_fee' id="total_fee" value='' />
+            <input type='hidden' name='show_url' id="show_url" value='' />
+            <input type='hidden' name='sign' id="sign" value='' />
+            <input type='hidden' name='sign_type' id="sign_type" value='' />
+        </form>
+        {else:}
+        <!-- 银盛支付宝支付 -->
+        <form id="paysubmit" name="paysubmit" action="{url:/payment/yinpay_alipay}" method="get">
+                    <input type="hidden" name="sign"          value="" />
+                    <input type="hidden" name="business_code" value="" />
+                    <input type="hidden" name="charset"     value=""/>
+                    <input type="hidden" name="method"      value=""/>
+                    <input type="hidden" name="notify_url" id="notify_url" value=""/>
+                    <input type="hidden" name="out_trade_no"  value=""/>
+                    <input type="hidden" name="partner_id" value=""/>
+                    <input type="hidden" name="return_url"    value="">
+                    <input type="hidden" name="seller_id" value=""/>
+                    <input type="hidden" name="seller_name"     value=""/>
+                    <input type="hidden" name="sign_type"    value=""/>
+                    <input type="hidden" name="subject"  value=""/>
+                    <input Type="hidden" name="timeout_express"  value=""/>
+                    <input Type="hidden" name="timestamp"  value=""/>
+                    <input Type="hidden" name="total_amount" value=""/>
+                    <input Type="hidden" name="version"  value=""/>
+                    <input Type="hidden" name="bank_type"  value=""/>
+                    <input Type="hidden" name="pay_mode"  value=""/>
+        </form>
+        {/if}
     {/if}
     <script type="text/javascript">
     function dopay(){
@@ -277,6 +301,7 @@
                     return false;
                  }
             } else {
+                if(user_id!=140531) {
                 var res = JSON.stringify(ret);
                 res = JSON.parse(res);
                 $("#service").val(res.service);
@@ -293,6 +318,30 @@
                 $("#sign").val(res.sign);
                 $("#sign_type").val(res.sign_type);
                 document.forms['paysubmit'].submit();
+               } else {
+                //银盛支付宝支付
+                var res = JSON.stringify(ret);
+                res = JSON.parse(res);
+                $("#sign").val(res.sign);
+                $("#business_code").val(res.business_code);
+                $("#charset").val(res.charset);
+                $("#method").val(res.method);
+                $("#notify_url").val(res.notify_url);
+                $("#out_trade_no").val(res.out_trade_no);
+                $("#partner_id").val(res.partner_id);
+                $("#return_url").val(res.return_url);
+                $("#seller_id").val(res.seller_id);
+                $("#seller_name").val(res.seller_name);
+                $("#sign_type").val(res.sign_type);
+                $("#subject").val(res.subject);
+                $("#timeout_express").val(res.timeout_express);
+                $("#timestamp").val(res.timestamp);
+                $("#total_amount").val(res.total_amount);
+                $("#version").val(res.version);
+                $("#bank_type").val(res.bank_type);
+                $("#pay_mode").val(res.pay_mode);
+                document.forms['paysubmit'].submit();
+               }
             }
         },'json');
     }
