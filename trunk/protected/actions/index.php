@@ -639,4 +639,22 @@ class IndexAction extends Controller {
         $this->content['path'] = $arr;
         $this->content['set'] = $set;
     }
+
+    public function article_list()
+    {
+        $category_id = Filter::int(Req::args('category_id'));
+        $where = '1=1';
+        if($category_id) {
+            $where = 'category_id='.$category_id;
+        }
+        $list = $this->model->table('article')->where($where)->findAll();
+        if($list) {
+            foreach ($list as $key => $value) {
+                $list[$key]['content'] = strip_tags(htmlspecialchars_decode($value['content']));
+                $list[$key]['content'] = str_replace('&nbsp;',' ',$value['content']);
+            }
+        }
+        $this->code = 0;
+        $this->content['list'] = $list;
+    }
 }

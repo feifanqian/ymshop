@@ -22,7 +22,9 @@
                     <li><a class="icon-pencil" href="{url:/content/article_edit/id/$item[id]}"> 编辑</a></li>
                     <li><a class="icon-remove-2" href="javascript:confirm_action('{url:/content/article_del/id/$item[id]}')"> 删除</a></li>
                 </ul></div></div> </td>
-        <td><a href="{url:/index/article/id/$item[id]}" target="_blank">{$item['title']}</a></td><td>{$categorys[$item['category_id']]|'默认分类'}</td><td>{$item['publish_time']}</td></tr>
+        <td><a href="{url:/index/article/id/$item[id]}" target="_blank">{$item['title']}</a></td>
+        <td>{$categorys[$item['category_id']]|'默认分类'}</td>
+        <td>{$item['publish_time']}</td></tr>
     {/query}
 </table>
 <div class="page_nav">

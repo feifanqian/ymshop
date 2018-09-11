@@ -999,7 +999,7 @@ class GoodsAction extends Controller {
   
         // $params = ['token' => $access_token, 'item_id' => $item_id, 'adzone_id' => $taoke['adzoneid'], 'site_id' => $taoke['siteid'], 'qq' => '2116177952'];
         $params = ['token' => $access_token, 'item_id' => $item_id, 'adzone_id' => $taoke['adzoneid'], 'site_id' => $taoke['siteid'], 'qq' => '1223354181'];
-        $req_url = $main_hightapi_url . "?" . http_build_query($params);
+        $req_url = $bak_hightapi_url . "?" . http_build_query($params);
 
         // $return = json_decode(file_get_contents($req_url), true);
         $return = json_decode(Common::httpRequest($req_url,'GET'),true);

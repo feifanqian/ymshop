@@ -304,6 +304,8 @@ class V1Controller extends Controller {
         "dynamic_click_laud"=>array("map/dynamic_click_laud",1,1), //商圈动态点赞
         "dynamic_comment"=>array("map/dynamic_comment",1,1), //商圈动态发布评论
         "area_list"=>array("map/area_list",0,1), //地区列表
+        //帮助建议
+        "article_list"=>array("index/article_list",0,1), //帮助建议文章
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息
