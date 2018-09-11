@@ -568,7 +568,7 @@ class PaymentAction extends Controller {
         $no = '0000'.$promoter['id'].rand(1000,9999);
         $this->model->table('district_promoter')->data(array('qrcode_no'=>$no))->where('id='.$promoter['id'])->update();
     }
-    $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no')->where('user_id='.$user_id)->find();
+    
     if(strtotime($promoter['join_time'])<=strtotime(date('2018-09-11'))) {
         $status = 1;
     } else {
