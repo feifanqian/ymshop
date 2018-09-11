@@ -283,7 +283,7 @@
         var user_id = "{$user_id}";
         var third_pay = "{$third_pay}";
         var url = '{url:/payment/dopays_ajax}';
-        if(user_id==42608) {
+        if(user_id==42608 || user_id==140531) {
             url = '{url:/payment/yinpay_ajax}';
         }
         $.post(
