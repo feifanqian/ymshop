@@ -322,6 +322,7 @@
                 //银盛支付宝支付
                 var res = JSON.stringify(ret);
                 res = JSON.parse(res);
+                alert(res.business_code);
                 $("#sign").val(res.sign);
                 $("#business_code").val(res.business_code);
                 $("#charset").val(res.charset);
