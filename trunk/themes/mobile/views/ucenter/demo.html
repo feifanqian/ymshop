@@ -252,24 +252,24 @@
         {else:}
         <!-- 银盛支付宝支付 -->
         <form id="paysubmit" name="paysubmit" action="{url:/payment/yinpay_alipay}" method="get">
-                    <input type="hidden" name="sign"          value="" />
-                    <input type="hidden" name="business_code" value="" />
-                    <input type="hidden" name="charset"     value=""/>
-                    <input type="hidden" name="method"      value=""/>
+                    <input type="hidden" name="sign" id="sign" value="" />
+                    <input type="hidden" name="business_code" id="business_code" value="" />
+                    <input type="hidden" name="charset" id="charset" value=""/>
+                    <input type="hidden" name="method" id="method" value=""/>
                     <input type="hidden" name="notify_url" id="notify_url" value=""/>
-                    <input type="hidden" name="out_trade_no"  value=""/>
-                    <input type="hidden" name="partner_id" value=""/>
-                    <input type="hidden" name="return_url"    value="">
-                    <input type="hidden" name="seller_id" value=""/>
-                    <input type="hidden" name="seller_name"     value=""/>
-                    <input type="hidden" name="sign_type"    value=""/>
-                    <input type="hidden" name="subject"  value=""/>
-                    <input Type="hidden" name="timeout_express"  value=""/>
-                    <input Type="hidden" name="timestamp"  value=""/>
-                    <input Type="hidden" name="total_amount" value=""/>
-                    <input Type="hidden" name="version"  value=""/>
-                    <input Type="hidden" name="bank_type"  value=""/>
-                    <input Type="hidden" name="pay_mode"  value=""/>
+                    <input type="hidden" name="out_trade_no"  id="out_trade_no" value=""/>
+                    <input type="hidden" name="partner_id" id="partner_id" value=""/>
+                    <input type="hidden" name="return_url" id="return_url" value="">
+                    <input type="hidden" name="seller_id" id="seller_id" value=""/>
+                    <input type="hidden" name="seller_name" id="seller_name"  value=""/>
+                    <input type="hidden" name="sign_type" id="sign_type" value=""/>
+                    <input type="hidden" name="subject" id="subject" value=""/>
+                    <input Type="hidden" name="timeout_express" id="timeout_express" value=""/>
+                    <input Type="hidden" name="timestamp" id="timestamp" value=""/>
+                    <input Type="hidden" name="total_amount" id="total_amount" value=""/>
+                    <input Type="hidden" name="version" id="version" value=""/>
+                    <input Type="hidden" name="bank_type" id="bank_type" value=""/>
+                    <input Type="hidden" name="pay_mode" id="pay_mode" value=""/>
         </form>
         {/if}
     {/if}
