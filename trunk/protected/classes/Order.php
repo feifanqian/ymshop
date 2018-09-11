@@ -271,7 +271,7 @@ class Order {
                  self::updateCommission(1,$order['id'],$order['user_id']); 
             }
              */
-            if($order['type']==0){
+            if($order['type']!=1){
                 // Common::setIncomeByInviteShip($order);
                 Common::setIncomeByInviteShipEachGoods($order);
                 if($order['qr_flag']==""){
