@@ -702,9 +702,17 @@ class TravelController extends Controller
         $access_token = $config['access_token'];
         $main_hightapi_url = 'http://193.112.121.99/xiaocao/hightapi.action';
         $bak_hightapi_url = 'http://119.29.94.164/xiaocao/hightapi.action';
-  
+        
+        //判断接口服务器状态
+        $array = get_headers($main_hightapi_url,1); 
+        if(preg_match('/200/',$array[0])){ 
+            $hightapi_url = $main_hightapi_url;
+        }else{
+        //启用备份服务器接口   
+            $hightapi_url = $bak_hightapi_url;
+        }
         $params = ['token' => $access_token, 'item_id' => $num_iid, 'adzone_id' => $taoke['adzoneid'], 'site_id' => $taoke['siteid'], 'qq' => '1223354181'];
-        $req_url = $bak_hightapi_url . "?" . http_build_query($params);
+        $req_url = $hightapi_url . "?" . http_build_query($params);
 
         $return = json_decode(file_get_contents($req_url), true);    
 
