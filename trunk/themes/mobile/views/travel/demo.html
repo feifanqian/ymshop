@@ -238,14 +238,13 @@
         var user_id = "{$user_id}";
         var third_pay = "{$third_pay}";
         var url = '{url:/payment/dopays_ajax}';
-        // if(user_id==42608) {
-        //     url = '{url:/payment/yinpay_ajax}';
-        // }
+        if(user_id==42608) {
+            url = '{url:/payment/yinpay_ajax}';
+        }
         $.post(
             url,
             {order_no:order_no,payment_id:payment_id,seller_id:seller_id,order_amount:order_amount},
             function(ret){
-            
                 var res = JSON.stringify(ret);
                  res = JSON.parse(res);
                  if(res.status==0){
@@ -255,7 +254,6 @@
                  }else{
                     return false;
                  }
-            
         },'json');
     }
                     //调用微信JS api 支付
