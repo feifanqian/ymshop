@@ -261,10 +261,10 @@ class DistrictAction extends Controller {
                 $this->code = 1175;
                 return;
             }
-            if(time()>strtotime($promoter_code['end_date'])){
-                $this->code = 1176;
-                return;
-            }
+            // if(time()>strtotime($promoter_code['end_date'])){
+            //     $this->code = 1176;
+            //     return;
+            // }
             if($promoter_code['status']==0){
                 $this->code = 1177;
                 return;
@@ -520,5 +520,21 @@ class DistrictAction extends Controller {
         $user_id = Filter::int(Req::args('user_id'));
         $this->code = 0;
         $this->content['district_arr'] = $this->getMyThreeDistricters($user_id);
+    }
+
+    public function judge_code()
+    {
+        $code = Filter::str(Req::args('code'));
+        $promoter_code = $this->model->table('promoter_code')->where("code ='{$code}'")->find();
+        if(!$promoter_code){
+            $this->code = 1175;
+            return;
+        }
+        if($promoter_code['status']==0){
+            $this->code = 1177;
+            return;
+        }
+        $this->code = 0;
+        return;
     }     
 }
