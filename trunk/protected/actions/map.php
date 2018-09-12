@@ -368,7 +368,7 @@ class MapAction extends Controller
     public function dynamic_report()
     {
         $id = Filter::int(Req::args("id"));
-        $type = Filter::str(Req::args("type"));
+        $type = Filter::int(Req::args("type"));
         $content = Filter::str(Req::args("content"));
         if(!$type) {
             $this->code = 1297;
