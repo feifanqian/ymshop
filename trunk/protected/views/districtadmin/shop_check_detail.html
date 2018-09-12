@@ -62,12 +62,14 @@
             </dd>
         </dl>
         {/if}
+        {if:$shop_check['account_card']!=null}
         <dl class="lineD">
             <dt>结算银行卡号:</dt>
             <dd>
                 <input type="text" value="{$shop_check['account_card']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
+        {/if}
         {if:$shop_check['bank_type']!=null}
         <dl class="lineD">
             <dt>银行类型:</dt>
