@@ -1172,6 +1172,7 @@ class PaymentController extends Controller {
            }
 
            $myParams = array();
+           if($payment_id==6) {
             $myParams['charset'] = 'utf-8';
             $myParams['method'] = 'ysepay.online.jsapi.pay';   
             $myParams['partner_id'] = 'yuanmeng';
@@ -1194,32 +1195,27 @@ class PaymentController extends Controller {
             "business_code" => "01000010",
             "sub_openid"=>$sub_openid,
             );
-          if($payment_id==8){
-            // $myParams['method'] = 'ysepay.online.wap.directpay.createbyuser';
-            $myParams['method'] = 'ysepay.online.qrcodepay';
-            // $myParams['bank_type'] = "1903000";
+            $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+          } else {
+            $myParams['business_code'] = '01000010';
+            $myParams['charset'] = 'utf-8';
+            $myParams['method'] = 'ysepay.online.wap.directpay.createbyuser';
+            $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
+            $myParams['out_trade_no'] = $order_no;
+            $myParams['partner_id'] = 'yuanmeng';
             $myParams['return_url'] = 'http://www.ymlypt.com/travel/order_details';
-            // $myParams['pay_mode'] = "native";
-            // $myParams['out_trade_no'] = $order_no;
-            // $myParams['subject'] = '圆梦共享网';
-            // $myParams["total_amount"]=$order_amount;
-            // $myParams["seller_id"]='yuanmeng';
-            // $myParams["seller_name"]='圆梦互联网科技（深圳）有限公司';
-            // $myParams["timeout_express"]='1d';
-            // $myParams['business_code'] = '3010001';
-            $biz_content_arr = array(
-                "out_trade_no" => $order_no,
-                "subject" => "圆梦共享网",
-                "total_amount" => $order_amount,
-                "seller_id" => "yuanmeng",
-                "seller_name" => "圆梦互联网科技（深圳）有限公司",
-                "timeout_express" => "24h",
-                "business_code" => "01000010",
-                "bank_type" => "1902000",
-            ); 
+            $myParams['seller_id'] = 'yuanmeng';
+            $myParams['seller_name'] = '圆梦互联网科技（深圳）有限公司';
+            $myParams['sign_type'] = 'RSA';
+            $myParams['subject'] = '圆梦共享网';
+            $myParams['timeout_express'] = '24h';
+            $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+            $myParams['total_amount'] = $order_amount;
+            $myParams['version'] = '3.0';
+            $myParams['pay_mode'] = 'native';
+            $myParams['bank_type'] = '1902000'; 
            }
            
-            $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
              
     //        网银直连需添加以下参数
     //        $myParams['pay_mode']           = 'internetbank';
@@ -1251,14 +1247,14 @@ class PaymentController extends Controller {
             // $return_url = 'http://www.ymlypt.com/travel/order_details';
             $result = array(
                 'sign'           => $myParams['sign'],
-                'biz_content'    => $myParams['biz_content'],
-                'business_code'  => $biz_content_arr['business_code'],
+                // 'biz_content'    => $myParams['biz_content'],
+                'business_code'  => $myParams['business_code'],
                 'charset'        => $myParams['charset'],
                 'method'         => $myParams['method'],
                 'notify_url'     => $myParams['notify_url'],
                 'out_trade_no'   => $myParams['out_trade_no'],
                 'partner_id'     => $myParams['partner_id'],
-                'return_url'     => $return_url,
+                'return_url'     => $myParams['return_url'],
                 'seller_id'      => $myParams['seller_id'],
                 'seller_name'    => $myParams['seller_name'],
                 'sign_type'      => $myParams['sign_type'],
