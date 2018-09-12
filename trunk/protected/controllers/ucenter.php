@@ -3395,7 +3395,7 @@ class UcenterController extends Controller
             $desk_id = 0;
         }
         if($cashier_id!=0 || $desk_id!=0) {
-            $cash=1;
+            $cash = 1;
         } else {
             $cash = 0;
         }
