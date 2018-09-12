@@ -125,6 +125,8 @@ class ContentController extends Controller {
         foreach ($rows as $row) {
             $categorys[$row['id']] = $row['name'];
         }
+        $where = 'category_id!=4';
+        $this->assign("where", $where);
         $this->categorys = $categorys;
         $this->redirect('article_list');
     }
