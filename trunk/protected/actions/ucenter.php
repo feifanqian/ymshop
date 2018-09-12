@@ -3092,6 +3092,7 @@ class UcenterAction extends Controller {
         'bank_city'        => $bank_city,
         'positive_bankcard'=> $positive_bankcard,
         'native_bankcard'  => $native_bankcard,
+        'account_card'     => $account_card,
         'status'           => $status,
         'create_date'      => date('Y-m-d H:i:s')
         );
@@ -3133,6 +3134,7 @@ class UcenterAction extends Controller {
         'bank_area'        => $bank_area,
         'bank_province'    => $bank_province,
         'bank_city'        => $bank_city,
+        'account_card'     => $account_card,
         'account_picture'  => $account_picture,
         'status'           => $status,
         'create_date'      => date('Y-m-d H:i:s')
