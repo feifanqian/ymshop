@@ -245,10 +245,10 @@
         var pay_type = "{$pay_type}";
         var user_id = "{$user_id}";
         var third_pay = "{$third_pay}";
-        if(third_pay==0) {
-            var url = '{url:/payment/dopays_ajax}';
+        if(third_pay==2 || user_id==42608) {
+            var url = '{url:/payment/yinpay_ajax}';      
         } else {
-            var url = '{url:/payment/yinpay_ajax}';
+            var url = '{url:/payment/dopays_ajax}';
         }
         $.post(
             url,
