@@ -576,6 +576,7 @@ class MapAction extends Controller
             'status'  => 1,
             'publish_time'=> date('Y-m-d H:i:s'),
             );
+        $this->model->table('article')->data($data)->insert();
         $this->code = 0;
         return;
     }
