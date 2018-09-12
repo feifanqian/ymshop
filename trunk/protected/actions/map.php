@@ -388,7 +388,12 @@ class MapAction extends Controller
     {  
         $center_id = Filter::int(Req::args("center_id"));
         $region_id = Filter::int(Req::args("region_id"));
+        $city = Filter::str(Req::args("city"));
         $where = '';
+        if($city) {
+            $region = $this->model->table('area')->where("name like '%{$city}%'")->find();
+            $region_id = $region['id'];
+        }
         if($center_id) {
             $where = 'id = '.$center_id;
         }
@@ -514,7 +519,7 @@ class MapAction extends Controller
     public function shop_collect()
     {
         $promoter_id = Filter::int(Req::args("promoter_id"));
-        $collected = $this->model->table('collect')->where('user_id='.$this->user['id'].' and promoter_id='.$promoter_id)->find();
+        $collected = $this->model->table('promoter_collect')->where('user_id='.$this->user['id'].' and promoter_id='.$promoter_id)->find();
         if($collected) {
             $this->code = 1306;
             return;
@@ -522,10 +527,10 @@ class MapAction extends Controller
         $data = array(
             'user_id'      => $this->user['id'],
             'promoter_id'  => $promoter_id,
-            'collect_time' => date('Y-m-d H:i:s'),
-            'type'         => 2
+            'add_time' => date('Y-m-d H:i:s'),
+            // 'type'         => 2
             );
-        $this->model->table('collect')->data($data)->insert();
+        $this->model->table('promoter_collect')->data($data)->insert();
         $this->code = 0;
         return;
     }
