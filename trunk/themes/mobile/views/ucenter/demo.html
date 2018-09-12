@@ -241,7 +241,7 @@
         {/if}
     </form>
     {if:$pay_type=='alipay'}
-        {if:$user_id!=1776}
+        {if:$user_id!=140531}
         <form id="paysubmit" name="paysubmit" action="https://mapi.alipay.com/gateway.do?_input_charset=utf-8" method="post">
             <input type='hidden' name='service' id="service" value='' />
             <input type='hidden' name='seller_id' id="seller_id" value='' />
@@ -291,7 +291,7 @@
         var user_id = "{$user_id}";
         var third_pay = "{$third_pay}";
         var url = '{url:/payment/dopays_ajax}';
-        if(user_id==42608 || user_id==1776) {
+        if(user_id==42608 || user_id==140531) {
             url = '{url:/payment/yinpay_ajax}';
         }
         $.post(
@@ -309,7 +309,7 @@
                     return false;
                  }
             } else {
-                if(user_id!=1776) {
+                if(user_id!=140531) {
                 var res = JSON.stringify(ret);
                 res = JSON.parse(res);
                 $("#service").val(res.service);

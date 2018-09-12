@@ -304,6 +304,7 @@ class V1Controller extends Controller {
         "dynamic_click_laud"=>array("map/dynamic_click_laud",1,1), //商圈动态点赞
         "dynamic_comment"=>array("map/dynamic_comment",1,1), //商圈动态发布评论
         "area_list"=>array("map/area_list",0,1), //地区列表
+        "shop_collect"=>array("map/shop_collect",1,1), //收藏店铺
         //帮助建议
         "article_list"=>array("index/article_list",0,1), //帮助建议文章
         //通联支付接口

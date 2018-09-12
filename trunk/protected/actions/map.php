@@ -509,5 +509,24 @@ class MapAction extends Controller
         $this->code = 0;
         $this->content['region'] = $province;
     }
-
+    
+    //收藏店铺
+    public function shop_collect()
+    {
+        $promoter_id = Filter::int(Req::args("promoter_id"));
+        $collected = $this->model->table('collect')->where('user_id='.$this->user['id'].' and promoter_id='.$promoter_id)->find();
+        if($collected) {
+            $this->code = 1306;
+            return;
+        }
+        $data = array(
+            'user_id'      => $this->user['id'],
+            'promoter_id'  => $promoter_id,
+            'collect_time' => date('Y-m-d H:i:s'),
+            'type'         => 2
+            );
+        $this->model->table('collect')->data($data)->insert();
+        $this->code = 0;
+        return;
+    }
 }
