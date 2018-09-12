@@ -3029,7 +3029,7 @@ class UcenterAction extends Controller {
             return;
         }
        } else if($page==3) {
-          if(!$bank_type || !$bank_name || !$bank_phone || !$bank_area || !$positive_bankcard || !$native_bankcard) {
+          if(!$bank_type || !$bank_name || !$bank_phone || !$positive_bankcard || !$native_bankcard) {
             $this->code = 1303;
             return;
           }
@@ -3044,7 +3044,7 @@ class UcenterAction extends Controller {
             return;
           }
        } else {
-          if(!$bank_type || !$bank_name || !$bank_phone || !$bank_area || !$account_picture) {
+          if(!$bank_type || !$bank_name || !$bank_phone || !$account_picture) {
             $this->code = 1303;
             return;
           }
