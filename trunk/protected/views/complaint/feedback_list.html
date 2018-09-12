@@ -1,0 +1,73 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+  
+    <a class="icon-delicious" href="{url:/complaint/complaint_list}"> 查看全部</a>
+     <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:50px">选择</th>
+        <th style="width:80px">操作</th>
+        <th>反馈内容</th>
+        <th>反馈图片</th>
+        <th>反馈时间 </th>
+        <th>用户</th>
+        <th style="width:80px">状态</th>
+    </tr>
+    {query:name=article as c fields=c.*,u.nickname join=left join user as u on c.user_id eq u.id  where=$where id=$obj page=1 order= id desc }
+        <tr style="height=100px;"><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                {if:$item['status']==0}
+                <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},1)">标记为受理中</a></li>
+                <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},2)">标记为已整改</a></li>
+                {/if}
+                {if:$item['status']==1}
+                <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},2)">标记为已整改</a></li>    
+                {/if}
+                {if:$item['status']==2}
+                <li><a class="icon-pencil" href="javascript:;" onclick="">暂无可选操作</a></li>    
+                {/if}
+            </td>
+            <td><div style="vertical-align:central;"><p style="text-indent: 10px;padding: 2px;">{$item['content']}</p></div></td>
+            <td>
+            {if:$item['imgs']!=null}
+            {set:$imgs = explode(',',$item['imgs'])}
+            {list:$items=$imgs item=$val}
+            <img src='{$val}' width="50" height="50">
+            {/list}
+            {/if}
+            </td>
+            <td>{$item['publish_time']}</td>
+            <td><a href="?condition=and--c.user_id--eq--{$item['user_id']}">{$item['nickname']}</a></td>
+            <td style="width:80px">
+                <a href="?condition=and--c.status--eq--{$item['status']}">{$status[$item['status']]} </a>
+            </td>
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+
+<script type="text/javascript">
+    function change_status(id,status){
+         var str=['',"<span style='color:blue'>受理中</span>",'已完成整改'];
+         $.post('{url:/complaint/change_status}',{id:id,status:status},function(data){
+                if(data['status']=='success'){
+                    $("#status_"+id).html(str[id]);
+                    art.dialog.tips("<p class='"+ data['status']+"'>"+data['msg']+"成功！</p>");
+                }else{
+                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"失败！</p>");
+                }
+                setTimeout("tools_reload()",2000);
+            },'json');
+    }
+
+$("#condition").on("click",function(){
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/complaint/complaint_list}',method:'get'});},data:{'c.type':{name:'投诉类型',values:{1:'商品投诉',2:'物流投诉',3:'其他'}},'c.status':{name:'处理状态',values:{0:'未处理', 1:'受理中', 2:'完成整改'}}}});
+})
+</script>

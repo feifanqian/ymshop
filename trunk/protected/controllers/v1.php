@@ -306,6 +306,7 @@ class V1Controller extends Controller {
         "area_list"=>array("map/area_list",0,1), //地区列表
         "shop_collect"=>array("map/shop_collect",1,1), //收藏店铺
         "shop_attention"=>array("map/shop_attention",1,1), //关注店铺
+        "feedback"=>array("map/feedback",0,1), //意见反馈
         //帮助建议
         "article_list"=>array("index/article_list",0,1), //帮助建议文章
         //通联支付接口

@@ -42,6 +42,19 @@ class ComplaintController extends Controller {
         $this->redirect();
     }
 
+    public function feedback_list() {
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str)
+            $this->assign("where", $condition_str);
+        else {
+            $this->assign("where", "c.category_id=4");
+        }
+        $this->assign("condition", $condition);
+        $this->assign("status", array('0' => "<span style='color:green'>已处理</span>", '1' =>"<span style='color:blue'>受理中</span>",'2'=>"<span style='color:gray'>已完成整改</span>"));
+        $this->redirect();
+    }
+
     public function change_status() {
         $id = Filter::int(Req::args("id"));
         $status = Req::args("status");

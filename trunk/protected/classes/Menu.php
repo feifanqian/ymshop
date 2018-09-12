@@ -161,6 +161,7 @@ class Menu {
             '/wxmanager/wx_response_edit' => array('name' => '资源编辑', 'parent' => 'weixin'),
             '/support/apply_list'=>array('name'=>'申请列表','parent'=>'support'),
             '/complaint/complaint_list'=>array('name'=>'投诉列表','parent'=>'complaint'),
+            '/complaint/feedback_list'=>array('name'=>'投诉列表','parent'=>'complaint'),
             '/districtadmin/record_sale'=>array('name'=>'销售记录','parent'=>'record'),
             '/districtadmin/record_income'=>array('name'=>'收益记录','parent'=>'record'),
             '/districtadmin/send_code_log'=>array('name'=>'激活码赠送记录','parent'=>'record'),

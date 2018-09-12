@@ -16,7 +16,7 @@
         <th style="width:160px">日期</th>
 
     </tr>
-    {query:name=article page=1 id=$obj order=id desc}
+    {query:name=article page=1 id=$obj where=category_id neq 4 order=id desc}
         <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
         <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
                     <li><a class="icon-pencil" href="{url:/content/article_edit/id/$item[id]}"> 编辑</a></li>

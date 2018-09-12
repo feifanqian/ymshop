@@ -564,4 +564,19 @@ class MapAction extends Controller
         $this->code = 0;
         return;
     }
+
+    //意见反馈
+    public function feedback()
+    {
+        $content = Filter::text(Req::args("content"));
+        $imgs = Filter::str(Req::args("imgs"));
+        $data = array(
+            'content' => $content,
+            'imgs'    => $imgs,
+            'status'  => 1,
+            'publish_time'=> date('Y-m-d H:i:s'),
+            );
+        $this->code = 0;
+        return;
+    }
 }
