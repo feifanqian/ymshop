@@ -261,6 +261,7 @@
         <!-- 银盛支付宝支付 -->
         <form id="paysubmit" name="paysubmit" action="https://openapi.ysepay.com/gateway.do" method="post">
             <input type="hidden" name="sign" id="sign" value="" />
+            <input type="hidden" name="biz_content" id="biz_content" value="" />
             <input type="hidden" name="business_code" id="business_code" value="" />
             <input type="hidden" name="charset" id="charset" value=""/>
             <input type="hidden" name="method" id="method" value=""/>
@@ -332,6 +333,7 @@
                 res = JSON.parse(res);
 
                 $("#sign").val(res.sign);
+                $("#biz_content").val(res.biz_content);
                 $("#business_code").val(res.business_code);
                 $("#charset").val(res.charset);
                 $("#method").val(res.method);
