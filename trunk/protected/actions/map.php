@@ -545,4 +545,23 @@ class MapAction extends Controller
         $this->code = 0;
         return;
     }
+
+    //关注店铺
+    public function shop_attention()
+    {
+        $promoter_id = Filter::int(Req::args("promoter_id"));
+        $collected = $this->model->table('shop_attention')->where('user_id='.$this->user['id'].' and promoter_id='.$promoter_id)->find();
+        if($collected) {
+            $this->code = 1307;
+            return;
+        }
+        $data = array(
+            'user_id'      => $this->user['id'],
+            'promoter_id'  => $promoter_id,
+            'add_time' => date('Y-m-d H:i:s'),
+            );
+        $this->model->table('shop_attention')->data($data)->insert();
+        $this->code = 0;
+        return;
+    }
 }
