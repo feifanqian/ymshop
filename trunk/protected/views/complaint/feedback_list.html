@@ -14,10 +14,10 @@
         <th>反馈内容</th>
         <th>反馈图片</th>
         <th>反馈时间 </th>
-        <th>用户</th>
+        <!-- <th>用户</th> -->
         <th style="width:80px">状态</th>
     </tr>
-    {query:name=article as c fields=c.*,u.nickname join=left join user as u on c.user_id eq u.id  where=$where id=$obj page=1 order= id desc }
+    {query:name=article as c fields=c.*  where=$where id=$obj page=1 order= id desc }
         <tr style="height=100px;"><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
                 {if:$item['status']==0}
@@ -41,7 +41,7 @@
             {/if}
             </td>
             <td>{$item['publish_time']}</td>
-            <td><a href="?condition=and--c.user_id--eq--{$item['user_id']}">{$item['nickname']}</a></td>
+            
             <td style="width:80px">
                 <a href="?condition=and--c.status--eq--{$item['status']}">{$status[$item['status']]} </a>
             </td>
