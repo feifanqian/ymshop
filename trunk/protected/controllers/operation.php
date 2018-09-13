@@ -37,7 +37,7 @@ class OperationController extends Controller
             $page = 1;
         }
         $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
-        
+        var_dump($user);die;
         $total_user = $this->getAllChildUserIds($user_id);
         if($total_user['user_ids']) {
             $ids = $total_user['user_ids'];
