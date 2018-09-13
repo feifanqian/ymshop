@@ -167,6 +167,7 @@ class Menu {
             '/support/apply_list'=>array('name'=>'申请列表','parent'=>'support'),
             '/complaint/complaint_list'=>array('name'=>'投诉列表','parent'=>'complaint'),
             '/complaint/feedback_list'=>array('name'=>'意见反馈','parent'=>'complaint'),
+            '/complaint/feedback_detail'=>array('name'=>'反馈详情','parent'=>'complaint','hidden'=>true),
             '/districtadmin/record_sale'=>array('name'=>'销售记录','parent'=>'record'),
             '/districtadmin/record_income'=>array('name'=>'收益记录','parent'=>'record'),
             '/districtadmin/send_code_log'=>array('name'=>'激活码赠送记录','parent'=>'record'),
