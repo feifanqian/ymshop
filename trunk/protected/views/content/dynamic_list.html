@@ -1,0 +1,59 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+  
+    <a class="icon-delicious" href="{url:/content/dynamic_list}"> 查看全部</a>
+     <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:50px">选择</th>
+        <th style="width:80px">操作</th>
+        <th>商圈</th>
+        <th>名字</th>
+        <th>头像</th>
+        <th>内容</th>
+        <th>发布时间 </th>
+        <th>举报人数</th>
+        <th>点赞数</th>
+        <th>状态</th>
+    </tr>
+    {query:name=center_dynamic as cd fields=cd.*,u.nickname,u.avatar,bc.name as center_name join=left join user as u on cd.user_id eq u.id left join business_center as bc on cd.center_id eq bc.id id=$obj page=1 order= id desc }
+        <tr style="height=100px;"><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},-1)">删除</a></li>
+                <li><a class="icon-pencil" href="{url:/content/dynamic_detail/id/$item[id]}">查看</a></li> 
+            </td>
+            <td>{$item['center_name']}</td>
+            <td>{$item['nickname']}</td>
+            {set:$avatar = $item['avatar']}
+            <td><img src="{url:@$avatar}"></td>
+            <td><div style="vertical-align:central;"><p style="text-indent: 10px;padding: 2px;">{$item['content']}</p></div></td>
+            <td>{$item['create_time']}</td>
+            <td>{$item['report_num']}</td>
+            <td>{$item['laud_num']}</td>
+            <td id="status_{$item['id']}">{$status[$item['status']]}</td>
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+
+<script type="text/javascript">
+    function change_status(id,status){
+         $.post('{url:/content/del_dynamic}',{id:id,status:status},function(data){
+                if(data['status']=='success'){
+                    $("#status_"+id).html('已删除');
+                }
+                setTimeout("tools_reload()",2000);
+            },'json');
+    }
+
+$("#condition").on("click",function(){
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/complaint/complaint_list}',method:'get'});},data:{'c.type':{name:'投诉类型',values:{1:'商品投诉',2:'物流投诉',3:'其他'}},'c.status':{name:'处理状态',values:{0:'未处理', 1:'受理中', 2:'完成整改'}}}});
+})
+</script>

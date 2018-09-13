@@ -422,7 +422,7 @@ class MapAction extends Controller
             $center['id'] = 0;
         }
         
-        $lists = $this->model->table('center_dynamic as cd')->join('left join user as u on cd.user_id=u.id left join district_promoter as dp on cd.user_id=dp.user_id')->fields('u.nickname,u.avatar,dp.id as promoter_id,dp.shop_type,cd.*')->where('cd.center_id = '.$center_id.' and cd.report_num < 5')->order('cd.id desc')->findPage($page,10);
+        $lists = $this->model->table('center_dynamic as cd')->join('left join user as u on cd.user_id=u.id left join district_promoter as dp on cd.user_id=dp.user_id')->fields('u.nickname,u.avatar,dp.id as promoter_id,dp.shop_type,cd.*')->where('cd.center_id = '.$center_id.' and cd.status!=-1 and cd.report_num < 5')->order('cd.id desc')->findPage($page,10);
         
         if($lists) {
             $list = $lists['data'];
@@ -581,6 +581,7 @@ class MapAction extends Controller
             'content' => $content,
             'imgs'    => $imgs,
             'status'  => 1,
+            'category_id'    => 4,
             'publish_time'=> date('Y-m-d H:i:s'),
             );
         $this->model->table('article')->data($data)->insert();

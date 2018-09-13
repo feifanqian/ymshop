@@ -1,0 +1,36 @@
+{echo:JS::import('form');}
+{echo:JS::import('editor');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<h1 class="page_title">动态详情</h1>
+<div id="obj_form" class="form2">
+    <!-- <form action="{url:/content/article_save}" method="post" > -->
+        <input type="hidden" name="id" value="{$info['id']}">
+      {if:$info['imgs']!=null}
+      {set:$imgs = explode(',',$info['imhs'])}
+      {list:items = $imgs}  
+      <dl class="lineD" id="show_img">
+        <dt>缩略图：</dt>
+        <dd>{if:isset($item)&&$item!=""}<img src="{url:@$item}" width="100" height="100">{/if}</dd>
+      </dl>
+      {/list}
+      {/if}
+    <dl class="lineD">
+      <dt>内容：</dt>
+      <dd>
+          <textarea id="contentdetail" class="kindeditor" pattern="required" name="content" style="width:700px;height:360px;visibility:hidden;">{$info['content}</textarea>
+        <label></label>
+      </dd>
+    </dl>
+    {if:$info['location']!=null}
+    <dl class="lineD">
+      <dt>位置：</dt>
+      <dd>
+          <textarea id="contentdetail" class="kindeditor" pattern="required" name="location" style="width:700px;height:360px;visibility:hidden;">{$info['location']}</textarea>
+        <label></label>
+      </dd>
+    </dl>
+    {/if}
+    <!-- <div style="text-align:center"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div> -->
+    <!-- </form> -->
+</div>

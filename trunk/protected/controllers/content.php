@@ -131,6 +131,29 @@ class ContentController extends Controller {
         $this->redirect('article_list');
     }
 
+    public function dynamic_list()
+    {
+        $status = array('-1' => '已删除', '1' => '正常', '2' => '被举报');
+        $this->assign('status',$status);
+        $this->redirect();
+    }
+
+    public function dynamic_detail()
+    {
+        $id = Req::args('id');
+        $model = new Model();
+        $info = $model->table('center_dynamic as cd')->join('left join user as u on cd.user_id=u.id left join district_promoter as dp on cd.user_id=dp.user_id')->fields('u.nickname,u.avatar,dp.id as promoter_id,dp.shop_type,cd.*')->where('cd.id = '.$id)->find();
+    }
+
+    public function del_dynamic()
+    {
+        $id = Req::args('id');
+        $model = new Model();
+        $model->table('center_dynamic')->data(['status'=>-1])->where('id='.$id)->update();
+        $info = array('status' => 'success', 'msg' => '成功');
+        echo JSON::encode($info);
+    }
+
     //文章分类
     function category_save() {
         $category = new Model("category");
