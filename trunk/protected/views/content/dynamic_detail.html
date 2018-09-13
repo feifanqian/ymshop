@@ -7,7 +7,7 @@
     <!-- <form action="{url:/content/article_save}" method="post" > -->
         <input type="hidden" name="id" value="{$info['id']}">
       {if:$info['imgs']!=null}
-      {set:$imgs = explode(',',$info['imhs'])}
+      {set:$imgs = explode(',',$info['imgs'])}
       {list:items = $imgs}  
       <dl class="lineD" id="show_img">
         <dt>缩略图：</dt>
