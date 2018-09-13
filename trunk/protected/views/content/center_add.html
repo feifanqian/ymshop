@@ -97,5 +97,5 @@ function setImg(value, needclose){
       {if:isset($invalid)}
           autoValidate.showMsg({id:$("input[name='{$invalid['name']}']").get(0), error:true, msg:'{$invalid['msg']}'});
       {/if}
-    };
+    });
 </script>

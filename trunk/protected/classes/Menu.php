@@ -64,6 +64,8 @@ class Menu {
             '/content/nav_edit' => array('name' => '导航管理', 'parent' => 'banner'),
             '/content/uploads_list' => array('name' => '上传文件管理', 'parent' => 'banner'),
             '/content/center_list' => array('name' => '商圈', 'parent' => 'center'),
+            '/content/center_add' => array('name' => '商圈添加', 'parent' => 'center','hidden'=>true),
+            '/content/center_edit' => array('name' => '商圈编辑', 'parent' => 'center','hidden'=>true),
             '/content/dynamic_list' => array('name' => '商圈动态', 'parent' => 'center'),
             '/content/dynamic_detail' => array('name' => '动态详情', 'parent' => 'center','hidden'=>true),
             '/admin/tables_list' => array('name' => '数据库备份', 'parent' => 'database'),
