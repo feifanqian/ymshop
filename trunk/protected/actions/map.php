@@ -377,7 +377,7 @@ class MapAction extends Controller
         $this->model->table('center_dynamic')->data(['status'=>2,'report_num'=>"`report_num`+1"])->where('id = '.$id)->update();
         $dynamic = $this->model->table('center_dynamic')->where('id = '.$id)->find();
         if($dynamic['report_num']>=5) {
-            $this->model->table('center_dynamic')->where('id = '.$id)->delete();
+            $this->model->table('center_dynamic')->data(['status'=>-1])->where('id = '.$id)->update();
         }
         $this->model->table('dynamic_report')->data(['dynamic_id'=>$id,'type'=>$type,'content'=>$content])->insert();
         $this->code = 0;
@@ -393,6 +393,7 @@ class MapAction extends Controller
         if(!$page) {
             $page = 1;
         }
+        $this->model->table('business_center')->data(['hot'=>"`hot`+1"])->where('id = '.$center_id)->update(); //人气加1
         $where = '';
         if($city) {
             $region = $this->model->table('area')->where("name like '%{$city}%'")->find();

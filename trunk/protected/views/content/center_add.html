@@ -1,0 +1,101 @@
+{echo:JS::import('form');}
+{echo:JS::import('editor');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<h1 class="page_title">商圈添加</h1>
+<div id="obj_form" class="form2">
+    <form action="{url:/content/article_save}" method="post" >
+        {if:isset($id)}<input type="hidden" name="id" value="{$id}">{/if}
+        <input type="hidden" name="region_id" id="region_id" value="">
+    <dl class="lineD">
+      <dt>地区</dt>
+      <dd id="areas" class="h-box" >
+        <div class="flex_1">
+            <div class="select">
+                <div class="option"></div>
+                <input  id="areas_hidden" type="text" class="input" style="visibility:hidden;width:0;" value="{$province},{$city}" alt="请选择完整地区信息！">
+                    <select id="province" name="province" >
+                      <option value="0">省份/直辖市</option>
+                    </select>
+                </div>
+        </div>
+        <div class="flex_1">
+            <div class="select">
+                <div class="option"></div>
+                <select id="city" name="city"><option value="0">市</option></select>
+            </div>
+        </div>
+      </dd>
+    </dl>
+      <dl class="lineD">
+        <dt>商圈名</dt>
+        <dd>
+          <input name="name" id="name" type="text" value="{$name}" readonly="readonly">
+          <label></label>
+        </dd>
+      </dl>
+      <dl class="lineD">
+        <dt>缩略图：</dt>  
+        <dd >
+           <button class="button  select_button" type="button" >
+                <b class="icon-plus green"></b>
+                添加图片
+           </button> 
+           <input type="hidden" name="avatar" value="{if:isset($avatar)&&$avatar!=''}{$avatar}{/if}">
+        </dd>
+      </dl>
+      <dl class="lineD" {if:isset($avatar)&&$avatar!=""}{else:}style="display: none;"{/if} id="show_img">
+      <dt></dt>
+      <dd>{if:isset($avatar)&&$avatar!=""}<img src="{url:@$avatar}" width="100" height="100">{/if}</dd>
+      </dl>
+    <div style="text-align:center"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>
+    </form>
+</div>
+<script type="text/javascript">
+var form =  new Form();
+form.setValue('category_id','{$category_id}');
+$(".select_button").on("click",function(){
+      uploadFile();
+      return false;
+    });
+function uploadFile(){
+  art.dialog.open('{url:/admin/photoshop?type=goods}',{id:'upimg_dialog',lock:true,opacity:0.1,title:'选择图片',width:613,height:380});
+}
+//回写选择图片
+function setImg(value, needclose){
+  var show_src = value.substr(0,4)!="http" ? ADMIN.upyuncfg.upyun_cdnurl + value : value;
+  if($("#show_img img").length==0){
+      $("#show_img dd").append('<img src="'+show_src+'" width="100" height="100">');
+      $("input[name='avatar']").val(value);
+      $("#show_img").show();
+  }else{
+      $("#show_img img").attr("src",show_src);
+      $("input[name='avatar']").val(value);
+  }
+  art.dialog({id:'upimg_dialog'}).close();
+}
+</script>
+<script type="text/javascript">
+    $(function(){
+      var selected = [{$province|0},{$city|0}];
+      $("#areas").Linkage({ url:"{url:/ajax/area_data}",selected:selected,initRunCallBack:true,callback:function(data){
+          var text = new Array();
+          var value = new Array();
+          for (i in data[0]){
+              if (data[0][i] != 0){
+                  text.push(data[1][i]);
+                  value.push(data[0][i]);
+              }
+          }
+          console.log(value);
+          $("#province").parent().find(".option").text(data[1][0]);
+          $("#city").parent().find(".option").text(data[1][1]);
+          $("#areas_hidden").val(value.join(','));
+          FireEvent(document.getElementById("areas_hidden"), "change");
+          $("#name").val(data[1][0]+data[1][1]+'圈');
+      }});
+      {if:isset($invalid)}
+          autoValidate.showMsg({id:$("input[name='{$invalid['name']}']").get(0), error:true, msg:'{$invalid['msg']}'});
+      {/if}
+    };
+</script>

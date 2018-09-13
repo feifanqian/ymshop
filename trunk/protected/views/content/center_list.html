@@ -1,0 +1,37 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('validator');}
+<div class="tools_bar clearfix">
+    <a href='{url:/content/center_add}' class="icon-plus" > 添加</a>
+</div>
+<table class="default">
+    <tr>
+        <th style="width:30px">选择</th>
+        <th style="width:70px">操作</th>
+        <th>商圈</th>
+        <th>头像</th>
+        <th>等级</th>
+        <th>人气</th>
+    </tr>
+    {query:name=business_center order=id desc/}
+    <tr>
+        <td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+        <td style="width:70px" class="btn_min">
+            <div class="operat hidden">
+                <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                <div class="menu_select">
+                    <ul>
+                        <li><a class="icon-pencil" href="{url:/content/center_edit/id/$item[id]}"> 编辑</a></li>
+                        <li><a class="icon-remove-2" href="javascript:confirm_action('{url:/content/category_del/id/$item[id]}');"> 删除</a></li>
+                    </ul>
+                </div>
+            </div>
+        </td>
+        <td>{$item['name']}</td>
+        {set:$avatar = $item['avatar']}
+        <td><img src="{url:@$avatar}" width="50" height="50"></td>
+        <td>{$item['level']}</td>
+        <td>{$item['hot']}</td>
+    </tr>
+    {/query}
+</table>

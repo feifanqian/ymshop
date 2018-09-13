@@ -573,4 +573,50 @@ class ContentController extends Controller {
         $model->table('ad_preset')->data($data)->where("id=".$id)->update();
         $this->redirect('ad_preset');
     }
+
+    public function center_list()
+    {
+        $this->redirect();
+    }
+
+    public function center_add()
+    {
+        $this->redirect();
+    }
+
+    public function center_edit()
+    {
+        $id = Filter::int(Req::args("id"));
+        $model = new Model();
+        $info = $model->table('business_center')->where("id=".$id)->find();
+        $this->assign('info',$info);
+        $this->redirect();
+    }
+
+    public function center_save()
+    {
+        $id = Filter::int(Req::args("id"));
+        $model = new Model();
+        $data = array(
+            'name'=>Req::args("name"),
+            'avatar'=>Req::args("avatar"),
+            'level'=>Filter::int(Req::args("level")),
+            'hot'=>Filter::int(Req::args("hot")),
+            'region_id'=>Filter::int(Req::args("region_id")),
+            );
+        if($id) {
+            $model->table('business_center')->data($data)->where("id=".$id)->update();
+        } else {
+            $model->table('business_center')->data($data)->insert();
+        }
+        $this->redirect('center_list');
+    }
+
+    public function center_del()
+    {
+        $id = Filter::int(Req::args("id"));
+        $model = new Model();
+        $model->table('business_center')->where('id='.$id)->delete();
+        $this->redirect('center_list');
+    }
 }

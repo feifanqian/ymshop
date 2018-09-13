@@ -22,9 +22,16 @@
     </tr>
     {query:name=center_dynamic as cd fields=cd.*,u.nickname,u.avatar,bc.name as center_name join=left join user as u on cd.user_id eq u.id left join business_center as bc on cd.center_id eq bc.id id=$obj page=1 order= id desc }
         <tr style="height=100px;"><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
-            <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
-                <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},-1)">删除</a></li>
-                <li><a class="icon-pencil" href="{url:/content/dynamic_detail/id/$item[id]}">查看</a></li> 
+            <td style="width:70px" class="btn_min">
+                <div class="operat hidden">
+                    <a class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                        <ul>
+                            <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},-1)">删除</a></li>
+                            <li><a class="icon-pencil" href="{url:/content/dynamic_detail/id/$item[id]}">查看</a></li>
+                        </ul>
+                    </div>
+                </div> 
             </td>
             <td>{$item['center_name']}</td>
             <td>{$item['nickname']}</td>
