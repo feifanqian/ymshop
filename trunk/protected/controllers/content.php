@@ -597,17 +597,42 @@ class ContentController extends Controller {
     {
         $id = Filter::int(Req::args("id"));
         $model = new Model();
-        $data = array(
-            'name'=>Req::args("name"),
-            'avatar'=>Req::args("avatar"),
-            'level'=>Filter::int(Req::args("level")),
-            'hot'=>Filter::int(Req::args("hot")),
-            'region_id'=>Filter::int(Req::args("region_id")),
-            );
+
         if($id) {
+            $data = array(
+                'name'=>Filter::str(Req::args("name")),
+                'avatar'=>Req::args("avatar"),
+                'level'=>Filter::int(Req::args("level")),
+                'province_id'=>Filter::int(Req::args("province")),
+                'region_id'=>Filter::int(Req::args("region_id")),
+                );
             $model->table('business_center')->data($data)->where("id=".$id)->update();
         } else {
-            $model->table('business_center')->data($data)->insert();
+            $region_id = Filter::int(Req::args("region_id"));
+
+            $province = Filter::int(Req::args("province"));
+            if($province) {
+                $province_area = $model->table('area')->where('id='.$province)->find();
+                $province_name = substr($province_area['name'], 0, -1);
+            }
+            $city = Filter::int(Req::args("city"));
+            if($city) {
+                $city_area = $model->table('area')->where('id='.$city)->find();
+                $city_name = substr($city_area['name'], 0, -1);
+            }
+            $name = $province_name.$city_name.'圈';
+            $data = array(
+                'name'=>$name,
+                'avatar'=>Req::args("avatar"),
+                'level'=>0,
+                'hot'=>0,
+                'province_id'=>$province,
+                'region_id'=>$region_id,
+                );
+            $exist = $model->table('business_center')->where('region_id='.$region_id)->find();
+            if(!$exist) {
+                $model->table('business_center')->data($data)->insert();
+            }
         }
         $this->redirect('center_list');
     }
