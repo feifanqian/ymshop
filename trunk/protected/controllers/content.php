@@ -143,6 +143,8 @@ class ContentController extends Controller {
         $id = Req::args('id');
         $model = new Model();
         $info = $model->table('center_dynamic as cd')->join('left join user as u on cd.user_id=u.id left join district_promoter as dp on cd.user_id=dp.user_id')->fields('u.nickname,u.avatar,dp.id as promoter_id,dp.shop_type,cd.*')->where('cd.id = '.$id)->find();
+        $this->assign('info',$info);
+        $this->redirect();
     }
 
     public function del_dynamic()

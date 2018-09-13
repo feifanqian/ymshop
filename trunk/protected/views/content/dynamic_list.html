@@ -29,7 +29,10 @@
             <td>{$item['center_name']}</td>
             <td>{$item['nickname']}</td>
             {set:$avatar = $item['avatar']}
-            <td><img src="{url:@$avatar}"></td>
+            {if:$avatar == '/0.png'}
+            {set:$avatar = '0.png'}
+            {/if}
+            <td><img src="{url:@$avatar}" width="50" height="50"></td>
             <td><div style="vertical-align:central;"><p style="text-indent: 10px;padding: 2px;">{$item['content']}</p></div></td>
             <td>{$item['create_time']}</td>
             <td>{$item['report_num']}</td>
