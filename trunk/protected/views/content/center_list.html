@@ -13,7 +13,7 @@
         <th>等级</th>
         <th>人气</th>
     </tr>
-    {query:name=business_center order=id desc/}
+    {query:name=business_center order=id desc id=$obj}
     <tr>
         <td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
         <td style="width:70px" class="btn_min">
@@ -22,7 +22,7 @@
                 <div class="menu_select">
                     <ul>
                         <li><a class="icon-pencil" href="{url:/content/center_edit/id/$item[id]}"> 编辑</a></li>
-                        <li><a class="icon-remove-2" href="javascript:confirm_action('{url:/content/category_del/id/$item[id]}');"> 删除</a></li>
+                        <li><a class="icon-remove-2" href="javascript:confirm_action('{url:/content/center_del/id/$item[id]}');"> 删除</a></li>
                     </ul>
                 </div>
             </div>
@@ -35,3 +35,6 @@
     </tr>
     {/query}
 </table>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
