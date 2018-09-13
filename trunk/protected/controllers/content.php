@@ -604,7 +604,7 @@ class ContentController extends Controller {
                 'avatar'=>Req::args("avatar"),
                 'level'=>Filter::int(Req::args("level")),
                 'province_id'=>Filter::int(Req::args("province")),
-                'region_id'=>Filter::int(Req::args("region_id")),
+                'region_id'=>Filter::int(Req::args("city")),
                 );
             $model->table('business_center')->data($data)->where("id=".$id)->update();
         } else {
