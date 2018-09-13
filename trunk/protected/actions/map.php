@@ -446,6 +446,8 @@ class MapAction extends Controller
                 $list[$key]['comment_list'] = $this->model->table('dynamic_comment as dc')->join('left join user as u on dc.user_id=u.id')->fields('u.nickname,u.avatar,dc.*')->where('dc.dynamic_id='.$value['id'])->findAll();
                 $list[$key]['comment_num'] = count($list[$key]['comment_list']);
             }
+        } else {
+            $list = [];
         }
 
         $this->code = 0;
