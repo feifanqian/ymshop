@@ -49,7 +49,7 @@
            <input type="hidden" name="avatar" value="{if:isset($avatar)&&$avatar!=''}{$avatar}{/if}">
         </dd>
       </dl>
-      <dl class="lineD" {if:isset($avatar)&&$avatar!=""}{else:}style="display: none;"{/if} id="show_img">
+      <dl class="lineD" id="show_img">
       <dt></dt>
       <dd>{if:isset($avatar)&&$avatar!=""}<img src="{url:@$avatar}" width="100" height="100">{/if}</dd>
       </dl>
