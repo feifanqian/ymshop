@@ -3182,7 +3182,12 @@ class UcenterAction extends Controller {
     {
         $info = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
         $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
-        $info['need_sign'] = empty($contract)?0:1;
+        if($contract && $info['status']!=2) {
+            $need_sign = 1;
+        } else {
+            $need_sign = 0;
+        }
+        $info['need_sign'] = $need_sign;
         $this->code = 0;
         $this->content['info'] = $info;
     }
