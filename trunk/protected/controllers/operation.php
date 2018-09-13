@@ -41,7 +41,8 @@ class OperationController extends Controller
         }
         $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
         // var_dump($user);die;
-        $total_user = $this->getAllChildUserIds($user_id);
+        // $total_user = $this->getAllChildUserIds($user_id);
+        $total_user = $user;
         if($total_user['user_ids']) {
             $ids = $total_user['user_ids'];
             $where1 = "user_id in ($ids) and pay_status=1 and status=4";
