@@ -13,7 +13,7 @@
         <th>等级</th>
         <th>人气</th>
     </tr>
-    {query:name=business_center order=id desc id=$obj}
+    {query:name=business_center id=$obj page=1 order= id desc}
     <tr>
         <td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
         <td style="width:70px" class="btn_min">
