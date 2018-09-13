@@ -10,8 +10,7 @@
     <dl class="lineD">
       <dt>地区</dt>
       <div class="flex_1">
-            
-                <input  id="areas_hidden" type="text" class="input" style="visibility:hidden;width:0;" value="{$province},{$city},{$county}" alt="请选择完整地区信息！">
+                <input  id="areas_hidden" type="text" class="input" style="visibility:hidden;width:0;" value="{$province},{$city}" alt="请选择完整地区信息！">
                 <div class="select" style="margin-left: 6%;">
                     <div class="option"></div>
                     <select id="province" name="province" >
@@ -24,13 +23,12 @@
                       <option value="0">市</option>
                     </select>
                 </div>
-                <div class="select" style="margin-left: 6%;">
+                <!-- <div class="select" style="margin-left: 6%;">
                     <div class="option"></div>
                     <select id="county" name="county" style="display: none;">
                       <option value="0">==县/区==</option>
                     </select>
-                </div>
-            
+                </div> -->
       </div>
       
     </dl>
@@ -84,7 +82,7 @@ function setImg(value, needclose){
 </script>
 <script type="text/javascript">
     $(function(){
-      var selected = [{$province|0},{$city|0},{$county|0}];
+      var selected = [{$province|0},{$city|0}];
       $("#areas").Linkage({ url:"{url:/ajax/area_data}",selected:selected,initRunCallBack:true,callback:function(data){
           var text = new Array();
           var value = new Array();
@@ -95,11 +93,16 @@ function setImg(value, needclose){
               }
           }
           console.log(value);
-          $("#province").parent().find(".option").text(data[1][0]);
-          $("#city").parent().find(".option").text(data[1][1]);
+          // $("#province").parent().find(".option").text(data[1][0]);
+          // $("#city").parent().find(".option").text(data[1][1]);
           $("#areas_hidden").val(value.join(','));
           FireEvent(document.getElementById("areas_hidden"), "change");
           $("#name").val(data[1][0]+data[1][1]+'圈');
+          $("#city").change(function(){
+             var city_id = $(this).val();
+             console.log(city_id);
+             $("#region_id").val(city_id);
+          })
       }});
       {if:isset($invalid)}
           autoValidate.showMsg({id:$("input[name='{$invalid['name']}']").get(0), error:true, msg:'{$invalid['msg']}'});
