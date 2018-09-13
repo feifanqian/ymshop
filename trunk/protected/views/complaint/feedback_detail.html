@@ -14,12 +14,12 @@
           <label></label>
         </dd>
       </dl>
-      {set:$imgs = $info['imgs']}
+      
       <dl class="lineD" id="show_img">
       <dt>图片</dt>
       <dd>
-      {if:$imgs!=""}
-        {set:$img = explode(',',$item['imgs'])}
+      {if:$info['imgs']!=""}
+        {set:$img = explode(',',$info['imgs'])}
         {list:items=$img item=$val}
         <img src='{url:@$val}' >
         {/list}
