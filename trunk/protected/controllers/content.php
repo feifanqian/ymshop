@@ -447,10 +447,11 @@ class ContentController extends Controller {
             $x_coor = Req::args('x_coor');
             $y_coor = Req::args('y_coor');
             $update_time = Req::args('update_time');
+            $end_time = Req::args('end_time');
             $content = array();
             if ($type == 2) {
                 foreach ($path as $key => $value) {
-                    $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key],'width' => $width[$key],'height' => $height[$key],'x_coor' => $x_coor[$key],'y_coor' => $y_coor[$key],'update_time' => $update_time[$key]);
+                    $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key],'width' => $width[$key],'height' => $height[$key],'x_coor' => $x_coor[$key],'y_coor' => $y_coor[$key],'update_time' => $update_time[$key],'end_time' => $end_time[$key]);
                 }
             } else {
                 $content[0] = array('path' => $path[0], 'url' => $url[0], 'title' => $title[0]);

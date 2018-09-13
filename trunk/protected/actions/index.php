@@ -620,13 +620,14 @@ class IndexAction extends Controller {
              // $set[$k]['y_coor'] = $list['y_coor'];
              // $set[$k]['top_distance'] = $list['top_distance'];
              $set[$k]['update_time'] = $v['update_time'];
+             $set[$k]['end_time'] = $v['end_time'];
              $set[$k]['width'] = $v['width'];
              $set[$k]['height'] = $v['height'];
              $set[$k]['x_coor'] = $v['x_coor'];
              $set[$k]['y_coor'] = $v['y_coor'];
              // $set[$k]['top_distance'] = 300;
 
-             if(time()<strtotime($v['update_time'])) {
+             if(time()<strtotime($v['update_time']) || time()>strtotime($v['end_time'])) {
                 unset($ads[$k]);
                 unset($arr[$k]);
                 unset($set[$k]);

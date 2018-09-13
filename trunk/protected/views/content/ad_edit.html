@@ -93,19 +93,23 @@
               <td style="width:150px;"><input pattern="required" class="middle" name="path[]" type="text" value="{$item['path']}" readonly="readonly"><button class="button select_button" value="选择">选择</button></td> 
               <td style="width:40px;">连接地址：</td> 
               <td style="width:100px;"><input name="url[]" empty type="text" value="<?php  echo isset($item['url']) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $item['url'])):""; ?>" class="middle"></td> 
-              <td style="width:40px;">名称：</td> 
-              <td style="width:60px;"><input name="title[]" type="text" value="{$item['title']}" class="small"></td>
+              <td style="width:40px;">名称：</td>
+              {if:isset($id) && $id==85} 
+              <td style="width:40px;"><input name="title[]" type="text" value="{$item['title']}" class="small"></td>
               <td style="width:40px;">宽：</td> 
-              <td style="width:60px;"><input name="width[]" type="text" value="{$item['width']}" class="small"></td>
+              <td style="width:40px;"><input name="width[]" type="text" value="{$item['width']}" class="small"></td>
               <td style="width:40px;">高：</td> 
-              <td style="width:60px;"><input name="height[]" type="text" value="{$item['height']}" class="small"></td>
+              <td style="width:40px;"><input name="height[]" type="text" value="{$item['height']}" class="small"></td>
               <td style="width:40px;">x轴：</td> 
-              <td style="width:60px;"><input name="x_coor[]" type="text" value="{$item['x_coor']}" class="small"></td>
+              <td style="width:40px;"><input name="x_coor[]" type="text" value="{$item['x_coor']}" class="small"></td>
               <td style="width:40px;">y轴：</td> 
-              <td style="width:60px;"><input name="y_coor[]" type="text" value="{$item['y_coor']}" class="small"></td>
+              <td style="width:40px;"><input name="y_coor[]" type="text" value="{$item['y_coor']}" class="small"></td>
               <td style="width:40px;">更新时间：</td> 
               <td style="width:60px;"><input name="update_time[]" type="text" value="{$item['update_time']}" class="small"></td>
-              <td style="width:90px;"><a href="javascript:;" class="icon-arrow-up-2"> 升</a><a href="javascript:;" class="icon-arrow-down-2"> 降</a> <a href="javascript:;" class="icon-close" onclick="item_del(this)"> 删</a></td>
+              <td style="width:40px;">失效时间：</td> 
+              <td style="width:60px;"><input name="end_time[]" type="text" value="{$item['end_time']}" class="small"></td>
+              {/if}
+              <td style="width:80px;"><a href="javascript:;" class="icon-arrow-up-2"> 升</a><a href="javascript:;" class="icon-arrow-down-2"> 降</a> <a href="javascript:;" class="icon-close" onclick="item_del(this)"> 删</a></td>
           </tr>
           {/list}
           {else:}
