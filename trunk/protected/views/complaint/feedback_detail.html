@@ -1,0 +1,82 @@
+{echo:JS::import('form');}
+{echo:JS::import('editor');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<h1 class="page_title">详情</h1>
+<div id="obj_form" class="form2">
+    <!-- <form action="{url:/content/center_save}" method="post" > -->
+        <input type="hidden" name="id" value="{$info['id']}">
+        <input type="hidden" name="region_id" id="region_id" value="">
+      <dl class="lineD">
+        <dt>内容：</dt>
+        <dd>
+            <textarea id="contentdetail" class="kindeditor" pattern="required" name="content" style="width:700px;height:360px;visibility:hidden;">{$info['content']}</textarea>
+          <label></label>
+        </dd>
+      </dl>
+      {set:$imgs = $info['imgs']}
+      <dl class="lineD" id="show_img">
+      <dt>图片</dt>
+      <dd>
+      {if:$imgs!=""}
+        {set:$img = explode(',',$item['imgs'])}
+        {list:items=$img item=$val}
+        <img src='{url:@$val}' >
+        {/list}
+      {/if}
+      </dd>
+      </dl>
+    <!-- <div style="text-align:center"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div> -->
+    <!-- </form> -->
+</div>
+<script type="text/javascript">
+var form =  new Form();
+form.setValue('category_id','{$category_id}');
+$(".select_button").on("click",function(){
+      uploadFile();
+      return false;
+    });
+function uploadFile(){
+  art.dialog.open('{url:/admin/photoshop?type=goods}',{id:'upimg_dialog',lock:true,opacity:0.1,title:'选择图片',width:613,height:380});
+}
+//回写选择图片
+function setImg(value, needclose){
+  var show_src = value.substr(0,4)!="http" ? ADMIN.upyuncfg.upyun_cdnurl + value : value;
+  if($("#show_img img").length==0){
+      $("#show_img dd").append('<img src="'+show_src+'" width="100" height="100">');
+      $("input[name='avatar']").val(value);
+      $("#show_img").show();
+  }else{
+      $("#show_img img").attr("src",show_src);
+      $("input[name='avatar']").val(value);
+  }
+  art.dialog({id:'upimg_dialog'}).close();
+}
+</script>
+<script type="text/javascript">
+    $(function(){
+      var selected = [{$info['province_id']|0},{$info['region_id']|0}];
+      $("#areas").Linkage({ url:"{url:/ajax/area_data}",selected:selected,initRunCallBack:true,callback:function(data){
+          var text = new Array();
+          var value = new Array();
+          for (i in data[0]){
+              if (data[0][i] != 0){
+                  text.push(data[1][i]);
+                  value.push(data[0][i]);
+              }
+          }
+          // $("#province").parent().find(".option").text(data[1][0]);
+          // $("#city").parent().find(".option").text(data[1][1]);
+          // $("#areas_hidden").val(value.join(','));
+          // FireEvent(document.getElementById("areas_hidden"), "change");
+          $("#name").val(data[1][0]+data[1][1]+'圈');
+          $("#city").change(function(){
+             var city_id = $(this).val();
+             $("#region_id").val(city_id);
+          })
+      }});
+      {if:isset($invalid)}
+          autoValidate.showMsg({id:$("input[name='{$invalid['name']}']").get(0), error:true, msg:'{$invalid['msg']}'});
+      {/if}
+    });
+</script>

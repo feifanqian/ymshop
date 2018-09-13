@@ -12,33 +12,42 @@
         <th style="width:50px">选择</th>
         <th style="width:80px">操作</th>
         <th>反馈内容</th>
-        <th>反馈图片</th>
+        <!-- <th>反馈图片</th> -->
         <th>反馈时间 </th>
         <!-- <th>用户</th> -->
         <th style="width:80px">状态</th>
     </tr>
     {query:name=article as c fields=c.*  where=$where id=$obj page=1 order= id desc }
-        <tr style="height=100px;"><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
-            <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
-                {if:$item['status']==0}
-                <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},1)">标记为受理中</a></li>
-                <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},2)">标记为已整改</a></li>
-                {/if}
-                {if:$item['status']==1}
-                <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},2)">标记为已整改</a></li>    
-                {/if}
-                {if:$item['status']==2}
-                <li><a class="icon-pencil" href="javascript:;" onclick="">暂无可选操作</a></li>    
-                {/if}
+        <tr style="height=100px;">
+            <td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:70px" class="btn_min">
+                <div class="operat hidden">
+                <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                <div class="menu_select">
+                    <ul>
+                        <li><a class="icon-pencil" href="{url:/complaint/feedback_detail/id/$item[id]}"> 详情</a></li>
+                        {if:$item['status']==0}
+                        <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},1)">标记为受理中</a></li>
+                        <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},2)">标记为已整改</a></li>
+                        {/if}
+                        {if:$item['status']==1}
+                        <li><a class="icon-pencil" href="javascript:;" onclick="change_status({$item['id']},2)">标记为已整改</a></li>    
+                        {/if}
+                        {if:$item['status']==2}
+                        <li><a class="icon-pencil" href="javascript:;" onclick="">暂无可选操作</a></li>    
+                        {/if}
+                    </ul>
+                </div>
+                </div>
             </td>
             <td><div style="vertical-align:central;"><p style="text-indent: 10px;padding: 2px;">{$item['content']}</p></div></td>
             <td>
-            {if:$item['imgs']!=null}
+            <!-- {if:$item['imgs']!=null}
             {set:$imgs = explode(',',$item['imgs'])}
             {list:$items=$imgs item=$val}
             <img src='{url:@$val}' width="50" height="50">
             {/list}
-            {/if}
+            {/if} -->
             </td>
             <td>{$item['publish_time']}</td>
             

@@ -55,6 +55,14 @@ class ComplaintController extends Controller {
         $this->redirect();
     }
 
+    public function feedback_detail() {
+        $id = Filter::int(Req::args("id"));
+        $model = new Model();
+        $info = $model->table('article')->where('id='.$id)->find();
+        $this->assign("info", $info);
+        $this->redirect();
+    }
+
     public function change_status() {
         $id = Filter::int(Req::args("id"));
         $status = Req::args("status");
