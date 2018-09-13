@@ -30,14 +30,17 @@ class OperationController extends Controller
         $start_date = Filter::str(Req::args('start_date'));
         $end_date = Filter::str(Req::args('end_date'));
         $page = Filter::int(Req::args('p'));
-        if($start_date && !$end_date) {
+        if(!$start_date) {
+            $start_date = date('Y-m-d', strtotime('-30 days'));
+        }
+        if(!$end_date) {
             $end_date = date('Y-m-d');
         }
         if(!$page) {
             $page = 1;
         }
         $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
-        var_dump($user);die;
+        // var_dump($user);die;
         $total_user = $this->getAllChildUserIds($user_id);
         if($total_user['user_ids']) {
             $ids = $total_user['user_ids'];
@@ -194,7 +197,10 @@ class OperationController extends Controller
         $start_date = Filter::str(Req::args('start_date'));
         $end_date = Filter::str(Req::args('end_date'));
         $page = Filter::int(Req::args('p'));
-        if($start_date && !$end_date) {
+        if(!$start_date) {
+            $start_date = date('Y-m-d', strtotime('-30 days'));
+        }
+        if(!$end_date) {
             $end_date = date('Y-m-d');
         }
         if(!$page) {
@@ -315,7 +321,10 @@ class OperationController extends Controller
         $start_date = Filter::str(Req::args('start_date'));
         $end_date = Filter::str(Req::args('end_date'));
         $page = Filter::int(Req::args('p'));
-        if($start_date && !$end_date) {
+        if(!$start_date) {
+            $start_date = date('Y-m-d', strtotime('-30 days'));
+        }
+        if(!$end_date) {
             $end_date = date('Y-m-d');
         }
         if(!$page) {
