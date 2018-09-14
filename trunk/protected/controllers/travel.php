@@ -1414,7 +1414,7 @@ class TravelController extends Controller
         if ($flag['status'] == 200) {
             return true;
         } else {
-            var_dump($flag);die;
+            // var_dump($flag);die;
             return false;
         }
     }
