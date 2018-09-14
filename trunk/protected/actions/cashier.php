@@ -24,7 +24,7 @@ class CashierAction extends Controller
         // 	$this->code = 1239;
         //     return;
         // }
-        // $name = Filter::str(Req::args('name'));
+        $name = Filter::str(Req::args('name'));
         // $job_no_exist = $this->model->table('cashier')->where("job_no=".$job_no." and hire_user_id=".$this->user['id']." and status=1")->find();
         // if($job_no_exist) {
         // 	$this->code = 1240;
