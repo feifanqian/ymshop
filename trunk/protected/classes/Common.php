@@ -1003,18 +1003,13 @@ class Common {
                 $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
                 if($inviter_info){
                     $is_promoter = $model->table("district_promoter")->where("user_id=".$inviter_info['user_id'])->find();
-                    if(!empty($is_promoter)){
-                        if($user_id == 188824){
+                    if(!empty($is_promoter)){       
                             if($is_promoter['hirer_id']==$user_info['district_id']) {
                                 $promoter_user_id = $inviter_info['user_id'];
                                 $is_break = true;
                             }else{
                                 $now_user_id = $inviter_info['user_id'];
                             }
-                        }else{
-                            $promoter_user_id = $inviter_info['user_id'];
-                            $is_break = true;
-                        }
                     }else{
                         $now_user_id = $inviter_info['user_id'];
                     }
