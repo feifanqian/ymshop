@@ -544,7 +544,7 @@ class DistrictAction extends Controller {
        // $shopidstrs = $this->getAllChildShops($user_id);
        $shopidstrs = Common::getAllChildShops($user_id);
        $shopids = $shopidstrs['shop_ids'];
-       var_dump($shopids);die;
+
        $start_date = Filter::str(Req::args('start_date'));
        $end_date = Filter::str(Req::args('end_date')); 
        $model = new Model();
@@ -555,6 +555,7 @@ class DistrictAction extends Controller {
          $where.=" and createtime >=".$t1." and createtime <=".$t2;
        }
        $invite = $model->table("invite")->fields('invite_user_id')->where($where)->findAll();
+       var_dump($invite);die;
        $ids = array();
        $idstr = '';
        $num = 0;
