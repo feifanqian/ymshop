@@ -541,7 +541,8 @@ class DistrictAction extends Controller {
     public function getAllChildUserIds()
     {
        $user_id = Filter::int(Req::args('user_id'));
-       $shopidstrs = $this->getAllChildShops($user_id);
+       // $shopidstrs = $this->getAllChildShops($user_id);
+       $shopidstrs = Common::getAllChildShops($user_id);
        $shopids = $shopidstrs['shop_ids'];
        $start_date = Filter::str(Req::args('start_date'));
        $end_date = Filter::str(Req::args('end_date')); 
