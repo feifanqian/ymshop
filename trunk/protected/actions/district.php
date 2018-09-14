@@ -541,38 +541,66 @@ class DistrictAction extends Controller {
     public function getAllChildUserIds()
     {
        $user_id = Filter::int(Req::args('user_id'));
+       $shopidstrs = $this->getAllChildShops($user_id);
+       $shopids = $shopidstrs['shop_ids'];
        $start_date = Filter::str(Req::args('start_date'));
        $end_date = Filter::str(Req::args('end_date')); 
        $model = new Model();
-       $is_break = false;
-       $num = 0;
-       $now_user_id = $user_id;
-       $idstr = '';
+       $where = "district_id in ($shopids)";
+       if($start_date && $end_date) {
+         $t1 = strtotime($start_date);
+         $t2 = strtotime($end_date);
+         $where.=" and createtime >=".$t1." and createtime <=".$t2;
+       }
+       $invite = $model->table("invite")->fields('invite_user_id')->where($where)->findAll();
        $ids = array();
-       while(!$is_break) {
-          $where = "i.user_id=".$now_user_id;
-          if($start_date && $end_date) {
-            $where.=" and c.reg_time between '{$start_date}' and '{$end_date}'";
-          }
-          $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
-          if($inviter_info) {
-            foreach($inviter_info as $k =>$v) {
-               $customer = $model->table('customer')->fields('user_id')->where('user_id='.$v['invite_user_id'])->find(); 
-               if($customer) {
-                 $ids[] = $v['invite_user_id'];
-               }
-               $num = $num+1;
-               $now_user_id = $v['invite_user_id'];
+       $idstr = '';
+       $num = 0;
+       if($invite) {
+        foreach ($invite as $key => $value) {
+            $customer = $model->table('customer')->fields('user_id')->where('user_id='.$value['invite_user_id'])->find(); 
+            if($customer) {
+                $ids[] = $value['invite_user_id'];
             }
-          } else {
-            $is_break = true;
-          }
-          array_push($ids, $user_id);
-          $idstr = $ids!=null?implode(',', $ids):'';
+        }
+        $idstr = $ids!=null?implode(',', $ids):'';
+        $num = count($ids);
        }
        $result['user_ids'] = $idstr;
        $result['num'] = $num;
        $this->code = 0;
        $this->content = $result;
+    }
+
+    public function getAllChildShops($user_id)
+    {
+        $model = new Model();
+        //根据所属上级关系找到下级所有经销商
+        $is_break = false; //false继续 true停止
+        $shop_ids = '';
+        $shop_id_arr = array();
+        $num = 0;
+        $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
+        $now_user_id = $shop['id'];
+        while(!$is_break){
+            $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id=".$now_user_id)->findAll();
+            if($inviter_info){
+                foreach ($inviter_info as $k => $v) {
+                    $shop_id_arr[] = $v['id'];
+                    
+                    $num = $num+1;
+                    $now_user_id = $v['id'];
+                    $is_break = false;
+                }    
+            }else{
+                $is_break = true;
+            }
+        }
+        array_push($shop_id_arr, $shop['id']);
+        $shop_ids = $shop_id_arr!=null?implode(',', $shop_id_arr):'';
+        $result = array();
+        $result['shop_ids'] = $shop_ids;
+        $result['num'] = $num;
+        return $result;
     }     
 }
