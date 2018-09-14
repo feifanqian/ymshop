@@ -407,7 +407,7 @@ class OrderAction extends Controller {
                         $order_type = 7;
                 }else if($type=="pointflash"){
                         $product_id = Filter::int($product_id[0]);
-                        $num = Filter::int($buy_num[0]);
+                        $num = isset($buy_num[0])?Filter::int($buy_num[0]):1;
                         if ($num < 1)
                             $num = 1;
                         $item = $model->table("pointflash_sale as ps")
