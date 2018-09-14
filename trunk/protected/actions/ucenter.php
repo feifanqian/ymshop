@@ -2048,7 +2048,8 @@ class UcenterAction extends Controller {
                 $this->code = 1140;
                 return;
             }else{
-                $this->model->table('invite')->data(array('user_id'=>$reference,'invite_user_id'=>$this->user['id'],'from'=>$from,'district_id'=>$district_id,'createtime'=>time()))->insert();
+                // $this->model->table('invite')->data(array('user_id'=>$reference,'invite_user_id'=>$this->user['id'],'from'=>$from,'district_id'=>$district_id,'createtime'=>time()))->insert();
+                Common::buildInviteShip($reference, $this->user['id'], $from);
                 $this->code = 0;
                 $this->content = '成功绑定邀请关系';
                 return;
