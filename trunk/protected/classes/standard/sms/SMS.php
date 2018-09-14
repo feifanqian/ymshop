@@ -62,18 +62,23 @@ class SMS extends ClassConfig {
      * @return array
      */
     public function sendCode($mobile, $code) {
+        // $params = array(
+        //     // 'appKey' => $this->config['appKey'],
+        //     'appKey' => '1f4d2d20dd266',
+        //     // 'templateCode' => $this->config['templateCode'],
+        //     'templateCode' => '9161448',
+        //     'zone' => '86',
+        //     'phone' => $mobile,
+        //     'AppName'=>"圆梦共享网",
+        //     'code' => $code,
+        // );
         $params = array(
-            // 'appKey' => $this->config['appKey'],
-            'appKey' => '1f4d2d20dd266',
-            // 'templateCode' => $this->config['templateCode'],
-            'templateCode' => '9161448',
-            'zone' => '86',
-            'phone' => $mobile,
-            'AppName'=>"圆梦共享网",
-            'code' => $code,
-        );
-        // var_dump($this->config['appKey']);die;
-        $ret = $this->postRequest('https://webapi.sms.mob.com/custom/msg', $params);
+         'appkey' => '1f4d2d20dd266', 
+         'zone' => '86',
+         'phone' => $phone,
+         );
+        // $ret = $this->postRequest('https://webapi.sms.mob.com/custom/msg', $params);
+        $ret = $this->postRequest('https://webapi.sms.mob.com/sms/sendmsg', $params);
         $json = json_decode($ret, TRUE);
         if (isset($json['status']) && $json['status'] == 200) {
             $time = time();
