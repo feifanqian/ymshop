@@ -541,39 +541,30 @@ class DistrictAction extends Controller {
     public function getAllChildUserIds()
     {
        $user_id = Filter::int(Req::args('user_id'));
-       // $shopidstrs = $this->getAllChildShops($user_id);
-       $shopidstrs = Common::getAllChildShops($user_id);
-       $shopids = $shopidstrs['shop_ids'];
-
        $start_date = Filter::str(Req::args('start_date'));
-       $end_date = Filter::str(Req::args('end_date')); 
+       $end_date = Filter::str(Req::args('end_date'));
+
        $model = new Model();
-       $where = "district_id in ($shopids)";
-       if($start_date && $end_date) {
-         $t1 = strtotime($start_date);
-         $t2 = strtotime($end_date);
-         $where.=" and createtime >=".$t1." and createtime <=".$t2;
-       }
-       $invite = $model->table("invite")->fields('invite_user_id')->where($where)->findAll();
-       // var_dump($invite);die;
-       $ids = array();
-       $idstr = '';
-       $num = 0;
-       if($invite) {
-        foreach ($invite as $key => $value) {
-            // $customer = $model->table('customer')->fields('user_id')->where('user_id='.$value['invite_user_id'])->find(); 
-            // if($customer) {
-                $ids[] = $value['invite_user_id'];
-            // }
+        $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
+        $idstr = Common::getAllChildShops($user_id);
+        $shopids = $idstr['shop_ids']==''?$shop['id']:$shop['id'].','.$idstr['shop_ids'];
+        $where = "district_id in ($shopids)";
+        if($start_date && $end_date) {
+            $t1 = strtotime($start_date);
+            $t2 = strtotime($end_date);
+            $where.=" and createtime >=".$t1." and createtime <=".$t2;
         }
-        var_dump($ids);die;
-        $idstr = $ids!=null?implode(',', $ids):'';
-        $num = count($ids);
-       }
-       $result['user_ids'] = $idstr;
-       $result['num'] = $num;
-       $this->code = 0;
-       $this->content = $result;
+        $inviter_info = $model->table("invite")->fields('invite_user_id')->where($where)->findAll();
+        $ids = array();
+        if($inviter_info) {
+            foreach($inviter_info as $k =>$v) {
+               $ids[] = $v['invite_user_id'];
+            }
+        }
+        $user_ids = $ids!=null?implode(',', $ids):'';    
+        $this->code = 0;
+        $this->content['user_ids'] = $user_ids;
+        $this->content['num'] = count($inviter_info);
     }
 
     public function getAllChildShops($user_id)
