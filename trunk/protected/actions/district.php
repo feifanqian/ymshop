@@ -555,16 +555,16 @@ class DistrictAction extends Controller {
          $where.=" and createtime >=".$t1." and createtime <=".$t2;
        }
        $invite = $model->table("invite")->fields('invite_user_id')->where($where)->findAll();
-       var_dump($invite);die;
+       // var_dump($invite);die;
        $ids = array();
        $idstr = '';
        $num = 0;
        if($invite) {
         foreach ($invite as $key => $value) {
-            $customer = $model->table('customer')->fields('user_id')->where('user_id='.$value['invite_user_id'])->find(); 
-            if($customer) {
+            // $customer = $model->table('customer')->fields('user_id')->where('user_id='.$value['invite_user_id'])->find(); 
+            // if($customer) {
                 $ids[] = $value['invite_user_id'];
-            }
+            // }
         }
         var_dump($ids);die;
         $idstr = $ids!=null?implode(',', $ids):'';
