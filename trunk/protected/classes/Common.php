@@ -1004,7 +1004,7 @@ class Common {
                 if($inviter_info){
                     $is_promoter = $model->table("district_promoter")->where("user_id=".$inviter_info['user_id'])->find();
                     if(!empty($is_promoter)){
-                        if($user_id == 1){
+                        if($user_id == 188824){
                             if($is_promoter['hirer_id']==$user_info['district_id']) {
                                 $promoter_user_id = $inviter_info['user_id'];
                                 $is_break = true;
