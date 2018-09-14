@@ -30,12 +30,12 @@ class OperationController extends Controller
         $start_date = Filter::str(Req::args('start_date'));
         $end_date = Filter::str(Req::args('end_date'));
         $page = Filter::int(Req::args('p'));
-        if(!$start_date) {
-            $start_date = date('Y-m-d', strtotime('-30 days'));
-        }
-        if(!$end_date) {
-            $end_date = date('Y-m-d');
-        }
+        // if(!$start_date) {
+        //     $start_date = date('Y-m-d', strtotime('-30 days'));
+        // }
+        // if(!$end_date) {
+        //     $end_date = date('Y-m-d');
+        // }
         if(!$page) {
             $page = 1;
         }
@@ -196,12 +196,12 @@ class OperationController extends Controller
         $start_date = Filter::str(Req::args('start_date'));
         $end_date = Filter::str(Req::args('end_date'));
         $page = Filter::int(Req::args('p'));
-        if(!$start_date) {
-            $start_date = date('Y-m-d', strtotime('-30 days'));
-        }
-        if(!$end_date) {
-            $end_date = date('Y-m-d');
-        }
+        // if(!$start_date) {
+        //     $start_date = date('Y-m-d', strtotime('-30 days'));
+        // }
+        // if(!$end_date) {
+        //     $end_date = date('Y-m-d');
+        // }
         if(!$page) {
             $page = 1;
         }
@@ -320,12 +320,12 @@ class OperationController extends Controller
         $start_date = Filter::str(Req::args('start_date'));
         $end_date = Filter::str(Req::args('end_date'));
         $page = Filter::int(Req::args('p'));
-        if(!$start_date) {
-            $start_date = date('Y-m-d', strtotime('-30 days'));
-        }
-        if(!$end_date) {
-            $end_date = date('Y-m-d');
-        }
+        // if(!$start_date) {
+        //     $start_date = date('Y-m-d', strtotime('-30 days'));
+        // }
+        // if(!$end_date) {
+        //     $end_date = date('Y-m-d');
+        // }
         if(!$page) {
             $page = 1;
         }
