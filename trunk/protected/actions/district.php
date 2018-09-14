@@ -563,6 +563,7 @@ class DistrictAction extends Controller {
                 $ids[] = $value['invite_user_id'];
             }
         }
+        var_dump($ids);die;
         $idstr = $ids!=null?implode(',', $ids):'';
         $num = count($ids);
        }
