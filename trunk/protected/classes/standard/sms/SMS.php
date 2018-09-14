@@ -70,7 +70,7 @@ class SMS extends ClassConfig {
             'zone' => '86',
             'phone' => $mobile,
             'AppName'=>"圆梦共享网",
-            // 'code' => $code,
+            'code' => $code,
         );
         // var_dump($this->config['appKey']);die;
         $ret = $this->postRequest('https://webapi.sms.mob.com/custom/msg', $params);
