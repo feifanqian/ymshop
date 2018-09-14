@@ -75,7 +75,7 @@ class SMS extends ClassConfig {
         $params = array(
          'appkey' => '1f4d2d20dd266', 
          'zone' => '86',
-         'phone' => $phone,
+         'phone' => $mobile,
          );
         // $ret = $this->postRequest('https://webapi.sms.mob.com/custom/msg', $params);
         $ret = $this->postRequest('https://webapi.sms.mob.com/sms/sendmsg', $params);
