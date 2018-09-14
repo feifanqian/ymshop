@@ -760,9 +760,9 @@ class Common {
      static function getMyPromoteInfo($user_id){
          $model = new Model();
          $is_district_promoter = $model->table('district_promoter')->where("user_id=$user_id")->fields("type,hirer_id")->find();
-         $role_type = $is_district_promoter ? 2:1;
+         $role_type = !empty($is_district_promoter)?2:1;
          $is_district_hirer = $model->table("district_shop")->where("owner_id=$user_id")->order("id asc")->find();
-         $role_type = $is_district_hirer ? 3:$role_type;
+         $role_type = !empty($is_district_hirer) ? 3:$role_type;
          $result = array();
          $district_id = 1;
          if($role_type==1){

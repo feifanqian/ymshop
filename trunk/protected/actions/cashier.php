@@ -35,7 +35,7 @@ class CashierAction extends Controller
         	$this->code = 1159;
             return;
         }
-        $job_no = $cashier.rand(1000,9999);
+        $job_no = $cashier['user_id'].rand(1000,9999);
         if($cashier['user_id']==$this->user['id']) {
             $this->code = 1265;
             return;
