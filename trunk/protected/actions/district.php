@@ -538,7 +538,7 @@ class DistrictAction extends Controller {
         return;
     }
 
-    public function getAllChildUserIds($user_id,$start_date='',$end_date='')
+    public function getAllChildUserIds()
     {
        $user_id = Filter::int(Req::args('user_id'));
        $start_date = Filter::str(Req::args('start_date'));
