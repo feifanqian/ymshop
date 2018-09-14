@@ -101,8 +101,10 @@ class OperationController extends Controller
         // $shop_num = 0;
         // $promoter_num = 0;
         $idstr = $user['user_ids'];
+        $shopids = $user['shopids'];
         if($idstr!='') {
-            $where8 = "c.user_id in ($idstr) and c.status=1";
+            // $where8 = "c.user_id in ($idstr) and c.status=1";
+            $where8 = "dp.hirer_id in ($shopids) and c.status=1";
             if($start_date || $end_date) {
                 $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
@@ -158,8 +160,10 @@ class OperationController extends Controller
         $page = Filter::int(Req::args('page'));
         $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
         $idstr = $user['user_ids'];
+        $shopids = $user['shopids'];
         if($idstr!='') {
-            $where8 = "c.user_id in ($idstr) and c.status=1";
+            // $where8 = "c.user_id in ($idstr) and c.status=1";
+            $where8 = "dp.hirer_id in ($shopids) and c.status=1";
             if($start_date || $end_date) {
                 $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
@@ -268,8 +272,10 @@ class OperationController extends Controller
         // $shop_num = 0;
         // $promoter_num = 0;
         $idstr = $user['user_ids'];
+        $shopids = $user['shopids'];
         if($idstr!='') {
-            $where8 = "c.user_id in ($idstr) and c.status=1";
+            // $where8 = "c.user_id in ($idstr) and c.status=1";
+            $where8 = "dp.hirer_id in ($shopids) and c.status=1";
             if($start_date || $end_date) {
                 $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
@@ -400,8 +406,10 @@ class OperationController extends Controller
 
         if($seo_title=='经销商') {
             $idstr = $user['user_ids'];
+            $shopids = $user['shopids'];
             if($idstr!='') {
-                $where8 = "c.user_id in ($idstr) and c.status=1";
+                // $where8 = "c.user_id in ($idstr) and c.status=1";
+                $where8 = "dp.hirer_id in ($shopids) and c.status=1";
                 if($start_date || $end_date) {
                     $where8 .= " and c.reg_time between '{$start_date}' and '{$end_date}'";
                 }
@@ -512,6 +520,7 @@ class OperationController extends Controller
         }
         $user_ids = $ids!=null?implode(',', $ids):'';
         $result['user_ids'] = $user_ids;
+        $result['shopids'] = $shopids;
         $result['num'] = count($inviter_info);
         return $result;
     }
