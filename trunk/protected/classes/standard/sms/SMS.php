@@ -69,7 +69,7 @@ class SMS extends ClassConfig {
             'templateCode' => '9161448',
             'zone' => '86',
             'phone' => $mobile,
-            'AppName'=>"圆梦购物网",
+            'AppName'=>"圆梦共享网",
             'code' => $code,
         );
         // var_dump($this->config['appKey']);die;

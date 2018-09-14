@@ -903,8 +903,9 @@ class TravelController extends Controller
         $inviter_id = Filter::int(Req::args("inviter"));
         $locked = Filter::int(Req::args("locked"));
         $user_id = Filter::int(Req::args("user_id"));
-        $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
-        $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+        // $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
+        // $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+        $checkFlag = $this->sms_verify($mobile_code, $mobile, '86');
         if($password!=$repassword) {
             $info = array('status' => 'fail', 'msg' => '两次密码输入不一致！');
         }
@@ -1012,8 +1013,9 @@ class TravelController extends Controller
     public function mobile_code_check(){
         $mobile = Filter::str(Req::args('mobile'));
         $mobile_code = Req::args('mobile_code');
-        $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
-        $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+        // $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
+        // $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+        $checkFlag = $this->sms_verify($mobile_code, $mobile, '86');
         if($checkFlag || $mobile_code=='000000') {
             $info = array('status' => 'success', 'msg' => '成功');
         } else {
@@ -1049,8 +1051,9 @@ class TravelController extends Controller
             $mobile_code = Req::args('mobile_code');
             $back = Filter::str(Req::args("back"));
             $inviter_id = Filter::int(Req::args("inviter"));
-            $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
-            $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+            // $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
+            // $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+            $checkFlag = $this->sms_verify($mobile_code, $mobile, '86');
             if($checkFlag || $mobile_code=='000000'){
                     SMS::getInstance()->flushCode($mobile);
                         if (!Validator::mobi($mobile)) {
@@ -1307,8 +1310,9 @@ class TravelController extends Controller
         $repassword = Req::args('repassword');
         $mobile_code = Req::args('mobile_code');
         $payment = Filter::int(Req::args('payment'));
-        $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
-        $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+        // $checkret = SMS::getInstance()->checkCode($mobile, $mobile_code);
+        // $checkFlag = $checkret && $checkret['status'] == 'success' ? TRUE : FALSE;
+        $checkFlag = $this->sms_verify($mobile_code, $mobile, '86');
         
         if($checkFlag || $mobile_code=='000000') {
             $had_bind= $this->model->table("customer")->where("mobile='{$mobile}' and status=1")->findAll();
@@ -1395,6 +1399,23 @@ class TravelController extends Controller
             // var_dump($info);die;
         }
         // echo JSON::encode($info);
+    }
+
+    //验证短信
+    private function sms_verify($code, $mobile, $zone) {
+        $url = "https://webapi.sms.mob.com/sms/verify";
+        $appkey = "1f4d2d20dd266";
+        $return = $this->postRequest($url, array('appkey' => $appkey,
+            'phone' => $mobile,
+            'zone' => $zone,
+            'code' => $code,
+        ));
+        $flag = json_decode($return, true);
+        if ($flag['status'] == 200) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }    
