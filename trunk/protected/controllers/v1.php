@@ -309,6 +309,7 @@ class V1Controller extends Controller {
         "feedback"=>array("map/feedback",0,1), //意见反馈
         //帮助建议
         "article_list"=>array("index/article_list",0,1), //帮助建议文章
+        "get_all_child_user_ids"=>array("district/getAllChildUserIds",0,1),
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息

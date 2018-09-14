@@ -536,5 +536,43 @@ class DistrictAction extends Controller {
         }
         $this->code = 0;
         return;
+    }
+
+    public function getAllChildUserIds($user_id,$start_date='',$end_date='')
+    {
+       $user_id = Filter::int(Req::args('user_id'));
+       $start_date = Filter::str(Req::args('start_date'));
+       $end_date = Filter::str(Req::args('end_date')); 
+       $model = new Model();
+       $is_break = false;
+       $num = 0;
+       $now_user_id = $user_id;
+       $idstr = '';
+       $ids = array();
+       while(!$is_break) {
+          $where = "i.user_id=".$now_user_id;
+          if($start_date && $end_date) {
+            $where.=" and c.reg_time between '{$start_date}' and '{$end_date}'";
+          }
+          $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
+          if($inviter_info) {
+            foreach($inviter_info as $k =>$v) {
+               $customer = $model->table('customer')->fields('user_id')->where('user_id='.$v['invite_user_id'])->find(); 
+               if($customer) {
+                 $ids[] = $v['invite_user_id'];
+               }
+               $num = $num+1;
+               $now_user_id = $v['invite_user_id'];
+            }
+          } else {
+            $is_break = true;
+          }
+          array_push($ids, $user_id);
+          $idstr = $ids!=null?implode(',', $ids):'';
+       }
+       $result['user_ids'] = $idstr;
+       $result['num'] = $num;
+       $this->code = 0;
+       $this->content = $result;
     }     
 }
