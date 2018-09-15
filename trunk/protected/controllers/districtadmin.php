@@ -2223,7 +2223,7 @@ class DistrictadminController extends Controller
         // $promoter_num = 0;
         $idstr = $user['user_ids'];
         $shopids = $user['shopids'];
-        if($idstr!='') {
+        if($shopids!='') {
             // $where8 = "c.user_id in ($idstr) and c.status=1";
             $where8 = "dp.hirer_id in ($shopids) and c.status=1";
             if($start_date || $end_date) {
