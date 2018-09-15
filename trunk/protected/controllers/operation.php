@@ -520,7 +520,7 @@ class OperationController extends Controller
         }
         $user_ids = $ids!=null?implode(',', $ids):'';
         $result['user_ids'] = $user_ids;
-        $result['shopids'] = $shopids;
+        $result['shopids'] = $idstr['shop_ids'];
         $result['num'] = count($inviter_info);
         return $result;
     }
