@@ -450,6 +450,8 @@ class ContentController extends Controller {
             $end_time = Req::args('end_time');
             $content = array();
             if ($type == 2) {
+                $id = Req::args("id");
+                var_dump($id);die;
                 foreach ($path as $key => $value) {
                     $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key],'width' => $width[$key],'height' => $height[$key],'x_coor' => $x_coor[$key],'y_coor' => $y_coor[$key],'update_time' => $update_time[$key],'end_time' => $end_time[$key]);
                 }
