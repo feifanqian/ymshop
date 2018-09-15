@@ -190,6 +190,8 @@ class Menu {
             // '/districtadmin/payset'=>array('name'=>'秒到支付','parent'=>'set'),
             '/districtadmin/cashier_list'=> array('name' => '收银员列表','parent' =>'cashier'),
             '/districtadmin/cashier_log'=> array('name' => '收银员上班记录','parent' =>'cashier'),
+            '/districtadmin/operation_list'=> array('name' => '运营中心','parent' =>'operation'),
+            '/districtadmin/operation_center'=> array('name' => '运营中心详情','parent' =>'operation','hidden'=>true),
         );
         //分组菜单
         $subMenu = array(
@@ -231,6 +233,7 @@ class Menu {
             'apply'=>array('name'=>'申请信息','parent'=>'districtadmin'),
             'set'=>array('name'=>'专区配置','parent'=>'districtadmin'),
             'cashier'=>array('name'=>'收银管理','parent'=>'districtadmin'),
+            'operation'=>array('name'=>'运营中心','parent'=>'districtadmin'),
         );
         //主菜单
         $menu = array(

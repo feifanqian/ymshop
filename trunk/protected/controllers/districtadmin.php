@@ -2370,5 +2370,26 @@ class DistrictadminController extends Controller
         }
         
         return $result;
+    }
+
+    public function operation_list()
+    {
+        $this->model = new Model();
+        $page = intval(Req::args("p"));
+        $page_size = 10;
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+
+        if ($condition_str) {
+            $where = 'ds.status=1 and ds.is_oc=1 and ' . $condition_str;
+            $this->assign("where", $condition_str);
+        } else {
+            $where = "ds.status=1 and ds.is_oc=1";
+            $this->assign("where", "status=1");
+        }
+        $this->assign("condition", $condition);
+        $list = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id left join district_shop as d on ds.invite_shop_id=d.id')->fields("ds.*,c.real_name,d.name as invite_shop_name")->where($where)->order("ds.id desc")->findPage($page, $page_size);
+        $this->assign("list", $list);
+        $this->redirect();
     } 
 }

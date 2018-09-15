@@ -1,0 +1,143 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+   <!-- <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>!-->
+    <a class="icon-delicious" href="{url:/districtadmin/list_hirer}"> 查看全部</a>
+    <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方经销商</a>
+<!--    <a class="icon-eye-blocked" href="{url:/order/order_list/status/2}"> 未审核</a>
+    <a class="icon-cogs" href="{url:/order/order_list/status/3}"> 执行中</a>-->
+
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:50px">选择</th>
+        <th style="width:65px">操作</th>
+        <th>专区名称</th>
+        <th style="width:100px">上级专区</th>
+        <th style="width:100px">所有者</th>
+        <th style="width:160px">创建时间</th>
+        <th style="width:60px">联系人</th>
+        <th style="width:200px">联系电话</th>
+        <th>收益</th>
+    </tr>
+    {list:$items=$list['data']}
+    <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+            <td style="width:65px" class="btn_min">
+                <div class="operat hidden">
+                    <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                     <ul>
+                       <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=p.role_type--eq--3__and--p.role_id--eq--{$item['id']}"> 查看收益记录</a></li>
+                       <li><a class="icon-eye" href="javascript:;" onclick="viewAchievement('{$item['name']}',{$item['owner_id']},{$item['id']});"> 查看销售业绩</a></li>
+                       <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/hirer_del/hirer_id/$item[id]}')"> 移出经销商</a></li>
+                       <li><a class="icon-pencil" href="{url:/districtadmin/hirer_edit/id/$item[id]}">编辑专区信息</a></li>
+                       <!-- <li><a class="icon-pencil" href="{url:/districtadmin/shop_child_count/id/$item[owner_id]}">查看所属下级专区和代理商销售信息</a></li> -->
+                       <li><a class="icon-pencil" href="{url:/districtadmin/operation_center/user_id/$item[owner_id]}">运营中心</a></li>
+                     </ul>
+                   </div>
+                </div>
+            </td>
+            <td>{$item['name']}</td>
+             <td style="width:100px">{$item['invite_shop_name']|"无"}</td>
+            <td style="width:100px">{$item['real_name']|"unknow"}</td>
+            <td style="width:60px">{$item['create_time']}</td>
+            <td style="width:60px">{$item['linkman']}</td>
+            <td style="width:160px">{$item['link_mobile']}</td>
+            <td>可用收益：{$item['valid_income']} 待解锁收益：{$item['frezze_income']} 已结算收益:{$item['settled_income']}</td>
+        </tr>
+    {/list}
+</table>
+</form>
+<div class="page_nav">
+{$list['html']}
+</div>
+<script type="text/javascript">
+function viewAchievement(name,id,district_id){
+layer.open({
+        id: id,
+        type: 2,
+        title: name,
+        shadeClose: true,
+        shade: false,
+//        maxmin: true, //开启最大化最小化按钮
+        area: ['893px', '600px'],
+        content: '{url:/districtadmin/chart}/role_type/2/user_id/'+id+"/district_id/"+district_id ,
+        full:function(){
+            console.log(option);
+        },
+        min:function(){
+            console.log(option);
+        },
+        restore:function(){
+            console.log(option);
+        }
+    });
+}
+function viewChildCount(name,district_id){
+layer.open({
+        id:district_id,
+        type: 2,
+        title: name,
+        shadeClose: true,
+        shade: false,
+//        maxmin: true, //开启最大化最小化按钮
+        area: ['893px', '600px'],
+        content: '{url:/districtadmin/shop_child_count}'+'/id/'+district_id ,
+        full:function(){
+            console.log(option);
+        },
+        min:function(){
+            console.log(option);
+        },
+        restore:function(){
+            console.log(option);
+        }
+    });
+}
+function addPromoter(hirer_id){
+     index =  layer.open({
+            id:"select",
+            type: 2,
+            title:"选择用户",
+            area: ['880px', '520px'],
+            fixed: false, //不固定
+            maxmin: false,
+            zindex:2,
+            content: '{url:/districtadmin/radio_customer_select}'+"/hirer_id/"+hirer_id,
+          });
+}
+function addPromoters(){
+     index =  layer.open({
+            id:"select",
+            type: 2,
+            title:"选择用户",
+            area: ['80%', '520px'],
+            fixed: false, //不固定
+            maxmin: false,
+            zindex:2,
+            content: '{url:/districtadmin/radio_customer_selects}',
+          });
+}
+function callback(hirer_id,user_id,pointcoin,district_name,linkman,link_mobile){
+     var load = layer.load();
+     console.log(hirer_id+"|"+user_id);
+     $.post('{url:/districtadmin/addPromoters}', {hirer_id:hirer_id,user_id:user_id,pointcoin:pointcoin,district_name:district_name,linkman:linkman,link_mobile:link_mobile} , function(result){
+            layer.close(load);
+            if(result.status=='success'){
+               layer.msg("添加成功",function(){
+                  layer.closeAll(); 
+               });
+            }else{
+                layer.msg(result.msg);
+            }
+        },'json');
+}
+$("#condition").on("click",function(){
+   //  layer.msg("暂未完成，请等待");
+   // return false;
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_hirer}',method:'get'});},data:{'ds.name':{name:'专区名称'},'d.name':{'name':'上级专区'},'c.real_name':{name:'所有者'},'ds.linkman':{name:' 联系人'},'ds.link_mobile':{name:'联系电话'}}});
+});
+</script>
