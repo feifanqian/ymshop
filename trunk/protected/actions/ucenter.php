@@ -3055,7 +3055,21 @@ class UcenterAction extends Controller {
        
        if($page==3 || $page==6) {
          $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
-         $status = empty($contract)?-1:0;
+         if($contract && $info['status']!=2 && $info['reason']==null) {
+            $need_sign = 1;
+         } else {
+            $need_sign = 0;
+         }
+         if($need_sign==1) {
+            $status = empty($contract)?-1:0;
+        } else {
+            $check = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
+            if($check) {
+                $status = $check['status'];
+            } else {
+                $status = -1;
+            }
+        }
        } 
        
        if($page==1) {
