@@ -3056,7 +3056,7 @@ class UcenterAction extends Controller {
        if($page==3 || $page==6) {
          $check = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
          $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
-         if($contract && $check['status']!=2 && $check['reason']==null) {
+         if($contract && $check && $check['status']!=2 && $check['reason']==null) {
             $need_sign = 1;
          } else {
             $need_sign = 0;

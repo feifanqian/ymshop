@@ -1774,30 +1774,33 @@ class Common {
         $user_ids = '';
         $num = 0;
         $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
-        $now_user_id = $shop['id'];
-        while(!$is_break){
-            $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id=".$now_user_id)->findAll();
-            if($inviter_info){
-                foreach ($inviter_info as $k => $v) {
-                    if($shop_ids=='') {
-                       $shop_ids = $v['id']; 
-                    } else {
-                       $shop_ids .= ','.$v['id'];
-                    }
-                    if($user_ids=='') {
-                       $user_ids = $v['owner_id']; 
-                    } else {
-                       $user_ids .= ','.$v['owner_id'];
-                    }
-                    // $shop_ids .= ','.self::getAllChildShops($v['owner_id']);
-                    $num = $num+1;
-                    $now_user_id = $v['id'];
-                    $is_break = false;
-                }    
-            }else{
-                $is_break = true;
+        if($shop) {
+            $now_user_id = $shop['id'];
+            while(!$is_break){
+                $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id=".$now_user_id)->findAll();
+                if($inviter_info){
+                    foreach ($inviter_info as $k => $v) {
+                        if($shop_ids=='') {
+                           $shop_ids = $v['id']; 
+                        } else {
+                           $shop_ids .= ','.$v['id'];
+                        }
+                        if($user_ids=='') {
+                           $user_ids = $v['owner_id']; 
+                        } else {
+                           $user_ids .= ','.$v['owner_id'];
+                        }
+                        // $shop_ids .= ','.self::getAllChildShops($v['owner_id']);
+                        $num = $num+1;
+                        $now_user_id = $v['id'];
+                        $is_break = false;
+                    }    
+                }else{
+                    $is_break = true;
+                }
             }
         }
+        
         $result = array();
         $result['shop_ids'] = $shop_ids;
         $result['user_ids'] = $user_ids;
