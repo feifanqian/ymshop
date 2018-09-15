@@ -2269,6 +2269,25 @@ class DistrictadminController extends Controller
         $this->redirect();
     }
 
+    private function calendar()
+    {
+        $cal = array();
+        $s_time = Req::args("s_time");
+        if (!$s_time) {
+            $s_time = date("Y-m-d -- Y-m-d");
+        }
+        $date = explode(' -- ', $s_time);
+        $stime = date('Y-m-d 00:00:00', strtotime($date[0]));
+        $etime = date('Y-m-d 00:00:00', strtotime($date[1] . '+1day'));
+        $cle = strtotime($etime) - strtotime($stime);
+        $num = ceil($cle / 86400);
+        $cal['start'] = $stime;
+        $cal['end'] = $etime;
+        $cal['days'] = $num;
+        $cal['str'] = $s_time;
+        return $cal;
+    }
+
     public function getAllChildUserIds($user_id,$start_date='',$end_date='')
     {
        $model = new Model();
