@@ -184,6 +184,7 @@ class Menu {
             '/districtadmin/invitepay' => array('name' => '商家二维码', 'parent' => 'personnel', 'hidden'=>true),
             '/districtadmin/hirer_edit'=> array('name' => '编辑专区名称','parent' =>'personnel', 'hidden'=>true),
             '/districtadmin/shop_child_count'=> array('name' => '下级专区和代理商销售信息','parent' =>'personnel', 'hidden'=>true),
+            '/districtadmin/operation_center'=> array('name' => '运营中心','parent' =>'personnel', 'hidden'=>true),
             '/districtadmin/promoter_edit'=> array('name' => '编辑代理商专区名称','parent' =>'personnel', 'hidden'=>true),
             '/districtadmin/contract_view'=> array('name' => '查看合约','parent' =>'personnel', 'hidden'=>true),
             // '/districtadmin/payset'=>array('name'=>'秒到支付','parent'=>'set'),
