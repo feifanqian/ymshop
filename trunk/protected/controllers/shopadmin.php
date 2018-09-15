@@ -316,6 +316,16 @@ class ShopadminController extends Controller {
                 $expressinfo['express_no'] = $goodsone['express_no'];
             }
         }
+        $type = array(
+            '0' => '普通',
+            '1' => '团购',
+            '2' => '抢购',
+            '3' => '绑定', 
+            '4' => '华币', 
+            '5' => '积分', 
+            '6' => '积分抢购'
+            );
+        $this->assign('type',$type);
         $this->assign("expressinfo", $expressinfo);
         $this->assign("orderinfo", $orderinfo);
         $this->assign("expresslist", $expresslist);
