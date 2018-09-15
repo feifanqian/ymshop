@@ -108,7 +108,7 @@ class ShopadminController extends Controller {
             $v['imglist'] = isset($imglist[$v['id']]) ? $imglist[$v['id']] : array();
 
             $v['express_status'] = $writelist[$v['id']] == count($v['imglist']) ? 'finished' : 'inprogress';
-            $v['img'] = isset($v['imglist'][0]['img']) ? $v['imglist'][0]['img'] : '';
+            // $v['img'] = isset($v['imglist'][0]['img']) ? $v['imglist'][0]['img'] : '';
         }
         unset($v);
         //处理过期订单状态
