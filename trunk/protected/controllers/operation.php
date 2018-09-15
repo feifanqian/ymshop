@@ -503,25 +503,58 @@ class OperationController extends Controller
     {
        $model = new Model();
         $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
-        $idstr = Common::getAllChildShops($user_id);
-        $shopids = $idstr['shop_ids']==''?$shop['id']:$shop['id'].','.$idstr['shop_ids'];
-        $where = "district_id in ($shopids)";
-        if($start_date && $end_date) {
-            $t1 = strtotime($start_date);
-            $t2 = strtotime($end_date);
-            $where.=" and createtime >=".$t1." and createtime <=".$t2;
-        }
-        $inviter_info = $model->table("invite")->fields('invite_user_id')->where($where)->findAll();
-        $ids = array();
-        if($inviter_info) {
-            foreach($inviter_info as $k =>$v) {
-               $ids[] = $v['invite_user_id'];
+        if($shop) {
+            $idstr = Common::getAllChildShops($user_id);
+            $shopids = $idstr['shop_ids']==''?$shop['id']:$shop['id'].','.$idstr['shop_ids'];
+            $where = "district_id in ($shopids)";
+            if($start_date && $end_date) {
+                $t1 = strtotime($start_date);
+                $t2 = strtotime($end_date);
+                $where.=" and createtime >=".$t1." and createtime <=".$t2;
             }
+            $inviter_info = $model->table("invite")->fields('invite_user_id')->where($where)->findAll();
+            $ids = array();
+            if($inviter_info) {
+                foreach($inviter_info as $k =>$v) {
+                   $ids[] = $v['invite_user_id'];
+                }
+            }
+            $user_ids = $ids!=null?implode(',', $ids):'';
+            $result['user_ids'] = $user_ids;
+            $result['shopids'] = $idstr['shop_ids'];
+            $result['num'] = count($inviter_info);
+        } else {
+            $is_break = false;
+            $num = 0;
+            $now_user_id = $user_id;
+            $idstr = '';
+            $ids = array();
+            while(!$is_break) {
+               $where = "i.user_id=".$now_user_id;
+               if($start_date && $end_date) {
+                 $where.=" and c.reg_time between '{$start_date}' and '{$end_date}'";
+               }
+               $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
+               if($inviter_info) {
+                 foreach($inviter_info as $k =>$v) {
+                    $customer = $model->table('customer')->fields('user_id')->where('user_id='.$v['invite_user_id'])->find(); 
+                    if($customer) {
+                      $ids[] = $v['invite_user_id'];
+                    }
+                    $num = $num+1;
+                    $now_user_id = $v['invite_user_id'];
+                 }
+               } else {
+                 $is_break = true;
+               }
+               array_push($ids, $user_id);
+               $idstr = $ids!=null?implode(',', $ids):'';
+            }
+            $result['user_ids'] = $idstr;
+            $result['shopids'] = '';
+            $result['num'] = $num;
         }
-        $user_ids = $ids!=null?implode(',', $ids):'';
-        $result['user_ids'] = $user_ids;
-        $result['shopids'] = $idstr['shop_ids'];
-        $result['num'] = count($inviter_info);
+        
         return $result;
     }
 }    
