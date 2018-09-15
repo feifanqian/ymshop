@@ -1,0 +1,54 @@
+<div class="tools_bar clearfix">
+    <form action="{url:/districtadmin/operation_center}" method="post">
+        <span class="fl">时间：<input name="s_time" type="text" value="{$s_time}" id="datepick" class="middle" readonly="readonly"></span><a href="javascript:tools_submit();" id="condition" class="icon-search" style=""> 查询</a>
+    </form>
+</div>
+<div class="clearfix">
+    <div class="mt10">
+        <h1><b>数量总统计:</b></h1>
+        <table class="mt10 default">
+            <tr>
+                <th class="caption">线上总订单：</th><td><a href="javascript:;" class="red">{$result['order_num']}个</a></td>
+                <th class="caption">扫码总订单：</th> <td><a href="javascript:;" class="red">{$result['offline_order_num']}个</a></td>
+            </tr>
+            <tr>
+                <th class="caption">经销商数量：</th> <td><a href="javascript:;" class="red">{$result['shop_num']}个</a></td>
+                <th class="caption">商家数量：</th> <td><a href="javascript:;" class="red">{$result['promoter_num']}个</a></td>
+            </tr>
+            <tr>
+                <th class="caption">会员数量：</th> <td><a href="javascript:;" class="red">{$result['user_num']}个</a></td>
+            </tr>
+        </table>
+    </div>
+    <div class="mt10">
+        <h1><b>金额总统计:</b></h1>
+        <table class="mt10 default">
+            <tr>
+                <th class="caption">线上订单总金额：</th><td><a href="javascript:;" class="red">￥{$result['order_sum']}</a></td>
+                <th class="caption">扫码订单总金额：</th> <td><a href="javascript:;" class="red">￥{$result['offline_order_sum']}</a></td>
+            </tr>
+            <tr>
+                <th class="caption">线上订单跨界收益：</th> <td><a href="javascript:;" class="red">￥{$result['order_benefit']}</a></td>
+                <th class="caption">扫码订单跨界收益：</th> <td><a href="javascript:;" class="red">￥{$result['crossover_sum']}</a></td>
+            </tr>
+            <tr>
+                <th class="caption">优惠购收益：</th> <td><a href="javascript:;" class="red">￥{$result['benefit_sum']}</a></td>
+            </tr>
+        </table>
+    </div>
+    <div class="mt10">
+        <h1><b>旗下经销商/商家:</b></h1>
+        {if:count($list['data'])>0}
+            {list:items=$list['data']}
+            <table class="mt10 default">
+                <tr><th class="caption">名称：</th> <td>{$item['real_name'] | $item['nickname']}</td></tr>
+                <tr><th class="caption">级别：</th> <td>{if:$item['role_type']==2}经销商{else:}商家{/if}</td></tr>
+                <tr><th class="caption">手机号：</th> <td>{$item['mobile'] | '--'}</td></tr>
+                <tr><th class="caption">经营者：</th> <td>{$item['realname'] | $item['real_name'] | $item['mobile']}</td></tr>
+                <tr><th class="caption">加入时间：</th> <td>{$item['create_time']}</td></tr>
+                <tr><th class="caption">查看详情</th> <td><a href="/districtadmin/operation_center?user_id={$item['id']}">查看详情</a> </td></tr>
+            </table>
+            {/list}
+        {/if}
+    </div>
+</div>

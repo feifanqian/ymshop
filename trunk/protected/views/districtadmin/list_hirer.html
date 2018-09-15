@@ -34,7 +34,8 @@
                        <li><a class="icon-eye" href="javascript:;" onclick="viewAchievement('{$item['name']}',{$item['owner_id']},{$item['id']});"> 查看销售业绩</a></li>
                        <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/hirer_del/hirer_id/$item[id]}')"> 移出经销商</a></li>
                        <li><a class="icon-pencil" href="{url:/districtadmin/hirer_edit/id/$item[id]}">编辑专区信息</a></li>
-                       <li><a class="icon-pencil" href="{url:/districtadmin/shop_child_count/id/$item[owner_id]}">查看所属下级专区和代理商销售信息</a></li>
+                       <!-- <li><a class="icon-pencil" href="{url:/districtadmin/shop_child_count/id/$item[owner_id]}">查看所属下级专区和代理商销售信息</a></li> -->
+                       <li><a class="icon-pencil" href="{url:/districtadmin/operation_center/user_id/$item[owner_id]}">运营中心</a></li>
                      </ul>
                    </div>
                 </div>
