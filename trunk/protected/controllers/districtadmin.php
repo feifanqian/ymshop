@@ -2272,6 +2272,12 @@ class DistrictadminController extends Controller
         } else {
             $is_shop = 0;
         }
+        $customer = $this->model->table('customer as c')->fields('c.real_name,c.mobile,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$user_id)->find();
+        $promoter = $this->model->table('district_promoter')->fields('create_time')->where('user_id='.$user_id)->find();
+        $result['real_name'] = $customer['real_name'];
+        $result['nickname'] = $customer['nickname'];
+        $result['mobile'] = $customer['mobile'];
+        $result['create_time'] = !empty($shop)?$shop['create_time']:$promoter['create_time'];
         $this->assign('is_shop',$is_shop);
         $this->assign('s_time', $s_time);
         $this->assign('result',$result);

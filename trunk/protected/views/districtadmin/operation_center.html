@@ -9,6 +9,16 @@
 </div>
 <div class="clearfix">
     <div class="mt10">
+        <h1><b>个人信息:</b></h1>
+        <table class="mt10 default">
+            <tr>
+                <th class="caption">名称：</th><td><a href="javascript:;">{$result['real_name'] | $result['nickname']}</a></td>
+                <th class="caption">手机号码：</th> <td><a href="javascript:;">{$result['mobile'] | '--'}</a></td>
+                <th class="caption">加入时间：</th> <td><a href="javascript:;">{$result['create_time']}</a></td>
+            </tr>
+        </table>
+    </div>
+    <div class="mt10">
         <h1><b>数量总统计:</b></h1>
         <table class="mt10 default">
             <tr>
