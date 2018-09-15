@@ -104,14 +104,13 @@ class ShopadminController extends Controller {
                 $writelist[$v['order_id']] += ($v['express_no'] ? 1 : 0);
             }
         }
+        $orders = $this->model->table("order_goods AS og")->fields("og.product_id,og.order_id,og.goods_id,og.goods_nums,og.express_no,og.express_company_id,go.img,go.imgs,go.name,o.pay_time")->join("left join goods AS go ON og.goods_id=go.id left join order as o on og.order_id=o.id")->where("order_id IN (" . implode(',', array_keys($writelist)) . ") AND og.shop_id = '{$this->user['id']}'")->findAll();
         foreach ($orders as $k => &$v) {
-            $v['imglist'] = isset($imglist[$v['id']]) ? $imglist[$v['id']] : array();
+            // $v['imglist'] = isset($imglist[$v['id']]) ? $imglist[$v['id']] : array();
 
             $v['express_status'] = $writelist[$v['id']] == count($v['imglist']) ? 'finished' : 'inprogress';
-            $v['img'] = isset($v['imglist'][0]['img']) ? $v['imglist'][0]['img'] : '';
-            if($v['img']=='') {
-                $v['img'] = $goodslist[$k]['img'];
-            }
+            // $v['img'] = isset($v['imglist'][0]['img']) ? $v['imglist'][0]['img'] : '';
+
         }
         unset($v);
         //处理过期订单状态
