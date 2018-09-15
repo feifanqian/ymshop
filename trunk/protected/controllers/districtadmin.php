@@ -2285,11 +2285,12 @@ class DistrictadminController extends Controller
     {
         $cal = array();
         $s_time = Req::args("s_time");
-        // if (!$s_time) {
-        //     $s_time = date("Y-m-d -- Y-m-d");
-        // }
+        if (!$s_time) {
+            $s_time = date("Y-m-d -- Y-m-d");
+        }
         $date = explode(' -- ', $s_time);
-        $stime = date('Y-m-d 00:00:00', strtotime($date[0]));
+        // $stime = date('Y-m-d 00:00:00', strtotime($date[0]));
+        $stime = date("Y-m-d 00:00:00", strtotime("-1 year"));
         $etime = date('Y-m-d 00:00:00', strtotime($date[1] . '+1day'));
         $cle = strtotime($etime) - strtotime($stime);
         $num = ceil($cle / 86400);
