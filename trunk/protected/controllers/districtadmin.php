@@ -2143,6 +2143,11 @@ class DistrictadminController extends Controller
         $end_date = $cal['end'];
         $s_time = $cal['str'];
         $user_id = Filter::int(Req::args('user_id'));
+        if($user_id==1) {
+            var_dump($start_date);
+            var_dump($end_date);
+            die;
+        }
         // $start_date = Filter::str(Req::args('start_date'));
         // $end_date = Filter::str(Req::args('end_date'));
         $page = Filter::int(Req::args('p'));
@@ -2226,7 +2231,7 @@ class DistrictadminController extends Controller
             }
             $list = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
             if($list['data']){
-                unset($list['html']);
+                // unset($list['html']);
                 $total = count($list['data']);
                 foreach($list['data'] as $k=>$v){
                     if($v['id']==null){
@@ -2261,6 +2266,13 @@ class DistrictadminController extends Controller
         $result['crossover_sum'] = $crossover_sum; //扫码订单跨界收益
         $result['benefit_sum'] = $benefit_sum; // 优惠购收益
         
+        $shop = $model->table('district_shop')->where('owner_id='.$user_id)->find();
+        if($shop) {
+            $is_shop = 1;
+        } else {
+            $is_shop = 0;
+        }
+        $this->assign('is_shop',$is_shop);
         $this->assign('s_time', $s_time);
         $this->assign('result',$result);
         $this->assign('list',$list);
