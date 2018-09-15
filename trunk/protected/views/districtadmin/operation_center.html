@@ -39,6 +39,7 @@
             </tr>
         </table>
     </div>
+    {if:$is_shop==1}
     <div class="mt10">
         <h1><b>旗下经销商/商家:</b></h1>
         {if:count($list['data'])>0}
@@ -57,4 +58,5 @@
         {$list['html']}
         </div>
     </div>
+    {/if}
 </div>

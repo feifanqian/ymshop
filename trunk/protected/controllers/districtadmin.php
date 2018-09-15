@@ -2143,11 +2143,11 @@ class DistrictadminController extends Controller
         $end_date = $cal['end'];
         $s_time = $cal['str'];
         $user_id = Filter::int(Req::args('user_id'));
-        if($user_id==1) {
-            var_dump($start_date);
-            var_dump($end_date);
-            die;
-        }
+        // if($user_id==1) {
+        //     var_dump($start_date);
+        //     var_dump($end_date);
+        //     die;
+        // }
         // $start_date = Filter::str(Req::args('start_date'));
         // $end_date = Filter::str(Req::args('end_date'));
         $page = Filter::int(Req::args('p'));
@@ -2285,9 +2285,9 @@ class DistrictadminController extends Controller
     {
         $cal = array();
         $s_time = Req::args("s_time");
-        if (!$s_time) {
-            $s_time = date("Y-m-d -- Y-m-d");
-        }
+        // if (!$s_time) {
+        //     $s_time = date("Y-m-d -- Y-m-d");
+        // }
         $date = explode(' -- ', $s_time);
         $stime = date('Y-m-d 00:00:00', strtotime($date[0]));
         $etime = date('Y-m-d 00:00:00', strtotime($date[1] . '+1day'));
