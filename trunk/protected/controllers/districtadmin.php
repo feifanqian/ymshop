@@ -2137,6 +2137,7 @@ class DistrictadminController extends Controller
 
     public function operation_center()
     {
+        $model = new Mode();
         $cal = $this->calendar();
         $start_date = $cal['start'];
         $end_date = $cal['end'];
@@ -2162,8 +2163,8 @@ class DistrictadminController extends Controller
             if($start_date || $end_date) {
                 $where1.=" and pay_time between '{$start_date}' and '{$end_date}'";
             }
-            $order_num = $this->model->table('order')->where($where1)->count();
-            $order_total = $this->model->table('order')->fields('sum(order_amount) as sum')->where($where1)->query();
+            $order_num = $model->table('order')->where($where1)->count();
+            $order_total = $model->table('order')->fields('sum(order_amount) as sum')->where($where1)->query();
             $order_sum = $order_total[0]['sum']!=null?$order_total[0]['sum']:0.00;
 
             // $where2 = "shop_ids = ".$user_id." and pay_status=1";
@@ -2171,20 +2172,20 @@ class DistrictadminController extends Controller
             if($start_date || $end_date) {
                 $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
             }
-            $offline_order_num = $this->model->table('order_offline')->where($where2)->count();
-            $offline_order_total = $this->model->table('order_offline')->fields('sum(order_amount) as sum')->where($where2)->query();
+            $offline_order_num = $model->table('order_offline')->where($where2)->count();
+            $offline_order_total = $model->table('order_offline')->fields('sum(order_amount) as sum')->where($where2)->query();
             $offline_order_sum = $offline_order_total[0]['sum']!=null?$offline_order_total[0]['sum']:0.00;
             $where3 = "user_id in ($ids) and type=21";
             if($start_date || $end_date) {
                 $where3 .=" and time between '{$start_date}' and '{$end_date}'"; 
             }
-            $benefit_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where3)->query();
+            $benefit_total = $model->table('balance_log')->fields('sum(amount) as sum')->where($where3)->query();
             $benefit_sum = $benefit_total[0]['sum']!=null?$benefit_total[0]['sum']:0.00;
             $where4 = "user_id in ($ids) and type=8";
             if($start_date || $end_date) {
                 $where4 .=" and time between '{$start_date}' and '{$end_date}'"; 
             }
-            $crossover_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
+            $crossover_total = $model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
             $where5 = "owner_id in ($ids)";
             if($start_date || $end_date) {
@@ -2194,13 +2195,13 @@ class DistrictadminController extends Controller
             if($start_date || $end_date) {
                 $where6 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
             }
-            $shop_num = $this->model->table('district_shop')->where($where5)->count();
-            $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
+            $shop_num = $model->table('district_shop')->where($where5)->count();
+            $promoter_num = $model->table('district_promoter')->where($where6)->count();
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
                 $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
             }
-            $order_benefit_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where7)->query();
+            $order_benefit_total = $model->table('balance_log')->fields('sum(amount) as sum')->where($where7)->query();
             $order_benefit = $order_benefit_total[0]['sum']!=null?$order_benefit_total[0]['sum']:0.00;
         } else {
             $order_num = 0;
@@ -2223,7 +2224,7 @@ class DistrictadminController extends Controller
             if($start_date || $end_date) {
                 $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
-            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
+            $list = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
             if($list['data']){
                 unset($list['html']);
                 $total = count($list['data']);
@@ -2232,7 +2233,7 @@ class DistrictadminController extends Controller
                         unset($list['data'][$k]);
                         $total = $total-1;
                     }else{
-                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        $shop = $model->table('district_shop')->where('owner_id='.$v['id'])->find();
                         if($shop){
                             $list['data'][$k]['role_type'] = 2; //经销商   
                         }else{
