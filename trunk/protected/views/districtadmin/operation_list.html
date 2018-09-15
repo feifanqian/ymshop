@@ -4,8 +4,8 @@
 <div class="tools_bar clearfix">
     <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
    <!-- <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>!-->
-    <a class="icon-delicious" href="{url:/districtadmin/list_hirer}"> 查看全部</a>
-    <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方经销商</a>
+    <a class="icon-delicious" href="{url:/districtadmin/operation_list}"> 查看全部</a>
+    <!-- <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方经销商</a> -->
 <!--    <a class="icon-eye-blocked" href="{url:/order/order_list/status/2}"> 未审核</a>
     <a class="icon-cogs" href="{url:/order/order_list/status/3}"> 执行中</a>-->
 
@@ -30,12 +30,7 @@
                     <a  class="icon-cog action" href="javascript:;"> 处理</a>
                     <div class="menu_select">
                      <ul>
-                       <li><a class="icon-eye" href="{url:/districtadmin/record_income}?condition=p.role_type--eq--3__and--p.role_id--eq--{$item['id']}"> 查看收益记录</a></li>
-                       <li><a class="icon-eye" href="javascript:;" onclick="viewAchievement('{$item['name']}',{$item['owner_id']},{$item['id']});"> 查看销售业绩</a></li>
-                       <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/hirer_del/hirer_id/$item[id]}')"> 移出经销商</a></li>
-                       <li><a class="icon-pencil" href="{url:/districtadmin/hirer_edit/id/$item[id]}">编辑专区信息</a></li>
-                       <!-- <li><a class="icon-pencil" href="{url:/districtadmin/shop_child_count/id/$item[owner_id]}">查看所属下级专区和代理商销售信息</a></li> -->
-                       <li><a class="icon-pencil" href="{url:/districtadmin/operation_center/user_id/$item[owner_id]}">运营中心</a></li>
+                       <li><a class="icon-pencil" href="{url:/districtadmin/operation_center/user_id/$item[owner_id]}">运营中心详情</a></li>
                      </ul>
                    </div>
                 </div>
@@ -138,6 +133,6 @@ function callback(hirer_id,user_id,pointcoin,district_name,linkman,link_mobile){
 $("#condition").on("click",function(){
    //  layer.msg("暂未完成，请等待");
    // return false;
-  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_hirer}',method:'get'});},data:{'ds.name':{name:'专区名称'},'d.name':{'name':'上级专区'},'c.real_name':{name:'所有者'},'ds.linkman':{name:' 联系人'},'ds.link_mobile':{name:'联系电话'}}});
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/operation_list}',method:'get'});},data:{'ds.name':{name:'专区名称'},'d.name':{'name':'上级专区'},'c.real_name':{name:'所有者'},'ds.linkman':{name:' 联系人'},'ds.link_mobile':{name:'联系电话'}}});
 });
 </script>
