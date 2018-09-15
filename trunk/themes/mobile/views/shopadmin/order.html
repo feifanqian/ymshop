@@ -12,7 +12,9 @@
             {list:$items=$orderlist}
             <a href="{url:/shopadmin/order_detail/id/$item[id]}" class="weui_media_box weui_media_appmsg">
                 <div class="weui_media_hd">
-                    <img class="weui_media_appmsg_thumb weui_media_text_img" src="{echo:Common::thumb($item['img'],100,100);}" />
+                    <!-- <img class="weui_media_appmsg_thumb weui_media_text_img" src="{echo:Common::thumb($item['img'],100,100);}" /> -->
+                    {set:$img = $item['img']}
+                    <img class="weui_media_appmsg_thumb weui_media_text_img" src="{url:@$img}" width="100" height="100" />
                 </div>
                 <div class="weui_media_bd">
                     <h4 class="weui_media_title">{$item['accept_name']}</h4>
