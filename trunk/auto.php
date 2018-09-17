@@ -422,7 +422,7 @@ class LinuxCliTask{
                 $now = time();
                 $amount = $v['order_amount']; 
                 if($v['join_id']!=0) {
-                    $groupbuy_log = $this->model->table('groupbuy_log')->fields('id,join_id,user_id,join_time')->where('id='.$v['join_id'].' and pay_status=1 and type=1')->findAll();
+                    $groupbuy_log = $this->model->table('groupbuy_log')->fields('id,join_id,user_id,join_time')->where('id='.$v['join_id'].' and pay_status=1 and type=1 and status!=1')->findAll();
                     if($groupbuy_log) {
                         foreach ($groupbuy_log as $key => $value) {
                             $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
@@ -431,6 +431,7 @@ class LinuxCliTask{
                                     $user_id = $groupbuy_join['need_num']+1;
                                     $data = array(
                                     'user_id'  => $groupbuy_join['user_id'].','.$user_id,
+                                    'need_num' => $groupbuy_join['need_num']-1
                                     );
                                     $this->model->table('groupbuy_join')->data($data)->where('id='.$value['join_id'])->update();
                                     $groupbuy_id = $groupbuy_log['groupbuy_id'];
@@ -456,7 +457,8 @@ class LinuxCliTask{
                                     $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
                                     $jpush->push();
                                 }
-                            } 
+                            }
+                            $this->model->table('groupbuy_log')->data(['status'=>1])->where('id='.$value['id'])->update(); 
                         }
                     }
                 }     
