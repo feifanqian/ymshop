@@ -2132,7 +2132,7 @@ class DistrictadminController extends Controller
         foreach ($items as $item) {
             $str .= "<tr>";
             foreach ($fields as $value) {
-                $str .= "<td>" . mb_convert_encoding($item[$value],"GBK", "UTF-8") . "</td>";
+                $str .= '<td style="vnd.ms-excel.numberformat:@;">' . mb_convert_encoding($item[$value],"GBK", "UTF-8") . "</td>";
             }
             $str .= "</tr>";
         }
