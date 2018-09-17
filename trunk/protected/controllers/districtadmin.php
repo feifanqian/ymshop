@@ -2193,27 +2193,34 @@ class DistrictadminController extends Controller
             }
             $crossover_total = $model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
-            // $where5 = "owner_id in ($ids)";
-            // if($start_date || $end_date) {
-            //     $where5 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
-            // }
-            $where5 = "ds.id in ($shopids)";
-            if($start_date || $end_date) {
-                $where5 .=" and ds.create_time between '{$start_date}' and '{$end_date}'"; 
-            }
-            // $where6 = "user_id in ($ids)";
-            // if($start_date || $end_date) {
-            //     $where6 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
-            // }
-            $where6 = "dp.hirer_id in ($shopids) and c.status=1";
-            if($start_date || $end_date) {
-                $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
-            }
-            $shop_num = $model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
-            $promoter_num = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
-            if($promoter_num>=$shop_num+1) {
-                $promoter_num = $promoter_num-$shop_num-1;
-            }
+           
+            if($shopids!='') {
+                 // $where5 = "owner_id in ($ids)";
+                // if($start_date || $end_date) {
+                //     $where5 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
+                // }
+                $where5 = "ds.id in ($shopids)";
+                if($start_date || $end_date) {
+                    $where5 .=" and ds.create_time between '{$start_date}' and '{$end_date}'"; 
+                }
+                // $where6 = "user_id in ($ids)";
+                // if($start_date || $end_date) {
+                //     $where6 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
+                // }
+                $where6 = "dp.hirer_id in ($shopids) and c.status=1";
+                if($start_date || $end_date) {
+                    $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
+                }
+                $shop_num = $model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
+                $promoter_num = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
+                if($promoter_num>=$shop_num+1) {
+                    $promoter_num = $promoter_num-$shop_num-1;
+                }
+            } else {
+                $shop_num = 0;
+                $promoter_num = 0;
+            } 
+            
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
                 $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
