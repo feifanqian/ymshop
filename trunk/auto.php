@@ -435,7 +435,7 @@ class LinuxCliTask{
                                     'user_id'  => $groupbuy_join['user_id'].','.$user_id,
                                     'need_num' => $groupbuy_join['need_num']-1
                                     );
-                                    $this->model->table('groupbuy_join')->data($data)->where('id='.$value['join_id'])->update();
+                                    $this->model->table('groupbuy_join')->data($data)->where('id='.$groupbuy_join['id'])->update();
                                     $log = array(
                                     'join_id'     => $join_id,
                                     'groupbuy_id' => $groupbuy_id,
