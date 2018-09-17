@@ -2195,18 +2195,10 @@ class DistrictadminController extends Controller
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
            
             if($shopids!='') {
-                 // $where5 = "owner_id in ($ids)";
-                // if($start_date || $end_date) {
-                //     $where5 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
-                // }
                 $where5 = "ds.id in ($shopids)";
                 if($start_date || $end_date) {
                     $where5 .=" and ds.create_time between '{$start_date}' and '{$end_date}'"; 
                 }
-                // $where6 = "user_id in ($ids)";
-                // if($start_date || $end_date) {
-                //     $where6 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
-                // }
                 $where6 = "dp.hirer_id in ($shopids) and c.status=1";
                 if($start_date || $end_date) {
                     $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
