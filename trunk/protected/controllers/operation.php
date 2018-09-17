@@ -94,8 +94,8 @@ class OperationController extends Controller
                 if($start_date || $end_date) {
                     $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
                 }
-                $shop_num = $model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
-                $promoter_num = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
+                $shop_num = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
+                $promoter_num = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
                 if($promoter_num>=$shop_num+1) {
                     $promoter_num = $promoter_num-$shop_num-1;
                 }
@@ -283,8 +283,8 @@ class OperationController extends Controller
                 if($start_date || $end_date) {
                     $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
                 }
-                $shop_num = $model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
-                $promoter_num = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
+                $shop_num = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
+                $promoter_num = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
                 if($promoter_num>=$shop_num+1) {
                     $promoter_num = $promoter_num-$shop_num-1;
                 }
@@ -428,8 +428,8 @@ class OperationController extends Controller
                 if($start_date || $end_date) {
                     $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
                 }
-                $shop_num = $model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
-                $promoter_num = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
+                $shop_num = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
+                $promoter_num = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
                 if($promoter_num>=$shop_num+1) {
                     $promoter_num = $promoter_num-$shop_num-1;
                 }
