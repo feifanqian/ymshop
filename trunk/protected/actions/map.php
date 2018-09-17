@@ -593,8 +593,9 @@ class MapAction extends Controller
     //帮助支持
     public function help_list()
     {
-        $this->model->table('article')->where('category_id=3')->findAll();
+        $list = $this->model->table('article')->where('category_id=3')->findAll();
         $this->code = 0;
+        $this->content = $list;
         return;
     }
 }
