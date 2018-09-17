@@ -2109,6 +2109,37 @@ class DistrictadminController extends Controller
         exit();
     }
 
+    public function export_contract()
+    {
+        $id = Filter::int(Req::args('id'));
+        $model = new Model();
+        $contract = $model->table('promoter_contract')->fields('*')->where('id='.$id)->find();
+        $user_id = $contract['user_id'];
+        $items = $model->table('shop_check')->where('user_id='.$user_id)->findAll();
+        header("Content-type:application/vnd.ms-excel");
+        header("Content-Disposition:filename=doc_receiving_list.xls");
+        $fields_array = array('legal_person' => '客户姓名','mobile' => '电话', 'create_date' => '上传时间', 'address' => '地区','id_no'=>'证件号码');
+        $fields = array('legal_person' => '客户姓名','mobile' => '电话', 'create_date' => '上传时间', 'address' => '地区','id_no'=>'证件号码');
+        $str = "<table border=1><tr>";
+        foreach ($items as $key => $value) {
+            $items[$key]['address'] = $value['province'].$value['city'].$value['county'].$value['address'];
+        }
+        foreach ($fields as $value) {
+            $str .= "<th>" . iconv("UTF-8", "GBK", $fields_array[$value]) . "</th>";
+        }
+        $str .= "</tr>";
+        foreach ($items as $item) {
+            $str .= "<tr>";
+            foreach ($fields as $value) {
+                $str .= "<td>" . mb_convert_encoding($item[$value],"GBK", "UTF-8") . "</td>";
+            }
+            $str .= "</tr>";
+        }
+        $str .= "</table>";
+        echo $str;
+        exit;
+    }
+
     public function send_code_log()
     {
         $condition = Req::args("condition");
@@ -2195,9 +2226,6 @@ class DistrictadminController extends Controller
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
            
             if($shopids!='') {
-                if($user_id==965) {
-                    var_dump($shopids);die;
-                }
                 $where5 = "ds.id in ($shopids)";
                 if($start_date || $end_date) {
                     $where5 .=" and ds.create_time between '{$start_date}' and '{$end_date}'"; 
