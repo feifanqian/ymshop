@@ -424,11 +424,13 @@ class LinuxCliTask{
                 if($v['join_id']!=0) {
                     $groupbuy_log = $this->model->table('groupbuy_log')->fields('id,groupbuy_id,join_id,user_id,join_time')->where('id='.$v['join_id'].' and pay_status=1 and type=1 and status!=1')->findAll();
                     if($groupbuy_log) {
+                        $this->model->table('customer')->data(['qq'=>'123'])->where('user_id=1')->update();
                         foreach ($groupbuy_log as $key => $value) {
                             $groupbuy_id = $value['groupbuy_id'];
                             $join_id = $value['join_id'];
                             $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
                             if($groupbuy_join['need_num']>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['end_time'])) {
+                                $this->model->table('customer')->data(['phone'=>'123'])->where('user_id=1')->update();
                                 for($i=0;$i++;$i<$groupbuy_join['need_num']) {
                                     $user_id = $groupbuy_join['need_num']+1;
                                     $data = array(
