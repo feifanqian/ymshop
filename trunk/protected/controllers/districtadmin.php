@@ -1816,6 +1816,7 @@ class DistrictadminController extends Controller
         $this->layout = '';
         $condition = Req::args("condition");
         $fields = Req::args("fields");
+        var_dump($fields);die;
         $condition = Common::str2where($condition);
         $model = new Model();
         if ($condition) {
@@ -2117,7 +2118,7 @@ class DistrictadminController extends Controller
         $user_id = $contract['user_id'];
         $items = $model->table('shop_check')->where('user_id='.$user_id)->findAll();
         header("Content-type:application/vnd.ms-excel");
-        header("Content-Disposition:filename=doc_receiving_list.xls");
+        header("Content-Disposition:filename=contract.xls");
         $fields_array = array('legal_person' => '客户姓名','mobile' => '电话', 'create_date' => '上传时间', 'address' => '地区','id_no'=>'证件号码');
         $fields = array('legal_person' => '客户姓名','mobile' => '电话', 'create_date' => '上传时间', 'address' => '地区','id_no'=>'证件号码');
         $str = "<table border=1><tr>";
