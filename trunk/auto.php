@@ -429,7 +429,7 @@ class LinuxCliTask{
                             $join_id = $value['join_id'];
                             $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
                             if($groupbuy_join['need_num']>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['end_time'])) {
-                                for($i=0;$i++;$i<$groupbuy_join['need_num']) {
+                                for($i=0;$i<$groupbuy_join['need_num'];$i++) {
                                     $user_id = $groupbuy_join['need_num']+1;
                                     $data = array(
                                     'user_id'  => $groupbuy_join['user_id'].','.$user_id,
