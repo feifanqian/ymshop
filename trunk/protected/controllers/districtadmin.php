@@ -1816,7 +1816,7 @@ class DistrictadminController extends Controller
         $this->layout = '';
         $condition = Req::args("condition");
         $fields = Req::args("fields");
-        var_dump($fields);die;
+
         $condition = Common::str2where($condition);
         $model = new Model();
         if ($condition) {
@@ -2120,7 +2120,7 @@ class DistrictadminController extends Controller
         header("Content-type:application/vnd.ms-excel");
         header("Content-Disposition:filename=contract.xls");
         $fields_array = array('legal_person' => '客户姓名','mobile' => '电话', 'create_date' => '上传时间', 'address' => '地区','id_no'=>'证件号码');
-        $fields = array('legal_person' => '客户姓名','mobile' => '电话', 'create_date' => '上传时间', 'address' => '地区','id_no'=>'证件号码');
+        $fields = array('legal_person','mobile', 'create_date', 'address','id_no');
         $str = "<table border=1><tr>";
         foreach ($items as $key => $value) {
             $items[$key]['address'] = $value['province'].$value['city'].$value['county'].$value['address'];
