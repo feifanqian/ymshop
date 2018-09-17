@@ -425,6 +425,8 @@ class LinuxCliTask{
                     $groupbuy_log = $this->model->table('groupbuy_log')->fields('id,join_id,user_id,join_time')->where('id='.$v['join_id'].' and pay_status=1 and type=1 and status!=1')->findAll();
                     if($groupbuy_log) {
                         foreach ($groupbuy_log as $key => $value) {
+                            $groupbuy_id = $value['groupbuy_id'];
+                            $join_id = $value['join_id'];
                             $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
                             if($groupbuy_join['need_num']>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['end_time'])) {
                                 for($i=0;$i++;$i<$groupbuy_join['need_num']) {
@@ -434,9 +436,8 @@ class LinuxCliTask{
                                     'need_num' => $groupbuy_join['need_num']-1
                                     );
                                     $this->model->table('groupbuy_join')->data($data)->where('id='.$value['join_id'])->update();
-                                    $groupbuy_id = $groupbuy_log['groupbuy_id'];
                                     $log = array(
-                                    'join_id'     => $value['join_id'],
+                                    'join_id'     => $join_id,
                                     'groupbuy_id' => $groupbuy_id,
                                     'user_id'     => $user_id,
                                     'join_time'   => date('Y-m-d H:i:s'),
@@ -453,7 +454,7 @@ class LinuxCliTask{
                                     //jpush
                                     $jpush = $NoticeService->getNotice('jpush');
                                     $audience['alias']=array($v['user_id']);
-                                    $res = $groupbuy_log['groupbuy_id'].','.$groupbuy_log['join_id'];
+                                    $res = $groupbuy_id.','.$join_id;
                                     $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
                                     $jpush->push();
                                 }
