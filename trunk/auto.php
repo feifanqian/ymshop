@@ -442,6 +442,7 @@ class LinuxCliTask{
                                     'groupbuy_id' => $groupbuy_id,
                                     'user_id'     => $user_id,
                                     'join_time'   => date('Y-m-d H:i:s'),
+                                    'pay_status'  => 1,
                                     'type'        => 2
                                     );
                                     $log_id = $this->model->table('groupbuy_log')->data($log)->insert();
