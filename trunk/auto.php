@@ -459,7 +459,8 @@ class LinuxCliTask{
                                     $jpush->push();
                                 }
                             }
-                            $this->model->table('groupbuy_log')->data(['status'=>1])->where('id='.$value['id'])->update(); 
+                            $this->model->table('groupbuy_log')->data(['status'=>1])->where('id='.$value['id'])->update();
+                            $this->model->table('groupbuy_join')->data(['status'=>1])->where('id='.$groupbuy_join['id'])->update(); 
                         }
                     }
                 }     
