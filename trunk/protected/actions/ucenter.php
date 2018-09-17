@@ -1506,6 +1506,9 @@ class UcenterAction extends Controller {
         }elseif ($type == 'native_bankcard') {
             $options['save-key'] = "/data/uploads/native_bankcard/" . $this->user['id'] . ".jpg";
             $options['ext-param'] = "native_bankcard:{$this->user['id']}";
+        }elseif ($type == 'contract') {
+            $options['save-key'] = "/data/uploads/contract/" . $this->user['id'] . ".jpg";
+            $options['ext-param'] = "contract:{$this->user['id']}";
         } else {
             $this->code = 1000;
             return;
