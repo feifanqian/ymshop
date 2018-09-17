@@ -294,6 +294,7 @@ class V1Controller extends Controller {
         "image_merge_test"=>array("map/image_merge_test",1,1), //图片合成测试
         "image_merge_tests"=>array("map/image_merge_tests",1,1), //图片合成测试
         "save_contract_image"=>array("map/save_contract_image",1,1), //图片保存
+        "save_contract_images"=>array("map/save_contract_images",1,1), //图片保存
         //商圈
         "business_center_list"=>array("map/business_center_list",0,1), //商圈列表
         "publish_dynamic"=>array("map/publish_dynamic",1,1), //发布动态

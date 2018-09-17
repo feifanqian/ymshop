@@ -270,6 +270,18 @@ class MapAction extends Controller
         $this->code = 0;
         $this->content['picture'] = $picture;
     }
+
+    public function save_contract_images()
+    {
+        $picture = Filter::str(Req::args('picture'));
+        $data = array(
+            'url4'    => $picture
+            );
+        $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
+        $this->model->table('shop_check')->data(['status'=>0])->where('user_id='.$this->user['id'])->update();
+        $this->code = 0;
+        $this->content['picture'] = $picture;
+    }
     
     //商圈列表
     public function business_center_list()
