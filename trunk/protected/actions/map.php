@@ -589,4 +589,12 @@ class MapAction extends Controller
         $this->code = 0;
         return;
     }
+
+    //帮助支持
+    public function help_list()
+    {
+        $this->model->table('article')->where('category_id=3')->findAll();
+        $this->code = 0;
+        return;
+    }
 }

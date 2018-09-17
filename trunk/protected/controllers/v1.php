@@ -307,6 +307,7 @@ class V1Controller extends Controller {
         "shop_collect"=>array("map/shop_collect",1,1), //收藏店铺
         "shop_attention"=>array("map/shop_attention",1,1), //关注店铺
         "feedback"=>array("map/feedback",0,1), //意见反馈
+        "help_list"=>array("map/help_list",0,1), //帮助支持
         //帮助建议
         "article_list"=>array("index/article_list",0,1), //帮助建议文章
         "get_all_child_user_ids"=>array("district/getAllChildUserIds",0,1),

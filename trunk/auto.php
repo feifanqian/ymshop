@@ -411,6 +411,117 @@ class LinuxCliTask{
             }
         }
     }
+
+    #添加机器人自动参与团购
+    public function autoJoinGroupBuy()
+    {
+        $name = 'ROBOT';
+        $order = $this->model->table('order')->where("pay_status=1 and type=1 and delivery_status=0 and status!=4 and accept_name not like '%{$name}%'")->findAll();
+        if($order) {
+            foreach($order as $k=>$v) {
+                $now = time();
+                $amount = $v['order_amount']; 
+                if($v['join_id']!=0) {
+                    $groupbuy_log = $this->model->table('groupbuy_log')->fields('id,join_id,user_id,join_time')->where('id='.$v['join_id'].' and pay_status=1 and type=1')->findAll();
+                    if($groupbuy_log) {
+                        foreach ($groupbuy_log as $key => $value) {
+                            $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
+                            if($groupbuy_join['need_num']>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['join_time'])) {
+                                for($i=0;$i++;$i<$groupbuy_join['need_num']) {
+                                    $user_id = $groupbuy_join['need_num']+1;
+                                    $data = array(
+                                    'user_id'  => $groupbuy_join['user_id'].','.$user_id,
+                                    );
+                                    $this->model->table('groupbuy_join')->data($data)->where('id='.$join_id)->update();
+                                    $groupbuy_id = $groupbuy_log['groupbuy_id'];
+                                    $log = array(
+                                    'join_id'     => $join_id,
+                                    'groupbuy_id' => $groupbuy_id,
+                                    'user_id'     => $user_id,
+                                    'join_time'   => date('Y-m-d H:i:s'),
+                                    'type'        => 2
+                                    );
+                                    $log_id = $this->model->table('groupbuy_log')->data($log)->insert();
+                                    $order_goods = $this->model->table('order_goods')->where('order_id='.$v['id'])->find();
+                                    $product_id = $order_goods['product_id'];
+                                    $result = $this->autoCreateOrder($user_id,$product_id,$groupbuy_id,$log_id);
+                                }
+                            } 
+                        }
+                    }
+                }     
+            }
+        }
+        
+    }
+
+    public function autoCreateOrder($user_id,$product_id,$groupbuy_id,$log_id){
+        $model = new Model();
+        
+        $product = $model->table('products as p')->where("p.id = $product_id")->join("left join goods as g on p.goods_id = g.id")->fields("p.*,g.shop_id")->find();
+        
+        $customer = $model->table('customer')->fields('real_name')->where('user_id='.$user_id)->find();
+
+        $gift_num = 1;
+
+        $groupbuy = $model->table("groupbuy")->where("id=$groupbuy_id")->find();
+        unset($groupbuy['description']);
+
+        $data['type']=1;
+        $data['order_no'] = Common::createOrderNo();
+        $data['user_id'] = $user_id;
+        $data['payment'] = 1;
+        $data['status'] = 3; 
+        $data['pay_status'] = 1;
+        $data['accept_name'] = $customer['real_name'];
+        $data['phone'] = '';
+        $data['mobile'] = '';
+        $data['province'] = '';
+        $data['city'] = '';
+        $data['county'] = '';
+        $data['addr'] = '';
+        $data['zip'] = '';
+        $data['payable_amount'] = $product['sell_price']*$gift_num;
+        $data['payable_freight'] = 0;
+        $data['real_freight'] = 0;
+        $data['create_time'] = date('Y-m-d H:i:s');
+        $data['pay_time'] = date("Y-m-d H:i:s");
+        $data['is_invoice'] = 0;
+        $data['handling_fee'] = 0;
+        $data['invoice_title'] = '';
+        $data['taxes'] = 0;
+        $data['discount_amount'] = 0;
+        $data['order_amount'] = $product['sell_price']*$gift_num;
+        $data['real_amount'] = $product['sell_price']*$gift_num;
+        $data['point'] = 0;
+        $data['voucher_id'] = 0;
+        $data['voucher'] = serialize(array());
+        $data['prom_id']=0;
+        $data['prom'] = serialize($groupbuy);
+        $data['admin_remark'] = "请勿发货，来自拼团机器人凑数订单";
+        $data['shop_ids'] = $product['shop_id'];
+        $data['join_id'] = $log_id;
+        $order_id =$model->table('order')->data($data)->insert();
+        
+        $tem_data['order_id'] = $order_id;
+        $tem_data['goods_id'] = $product['goods_id'];
+        $tem_data['product_id'] = $product['id'];
+        $tem_data['shop_id'] = $product['shop_id'];
+        $tem_data['goods_price'] = $product['sell_price'];
+        $tem_data['real_price'] = $product['sell_price'];
+        $tem_data['goods_nums'] = $gift_num;
+        $tem_data['goods_weight'] = $product['weight'];
+        $tem_data['prom_goods'] = serialize(array());
+        $tem_data['spec'] = serialize($product['spec']);
+        $model->table("order_goods")->data($tem_data)->insert();
+        if($order_id){
+            $model->table("products")->where("id=" . $product_id)->data(array('store_nums' => "`store_nums`-" . $gift_num))->update();//更新库存
+            $model->table('goods')->data(array('store_nums' => "`store_nums`-" . $gift_num))->where('id=' . $product['goods_id'])->update();
+            return true;
+        }else{
+            return false;
+        }
+    }
   
     private function doCurl($url,$post_data,$time_out =30){
         $post_data = is_array($post_data)?http_build_query($post_data):$post_data;
