@@ -81,7 +81,9 @@ class OperationController extends Controller
             }
             $shop_num = $this->model->table('district_shop')->where($where5)->count();
             $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
-            $promoter_num = $promoter_num-1;
+            if($promoter_num>=1) {
+                $promoter_num = $promoter_num-1;
+            }
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
                 $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
