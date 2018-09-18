@@ -21,7 +21,7 @@
 .header p{
     margin-top:20px;
     font-size: 26px;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 .Wdate{
     width: 30%;
@@ -30,7 +30,13 @@
     background-size: 100% 50px !important;
     color: #fff;
     text-align: center;
-    border: none;
+    border: none !important;
+}
+.block{
+    width: 94%;
+    margin-left: 3%;
+    background-color: #fff;
+    height: 340px;
 }
 .line{
     margin-top: 10px;
@@ -40,7 +46,7 @@
     padding-left: 2%;
     border-left: 3px solid #4eabf4;
     font-size: 26px;
-    font-weight: bold;
+    /*font-weight: bold;*/
     line-height: 40px;
     color: #333; 
 }
@@ -58,15 +64,16 @@
 }
 .line-info span{
     display: inline-block;
-    width: 48%;
-    height: 33px;
+    width: 32%;
+    height: 120px;
     float: left;
     font-size: 24px;
     color: #666;
-    margin-bottom: 4px;
+    /*margin-bottom: 4px;*/
 }
 .line-info p{
     display: inline;
+    color: #ff6600;
 }
 .line-info img{
     width: 33px;
@@ -159,9 +166,9 @@ iframe{
     <div class="line">数量总统计</div><br/>
     <div class="line-info">
       <span><img src="/themes/mobile/images/op_center/--05.jpg" >&nbsp;&nbsp;&nbsp;线上总订单：<p id="order_num">{$result['order_num']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--06.jpg" >&nbsp;&nbsp;&nbsp;扫码总订单：<p id="offline_order_num">{$result['offline_order_num']}</p></span><br/>
+      <span><img src="/themes/mobile/images/op_center/--06.jpg" >&nbsp;&nbsp;&nbsp;扫码总订单：<p id="offline_order_num">{$result['offline_order_num']}</p></span>
       <span><img src="/themes/mobile/images/op_center/--09.jpg" >&nbsp;&nbsp;&nbsp;经销商数量：<p id="shop_num">{$result['shop_num']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--07.jpg" >&nbsp;&nbsp;&nbsp;商家数量：<p id="promoter_num">{$result['promoter_num']}</p></span><br/>
+      <span><img src="/themes/mobile/images/op_center/--07.jpg" >&nbsp;&nbsp;&nbsp;商家数量：<p id="promoter_num">{$result['promoter_num']}</p></span>
       <span><img src="/themes/mobile/images/op_center/--08.jpg" >&nbsp;&nbsp;&nbsp;会员数量：<p id="user_num">{$result['user_num']}</p></span>
     </div>
   </div>
