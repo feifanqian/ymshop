@@ -2273,7 +2273,7 @@ class DistrictadminController extends Controller
         $idstr = $user['user_ids'];
         if($shopids!='') {
             // $where8 = "c.user_id in ($idstr) and c.status=1";
-            $where8 = "dp.hirer_id in ($shopids) and c.status=1";
+            $where8 = "dp.hirer_id in ($shopids) and c.status=1 and dp.user_id!=".$user_id;
             if($start_date || $end_date) {
                 $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
