@@ -146,7 +146,8 @@
 }
 .div-child span{
     color:#666;
-    font-size: 24px;
+    font-size: 22px;
+    font-weight: 500;
 }
 .span-right{
     float: right;
@@ -216,11 +217,11 @@ iframe{
             <div class="child-left">
                  <div class="div-child">
                      {set:$avatar = $item['avatar']}
-                     <img src="{url:@$avatar}" width="80" height="80" style="border-radius: 50%">
+                     <img src="{url:@$avatar}" width="100" height="100" style="border-radius: 50%">
                      {if:$item['role_type']==2}
-                     <p>经销商</p>
+                     <p style="font-weight: 500;font-size: 22px;">经销商</p>
                      {else:}
-                     <p>商家</p>
+                     <p style="font-weight: 500;font-size: 22px;">&nbsp;商家</p>
                      {/if}
                  </div>
             </div>
