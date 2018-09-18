@@ -415,6 +415,7 @@ class LinuxCliTask{
     #添加机器人自动参与团购
     public function autoJoinGroupBuy()
     {
+        $NoticeService = new NoticeService();
         $order = $this->model->table('order')->where("pay_status=1 and type=1 and delivery_status=0 and status!=4 and is_robot=0")->findAll();
         if($order) {
             foreach($order as $k=>$v) {
@@ -449,7 +450,6 @@ class LinuxCliTask{
                                     $product_id = $order_goods['product_id'];
                                     $result = $this->autoCreateOrder($user_id,$product_id,$groupbuy_id,$log_id);
                                 }
-                                $NoticeService = new NoticeService();
                                 $client_type = Common::getPayClientByPaymentID($v['payment']);
                                 if($client_type=='ios'||$client_type=='android'){
                                     //jpush

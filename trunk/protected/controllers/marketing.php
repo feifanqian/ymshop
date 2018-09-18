@@ -1124,4 +1124,127 @@ class MarketingController extends Controller {
         $this->assign('list',$list);
         $this->redirect();
     }
+
+    public function add_rebot()
+    {
+        $id = Filter::int(Req::args("id"));
+        $model = new Model();
+        $NoticeService = new NoticeService();
+        $order = $model->table('order')->where("id=".$id)->find();
+        $amount = $order['order_amount']; 
+        if($order['join_id']!=0) {
+            $groupbuy_log = $model->table('groupbuy_log')->fields('id,groupbuy_id,join_id,user_id,join_time')->where('id='.$order['join_id'].' and pay_status=1 and type=1 and status!=1')->findAll();
+            if($groupbuy_log) {
+                foreach ($groupbuy_log as $key => $value) {
+                    $groupbuy_id = $value['groupbuy_id'];
+                    $join_id = $value['join_id'];
+                    $groupbuy_join = $model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
+                    if($groupbuy_join['need_num']>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['end_time'])) {
+                        for($i=0;$i<$groupbuy_join['need_num'];$i++) {
+                            $user_id = $groupbuy_join['need_num']+1;
+                            $data = array(
+                                'user_id'  => $groupbuy_join['user_id'].','.$user_id,
+                                'need_num' => $groupbuy_join['need_num']-1
+                            );
+                            $model->table('groupbuy_join')->data($data)->where('id='.$groupbuy_join['id'])->update();
+                            $log = array(
+                                'join_id'     => $join_id,
+                                'groupbuy_id' => $groupbuy_id,
+                                'user_id'     => $user_id,
+                                'join_time'   => date('Y-m-d H:i:s'),
+                                'status'      => 1,
+                                'pay_status'  => 1,
+                                'type'        => 2
+                            );
+                            $log_id = $model->table('groupbuy_log')->data($log)->insert();
+                            $order_goods = $model->table('order_goods')->where('order_id='.$order['id'])->find();
+                            $product_id = $order_goods['product_id'];
+                            $result = $this->autoCreateOrder($user_id,$product_id,$groupbuy_id,$log_id);
+                        }
+                        $client_type = Common::getPayClientByPaymentID($order['payment']);
+                        if($client_type=='ios'||$client_type=='android'){
+                            //jpush
+                            $jpush = $NoticeService->getNotice('jpush');
+                            $audience['alias']=array($order['user_id']);
+                            $res = $groupbuy_id.','.$join_id;
+                            $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
+                            $jpush->push();
+                        }
+                    }
+                    $model->table('groupbuy_log')->data(['status'=>1])->where('id='.$value['id'])->update();
+                    $model->table('groupbuy_join')->data(['status'=>1])->where('id='.$groupbuy_join['id'])->update(); 
+                }
+            }
+        }
+        echo JSON::encode(array('status' => 'success', 'msg' => '成功'));
+    }
+
+    public function autoCreateOrder($user_id,$product_id,$groupbuy_id,$log_id){
+        $model = new Model();
+        
+        $product = $model->table('products as p')->where("p.id = $product_id")->join("left join goods as g on p.goods_id = g.id")->fields("p.*,g.shop_id")->find();
+        
+        $customer = $model->table('customer')->fields('real_name')->where('user_id='.$user_id)->find();
+
+        $gift_num = 1;
+
+        $groupbuy = $model->table("groupbuy")->where("id=$groupbuy_id")->find();
+        unset($groupbuy['description']);
+
+        $data['type']=1;
+        $data['order_no'] = Common::createOrderNo();
+        $data['user_id'] = $user_id;
+        $data['payment'] = 1;
+        $data['status'] = 3; 
+        $data['pay_status'] = 1;
+        $data['accept_name'] = $customer['real_name'];
+        $data['phone'] = '';
+        $data['mobile'] = '';
+        $data['province'] = '';
+        $data['city'] = '';
+        $data['county'] = '';
+        $data['addr'] = '';
+        $data['zip'] = '';
+        $data['payable_amount'] = $product['sell_price']*$gift_num;
+        $data['payable_freight'] = 0;
+        $data['real_freight'] = 0;
+        $data['create_time'] = date('Y-m-d H:i:s');
+        $data['pay_time'] = date("Y-m-d H:i:s");
+        $data['is_invoice'] = 0;
+        $data['handling_fee'] = 0;
+        $data['invoice_title'] = '';
+        $data['taxes'] = 0;
+        $data['discount_amount'] = 0;
+        $data['order_amount'] = $product['sell_price']*$gift_num;
+        $data['real_amount'] = $product['sell_price']*$gift_num;
+        $data['point'] = 0;
+        $data['voucher_id'] = 0;
+        $data['voucher'] = serialize(array());
+        $data['prom_id']=0;
+        $data['prom'] = serialize($groupbuy);
+        $data['admin_remark'] = "请勿发货，来自拼团机器人凑数订单";
+        $data['shop_ids'] = $product['shop_id'];
+        $data['join_id'] = $log_id;
+        $data['is_robot'] = 1;
+        $order_id =$model->table('order')->data($data)->insert();
+        
+        $tem_data['order_id'] = $order_id;
+        $tem_data['goods_id'] = $product['goods_id'];
+        $tem_data['product_id'] = $product['id'];
+        $tem_data['shop_id'] = $product['shop_id'];
+        $tem_data['goods_price'] = $product['sell_price'];
+        $tem_data['real_price'] = $product['sell_price'];
+        $tem_data['goods_nums'] = $gift_num;
+        $tem_data['goods_weight'] = $product['weight'];
+        $tem_data['prom_goods'] = serialize(array());
+        $tem_data['spec'] = serialize($product['spec']);
+        $model->table("order_goods")->data($tem_data)->insert();
+        if($order_id){
+            $model->table("products")->where("id=" . $product_id)->data(array('store_nums' => "`store_nums`-" . $gift_num))->update();//更新库存
+            $model->table('goods')->data(array('store_nums' => "`store_nums`-" . $gift_num))->where('id=' . $product['goods_id'])->update();
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

@@ -30,7 +30,9 @@
                             <div class="menu_select">
                                 <ul>
                                     <li><a class="icon-pencil" href="javascript:;" onclick="view({$item['order_id']})"> 查看</a></li>
-                                    <!-- <li><a class="icon-close" href="javascript:;" onclick="confirm_action('{url:/marketing/groupbuy_del/id/$item[id]}')"> 删除</a></li> -->
+                                    {if:$item['join_status']=='拼团中'}
+                                    <li><a class="icon-plus" href="javascript:;" onclick="add_rebot({$item['order_id']})">添加机器人拼单</a></li>
+                                    {/if}
                                 </ul>
                             </div>
                         </div> 
@@ -53,5 +55,18 @@
     <script type="text/javascript">
     function view(id){
         art.dialog.open("{url:/order/order_view/id/}"+id,{id:'view_dialog',title:'查看订单',resize:false,width:900,height:450});
+    }
+    function add_rebot(id)
+    {
+        $.post("{url:/marketing/add_rebot}",{id:id},function(data){
+                layer.close(load);
+                if(data.status=='success'){
+                   layer.msg("操作成功",function(){
+                      window.location.reload(); 
+                   });
+                }else{
+                    layer.msg(data.msg);
+                }
+            },'json');
     }
     </script>
