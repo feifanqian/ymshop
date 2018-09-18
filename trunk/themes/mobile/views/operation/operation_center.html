@@ -197,30 +197,35 @@ iframe{
     </div>
   </div>
   <div class="block">
-   <div class="line">旗下经销商/商家</div>
+   <div class="line" style="font-weight: 500;">旗下经销商/商家</div>
    <div class="list" id="list">
      {if:count($list['data'])>0}
         {list:items=$list['data']}
         <div class="list-child">
-            <div class="div-child">
-                <span>名称：{$item['real_name'] | $item['nickname']}</span>
-                <span class="span-right">
-                {if:$item['role_type']==2}
-                <i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商
-                {else:}
-                <i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家
-                {/if}
-                </span>
+            <div class="child-left">
+
             </div>
-            <div class="div-child">
-                <span>手机号：{$item['mobile'] | '--'}</span>
-            </div>
-            <div class="div-child">
-                <span>经营者：{$item['realname'] | $item['mobile'] | $item['real_name']}</span>
-            </div>
-            <div class="div-child">
-                <span>加入时间：{$item['create_time']}</span>
-                <a href="/operation/shop_info?user_id={$item['id']}">查看详情</a> 
+            <div class="child-right">
+                <div class="div-child">
+                    <span>名称：{$item['real_name'] | $item['nickname']}</span>
+                    <span class="span-right">
+                    {if:$item['role_type']==2}
+                    <i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商
+                    {else:}
+                    <i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家
+                    {/if}
+                    </span>
+                </div>
+                <div class="div-child">
+                    <span>手机号：{$item['mobile'] | '--'}</span>
+                </div>
+                <div class="div-child">
+                    <span>经营者：{$item['realname'] | $item['mobile'] | $item['real_name']}</span>
+                </div>
+                <div class="div-child">
+                    <span>加入时间：{$item['create_time']}</span>
+                    <a href="/operation/shop_info?user_id={$item['id']}">查看详情</a> 
+                </div>
             </div>    
         </div>
         {/list}
@@ -316,45 +321,15 @@ $("input[name='end_date']").blur(function(){
             },
         });
 });
-    // function getScrollTop() { 
-    //     var scrollTop = 0; 
-    //     if (document.documentElement && document.documentElement.scrollTop) { 
-    //         scrollTop = document.documentElement.scrollTop; 
-    //     } else if (document.body) { 
-    //         scrollTop = document.body.scrollTop; 
-    //     } 
-    //     return scrollTop; 
-    // } 
-    // // 获取当前可视范围的高度 
-    // function getClientHeight() { 
-    //     var clientHeight = 0; 
-    //     if (document.body.clientHeight && document.documentElement.clientHeight) { 
-    //         clientHeight = Math.min(document.body.clientHeight, document.documentElement.clientHeight); 
-    //     } 
-    //     else { 
-    //         clientHeight = Math.max(document.body.clientHeight, document.documentElement.clientHeight); 
-    //     } 
-    //     return clientHeight; 
-    // }
-    // // 获取文档完整的高度 
-    // function getScrollHeight() { 
-    //     return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight); 
-    // }
 
     var page = $('#page').val();
     $(window).bind('scroll', function () {
-        // if (getScrollTop() + getClientHeight() == getScrollHeight()) {
-        //     page++;
-        //     ajaxRead();
-        // }
+    
         var body = $("body");
         var scrollTop = $(this).scrollTop();
-        // var scrollHeight = $(document).height();
         var scrollHeight = body.height();
         var windowHeight = $(this).height();
-        console.log("1="+scrollTop);
-        console.log("2="+windowHeight);
-        console.log("3="+scrollHeight);
+        
         if (scrollTop + windowHeight >= scrollHeight) {
         // 此处是滚动条到底部时候触发的事件，在这里写要加载的数据，或者是拉动滚动条的操作
            page++;
@@ -379,7 +354,7 @@ $("input[name='end_date']").blur(function(){
                 var jsonstr = JSON.stringify(res);
                 var jsonarray= $.parseJSON(jsonstr);
                 if (jsonarray.length == 0) {
-                    layer.msg('已经到底!',{time:500});
+                    // layer.msg('已经到底!',{time:500});
                 }  else {
                     $.each(jsonarray, function (i, item) {
                         html += '<div class="list-child">';
