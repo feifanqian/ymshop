@@ -2286,10 +2286,8 @@ class DistrictadminController extends Controller
                         $shop = $model->table('district_shop')->where('owner_id='.$v['id'])->find();
                         if($shop){
                             $list['data'][$k]['role_type'] = 2; //经销商
-                            $shop_num = $shop_num + 1;   
                         }else{
                             $list['data'][$k]['role_type'] = 1; //商家
-                            $promoter_num = $promoter_num + 1;
                         }
                     }
                 }
