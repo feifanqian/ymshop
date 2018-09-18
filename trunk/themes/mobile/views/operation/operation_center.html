@@ -164,6 +164,16 @@ iframe{
     width: 400px !important;
     height: 230px !important;
 }
+.child-left{
+    width: 20%;
+    margin-top: 20px;
+    height: 176px;
+    float: left;
+}
+.child-right{
+    width: 80%;
+    float: left;
+}
 </style>
 <body>
 <div id="app">
@@ -205,11 +215,11 @@ iframe{
             <div class="child-left">
                  <div class="div-child">
                      {set:$avatar = $item['avatar']}
-                     <img src="{url:@$avatar}" width="50" height="50" style="border-radius: 50%">
+                     <img src="{url:@$avatar}" width="80" height="80" style="border-radius: 50%">
                      {if:$item['role_type']==2}
-                     <i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商
+                     <p>经销商</p>
                      {else:}
-                     <i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家
+                     <p>商家</p>
                      {/if}
                  </div>
             </div>
