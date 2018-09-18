@@ -2299,6 +2299,7 @@ class DistrictadminController extends Controller
             }
             $nums = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findAll();
             if($nums) {
+                $promoter_num = count($nums);
                 foreach($nums as $k=>$v){
                     if($v['id']==null){
                         unset($nums[$k]);
@@ -2306,11 +2307,10 @@ class DistrictadminController extends Controller
                         $shop = $model->table('district_shop')->where('owner_id='.$v['id'])->find();
                         if($shop){
                             $shop_num = $shop_num + 1;   
-                        }else{
-                            $promoter_num = $promoter_num + 1;
                         }
                     }
                 }
+                $promoter_num = $promoter_num - $shop_num;
             }
         } else {
             $list['data'] = [];
