@@ -40,7 +40,7 @@
     width: 94%;
     margin-left: 3%;
     background-color: #fff;
-    height: 340px;
+    height: 350px;
     margin-top: 20px;
 }
 .line{
@@ -54,14 +54,14 @@
     /*font-weight: bold;*/
     line-height: 40px;
     color: #333;
-    margin-bottom: 30px; 
+    margin-bottom: 20px; 
 }
 .line span{
     color:#ccc;
 }
 .line-info{
     margin-top: -10px;
-    /*border-top: 0.1px solid #ccc;*/
+    border-top: 0.02px solid #eee;
     /*border-bottom: 0.1px solid #ccc;*/
     padding-left: 5%;
     padding-top: 10px;
@@ -75,7 +75,8 @@
     float: left;
     font-size: 24px;
     color: #666;
-    /*margin-bottom: 4px;*/
+    border-bottom: 0.02px solid #eee;
+    padding-top: 20px;
 }
 .line-info b{
     display: block;
@@ -178,16 +179,16 @@ iframe{
   <div class="block">
     <div class="line">数量统计</div>
     <div class="line-info">
-      <span><b>线上总订单</b><p id="order_num">{$result['order_num']}</p></span>
-      <span><b>扫码总订单</b><p id="offline_order_num">{$result['offline_order_num']}</p></span>
+      <span style="border-right: 0.02px solid #eee;"><b>线上总订单</b><p id="order_num">{$result['order_num']}</p></span>
+      <span style="border-right: 0.02px solid #eee;"><b>扫码总订单</b><p id="offline_order_num">{$result['offline_order_num']}</p></span>
       <span><b>经销商数量</b><p id="shop_num">{$result['shop_num']}</p></span>
-      <span><b>商家数量</b><p id="promoter_num">{$result['promoter_num']}</p></span>
-      <span><b>会员数量</b><p id="user_num">{$result['user_num']}</p></span>
+      <span style="border-right: 0.02px solid #eee;"><b>商家数量</b><p id="promoter_num">{$result['promoter_num']}</p></span>
+      <span style="border-right: 0.02px solid #eee;"><b>会员数量</b><p id="user_num">{$result['user_num']}</p></span>
     </div>
   </div>
   <div class="block">
     <div class="line">金额总统计</div>
-    <div class="line-infos">
+    <div class="line-info">
       <span><b>线上订单总金额</b><p id="order_sum">{$result['order_sum']}</p></span>
       <span><b>扫码订单总金额</b><p id="offline_order_sum">{$result['offline_order_sum']}</p></span>
       <span><b>线上订单跨界收益</b><p id="order_benefit">{$result['order_benefit']}</p></span>
