@@ -91,9 +91,6 @@
     height: 33px;
     vertical-align: -33%;
 }
-.line-info p{
-    display: inline;
-}
 .line-infos{
     margin-top: -10px;
     border-top: 0.1px solid #ccc;
@@ -196,10 +193,10 @@ iframe{
     <input name="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker()">
     </p>
   </div>
-  <div class="block">
-    <div class="line">个人信息</div><br/>
-    <div class="list">
-        <div class="list-child">
+  <div class="block" style="height: 250px;">
+    <div class="line" style="margin-bottom: 0px;">个人信息</div><br/>
+    <div class="list" style="border-top: none;padding-top: 0px;">
+        <div class="list-child" style="border-bottom: none;">
             <div class="child-left">
                  <div class="div-child">
                      {set:$avatar = $result['avatar']}
