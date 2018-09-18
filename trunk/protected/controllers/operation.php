@@ -94,17 +94,17 @@ class OperationController extends Controller
                 if($start_date || $end_date) {
                     $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
                 }
-                $shop_num = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
-                if($shop_num>=1) {
-                    $shop_num = $shop_num - 1;
-                }
-                $promoter_num = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
-                if($promoter_num>=1) {
-                    $promoter_num = $promoter_num - 1;
-                }
-                if($promoter_num>=$shop_num) {
-                    $promoter_num = $promoter_num-$shop_num;
-                }
+                // $shop_num = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
+                // if($shop_num>=1) {
+                //     $shop_num = $shop_num - 1;
+                // }
+                // $promoter_num = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
+                // if($promoter_num>=1) {
+                //     $promoter_num = $promoter_num - 1;
+                // }
+                // if($promoter_num>=$shop_num) {
+                //     $promoter_num = $promoter_num-$shop_num;
+                // }
             } else {
                 $shop_num = 0;
                 $promoter_num = 0;
@@ -126,8 +126,8 @@ class OperationController extends Controller
             $promoter_num = 0;
             $order_benefit = 0.00;
         }
-        // $shop_num = 0;
-        // $promoter_num = 0;
+        $shop_num = 0;
+        $promoter_num = 0;
         $idstr = $user['user_ids'];
         if($shopids!='') {
             // $where8 = "c.user_id in ($idstr) and c.status=1";
@@ -155,6 +155,21 @@ class OperationController extends Controller
                 $list['data'] = array_values($list['data']); 
             } else {
                 $list['data'] = [];
+            }
+            $nums = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findAll();
+            if($nums) {
+                foreach($nums as $k=>$v){
+                    if($v['id']==null){
+                        unset($nums[$k]);
+                    }else{
+                        $shop = $model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if($shop){
+                            $shop_num = $shop_num + 1;   
+                        }else{
+                            $promoter_num = $promoter_num + 1;
+                        }
+                    }
+                }
             }
         } else {
             $list['data'] = [];
@@ -434,11 +449,11 @@ class OperationController extends Controller
                 if($start_date || $end_date) {
                     $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
                 }
-                $shop_num = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
-                $promoter_num = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
-                if($promoter_num>=$shop_num+1) {
-                    $promoter_num = $promoter_num-$shop_num-1;
-                }
+                // $shop_num = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
+                // $promoter_num = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
+                // if($promoter_num>=$shop_num+1) {
+                //     $promoter_num = $promoter_num-$shop_num-1;
+                // }
             } else {
                 $shop_num = 0;
                 $promoter_num = 0;
@@ -466,8 +481,8 @@ class OperationController extends Controller
         $promoter = $this->model->table('district_promoter')->fields('create_time')->where('user_id='.$user_id)->find();
         $seo_title = !empty($shop)?'经销商':'商家';
         
-        // $shop_num = 0;
-        // $promoter_num = 0;
+        $shop_num = 0;
+        $promoter_num = 0;
 
         if($seo_title=='经销商') {
             $idstr = $user['user_ids'];
@@ -500,6 +515,21 @@ class OperationController extends Controller
                     $list['data'] = array_values($list['data']); 
                 } else {
                     $list['data'] = [];
+                }
+                $nums = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findAll();
+                if($nums) {
+                    foreach($nums as $k=>$v){
+                        if($v['id']==null){
+                            unset($nums[$k]);
+                        }else{
+                            $shop = $model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                            if($shop){
+                                $shop_num = $shop_num + 1;   
+                            }else{
+                                $promoter_num = $promoter_num + 1;
+                            }
+                        }
+                    }
                 }
             } else {
                 $list['data'] = [];

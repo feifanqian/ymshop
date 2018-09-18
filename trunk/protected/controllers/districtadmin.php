@@ -2279,12 +2279,9 @@ class DistrictadminController extends Controller
             }
             $list = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
             if($list['data']){
-                // unset($list['html']);
-                $total = count($list['data']);
                 foreach($list['data'] as $k=>$v){
                     if($v['id']==null){
                         unset($list['data'][$k]);
-                        $total = $total-1;
                     }else{
                         $shop = $model->table('district_shop')->where('owner_id='.$v['id'])->find();
                         if($shop){
@@ -2299,6 +2296,21 @@ class DistrictadminController extends Controller
                 $list['data'] = array_values($list['data']); 
             } else {
                 $list['data'] = [];
+            }
+            $nums = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findAll();
+            if($nums) {
+                foreach($nums as $k=>$v){
+                    if($v['id']==null){
+                        unset($nums[$k]);
+                    }else{
+                        $shop = $model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if($shop){
+                            $shop_num = $shop_num + 1;   
+                        }else{
+                            $promoter_num = $promoter_num + 1;
+                        }
+                    }
+                }
             }
         } else {
             $list['data'] = [];
