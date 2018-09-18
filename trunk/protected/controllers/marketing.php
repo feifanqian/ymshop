@@ -1144,11 +1144,7 @@ class MarketingController extends Controller {
                         for($i=0;$i<$need_num;$i++) {
                             $new_groupbuy_join = $model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
                             // $user_id = $groupbuy_join['need_num']+1;
-                            $user_id = rand(1000,190722);
-                            $customer = $model->table('customer')->fields('user_id')->where('user_id='.$user_id)->find();
-                            if(!$customer) {
-                                $user_id = rand(1000,190722);
-                            }
+                            $user_id = rand(2,10);
                             $data = array(
                                 'user_id'  => $new_groupbuy_join['user_id'].','.$user_id,
                                 'need_num' => $new_groupbuy_join['need_num']-1

@@ -10,23 +10,36 @@
 </head>
 <style type="text/css">
 #app{
-
+    margin-top: -3%;
+    background-color: #f5f5f7;
+    padding-top: 20px;
 }
 .header{
-    /*margin-top: 2%;*/
+    width: 100%;
+    height: 100px;
+    background: #fff;
+    line-height: 100px;
     padding-left: 3%;
-    /*padding-bottom: 10px;*/
-    border-bottom: 0.1px  solid #ccc;
 }
 .header p{
-    margin-top:20px;
     font-size: 26px;
-    font-weight: bold;
+    color: #363636;
 }
 .Wdate{
     width: 30%;
-    height: 30px !important;
-    background: #fff url(/themes/mobile/images/op_center/--04.jpg) no-repeat right !important;
+    height: 50px !important;
+    background: #fff url(/themes/mobile/images/op_center/date_bg.png) no-repeat right !important;
+    background-size: 100% 50px !important;
+    color: #fff;
+    text-align: center;
+    border: none !important;
+}
+.block{
+    width: 96%;
+    margin-left: 2%;
+    background-color: #fff;
+    height: 360px;
+    margin-top: 20px;
 }
 .line{
     margin-top: 10px;
@@ -36,30 +49,42 @@
     padding-left: 2%;
     border-left: 3px solid #4eabf4;
     font-size: 26px;
-    font-weight: bold;
+    /*font-weight: bold;*/
     line-height: 40px;
-    color: #333; 
+    color: #333;
+    margin-bottom: 20px; 
 }
 .line span{
     color:#ccc;
 }
 .line-info{
     margin-top: -10px;
-    border-top: 0.1px solid #ccc;
+    border-top: 0.02px solid #eee;
     /*border-bottom: 0.1px solid #ccc;*/
     padding-left: 5%;
     padding-top: 10px;
     padding-bottom: 20px;
-    height: 100px;
 }
 .line-info span{
     display: inline-block;
-    width: 48%;
-    height: 33px;
+    width: 32%;
+    height: 130px;
     float: left;
     font-size: 24px;
     color: #666;
-    margin-bottom: 4px;
+    border-bottom: 0.02px solid #eee;
+    padding-top: 20px;
+}
+.line-info b{
+    display: block;
+    font-weight: 500;
+    width: 100px;
+    text-align: center;
+    margin: 0 auto;
+}
+.line-info p{
+    color: #ff6600;
+    text-align: center;
 }
 .line-info img{
     width: 33px;
@@ -101,6 +126,7 @@
 .list-child{
     border-bottom: 0.1px solid #ccc;
     width: 90%;
+    height: 180px;
     padding-left: 5%;
     padding-right: 5%;
     padding-bottom: 10px;
@@ -115,22 +141,29 @@
     text-decoration: none;
     color: #4eabf4;
     float: right;
-    margin-right: 5%;
-    font-size: 24px;
+    /*margin-right: 2%;*/
+    font-size: 20px;
 }
 .div-child span{
     color:#666;
-    font-size: 24px;
+    font-size: 20px;
+    font-weight: 500;
+}
+.div-child p{
+    width: 100px;
+    font-weight: 500;
+    font-size: 22px;
+    text-align: center;
 }
 .span-right{
     float: right;
-    margin-right: 5%;
+    margin-right: 2%;
 }
-.list-child img{
+/*.list-child img{
     width: 33px;
     height: 33px;
     vertical-align: -33%;
-}
+}*/
 iframe{
     width: 400px !important;
     height: 230px !important;
@@ -138,6 +171,18 @@ iframe{
 .WdateDiv{
     width: 400px !important;
     height: 230px !important;
+}
+.child-left{
+    width: 18%;
+    margin-top: 20px;
+    height: 176px;
+    float: left;
+}
+.child-right{
+    width: 80%;
+    margin-left: 2%;
+    float: left;
+    padding-top: 10px;
 }
 </style>
 <body>
@@ -153,32 +198,48 @@ iframe{
   </div>
   <div class="block">
     <div class="line">个人信息</div><br/>
-    <div class="line-infos" style="height: 100px;">
-      <span>名称：{$result['real_name'] | $result['nickname']}</span>
-      <span>手机号码：{$result['mobile'] | '--'}</span>
-      <span>加入时间：{$result['create_time']}</span>
+    <div class="list">
+        <div class="list-child">
+            <div class="child-left">
+                 <div class="div-child">
+                     {set:$avatar = $result['avatar']}
+                     <img src="{url:@$avatar}" width="90" height="90" style="border-radius: 50%">
+                 </div>
+            </div>
+            <div class="child-right">
+                <div class="div-child">
+                    <span>名称：{$result['real_name'] | $result['nickname']}</span>
+                </div>
+                <div class="div-child">
+                    <span>手机号：{$result['mobile'] | '--'}</span>
+                </div>
+                <div class="div-child">
+                    <span>加入时间：{$result['create_time']}</span>
+                </div>
+            </div>    
+        </div>
     </div>
   </div>
   <div class="block">
-    <div class="line">数量总统计</div><br/>
+    <div class="line">数量统计</div><br/>
     <div class="line-info">
-      <span><img src="/themes/mobile/images/op_center/--05.jpg" >&nbsp;&nbsp;&nbsp;线上总订单：<p id="order_num">{$result['order_num']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--06.jpg" >&nbsp;&nbsp;&nbsp;扫码总订单：<p id="offline_order_num">{$result['offline_order_num']}</p></span><br/>
+      <span style="border-right: 0.02px solid #eee;"><b>线上总订单</b><p id="order_num">{$result['order_num']}</p></span>
+      <span style="border-right: 0.02px solid #eee;"><b>扫码总订单</b><p id="offline_order_num">{$result['offline_order_num']}</p></span>
       {if:$seo_title=="经销商"}
-      <span><img src="/themes/mobile/images/op_center/--09.jpg" >&nbsp;&nbsp;&nbsp;经销商数量：<p id="shop_num">{$result['shop_num']}</p></span>
+      <span><b>经销商数量</b><p id="shop_num">{$result['shop_num']}</p></span>
       {/if}
-      <span><img src="/themes/mobile/images/op_center/--07.jpg" >&nbsp;&nbsp;&nbsp;商家数量：<p id="promoter_num">{$result['promoter_num']}</p></span><br/>
-      <span><img src="/themes/mobile/images/op_center/--08.jpg" >&nbsp;&nbsp;&nbsp;会员数量：<p id="user_num">{$result['user_num']}</p></span>
+      <span style="border-right: 0.02px solid #eee;border-bottom: none;"><b>商家数量</b><p id="promoter_num">{$result['promoter_num']}</p></span>
+      <span style="border-right: 0.02px solid #eee;border-bottom: none;"><b>会员数量</b><p id="user_num">{$result['user_num']}</p></span>
     </div>
   </div>
   <div class="block">
     <div class="line">金额总统计</div><br/>
-    <div class="line-infos">
-      <span><img src="/themes/mobile/images/op_center/--10.jpg" >&nbsp;&nbsp;&nbsp;线上订单总金额：<p id="order_sum">{$result['order_sum']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--13.jpg" >&nbsp;&nbsp;&nbsp;扫码订单总金额：<p id="offline_order_sum">{$result['offline_order_sum']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--11.jpg" >&nbsp;&nbsp;&nbsp;线上订单跨界收益：<p id="order_benefit">{$result['order_benefit']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--12.jpg" >&nbsp;&nbsp;&nbsp;扫码订单跨界收益：<p id="crossover_sum">{$result['crossover_sum']}</p></span>
-      <span><img src="/themes/mobile/images/op_center/--14.jpg" >&nbsp;&nbsp;&nbsp;优惠购收益：<p id="benefit_sum">{$result['benefit_sum']}</p></span>
+    <div class="line-info">
+      <span style="border-right: 0.02px solid #eee;"><b>线上订单总金额</b><p id="order_sum">{$result['order_sum']}</p></span>
+      <span style="border-right: 0.02px solid #eee;"><b>扫码订单总金额</b><p id="offline_order_sum">{$result['offline_order_sum']}</p></span>
+      <span><b>线上订单跨界收益</b><p id="order_benefit">{$result['order_benefit']}</p></span>
+      <span style="border-right: 0.02px solid #eee;border-bottom: none;"><b>扫码订单跨界收益<b><p id="crossover_sum">{$result['crossover_sum']}</p></span>
+      <span style="border-right: 0.02px solid #eee;border-bottom: none;"><b>优惠购收益</b><p id="benefit_sum">{$result['benefit_sum']}</p></span>
     </div>
   </div>
   {if:$seo_title=="经销商"}
@@ -188,25 +249,31 @@ iframe{
      {if:count($list['data'])>0}
         {list:items=$list['data']}
         <div class="list-child">
-            <div class="div-child">
-                <span>名称：{$item['real_name'] | $item['nickname']}</span>
-                <span class="span-right">
-                {if:$item['role_type']==2}
-                <i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商
-                {else:}
-                <i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家
-                {/if}
-                </span>
+            <div class="child-left">
+                 <div class="div-child">
+                     {set:$avatar = $item['avatar']}
+                     <img src="{url:@$avatar}" width="90" height="90" style="border-radius: 50%">
+                     {if:$item['role_type']==2}
+                     <p>经销商</p>
+                     {else:}
+                     <p>商家</p>
+                     {/if}
+                 </div>
             </div>
-            <div class="div-child">
-                <span>手机号：{$item['mobile'] | '--'}</span>
-            </div>
-            <div class="div-child">
-                <span>经营者：{$item['realname'] | $item['mobile'] | $item['real_name']}</span>
-            </div>
-            <div class="div-child">
-                <span>加入时间：{$item['create_time']}</span>
-                <a href="/operation/shop_info?user_id={$item['id']}">查看详情</a> 
+            <div class="child-right">
+                <div class="div-child">
+                    <span>名称：{$item['real_name'] | $item['nickname']}</span>
+                </div>
+                <div class="div-child">
+                    <span>手机号：{$item['mobile'] | '--'}</span>
+                </div>
+                <div class="div-child">
+                    <span>经营者：{$item['realname'] | $item['mobile'] | $item['real_name']}</span>
+                </div>
+                <div class="div-child">
+                    <span>加入时间：{$item['create_time']}</span>
+                    <a href="/operation/shop_info?user_id={$item['id']}">查看详情&nbsp;></a> 
+                </div>
             </div>    
         </div>
         {/list}

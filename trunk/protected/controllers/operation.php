@@ -483,7 +483,7 @@ class OperationController extends Controller
             $order_benefit = 0.00;
         }
         
-        $customer = $this->model->table('customer as c')->fields('c.real_name,c.mobile,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$user_id)->find();
+        $customer = $this->model->table('customer as c')->fields('c.real_name,c.mobile,u.nickname,u.avatar')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$user_id)->find();
         $shop = $this->model->table('district_shop')->fields('create_time')->where('owner_id='.$user_id)->find();
         $promoter = $this->model->table('district_promoter')->fields('create_time')->where('user_id='.$user_id)->find();
         $seo_title = !empty($shop)?'经销商':'商家';
@@ -556,6 +556,7 @@ class OperationController extends Controller
         $result['real_name'] = $customer['real_name'];
         $result['nickname'] = $customer['nickname'];
         $result['mobile'] = $customer['mobile'];
+        $result['avatar'] = $customer['avatar'];
         $result['create_time'] = !empty($shop)?$shop['create_time']:$promoter['create_time'];
         
         $this->assign('result',$result);
