@@ -203,17 +203,21 @@ iframe{
         {list:items=$list['data']}
         <div class="list-child">
             <div class="child-left">
-
+                 <div class="div-child">
+                     {set:$avatar = $item['avatar']}
+                     <img src="{url:@$avatar}" width="50" height="50" style="border-radius: 50%">
+                     {if:$item['role_type']==2}
+                     <i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商
+                     {else:}
+                     <i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家
+                     {/if}
+                 </div>
             </div>
             <div class="child-right">
                 <div class="div-child">
                     <span>名称：{$item['real_name'] | $item['nickname']}</span>
                     <span class="span-right">
-                    {if:$item['role_type']==2}
-                    <i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商
-                    {else:}
-                    <i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家
-                    {/if}
+                    
                     </span>
                 </div>
                 <div class="div-child">
