@@ -415,8 +415,7 @@ class LinuxCliTask{
     #添加机器人自动参与团购
     public function autoJoinGroupBuy()
     {
-        $name = 'ROBOT';
-        $order = $this->model->table('order')->where("pay_status=1 and type=1 and delivery_status=0 and status!=4 and accept_name not like '%{$name}%'")->findAll();
+        $order = $this->model->table('order')->where("pay_status=1 and type=1 and delivery_status=0 and status!=4 and is_robot=0")->findAll();
         if($order) {
             foreach($order as $k=>$v) {
                 $now = time();
@@ -517,6 +516,7 @@ class LinuxCliTask{
         $data['admin_remark'] = "请勿发货，来自拼团机器人凑数订单";
         $data['shop_ids'] = $product['shop_id'];
         $data['join_id'] = $log_id;
+        $data['is_robot'] = 1;
         $order_id =$model->table('order')->data($data)->insert();
         
         $tem_data['order_id'] = $order_id;
