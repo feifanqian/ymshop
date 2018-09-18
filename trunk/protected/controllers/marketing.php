@@ -1132,57 +1132,57 @@ class MarketingController extends Controller {
         $NoticeService = new NoticeService();
         $order = $model->table('order')->where("id=".$id)->find();
         $amount = $order['order_amount']; 
-        if($order['join_id']!=0) {
-            $groupbuy_log = $model->table('groupbuy_log')->fields('id,groupbuy_id,join_id,user_id,join_time')->where('id='.$order['join_id'].' and pay_status=1 and type=1 and status!=1')->findAll();
-            if($groupbuy_log) {
-                foreach ($groupbuy_log as $key => $value) {
-                    $groupbuy_id = $value['groupbuy_id'];
-                    $join_id = $value['join_id'];
-                    $groupbuy_join = $model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
-                    $need_num = $groupbuy_join['need_num'];
-                    if($need_num>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['end_time'])) {
-                        for($i=0;$i<$need_num;$i++) {
-                            $new_groupbuy_join = $model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
-                            // $user_id = $groupbuy_join['need_num']+1;
-                            $user_id = rand(1000,190722);
-                            $customer = $model->table('customer')->fields('user_id')->where('user_id='.$user_id)->find();
-                            if(!$customer) {
-                                $user_id = rand(1000,190722);
-                            }
-                            $data = array(
-                                'user_id'  => $new_groupbuy_join['user_id'].','.$user_id,
-                                'need_num' => $new_groupbuy_join['need_num']-1
-                            );
-                            $model->table('groupbuy_join')->data($data)->where('id='.$groupbuy_join['id'])->update();
-                            $log = array(
-                                'join_id'     => $join_id,
-                                'groupbuy_id' => $groupbuy_id,
-                                'user_id'     => $user_id,
-                                'join_time'   => date('Y-m-d H:i:s'),
-                                'status'      => 1,
-                                'pay_status'  => 1,
-                                'type'        => 2
-                            );
-                            $log_id = $model->table('groupbuy_log')->data($log)->insert();
-                            $order_goods = $model->table('order_goods')->where('order_id='.$order['id'])->find();
-                            $product_id = $order_goods['product_id'];
-                            $result = $this->autoCreateOrder($user_id,$product_id,$groupbuy_id,$log_id);
-                        }
-                        $client_type = Common::getPayClientByPaymentID($order['payment']);
-                        if($client_type=='ios'||$client_type=='android'){
-                            //jpush
-                            $jpush = $NoticeService->getNotice('jpush');
-                            $audience['alias']=array($order['user_id']);
-                            $res = $groupbuy_id.','.$join_id;
-                            $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
-                            $jpush->push();
-                        }
-                    }
-                    $model->table('groupbuy_log')->data(['status'=>1])->where('id='.$value['id'])->update();
-                    $model->table('groupbuy_join')->data(['status'=>1])->where('id='.$groupbuy_join['id'])->update(); 
-                }
-            }
-        }
+        // if($order['join_id']!=0) {
+        //     $groupbuy_log = $model->table('groupbuy_log')->fields('id,groupbuy_id,join_id,user_id,join_time')->where('id='.$order['join_id'].' and pay_status=1 and type=1 and status!=1')->findAll();
+        //     if($groupbuy_log) {
+        //         foreach ($groupbuy_log as $key => $value) {
+        //             $groupbuy_id = $value['groupbuy_id'];
+        //             $join_id = $value['join_id'];
+        //             $groupbuy_join = $model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
+        //             $need_num = $groupbuy_join['need_num'];
+        //             if($need_num>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['end_time'])) {
+        //                 for($i=0;$i<$need_num;$i++) {
+        //                     $new_groupbuy_join = $model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
+        //                     // $user_id = $groupbuy_join['need_num']+1;
+        //                     $user_id = rand(1000,190722);
+        //                     $customer = $model->table('customer')->fields('user_id')->where('user_id='.$user_id)->find();
+        //                     if(!$customer) {
+        //                         $user_id = rand(1000,190722);
+        //                     }
+        //                     $data = array(
+        //                         'user_id'  => $new_groupbuy_join['user_id'].','.$user_id,
+        //                         'need_num' => $new_groupbuy_join['need_num']-1
+        //                     );
+        //                     $model->table('groupbuy_join')->data($data)->where('id='.$groupbuy_join['id'])->update();
+        //                     $log = array(
+        //                         'join_id'     => $join_id,
+        //                         'groupbuy_id' => $groupbuy_id,
+        //                         'user_id'     => $user_id,
+        //                         'join_time'   => date('Y-m-d H:i:s'),
+        //                         'status'      => 1,
+        //                         'pay_status'  => 1,
+        //                         'type'        => 2
+        //                     );
+        //                     $log_id = $model->table('groupbuy_log')->data($log)->insert();
+        //                     $order_goods = $model->table('order_goods')->where('order_id='.$order['id'])->find();
+        //                     $product_id = $order_goods['product_id'];
+        //                     $result = $this->autoCreateOrder($user_id,$product_id,$groupbuy_id,$log_id);
+        //                 }
+        //                 $client_type = Common::getPayClientByPaymentID($order['payment']);
+        //                 if($client_type=='ios'||$client_type=='android'){
+        //                     //jpush
+        //                     $jpush = $NoticeService->getNotice('jpush');
+        //                     $audience['alias']=array($order['user_id']);
+        //                     $res = $groupbuy_id.','.$join_id;
+        //                     $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
+        //                     $jpush->push();
+        //                 }
+        //             }
+        //             $model->table('groupbuy_log')->data(['status'=>1])->where('id='.$value['id'])->update();
+        //             $model->table('groupbuy_join')->data(['status'=>1])->where('id='.$groupbuy_join['id'])->update(); 
+        //         }
+        //     }
+        // }
         echo JSON::encode(array('status' => 'success', 'msg' => '成功'));
     }
 

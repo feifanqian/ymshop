@@ -59,7 +59,8 @@
     function add_rebot(id)
     {
         $.post("{url:/marketing/add_rebot}",{id:id},function(data){
-                layer.close(load);
+                // layer.close(load);
+                console.log(data);
                 if(data.status=='success'){
                    layer.msg("操作成功",function(){
                       window.location.reload(); 
