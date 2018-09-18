@@ -610,4 +610,13 @@ class MapAction extends Controller
         $this->content = $list;
         return;
     }
+
+    //新闻动态
+    public function news_list()
+    {
+        $list = $this->model->table('article')->where('category_id=5')->findAll();
+        $this->code = 0;
+        $this->content = $list;
+        return;
+    }
 }
