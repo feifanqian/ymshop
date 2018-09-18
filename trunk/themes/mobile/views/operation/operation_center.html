@@ -37,8 +37,8 @@
     border: none !important;
 }
 .block{
-    width: 94%;
-    margin-left: 3%;
+    width: 96%;
+    margin-left: 2%;
     background-color: #fff;
     height: 360px;
     margin-top: 20px;
@@ -141,12 +141,12 @@
     text-decoration: none;
     color: #4eabf4;
     float: right;
-    margin-right: 2%;
-    font-size: 24px;
+    /*margin-right: 2%;*/
+    font-size: 20px;
 }
 .div-child span{
     color:#666;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 500;
 }
 .div-child p{
@@ -173,7 +173,7 @@ iframe{
     height: 230px !important;
 }
 .child-left{
-    width: 20%;
+    width: 18%;
     margin-top: 20px;
     height: 176px;
     float: left;
@@ -181,6 +181,7 @@ iframe{
 .child-right{
     width: 80%;
     float: left;
+    padding-top: 10px;
 }
 </style>
 <body>
@@ -223,7 +224,7 @@ iframe{
             <div class="child-left">
                  <div class="div-child">
                      {set:$avatar = $item['avatar']}
-                     <img src="{url:@$avatar}" width="100" height="100" style="border-radius: 50%">
+                     <img src="{url:@$avatar}" width="90" height="90" style="border-radius: 50%">
                      {if:$item['role_type']==2}
                      <p>经销商</p>
                      {else:}
