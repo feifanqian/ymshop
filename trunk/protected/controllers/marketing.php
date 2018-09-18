@@ -1139,12 +1139,19 @@ class MarketingController extends Controller {
                     $groupbuy_id = $value['groupbuy_id'];
                     $join_id = $value['join_id'];
                     $groupbuy_join = $model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
-                    if($groupbuy_join['need_num']>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['end_time'])) {
-                        for($i=0;$i<$groupbuy_join['need_num'];$i++) {
-                            $user_id = $groupbuy_join['need_num']+1;
+                    $need_num = $groupbuy_join['need_num'];
+                    if($need_num>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['end_time'])) {
+                        for($i=0;$i<$need_num;$i++) {
+                            $new_groupbuy_join = $model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
+                            // $user_id = $groupbuy_join['need_num']+1;
+                            $user_id = rand(1000,190722);
+                            $customer = $model->table('customer')->fields('user_id')->where('user_id='.$user_id)->find();
+                            if(!$customer) {
+                                $user_id = rand(1000,190722);
+                            }
                             $data = array(
-                                'user_id'  => $groupbuy_join['user_id'].','.$user_id,
-                                'need_num' => $groupbuy_join['need_num']-1
+                                'user_id'  => $new_groupbuy_join['user_id'].','.$user_id,
+                                'need_num' => $new_groupbuy_join['need_num']-1
                             );
                             $model->table('groupbuy_join')->data($data)->where('id='.$groupbuy_join['id'])->update();
                             $log = array(
@@ -1184,7 +1191,7 @@ class MarketingController extends Controller {
         
         $product = $model->table('products as p')->where("p.id = $product_id")->join("left join goods as g on p.goods_id = g.id")->fields("p.*,g.shop_id")->find();
         
-        $customer = $model->table('customer')->fields('real_name')->where('user_id='.$user_id)->find();
+        // $customer = $model->table('customer')->fields('real_name')->where('user_id='.$user_id)->find();
 
         $gift_num = 1;
 
@@ -1197,7 +1204,7 @@ class MarketingController extends Controller {
         $data['payment'] = 1;
         $data['status'] = 3; 
         $data['pay_status'] = 1;
-        $data['accept_name'] = $customer['real_name'];
+        $data['accept_name'] = 'ROBOT';
         $data['phone'] = '';
         $data['mobile'] = '';
         $data['province'] = '';
