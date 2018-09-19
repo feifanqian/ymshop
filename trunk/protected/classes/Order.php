@@ -142,16 +142,16 @@ class Order {
                             $need_num = $groupbuy_join['need_num']-1;
                             if($need_num==0) {
                                 // var_dump(111);die;
-                                // $client_type = Common::getPayClientByPaymentID($payment_id);
-                                // if($client_type=='ios'||$client_type=='android'){
-                                //     //jpush
-                                //     $jpush = $NoticeService->getNotice('jpush');
-                                //     $audience['alias']=array($order['user_id']);
-                                //     $res = $groupbuy_log['groupbuy_id'].','.$groupbuy_log['join_id'];
-                                //     $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
-                                //     $jpush->push();
-                                // }
-                                var_dump(111);
+                                $client_type = Common::getPayClientByPaymentID($payment_id);
+                                if($client_type=='ios'||$client_type=='android'){
+                                    //jpush
+                                    $jpush = $NoticeService->getNotice('jpush');
+                                    $audience['alias']=array($order['user_id']);
+                                    $res = $groupbuy_log['groupbuy_id'].','.$groupbuy_log['join_id'];
+                                    $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
+                                    $jpush->push();
+                                }
+                                // var_dump(111);
                                 // 拼团成功参与分账
                                 $logs = $model->table('groupbuy_log')->fields('id')->where('join_id='.$groupbuy_log['join_id'].' and pay_status=1')->findAll();
                                 if($logs) {
@@ -167,7 +167,7 @@ class Order {
                                     //         Common::setIncomeByInviteShipEachGoods($value);
                                     //     }
                                     // }
-                                    var_dump(222);
+                                    // var_dump(222);
                                 }
                             }
                         }
