@@ -3412,6 +3412,9 @@ class UcenterController extends Controller
         }
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], $from);
+            if($this->user['id']==140531 || $this->user['id']==190665) {
+                var_dump($cashier_id);die;
+            }
         } else {
             // Cookie::set("inviter", $inviter_id);
             // $this->noRight();
