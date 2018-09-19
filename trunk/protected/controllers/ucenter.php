@@ -3513,6 +3513,9 @@ class UcenterController extends Controller
                         $this->safebox->set('user', $obj, 31622400);
                         $this->user = $this->safebox->get('user');
                         $this->user['id'] = $obj['id'];
+                        if($this->user['id']==140531) {
+                            var_dump($cashier_id);die;
+                        }
                     } else {
                         $this->model->table('oauth_user')->data(array(
                             'open_name' => $nick_name,
