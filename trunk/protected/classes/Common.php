@@ -886,7 +886,9 @@ class Common {
                    $model->table('customer')->where('user_id='.$inviter_info['user_id'])->data(array("balance"=>"`balance`+({$balance1})"))->update();
                    Log::balance($balance1, $inviter_info['user_id'], $order['order_no'],'线上消费收益(上级邀请者)', 5); 
              }
+             var_dump(111);
              $first_promoter_user_id = self::getFirstPromoters($order['user_id']);
+             var_dump(222);die;
              if($first_promoter_user_id){   
                 if($balance2>0) {
                     // Log::incomeLog($balance2, 2, $first_promoter_user_id, $order['id'], 0,"下级消费分成(上级第一个代理商)");
