@@ -12,6 +12,7 @@
                 <th style="width:30px">选择</th>
                 <th style="width:70px">操作</th>
                 <th style="width:100px;">活动名称</th>
+                <th style="width:80px;">组队id</th>
                 <th style="width:200px;">商品</th>
                 <th style="width:80px;">用户</th>
                 <th style="width:70px">拼团数量</th>
@@ -37,9 +38,10 @@
                             </div>
                         </div> 
                     </td>
-                    <td><a href="{url:/index/groupbuy/id/$item[id]}" target="_blank">{$item['title']}</a></td>
-                    <td style="width:70px;">{$item['name']}</td>
-                    <td style="width:70px">{$item['nickname']}</td>
+                    <td style="width: 100px;"><a href="{url:/index/groupbuy/id/$item[id]}" target="_blank">{$item['title']}</a></td>
+                    <td style="width:80px;">{$item['join_id']}</td>
+                    <td style="width:200px;">{$item['name']}</td>
+                    <td style="width:80px">{$item['nickname']}</td>
                     <td style="width:70px">{$item['min_num']}</td>
                     <td style="width:120px">{$item['join_time']}</td>
                     <td style="width:120px">{$item['end_time']}</td>
