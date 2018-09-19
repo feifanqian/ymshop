@@ -601,7 +601,7 @@ class DistrictAction extends Controller {
 
     public function get_first_promoter(){
         $user_id = Filter::int(Req::args('user_id'));
-        $idstr = Common::getFirstPromoters($user_id);
+        $idstr = Common::getFirstPromoter($user_id);
         $this->code = 0;
         $this->content = $idstr;
     }     
