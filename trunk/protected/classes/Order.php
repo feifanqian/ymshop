@@ -141,6 +141,7 @@ class Order {
                             $model->table('groupbuy_join')->data(['need_num'=>"`need_num`-1"])->where('id='.$groupbuy_log['join_id'])->update();
                             $need_num = $groupbuy_join['need_num']-1;
                             if($need_num==0) {
+                                var_dump(111);die;
                                 $client_type = Common::getPayClientByPaymentID($payment_id);
                                 // 拼团成功参与分账
                                 $logs = $model->table('groupbuy_log')->fields('id')->where('join_id='.$groupbuy_log['join_id'].' and pay_status=1')->findAll();
