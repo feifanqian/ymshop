@@ -263,7 +263,7 @@ class Order {
                 //jpush
                 $jpush = $NoticeService->getNotice('jpush');
                 $audience['alias']=array($order['user_id']);
-                $jpush->setPushData('all', $audience, '恭喜您，订单支付成功！', 'order_pay_success', $order['order_no']);
+                $jpush->setPushData('all', $audience, '恭喜您，订单支付成功！', 'order_pay_success', $order['id']);
                 $jpush->push();
             }
             /*不再使用此功能
