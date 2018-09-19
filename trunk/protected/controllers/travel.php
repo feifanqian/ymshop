@@ -1499,7 +1499,7 @@ class TravelController extends Controller
                                 $user_id = $oauth_user['user_id'];
                                 $this->user['id'] = $user_id;
                             }
-                            if($inviter_id){
+                            if($inviter_id && $user_id){
                                 Common::buildInviteShip($inviter_id, $user_id, 'second-wap');
                             }   
                         }
@@ -1508,7 +1508,7 @@ class TravelController extends Controller
                     }
             }
          }
-         if($inviter_id) {
+         if($inviter_id && $this->user['id']) {
             Common::buildInviteShip($inviter_id, $this->user['id'], 'wechat');
          }
         $news = $this->model->table('article')->where('id='.$id)->find();
