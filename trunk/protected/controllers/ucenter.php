@@ -3412,9 +3412,6 @@ class UcenterController extends Controller
         }
         if (isset($this->user['id'])) {
             Common::buildInviteShip($inviter_id, $this->user['id'], $from);
-            if($this->user['id']==140531 || $this->user['id']==190665) {
-                var_dump($cashier_id);die;
-            }
         } else {
             // Cookie::set("inviter", $inviter_id);
             // $this->noRight();
@@ -3492,10 +3489,10 @@ class UcenterController extends Controller
                 } else {
                     $auth_code = $_GET['auth_code'];
                     $seller_id = $_GET['inviter_id'];
-                    if(isset($_GET['cashier_id'])) {
+                    if(isset($_GET['cashier_id']) && $_GET['cashier_id']!=0) {
                         $cashier_id = $_GET['cashier_id'];
                     }
-                    if(isset($_GET['desk_id'])) {
+                    if(isset($_GET['desk_id']) && $_GET['desk_id']!=0) {
                         $desk_id = $_GET['desk_id'];
                     }
                     if($cashier_id!=0 || $desk_id!=0) {
