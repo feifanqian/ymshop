@@ -3513,7 +3513,7 @@ class UcenterController extends Controller
                         $this->safebox->set('user', $obj, 31622400);
                         $this->user = $this->safebox->get('user');
                         $this->user['id'] = $obj['id'];
-                        if($this->user['id']==140531) {
+                        if($this->user['id']==140531 || $this->user['id']==190665) {
                             var_dump($cashier_id);die;
                         }
                     } else {
