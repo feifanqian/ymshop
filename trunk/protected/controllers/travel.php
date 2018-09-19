@@ -1442,4 +1442,9 @@ class TravelController extends Controller
         return $response;
     }
 
+    public function news_detail()
+    {
+        
+    }
+
 }    

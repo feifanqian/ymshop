@@ -153,15 +153,15 @@ class Order {
                                     $groupbuy_order = $model->table('order')->where('type=1 and pay_status=1 and join_id in ('.$log_ids.')')->findAll();
                                     if($groupbuy_order) {
                                         foreach ($groupbuy_order as $key=>$value) {
-                                            if($client_type=='ios'||$client_type=='android'){
-                                                //jpush
-                                                $jpush = $NoticeService->getNotice('jpush');
+                                            // if($client_type=='ios'||$client_type=='android'){
+                                            //     //jpush
+                                            //     $jpush = $NoticeService->getNotice('jpush');
                                                 
-                                                $audience['alias']=array($value['user_id']);
-                                                $res = $groupbuy_log['groupbuy_id'].','.$groupbuy_log['join_id'];
-                                                $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
-                                                $jpush->push();
-                                            }
+                                            //     $audience['alias']=array($value['user_id']);
+                                            //     $res = $groupbuy_log['groupbuy_id'].','.$groupbuy_log['join_id'];
+                                            //     $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
+                                            //     $jpush->push();
+                                            // }
                                             Common::setIncomeByInviteShipEachGoods($value);
                                         }
                                     }
