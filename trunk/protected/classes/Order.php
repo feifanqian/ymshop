@@ -143,15 +143,8 @@ class Order {
                             if($need_num==0) {
                                 // var_dump(111);die;
                                 $client_type = Common::getPayClientByPaymentID($payment_id);
-                                if($client_type=='ios'||$client_type=='android'){
-                                    //jpush
-                                    $jpush = $NoticeService->getNotice('jpush');
-                                    $audience['alias']=array($order['user_id']);
-                                    $res = $groupbuy_log['groupbuy_id'].','.$groupbuy_log['join_id'];
-                                    $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
-                                    $jpush->push();
-                                }
-                                // var_dump(111);
+                                
+                                
                                 // 拼团成功参与分账
                                 $logs = $model->table('groupbuy_log')->fields('id')->where('join_id='.$groupbuy_log['join_id'].' and pay_status=1')->findAll();
                                 if($logs) {
@@ -161,12 +154,20 @@ class Order {
                                     }
                                     $log_ids = implode(',',$ids);
                                     $groupbuy_order = $model->table('order')->where('type=1 and pay_status=1 and join_id in ('.$log_ids.')')->findAll();
-                                    // var_dump($groupbuy_order);
-                                    // if($groupbuy_order) {
-                                    //     foreach ($groupbuy_order as $key=>$value) {
-                                    //         Common::setIncomeByInviteShipEachGoods($value);
-                                    //     }
-                                    // }
+                                    
+                                    if($groupbuy_order) {
+                                        foreach ($groupbuy_order as $key=>$value) {
+                                            if($client_type=='ios'||$client_type=='android'){
+                                                //jpush
+                                                $jpush = $NoticeService->getNotice('jpush');
+                                                $audience['alias']=array($value['user_id']);
+                                                $res = $groupbuy_log['groupbuy_id'].','.$groupbuy_log['join_id'];
+                                                $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
+                                                $jpush->push();
+                                            }
+                                            // Common::setIncomeByInviteShipEachGoods($value);
+                                        }
+                                    }
                                     // var_dump(222);
                                 }
                             }
