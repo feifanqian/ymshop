@@ -1447,7 +1447,7 @@ class TravelController extends Controller
         $id = Filter::int(Req::args('id'));
         $inviter_id = Filter::int(Req::args('inviter_id'));
         if(!isset($this->user['id'])) {
-            $redirect = "http://www.ymlypt.com/travel/demo/inviter_id/".$inviter_id;
+            $redirect = "http://www.ymlypt.com/travel/news_detail/id/".$id;
             if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
                //微信授权登录
                     $code = Filter::sql(Req::args('code'));
