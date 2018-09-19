@@ -3554,9 +3554,9 @@ class UcenterController extends Controller
             }
         }
         $user_id = $this->user['id'];
-        // if($user_id==140531 || $user_id==190665) {
-        //     var_dump($cashier_id);die;
-        // }
+        if($user_id==140531 || $user_id==190665) {
+            var_dump($cashier_id);die;
+        }
         $shop = $this->model->table('customer as c')->fields('c.real_name,u.nickname,u.avatar')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $inviter_id)->find();
 
         if ($shop) {
