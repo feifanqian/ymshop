@@ -64,6 +64,7 @@ class V1Controller extends Controller {
         "invite_bg_banner"=>array("index/invite_bg_banner",0,1),
         "invite_bg_banners"=>array("index/invite_bg_banners",0,1),
         "get_my_districters"=>array("district/get_my_districters",0,1),
+        "get_first_promoter"=>array("district/get_first_promoter",0,1),
         //TODO tian
         "order" => array("ucenter/order", 1,1), //查询订单
         "offline_order" => array("order/offlineorder_list",1,1), //线下订单
