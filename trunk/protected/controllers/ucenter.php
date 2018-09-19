@@ -3513,9 +3513,6 @@ class UcenterController extends Controller
                         $this->safebox->set('user', $obj, 31622400);
                         $this->user = $this->safebox->get('user');
                         $this->user['id'] = $obj['id'];
-                        if($this->user['id']==140531 || $this->user['id']==190665) {
-                            var_dump($cashier_id);die;
-                        }
                     } else {
                         $this->model->table('oauth_user')->data(array(
                             'open_name' => $nick_name,
@@ -3557,6 +3554,9 @@ class UcenterController extends Controller
             }
         }
         $user_id = $this->user['id'];
+        // if($user_id==140531 || $user_id==190665) {
+        //     var_dump($cashier_id);die;
+        // }
         $shop = $this->model->table('customer as c')->fields('c.real_name,u.nickname,u.avatar')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $inviter_id)->find();
 
         if ($shop) {

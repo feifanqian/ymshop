@@ -67,7 +67,7 @@
             <input class="weui_input" id="start" type="text" value="湖北 武汉 武昌区">
         </div>
     </div> -->
-    <a class="weui_cell open-popup" data-target="#selectid" href="javascript:;">
+    <a class="weui_cell open-popup" data-target="#selectid" href="javascript:;" style="display: none;">
         <div class="weui_cell_hd"><label for="date" class="weui_label">规格</label></div>
         <div class="weui_cell_bd weui_cell_primary">
             <p id="attr-text">选择</p>
@@ -112,7 +112,8 @@
   {if:$info['groupbuy_join_list']['users']!=null}
   {list:items = $info['groupbuy_join_list']['users']}
   <span style="display: inline-block;width:60px;height: 60px;margin-left:20px;float: left;">
-      <img src="{echo:Common::thumb($item['avatar'],60,60)}" width="60" height="60" style="border-radius: 60px;">
+      {set:$avatar = $item['avatar']}
+      <img src="{url:@$avatar}" width="60" height="60" style="border-radius: 60px;">
   </span>
   {/list}
   {foreach:items=$img_default key=$k item=$item}
