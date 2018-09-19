@@ -431,7 +431,7 @@ class LinuxCliTask{
                             $need_num = $groupbuy_join['need_num'];
                             if($need_num>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['end_time'])) {
                                 for($i=0;$i<$need_num;$i++) {
-                                    $new_groupbuy_join = $model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
+                                    $new_groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
                                     // $user_id = $groupbuy_join['need_num']+1;
                                     $user_id = rand(2,10);
                                     $data = array(
