@@ -3410,9 +3410,9 @@ class UcenterController extends Controller
             $pay_type = 'wechat';
             $from = 'second-wap';
         }
-        if (isset($this->user['id']) && $this->user['id']!=140531) {
-            Common::buildInviteShip($inviter_id, $this->user['id'], $from);
-        } else {
+        // if (isset($this->user['id']) && $this->user['id']!=140531) {
+        //     Common::buildInviteShip($inviter_id, $this->user['id'], $from);
+        // } else {
             // Cookie::set("inviter", $inviter_id);
             // $this->noRight();
             $redirect = "http://www.ymlypt.com/ucenter/demo/inviter_id/".$inviter_id;
@@ -3558,7 +3558,7 @@ class UcenterController extends Controller
                 $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '请在微信或在支付宝中打开'));
                 exit;
             }
-        }
+        // }
         $user_id = $this->user['id'];
         $shop = $this->model->table('customer as c')->fields('c.real_name,u.nickname,u.avatar')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $inviter_id)->find();
 
