@@ -153,7 +153,7 @@ class Order {
                                         $ids[] = $value['id'];
                                     }
                                     $log_ids = implode(',',$ids);
-                                    $groupbuy_order = $model->table('order')->where('type=1 and pay_status=1 and join_id in ('.$log_ids.')')->findAll();
+                                    $groupbuy_order = $model->table('order')->fields('id,user_id')->where('type=1 and pay_status=1 and join_id in ('.$log_ids.')')->findAll();
                                     
                                     if($groupbuy_order) {
                                         foreach ($groupbuy_order as $key=>$value) {
@@ -165,10 +165,10 @@ class Order {
                                                 $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
                                                 $jpush->push();
                                             }
-                                            // Common::setIncomeByInviteShipEachGoods($value);
+                                            $order_item = $model->table('order')->where('id='.$value['id'])->find();
+                                            Common::setIncomeByInviteShipEachGoods($order_item);
                                         }
                                     }
-                                    // var_dump(222);
                                 }
                             }
                         }
