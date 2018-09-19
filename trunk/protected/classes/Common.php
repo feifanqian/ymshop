@@ -830,9 +830,10 @@ class Common {
          }
      }
 
-     static function setIncomeByInviteShipEachGoods($order){
+     static function setIncomeByInviteShipEachGoods($order_id){
          $model = new Model();
          //通过订单id获取商品id
+         $order = $model->table('order')->where('id='.$order_id)->find();
          $order_goods = $model->table('order_goods')->fields('goods_id')->where('order_id='.$order['id'])->find();
          $goods = $model->table('goods')->fields('inviter_rate,promoter_rate,districter_rate')->where('id='.$order_goods['goods_id'])->find();
 
@@ -885,7 +886,7 @@ class Common {
                    $model->table('customer')->where('user_id='.$inviter_info['user_id'])->data(array("balance"=>"`balance`+({$balance1})"))->update();
                    Log::balance($balance1, $inviter_info['user_id'], $order['order_no'],'线上消费收益(上级邀请者)', 5); 
              }
-             $first_promoter_user_id = self::getFirstPromoter($order['user_id']);
+             $first_promoter_user_id = self::getFirstPromoters($order['user_id']);
              if($first_promoter_user_id){   
                 if($balance2>0) {
                     // Log::incomeLog($balance2, 2, $first_promoter_user_id, $order['id'], 0,"下级消费分成(上级第一个代理商)");
@@ -1013,6 +1014,30 @@ class Common {
                     }else{
                         $now_user_id = $inviter_info['user_id'];
                     }
+                }else{
+                    $is_break = true;
+                }
+            }
+            return $promoter_user_id;
+        
+     }
+
+     static function getFirstPromoters($user_id){
+        $model = new Model();
+        // $is_promoter = $model->table("district_promoter")->where("user_id=".$user_id)->find();
+        
+            //根据邀请关系找到上级第一个推广者（代理商）
+            $is_break = false;
+            $now_user_id = $user_id;
+            $promoter_user_id = 1;
+            $user_info = $model->table("invite")->where("invite_user_id=".$user_id)->find();
+            if(!$user_info) {
+                return $promoter_user_id;
+            }
+            while(!$is_break){
+                $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
+                if($inviter_info){
+                    $now_user_id = $inviter_info['user_id'];
                 }else{
                     $is_break = true;
                 }
