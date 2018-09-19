@@ -1965,10 +1965,10 @@ class PaymentController extends Controller {
                         exit;
                     } 
                 }elseif(!empty($order_offline)){
-                    // if ($order_offline['pay_status'] == 1) {
-                    //     echo 'success';
-                    //     exit;
-                    // }
+                    if ($order_offline['pay_status'] == 1) {
+                        echo 'success';
+                        exit;
+                    }
                     $order_no = $orderNo;
                      $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
                      if ($order['order_amount'] != $money) {
