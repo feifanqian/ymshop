@@ -165,8 +165,8 @@ class Order {
                                                 $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
                                                 $jpush->push();
                                             }
-                                            $order_item = $model->table('order')->where('id='.$value['id'])->find();
-                                            Common::setIncomeByInviteShipEachGoods($order_item);
+                                            // $order_item = $model->table('order')->where('id='.$value['id'])->find();
+                                            // Common::setIncomeByInviteShipEachGoods($order_item);
                                         }
                                     }
                                 }
@@ -276,7 +276,7 @@ class Order {
                  self::updateCommission(1,$order['id'],$order['user_id']); 
             }
              */
-            if($order['type']!=1){
+            // if($order['type']!=1){
                 // Common::setIncomeByInviteShip($order);
                 Common::setIncomeByInviteShipEachGoods($order);
                 if($order['qr_flag']==""){
@@ -286,7 +286,7 @@ class Order {
                 // else{
                 //     DistrictLogic::getInstance()->districtIncomeAssign($order_goods_info,array('order_amount'=>$order['order_amount'],'order_id'=>$order['id'],'order_no'=>$order['order_no'],'qr_flag'=>$order['qr_flag']));
                 // }
-            }
+            // }
             return $order['id'];
         } else {
             return false;
