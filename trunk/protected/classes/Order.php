@@ -165,8 +165,8 @@ class Order {
                                                 $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
                                                 $jpush->push();
                                             }
-                                            // $order_item = $model->table('order')->where('id='.$value['id'])->find();
-                                            // Common::setIncomeByInviteShipEachGoods($order_item['id']);
+                                            $order_item = $model->table('order')->where('id='.$value['id'])->find();
+                                            Common::setIncomeByInviteShipEachGoods($order_item['id']);
                                         }
                                     }
                                 }
