@@ -1114,4 +1114,26 @@ class PaymentAction extends Controller {
       
       var_dump($result);
     }
+
+    public function be_promoter_by_balance()
+    {
+        $isPromoter = $this->model->table("district_promoter")->where("user_id=".$this->user['id'])->find();
+        if($isPromoter) {
+            $this->code = 1308;
+            return;
+        }
+        $customer = $this->model->table('customer')->where('user_id='.$this->user['id'])->find();
+        if($customer['balance']<3600) {
+            $this->code = 1309;
+            return;
+        }
+        $this->model->table('customer')->data(['balance'=>"`balance`-3600"])->where('user_id='.$this->user['id'])->update();
+        $promoter_data['user_id']=$this->user['id'];
+        $promoter_data['type']=5;
+        $promoter_data['create_time']=$promoter_data['join_time']=date("Y-m-d H:i:s");
+        $promoter_data['hirer_id']=$inviter_info?$inviter_info['district_id']:1;
+        $promoter_data['status']=1;
+        $promoter_data['base_rate']=$recharge['rate'];
+        $model->table("district_promoter")->data($promoter_data)->insert();
+    }
 }
