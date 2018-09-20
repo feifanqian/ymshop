@@ -173,7 +173,7 @@ iframe{
 }
 .child-left{
     width: 18%;
-    margin-top: 20px;
+    margin-top: 16px;
     height: 176px;
     float: left;
 }
@@ -195,10 +195,10 @@ iframe{
     <input name="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker()">
     </p>
   </div>
-  <div class="block" style="height: 250px;">
-    <div class="line" style="margin-bottom: 0px;">个人信息</div>
-    <div class="list-child" style="border-bottom: none;">
-            <div class="child-left">
+  <div class="block" style="height: 220px;">
+    <div class="line" style="margin-bottom: 0px;"><img src="/themes/mobile/images/op_center/line.png">&nbsp;&nbsp;个人信息</div>
+    <div class="list-child" style="border-bottom: none;height: 120px;">
+            <div class="child-left" style="height: 120px;">
                  <div class="div-child">
                      {set:$avatar = $result['avatar']}
                      <img src="{url:@$avatar}" width="90" height="90" style="border-radius: 50%">
@@ -218,7 +218,7 @@ iframe{
     </div>
   </div>
   <div class="block">
-    <div class="line"><img src="/themes/mobile/images/op_center/line.png">数量统计</div><br/>
+    <div class="line"><img src="/themes/mobile/images/op_center/line.png">&nbsp;&nbsp;数量统计</div><br/>
     <div class="line-info">
       <span style="border-right: 0.02px solid #eee;"><b>线上总订单</b><p id="order_num">{$result['order_num']}</p></span>
       <span style="border-right: 0.02px solid #eee;"><b>扫码总订单</b><p id="offline_order_num">{$result['offline_order_num']}</p></span>
@@ -230,7 +230,7 @@ iframe{
     </div>
   </div>
   <div class="block">
-    <div class="line"><img src="/themes/mobile/images/op_center/line.png">金额总统计</div><br/>
+    <div class="line"><img src="/themes/mobile/images/op_center/line.png">&nbsp;&nbsp;金额总统计</div><br/>
     <div class="line-info">
       <span style="border-right: 0.02px solid #eee;"><b>线上订单总金额</b><p id="order_sum">{$result['order_sum']}</p></span>
       <span style="border-right: 0.02px solid #eee;"><b>扫码订单总金额</b><p id="offline_order_sum">{$result['offline_order_sum']}</p></span>
