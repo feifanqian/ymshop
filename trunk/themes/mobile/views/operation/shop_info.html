@@ -328,23 +328,30 @@ $("input[name='end_date']").change(function(){
                 
                     $.each(jsonarray, function (i, item) {
                         html += '<div class="list-child">';
+                        html += '<div class="child-left">';
+                        html += '<div class="div-child">';
+                        avatar = item.avatar;
+                        html += '<img src="{url:@'+avatar+'}" width="90" height="90" style="border-radius: 50%">';
+                        if(item.role_type==2) {
+                           html += '<p>经销商</p>';
+                        } else {
+                           html += '<p>商家</p>';
+                        }
+                        html += '</div>';
+                        html += '</div>';
+                        html += '<div class="child-right">';
                         html += '<div class="div-child">';
                         if(item.real_name!=null) {
                            html += '<span>名称：'+item.real_name+'</span>';
                         } else {
                            html += '<span>名称：'+item.nickname+'</span>';
                         }
-                        if(item.role_type==2) {
-                           html += '<span class="span-right"><i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商</span>';
-                        } else {
-                           html += '<span class="span-right"><i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家</span>';
-                        }
                         html += '</div>';
                         html += '<div class="div-child">';
                         if(item.mobile!=null) {
-                            html += '<span>手机号：'+item.mobile+'</span><br/>';
+                            html += '<span>手机号：'+item.mobile+'</span>';
                         } else {
-                            html += '<span>手机号：--</span><br/>';
+                            html += '<span>手机号：--</span>';
                         }   
                         html += '</div>';
                         html += '<div class="div-child">';
@@ -359,6 +366,7 @@ $("input[name='end_date']").change(function(){
                         html += '<div class="div-child">';
                         html += '<span>加入时间：'+item.create_time+'</span>'
                         html += '<a href="/operation/shop_info?user_id='+item.id+'">查看详情</a>';
+                        html += '</div>';
                         html += '</div>';
                         html += '</div>';
                     });
@@ -421,23 +429,30 @@ function getScrollTop() {
                 }  else {
                     $.each(jsonarray, function (i, item) {
                         html += '<div class="list-child">';
+                        html += '<div class="child-left">';
+                        html += '<div class="div-child">';
+                        avatar = item.avatar;
+                        html += '<img src="{url:@'+avatar+'}" width="90" height="90" style="border-radius: 50%">';
+                        if(item.role_type==2) {
+                           html += '<p>经销商</p>';
+                        } else {
+                           html += '<p>商家</p>';
+                        }
+                        html += '</div>';
+                        html += '</div>';
+                        html += '<div class="child-right">';
                         html += '<div class="div-child">';
                         if(item.real_name!=null) {
                            html += '<span>名称：'+item.real_name+'</span>';
                         } else {
                            html += '<span>名称：'+item.nickname+'</span>';
                         }
-                        if(item.role_type==2) {
-                           html += '<span class="span-right"><i><img src="/themes/mobile/images/op_center/--09.jpg"></i>经销商</span>';
-                        } else {
-                           html += '<span class="span-right"><i><img src="/themes/mobile/images/op_center/--07.jpg"></i>商家</span>';
-                        }
                         html += '</div>';
                         html += '<div class="div-child">';
                         if(item.mobile!=null) {
-                            html += '<span>手机号：'+item.mobile+'</span><br/>';
+                            html += '<span>手机号：'+item.mobile+'</span>';
                         } else {
-                            html += '<span>手机号：--</span><br/>';
+                            html += '<span>手机号：--</span>';
                         }   
                         html += '</div>';
                         html += '<div class="div-child">';
@@ -451,7 +466,8 @@ function getScrollTop() {
                         html += '</div>';
                         html += '<div class="div-child">';
                         html += '<span>加入时间：'+item.create_time+'</span>'
-                        html += '<a href="/operation/shop_info/user_id/'+item.id+'">查看详情</a>';
+                        html += '<a href="/operation/shop_info?user_id='+item.id+'">查看详情</a>';
+                        html += '</div>';
                         html += '</div>';
                         html += '</div>';
                     });

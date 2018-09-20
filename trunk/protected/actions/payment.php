@@ -1128,12 +1128,17 @@ class PaymentAction extends Controller {
             return;
         }
         $this->model->table('customer')->data(['balance'=>"`balance`-3600"])->where('user_id='.$this->user['id'])->update();
+        Log::balance(-3600, $this->user['id'], '','加盟商家服务费', 23);
+        $inviter_info = $this->model->table("invite")->where("invite_user_id=".$this->user['id'])->find();
         $promoter_data['user_id']=$this->user['id'];
+        $promoter_data['shop_name'] = $customer['real_name'];
         $promoter_data['type']=5;
         $promoter_data['create_time']=$promoter_data['join_time']=date("Y-m-d H:i:s");
         $promoter_data['hirer_id']=$inviter_info?$inviter_info['district_id']:1;
         $promoter_data['status']=1;
-        $promoter_data['base_rate']=$recharge['rate'];
+        $promoter_data['base_rate']='3.00';
         $model->table("district_promoter")->data($promoter_data)->insert();
+        $this->code = 0;
+        return;
     }
 }
