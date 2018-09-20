@@ -1522,6 +1522,9 @@ class TravelController extends Controller
 
         $jssdk = new JSSDK($wechatcfg['app_key'], $wechatcfg['app_secret']);
         $signPackage = $jssdk->GetSignPackage();
+        if(strpos($news['thumb_img'],'https') == false || strpos($news['thumb_img'],'http') == false){
+            $news['thumb_img'] = "https://ymlypt.b0.upaiyun.com".$news['thumb_img'];
+        }
         $this->assign("signPackage", $signPackage);
         $this->assign("news",$news);
         $this->assign("id",$id);

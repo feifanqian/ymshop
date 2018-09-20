@@ -544,7 +544,10 @@ class OperationController extends Controller
             }
             $this->assign('list',$list);
         }
-
+        
+        if($customer['avatar'] == '/0.png') {
+           $customer['avatar'] == '0.png';
+        }
         $result = array();
         $result['order_num'] = $order_num; //线上总订单数
         $result['offline_order_num'] = $offline_order_num; //扫码总订单数
