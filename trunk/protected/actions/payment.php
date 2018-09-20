@@ -348,6 +348,10 @@ class PaymentAction extends Controller {
             $this->code = 1237;
             return;
         }
+       if(in_array($seller_id, [55568,21079])) {
+            $this->code = 1237;
+            return;
+        }
        if(!$payment_id){
          $this->code = 1157;
        }
