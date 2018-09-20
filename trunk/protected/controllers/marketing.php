@@ -1113,7 +1113,7 @@ class MarketingController extends Controller {
                         $list['data'][$k]['join_status'] = '<span style="color:red;">拼团失败</span>';
                     } elseif ($had_join_num<$v['min_num'] && time()<strtotime($v['end_time'])) {
                         $list['data'][$k]['join_status'] = '拼团中';
-                    } elseif ($v['pay_status']==3)) {
+                    } elseif ($v['pay_status']==3) {
                         $list['data'][$k]['join_status'] = '已退款';
                     } else {
                         $list['data'][$k]['join_status'] = '拼团中';
