@@ -220,13 +220,18 @@ iframe{
   <div class="block">
     <div class="line"><img src="/themes/mobile/images/op_center/line.png">&nbsp;&nbsp;数量统计</div><br/>
     <div class="line-info">
-      <span style="border-right: 0.02px solid #eee;"><b>线上总订单</b><p id="order_num">{$result['order_num']}</p></span>
-      <span style="border-right: 0.02px solid #eee;"><b>扫码总订单</b><p id="offline_order_num">{$result['offline_order_num']}</p></span>
       {if:$seo_title=="经销商"}
+      <span style="border-right: 0.02px solid #eee;"><b>线上总订单</b><p id="order_num">{$result['order_num']}</p></span>
+      <span style="border-right: 0.02px solid #eee;"><b>扫码总订单</b><p id="offline_order_num">{$result['offline_order_num']}</p></span> 
       <span><b>经销商数量</b><p id="shop_num">{$result['shop_num']}</p></span>
-      {/if}
       <span style="border-right: 0.02px solid #eee;border-bottom: none;"><b>商家数量</b><p id="promoter_num">{$result['promoter_num']}</p></span>
       <span style="border-right: 0.02px solid #eee;border-bottom: none;"><b>旗下总会员数</b><p id="user_num">{$result['user_num']}</p></span>
+      {else:}
+      <span style="border-right: 0.02px solid #eee;"><b>线上总订单</b><p id="order_num">{$result['order_num']}</p></span>
+      <span style="border-right: 0.02px solid #eee;"><b>扫码总订单</b><p id="offline_order_num">{$result['offline_order_num']}</p></span> 
+      <span><b>商家数量</b><p id="promoter_num">{$result['promoter_num']}</p></span>
+      <span style="border-right: 0.02px solid #eee;border-bottom: none;"><b>旗下总会员数</b><p id="user_num">{$result['user_num']}</p></span>
+      {/if}
     </div>
   </div>
   <div class="block">
