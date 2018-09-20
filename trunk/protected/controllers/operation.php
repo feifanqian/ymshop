@@ -410,7 +410,7 @@ class OperationController extends Controller
         
         // $total_user = $this->getAllChildUserIds($user_id);
         $shopids = $user['shopids'];
-        if($user['user_ids'] || $user['shopids']) {
+        if($user['user_ids']!='' && $user['shopids']!='') {
             $ids = $user['user_ids'];
             $where1 = "user_id in ($ids) and pay_status=1 and status=4";
             if($start_date || $end_date) {
