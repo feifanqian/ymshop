@@ -1137,7 +1137,7 @@ class PaymentAction extends Controller {
         $promoter_data['hirer_id']=$inviter_info?$inviter_info['district_id']:1;
         $promoter_data['status']=1;
         $promoter_data['base_rate']='3.00';
-        $model->table("district_promoter")->data($promoter_data)->insert();
+        $this->model->table("district_promoter")->data($promoter_data)->insert();
         $this->code = 0;
         return;
     }
