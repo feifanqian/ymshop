@@ -165,7 +165,7 @@ class Order {
                                                 $jpush->setPushData('all', $audience, '恭喜您，拼团成功！', 'order_pay_success', $res);
                                                 $jpush->push();
                                             }
-                                            Common::setIncomeByInviteShipEachGoods($value['id']);
+                                            // Common::setIncomeByInviteShipEachGoods($value['id']);
                                         }
                                     }
                                 }
@@ -275,7 +275,8 @@ class Order {
                  self::updateCommission(1,$order['id'],$order['user_id']); 
             }
              */
-            if($order['type']!=1){
+            // if($order['type']!=1){
+            if(!in_array($order['user_id']),[2,3,4,5,6,7,8,9,10]) {
                 // Common::setIncomeByInviteShip($order);
                 Common::setIncomeByInviteShipEachGoods($order['id']);
                 if($order['qr_flag']==""){
