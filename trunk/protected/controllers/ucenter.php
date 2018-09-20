@@ -3414,7 +3414,7 @@ class UcenterController extends Controller
             $pay_type = 'wechat';
             $from = 'second-wap';
         }
-        if (isset($this->user['id']) && $this->user['id']!=140531) {
+        if (isset($this->user['id']) && $this->user['id']!=191709) {
             Common::buildInviteShip($inviter_id, $this->user['id'], $from);
         } else {
             // Cookie::set("inviter", $inviter_id);
