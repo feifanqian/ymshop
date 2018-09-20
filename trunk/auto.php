@@ -430,10 +430,10 @@ class LinuxCliTask{
                             $groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
                             $need_num = $groupbuy_join['need_num'];
                             if($need_num>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['end_time'])) {
+                                $user_id_arr = $this->unique_rand(2,10,$need_num); // 机器人随机id数组
                                 for($i=0;$i<$need_num;$i++) {
                                     $new_groupbuy_join = $this->model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
-                                    // $user_id = $groupbuy_join['need_num']+1;
-                                    $user_id = rand(2,10);
+                                    $user_id = $user_id_arr[$i];
                                     $data = array(
                                     'user_id'  => $new_groupbuy_join['user_id'].','.$user_id,
                                     'need_num' => $new_groupbuy_join['need_num']-1
@@ -471,6 +471,18 @@ class LinuxCliTask{
             }
         }
         
+    }
+
+    public function  unique_rand($min,$max,$num){
+        $count = 0;
+        $return_arr = array();
+        while($count < $num){
+            $return_arr[] = mt_rand($min,$max);
+            $return_arr = array_flip(array_flip($return_arr));
+            $count = count($return_arr);
+        }
+        shuffle($return_arr);
+        return $return_arr;
     }
 
     public function autoCreateOrder($user_id,$product_id,$groupbuy_id,$log_id){

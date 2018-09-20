@@ -1102,22 +1102,22 @@ class MarketingController extends Controller {
             $page = 1;
         }
         $model = new Model();
-        $list = $model->table('order as o')->fields('gl.id as log_id,gl.join_id,gl.groupbuy_id as id,go.name,go.img,g.min_num,g.price,gj.end_time,gj.status,o.id as order_id,og.product_id,gl.status as gl_status,u.nickname,g.title,gl.join_time')->join('left join groupbuy_log as gl on o.join_id=gl.id left join order_goods as og on o.id=og.order_id left join groupbuy as g on gl.groupbuy_id=g.id left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on gl.join_id=gj.id left join user as u on o.user_id=u.id')->where('gl.pay_status in (1,3) and o.pay_status=1')->order('gl.join_id desc')->findPage($page,10);
+        $list = $model->table('order as o')->fields('gl.id as log_id,gl.join_id,gl.groupbuy_id as id,go.name,go.img,g.min_num,g.price,gj.end_time,gj.status,o.id as order_id,og.product_id,gl.status as gl_status,u.nickname,g.title,gl.join_time,gl.pay_status')->join('left join groupbuy_log as gl on o.join_id=gl.id left join order_goods as og on o.id=og.order_id left join groupbuy as g on gl.groupbuy_id=g.id left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on gl.join_id=gj.id left join user as u on o.user_id=u.id')->where('gl.pay_status in (1,3) and o.pay_status in (1,3)')->order('gl.join_id desc')->findPage($page,10);
         if($list) {
             if($list['data']!=null) {
                 foreach ($list['data'] as $k => $v) {
                     $had_join_num = $model->table('groupbuy_log')->where('join_id='.$v['join_id'].' and pay_status=1')->count();
-                        if($had_join_num>=$v['min_num']) {
-                            $list['data'][$k]['join_status'] = '<span style="color:green;">拼团成功</span>';
-                        } elseif ($had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
-                            $list['data'][$k]['join_status'] = '<span style="color:red;">拼团失败</span>';
-                        } elseif ($had_join_num<$v['min_num'] && time()<strtotime($v['end_time'])) {
-                            $list['data'][$k]['join_status'] = '拼团中';
-                        } elseif ($v['gl_status']==3 && time()>strtotime($v['end_time'])) {
-                            $list['data'][$k]['join_status'] = '已退款';
-                        } else {
-                            $list['data'][$k]['join_status'] = '拼团中';
-                        }
+                    if($had_join_num>=$v['min_num']) {
+                        $list['data'][$k]['join_status'] = '<span style="color:green;">拼团成功</span>';
+                    } elseif ($had_join_num<$v['min_num'] && time()>=strtotime($v['end_time'])) {
+                        $list['data'][$k]['join_status'] = '<span style="color:red;">拼团失败</span>';
+                    } elseif ($had_join_num<$v['min_num'] && time()<strtotime($v['end_time'])) {
+                        $list['data'][$k]['join_status'] = '拼团中';
+                    } elseif ($v['pay_status']==3)) {
+                        $list['data'][$k]['join_status'] = '已退款';
+                    } else {
+                        $list['data'][$k]['join_status'] = '拼团中';
+                    }
                 }
             }
         }
@@ -1141,10 +1141,10 @@ class MarketingController extends Controller {
                     $groupbuy_join = $model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
                     $need_num = $groupbuy_join['need_num'];
                     if($need_num>0 && time()>strtotime($value['join_time']) && time()<strtotime($groupbuy_join['end_time'])) {
+                        $user_id_arr = $this->unique_rand(2,10,$need_num); // 机器人随机id数组
                         for($i=0;$i<$need_num;$i++) {
                             $new_groupbuy_join = $model->table('groupbuy_join')->where('id='.$value['join_id'])->find();
-                            // $user_id = $groupbuy_join['need_num']+1;
-                            $user_id = rand(2,10);
+                            $user_id = $user_id_arr[$i];
                             $data = array(
                                 'user_id'  => $new_groupbuy_join['user_id'].','.$user_id,
                                 'need_num' => $new_groupbuy_join['need_num']-1
@@ -1180,6 +1180,18 @@ class MarketingController extends Controller {
             }
         }
         echo JSON::encode(array('status' => 'success', 'msg' => '成功'));
+    }
+
+    public function  unique_rand($min,$max,$num){
+        $count = 0;
+        $return_arr = array();
+        while($count < $num){
+            $return_arr[] = mt_rand($min,$max);
+            $return_arr = array_flip(array_flip($return_arr));
+            $count = count($return_arr);
+        }
+        shuffle($return_arr);
+        return $return_arr;
     }
 
     public function autoCreateOrder($user_id,$product_id,$groupbuy_id,$log_id){
