@@ -151,6 +151,9 @@ class OperationController extends Controller
                             $list['data'][$k]['role_type'] = 1; //商家
                         }
                     }
+                    if($v['avatar']=='/0.png') {
+                        $list['data'][$k]['avatar'] = '0.png';
+                    }
                 }
                 $list['data'] = array_values($list['data']); 
             } else {
