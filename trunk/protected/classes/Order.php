@@ -276,7 +276,7 @@ class Order {
             }
              */
             // if($order['type']!=1){
-            if(!in_array($order['user_id']),[2,3,4,5,6,7,8,9,10]) {
+            if(!in_array($order['user_id'],[2,3,4,5,6,7,8,9,10])) {
                 // Common::setIncomeByInviteShip($order);
                 Common::setIncomeByInviteShipEachGoods($order['id']);
                 if($order['qr_flag']==""){
