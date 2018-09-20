@@ -489,8 +489,9 @@ class LinuxCliTask{
         $data['order_no'] = Common::createOrderNo();
         $data['user_id'] = $user_id;
         $data['payment'] = 1;
-        $data['status'] = 3; 
+        $data['status'] = 4; 
         $data['pay_status'] = 1;
+        $data['delivery_status'] = 2;
         $data['accept_name'] = 'ROBOT';
         $data['phone'] = '';
         $data['mobile'] = '';
