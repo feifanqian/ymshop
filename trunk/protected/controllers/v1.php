@@ -312,6 +312,7 @@ class V1Controller extends Controller {
         "help_list"=>array("map/help_list",0,1), //帮助支持
         "news_list"=>array("map/news_list",0,1), //新闻动态
         "news_detail"=>array("map/news_detail",0,1), //新闻详情
+        "news_share_link"=>array("map/news_share_link",1,1), //新闻动态分享链接
         //帮助建议
         "article_list"=>array("index/article_list",0,1), //帮助建议文章
         "get_all_child_user_ids"=>array("district/getAllChildUserIds",0,1),

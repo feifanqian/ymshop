@@ -1500,7 +1500,7 @@ class TravelController extends Controller
                                 $this->user['id'] = $user_id;
                             }
                             if($inviter_id && $user_id){
-                                Common::buildInviteShip($inviter_id, $user_id, 'second-wap');
+                                Common::buildInviteShip($inviter_id, $user_id, 'wechat');
                             }   
                         }
                     } else {

@@ -629,4 +629,12 @@ class MapAction extends Controller
         $this->content = $info;
         return;
     }
+
+    public function news_share_link()
+    {
+        $id = Filter::int(Req::args("id"));
+        $this->code = 0;
+        $this->content['link'] = "http://www.ymlypt.com/travel/news_detail/id/".$id."/inviter_id/".$this->user['id'];
+        return;
+    }
 }
