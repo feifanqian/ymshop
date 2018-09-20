@@ -11,7 +11,7 @@
 <style type="text/css">
 #app{
     margin-top: -3%;
-    background-color: #f5f5f7;
+    background-color: #f5f5f6;
     padding-top: 20px;
 }
 .header{
@@ -42,6 +42,7 @@
     background-color: #fff;
     height: 360px;
     margin-top: 20px;
+    border-radius: 24px;
 }
 .line{
     margin-top: 10px;
@@ -49,12 +50,27 @@
     height: 40px;
     margin-left: 4%;
     padding-left: 2%;
-    border-left: 3px solid #4eabf4;
+    /*border-left: 3px solid #4eabf4;*/
     font-size: 26px;
     /*font-weight: bold;*/
     line-height: 40px;
     color: #333;
     margin-bottom: 20px; 
+}
+.lines{
+    margin-top: 10px;
+    width: 100%;
+    height: 40px;
+    padding-left: 2%;
+    /*border-left: 3px solid #4eabf4;*/
+    font-size: 26px;
+    /* font-weight: bold; */
+    line-height: 40px;
+    color: #333;
+    margin-bottom: 20px;
+}
+.line img,.lines img{
+    vertical-align: -33%;
 }
 .line span{
     color:#ccc;
@@ -120,8 +136,9 @@
     vertical-align: -33%;
 }
 .list{
-    border-top: 0.1px solid #ccc;
-    padding-top: 10px;
+    /*border-top: 0.1px solid #ccc;*/
+    /*padding-top: 10px;*/
+    width: 100%;
 }
 .list-child{
     border-bottom: 0.1px solid #ccc;
@@ -131,6 +148,8 @@
     padding-right: 5%;
     padding-bottom: 10px;
     padding-top: 14px;
+    margin-top: 20px;
+    border-radius: 24px;
 }
 .div-child{
     width: 100%;
@@ -215,7 +234,7 @@ iframe{
     </p>
   </div>
   <div class="block">
-    <div class="line">数量统计</div>
+    <div class="line"><img src="/themes/mobile/images/op_center/line.png">数量统计</div>
     <div class="line-info">
       <span style="border-right: 0.02px solid #eee;"><b>线上总订单</b><p id="order_num">{$result['order_num']}</p></span>
       <span style="border-right: 0.02px solid #eee;"><b>扫码总订单</b><p id="offline_order_num">{$result['offline_order_num']}</p></span>
@@ -225,7 +244,7 @@ iframe{
     </div>
   </div>
   <div class="block">
-    <div class="line">金额总统计</div>
+    <div class="line"><img src="/themes/mobile/images/op_center/line.png">金额总统计</div>
     <div class="line-info">
       <span style="border-right: 0.02px solid #eee;"><b>线上订单总金额</b><p id="order_sum">{$result['order_sum']}</p></span>
       <span style="border-right: 0.02px solid #eee;"><b>扫码订单总金额</b><p id="offline_order_sum">{$result['offline_order_sum']}</p></span>
@@ -234,8 +253,8 @@ iframe{
       <span style="border-right: 0.02px solid #eee;border-bottom: none;"><b>优惠购收益</b><p id="benefit_sum">{$result['benefit_sum']}</p></span>
     </div>
   </div>
-  <div class="block">
-   <div class="line" style="font-weight: 500;">旗下经销商/商家</div>
+  <div class="lines" style="font-weight: 500;">旗下经销商/商家</div>
+  <!-- <div class="block"> -->
    <div class="list" id="list">
      {if:count($list['data'])>0}
         {list:items=$list['data']}
@@ -272,7 +291,7 @@ iframe{
        <div class="list-child" style="text-align: center;margin-top: 10%;">暂无经销商/商家</div>  
      {/if}
    </div>
-  </div>
+  <!-- </div> -->
 </div>
 </body>
 <script src="/runtime/systemjs/jquery.min.js"></script>

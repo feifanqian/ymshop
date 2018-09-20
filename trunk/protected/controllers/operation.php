@@ -626,6 +626,7 @@ class OperationController extends Controller
                    $ids[] = $v['invite_user_id'];
                 }
             }
+            array_push($ids, $user_id);
             $user_ids = $ids!=null?implode(',', $ids):'';
             $result['user_ids'] = $user_ids;
             $result['shopids'] = $shopids;
