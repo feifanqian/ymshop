@@ -442,6 +442,8 @@ class OperationController extends Controller
                     }
                 }
             }
+        }else{
+            $promoter_id_arr[] = $user_id;
         }
         
         $ids = $user['shop_ids_arr'];
