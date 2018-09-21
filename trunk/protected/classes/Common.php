@@ -1804,8 +1804,9 @@ class Common {
         if($shop) {
             $now_user_id = $shop['id'];
             while(!$is_break){
-                $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id=".$now_user_id)->findAll();
+                $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id in (".$now_user_id.")")->findAll();
                 if($inviter_info){
+                    $now_user_id = '';
                     foreach ($inviter_info as $k => $v) {
                         if($shop_ids=='') {
                            $shop_ids = $v['id']; 
@@ -1817,9 +1818,8 @@ class Common {
                         } else {
                            $user_ids .= ','.$v['owner_id'];
                         }
-                        // $shop_ids .= ','.self::getAllChildShops($v['owner_id']);
                         $num = $num+1;
-                        $now_user_id = $v['id'];
+                        $now_user_id = $now_user_id==''?$v['id']:$now_user_id.','.$v['id'];
                         $is_break = false;
                     }    
                 }else{
