@@ -71,6 +71,40 @@ class OperationController extends Controller
 
         $promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; //商家id
         
+        if($promoter_ids!='') {
+            $where9 = "dp.user_id in ($promoter_ids) and c.status=1 and dp.user_id!=".$user_id;
+            if($start_date || $end_date) {
+                $where9 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
+            }
+            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->findPage($page,10);
+            if($list['data']){
+                unset($list['html']);
+                $total = count($list['data']);
+                foreach($list['data'] as $k=>$v){
+                    if($v['id']==null){
+                        unset($list['data'][$k]);
+                        $total = $total-1;
+                    }else{
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if($shop){
+                            $list['data'][$k]['role_type'] = 2; //经销商   
+                        }else{
+                            $list['data'][$k]['role_type'] = 1; //商家
+                        }
+                    }
+                    if($v['avatar']=='/0.png') {
+                         $list['data'][$k]['avatar'] = '0.png';
+                    }
+                }
+                $list['data'] = array_values($list['data']); 
+            } else {
+                $list['data'] = [];
+            }
+        } else {
+            $list['data'] = [];
+        }
+        
+        
         if($user['user_ids']) {
             $ids = $user['user_ids'];
             $where1 = "user_id in ($ids) and pay_status=1 and status=4";
@@ -128,41 +162,6 @@ class OperationController extends Controller
         } else {
             $offline_order_num = 0;
             $offline_order_sum = 0.00;
-        }
-
-        $idstr = $user['user_ids'];
-        if($shopids!='') {
-            // $where8 = "c.user_id in ($idstr) and c.status=1";
-            $where8 = "dp.hirer_id in ($shopids) and c.status=1 and dp.user_id!=".$user_id;
-            if($start_date || $end_date) {
-                $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
-            }
-            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
-            if($list['data']){
-                unset($list['html']);
-                $total = count($list['data']);
-                foreach($list['data'] as $k=>$v){
-                    if($v['id']==null){
-                        unset($list['data'][$k]);
-                        $total = $total-1;
-                    }else{
-                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                        if($shop){
-                            $list['data'][$k]['role_type'] = 2; //经销商   
-                        }else{
-                            $list['data'][$k]['role_type'] = 1; //商家
-                        }
-                    }
-                    if($v['avatar']=='/0.png') {
-                        $list['data'][$k]['avatar'] = '0.png';
-                    }
-                }
-                $list['data'] = array_values($list['data']); 
-            } else {
-                $list['data'] = [];
-            }
-        } else {
-            $list['data'] = [];
         }
         
         $result = array();
