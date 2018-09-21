@@ -454,10 +454,10 @@ class IndexController extends Controller {
             }
             $now = time();
         
-            $groupbuy_join_list = $this->model->table('groupbuy_log as gl')->fields('gl.join_id,gl.user_id as uid,gj.user_id,gj.end_time')->join('left join groupbuy_join as gj on gl.join_id=gj.id left join order as o on o.join_id=gl.id')->where('gl.groupbuy_id='.$id.' and gl.pay_status=1 and gj.need_num>0 and o.pay_status=1 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
-            
+            // $groupbuy_join_list = $this->model->table('groupbuy_log as gl')->fields('gl.join_id,gl.user_id as uid,gj.user_id,gj.end_time')->join('left join groupbuy_join as gj on gl.join_id=gj.id left join order as o on o.join_id=gl.id')->where('gl.groupbuy_id='.$id.' and gl.pay_status=1 and gj.need_num>0 and o.pay_status=1 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
+            $groupbuy_join_list = $this->model->table('groupbuy_log as gl')->fields('gl.id as log_id,gl.join_id,gl.user_id as uid,gj.user_id,gj.end_time')->join('left join groupbuy_join as gj on gl.join_id=gj.id left join groupbuy as g on gj.groupbuy_id=g.id left join order as o on o.join_id=gl.id')->where('gl.groupbuy_id='.$id.' and gl.pay_status=1 and gj.need_num>0 and o.pay_status=1 and UNIX_TIMESTAMP(g.start_time)<='.$now.' and UNIX_TIMESTAMP(gj.end_time)>'.$now)->findAll();
             if($groupbuy_join_list) {
-                $groupbuy_join_list = $this->super_unique($groupbuy_join_list);
+                // $groupbuy_join_list = $this->super_unique($groupbuy_join_list);
                 foreach ($groupbuy_join_list as $k => $v) {
                     $user_ids = explode(',',$v['user_id']);
                     $user_id = $user_ids[0];
@@ -2259,7 +2259,7 @@ class IndexController extends Controller {
         $groupbuy_join_list = $this->model->table('groupbuy_log as gl')->fields('gl.id as log_id,gl.join_id,gl.user_id as uid,gj.user_id,gj.end_time')->join('left join groupbuy_join as gj on gl.join_id=gj.id left join groupbuy as g on gj.groupbuy_id=g.id left join order as o on o.join_id=gl.id')->where('gl.groupbuy_id='.$id.' and gl.pay_status=1 and gj.need_num>0 and o.pay_status=1 and UNIX_TIMESTAMP(g.start_time)<='.$now.' and UNIX_TIMESTAMP(gj.end_time)>'.$now)->findAll();
             
         if($groupbuy_join_list) {
-            $groupbuy_join_list = $this->super_unique($groupbuy_join_list);
+            // $groupbuy_join_list = $this->super_unique($groupbuy_join_list);
             foreach ($groupbuy_join_list as $k => $v) {
                 $user_ids = explode(',',$v['user_id']);
                 $user_id = $user_ids[0];
