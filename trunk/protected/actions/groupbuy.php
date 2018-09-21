@@ -162,8 +162,8 @@ class GroupbuyAction extends Controller
             foreach ($info['groupbuy_join_list'] as $k => $v) {
                 $user_ids = explode(',',$v['user_id']);
                 $user_id = $user_ids[0];
-                // $info['groupbuy_join_list'][$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$user_id)->find();
-                $info['groupbuy_join_list'][$k]['users'] = $this->model->table('user')->fields('nickname,avatar')->where('id='.$v['uid'])->find();
+                $info['groupbuy_join_list'][$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$user_id)->find();
+                // $info['groupbuy_join_list'][$k]['users'] = $this->model->table('user')->fields('nickname,avatar')->where('id='.$v['uid'])->find();
                 $info['groupbuy_join_list'][$k]['remain_time'] = $this->timediff(time(),strtotime($v['end_time']));
                 $info['groupbuy_join_list'][$k]['remain_seconds'] = strtotime($v['end_time'])-time();
                 $had_join_num = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$v['join_id'].' and pay_status=1')->count();
