@@ -57,12 +57,6 @@ class OperationController extends Controller
                     if($v['id']==null){
                         unset($nums[$k]);
                     }else{
-                        // $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                        // if($shop){
-                        //     $shop_num = $shop_num+1;
-                        // }else{
-                        //     $promoter_num = $promoter_num+1;   
-                        // }
                         $promoter_id_arr[] = $v['id'];
                     }
                 }
@@ -90,10 +84,8 @@ class OperationController extends Controller
                         $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
                         if($shop){
                             $list['data'][$k]['role_type'] = 2; //经销商   
-                            $shop_num = $shop_num+1;
                         }else{
                             $list['data'][$k]['role_type'] = 1; //商家
-                            $promoter_num = $promoter_num+1;
                         }
                     }
                     if($v['avatar']=='/0.png') {
@@ -103,6 +95,21 @@ class OperationController extends Controller
                 $list['data'] = array_values($list['data']); 
             } else {
                 $list['data'] = [];
+            }
+            $num = $this->model->table('district_promoter as dp')->join('left join user as u on dp.user_id= u.id')->fields('u.id')->where($where9)->findAll();
+            if($num) {
+                foreach($num as $k=>$v){
+                    if($v['id']==null){
+                        unset($num[$k]);
+                    }else{
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if($shop){
+                            $shop_num = $shop_num+1;
+                        }else{
+                            $promoter_num = $promoter_num+1;   
+                        }
+                    }
+                }
             }
         } else {
             $list['data'] = [];
