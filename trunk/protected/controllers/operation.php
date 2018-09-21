@@ -64,7 +64,9 @@ class OperationController extends Controller
         }
         
         $ids = $user['shop_ids_arr'];
-        $promoter_id_arr = array_merge($promoter_id_arr,$ids);
+        if($ids!=null) {
+            $promoter_id_arr = array_merge($promoter_id_arr,$ids);
+        }
         $promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; //商家id
         
         if($promoter_ids!='') {
