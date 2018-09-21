@@ -3070,7 +3070,7 @@ class UcenterAction extends Controller {
             $need_sign = 0;
          }
          if($need_sign==1) {
-            $status = empty($contract)?-1:0;
+            $status = empty($contract)?-1:$check['status'];
         } elseif ($need_sign==3){
             $status = 3;
         }else {
