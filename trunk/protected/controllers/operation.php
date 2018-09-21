@@ -329,6 +329,9 @@ class OperationController extends Controller
                         }
                     }
                 }
+                if($promoter_num>0) {
+                    $promoter_num = $promoter_num+1;
+                }
             }
         } else {
             $list['data'] = [];
