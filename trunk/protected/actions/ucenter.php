@@ -3033,7 +3033,7 @@ class UcenterAction extends Controller {
             return;
         }
        } else if($page==3) {
-          if(!$bank_type || !$bank_name || !$bank_phone || !$positive_bankcard || !$native_bankcard) {
+          if(!$bank_type || !$bank_name || !$bank_phone || !$positive_bankcard || !$native_bankcard || !$account_card) {
             $this->code = 1303;
             return;
           }
@@ -3080,7 +3080,30 @@ class UcenterAction extends Controller {
                 $status = -1;
             }
         }
-       // } 
+       // }
+       if($page==3) {
+        if($check) {
+         if($bank_type!=$check['bank_type'] || $account_card!=$check['account_card'] || $bank_name!=$check['bank_name'] || $bank_phone!=$check['bank_phone'] || $bank_area!=$check['bank_area'] || $positive_bankcard!=$check['positive_bankcard'] || $native_bankcard!=$check['native_bankcard']) {
+            if($contract) {
+                $status = 0;
+            } else {
+                $status = -1;
+            }  
+         } 
+        }
+       }
+
+       if($page==6) {
+        if($check) {
+         if($bank_type!=$check['bank_type'] || $account_card!=$check['account_card'] || $bank_name!=$check['bank_name'] || $bank_phone!=$check['bank_phone'] || $bank_area!=$check['bank_area'] || $account_picture!=$check['account_picture']) {
+            if($contract) {
+                $status = 0;
+            } else {
+                $status = -1;
+            }  
+         } 
+        }
+       } 
        
        if($page==1) {
         $data = array(
