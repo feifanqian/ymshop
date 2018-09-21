@@ -200,9 +200,10 @@ class OperationController extends Controller
                         }else{
                             $list['data'][$k]['role_type'] = 1; //商家     
                         }
-                        if(strpos($v['avatar'],'https') == false || strpos($v['avatar'],'http') == false){
-                           // $v['avatar'] = "https://ymlypt.b0.upaiyun.com".$v['avatar'];
-                           $v['avatar'] = '';
+                        if(strpos($v['avatar'],'https') !== false || strpos($v['avatar'],'http') !== false){
+                            $list['data'][$k]['avatar'] = $v['avatar'];
+                        } else {
+                            $list['data'][$k]['avatar'] = 'https://ymlypt.b0.upaiyun.com'.$v['avatar'];
                         }
                     }
                 }
