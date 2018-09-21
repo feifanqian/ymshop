@@ -131,7 +131,7 @@ class OperationController extends Controller
             }
             $nums = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findAll();
             if($nums) {
-                $promoter_num = count($nums);
+                // $promoter_num = count($nums);
                 foreach($nums as $k=>$v){
                     if($v['id']==null){
                         unset($nums[$k]);
@@ -316,7 +316,7 @@ class OperationController extends Controller
             }
             $nums = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('u.id')->where($where8)->findAll();
             if($nums) {
-                $promoter_num = count($nums);
+                // $promoter_num = count($nums);
                 foreach($nums as $k=>$v){
                     if($v['id']==null){
                         unset($nums[$k]);
@@ -469,7 +469,7 @@ class OperationController extends Controller
                 }
                 $nums = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findAll();
                 if($nums) {
-                    $promoter_num = count($nums);
+                    // $promoter_num = count($nums);
                     foreach($nums as $k=>$v){
                         if($v['id']==null){
                             unset($nums[$k]);
