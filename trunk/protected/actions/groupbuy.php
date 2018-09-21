@@ -155,14 +155,15 @@ class GroupbuyAction extends Controller
         
         $now = time();
         
-        $groupbuy_join_list = $this->model->table('groupbuy_log as gl')->fields('gl.id as log_id,gl.join_id,gj.user_id,gj.end_time')->join('left join groupbuy_join as gj on gl.join_id=gj.id left join groupbuy as g on gj.groupbuy_id=g.id left join order as o on o.join_id=gl.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1 and gj.need_num>0 and o.pay_status=1 and UNIX_TIMESTAMP(g.start_time)<='.$now.' and UNIX_TIMESTAMP(gj.end_time)>'.$now)->findAll();
+        $groupbuy_join_list = $this->model->table('groupbuy_log as gl')->fields('gl.id as log_id,gl.join_id,gl.user_id as uid,gj.user_id,gj.end_time')->join('left join groupbuy_join as gj on gl.join_id=gj.id left join groupbuy as g on gj.groupbuy_id=g.id left join order as o on o.join_id=gl.id')->where('gl.groupbuy_id='.$groupbuy_id.' and gl.pay_status=1 and gj.need_num>0 and o.pay_status=1 and UNIX_TIMESTAMP(g.start_time)<='.$now.' and UNIX_TIMESTAMP(gj.end_time)>'.$now)->findAll();
         
         if($groupbuy_join_list) {
             $info['groupbuy_join_list'] = $this->super_unique($groupbuy_join_list);
             foreach ($info['groupbuy_join_list'] as $k => $v) {
                 $user_ids = explode(',',$v['user_id']);
                 $user_id = $user_ids[0];
-                $info['groupbuy_join_list'][$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$user_id)->find();
+                // $info['groupbuy_join_list'][$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$user_id)->find();
+                $info['groupbuy_join_list'][$k]['users'] = $this->model->table('user')->fields('nickname,avatar')->where('id='.$v['uid'])->find();
                 $info['groupbuy_join_list'][$k]['remain_time'] = $this->timediff(time(),strtotime($v['end_time']));
                 $info['groupbuy_join_list'][$k]['remain_seconds'] = strtotime($v['end_time'])-time();
                 $had_join_num = $this->model->table('groupbuy_log')->where('groupbuy_id='.$groupbuy_id.' and join_id='.$v['join_id'].' and pay_status=1')->count();
