@@ -2230,7 +2230,7 @@ class DistrictadminController extends Controller
             if($start_date || $end_date) {
                 $where5 .=" and order_time between '{$start_date}' and '{$end_date}'"; 
             }
-            $taoke_num = $this->model->table('benefit_log')->where($where5)->count(); 
+            $taoke_num = $model->table('benefit_log')->where($where5)->count(); 
             
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
