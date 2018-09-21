@@ -3200,7 +3200,7 @@ class UcenterAction extends Controller {
     {
         $info = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
         $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
-        if($contract && $info['status']!=2 && $info['reason']==null) {
+        if($contract && $info && $info['status']!=2 && $info['reason']==null) {
             $need_sign = 1;
         } else {
             $need_sign = 0;
