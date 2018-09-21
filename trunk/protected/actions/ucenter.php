@@ -3056,31 +3056,38 @@ class UcenterAction extends Controller {
        
        $this->model->table('district_promoter')->data(array('shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
        
-       if($page==3 || $page==6) {
+       // if($page==3 || $page==6) {
          $check = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
          $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
          if($contract && $check && $check['status']!=2 && $check['reason']==null) {
+            // if($check['status']==1) {
+            //     $need_sign = 3;
+            // } else {
+            //     $need_sign = 1;
+            // }
             $need_sign = 1;
          } else {
             $need_sign = 0;
          }
          if($need_sign==1) {
             $status = empty($contract)?-1:0;
-        } else {
+        } elseif ($need_sign==3){
+            $status = 3;
+        }else {
             if($check) {
                 $status = $check['status'];
             } else {
                 $status = -1;
             }
         }
-       } 
+       // } 
        
        if($page==1) {
         $data = array(
         'user_id'          => $this->user['id'],
         'type'             => $type,
         'industry_no'      => $industry_no,
-        'status'           => -1,
+        'status'           => $status,
         'create_date'      => date('Y-m-d H:i:s')
         );
        } else if($page==2) {
@@ -3096,7 +3103,7 @@ class UcenterAction extends Controller {
         'address'          => $address,
         'positive_idcard'  => $positive_idcard,
         'native_idcard'    => $native_idcard,
-        'status'           => -1,
+        'status'           => $status,
         'create_date'      => date('Y-m-d H:i:s')
         );
        } else if($page==3) {
@@ -3126,7 +3133,7 @@ class UcenterAction extends Controller {
         'business_number'  => $business_number,
         'business_addr'    => $business_addr,
         'address'          => $address,
-        'status'           => -1,
+        'status'           => $status,
         'create_date'      => date('Y-m-d H:i:s')
         );
        } else if($page==5) {
@@ -3140,7 +3147,7 @@ class UcenterAction extends Controller {
         'hand_idcard'      => $hand_idcard,
         'positive_idcard'  => $positive_idcard,
         'native_idcard'    => $native_idcard, 
-        'status'           => -1,
+        'status'           => $status,
         'create_date'      => date('Y-m-d H:i:s')
         );
        } else {
