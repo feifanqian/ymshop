@@ -843,7 +843,7 @@ class TravelController extends Controller
                             Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
                         }
                         $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
-                        $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
+                        $seo_title = $customer['mobile_verified']==0?"绑定手机号":"关联成功";
                         $this->assign('user_id',$this->user['id']);
                         $this->assign('mobile_verified',$customer['mobile_verified']);
                         $this->assign('locked',$locked);
@@ -867,7 +867,7 @@ class TravelController extends Controller
                     Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
                 }
                 $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
-                $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
+                $seo_title = $customer['mobile_verified']==0?"绑定手机号":"关联成功";
                 $this->assign('user_id',$this->user['id']);
                 $this->assign('mobile_verified',$customer['mobile_verified']);
                 $this->assign('locked',$locked);
@@ -1000,7 +1000,7 @@ class TravelController extends Controller
             $this->redirect('/travel/register_success?locked='.$locked);
         } else {
             $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$user_id)->find();
-            $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
+            $seo_title = $customer['mobile_verified']==0?"绑定手机号":"关联成功";
             $msg = '验证码错误！';
             $this->assign('mobile_verified',$customer['mobile_verified']);
             $this->assign('locked',$locked);
@@ -1029,7 +1029,7 @@ class TravelController extends Controller
         $locked = Filter::int(Req::args('locked'));
         // var_dump($locked);die;
         if($locked==1 || $locked==2) {
-            $seo_title = "锁粉成功";
+            $seo_title = "关联成功";
         } else {
             $seo_title = "付款成功";
         }
