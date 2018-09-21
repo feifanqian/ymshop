@@ -2226,30 +2226,11 @@ class DistrictadminController extends Controller
             $crossover_total = $model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
            
-            if($shopids!='') {
-                $where5 = "ds.id in ($shopids)";
-                if($start_date || $end_date) {
-                    $where5 .=" and ds.create_time between '{$start_date}' and '{$end_date}'"; 
-                }
-                $where6 = "dp.hirer_id in ($shopids) and c.status=1";
-                if($start_date || $end_date) {
-                    $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
-                }
-                // $shop_num = $model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
-                // if($shop_num>=1) {
-                //     $shop_num = $shop_num - 1;
-                // }
-                // $promoter_num = $model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
-                // if($promoter_num>=1) {
-                //     $promoter_num = $promoter_num - 1;
-                // }
-                // if($promoter_num>=$shop_num) {
-                //     $promoter_num = $promoter_num-$shop_num;
-                // }
-            } else {
-                $shop_num = 0;
-                $promoter_num = 0;
-            } 
+            $where5 = "user_id in ($ids) and type in (1,2)";
+            if($start_date || $end_date) {
+                $where5 .=" and order_time between '{$start_date}' and '{$end_date}'"; 
+            }
+            $taoke_num = $this->model->table('benefit_log')->where($where5)->count(); 
             
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
@@ -2267,6 +2248,7 @@ class DistrictadminController extends Controller
             $shop_num = 0;
             $promoter_num = 0;
             $order_benefit = 0.00;
+            $taoke_num = 0;
         }
         $shop_num = 0;
         $promoter_num = 0;
@@ -2325,6 +2307,7 @@ class DistrictadminController extends Controller
         $result['order_benefit'] = $order_benefit; //线上订单跨界收益
         $result['crossover_sum'] = $crossover_sum; //扫码订单跨界收益
         $result['benefit_sum'] = $benefit_sum; // 优惠购收益
+        $result['taoke_num'] = $taoke_num; // 优惠购订单数
         
         $shop = $model->table('district_shop')->where('owner_id='.$user_id)->find();
         if($shop) {
