@@ -72,43 +72,12 @@ class OperationController extends Controller
             }
             $crossover_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
-            // $where5 = "owner_id in ($ids)";
-            // if($start_date || $end_date) {
-            //     $where5 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
-            // }
-            // $where6 = "user_id in ($ids)";
-            // if($start_date || $end_date) {
-            //     $where6 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
-            // }
-            // $shop_num = $this->model->table('district_shop')->where($where5)->count();
-            // $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
-            // if($promoter_num>=1) {
-            //     $promoter_num = $promoter_num-1;
-            // }
-            if($shopids!='') {
-                $where5 = "ds.id in ($shopids)";
-                if($start_date || $end_date) {
-                    $where5 .=" and ds.create_time between '{$start_date}' and '{$end_date}'"; 
-                }
-                $where6 = "dp.hirer_id in ($shopids) and c.status=1";
-                if($start_date || $end_date) {
-                    $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
-                }
-                // $shop_num = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
-                // if($shop_num>=1) {
-                //     $shop_num = $shop_num - 1;
-                // }
-                // $promoter_num = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
-                // if($promoter_num>=1) {
-                //     $promoter_num = $promoter_num - 1;
-                // }
-                // if($promoter_num>=$shop_num) {
-                //     $promoter_num = $promoter_num-$shop_num;
-                // }
-            } else {
-                $shop_num = 0;
-                $promoter_num = 0;
+            $where5 = "user_id in ($ids) and type in (1,2)";
+            if($start_date || $end_date) {
+                $where5 .=" and order_time between '{$start_date}' and '{$end_date}'"; 
             }
+            $taoke_num = $this->model->table('benefit_log')->where($where5)->count(); 
+            
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
                 $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
@@ -125,6 +94,7 @@ class OperationController extends Controller
             $shop_num = 0;
             $promoter_num = 0;
             $order_benefit = 0.00;
+            $taoke_num = 0;
         }
         $shop_num = 0;
         $promoter_num = 0;
@@ -189,6 +159,7 @@ class OperationController extends Controller
         $result['order_benefit'] = $order_benefit; //线上订单跨界收益
         $result['crossover_sum'] = $crossover_sum; //扫码订单跨界收益
         $result['benefit_sum'] = $benefit_sum; // 优惠购收益
+        $result['taoke_num'] = $taoke_num; // 优惠购订单数
         
         $this->assign('result',$result);
         $this->assign('list',$list);
@@ -282,34 +253,13 @@ class OperationController extends Controller
             }
             $crossover_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
-            // $where5 = "owner_id in ($ids)";
-            // if($start_date || $end_date) {
-            //     $where5 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
-            // }
-            // $where6 = "user_id in ($ids)";
-            // if($start_date || $end_date) {
-            //     $where6 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
-            // }
-            // $shop_num = $this->model->table('district_shop')->where($where5)->count();
-            // $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
-            if($shopids!='') {
-                $where5 = "ds.id in ($shopids)";
-                if($start_date || $end_date) {
-                    $where5 .=" and ds.create_time between '{$start_date}' and '{$end_date}'"; 
-                }
-                $where6 = "dp.hirer_id in ($shopids) and c.status=1";
-                if($start_date || $end_date) {
-                    $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
-                }
-                $shop_num = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
-                $promoter_num = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
-                if($promoter_num>=$shop_num+1) {
-                    $promoter_num = $promoter_num-$shop_num-1;
-                }
-            } else {
-                $shop_num = 0;
-                $promoter_num = 0;
+            
+            $where5 = "user_id in ($ids) and type in (1,2)";
+            if($start_date || $end_date) {
+                $where5 .=" and order_time between '{$start_date}' and '{$end_date}'"; 
             }
+            $taoke_num = $this->model->table('benefit_log')->where($where5)->count();
+            
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
                 $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
@@ -326,6 +276,7 @@ class OperationController extends Controller
             $shop_num = 0;
             $promoter_num = 0;
             $order_benefit = 0.00;
+            $taoke_num = 0;
         }
         // $shop_num = 0;
         // $promoter_num = 0;
@@ -387,6 +338,7 @@ class OperationController extends Controller
         $result['order_benefit'] = $order_benefit; //线上订单跨界收益
         $result['crossover_sum'] = $crossover_sum; //扫码订单跨界收益
         $result['benefit_sum'] = $benefit_sum; // 优惠购收益
+        $result['taoke_num'] = $taoke_num; // 优惠购订单数
 
         echo JSON::encode($result);
     }
@@ -440,34 +392,13 @@ class OperationController extends Controller
             }
             $crossover_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
-            // $where5 = "owner_id in ($ids)";
-            // if($start_date || $end_date) {
-            //     $where5 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
-            // }
-            // $where6 = "user_id in ($ids)";
-            // if($start_date || $end_date) {
-            //     $where6 .=" and create_time between '{$start_date}' and '{$end_date}'"; 
-            // }
-            // $shop_num = $this->model->table('district_shop')->where($where5)->count();
-            // $promoter_num = $this->model->table('district_promoter')->where($where6)->count();
-            if($shopids!='') {
-                $where5 = "ds.id in ($shopids)";
-                if($start_date || $end_date) {
-                    $where5 .=" and ds.create_time between '{$start_date}' and '{$end_date}'"; 
-                }
-                $where6 = "dp.hirer_id in ($shopids) and c.status=1";
-                if($start_date || $end_date) {
-                    $where6 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
-                }
-                // $shop_num = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id')->fields('ds.id')->where($where5)->count();
-                // $promoter_num = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id')->fields('dp.id')->where($where6)->count();
-                // if($promoter_num>=$shop_num+1) {
-                //     $promoter_num = $promoter_num-$shop_num-1;
-                // }
-            } else {
-                $shop_num = 0;
-                $promoter_num = 0;
+            
+            $where5 = "user_id in ($ids) and type in (1,2)";
+            if($start_date || $end_date) {
+                $where5 .=" and order_time between '{$start_date}' and '{$end_date}'"; 
             }
+            $taoke_num = $this->model->table('benefit_log')->where($where5)->count();
+
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
                 $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
@@ -484,6 +415,7 @@ class OperationController extends Controller
             $shop_num = 0;
             $promoter_num = 0;
             $order_benefit = 0.00;
+            $taoke_num = 0;
         }
         
         $customer = $this->model->table('customer as c')->fields('c.real_name,c.mobile,u.nickname,u.avatar')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$user_id)->find();
@@ -559,6 +491,7 @@ class OperationController extends Controller
         $result['order_benefit'] = $order_benefit; //线上订单跨界收益
         $result['crossover_sum'] = $crossover_sum; //扫码订单跨界收益
         $result['benefit_sum'] = $benefit_sum; // 优惠购收益
+        $result['taoke_num'] = $taoke_num; // 优惠购订单数
         $result['real_name'] = $customer['real_name'];
         $result['nickname'] = $customer['nickname'];
         $result['mobile'] = $customer['mobile'];

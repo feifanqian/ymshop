@@ -221,7 +221,7 @@ iframe{
       <span><b>经销商数量</b><p id="shop_num">{$result['shop_num']}</p></span>
       <span style="border-right: 0.02px solid #eee;border-bottom: none;"><b>商家数量</b><p id="promoter_num">{$result['promoter_num']}</p></span>
       <span style="border-right: 0.02px solid #eee;border-bottom: none;"><b>旗下总会员数</b><p id="user_num">{$result['user_num']}</p></span>
-      
+      <span style="border-right: 0.02px solid #eee;border-bottom: none;"><b>优惠购订单数</b><p id="taoke_num">{$result['taoke_num']}</p></span>
     </div>
   </div>
   <div class="block">
@@ -301,6 +301,7 @@ $("input[name='end_date']").blur(function(){
                 $("#shop_num").html(jsonarray.shop_num);
                 $("#promoter_num").html(jsonarray.promoter_num);
                 $("#user_num").html(jsonarray.user_num);
+                $("#taoke_num").html(jsonarray.taoke_num);
                 $("#order_sum").html(jsonarray.order_sum);
                 $("#offline_order_sum").html(jsonarray.offline_order_sum);
                 $("#order_benefit").html(jsonarray.order_benefit);
