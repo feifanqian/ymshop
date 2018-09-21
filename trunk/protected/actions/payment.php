@@ -1123,12 +1123,12 @@ class PaymentAction extends Controller {
             return;
         }
         $customer = $this->model->table('customer')->where('user_id='.$this->user['id'])->find();
-        if($customer['balance']<3600) {
+        if($customer['balance']<0.01) {
             $this->code = 1309;
             return;
         }
-        $this->model->table('customer')->data(['balance'=>"`balance`-3600"])->where('user_id='.$this->user['id'])->update();
-        Log::balance(-3600, $this->user['id'], '','加盟商家服务费', 23);
+        $this->model->table('customer')->data(['balance'=>"`balance`-0.01"])->where('user_id='.$this->user['id'])->update();
+        Log::balance(-0.01, $this->user['id'], '','加盟商家服务费', 23);
         $inviter_info = $this->model->table("invite")->where("invite_user_id=".$this->user['id'])->find();
         $promoter_data['user_id']=$this->user['id'];
         $promoter_data['shop_name'] = $customer['real_name'];
