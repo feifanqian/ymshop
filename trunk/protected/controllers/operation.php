@@ -240,9 +240,6 @@ class OperationController extends Controller
                         } else {
                             $list['data'][$k]['avatar'] = 'https://ymlypt.b0.upaiyun.com'.$v['avatar'];
                         }
-                        if($page==2) {
-                            unset($list['data'][0]);
-                        }
                     }
                 }
                 $list['data'] = array_values($list['data']); 
