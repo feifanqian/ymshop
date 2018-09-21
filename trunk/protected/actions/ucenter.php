@@ -3081,9 +3081,58 @@ class UcenterAction extends Controller {
             }
         }
        // }
+       
+       if($page==1) {
+        if($check) {
+         if($type!=$check['type'] || $industry_no!=$check['industry_no']) {
+            if($contract) {
+                $status = 0;
+            } else {
+                $status = -1;
+            }  
+         } 
+        }
+       }
+       
+       if($page==2) {
+        if($check) {
+         if($legal_person!=$check['legal_person'] || $mobile!=$check['mobile'] || $shop_name!=$check['shop_name']|| $id_no!=$check['id_no'] || $positive_idcard!=$check['positive_idcard'] || $native_idcard!=$check['native_idcard'] || $province!=$check['province']|| $city!=$check['city'] || $county!=$check['county'] || $address!=$check['address']) {
+            if($contract) {
+                $status = 0;
+            } else {
+                $status = -1;
+            }  
+         } 
+        }
+       }
+
        if($page==3) {
         if($check) {
          if($bank_type!=$check['bank_type'] || $account_card!=$check['account_card'] || $bank_name!=$check['bank_name'] || $bank_phone!=$check['bank_phone'] || $bank_area!=$check['bank_area'] || $positive_bankcard!=$check['positive_bankcard'] || $native_bankcard!=$check['native_bankcard']) {
+            if($contract) {
+                $status = 0;
+            } else {
+                $status = -1;
+            }  
+         } 
+        }
+       }
+
+       if($page==4) {
+        if($check) {
+         if($legal_person!=$check['legal_person'] || $found_date!=$check['found_date'] || $province!=$check['province']|| $city!=$check['city'] || $county!=$check['county'] || $address!=$check['address'] || $business_number!=$check['business_number'] || $business_addr!=$check['business_addr'] || $business_licence!=$check['business_licence']) {
+            if($contract) {
+                $status = 0;
+            } else {
+                $status = -1;
+            }  
+         } 
+        }
+       }
+
+       if($page==5) {
+        if($check) {
+         if($legal_person!=$check['legal_person'] || $mobile!=$check['mobile'] || $shop_name!=$check['shop_name']|| $id_no!=$check['id_no'] || $shop_photo!=$check['shop_photo'] || $positive_idcard!=$check['positive_idcard'] || $native_idcard!=$check['native_idcard'] || $hand_idcard!=$check['hand_idcard']) {
             if($contract) {
                 $status = 0;
             } else {
