@@ -31,6 +31,7 @@ body{
 }
 .Wdate{
     width: 26%;
+    padding-left: 2%;
     height: 50px !important;
     background: #fff url(/themes/mobile/images/op_center/date_bg.png) no-repeat right !important;
     background-size: 100% 50px !important;
@@ -189,9 +190,9 @@ iframe{
   <div class="header">
     <p>
      统计时间：
-     <input name="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" onfocus="WdatePicker()">
+     <input name="start_date" id="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" onfocus="WdatePicker()">
     &nbsp;&nbsp;至&nbsp;&nbsp;
-    <input name="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker()">
+    <input name="end_date" id="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker()">
     </p>
   </div>
   <div class="block" style="height: 220px;">
@@ -293,6 +294,16 @@ iframe{
 <script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
 <script type="text/javascript">
+window.onload = function () {
+    var start_date = "{$start_date}";
+    var end_date = "{$end_date}";
+    if(start_date=='') {
+        $('#start_date').val('请选择日期');
+    }
+    if(end_date=='') {
+        $('#end_date').val('请选择日期');
+    }                    
+}
 $("input[name='end_date']").change(function(){
     var page = $('#page').val();
     var start_date = $("input[name='start_date']").val();
