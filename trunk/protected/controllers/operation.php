@@ -278,8 +278,8 @@ class OperationController extends Controller
             $order_benefit = 0.00;
             $taoke_num = 0;
         }
-        // $shop_num = 0;
-        // $promoter_num = 0;
+        $shop_num = 0;
+        $promoter_num = 0;
         $idstr = $user['user_ids'];
         $shopids = $user['shopids'];
         if($shopids!='') {
@@ -312,7 +312,7 @@ class OperationController extends Controller
             } else {
                 $list['data'] = [];
             }
-            $nums = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findAll();
+            $nums = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('u.id')->where($where8)->findAll();
             if($nums) {
                 $promoter_num = count($nums);
                 foreach($nums as $k=>$v){
@@ -321,11 +321,19 @@ class OperationController extends Controller
                     }else{
                         $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
                         if($shop){
-                            $shop_num = $shop_num + 1;   
+                            $nums[$k]['role_type'] = 2; //经销商
+                        }else{
+                            $nums[$k]['role_type'] = 1; //商家   
                         }
                     }
                 }
-                $promoter_num = $promoter_num - $shop_num;
+                foreach($nums as $k=>$v){
+                    if($v['role_type']==2) {
+                        $shop_num = $shop_num+1;
+                    } else {
+                        $promoter_num = $promoter_num+1;
+                    }
+                }
             }
         } else {
             $list['data'] = [];
