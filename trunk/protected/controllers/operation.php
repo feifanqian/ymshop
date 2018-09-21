@@ -68,7 +68,7 @@ class OperationController extends Controller
         $promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; //商家id
         
         if($promoter_ids!='') {
-            $where9 = "dp.user_id in ($promoter_ids) and c.status=1 and dp.user_id!=".$user_id;
+            $where9 = "dp.user_id in ($promoter_ids) and dp.user_id!=".$user_id;
             if($start_date || $end_date) {
                 $where9 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
