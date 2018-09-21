@@ -197,7 +197,7 @@ class OperationController extends Controller
         $shopids = $user['shopids'];
         $promoter_id_arr = array();
         if($shopids!='') {
-            $where8 = "dp.hirer_id in ($shopids) and c.status=1 and dp.user_id!=".$user_id;
+            $where8 = "dp.hirer_id in ($shopids) and dp.user_id!=".$user_id;
             if($start_date || $end_date) {
                 $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
