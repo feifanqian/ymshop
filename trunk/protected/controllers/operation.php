@@ -322,16 +322,11 @@ class OperationController extends Controller
                         $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
                         if($shop){
                             $nums[$k]['role_type'] = 2; //经销商
+                            $shop_num = $shop_num+1;
                         }else{
-                            $nums[$k]['role_type'] = 1; //商家   
+                            $nums[$k]['role_type'] = 1; //商家
+                            $promoter_num = $promoter_num+1;   
                         }
-                    }
-                }
-                foreach($nums as $k=>$v){
-                    if($v['role_type']==2) {
-                        $shop_num = $shop_num+1;
-                    } else {
-                        $promoter_num = $promoter_num+1;
                     }
                 }
             }
