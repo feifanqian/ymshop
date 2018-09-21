@@ -421,10 +421,85 @@ class OperationController extends Controller
             $page = 1;
         }
         $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
-        
-        // $total_user = $this->getAllChildUserIds($user_id);
+
         $shopids = $user['shopids'];
-        if($user['user_ids']!='' || $user['shopids']!='') {
+        $promoter_id_arr = array();
+        $promoter_ids = '';
+        $shop_num = 0;
+        $promoter_num = 0;
+        if($shopids!='') {
+            $where8 = "dp.hirer_id in ($shopids) and dp.user_id!=".$user_id;
+            if($start_date || $end_date) {
+                $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
+            }
+            $nums = $this->model->table('district_promoter as dp')->join('left join user as u on dp.user_id= u.id')->fields('u.id')->where($where8)->findAll();
+            if($nums) {
+                foreach($nums as $k=>$v){
+                    if($v['id']==null){
+                        unset($nums[$k]);
+                    }else{
+                        $promoter_id_arr[] = $v['id'];
+                    }
+                }
+            }
+        }
+        
+        $ids = $user['shop_ids_arr'];
+        if($ids!=null) {
+            $promoter_id_arr = array_merge($promoter_id_arr,$ids);
+        }
+        $promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; //商家id
+        
+        if($promoter_ids!='') {
+            $where9 = "dp.user_id in ($promoter_ids) and dp.user_id!=".$user_id;
+            if($start_date || $end_date) {
+                $where9 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
+            }
+            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->findPage($page,10);
+            if($list['data']){
+                unset($list['html']);
+                $total = count($list['data']);
+                foreach($list['data'] as $k=>$v){
+                    if($v['id']==null){
+                        unset($list['data'][$k]);
+                        $total = $total-1;
+                    }else{
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if($shop){
+                            $list['data'][$k]['role_type'] = 2; //经销商   
+                        }else{
+                            $list['data'][$k]['role_type'] = 1; //商家
+                        }
+                    }
+                    if($v['avatar']=='/0.png') {
+                         $list['data'][$k]['avatar'] = '0.png';
+                    }
+                }
+                $list['data'] = array_values($list['data']); 
+            } else {
+                $list['data'] = [];
+            }
+            $num = $this->model->table('district_promoter as dp')->join('left join user as u on dp.user_id= u.id')->fields('u.id')->where($where9)->findAll();
+            if($num) {
+                foreach($num as $k=>$v){
+                    if($v['id']==null){
+                        unset($num[$k]);
+                    }else{
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if($shop){
+                            $shop_num = $shop_num+1;
+                        }else{
+                            $promoter_num = $promoter_num+1;   
+                        }
+                    }
+                }
+            }
+        } else {
+            $list['data'] = [];
+        }
+        
+        
+        if($user['user_ids']) {
             $ids = $user['user_ids'];
             $where1 = "user_id in ($ids) and pay_status=1 and status=4";
             if($start_date || $end_date) {
@@ -432,16 +507,8 @@ class OperationController extends Controller
             }
             $order_num = $this->model->table('order')->where($where1)->count();
             $order_total = $this->model->table('order')->fields('sum(order_amount) as sum')->where($where1)->query();
-            $order_sum = $order_total[0]['sum']!=null?$order_total[0]['sum']:0.00;
-
-            // $where2 = "shop_ids = ".$user_id." and pay_status=1";
-            $where2 = "shop_ids in ($ids) and pay_status=1";
-            if($start_date || $end_date) {
-                $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
-            }
-            $offline_order_num = $this->model->table('order_offline')->where($where2)->count();
-            $offline_order_total = $this->model->table('order_offline')->fields('sum(order_amount) as sum')->where($where2)->query();
-            $offline_order_sum = $offline_order_total[0]['sum']!=null?$offline_order_total[0]['sum']:0.00;
+            $order_sum = $order_total[0]['sum']!=null?$order_total[0]['sum']:0.00;        
+            
             $where3 = "user_id in ($ids) and type=21";
             if($start_date || $end_date) {
                 $where3 .=" and time between '{$start_date}' and '{$end_date}'"; 
@@ -454,13 +521,12 @@ class OperationController extends Controller
             }
             $crossover_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
-            
             $where5 = "user_id in ($ids) and type in (1,2)";
             if($start_date || $end_date) {
                 $where5 .=" and order_time between '{$start_date}' and '{$end_date}'"; 
             }
-            $taoke_num = $this->model->table('benefit_log')->where($where5)->count();
-
+            $taoke_num = $this->model->table('benefit_log')->where($where5)->count(); 
+            
             $where7 = "user_id in ($ids) and type=5";
             if($start_date || $end_date) {
                 $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
@@ -470,14 +536,26 @@ class OperationController extends Controller
         } else {
             $order_num = 0;
             $order_sum = 0.00;
-            $offline_order_num = 0;
-            $offline_order_sum = 0.00;
             $benefit_sum = 0.00;
             $crossover_sum = 0.00;
             $shop_num = 0;
             $promoter_num = 0;
             $order_benefit = 0.00;
             $taoke_num = 0;
+        }
+
+        if($promoter_ids!='') {
+            $where2 = "shop_ids in ($promoter_ids) and pay_status=1";
+            if($start_date || $end_date) {
+                $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
+            }
+            $offline_order_num = $this->model->table('order_offline')->where($where2)->count();
+
+            $offline_order_total = $this->model->table('order_offline')->fields('sum(order_amount) as sum')->where($where2)->query();
+            $offline_order_sum = $offline_order_total[0]['sum']!=null?$offline_order_total[0]['sum']:0.00;
+        } else {
+            $offline_order_num = 0;
+            $offline_order_sum = 0.00;
         }
         
         $customer = $this->model->table('customer as c')->fields('c.real_name,c.mobile,u.nickname,u.avatar')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$user_id)->find();
@@ -487,59 +565,6 @@ class OperationController extends Controller
         
         $shop_num = 0;
         $promoter_num = 0;
-
-        if($seo_title=='经销商') {
-            $idstr = $user['user_ids'];
-            $shopids = $user['shopids'];
-            if($shopids!='') {
-                // $where8 = "c.user_id in ($idstr) and c.status=1";
-                $where8 = "dp.hirer_id in ($shopids) and c.status=1 and dp.user_id!=".$user_id;
-                if($start_date || $end_date) {
-                    $where8 .= " and c.reg_time between '{$start_date}' and '{$end_date}'";
-                }
-                $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
-                if($list['data']){
-                    unset($list['html']);
-                    $total = count($list['data']);
-                    foreach($list['data'] as $k=>$v){
-                        if($v['id']==null){
-                            unset($list['data'][$k]);
-                            $total = $total-1;
-                        }else{
-                            $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                            if($shop){
-                                $list['data'][$k]['role_type'] = 2; //经销商   
-                            }else{
-                                $list['data'][$k]['role_type'] = 1; //商家   
-                            }
-                        }
-                    }
-                    $list['data'] = array_values($list['data']); 
-                } else {
-                    $list['data'] = [];
-                }
-                $nums = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findAll();
-                if($nums) {
-                    // $promoter_num = count($nums);
-                    foreach($nums as $k=>$v){
-                        if($v['id']==null){
-                            unset($nums[$k]);
-                        }else{
-                            $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                            if($shop){
-                                $shop_num = $shop_num+1;
-                            }else{
-                                $promoter_num = $promoter_num+1;   
-                            }
-                        }
-                    }
-                    // $promoter_num = $promoter_num - $shop_num;
-                }
-            } else {
-                $list['data'] = [];
-            }
-            $this->assign('list',$list);
-        }
         
         if($customer['avatar'] == '/0.png') {
            $customer['avatar'] == '0.png';
@@ -566,6 +591,7 @@ class OperationController extends Controller
         $this->assign('user_id',$user_id);
         $this->assign('page',$page);
         $this->assign("seo_title", $seo_title);
+        $this->assign('list',$list);
         $this->redirect();
     }
 
