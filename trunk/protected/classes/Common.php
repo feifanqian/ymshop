@@ -1799,6 +1799,8 @@ class Common {
         $is_break = false; //false继续 true停止
         $shop_ids = '';
         $user_ids = '';
+        $shop_ids_arr = array();
+        $user_ids_arr = array();
         $num = 0;
         $shop = $model->table("district_shop")->fields('id,owner_id')->where("owner_id=".$user_id)->find();
         if($shop) {
@@ -1808,16 +1810,10 @@ class Common {
                 if($inviter_info){
                     $now_user_id = '';
                     foreach ($inviter_info as $k => $v) {
-                        if($shop_ids=='') {
-                           $shop_ids = $v['id']; 
-                        } else {
-                           $shop_ids .= ','.$v['id'];
-                        }
-                        if($user_ids=='') {
-                           $user_ids = $v['owner_id']; 
-                        } else {
-                           $user_ids .= ','.$v['owner_id'];
-                        }
+                        $shop_ids_arr[] = $v['id'];
+                        $user_ids_arr[] = $v['owner_id'];
+                        $shop_ids = $shop_ids_arr!=null?implode(',', $shop_ids_arr):'';
+                        $user_ids = $user_ids_arr!=null?implode(',', $user_ids_arr):'';
                         $num = $num+1;
                         $now_user_id = $now_user_id==''?$v['id']:$now_user_id.','.$v['id'];
                         $is_break = false;
@@ -1831,6 +1827,8 @@ class Common {
         $result = array();
         $result['shop_ids'] = $shop_ids;
         $result['user_ids'] = $user_ids;
+        $result['shop_ids_arr'] = $shop_ids_arr;
+        $result['user_ids_arr'] = $user_ids_arr;
         $result['num'] = $num;
         return $result;
     }

@@ -51,7 +51,7 @@ class OperationController extends Controller
             if($start_date || $end_date) {
                 $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
-            $nums = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findAll();
+            $nums = $this->model->table('district_promoter as dp')->join('left join user as u on dp.user_id= u.id')->fields('u.id')->where($where8)->findAll();
             if($nums) {
                 foreach($nums as $k=>$v){
                     if($v['id']==null){
@@ -68,7 +68,9 @@ class OperationController extends Controller
                 }
             }
         }
-
+        
+        $ids = $user['shop_ids_arr'];
+        $promoter_id_arr = array_merge($promoter_id_arr,$ids);
         $promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; //商家id
         
         if($promoter_ids!='') {
@@ -193,13 +195,32 @@ class OperationController extends Controller
         $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
         $idstr = $user['user_ids'];
         $shopids = $user['shopids'];
-        if($idstr!='') {
-            // $where8 = "c.user_id in ($idstr) and c.status=1";
-            $where8 = "dp.hirer_id in ($shopids) and c.status=1";
+        $promoter_id_arr = array();
+        if($shopids!='') {
+            $where8 = "dp.hirer_id in ($shopids) and c.status=1 and dp.user_id!=".$user_id;
             if($start_date || $end_date) {
                 $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
-            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where8)->findPage($page,10);
+            $nums = $this->model->table('district_promoter as dp')->join('left join user as u on dp.user_id= u.id')->fields('u.id')->where($where8)->findAll();
+            if($nums) {
+                foreach($nums as $k=>$v){
+                    if($v['id']==null){
+                        unset($nums[$k]);
+                    }else{
+                        $promoter_id_arr[] = $v['id'];
+                    }
+                }
+            }
+        }
+        $ids = $user['shop_ids_arr'];
+        $promoter_id_arr = array_merge($promoter_id_arr,$ids);
+        $promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; //商家id
+        if($promoter_ids!='') {
+            $where9 = "dp.user_id in ($promoter_ids) and c.status=1 and dp.user_id!=".$user_id;
+            if($start_date || $end_date) {
+                $where9 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
+            }
+            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->findPage($page,10);
             if($list['data']){
                 unset($list['html']);
                 $total = count($list['data']);
@@ -598,6 +619,7 @@ class OperationController extends Controller
             $user_ids = $ids!=null?implode(',', $ids):'';
             $result['user_ids'] = $user_ids;
             $result['shopids'] = $shopids;
+            $result['shop_ids_arr'] = $idstr['shop_ids_arr'];
             $result['num'] = count($inviter_info);
         } else {
             $is_break = false;
@@ -628,6 +650,7 @@ class OperationController extends Controller
             }
             $result['user_ids'] = $idstr;
             $result['shopids'] = '';
+            $result['shop_ids_arr'] = null;
             $result['num'] = $num;
         }
         
