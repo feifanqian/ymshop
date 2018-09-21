@@ -2254,14 +2254,15 @@ class IndexController extends Controller {
         $now = time();
         $groupbuy = $this->model->table('groupbuy')->where('id='.$id)->find();
         
-        $groupbuy_join_list = $this->model->table('groupbuy_join as gj')->fields('gl.join_id,gj.user_id,gj.end_time')->join('left join groupbuy_log as gl on gl.join_id=gj.id')->where('gl.groupbuy_id='.$id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
+        $groupbuy_join_list = $this->model->table('groupbuy_join as gj')->fields('gl.join_id,gl.user_id as uid,gj.user_id,gj.end_time')->join('left join groupbuy_log as gl on gl.join_id=gj.id')->where('gl.groupbuy_id='.$id.' and gl.pay_status=1 and gj.need_num>0 and UNIX_TIMESTAMP(end_time)>'.$now)->findAll();
             
         if($groupbuy_join_list) {
             $groupbuy_join_list = $this->super_unique($groupbuy_join_list);
             foreach ($groupbuy_join_list as $k => $v) {
                 $user_ids = explode(',',$v['user_id']);
                 $user_id = $user_ids[0];
-                $groupbuy_join_list[$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$user_id)->find();
+                // $groupbuy_join_list[$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$user_id)->find();
+                $groupbuy_join_list[$k]['users'] = $users = $this->model->table('user')->fields('nickname,avatar')->where('id='.$v['uid'])->find();
                 $had_join_num = $this->model->table('groupbuy_log')->where('groupbuy_id='.$id.' and join_id='.$v['join_id'].' and pay_status=1')->count();
                 $groupbuy_join_list[$k]['need_num'] = $groupbuy['min_num']-$had_join_num;
             }
