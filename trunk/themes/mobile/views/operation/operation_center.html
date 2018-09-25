@@ -285,11 +285,6 @@ iframe{
   <!-- </div> -->
 <!-- </div> -->
 </body>
-<script src="/runtime/systemjs/jquery.min.js"></script>
-<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
-<script src="/static/js/datepicker.js"></script>
-<!-- <script src="/runtime/systemjs/My97DatePicker/calendar.js"></script> -->
-<script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 (function(){
 window.alert = function(name){
@@ -301,6 +296,13 @@ window.frames[0].window.alert(name);
 iframe.parentNode.removeChild(iframe);
 }
 })();
+</script>
+<script src="/runtime/systemjs/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
+<script src="/static/js/datepicker.js"></script>
+<!-- <script src="/runtime/systemjs/My97DatePicker/calendar.js"></script> -->
+<script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
 window.onload = function () {
     var start_date = "{$start_date}";
     var end_date = "{$end_date}";
