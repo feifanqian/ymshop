@@ -89,7 +89,8 @@ class OperationController extends Controller
                         unset($list['data'][$k]);
                         $total = $total-1;
                     }else{
-                        if(in_array($v['id'],$user_ids_arr)){
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if(in_array($v['id'],$user_ids_arr) && $shop) {
                             $list['data'][$k]['role_type'] = 2; //经销商   
                         }else{
                             $list['data'][$k]['role_type'] = 1; //商家
@@ -109,13 +110,8 @@ class OperationController extends Controller
                     if($v['id']==null){
                         unset($num[$k]);
                     }else{
-                        // $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                        // if($shop){
-                        //     $shop_num = $shop_num+1;
-                        // }else{
-                        //     $promoter_num = $promoter_num+1;   
-                        // }
-                        if(in_array($v['id'],$user_ids_arr)){
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if(in_array($v['id'],$user_ids_arr) && $shop) {
                             $shop_num = $shop_num+1;  
                         }else{
                             $promoter_num = $promoter_num+1;
@@ -263,7 +259,8 @@ class OperationController extends Controller
                         unset($list['data'][$k]);
                         $total = $total-1;
                     }else{
-                        if(in_array($v['id'],$user_ids_arr)){
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if(in_array($v['id'],$user_ids_arr) && $shop) {
                             $list['data'][$k]['role_type'] = 2; //经销商     
                         }else{
                             $list['data'][$k]['role_type'] = 1; //商家     
@@ -350,7 +347,8 @@ class OperationController extends Controller
                         unset($list['data'][$k]);
                         $total = $total-1;
                     }else{
-                        if(in_array($v['id'],$user_ids_arr)){
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if(in_array($v['id'],$user_ids_arr) && $shop) {
                             $list['data'][$k]['role_type'] = 2; //经销商   
                         }else{
                             $list['data'][$k]['role_type'] = 1; //商家
@@ -370,13 +368,8 @@ class OperationController extends Controller
                     if($v['id']==null){
                         unset($num[$k]);
                     }else{
-                        // $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                        // if($shop){
-                        //     $shop_num = $shop_num+1;
-                        // }else{
-                        //     $promoter_num = $promoter_num+1;   
-                        // }
-                        if(in_array($v['id'],$user_ids_arr)){
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if(in_array($v['id'],$user_ids_arr) && $shop) {
                             $shop_num = $shop_num+1;  
                         }else{
                             $promoter_num = $promoter_num+1;
@@ -536,7 +529,8 @@ class OperationController extends Controller
                         unset($list['data'][$k]);
                         $total = $total-1;
                     }else{
-                        if(in_array($v['id'],$user_ids_arr)){
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if(in_array($v['id'],$user_ids_arr) && $shop) {
                             $list['data'][$k]['role_type'] = 2; //经销商 
                         }else{
                             $list['data'][$k]['role_type'] = 1; //商家
@@ -556,13 +550,8 @@ class OperationController extends Controller
                     if($v['id']==null){
                         unset($num[$k]);
                     }else{
-                        // $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
-                        // if($shop){
-                        //     $shop_num = $shop_num+1;
-                        // }else{
-                        //     $promoter_num = $promoter_num+1;   
-                        // }
-                        if(in_array($v['id'],$user_ids_arr)){
+                        $shop = $this->model->table('district_shop')->where('owner_id='.$v['id'])->find();
+                        if(in_array($v['id'],$user_ids_arr) && $shop) {
                             $shop_num = $shop_num+1;  
                         }else{
                             $promoter_num = $promoter_num+1;
@@ -643,9 +632,6 @@ class OperationController extends Controller
         $shop = $this->model->table('district_shop')->fields('create_time')->where('owner_id='.$user_id)->find();
         $promoter = $this->model->table('district_promoter')->fields('create_time')->where('user_id='.$user_id)->find();
         $seo_title = !empty($shop)?'经销商':'商家';
-        
-        $shop_num = 0;
-        $promoter_num = 0;
         
         if($customer['avatar'] == '/0.png') {
            $customer['avatar'] == '0.png';
