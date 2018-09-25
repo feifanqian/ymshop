@@ -292,16 +292,16 @@ iframe{
 <!-- <script src="/runtime/systemjs/My97DatePicker/calendar.js"></script> -->
 <script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
-// window.onload = function () {
-//     var start_date = "{$start_date}";
-//     var end_date = "{$end_date}";
-//     if(start_date=='') {
-//         $('#start_date').val('请选择日期');
-//     }
-//     if(end_date=='') {
-//         $('#end_date').val('请选择日期');
-//     }                    
-// }
+window.onload = function () {
+    var start_date = "{$start_date}";
+    var end_date = "{$end_date}";
+    if(start_date=='') {
+        $('#start_date').val('请选择日期');
+    }
+    if(end_date=='') {
+        $('#end_date').val('请选择日期');
+    }                    
+}
 function date_change() {
     console.log(111);
     var page = $('#page').val();
