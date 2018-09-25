@@ -303,17 +303,16 @@ window.onload = function () {
     }                    
 }
 function date_change() {
-    console.log(111);
     var page = $('#page').val();
     var start_date = $("input[name='start_date']").val();
     if(start_date=='' || start_date=='请选择日期') {
         alert('请先选择开始日期');
     }
     var end_date = $("input[name='end_date']").val();
-    console.log(end_date);
     var user_id = "{$user_id}";
     var url = "/operation/ajax_operation_order";
     var data = {page: page,user_id:user_id,start_date:start_date,end_date:end_date};
+    console.log(data);
     $.ajax({
             type: 'post',
             dataType: 'json',
