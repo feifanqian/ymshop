@@ -310,6 +310,7 @@ $("input[name='end_date']").change(function(){
         alert('请先选择开始日期');
     }
     var end_date = $("input[name='end_date']").val();
+    console.log(end_date);
     var user_id = "{$user_id}";
     var url = "/operation/ajax_operation_order";
     var data = {page: page,user_id:user_id,start_date:start_date,end_date:end_date};
