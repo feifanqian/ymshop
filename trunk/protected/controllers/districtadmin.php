@@ -2200,7 +2200,7 @@ class DistrictadminController extends Controller
         $promoter_num = 0;
         if($shopids!='') {
             $where8 = "dp.hirer_id in ($shopids) and dp.user_id!=".$user_id;
-            if($start_date || $end_date) {
+            if($start_date && $end_date) {
                 $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
             $nums = $this->model->table('district_promoter as dp')->join('left join user as u on dp.user_id= u.id')->fields('u.id')->where($where8)->findAll();
@@ -2223,7 +2223,7 @@ class DistrictadminController extends Controller
         
         if($promoter_ids!='') {
             $where9 = "dp.user_id in ($promoter_ids) and dp.user_id!=".$user_id;
-            if($start_date || $end_date) {
+            if($start_date && $end_date) {
                 $where9 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
             $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->findPage($page,10);
@@ -2278,7 +2278,7 @@ class DistrictadminController extends Controller
             }
             $ids = $ids_arr!=null?implode(',', $ids_arr):''; 
             $where1 = "user_id in ($ids) and pay_status=1 and status=4";
-            if($start_date || $end_date) {
+            if($start_date && $end_date) {
                 $where1.=" and pay_time between '{$start_date}' and '{$end_date}'";
             }
             $order_num = $this->model->table('order')->where($where1)->count();
@@ -2286,25 +2286,25 @@ class DistrictadminController extends Controller
             $order_sum = $order_total[0]['sum']!=null?$order_total[0]['sum']:0.00;        
             
             $where3 = "user_id in ($ids) and type=21";
-            if($start_date || $end_date) {
+            if($start_date && $end_date) {
                 $where3 .=" and time between '{$start_date}' and '{$end_date}'"; 
             }
             $benefit_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where3)->query();
             $benefit_sum = $benefit_total[0]['sum']!=null?$benefit_total[0]['sum']:0.00;
             $where4 = "user_id in ($ids) and type=8";
-            if($start_date || $end_date) {
+            if($start_date && $end_date) {
                 $where4 .=" and time between '{$start_date}' and '{$end_date}'"; 
             }
             $crossover_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where4)->query();
             $crossover_sum = $crossover_total[0]['sum']!=null?$crossover_total[0]['sum']:0.00;
             $where5 = "user_id in ($ids) and type in (1,2)";
-            if($start_date || $end_date) {
+            if($start_date && $end_date) {
                 $where5 .=" and order_time between '{$start_date}' and '{$end_date}'"; 
             }
             $taoke_num = $this->model->table('benefit_log')->where($where5)->count(); 
             
             $where7 = "user_id in ($ids) and type=5";
-            if($start_date || $end_date) {
+            if($start_date && $end_date) {
                 $where7 .=" and time between '{$start_date}' and '{$end_date}'"; 
             }
             $order_benefit_total = $this->model->table('balance_log')->fields('sum(amount) as sum')->where($where7)->query();
@@ -2322,7 +2322,7 @@ class DistrictadminController extends Controller
 
         if($promoter_ids!='') {
             $where2 = "shop_ids in ($promoter_ids) and pay_status=1";
-            if($start_date || $end_date) {
+            if($start_date && $end_date) {
                 $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
             }
             $offline_order_num = $this->model->table('order_offline')->where($where2)->count();

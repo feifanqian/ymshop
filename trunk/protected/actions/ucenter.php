@@ -3263,24 +3263,21 @@ class UcenterAction extends Controller {
     {
         $info = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
         $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
-        if($contract || $info) {
-            if($info) {
-               if($info['status']!=2 && $info['reason']==null) {
-                    $need_sign = 1;
-                } else {
-                    $need_sign = 0;
-                } 
+        if(!$contract && !$info) {
+            $need_sign = 0;
+        } elseif($contract && $info) {
+            if($info['status']!=2 && $info['reason']==null) {
+                $need_sign = 1;
             } else {
                 $need_sign = 0;
-            }
+            }     
+        } else {
             if($contract) {
                 $need_sign = 1;
             } else {
                 $need_sign = 0;
-            }
-        } else {
-            $need_sign = 0;
-        }
+            }  
+        } 
 
         $info['need_sign'] = $need_sign;
         $this->code = 0;
