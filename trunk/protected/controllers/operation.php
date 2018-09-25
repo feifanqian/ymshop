@@ -29,6 +29,12 @@ class OperationController extends Controller
         $user_id = Filter::int(Req::args('user_id'));
         $start_date = Filter::str(Req::args('start_date'));
         $end_date = Filter::str(Req::args('end_date'));
+        if($start_date=='请选择日期') {
+            $start_date = '';
+        }
+        if($end_date=='请选择日期') {
+            $end_date = '';
+        }
         $page = Filter::int(Req::args('p'));
         // if(!$start_date) {
         //     $start_date = date('Y-m-d', strtotime('-30 days'));
@@ -202,6 +208,12 @@ class OperationController extends Controller
         $user_id = Filter::int(Req::args('user_id'));
         $start_date = Filter::str(Req::args('start_date'));
         $end_date = Filter::str(Req::args('end_date'));
+        if($start_date=='请选择日期') {
+            $start_date = '';
+        }
+        if($end_date=='请选择日期') {
+            $end_date = '';
+        }
         $page = Filter::int(Req::args('page'));
         $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
         $idstr = $user['user_ids'];
@@ -268,6 +280,12 @@ class OperationController extends Controller
         $user_id = Filter::int(Req::args('user_id'));
         $start_date = Filter::str(Req::args('start_date'));
         $end_date = Filter::str(Req::args('end_date'));
+        if($start_date=='请选择日期') {
+            $start_date = '';
+        }
+        if($end_date=='请选择日期') {
+            $end_date = '';
+        }
         $page = Filter::int(Req::args('p'));
     
         if(!$page) {
@@ -410,6 +428,12 @@ class OperationController extends Controller
         $user_id = Filter::int(Req::args('user_id'));
         $start_date = Filter::str(Req::args('start_date'));
         $end_date = Filter::str(Req::args('end_date'));
+        if($start_date=='请选择日期') {
+            $start_date = '';
+        }
+        if($end_date=='请选择日期') {
+            $end_date = '';
+        }
         $page = Filter::int(Req::args('p'));
         // if(!$start_date) {
         //     $start_date = date('Y-m-d', strtotime('-30 days'));
