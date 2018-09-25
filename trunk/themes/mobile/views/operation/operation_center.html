@@ -220,7 +220,7 @@ iframe{
      统计时间：
      <input name="start_date" id="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" onfocus="WdatePicker()" readonly="readonly">
     &nbsp;&nbsp;至&nbsp;&nbsp;
-    <input name="end_date" id="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker()" readonly="readonly">
+    <input name="end_date" id="end_date" class="Wdate" type="text" pattern="required" onChange="date_change()" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker()" readonly="readonly">
     </p>
   </div>
   <div class="block">
@@ -302,6 +302,7 @@ window.onload = function () {
         $('#end_date').val('请选择日期');
     }                    
 }
+function date_change() {
 $("input[name='end_date']").change(function(){
     console.log(111);
     var page = $('#page').val();
@@ -396,6 +397,8 @@ $("input[name='end_date']").change(function(){
             },
         });
 });
+}
+
 
     var page = $('#page').val();
     $(window).bind('scroll', function () {
