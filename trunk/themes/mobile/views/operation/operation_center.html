@@ -285,25 +285,14 @@ iframe{
   <!-- </div> -->
 <!-- </div> -->
 </body>
-<script type="text/javascript">
-(function(){
-window.alert = function(name){
-var iframe = document.createElement("IFRAME");
-iframe.style.display="none";
-iframe.setAttribute("src", 'data:text/plain');
-document.documentElement.appendChild(iframe);
-window.frames[0].window.alert(name);
-iframe.parentNode.removeChild(iframe);
-}
-})();
-alert('试一试');
-</script>
 <script src="/runtime/systemjs/jquery.min.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/alert.js"></script>
 <script src="/static/js/datepicker.js"></script>
 <!-- <script src="/runtime/systemjs/My97DatePicker/calendar.js"></script> -->
 <script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
+alert("哈哈哈！！！看，没有标题~_~");
 window.onload = function () {
     var start_date = "{$start_date}";
     var end_date = "{$end_date}";
