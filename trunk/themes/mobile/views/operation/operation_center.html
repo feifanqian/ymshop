@@ -218,9 +218,9 @@ iframe{
   <div class="header">
     <p>
      统计时间：
-     <input name="start_date" id="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" onfocus="WdatePicker()">
+     <input name="start_date" id="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" onfocus="WdatePicker()" readonly="readonly">
     &nbsp;&nbsp;至&nbsp;&nbsp;
-    <input name="end_date" id="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker()">
+    <input name="end_date" id="end_date" class="Wdate" type="text" pattern="required" onChange="" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker()" readonly="readonly">
     </p>
   </div>
   <div class="block">
