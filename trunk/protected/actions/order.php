@@ -932,12 +932,12 @@ class OrderAction extends Controller {
             $product_info = substr($product_info,1);
             $product_info = substr($product_info,0,-1);
             $product_info = explode(',',$product_info);
-            $product_info = array_values($product_info);
-            foreach ($product_info as $key => $value) {
+            $product_ids = array_values($product_info);
+            foreach ($product_ids as $key => $value) {
                 $explode = explode('=',$value);
-                $product_info[$key] = $explode[0];
+                $product_ids[$key] = $explode[0];
             }
-            $product_ids = implode(',',$product_info);
+            // $product_ids = implode(',',$product_info);
         }
         $product = $this->model->table('products')->fields('goods_id')->where("id IN (" . implode(',', $product_ids) . ")")->findAll();
         if(!$product){
