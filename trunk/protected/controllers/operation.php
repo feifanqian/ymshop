@@ -450,10 +450,7 @@ class OperationController extends Controller
                 $where2 = "user_id in ($user_ids) and pay_status=1";
             }
             if($start_date && $end_date) {
-                $t1 = strtotime($start_date);
-                $t2 = strtotime($end_date);
-                $where2.=" and UNIX_TIMESTAMP(pay_time)>=".$t1." and UNIX_TIMESTAMP(pay_time)<=".$t2;
-                // $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
+                $where2 = "(shop_ids IN ($promoter_ids) OR user_id IN ($user_ids)) AND pay_status =1 AND (pay_time BETWEEN  '{$start_date}' AND  '{$end_date}' )";
             }
             // if($user_id==965) {
             //     var_dump($where2);die;
