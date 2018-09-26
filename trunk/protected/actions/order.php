@@ -937,10 +937,7 @@ class OrderAction extends Controller {
                 $explode = explode('=',$value);
                 $product_info[$key] = $explode[0];
             }
-            var_dump($product_info);
             $product_ids = implode(',',$product_info);
-            // $product_ids = array_filter(array_keys($product_info));
-            var_dump($product_ids);die;
         }
         $product = $this->model->table('products')->fields('goods_id')->where("id IN (" . implode(',', $product_ids) . ")")->findAll();
         if(!$product){
