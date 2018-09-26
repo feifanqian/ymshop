@@ -150,6 +150,26 @@ class MapAction extends Controller
             if($shop_check['mobile']==null) {
                 $this->model->table('shop_check')->data(['mobile'=>$mobile])->where('id='.$shop_check['id'])->update();
             }
+            if($shop_check['legal_person']==null) {
+                $this->model->table('shop_check')->data(['legal_person'=>$name])->where('id='.$shop_check['id'])->update();
+            }
+            if($shop_check['address']==null) {
+                $this->model->table('shop_check')->data(['address'=>$address])->where('id='.$shop_check['id'])->update();
+            }
+        } else {
+            $data = array(
+                'user_id'      => $this->user['id'],
+                'address' => $name,
+                'mobile'       => $mobile,
+                'id_no'        => $id_no,
+                'address'      => $address,
+                );
+            $this->model->table('shop_check')->data($data)->insert();
+        }
+
+        $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+        if($promoter) {
+            $this->model->table('district_promoter')->data(['base_rate'=>$rate])->where('user_id='.$this->user['id'])->update();
         }
 
         $this->code = 0;
@@ -229,6 +249,11 @@ class MapAction extends Controller
             $this->model->table('promoter_contract')->data($data)->insert();      
         } else {
             $this->model->table('promoter_contract')->data($data)->where('id='.$contract['id'])->update();
+        }
+
+        $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+        if($promoter) {
+            $this->model->table('district_promoter')->data(['base_rate'=>$rate])->where('user_id='.$this->user['id'])->update();
         }
 
         $this->code = 0;
