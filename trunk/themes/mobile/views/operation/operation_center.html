@@ -311,8 +311,8 @@ iframe{
         var arr = [];
         for (var i = nowYear - 5; i <= nowYear + 5; i++) {
             arr.push({
-                id: i + '',
-                value: i + '年'
+                id: i,
+                value: i + '-'
             });
         }
         return arr;
@@ -320,9 +320,12 @@ iframe{
     function formatMonth () {
         var arr = [];
         for (var i = 1; i <= 12; i++) {
+            if(i<=9) {
+                i = '0'+i;
+            }
             arr.push({
-                id: i + '',
-                value: i + '月'
+                id: i,
+                value: i + '-'
             });
         }
         return arr;
@@ -331,8 +334,8 @@ iframe{
         var arr = [];
         for (var i = 1; i <= count; i++) {
             arr.push({
-                id: i + '',
-                value: i + '日'
+                id: i,
+                value: i + '-'
             });
         }
         return arr;
