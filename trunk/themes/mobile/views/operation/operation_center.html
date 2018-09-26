@@ -220,9 +220,10 @@ iframe{
     <p>
      统计时间：
      <!-- <input name="start_date" id="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" onfocus="WdatePicker()" readonly="readonly"> -->
-     <input name="start_date" type="text" class="Wdate"  pattern="required" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" readonly="readonly" data-year="" data-month="" data-date="" id="start_date">
+     <input name="start_date" id="start_date" type="text" class="Wdate"  pattern="required" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" readonly="readonly" data-year="" data-month="" data-date="">
     &nbsp;&nbsp;至&nbsp;&nbsp;
-    <input name="end_date" id="end_date" class="Wdate" type="text" pattern="required" onChange="date_change()" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker()" readonly="readonly">
+    <!-- <input name="end_date" id="end_date" class="Wdate" type="text" pattern="required" onChange="date_change()" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker()" readonly="readonly"> -->
+    <input name="end_date" id="end_date" type="text" class="Wdate"  pattern="required" value="{$end_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" readonly="readonly" data-year="" data-month="" data-date="">
     </p>
   </div>
   <div class="block">
@@ -292,20 +293,25 @@ iframe{
 <script type="text/javascript" src="/themes/mobile/js/alert.js"></script>
 <script src="/static/js/datepicker.js"></script>
 <!-- <script src="/runtime/systemjs/My97DatePicker/calendar.js"></script> -->
-<script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script>
+<!-- <script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script> -->
 <script type="text/javascript" src="/themes/mobile/js/zepto.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/iosSelect.js"></script>
 <script type="text/javascript">
     var selectDateDom = $('#selectDate');
-    var showDateDom = $('#start_date');
+    var showDateDom1 = $('#start_date');
+    var showDateDom2 = $('#end_date');
     // 初始化时间
     var now = new Date();
     var nowYear = now.getFullYear();
     var nowMonth = now.getMonth() + 1;
     var nowDate = now.getDate();
-    showDateDom.attr('data-year', nowYear);
-    showDateDom.attr('data-month', nowMonth);
-    showDateDom.attr('data-date', nowDate);
+    showDateDom1.attr('data-year', nowYear);
+    showDateDom1.attr('data-month', nowMonth);
+    showDateDom1.attr('data-date', nowDate);
+
+    showDateDom2.attr('data-year', nowYear);
+    showDateDom2.attr('data-month', nowMonth);
+    showDateDom2.attr('data-date', nowDate);
     // 数据初始化
     function formatYear (nowYear) {
         var arr = [];
@@ -387,10 +393,10 @@ iframe{
         });
         */
     };
-    selectDateDom.bind('click', function () {
-        var oneLevelId = showDateDom.attr('data-year');
-        var twoLevelId = showDateDom.attr('data-month');
-        var threeLevelId = showDateDom.attr('data-date');
+    showDateDom1.bind('click', function () {
+        var oneLevelId = showDateDom1.attr('data-year');
+        var twoLevelId = showDateDom1.attr('data-month');
+        var threeLevelId = showDateDom1.attr('data-date');
         var iosSelect = new IosSelect(3, 
             [yearData, monthData, dateData],
             {
@@ -401,10 +407,31 @@ iframe{
                 threeLevelId: threeLevelId,
                 showLoading: true,
                 callback: function (selectOneObj, selectTwoObj, selectThreeObj) {
-                    showDateDom.attr('data-year', selectOneObj.id);
-                    showDateDom.attr('data-month', selectTwoObj.id);
-                    showDateDom.attr('data-date', selectThreeObj.id);
-                    showDateDom.val(selectOneObj.value + '-' + selectTwoObj.value + '-' + selectThreeObj.value);
+                    showDateDom1.attr('data-year', selectOneObj.id);
+                    showDateDom1.attr('data-month', selectTwoObj.id);
+                    showDateDom1.attr('data-date', selectThreeObj.id);
+                    showDateDom1.val(selectOneObj.value + '-' + selectTwoObj.value + '-' + selectThreeObj.value);
+                }
+        });
+    });
+    showDateDom2.bind('click', function () {
+        var oneLevelId = showDateDom2.attr('data-year');
+        var twoLevelId = showDateDom2.attr('data-month');
+        var threeLevelId = showDateDom2.attr('data-date');
+        var iosSelect = new IosSelect(3, 
+            [yearData, monthData, dateData],
+            {
+                title: '日期选择',
+                itemHeight: 35,
+                oneLevelId: oneLevelId,
+                twoLevelId: twoLevelId,
+                threeLevelId: threeLevelId,
+                showLoading: true,
+                callback: function (selectOneObj, selectTwoObj, selectThreeObj) {
+                    showDateDom2.attr('data-year', selectOneObj.id);
+                    showDateDom2.attr('data-month', selectTwoObj.id);
+                    showDateDom2.attr('data-date', selectThreeObj.id);
+                    showDateDom2.val(selectOneObj.value + '-' + selectTwoObj.value + '-' + selectThreeObj.value);
                 }
         });
     });
