@@ -312,7 +312,7 @@ iframe{
         for (var i = nowYear - 5; i <= nowYear + 5; i++) {
             arr.push({
                 id: i,
-                value: i + '-'
+                value: i
             });
         }
         return arr;
@@ -325,7 +325,7 @@ iframe{
             }
             arr.push({
                 id: i,
-                value: i + '-'
+                value: i
             });
         }
         return arr;
@@ -335,7 +335,7 @@ iframe{
         for (var i = 1; i <= count; i++) {
             arr.push({
                 id: i,
-                value: i + '-'
+                value: i
             });
         }
         return arr;
@@ -404,7 +404,7 @@ iframe{
                     showDateDom.attr('data-year', selectOneObj.id);
                     showDateDom.attr('data-month', selectTwoObj.id);
                     showDateDom.attr('data-date', selectThreeObj.id);
-                    showDateDom.val(selectOneObj.value + ' ' + selectTwoObj.value + ' ' + selectThreeObj.value);
+                    showDateDom.val(selectOneObj.value + '-' + selectTwoObj.value + '-' + selectThreeObj.value);
                 }
         });
     });
