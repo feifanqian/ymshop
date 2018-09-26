@@ -2440,8 +2440,10 @@ class DistrictadminController extends Controller
             array_push($ids, $user_id);
             $user_ids = $ids!=null?implode(',', $ids):'';
             $result['user_ids'] = $user_ids;
+            $result['ids'] = $ids;
             $result['shopids'] = $shopids;
             $result['shop_ids_arr'] = $idstr['shop_ids_arr'];
+            $result['user_ids_arr'] = $idstr['user_ids_arr'];
             $result['num'] = count($inviter_info);
         } else {
             $is_break = false;
@@ -2471,8 +2473,10 @@ class DistrictadminController extends Controller
                $idstr = $ids!=null?implode(',', $ids):'';
             }
             $result['user_ids'] = $idstr;
+            $result['ids'] = $ids;
             $result['shopids'] = '';
             $result['shop_ids_arr'] = null;
+            $result['user_ids_arr'] = $ids;
             $result['num'] = $num;
         }
         
