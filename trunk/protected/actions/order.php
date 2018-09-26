@@ -926,8 +926,6 @@ class OrderAction extends Controller {
             return;
         }
         $fare = new Fare($weight);
-        var_dump($product_info);
-        var_dump(is_array($product_info));die;
         // if(!is_array($product_info)) {
         //     $product_info = substr($product_info,0,product_infolen($str)-1);
         // }
