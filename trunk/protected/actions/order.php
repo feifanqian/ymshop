@@ -926,6 +926,11 @@ class OrderAction extends Controller {
             return;
         }
         $fare = new Fare($weight);
+        var_dump($product_info);
+        var_dump(is_array($product_info));die;
+        // if(!is_array($product_info)) {
+        //     $product_info = substr($product_info,0,product_infolen($str)-1);
+        // }
         $product_ids = array_filter(array_keys($product_info));
         $product = $this->model->table('products')->fields('goods_id')->where("id IN (" . implode(',', $product_ids) . ")")->findAll();
         if(!$product){
