@@ -432,6 +432,98 @@ iframe{
                     showDateDom2.attr('data-month', selectTwoObj.id);
                     showDateDom2.attr('data-date', selectThreeObj.id);
                     showDateDom2.val(selectOneObj.value + '-' + selectTwoObj.value + '-' + selectThreeObj.value);
+                    console.log(333);
+                    var page = $('#page').val();
+                    var start_date = $("input[name='start_date']").val();
+                    if(start_date=='' || start_date=='请选择日期') {
+                        alert('请先选择开始日期');
+                    }
+                    var end_date = $("input[name='end_date']").val();
+                    var user_id = "{$user_id}";
+                    var url = "/operation/ajax_operation_order";
+                    var data = {page: page,user_id:user_id,start_date:start_date,end_date:end_date};
+                    console.log(data);
+                    $.ajax({
+                            type: 'post',
+                            dataType: 'json',
+                            url: url,
+                            data: data,
+                            success: function (res) {
+                                var jsonstr = JSON.stringify(res);
+                                var jsonarray= $.parseJSON(jsonstr);
+                                $("#order_num").html(jsonarray.order_num);
+                                $("#offline_order_num").html(jsonarray.offline_order_num);
+                                $("#shop_num").html(jsonarray.shop_num);
+                                $("#promoter_num").html(jsonarray.promoter_num);
+                                $("#user_num").html(jsonarray.user_num);
+                                $("#taoke_num").html(jsonarray.taoke_num);
+                                $("#order_sum").html(jsonarray.order_sum);
+                                $("#offline_order_sum").html(jsonarray.offline_order_sum);
+                                $("#order_benefit").html(jsonarray.order_benefit);
+                                $("#crossover_sum").html(jsonarray.crossover_sum);
+                                $("#benefit_sum").html(jsonarray.benefit_sum);
+                            },
+                        });
+                    var urls = "{url:/operation/ajax_operation_center}";
+                    var html = "";
+                    var avatar = '';
+                    $.ajax({
+                            type: 'post',
+                            dataType: 'json',
+                            url: urls,
+                            data: data,
+                            success: function (res) {
+                                var jsonstr = JSON.stringify(res);
+                                var jsonarray= $.parseJSON(jsonstr);
+                                
+                                    $.each(jsonarray, function (i, item) {
+                                        html += '<div class="list-child">';
+                                        html += '<div class="child-left">';
+                                        html += '<div class="div-child">';
+                                        // avatar = item.avatar;
+                                        html += '<img src="'+item.avatar+'" width="90" height="90" style="border-radius: 50%">';
+                                        if(item.role_type==2) {
+                                           html += '<p>经销商</p>';
+                                        } else {
+                                           html += '<p>商家</p>';
+                                        }
+                                        html += '</div>';
+                                        html += '</div>';
+                                        html += '<div class="child-right">';
+                                        html += '<div class="div-child">';
+                                        if(item.real_name!=null) {
+                                           html += '<span>名称：'+item.real_name+'</span>';
+                                        } else {
+                                           html += '<span>名称：'+item.nickname+'</span>';
+                                        }
+                                        html += '</div>';
+                                        html += '<div class="div-child">';
+                                        if(item.mobile!=null) {
+                                            html += '<span>手机号：'+item.mobile+'</span>';
+                                        } else {
+                                            html += '<span>手机号：--</span>';
+                                        }   
+                                        html += '</div>';
+                                        html += '<div class="div-child">';
+                                        if(item.realname!=null) {
+                                           html += '<span>经营者：'+item.realname+'</span>';
+                                        } else if(item.mobile!=null) {
+                                           html += '<span>经营者：'+item.mobile+'</span>';
+                                        } else {
+                                           html += '<span>经营者：'+item.real_name+'</span>';
+                                        }
+                                        html += '</div>';
+                                        html += '<div class="div-child">';
+                                        html += '<span>加入时间：'+item.create_time+'</span>'
+                                        html += '<a href="/operation/shop_info?user_id='+item.id+'">查看详情</a>';
+                                        html += '</div>';
+                                        html += '</div>';
+                                        html += '</div>';
+                                    });
+                                    $("#list").html(html);
+                                
+                            },
+                        });
                 }
         });
     });
