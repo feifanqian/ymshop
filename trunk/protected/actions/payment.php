@@ -352,6 +352,10 @@ class PaymentAction extends Controller {
             $this->code = 1237;
             return;
         }
+        if($seller_id==181199 && date('Y-m-d H:i:s')>'2018-09-26 00:00:00' && date('Y-m-d H:i:s')<'2018-10-02 23:59:59'){
+            $this->code = 1237;
+            return;
+        }
        if(!$payment_id){
          $this->code = 1157;
        }

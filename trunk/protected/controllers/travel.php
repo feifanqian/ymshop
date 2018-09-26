@@ -1134,6 +1134,10 @@ class TravelController extends Controller
         if(in_array($inviter_id, [55568,21079])) {
             $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
             exit;
+        }
+        if($inviter_id==181199 && date('Y-m-d H:i:s')>'2018-09-26 00:00:00' && date('Y-m-d H:i:s')<'2018-10-02 23:59:59'){
+            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
+            exit;
         } 
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false) {
             $pay_type = 'alipay';
