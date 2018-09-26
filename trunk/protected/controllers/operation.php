@@ -747,23 +747,21 @@ class OperationController extends Controller
             $result['user_ids_arr'] = $idstr['user_ids_arr'];
             $result['num'] = count($inviter_info);
         } else {
+            $promoter = $model->table('district_promoter')->fields('hirer_id')->where('user_id='.$user_id)->find();
             $is_break = false;
             $num = 0;
             $now_user_id = $user_id;
             $idstr = '';
             $ids = array();
             while(!$is_break) {
-               $where = "i.user_id=".$now_user_id;
+               $where = "i.user_id=".$now_user_id." and i.district_id=".$promoter['hirer_id'];
                if($start_date && $end_date) {
                  $where.=" and c.reg_time between '{$start_date}' and '{$end_date}'";
                }
-               $inviter_info = $model->table("invite as i")->join('left join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
+               $inviter_info = $model->table("invite as i")->join('inner join customer as c on i.invite_user_id=c.user_id')->fields('i.invite_user_id')->where($where)->findAll();
                if($inviter_info) {
                  foreach($inviter_info as $k =>$v) {
-                    $customer = $model->table('customer')->fields('user_id')->where('user_id='.$v['invite_user_id'])->find(); 
-                    if($customer) {
-                      $ids[] = $v['invite_user_id'];
-                    }
+                    $ids[] = $v['invite_user_id'];
                     $num = $num+1;
                     $now_user_id = $v['invite_user_id'];
                  }
