@@ -926,10 +926,12 @@ class OrderAction extends Controller {
             return;
         }
         $fare = new Fare($weight);
-        // if(!is_array($product_info)) {
-        //     $product_info = substr($product_info,0,product_infolen($str)-1);
-        // }
-        $product_ids = array_filter(array_keys($product_info));
+        if(is_array($product_info)) {
+            $product_ids = array_filter(array_keys($product_info));
+        } else {
+            $product_ids = substr($product_info,1);
+            $product_ids = substr($product_ids,0,-1);
+        }
         $product = $this->model->table('products')->fields('goods_id')->where("id IN (" . implode(',', $product_ids) . ")")->findAll();
         if(!$product){
             $this->code = 1040;
