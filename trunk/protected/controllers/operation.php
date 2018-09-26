@@ -633,14 +633,14 @@ class OperationController extends Controller
         $user_ids = $user['user_ids'];
         if($promoter_ids!='' || $user_ids!='') {
             if($promoter_ids!='' && $user_ids!='') {
-                $where2 = "shop_ids in ($promoter_ids) or user_id in ($user_ids) and pay_status=1";  
+                $where2 = "(shop_ids in ($promoter_ids) or user_id in ($user_ids)) and pay_status=1";  
             } elseif($promoter_ids!='' && $user_ids=='') {
-                $where2 = "shop_ids in ($promoter_ids) and pay_status=1";
+                $where2 = "(shop_ids in ($promoter_ids)) and pay_status=1";
             } else {
-                $where2 = "user_id in ($user_ids) and pay_status=1";
+                $where2 = "(user_id in ($user_ids)) and pay_status=1";
             }
             if($start_date && $end_date) {
-                $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
+                $where2 .= " AND (pay_time BETWEEN  '{$start_date}' AND  '{$end_date}' )";
             }
             $offline_order_num = $this->model->table('order_offline')->where($where2)->count();
 
