@@ -2169,7 +2169,7 @@ class DistrictadminController extends Controller
 
     public function operation_center()
     {
-        $model = new Model();
+        $this->model = new Model();
         $cal = $this->calendar();
         $start_date = $cal['start'];
         $end_date = $cal['end'];
