@@ -929,8 +929,10 @@ class OrderAction extends Controller {
         if(is_array($product_info)) {
             $product_ids = array_filter(array_keys($product_info));
         } else {
-            $product_ids = substr($product_info,1);
-            $product_ids = substr($product_ids,0,-1);
+            $product_info = substr($product_info,1);
+            $product_info = substr($product_info,0,-1);
+            $product_info = explode(',',$product_info);
+            $product_ids = array_filter(array_keys($product_info));
         }
         $product = $this->model->table('products')->fields('goods_id')->where("id IN (" . implode(',', $product_ids) . ")")->findAll();
         if(!$product){
