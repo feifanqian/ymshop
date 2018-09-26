@@ -452,8 +452,11 @@ class OperationController extends Controller
             if($start_date && $end_date) {
                 $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
             }
+            if($user_id==965) {
+                var_dump($where2);die;
+            }
             $offline_order_num = $this->model->table('order_offline')->where($where2)->count();
-
+      
             $offline_order_total = $this->model->table('order_offline')->fields('sum(order_amount) as sum')->where($where2)->query();
             $offline_order_sum = $offline_order_total[0]['sum']!=null?$offline_order_total[0]['sum']:0.00;
         } else {
