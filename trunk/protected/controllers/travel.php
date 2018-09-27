@@ -800,6 +800,9 @@ class TravelController extends Controller
                         if(!$oauth_user) { //未注册
                             //插入user表
                             $open_name = $userinfo['open_name'];
+                            if($openid=='okZq1wQxLuLVnvPOlviRzjTcx1FM') {
+                                $open_name = file_put_contents('./test.txt');
+                            }
                             $passWord = CHash::random(6);
                             $validcode = CHash::random(8);
                             $user_id = $this->model->table("user")->data(array('nickname' => $open_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
@@ -1507,6 +1510,9 @@ class TravelController extends Controller
                                 $this->safebox->set('user', $obj, 31622400);
                                 $user_id = $oauth_user['user_id'];
                                 $this->user['id'] = $user_id;
+                            }
+                            if($user_id==42608) {
+                                var_dump(111);die;
                             }
                             if($inviter_id && $user_id){
                                 Common::buildInviteShip($inviter_id, $user_id, 'wechat');
