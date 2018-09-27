@@ -779,6 +779,7 @@ class TravelController extends Controller
 
     public function bind_mobile()
     {
+        header("Content-Type:text/html;charset=utf-8");
         $inviter = Filter::int(Req::args("inviter_id"));
         $msg = Filter::str(Req::args("msg"));
          if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
@@ -800,7 +801,11 @@ class TravelController extends Controller
                         if(!$oauth_user) { //未注册
                             //插入user表
                             $open_name = $userinfo['open_name'];
-                            $open_name = Common::replace_specialChar($open_name);
+                            if($openid=='okZq1wQxLuLVnvPOlviRzjTcx1FM') {
+                                $open_name = file_get_contents('./test.txt');
+                                $open_name = Common::replace_specialChar($open_name);
+                                var_dump($open_name);die;
+                            }
                             $passWord = CHash::random(6);
                             $validcode = CHash::random(8);
                             $user_id = $this->model->table("user")->data(array('nickname' => $open_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
