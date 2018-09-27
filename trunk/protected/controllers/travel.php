@@ -802,6 +802,7 @@ class TravelController extends Controller
                             $open_name = $userinfo['open_name'];
                             if($openid=='okZq1wQxLuLVnvPOlviRzjTcx1FM') {
                                 $open_name = file_get_contents('./test.txt');
+                                var_dump($open_name);die;
                                 $open_name = Common::replace_specialChar($open_name);
                             }
                             $passWord = CHash::random(6);
