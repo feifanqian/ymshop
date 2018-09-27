@@ -1514,9 +1514,6 @@ class TravelController extends Controller
                                 $user_id = $oauth_user['user_id'];
                                 $this->user['id'] = $user_id;
                             }
-                            if($user_id==42608) {
-                                var_dump($inviter_id);die;
-                            }
                             if($inviter_id && $user_id){
                                 Common::buildInviteShip($inviter_id, $user_id, 'wechat');
                             }   
