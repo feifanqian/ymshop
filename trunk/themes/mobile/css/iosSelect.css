@@ -36,7 +36,7 @@ ul, li {
     text-align: center;
 }
 .ios-select-widget-box header.iosselect-header a {
-    font-size: 22px;
+    font-size: 30px;
     color: #e94643;
     text-decoration: none;
 }
@@ -184,7 +184,7 @@ ul, li {
     margin: 0;
     padding: 0;
     display: inline-block;
-    font-size: 22px;
+    font-size: 30px;
     font-weight: normal;
     color: #333;
 }
