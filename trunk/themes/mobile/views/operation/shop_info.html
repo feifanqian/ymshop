@@ -202,10 +202,7 @@ iframe{
     height: 60px !important;
     line-height: 60px !important;
 }
-.ios-select-widget-box ul li{
-    height: 32px !important;
-    line-height: 32px !important;
-}
+
 </style>
 <body>
 <!-- <div id="app"> -->
@@ -398,7 +395,7 @@ iframe{
             [yearData, monthData, dateData],
             {
                 title: '日期选择',
-                itemHeight: 32,
+                itemHeight: 30,
                 oneLevelId: oneLevelId,
                 twoLevelId: twoLevelId,
                 threeLevelId: threeLevelId,
@@ -419,7 +416,7 @@ iframe{
             [yearData, monthData, dateData],
             {
                 title: '日期选择',
-                itemHeight: 32,
+                itemHeight: 30,
                 oneLevelId: oneLevelId,
                 twoLevelId: twoLevelId,
                 threeLevelId: threeLevelId,
@@ -438,7 +435,6 @@ iframe{
                     var user_id = "{$user_id}";
                     var url = "/operation/ajax_operation_order";
                     var data = {page: page,user_id:user_id,start_date:start_date,end_date:end_date};
-                    console.log(data);
                     $.ajax({
                             type: 'post',
                             dataType: 'json',
