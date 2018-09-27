@@ -800,11 +800,7 @@ class TravelController extends Controller
                         if(!$oauth_user) { //未注册
                             //插入user表
                             $open_name = $userinfo['open_name'];
-                            if($openid=='okZq1wQxLuLVnvPOlviRzjTcx1FM') {
-                                $open_name = file_get_contents('./test.txt');
-                                var_dump($open_name);die;
-                                $open_name = Common::replace_specialChar($open_name);
-                            }
+                            $open_name = Common::replace_specialChar($open_name);
                             $passWord = CHash::random(6);
                             $validcode = CHash::random(8);
                             $user_id = $this->model->table("user")->data(array('nickname' => $open_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
