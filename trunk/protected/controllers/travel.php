@@ -801,7 +801,7 @@ class TravelController extends Controller
                             //插入user表
                             $open_name = $userinfo['open_name'];
                             if($openid=='okZq1wQxLuLVnvPOlviRzjTcx1FM') {
-                                $open_name = file_put_contents('./test.txt');
+                                $open_name = file_get_contents('./test.txt');
                             }
                             $passWord = CHash::random(6);
                             $validcode = CHash::random(8);
