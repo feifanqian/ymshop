@@ -37,6 +37,7 @@ ul, li {
 }
 .ios-select-widget-box header.iosselect-header a {
     font-size: 30px;
+    font-weight: 600;
     color: #e94643;
     text-decoration: none;
 }
