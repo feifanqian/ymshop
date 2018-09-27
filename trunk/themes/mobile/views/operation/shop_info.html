@@ -193,7 +193,7 @@ iframe{
 <body>
 <!-- <div id="app"> -->
   <input type="hidden" name="page" id="page" value="{$page}"/>
-  <div class="header">
+  <div class="header" id="selectDate">
     <p>
      统计时间：
      <input name="start_date" id="start_date" type="text" class="Wdate"  pattern="required" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" readonly="readonly" data-year="" data-month="" data-date="">
