@@ -799,22 +799,23 @@ class TravelController extends Controller
 
                         if(!$oauth_user) { //未注册
                             //插入user表
+                            $open_name = $userinfo['open_name'];
                             $passWord = CHash::random(6);
                             $validcode = CHash::random(8);
-                            $user_id = $this->model->table("user")->data(array('nickname' => $userinfo['open_name'], 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+                            $user_id = $this->model->table("user")->data(array('nickname' => $open_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
                             $name = "u" . sprintf("%09d", $user_id);
                             $email = $name . "@no.com";
                             $time = date('Y-m-d H:i:s');
                             $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
 
                             //插入customer表
-                            $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                            $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $open_name, 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
                             Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
 
                             //插入oauth_user表
                             $this->model->table('oauth_user')->data(array(
                                     'user_id' => $user_id, 
-                                    'open_name' => $userinfo['open_name'],
+                                    'open_name' => $open_name,
                                     'oauth_type' => "wechat",
                                     'posttime' => time(),
                                     'token' => $token['access_token'],

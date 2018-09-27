@@ -223,10 +223,10 @@ iframe{
     <p>
      统计时间：
      <!-- <input name="start_date" id="start_date" type="text" class="Wdate"   pattern="required"  onChange="" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" onfocus="WdatePicker()" readonly="readonly"> -->
-     <input name="start_date" id="start_date" type="text" class="Wdate"  pattern="required" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" readonly="readonly" data-year="" data-month="" data-date="">
+     <input name="start_date" id="start_date" type="text" class="Wdate"  pattern="required" value="{$start_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" readonly="readonly" data-year="" data-month="" data-date="" unselectable="on" onfocus="this.blur()">
     &nbsp;&nbsp;至&nbsp;&nbsp;
     <!-- <input name="end_date" id="end_date" class="Wdate" type="text" pattern="required" onChange="date_change()" value="{$end_date|date('Y-m-d H:i:s',strtotime($end_date))|''}"  onfocus="WdatePicker()" readonly="readonly"> -->
-    <input name="end_date" id="end_date" type="text" class="Wdate"  pattern="required" value="{$end_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" readonly="readonly" data-year="" data-month="" data-date="" >
+    <input name="end_date" id="end_date" type="text" class="Wdate"  pattern="required" value="{$end_date|date('Y-m-d H:i:s',strtotime($start_date))|''}" readonly="readonly" data-year="" data-month="" data-date="" unselectable="on" onfocus="this.blur()">
     </p>
   </div>
   <div class="block">
