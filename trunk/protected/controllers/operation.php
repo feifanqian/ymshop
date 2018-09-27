@@ -782,4 +782,10 @@ class OperationController extends Controller
         
         return $result;
     }
+
+    public function replace_specialChar($strParam)
+    {
+        $regex = "/\/|\～|\，|\。|\！|\？|\“|\”|\【|\】|\『|\』|\：|\；|\《|\》|\’|\‘|\ |\·|\~|\!|\@|\#|\\$|\%|\^|\&|\*|\(|\)|\_|\+|\{|\}|\:|\<|\>|\?|\[|\]|\,|\.|\/|\;|\'|\`|\-|\=|\\\|\|/";    
+        return preg_replace($regex,"",$strParam);
+    }
 }    
