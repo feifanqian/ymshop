@@ -662,4 +662,12 @@ class MapAction extends Controller
         $this->content['link'] = "http://www.ymlypt.com/travel/news_detail/id/".$id."/inviter_id/".$this->user['id'];
         return;
     }
+
+    public function shop_rights()
+    {
+        $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where('category_id=6')->findAll();
+        $this->code = 0;
+        $this->content = $list[0];
+        return;
+    }
 }

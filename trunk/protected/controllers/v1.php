@@ -318,6 +318,7 @@ class V1Controller extends Controller {
         "article_list"=>array("index/article_list",0,1), //帮助建议文章
         "get_all_child_user_ids"=>array("district/getAllChildUserIds",0,1),
         "get_all_child_user_id"=>array("district/getAllChildUserId",0,1),
+        "shop_rights"=>array("map/shop_rights",0,1),
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息
