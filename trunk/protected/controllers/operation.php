@@ -783,9 +783,59 @@ class OperationController extends Controller
         return $result;
     }
 
-    public function replace_specialChar($strParam)
+    public function replace_specialChar($str)
     {
-        // $regex = "/\/|\～|\，|\。|\！|\？|\“|\”|\【|\】|\『|\』|\：|\；|\《|\》|\’|\‘|\ |\·|\~|\!|\@|\#|\\$|\%|\^|\&|\*|\(|\)|\_|\+|\{|\}|\:|\<|\>|\?|\[|\]|\,|\.|\/|\;|\'|\`|\-|\=|\\\|\|/";    
-        // return preg_replace($regex,"",$strParam);
+        $str = str_replace('`', '', $str);
+        $str = str_replace('·', '', $str);
+        $str = str_replace('~', '', $str);
+        $str = str_replace('!', '', $str);
+        $str = str_replace('！','', $str);
+        $str = str_replace('@', '', $str);
+        $str = str_replace('#', '', $str);
+        $str = str_replace('$', '', $str);
+        $str = str_replace('￥', '', $str);
+        $str = str_replace('%', '', $str);
+        $str = str_replace('^', '', $str);
+        $str = str_replace('……', '', $str);
+        $str = str_replace('&', '', $str);
+        $str = str_replace('*', '', $str);
+        $str = str_replace('(', '', $str);
+        $str = str_replace(')', '', $str);
+        $str = str_replace('（', '', $str);
+        $str = str_replace('）', '', $str);
+        $str = str_replace('-', '', $str);
+        $str = str_replace('_', '', $str);
+        $str = str_replace('——', '', $str);
+        $str = str_replace('+', '', $str);
+        $str = str_replace('=', '', $str);
+        $str = str_replace('|', '', $str);
+        $str = str_replace('\\', '', $str);
+        $str = str_replace('[', '', $str);
+        $str = str_replace(']', '', $str);
+        $str = str_replace('【', '', $str);
+        $str = str_replace('】', '', $str);
+        $str = str_replace('{', '', $str);
+        $str = str_replace('}', '', $str);
+        $str = str_replace(';', '', $str);
+        $str = str_replace('；', '', $str);
+        $str = str_replace(':', '', $str);
+        $str = str_replace('：', '', $str);
+        $str = str_replace('\'', '', $str);
+        $str = str_replace('"', '', $str);
+        $str = str_replace('“', '', $str);
+        $str = str_replace('”', '', $str);
+        $str = str_replace(',', '', $str);
+        $str = str_replace('，', '', $str);
+        $str = str_replace('<', '', $str);
+        $str = str_replace('>', '', $str);
+        $str = str_replace('《', '', $str);
+        $str = str_replace('》', '', $str);
+        $str = str_replace('.', '', $str);
+        $str = str_replace('。', '', $str);
+        $str = str_replace('/', '', $str);
+        $str = str_replace('、', '', $str);
+        $str = str_replace('?', '', $str);
+        $str = str_replace('？', '', $str);
+        return trim($str);
     }
 }    
