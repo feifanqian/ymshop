@@ -1943,4 +1943,10 @@ class Common {
         $result['idstr'] = $idstr;
         return $result;
     }
+
+    static function replace_specialChar($strParam)
+    {
+        $regex = "/\/|\～|\，|\。|\！|\？|\“|\”|\‘|\’|\'|\【|\】|\『|\』|\：|\；|\《|\》|\ |\·|\~|\!|\@|\#|\\$|\%|\^|\&|\*|\(|\)|\_|\+|\{|\}|\:|\<|\>|\?|\[|\]|\,|\.|\/|\;|\`|\-|\=|\\\|\|/";    
+        return preg_replace($regex,"",$strParam);
+    }
 }
