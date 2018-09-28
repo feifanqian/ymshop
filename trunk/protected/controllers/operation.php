@@ -86,7 +86,7 @@ class OperationController extends Controller
             if($start_date && $end_date) {
                 $where9 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
-            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->findPage($page,10);
+            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->order('dp.id desc')->findPage($page,10);
             if($list['data']){
                 unset($list['html']);
                 $total = count($list['data']);
@@ -270,7 +270,7 @@ class OperationController extends Controller
             if($start_date && $end_date) {
                 $where9 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
-            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->findPage($page,10);
+            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->order('dp.id desc')->findPage($page,10);
             if($list['data']){
                 unset($list['html']);
                 $total = count($list['data']);
@@ -364,7 +364,7 @@ class OperationController extends Controller
             if($start_date && $end_date) {
                 $where9 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
-            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->findPage($page,10);
+            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->order('dp.id desc')->findPage($page,10);
             if($list['data']){
                 unset($list['html']);
                 $total = count($list['data']);
@@ -560,7 +560,7 @@ class OperationController extends Controller
             if($start_date && $end_date) {
                 $where9 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
-            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->findPage($page,10);
+            $list = $this->model->table('district_promoter as dp')->join('left join customer as c on dp.user_id=c.user_id left join user as u on c.user_id= u.id')->fields('c.real_name,c.realname,c.mobile,u.id,u.nickname,u.avatar,dp.create_time')->where($where9)->order('dp.id desc')->findPage($page,10);
             if($list['data']){
                 unset($list['html']);
                 $total = count($list['data']);
