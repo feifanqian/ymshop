@@ -35,6 +35,12 @@ class OperationController extends Controller
         if($end_date=='请选择日期') {
             $end_date = '';
         }
+        if($start_date) {
+            $start_date .= " 00:00:01";
+        }
+        if($end_date) {
+            $end_date .= " 23:59:59";
+        }
         $page = Filter::int(Req::args('p'));
         // if(!$start_date) {
         //     $start_date = date('Y-m-d', strtotime('-30 days'));
@@ -227,6 +233,12 @@ class OperationController extends Controller
         if($end_date=='请选择日期') {
             $end_date = '';
         }
+        if($start_date) {
+            $start_date .= " 00:00:01";
+        }
+        if($end_date) {
+            $end_date .= " 23:59:59";
+        }
         $page = Filter::int(Req::args('page'));
         $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
         $idstr = $user['user_ids'];
@@ -300,6 +312,12 @@ class OperationController extends Controller
         }
         if($end_date=='请选择日期') {
             $end_date = '';
+        }
+        if($start_date) {
+            $start_date .= " 00:00:01";
+        }
+        if($end_date) {
+            $end_date .= " 23:59:59";
         }
         $page = Filter::int(Req::args('p'));
         // if(!$start_date) {
@@ -488,6 +506,12 @@ class OperationController extends Controller
         }
         if($end_date=='请选择日期') {
             $end_date = '';
+        }
+        if($start_date) {
+            $start_date .= " 00:00:01";
+        }
+        if($end_date) {
+            $end_date .= " 23:59:59";
         }
         $page = Filter::int(Req::args('p'));
         // if(!$start_date) {
