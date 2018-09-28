@@ -23,7 +23,7 @@
         
         <th style="width:120px">状态</th>
     </tr>
-    {query:name=shop_check as sc join=left join user as u on sc.user_id eq u.id left join district_promoter as dp on sc.user_id eq dp.user_id fields=sc.*,u.nickname,u.name,dp.shop_name where=$where id=$obj page=1 order= sc.create_date desc}
+    {query:name=shop_check as sc join=left join user as u on sc.user_id eq u.id left join district_promoter as dp on sc.user_id eq dp.user_id fields=sc.*,u.nickname,u.name,dp.shop_name where=$where id=$obj page=1 order= sc.id desc}
         <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a>
