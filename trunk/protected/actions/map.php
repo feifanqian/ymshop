@@ -292,7 +292,7 @@ class MapAction extends Controller
             'url4'    => $picture
             );
         $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
-        $this->model->table('shop_check')->data(['status'=>0])->where('user_id='.$this->user['id'])->update();
+        // $this->model->table('shop_check')->data(['status'=>-1])->where('user_id='.$this->user['id'])->update();
         $this->code = 0;
         $this->content['picture'] = $picture;
     }
@@ -304,7 +304,7 @@ class MapAction extends Controller
             'url4'    => $picture
             );
         $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
-        $this->model->table('shop_check')->data(['status'=>0])->where('user_id='.$this->user['id'])->update();
+        // $this->model->table('shop_check')->data(['status'=>-1])->where('user_id='.$this->user['id'])->update();
         $this->code = 0;
         $this->content['picture'] = $picture;
     }
