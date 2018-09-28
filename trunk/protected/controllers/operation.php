@@ -341,9 +341,6 @@ class OperationController extends Controller
             if($start_date && $end_date) {
                 $where8 .= " and dp.create_time between '{$start_date}' and '{$end_date}'";
             }
-            if($user_id==965) {
-                var_dump($where8);die;
-            }
             $nums = $this->model->table('district_promoter as dp')->join('left join user as u on dp.user_id= u.id')->fields('u.id')->where($where8)->findAll();
             if($nums) {
                 foreach($nums as $k=>$v){
