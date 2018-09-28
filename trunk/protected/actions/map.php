@@ -163,6 +163,7 @@ class MapAction extends Controller
                 'mobile'       => $mobile,
                 'id_no'        => $id_no,
                 'address'      => $address,
+                'status'       => -1
                 );
             $this->model->table('shop_check')->data($data)->insert();
         }
