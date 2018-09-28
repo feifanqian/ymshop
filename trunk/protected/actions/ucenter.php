@@ -2121,7 +2121,13 @@ class UcenterAction extends Controller {
         if(!$level) {
             $level = 0;
         }
-        $where = "do.user_id=".$this->user['id'];    
+        $where = "do.user_id=".$this->user['id'];
+        if($start_time) {
+            $start_time .= " 00:00:01";
+        }
+        if($end_time) {
+            $end_time .= " 23:59:59";
+        }    
         if($start_time) {
             $start = strtotime($start_time);
             $where .= ' and createtime>'.$start;
