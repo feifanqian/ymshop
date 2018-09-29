@@ -2114,9 +2114,14 @@ class DistrictadminController extends Controller
     {
         $id = Filter::int(Req::args('id'));
         $model = new Model();
-        $contract = $model->table('promoter_contract')->fields('*')->where('id='.$id)->find();
-        $user_id = $contract['user_id'];
-        $items = $model->table('shop_check')->where('user_id='.$user_id)->findAll();
+        if($id) {
+            $contract = $model->table('promoter_contract')->fields('*')->where('id='.$id)->find();
+            $user_id = $contract['user_id'];
+            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no')->where('user_id='.$user_id)->findAll();
+        } else {
+            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no')->where('address IS NOT NULL AND id_no IS NOT NULL ')->findAll();
+        }
+        
         header("Content-type:application/vnd.ms-excel");
         header("Content-Disposition:filename=contract.xls");
         $fields_array = array('legal_person' => '客户姓名','mobile' => '电话', 'create_date' => '上传时间', 'address' => '地区','id_no'=>'证件号码');
