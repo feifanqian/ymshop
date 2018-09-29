@@ -675,13 +675,17 @@ class MapAction extends Controller
 
     public function jpush_test()
     {
-        $content = "由于国庆期间银行系统维护，9月30日至10月7日提现将在节后到账，不便之处敬请谅解。祝各位圆梦用户节日快乐！";
+        $type = Filter::str(Req::args("type"));
+        if(!$type) {
+            $type = 'notice';
+        }
+        // $content = "由于国庆期间银行系统维护，9月30日至10月7日提现将在节后到账，不便之处敬请谅解。祝各位圆梦用户节日快乐！";
+        $content = "接到第三方支付平台通知，由于中国人民银行国庆期间休假并停止结账系统，商户于国庆假期2018年9月30日至2018年10月7日发起的提现申请，到账时间将推迟至2018年10月8日之后，请广大商户做好资金安排，不便之处敬请谅解。圆梦共享网祝您及您的家人节日快乐！";
         $platform = 'all';
         
         $NoticeService = new NoticeService();
         $jpush = $NoticeService->getNotice('jpush');
         
-        $type = 'notice';
         $user_arr = [];
         // $where = 'mobile is not null and mobile_verified=1';
         $where = 'user_id in (42608,147325)';
