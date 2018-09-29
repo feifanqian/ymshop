@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
     <link rel="stylesheet" href="/themes/mobile/css/toastr.css">
+    <link rel="stylesheet" type="text/css" href="/themes/mobile/css/weui.min.css">
+    <link rel="stylesheet" type="text/css" href="/themes/mobile/css/jquery.weui.min.css">
+    <link rel="stylesheet" type="text/css" href="/themes/mobile/css/common.css?v=20170718">
     <title>向商家付款</title>
 </head>
 <body>
@@ -201,6 +204,7 @@
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
 <!-- <script type="text/javascript" src="/themes/mobile/js/toastr.min.js"></script> -->
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/common.js"></script>
 <div class="wrap">
     {if:$cash==1}
     <form action="{url:/payment/dopays}" method="post" id="payform">
@@ -282,21 +286,21 @@
                                      },
                                     function (res) {
                                         if (res.err_msg == "get_brand_wcpay_request:ok") {
-                                                location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
-                                               //  $.toast('微信支付成功!', function () {
-                                               //      location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
-                                               // });
+                                                // location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
+                                                $.toast('微信支付成功!', function () {
+                                                    location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
+                                               });
                                         } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-                                                location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
-                                                // $.toast('用户取消支付!', 'cancel', function () {
-                                                //     location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
-                                                // });
+                                                // location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                $.toast('用户取消支付!', 'cancel', function () {
+                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                });
                                         } else if (res.err_msg == "get_brand_wcpay_request:fail"){
-                                                alert('支付失败'); 
+                                                // alert('支付失败'); 
                                                 // alert(JSON.stringify(res));
-                                                // $.toast('支付失败!', 'forbidden', function () {
-                                                //     location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
-                                                // });
+                                                $.toast('支付失败!', 'forbidden', function () {
+                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                });
                                         }
                                     }
                             );       
