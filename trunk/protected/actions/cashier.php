@@ -931,10 +931,10 @@ class CashierAction extends Controller
         $where = 'user_id='.$this->user['id'];
         switch ($status) {
             case 1:
-                $where.=" and type = 2";
+                $where.=" and type in (0,2)";
                 break;
             case 2:
-                $where.=" and type in ('0,1')";
+                $where.=" and type = 1";
                 break;
             case 3:
                 $where.=" and type = -1";
