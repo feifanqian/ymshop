@@ -301,9 +301,6 @@ iframe{
 <script type="text/javascript" src="/themes/mobile/js/iosSelect.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/toast.js"></script>
 <script type="text/javascript">
-    $.Toast("成功",'success',function(){
-        window.location.reload();
-    });
     var selectDateDom = $('#selectDate');
     var showDateDom1 = $('#start_date');
     var showDateDom2 = $('#end_date');
@@ -536,6 +533,9 @@ iframe{
 </script>
 <script type="text/javascript">
 window.onload = function () {
+    $.Toast("成功",'success',function(){
+        alert('111');
+    });
     var start_date = "{$start_date}";
     var end_date = "{$end_date}";
     if(start_date=='') {
