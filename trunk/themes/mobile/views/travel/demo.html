@@ -282,21 +282,21 @@
                                      },
                                     function (res) {
                                         if (res.err_msg == "get_brand_wcpay_request:ok") {
-                                                // location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
-                                                $.toast('微信支付成功!', function () {
-                                                    location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
-                                               });
+                                                location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
+                                               //  $.toast('微信支付成功!', function () {
+                                               //      location.href = "http://www.ymlypt.com/travel/order_details/id/"+order_id;
+                                               // });
                                         } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
-                                                // location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
-                                                $.toast('用户取消支付!', 'cancel', function () {
-                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
-                                                });
+                                                location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                // $.toast('用户取消支付!', 'cancel', function () {
+                                                //     location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                // });
                                         } else if (res.err_msg == "get_brand_wcpay_request:fail"){
-                                                // alert('支付失败'); 
+                                                alert('支付失败'); 
                                                 // alert(JSON.stringify(res));
-                                                $.toast('支付失败!', 'forbidden', function () {
-                                                    location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
-                                                });
+                                                // $.toast('支付失败!', 'forbidden', function () {
+                                                //     location.href = "http://www.ymlypt.com/simple/offline_order_status/order_id/"+order_id;
+                                                // });
                                         }
                                     }
                             );       
