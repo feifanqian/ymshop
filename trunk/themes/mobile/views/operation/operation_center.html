@@ -299,7 +299,11 @@ iframe{
 <!-- <script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script> -->
 <script type="text/javascript" src="/themes/mobile/js/zepto.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/iosSelect.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/toast.js"></script>
 <script type="text/javascript">
+    $.toast("成功",'success',function(){
+        window.location.reload();
+    });
     var selectDateDom = $('#selectDate');
     var showDateDom1 = $('#start_date');
     var showDateDom2 = $('#end_date');
