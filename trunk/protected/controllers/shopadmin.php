@@ -119,9 +119,7 @@ class ShopadminController extends Controller {
             $order_model->where("id in (" . $ids . ")")->data($data)->update();
         }
         $pagelist = $query->pageBar(2);
-        if($this->user['id']==1) {
-            var_dump($orders);die;
-        }
+        
         $this->assign("status", $status);
         $this->assign("where", $where);
         $this->assign("orderlist", $orders);
