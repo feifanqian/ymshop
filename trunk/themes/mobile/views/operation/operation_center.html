@@ -299,7 +299,7 @@ iframe{
 <!-- <script src="/runtime/systemjs/My97DatePicker/WdatePicker.js"></script> -->
 <script type="text/javascript" src="/themes/mobile/js/zepto.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/iosSelect.js"></script>
-<script type="text/javascript" src="/themes/mobile/js/toast.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
 <script type="text/javascript">
     var selectDateDom = $('#selectDate');
     var showDateDom1 = $('#start_date');
@@ -559,16 +559,9 @@ window.onload = function () {
     });
 
     function ajaxRead() {
-        $.Toast("test", "this is a test message.", "success", {
-                    stack: true,
-                    has_icon:true,
-                    has_close_btn:true,
-                    fullscreen:false,
-                    timeout:3000,
-                    sticky:false,
-                    has_progress:true,
-                    rtl:false,
-                });
+        $.toast('支付失败!', 'forbidden', function () {
+            
+        });
         var html = "";
         var avatar = "";
         var url = "{url:/operation/ajax_operation_center}";
