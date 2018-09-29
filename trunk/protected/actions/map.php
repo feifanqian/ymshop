@@ -159,10 +159,11 @@ class MapAction extends Controller
         } else {
             $data = array(
                 'user_id'      => $this->user['id'],
-                'address' => $name,
+                'legal_person' => $name,
                 'mobile'       => $mobile,
                 'id_no'        => $id_no,
                 'address'      => $address,
+                'create_date'  => date('Y-m-d H:i:s'),
                 'status'       => -1
                 );
             $this->model->table('shop_check')->data($data)->insert();
