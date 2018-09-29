@@ -91,7 +91,7 @@ class DistrictAction extends Controller {
      */
     public function getDistrictList() {
         $district = $this->model->table("district_shop")->where("owner_id=" . $this->user['id'])->findAll();
-        $apply_info = $this->model->table("district_apply")->where("user_id=" . $this->user['id'] . " and status != 1")->findAll();
+        $apply_info = $this->model->table("district_apply")->where("user_id=" . $this->user['id'] . " and status != 1")->order('id desc')->limit(1)->findAll();
         if (empty($district) && empty($apply_info)) {
             $this->code = 1131;
             return;
