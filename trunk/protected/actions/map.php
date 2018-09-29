@@ -672,4 +672,39 @@ class MapAction extends Controller
         $this->content = $list[0];
         return;
     }
+
+    public function jpush_test()
+    {
+        $content = "由于国庆期间银行系统维护，9月30日至10月7日提现将在节后到账，不便之处敬请谅解。祝各位圆梦用户节日快乐！";
+        $platform = 'all';
+        
+        $NoticeService = new NoticeService();
+        $jpush = $NoticeService->getNotice('jpush');
+        
+        $type = 'notice';
+        $user_arr = [];
+        $user = $this->model->table('customer')->fields('user_id')->where('mobile is not null and mobile_verified=1')->findAll();
+        foreach ($user as $key => $value) {
+            $user_arr[] = $value['user_id'];
+            $push_data = array(
+            'to_id'=>$value['user_id'],
+            'type'=>$type,
+            'content'=>$content,
+            'create_time'=>date('Y-m-d H:i:s'),
+            'status'=>'unread',
+            'value'=>''
+            );
+        $this->model->table('push_message')->data($push_data)->insert();
+        }
+        $audience['alias'] = $user_arr;
+        $jpush->setPushData($platform, $audience, $content, $type, '');
+        $ret = $this->jpush->push();
+
+        if(!$ret) {
+            $this->code = 1242;
+            return;
+        }
+        $this->code = 0;
+        return;
+    }
 }
