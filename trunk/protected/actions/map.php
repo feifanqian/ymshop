@@ -700,7 +700,7 @@ class MapAction extends Controller
         }
         $audience['alias'] = $user_arr;
         $jpush->setPushData($platform, $audience, $content, $type, '');
-        $ret = $this->jpush->push();
+        $ret = $jpush->push();
 
         if(!$ret) {
             $this->code = 1242;
