@@ -76,7 +76,7 @@ class DistrictAction extends Controller {
         $data['user_id'] = $this->user['id'];
         $data['pay_status'] = 0;
         $data['status'] = 0;
-        var_dump($linkmobile);die;
+        var_dump($_POST);die;
         $result = $this->model->table("district_apply")->data($data)->insert();
         if ($result) {
             $this->code = 0;
