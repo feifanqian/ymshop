@@ -48,7 +48,7 @@ class DistrictAction extends Controller {
         $name = Filter::str(Req::args('name'));
         $location = Filter::sql(Req::args('location'));
         $linkman = Filter::str(Req::args('linkman'));
-        $linkmobile = Filter::str(Req::args('linkmobile'));
+        $linkmobile = Req::args('linkmobile');
         $reference = Filter::int(Req::args('reference'));
 
         if (strlen($name) > 20 || strlen($name) < 3) {
@@ -76,7 +76,7 @@ class DistrictAction extends Controller {
         $data['user_id'] = $this->user['id'];
         $data['pay_status'] = 0;
         $data['status'] = 0;
-        var_dump($data);die;
+        var_dump($linkmobile);die;
         $result = $this->model->table("district_apply")->data($data)->insert();
         if ($result) {
             $this->code = 0;
