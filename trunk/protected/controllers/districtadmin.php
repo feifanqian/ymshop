@@ -2117,9 +2117,9 @@ class DistrictadminController extends Controller
         if($id) {
             $contract = $model->table('promoter_contract')->fields('*')->where('id='.$id)->find();
             $user_id = $contract['user_id'];
-            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no')->where('user_id='.$user_id)->findAll();
+            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no,province,city,county')->where('user_id='.$user_id)->findAll();
         } else {
-            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no')->where('address IS NOT NULL AND id_no IS NOT NULL ')->findAll();
+            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no,province,city,county')->where('address IS NOT NULL AND id_no IS NOT NULL ')->findAll();
         }
         
         header("Content-type:application/vnd.ms-excel");
@@ -2128,7 +2128,11 @@ class DistrictadminController extends Controller
         $fields = array('legal_person','mobile', 'create_date', 'address','id_no');
         $str = "<table border=1><tr>";
         foreach ($items as $key => $value) {
-            $items[$key]['address'] = $value['province'].$value['city'].$value['county'].$value['address'];
+            if($value['address']!=null) {
+                $items[$key]['address'] = $value['address'];
+            } else {
+                $items[$key]['address'] = $value['province'].$value['city'].$value['county'];
+            }  
         }
         foreach ($fields as $value) {
             $str .= "<th>" . iconv("UTF-8", "GBK", $fields_array[$value]) . "</th>";
