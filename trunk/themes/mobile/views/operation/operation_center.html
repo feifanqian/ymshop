@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
     <link rel="stylesheet" type="text/css" href="/themes/mobile/css/iosSelect.css">
+    <link rel="stylesheet" type="text/css" href="/themes/mobile/css/weui.min.css">
+    <link rel="stylesheet" type="text/css" href="/themes/mobile/css/jquery.weui.min.css">
+    <link rel="stylesheet" type="text/css" href="/themes/mobile/css/common.css?v=20170718">
     <title>运营管理</title>
 </head>
 <style type="text/css">
@@ -300,6 +303,7 @@ iframe{
 <script type="text/javascript" src="/themes/mobile/js/zepto.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/iosSelect.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/common.js"></script>
 <script type="text/javascript">
     var selectDateDom = $('#selectDate');
     var showDateDom1 = $('#start_date');
@@ -559,6 +563,9 @@ window.onload = function () {
     });
 
     function ajaxRead() {
+        $.toast('支付失败!', 'forbidden', function () {
+            
+        });
         var html = "";
         var avatar = "";
         var url = "{url:/operation/ajax_operation_center}";
