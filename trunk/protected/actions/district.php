@@ -71,12 +71,11 @@ class DistrictAction extends Controller {
         $data['name'] = $name;
         $data['location'] = $location;
         $data['linkman'] = $linkman;
-        $data['linkmobile'] = $linkmobile;
+        $data['linkmobile'] = $linkmobile!=null?$linkmobile:$_POST['linkmobile'];
         $data['apply_time'] = date("Y-m-d H:i:s");
         $data['user_id'] = $this->user['id'];
         $data['pay_status'] = 0;
         $data['status'] = 0;
-        var_dump($_POST);die;
         $result = $this->model->table("district_apply")->data($data)->insert();
         if ($result) {
             $this->code = 0;
