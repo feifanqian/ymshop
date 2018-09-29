@@ -559,7 +559,16 @@ window.onload = function () {
     });
 
     function ajaxRead() {
-        $.Toast("已经到底");
+        $.Toast("test", "this is a test message.", "success", {
+                    stack: true,
+                    has_icon:true,
+                    has_close_btn:true,
+                    fullscreen:false,
+                    timeout:3000,
+                    sticky:false,
+                    has_progress:true,
+                    rtl:false,
+                });
         var html = "";
         var avatar = "";
         var url = "{url:/operation/ajax_operation_center}";
