@@ -241,9 +241,9 @@ class OrderController extends Controller {
         else {
             $status = Req::args("status");
             if ($status)
-                $this->assign("where", "od.type!=8 and od.status=" . $status);
+                $this->assign("where", "od.type!=8 and od.is_robot=0 and od.status=" . $status);
             else
-                $this->assign("where", "od.type!=8 and od.status !=6");
+                $this->assign("where", "od.type!=8 and od.is_robot=0 and od.status !=6");
         }
         $this->assign("condition", $condition);
         $this->assign("status", array('0' => '<span class="red">等待审核</span>', '1' => '<span class="red">等待审核</span>', '2' => '<span class="red">等待审核</span>', '3' => '已审核', '4' => '已完成', '5' => '已取消', '6' => '<span class="red"><s>已作废</s></span>'));
