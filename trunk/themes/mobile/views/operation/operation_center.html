@@ -559,7 +559,7 @@ window.onload = function () {
     });
 
     function ajaxRead() {
-        layer.msg('已经到底!',{time:500});
+        $.Toast("已经到底");
         var html = "";
         var avatar = "";
         var url = "{url:/operation/ajax_operation_center}";
