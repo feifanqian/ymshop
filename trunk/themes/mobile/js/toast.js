@@ -1,131 +1,161 @@
-'use strict';
-(function($,window){ 
-	//动态加载animate
-	var loadStyles = function(url) {
-		var hasSameStyle = false;
-		var links = $('link');
-		for(var i = 0;i<links.length;i++){
-			if(links.eq(i).attr('href') == url){
-				hasSameStyle = true;
-				return
-			}
+(function(){
+    "use strict";
+    $.Toast = function(title, message, type, options){
+        var defaultOptions = {
+            appendTo: "body",
+            stack: false,
+            position_class: "toast-bottom-right",
+            fullscreen:false,
+            width: 250,
+            spacing:20,
+            timeout: 4000,
+            has_close_btn:true,
+            has_icon:true,
+            sticky:false,
+            border_radius:6,
+            has_progress:false,
+            rtl:false
+        }
+
+        var $element = null;
+
+        var $options = $.extend(true, {}, defaultOptions, options);
+
+        var spacing = $options.spacing;
+
+        var css = {
+            "position":($options.appendTo == "body") ? "fixed" : "absolute",
+            "min-width":$options.width,
+            "display":"none",
+            "border-radius":$options.border_radius,
+            "z-index":99999
+        }
+
+        $element = $('<div class="toast-item-wrapper ' + type + ' ' + $options.position_class + '"></div>');
+        $('<p class="toast-title">' + title + '</p>').appendTo($element);
+        $('<p class="toast-message">' + message + '</p>').appendTo($element);
+
+        if($options.fullscreen){
+            $element.addClass( "fullscreen" );
+        }
+
+        if($options.rtl){
+            $element.addClass( "rtl" );
+        }
+
+        if($options.has_close_btn){
+            $('<span class="toast-close">&times;</span>').appendTo($element);
+            if( $options.rtl){
+                css["padding-left"] = 20;
+            } else {
+                css["padding-right"] = 20;
+            }
+        }
+
+        if($options.has_icon){
+            $('<i class="toast-icon toast-icon-' + type + '"></i>').appendTo($element);
+            if( $options.rtl){
+                css["padding-right"] = 50;
+            } else {
+                css["padding-left"] = 50;
+            }            
+        }
+
+        if($options.has_progress && $options.timeout > 0){
+            $('<div class="toast-progress"></div>').appendTo($element);
+        }
+
+        if($options.sticky){
+            $options.spacing = 0;
+            spacing = 0;
+
+            switch($options.position_class){
+                case "toast-top-left" : {
+                    css["top"] = 0;
+                    css["left"] = 0;
+                    break;
+                }
+                case "toast-top-right" : {
+                    css["top"] = 0;
+                    css["left"] = 0;                    
+                    break;
+                }
+                case "toast-top-center" : {
+                    css["top"] = 0;
+                    css["left"] = css["right"] = 0;  
+                    css["width"] = "100%";                  
+                    break;
+                }
+                case "toast-bottom-left" : {
+                    css["bottom"] = 0;
+                    css["left"] = 0;                     
+                    break;
+                }
+                case "toast-bottom-right" : {
+                    css["bottom"] = 0;
+                    css["right"] = 0;                     
+                    break;
+                }
+                case "toast-bottom-center" : {
+                    css["bottom"] = 0;
+                    css["left"] = css["right"] = 0;  
+                    css["width"] = "100%";                     
+                    break;
+                }
+                default : {
+                    break;
+                }                                                                        
+            }
+        }
+
+        if($options.stack){
+            if($options.position_class.indexOf("toast-top") !== -1 ){
+                $($options.appendTo).find('.toast-item-wrapper').each(function(){
+                    css["top"] = parseInt($(this).css("top")) + this.offsetHeight + spacing;
+                });
+            } else if($options.position_class.indexOf("toast-bottom") !== -1 ){
+                $($options.appendTo).find('.toast-item-wrapper').each(function(){
+                    css["bottom"] = parseInt($(this).css("bottom")) + this.offsetHeight + spacing;
+                });
+            }
+        }        
+
+        $element.css(css);
+
+        $element.appendTo($options.appendTo);
+
+		if($element.fadeIn) {
+            $element.fadeIn();
+        }else {
+            $alert.css({display: 'block', opacity: 1});
+        }
+
+		function removeToast(){          
+			$.Toast.remove( $element );
 		}
 
-		if(!hasSameStyle){
-			var link = document.createElement("link");
-			link.type = "text/css";
-			link.rel = "stylesheet";
-			link.href = url;
-			document.getElementsByTagName("head")[0].appendChild(link);
-		}
+		if($options.timeout > 0){
+			setTimeout(removeToast, $options.timeout);
+            if($options.has_progress){
+                $(".toast-progress", $element).animate({"width":"100%"}, $options.timeout);
+            }
+		}        
+
+        $(".toast-close", $element).click(removeToast)
+
+        return $element;
     }
 
-    loadStyles('css/animate.css');
-
-	//显示提示信息    toast
-	$.fn.toast = function(options){
-		var $this = $(this);
-		var _this = this;
-		return this.each(function(){
-			$(this).css({
-				position:'relative'
+    $.Toast.remove = function( $element ){
+        "use strict";        
+		if($element.fadeOut)
+		{
+			$element.fadeOut(function(){
+				return $element.remove();
 			});
-			var top = '';		//bottom的位置
-			var translateInfo = ''; 	//居中和不居中时的tarnslate
-
-		    var box = '';   //消息元素
-		    var defaults = {
-		    	position:  			  "absolute", 				//不是body的话就absolute
-		    	animateIn:  		  "fadeIn",					//进入的动画
-		    	animateOut: 		  "fadeOut",				//结束的动画
-				padding:              "10px 20px",              //padding
-				background:           "rgba(7,17,27,0.66)",     //背景色
-				borderRadius:         "6px",                    //圆角
-				duration:             3000,                     //定时器时间
-				animateDuration: 	  500, 						//执行动画时间
-				fontSize:             14,                   	//字体大小
-				content:              "这是一个提示信息",       //提示内容
-				color:                "#fff",                   //文字颜色
-				top:            	  "80%",                	//bottom底部的位置    具体的数值 或者center  垂直居中
-				zIndex:               1000001,                	//层级
-				isCenter:   		  true, 					//是否垂直水平居中显示
-				closePrev: 			  true, 					//在打开下一个toast的时候立即关闭上一个toast
-		    }
-		    
-		    var opt = $.extend(defaults,options||{});
-		    var t = '';
-		  
-			// setTimeout(function(){
-			//   	box.addClass('show');
-			// },10);
-
-			top = opt.isCenter===true? '50%':opt.top;
-
-			defaults.isLowerIe9 = function(){
-				return (!window.FormData);
-			}
-
-			// translateY(-50%)
-			// translateInfo = opt.isCenter===true? 'translate3d(-50%,0,0)':'translate3d(-50%,-50%,0)';
-
-		    defaults.createMessage = function(){
-				if(opt.closePrev){
-					$('.cpt-toast').remove();
-				}
-				box = $("<span class='animated "+opt.animateIn+" cpt-toast'></span>").css({
-					"position":opt.position,
-					"padding":opt.padding,
-					"background":opt.background,
-					"font-size":opt.fontSize,
-					"-webkit-border-radius":opt.borderRadius,
-					"-moz-border-radius":opt.borderRadius,
-					"border-radius":opt.borderRadius,
-					"color":opt.color,
-					"top":top,
-					"z-index":opt.zIndex,
-					"-webkit-transform":'translate3d(-50%,-50%,0)',
-			        "-moz-transform":'translate3d(-50%,-50%,0)',
-			        "transform":'translate3d(-50%,-50%,0)',
-			        '-webkit-animation-duration':opt.animateDuration/1000+'s',
-	    			'-moz-animation-duration':opt.animateDuration/1000+'s',
-	    			'animation-duration':opt.animateDuration/1000+'s',
-				}).html(opt.content).appendTo($this);
-				defaults.colseMessage();
-		    }
-
-		    defaults.colseMessage = function(){
-		    	var isLowerIe9 = defaults.isLowerIe9();
-		    	if(!isLowerIe9){
-			    	t = setTimeout(function(){
-			    		box.removeClass(opt.animateIn).addClass(opt.animateOut).on('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-			    			box.remove();
-			    		});
-			    	},opt.duration);
-		    	}else{
-		    		t = setTimeout(function(){
-			    		box.remove();
-			    	},opt.duration);
-		    	}
-		    }
-
-		    defaults.createMessage();
-		})
-	};
-})(jQuery,window); 
-
-
-var showMessage = function(content,duration,isCenter,animateIn,animateOut){
-	var animateIn = animateIn || 'fadeIn';
-	var animateOut = animateOut || 'fadeOut';
-	var content = content || '这是一个提示信息';
-	var duration = duration || '3000';
-	var isCenter = isCenter || false;
-	$('body').toast({
-		position:'fixed',
-		animateIn:animateIn,
-		animateOut:animateOut,
-		content:content,
-		duration:duration,
-		isCenter:isCenter,
-	});
-}
+		}
+		else{
+			$element.remove();
+		}        
+    }
+})();
