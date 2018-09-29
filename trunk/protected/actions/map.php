@@ -700,16 +700,16 @@ class MapAction extends Controller
             'status'=>'unread',
             'value'=>''
             );
-        $this->model->table('push_message')->data($push_data)->insert();
-        }
-        $audience['alias'] = $user_arr;
+        // $this->model->table('push_message')->data($push_data)->insert();
+        $audience['alias'] = $value['user_id'];
         $jpush->setPushData($platform, $audience, $content, $type, '');
         $ret = $jpush->push();
-
-        if(!$ret) {
-            $this->code = 1242;
-            return;
         }
+
+        // if(!$ret) {
+        //     $this->code = 1242;
+        //     return;
+        // }
         $this->code = 0;
         return;
     }
