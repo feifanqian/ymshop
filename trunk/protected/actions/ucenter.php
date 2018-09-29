@@ -893,7 +893,7 @@ class UcenterAction extends Controller {
     }
 
     public function push_message() {
-        $list = $this->model->table("push_message as p")->fields('p.to_id,p.type,p.content,p.create_time,p.value,c.status')->join('left join cashier as c on p.value=c.id')->where("to_id=" . $this->user['id'])->findAll();
+        $list = $this->model->table("push_message as p")->fields('p.to_id,p.type,p.content,p.create_time,p.value,c.status')->join('left join cashier as c on p.value=c.id')->where("to_id=" . $this->user['id'])->order('p.id desc')->findAll();
         $this->code = 0;
         $this->content = $list;
     }
