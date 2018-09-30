@@ -687,29 +687,29 @@ class MapAction extends Controller
         $jpush = $NoticeService->getNotice('jpush');
         
         $user_arr = [];
-        $where = 'mobile is not null and mobile_verified=1';
+        $where = 'mobile is not null and mobile_verified=1 and user_id>=190000';
         // $where = 'user_id in (42608,147325)';
         $user = $this->model->table('customer')->fields('user_id')->where($where)->findAll();
         foreach ($user as $key => $value) {
             $user_arr[] = $value['user_id'];
-            $push_data = array(
-            'to_id'=>$value['user_id'],
-            'type'=>$type,
-            'content'=>$content,
-            'create_time'=>date('Y-m-d H:i:s'),
-            'status'=>'unread',
-            'value'=>''
-            );
+            // $push_data = array(
+            // 'to_id'=>$value['user_id'],
+            // 'type'=>$type,
+            // 'content'=>$content,
+            // 'create_time'=>date('Y-m-d H:i:s'),
+            // 'status'=>'unread',
+            // 'value'=>''
+            // );
         // $this->model->table('push_message')->data($push_data)->insert();
-        $audience['alias'] = $value['user_id'];
+        }
+        $audience['alias'] = $user_arr;
         $jpush->setPushData($platform, $audience, $content, $type, '');
         $ret = $jpush->push();
-        }
 
-        // if(!$ret) {
-        //     $this->code = 1242;
-        //     return;
-        // }
+        if(!$ret) {
+            $this->code = 1242;
+            return;
+        }
         $this->code = 0;
         return;
     }
