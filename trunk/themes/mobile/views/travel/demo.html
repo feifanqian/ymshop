@@ -232,8 +232,8 @@
         {/if}
         <div class="weui_cells weui_cells_access">
             <div class="weui_cell ">
-                <div class="weui_cell_ft">
-                <input class="weui_input" id="paytypes" name='paytype' type="text" value="微信支付" data-values="6" readonly="readonly"/>
+                <div style="margin: 0px auto;">
+                <input class="weui_input" id="paytypes" name='paytype' type="text" value="微信支付" data-values="6" readonly="readonly" style="width: auto;" />
                     <!-- {if:$paytypeone}
                         <input class="weui_input" id="paytypes" name='paytype' type="text" value="{$paytypeone['pay_name']}" data-values="{$paytypeone['id']}" />
                     {/if} -->
@@ -410,15 +410,15 @@
             var amounts=$('#div').html();
             $("#order_amount").val(amounts);
         });
-        $("#paytypes").select({
-            title: "选择支付方式",
-            items: {echo: json_encode($paydict); },
-            onChange: function () {
-                    var payment_id = $("#paytypes").attr("data-values");
-                    var payname = $("#paytypes").val();
-                    $("input[name='payment_id']").val($("#paytypes").attr("data-values"));
-                }
-        }); 
+        // $("#paytypes").select({
+        //     title: "选择支付方式",
+        //     items: {echo: json_encode($paydict); },
+        //     onChange: function () {
+        //             var payment_id = $("#paytypes").attr("data-values");
+        //             var payname = $("#paytypes").val();
+        //             $("input[name='payment_id']").val($("#paytypes").attr("data-values"));
+        //         }
+        // }); 
     });
 </script>
 </html>
