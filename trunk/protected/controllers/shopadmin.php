@@ -80,6 +80,7 @@ class ShopadminController extends Controller {
         $where[] = "status BETWEEN 3 AND 4";
         $where[] = "pay_status ='1'";
         $where[] = "is_del = 0";
+        $where[] = "is_robot = 0";
         if ($where) {
             $where = implode(' AND ', $where);
         }
