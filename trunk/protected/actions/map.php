@@ -641,9 +641,18 @@ class MapAction extends Controller
     //新闻动态
     public function news_list()
     {
-        $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where('category_id=5')->order('id desc')->findAll();
+        $page = Filter::int(Req::args("page"));
+        if(!$page) {
+            $page = 1;
+        }
+        $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where('category_id=5')->order('id desc')->findPage($page,20);
+        if($list) {
+            unset($list['html']);
+        } else {
+            $list['data'] = [];
+        }
         $this->code = 0;
-        $this->content = $list;
+        $this->content = $list['data'];
         return;
     }
 
