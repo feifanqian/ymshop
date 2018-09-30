@@ -687,7 +687,7 @@ class MapAction extends Controller
         $jpush = $NoticeService->getNotice('jpush');
         
         $user_arr = [];
-        $where = 'mobile is not null and mobile_verified=1 and user_id>=190000';
+        $where = 'mobile is not null and mobile_verified=1 and user_id>=180000 and user_id<190000';
         // $where = 'user_id in (42608,147325)';
         $user = $this->model->table('customer')->fields('user_id')->where($where)->findAll();
         foreach ($user as $key => $value) {
