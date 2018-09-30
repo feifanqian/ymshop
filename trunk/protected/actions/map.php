@@ -676,6 +676,8 @@ class MapAction extends Controller
     public function jpush_test()
     {
         $type = Filter::str(Req::args("type"));
+        $user_id1 = Filter::int(Req::args("user_id1"));
+        $user_id2 = Filter::int(Req::args("user_id2"));
         if(!$type) {
             $type = 'notice';
         }
@@ -687,7 +689,7 @@ class MapAction extends Controller
         $jpush = $NoticeService->getNotice('jpush');
         
         $user_arr = [];
-        $where = 'mobile is not null and mobile_verified=1 and user_id>=180000 and user_id<190000';
+        $where = 'mobile is not null and mobile_verified=1 and user_id>='.$user_id1.' and user_id<'.$user_id2;
         // $where = 'user_id in (42608,147325)';
         $user = $this->model->table('customer')->fields('user_id')->where($where)->findAll();
         foreach ($user as $key => $value) {
