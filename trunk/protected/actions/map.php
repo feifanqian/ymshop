@@ -632,7 +632,7 @@ class MapAction extends Controller
     //帮助支持
     public function help_list()
     {
-        $list = $this->model->table('article')->fields('id,title,content,imgs,publish_time')->where('category_id=3')->findAll();
+        $list = $this->model->table('article')->fields('id,title,content,imgs,publish_time')->where('category_id=3')->order('id desc')->findAll();
         $this->code = 0;
         $this->content = $list;
         return;
@@ -641,7 +641,7 @@ class MapAction extends Controller
     //新闻动态
     public function news_list()
     {
-        $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where('category_id=5')->findAll();
+        $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where('category_id=5')->order('id desc')->findAll();
         $this->code = 0;
         $this->content = $list;
         return;
@@ -667,7 +667,7 @@ class MapAction extends Controller
 
     public function shop_rights()
     {
-        $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where('category_id=6')->findAll();
+        $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where('category_id=6')->order('id desc')->findAll();
         $this->code = 0;
         $this->content = $list[0];
         return;
