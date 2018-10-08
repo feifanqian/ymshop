@@ -2228,7 +2228,7 @@ class UcenterAction extends Controller {
         } else {
             $list = $this->model->table('invite as do')
                     ->join('left join user as u on do.invite_user_id = u.id left join customer as c on do.invite_user_id = c.user_id')
-                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from,c.mobile,c.mobile_verified')
+                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from,c.mobile,c.mobile_verified,u.is_vip')
                     ->where($where)
                     ->order($sort)
                     ->findAll();
