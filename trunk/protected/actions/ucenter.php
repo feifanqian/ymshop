@@ -178,11 +178,11 @@ class UcenterAction extends Controller {
         $this->content['userinfo']['is_signed'] = $sign?1:0;
         $this->content['userinfo']['is_cashier'] = $customer['is_cashier'];
         $this->content['userinfo']['pay_password_open'] = $customer['pay_password']==null?0:1;
-        // $invite_num = $this->model->table('invite as in')->join('left join customer as c on in.invite_user_id=c.user_id')->where('in.user_id='.$this->user['id'].' and c.mobile_verified=1')->count();
-        // if($invite_num>=5) {
-        //     $this->model->table('user')->data(['is_vip'=>1])->where('id='.$this->user['id'])->update();
-        // }
-        // $this->content['userinfo']['invite_num'] = $invite_num;
+        $invite_num = $this->model->table('invite as i')->join('left join customer as c on i.invite_user_id=c.user_id')->where('i.user_id='.$this->user['id'].' and c.mobile_verified=1')->count();
+        if($invite_num>=5) {
+            $this->model->table('user')->data(['is_vip'=>1])->where('id='.$this->user['id'])->update();
+        }
+        $this->content['userinfo']['invite_num'] = $invite_num;
     }
 
     //设置昵称
