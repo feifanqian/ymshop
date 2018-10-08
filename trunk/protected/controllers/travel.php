@@ -1164,12 +1164,28 @@ class TravelController extends Controller
         // }
         if(!isset($this->user['id'])) {
             $redirect = "http://www.ymlypt.com/travel/demo/inviter_id/".$inviter_id;
+            if($cashier_id!=0) {
+                $redirect.='/cashier_id/'.$cashier_id;
+            }
+            if($desk_id!=0) {
+                $redirect.='/desk_id/'.$desk_id;
+            }
             // $this->user['id'] = $this->autologin($redirect,$inviter_id);
             if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
                //微信授权登录
                     $code = Filter::sql(Req::args('code'));
                     $oauth = new WechatOAuth();
-                    
+                    if(isset($_GET['cashier_id']) && $_GET['cashier_id']!=0) {
+                        $cashier_id = $_GET['cashier_id'];
+                    }
+                    if(isset($_GET['desk_id']) && $_GET['desk_id']!=0) {
+                        $desk_id = $_GET['desk_id'];
+                    }
+                    if($cashier_id!=0 || $desk_id!=0) {
+                        $cash = 1;
+                    } else {
+                        $cash = 0;
+                    }
                     $url = $oauth->getCodes($redirect);
                     if($code) {
                         $extend = null;
