@@ -320,6 +320,7 @@ class V1Controller extends Controller {
         "get_all_child_user_id"=>array("district/getAllChildUserId",0,1),
         "shop_rights"=>array("map/shop_rights",0,1),
         "jpush_test"=>array("map/jpush_test",0,1), //批量极光推送
+        "be_vip_by_point"=>array("payment/be_vip_by_point",1,1), //积分兑换VIP
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息

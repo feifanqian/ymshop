@@ -1145,4 +1145,23 @@ class PaymentAction extends Controller {
         $this->code = 0;
         return;
     }
+
+    public function be_vip_by_point()
+    {
+        $customer = $this->model->table('customer')->fields('point_coin')->where('user_id='.$this->user['id'])->find();
+        $user = $this->model->table('user')->fields('is_vip')->where('id='.$this->user['id'])->find();
+        if($user['is_vip']==1) {
+            $this->code = 1310;
+            return;
+        }
+        if($customer['point_coin']<3000) {
+            $this->code = 1149;
+            return;
+        }
+        $this->model->table("customer")->data(array('point_coin'=>"`point_coin`-3000"))->where('user_id='.$this->user['id'])->update();
+        Log::pointcoin_log(3000, $this->user['id'], '', '积分兑换VIP', 14);
+        $this->model->table('user')->data(['is_vip'=>1])->where('id='.$this->user['id'])->update();
+        $this->code = 0;
+        return;
+    }
 }

@@ -190,6 +190,12 @@ class Order {
                         if ($time_diff >= 0 || $max_num <= $data['goods_num'])
                             $data['is_end'] = 1;
                         $model->table("flash_sale")->where("id=" . $prom['id'])->data($data)->update();
+                        //查询是否赠送积分
+                        $buy_num = $model->table('order')->where('prom_id='.$prom['id'].' and user_id='.$order['user_id'].' and pay_status=1 and type=2')->count();
+                        if($flashbuy['send_point']>0 && $buy_num==1) {
+                            $model->table("customer")->data(array('point_coin'=>"`point_coin`+".$flashbuy['send_point']))->where('user_id='.$order['user_id'])->update();
+                            Log::pointcoin_log($flashbuy['send_point'], $order['user_id'], $order['order_no'], '抢购商品积分赠送', 9);
+                        }
                     }
                 }
             }else if($order['type'] == 6){
