@@ -566,11 +566,11 @@ class PaymentAction extends Controller {
 
    public function pay_qrcode(){
     $user_id = $this->user['id'];
-    if($user_id==1) {
+    // if($user_id==1) {
         $url = Url::fullUrlFormat("/travel/demo/inviter_id/".$user_id);
-    } else {
-        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
-    }
+    // } else {
+    //     $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
+    // }
     $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no,join_time')->where('user_id='.$user_id)->find();
     if($promoter['qrcode_no']=='') {
         $no = '0000'.$promoter['id'].rand(1000,9999);

@@ -543,7 +543,8 @@ class CashierAction extends Controller
             $this->code = 1253;
             return;
         }
-        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$cashier['hire_user_id']."/cashier_id/".$cashier['id']."/desk_id/".$sign['desk_id']);
+        // $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$cashier['hire_user_id']."/cashier_id/".$cashier['id']."/desk_id/".$sign['desk_id']);
+        $url = Url::fullUrlFormat("/travel/demo/inviter_id/".$cashier['hire_user_id']."/cashier_id/".$cashier['id']."/desk_id/".$sign['desk_id']);
         $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no')->where('user_id='.$cashier['hire_user_id'])->find();
         if($promoter['qrcode_no']=='') {
             $no = '0000'.$promoter['id'].rand(1000,9999);
