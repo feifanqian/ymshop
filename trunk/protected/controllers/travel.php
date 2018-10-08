@@ -1124,19 +1124,31 @@ class TravelController extends Controller
         if (!$inviter_id) {
             $inviter_id = Session::get('seller_id');
         }
-        $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
-        if(!$cashier_id) {
-            $cashier_id = 0;
-        }
-        $desk_id = Filter::int(Req::args('desk_id'));//收银员id
+        // $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
+        // if(!$cashier_id) {
+        //     $cashier_id = 0;
+        // }
+        $cashier_id = 0;
+        $desk_id = Filter::int(Req::args('desk_id'));//收银台id
         if(!$desk_id) {
             $desk_id = 0;
+        }
+        if($desk_id) {
+            $desk = $this->model->table('cashier_desk')->where('id='.$desk_id.' and status=1')->find();
+            if(!$desk) {
+                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '未找到该收银台或已删除'));
+                exit;
+            }
+            $cashier = $this->model->table('cashier_attendance')->where('desk_id='.$desk_id)->order('id desc')->find();
+            if($cashier) {
+                $cashier_id = $cashier['cashier_id'];
+            }
         }
         if($cashier_id!=0 || $desk_id!=0) {
             $cash = 1;
         } else {
             $cash = 0;
-        }
+        }   
         if(in_array($inviter_id, [101738,87455,55568,8158,25795,31751]) && date('Y-m-d H:i:s')>'2018-05-15 12:00:00' && date('Y-m-d H:i:s')<'2018-06-15 12:00:00'){
             $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
             exit;
