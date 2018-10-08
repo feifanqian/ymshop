@@ -1309,10 +1309,10 @@ class TravelController extends Controller
                         $this->safebox->set('user', $obj, 31622400);
                         $this->user = $this->safebox->get('user');
                         $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
-                        $this->user['id'] = $last_id;
-                        if($inviter_id){
-                            Common::buildInviteShip($inviter_id, $this->user['id'], 'alipay');
-                        } 
+                        $this->user['id'] = $last_id; 
+                    }
+                    if($inviter_id){
+                        Common::buildInviteShip($inviter_id, $this->user['id'], 'alipay');
                     }
                 }
             }
