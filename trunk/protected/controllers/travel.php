@@ -1229,11 +1229,28 @@ class TravelController extends Controller
                 //支付宝授权登录
                 if (isset($_GET['inviter_id']) && !isset($_GET['auth_code'])) {
                     $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/travel/demo&state=test&inviter_id=" . $_GET['inviter_id'];
+                    if($cashier_id!=0) {
+                        $act.='&cashier_id='.$cashier_id;
+                    }
+                    if($desk_id!=0) {
+                        $act.='&desk_id='.$desk_id;
+                    }
                     $this->redirect($act);
                     exit;
                 } else {
                     $auth_code = $_GET['auth_code'];
                     $seller_id = $_GET['inviter_id'];
+                    if(isset($_GET['cashier_id']) && $_GET['cashier_id']!=0) {
+                        $cashier_id = $_GET['cashier_id'];
+                    }
+                    if(isset($_GET['desk_id']) && $_GET['desk_id']!=0) {
+                        $desk_id = $_GET['desk_id'];
+                    }
+                    if($cashier_id!=0 || $desk_id!=0) {
+                        $cash = 1;
+                    } else {
+                        $cash = 0;
+                    }
                     $pay_alipayapp = new pay_alipayapp();
                     $result = $pay_alipayapp->alipayLogin($auth_code);
                     if (!isset($result['code']) || $result['code'] != 10000) {
