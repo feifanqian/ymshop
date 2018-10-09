@@ -871,7 +871,7 @@ class Common {
                 $balance3 = round($base_balance*$promoter2_rate/100,2);
                 $balance4 = round($base_balance*$plat_rate/100,2);
                 
-                $balance5 = round($base_balance*$encourage/100,2); //激励金
+                $balance5 = round($base_balance*$encourage/100,2); //10%激励金
                 $balance6 = round($base_balance*$reward1/100,2); //2%奖金池
                 $balance7 = round($base_balance*$reward2/100,2); //3%奖金池
                 $balance8 = round($base_balance*$ready_rate/100,2); //5%预备金
@@ -887,6 +887,36 @@ class Common {
                    Log::balance($balance1, $inviter_info['user_id'], $order['order_no'],'线上消费收益(上级邀请者)', 5); 
              }
              // var_dump(111);
+             // 获取上级超级vip及B级粉丝当月总订单数
+             $first_vip = self::getFirstVip($order['user_id']);
+             $vip_rate = $config['vip_rate']; //6%超级vip池
+             if($first_vip) {
+                $inviter_infos = $model->table("invite")->fields('invite_user_id')->where('user_id='.$first_vip)->findAll();
+                $ids = array();
+                if($inviter_infos) {
+                    foreach($inviter_infos as $k =>$v) {
+                       $ids[] = $v['invite_user_id'];
+                    }
+                }
+                $user_ids = $ids!=null?implode(',', $ids):'';
+                if($user_ids!='') {                  
+                   $last= strtotime("-1 month", time());
+                   $last_lastday = date("Y-m-t", $last);//上个月最后一天
+                   $last_firstday = date('Y-m-01', $last);//上个月第一天
+                   $order_num = $model->table('order')->where("pay_status=1 and status in (3,4) and user_id in ($user_ids) and create_time between '{$last_firstday}' and '{$last_lastday}'")->count(); 
+               } else {
+                   $order_num = 0;
+               }
+               if($order_num>=100) {
+                 $balance9 = round($base_balance*($vip_rate+$encourage)/100,2); //超级vip6%+10%激励金分润
+               } else {
+                 $balance9 = round($base_balance*($vip_rate)/100,2); //超级vip6%分润
+               }
+               if($balance9>0) {
+                    $model->table('customer')->where('user_id='.$first_vip)->data(array("balance"=>"`balance`+({$balance9})"))->update();
+                    Log::balance($balance9, $first_vip, $order['order_no'],'线上消费收益(上级第一个超级VIP)', 5);
+                }
+             }
              $first_promoter_user_id = self::getFirstPromoter($order['user_id']);
              // var_dump(222);die;
              if($first_promoter_user_id){   
@@ -1022,6 +1052,32 @@ class Common {
             }
             return $promoter_user_id;
         
+     }
+
+     static function getFirstVip($user_id){
+        $model = new Model();
+            $is_break = false;
+            $now_user_id = $user_id;
+            $promoter_user_id = 1;
+            $user_info = $model->table("invite")->where("invite_user_id=".$user_id)->find();
+            if(!$user_info) {
+                return $promoter_user_id;
+            }
+            while(!$is_break){
+                $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
+                if($inviter_info){
+                    $user = $model->table("user")->where("id=".$inviter_info['user_id'])->find();
+                    if(!empty($user) && $user['is_vip']==1) {       
+                        $promoter_user_id = $inviter_info['user_id'];
+                        $is_break = true;    
+                    }else{
+                        $now_user_id = $inviter_info['user_id'];
+                    }
+                }else{
+                    $is_break = true;
+                }
+            }
+            return $promoter_user_id; 
      }
 
      static function getFirstPromoters($user_id){
