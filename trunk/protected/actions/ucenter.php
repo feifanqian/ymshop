@@ -3004,7 +3004,7 @@ class UcenterAction extends Controller {
        $shop_photo = Req::args('shop_photo'); //门店照
        $hand_idcard = Req::args('hand_idcard'); //手持身份证照
        $shop_name = Req::args('shop_name'); //店铺名
-       $legal_person = Req::args('legal_person'); //法人名字
+       $legal_person = Filter::str(Req::args('legal_person')); //法人名字
        $mobile = Req::args('mobile'); //手机号
        $found_date = Req::args('found_date'); //成立时间
        $province = Req::args('province'); 
