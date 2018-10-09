@@ -55,16 +55,38 @@
     <div class="mt10">
         <h1><b>旗下经销商/商家:</b></h1>
         {if:count($list['data'])>0}
+        <table class="default" >
+                <tr>
+                    <th style="width:10px">选择</th>
+                    <th style="width:30px">操作</th>
+                    <th style="width:100px">名称</th>
+                    <th style="width:100px">级别</th>
+                    <th style="width:100px">手机号</th>
+                    <th style="width:100px">经营者</th>
+                    <th style="width:100px">加入时间</th>
+                </tr>
             {list:items=$list['data']}
-            <table class="mt10 default">
-                <tr><th class="caption">名称：</th> <td>{$item['real_name'] | $item['nickname']}</td></tr>
-                <tr><th class="caption">级别：</th> <td>{if:$item['role_type']==2}经销商{else:}商家{/if}</td></tr>
-                <tr><th class="caption">手机号：</th> <td>{$item['mobile'] | '--'}</td></tr>
-                <tr><th class="caption">经营者：</th> <td>{$item['realname'] | $item['real_name'] | $item['mobile']}</td></tr>
-                <tr><th class="caption">加入时间：</th> <td>{$item['create_time']}</td></tr>
-                <tr><th class="caption">查看详情</th> <td><a href="/districtadmin/operation_center?user_id={$item['id']}">查看详情</a> </td></tr>
-            </table>
+                {set:$role_type=array("1"=>"商家","2"=>"经销商");}  
+                <tr>
+                    <td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+                    <td style="width:65px" class="btn_min">
+                        <div class="operat hidden">
+                            <a  class="icon-cog action" href="javascript:;"> 处理</a>
+                            <div class="menu_select">
+                                <ul>
+                                   <li><a class="icon-eye" href="/districtadmin/operation_center?user_id={$item['id']}"> 查看详情</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:100px">{$item['real_name'] | $item['nickname']}</td>
+                    <td style="width:100px">{$role_type[$item['role_type']]}</td> 
+                    <td style="width:100px">{$item['mobile'] | '--'}</td>
+                    <td style="width:100px">{$item['realname'] | $item['real_name'] | $item['mobile']}</td>
+                    <td style="width:100px">{$item['create_time']}</td>
+                </tr>
             {/list}
+        </table>
         {/if}
         <div class="page_nav">
         {$list['html']}
