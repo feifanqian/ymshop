@@ -1235,7 +1235,9 @@ class PaymentController extends Controller {
         $url = 'https://openapi.ysepay.com/gateway.do';
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
-
+        if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])) {
+            var_dump($ret['ysepay_online_jsapi_pay_response']);die;
+        }
         if($payment_id==6) {
             $result = array(
                 'status'          => 0,
