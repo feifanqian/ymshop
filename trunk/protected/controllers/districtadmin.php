@@ -2117,22 +2117,24 @@ class DistrictadminController extends Controller
         if($id) {
             $contract = $model->table('promoter_contract')->fields('*')->where('id='.$id)->find();
             $user_id = $contract['user_id'];
-            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no,province,city,county')->where('user_id='.$user_id)->findAll();
+            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no,province,city,county,status,reason')->where('user_id='.$user_id)->findAll();
         } else {
-            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no,province,city,county')->where('address IS NOT NULL AND id_no IS NOT NULL ')->findAll();
+            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no,province,city,county,status,reason')->where('address IS NOT NULL AND id_no IS NOT NULL ')->findAll();
         }
         
         header("Content-type:application/vnd.ms-excel");
         header("Content-Disposition:filename=contract.xls");
-        $fields_array = array('legal_person' => '客户姓名','mobile' => '电话', 'create_date' => '上传时间', 'address' => '地区','id_no'=>'证件号码');
-        $fields = array('legal_person','mobile', 'create_date', 'address','id_no');
+        $fields_array = array('legal_person' => '客户姓名','mobile' => '电话', 'create_date' => '上传时间', 'address' => '地区','id_no'=>'证件号码','status'=>'状态','reason'=>'驳回原因');
+        $fields = array('legal_person','mobile', 'create_date', 'address','id_no','status','reason');
         $str = "<table border=1><tr>";
+        $status = array('-1' => '未完善', '0' => '未审核', '1' => '通过', '2' => '未通过');
         foreach ($items as $key => $value) {
             if($value['address']!=null) {
                 $items[$key]['address'] = $value['address'];
             } else {
                 $items[$key]['address'] = $value['province'].$value['city'].$value['county'];
-            }  
+            }
+            $items[$key]['status'] = $status[$value['status']];
         }
         foreach ($fields as $value) {
             $str .= "<th>" . iconv("UTF-8", "GBK", $fields_array[$value]) . "</th>";

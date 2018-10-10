@@ -21,7 +21,7 @@
         <th style="width:160px">创建时间</th>
         <th style="width:60px">联系人</th>
         <th style="width:200px">联系电话</th>
-        <th>收益</th>
+        <!-- <th>收益</th> -->
     </tr>
     {list:$items=$list['data']}
     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
@@ -46,7 +46,7 @@
             <td style="width:60px">{$item['create_time']}</td>
             <td style="width:60px">{$item['linkman']}</td>
             <td style="width:160px">{$item['link_mobile']}</td>
-            <td>可用收益：{$item['valid_income']} 待解锁收益：{$item['frezze_income']} 已结算收益:{$item['settled_income']}</td>
+            <!-- <td>可用收益：{$item['valid_income']} 待解锁收益：{$item['frezze_income']} 已结算收益:{$item['settled_income']}</td> -->
         </tr>
     {/list}
 </table>
