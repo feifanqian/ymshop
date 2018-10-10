@@ -173,6 +173,6 @@ function Condition(id){
 }
 $("#condition").on("click",function(){
    
-  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/shop_check}',method:'get'});},data:{'u.nickname':{name:'  申请者'},'u.name':{name:'用户名'},'dp.shop_name':{name:'店铺名'},'sc.status':{name:'状态',values:{0:'未处理',1:'已通过',2:'已作废'}}}});
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/shop_check}',method:'get'});},data:{'u.id':{name:'用户id'},'u.nickname':{name:'  申请者'},'u.name':{name:'用户名'},'dp.shop_name':{name:'店铺名'},'sc.status':{name:'状态',values:{0:'未处理',1:'已通过',2:'已作废'}}}});
 })
 </script>
