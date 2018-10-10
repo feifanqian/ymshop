@@ -172,6 +172,8 @@ class MapAction extends Controller
         $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
         if($promoter) {
             $this->model->table('district_promoter')->data(['base_rate'=>$rate])->where('user_id='.$this->user['id'])->update();
+        } else {
+            $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'base_rate'=>$rate))->insert();
         }
 
         $this->code = 0;
