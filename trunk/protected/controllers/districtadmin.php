@@ -2098,6 +2098,11 @@ class DistrictadminController extends Controller
         $id = Filter::int(Req::args('id'));
         $model = new Model();
         $contract = $model->table('promoter_contract')->fields('*')->where('user_id='.$id)->find();
+        if($contract) {
+            if($contract['url4']!=null) {
+                $contract['url4'] = $contract['url4'].'!/fwfh/1280x1280';
+            }
+        }
         $status =  array('2' => '<span class="red">审核未通过</span>', '0' => '等待审核', '1' => '<span class="green">审核通过</span>');
         $this->assign('contract',$contract);
         $this->assign('status',$status);
