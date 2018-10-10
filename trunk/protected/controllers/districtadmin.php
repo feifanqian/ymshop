@@ -2112,7 +2112,7 @@ class DistrictadminController extends Controller
                 );
 
                 $re = $this->curl_form($post_data8,$sumbit_url,$http_url);
-                unlink($save_path4);
+                unlink($save_path8);
         
         //注册商户号   
         $promoter = $model->table('district_promoter')->fields('shop_name,province_id,city_id,location')->where('user_id='.$shop_check['user_id'])->find();
