@@ -2100,7 +2100,7 @@ class DistrictadminController extends Controller
         $contract = $model->table('promoter_contract')->fields('*')->where('user_id='.$id)->find();
         if($contract) {
             if($contract['url4']!=null) {
-                $contract['url4'] = $contract['url4'].'!/fwfh/1280x1280';
+                $contract['url4'] = $contract['url4'].'!/fwfh/1980x1980';
             }
         }
         $status =  array('2' => '<span class="red">审核未通过</span>', '0' => '等待审核', '1' => '<span class="green">审核通过</span>');
