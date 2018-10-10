@@ -1435,7 +1435,7 @@ class DistrictadminController extends Controller
             //   $file_name = time().$shop_check['user_id'].'positive_idcard';
             //   $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
             //   $save_path = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name.'.'.$file_ext;
-            //   file_put_contents($save_path, file_get_contents($shop_check['positive_idcard']));
+            //   file_put_contents($save_path, file_get_contents($shop_check['positive_idcard'].'!/fwfh/1280x1280'));
             //   $post_data = array (
             //         // "name"=>'picFile',
             //         "picType"=>'00',
@@ -1454,7 +1454,7 @@ class DistrictadminController extends Controller
             //     $file_name1 = time().$shop_check['user_id'].'native_idcard';
             //     $file_ext1 = substr(strrchr($shop_check['native_idcard'], '.'), 1);
             //     $save_path1 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name1.'.'.$file_ext1;
-            //     file_put_contents($save_path1, file_get_contents($shop_check['native_idcard']));
+            //     file_put_contents($save_path1, file_get_contents($shop_check['native_idcard'].'!/fwfh/1280x1280'));
             //     $post_data1 = array (
             //         // "name"=>'picFile',
             //         "picType"=>'30',
@@ -1473,7 +1473,7 @@ class DistrictadminController extends Controller
             //   $file_name5 = time().$shop_check['user_id'].'positive_bankcard';
             //   $file_ext5 = substr(strrchr($shop_check['positive_bankcard'], '.'), 1);
             //   $save_path5 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name5.'.'.$file_ext5;
-            //   file_put_contents($save_path5, file_get_contents($shop_check['positive_bankcard']));
+            //   file_put_contents($save_path5, file_get_contents($shop_check['positive_bankcard'].'!/fwfh/1280x1280'));
             //   $post_data5 = array (
             //         // "name"=>'picFile',
             //         "picType"=>'35',
@@ -1492,7 +1492,7 @@ class DistrictadminController extends Controller
             //     $file_name6 = time().$shop_check['user_id'].'native_bankcard';
             //     $file_ext6 = substr(strrchr($shop_check['native_bankcard'], '.'), 1);
             //     $save_path6 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name6.'.'.$file_ext6;
-            //     file_put_contents($save_path6, file_get_contents($shop_check['native_bankcard']));
+            //     file_put_contents($save_path6, file_get_contents($shop_check['native_bankcard'].'!/fwfh/1280x1280'));
             //     $post_data6 = array (
             //         // "name"=>'picFile',
             //         "picType"=>'36',
@@ -1511,7 +1511,7 @@ class DistrictadminController extends Controller
             //         $file_name2 = time().$shop_check['user_id'].'hand_idcard';
             //         $file_ext2 = substr(strrchr($shop_check['hand_idcard'], '.'), 1);
             //         $save_path2 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name2.'.'.$file_ext2;
-            //         file_put_contents($save_path2, file_get_contents($shop_check['hand_idcard']));
+            //         file_put_contents($save_path2, file_get_contents($shop_check['hand_idcard'].'!/fwfh/1280x1280'));
             //         $post_data2 = array (
             //             // "name"=>'picFile',
             //             "picType"=>'33',
@@ -1529,7 +1529,7 @@ class DistrictadminController extends Controller
             //         $file_name3 = time().$shop_check['user_id'].'business_licence';
             //         $file_ext3 = substr(strrchr($shop_check['business_licence'], '.'), 1);
             //         $save_path3 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name3.'.'.$file_ext3;
-            //         file_put_contents($save_path3, file_get_contents($shop_check['business_licence']));
+            //         file_put_contents($save_path3, file_get_contents($shop_check['business_licence'].'!/fwfh/1280x1280'));
             //         $post_data3 = array (
             //             // "name"=>'picFile',
             //             "picType"=>'19',
@@ -1546,7 +1546,7 @@ class DistrictadminController extends Controller
             //         $file_name4 = time().$shop_check['user_id'].'shop_photo';
             //         $file_ext4 = substr(strrchr($shop_check['shop_photo'], '.'), 1);
             //         $save_path4 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name4.'.'.$file_ext4;
-            //         file_put_contents($save_path4, file_get_contents($shop_check['shop_photo']));
+            //         file_put_contents($save_path4, file_get_contents($shop_check['shop_photo'].'!/fwfh/1280x1280'));
             //         $post_data4 = array (
             //             // "name"=>'picFile',
             //             "picType"=>'34',
@@ -1569,7 +1569,7 @@ class DistrictadminController extends Controller
             //     $file_name7 = time().$shop_check['user_id'].'contract';
             //     $file_ext7 = substr(strrchr($contract['url4'], '.'), 1);
             //     $save_path7 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name7.'.'.$file_ext7;
-            //     file_put_contents($save_path7, file_get_contents($contract['url4']));
+            //     file_put_contents($save_path7, file_get_contents($contract['url4'].'!/fwfh/1280x1280'));
             //     $post_data7 = array (
             //         // "name"=>'picFile',
             //         "picType"=>'31',
@@ -2093,7 +2093,7 @@ class DistrictadminController extends Controller
         $id = Filter::int(Req::args('id'));
         $model = new Model();
         $contract = $model->table('promoter_contract')->fields('*')->where('user_id='.$id)->find();
-        $status =  array('-1' => '<span class="red">审核未通过</span>', '0' => '等待审核', '1' => '<span class="green">审核通过</span>');
+        $status =  array('2' => '<span class="red">审核未通过</span>', '0' => '等待审核', '1' => '<span class="green">审核通过</span>');
         $this->assign('contract',$contract);
         $this->assign('status',$status);
         $this->redirect();
