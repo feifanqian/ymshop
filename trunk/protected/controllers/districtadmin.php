@@ -1989,8 +1989,8 @@ class DistrictadminController extends Controller
         $biz_content_arr = array(
             'merchant_no'=>'yuanmeng'.$shop_check['user_id'],
             'cust_type'=>$cust_type,
-            // 'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
-            'token'=>$shop_check['token'],
+            'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            // 'token'=>$shop_check['token'],
             'another_name'=>$name,
             'cust_name'=>$name,
             'mer_flag'=>'11',
@@ -2034,13 +2034,13 @@ class DistrictadminController extends Controller
         $res = Common::httpRequest($url1,'POST',$params);
         // var_dump($res);die;
         $res = json_decode($res,true);
-        var_dump($res);die;
+        // var_dump($res);die;
         if($res['ysepay_merchant_register_accept_response']['code']==10000) {
            $model->table("shop_check")->data(array("usercode" =>$res['ysepay_merchant_register_accept_response']['usercode']))->where("id=" . $id)->update();
            echo json_encode(array("status" => 'success', 'msg' => '成功'));
             exit();
         } else {
-            echo json_encode(array("status" => 'error', 'msg' => $res['ysepay_merchant_register_accept_response']));
+            echo json_encode(array("status" => 'error', 'msg' => $res['ysepay_merchant_register_accept_response']['sub_msg']));
             exit();
         }    
     }
