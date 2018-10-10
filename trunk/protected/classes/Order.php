@@ -219,12 +219,12 @@ class Order {
 //            if ($order['point'] > 0) {
 //                Pointlog::write($order['user_id'], $order['point'], '购买商品，订单：' . $order['order_no'] . ' 赠送' . $order['point'] . '积分');
 //            }
-            if($order['type']==2&&$order['point']>0){
-                $result = $model->table("customer")->data(array("point_coin"=>"`point_coin`+".$order['point']))->where("user_id=".$order['user_id'])->update();
-                if($result){
-                    Log::pointcoin_log($order['point'], $order['user_id'], $order['order_no'], "购买商品赠送", 9);
-                }
-            }
+            // if($order['type']==2&&$order['point']>0){
+            //     $result = $model->table("customer")->data(array("point_coin"=>"`point_coin`+".$order['point']))->where("user_id=".$order['user_id'])->update();
+            //     if($result){
+            //         Log::pointcoin_log($order['point'], $order['user_id'], $order['order_no'], "购买商品赠送", 9);
+            //     }
+            // }
             //记录支付日志
             // $paymentModel = new Model('payment');
             // $paymentObj = $paymentModel->where("id=$payment_id")->find();
