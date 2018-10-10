@@ -47,7 +47,7 @@
 <script type="text/javascript">
 function do_act(id,status){
     var reason = '';
-    if(status==-1) {
+    if(status==2) {
         layer.prompt({title: '请输入作废理由', formType: 2}, function(reason, index){
         layer.close(index);
       });

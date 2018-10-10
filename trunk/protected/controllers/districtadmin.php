@@ -2117,9 +2117,9 @@ class DistrictadminController extends Controller
         if($id) {
             $contract = $model->table('promoter_contract')->fields('*')->where('id='.$id)->find();
             $user_id = $contract['user_id'];
-            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no,province,city,county,status,reason')->where('user_id='.$user_id)->findAll();
+            $items = $model->table('shop_check as sc')->join('left join promoter_contract as pc on sc.user_id=pc.user_id')->fields('sc.legal_person,sc.mobile,sc.create_date,sc.address,sc.id_no,sc.province,sc.city,sc.county,pc.status,pc.reason')->where('sc.user_id='.$user_id)->findAll();
         } else {
-            $items = $model->table('shop_check')->fields('legal_person,mobile,create_date,address,id_no,province,city,county,status,reason')->where('address IS NOT NULL AND id_no IS NOT NULL ')->findAll();
+            $items = $model->table('shop_check as sc')->join('left join promoter_contract as pc on sc.user_id=pc.user_id')->fields('sc.legal_person,sc.mobile,sc.create_date,sc.address,sc.id_no,sc.province,sc.city,sc.county,pc.status,pc.reason')->where('sc.address IS NOT NULL AND sc.id_no IS NOT NULL ')->findAll();
         }
         
         header("Content-type:application/vnd.ms-excel");
