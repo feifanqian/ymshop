@@ -2105,23 +2105,25 @@ class DistrictadminController extends Controller
                 $re = $this->curl_form($post_data7,$sumbit_url,$http_url);
                 // var_dump($re);
                 unlink($save_path7);
+                
+                if($shop_check['account_picture']!=null) {
+                    //开户许可证
+                    $file_name8 = time().$shop_check['user_id'].'account_picture';
+                    $file_ext8 = substr(strrchr($shop_check['account_picture'], '.'), 1);
+                    $save_path8 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name8.'.'.$file_ext8;
+                    $account_picture = strpos($shop_check['account_picture'],'https') !== false?$shop_check['account_picture']:'https://ymlypt.b0.upaiyun.com'.$shop_check['account_picture'];
+                    file_put_contents($save_path8, file_get_contents($account_picture.'!/fwfh/1280x1280'));
+                    $post_data8 = array (
+                        // "name"=>'picFile',
+                        "picType"=>'37',
+                        "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                        "superUsercode"=>'yuanmeng',
+                        "upload" => new CURLFile($save_path8),
+                    );
 
-                //开户许可证
-                $file_name8 = time().$shop_check['user_id'].'account_picture';
-                $file_ext8 = substr(strrchr($shop_check['account_picture'], '.'), 1);
-                $save_path8 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name8.'.'.$file_ext8;
-                $account_picture = strpos($shop_check['account_picture'],'https') !== false?$shop_check['account_picture']:'https://ymlypt.b0.upaiyun.com'.$shop_check['account_picture'];
-                file_put_contents($save_path8, file_get_contents($account_picture.'!/fwfh/1280x1280'));
-                $post_data8 = array (
-                    // "name"=>'picFile',
-                    "picType"=>'37',
-                    "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                    "superUsercode"=>'yuanmeng',
-                    "upload" => new CURLFile($save_path8),
-                );
-
-                $re = $this->curl_form($post_data8,$sumbit_url,$http_url);
-                unlink($save_path8);
+                    $re = $this->curl_form($post_data8,$sumbit_url,$http_url);
+                    unlink($save_path8);
+                }
         
         //注册商户号   
         $promoter = $model->table('district_promoter')->fields('shop_name,province_id,city_id,location')->where('user_id='.$shop_check['user_id'])->find();
