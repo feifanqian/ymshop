@@ -1944,6 +1944,7 @@ class DistrictadminController extends Controller
         //上传资料
         $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
         $http_url="http://39.108.165.0";
+        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
           //身份证正面
               $file_name = time().$shop_check['user_id'].'positive_idcard';
               $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
@@ -2114,7 +2115,7 @@ class DistrictadminController extends Controller
         //注册商户号
         $id = Filter::int(Req::args('id'));
         $model = new Model();
-        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        
         $promoter = $model->table('district_promoter')->fields('shop_name,province_id,city_id,location')->where('user_id='.$shop_check['user_id'])->find();
         $customer = $model->table('customer as c')->fields('c.real_name,c.realname,c.mobile,c.id_no,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$shop_check['user_id'])->find();
         $name = $promoter['shop_name']!=null?$promoter['shop_name']:($customer['nickname']!=null?$customer['nickname']:$customer['real_name']);
