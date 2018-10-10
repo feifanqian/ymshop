@@ -252,10 +252,10 @@ class DistrictAction extends Controller {
             return;
         }else{
             $exist = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
-            if($exist){
-                $this->code = 1174;
-                return;
-            }
+            // if($exist){
+            //     $this->code = 1174;
+            //     return;
+            // }
             $promoter_code = $this->model->table('promoter_code')->where("code ='{$code}'")->find();
             if(!$promoter_code){
                 $this->code = 1175;
@@ -274,7 +274,7 @@ class DistrictAction extends Controller {
             //     $this->code = 1285;
             //     return;
             // }
-            $exist = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+            
             if(!$exist) {
                 $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id'],'shop_type'=>$type))->insert();
             } else {
