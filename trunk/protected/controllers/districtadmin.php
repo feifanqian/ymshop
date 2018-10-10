@@ -2034,10 +2034,15 @@ class DistrictadminController extends Controller
         $res = Common::httpRequest($url1,'POST',$params);
         // var_dump($res);die;
         $res = json_decode($res,true);
-        // var_dump($res);
+        var_dump($res);die;
         if($res['ysepay_merchant_register_accept_response']['code']==10000) {
            $model->table("shop_check")->data(array("usercode" =>$res['ysepay_merchant_register_accept_response']['usercode']))->where("id=" . $id)->update();
-        }
+           echo json_encode(array("status" => 'success', 'msg' => '成功'));
+            exit();
+        } else {
+            echo json_encode(array("status" => 'error', 'msg' => $res['ysepay_merchant_register_accept_response']));
+            exit();
+        }    
     }
 
     public function shop_check_query()
