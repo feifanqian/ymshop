@@ -107,7 +107,7 @@ class ShopadminController extends Controller {
                 $writelist[$v['order_id']] += ($v['express_no'] ? 1 : 0);
             }
         }
-        $orders_list = $this->model->table("order AS o")->fields("o.id,go.img,o.accept_name,o.pay_time,o.delivery_status,og.goods_nums")->join("left join goods AS go ON og.goods_id=go.id left join order_goods as og on og.order_id=o.id")->where("FIND_IN_SET('{$this->user['id']}',o.shop_ids) and o.status BETWEEN 1 AND 4 and o.pay_status=1 and o.is_del=0 and o.is_robot=0 and og.shop_id = '{$this->user['id']}'")->order('o.id desc')->findPage($page,10);
+        $orders_list = $this->model->table("order_goods AS og")->fields("o.id,go.img,o.accept_name,o.pay_time,o.delivery_status,og.goods_nums")->join("left join goods AS go ON og.goods_id=go.id left join order as o on og.order_id=o.id")->where("FIND_IN_SET('{$this->user['id']}',o.shop_ids) and o.status BETWEEN 1 AND 4 and o.pay_status=1 and o.is_del=0 and o.is_robot=0 and og.shop_id = '{$this->user['id']}'")->order('o.id desc')->findPage($page,10);
         foreach ($orders as $k => &$v) {
             $v['imglist'] = isset($imglist[$v['id']]) ? $imglist[$v['id']] : array();
             $v['express_status'] = $writelist[$v['id']] == count($v['imglist']) ? 'finished' : 'inprogress';
