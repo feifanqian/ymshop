@@ -1986,7 +1986,7 @@ class DistrictadminController extends Controller
                 unlink($save_path1);
                 // exit();
             
-            if($shop_check['type']!=3) {
+            if($shop_check['type']!=3 && $shop_check['positive_bankcard']!=null) {
                 //银行卡正面
               $file_name5 = time().$shop_check['user_id'].'positive_bankcard';
               $file_ext5 = substr(strrchr($shop_check['positive_bankcard'], '.'), 1);
@@ -2221,7 +2221,7 @@ class DistrictadminController extends Controller
            echo json_encode(array("status" => 'success', 'msg' => '成功'));
             exit();
         } else {
-            var_dump($res);die;
+            // var_dump($res);die;
             echo json_encode(array("status" => 'error', 'msg' => $res['ysepay_merchant_register_accept_response']['sub_msg']));
             exit();
         }    
