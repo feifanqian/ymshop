@@ -7,6 +7,7 @@
                 <div class="weui-col-20" style="text-align: right;"></div>
             </div>
         </div>
+        <input type="hidden" name="page" id="page" value="{$page}"/>
         <div class="weui_panel_bd">
             {if:$orderlist}
             {list:$items=$orderlist}
@@ -47,11 +48,21 @@ $(window).bind('scroll', function () {
         var scrollTop = $(this).scrollTop();
         var scrollHeight = body.height();
         var windowHeight = $(this).height();
-        
+        var page = $('#page').val();
         if (scrollTop + windowHeight >= scrollHeight) {
         // 此处是滚动条到底部时候触发的事件，在这里写要加载的数据，或者是拉动滚动条的操作
-           $.ajax({
-                url: $(".pagelist .current").next().attr("href"),
+           page++;
+           ajaxRead();
+        }
+    });
+   function ajaxRead() {
+       var data = {page: page};
+       var url = "{url:/shopadmin/order}";
+       // var url = $(".pagelist .current").next().attr("href");
+       $.ajax({
+                type: 'get',
+                url: url,
+                data: data,
                 dataType: 'json',
                 success: function (ret) {
                     if (ret.contentlist) {
@@ -68,6 +79,5 @@ $(window).bind('scroll', function () {
                     $(".pagelist").hide();
                 }
             });
-        }
-    });
+    }
 </script>

@@ -123,6 +123,7 @@ class ShopadminController extends Controller {
         
         $this->assign("status", $status);
         $this->assign("where", $where);
+        $this->assign("page", $page);
         $this->assign("orderlist", $orders);
         $this->assign("pagelist", $pagelist);
 
