@@ -51,9 +51,31 @@ $(window).bind('scroll', function () {
         var windowHeight = $(this).height();
         if (scrollTop + windowHeight >= scrollHeight) {
         // 此处是滚动条到底部时候触发的事件，在这里写要加载的数据，或者是拉动滚动条的操作
-           page++;
-           console.log(page);
-           ajaxRead();
+           // page++;
+           // console.log(page);
+           // ajaxRead();
+           var url = $(".pagelist .current").next().attr("href");
+           $.ajax({
+                // type: 'post',
+                url: url,
+                // data: data,
+                dataType: 'json',
+                // processData:false,
+                success: function (ret) {
+                    if (ret.contentlist) {
+                        $(ret.contentlist).insertBefore($(".weui-infinite-scroll"));
+                    } else {
+                        $('<div class="no-more-record">暂无更多记录</div>').insertBefore($(".weui-infinite-scroll"));
+                    }
+                    $(".pagelist").html(ret.pagelist);
+                    loading = false;
+                    $(".weui-infinite-scroll").hide();
+                },
+                error: function () {
+                    $(".weui-infinite-scroll").hide();
+                    $(".pagelist").hide();
+                }
+            });
         }
     });
    function ajaxRead() {
