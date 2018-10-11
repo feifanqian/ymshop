@@ -110,11 +110,11 @@ class ShopadminController extends Controller {
                 $writelist[$v['order_id']] += ($v['express_no'] ? 1 : 0);
             }
         }
-        $orders_list = $this->model->table("order_goods AS og")->fields("o.id,go.img,o.accept_name,o.pay_time,o.delivery_status,og.goods_nums")->join("left join goods AS go ON og.goods_id=go.id left join order as o on og.order_id=o.id")->where("FIND_IN_SET('{$this->user['id']}',o.shop_ids) and o.status BETWEEN 1 AND 4 and o.pay_status=1 and o.is_del=0 and o.is_robot=0 and og.shop_id = '{$this->user['id']}'")->order('o.id desc')->findPage($page,10);
-        // var_dump($orders_list);die;
+        $orders_list = $this->model->table("order_goods AS og")->fields("o.id,go.img,o.accept_name,o.pay_time,o.delivery_status,og.goods_nums")->join("left join goods AS go ON og.goods_id=go.id left join order as o on og.order_id=o.id")->where("FIND_IN_SET('{$this->user['id']}',o.shop_ids) and o.status BETWEEN 1 AND 4 and o.pay_status=1 and o.is_del=0 and o.is_robot=0 and og.shop_id = '{$this->user['id']}'")->order('o.id desc')->findAll();
         if($orders_list) {
-            foreach ($orders_list['data'] as $k => $v) {
-                $orders_list['data'][$k]['img'] = "https://ymlypt.b0.upaiyun.com".$v['img'];  
+            $orders_list = array_slice($orders_list, ($page-1)*10, 10);
+            foreach ($orders_list as $k => $v) {
+                $orders_list[$k]['img'] = "https://ymlypt.b0.upaiyun.com".$v['img'];  
             }
         }
         foreach ($orders as $k => &$v) {
@@ -136,7 +136,7 @@ class ShopadminController extends Controller {
         $this->assign("status", $status);
         $this->assign("where", $where);
         $this->assign("page", $page);
-        $this->assign("orderlist", $orders_list['data']);
+        $this->assign("orderlist", $orders_list);
         $this->assign("pagelist", $pagelist);
         // var_dump($where);die;
         if ($this->is_ajax_request()) {
@@ -146,7 +146,7 @@ class ShopadminController extends Controller {
             $content = ob_get_contents();
             ob_clean();
             // echo json_encode(array('contentlist' => $content, 'pagelist' => $pagelist));
-            echo json_encode(array('contentlist' => $orders_list['data'], 'pagelist' => $pagelist));
+            echo json_encode(array('contentlist' => $orders_list, 'pagelist' => $pagelist));
             exit;
         } else {
             $this->redirect("shopadmin/order");
