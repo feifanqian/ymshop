@@ -133,7 +133,8 @@ class ShopadminController extends Controller {
             $this->redirect("shopadmin/order_ajax", true, $this->datas);
             $content = ob_get_contents();
             ob_clean();
-            echo json_encode(array('contentlist' => $content, 'pagelist' => $pagelist));
+            // echo json_encode(array('contentlist' => $content, 'pagelist' => $pagelist));
+            echo json_encode(array('contentlist' => $orders, 'pagelist' => $pagelist));
             exit;
         } else {
             $this->redirect("shopadmin/order");
