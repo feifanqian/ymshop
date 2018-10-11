@@ -95,7 +95,7 @@ class ShopadminController extends Controller {
         // $orders = $query->find();
         $orders = $this->model->table('order')->where($where)->order('id desc')->findPage($page,10);
         $writelist = array();
-        foreach ($orders as $order) {
+        foreach ($orders as &$order) {
             $writelist[$order['id']] = 0;
         }
         $imglist = array();
