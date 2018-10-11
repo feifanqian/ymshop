@@ -133,7 +133,7 @@ class ShopadminController extends Controller {
         $this->assign("status", $status);
         $this->assign("where", $where);
         $this->assign("page", $page);
-        $this->assign("orderlist", $orders_list['data']);
+        $this->assign("orderlist", $orders_list);
         $this->assign("pagelist", $pagelist);
         // var_dump($where);die;
         if ($this->is_ajax_request()) {
@@ -143,7 +143,7 @@ class ShopadminController extends Controller {
             $content = ob_get_contents();
             ob_clean();
             // echo json_encode(array('contentlist' => $content, 'pagelist' => $pagelist));
-            echo json_encode(array('contentlist' => $orders_list['data'], 'pagelist' => $pagelist));
+            echo json_encode(array('contentlist' => $orders_list, 'pagelist' => $pagelist));
             exit;
         } else {
             $this->redirect("shopadmin/order");
