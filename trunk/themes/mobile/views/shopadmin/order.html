@@ -43,7 +43,7 @@
     </div>
 </div>
 <script type="text/javascript">
-var page = $('#page').val();
+var p = $('#page').val();
 $(window).bind('scroll', function () {
         var body = $("body");
         var scrollTop = $(this).scrollTop();
@@ -51,8 +51,8 @@ $(window).bind('scroll', function () {
         var windowHeight = $(this).height();
         if (scrollTop + windowHeight >= scrollHeight) {
         // 此处是滚动条到底部时候触发的事件，在这里写要加载的数据，或者是拉动滚动条的操作
-           page++;
-           console.log(page);
+           p++;
+           console.log(p);
            ajaxRead();
            // var url = $(".pagelist .current").next().attr("href");
            // $.ajax({
@@ -79,7 +79,7 @@ $(window).bind('scroll', function () {
         }
     });
    function ajaxRead() {
-       var data = {page: page};
+       var data = {p: p};
        var url = "{url:/shopadmin/order}";
        // var url = $(".pagelist .current").next().attr("href");
        $.ajax({
