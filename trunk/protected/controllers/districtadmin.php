@@ -2026,7 +2026,7 @@ class DistrictadminController extends Controller
                 unlink($save_path6);
                 // exit();
             }
-                if($shop_check['type']!=2) {
+                if($shop_check['type']!=2 && $shop_check['hand_idcard']!=null) {
                     //手持身份证正扫面照
                     $file_name2 = time().$shop_check['user_id'].'hand_idcard';
                     $file_ext2 = substr(strrchr($shop_check['hand_idcard'], '.'), 1);
