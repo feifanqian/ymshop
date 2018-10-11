@@ -64,6 +64,7 @@ $(window).bind('scroll', function () {
                 url: url,
                 data: data,
                 dataType: 'json',
+                processData:false,
                 success: function (ret) {
                     if (ret.contentlist) {
                         $(ret.contentlist).insertBefore($(".weui-infinite-scroll"));
