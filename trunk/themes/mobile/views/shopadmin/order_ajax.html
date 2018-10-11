@@ -6,10 +6,10 @@
     </div>
     <div class="weui_media_bd">
         <h4 class="weui_media_title">{$item['accept_name']}</h4>
-        <p class="weui_media_desc">商品数量: {echo:count($item['imglist']);}</p>
+        <p class="weui_media_desc">商品数量: {$item['goods_num']}}</p>
         <p class="weui_media_desc">付款时间: {$item['pay_time']}</p>
         <div class="weui_timetips">
-            {if:$item['express_status']=='finished'}
+            {if:$item['delivery_status']>1}
             <input type="button" value="已完成" class="weui_btn weui_btn_mini" />
             {else:}
             <input type="button" value="待发货" class="weui_btn weui_btn_mini weui_btn_primary" />
