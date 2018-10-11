@@ -135,9 +135,8 @@ class ShopadminController extends Controller {
             ob_start();
             $this->redirect("shopadmin/order_ajax", true, $this->datas);
             $content = ob_get_contents();
-            // var_dump($content);die;
+            var_dump($where);die;
             ob_clean();
-            var_dump($page);die;
             // echo json_encode(array('contentlist' => $content, 'pagelist' => $pagelist));
             echo json_encode(array('contentlist' => $orders, 'pagelist' => $pagelist));
             exit;
