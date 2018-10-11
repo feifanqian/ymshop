@@ -51,31 +51,31 @@ $(window).bind('scroll', function () {
         var windowHeight = $(this).height();
         if (scrollTop + windowHeight >= scrollHeight) {
         // 此处是滚动条到底部时候触发的事件，在这里写要加载的数据，或者是拉动滚动条的操作
-           // page++;
-           // console.log(page);
-           // ajaxRead();
-           var url = $(".pagelist .current").next().attr("href");
-           $.ajax({
-                // type: 'post',
-                url: url,
-                // data: data,
-                dataType: 'json',
-                // processData:false,
-                success: function (ret) {
-                    if (ret.contentlist) {
-                        $(ret.contentlist).insertBefore($(".weui-infinite-scroll"));
-                    } else {
-                        $('<div class="no-more-record">暂无更多记录</div>').insertBefore($(".weui-infinite-scroll"));
-                    }
-                    $(".pagelist").html(ret.pagelist);
-                    loading = false;
-                    $(".weui-infinite-scroll").hide();
-                },
-                error: function () {
-                    $(".weui-infinite-scroll").hide();
-                    $(".pagelist").hide();
-                }
-            });
+           page++;
+           console.log(page);
+           ajaxRead();
+           // var url = $(".pagelist .current").next().attr("href");
+           // $.ajax({
+           //      // type: 'post',
+           //      url: url,
+           //      // data: data,
+           //      dataType: 'json',
+           //      // processData:false,
+           //      success: function (ret) {
+           //          if (ret.contentlist) {
+           //              $(ret.contentlist).insertBefore($(".weui-infinite-scroll"));
+           //          } else {
+           //              $('<div class="no-more-record">暂无更多记录</div>').insertBefore($(".weui-infinite-scroll"));
+           //          }
+           //          $(".pagelist").html(ret.pagelist);
+           //          loading = false;
+           //          $(".weui-infinite-scroll").hide();
+           //      },
+           //      error: function () {
+           //          $(".weui-infinite-scroll").hide();
+           //          $(".pagelist").hide();
+           //      }
+           //  });
         }
     });
    function ajaxRead() {
@@ -89,11 +89,28 @@ $(window).bind('scroll', function () {
                 dataType: 'json',
                 // processData:false,
                 success: function (ret) {
-                    if (ret.contentlist) {
-                        $(ret.contentlist).insertBefore($(".weui-infinite-scroll"));
-                    } else {
-                        $('<div class="no-more-record">暂无更多记录</div>').insertBefore($(".weui-infinite-scroll"));
-                    }
+                    data = JSON.stringify(res.contentlist);
+                    var jsonarray= $.parseJSON(data);
+                    $.each(jsonarray, function (i, item) {
+                        html += '<a href="/shopadmin/order_detail/id/'+item.id+'" class="weui_media_box weui_media_appmsg">';
+                        html += '<div class="weui_media_hd">';
+                        html += '<img class="weui_media_appmsg_thumb weui_media_text_img" src="'+item.img+'!/fwfh/100x100'+'" />';
+                        html += '</div>'
+                        html += '<div class="weui_media_bd">';
+                        html += '<h4 class="weui_media_title">'+item.accept_name+'</h4>';
+                        html += '<p class="weui_media_desc">商品数量: '+item.goods_count+'</p>';
+                        html += '<p class="weui_media_desc">付款时间: '+item.pay_time+'</p>';
+                        html += '<div class="weui_timetips">';
+                        if(item.express_status=='finished') {
+                           html += '<input type="button" value="已发货" class="weui_btn weui_btn_mini" />';
+                        } else {
+                           html += '<input type="button" value="待发货" class="weui_btn weui_btn_mini weui_btn_primary" />';
+                        }
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</a>';
+                    });
+                    $(".weui_panel_bd").append(html);
                     $(".pagelist").html(ret.pagelist);
                     loading = false;
                     $(".weui-infinite-scroll").hide();

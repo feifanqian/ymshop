@@ -110,6 +110,7 @@ class ShopadminController extends Controller {
             $v['imglist'] = isset($imglist[$v['id']]) ? $imglist[$v['id']] : array();
             $v['express_status'] = $writelist[$v['id']] == count($v['imglist']) ? 'finished' : 'inprogress';
             $v['img'] = isset($v['imglist'][0]['img']) ? $v['imglist'][0]['img'] : '';
+            $orders[$k]['goods_count'] = count($v['imglist']);
         }
         unset($v);
         //处理过期订单状态
@@ -132,10 +133,10 @@ class ShopadminController extends Controller {
             ob_start();
             $this->redirect("shopadmin/order_ajax", true, $this->datas);
             $content = ob_get_contents();
-            var_dump($content);die;
+            // var_dump($content);die;
             ob_clean();
-            echo json_encode(array('contentlist' => $content, 'pagelist' => $pagelist));
-            // echo json_encode(array('contentlist' => $orders, 'pagelist' => $pagelist));
+            // echo json_encode(array('contentlist' => $content, 'pagelist' => $pagelist));
+            echo json_encode(array('contentlist' => $orders, 'pagelist' => $pagelist));
             exit;
         } else {
             $this->redirect("shopadmin/order");
