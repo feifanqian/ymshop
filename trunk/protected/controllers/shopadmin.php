@@ -129,7 +129,7 @@ class ShopadminController extends Controller {
         $this->assign("page", $page);
         $this->assign("orderlist", $orders);
         $this->assign("pagelist", $pagelist);
-        var_dump($where);die;
+        // var_dump($where);die;
         if ($this->is_ajax_request()) {
             Req::args('act', 'order_ajax');
             ob_start();
