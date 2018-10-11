@@ -107,7 +107,7 @@ class ShopadminController extends Controller {
                 $writelist[$v['order_id']] += ($v['express_no'] ? 1 : 0);
             }
         }
-        // $orders = $this->model->table("order_goods AS og")->fields("og.product_id,og.order_id,og.goods_id,og.goods_nums,og.express_no,og.express_company_id,go.img,go.imgs,go.name,o.pay_time")->join("left join goods AS go ON og.goods_id=go.id left join order as o on og.order_id=o.id")->where("order_id IN (" . implode(',', array_keys($writelist)) . ") AND og.shop_id = '{$this->user['id']}'")->findAll();
+        $orders_list = $this->model->table("order_goods AS og")->fields("o.id,go.img,o.accept_name,o.pay_time,o.delivery_status,og.goods_nums")->join("left join goods AS go ON og.goods_id=go.id left join order as o on og.order_id=o.id")->where("FIND_IN_SET('{$this->user['id']}',o.shop_ids) and o.status BETWEEN 1 AND 4 and o.pay_status=1 and o.is_del=0 and o.is_robot=0 and og.shop_id = '{$this->user['id']}'")->findPage($page,10);
         foreach ($orders as $k => &$v) {
             $v['imglist'] = isset($imglist[$v['id']]) ? $imglist[$v['id']] : array();
             $v['express_status'] = $writelist[$v['id']] == count($v['imglist']) ? 'finished' : 'inprogress';
@@ -127,7 +127,7 @@ class ShopadminController extends Controller {
         $this->assign("status", $status);
         $this->assign("where", $where);
         $this->assign("page", $page);
-        $this->assign("orderlist", $orders);
+        $this->assign("orderlist", $orders_list['data']);
         $this->assign("pagelist", $pagelist);
         // var_dump($where);die;
         if ($this->is_ajax_request()) {
@@ -137,7 +137,7 @@ class ShopadminController extends Controller {
             $content = ob_get_contents();
             ob_clean();
             // echo json_encode(array('contentlist' => $content, 'pagelist' => $pagelist));
-            echo json_encode(array('contentlist' => $orders, 'pagelist' => $pagelist));
+            echo json_encode(array('contentlist' => $orders_list['data'], 'pagelist' => $pagelist));
             exit;
         } else {
             $this->redirect("shopadmin/order");
