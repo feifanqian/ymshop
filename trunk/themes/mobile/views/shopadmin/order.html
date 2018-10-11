@@ -89,7 +89,7 @@ $(window).bind('scroll', function () {
                 dataType: 'json',
                 // processData:false,
                 success: function (ret) {
-                    data = JSON.stringify(res.contentlist);
+                    data = JSON.stringify(ret.contentlist);
                     var jsonarray= $.parseJSON(data);
                     $.each(jsonarray, function (i, item) {
                         html += '<a href="/shopadmin/order_detail/id/'+item.id+'" class="weui_media_box weui_media_appmsg">';
