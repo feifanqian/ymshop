@@ -39,7 +39,7 @@
             <div class="infinite-preloader"></div>
             正在加载... 
         </div>
-       <div class="tc pagelist">{$pagelist}</div>
+       <div class="tc pagelist"></div>
     </div>
 </div>
 <script type="text/javascript">
@@ -95,7 +95,7 @@ $(window).bind('scroll', function () {
                     $.each(jsonarray, function (i, item) {
                         html += '<a href="/shopadmin/order_detail/id/'+item.id+'" class="weui_media_box weui_media_appmsg">';
                         html += '<div class="weui_media_hd">';
-                        html += '<img class="weui_media_appmsg_thumb weui_media_text_img" src="'+'https://ymlypt.b0.upaiyun.com'+item.img+'!/fwfh/100x100'+'" />';
+                        html += '<img class="weui_media_appmsg_thumb weui_media_text_img" src="'+item.img+'!/fwfh/100x100'+'" />';
                         html += '</div>'
                         html += '<div class="weui_media_bd">';
                         html += '<h4 class="weui_media_title">'+item.accept_name+'</h4>';
