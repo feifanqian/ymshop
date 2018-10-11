@@ -137,6 +137,7 @@ class ShopadminController extends Controller {
             $content = ob_get_contents();
             // var_dump($content);die;
             ob_clean();
+            var_dump($page);die;
             // echo json_encode(array('contentlist' => $content, 'pagelist' => $pagelist));
             echo json_encode(array('contentlist' => $orders, 'pagelist' => $pagelist));
             exit;
