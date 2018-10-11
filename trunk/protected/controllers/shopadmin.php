@@ -84,7 +84,7 @@ class ShopadminController extends Controller {
         if ($where) {
             $where = implode(' AND ', $where);
         }
-        $page = Filter::int(Req::args("p"));
+        $page = Filter::int(Req::args("page"));
         $page = $page > 0 ? $page : 1;
         $query->where = $where;
         $query->order = "id desc";
