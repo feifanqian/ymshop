@@ -92,12 +92,12 @@ class ShopadminController extends Controller {
         // $orders = $query->find();
         // $order_id = array();
         // $now = time();
-        // $writelist = array();
-        // foreach ($orders as $order) {
-        //     $writelist[$order['id']] = 0;
-        // }
         // $orders = $query->find();
         $orders = $this->model->table('order')->where($where)->order('id desc')->findPage($page,10);
+        $writelist = array();
+        foreach ($orders as $order) {
+            $writelist[$order['id']] = 0;
+        }
         $imglist = array();
         if ($writelist) {
             $goodslist = $this->model->table("order_goods AS og")->fields("og.product_id,og.order_id,og.goods_id,og.express_no,og.express_company_id,go.img,go.imgs,go.name")->join("goods AS go ON og.goods_id=go.id")->where("order_id IN (" . implode(',', array_keys($writelist)) . ") AND og.shop_id = '{$this->user['id']}'")->findAll();
