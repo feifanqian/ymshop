@@ -247,7 +247,7 @@ class DistrictadminController extends Controller
             $where = $condition_str;
             $this->assign("where", $where);
         } else {
-            $this->assign("where", "1=1");
+            $this->assign("where", "dp.status=1");
         }
         $this->assign("condition", $condition);
         $this->redirect();
