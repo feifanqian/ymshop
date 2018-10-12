@@ -244,10 +244,10 @@ class DistrictadminController extends Controller
         $condition_str = Common::str2where($condition);
 
         if ($condition_str) {
-            $where = 'dp.status=1 and ' . $condition_str;
+            $where = $condition_str;
             $this->assign("where", $where);
         } else {
-            $this->assign("where", "dp.status=1");
+            $this->assign("where", "1=1");
         }
         $this->assign("condition", $condition);
         $this->redirect();
