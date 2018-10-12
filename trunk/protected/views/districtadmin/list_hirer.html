@@ -138,6 +138,6 @@ function callback(hirer_id,user_id,pointcoin,district_name,linkman,link_mobile){
 $("#condition").on("click",function(){
    //  layer.msg("暂未完成，请等待");
    // return false;
-  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_hirer}',method:'get'});},data:{'ds.name':{name:'专区名称'},'d.name':{'name':'上级专区'},'c.real_name':{name:'所有者'},'ds.linkman':{name:' 联系人'},'ds.link_mobile':{name:'联系电话'}}});
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_hirer}',method:'get'});},data:{'ds.owner_id':{name:'用户id'},'ds.name':{name:'专区名称'},'d.name':{'name':'上级专区'},'c.real_name':{name:'所有者'},'ds.linkman':{name:' 联系人'},'ds.link_mobile':{name:'联系电话'}}});
 });
 </script>
