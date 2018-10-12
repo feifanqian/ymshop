@@ -158,7 +158,7 @@ function sendMsg(name,id){
 }
 $("#condition").on("click",function(){
     
-  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_promoter}',method:'get'});},data:{'c.user_id':{name:'用户id'},'c.real_name':{name:'代理商'},'ds.name':{'name':'所属专区'}}});
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_promoter}',method:'get'});},data:{'c.user_id':{name:'用户id'},'c.real_name':{name:'代理商'},'pc.status': {name: '签约状态', values: {0: '审核中', 1: '已通过', 2: '未通过'}},'ds.name':{'name':'所属专区'}}});
 })
 function addPromoters(){
      index =  layer.open({
