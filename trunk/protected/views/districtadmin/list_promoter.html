@@ -27,7 +27,7 @@
         <th style="width:40px">基础分账比例</th>
     </tr>
     {set:$type=array("1"=>"经销商直推","2"=>"代理商推荐","3"=>"系统生成","4"=>"官方代理商","5"=>"自升级","6"=>"激活码生成");}
-    {query:name=district_promoter as dp fields=dp.id,dp.hirer_id,dp.type,dp.user_id,pc.status,dp.join_time,dp.base_rate,dp.unique_code,c.real_name,c.valid_income,c.frezze_income,c.settled_income,ds.name as shop_name join=left join customer as c on dp.user_id eq c.user_id left join district_shop as ds on dp.hirer_id eq ds.id left join promoter_contract as pc on dp.user_id=pc.user_id where=$where id=$obj page=1 order= dp.id desc}
+    {query:name=district_promoter as dp fields=dp.id,dp.hirer_id,dp.type,dp.user_id,pc.status,dp.join_time,dp.base_rate,dp.unique_code,c.real_name,c.valid_income,c.frezze_income,c.settled_income,ds.name as shop_name join=left join customer as c on dp.user_id eq c.user_id left join district_shop as ds on dp.hirer_id eq ds.id left join promoter_contract as pc on dp.user_id eq pc.user_id where=$where id=$obj page=1 order= dp.id desc}
     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden">
