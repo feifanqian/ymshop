@@ -22,7 +22,7 @@
                     <p class="weui_media_desc">商品数量: {$item['goods_nums']}</p>
                     <p class="weui_media_desc">付款时间: {$item['pay_time']}</p>
                     <div class="weui_timetips">
-                        {if:$item['delivery_status']>1}
+                        {if:$item['delivery_status']>=1}
                         <input type="button" value="已发货" class="weui_btn weui_btn_mini" />
                         {else:}
                         <input type="button" value="待发货" class="weui_btn weui_btn_mini weui_btn_primary" />
@@ -102,7 +102,7 @@ $(window).bind('scroll', function () {
                         html += '<p class="weui_media_desc">商品数量: '+item.goods_nums+'</p>';
                         html += '<p class="weui_media_desc">付款时间: '+item.pay_time+'</p>';
                         html += '<div class="weui_timetips">';
-                        if(item.delivery_status>1) {
+                        if(item.delivery_status>=1) {
                            html += '<input type="button" value="已发货" class="weui_btn weui_btn_mini" />';
                         } else {
                            html += '<input type="button" value="待发货" class="weui_btn weui_btn_mini weui_btn_primary" />';
