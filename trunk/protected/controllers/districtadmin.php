@@ -2281,7 +2281,7 @@ class DistrictadminController extends Controller
         $model = new Model();
         $contract = $model->table('promoter_contract')->fields('*')->where('user_id='.$id)->find();
         if($contract) {
-            if($contract['url4']!=null) {
+            if($contract['url4']!=null && strpos($contract['url4'],'https') !== false) {
                 $contract['url4'] = $contract['url4'].'!/fwfh/1980x1980';
             }
         }
