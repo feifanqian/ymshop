@@ -2059,7 +2059,7 @@ class UcenterController extends Controller
                         $info = array('field' => 'account', 'msg' => '此邮箱已被其它用户占用，无法修改为此邮箱。');
                     }
                 } elseif ($obj == 'mobile' && Validator::mobi($account)) {
-                    $result = $this->model->table('customer')->where("mobile ='" . $account . "'" . '  and user_id!=' . $this->user['id'])->find();
+                    $result = $this->model->table('customer')->where("mobile ='" . $account . "'" . '  and user_id!=' . $this->user['id']." and status=1")->find();
                     $password = Req::args('password');
                     $repassword = Req::args('repassword');
                     if ($password != $repassword) {
