@@ -2044,7 +2044,8 @@ class UcenterController extends Controller
             $activateObj = Session::get('activateObj');
             $newCode = $activateObj['code'];
             $newAccount = $activateObj['obj'];
-            if ($code == $newCode && $account == $newAccount) {
+            $checkFlag = $this->sms_verify($code, $account, '86');
+            if ($checkFlag) {
                 if ($obj == 'email' && Validator::email($account)) {
                     $result = $this->model->table('user')->where("email='" . $account . "' and id != " . $this->user['id'])->find();
                     if (!$result) {
@@ -2150,11 +2151,51 @@ class UcenterController extends Controller
                 $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
                 exit;
             } else {
-                // $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
-                $info = array('field' => 'account', 'msg' => $newCode.$newAccount);
+                $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
+                // $info = array('field' => 'account', 'msg' => $newCode.$newAccount);
             }
         }
         $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random'], true, array('invalid' => $info, 'account' => $account));
+    }
+
+    private function sms_verify($code, $mobile, $zone) {
+        $url = "https://webapi.sms.mob.com/sms/verify";
+        $appkey = "1f4d2d20dd266";
+        $return = $this->postRequest($url, array('appkey' => $appkey,
+            'phone' => $mobile,
+            'zone' => $zone,
+            'code' => $code,
+        ));
+        $flag = json_decode($return, true);
+        if ($flag['status'] == 200) {
+            return true;
+        } else {
+            // var_dump($flag);die;
+            return false;
+        }
+    }
+
+    private function postRequest($api, array $params = array(), $timeout = 30) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $api);
+        // 以返回的形式接收信息
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // 设置为POST方式
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        // 不验证https证书
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/x-www-form-urlencoded;charset=UTF-8',
+            'Accept: application/json',
+        ));
+        // 发送数据
+        $response = curl_exec($ch);
+        // 不要忘记释放资源
+        curl_close($ch);
+        return $response;
     }
 
     public function update_obj_success()
