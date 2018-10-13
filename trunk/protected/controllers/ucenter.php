@@ -2150,7 +2150,8 @@ class UcenterController extends Controller
                 $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
                 exit;
             } else {
-                $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
+                // $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
+                $info = array('field' => 'account', 'msg' => $newCode.$newAccount);
             }
         }
         $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random'], true, array('invalid' => $info, 'account' => $account));
