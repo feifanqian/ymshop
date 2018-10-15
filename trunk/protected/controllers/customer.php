@@ -657,6 +657,17 @@ class CustomerController extends Controller {
         $this->redirect();
     }
 
+    function blacklist() {
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str)
+            $this->assign("where", $condition_str);
+        else
+            $this->assign("where", "1=1");
+        $this->assign("condition", $condition);
+        $this->redirect();
+    }
+
     public function customer_export(){
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
@@ -712,6 +723,18 @@ class CustomerController extends Controller {
             $customer = $model->join("user as u on c.user_id = u.id")->where("c.user_id=" . $id)->find();
         }
         $this->redirect('customer_edit', false, $customer);
+    }
+
+    public function blacklist_edit() {
+        $id = Req::args("id");
+
+        $customer = Req::args();
+        if ($id) {
+            $model = new Model("blacklist as b");
+            $customer = $model->join("customer as c on b.user_id = c.user_id")->where("b.id=" . $id)->find();
+            $this->assign('id',$id);
+        }
+        $this->redirect('blacklist_edit', false, $customer);
     }
 
     public function customer_del() {
@@ -782,6 +805,31 @@ class CustomerController extends Controller {
             }
         }
         $this->redirect("customer_list");
+    }
+
+    public function blacklist_save() {
+        $id = Req::args("id");
+        $user_id = Req::args("user_id");
+        $start_time = Req::args("start_time");
+        $end_time = Req::args("end_time");
+        
+        $blacklist = new Model("blacklist");
+
+        $customerModel = new Model("customer");
+        if ($id) {
+            $user = $blacklist->where("id=$id")->find();
+            if ($user) {
+                if ($start_time || $end_time)
+                    $blacklist->data(array('start_time' => $start_time, 'end_time' => $end_time))->where("id=$id")->update();
+                Req::args('user_id', $id);
+                Log::op($this->manager['id'], "修改黑名单", "管理员[" . $this->manager['name'] . "]:修改了会员 " . $user['user_id'] . " 的信息");
+            }
+        }else {
+                $last_id = $blacklist->data(array('user_id'=>$user_id,'start_time' => $start_time,'end_time' => $end_time))->add();
+                Log::op($this->manager['id'], "添加会员", "管理员[" . $this->manager['name'] . "]:添加了会员 " . $user_id . " 的信息");
+            
+        }
+        $this->redirect("blacklist");
     }
 
     public function customer_password() {

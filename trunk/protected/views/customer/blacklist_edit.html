@@ -1,0 +1,33 @@
+{echo:JS::import('form');}
+{echo:JS::import('date');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<h1 class="page_title">黑名单编辑</h1>
+<div id="obj_form" class="form2">
+    <form action="{url:/customer/blacklist_save}" method="post">
+        {if:isset($id)}<input type="hidden" name="id" id="objId" value="{$id}">{/if}
+        <dl class="lineD">
+            <dt><b class="red">*</b>用户id</dt>
+            <dd>
+                <input name="user_id" type="text" pattern="required" value="{$user_id}" alt="">
+                <label></label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>开始日期：</dt>
+            <dd>
+                <input name="start_time" type="text" onfocus="WdatePicker()" class="Wdate" value="{$start_time}">
+                <label></label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>结束日期：</dt>
+            <dd>
+                <input name="end_time" type="text" onfocus="WdatePicker()" class="Wdate" value="{$end_time}">
+                <label></label>
+            </dd>
+        </dl>
+        <div style="text-align:center"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input
+                type="reset" value="重置" class="button"></div>
+    </form>
+</div>
