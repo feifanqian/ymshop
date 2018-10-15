@@ -292,7 +292,8 @@ class MapAction extends Controller
         // var_dump($picture);die;
         // $url = Filter::str(Req::args('url'));
         $data = array(
-            'url4'    => $picture
+            'url4'    => $picture,
+            'status'  => 0,
             );
         $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
         // $this->model->table('shop_check')->data(['status'=>-1])->where('user_id='.$this->user['id'])->update();
@@ -304,7 +305,8 @@ class MapAction extends Controller
     {
         $picture = Filter::str(Req::args('picture'));
         $data = array(
-            'url4'    => $picture
+            'url4'    => $picture,
+            'status'  => 0,
             );
         $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
         // $this->model->table('shop_check')->data(['status'=>-1])->where('user_id='.$this->user['id'])->update();
