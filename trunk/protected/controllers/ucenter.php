@@ -3440,18 +3440,21 @@ class UcenterController extends Controller
             $cash = 1;
         } else {
             $cash = 0;
-        }
-        if(in_array($inviter_id, [101738,87455,55568,8158,25795,31751]) && date('Y-m-d H:i:s')>'2018-05-15 12:00:00' && date('Y-m-d H:i:s')<'2018-06-15 12:00:00'){
-            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
-            exit;
         }  
-        if(in_array($inviter_id, [55568,21079])) {
-            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
-            exit;
-        }
-        if($inviter_id==181199 && date('Y-m-d H:i:s')>'2018-09-26 00:00:00' && date('Y-m-d H:i:s')<'2018-10-02 23:59:59') {
-            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
-            exit;
+        //黑名单
+        $blacklist = $this->model->table('blacklist')->findAll();
+        if($blacklist) {
+            $ids = array();
+            foreach($blacklist as $k =>$v) {
+                $ids[] = $v['user_id'];
+            }
+            if(in_array($inviter_id, $ids)) {
+                $black = $this->model->table('blacklist')->where('user_id='.$inviter_id)->find();
+                if(date('Y-m-d H:i:s')>$black['start_time'] && date('Y-m-d H:i:s')<$black['end_time']) {
+                    $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
+                    exit;
+                }    
+            }
         }
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false) {
             $pay_type = 'alipay';

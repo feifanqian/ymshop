@@ -344,17 +344,20 @@ class PaymentAction extends Controller {
        if(!$seller_id){
         $this->code = 1158;
        }
-       if(in_array($seller_id, [101738,87455,55568,8158,25795,31751]) && date('Y-m-d H:i:s')>'2018-05-15 12:00:00' && date('Y-m-d H:i:s')<'2018-06-15 12:00:00'){
-            $this->code = 1237;
-            return;
-        }
-       if(in_array($seller_id, [55568,21079])) {
-            $this->code = 1237;
-            return;
-        }
-        if($seller_id==181199 && date('Y-m-d H:i:s')>'2018-09-26 00:00:00' && date('Y-m-d H:i:s')<'2018-10-02 23:59:59'){
-            $this->code = 1237;
-            return;
+       //黑名单
+        $blacklist = $this->model->table('blacklist')->findAll();
+        if($blacklist) {
+            $ids = array();
+            foreach($blacklist as $k =>$v) {
+                $ids[] = $v['user_id'];
+            }
+            if(in_array($seller_id, $ids)) {
+                $black = $this->model->table('blacklist')->where('user_id='.$seller_id)->find();
+                if(date('Y-m-d H:i:s')>$black['start_time'] && date('Y-m-d H:i:s')<$black['end_time']) {
+                    $this->code = 1237;
+                    return;
+                }    
+            }
         }
        if(!$payment_id){
          $this->code = 1157;

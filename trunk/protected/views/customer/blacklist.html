@@ -22,7 +22,7 @@
         <th style="width:130px">封禁结束时间</th>
         <th style="width:60px">状态</th>
     </tr>
-    {query:name=blacklist as b fields=b.*,c.real_name,c.mobile,c.reg_time,c.status join=left join customer as c on b.user_id eq c.user_id where=$where id=$obj page=1 order=user_id desc}
+    {query:name=blacklist as b fields=b.*,c.real_name,c.mobile,c.reg_time,c.status join=left join customer as c on b.user_id eq c.user_id where=$where id=$obj page=1 order=b.id desc}
         <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
         <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
                 <li><a class="icon-pencil" href="{url:/customer/blacklist_edit/id/$item[id]}"> 编辑</a></li>

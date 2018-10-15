@@ -1162,10 +1162,6 @@ class TravelController extends Controller
         } else {
             $cash = 0;
         }   
-        if(in_array($inviter_id, [55568,21079])) {
-            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
-            exit;
-        }
         //黑名单
         $blacklist = $this->model->table('blacklist')->findAll();
         if($blacklist) {
