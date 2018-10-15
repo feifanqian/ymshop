@@ -1057,28 +1057,51 @@ class Common {
 
      static function getFirstVip($user_id){
         $model = new Model();
-            $is_break = false;
-            $now_user_id = $user_id;
-            $promoter_user_id = 1;
-            $user_info = $model->table("invite")->where("invite_user_id=".$user_id)->find();
-            if(!$user_info) {
-                return $promoter_user_id;
-            }
-            while(!$is_break){
-                $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
-                if($inviter_info){
-                    $user = $model->table("user")->where("id=".$inviter_info['user_id'])->find();
-                    if(!empty($user) && $user['is_vip']==1) {       
-                        $promoter_user_id = $inviter_info['user_id'];
-                        $is_break = true;    
-                    }else{
-                        $now_user_id = $inviter_info['user_id'];
+        // $is_break = false;
+        // $now_user_id = $user_id;
+        // $first_vip = 1;
+        // $user_info = $model->table("invite")->where("invite_user_id=".$user_id)->find();
+        // if(!$user_info) {
+        //     return $first_vip;
+        // }
+        // while(!$is_break){
+        //     $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
+        //     if($inviter_info){
+        //         $user = $model->table("user")->where("id=".$inviter_info['user_id'])->find();
+        //         if(!empty($user) && $user['is_vip']==1) {       
+        //             $first_vip = $inviter_info['user_id'];
+        //             $is_break = true;    
+        //         }else{
+        //             $now_user_id = $inviter_info['user_id'];
+        //         }
+        //     }else{
+        //         $is_break = true;
+        //     }
+        // }
+        // return $first_vip; 
+        
+        $user_info = $model->table("invite")->where("invite_user_id=".$user_id)->find();
+        if($user_info) {
+            $inviter1 = $user_info['user_id']; //第一个邀请人
+            $user_info1 = $model->table("invite")->where("invite_user_id=".$inviter1)->find();
+            if($user_info1) {
+                $inviter2 = $user_info1['user_id']; //第二个邀请人
+                $user2 = $model->table("user")->fields('is_vip')->where("id=".$inviter2)->find();
+                if($user2['is_vip']==1) {
+                    $first_vip = $inviter2;
+                } else {
+                    $user1 = $model->table("user")->fields('is_vip')->where("id=".$inviter1)->find();
+                    if($user1['is_vip']==1) {
+                        $first_vip = $inviter1;
+                    } else {
+                        $first_vip = 1; //分给平台
                     }
-                }else{
-                    $is_break = true;
                 }
             }
-            return $promoter_user_id; 
+            return $first_vip;
+        } else {
+            return false;
+        }
      }
 
      static function getFirstPromoters($user_id){
