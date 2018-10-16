@@ -1982,8 +1982,8 @@ class DistrictadminController extends Controller
                 );
 
                 $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
-                // var_dump($re);
                 unlink($save_path1);
+                var_dump(json_decode($re,true));die;
                 // exit();
             
             if($shop_check['type']!=3 && $shop_check['positive_bankcard']!=null) {
