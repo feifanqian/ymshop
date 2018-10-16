@@ -350,7 +350,7 @@ class GroupbuyAction extends Controller
         }
         $id_str = implode(',', $ids);
             
-        $list = $this->model->table('order as o')->fields('gl.id as log_id,gl.join_id,gl.groupbuy_id as id,go.name,go.img,g.min_num,g.price,gj.end_time,gj.status,o.id as order_id,og.product_id,gl.join_time,gl.pay_status')->join('left join groupbuy_log as gl on o.join_id=gl.id left join order_goods as og on o.id=og.order_id left join groupbuy as g on gl.groupbuy_id=g.id left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on gl.join_id=gj.id')->where('gl.user_id='.$this->user['id'].' and gl.pay_status in (1,3) and o.pay_status in (1,3) and gl.groupbuy_id in ($id_str)')->order('o.id desc')->findPage($page,10);
+        $list = $this->model->table('order as o')->fields('gl.id as log_id,gl.join_id,gl.groupbuy_id as id,go.name,go.img,g.min_num,g.price,gj.end_time,gj.status,o.id as order_id,og.product_id,gl.join_time,gl.pay_status')->join('left join groupbuy_log as gl on o.join_id=gl.id left join order_goods as og on o.id=og.order_id left join groupbuy as g on gl.groupbuy_id=g.id left join goods as go on g.goods_id=go.id left join groupbuy_join as gj on gl.join_id=gj.id')->where('gl.user_id='.$this->user['id'].' and gl.pay_status in (1,3) and o.pay_status in (1,3)')->order('o.id desc')->findPage($page,10);
 
         if($list) {
             if($list['data']!=null) {
