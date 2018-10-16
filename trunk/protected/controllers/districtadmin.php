@@ -1641,7 +1641,7 @@ class DistrictadminController extends Controller
         }
         //    释放cURL句柄
         curl_close($ch);
-        // return $output;
+        return $output;
     }
 
     public function shop_check_dos(){
@@ -2221,7 +2221,7 @@ class DistrictadminController extends Controller
            echo json_encode(array("status" => 'success', 'msg' => '成功'));
             exit();
         } else {
-            // var_dump($res);die;
+            var_dump($res);die;
             echo json_encode(array("status" => 'error', 'msg' => $res['ysepay_merchant_register_accept_response']['sub_msg']));
             exit();
         }    
