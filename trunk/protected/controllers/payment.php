@@ -1236,7 +1236,6 @@ class PaymentController extends Controller {
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
         if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])) {
-            var_dump($sub_openid);
             var_dump($ret['ysepay_online_jsapi_pay_response']);die;
         }
         if($payment_id==6) {
