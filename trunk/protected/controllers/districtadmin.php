@@ -1948,188 +1948,188 @@ class DistrictadminController extends Controller
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
           //身份证正面
-              $file_name = time().$shop_check['user_id'].'positive_idcard';
-              $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
-              $save_path = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name.'.'.$file_ext;
-              $positive_idcard = strpos($shop_check['positive_idcard'],'https') !== false?$shop_check['positive_idcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['positive_idcard'];
-              file_put_contents($save_path, file_get_contents($positive_idcard.'!/fwfh/1280x1280'));
-              $post_data = array (
-                    // "name"=>'picFile',
-                    "picType"=>'00',
-                    "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                    "superUsercode"=>'yuanmeng',
-                    "upload" => new CURLFile($save_path),
-                );
+              // $file_name = time().$shop_check['user_id'].'positive_idcard';
+              // $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
+              // $save_path = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name.'.'.$file_ext;
+              // $positive_idcard = strpos($shop_check['positive_idcard'],'https') !== false?$shop_check['positive_idcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['positive_idcard'];
+              // file_put_contents($save_path, file_get_contents($positive_idcard.'!/fwfh/1280x1280'));
+              // $post_data = array (
+              //       // "name"=>'picFile',
+              //       "picType"=>'00',
+              //       "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+              //       "superUsercode"=>'yuanmeng',
+              //       "upload" => new CURLFile($save_path),
+              //   );
 
-                $re = $this->curl_form($post_data,$sumbit_url,$http_url);
-                unlink($save_path);
-                $result = json_decode($re,true);
-                // exit();
+              //   $re = $this->curl_form($post_data,$sumbit_url,$http_url);
+              //   unlink($save_path);
+              //   $result = json_decode($re,true);
+              //   // exit();
                 
-                // if($result['isSuccess']==true) {
-                    //身份证反面
-                    $file_name1 = time().$shop_check['user_id'].'native_idcard';
-                    $file_ext1 = substr(strrchr($shop_check['native_idcard'], '.'), 1);
-                    $save_path1 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name1.'.'.$file_ext1;
-                    $native_idcard = strpos($shop_check['native_idcard'],'https') !== false?$shop_check['native_idcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['native_idcard'];
-                    file_put_contents($save_path1, file_get_contents($native_idcard.'!/fwfh/1280x1280'));
-                    $post_data1 = array (
-                        // "name"=>'picFile',
-                        "picType"=>'30',
-                        "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                        "superUsercode"=>'yuanmeng',
-                        "upload" => new CURLFile($save_path1),
-                    );
+              //   // if($result['isSuccess']==true) {
+              //       //身份证反面
+              //       $file_name1 = time().$shop_check['user_id'].'native_idcard';
+              //       $file_ext1 = substr(strrchr($shop_check['native_idcard'], '.'), 1);
+              //       $save_path1 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name1.'.'.$file_ext1;
+              //       $native_idcard = strpos($shop_check['native_idcard'],'https') !== false?$shop_check['native_idcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['native_idcard'];
+              //       file_put_contents($save_path1, file_get_contents($native_idcard.'!/fwfh/1280x1280'));
+              //       $post_data1 = array (
+              //           // "name"=>'picFile',
+              //           "picType"=>'30',
+              //           "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+              //           "superUsercode"=>'yuanmeng',
+              //           "upload" => new CURLFile($save_path1),
+              //       );
 
-                    $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
-                    unlink($save_path1);
-                    $result = json_decode($re,true);
-                    // if($result['isSuccess']==true) {
-                       if($shop_check['type']!=3 && $shop_check['positive_bankcard']!=null) {
-                          //银行卡正面
-                          $file_name5 = time().$shop_check['user_id'].'positive_bankcard';
-                          $file_ext5 = substr(strrchr($shop_check['positive_bankcard'], '.'), 1);
-                          $save_path5 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name5.'.'.$file_ext5;
-                          $positive_bankcard = strpos($shop_check['positive_bankcard'],'https') !== false?$shop_check['positive_bankcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['positive_bankcard'];
-                          file_put_contents($save_path5, file_get_contents($positive_bankcard.'!/fwfh/1280x1280'));
-                          $post_data5 = array (
-                                // "name"=>'picFile',
-                                "picType"=>'35',
-                                "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                                "superUsercode"=>'yuanmeng',
-                                "upload" => new CURLFile($save_path5),
-                            );
+              //       $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
+              //       unlink($save_path1);
+              //       $result = json_decode($re,true);
+              //       // if($result['isSuccess']==true) {
+              //          if($shop_check['type']!=3 && $shop_check['positive_bankcard']!=null) {
+              //             //银行卡正面
+              //             $file_name5 = time().$shop_check['user_id'].'positive_bankcard';
+              //             $file_ext5 = substr(strrchr($shop_check['positive_bankcard'], '.'), 1);
+              //             $save_path5 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name5.'.'.$file_ext5;
+              //             $positive_bankcard = strpos($shop_check['positive_bankcard'],'https') !== false?$shop_check['positive_bankcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['positive_bankcard'];
+              //             file_put_contents($save_path5, file_get_contents($positive_bankcard.'!/fwfh/1280x1280'));
+              //             $post_data5 = array (
+              //                   // "name"=>'picFile',
+              //                   "picType"=>'35',
+              //                   "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+              //                   "superUsercode"=>'yuanmeng',
+              //                   "upload" => new CURLFile($save_path5),
+              //               );
 
 
-                            $re = $this->curl_form($post_data5,$sumbit_url,$http_url);
-                            // var_dump($re);
-                            unlink($save_path5);
-                            // exit();
+              //               $re = $this->curl_form($post_data5,$sumbit_url,$http_url);
+              //               // var_dump($re);
+              //               unlink($save_path5);
+              //               // exit();
                             
-                            //银行卡反面
-                            $file_name6 = time().$shop_check['user_id'].'native_bankcard';
-                            $file_ext6 = substr(strrchr($shop_check['native_bankcard'], '.'), 1);
-                            $save_path6 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name6.'.'.$file_ext6;
-                            $native_bankcard = strpos($shop_check['native_bankcard'],'https') !== false?$shop_check['native_bankcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['native_bankcard'];
-                            file_put_contents($save_path6, file_get_contents($native_bankcard.'!/fwfh/1280x1280'));
-                            $post_data6 = array (
-                                // "name"=>'picFile',
-                                "picType"=>'36',
-                                "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                                "superUsercode"=>'yuanmeng',
-                                "upload" => new CURLFile($save_path6),
-                            );
+              //               //银行卡反面
+              //               $file_name6 = time().$shop_check['user_id'].'native_bankcard';
+              //               $file_ext6 = substr(strrchr($shop_check['native_bankcard'], '.'), 1);
+              //               $save_path6 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name6.'.'.$file_ext6;
+              //               $native_bankcard = strpos($shop_check['native_bankcard'],'https') !== false?$shop_check['native_bankcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['native_bankcard'];
+              //               file_put_contents($save_path6, file_get_contents($native_bankcard.'!/fwfh/1280x1280'));
+              //               $post_data6 = array (
+              //                   // "name"=>'picFile',
+              //                   "picType"=>'36',
+              //                   "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+              //                   "superUsercode"=>'yuanmeng',
+              //                   "upload" => new CURLFile($save_path6),
+              //               );
                          
-                            $re = $this->curl_form($post_data6,$sumbit_url,$http_url);
-                            // var_dump($re);
-                            unlink($save_path6);
-                            $result = json_decode($re,true);
-                            // exit();
-                        }
+              //               $re = $this->curl_form($post_data6,$sumbit_url,$http_url);
+              //               // var_dump($re);
+              //               unlink($save_path6);
+              //               $result = json_decode($re,true);
+              //               // exit();
+              //           }
 
-                        if($shop_check['type']!=2 && $shop_check['hand_idcard']!=null) {
-                            //手持身份证正扫面照
-                            $file_name2 = time().$shop_check['user_id'].'hand_idcard';
-                            $file_ext2 = substr(strrchr($shop_check['hand_idcard'], '.'), 1);
-                            $save_path2 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name2.'.'.$file_ext2;
-                            $hand_idcard = strpos($shop_check['hand_idcard'],'https') !== false?$shop_check['hand_idcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['hand_idcard'];
-                            file_put_contents($save_path2, file_get_contents($hand_idcard.'!/fwfh/1280x1280'));
-                            $post_data2 = array (
-                                // "name"=>'picFile',
-                                "picType"=>'33',
-                                "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                                "superUsercode"=>'yuanmeng',
-                                "upload" => new CURLFile($save_path2),
-                            );
+              //           if($shop_check['type']!=2 && $shop_check['hand_idcard']!=null) {
+              //               //手持身份证正扫面照
+              //               $file_name2 = time().$shop_check['user_id'].'hand_idcard';
+              //               $file_ext2 = substr(strrchr($shop_check['hand_idcard'], '.'), 1);
+              //               $save_path2 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name2.'.'.$file_ext2;
+              //               $hand_idcard = strpos($shop_check['hand_idcard'],'https') !== false?$shop_check['hand_idcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['hand_idcard'];
+              //               file_put_contents($save_path2, file_get_contents($hand_idcard.'!/fwfh/1280x1280'));
+              //               $post_data2 = array (
+              //                   // "name"=>'picFile',
+              //                   "picType"=>'33',
+              //                   "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+              //                   "superUsercode"=>'yuanmeng',
+              //                   "upload" => new CURLFile($save_path2),
+              //               );
 
-                            $re = $this->curl_form($post_data2,$sumbit_url,$http_url);
+              //               $re = $this->curl_form($post_data2,$sumbit_url,$http_url);
                             
-                            unlink($save_path2);
-                            $result = json_decode($re,true);
-                            // exit();
-                            // if($result['isSuccess']==true) {
-                                //营业执照
-                                $file_name3 = time().$shop_check['user_id'].'business_licence';
-                                $file_ext3 = substr(strrchr($shop_check['business_licence'], '.'), 1);
-                                $save_path3 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name3.'.'.$file_ext3;
-                                $business_licence = strpos($shop_check['business_licence'],'https') !== false?$shop_check['business_licence']:'https://ymlypt.b0.upaiyun.com'.$shop_check['business_licence'];
-                                file_put_contents($save_path3, file_get_contents($business_licence.'!/fwfh/1280x1280'));
-                                $post_data3 = array (
-                                    // "name"=>'picFile',
-                                    "picType"=>'19',
-                                    "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                                    "superUsercode"=>'yuanmeng',
-                                    "upload" => new CURLFile($save_path3),
-                                );
+              //               unlink($save_path2);
+              //               $result = json_decode($re,true);
+              //               // exit();
+              //               // if($result['isSuccess']==true) {
+              //                   //营业执照
+              //                   $file_name3 = time().$shop_check['user_id'].'business_licence';
+              //                   $file_ext3 = substr(strrchr($shop_check['business_licence'], '.'), 1);
+              //                   $save_path3 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name3.'.'.$file_ext3;
+              //                   $business_licence = strpos($shop_check['business_licence'],'https') !== false?$shop_check['business_licence']:'https://ymlypt.b0.upaiyun.com'.$shop_check['business_licence'];
+              //                   file_put_contents($save_path3, file_get_contents($business_licence.'!/fwfh/1280x1280'));
+              //                   $post_data3 = array (
+              //                       // "name"=>'picFile',
+              //                       "picType"=>'19',
+              //                       "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+              //                       "superUsercode"=>'yuanmeng',
+              //                       "upload" => new CURLFile($save_path3),
+              //                   );
 
-                                $re = $this->curl_form($post_data3,$sumbit_url,$http_url);
-                                unlink($save_path3);
-                                // exit();
+              //                   $re = $this->curl_form($post_data3,$sumbit_url,$http_url);
+              //                   unlink($save_path3);
+              //                   // exit();
                                 
-                                //门店照
-                                $file_name4 = time().$shop_check['user_id'].'shop_photo';
-                                $file_ext4 = substr(strrchr($shop_check['shop_photo'], '.'), 1);
-                                $save_path4 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name4.'.'.$file_ext4;
-                                $shop_photo = strpos($shop_check['shop_photo'],'https') !== false?$shop_check['shop_photo']:'https://ymlypt.b0.upaiyun.com'.$shop_check['shop_photo'];
-                                file_put_contents($save_path4, file_get_contents($shop_photo.'!/fwfh/1280x1280'));
-                                $post_data4 = array (
-                                    // "name"=>'picFile',
-                                    "picType"=>'34',
-                                    "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                                    "superUsercode"=>'yuanmeng',
-                                    "upload" => new CURLFile($save_path4),
-                                );
+              //                   //门店照
+              //                   $file_name4 = time().$shop_check['user_id'].'shop_photo';
+              //                   $file_ext4 = substr(strrchr($shop_check['shop_photo'], '.'), 1);
+              //                   $save_path4 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name4.'.'.$file_ext4;
+              //                   $shop_photo = strpos($shop_check['shop_photo'],'https') !== false?$shop_check['shop_photo']:'https://ymlypt.b0.upaiyun.com'.$shop_check['shop_photo'];
+              //                   file_put_contents($save_path4, file_get_contents($shop_photo.'!/fwfh/1280x1280'));
+              //                   $post_data4 = array (
+              //                       // "name"=>'picFile',
+              //                       "picType"=>'34',
+              //                       "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+              //                       "superUsercode"=>'yuanmeng',
+              //                       "upload" => new CURLFile($save_path4),
+              //                   );
 
-                                $re = $this->curl_form($post_data4,$sumbit_url,$http_url);
-                                unlink($save_path4);
-                                // exit();
-                            // }  
-                        }
-                    // }
-                // }
+              //                   $re = $this->curl_form($post_data4,$sumbit_url,$http_url);
+              //                   unlink($save_path4);
+              //                   // exit();
+              //               // }  
+              //           }
+              //       // }
+              //   // }
             
 
-                //客户协议
-                $contract = $model->table('promoter_contract')->where('user_id='.$shop_check['user_id'])->find();
-                if(!$contract) {
-                    echo json_encode(array("status" => 'error', 'msg' => '缺少客户协议'));
-                    exit();
-                }
-                $file_name7 = time().$shop_check['user_id'].'contract';
-                $file_ext7 = substr(strrchr($contract['url4'], '.'), 1);
-                $save_path7 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name7.'.'.$file_ext7;
-                $url4 = strpos($contract['url4'],'https') !== false?$contract['url4']:'https://ymlypt.b0.upaiyun.com'.$contract['url4'];
-                file_put_contents($save_path7, file_get_contents($url4.'!/fwfh/1280x1280'));
-                $post_data7 = array (
-                    // "name"=>'picFile',
-                    "picType"=>'31',
-                    "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                    "superUsercode"=>'yuanmeng',
-                    "upload" => new CURLFile($save_path7),
-                );
+              //   //客户协议
+              //   $contract = $model->table('promoter_contract')->where('user_id='.$shop_check['user_id'])->find();
+              //   if(!$contract) {
+              //       echo json_encode(array("status" => 'error', 'msg' => '缺少客户协议'));
+              //       exit();
+              //   }
+              //   $file_name7 = time().$shop_check['user_id'].'contract';
+              //   $file_ext7 = substr(strrchr($contract['url4'], '.'), 1);
+              //   $save_path7 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name7.'.'.$file_ext7;
+              //   $url4 = strpos($contract['url4'],'https') !== false?$contract['url4']:'https://ymlypt.b0.upaiyun.com'.$contract['url4'];
+              //   file_put_contents($save_path7, file_get_contents($url4.'!/fwfh/1280x1280'));
+              //   $post_data7 = array (
+              //       // "name"=>'picFile',
+              //       "picType"=>'31',
+              //       "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+              //       "superUsercode"=>'yuanmeng',
+              //       "upload" => new CURLFile($save_path7),
+              //   );
              
-                $re = $this->curl_form($post_data7,$sumbit_url,$http_url);
-                // var_dump($re);
-                unlink($save_path7);
+              //   $re = $this->curl_form($post_data7,$sumbit_url,$http_url);
+              //   // var_dump($re);
+              //   unlink($save_path7);
                 
-                if($shop_check['account_picture']!=null) {
-                    //开户许可证
-                    $file_name8 = time().$shop_check['user_id'].'account_picture';
-                    $file_ext8 = substr(strrchr($shop_check['account_picture'], '.'), 1);
-                    $save_path8 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name8.'.'.$file_ext8;
-                    $account_picture = strpos($shop_check['account_picture'],'https') !== false?$shop_check['account_picture']:'https://ymlypt.b0.upaiyun.com'.$shop_check['account_picture'];
-                    file_put_contents($save_path8, file_get_contents($account_picture.'!/fwfh/1280x1280'));
-                    $post_data8 = array (
-                        // "name"=>'picFile',
-                        "picType"=>'37',
-                        "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                        "superUsercode"=>'yuanmeng',
-                        "upload" => new CURLFile($save_path8),
-                    );
+              //   if($shop_check['account_picture']!=null) {
+              //       //开户许可证
+              //       $file_name8 = time().$shop_check['user_id'].'account_picture';
+              //       $file_ext8 = substr(strrchr($shop_check['account_picture'], '.'), 1);
+              //       $save_path8 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name8.'.'.$file_ext8;
+              //       $account_picture = strpos($shop_check['account_picture'],'https') !== false?$shop_check['account_picture']:'https://ymlypt.b0.upaiyun.com'.$shop_check['account_picture'];
+              //       file_put_contents($save_path8, file_get_contents($account_picture.'!/fwfh/1280x1280'));
+              //       $post_data8 = array (
+              //           // "name"=>'picFile',
+              //           "picType"=>'37',
+              //           "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+              //           "superUsercode"=>'yuanmeng',
+              //           "upload" => new CURLFile($save_path8),
+              //       );
 
-                    $re = $this->curl_form($post_data8,$sumbit_url,$http_url);
-                    unlink($save_path8);
-                }
+              //       $re = $this->curl_form($post_data8,$sumbit_url,$http_url);
+              //       unlink($save_path8);
+              //   }
         // if($result['isSuccess']==true) {
             //注册商户号   
             $promoter = $model->table('district_promoter')->fields('shop_name,province_id,city_id,location')->where('user_id='.$shop_check['user_id'])->find();
