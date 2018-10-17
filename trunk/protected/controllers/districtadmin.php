@@ -2142,18 +2142,18 @@ class DistrictadminController extends Controller
             } else {
                 $cust_type = 'B'; //企业
             }
-            if($promoter['province_id']==0 || $promoter['city_id']==0) {
-                echo json_encode(array("status" => 'error', 'msg' => '请先完善省份城市信息'));
-                exit();
-            }
-            if($promoter['location']==null) {
-                echo json_encode(array("status" => 'error', 'msg' => '请先完善详细地址信息'));
-                exit();
-            }
-            if($customer['realname']==null) {
-                echo json_encode(array("status" => 'error', 'msg' => '请先完成实名认证'));
-                exit();
-            }
+            // if($promoter['province_id']==0 || $promoter['city_id']==0) {
+            //     echo json_encode(array("status" => 'error', 'msg' => '请先完善省份城市信息'));
+            //     exit();
+            // }
+            // if($promoter['location']==null) {
+            //     echo json_encode(array("status" => 'error', 'msg' => '请先完善详细地址信息'));
+            //     exit();
+            // }
+            // if($customer['realname']==null) {
+            //     echo json_encode(array("status" => 'error', 'msg' => '请先完成实名认证'));
+            //     exit();
+            // }
             $province = $model->table('area')->where('id='.$promoter['province_id'])->find();
             $city = $model->table('area')->where('id='.$promoter['city_id'])->find();
 
@@ -2185,8 +2185,8 @@ class DistrictadminController extends Controller
                 'province'=>$province['name'],
                 'city'=>$city['name'],
                 'company_addr'=>$promoter['location'],
-                'legal_name'=>$customer['realname'],
-                'legal_tel'=>$customer['mobile'],
+                'legal_name'=>$shop_check['legal_person'],
+                'legal_tel'=>$shop_check['mobile'],
                 'legal_cert_type'=>'00',
                 "legal_cert_expire"=>"20250825",
                 'legal_cert_no'=>$legal_cert_no,
@@ -2202,7 +2202,7 @@ class DistrictadminController extends Controller
                 'bank_city'=>$shop_check['city']!=null?$shop_check['city']:$city['name'],
                 'cert_type'=>'00',
                 'cert_no'=>$legal_cert_no,
-                'bank_telephone_no'=>$customer['mobile']
+                'bank_telephone_no'=>$shop_check['mobile']
                 );
             $params['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
             // $params['biz_content'] = '{}';
