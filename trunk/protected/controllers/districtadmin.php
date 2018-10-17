@@ -1959,18 +1959,6 @@ class DistrictadminController extends Controller
             } else {
                 $cust_type = 'B'; //企业
             }
-            // if($promoter['province_id']==0 || $promoter['city_id']==0) {
-            //     echo json_encode(array("status" => 'error', 'msg' => '请先完善省份城市信息'));
-            //     exit();
-            // }
-            // if($promoter['location']==null) {
-            //     echo json_encode(array("status" => 'error', 'msg' => '请先完善详细地址信息'));
-            //     exit();
-            // }
-            // if($customer['realname']==null) {
-            //     echo json_encode(array("status" => 'error', 'msg' => '请先完成实名认证'));
-            //     exit();
-            // }
             $province = $model->table('area')->where('id='.$promoter['province_id'])->find();
             $city = $model->table('area')->where('id='.$promoter['city_id'])->find();
 
@@ -2030,21 +2018,16 @@ class DistrictadminController extends Controller
                 $signStr .= $key . '=' . $val . '&';
             }
             $signStr = rtrim($signStr, '&');
-            // var_dump($signStr);die;
             $sign = $this->sign_encrypt(array('data' => $signStr));
             $params['sign'] = trim($sign['check']);
-            // print_r($params);
             $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
             $res = Common::httpRequest($url1,'POST',$params);
-            // var_dump($res);die;
             $res = json_decode($res,true);
-            // var_dump($res);die;
             if($res['ysepay_merchant_register_accept_response']['code']==10000) {
                $model->table("shop_check")->data(array("usercode" =>$res['ysepay_merchant_register_accept_response']['usercode']))->where("id=" . $id)->update();
                echo json_encode(array("status" => 'success', 'msg' => '成功'));
                 exit();
             } else {
-                // var_dump($res);die;
                 echo json_encode(array("status" => 'error', 'msg' => $res['ysepay_merchant_register_accept_response']['sub_msg']));
                 exit();
             }
@@ -2057,7 +2040,6 @@ class DistrictadminController extends Controller
         
         $myParams['method'] = 'ysepay.merchant.register.token.get';
         $myParams['partner_id'] = 'yuanmeng';
-        // $myParams['partner_id'] = $this->user['id'];
         $myParams['timestamp'] = date('Y-m-d H:i:s', time());
         $myParams['charset'] = 'GBK';
         $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
@@ -2066,7 +2048,6 @@ class DistrictadminController extends Controller
         $myParams['version'] = '3.0';
         $biz_content_arr = array(
         );
-        // $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
         $myParams['biz_content'] = '{}';
         ksort($myParams);
         
@@ -2078,7 +2059,6 @@ class DistrictadminController extends Controller
         $sign = $this->sign_encrypt(array('data' => $signStr));
         $myParams['sign'] = trim($sign['check']);
         $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
-        // var_dump($myParams);
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
         //上传资料
@@ -2270,6 +2250,179 @@ class DistrictadminController extends Controller
                 //     $re = $this->curl_form($post_data8,$sumbit_url,$http_url);
                 //     unlink($save_path8);
                 // }
+    }
+
+    public function shop_check_upload2()
+    {
+        $id = Filter::int(Req::args('id'));
+        $token = Filter::str(Req::args('token'));
+        $model = new Model();
+        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        //身份证反面
+        $file_name1 = time().$shop_check['user_id'].'native_idcard';
+        $file_ext1 = substr(strrchr($shop_check['native_idcard'], '.'), 1);
+        $save_path1 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name1.'.'.$file_ext1;
+        $native_idcard = strpos($shop_check['native_idcard'],'https') !== false?$shop_check['native_idcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['native_idcard'];
+        file_put_contents($save_path1, file_get_contents($native_idcard.'!/fwfh/1280x1280'));
+        $post_data1 = array (
+            "picType"=>'30',
+            "token"=>$token,
+            "superUsercode"=>'yuanmeng',
+            "upload" => new CURLFile($save_path1),
+        );
+
+        $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
+        unlink($save_path1);
+        // $result = json_decode($re,true);
+        // if($result['isSuccess']==true) {
+
+        // } 
+    }
+
+    public function shop_check_upload3()
+    {
+        $id = Filter::int(Req::args('id'));
+        $token = Filter::str(Req::args('token'));
+        $model = new Model();
+        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        //银行卡正面
+        $file_name5 = time().$shop_check['user_id'].'positive_bankcard';
+        $file_ext5 = substr(strrchr($shop_check['positive_bankcard'], '.'), 1);
+        $save_path5 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name5.'.'.$file_ext5;
+        $positive_bankcard = strpos($shop_check['positive_bankcard'],'https') !== false?$shop_check['positive_bankcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['positive_bankcard'];
+        file_put_contents($save_path5, file_get_contents($positive_bankcard.'!/fwfh/1280x1280'));
+        $post_data5 = array (
+            "picType"=>'35',
+            "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            "superUsercode"=>'yuanmeng',
+            "upload" => new CURLFile($save_path5),
+        );
+
+        $re = $this->curl_form($post_data5,$sumbit_url,$http_url);
+        unlink($save_path5);
+    }
+
+    public function shop_check_upload4()
+    {
+        $id = Filter::int(Req::args('id'));
+        $token = Filter::str(Req::args('token'));
+        $model = new Model();
+        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        //银行卡反面
+        $file_name6 = time().$shop_check['user_id'].'native_bankcard';
+        $file_ext6 = substr(strrchr($shop_check['native_bankcard'], '.'), 1);
+        $save_path6 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name6.'.'.$file_ext6;
+        $native_bankcard = strpos($shop_check['native_bankcard'],'https') !== false?$shop_check['native_bankcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['native_bankcard'];
+        file_put_contents($save_path6, file_get_contents($native_bankcard.'!/fwfh/1280x1280'));
+        $post_data6 = array (
+            "picType"=>'36',
+            "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            "superUsercode"=>'yuanmeng',
+            "upload" => new CURLFile($save_path6),
+        );
+                         
+        $re = $this->curl_form($post_data6,$sumbit_url,$http_url);
+        unlink($save_path6);
+    }
+
+    public function shop_check_upload5()
+    {
+        $id = Filter::int(Req::args('id'));
+        $token = Filter::str(Req::args('token'));
+        $model = new Model();
+        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        //手持身份证正面照
+        $file_name2 = time().$shop_check['user_id'].'hand_idcard';
+        $file_ext2 = substr(strrchr($shop_check['hand_idcard'], '.'), 1);
+        $save_path2 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name2.'.'.$file_ext2;
+        $hand_idcard = strpos($shop_check['hand_idcard'],'https') !== false?$shop_check['hand_idcard']:'https://ymlypt.b0.upaiyun.com'.$shop_check['hand_idcard'];
+        file_put_contents($save_path2, file_get_contents($hand_idcard.'!/fwfh/1280x1280'));
+        $post_data2 = array (
+            // "name"=>'picFile',
+            "picType"=>'33',
+            "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            "superUsercode"=>'yuanmeng',
+            "upload" => new CURLFile($save_path2),
+        );
+
+        $re = $this->curl_form($post_data2,$sumbit_url,$http_url);
+        unlink($save_path2);
+    }
+
+    public function shop_check_upload6()
+    {
+        $id = Filter::int(Req::args('id'));
+        $token = Filter::str(Req::args('token'));
+        $model = new Model();
+        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        //营业执照
+        $file_name3 = time().$shop_check['user_id'].'business_licence';
+        $file_ext3 = substr(strrchr($shop_check['business_licence'], '.'), 1);
+        $save_path3 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name3.'.'.$file_ext3;
+        $business_licence = strpos($shop_check['business_licence'],'https') !== false?$shop_check['business_licence']:'https://ymlypt.b0.upaiyun.com'.$shop_check['business_licence'];
+        file_put_contents($save_path3, file_get_contents($business_licence.'!/fwfh/1280x1280'));
+        $post_data3 = array (
+            // "name"=>'picFile',
+            "picType"=>'19',
+            "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            "superUsercode"=>'yuanmeng',
+            "upload" => new CURLFile($save_path3),
+        );
+        $re = $this->curl_form($post_data3,$sumbit_url,$http_url);
+        unlink($save_path3);
+    }
+
+    public function shop_check_upload7()
+    {
+        $id = Filter::int(Req::args('id'));
+        $token = Filter::str(Req::args('token'));
+        $model = new Model();
+        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        //门店照
+        $file_name4 = time().$shop_check['user_id'].'shop_photo';
+        $file_ext4 = substr(strrchr($shop_check['shop_photo'], '.'), 1);
+        $save_path4 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name4.'.'.$file_ext4;
+        $shop_photo = strpos($shop_check['shop_photo'],'https') !== false?$shop_check['shop_photo']:'https://ymlypt.b0.upaiyun.com'.$shop_check['shop_photo'];
+        file_put_contents($save_path4, file_get_contents($shop_photo.'!/fwfh/1280x1280'));
+        $post_data4 = array (
+            // "name"=>'picFile',
+            "picType"=>'34',
+            "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            "superUsercode"=>'yuanmeng',
+            "upload" => new CURLFile($save_path4),
+        );
+        $re = $this->curl_form($post_data4,$sumbit_url,$http_url);
+        unlink($save_path4);
+    }
+
+    public function shop_check_upload8()
+    {
+        $id = Filter::int(Req::args('id'));
+        $token = Filter::str(Req::args('token'));
+        $model = new Model();
+        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        //客户协议
+        $contract = $model->table('promoter_contract')->where('user_id='.$shop_check['user_id'])->find();
+        if(!$contract) {
+            echo json_encode(array("status" => 'error', 'msg' => '缺少客户协议'));
+            exit();
+        }
+        $file_name7 = time().$shop_check['user_id'].'contract';
+        $file_ext7 = substr(strrchr($contract['url4'], '.'), 1);
+        $save_path7 = dirname(dirname(dirname(__FILE__))).'/static/temp_path/'.$file_name7.'.'.$file_ext7;
+        $url4 = strpos($contract['url4'],'https') !== false?$contract['url4']:'https://ymlypt.b0.upaiyun.com'.$contract['url4'];
+        file_put_contents($save_path7, file_get_contents($url4.'!/fwfh/1280x1280'));
+        $post_data7 = array (
+            // "name"=>'picFile',
+            "picType"=>'31',
+            "token"=>$ret['ysepay_merchant_register_token_get_response']['token'],
+            "superUsercode"=>'yuanmeng',
+            "upload" => new CURLFile($save_path7),
+        );
+             
+        $re = $this->curl_form($post_data7,$sumbit_url,$http_url);
+        // var_dump($re);
+        unlink($save_path7);
     }
 
     public function shop_check_query()

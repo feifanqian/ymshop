@@ -37,7 +37,7 @@ class ComplaintController extends Controller {
             $this->assign("where", "1=1");
         }
         $this->assign("condition", $condition);
-        $this->assign("type", array('1' => '<span class="red">商品投诉</span>', '2' => '<span class="red">物流投诉</span>','2' => '<span class="red">其他</span>', ));
+        $this->assign("type", array('1' => '<span class="red">商品投诉</span>', '2' => '<span class="red">物流投诉</span>','3' => '<span class="red">其他</span>', ));
         $this->assign("status", array('0' => "<span style='color:green'>未处理</span>", '1' =>"<span style='color:blue'>受理中</span>",'2'=>"<span style='color:gray'>已完成整改</span>"));
         $this->redirect();
     }
