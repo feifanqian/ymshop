@@ -686,23 +686,23 @@ class CashierAction extends Controller
                     switch ($v['type']) {
                         case 1:
                             $title = '积分券';
-                            $amount = 12;
+                            // $amount = 12;
                             break;
                         case 2:
                             $title = '现金券';
-                            $amount = 600;
+                            // $amount = 600;
                             break;
                         case 3:
                             $title = '港澳游';
-                            $amount = 3988;
+                            // $amount = 3988;
                             break;
                         case 4:
                             $title = '商品券';
-                            $amount = 2680;
+                            // $amount = 2680;
                             break;  
                         default:
                             $title = '积分券';
-                            $amount = 12;
+                            // $amount = 12;
                             break;
                     }
                     if(date('Y-m-d',strtotime($v['end_time']))==date("Y-m-d",strtotime("+1 day"))) {
@@ -710,7 +710,7 @@ class CashierAction extends Controller
                     } else {
                         $list['data'][$k]['endline'] = '';
                     }
-                    $list['data'][$k]['alias'] = $amount.'元'.$title;
+                    $list['data'][$k]['alias'] = $v['amount'].'元'.$title;
                 }
             }
             unset($list['html']);

@@ -1947,6 +1947,146 @@ class DistrictadminController extends Controller
         $id = Filter::int(Req::args('id'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        // if($result['isSuccess']==true) {
+            //注册商户号   
+            $promoter = $model->table('district_promoter')->fields('shop_name,province_id,city_id,location')->where('user_id='.$shop_check['user_id'])->find();
+            $customer = $model->table('customer as c')->fields('c.real_name,c.realname,c.mobile,c.id_no,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$shop_check['user_id'])->find();
+            $name = $promoter['shop_name']!=null?$promoter['shop_name']:($customer['nickname']!=null?$customer['nickname']:$customer['real_name']);
+            if($shop_check['type']==1) {
+                $cust_type = 'C'; //小微
+            } elseif($shop_check['type']==2) {
+                $cust_type = 'O'; //个体
+            } else {
+                $cust_type = 'B'; //企业
+            }
+            // if($promoter['province_id']==0 || $promoter['city_id']==0) {
+            //     echo json_encode(array("status" => 'error', 'msg' => '请先完善省份城市信息'));
+            //     exit();
+            // }
+            // if($promoter['location']==null) {
+            //     echo json_encode(array("status" => 'error', 'msg' => '请先完善详细地址信息'));
+            //     exit();
+            // }
+            // if($customer['realname']==null) {
+            //     echo json_encode(array("status" => 'error', 'msg' => '请先完成实名认证'));
+            //     exit();
+            // }
+            $province = $model->table('area')->where('id='.$promoter['province_id'])->find();
+            $city = $model->table('area')->where('id='.$promoter['city_id'])->find();
+
+            $bankcard = $model->table('bankcard')->where('user_id='.$shop_check['user_id'])->find();
+            // $legal_cert_no = bin2hex($this->des_encrypt($customer['id_no'],'yuanmeng'));
+            $legal_cert_no = $this->des_encrypt($shop_check['id_no'],'yuanmeng');
+            // var_dump($legal_cert_no);
+            $params = array();  
+            
+            $params['method'] = 'ysepay.merchant.register.accept';
+            $params['partner_id'] = 'yuanmeng';
+            // $params['partner_id'] = $this->user['id'];
+            $params['timestamp'] = date('Y-m-d H:i:s', time());
+            $params['charset'] = 'utf-8';
+            $params['sign_type'] = 'RSA';
+            $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+              
+              
+            $params['version'] = '3.0';
+            $biz_content_arr = array(
+                'merchant_no'=>'yuanmeng'.$shop_check['user_id'],
+                'cust_type'=>$cust_type,
+                'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                // 'token'=>$shop_check['token'],
+                'another_name'=>$name,
+                'cust_name'=>$name,
+                'mer_flag'=>'11',
+                'industry'=>'58',
+                'province'=>$shop_check['province'],
+                'city'=>$shop_check['city'],
+                'company_addr'=>$shop_check['address'],
+                'legal_name'=>$shop_check['legal_person'],
+                'legal_tel'=>$shop_check['mobile'],
+                'legal_cert_type'=>'00',
+                "legal_cert_expire"=>"20250825",
+                'legal_cert_no'=>$legal_cert_no,
+                // 'notify_type'=>2,
+                'settle_type'=>'1',
+                'bank_account_no'=>$shop_check['account_card'],
+                'bank_account_name'=>$shop_check['legal_person'],
+                'bank_account_type'=>'personal',
+                'bank_card_type'=>'debit',
+                'bank_name'=>$shop_check['bank_name'],
+                'bank_type'=>$shop_check['bank_type'],
+                'bank_province'=>$shop_check['bank_province']!=null?$shop_check['bank_province']:$shop_check['province'],
+                'bank_city'=>$shop_check['bank_city']!=null?$shop_check['bank_city']:$shop_check['city'],
+                'cert_type'=>'00',
+                'cert_no'=>$legal_cert_no,
+                'bank_telephone_no'=>$shop_check['mobile']
+                );
+            $params['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+            // $params['biz_content'] = '{}';
+            ksort($params);
+            
+            $signStr = "";
+            foreach ($params as $key => $val) {
+                $signStr .= $key . '=' . $val . '&';
+            }
+            $signStr = rtrim($signStr, '&');
+            // var_dump($signStr);die;
+            $sign = $this->sign_encrypt(array('data' => $signStr));
+            $params['sign'] = trim($sign['check']);
+            // print_r($params);
+            $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
+            $res = Common::httpRequest($url1,'POST',$params);
+            // var_dump($res);die;
+            $res = json_decode($res,true);
+            // var_dump($res);die;
+            if($res['ysepay_merchant_register_accept_response']['code']==10000) {
+               $model->table("shop_check")->data(array("usercode" =>$res['ysepay_merchant_register_accept_response']['usercode']))->where("id=" . $id)->update();
+               echo json_encode(array("status" => 'success', 'msg' => '成功'));
+                exit();
+            } else {
+                // var_dump($res);die;
+                echo json_encode(array("status" => 'error', 'msg' => $res['ysepay_merchant_register_accept_response']['sub_msg']));
+                exit();
+            }
+        // }   
+    }
+
+    public function shop_check_upload()
+    {
+        $myParams = array();  
+        
+        $myParams['method'] = 'ysepay.merchant.register.token.get';
+        $myParams['partner_id'] = 'yuanmeng';
+        // $myParams['partner_id'] = $this->user['id'];
+        $myParams['timestamp'] = date('Y-m-d H:i:s', time());
+        $myParams['charset'] = 'GBK';
+        $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
+        $myParams['sign_type'] = 'RSA';  
+          
+        $myParams['version'] = '3.0';
+        $biz_content_arr = array(
+        );
+        // $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
+        $myParams['biz_content'] = '{}';
+        ksort($myParams);
+        
+        $signStr = "";
+        foreach ($myParams as $key => $val) {
+            $signStr .= $key . '=' . $val . '&';
+        }
+        $signStr = rtrim($signStr, '&');
+        $sign = $this->sign_encrypt(array('data' => $signStr));
+        $myParams['sign'] = trim($sign['check']);
+        $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
+        // var_dump($myParams);
+        $ret = Common::httpRequest($url,'POST',$myParams);
+        $ret = json_decode($ret,true);
+        //上传资料
+        $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
+        $http_url="http://39.108.165.0";
+        $id = Filter::int(Req::args('id'));
+        $model = new Model();
+        $shop_check = $model->table('shop_check')->where('id='.$id)->find();
           //身份证正面
               $file_name = time().$shop_check['user_id'].'positive_idcard';
               $file_ext = substr(strrchr($shop_check['positive_idcard'], '.'), 1);
@@ -2130,108 +2270,6 @@ class DistrictadminController extends Controller
                 //     $re = $this->curl_form($post_data8,$sumbit_url,$http_url);
                 //     unlink($save_path8);
                 // }
-        // if($result['isSuccess']==true) {
-            //注册商户号   
-            $promoter = $model->table('district_promoter')->fields('shop_name,province_id,city_id,location')->where('user_id='.$shop_check['user_id'])->find();
-            $customer = $model->table('customer as c')->fields('c.real_name,c.realname,c.mobile,c.id_no,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$shop_check['user_id'])->find();
-            $name = $promoter['shop_name']!=null?$promoter['shop_name']:($customer['nickname']!=null?$customer['nickname']:$customer['real_name']);
-            if($shop_check['type']==1) {
-                $cust_type = 'C'; //小微
-            } elseif($shop_check['type']==2) {
-                $cust_type = 'O'; //个体
-            } else {
-                $cust_type = 'B'; //企业
-            }
-            // if($promoter['province_id']==0 || $promoter['city_id']==0) {
-            //     echo json_encode(array("status" => 'error', 'msg' => '请先完善省份城市信息'));
-            //     exit();
-            // }
-            // if($promoter['location']==null) {
-            //     echo json_encode(array("status" => 'error', 'msg' => '请先完善详细地址信息'));
-            //     exit();
-            // }
-            // if($customer['realname']==null) {
-            //     echo json_encode(array("status" => 'error', 'msg' => '请先完成实名认证'));
-            //     exit();
-            // }
-            $province = $model->table('area')->where('id='.$promoter['province_id'])->find();
-            $city = $model->table('area')->where('id='.$promoter['city_id'])->find();
-
-            $bankcard = $model->table('bankcard')->where('user_id='.$shop_check['user_id'])->find();
-            // $legal_cert_no = bin2hex($this->des_encrypt($customer['id_no'],'yuanmeng'));
-            $legal_cert_no = $this->des_encrypt($shop_check['id_no'],'yuanmeng');
-            // var_dump($legal_cert_no);
-            $params = array();  
-            
-            $params['method'] = 'ysepay.merchant.register.accept';
-            $params['partner_id'] = 'yuanmeng';
-            // $params['partner_id'] = $this->user['id'];
-            $params['timestamp'] = date('Y-m-d H:i:s', time());
-            $params['charset'] = 'utf-8';
-            $params['sign_type'] = 'RSA';
-            $params['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
-              
-              
-            $params['version'] = '3.0';
-            $biz_content_arr = array(
-                'merchant_no'=>'yuanmeng'.$shop_check['user_id'],
-                'cust_type'=>$cust_type,
-                'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
-                // 'token'=>$shop_check['token'],
-                'another_name'=>$name,
-                'cust_name'=>$name,
-                'mer_flag'=>'11',
-                'industry'=>'58',
-                'province'=>$shop_check['province'],
-                'city'=>$shop_check['city'],
-                'company_addr'=>$shop_check['address'],
-                'legal_name'=>$shop_check['legal_person'],
-                'legal_tel'=>$shop_check['mobile'],
-                'legal_cert_type'=>'00',
-                "legal_cert_expire"=>"20250825",
-                'legal_cert_no'=>$legal_cert_no,
-                // 'notify_type'=>2,
-                'settle_type'=>'1',
-                'bank_account_no'=>$shop_check['account_card'],
-                'bank_account_name'=>$shop_check['legal_person'],
-                'bank_account_type'=>'personal',
-                'bank_card_type'=>'debit',
-                'bank_name'=>$shop_check['bank_name'],
-                'bank_type'=>$shop_check['bank_type'],
-                'bank_province'=>$shop_check['bank_province']!=null?$shop_check['bank_province']:$shop_check['province'],
-                'bank_city'=>$shop_check['bank_city']!=null?$shop_check['bank_city']:$shop_check['city'],
-                'cert_type'=>'00',
-                'cert_no'=>$legal_cert_no,
-                'bank_telephone_no'=>$shop_check['mobile']
-                );
-            $params['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
-            // $params['biz_content'] = '{}';
-            ksort($params);
-            
-            $signStr = "";
-            foreach ($params as $key => $val) {
-                $signStr .= $key . '=' . $val . '&';
-            }
-            $signStr = rtrim($signStr, '&');
-            // var_dump($signStr);die;
-            $sign = $this->sign_encrypt(array('data' => $signStr));
-            $params['sign'] = trim($sign['check']);
-            // print_r($params);
-            $url1 = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
-            $res = Common::httpRequest($url1,'POST',$params);
-            // var_dump($res);die;
-            $res = json_decode($res,true);
-            // var_dump($res);die;
-            if($res['ysepay_merchant_register_accept_response']['code']==10000) {
-               $model->table("shop_check")->data(array("usercode" =>$res['ysepay_merchant_register_accept_response']['usercode']))->where("id=" . $id)->update();
-               echo json_encode(array("status" => 'success', 'msg' => '成功'));
-                exit();
-            } else {
-                // var_dump($res);die;
-                echo json_encode(array("status" => 'error', 'msg' => $res['ysepay_merchant_register_accept_response']['sub_msg']));
-                exit();
-            }
-        // }   
     }
 
     public function shop_check_query()
