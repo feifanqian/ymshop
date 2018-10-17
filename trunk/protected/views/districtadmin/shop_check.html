@@ -147,19 +147,98 @@ function register(id){
         });
 }
 function upload(id,type){
-    layer.confirm('您确定要注册吗？', {
+    layer.confirm('您确定要上传吗？', {
         btn: ['确定','取消'] //按钮
       }, function(index){
         layer.close(index);
         var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
         $.post("{url:/districtadmin/shop_check_upload}",{id:id,type:type},function(data){
-             layer.close(index);
+             var token = data.token;
             if(data.status=='success'){
-            layer.msg('操作成功', {icon: 6},function(){
-                tools_reload();
-            }); 
-          }else{
-            layer.msg(data.msg, {icon: 5}); 
+                $.post("{url:/districtadmin/shop_check_upload1}",{id:id,token:token},function(data){ //身份证正面
+                  if(data.isSuccess==true){
+                     $.post("{url:/districtadmin/shop_check_upload2}",{id:id,token:token},function(data){ //身份证反面
+                      if(data.isSuccess==true){
+                          if(type==1) {
+                            //个体
+                            $.post("{url:/districtadmin/shop_check_upload5}",{id:id,token:token},function(data){ //手持身份证
+                              if(data.isSuccess==true) {
+                                 $.post("{url:/districtadmin/shop_check_upload6}",{id:id,token:token},function(data){ //营业执照
+                                  if(data.isSuccess==true) {
+                                     $.post("{url:/districtadmin/shop_check_upload7}",{id:id,token:token},function(data){ //门店照
+                                      if(data.isSuccess==true) {
+                                         $.post("{url:/districtadmin/shop_check_upload3}",{id:id,token:token},function(data){ //银行卡正面
+                                          if(data.isSuccess==true) {
+                                            $.post("{url:/districtadmin/shop_check_upload4}",{id:id,token:token},function(data){ //银行卡反面
+                                              if(data.isSuccess==true) {
+                                                $.post("{url:/districtadmin/shop_check_upload8}",{id:id,token:token},function(data){ //客户协议
+                                                if(data.isSuccess==true) {
+                                                   layer.msg('操作成功', {icon: 6},function(){
+                                                       tools_reload();
+                                                   });
+                                                }
+                                              },'json')
+                                              }
+                                            },'json')
+                                          }
+                                        },'json')
+                                      }
+                                    },'json')
+                                  }
+                                },'json')
+                              }
+                            },'json')  
+                          } else if(type==2) {
+                            //小微
+                            $.post("{url:/districtadmin/shop_check_upload3}",{id:id,token:token},function(data){ //银行卡正面
+                                if(data.isSuccess==true) {
+                                    $.post("{url:/districtadmin/shop_check_upload4}",{id:id,token:token},function(data){ //银行卡反面
+                                        if(data.isSuccess==true) {
+                                            $.post("{url:/districtadmin/shop_check_upload8}",{id:id,token:token},function(data){ //客户协议
+                                                if(data.isSuccess==true) {
+                                                   layer.msg('操作成功', {icon: 6},function(){
+                                                       tools_reload();
+                                                   });
+                                                }
+                                            },'json')
+                                        }
+                                    },'json')
+                                }
+                            },'json')
+                          } else {
+                            //企业
+                            $.post("{url:/districtadmin/shop_check_upload5}",{id:id,token:token},function(data){ //手持身份证
+                              if(data.isSuccess==true) {
+                                 $.post("{url:/districtadmin/shop_check_upload6}",{id:id,token:token},function(data){ //营业执照
+                                  if(data.isSuccess==true) {
+                                     $.post("{url:/districtadmin/shop_check_upload7}",{id:id,token:token},function(data){ //门店照
+                                      if(data.isSuccess==true) {
+                                         $.post("{url:/districtadmin/shop_check_upload8}",{id:id,token:token},function(data){ //客户协议
+                                              if(data.isSuccess==true) {
+                                                   $.post("{url:/districtadmin/shop_check_upload9}",{id:id,token:token},function(data){ //开户许可证
+                                                        if(data.isSuccess==true) {
+                                                             layer.msg('操作成功', {icon: 6},function(){
+                                                                 tools_reload();
+                                                             });
+                                                        }
+                                                    },'json')
+                                              }
+                                          },'json')
+                                      }
+                                    },'json')
+                                  }
+                                },'json')
+                              }
+                            },'json')
+                          }
+                      }else{
+                        layer.msg(data.msg, {icon: 5}); 
+                      }
+                    },'json');
+                  }else{
+                    layer.msg(data.msg, {icon: 5}); 
+                  }
+                },'json');
           }
         },'json');
       }, function(){
