@@ -1951,7 +1951,7 @@ class DistrictadminController extends Controller
             //注册商户号   
             $promoter = $model->table('district_promoter')->fields('shop_name,province_id,city_id,location')->where('user_id='.$shop_check['user_id'])->find();
             $customer = $model->table('customer as c')->fields('c.real_name,c.realname,c.mobile,c.id_no,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$shop_check['user_id'])->find();
-            $name = $promoter['shop_name']!=null?$promoter['shop_name']:($customer['nickname']!=null?$customer['nickname']:$customer['real_name']);
+            $name = $shop_check['shop_name']!=null?$shop_check['shop_name']:($customer['nickname']!=null?$customer['nickname']:$customer['real_name']);
             if($shop_check['type']==1) {
                 $cust_type = 'C'; //小微
             } elseif($shop_check['type']==2) {
