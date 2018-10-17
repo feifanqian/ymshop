@@ -2159,7 +2159,7 @@ class DistrictadminController extends Controller
 
             $bankcard = $model->table('bankcard')->where('user_id='.$shop_check['user_id'])->find();
             // $legal_cert_no = bin2hex($this->des_encrypt($customer['id_no'],'yuanmeng'));
-            $legal_cert_no = $this->des_encrypt($customer['id_no'],'yuanmeng');
+            $legal_cert_no = $this->des_encrypt($shop_check['id_no'],'yuanmeng');
             // var_dump($legal_cert_no);
             $params = array();  
             
@@ -2227,7 +2227,7 @@ class DistrictadminController extends Controller
                echo json_encode(array("status" => 'success', 'msg' => '成功'));
                 exit();
             } else {
-                var_dump($res);die;
+                // var_dump($res);die;
                 echo json_encode(array("status" => 'error', 'msg' => $res['ysepay_merchant_register_accept_response']['sub_msg']));
                 exit();
             }
