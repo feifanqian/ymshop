@@ -1966,7 +1966,7 @@ class DistrictadminController extends Controller
                 $result = json_decode($re,true);
                 // exit();
                 
-                if($result['isSuccess']==true) {
+                // if($result['isSuccess']==true) {
                     //身份证反面
                     $file_name1 = time().$shop_check['user_id'].'native_idcard';
                     $file_ext1 = substr(strrchr($shop_check['native_idcard'], '.'), 1);
@@ -1984,7 +1984,7 @@ class DistrictadminController extends Controller
                     $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
                     unlink($save_path1);
                     $result = json_decode($re,true);
-                    if($result['isSuccess']==true) {
+                    // if($result['isSuccess']==true) {
                        if($shop_check['type']!=3 && $shop_check['positive_bankcard']!=null) {
                           //银行卡正面
                           $file_name5 = time().$shop_check['user_id'].'positive_bankcard';
@@ -2047,7 +2047,7 @@ class DistrictadminController extends Controller
                             unlink($save_path2);
                             $result = json_decode($re,true);
                             // exit();
-                            if($result['isSuccess']==true) {
+                            // if($result['isSuccess']==true) {
                                 //营业执照
                                 $file_name3 = time().$shop_check['user_id'].'business_licence';
                                 $file_ext3 = substr(strrchr($shop_check['business_licence'], '.'), 1);
@@ -2083,10 +2083,10 @@ class DistrictadminController extends Controller
                                 $re = $this->curl_form($post_data4,$sumbit_url,$http_url);
                                 unlink($save_path4);
                                 // exit();
-                            }  
+                            // }  
                         }
-                    }
-                }
+                    // }
+                // }
             
 
                 //客户协议
@@ -2130,7 +2130,7 @@ class DistrictadminController extends Controller
                     $re = $this->curl_form($post_data8,$sumbit_url,$http_url);
                     unlink($save_path8);
                 }
-        if($result['isSuccess']==true) {
+        // if($result['isSuccess']==true) {
             //注册商户号   
             $promoter = $model->table('district_promoter')->fields('shop_name,province_id,city_id,location')->where('user_id='.$shop_check['user_id'])->find();
             $customer = $model->table('customer as c')->fields('c.real_name,c.realname,c.mobile,c.id_no,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$shop_check['user_id'])->find();
@@ -2231,7 +2231,7 @@ class DistrictadminController extends Controller
                 echo json_encode(array("status" => 'error', 'msg' => $res['ysepay_merchant_register_accept_response']['sub_msg']));
                 exit();
             }
-        }   
+        // }   
     }
 
     public function shop_check_query()
