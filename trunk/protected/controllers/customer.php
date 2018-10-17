@@ -798,6 +798,7 @@ class CustomerController extends Controller {
                 Req::args('user_id', $last_id);
                 Req::args('reg_time',date("Y-m-d H:i:s"));
                 Req::args('real_name', $mobile);
+                Req::args('mobile_verified', 1);
                 if (!Validator::date(Req::post('birthday')))
                     Req::post('birthday', date('Y-m-d'));
                 $customerModel->insert();

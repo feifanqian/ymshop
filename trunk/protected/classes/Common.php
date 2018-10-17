@@ -715,6 +715,19 @@ class Common {
                 $num = $num+1;
                 $model->table('invite_active')->data(['invite_num'=>$num])->where('user_id='.$inviter_id)->update();
             }
+            $invite_num = $model->table('invite as i')->join('left join customer as c on i.invite_user_id=c.user_id')->where('i.user_id='.$inviter_id.' and c.mobile_verified=1')->count();
+            $vip = $model->table('user')->fields('is_vip')->where('id='.$inviter_id)->find();
+            if($invite_num>=2 && $vip['is_vip']==0) { 
+                $type = 'upgrade_vip';
+                $content = "您有5位或以上粉丝成功注册圆梦用户，恭喜您成功获得VIP资格";
+                $platform = 'all';
+                $NoticeService = new NoticeService();
+                $jpush = $NoticeService->getNotice('jpush');
+                $audience['alias'] = array($inviter_id);
+                $jpush->setPushData($platform, $audience, $content, $type, '');
+                $ret = $jpush->push();
+                $model->table('user')->data(['is_vip'=>1])->where('id='.$inviter_id)->update();
+            }
             if($result){
                 return true;
             }else{
