@@ -2036,6 +2036,8 @@ class DistrictadminController extends Controller
 
     public function shop_check_upload()
     {
+        $id = Filter::int(Req::args('id'));
+        $model = new Model();
         $myParams = array();  
         
         $myParams['method'] = 'ysepay.merchant.register.token.get';
@@ -2061,16 +2063,23 @@ class DistrictadminController extends Controller
         $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
-        echo json_encode(array("status" => 'success', 'msg' => '成功','token'=>$ret['ysepay_merchant_register_token_get_response']['token']));
+        if(!isset($ret['ysepay_merchant_register_token_get_response']['token'])) {
+            echo json_encode(array("status" => 'error', 'msg' => 'token获取失败'));
+            exit();
+        }
+        $token = $ret['ysepay_merchant_register_token_get_response']['token'];
+        $model->table('shop_check')->data(['token'=>$token])->where('id='.$id)->update();
+        echo json_encode(array("status" => 'success', 'msg' => '成功','token'=>$token));
         exit();
     }
 
     public function shop_check_upload1()
     {
         $id = Filter::int(Req::args('id'));
-        $token = Filter::str(Req::args('token'));
+        // $token = Filter::str(Req::args('token'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        $token = $shop_check['token'];
         //上传资料
         $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
         $http_url="http://39.108.165.0";
@@ -2095,9 +2104,10 @@ class DistrictadminController extends Controller
     public function shop_check_upload2()
     {
         $id = Filter::int(Req::args('id'));
-        $token = Filter::str(Req::args('token'));
+        // $token = Filter::str(Req::args('token'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        $token = $shop_check['token'];
         //上传资料
         $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
         $http_url="http://39.108.165.0";
@@ -2116,18 +2126,15 @@ class DistrictadminController extends Controller
 
         $re = $this->curl_form($post_data1,$sumbit_url,$http_url);
         unlink($save_path1);
-        // $result = json_decode($re,true);
-        // if($result['isSuccess']==true) {
-
-        // } 
     }
 
     public function shop_check_upload3()
     {
         $id = Filter::int(Req::args('id'));
-        $token = Filter::str(Req::args('token'));
+        // $token = Filter::str(Req::args('token'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        $token = $shop_check['token'];
         //上传资料
         $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
         $http_url="http://39.108.165.0";
@@ -2151,9 +2158,10 @@ class DistrictadminController extends Controller
     public function shop_check_upload4()
     {
         $id = Filter::int(Req::args('id'));
-        $token = Filter::str(Req::args('token'));
+        // $token = Filter::str(Req::args('token'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        $token = $shop_check['token'];
         //上传资料
         $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
         $http_url="http://39.108.165.0";
@@ -2177,9 +2185,10 @@ class DistrictadminController extends Controller
     public function shop_check_upload5()
     {
         $id = Filter::int(Req::args('id'));
-        $token = Filter::str(Req::args('token'));
+        // $token = Filter::str(Req::args('token'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        $token = $shop_check['token'];
         //上传资料
         $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
         $http_url="http://39.108.165.0";
@@ -2204,9 +2213,10 @@ class DistrictadminController extends Controller
     public function shop_check_upload6()
     {
         $id = Filter::int(Req::args('id'));
-        $token = Filter::str(Req::args('token'));
+        // $token = Filter::str(Req::args('token'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        $token = $shop_check['token'];
         //上传资料
         $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
         $http_url="http://39.108.165.0";
@@ -2230,9 +2240,10 @@ class DistrictadminController extends Controller
     public function shop_check_upload7()
     {
         $id = Filter::int(Req::args('id'));
-        $token = Filter::str(Req::args('token'));
+        // $token = Filter::str(Req::args('token'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        $token = $shop_check['token'];
         //上传资料
         $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
         $http_url="http://39.108.165.0";
@@ -2256,9 +2267,10 @@ class DistrictadminController extends Controller
     public function shop_check_upload8()
     {
         $id = Filter::int(Req::args('id'));
-        $token = Filter::str(Req::args('token'));
+        // $token = Filter::str(Req::args('token'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        $token = $shop_check['token'];
         //上传资料
         $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
         $http_url="http://39.108.165.0";
@@ -2289,9 +2301,10 @@ class DistrictadminController extends Controller
     public function shop_check_upload9()
     {
         $id = Filter::int(Req::args('id'));
-        $token = Filter::str(Req::args('token'));
+        // $token = Filter::str(Req::args('token'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
+        $token = $shop_check['token'];
         //上传资料
         $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
         $http_url="http://39.108.165.0";
