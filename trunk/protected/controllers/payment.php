@@ -1184,7 +1184,7 @@ class PaymentController extends Controller {
             $myParams['version'] = '3.0';
             $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
             $biz_content_arr = array(
-            "appid"=>"wx167f2c4da1f798b0",
+            "appid"=>"wx442dec4e782c99d8",
             "out_trade_no"=>$order_no,
             "subject"=>'圆梦共享网',
             "total_amount"=>$order_amount,
@@ -1237,6 +1237,7 @@ class PaymentController extends Controller {
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
         if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])) {
+            var_dump($myParams);
             var_dump($ret['ysepay_online_jsapi_pay_response']);die;
         }
         if($payment_id==6) {
