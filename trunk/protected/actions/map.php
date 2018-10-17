@@ -135,7 +135,8 @@ class MapAction extends Controller
         $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
         $data = array(
             'user_id' => $this->user['id'],
-            'url3'    => $url
+            'url3'    => $url,
+            'base_rate' => $rate
             );
         if(!$contract) {
             $this->model->table('promoter_contract')->data($data)->insert();      
@@ -172,8 +173,6 @@ class MapAction extends Controller
         $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
         if($promoter) {
             $this->model->table('district_promoter')->data(['base_rate'=>$rate])->where('user_id='.$this->user['id'])->update();
-        } else {
-            $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'base_rate'=>$rate))->insert();
         }
 
         $this->code = 0;
@@ -309,6 +308,11 @@ class MapAction extends Controller
             'status'  => 0,
             );
         $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
+        $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
+        $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+        if($promoter) {
+            $this->model->table('district_promoter')->data(['base_rate'=>$contract['base_rate']])->where('user_id='.$this->user['id'])->update();
+        }
         // $this->model->table('shop_check')->data(['status'=>-1])->where('user_id='.$this->user['id'])->update();
         $this->code = 0;
         $this->content['picture'] = $picture;

@@ -280,6 +280,11 @@ class DistrictAction extends Controller {
             } else {
                 $result = $this->model->table('district_promoter')->data(array('invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id'],'shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
             }
+
+            $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
+            if($contract) {
+                $this->model->table('district_promoter')->data(['base_rate'=>$contract['base_rate']])->where('user_id='.$this->user['id'])->update();
+            }
             
             $point = 3600.00;
             $this->model->table('customer')->data(array('point_coin'=>"`point_coin`+({$point})"))->where('user_id='.$this->user['id'])->update();
