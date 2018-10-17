@@ -1184,7 +1184,7 @@ class PaymentController extends Controller {
             $myParams['version'] = '3.0';
             $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
             $biz_content_arr = array(
-            "appid"=>"wx442dec4e782c99d8",
+            "appid"=>"wx167f2c4da1f798b0",
             "out_trade_no"=>$order_no,
             "subject"=>'圆梦共享网',
             "total_amount"=>$order_amount,
