@@ -875,19 +875,6 @@ class TravelController extends Controller
                 }
                 if($inviter){
                     Common::buildInviteShip($inviter, $this->user['id'], 'wechat');
-                    $invite_num = $this->model->table('invite as i')->join('left join customer as c on i.invite_user_id=c.user_id')->where('i.user_id='.$inviter.' and c.mobile_verified=1')->count();
-                    $vip = $this->model->table('user')->fields('is_vip')->where('id='.$inviter)->find();
-                    if($invite_num>=2 && $vip['is_vip']==0) { 
-                        $type = 'upgrade_vip';
-                        $content = "您有5位或以上粉丝成功注册圆梦用户，恭喜您成功获得VIP资格";
-                        $platform = 'all';
-                        $NoticeService = new NoticeService();
-                        $jpush = $NoticeService->getNotice('jpush');
-                        $audience['alias'] = array($inviter);
-                        $jpush->setPushData($platform, $audience, $content, $type, '');
-                        $ret = $jpush->push();
-                        $this->model->table('user')->data(['is_vip'=>1])->where('id='.$inviter)->update();
-                    }
                 }
                 $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
                 $seo_title = $customer['mobile_verified']==0?"绑定手机号":"关联成功";
