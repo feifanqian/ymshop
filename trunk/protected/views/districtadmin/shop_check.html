@@ -1,6 +1,7 @@
  {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
 {set:$status=array("-1"=>"未完善","0"=>"<span class='green icon-busy'>未处理</span>","1"=>"<span class='gray icon-coin'>已审核</span>","2"=>"<span class='red icon-remove'>未通过</span>");}
+{set:$register_status=array("-1"=>"未注册","0"=>"<span class='green icon-busy'>审核中</span>","1"=>"<span class='gray icon-coin'>已通过</span>","2"=>"<span class='red icon-remove'>未通过</span>");}
 {set:$type = array("0"=>"未知","1"=>"个体商户","2"=>"小微商户","3"=>"企业商户");}
 <form action="" method="post">
 <div class="tools_bar clearfix">
@@ -21,7 +22,8 @@
         <th style="width:140px">申请时间</th>
         <th style="width:140px">处理时间</th>
         
-        <th style="width:120px">状态</th>
+        <th style="width:100px">审核状态</th>
+        <th style="width:100px">银盛注册状态</th>
     </tr>
     {query:name=shop_check as sc join=left join user as u on sc.user_id eq u.id left join district_promoter as dp on sc.user_id eq dp.user_id fields=sc.*,u.nickname,u.name,dp.shop_name where=$where id=$obj page=1 order= sc.id desc}
         <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
@@ -53,7 +55,8 @@
             <td style="width:140px">{$item['create_date']}</td>
             <td style="width:140px">{$item['check_date']|"-------"}</td>
             
-            <td style="width:120px">{$status[$item['status']]}</td>
+            <td style="width:100px">{$status[$item['status']]}</td>
+            <td style="width:100px;">{$register_status[$item['register_status']]}</td>
         </tr>
     {/query}
 </table>
