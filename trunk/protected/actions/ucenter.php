@@ -87,7 +87,7 @@ class UcenterAction extends Controller {
                 if($last_id){
                     $name = "u" . sprintf("%09d", $last_id);
                     $this->model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
-                    $this->model->table("customer")->data(array('mobile' => $mobile, 'real_name'=>$realname, 'mobile_verified' => 1, 'balance' => 0, 'score' => 0, 'user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time))->insert();
+                    $this->model->table("customer")->data(array('mobile' => $mobile, 'real_name'=>$realname, 'mobile_verified' => 1, 'balance' => 0, 'score' => 0, 'user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time,'checkin_time'=>$time))->insert();
                     if($inviter_id){
                         Common::buildInviteShip($inviter_id, $last_id, 'wechat');
                     }
@@ -400,7 +400,7 @@ class UcenterAction extends Controller {
                     $name = "u" . sprintf("%09d", $last_id);
                     //更新用户名和邮箱
                     $model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
-                    $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nickname,'mobile' => $mobile,'point_coin'=>200, 'mobile_verified' => 1, 'balance' => 0, 'reg_time' => $time, 'login_time' => $time))->insert();
+                    $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nickname,'mobile' => $mobile,'point_coin'=>200, 'mobile_verified' => 1, 'balance' => 0, 'reg_time' => $time, 'login_time' => $time,'checkin_time'=>$time))->insert();
                     Log::pointcoin_log(200, $last_id, '', '微信授权新用户积分奖励', 10);
                     if($inviter_id){
                         Common::buildInviteShip($inviter_id, $last_id, $platform);

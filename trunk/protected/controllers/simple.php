@@ -115,7 +115,7 @@ class SimpleController extends Controller {
                             $last_id = $model->data(array('email' => $email, 'name' => $name, 'password' => CHash::md5($passWord, $validcode), 'validcode' => $validcode, 'status' => $user_status))->insert();
 
                             $time = date('Y-m-d H:i:s');
-                            $model->table("customer")->data(array('user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile,'mobile_verified'=>1))->insert();
+                            $model->table("customer")->data(array('user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile,'mobile_verified'=>1,'checkin_time'=>$time))->insert();
 
                             if ($mobile) {
                                 SMS::getInstance()->flushCode($mobile);
@@ -206,7 +206,7 @@ class SimpleController extends Controller {
                                             //更新用户名和邮箱
                                             $this->model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
                                             $time = date('Y-m-d H:i:s');
-                                            $this->model->table("customer")->data(array('user_id' => $last_id,'real_name'=>$realname,'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile,'mobile_verified'=>1))->insert();
+                                            $this->model->table("customer")->data(array('user_id' => $last_id,'real_name'=>$realname,'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile,'mobile_verified'=>1,'checkin_time'=>$time))->insert();
                                             //记录邀请人
                                             $inviter = Cookie::get("inviter");                                            
                                             if($inviter!==NUll){

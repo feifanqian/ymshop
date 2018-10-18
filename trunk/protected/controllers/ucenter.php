@@ -1037,6 +1037,7 @@ class UcenterController extends Controller
                                 'mobile' => $mobile,
                                 'real_name' => $realname,
                                 'mobile_verified' => 1,
+                                'checkin_time'=>date("Y-m-d H:i:s"),
                                 'point_coin' => 200
                             );
                             $this->model->table("customer")->data($data)->where("user_id={$this->user['id']}")->update();
@@ -2068,7 +2069,7 @@ class UcenterController extends Controller
                     $validcode = CHash::random(8);
                     $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $this->user['id'])->update();
                     if (!$result) {
-                        $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1))->where('user_id=' . $this->user['id'])->update();
+                        $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s")))->where('user_id=' . $this->user['id'])->update();
                         Session::clear('verifiedInfo');
                         Session::clear('activateObj');
                         $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
@@ -2094,13 +2095,13 @@ class UcenterController extends Controller
                                     if($promoter1 || $promoter2) {
                                         if($promoter1) { //分配$user_id账号
                                             $customer = $this->model->table('customer')->where('user_id=' . $weixin['user_id'])->find();
-                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s"),'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $user_id)->update();
                                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $weixin['user_id'])->update();
                                             $this->model->table('oauth_user')->data(array('other_user_id' => $weixin['user_id']))->where('user_id=' . $user_id)->update();
                                             $last_id = $user_id;    
                                         } else { //分配$weixin['user_id']账号
                                             $customer = $this->model->table('customer')->where('user_id=' . $user_id)->find();
-                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $weixin['user_id'])->update();
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s"),'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $weixin['user_id'])->update();
                                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
                                             $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
                                             $this->model->table('oauth_user')->data(array('user_id' => $weixin['user_id']))->where('other_user_id=' . $user_id)->update();
@@ -2111,12 +2112,12 @@ class UcenterController extends Controller
                                         $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
                                         //已注册时间早的为主
                                         if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
-                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s"),'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
                                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $value['user_id'])->update();   
                                             $this->model->table('oauth_user')->data(array('other_user_id' => $value['user_id']))->where('user_id=' . $user_id)->update();
                                             $last_id = $user_id;
                                         } else {
-                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer1['balance']})",'offline_balance'=>"`offline_balance`+({$customer1['offline_balance']})"))->where('user_id=' . $value['user_id'])->update();
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s"),'balance'=>"`balance`+({$customer1['balance']})",'offline_balance'=>"`offline_balance`+({$customer1['offline_balance']})"))->where('user_id=' . $value['user_id'])->update();
                                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
                                             $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
                                             $this->model->table('oauth_user')->data(array('user_id' => $value['user_id']))->where('other_user_id=' . $user_id)->update();
@@ -2129,7 +2130,7 @@ class UcenterController extends Controller
                                     $customer1 = $this->model->table('customer')->where('user_id=' . $user_id)->find();
                                     $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
                                     //绑定手机号
-                                    $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                    $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s"),'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
                                     //已注册时间早的为主
                                     if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
                                         $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $value['user_id'])->update();   
