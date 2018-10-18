@@ -715,7 +715,8 @@ class Common {
                 $num = $num+1;
                 $model->table('invite_active')->data(['invite_num'=>$num])->where('user_id='.$inviter_id)->update();
             }
-            $invite_num = $model->table('invite as i')->join('left join customer as c on i.invite_user_id=c.user_id')->where('i.user_id='.$inviter_id.' and c.mobile_verified=1')->count();
+            $start_time = '2018-10-18 00:00:01';
+            $invite_num = $model->table('invite as i')->join('left join customer as c on i.invite_user_id=c.user_id')->where("i.user_id=".$inviter_id." and c.mobile_verified=1 and c.checkin_time>'{$start_time}'")->count();
             $vip = $model->table('user')->fields('is_vip')->where('id='.$inviter_id)->find();
             if($invite_num>=2 && $vip['is_vip']==0) { 
                 $type = 'upgrade_vip';
