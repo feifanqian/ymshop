@@ -187,8 +187,9 @@ function upload(id,type){
                                                           tools_reload();
                                                       }); 
                                                     }else{
-                                                      layer.msg(data.msg, {icon: 5});
-                                                      tools_reload();
+                                                      layer.msg(data.msg, {icon: 5},function(){
+                                                          tools_reload();
+                                                      });
                                                     }
                                                   },'json');
                                                 } else {
@@ -220,9 +221,9 @@ function upload(id,type){
                                                           tools_reload();
                                                       }); 
                                                     }else{
-                                                      layer.msg(data.msg, {icon: 5});
-                                                      // tools_reload();
-                                                      return false;
+                                                      layer.msg(data.msg, {icon: 5},function(){
+                                                          tools_reload();
+                                                      });
                                                     }
                                                   },'json');
                                                 } else {
@@ -252,8 +253,9 @@ function upload(id,type){
                                                                     tools_reload();
                                                                 }); 
                                                               }else{
-                                                                layer.msg(data.msg, {icon: 5});
-                                                                tools_reload(); 
+                                                                layer.msg(data.msg, {icon: 5},function(){
+                                                                    tools_reload();
+                                                                });
                                                               }
                                                             },'json');
                                                         }
