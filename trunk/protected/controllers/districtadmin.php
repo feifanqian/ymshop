@@ -1953,9 +1953,9 @@ class DistrictadminController extends Controller
             $customer = $model->table('customer as c')->fields('c.real_name,c.realname,c.mobile,c.id_no,u.nickname')->join('left join user as u on c.user_id=u.id')->where('c.user_id='.$shop_check['user_id'])->find();
             $name = $shop_check['shop_name']!=null?$shop_check['shop_name']:($customer['nickname']!=null?$customer['nickname']:$customer['real_name']);
             if($shop_check['type']==1) {
-                $cust_type = 'C'; //小微
+                $cust_type = 'O'; //小微
             } elseif($shop_check['type']==2) {
-                $cust_type = 'O'; //个体
+                $cust_type = 'C'; //个体
             } else {
                 $cust_type = 'B'; //企业
             }
