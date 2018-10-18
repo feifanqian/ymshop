@@ -2248,8 +2248,12 @@ class DistrictadminController extends Controller
         //客户协议
         $contract = $model->table('promoter_contract')->where('user_id='.$shop_check['user_id'])->find();
         if(!$contract) {
-            echo json_encode(array("status" => 'error', 'msg' => '缺少客户协议'));
+            echo json_encode(array("isSuccess" => false, 'msg' => '缺少客户协议'));
             exit();
+        }
+        if($contract['url4']==null) {
+           echo json_encode(array("isSuccess" => false, 'msg' => '尚未签定客户协议'));
+           exit();
         }
         $file_name7 = time().$shop_check['user_id'].'contract';
         $file_ext7 = substr(strrchr($contract['url4'], '.'), 1);
