@@ -1998,7 +1998,7 @@ class DistrictadminController extends Controller
                 exit();
             } else {
                 // var_dump($params);
-                // var_dump($res['ysepay_merchant_register_accept_response']['sub_msg']);
+                var_dump($res['ysepay_merchant_register_accept_response']['sub_msg']);
                 echo json_encode(array("status" => 'error', 'msg' => $res['ysepay_merchant_register_accept_response']['sub_msg']));
                 exit();
             }
