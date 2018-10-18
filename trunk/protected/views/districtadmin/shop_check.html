@@ -221,7 +221,8 @@ function upload(id,type){
                                                       }); 
                                                     }else{
                                                       layer.msg(data.msg, {icon: 5});
-                                                      tools_reload();
+                                                      // tools_reload();
+                                                      return false;
                                                     }
                                                   },'json');
                                                 } else {
