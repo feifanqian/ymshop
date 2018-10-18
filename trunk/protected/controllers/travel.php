@@ -1328,12 +1328,14 @@ class TravelController extends Controller
         $order_no = date('YmdHis') . rand(1000, 9999);
         // $jsApiParameters = Session::get('payinfo');
         // $this->assign("jsApiParameters",$jsApiParameters);
-        if($user_id==201486) {
-            $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-            if(strpos($agent, 'android')==true) {
-                var_dump('android');die;
-            }
+        
+        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        if(strpos($agent, 'android')==true) {
+            $platform = 'android';
+        } else {
+            $platform = 'ios';
         }
+        
         $this->assign("seo_title", "向商家付款");
         $this->assign('seller_id', $inviter_id);
         $this->assign('cashier_id', $cashier_id);
@@ -1341,6 +1343,7 @@ class TravelController extends Controller
         $this->assign('seller_ids', Session::get('seller_id'));
         $this->assign('order_no', $order_no);
         $this->assign('user_id', $user_id);
+        $this->assign('platform', $platform);
         $third_pay = 0;
         $third_payment = $this->model->table('third_payment')->where('id=1')->find();
         if ($third_payment) {

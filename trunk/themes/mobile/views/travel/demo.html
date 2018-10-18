@@ -780,8 +780,13 @@
 </div>
 </body>
 <script>
+    var platform = "{$platform}";
+    if(platform=='ios') {
+        $(function() {
+            FastClick.attach(document.body);
+        });
+    }
     $(function(){
-        
         //填写信息
         $('.infor-sub').click(function(e){
             $('.layer').hide();
