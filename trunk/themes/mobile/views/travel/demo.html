@@ -496,7 +496,7 @@
         background-position: top center; 
     }
 
-    #payform{
+    /*#payform{
       width: 90%;
       height: 440px;
       margin-left: 5%;
@@ -504,7 +504,7 @@
       padding-top: 20px;
       padding-left: 50px;
       padding-right: 50px;
-    }
+    }*/
 
     .layer-content {
         position: absolute;
@@ -624,9 +624,9 @@
 <!-- <script type="text/javascript" src="/themes/mobile/js/toastr.min.js"></script> -->
 <div class="wrap">
     {if:$cash==1}
-    <form action="{url:/payment/dopays}" method="post" id="payform" style="width: 90%;height: 400px;margin-left: 5%;background: #fff;padding-top: 40px;padding-left: 50px;padding-right: 50px;">
+    <form action="{url:/payment/dopays}" method="post" id="payform" style="width: 90%;height: 426px;margin-left: 5%;background: #fff;padding-top: 20px;padding-left: 50px;padding-right: 50px;">
     {else:}
-    <form action="" method="post" id="payform" style="width: 90%;height: 400px;margin-left: 5%;background: #fff;padding-top: 40px;padding-left: 50px;padding-right: 50px;">
+    <form action="" method="post" id="payform" style="width: 90%;height: 426px;margin-left: 5%;background: #fff;padding-top: 20px;padding-left: 50px;padding-right: 50px;">
     {/if}
         <input type="hidden" name="order_no" value="{$order_no}">
         <input type="hidden" name="payment_id" value="8">
