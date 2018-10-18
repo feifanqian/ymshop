@@ -1948,7 +1948,7 @@ class DistrictadminController extends Controller
               
             $params['version'] = '3.0';
             $biz_content_arr = array(
-                'merchant_no'=>'yuanmeng'.$shop_check['user_id'],
+                'merchant_no'=>'yuanmeng'.$shop_check['user_id'].rand(11,99),
                 'cust_type'=>$cust_type,
                 'token'=>$shop_check['token'],
                 // 'token'=>$shop_check['token'],
