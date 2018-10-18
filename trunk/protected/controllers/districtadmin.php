@@ -1913,37 +1913,6 @@ class DistrictadminController extends Controller
     }
 
     public function shop_check_register() {
-        $myParams = array();  
-        
-        $myParams['method'] = 'ysepay.merchant.register.token.get';
-        $myParams['partner_id'] = 'yuanmeng';
-        // $myParams['partner_id'] = $this->user['id'];
-        $myParams['timestamp'] = date('Y-m-d H:i:s', time());
-        $myParams['charset'] = 'GBK';
-        $myParams['notify_url'] = 'http://api.test.ysepay.net/atinterface/receive_return.htm';      
-        $myParams['sign_type'] = 'RSA';  
-          
-        $myParams['version'] = '3.0';
-        $biz_content_arr = array(
-        );
-        // $myParams['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
-        $myParams['biz_content'] = '{}';
-        ksort($myParams);
-        
-        $signStr = "";
-        foreach ($myParams as $key => $val) {
-            $signStr .= $key . '=' . $val . '&';
-        }
-        $signStr = rtrim($signStr, '&');
-        $sign = $this->sign_encrypt(array('data' => $signStr));
-        $myParams['sign'] = trim($sign['check']);
-        $url = 'https://register.ysepay.com:2443/register_gateway/gateway.do';
-        // var_dump($myParams);
-        $ret = Common::httpRequest($url,'POST',$myParams);
-        $ret = json_decode($ret,true);
-        //上传资料
-        $sumbit_url = "https://uploadApi.ysepay.com:2443/yspay-upload-service?method=upload";
-        $http_url="http://39.108.165.0";
         $id = Filter::int(Req::args('id'));
         $model = new Model();
         $shop_check = $model->table('shop_check')->where('id='.$id)->find();
@@ -1981,7 +1950,7 @@ class DistrictadminController extends Controller
             $biz_content_arr = array(
                 'merchant_no'=>'yuanmeng'.$shop_check['user_id'],
                 'cust_type'=>$cust_type,
-                'token'=>$ret['ysepay_merchant_register_token_get_response']['token'],
+                'token'=>$shop_check['token'],
                 // 'token'=>$shop_check['token'],
                 'another_name'=>$name,
                 'cust_name'=>$name,

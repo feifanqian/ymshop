@@ -35,8 +35,8 @@
                             <li><a class="icon-remove" href="javascript:;" onclick="cancel({$item['id']})"> 作废该请求</a></li>
                             {/if}
                             {if:$item['status']==1}
-                            <li><a class="icon-key" href="javascript:;" onclick="upload({$item['id']},{$item['type']})">上传资料图片</a></li>
-                            <li><a class="icon-key" href="javascript:;" onclick="register({$item['id']})">注册银盛账户</a></li>
+                            <li><a class="icon-key" href="javascript:;" onclick="upload({$item['id']},{$item['type']})">注册银盛账户</a></li>
+                            <!-- <li><a class="icon-key" href="javascript:;" onclick="register({$item['id']})">注册银盛账户</a></li> -->
                             <li><a class="icon-key" href="javascript:;" onclick="check({$item['id']})">查询银盛账户</a></li>
                             {/if}
                             <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/shop_check_delete/id/$item[id]}')">删除</a></li>
@@ -147,7 +147,7 @@ function register(id){
         });
 }
 function upload(id,type){
-    layer.confirm('您确定要上传吗？', {
+    layer.confirm('您确定要注册吗？', {
         btn: ['确定','取消'] //按钮
       }, function(index){
         layer.close(index);
@@ -177,9 +177,16 @@ function upload(id,type){
                                               if(data.isSuccess==true) {
                                                 $.post("{url:/districtadmin/shop_check_upload8}",{id:id},function(data){ //客户协议
                                                 if(data.isSuccess==true) {
-                                                   layer.msg('操作成功', {icon: 6},function(){
-                                                       tools_reload();
-                                                   });
+                                                   $.post("{url:/districtadmin/shop_check_register}",{id:id},function(data){
+                                                       // layer.close(index);
+                                                      if(data.status=='success'){
+                                                      layer.msg('操作成功', {icon: 6},function(){
+                                                          tools_reload();
+                                                      }); 
+                                                    }else{
+                                                      layer.msg(data.msg, {icon: 5}); 
+                                                    }
+                                                  },'json');
                                                 }
                                               },'json')
                                               }
@@ -200,9 +207,16 @@ function upload(id,type){
                                         if(data.isSuccess==true) {
                                             $.post("{url:/districtadmin/shop_check_upload8}",{id:id},function(data){ //客户协议
                                                 if(data.isSuccess==true) {
-                                                   layer.msg('操作成功', {icon: 6},function(){
-                                                       tools_reload();
-                                                   });
+                                                   $.post("{url:/districtadmin/shop_check_register}",{id:id},function(data){
+                                                       // layer.close(index);
+                                                      if(data.status=='success'){
+                                                      layer.msg('操作成功', {icon: 6},function(){
+                                                          tools_reload();
+                                                      }); 
+                                                    }else{
+                                                      layer.msg(data.msg, {icon: 5}); 
+                                                    }
+                                                  },'json');
                                                 }
                                             },'json')
                                         }
@@ -221,9 +235,16 @@ function upload(id,type){
                                               if(data.isSuccess==true) {
                                                    $.post("{url:/districtadmin/shop_check_upload9}",{id:id},function(data){ //开户许可证
                                                         if(data.isSuccess==true) {
-                                                             layer.msg('操作成功', {icon: 6},function(){
-                                                                 tools_reload();
-                                                             });
+                                                             $.post("{url:/districtadmin/shop_check_register}",{id:id},function(data){
+                                                                 // layer.close(index);
+                                                                if(data.status=='success'){
+                                                                layer.msg('操作成功', {icon: 6},function(){
+                                                                    tools_reload();
+                                                                }); 
+                                                              }else{
+                                                                layer.msg(data.msg, {icon: 5}); 
+                                                              }
+                                                            },'json');
                                                         }
                                                     },'json')
                                               }
