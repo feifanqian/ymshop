@@ -2336,6 +2336,7 @@ class DistrictadminController extends Controller
         $res = json_decode($res,true);
         // var_dump($res);die;
         if(isset($res['ysepay_merchant_register_query_response']['cust_status'])) {
+            var_dump($res['ysepay_merchant_register_query_response']);die;
             exit(json_encode(array('status'=>'success','msg'=>$res['ysepay_merchant_register_query_response']['cust_status'])));
         } else {
             exit(json_encode(array('status'=>'success','msg'=>$res['ysepay_merchant_register_query_response']['sub_msg'])));
