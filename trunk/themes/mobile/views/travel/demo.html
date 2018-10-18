@@ -199,6 +199,20 @@
             margin: 10px auto;
             background: #7c7eaa;
         }
+    *{
+        -webkit-touch-callout:none;  /*系统默认菜单被禁用*/
+        -webkit-user-select:none; /*webkit浏览器*/
+        -khtml-user-select:none; /*早期浏览器*/
+        -moz-user-select:none;/*火狐*/
+        -ms-user-select:none; /*IE10*/
+        user-select:none;
+    }
+    input,textarea {
+        -webkit-user-select:auto; /*webkit浏览器*/
+        margin: 0px;
+        padding: 0px;
+        outline: none;
+    }
 </style>
 <script type="text/javascript" src="/themes/mobile/js/jquery.min.js"></script>
 <script type="text/javascript" src="/themes/mobile/js/jquery.weui.min.js"></script>
