@@ -1900,17 +1900,18 @@ class Common {
         if($shop) {
             $now_user_id = $shop['id'];
             while(!$is_break){
-                $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id in (".$now_user_id.")")->findAll();
+                $inviter_info = $model->table("district_shop")->fields('id,owner_id,is_oc')->where("invite_shop_id in (".$now_user_id.")")->findAll();
                 if($inviter_info){
                     $now_user_id = '';
                     foreach ($inviter_info as $k => $v) {
-                        $shop_ids_arr[] = $v['id'];
-                        $user_ids_arr[] = $v['owner_id'];
-                        $shop_ids = $shop_ids_arr!=null?implode(',', $shop_ids_arr):'';
-                        $user_ids = $user_ids_arr!=null?implode(',', $user_ids_arr):'';
-                        $num = $num+1;
-                        $now_user_id = $now_user_id==''?$v['id']:$now_user_id.','.$v['id'];
-                        $is_break = false;
+                        if($v['is_oc'] == 0){
+                            $shop_ids_arr[] = $v['id'];
+                            $user_ids_arr[] = $v['owner_id'];
+                            $shop_ids = $shop_ids_arr!=null?implode(',', $shop_ids_arr):'';
+                            $user_ids = $user_ids_arr!=null?implode(',', $user_ids_arr):'';
+                            $num = $num+1;
+                            $now_user_id = $now_user_id==''?$v['id']:$now_user_id.','.$v['id'];
+                        }
                     }    
                 }else{
                     $is_break = true;
