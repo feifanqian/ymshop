@@ -810,7 +810,7 @@ class OperationController extends Controller
             $result['ids'] = $ids;
             $result['shopids'] = '';
             $result['shop_ids_arr'] = null;
-            $result['user_ids_arr'] = $ids;
+            $result['user_ids_arr'] = null;
             $result['num'] = $num;
         }
         
