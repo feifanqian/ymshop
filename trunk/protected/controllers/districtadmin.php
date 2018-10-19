@@ -2481,7 +2481,8 @@ class DistrictadminController extends Controller
         $user = $this->getAllChildUserIds($user_id,$start_date,$end_date);
         $shopids = $user['shopids'];
         $promoter_id_arr = array();
-        $promoter_ids = '';
+        $promoter_ids = '';//商家和经销商id
+        $pure_promoter_ids = '';//商家id
         $shop_num = 0;
         $promoter_num = 0;
         if($shopids!='') {
@@ -2502,10 +2503,12 @@ class DistrictadminController extends Controller
         }
         
         $user_ids_arr = $user['user_ids_arr'];
+        $pure_promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; 
+        $promoter_id_arr1 = array();
         if($user_ids_arr!=null) {
-            $promoter_id_arr = array_merge($promoter_id_arr,$user_ids_arr);
+            $promoter_id_arr1 = array_merge($promoter_id_arr, $user_ids_arr);
         }
-        $promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; //商家id
+        $promoter_ids = $promoter_id_arr1!=null?implode(',', $promoter_id_arr1):''; //商家id
         
         if($promoter_ids!='') {
             $where9 = "dp.user_id in ($promoter_ids) and dp.user_id!=".$user_id;
@@ -2607,14 +2610,8 @@ class DistrictadminController extends Controller
         }
 
         $user_ids = $user['user_ids'];
-        if($promoter_ids!='' || $user_ids!='') {
-            if($promoter_ids!='' && $user_ids!='') {
-                $where2 = "shop_ids in ($promoter_ids) or user_id in ($user_ids) and pay_status=1";  
-            } elseif($promoter_ids!='' && $user_ids=='') {
-                $where2 = "shop_ids in ($promoter_ids) and pay_status=1";
-            } else {
-                $where2 = "user_id in ($user_ids) and pay_status=1";
-            }
+       if($pure_promoter_ids!='') {
+            $where2 = "shop_ids in ($pure_promoter_ids) and pay_status = 1";
             if($start_date && $end_date) {
                 $where2.=" and pay_time between '{$start_date}' and '{$end_date}'";
             }

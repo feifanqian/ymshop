@@ -1904,7 +1904,7 @@ class Common {
                 if($inviter_info){
                     $now_user_id = '';
                     foreach ($inviter_info as $k => $v) {
-                        if($v['is_oc'] == 0){
+                        if($v['is_oc'] == 0){//不是运营中心
                             $shop_ids_arr[] = $v['id'];
                             $user_ids_arr[] = $v['owner_id'];
                             $shop_ids = $shop_ids_arr!=null?implode(',', $shop_ids_arr):'';
