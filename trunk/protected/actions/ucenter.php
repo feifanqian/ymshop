@@ -751,6 +751,18 @@ class UcenterAction extends Controller {
         } else {
             $result = $this->model->table('order')->where("id=$id and user_id=" . $this->user['id'] . " and status=3 and pay_status=1 and delivery_status=1")->data(array('delivery_status' => 2, 'status' => 4, 'completion_time' => date('Y-m-d H:i:s')))->update();
             if ($result) {
+                //查询是否赠送积分
+                $prom = unserialize($flag['prom']);
+                if (isset($prom['id']) && $flag['type']==2) {
+                    $flashbuy = $this->model->table("flash_sale")->where("id=" . $prom['id'])->find();
+                    if($flashbuy) {
+                        $buy_num = $this->model->table('order')->where('prom_id='.$prom['id'].' and user_id='.$flag['user_id'].' and pay_status=1 and type=2')->count();
+                        if($flashbuy['send_point']>0 && $buy_num==1) {
+                            $this->model->table("customer")->data(array('point_coin'=>"`point_coin`+".$flashbuy['send_point']))->where('user_id='.$flag['user_id'])->update();
+                            Log::pointcoin_log($flashbuy['send_point'], $flag['user_id'], $flag['order_no'], '抢购商品积分赠送', 9);
+                        }
+                    }
+                }
                 //提取购买商品信息
                 $products = $this->model->table('order as od')->join('left join order_goods as og on od.id=og.order_id')->where('od.id=' . $id)->findAll();
                 foreach ($products as $product) {
