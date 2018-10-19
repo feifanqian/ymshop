@@ -79,9 +79,9 @@ class OperationController extends Controller
         $user_ids_arr = $user['user_ids_arr'];
         $pure_promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; 
         if($user_ids_arr!=null) {
-            $promoter_id_arr = array_merge($promoter_id_arr,$user_ids_arr);
+            $promoter_id_arr1 = array_merge($promoter_id_arr,$user_ids_arr);
         }
-        $promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; //商家和经销商id
+        $promoter_ids = $promoter_id_arr1!=null?implode(',', $promoter_id_arr1):''; //商家和经销商id
         
         if($promoter_ids!='') {
             $where9 = "dp.user_id in ($promoter_ids) and dp.user_id!=".$user_id;
@@ -361,9 +361,9 @@ class OperationController extends Controller
         $user_ids_arr = $user['user_ids_arr'];
         $pure_promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; 
         if($user_ids_arr!=null) {
-            $promoter_id_arr = array_merge($promoter_id_arr,$user_ids_arr);
+            $promoter_id_arr1 = array_merge($promoter_id_arr,$user_ids_arr);
         }
-        $promoter_ids = $promoter_id_arr!=null?implode(',', $promoter_id_arr):''; //商家id
+        $promoter_ids = $promoter_id_arr1!=null?implode(',', $promoter_id_arr1):''; //商家id
         
         if($promoter_ids!='') {
             $where9 = "dp.user_id in ($promoter_ids) and dp.user_id!=".$user_id;
