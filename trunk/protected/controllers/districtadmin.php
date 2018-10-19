@@ -1373,8 +1373,8 @@ class DistrictadminController extends Controller
         $id = Filter::int($id); //
         $model = new Model();
         $shop_check = $model->table('shop_check')->fields('*')->where('id='.$id)->find();
-        $bank_type = $model->table('bank_type')->findAll();
-        $this->assign('bank_type',$bank_type);
+        // $bank_type = $model->table('bank_type')->findAll();
+        // $this->assign('bank_type',$bank_type);
         $this->assign('shop_check',$shop_check);
         $this->redirect();
     }
