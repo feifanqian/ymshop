@@ -90,7 +90,7 @@
                 <select name="choose_bank" id="choose_bank">
                         <option value="0">选择支行</option>
                         {list:$items=$bank_type}
-                            <option value="{$vo.id}">{$item['longname']}</option>
+                            <option value="{$item['id']}">{$item['longname']}</option>
                         {/list}
                 </select>
             </dd>
