@@ -81,8 +81,30 @@
         <dl class="lineD">
             <dt>银行:</dt>
             <dd>
-                <input type="text" value="{$shop_check['bank_name']}" style="width: 200px;height: 30px;"> 
+                <input type="text" id="bank_name" value="{$shop_check['bank_name']}" style="width: 200px;height: 30px;"> 
             </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>手动选择银行:</dt>
+            <dd>
+                <select name="choose_bank" id="choose_bank">
+                        <option value="0">选择支行</option>
+                        {list:$items=$bank_type}
+                            <option value="{$vo.id}">{$item['longname']}</option>
+                        {/list}
+                </select>
+            </dd>
+        </dl>
+        <dl class="lineD">
+           <dt>搜索</dt>
+           <dd>
+               <span class="fr">
+                <input type="text" value="" name="s_content"/>
+                        <a href='javascript:;'
+                           onclick="search_submit()"
+                           class="fr icon-search" style=""></a>
+                </span>
+           </dd>
         </dl>
         {if:$shop_check['positive_bankcard']!=null}
         <dl class="lineD">
@@ -178,5 +200,23 @@ function cancel(id){
           }
         },'json');
    });
+}
+function search_submit()
+{
+    var name = $('#s_content').val();
+    $.post("{url:/districtadmin/get_bank_type}",{name:name},function(data){
+            data = JSON.stringify(res);
+                var jsonarray= $.parseJSON(data);
+                var html = '';
+                // layer.close(index);
+                if (jsonarray.length) {
+                    $.each(jsonarray, function (i, item) {
+                        html += "<option value="+item.id+">"+item.longname+"</option>";  
+                    });
+                    $('#choose_bank').html();
+                    $('#choose_bank').append(html);
+                    $('#bank_name').val(item.longname);
+                }
+        },'json');
 }
 </script>

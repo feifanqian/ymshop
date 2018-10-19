@@ -1373,8 +1373,8 @@ class DistrictadminController extends Controller
         $id = Filter::int($id); //
         $model = new Model();
         $shop_check = $model->table('shop_check')->fields('*')->where('id='.$id)->find();
-        
-        
+        $bank_type = $model->table('bank_type')->findAll();
+        $this->assign('bank_type',$bank_type);
         $this->assign('shop_check',$shop_check);
         $this->redirect();
     }
@@ -1649,6 +1649,11 @@ class DistrictadminController extends Controller
         $status = Filter::sql(Req::args("status"));
         $model = new Model();
         $model->table("shop_check")->data(array("status" =>1,'check_date'=> date("Y-m-d H:i:s"),'reason'=>null))->where("id=" . $id)->update();
+        $choose_bank = Filter::sql(Req::args("choose_bank"));
+        $bank_name = Filter::str(Req::args("bank_name"));
+        if($choose_bank) {
+            $model->table("shop_check")->data(array("bank_name"=>$bank_name))->where("id=" . $id)->update();
+        }
         $shop_check = $model->table("shop_check")->where("id=" . $id)->find();
           
             //上传银盛
@@ -2783,5 +2788,13 @@ class DistrictadminController extends Controller
         $list = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id left join district_shop as d on ds.invite_shop_id=d.id')->fields("ds.*,c.real_name,d.name as invite_shop_name")->where($where)->order("ds.id desc")->findPage($page, $page_size);
         $this->assign("list", $list);
         $this->redirect();
+    }
+
+    public function get_bank_type()
+    {
+       $name = Req::args("name");
+       $model = new Model();
+       $bank_type = $model->table('bank_type')->where("longname like '%{$name}%'")->findAll();
+       echo JSON::encode($bank_type);
     } 
 }
