@@ -1913,6 +1913,9 @@ class Common {
                             $now_user_id = $now_user_id==''?$v['id']:$now_user_id.','.$v['id'];
                         }
                     }    
+                    if($now_user_id == ''){
+                        $is_break = true;
+                    }
                 }else{
                     $is_break = true;
                 }
