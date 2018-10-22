@@ -56,6 +56,7 @@
                 <strong>{$userInfo['email']}</strong>
                 {elseif:$type=='mobile'}
                 <strong>{$userInfo['mobile']}</strong>
+                <input type="hidden" name="mobile" value="{$userInfo['mobile']}">
                 {elseif:$type=='paypwd'}
                   <label><input class="weui_input" type="password"  name="code" pattern="required" alt="" placeholder="支付密码"></label>         
                 {/if}
@@ -148,15 +149,40 @@
     autoValidate.showMsg({id:$("input[name='{$invalid['field']}']").get(0), error:true, msg:"{$invalid['msg']}"});
     $("#msgInfo").text("{$invalid['msg']}");
     {/if}
-            $("#sendSMS").click(function() {
-    $.post("{url:/ucenter/send_code}", {type:'mobile', obj:'{$obj}'}, function(result) {
-    if (result['status'] == 'success') {
-    lockSendButton($("#sendSMS"), 120);
-    } else {
-    art.dialog.tips("<p class='fail'>" + result['msg'] + "</p>");
-    lockSendButton($("#sendSMS"), result['haveTime']);
-    }
-    }, 'json');
+    $("#sendSMS").click(function() {
+        // $.post("{url:/ucenter/send_code}", {type:'mobile', obj:'{$obj}'}, function(result) {
+        // if (result['status'] == 'success') {
+        // lockSendButton($("#sendSMS"), 120);
+        // } else {
+        // art.dialog.tips("<p class='fail'>" + result['msg'] + "</p>");
+        // lockSendButton($("#sendSMS"), result['haveTime']);
+        // }
+        // }, 'json');
+        var mobile = "{$userInfo['mobile']}";
+        $.post("{url:/ajax/send_sms}", {mobile:mobile}, function(result) {
+                    if (result['status'] == 'success') {
+                        $.toast(result['msg']);
+                        // $('#account').attr("readonly", "readonly");
+                        var send_sms = $("#sendSMS");
+                        send_sms.attr("disabled", true);
+                        send_sms.addClass("btn-disable");
+                        var i = 120;
+                        send_sms.val(i + '秒后重新获取');
+                        var timer = setInterval(function () {
+                            i--;
+                            send_sms.val(i + '秒后重新获取');
+                            if (i <= 0) {
+                                clearInterval(timer);
+                                send_sms.val('获取短信验证码');
+                                // $('#account').removeAttr("readonly");
+                                send_sms.removeClass("btn-disable");
+                                send_sms.attr("disabled", false);
+                            }
+                        }, 1000);
+                    } else {
+                        $.toast(result['msg'],'forbidden');
+                    }
+                }, 'json');
     });
     $("#sendEmail").on('click', function(){
     $.post("{url:/ucenter/send_code}", {type:'email', obj:'{$obj}'}, function(data){

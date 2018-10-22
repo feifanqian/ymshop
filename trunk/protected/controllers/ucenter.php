@@ -1940,6 +1940,7 @@ class UcenterController extends Controller
         $type = Req::args('type');
         $obj = Req::args('obj');
         $pay_password = Req::args('pay_password');
+        $mobile = Req::args('mobile');
         $obj = $this->updateObj($obj); //默认是修改登陆密码
 
         if ($pay_password == '' && $recode != '') {
@@ -1957,7 +1958,8 @@ class UcenterController extends Controller
 
 
         $verifiedInfo = Session::get("verifiedInfo");
-        if (isset($verifiedInfo['code']) && $code == $verifiedInfo['code']) {
+        $checkFlag = $this->sms_verify($code, $mobile, '86');
+        if ( (isset($verifiedInfo['code']) && $code == $verifiedInfo['code']) ||  $checkFlag==true) {
             $verifiedInfo['obj'] = $obj;
             Session::set("verifiedInfo", $verifiedInfo);
             $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random']);
