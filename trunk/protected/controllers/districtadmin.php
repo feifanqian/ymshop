@@ -1651,10 +1651,10 @@ class DistrictadminController extends Controller
         $model->table("shop_check")->data(array("status" =>1,'check_date'=> date("Y-m-d H:i:s"),'reason'=>null))->where("id=" . $id)->update();
         $choose_bank = Filter::sql(Req::args("choose_bank"));
         $bank_name = Filter::str(Req::args("bank_name"));
-        if($choose_bank) {
+        $shop_check = $model->table("shop_check")->where("id=" . $id)->find();
+        if($bank_name!=$shop['bank_name']) {
             $model->table("shop_check")->data(array("bank_name"=>$bank_name))->where("id=" . $id)->update();
         }
-        $shop_check = $model->table("shop_check")->where("id=" . $id)->find();
           
             //上传银盛
               // $myParams = array();
