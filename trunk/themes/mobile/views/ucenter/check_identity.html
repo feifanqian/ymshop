@@ -56,7 +56,7 @@
                 <strong>{$userInfo['email']}</strong>
                 {elseif:$type=='mobile'}
                 <strong>{$userInfo['mobile']}</strong>
-                <input type="hidden" name="mobile" value="{$userInfo['mobile']}">
+                <input type="hidden" name="mobile" value="{$mobile}">
                 {elseif:$type=='paypwd'}
                   <label><input class="weui_input" type="password"  name="code" pattern="required" alt="" placeholder="支付密码"></label>         
                 {/if}
@@ -158,7 +158,7 @@
         // lockSendButton($("#sendSMS"), result['haveTime']);
         // }
         // }, 'json');
-        var mobile = "{$userInfo['mobile']}";
+        var mobile = "{$mobile}";
         $.post("{url:/ajax/send_sms}", {mobile:mobile}, function(result) {
                     if (result['status'] == 'success') {
                         $.toast(result['msg']);

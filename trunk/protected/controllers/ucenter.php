@@ -1927,9 +1927,10 @@ class UcenterController extends Controller
     public function check_identity()
     {
         $verified = $this->verifiedType();
-        $customer = $this->model->table('customer')->fields('pay_password')->where("user_id=" . $this->user['id'])->find();
+        $customer = $this->model->table('customer')->fields('pay_password,mobile')->where("user_id=" . $this->user['id'])->find();
         $pay_password = $customer['pay_password'];
         $this->assign('pay_password', $pay_password);
+        $this->assign('mobile', $customer['mobile']);
         $this->redirect();
     }
 
