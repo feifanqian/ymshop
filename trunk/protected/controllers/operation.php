@@ -74,6 +74,8 @@ class OperationController extends Controller
                     }
                 }
             }
+        }else{
+            $promoter_id_arr[] = $user_id;
         }
         
         $user_ids_arr = $user['user_ids_arr'];
@@ -349,6 +351,8 @@ class OperationController extends Controller
                     }
                 }
             }
+        }else{
+            $promoter_id_arr[] = $user_id;
         }
         
         $user_ids_arr = $user['user_ids_arr'];
