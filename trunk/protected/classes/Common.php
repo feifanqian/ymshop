@@ -853,8 +853,8 @@ class Common {
 
          $inviter_info = $model->table("invite")->where("invite_user_id=".$order['user_id'])->find();
          if($inviter_info){
-                $base_balance = round($order['order_amount']*$goods['inviter_rate']/100,2);
                 $config = Config::getInstance()->get("district_set");
+                $base_balance = round($order['order_amount']*($goods['inviter_rate']-$config['handling_rate'])/100,2);
                 
                 $promoter_rate = $config['promoter_rate1'];
                 $district_rate = $config['district_rate1'];
@@ -966,7 +966,7 @@ class Common {
          $inviter_info = $model->table("invite")->where("invite_user_id=".$order['user_id'])->find();
          if($inviter_info){
              $config = Config::getInstance()->get("district_set");
-             $base_balance = round($order['order_amount']*$goods['inviter_rate']/100,2);
+             $base_balance = round($order['order_amount']*($goods['inviter_rate']-$config['handling_rate'])/100,2);
                 $income1 = round($base_balance*$config['promoter_rate1']/100,2);
                 if($income1>0) {
                     Log::incomeLog($income1, 1, $inviter_info['user_id'], $order['id'], 15,"下级消费分成(上级邀请者)退款收回收益");
