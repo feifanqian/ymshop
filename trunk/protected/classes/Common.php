@@ -856,24 +856,10 @@ class Common {
                 $base_balance = round($order['order_amount']*$goods['inviter_rate']/100,2);
                 $config = Config::getInstance()->get("district_set");
                 
-                $inviter_inviter = $model->table("invite")->where("invite_user_id=".$inviter_info['user_id'])->find(); //上级邀请人的邀请人
-                if($inviter_inviter) {
-                    // 判断是不是超级vip
-                    $user = $model->table('user')->fields('is_vip')->where('id='.$inviter_inviter['user_id'])->find();
-                    if($user['is_vip']==1) {
-                        $promoter_rate = $config['promoter_rate1'];
-                        $district_rate = $config['district_rate1'];
-                        $promoter2_rate = $config['promoter2_rate1'];    
-                    } else {
-                        $promoter_rate = $config['promoter_rate'];
-                        $district_rate = $config['district_rate'];
-                        $promoter2_rate = $config['promoter2_rate'];
-                    }
-                } else {
-                    $promoter_rate = $config['promoter_rate'];
-                    $district_rate = $config['district_rate'];
-                    $promoter2_rate = $config['promoter2_rate']; 
-                }
+                $promoter_rate = $config['promoter_rate1'];
+                $district_rate = $config['district_rate1'];
+                $promoter2_rate = $config['promoter2_rate1'];
+
                 $plat_rate = $config['plat_rate1'];
                 $encourage = $config['encourage'];
                 $reward1 = $config['reward3'];

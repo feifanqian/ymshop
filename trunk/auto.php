@@ -274,24 +274,10 @@ class LinuxCliTask{
                         $base_balance = $v['effect_prediction'];
                         $config = Config::getInstance()->get("district_set");
                         
-                        $inviter_inviter = $model->table("invite")->where("invite_user_id=".$user_id)->find(); //上级邀请人的邀请人
-                        if($inviter_inviter) {
-                            // 判断是不是超级vip
-                            $user1 = $model->table('user')->fields('is_vip')->where('id='.$inviter_inviter['user_id'])->find();
-                            if($user1['is_vip']==1) {
-                                $promoter_rate = $config['promoter_rate1']; //40%
-                                $district_rate = $config['district_rate1']; //16%
-                                $promoter2_rate = $config['promoter2_rate1']; //8%    
-                            } else {
-                                $promoter_rate = $config['promoter_rate']; //40%
-                                $district_rate = $config['district_rate']; //20%
-                                $promoter2_rate = $config['promoter2_rate']; //10%
-                            }
-                        } else {
-                            $promoter_rate = $config['promoter_rate']; //40%
-                            $district_rate = $config['district_rate']; //20%
-                            $promoter2_rate = $config['promoter2_rate']; //10% 
-                        }
+                        $promoter_rate = $config['promoter_rate1']; //40%
+                        $district_rate = $config['district_rate1']; //16%
+                        $promoter2_rate = $config['promoter2_rate1']; //8%
+
                         //上级代理商
                         $promoter = $this->model->table('district_promoter')->where('user_id='.$user_id)->find();
                         if($promoter) {
@@ -299,7 +285,6 @@ class LinuxCliTask{
                         } else {
                             $promoter_id = Common::getFirstPromoter($user_id);
                         }
-                        // $promoter_id = Common::getFirstPromoter($user_id);
                         //上级经销商
                         $district = $this->model->table('district_shop')->where('owner_id='.$user_id)->find();
                         if($district) {
@@ -307,7 +292,6 @@ class LinuxCliTask{
                         } else {
                             $district_id = Common::getFirstDistrictId($user_id);
                         }
-                        // $district_id = Common::getFirstDistrictId($user_id);
                         
                         if($user_id == $promoter_id) {
                             if($district_id == $user_id) {
@@ -381,7 +365,6 @@ class LinuxCliTask{
                             }
                          }
                     }
-                    
                 }
             $this->model->table('taoke')->data(array('is_handle'=>1))->where('id='.$v['id'])->update();    
             }
