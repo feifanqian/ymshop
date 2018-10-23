@@ -219,7 +219,7 @@ function search_submit()
         },'json');
 }
 $("#choose_bank").change(function(){
-    var choose_bank = $("#choose_bank option:selected").val();
+    var choose_bank = $("#choose_bank option:selected").html();
     $('#bank_name').val(choose_bank);
 })    
 </script>
