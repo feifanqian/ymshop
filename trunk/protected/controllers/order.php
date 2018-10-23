@@ -776,7 +776,7 @@ class OrderController extends Controller {
                $result = Order::refunded($refund_id);
                if($result){
                   $ordermodel = new Model("order as o");
-                   $order_model = $ordermodel->fields('o.user_id,o.order_amount,o.id,og.goods_id')->join('left join order_goods as og on o.id=og.order_id')->where('o.order_no='.$order_no)->find();
+                   $order_model = $ordermodel->fields('o.user_id,o.order_amount,o.id,og.goods_id,o.order_no')->join('left join order_goods as og on o.id=og.order_id')->where('o.order_no='.$order_no)->find();
                     if($order_model){
                        Common::backIncomeByInviteShip($order_model); //收回收益
                     } 
