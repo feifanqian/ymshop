@@ -226,7 +226,7 @@ class LinuxCliTask{
     #淘宝订单定时分佣
     public function autoMaidByAdzoneid() {
         $model = new Model();
-        $order = $this->model->table('taoke')->fields('id,create_time,goods_name,goods_id,goods_number,order_status,order_amount,goods_price,effect_prediction,estimated_revenue,order_sn,adv_id')->where("is_handle=0")->findAll();
+        $order = $this->model->table('taoke')->fields('id,create_time,goods_name,goods_id,goods_number,order_status,order_amount,goods_price,effect_prediction,estimated_revenue,order_sn,adv_id')->where("is_handle=0 and order_sn=237055564879913002")->findAll();
         if($order) {
             foreach ($order as $k => $v) {
                 $price = $v['order_status'] =='订单失效'?$v['goods_price']:$v['order_amount'];
