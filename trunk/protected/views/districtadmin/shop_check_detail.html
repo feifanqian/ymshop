@@ -85,15 +85,14 @@
                 <a href='javascript:;' onclick="search_submit()" class="fr icon-search" style="">匹配</a>
             </dd>
         </dl>
-        <!-- <dl class="lineD">
+        <dl class="lineD" id="choose_banks" style="display: none;">
             <dt>手动选择银行:</dt>
             <dd>
                 <select name="choose_bank" id="choose_bank">
-                        <option value="0">选择支行</option>
-                        
+                        <option value="0">选择支行</option>       
                 </select>
             </dd>
-        </dl> -->
+        </dl>
         <!-- <dl class="lineD">
            <dt>银行关键词匹配</dt>
            <dd>
@@ -210,13 +209,17 @@ function search_submit()
                 // layer.close(index);
                 if (jsonarray.length) {
                     console.log(jsonarray);
-                    // $.each(jsonarray, function (i, item) {
-                    //     html += "<option value="+item.id+">"+item.longname+"</option>";  
-                    // });
-                    // $('#choose_bank').html();
-                    // $('#choose_bank').append(html);
-                    // $('#bank_name').val(jsonarray.longname);
+                    $('#choose_banks').show();
+                    $.each(jsonarray, function (i, item) {
+                        html += "<option value="+item.id+">"+item.longname+"</option>";  
+                    });
+                    $('#choose_bank').html();
+                    $('#choose_bank').append(html);
                 }
         },'json');
 }
+$("#choose_bank").change(function(){
+    var choose_bank = $("#choose_bank option:selected").val();
+    $('#bank_name').val(choose_bank);
+})    
 </script>
