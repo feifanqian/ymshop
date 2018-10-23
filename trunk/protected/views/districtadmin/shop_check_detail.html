@@ -81,7 +81,8 @@
         <dl class="lineD">
             <dt>银行:</dt>
             <dd>
-                <input type="text" id="bank_name" name="bank_name" value="{$shop_check['bank_name']}" style="width: 200px;height: 30px;"> 
+                <input type="text" id="bank_name" name="bank_name" value="{$shop_check['bank_name']}" style="width: 200px;height: 30px;">
+                <a href='javascript:;' onclick="search_submit()" class="fr icon-search" style="">匹配</a>
             </dd>
         </dl>
         <!-- <dl class="lineD">
@@ -92,9 +93,9 @@
                         
                 </select>
             </dd>
-        </dl>
-        <dl class="lineD">
-           <dt>搜索</dt>
+        </dl> -->
+        <!-- <dl class="lineD">
+           <dt>银行关键词匹配</dt>
            <dd>
                <span class="fr">
                 <input type="text" value="" name="s_content"/>
@@ -208,12 +209,13 @@ function search_submit()
                 var html = '';
                 // layer.close(index);
                 if (jsonarray.length) {
-                    $.each(jsonarray, function (i, item) {
-                        html += "<option value="+item.id+">"+item.longname+"</option>";  
-                    });
-                    $('#choose_bank').html();
-                    $('#choose_bank').append(html);
-                    $('#bank_name').val(item.longname);
+                    console.log(jsonarray);
+                    // $.each(jsonarray, function (i, item) {
+                    //     html += "<option value="+item.id+">"+item.longname+"</option>";  
+                    // });
+                    // $('#choose_bank').html();
+                    // $('#choose_bank').append(html);
+                    // $('#bank_name').val(jsonarray.longname);
                 }
         },'json');
 }
