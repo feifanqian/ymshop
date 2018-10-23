@@ -203,7 +203,7 @@ function cancel(id){
 function search_submit()
 {
     var name = $('#s_content').val();
-    $.post("{url:/districtadmin/get_bank_type}",{name:name},function(data){
+    $.post("{url:/districtadmin/get_bank_type}",{name:name},function(res){
             data = JSON.stringify(res);
                 var jsonarray= $.parseJSON(data);
                 var html = '';
