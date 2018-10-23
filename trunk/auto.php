@@ -340,8 +340,8 @@ class LinuxCliTask{
                             $inviter_infos = $model->table("invite")->fields('invite_user_id')->where('user_id='.$first_vip)->findAll();
                             $ids = array();
                             if($inviter_infos) {
-                                foreach($inviter_infos as $k =>$v) {
-                                   $ids[] = $v['invite_user_id'];
+                                foreach($inviter_infos as $k1 =>$v1) {
+                                   $ids[] = $v1['invite_user_id'];
                                 }
                             }
                             $user_ids = $ids!=null?implode(',', $ids):'';
