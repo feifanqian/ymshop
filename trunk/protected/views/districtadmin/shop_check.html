@@ -186,7 +186,9 @@ function upload(id,type){
                                                           tools_reload();
                                                       }); 
                                                     }else{
-                                                      layer.msg(data.msg);
+                                                      layer.msg(data.msg, {icon: 8},function(){
+                                                          return false;
+                                                      });
                                                     }
                                                   },'json');
                                                 } else {
@@ -218,7 +220,10 @@ function upload(id,type){
                                                           tools_reload();
                                                       }); 
                                                     }else{
-                                                      layer.msg(data.msg);
+                                                      layer.msg(data.msg, {icon: 8},function(){
+                                                          // tools_reload();
+                                                          return false;
+                                                      });
                                                     }
                                                   },'json');
                                                 } else {
@@ -248,7 +253,9 @@ function upload(id,type){
                                                                     tools_reload();
                                                                 }); 
                                                               }else{
-                                                                layer.msg(data.msg);
+                                                                layer.msg(data.msg, {icon: 8},function(){
+                                                                    return false;
+                                                                });
                                                               }
                                                             },'json');
                                                         }
