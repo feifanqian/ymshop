@@ -1999,6 +1999,7 @@ class DistrictadminController extends Controller
             $res = json_decode($res,true);
             if($res['ysepay_merchant_register_accept_response']['code']==10000) {
                $model->table("shop_check")->data(array("usercode" =>$res['ysepay_merchant_register_accept_response']['usercode'],"register_status"=>0))->where("id=" . $id)->update();
+               $model->table("district_promoter")->data(array("partner_id" =>$res['ysepay_merchant_register_accept_response']['usercode']))->where("user_id=" . $shop_check['user_id'])->update();
                echo json_encode(array("status" => 'success', 'msg' => '成功'));
                 exit();
             } else {
