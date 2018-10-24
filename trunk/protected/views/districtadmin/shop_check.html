@@ -181,14 +181,13 @@ function upload(id,type){
                                                 $.post("{url:/districtadmin/shop_check_upload8}",{id:id},function(data){ //客户协议
                                                 if(data.isSuccess==true) {
                                                    $.post("{url:/districtadmin/shop_check_register}",{id:id},function(data){
-                                                       // layer.close(index);
                                                       if(data.status=='success'){
-                                                      layer.msg('操作成功', {icon: 6},function(){
+                                                      layer.msg("操作成功", {icon: 6},function(){
                                                           tools_reload();
                                                       }); 
                                                     }else{
                                                       layer.msg(data.msg, {icon: 5},function(){
-                                                          tools_reload();
+                                                          return false;
                                                       });
                                                     }
                                                   },'json');
@@ -222,7 +221,8 @@ function upload(id,type){
                                                       }); 
                                                     }else{
                                                       layer.msg(data.msg, {icon: 5},function(){
-                                                          tools_reload();
+                                                          // tools_reload();
+                                                          return false;
                                                       });
                                                     }
                                                   },'json');
@@ -254,7 +254,7 @@ function upload(id,type){
                                                                 }); 
                                                               }else{
                                                                 layer.msg(data.msg, {icon: 5},function(){
-                                                                    tools_reload();
+                                                                    return false;
                                                                 });
                                                               }
                                                             },'json');
