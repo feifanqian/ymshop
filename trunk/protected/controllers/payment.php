@@ -1171,11 +1171,18 @@ class PaymentController extends Controller {
             $sub_openid='';
            }
 
-           $promoter = $this->model->table('district_promoter')->fields('partner_id')->where('user_id='.$seller_id)->find();
+           $promoter = $this->model->table('district_promoter')->fields('partner_id')->where('user_id='.$seller_id)->find(); 
            if($promoter && $promoter['partner_id']!=null) {
             $seller_ids = $promoter['partner_id'];
            } else {
             $seller_ids = 'yuanmeng';
+           }
+           
+           $shop_check = $this->model->table('shop_check')->fields('shop_name')->where('user_id='.$seller_id)->find();
+           if($shop_check && $shop_check['shop_name']!=null) {
+            $seller_name = $shop_check['shop_name'];
+           } else {
+            $seller_name = '圆梦互联网科技（深圳）有限公司';
            }
 
            $myParams = array();
@@ -1197,7 +1204,7 @@ class PaymentController extends Controller {
             "total_amount"=>$order_amount,
             "currency"=>"CNY",
             "seller_id"=>$seller_ids,
-            "seller_name"=>'圆梦互联网科技（深圳）有限公司',
+            "seller_name"=>$seller_name,
             "timeout_express"=>'24h',
             // "business_code"=>'3010001',
             "business_code" => "01000010",
@@ -1213,7 +1220,7 @@ class PaymentController extends Controller {
             $myParams['partner_id'] = 'yuanmeng';
             $myParams['return_url'] = 'http://www.ymlypt.com/travel/order_details';
             $myParams['seller_id'] = $seller_ids;
-            $myParams['seller_name'] = '圆梦互联网科技（深圳）有限公司';
+            $myParams['seller_name'] = $seller_name;
             $myParams['sign_type'] = 'RSA';
             $myParams['subject'] = '圆梦共享网';
             $myParams['timeout_express'] = '24h';
