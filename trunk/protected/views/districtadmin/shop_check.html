@@ -186,9 +186,7 @@ function upload(id,type){
                                                           tools_reload();
                                                       }); 
                                                     }else{
-                                                      layer.msg(data.msg, {icon: 5},function(){
-                                                          return false;
-                                                      });
+                                                      layer.msg(data.msg);
                                                     }
                                                   },'json');
                                                 } else {
@@ -220,10 +218,7 @@ function upload(id,type){
                                                           tools_reload();
                                                       }); 
                                                     }else{
-                                                      layer.msg(data.msg, {icon: 5},function(){
-                                                          // tools_reload();
-                                                          return false;
-                                                      });
+                                                      layer.msg(data.msg);
                                                     }
                                                   },'json');
                                                 } else {
@@ -253,9 +248,7 @@ function upload(id,type){
                                                                     tools_reload();
                                                                 }); 
                                                               }else{
-                                                                layer.msg(data.msg, {icon: 5},function(){
-                                                                    return false;
-                                                                });
+                                                                layer.msg(data.msg);
                                                               }
                                                             },'json');
                                                         }
