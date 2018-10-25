@@ -1171,17 +1171,14 @@ class PaymentController extends Controller {
             $sub_openid='';
            }
 
-           $promoter = $this->model->table('district_promoter')->fields('partner_id')->where('user_id='.$seller_id)->find(); 
-           if($promoter && $promoter['partner_id']!=null) {
-            $seller_ids = $promoter['partner_id'];
-           } else {
-            $seller_ids = 'yuanmeng';
-           }
-           
-           $shop_check = $this->model->table('shop_check')->fields('shop_name')->where('user_id='.$seller_id)->find();
-           if($shop_check && $shop_check['shop_name']!=null) {
+           // $promoter = $this->model->table('district_promoter')->fields('partner_id')->where('user_id='.$seller_id)->find(); 
+
+           $shop_check = $this->model->table('shop_check')->fields('shop_name,usercode,register_status')->where('user_id='.$seller_id)->find();
+           if($shop_check && $shop_check['shop_name']!=null && $shop_check['usercode']!=null && $shop_check['register_status']==1) {
+            $seller_ids = $shop_check['usercode'];
             $seller_name = $shop_check['shop_name'];
            } else {
+            $seller_ids = 'yuanmeng';
             $seller_name = '圆梦互联网科技（深圳）有限公司';
            }
 
