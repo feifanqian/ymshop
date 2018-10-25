@@ -662,6 +662,7 @@ class MapAction extends Controller
                 }
                 $str = implode(',', $ids);
                 $where = 'category_id in ($str)';
+                var_dump($where);die;
             } else {
                $this->code = 0;
                $this->content = [];
