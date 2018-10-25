@@ -188,7 +188,7 @@ class UcenterAction extends Controller {
     //设置昵称
     public function set_nickname() {
         $new_name = Filter::str(Req::args('new'));
-        if (strlen($new_name) > 20) {
+        if (strlen($new_name) > 50) {
             $this->code = 1000;
             return;
         }
