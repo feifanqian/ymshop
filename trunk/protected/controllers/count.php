@@ -2100,6 +2100,7 @@ class CountController extends Controller
             $where7 = "status=1 and type=1";
             $where8 = "status=0 and type=1";
         }
+        var_dump($where5);die;
         $model = new Model();
         $order_num = $model->table('order')->fields('count(id) as num')->where($where1)->query();
         $offline_order_num = $model->table('order_offline')->fields('count(id) as num')->where($where1)->query();
