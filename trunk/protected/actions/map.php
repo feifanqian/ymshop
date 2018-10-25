@@ -650,7 +650,7 @@ class MapAction extends Controller
     public function news_list()
     {
         $page = Filter::int(Req::args("page"));
-        $id = Filter::int(Req::args("id"));
+        $id = Filter::int(Req::args("type_id"));
         $where = 'category_id=5';
         if($id) {
             $ids = array();
@@ -688,7 +688,7 @@ class MapAction extends Controller
     //新闻类型
     public function news_type()
     {
-        $type = $this->model->table('category')->fields('id,name')->where('parent_id=5')->findAll();
+        $type = $this->model->table('category')->fields('id as type_id,name')->where('parent_id=5')->findAll();
         $this->code = 0;
         $this->content = $type;
         return;
