@@ -650,9 +650,27 @@ class MapAction extends Controller
     public function news_list()
     {
         $page = Filter::int(Req::args("page"));
+        $id = Filter::int(Req::args("id"));
+        $where = 'category_id=5';
+        if($id) {
+            $ids = array();
+            $str = '';
+            $category = $this->model->table('category')->fields('id')->where('parent_id=5')->findAll();
+            if($category) {
+                foreach ($category as $key => $value) {
+                    $ids[] = $value['id'];
+                }
+                $str = implode(',', $ids);
+                $where = 'category_id in ($str)';
+            } else {
+               $this->code = 0;
+               $this->content = [];
+               return;
+            }
+        }
         $list = array();
         if($page) {
-            $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where('category_id=5')->order('id desc')->findPage($page,20);
+            $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where($where)->order('id desc')->findPage($page,20);
             if($list) {
                 unset($list['html']);
             } else {
@@ -664,6 +682,15 @@ class MapAction extends Controller
         
         $this->code = 0;
         $this->content = $list['data'];
+        return;
+    }
+
+    //新闻类型
+    public function news_type()
+    {
+        $type = $this->model->table('category')->fields('id,name')->where('parent_id=5')->findAll();
+        $this->code = 0;
+        $this->content = $type;
         return;
     }
 

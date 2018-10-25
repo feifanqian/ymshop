@@ -311,6 +311,7 @@ class V1Controller extends Controller {
         "feedback"=>array("map/feedback",0,1), //意见反馈
         "help_list"=>array("map/help_list",0,1), //帮助支持
         "news_list"=>array("map/news_list",0,1), //新闻动态
+        "news_type"=>array("map/news_type",0,1), //新闻类型
         "news_detail"=>array("map/news_detail",0,1), //新闻详情
         "news_share_link"=>array("map/news_share_link",1,1), //新闻动态分享链接
         "be_promoter_by_balance"=>array("payment/be_promoter_by_balance",1,1), //余额充值成为代理商
