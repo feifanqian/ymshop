@@ -655,16 +655,14 @@ class MapAction extends Controller
         if($id) {
             $ids = array();
             $str = '';
-            var_dump(111);
             $category = $this->model->table('category')->fields('id')->where('parent_id=5')->findAll();
-            var_dump($category);die;
             if($category) {
                 foreach ($category as $key => $value) {
                     $ids[] = $value['id'];
                 }
                 $str = implode(',', $ids);
-                $where = 'category_id in ($str)';
-                var_dump($where);die;
+                $where = "category_id in ($str)";
+                var_dump($where);
             } else {
                $this->code = 0;
                $this->content = [];
