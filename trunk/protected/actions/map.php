@@ -660,6 +660,7 @@ class MapAction extends Controller
                 foreach ($category as $key => $value) {
                     $ids[] = $value['id'];
                 }
+                array_push($ids, 5);
                 $str = implode(',', $ids);
                 $where = "category_id in ($str)";
             } else {
