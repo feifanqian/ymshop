@@ -652,7 +652,7 @@ class MapAction extends Controller
         $page = Filter::int(Req::args("page"));
         $id = Filter::int(Req::args("type_id"));
         $where = 'category_id=5';
-        if($id) {
+        if(!$id) {
             $ids = array();
             $str = '';
             $category = $this->model->table('category')->fields('id')->where('parent_id=5')->findAll();
@@ -667,6 +667,8 @@ class MapAction extends Controller
                $this->content = [];
                return;
             }
+        } else {
+            $where = 'category_id='.$id;
         }
         $list = array();
         if($page) {
