@@ -258,6 +258,7 @@ class MapAction extends Controller
         if($promoter) {
             $this->model->table('district_promoter')->data(['base_rate'=>$rate])->where('user_id='.$this->user['id'])->update();
         }
+        $this->model->table('shop_check')->data(['status'=>0])->where('user_id='.$this->user['id'])->update();
 
         $this->code = 0;
         $this->content['url'] = $url;
