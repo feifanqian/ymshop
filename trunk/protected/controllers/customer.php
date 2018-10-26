@@ -204,6 +204,49 @@ class CustomerController extends Controller {
         }
     }
 
+    public function withdraw_querys($id){
+        $model = new Model('balance_withdraw as wd');
+        $obj = $model->where("wd.id=$id")->find();
+        if($obj){
+                // $ChinapayDf = new ChinapayDf();
+                $ChinapayDf = new AllinpayDf();
+                $params['merSeqId']=$obj['mer_seq_id'];
+                $params['merDate']= substr( $params['merSeqId'],0,8);
+                $merchantId=AppConfig::MERCHANT_ID;
+                $req_sn = $merchantId.$obj['withdraw_no'];
+
+                $third_pay = 0;
+                $payment_model = new Model();
+                $third_payment = $payment_model->table('third_payment')->where('id=1')->find();
+                if($third_payment){
+                    $third_pay = $third_payment['third_payment'];
+                }
+                if($third_pay==0 && in_array($obj['user_id'], [42608,141580,141585])) {
+                    $result = $ChinapayDf->DfYinshengQuery($obj['withdraw_no']); //使用银盛代付查询接口
+                } else {
+                    $result = $ChinapayDf->DfQuery($req_sn); //使用通联代付查询接口 
+                }
+                if($result['code']==1){
+                    if($obj['status']==4 || $obj['status']==0 || $obj['status']==2){
+                        if($obj['type']==0){
+                            $config = Config::getInstance();
+                            $other = $config->get("other");
+                            $real_amount = round($obj['amount']*(100-$other['withdraw_fee_rate'])/100,2);
+                        }else{
+                            $real_amount = $obj['amount'];
+                        }
+                        $model->data(array('status'=>1,'real_amount'=>$real_amount))->where("wd.id=$id")->update();
+                    }
+                    $return = array('status'=>'success','msg'=>$result['msg']);
+                }else{
+                    $return = array('status'=>'fail','msg'=>$result['msg']);
+                }  
+        }else{
+            $return = array('status'=>'fail','msg'=>'信息错误');
+        }
+        return $return;
+    }
+
     public function re_withdraw_query($id){
             $model = new Model('balance_withdraw as wd');
             $obj = $model->where("wd.id=$id")->find();
@@ -325,8 +368,8 @@ class CustomerController extends Controller {
                            $result = $ChinapayDf->DfYinsheng($params);
                        } 
                     }
-                    
-                    if($result['status']==1){
+                    $query = $this->withdraw_querys($id);
+                    if($result['status']==1 && $query['status']=='success'){
                         $date = date("Y-m-d H:i:s");
                         $real_amount = round($params['transAmt']/100,2);
                         $update = $model->query("update tiny_balance_withdraw set status=1,note='{$note}',real_amount={$real_amount},fee_rate={$other['withdraw_fee_rate']},mer_seq_id='{$params['merSeqId']}',submit_date='{$date}' where id = $id and status= 0");
