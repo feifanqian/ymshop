@@ -2089,6 +2089,7 @@ class PaymentController extends Controller {
             "out_batch_no" =>'S'.substr($order_no,0,15),
             "out_trade_no" => $order_no,
             'payee_usercode' => 'yuanmeng',
+            // 'payee_usercode' =>$shop['partner_id'],
             // "org_no" => "6584000000",
             // "org_no" => "",
             "division_mode" => "01",

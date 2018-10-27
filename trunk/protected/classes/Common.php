@@ -994,13 +994,41 @@ class Common {
                     Log::balance(-$income3, $district_id, $order['order_no'],'下级消费分成(所属专区)退款收回收益', 4);
                  } 
              }
-             // $district_info = $model->table("district_shop")->where("id=".$inviter_info['district_id'])->find();
-             // if($district_info&&$district_info['invite_shop_id']!=""){
-             //    $income4 = round($order['order_amount']*$config['income4']/100,2);
-             //    if($income4) {
-             //        Log::incomeLog($income4, 3, $district_info['invite_shop_id'], $order['id'], 15,"专区邀请者分成退款收回收益");
-             //    }  
-             // }
+             $income4 = round($base_balance*$config['plat_rate1']/100,2);
+             if($income4>0) {
+                $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`-({$income4})"))->update();
+                Log::balance(-$income4, 1, $order['order_no'],'下级消费分成(平台)退款收回收益', 4);
+             }
+             $first_vip = self::getFirstVip($order['user_id']);
+             $vip_rate = $config['vip_rate']; //6%超级vip池
+             $encourage = $config['encourage'];
+             if($first_vip) {
+                $inviter_infos = $model->table("invite")->fields('invite_user_id')->where('user_id='.$first_vip)->findAll();
+                $ids = array();
+                if($inviter_infos) {
+                    foreach($inviter_infos as $k =>$v) {
+                       $ids[] = $v['invite_user_id'];
+                    }
+                }
+                $user_ids = $ids!=null?implode(',', $ids):'';
+                if($user_ids!='') {                  
+                   $last= strtotime("-1 month", time());
+                   $last_lastday = date("Y-m-t", $last);//上个月最后一天
+                   $last_firstday = date('Y-m-01', $last);//上个月第一天
+                   $order_num = $model->table('order')->where("pay_status=1 and status in (3,4) and user_id in ($user_ids) and create_time between '{$last_firstday}' and '{$last_lastday}'")->count(); 
+               } else {
+                   $order_num = 0;
+               }
+               if($order_num>=100) {
+                 $income5 = round($base_balance*($vip_rate+$encourage)/100,2); //超级vip6%+10%激励金分润
+               } else {
+                 $income5 = round($base_balance*($vip_rate)/100,2); //超级vip6%分润
+               }
+               if($income5>0) {
+                    $model->table('customer')->where('user_id='.$first_vip)->data(array("balance"=>"`balance`-({$income5})"))->update();
+                    Log::balance(-$income5, $first_vip, $order['order_no'],'下级消费分成(第一个超级VIP)退款收回收益', 4);
+                }
+             }
          }else{
              return false;
          }
