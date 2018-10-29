@@ -242,7 +242,7 @@ class CustomerController extends Controller {
                     $return = array('status'=>'fail','msg'=>$result['msg']);
                 }  
         }else{
-            $return = array('status'=>'fail','msg'=>'信息错误');
+            $return = array('status'=>'fail','msg'=>'信息错误1');
         }
         return $return;
     }
@@ -403,7 +403,7 @@ class CustomerController extends Controller {
             
             //扣除账户里的余额
         }
-        exit(json_encode(array('status'=>'fail','msg'=>'信息错误')));
+        exit(json_encode(array('status'=>'fail','msg'=>'信息错误2')));
     }
 
     //再次处理提现
