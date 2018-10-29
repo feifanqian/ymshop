@@ -437,7 +437,7 @@ class V1Controller extends Controller {
             if ($user_id && $token) {
                 $userinfo = $this->model->table("user")->where("id='{$user_id}'")->find();
                 $time = time();
-                if ($userinfo && $userinfo['token'] == $token && strtotime($userinfo['expire_time']) > $time) {
+                if ($userinfo && $userinfo['token'] == $token) {
                     $model = new Model("user as us");
                     $this->user = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.id='{$userinfo['id']}'")->find();
                     return true;
