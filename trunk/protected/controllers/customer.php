@@ -373,6 +373,7 @@ class CustomerController extends Controller {
                         $date = date("Y-m-d H:i:s");
                         $real_amount = round($params['transAmt']/100,2);
                         $update = $model->query("update tiny_balance_withdraw set status=1,note='{$note}',real_amount={$real_amount},fee_rate={$other['withdraw_fee_rate']},mer_seq_id='{$params['merSeqId']}',submit_date='{$date}' where id = $id and status= 0");
+                        var_dump($update);die;
                         if($update){
                             Log::op($this->manager['id'], "通过提现申请", "管理员[" . $this->manager['name'] . "]:通过了提现申请 " . $obj['withdraw_no']);
                             exit(json_encode(array('status'=>'success','msg'=>'提现成功')));
