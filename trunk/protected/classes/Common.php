@@ -1050,13 +1050,13 @@ class Common {
             if(!$user_info) {
                 return $promoter_user_id;
             }
-            $is_shop = $model->table("district_shop")->where("id=".$user_info['district_id']." and owner_id=".$user_info['user_id'])->find();
+            $is_shop = $model->table("district_shop")->where("id=".$user_info['district_id'])->find();
             while(!$is_break){
                 $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
                 if($inviter_info){
                     $is_promoter = $model->table("district_promoter")->where("user_id=".$inviter_info['user_id'])->find();
                     if(!empty($is_promoter)){       
-                            if($is_promoter['hirer_id']==$user_info['district_id'] || !empty($is_shop)) {
+                            if($is_promoter['hirer_id']==$user_info['district_id'] || $is_shop['owner_id']==$inviter_info['user_id']) {
                                 $promoter_user_id = $inviter_info['user_id'];
                                 $is_break = true;
                             }else{
