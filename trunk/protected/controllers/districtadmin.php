@@ -2001,7 +2001,7 @@ class DistrictadminController extends Controller
             if($res['ysepay_merchant_register_query_response']['cust_status']=='审核失败') {
                 $model->table("shop_check")->data(array("register_status"=>2))->where("id=" . $id)->update();
             }
-            var_dump($res['ysepay_merchant_register_query_response']['merchant_no']);die;
+            // var_dump($res['ysepay_merchant_register_query_response']['merchant_no']);die;
             exit(json_encode(array('status'=>'success','msg'=>$res['ysepay_merchant_register_query_response']['cust_status'])));
         } else {
             exit(json_encode(array('status'=>'success','msg'=>$res['ysepay_merchant_register_query_response']['sub_msg'])));
