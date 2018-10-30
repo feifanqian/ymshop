@@ -64,7 +64,9 @@
 </head>
 <body>
 <div id="app">
-    <a href="javascript:;" onclick="launchApp()">打开淘宝</a>
+    // <a href="javascript:;" onclick="launchApp()">打开淘宝</a>
+    <!-- <a href="https://t.asczwa.com/taobao?backurl=http://m.//://m.rijni.top/h.3jyhsWQ?sm=4aa9a6">打开淘宝</a> -->
+    <a href="taobao://" id="open">打开应用</a>
     <a href="javascript:;" class="button" id="shareWechat">分享</a>
     
 </div>
@@ -181,6 +183,30 @@ function taobao(){
       mui.toast('你取消了跳转淘宝');
     }
   })
+}
+var downloader, 
+    scheme = 'taobao://',  // 需要打开的 scheme 地址
+    download='https://a.app.qq.com/o/simple.jsp?pkgname=com.taobao.taobao&source=tripshare_taobao_click';  // 如果打开scheme失效的app下载地址
+
+// 给 id 为 open 的按钮添加点击事件处理函数
+document.getElementById('open').onclick = function () {
+        window.location.href = scheme;  // 尝试打开 scheme 
+
+        // 设置3秒的定时下载任务，3秒之后下载app
+        downloader = setTimeout(function(){
+            window.location.href = download;
+        }, 3000);
+    };
+
+    document.addEventListener('visibilitychange webkitvisibilitychange', function () {
+        // 如果页面隐藏，推测打开scheme成功，清除下载任务
+        if (document.hidden || document.webkitHidden) {
+            clearTimeout(downloader);
+        }
+    });
+    window.addEventListener('pagehide', function() {
+        clearTimeout(downloader);
+    });
 }
 </script>
 </body>
