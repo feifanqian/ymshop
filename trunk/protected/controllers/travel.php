@@ -1599,4 +1599,23 @@ class TravelController extends Controller
         $this->redirect();    
     }
 
+    public function double11()
+    {
+        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        if(strpos($agent, 'android')==true) {
+            $platform = 'android';
+        } else {
+            $platform = 'ios';
+        }
+        $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+        $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+
+        $jssdk = new JSSDK($wechatcfg['app_key'], $wechatcfg['app_secret']);
+        $signPackage = $jssdk->GetSignPackage();
+        
+        $this->assign("signPackage", $signPackage);
+        $this->assign("platform",$platform);
+        $this->redirect();
+    }
+
 }    
