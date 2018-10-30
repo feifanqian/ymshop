@@ -2453,5 +2453,40 @@ class DistrictadminController extends Controller
        $model = new Model();
        $bank_type = $model->table('bank_type')->where("longname like '%{$name}%'")->findAll();
        echo JSON::encode($bank_type);
+    }
+
+    public function export_test()
+    {
+        $model = new Model();
+        $items = $model->table('district_promoter as dp')->fields('dp.user_id,dp.shop_name,c.real_name')->join('customer as c on dp.user_id=c.user_id')->findAll();
+        foreach ($items as $key => $value) {
+            $order = $model->table('order_offline')->fields('create_time')->where('shop_ids='.$value['user_id'].' and pay_status=1')->order('id desc')->find();
+            if($order) {
+                $items[$key]['order_time'] = $order['create_time'];
+            } else {
+                $items[$key]['order_time'] = '';
+            }
+        }
+        
+        header("Content-type:application/vnd.ms-excel");
+        header("Content-Disposition:filename=contract.xls");
+        $fields_array = array('user_id' => '商户id','shop_name' => '店铺名', 'real_name' => '商家名', 'order_time' => '时间');
+        $fields = array('user_id','shop_name', 'real_name', 'order_time');
+        $str = "<table border=1><tr>";
+        
+        foreach ($fields as $value) {
+            $str .= "<th>" . iconv("UTF-8", "GBK", $fields_array[$value]) . "</th>";
+        }
+        $str .= "</tr>";
+        foreach ($items as $item) {
+            $str .= "<tr>";
+            foreach ($fields as $value) {
+                $str .= '<td style="vnd.ms-excel.numberformat:@;">' . mb_convert_encoding($item[$value],"GBK", "UTF-8") . "</td>";
+            }
+            $str .= "</tr>";
+        }
+        $str .= "</table>";
+        echo $str;
+        exit;
     } 
 }
