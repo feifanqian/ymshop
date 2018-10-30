@@ -1980,7 +1980,7 @@ class DistrictadminController extends Controller
         $params['version'] = '3.0';
         $biz_content_arr = array(
             'usercode'=>$shop_check['usercode'],
-            'merchant_no'=>'yuanmeng'.$shop_check['user_id']
+            // 'merchant_no'=>'yuanmeng'.$shop_check['user_id']
             );
         $params['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
         // $params['biz_content'] = '{}';
