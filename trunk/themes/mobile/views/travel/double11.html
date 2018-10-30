@@ -160,7 +160,7 @@ function launchApp() {
   var platform = '{$platform}';
   if ( platform == "android" ) {
     plus.runtime.launchApplication( {pname:"com.taobao.taobao"
-    ,extra:{url:"https://m.taobao.com/#index"}}, function ( e ) {
+    ,extra:{url:'https://m.taobao.com/#index'}}, function ( e ) {
         alert( "打开失败:" + e.message );
     } );
   } else if ( platform == "ios" ) {
