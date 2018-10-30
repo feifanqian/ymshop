@@ -64,8 +64,6 @@
 </head>
 <body>
 <div id="app">
-    // <a href="javascript:;" onclick="launchApp()">打开淘宝</a>
-    <!-- <a href="https://t.asczwa.com/taobao?backurl=http://m.//://m.rijni.top/h.3jyhsWQ?sm=4aa9a6">打开淘宝</a> -->
     <a href="taobao://" id="open">打开应用</a>
     <a href="javascript:;" class="button" id="shareWechat">分享</a>
     
@@ -157,35 +155,9 @@ $('#shareWechat').on("click",function(){
 wx.error(function (res) {
  alert(res.errMsg);  //打印错误消息。及把 debug:false,设置为debug:ture就可以直接在网页上看到弹出的错误提示
 });
-function launchApp() {
-  var platform = '{$platform}';
-  if ( platform == "android" ) {
-    plus.runtime.launchApplication( {pname:"com.taobao.taobao"
-    ,extra:{url:'https://m.taobao.com/#index'}}, function ( e ) {
-        alert( "打开失败:" + e.message );
-    } );
-  } else if ( platform == "ios" ) {
-    plus.runtime.launchApplication( {action:"taobao://"}, function ( e ) {
-      alert( "打开失败: " + e.message );
-    } );
-  }
-}
-function taobao(){
-  var btnArray = ['否', '是'];
-  mui.confirm('是否跳转到淘宝', '提示', btnArray, function(e) {
-    if (e.index == 1) {
-      //跳转淘宝
-      //window.location.href = 'https://m.taobao.com/#index';
-      //openNewPage('taobao.html')
-      launchApp();
-    } else {
-      //取消跳转
-      mui.toast('你取消了跳转淘宝');
-    }
-  })
-}
+
 var downloader, 
-    scheme = 'taobao://',  // 需要打开的 scheme 地址
+    scheme = 'taobao://item.taobao.com',  // 需要打开的 scheme 地址
     download='https://a.app.qq.com/o/simple.jsp?pkgname=com.taobao.taobao&source=tripshare_taobao_click';  // 如果打开scheme失效的app下载地址
 
 // 给 id 为 open 的按钮添加点击事件处理函数
