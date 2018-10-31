@@ -204,7 +204,9 @@ class ActiveController extends Controller
                     } elseif ($redirectURL=='pay'){
                         $id = Filter::int(Req::args("id"));
                         $this->redirect("/travel/pay/id/{$id}");
-                    }else {
+                    } elseif ($redirectURL=='double11'){
+                        $this->redirect("/travel/double11");
+                    } else {
                         $this->redirect("/active/recruit");
                         // $url = Cookie::get('url');
                         // $url = $url!=NULL?$url:'/active/recruit';
