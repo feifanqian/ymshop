@@ -745,7 +745,11 @@ class UcenterAction extends Controller {
         $id = Filter::int(Req::args("id"));
         $flag = $this->model->table('order')->where("id=$id and user_id=" . $this->user['id'])->find();
         //$flag = $this->model->query("select * from tiny_order where id = $id and user_id=".$this->user['id']." and status = 4");
-        if (!empty($flag)) {
+        if(!$flag) {
+            $this->code = 1096;
+            return;
+        }
+        if ($flag['status']==4) {
             $this->code = 1043;
             return;
         } else {
