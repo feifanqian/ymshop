@@ -108,6 +108,7 @@ class Menu {
             '/customer/notify_list' => array('name' => '到货通知', 'parent' => 'ask_reviews'),
             '/order/order_list' => array('name' => '商品订单', 'parent' => 'order'),
             '/order/offlineorder_list' => array('name' => '线下订单', 'parent' => 'order'),
+            '/order/trip_order_list' => array('name' => '携程订单', 'parent' => 'order'),
             '/order/express_template_list' => array('name' => '快递单模板', 'parent' => 'express'),
             '/order/express_template_edit' => array('name' => '快递单模板编辑', 'parent' => 'express'),
             '/order/ship_list' => array('name' => '发货点管理', 'parent' => 'express'),

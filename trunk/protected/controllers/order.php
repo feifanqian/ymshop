@@ -259,6 +259,25 @@ class OrderController extends Controller {
         $this->redirect();
     }
 
+    public function trip_order_list() {
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str)
+            $this->assign("where", $condition_str);
+        else {
+            $status = Req::args("status");
+            if ($status)
+                $this->assign("where", "od.status=" . $status);
+            else
+                $this->assign("where", "1=1");
+        }
+        $this->assign("condition", $condition);
+        $this->assign("status", array('0' => '<span class="red">已提交</span>', '1' => '已成交',  '-1' => '<span class="red"><s>已取消</s></span>'));
+        
+        
+        $this->redirect();
+    }
+
     public function offlineorder_list() {
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
@@ -892,5 +911,82 @@ class OrderController extends Controller {
                 $this->msg = array("warning", "没有符合该筛选条件的数据，请重新筛选！");
                 $this->redirect("doc_receiving_list", false, Req::args());
             }
+    }
+
+    public function trip_order_export()
+    {
+        //判断是否选择了要上传的表格
+        if (empty($_POST['myfile'])) {
+            echo "<script>alert(您未选择表格);</script>";
+        }
+
+        //获取表格的大小，限制上传表格的大小5M
+        $file_size = $_FILES['myfile']['size'];
+        if ($file_size>5*1024*1024) {
+        echo "<script>alert('上传失败，上传的表格不能超过5M的大小');</script>";
+            exit();
+        }
+
+        //限制上传表格类型
+        $file_type = $_FILES['myfile']['type'];
+        //application/vnd.ms-excel  为xls文件类型
+        if ($file_type!='application/vnd.ms-excel') {
+            echo "<script>alert('上传失败，只能上传excel2003的xls格式!');</script>";
+         exit();
+        }
+
+        //判断表格是否上传成功
+        if (is_uploaded_file($_FILES['myfile']['tmp_name'])) {
+            require_once './protected/classes/PHPExcel.php';
+            require_once './protected/classes/PHPExcel/IOFactory.php';
+            // require_once 'PHPExcel/Reader/Excel5.php';
+            //以上三步加载phpExcel的类
+
+            $objReader = PHPExcel_IOFactory::createReader('Excel5');//use excel2007 for 2007 format 
+            //接收存在缓存中的excel表格
+            $filename = $_FILES['myfile']['tmp_name'];
+            $objPHPExcel = $objReader->load($filename); //$filename可以是上传的表格，或者是指定的表格
+            $sheet = $objPHPExcel->getSheet(0); 
+            $highestRow = $sheet->getHighestRow(); // 取得总行数 
+            // $highestColumn = $sheet->getHighestColumn(); // 取得总列数
+            
+            //循环读取excel表格,读取一条,插入一条
+            //j表示从哪一行开始读取  从第二行开始读取，因为第一行是标题不保存
+            //$a表示列号
+            for($j=2;$j<=$highestRow;$j++)  
+            {
+                $from = $objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue();//来源
+                $order_no = $objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue();//订单号
+                $submit_date = $objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue();//日期
+                $business_date = $objPHPExcel->getActiveSheet()->getCell("D".$j)->getValue();//业务类型
+                $num = $objPHPExcel->getActiveSheet()->getCell("E".$j)->getValue();//数量
+                $order_amount = $objPHPExcel->getActiveSheet()->getCell("F".$j)->getValue();//订单金额
+                $order_status = $objPHPExcel->getActiveSheet()->getCell("G".$j)->getValue();//状态
+                $ouid = $objPHPExcel->getActiveSheet()->getCell("H".$j)->getValue();
+
+                $data = array(
+                    'from' => $from,
+                    'order_no' => $order_no,
+                    'submit_date'=> $submit_date,
+                    'business_date'=> $business_date,
+                    'num' => $num,
+                    'order_amount'=> $order_amount,
+                    'order_status'=>$order_status,
+                    'ouid'=>$ouid,
+                    'add_time' => date('Y-m-d H:i:s')
+                    );
+
+                $model = new Model();
+                $res = $model->table('trip_order')->data($data)->insert();
+                
+                if ($res) {
+                    echo "<script>alert('添加成功！');";
+                    
+                }else{
+                    echo "<script>alert('添加失败！');";
+                    exit();
+                }
+            }
+        }    
     }
 }

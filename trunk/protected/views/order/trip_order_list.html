@@ -1,0 +1,316 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<script type="text/javascript" src="{url:@static/js/jquery.cookie.js}"></script>
+<form action="" method="post">
+    <div class="tools_bar clearfix">
+        <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)"
+           title="全选" data="true"> 全选 </a>
+        <a class="icon-remove-2" href="javascript:;"
+           onclick="tools_submit({action:'{url:/order/trip_order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>
+        <a class="icon-delicious" href="{url:/order/trip_order_list}"> 全部订单</a>
+        <a class="icon-eye-blocked" href="{url:/order/trip_order_list/status/0}"> 已提交</a>
+        <a class="icon-cogs" href="{url:/order/trip_order_list/status/1}"> 已成交</a>
+        <a class="icon-cogs" href="{url:/order/trip_order_list/status/-1}"> 已取消</a>
+        <form enctype="multipart/form-data" action="{url:/order/trip_order_export" method="post">
+            <table>
+                <tr>
+                <td>请选择你要导入的Excel表格</td>
+                <td><input type="file" name="myfile" class="icon-file-excel"></td>
+                </tr>
+                <tr><td><input type="submit" value="确定" /></td></tr>
+            </table>
+        </form>
+        <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style=""> 筛选条件</a><input
+                id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    </div>
+    <table class="default">
+        <tr>
+            <th style="width:30px">选择</th>
+            <th style="width:50px">操作</th>
+            <th style="width:100px">订单来源</th>
+            <th style="width:100px">订单号</th>
+            <th style="width:100px">提交时间</th>
+            <th style="width:50px">业务类型</th>
+            <th style="width:50px">数量</th>
+            <th style="width:100px">订单金额</th>
+            <th style="width:50px">订单状态</th>
+            <th style="width:50px">Ouid</th>
+        </tr>
+        {query:name=trip_order as od fields=od.* where=$where id=$obj page=1 order= od.id desc }
+        <tr>
+            <td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"><i class="icon-order-{$item['type']}"></i></td>
+            <td style="width:50px" class="btn_min">
+                <div class="operat hidden"><a class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                        <ul>
+                            <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看</a></li>
+                            {if:$item['status'] == 0}
+                            <li><a class="icon-switch" href="javascript:;"
+                                   onclick="change_status({$item['id']},1,null)"> 完成</a></li>
+                            {/if}
+                            {if:$item['status'] !=-1}
+                            <li><a class="icon-remove" href="javascript:;"
+                                   onclick="change_status({$item['id']},-1,null)"> 作废</a></li>
+                            {/if}
+                            {if:$item['status'] !=1}
+                            <li><a class="icon-close"
+                                   href="javascript:confirm_action('{url:/order/trip_order_del/id/$item[id]}')"> 删除</a></li>
+                            {/if}
+                            
+                        </ul>
+                    </div>
+                </div>
+            </td>
+            <td style="width:100px;">{$item['from']}</td>
+            <td style="width:100px"><span>{$item['order_no']}</span></td>
+            <td style="width:100px;">{$item['submit_date']}</td>
+            <td style="width:50px">{$item['business_type']}</td>
+            <td style="width:50px">{$item['num']}</td>
+            <td style="width:100px">{$item['order_amount']}</td>
+            <td style="width:50px">{$item['order_status']}</td>
+            <td style="width:50px">{$item['ouid']}</td>
+        </tr>
+        {/query}
+    </table>
+</form>
+<div class="page_nav">
+    {echo:$obj->pageBar()}
+</div>
+
+<style type='text/css'>
+    .badge {
+        background-color: rgb(255, 0, 0);
+        border-radius: 10px;
+        color: #fff;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        min-width: 10px;
+        padding: 3px 7px;
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .shan {
+        -webkit-animation: twinkling 1.3s infinite ease-in-out;
+        -webkit-animation-direction: alternate;
+    }
+
+    @-webkit-keyframes twinkling { /*透明度由0到1*/
+        0% {
+            opacity: 0; /*透明度为0*/
+        }
+        100% {
+            opacity: 1; /*透明度为1*/
+        }
+    }
+</style>
+
+<script type="text/javascript">
+    var pendingData= new Array();
+    var noticevoice = $("#notice-voice")[0];
+    var voice_status;
+    var dialog_status;
+    var interval;
+    var count =2;
+    
+    noticevoice.addEventListener('ended',function(){
+        if (count > 0) { 
+           this.play();
+           count--;
+        }else{
+            count =2;
+        } 
+    });
+    function voiceControl(context){
+       if($(".fa-ban",context).length==0){
+           $('i:first',context).addClass('fa-ban');
+           noticevoice.volume =0.0;
+           $.cookie('voice_status', 'off', { expires: 30 });//重置cookie
+           voice_status = 'off';
+       }else{
+           $('i:first',context).removeClass('fa-ban');
+           noticevoice.volume =1.0;
+           $.cookie('voice_status', 'on', { expires: 30 });
+           voice_status='on';
+       }
+    }
+    function dialogControl(context){
+       if($(".fa-ban",context).length==0){
+           $('i:first',context).addClass('fa-ban');
+           layer.closeAll();
+           $.cookie('dialog_status', 'off', { expires: 30 });
+           dialog_status = 'off';
+           console.log('offf');
+       }else{
+           $('i:first',context).removeClass('fa-ban');
+           $.cookie('dialog_status', 'on', { expires: 30 });
+           dialog_status ='on';
+           console.log('on');
+       }
+    }
+    
+    function init(){
+        if($.cookie('voice_status')==null || $.cookie('voice_status')==undefined){
+            $.cookie('voice_status', 'on', { expires: 30 });//默认开启声音
+        }
+        if($.cookie('dialog_status')==null || $.cookie('dialog_status')==undefined){
+            $.cookie('dialog_status', 'on', { expires: 30 });//默认开启弹窗
+        }
+        voice_status = $.cookie('voice_status');
+        dialog_status = $.cookie('dialog_status');
+        if(voice_status=='on'){
+            $("#voice i:first").removeClass('fa-ban');
+            noticevoice.volume =1.0;
+        }else{
+            $("#voice i:first").addClass('fa-ban');
+            noticevoice.volume =0.0;
+        }
+        if(dialog_status=='on'){
+            $("#dialog i:first").removeClass('fa-ban');
+        }else{
+            $("#dialog i:first").addClass('fa-ban');
+        }
+        $.get("{url:/order/checkUpdateInfo}",function(returns){
+            if(returns.status=='success'){
+                pendingData['all'] = returns.data.allOrderCount;
+                pendingData['undelivery'] = returns.data.undeliveryOrder;
+                pendingData['huadian'] = returns.data.pendingHuadianOrder;
+                pendingData['refund'] = returns.data.pendingRefundCount;
+                if(dialog_status=='on'){
+                     refundNotice(returns.data.pendingRefundCount);
+                     undeliveryNotice(returns.data.undeliveryOrder);
+               }
+               setInterval("Update();",10000); 
+            }
+        },'json');
+    }
+    
+    function refundNotice(num){
+       if(dialog_status=='off'){
+           return false;
+       }
+       if($('#refundNotice').length==0){
+       layer.open({
+                    id:'refundNotice',
+                    type: 1,
+                    offset:['444px','17px'],
+                    move: '.move',
+                    anim:1,
+                    shade: false,
+                    title: false, //不显示标题
+                    content: "<p style='background-color:rgba(107, 0, 255, 0.93);width:160px;'><i class='icon-search move' style='color:rgb(0, 255, 104);'></i><a href='{url:/order/refund_apply_list}' style='color:white;'> 未处理的退款请求<span class='badge'>"+num+"</span></a></p>", 
+       });
+      }else{
+         $('#refundNotice .badge').text(num);
+      }
+    }
+    
+    function newOrderNotice(){
+        interval = setInterval(function(){
+        if($(document).attr("title").indexOf('★')==-1){
+            $(document).attr("title","★"+'订单有新'+"★");
+        }else{
+            $(document).attr("title","☆"+'商品订单'+"☆");
+        }
+      },1000);
+      layer.tips("<i class='icon-info red' style='font-size:15px;line-height:22px;position: relative;top:2px;'></i>您有新订单！请点击查看", '.current', {
+            tips: 3,
+            time: 20000
+      });
+    }
+    function undeliveryNotice(num){
+        if(dialog_status=='off'){
+           return false;
+       }
+        if($('#undeliveryNotice').length==0){
+         layer.open({
+                    id:'undeliveryNotice',
+                    type: 1,
+                    offset:['412px','17px'],
+                    move: '.move',
+                    anim:1,
+                    shade: false,
+                    title: false, //不显示标题
+                    content: "<p style='background-color:rgba(107, 0, 255, 0.93);width:160px;'><i class='icon-search move' style='color:rgb(0, 255, 104);'></i><a href='/order/order_list?condition=and--pay_status--eq--1__and--delivery_status--eq--0__and--od.status--ne--6__and--od.status--ne--5' style='color:white;'> 未发货的商品订单<span class='badge'>"+num+"</span></a></p>", 
+       });
+     }else{
+       $('#undeliveryNotice .badge').text(num);
+      }
+    }
+    
+ 
+    function edit(id){
+        art.dialog.open("{url:/order/trip_order_edit/id/}"+id,{id:'edit_dialog',title:'订单编辑',resize:false,width:900,height:450});
+    }
+    function view(id){
+        art.dialog.open("{url:/order/trip_order_view/id/}"+id,{id:'view_dialog',title:'查看订单',resize:false,width:900,height:450});
+    }
+    
+    function change_status(id,status,op){
+        var title = '';
+        if(status==null){
+            if(op=='del') title = '删除订单';
+            else if(op=='note') title = '备注订单';
+        }else{
+            if(status == 3) title = '审核订单';
+            else if(status == 4) title = '完成订单';
+            else if(status == 6) title = '作废订单';
+        }
+        
+        // $("#order_status").val(status);
+        
+        art.dialog({id:'status_dialog',title:title,resize:false,width:500,height:200,padding:'0 5px',content:document.getElementById('status_dialog')});
+    }
+    function submit_status(){
+        var order_status = ['<span class="red">等待审核</span>','<span class="red">等待审核</span>','<span class="red">等待审核</span>','已审核','已完成','已取消','<span class="red"><s>已作废</s></span>'];
+        var remark= $("#order_remark").val();
+        var id = $("#order_id").val();
+        var status = $("#order_status").val();
+        var op = $("#order_op").val();
+        if(remark != ''){
+            $.post('{url:/order/order_status}',{id:id,status:status,op:op,remark:remark},function(data){
+                art.dialog({id:'status_dialog'}).close();
+                if(data['status']=='success'){
+                    $("#status_"+id).html(order_status[status]);
+                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"成功！</p>");
+                }else{
+                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"失败！</p>");
+                }
+                setTimeout("tools_reload()",2000);
+            },'json');
+        }else{
+            art.dialog.tips("<p class='warning'>备注信息不能为空!</p>");
+        }
+
+    }
+    function send_close(){
+        art.dialog({id:'send_dialog'}).close();
+        art.dialog.tips("<p class='success'>发货成功！</p>");
+    }
+    function close(){
+        art.dialog({id:'edit_dialog'}).close();
+        art.dialog.tips("<p class='success'>订单编辑成功！</p>");
+    }
+    
+    {set:$payment=trim($payment,',');}
+        $("#condition").on("click", function () {
+            $("body").Condition({
+                input: "#condition_input",
+                okVal: '高级搜索',
+                callback: function (data) {
+                    tools_submit({action: '{url:/order/trip_order_list}', method: 'get'});
+                },
+                data: {
+                    ouid: {name: 'ouid'},
+                    order_no: {name: '订单编号'},
+                    status: {name: '状态', values: {0: '已提交', 1: '已完成', -1: '已取消'}},  
+           }
+        }
+            
+        })
+      });      
+
+</script>
