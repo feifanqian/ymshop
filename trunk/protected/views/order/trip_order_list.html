@@ -1,7 +1,7 @@
 {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
 <script type="text/javascript" src="{url:@static/js/jquery.cookie.js}"></script>
-<form action="" method="post">
+
     <div class="tools_bar clearfix">
         <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)"
            title="全选" data="true"> 全选 </a>
@@ -11,17 +11,19 @@
         <a class="icon-eye-blocked" href="{url:/order/trip_order_list/status/0}"> 已提交</a>
         <a class="icon-cogs" href="{url:/order/trip_order_list/status/1}"> 已成交</a>
         <a class="icon-cogs" href="{url:/order/trip_order_list/status/-1}"> 已取消</a>
-        <form enctype="multipart/form-data" action="{url:/order/trip_order_export}" method="post">
-            <table>
-                <tr>
-                <td>请选择你要导入的Excel表格</td>
-                <td><input type="file" name="myfile" class="icon-file-excel"></td>
-                </tr>
-                <tr><td><input type="submit" value="确定" /></td></tr>
-            </table>
-        </form>
+        
         <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style=""> 筛选条件</a><input
                 id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    </div>
+    <div class="tools_bar clearfix">
+       <form enctype="multipart/form-data" action="{url:/order/trip_order_export}" method="post">
+            
+                请选择你要导入的Excel表格
+                <input type="file" name="myfile" class="icon-file-excel">
+                
+                <input type="submit" value="确定" />
+            
+        </form>
     </div>
     <table class="default">
         <tr>
@@ -72,7 +74,7 @@
         </tr>
         {/query}
     </table>
-</form>
+
 <div class="page_nav">
     {echo:$obj->pageBar()}
 </div>
