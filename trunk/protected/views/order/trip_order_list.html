@@ -16,13 +16,13 @@
                 id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
     </div>
     <div class="tools_bar clearfix">
+    
        <form enctype="multipart/form-data" action="{url:/order/trip_order_export}" method="post">
-            
-                请选择你要导入的Excel表格
-                <input type="file" name="myfile" class="icon-file-excel">
-                
-                <input type="submit" value="确定" />
-            
+          <span class="fl">
+            <a href='javascript:;' id="condition" class="icon-search" style=""> 请选择你要导入的Excel表格</a>
+            <input type="file" name="myfile" >
+            <input type="submit" value="确定" />
+          </span>  
         </form>
     </div>
     <table class="default">
