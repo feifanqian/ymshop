@@ -294,23 +294,6 @@
         art.dialog({id:'edit_dialog'}).close();
         art.dialog.tips("<p class='success'>订单编辑成功！</p>");
     }
-    
-    {set:$payment=trim($payment,',');}
-        $("#condition").on("click", function () {
-            $("body").Condition({
-                input: "#condition_input",
-                okVal: '高级搜索',
-                callback: function (data) {
-                    tools_submit({action: '{url:/order/trip_order_list}', method: 'get'});
-                },
-                data: {
-                    ouid: {name: 'ouid'},
-                    order_no: {name: '订单编号'},
-                    status: {name: '状态', values: {0: '已提交', 1: '已完成', -1: '已取消'}},  
-           }
-        }
-            
-        })
-      });      
+        
 
 </script>
