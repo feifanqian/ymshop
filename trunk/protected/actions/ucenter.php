@@ -752,6 +752,7 @@ class UcenterAction extends Controller {
             $result = $this->model->table('order')->where("id=$id and user_id=" . $this->user['id'] . " and status=3 and pay_status=1 and delivery_status=1")->data(array('delivery_status' => 2, 'status' => 4, 'completion_time' => date('Y-m-d H:i:s')))->update();
             if ($result) {
                 //查询是否赠送积分
+                var_dump($flag);die;
                 $prom = unserialize($flag['prom']);
                 if (isset($prom['id']) && $flag['type']==2) {
                     $flashbuy = $this->model->table("flash_sale")->where("id=" . $prom['id'])->find();
