@@ -16,6 +16,7 @@ class V1Controller extends Controller {
         //'接口名'=>array("对应控制器方法",是否需要用户验证,是否正常)
         'signup' => array('ucenter/app_signup', 0,1), //注册接口
         'login' => array('ucenter/login', 0,1), //登陆接口
+        'check_token'=>array('ucenter/check_token',1,1), //验证token
         'userinfo' => array('ucenter/info', 1,1), //用户信息接口
         'thirdlogin' => array('ucenter/thirdlogin', 0,1), //第三方登录
         'thirdbind' => array('ucenter/thirdbind', 0,1), //第三方登录绑定
@@ -437,7 +438,7 @@ class V1Controller extends Controller {
             if ($user_id && $token) {
                 $userinfo = $this->model->table("user")->where("id='{$user_id}'")->find();
                 $time = time();
-                if ($userinfo && $userinfo['token'] == $token) {
+                if ($userinfo && $userinfo['token'] == $token && strtotime($userinfo['expire_time']) > $time) {
                     $model = new Model("user as us");
                     $this->user = $model->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.group_id,cu.user_id,cu.login_time,cu.mobile")->where("us.id='{$userinfo['id']}'")->find();
                     return true;

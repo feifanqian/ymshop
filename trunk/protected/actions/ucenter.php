@@ -3667,4 +3667,24 @@ class UcenterAction extends Controller {
         $this->content['inviter_name'] = $inviter_name;
         return;
     }
+
+    public function check_token()
+    {
+        $token = Req::args('token');
+        $user_id = Filter::int(Req::args('user_id'));
+        $userinfo = $this->model->table("user")->where("id=".$user_id)->find();
+        if($userinfo) {
+            if($userinfo['token']==$token) {
+                $this->model->table("user")->data(array('expire_time' => date('Y-m-d H:i:s', strtotime('+7 days'))))->where('id=' . $user_id)->update();
+                $this->code = 0;
+                return;
+            } else {
+                $this->code = 1003;
+                return;
+            }
+        } else {
+            $this->code = 1000;
+            return;
+        }
+    }
 }
