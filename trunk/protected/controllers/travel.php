@@ -1601,76 +1601,76 @@ class TravelController extends Controller
 
     public function double11()
     {
-        $inviter_id = Filter::int(Req::args('inviter_id'));
-        if(!isset($this->user['id']) || $this->user['id']==null) {
-            $redirect = "http://www.ymlypt.com/travel/double11";
-            if($inviter_id) {
-                $redirect.='/inviter_id/'.$inviter_id;
-            }
-            if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
-               //微信授权登录
-                    $code = Filter::sql(Req::args('code'));
-                    $oauth = new WechatOAuth();
+        // $inviter_id = Filter::int(Req::args('inviter_id'));
+        // if(!isset($this->user['id']) || $this->user['id']==null) {
+        //     $redirect = "http://www.ymlypt.com/travel/double11";
+        //     if($inviter_id) {
+        //         $redirect.='/inviter_id/'.$inviter_id;
+        //     }
+        //     if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+        //        //微信授权登录
+        //             $code = Filter::sql(Req::args('code'));
+        //             $oauth = new WechatOAuth();
                     
-                    $url = $oauth->getCodes($redirect);
-                    if($code) {
-                        $extend = null;
-                        $token = $oauth->getAccessToken($code, $extend);
-                        $userinfo = $oauth->getUserInfo();
-                        if(!empty($userinfo)) {
-                            $openid = $token['openid'];
-                            $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
+        //             $url = $oauth->getCodes($redirect);
+        //             if($code) {
+        //                 $extend = null;
+        //                 $token = $oauth->getAccessToken($code, $extend);
+        //                 $userinfo = $oauth->getUserInfo();
+        //                 if(!empty($userinfo)) {
+        //                     $openid = $token['openid'];
+        //                     $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
 
-                            if(!$oauth_user) { //未注册
-                                $open_name = $userinfo['open_name'];
-                                $open_name = Common::replace_specialChar($open_name);
-                                //插入user表
-                                $passWord = CHash::random(6);
-                                $validcode = CHash::random(8);
-                                $user_id = $this->model->table("user")->data(array('nickname' => $open_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
-                                $name = "u" . sprintf("%09d", $user_id);
-                                $email = $name . "@no.com";
-                                $time = date('Y-m-d H:i:s');
-                                $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
+        //                     if(!$oauth_user) { //未注册
+        //                         $open_name = $userinfo['open_name'];
+        //                         $open_name = Common::replace_specialChar($open_name);
+        //                         //插入user表
+        //                         $passWord = CHash::random(6);
+        //                         $validcode = CHash::random(8);
+        //                         $user_id = $this->model->table("user")->data(array('nickname' => $open_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+        //                         $name = "u" . sprintf("%09d", $user_id);
+        //                         $email = $name . "@no.com";
+        //                         $time = date('Y-m-d H:i:s');
+        //                         $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
 
-                                //插入customer表
-                                $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $open_name, 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
-                                Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
+        //                         //插入customer表
+        //                         $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $open_name, 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+        //                         Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
 
-                                //插入oauth_user表
-                                $this->model->table('oauth_user')->data(array(
-                                        'user_id' => $user_id, 
-                                        'open_name' => $open_name,
-                                        'oauth_type' => "wechat",
-                                        'posttime' => time(),
-                                        'token' => $token['access_token'],
-                                        'expires' => $token['expires_in'],
-                                        'open_id' => $token['openid']
-                                    ))->insert();
+        //                         //插入oauth_user表
+        //                         $this->model->table('oauth_user')->data(array(
+        //                                 'user_id' => $user_id, 
+        //                                 'open_name' => $open_name,
+        //                                 'oauth_type' => "wechat",
+        //                                 'posttime' => time(),
+        //                                 'token' => $token['access_token'],
+        //                                 'expires' => $token['expires_in'],
+        //                                 'open_id' => $token['openid']
+        //                             ))->insert();
 
-                                //记录登录信息
-                                $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
-                                $obj['open_id'] = $token['openid'];
-                                $this->safebox->set('user', $obj, 1800);
-                                $this->user['id'] = $user_id;
-                            } else { //已注册
-                                $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
-                                $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
-                                $this->safebox->set('user', $obj, 31622400);
-                                $user_id = $oauth_user['user_id'];
-                                $this->user['id'] = $user_id;
-                            }
-                            if($inviter_id && $user_id){
-                                Common::buildInviteShip($inviter_id, $user_id, 'wechat');
-                            }   
-                        }
-                    } else {
-                        header("Location: {$url}"); 
-                    }
-            } else {
-                $this->redirect('/active/login/redirect/double11');
-            }
-         }
+        //                         //记录登录信息
+        //                         $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
+        //                         $obj['open_id'] = $token['openid'];
+        //                         $this->safebox->set('user', $obj, 1800);
+        //                         $this->user['id'] = $user_id;
+        //                     } else { //已注册
+        //                         $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
+        //                         $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
+        //                         $this->safebox->set('user', $obj, 31622400);
+        //                         $user_id = $oauth_user['user_id'];
+        //                         $this->user['id'] = $user_id;
+        //                     }
+        //                     if($inviter_id && $user_id){
+        //                         Common::buildInviteShip($inviter_id, $user_id, 'wechat');
+        //                     }   
+        //                 }
+        //             } else {
+        //                 header("Location: {$url}"); 
+        //             }
+        //     } else {
+        //         $this->redirect('/active/login/redirect/double11');
+        //     }
+        //  }
         $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
         if(strpos($agent, 'android')==true) {
             $platform = 'android';

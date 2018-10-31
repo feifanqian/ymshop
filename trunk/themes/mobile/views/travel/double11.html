@@ -112,8 +112,6 @@ $('#shareWechat').on("click",function(){
      var lineLink = '';
     var descContent = "双11";
     var shareTitle = "双11";
-    // var shareTitle = "资讯中心";
-    // alert('share');
     wx.ready(function () {   //ready函数用于调用API，如果你的网页在加载后就需要自定义分享和回调功能，需要在此调用分享函数。//如果是微信游戏结束后，需要点击按钮触发得到分值后分享，这里就不需要调用API了，可以在按钮上绑定事件直接调用。因此，微信游戏由于大多需要用户先触发获取分值，此处请不要填写如下所示的分享API
         wx.onMenuShareAppMessage({  //例如分享到朋友圈的API  
            title: shareTitle, // 分享标题
@@ -141,15 +139,6 @@ $('#shareWechat').on("click",function(){
                 alert('取消分享');
             }
         });
-        // WeixinJSBridge.invoke('sendAppMessage',{   
-        // //"appid":appId,   
-        // "img_url":'http://www.ymlypt.com/static/yuanmeng1/activity_a/img/recruit/header.jpg',   
-        // //"img_width":"640",   
-        // //"img_height":"640",   
-        // "link":'http://www.ymlypt.com/active/login/redirect/recruit/inviter/'+user_id,   
-        // "desc":'共享无形资源，获取跨界收益，振兴传统商业的共享经济平台',   
-        // "title":'圆梦共享网'   
-        // });  
     });
   
 wx.error(function (res) {
