@@ -4,15 +4,16 @@
 {echo:JS::import('form')}
 <!-- <form action="" method="post"> -->
 <div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+    <a class="icon-delicious" href="{url:/districtadmin/list_hirer}"> 查看全部</a>
+    <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方经销商</a>
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<div class="tools_bar clearfix">
     <form action="{url:/districtadmin/list_hirer}" method="post">
         <span class="fl">时间：<input name="s_time" type="text" value="{$s_time}" id="datepick" class="middle" readonly="readonly"></span>
         <a href="javascript:tools_submit();" id="conditions" class="icon-search" style=""> 查询</a>
     </form>
-    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
-    <a class="icon-delicious" href="{url:/districtadmin/list_hirer}"> 查看全部</a>
-    <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方经销商</a>
-
-    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
 </div>
 <table class="default" >
     <tr>
