@@ -948,7 +948,7 @@ class OrderController extends Controller {
             //接收存在缓存中的excel表格
             $filename = $_FILES['myfile']['tmp_name'];
             $extend = pathinfo($filename);
-            $extend = strtolower($extend["extension"]);
+            // $extend = strtolower($extend["extension"]);
             var_dump($extend);die; 
             $objReader = PHPExcel_IOFactory::createReader('excel2007');//use excel2007 for 2007 format 
             $objPHPExcel = $objReader->load($filename); //$filename可以是上传的表格，或者是指定的表格
