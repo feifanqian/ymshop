@@ -947,6 +947,8 @@ class OrderController extends Controller {
 
             //接收存在缓存中的excel表格
             $filename = $_FILES['myfile']['tmp_name'];
+            var_dump($filename);
+            var_dump($_FILES['myfile']);
             $extend = pathinfo($filename);
             // $extend = strtolower($extend["extension"]);
             var_dump($extend);die; 
