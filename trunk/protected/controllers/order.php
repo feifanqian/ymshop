@@ -922,7 +922,8 @@ class OrderController extends Controller {
          }      
          require_once './protected/classes/PHPExcel.php';
          require_once './protected/classes/IOFactory.php';
-         require_once './protected/classes/PHPExcel/Reader/Excel5.php';     
+         require_once './protected/classes/PHPExcel/Reader/Excel5.php';
+         require_once './protected/classes/PHPExcel/Reader/Excel2007.php';     
          $objReader = PHPExcel_IOFactory::createReader('excel2007');   
             
          $excelpath = $file;      
