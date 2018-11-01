@@ -709,9 +709,6 @@ class CustomerController extends Controller {
 
     function customer_list() {
         $condition = Req::args("condition");
-        if($condition) {
-            var_dump($condition);die;
-        }
         $condition_str = Common::str2where($condition);
         if ($condition_str)
             $this->assign("where", $condition_str);

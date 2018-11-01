@@ -86,6 +86,9 @@ class DistrictadminController extends Controller
         $page = intval(Req::args("p"));
         $page_size = 10;
         $condition = Req::args("condition");
+        if($condition) {
+            var_dump($condition);die;
+        }
         $condition_str = Common::str2where($condition);
 
         if ($condition_str) {
