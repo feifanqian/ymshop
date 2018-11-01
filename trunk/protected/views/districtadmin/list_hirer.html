@@ -3,12 +3,13 @@
 {echo:JS::import('highcharts')}
 {echo:JS::import('form')}
 {widget:name=districtadmin action=cal}
-<form action="" method="post">
 <div class="tools_bar clearfix">
-    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
-    <a class="icon-delicious" href="{url:/districtadmin/list_hirer}"> 查看全部</a>
-    <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方经销商</a>
-    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    <form action="" method="post">
+        <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+        <a class="icon-delicious" href="{url:/districtadmin/list_hirer}"> 查看全部</a>
+        <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方经销商</a>
+        <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    </form>
 </div>
 <!-- <div class="tools_bar clearfix">
     <form action="{url:/districtadmin/list_hirer}" method="post">
@@ -55,7 +56,6 @@
         </tr>
     {/list}
 </table>
-</form>
 <div class="page_nav">
 {$list['html']}
 </div>
