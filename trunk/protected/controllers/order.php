@@ -956,11 +956,11 @@ class OrderController extends Controller {
             if ($extend=="xlsx") {
               $PHPReader = new PHPExcel_Reader_Excel2007();
               // $PHPExcel = $PHPReader->load("./" . $excel_fiel_path);
-              $PHPExcel = $PHPReader->load($file);
+              $PHPExcel = $PHPReader->load($filename);
             }else{
               $PHPReader = new PHPExcel_Reader_Excel5();
               // $PHPExcel = $PHPReader->load("./" . $excel_fiel_path);
-              $PHPExcel = $PHPReader->load($file);
+              $PHPExcel = $PHPReader->load($filename);
             }
             // $objReader = PHPExcel_IOFactory::createReader('excel2007');//use excel2007 for 2007 format 
             // $PHPExcel = $objReader->load($file); //$filename可以是上传的表格，或者是指定的表格
