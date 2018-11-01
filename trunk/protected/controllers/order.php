@@ -948,6 +948,9 @@ class OrderController extends Controller {
             $objReader = PHPExcel_IOFactory::createReader('excel2007');//use excel2007 for 2007 format 
             //接收存在缓存中的excel表格
             $filename = $_FILES['myfile']['tmp_name'];
+            $extend = pathinfo($filename);
+            $extend = strtolower($extend["extension"]);
+            var_dump($extend);die; 
             $objPHPExcel = $objReader->load($filename); //$filename可以是上传的表格，或者是指定的表格
             $sheet = $objPHPExcel->getSheet(0); 
             $highestRow = $sheet->getHighestRow(); // 取得总行数 
