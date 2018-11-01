@@ -916,7 +916,7 @@ class OrderController extends Controller {
     public function trip_order_export()
     {
         $model = new Model();
-        $file = $_FILES['myfile']['tmp_name'];      
+        $file = $_FILES['file']['tmp_name'];      
         if(empty($file)){         
             echo "<script>alert('请选择文件');</script>";      
          }      
@@ -931,26 +931,7 @@ class OrderController extends Controller {
          $sheet = $PHPExcel->getSheet(0);      
          $highestRow = $sheet->getHighestRow();       //取得总行数      
          $highestColumn = $sheet->getHighestColumn(); //取得总列数            
-        //  $str = '';      
-        //  for($j=2;$j<=$highestRow;$j++)               //从第二行开始读取数据     
-        //  {           
-        //       $str.='(';         
-        //       $strValue = '';             
-        //       for($k='A';$k<=$highestColumn;$k++)      //从A列读取数据                
-        //       {                      
-        //                   //读取单元格 
-        //            $strValue.="'".$PHPExcel->getActiveSheet()->getCell("$k$j")->getValue()."'".',';               
-        //        } 
-                              
-        //        $strValue=substr($strValue,0,-1);                 
-        //        $str.=$strValue.'),';               
-        // }     
-        // $str=substr($str,0,-1);     
-        // $sql = "INSERT INTO trip_order (froms,order_no,submit_date,business_type,num,order_amount,order_status,ouid) VALUES $str";           
-        // $res = $model->query($sql);      
-        // if($res){ 
-        //     echo "<script>alert('导入成功！');</script>";        
-        // }
+        
         for($j=2;$j<=$highestRow;$j++)  
             {
                 $from = $PHPExcel->getActiveSheet()->getCell("A".$j)->getValue();//来源
@@ -973,110 +954,13 @@ class OrderController extends Controller {
                     'ouid'=>$ouid,
                     'add_time' => date('Y-m-d H:i:s')
                     );
-
-                $res = $model->table('trip_order')->data($data)->insert();
                 
-                if ($res) {
-                    echo "<script>alert('添加成功！');";
-                    
-                }else{
-                    echo "<script>alert('添加失败！');";
-                    exit();
+                $exist = $model->table('trip_order')->where("order_no='{$order_no}'")->find();
+                if(!$exist) {
+                    $model->table('trip_order')->data($data)->insert();
                 }
-            }                 
-
-
-        // header("Content-type: text/html; charset=utf-8");
-        // //判断是否选择了要上传的表格
-        // if (empty($_POST['myfile'])) {
-        //     echo "<script>alert(您未选择表格);</script>";
-        // }
-
-        // //获取表格的大小，限制上传表格的大小5M
-        // $file_size = $_FILES['myfile']['size'];
-        // if ($file_size>5*1024*1024) {
-        // echo "<script>alert('上传失败，上传的表格不能超过5M的大小');</script>";
-        //     exit();
-        // }
-
-        // //限制上传表格类型
-        // $file_type = $_FILES['myfile']['type'];
-        // // var_dump($file_type);die;
-        // //application/vnd.ms-excel  为xls文件类型
-        // // if ($file_type!='application/vnd.ms-excel') {
-        // //     echo "<script>alert('上传失败，只能上传excel2003的xls格式!');</script>";
-        // //  exit();
-        // // }
-
-        // //判断表格是否上传成功
-        // if (is_uploaded_file($_FILES['myfile']['tmp_name'])) {
-        //     require_once './protected/classes/PHPExcel.php';
-        //     // require_once './protected/classes/PHPExcel/IOFactory.php';
-        //     require_once './protected/classes/IOFactory.php';
-        //     require_once './protected/classes/PHPExcel/Reader/Excel5.php';
-        //     //以上三步加载phpExcel的类
-
-        //     //接收存在缓存中的excel表格
-        //     $file = $_FILES['myfile']['tmp_name'];
-            
-        //     $filename = $_FILES['myfile']['name'];
-        //     $extend = pathinfo($filename);
-        //     $extend = strtolower($extend["extension"]);
-        //     // var_dump($extend);die; 
-        //     $PHPExcel = new PHPExcel();
-        //     if ($extend=="xlsx") {
-        //       $PHPReader = new PHPExcel_Reader_Excel2007();
-        //       // $PHPExcel = $PHPReader->load("./" . $excel_fiel_path);
-        //       $PHPExcel = $PHPReader->load($filename);
-        //     }else{
-        //       $PHPReader = new PHPExcel_Reader_Excel5();
-        //       // $PHPExcel = $PHPReader->load("./" . $excel_fiel_path);
-        //       $PHPExcel = $PHPReader->load($filename);
-        //     }
-        //     // $objReader = PHPExcel_IOFactory::createReader('excel2007');//use excel2007 for 2007 format 
-        //     // $PHPExcel = $objReader->load($file); //$filename可以是上传的表格，或者是指定的表格
-        //     // $sheet = $PHPExcel->getSheet(0); 
-        //     // $highestRow = $sheet->getHighestRow(); // 取得总行数 
-        //     // $highestColumn = $sheet->getHighestColumn(); // 取得总列数
-        //     $objWorksheet = $PHPExcel->getActiveSheet();
-        //     $highestRow = $objWorksheet->getHighestRow(); 
-        //     //循环读取excel表格,读取一条,插入一条
-        //     //j表示从哪一行开始读取  从第二行开始读取，因为第一行是标题不保存
-        //     //$a表示列号
-        //     for($j=2;$j<=$highestRow;$j++)  
-        //     {
-        //         $from = $PHPExcel->getActiveSheet()->getCell("A".$j)->getValue();//来源
-        //         $order_no = $PHPExcel->getActiveSheet()->getCell("B".$j)->getValue();//订单号
-        //         $submit_date = $PHPExcel->getActiveSheet()->getCell("C".$j)->getValue();//日期
-        //         $business_date = $PHPExcel->getActiveSheet()->getCell("D".$j)->getValue();//业务类型
-        //         $num = $PHPExcel->getActiveSheet()->getCell("E".$j)->getValue();//数量
-        //         $order_amount = $PHPExcel->getActiveSheet()->getCell("F".$j)->getValue();//订单金额
-        //         $order_status = $PHPExcel->getActiveSheet()->getCell("G".$j)->getValue();//状态
-        //         $ouid = $PHPExcel->getActiveSheet()->getCell("H".$j)->getValue();
-
-        //         $data = array(
-        //             'froms' => $from,
-        //             'order_no' => $order_no,
-        //             'submit_date'=> $submit_date,
-        //             'business_type'=> $business_date,
-        //             'num' => $num,
-        //             'order_amount'=> $order_amount,
-        //             'order_status'=>$order_status,
-        //             'ouid'=>$ouid,
-        //             'add_time' => date('Y-m-d H:i:s')
-        //             );
-
-        //         $model = new Model();
-        //         $res = $model->table('trip_order')->data($data)->insert();
-                
-        //         if ($res) {
-        //             echo "<script>alert('添加成功！');";
-                    
-        //         }else{
-        //             echo "<script>alert('添加失败！');";
-        //             exit();
-        //         }
-        //     }
-        // }    
+            }
+            $info = array('status' => 'success', 'msg' => '成功');
+            echo JSON::encode($info);                    
     }
 }

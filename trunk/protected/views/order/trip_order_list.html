@@ -17,11 +17,11 @@
     </div>
     <div class="tools_bar clearfix">
     
-       <form enctype="multipart/form-data" action="{url:/order/trip_order_export}" method="post">
+       <form enctype="multipart/form-data" action="" method="post">
           <span class="fl">
             <a href='javascript:;' id="condition" class="icon-search" style=""> 请选择你要导入的Excel表格</a>
-            <input type="file" name="myfile" >
-            <input type="submit" value="确定" />
+            <input type="file" name="file" >
+            <input type="button" value="确定" id="fileuploader" />
           </span>  
         </form>
     </div>
@@ -170,6 +170,23 @@
         art.dialog({id:'edit_dialog'}).close();
         art.dialog.tips("<p class='success'>订单编辑成功！</p>");
     }
-        
 
+    $('#fileuploader').click(function(){
+        var formData = new FormData($('form')[0]);
+        formData.append('file',$(':file')[0].files[0]);
+        $.ajax({
+          url:'{url:/order/trip_order_export}',
+          type: 'POST',
+          data: formData,
+          //这两个设置项必填
+          contentType: false,
+          processData: false,
+          success:function(data){
+            layer.msg("导入成功",{icon:6},function(){
+                    window.location.reload();
+            });
+          }
+         })
+    })
+        
 </script>
