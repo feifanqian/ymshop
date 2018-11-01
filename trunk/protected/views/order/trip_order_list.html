@@ -126,50 +126,19 @@
     }
     
     function change_status(id,status,op){
-        var title = '';
-        if(status==null){
-            if(op=='del') title = '删除订单';
-            else if(op=='note') title = '备注订单';
-        }else{
-            if(status == 3) title = '审核订单';
-            else if(status == 4) title = '完成订单';
-            else if(status == 6) title = '作废订单';
-        }
-        
-        // $("#order_status").val(status);
-        
-        art.dialog({id:'status_dialog',title:title,resize:false,width:500,height:200,padding:'0 5px',content:document.getElementById('status_dialog')});
+        $.ajax({
+          url:'{url:/order/trip_order_status}',
+          type: 'POST',
+          data: {'id':id,'status':status},
+          
+          success:function(data){
+            layer.msg("成功",{icon:6},function(){
+                    window.location.reload();
+            });
+          }
+         })
     }
-    function submit_status(){
-        var order_status = ['<span class="red">等待审核</span>','<span class="red">等待审核</span>','<span class="red">等待审核</span>','已审核','已完成','已取消','<span class="red"><s>已作废</s></span>'];
-        var remark= $("#order_remark").val();
-        var id = $("#order_id").val();
-        var status = $("#order_status").val();
-        var op = $("#order_op").val();
-        if(remark != ''){
-            $.post('{url:/order/order_status}',{id:id,status:status,op:op,remark:remark},function(data){
-                art.dialog({id:'status_dialog'}).close();
-                if(data['status']=='success'){
-                    $("#status_"+id).html(order_status[status]);
-                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"成功！</p>");
-                }else{
-                    art.dialog.tips("<p class='"+data['status']+"'>"+data['msg']+"失败！</p>");
-                }
-                setTimeout("tools_reload()",2000);
-            },'json');
-        }else{
-            art.dialog.tips("<p class='warning'>备注信息不能为空!</p>");
-        }
-
-    }
-    function send_close(){
-        art.dialog({id:'send_dialog'}).close();
-        art.dialog.tips("<p class='success'>发货成功！</p>");
-    }
-    function close(){
-        art.dialog({id:'edit_dialog'}).close();
-        art.dialog.tips("<p class='success'>订单编辑成功！</p>");
-    }
+    
 
     $('#fileuploader').click(function(){
         var formData = new FormData($('form')[0]);

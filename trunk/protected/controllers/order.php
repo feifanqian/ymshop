@@ -976,5 +976,14 @@ class OrderController extends Controller {
         $orders = $model->where("id in ($ids)")->findAll();
         $msg = array('success', '成功删除了订单');
         $this->redirect("trip_order_list", true, array('msg' => $msg));
+    }
+
+    public function trip_order_status()
+    {
+        $id = Req::args('id');
+        $status = Req::args('status');
+        $model->table('trip_order')->data(['status'=>$status])->where('id='.$id)->update();
+        $info = array('status' => 'success', 'msg' => '成功');
+        echo JSON::encode($info);
     }    
 }
