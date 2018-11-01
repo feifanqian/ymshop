@@ -3,7 +3,7 @@
 {echo:JS::import('highcharts')}
 {echo:JS::import('form')}
 {widget:name=districtadmin action=cal}
-<!-- <form action="" method="post"> -->
+<form action="" method="post">
 <div class="tools_bar clearfix">
     <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
     <a class="icon-delicious" href="{url:/districtadmin/list_hirer}"> 查看全部</a>
@@ -55,7 +55,7 @@
         </tr>
     {/list}
 </table>
-<!-- </form> -->
+</form>
 <div class="page_nav">
 {$list['html']}
 </div>
