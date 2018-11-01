@@ -963,4 +963,18 @@ class OrderController extends Controller {
             $info = array('status' => 'success', 'msg' => '成功');
             echo JSON::encode($info);                    
     }
+
+    public function trip_order_del() {
+        $id = Req::args('id');
+        //删除
+        if (is_array($id)) {
+            $ids = implode(",", $id);
+        } else {
+            $ids = $id;
+        }
+        $model = new Model("trip_order");
+        $orders = $model->where("id in ($ids)")->findAll();
+        $msg = array('success', '成功删除了订单');
+        $this->redirect("trip_order_list", true, array('msg' => $msg));
+    }    
 }
