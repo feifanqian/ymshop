@@ -942,10 +942,10 @@ class OrderController extends Controller {
             require_once './protected/classes/PHPExcel.php';
             // require_once './protected/classes/PHPExcel/IOFactory.php';
             require_once './protected/classes/IOFactory.php';
-            // require_once 'PHPExcel/Reader/Excel5.php';
+            require_once './protected/classes/PHPExcel/Reader/Excel5.php';
             //以上三步加载phpExcel的类
 
-            $objReader = PHPExcel_IOFactory::createReader('Excel5');//use excel2007 for 2007 format 
+            $objReader = PHPExcel_IOFactory::createReader('excel2007');//use excel2007 for 2007 format 
             //接收存在缓存中的excel表格
             $filename = $_FILES['myfile']['tmp_name'];
             $objPHPExcel = $objReader->load($filename); //$filename可以是上传的表格，或者是指定的表格
