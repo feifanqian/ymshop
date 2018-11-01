@@ -6,12 +6,13 @@
 {set:$status=array("-1"=>"未完善","0"=>"<span class='green icon-busy'>未处理</span>","1"=>"<span class='gray icon-coin'>已审核</span>","2"=>"<span class='red icon-remove'>未通过</span>");}
 {set:$register_status=array("-1"=>"未注册","0"=>"<span class='green icon-busy'>审核中</span>","1"=>"<span class='gray icon-coin'>已通过</span>","2"=>"<span class='red icon-remove'>未通过</span>");}
 {set:$type = array("0"=>"未知","1"=>"个体商户","2"=>"小微商户","3"=>"企业商户");}
-<form action="" method="post">
 <div class="tools_bar clearfix">
-    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
-    <a class="icon-delicious" href="{url:/districtadmin/shop_check}"> 查看全部</a>
-    <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a>
-    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    <form action="" method="post">
+      <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+      <a class="icon-delicious" href="{url:/districtadmin/shop_check}"> 查看全部</a>
+      <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a>
+      <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    </form>
 </div>
 <div class="tools_bar clearfix">
     <form action="{url:/districtadmin/shop_check}" method="post">
