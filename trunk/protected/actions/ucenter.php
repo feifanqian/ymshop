@@ -2191,7 +2191,7 @@ class UcenterAction extends Controller {
                 case 'H':
                     $where.=" and `from` in ('goods_qrcode')";
                     break;
-                case 'I':
+                case 'J':
                     $where.=" and `from` in ('news_share')";
                     break;                            
                 default:
