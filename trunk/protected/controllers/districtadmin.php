@@ -1372,13 +1372,21 @@ class DistrictadminController extends Controller
     }
 
     public function shop_check(){
+        $cal = $this->calendar();
+        $stime = $cal['start'];
+        $etime = $cal['end'];
+        $s_time = $cal['str'];
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
         if ($condition_str) {
-            $this->assign("where", $condition_str);
+            $where = $condition_str;
         } else {
-            $this->assign("where", "1=1");
+            $where = '1=1';
         }
+        if($stime && $etime) {
+            $where = "sc.create_date between '$stime' and '$etime'";
+        }
+        $this->assign("where", $where);
         $this->assign("condition", $condition);
         $this->redirect();
     }
