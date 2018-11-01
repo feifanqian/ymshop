@@ -973,7 +973,7 @@ class OrderController extends Controller {
             $ids = $id;
         }
         $model = new Model("trip_order");
-        $orders = $model->where("id in ($ids)")->findAll();
+        $orders = $model->where("id in ($ids)")->delete();
         $msg = array('success', '成功删除了订单');
         $this->redirect("trip_order_list", true, array('msg' => $msg));
     }
