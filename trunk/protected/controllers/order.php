@@ -915,6 +915,7 @@ class OrderController extends Controller {
 
     public function trip_order_export()
     {
+        header("Content-type: text/html; charset=utf-8");
         //判断是否选择了要上传的表格
         if (empty($_POST['myfile'])) {
             echo "<script>alert(您未选择表格);</script>";
@@ -929,6 +930,7 @@ class OrderController extends Controller {
 
         //限制上传表格类型
         $file_type = $_FILES['myfile']['type'];
+        var_dump($file_type);die;
         //application/vnd.ms-excel  为xls文件类型
         if ($file_type!='application/vnd.ms-excel') {
             echo "<script>alert('上传失败，只能上传excel2003的xls格式!');</script>";
