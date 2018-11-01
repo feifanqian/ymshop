@@ -930,12 +930,12 @@ class OrderController extends Controller {
 
         //限制上传表格类型
         $file_type = $_FILES['myfile']['type'];
-        var_dump($file_type);die;
+        // var_dump($file_type);die;
         //application/vnd.ms-excel  为xls文件类型
-        if ($file_type!='application/vnd.ms-excel') {
-            echo "<script>alert('上传失败，只能上传excel2003的xls格式!');</script>";
-         exit();
-        }
+        // if ($file_type!='application/vnd.ms-excel') {
+        //     echo "<script>alert('上传失败，只能上传excel2003的xls格式!');</script>";
+        //  exit();
+        // }
 
         //判断表格是否上传成功
         if (is_uploaded_file($_FILES['myfile']['tmp_name'])) {
