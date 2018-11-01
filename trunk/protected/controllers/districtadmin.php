@@ -79,6 +79,10 @@ class DistrictadminController extends Controller
     public function list_hirer()
     {
         $this->model = new Model();
+        $cal = $this->calendar();
+        $stime = $cal['start'];
+        $etime = $cal['end'];
+        $s_time = $cal['str'];
         $page = intval(Req::args("p"));
         $page_size = 10;
         $condition = Req::args("condition");
@@ -91,9 +95,13 @@ class DistrictadminController extends Controller
             $where = "ds.status=1";
             $this->assign("where", "status=1");
         }
+        if($stime && $etime) {
+            $where = "ds.create_time between '$stime' and '$etime' and ds.status=1";
+        }
         $this->assign("condition", $condition);
         $list = $this->model->table('district_shop as ds')->join('left join customer as c on ds.owner_id=c.user_id left join district_shop as d on ds.invite_shop_id=d.id')->fields("ds.*,c.real_name,d.name as invite_shop_name")->where($where)->order("ds.id desc")->findPage($page, $page_size);
         $this->assign("list", $list);
+        $this->assign('s_time', $s_time);
         $this->redirect();
     }
 
