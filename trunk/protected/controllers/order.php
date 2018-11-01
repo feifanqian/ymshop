@@ -940,7 +940,8 @@ class OrderController extends Controller {
         //判断表格是否上传成功
         if (is_uploaded_file($_FILES['myfile']['tmp_name'])) {
             require_once './protected/classes/PHPExcel.php';
-            require_once './protected/classes/PHPExcel/IOFactory.php';
+            // require_once './protected/classes/PHPExcel/IOFactory.php';
+            require_once './protected/classes/IOFactory.php';
             // require_once 'PHPExcel/Reader/Excel5.php';
             //以上三步加载phpExcel的类
 
