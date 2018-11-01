@@ -1,8 +1,10 @@
 {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
-<!-- {set:$status=array("1"=>'正常','0'=>'禁用');} -->
+{echo:JS::import('highcharts')}
+{echo:JS::import('form')}
+{widget:name=districtadmin action=cal}
 {set:$status=array("0"=>'审核中',"1"=>'通过','2'=>'未通过','3'=>'未签约',null=>'未签约');}
-<form action="" method="post">
+<!-- <form action="" method="post"> -->
 <div class="tools_bar clearfix">
     <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
    <!-- <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>!-->
@@ -12,6 +14,12 @@
     <a class="icon-file-excel" href="{url:/districtadmin/export_test}"> 导出商家订单信息</a>
 
     <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<div class="tools_bar clearfix">
+    <form action="{url:/districtadmin/list_promoter}" method="post">
+        <span class="fl">时间：<input name="s_time" type="text" value="{$s_time}" id="datepick" class="middle"></span>
+        <a href="javascript:tools_submit();" id="conditions" class="icon-search" style=""> 查询</a>
+    </form>
 </div>
 <table class="default" >
     <tr>
@@ -64,7 +72,7 @@
         </tr>
     {/query}
 </table>
-</form>
+<!-- </form> -->
 <div class="page_nav">
 {echo:$obj->pageBar()}
 </div>

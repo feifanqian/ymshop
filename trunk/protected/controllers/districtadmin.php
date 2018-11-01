@@ -247,16 +247,23 @@ class DistrictadminController extends Controller
 
     public function list_promoter()
     {
-
+        $cal = $this->calendar();
+        $stime = $cal['start'];
+        $etime = $cal['end'];
+        $s_time = $cal['str'];
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
 
         if ($condition_str) {
             $where = $condition_str;
-            $this->assign("where", $where);
         } else {
-            $this->assign("where", "dp.status=1");
+            $where = 'dp.status=1';
         }
+        if($stime && $etime) {
+            $where = "dp.join_time between '$stime' and '$etime' and dp.status=1";
+        }
+        $this->assign("where", $where);
+        $this->assign('s_time', $s_time);
         $this->assign("condition", $condition);
         $this->redirect();
     }
