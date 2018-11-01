@@ -946,31 +946,42 @@ class OrderController extends Controller {
             //以上三步加载phpExcel的类
 
             //接收存在缓存中的excel表格
-            $filename = $_FILES['myfile']['tmp_name'];
-            var_dump($filename);
-            var_dump($_FILES['myfile']);
-            $extend = pathinfo($filename);
-            // $extend = strtolower($extend["extension"]);
-            var_dump($extend);die; 
-            $objReader = PHPExcel_IOFactory::createReader('excel2007');//use excel2007 for 2007 format 
-            $objPHPExcel = $objReader->load($filename); //$filename可以是上传的表格，或者是指定的表格
-            $sheet = $objPHPExcel->getSheet(0); 
-            $highestRow = $sheet->getHighestRow(); // 取得总行数 
-            // $highestColumn = $sheet->getHighestColumn(); // 取得总列数
+            $file = $_FILES['myfile']['tmp_name'];
             
+            $filename = $_FILES['myfile']['name'];
+            $extend = pathinfo($filename);
+            $extend = strtolower($extend["extension"]);
+            // var_dump($extend);die; 
+            $PHPExcel = new PHPExcel();
+            if ($extend=="xlsx") {
+              $PHPReader = new PHPExcel_Reader_Excel2007();
+              // $PHPExcel = $PHPReader->load("./" . $excel_fiel_path);
+              $PHPExcel = $PHPReader->load($file);
+            }else{
+              $PHPReader = new PHPExcel_Reader_Excel5();
+              // $PHPExcel = $PHPReader->load("./" . $excel_fiel_path);
+              $PHPExcel = $PHPReader->load($file);
+            }
+            // $objReader = PHPExcel_IOFactory::createReader('excel2007');//use excel2007 for 2007 format 
+            // $PHPExcel = $objReader->load($file); //$filename可以是上传的表格，或者是指定的表格
+            // $sheet = $PHPExcel->getSheet(0); 
+            // $highestRow = $sheet->getHighestRow(); // 取得总行数 
+            // $highestColumn = $sheet->getHighestColumn(); // 取得总列数
+            $objWorksheet = $PHPExcel->getActiveSheet();
+            $highestRow = $objWorksheet->getHighestRow(); 
             //循环读取excel表格,读取一条,插入一条
             //j表示从哪一行开始读取  从第二行开始读取，因为第一行是标题不保存
             //$a表示列号
             for($j=2;$j<=$highestRow;$j++)  
             {
-                $from = $objPHPExcel->getActiveSheet()->getCell("A".$j)->getValue();//来源
-                $order_no = $objPHPExcel->getActiveSheet()->getCell("B".$j)->getValue();//订单号
-                $submit_date = $objPHPExcel->getActiveSheet()->getCell("C".$j)->getValue();//日期
-                $business_date = $objPHPExcel->getActiveSheet()->getCell("D".$j)->getValue();//业务类型
-                $num = $objPHPExcel->getActiveSheet()->getCell("E".$j)->getValue();//数量
-                $order_amount = $objPHPExcel->getActiveSheet()->getCell("F".$j)->getValue();//订单金额
-                $order_status = $objPHPExcel->getActiveSheet()->getCell("G".$j)->getValue();//状态
-                $ouid = $objPHPExcel->getActiveSheet()->getCell("H".$j)->getValue();
+                $from = $PHPExcel->getActiveSheet()->getCell("A".$j)->getValue();//来源
+                $order_no = $PHPExcel->getActiveSheet()->getCell("B".$j)->getValue();//订单号
+                $submit_date = $PHPExcel->getActiveSheet()->getCell("C".$j)->getValue();//日期
+                $business_date = $PHPExcel->getActiveSheet()->getCell("D".$j)->getValue();//业务类型
+                $num = $PHPExcel->getActiveSheet()->getCell("E".$j)->getValue();//数量
+                $order_amount = $PHPExcel->getActiveSheet()->getCell("F".$j)->getValue();//订单金额
+                $order_status = $PHPExcel->getActiveSheet()->getCell("G".$j)->getValue();//状态
+                $ouid = $PHPExcel->getActiveSheet()->getCell("H".$j)->getValue();
 
                 $data = array(
                     'from' => $from,
