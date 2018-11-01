@@ -927,30 +927,63 @@ class OrderController extends Controller {
          $objReader = PHPExcel_IOFactory::createReader('excel2007');   
             
          $excelpath = $file;      
-         $objPHPExcel = $objReader->load($excelpath);       
-         $sheet = $objPHPExcel->getSheet(0);      
+         $PHPExcel = $objReader->load($excelpath);       
+         $sheet = $PHPExcel->getSheet(0);      
          $highestRow = $sheet->getHighestRow();       //取得总行数      
          $highestColumn = $sheet->getHighestColumn(); //取得总列数            
-         $str = '';      
-         for($j=2;$j<=$highestRow;$j++)               //从第二行开始读取数据     
-         {           
-              $str.='(';         
-              $strValue = '';             
-              for($k='A';$k<=$highestColumn;$k++)      //从A列读取数据                
-              {                      
-                          //读取单元格 
-                   $strValue.="'".$objPHPExcel->getActiveSheet()->getCell("$k$j")->getValue()."'".',';               
-               } 
+        //  $str = '';      
+        //  for($j=2;$j<=$highestRow;$j++)               //从第二行开始读取数据     
+        //  {           
+        //       $str.='(';         
+        //       $strValue = '';             
+        //       for($k='A';$k<=$highestColumn;$k++)      //从A列读取数据                
+        //       {                      
+        //                   //读取单元格 
+        //            $strValue.="'".$PHPExcel->getActiveSheet()->getCell("$k$j")->getValue()."'".',';               
+        //        } 
                               
-               $strValue=substr($strValue,0,-1);                 
-               $str.=$strValue.'),';               
-        }     
-        $str=substr($str,0,-1);     
-        $sql = "INSERT INTO trip_order (froms,order_no,submit_date,business_type,num,order_amount,order_status,ouid) VALUES $str";           
-        $res = $model->query($sql);      
-        if($res){ 
-            echo "<script>alert('导入成功！');</script>";        
-        }                 
+        //        $strValue=substr($strValue,0,-1);                 
+        //        $str.=$strValue.'),';               
+        // }     
+        // $str=substr($str,0,-1);     
+        // $sql = "INSERT INTO trip_order (froms,order_no,submit_date,business_type,num,order_amount,order_status,ouid) VALUES $str";           
+        // $res = $model->query($sql);      
+        // if($res){ 
+        //     echo "<script>alert('导入成功！');</script>";        
+        // }
+        for($j=2;$j<=$highestRow;$j++)  
+            {
+                $from = $PHPExcel->getActiveSheet()->getCell("A".$j)->getValue();//来源
+                $order_no = $PHPExcel->getActiveSheet()->getCell("B".$j)->getValue();//订单号
+                $submit_date = $PHPExcel->getActiveSheet()->getCell("C".$j)->getValue();//日期
+                $business_date = $PHPExcel->getActiveSheet()->getCell("D".$j)->getValue();//业务类型
+                $num = $PHPExcel->getActiveSheet()->getCell("E".$j)->getValue();//数量
+                $order_amount = $PHPExcel->getActiveSheet()->getCell("F".$j)->getValue();//订单金额
+                $order_status = $PHPExcel->getActiveSheet()->getCell("G".$j)->getValue();//状态
+                $ouid = $PHPExcel->getActiveSheet()->getCell("H".$j)->getValue();
+
+                $data = array(
+                    'froms' => $from,
+                    'order_no' => $order_no,
+                    'submit_date'=> $submit_date,
+                    'business_type'=> $business_date,
+                    'num' => $num,
+                    'order_amount'=> $order_amount,
+                    'order_status'=>$order_status,
+                    'ouid'=>$ouid,
+                    'add_time' => date('Y-m-d H:i:s')
+                    );
+
+                $res = $model->table('trip_order')->data($data)->insert();
+                
+                if ($res) {
+                    echo "<script>alert('添加成功！');";
+                    
+                }else{
+                    echo "<script>alert('添加失败！');";
+                    exit();
+                }
+            }                 
 
 
         // header("Content-type: text/html; charset=utf-8");
