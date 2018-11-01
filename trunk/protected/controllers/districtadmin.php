@@ -1387,6 +1387,7 @@ class DistrictadminController extends Controller
             $where = "sc.create_date between '$stime' and '$etime'";
         }
         $this->assign("where", $where);
+        $this->assign('s_time', $s_time);
         $this->assign("condition", $condition);
         $this->redirect();
     }
