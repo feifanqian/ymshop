@@ -184,7 +184,7 @@ class OrderAction extends Controller {
             }
             $start_time = $flash_sale['start_time'];
             $end_time = $flash_sale['end_time'];
-            $had_bought = $model->table('order')->where("type=2 and pay_status=1 and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}'")->count();
+            $had_bought = $model->table('order')->where("type=2 and pay_status=1 and prom_id=".$prom_id." and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}'")->count();
             if($flash_sale['is_limit']==1){
                 if($had_bought>=$flash_sale['quota_num']){
                      $this->code = 1204;
