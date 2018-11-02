@@ -450,6 +450,7 @@ class ContentController extends Controller {
             $update_time = Req::args('update_time');
             $end_time = Req::args('end_time');
             $content = array();
+            var_dump($path);die;
             if ($type == 2) {
                 $id = Req::args("id");
                 if($id==85) {
