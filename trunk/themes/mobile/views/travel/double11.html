@@ -100,7 +100,7 @@
     <!-- <a href="taobao://" id="open">打开应用</a> -->
     <!-- <a href="javascript:;" class="button" id="shareWechat">分享</a> -->
     <div id="share-button"><img src="/themes/mobile/images/fenxiang@2x.png" style="width: 100%;"></div>
-    <a href="javascript:;" class="button1" id="getRedbag">领取红包</a>
+    <a href="taobao://" class="button1" id="open">领取红包</a>
     <div id="font-share"><img src="/themes/mobile/images/double_get.png" style="width: 100%;"></div>
     <div id="copy_share">
        <div id="copy" style="width: 40%;float: left;"><img src="/themes/mobile/images/copy_taostr.png" style="width: 100%;"></div>
@@ -149,8 +149,8 @@ $('#shareWechat').on("click",function(){
     var imgUrl = "";
     // var lineLink = 'http://www.ymlypt.com/active/login/redirect/recruit/inviter/'+user_id;
      var lineLink = '';
-    var descContent = "双11";
-    var shareTitle = "双11";
+    var descContent = "超级红包主会场";
+    var shareTitle = "超级红包主会场";
     wx.ready(function () {   //ready函数用于调用API，如果你的网页在加载后就需要自定义分享和回调功能，需要在此调用分享函数。//如果是微信游戏结束后，需要点击按钮触发得到分值后分享，这里就不需要调用API了，可以在按钮上绑定事件直接调用。因此，微信游戏由于大多需要用户先触发获取分值，此处请不要填写如下所示的分享API
         wx.onMenuShareAppMessage({  //例如分享到朋友圈的API  
            title: shareTitle, // 分享标题
@@ -185,7 +185,8 @@ wx.error(function (res) {
 });
 
 var downloader, 
-    scheme = 'taobao://item.taobao.com',  // 需要打开的 scheme 地址
+    // scheme = 'taobao://item.taobao.com',  // 需要打开的 scheme 地址
+    scheme = "taobao://s.click.taobao.com/1ASHfKw",
     // scheme = 'taobao://m.taobao.com/#index',  // 需要打开的 scheme 地址
     download='https://a.app.qq.com/o/simple.jsp?pkgname=com.taobao.taobao&source=tripshare_taobao_click';  // 如果打开scheme失效的app下载地址
 
