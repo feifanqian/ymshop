@@ -446,6 +446,7 @@ class ContentController extends Controller {
             $height = Req::args('height');
             $x_coor = Req::args('x_coor');
             $y_coor = Req::args('y_coor');
+            $align_center = Req::args('align_center');
             $update_time = Req::args('update_time');
             $end_time = Req::args('end_time');
             $content = array();
@@ -453,7 +454,7 @@ class ContentController extends Controller {
                 $id = Req::args("id");
                 if($id==85) {
                     foreach ($path as $key => $value) {
-                        $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key],'width' => $width[$key],'height' => $height[$key],'x_coor' => $x_coor[$key],'y_coor' => $y_coor[$key],'update_time' => $update_time[$key],'end_time' => $end_time[$key]);
+                        $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key],'width' => $width[$key],'height' => $height[$key],'x_coor' => $x_coor[$key],'y_coor' => $y_coor[$key],'align_center' => $align_center[$key],'update_time' => $update_time[$key],'end_time' => $end_time[$key]);
                     }
                 } else {
                     foreach ($path as $key => $value) {
@@ -542,6 +543,7 @@ class ContentController extends Controller {
              $set[$k]['height'] = $list['height'];
              $set[$k]['x_coor'] = $list['x_coor'];
              $set[$k]['y_coor'] = $list['y_coor'];
+             $set[$k]['align_center'] = $list['align_center'];
              $set[$k]['top_distance'] = $list['top_distance'];
              $set[$k]['id'] = $list['id'];      
         }
@@ -576,6 +578,7 @@ class ContentController extends Controller {
             'height'=>Req::args("height"),
             'x_coor'=>Req::args("x_coor"),
             'y_coor'=>Req::args("y_coor"),
+            'align_center'=>Req::args("align_center"),
             'top_distance'=>Req::args("top_distance"),
             );
         $model->table('ad_preset')->data($data)->where("id=".$id)->update();

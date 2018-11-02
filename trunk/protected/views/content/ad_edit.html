@@ -105,6 +105,9 @@
               <td style="width:40px;">y轴：</td> 
               <td style="width:40px;"><input name="y_coor[]" type="text" value="{$item['y_coor']}" class="small"></td>
               <td style="width:40px;">是否居中：</td>
+              {if:!isset($item['align_center'])}
+              {set:$item['align_center'] = 0}
+              {/if}
               <td style="width:40px;">
                 <input name="align_center[]" type="checkbox" value="{$item['align_center']}" class="small" {if:$item['align_center']==1}checked="checked"{/if}>
               </td>
