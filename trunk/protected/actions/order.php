@@ -176,41 +176,47 @@ class OrderAction extends Controller {
         //    $this->code = 1108;
         //    return;
         // }
+        $info = ['status'=>'success','code'=>0];
         $flash_sale = $model->table('flash_sale')->where('id='.$prom_id)->find();
         if($flash_sale){
             if($flash_sale['is_end'] == 1){
-                $this->code = 1203;
-                return;
+                // $this->code = 1203;
+                // return;
+                $info = ['status'=>'error','code'=>1204];
             }
             $start_time = $flash_sale['start_time'];
             $end_time = $flash_sale['end_time'];
             $had_bought = $model->table('order')->where("pay_time between '{$start_time}' and '{$end_time}' and type=2 and pay_status=1 and prom_id=".$prom_id." and user_id=".$user_id)->count();
             if($flash_sale['is_limit']==1){
                 if($had_bought>=$flash_sale['quota_num']){
-                     $this->code = 1204;
-                     return;
-                     exit();       
+                     // $this->code = 1204;
+                     // return;
+                     // exit();
+                     $info = ['status'=>'error','code'=>1204];       
                 }
             }
             $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6");
             if($sum1[0]['sum']>= $flash_sale['max_num']){
-                $this->code = 1206;
-                return;
+                // $this->code = 1206;
+                // return;
+                $info = ['status'=>'error','code'=>1206];
             }
             $five_minutes = strtotime('-5 minutes');
             $sum2 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and UNIX_TIMESTAMP(od.create_time)>".$five_minutes);
             if($sum2[0]['sum']>= $flash_sale['max_num']){
-                $this->code = 1207;
-                return;         
+                // $this->code = 1207;
+                // return;
+                $info = ['status'=>'error','code'=>1207];         
             }
         }
         
         $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6 and od.user_id = $user_id");
         if($sum[0]['sum']>= $quota_num){
-            $this->code = 1109;
-            return;
+            // $this->code = 1109;
+            // return;
+            $info = ['status'=>'error','code'=>1109];
         }
-              
+        return $info;      
     }
     
     //提交订单
@@ -298,7 +304,12 @@ class OrderAction extends Controller {
             if ($num < 1)
                 $num = 1;
             $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("fb.*,go.name,go.sell_price,go.img,go.freeshipping,go.point,go.shop_id,go.weight,go.store_nums,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
-            $this->flashStatus($id, $item['quota_num'], $this->user['id']);
+            $ret = $this->flashStatus($id, $item['quota_num'], $this->user['id']);
+            if($ret['code']!=0) {
+                var_dump(111);die;
+                $this->code = $ret['code'];
+                return;
+            }
             $order_products = $this->packFlashbuyProducts($item, $num);
             $flashbuy = $model->table("flash_sale")->where("id=$id")->find();
             unset($flashbuy['description']);
