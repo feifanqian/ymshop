@@ -454,7 +454,7 @@ class ContentController extends Controller {
                 $id = Req::args("id");
                 if($id==85) {
                     foreach ($path as $key => $value) {
-                        $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key],'width' => $width[$key],'height' => $height[$key],'x_coor' => $x_coor[$key],'y_coor' => $y_coor[$key],'align_center' => $align_center!=null?$align_center[$key]:0,'update_time' => $update_time[$key],'end_time' => $end_time[$key]);
+                        $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key],'width' => $width[$key],'height' => $height[$key],'x_coor' => $x_coor[$key],'y_coor' => $y_coor[$key],'align_center' => isset($align_center[$key])?$align_center[$key]:0,'update_time' => $update_time[$key],'end_time' => $end_time[$key]);
                     }
                 } else {
                     foreach ($path as $key => $value) {
