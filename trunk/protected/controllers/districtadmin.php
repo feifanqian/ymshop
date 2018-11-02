@@ -1351,11 +1351,14 @@ class DistrictadminController extends Controller
     {
         $id = Req::args('id');
         $model = new Model();
-        // $name = Req::args('real_name');
+        $shop_name = Req::args('shop_name');
         $lng = Req::args('lng'); //经度
         $lat = Req::args('lat'); //纬度
         $location = Req::args('location');
         $info = Req::args('info');
+        if ($shop_name) {
+            $model->table('district_promoter')->data(array('shop_name'=>$shop_name))->where('id='.$id)->update();
+        }
         if ($lng) {
             $model->table('district_promoter')->data(array('lng'=>$lng))->where('id='.$id)->update();
             }
