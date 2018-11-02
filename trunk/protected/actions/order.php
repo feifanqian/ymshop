@@ -306,7 +306,6 @@ class OrderAction extends Controller {
             $item = $model->table("flash_sale as fb")->join("left join goods as go on fb.goods_id=go.id left join products as pr on pr.id=$product_id")->fields("fb.*,go.name,go.sell_price,go.img,go.freeshipping,go.point,go.shop_id,go.weight,go.store_nums,pr.id as product_id,pr.spec")->where("fb.id=$id")->find();
             $ret = $this->flashStatus($id, $item['quota_num'], $this->user['id']);
             if($ret['code']!=0) {
-                var_dump(111);die;
                 $this->code = $ret['code'];
                 return;
             }
