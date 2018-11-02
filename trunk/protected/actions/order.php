@@ -430,30 +430,27 @@ class OrderAction extends Controller {
                             $product_id = substr($product_id,1,strlen($product_id)-2);
                             $product_id = Filter::int($product_id);
                         }
-                        var_dump($product_id);
+                        
                         $num = isset($buy_num[0])?Filter::int($buy_num[0]):1;
                         if ($num < 1)
                             $num = 1;
-                        var_dump(111);
+                        
                         $item = $model->table("pointflash_sale as ps")
                                 ->join("left join goods as go on ps.goods_id=go.id left join products as pr on pr.goods_id=ps.goods_id")
                                 ->fields("*,go.id as goods_id,pr.id as product_id,pr.spec")
                                 ->where("ps.id=$id and pr.id = $product_id")
                                 ->find();
-                        var_dump(222);die;        
+                              
                         $pointflash = $model->table("pointflash_sale")->where("id=$id")->find();
+                        
                         if(empty($pointflash)||empty($item)){
-                            // var_dump($product_id);
-                            // var_dump($id);
-                            // var_dump($item);
-                            // var_dump($pointflash);die;
                             $this->code = 1214;
                             return;
                         }
                         $start_diff = time() - strtotime($pointflash['start_date']);
                         $end_diff = time() - strtotime($pointflash['end_date']);
                         if ($pointflash['is_end'] == 0 && $start_diff >= 0 && $end_diff < 0) {
-                            $ress = $this->pointflashStatus($id,$pointflash['quota_count'],$this->user['id'],true);
+                            $ress = $this->pointflashStatus($id,$pointflash['quota_count'],$this->user['id']);
                             if($ress['code']!=0) {
                                 $this->code = $ress['code'];
                                 return;
@@ -752,7 +749,7 @@ class OrderAction extends Controller {
             }
             $start_time = $flash_sale['start_date'];
             $end_time = $flash_sale['end_date'];
-            $had_bought = $model->table('order')->where("pay_time between '{$start_time}' and '{$end_time}' and prom_id=".$prom_id." type=6 and pay_status=1 and user_id=".$user_id)->count();
+            $had_bought = $model->table('order')->where("pay_time between '{$start_time}' and '{$end_time}' and prom_id=".$prom_id." and type=6 and pay_status=1 and user_id=".$user_id)->count();
             if($had_bought>=$flash_sale['quota_count']){
                 // $this->code = 1204;
                 // return;
