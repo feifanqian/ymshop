@@ -171,12 +171,13 @@ class OrderAction extends Controller {
     
     public function flashStatus($prom_id,$quota_num,$user_id){
         $model = new Model();
-        $history =  $model->table("order")->where("type = 2 and prom_id = $prom_id and pay_status=0 and status not in (5,6) and is_del != 1 and user_id =".$user_id)->count();
-        if($history>0){
-           $this->code = 1108;
-           return;
-        }
+        // $history =  $model->table("order")->where("type = 2 and prom_id = $prom_id and pay_status=0 and status not in (5,6) and is_del != 1 and user_id =".$user_id)->count();
+        // if($history>0){
+        //    $this->code = 1108;
+        //    return;
+        // }
         $flash_sale = $model->table('flash_sale')->where('id='.$prom_id)->find();
+        var_dump($flash_sale);die;
         if($user_id==42608) {
             var_dump($flash_sale);
             die;
