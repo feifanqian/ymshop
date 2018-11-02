@@ -189,7 +189,7 @@ class OrderAction extends Controller {
             }
             $start_time = $flash_sale['start_time'];
             $end_time = $flash_sale['end_time'];
-            $had_bought = $model->table('order')->where("pay_time between '{$start_time}' and '{$end_time}' and type=2 and pay_status=1 and prom_id=".$prom_id." and user_id=".$user_id)->count();
+            $had_bought = $model->table('order')->where("pay_time between '{$start_time}' and '{$end_time}' and type=2 and pay_status in (1,2) and prom_id=".$prom_id." and user_id=".$user_id)->count();
             if($flash_sale['is_limit']==1){
                 if($had_bought>=$flash_sale['quota_num']){
                      // $this->code = 1204;
@@ -199,7 +199,7 @@ class OrderAction extends Controller {
                      return $info;       
                 }
             }
-            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6");
+            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status in (1,2) and od.status !=6");
             if($sum1[0]['sum']>= $flash_sale['max_num']){
                 // $this->code = 1206;
                 // return;
@@ -216,7 +216,7 @@ class OrderAction extends Controller {
             }
         }
         
-        $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6 and od.user_id = $user_id");
+        $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = in (1,2) and od.status !=6 and od.user_id = $user_id");
         if($sum[0]['sum']>= $quota_num){
             // $this->code = 1109;
             // return;
@@ -749,14 +749,14 @@ class OrderAction extends Controller {
             }
             $start_time = $flash_sale['start_date'];
             $end_time = $flash_sale['end_date'];
-            $had_bought = $model->table('order')->where("pay_time between '{$start_time}' and '{$end_time}' and prom_id=".$prom_id." and type=6 and pay_status=1 and user_id=".$user_id)->count();
+            $had_bought = $model->table('order')->where("pay_time between '{$start_time}' and '{$end_time}' and prom_id=".$prom_id." and type=6 and pay_status in (1,2) and user_id=".$user_id)->count();
             if($had_bought>=$flash_sale['quota_count']){
                 // $this->code = 1204;
                 // return;
                 $info = ['status'=>'error','code'=>1204];
                 return $info;      
             } 
-            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 6 and od.pay_status = 1 and od.status !=6 and od.pay_time>'{$start_time}' and od.pay_time<'{$end_time}'");
+            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 6 and od.pay_status in (1,2) and od.status !=6 and od.pay_time>'{$start_time}' and od.pay_time<'{$end_time}'");
             if($sum1[0]['sum']>= $flash_sale['max_sell_count']){
                 // $this->code = 1206;
                 // return;
@@ -773,7 +773,7 @@ class OrderAction extends Controller {
             }
         }
 
-        $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 6 and od.pay_status = 1 and od.status !=6 and od.user_id = $user_id");
+        $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 6 and od.pay_status in (1,2) and od.status !=6 and od.user_id = $user_id");
         if($sum[0]['sum']>= $quota_num){
             // $this->code = 1218;
             // return;
