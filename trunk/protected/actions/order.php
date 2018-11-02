@@ -188,7 +188,8 @@ class OrderAction extends Controller {
             if($flash_sale['is_limit']==1){
                 if($had_bought>=$flash_sale['quota_num']){
                      $this->code = 1204;
-                     return;       
+                     return;
+                     exit();       
                 }
             }
             $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6");
