@@ -435,7 +435,8 @@ class OrderAction extends Controller {
                                 ->find();
                         $pointflash = $model->table("pointflash_sale")->where("id=$id")->find();
                         if(empty($pointflash)||empty($item)){
-                            var_dump($id);die;
+                            var_dump($item);
+                            var_dump($pointflash);die;
                             $this->code = 1214;
                             return;
                         }
