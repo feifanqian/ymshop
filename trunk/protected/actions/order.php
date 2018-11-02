@@ -178,7 +178,6 @@ class OrderAction extends Controller {
         // }
         $flash_sale = $model->table('flash_sale')->where('id='.$prom_id)->find();
         if($flash_sale){
-            var_dump(123);
             if($flash_sale['is_end'] == 1){
                 $this->code = 1203;
                 return;
@@ -187,7 +186,8 @@ class OrderAction extends Controller {
             $end_time = $flash_sale['end_time'];
             $had_bought = $model->table('order')->where("pay_time between '{$start_time}' and '{$end_time}' and type=2 and pay_status=1 and prom_id=".$prom_id." and user_id=".$user_id)->count();
             if($flash_sale['is_limit']==1){
-                var_dump(111);die;
+                var_dump($had_bought);
+                var_dump($flash_sale['quota_num']);die;
                 if($had_bought>=$flash_sale['quota_num']){
                      $this->code = 1204;
                      return;       
