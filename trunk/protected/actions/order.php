@@ -183,6 +183,7 @@ class OrderAction extends Controller {
                 // $this->code = 1203;
                 // return;
                 $info = ['status'=>'error','code'=>1204];
+                return $info;
             }
             $start_time = $flash_sale['start_time'];
             $end_time = $flash_sale['end_time'];
@@ -192,7 +193,8 @@ class OrderAction extends Controller {
                      // $this->code = 1204;
                      // return;
                      // exit();
-                     $info = ['status'=>'error','code'=>1204];       
+                     $info = ['status'=>'error','code'=>1204];
+                     return $info;       
                 }
             }
             $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6");
@@ -200,13 +202,15 @@ class OrderAction extends Controller {
                 // $this->code = 1206;
                 // return;
                 $info = ['status'=>'error','code'=>1206];
+                return $info;
             }
             $five_minutes = strtotime('-5 minutes');
             $sum2 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and UNIX_TIMESTAMP(od.create_time)>".$five_minutes);
             if($sum2[0]['sum']>= $flash_sale['max_num']){
                 // $this->code = 1207;
                 // return;
-                $info = ['status'=>'error','code'=>1207];         
+                $info = ['status'=>'error','code'=>1207];
+                return $info;         
             }
         }
         
@@ -215,6 +219,7 @@ class OrderAction extends Controller {
             // $this->code = 1109;
             // return;
             $info = ['status'=>'error','code'=>1109];
+            return $info;
         }
         return $info;      
     }
