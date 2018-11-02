@@ -170,10 +170,6 @@ class OrderAction extends Controller {
     }
     
     public function flashStatus($prom_id,$quota_num,$user_id){
-        if($user_id==42608) {
-            var_dump($prom_id);
-            var_dump($quota_num);die;
-        }
         $model = new Model();
         $history =  $model->table("order")->where("type = 2 and prom_id = $prom_id and pay_status=0 and status not in (5,6) and is_del != 1 and user_id =".$user_id)->count();
         if($history>0){
@@ -188,8 +184,12 @@ class OrderAction extends Controller {
             }
             $start_time = $flash_sale['start_time'];
             $end_time = $flash_sale['end_time'];
-            $had_bought = $model->table('order')->where("type=2 and pay_status=1 and prom_id=".$prom_id." and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}'")->count();
+            $had_bought = $model->table('order')->where("pay_time between '{$start_time}' and '{$end_time}' and type=2 and pay_status=1 and prom_id=".$prom_id." and user_id=".$user_id)->count();
             if($flash_sale['is_limit']==1){
+                if($user_id==42608) {
+                    var_dump($had_bought);
+                    die;
+                }
                 if($had_bought>=$flash_sale['quota_num']){
                      $this->code = 1204;
                      return;       
