@@ -177,6 +177,10 @@ class OrderAction extends Controller {
            return;
         }
         $flash_sale = $model->table('flash_sale')->where('id='.$prom_id)->find();
+        if($user_id==42608) {
+            var_dump($flash_sale);
+            die;
+        }
         if($flash_sale){
             if($flash_sale['is_end'] == 1){
                 $this->code = 1203;
