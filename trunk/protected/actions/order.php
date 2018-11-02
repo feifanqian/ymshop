@@ -187,7 +187,6 @@ class OrderAction extends Controller {
             $had_bought = $model->table('order')->where("pay_time between '{$start_time}' and '{$end_time}' and type=2 and pay_status=1 and prom_id=".$prom_id." and user_id=".$user_id)->count();
             if($flash_sale['is_limit']==1){
                 if($had_bought>=$flash_sale['quota_num']){
-                    var_dump(222);die;
                      $this->code = 1204;
                      return;       
                 }
