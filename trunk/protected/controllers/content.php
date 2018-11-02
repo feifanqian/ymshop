@@ -450,11 +450,11 @@ class ContentController extends Controller {
             $update_time = Req::args('update_time');
             $end_time = Req::args('end_time');
             $content = array();
-            var_dump($path);die;
             if ($type == 2) {
                 $id = Req::args("id");
                 if($id==85) {
                     foreach ($path as $key => $value) {
+                        var_dump($align_center);die;
                         $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key],'width' => $width[$key],'height' => $height[$key],'x_coor' => $x_coor[$key],'y_coor' => $y_coor[$key],'align_center' => $align_center[$key],'update_time' => $update_time[$key],'end_time' => $end_time[$key]);
                     }
                 } else {
