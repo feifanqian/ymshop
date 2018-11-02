@@ -424,8 +424,8 @@ class OrderAction extends Controller {
                         $data['prom_id'] = $id;
                         $order_type = 7;
                 }else if($type=="pointflash"){
-                        var_dump($product_id);die;
                         $product_id = Filter::int($product_id[0]);
+                        var_dump($product_id);die;
                         $num = isset($buy_num[0])?Filter::int($buy_num[0]):1;
                         if ($num < 1)
                             $num = 1;
