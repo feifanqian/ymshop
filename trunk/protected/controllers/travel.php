@@ -1683,6 +1683,9 @@ class TravelController extends Controller
         $jssdk = new JSSDK($wechatcfg['app_key'], $wechatcfg['app_secret']);
         $signPackage = $jssdk->GetSignPackage();
         
+        $config = Config::getInstance()->get("globals");
+
+        $this->assign("config", $config);
         $this->assign("signPackage", $signPackage);
         $this->assign("platform",$platform);
         $this->redirect();
