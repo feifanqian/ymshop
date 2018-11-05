@@ -324,12 +324,13 @@ class UcenterAction extends Controller {
     public function thirdlogin() {
         $platform = Filter::sql(Req::args('platform'));
         $openid = Filter::sql(Req::args('openid'));
+        $unionid = Filter::sql(Req::args('unionid'));
         $token = Filter::sql(Req::args('token'));
 
         if ($platform && $openid && $token) {
             $model = $this->model->table("oauth_user as ou");
             // $obj = $model->join("left join user as us on us.id = ou.user_id")->fields("ou.*,us.adzoneid")->where("ou.oauth_type='$platform' and ou.open_id='{$openid}'")->find();
-            $obj = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and open_id='{$openid}' or unionid = '{$openid}'")->find();
+            $obj = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and unionid = '{$unionid}' or open_id='{$openid}'")->find();
             if ($obj) {
                 $token = CHash::random(32, 'char');
                 $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['user_id'])->update();
