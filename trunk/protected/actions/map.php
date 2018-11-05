@@ -312,9 +312,9 @@ class MapAction extends Controller
         $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
         $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
         $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
-        if($promoter) {
-            $this->model->table('district_promoter')->data(['base_rate'=>$contract['base_rate']])->where('user_id='.$this->user['id'])->update();
-        }
+        // if($promoter) {
+        //     $this->model->table('district_promoter')->data(['base_rate'=>$contract['base_rate']])->where('user_id='.$this->user['id'])->update();
+        // }
         // $this->model->table('shop_check')->data(['status'=>-1])->where('user_id='.$this->user['id'])->update();
         $this->code = 0;
         $this->content['picture'] = $picture;
