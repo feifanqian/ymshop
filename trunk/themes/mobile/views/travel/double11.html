@@ -213,11 +213,10 @@ document.getElementById('open').onclick = function () {
 
     };
 
-    
-
-    var downloaders, 
-    schemes = "yuanmeng://www.ymlypt.com/travel/double11",
-     var platform = "{$platform}";
+    var downloaders; 
+    var schemes = "yuanmeng://www.ymlypt.com/travel/double11";
+    var platform = "{$platform}";
+    var downloads;
     if(platform=='android') {
        downloads = "{$config['site_androidurl']}";
     } else {
