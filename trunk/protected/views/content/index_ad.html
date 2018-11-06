@@ -5,7 +5,13 @@
     <dl class="lineD">
       <dt><b class="red">*</b>图片地址</dt>
       <dd>
-        <input name="image_url" type="text" value="{$ad['image_url']}" alt=""/><label></label>
+        <input name="image_url" id="image_url" type="text" value="{$ad['image_url']}" alt=""/><label></label>
+        <img src="{$ad['image_url']}" width="70" height="50">
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dd>  
+        <img id="preview" src="{$ad['image_url']}" width="70" height="50">
       </dd>
     </dl>
     <dl class="lineD">
@@ -23,4 +29,9 @@
     </dl>
     <div style="text-align:center"><input type="submit" value="提交" class="button"></div>
     </form>
+    <script type="text/javascript">
+    $('#image_url').change(function(){
+      $("#preview").attr('src',$(this).val());
+    })
+    </script>
 </div>
