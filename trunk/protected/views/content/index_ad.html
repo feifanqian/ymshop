@@ -46,6 +46,7 @@
     }
     //回写选择图片
     function setImg(value, needclose) {
+      console.log(value);
       var show_src = ADMIN.upyuncfg.upyun_cdnurl + value;
       $("#preview").attr('src',show_src);
       $("#image_url").val(show_src);
