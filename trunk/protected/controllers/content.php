@@ -687,8 +687,8 @@ class ContentController extends Controller {
     public function index_ad_save()
     {
         $model = new Model();
-        $image_url = Filter::int(Req::args("image_url"));
-        $jump_link = Filter::int(Req::args("jump_link"));
+        $image_url = Filter::str(Req::args("image_url"));
+        $jump_link = Filter::str(Req::args("jump_link"));
         $status = Filter::int(Req::args("status"));
         $model->table('index_ad')->data(['image_url'=>$image_url,'jump_link'=>$jump_link])->where('id=1')->update();
         $this->redirect('index_ad');
