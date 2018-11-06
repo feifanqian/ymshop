@@ -9,8 +9,8 @@
       </dd>
     </dl>
     <dl class="lineD">
-      <dd>  
-        <img id="preview" src="{$ad['image_url']}" width="70" height="50">
+      <dd>
+        <a href='javascript:uploadFile();' class="icon-plus" ><img id="preview" src="{$ad['image_url']}" width="70" height="50"></a>  
       </dd>
     </dl>
     <dl class="lineD">
@@ -32,5 +32,20 @@
     $('#image_url').change(function(){
       $("#preview").attr('src',$(this).val());
     })
+    $(function () {
+        $(".select_button").on("click", function () {
+            uploadFile();
+            return false;
+        });
+    });
+    function uploadFile() {
+        art.dialog.open('{url:/admin/photoshop?type=upload}', {id: 'upimg_dialog', lock: true, opacity: 0.1, title: '选择图片', width: 613, height: 380});
+    }
+    //回写选择图片
+    function setImg(value, needclose) {
+      var show_src = ADMIN.upyuncfg.upyun_cdnurl + value;
+      $("#preview").attr('src',show_src);
+      $("#image_url").val(show_src);
+    }
     </script>
 </div>
