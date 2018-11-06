@@ -664,7 +664,7 @@ class ContentController extends Controller {
         $year = date('Y');
         $mon = date('m');
         $day = date('d');
-        $save_key =  "/data/uploads/{$year}/{$mon}/{$day}" +time()+ ".jpg";
+        $save_key =  "/data/uploads/{$year}/{$mon}/{$day}/" +time()+ ".jpg";
             $options = array(
                 'bucket' => $upyun['upyun_bucket'],
                 // 'allow-file-type' => 'jpg,gif,png,jpeg', // 文件类型限制，如：jpg,gif,png
