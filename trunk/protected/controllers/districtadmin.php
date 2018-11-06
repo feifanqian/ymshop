@@ -1670,6 +1670,14 @@ class DistrictadminController extends Controller
                 'cert_no'=>$legal_cert_no,
                 'bank_telephone_no'=>$shop_check['mobile']
                 );
+            if($shop_check['type']==1 || $shop_check['type']==3) {
+                $biz_content_arr['bus_license'] = $shop_check['business_number'];
+                $biz_content_arr['bus_license_expire'] = $shop_check['business_expire'];
+                if($shop_check['business_expire']==null) {
+                    echo json_encode(array("status" => 'error', 'msg' => '缺少营业执照有效期'));
+                    exit();
+                }
+            }
             $params['biz_content'] = json_encode($biz_content_arr, JSON_UNESCAPED_UNICODE);//构造字符串
             // $params['biz_content'] = '{}';
             ksort($params);

@@ -3032,6 +3032,7 @@ class UcenterAction extends Controller {
        $city = Req::args('city'); 
        $county = Req::args('county'); 
        $business_number = Req::args('business_number'); //营业执照编号
+       $business_expire = Req::args('business_expire'); //营业执照有效期
        $business_addr = Req::args('business_addr'); //营业执照地址
        $bank_type = Req::args('bank_type'); //银行名称
        $bank_phone = Req::args('bank_phone'); //银行预留手机号
@@ -3219,6 +3220,7 @@ class UcenterAction extends Controller {
         'county'           => $county,
         'business_licence' => $business_licence,
         'business_number'  => $business_number,
+        'business_expire'  => $business_expire,
         'business_addr'    => $business_addr,
         'address'          => $address,
         'status'           => $status,
