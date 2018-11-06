@@ -24,6 +24,12 @@
         </dl>
         {/if}
         <dl class="lineD">
+            <dt>证件号：</dt>
+            <dd>
+                <input type="text" name="id_no" value="{$shop_check['id_no']}" style="width: 200px;height: 30px;">  
+            </dd>
+        </dl>
+        <dl class="lineD">
             <dt>身份证正面照：</dt>
             <dd>
                 {set:$positive_idcard = $shop_check['positive_idcard']}

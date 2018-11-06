@@ -1496,6 +1496,8 @@ class DistrictadminController extends Controller
         $bank_name = Filter::str(Req::args("bank_name"));
         $business_number = Filter::str(Req::args("business_number"));
         $business_expire = Filter::str(Req::args("business_expire"));
+        $id_no = Filter::str(Req::args("id_no"));
+
         $shop_check = $model->table("shop_check")->where("id=" . $id)->find();
         if($bank_name!=$shop_check['bank_name']) {
             $model->table("shop_check")->data(array("bank_name"=>$bank_name))->where("id=" . $id)->update();
@@ -1505,6 +1507,9 @@ class DistrictadminController extends Controller
         }
         if($business_expire!=$shop_check['business_expire']) {
             $model->table("shop_check")->data(array("business_expire"=>$business_expire))->where("id=" . $id)->update();
+        }
+        if($id_no!=$shop_check['id_no']) {
+            $model->table("shop_check")->data(array("id_no"=>$id_no))->where("id=" . $id)->update();
         }     
           
         $this->redirect('shop_check');
