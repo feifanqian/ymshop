@@ -669,7 +669,7 @@ class ContentController extends Controller {
         $options = array(
                 'bucket' => $upyun['upyun_bucket'],
                 // 'allow-file-type' => 'jpg,gif,png,jpeg', // 文件类型限制，如：jpg,gif,png
-                'expiration' => time() + $upyun['upyun_expiration'],
+                'expiration' => time() + 86400,
                 // 'notify-url' => $upyun['upyun_notify-url'],
                 // 'ext-param' => "",
                 'save-key' => $save_key

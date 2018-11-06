@@ -58,22 +58,24 @@
       }
       // 计算 policy 和 signature 所需的参数
       // 详情见： http://docs.upyun.com/api/form_api/#表单API接口简介
-      var time = new Date().getTime();
-      var save_as = "{$save_key}";
-      var options = {
-          bucket: config.bucket,
-          expiration: Math.floor(new Date().getTime() / 1000) + 86400,
-          'save-key': save_as
-        };
-      var policy = window.btoa(JSON.stringify(options));
+      // var time = new Date().getTime();
+      // var save_as = "{$save_key}";
+      // var options = {
+      //     bucket: config.bucket,
+      //     expiration: Math.floor(new Date().getTime() / 1000) + 86400,
+      //     'save-key': save_as
+      //   };
+      // var policy = window.btoa(JSON.stringify(options));
+      var policy = "{$policy}"
           
-      var signature = CryptoJS.MD5(policy + '&' + form_api_secret);
+      // var signature = CryptoJS.MD5(policy + '&' + form_api_secret);
+      var signature = "{$signature}";
       var data = new FormData();
           data.append('policy', policy);
           data.append('signature', signature);
           data.append('file', file);
       var request = new XMLHttpRequest();
-          request.open('POST', config.api + options.bucket);
+          request.open('POST', "http://v1.api.upyun.com/ymlypt");
       request.onload = function(e) {
               // console.log(request.response);
       };
