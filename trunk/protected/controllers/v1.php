@@ -204,6 +204,7 @@ class V1Controller extends Controller {
         "shop_check"=>array("ucenter/shop_check",1,1), // 商家信息认证申请
         "new_shop_check"=>array("ucenter/new_shop_check",1,1), // 新商家信息认证申请
         "shop_checked"=>array("ucenter/shop_checked",1,1), // 判断商家是否认证过
+        "contract_status"=>array("ucenter/contract_status",1,1), // 商家签约状态
         "shop_check_info"=>array("ucenter/shop_check_info",1,1), //商家认证信息
         "industry_list"=>array("goods/industry_list",0,1), //行业列表
 

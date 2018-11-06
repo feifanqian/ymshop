@@ -3293,6 +3293,14 @@ class UcenterAction extends Controller {
         $this->content = $need_check;
     }
 
+    public function contract_status()
+    {
+        $promoter_contract = $this->model->table('promoter_contract')->fields('status')->where('user_id='.$this->user['id'])->find();
+        $status = !empty($promoter_contract)?$promoter_contract['status']:3;
+        $this->code = 0;
+        $this->content = $status;
+    }
+
     public function shop_check_info()
     {
         $info = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
