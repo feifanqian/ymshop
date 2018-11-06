@@ -13,7 +13,7 @@
     </dl>
     <dl class="lineD">
       <dd>
-        <a href='javascript:uploadFile();' class="icon-plus" ><img id="preview" src="{$ad['image_url']}" width="70" height="50"></a>  
+        <img id="preview" src="{$ad['image_url']}" width="70" height="50"><input class="icon-plus" type="file" name="file" value="" >  
       </dd>
     </dl>
     <dl class="lineD">
@@ -35,21 +35,53 @@
     $('#image_url').change(function(){
       $("#preview").attr('src',$(this).val());
     })
-    $(function () {
-        $(".select_button").on("click", function () {
-            uploadFile();
-            return false;
-        });
+    $("input[name='file']").change(function(){
+  
+      var file = $("input[name='file']").get(0).files[0];
+      
+      upyun_upload(file);
+      
     });
-    function uploadFile() {
-        art.dialog.open('{url:/admin/photoshop?type=upload}', {id: 'upimg_dialog', lock: true, opacity: 0.1, title: '选择图片', width: 613, height: 380});
-    }
-    //回写选择图片
-    function setImg(value, needclose) {
-      console.log(value);
-      var show_src = ADMIN.upyuncfg.upyun_cdnurl + value;
-      $("#preview").attr('src',show_src);
-      $("#image_url").val(show_src);
-    }
+
+    function upyun_upload(file) {
+    var config = {
+        api: 'http://v1.api.upyun.com/',
+        bucket: 'ymlypt',
+          // 空间的表单 API
+        form_api_secret: "{$secret}"
+      };
+    var form_api_secret = "REGXLUpFH4GQcVa/ehZLS6QinhI=";
+    if(!file) {
+          console.log('no file is selected');
+          return;
+      }
+      // 计算 policy 和 signature 所需的参数
+      // 详情见： http://docs.upyun.com/api/form_api/#表单API接口简介
+      var time = new Date().getTime();
+      var save_as = "{$save_key}";
+      var options = {
+          bucket: config.bucket,
+          expiration: Math.floor(new Date().getTime() / 1000) + 86400,
+          'save-key': save_as
+        };
+      var policy = window.btoa(JSON.stringify(options));
+          
+      var signature = CryptoJS.MD5(policy + '&' + form_api_secret);
+      var data = new FormData();
+          data.append('policy', policy);
+          data.append('signature', signature);
+          data.append('file', file);
+      var request = new XMLHttpRequest();
+          request.open('POST', config.api + options.bucket);
+      request.onload = function(e) {
+              // console.log(request.response);
+      };
+          request.send(data);
+      var path = "https://ymlypt.b0.upaiyun.com"+save_as;
+      $("#preview").attr('src',path);
+      $("#image_url").val(path);
+      return true;
+}
+    
     </script>
 </div>
