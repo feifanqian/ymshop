@@ -664,7 +664,7 @@ class ContentController extends Controller {
         $year = date('Y');
         $mon = date('m');
         $day = date('d');
-        $save_key =  "/data/uploads/{$year}/{$mon}/{$day}/" +time()+ ".jpg";
+        $save_key =  "/data/uploads/".$year."/".$mon."/".$day."/" +time()+ ".jpg";
         var_dump($save_key);die;
         $options = array(
                 'bucket' => $upyun['upyun_bucket'],
