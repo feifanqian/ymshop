@@ -79,7 +79,8 @@
       request.onload = function(e) {
               // console.log(request.response);
       };
-          request.send(data);
+          var ret = request.send(data);
+          console.log(ret);
       var path = "https://ymlypt.b0.upaiyun.com"+save_as;
       console.log(save_as);
       $("#preview").attr('src',path);
