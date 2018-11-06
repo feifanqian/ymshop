@@ -208,6 +208,7 @@ class V1Controller extends Controller {
         "shop_check_info"=>array("ucenter/shop_check_info",1,1), //商家认证信息
         "industry_list"=>array("goods/industry_list",0,1), //行业列表
         "index_ad"=>array("index/index_ad",0,1),
+        "contract_view"=>array("index/contract_view",1,1),
 
         "pointcoin_log"=>array("ucenter/pointcoin_log",1,1),
         //充值套餐详情

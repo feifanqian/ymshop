@@ -3326,6 +3326,13 @@ class UcenterAction extends Controller {
         $this->content['info'] = $info;
     }
 
+    public function contract_view()
+    {
+        $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
+        $this->code = 0;
+        $this->content['url'] = $contract['url4'];
+    }
+
     public function shop_register(){
 
         //获取token
