@@ -671,7 +671,7 @@ class ContentController extends Controller {
                 'expiration' => time() + $upyun['upyun_expiration'],
                 // 'notify-url' => $upyun['upyun_notify-url'],
                 // 'ext-param' => "",
-                'save-key' => $save_key;
+                'save-key' => $save_key
             );
             $policy = base64_encode(json_encode($options));
             $signature = md5($policy . '&' . $upyun['upyun_formkey']);
