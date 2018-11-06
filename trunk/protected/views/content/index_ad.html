@@ -2,6 +2,7 @@
 {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
 {echo:JS::import('validator');}
+<script type="text/javascript" src="{url:#js/crypto-js.js}" charset="utf-8"></script>
 <div id="obj_form" class="form2">
     <form action="{url:/content/index_ad_save}" method="post" >
     <input type="hidden" name="id" value="{$ad['id']|1}">
@@ -13,7 +14,7 @@
     </dl>
     <dl class="lineD">
       <dd>
-        <img id="preview" src="{$ad['image_url']}" width="70" height="50"><input class="icon-plus" type="file" name="file" value="" >  
+        <img id="preview" src="{$ad['image_url']}" width="70" height="50"><input type="file" name="file" value="" >  
       </dd>
     </dl>
     <dl class="lineD">
