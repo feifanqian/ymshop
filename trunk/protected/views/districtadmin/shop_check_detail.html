@@ -104,7 +104,7 @@
                 </span>
            </dd>
         </dl> -->
-        {if:$shop_check['positive_bankcard']!=null}
+        {if:$shop_check['type']!=3}
         <dl class="lineD">
             <dt>银行卡正面照：</dt>
             <dd>
@@ -113,7 +113,7 @@
             </dd>
         </dl>
         {/if}
-        {if:$shop_check['native_bankcard']!=null}
+        {if:$shop_check['type']!=3}
         <dl class="lineD">
             <dt>银行卡反面照：</dt>
             <dd>
