@@ -1612,10 +1612,13 @@ class DistrictadminController extends Controller
             $name = $shop_check['shop_name']!=null?$shop_check['shop_name']:($customer['nickname']!=null?$customer['nickname']:$customer['real_name']);
             if($shop_check['type']==1) {
                 $cust_type = 'C'; //个体
+                $cust_name = $name;
             } elseif($shop_check['type']==2) {
                 $cust_type = 'O'; //小微
+                $cust_name = $shop_check['legal_person'];
             } else {
                 $cust_type = 'B'; //企业
+                $cust_name = $name;
             }
             $province = $model->table('area')->where('id='.$promoter['province_id'])->find();
             $city = $model->table('area')->where('id='.$promoter['city_id'])->find();
@@ -1642,7 +1645,7 @@ class DistrictadminController extends Controller
                 'cust_type'=>$cust_type,
                 'token'=>$shop_check['token'],
                 'another_name'=>$name,
-                'cust_name'=>$name,
+                'cust_name'=>$cust_name,
                 'mer_flag'=>'11',
                 'industry'=>'58',
                 'province'=>$shop_check['province'],
