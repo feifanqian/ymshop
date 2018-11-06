@@ -652,4 +652,11 @@ class IndexAction extends Controller {
         $this->code = 0;
         $this->content['list'] = $list;
     }
+
+    public function index_ad()
+    {
+        $ad = $this->model->table('index_ad')->where('id=1')->find();
+        $this->code = 0;
+        $this->content['ad'] = $ad;
+    }
 }

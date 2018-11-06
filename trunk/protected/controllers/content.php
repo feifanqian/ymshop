@@ -655,4 +655,22 @@ class ContentController extends Controller {
         $model->table('business_center')->where('id='.$id)->delete();
         $this->redirect('center_list');
     }
+
+    public function index_ad()
+    {
+        $model = new Model();
+        $ad = $model->table('index_ad')->where('id=1')->find();
+        $this->assign('ad',$ad);
+        $this->redirect();
+    }
+
+    public function index_ad_save()
+    {
+        $model = new Model();
+        $image_url = Filter::int(Req::args("image_url"));
+        $jump_link = Filter::int(Req::args("jump_link"));
+        $status = Filter::int(Req::args("status"));
+        $model->table('index_ad')->data(['image_url'=>$image_url,'jump_link'=>$jump_link])->where('id=1')->update();
+        $this->redirect('index_ad');
+    }
 }

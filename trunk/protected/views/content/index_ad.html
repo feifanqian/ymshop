@@ -1,0 +1,26 @@
+{echo:JS::import('form');}
+<div id="obj_form" class="form2">
+    <form action="{url:/content/index_ad_save}" method="post" >
+    <input type="hidden" name="id" value="{$ad['id']|1}">
+    <dl class="lineD">
+      <dt><b class="red">*</b>图片地址</dt>
+      <dd>
+        <input name="image_url" type="text" value="{$ad['image_url']}" alt=""/><label></label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b>跳转链接</dt>
+      <dd>
+        <input name="jump_link" type="text" value="{$ad['jump_link']}" alt=""/><label></label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt>是否展示：</dt>
+      <dd>
+        <label><input type="radio" name="status" value="1" {if:$ad['status']==1}checked="checked"{/if}>是</label>
+        <label><input type="radio" name="status" value="0" {if:$ad['status']==0}checked="checked"{/if}>否</label>
+      </dd>
+    </dl>
+    <div style="text-align:center"><input type="submit" value="提交" class="button"></div>
+    </form>
+</div>
