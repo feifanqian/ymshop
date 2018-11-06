@@ -3330,7 +3330,7 @@ class UcenterAction extends Controller {
     {
         $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
         $this->code = 0;
-        $this->content['url'] = $contract['url4'];
+        $this->content['url'] = !empty($contract)?$contract['url4']:'';
     }
 
     public function shop_register(){
