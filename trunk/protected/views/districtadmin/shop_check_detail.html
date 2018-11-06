@@ -141,7 +141,15 @@
         <dl class="lineD">
             <dt>营业执照登记号：</dt>
             <dd>
-                <input type="text" value="{$shop_check['business_number']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="business_number" value="{$shop_check['business_number']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        {/if}
+        {if:$shop_check['type']!=2}
+        <dl class="lineD">
+            <dt>营业执照有效期：</dt>
+            <dd>
+                <input type="text" name="business_expire" value="{$shop_check['business_expire']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}
