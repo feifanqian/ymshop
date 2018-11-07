@@ -3092,27 +3092,22 @@ class UcenterAction extends Controller {
        // if($page==3 || $page==6) {
          $check = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
          $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
-         if($contract && $check && $check['status']!=2 && $check['reason']==null) {
-            // if($check['status']==1) {
-            //     $need_sign = 3;
-            // } else {
-            //     $need_sign = 1;
-            // }
-            $need_sign = 1;
-         } else {
-            $need_sign = 0;
-         }
-         if($need_sign==1) {
-            $status = empty($contract)?-1:$check['status'];
-        } elseif ($need_sign==3){
-            $status = 3;
-        }else {
-            if($check) {
-                $status = $check['status'];
-            } else {
-                $status = -1;
-            }
-        }
+         // if($contract && $check && $check['status']!=2 && $check['reason']==null) {
+         //    $need_sign = 1;
+         // } else {
+         //    $need_sign = 0;
+         // }
+        //  if($need_sign==1) {
+        //     $status = empty($contract)?-1:$check['status'];
+        // } elseif ($need_sign==3){
+        //     $status = 3;
+        // }else {
+        //     if($check) {
+        //         $status = $check['status'];
+        //     } else {
+        //         $status = -1;
+        //     }
+        // }
        // }
        
        if($page==1) {
@@ -3134,11 +3129,12 @@ class UcenterAction extends Controller {
        if($page==3) {
         if($check) {
          if($bank_type!=$check['bank_type'] || $account_card!=$check['account_card'] || $bank_name!=$check['bank_name'] || $bank_phone!=$check['bank_phone'] || $bank_area!=$check['bank_area'] || $positive_bankcard!=$check['positive_bankcard'] || $native_bankcard!=$check['native_bankcard']) {
-            if($contract) {
-                $status = 0;
-            } else {
-                $status = -1;
-            }  
+            // if($contract) {
+            //     $status = 0;
+            // } else {
+            //     $status = -1;
+            // }
+            $status = 0;  
          } 
         }
        }
@@ -3162,11 +3158,12 @@ class UcenterAction extends Controller {
        if($page==6) {
         if($check) {
          if($bank_type!=$check['bank_type'] || $account_card!=$check['account_card'] || $bank_name!=$check['bank_name'] || $bank_phone!=$check['bank_phone'] || $bank_area!=$check['bank_area'] || $account_picture!=$check['account_picture']) {
-            if($contract) {
-                $status = 0;
-            } else {
-                $status = -1;
-            }  
+            // if($contract) {
+            //     $status = 0;
+            // } else {
+            //     $status = -1;
+            // }
+            $status = 0;  
          } 
         }
        } 
