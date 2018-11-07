@@ -3109,6 +3109,7 @@ class UcenterAction extends Controller {
         //     }
         // }
        // }
+       $status = !empty($check)?$check['status']:0;
        
        if($page==1) {
         if($check) {
