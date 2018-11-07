@@ -3132,6 +3132,9 @@ class UcenterAction extends Controller {
          if($bank_type!=$check['bank_type'] || $account_card!=$check['account_card'] || $bank_name!=$check['bank_name'] || $bank_phone!=$check['bank_phone'] || $bank_area!=$check['bank_area'] || $positive_bankcard!=$check['positive_bankcard'] || $native_bankcard!=$check['native_bankcard']) {
             if($check['status']!=1) {
                 $status = 0;
+                if($this->user['id']==164032) {
+                    var_dump($status);die;
+                   }
             } else {
                 $status = $check['status'];
             }
@@ -3251,9 +3254,7 @@ class UcenterAction extends Controller {
         'create_date'      => date('Y-m-d H:i:s')
         );
        }
-       if($this->user['id']==164032) {
-        var_dump($status);die;
-       }
+       
        $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
        if($shop_check){
           $result = $this->model->table('shop_check')->data($data)->where('user_id='.$this->user['id'])->update();
