@@ -3130,12 +3130,11 @@ class UcenterAction extends Controller {
        if($page==3) {
         if($check) {
          if($bank_type!=$check['bank_type'] || $account_card!=$check['account_card'] || $bank_name!=$check['bank_name'] || $bank_phone!=$check['bank_phone'] || $bank_area!=$check['bank_area'] || $positive_bankcard!=$check['positive_bankcard'] || $native_bankcard!=$check['native_bankcard']) {
-            // if($contract) {
-            //     $status = 0;
-            // } else {
-            //     $status = -1;
-            // }
-            $status = 0;  
+            if($check['status']!=1) {
+                $status = 0;
+            } else {
+                $status = $check['status'];
+            }
          } 
         }
        }
@@ -3159,12 +3158,11 @@ class UcenterAction extends Controller {
        if($page==6) {
         if($check) {
          if($bank_type!=$check['bank_type'] || $account_card!=$check['account_card'] || $bank_name!=$check['bank_name'] || $bank_phone!=$check['bank_phone'] || $bank_area!=$check['bank_area'] || $account_picture!=$check['account_picture']) {
-            // if($contract) {
-            //     $status = 0;
-            // } else {
-            //     $status = -1;
-            // }
-            $status = 0;  
+            if($check['status']!=1) {
+                $status = 0;
+            } else {
+                $status = $check['status'];
+            }
          } 
         }
        } 
