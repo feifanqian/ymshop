@@ -3251,6 +3251,9 @@ class UcenterAction extends Controller {
         'create_date'      => date('Y-m-d H:i:s')
         );
        }
+       if($this->user['id']==164032) {
+        var_dump($status);die;
+       }
        $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
        if($shop_check){
           $result = $this->model->table('shop_check')->data($data)->where('user_id='.$this->user['id'])->update();
