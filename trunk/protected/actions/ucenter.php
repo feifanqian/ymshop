@@ -3133,6 +3133,7 @@ class UcenterAction extends Controller {
             if($check['status']!=1) {
                 $status = 0;
                 if($this->user['id']==164032) {
+                    var_dump(111);
                     var_dump($status);die;
                    }
             } else {
