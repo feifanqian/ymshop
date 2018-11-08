@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+	<link href="/themes/mobile/css/tao_share.css" rel="stylesheet">
+</head>
+<body>
+  <div class="wxpro">
+        <div class="fixbox">
+            <button class="buttoncopy" data-clipboard-text="Just because you can doesn't mean you should — clipboard.js" style="font-size: 15px;">
+                <i class="icon_copy">
+                    <img src="/themes/mobile/images/copy.png" alt="">
+                </i> 一键复制淘口令
+            </button>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/themes/mobile/js/clipboard.min.js"></script>
+<script type="text/javascript">
+var clipboard = new ClipboardJS('.buttoncopy');
+
+clipboard.on('success', function(e) {
+    console.info('Action:', e.action);
+    console.info('Text:', e.text);
+    console.info('Trigger:', e.trigger);
+
+    e.clearSelection();
+    alert("复制成功！");
+});
+
+clipboard.on('error', function(e) {
+    console.error('Action:', e.action);
+    console.error('Trigger:', e.trigger);
+});
+</script>
+</html>

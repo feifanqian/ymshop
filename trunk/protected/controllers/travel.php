@@ -1691,4 +1691,9 @@ class TravelController extends Controller
         $this->redirect();
     }
 
+    public function test()
+    {
+        $this->redirect();
+    }
+
 }    
