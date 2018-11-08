@@ -41,7 +41,7 @@
                   <div class="top" style="font-size: 15px;">{$info['tao_str']}<p style="font-size: 15px;">长按复制框内文字，启动手机【<i class="icon_tao"><img src="/themes/mobile/images/tao.aed96c4.png" alt=""></i>】即可领券购买</p>
                   </div> 
                   <div class="bot">
-                        <button class="buttoncopy" data-clipboard-text="{$info['tao_str']}" style="font-size: 15px;" onclick="clipboard()">
+                        <button class="buttoncopy" data-clipboard-text="{$info['tao_str']}" style="font-size: 15px;" >
                             <i class="icon_copy">
                               <img src="/themes/mobile/images/copy.png" alt="">
                             </i> 一键复制淘口令
@@ -50,7 +50,7 @@
             </div>
         </div> 
         <div class="fixbox">
-            <button class="buttoncopy" data-clipboard-text="{$info['tao_str']}" style="font-size: 15px;" onclick="clipboard()">
+            <button class="buttoncopy" data-clipboard-text="{$info['tao_str']}" style="font-size: 15px;" >
                 <i class="icon_copy">
                     <img src="/themes/mobile/images/copy.png" alt="">
                 </i> 一键复制淘口令
@@ -98,7 +98,7 @@
  
 //     });
 // });
-function clipboard(){
+
   var clipboard = new ClipboardJS('.buttoncopy');
 
   clipboard.on('success', function(e) {
@@ -114,6 +114,6 @@ function clipboard(){
       console.error('Action:', e.action);
       console.error('Trigger:', e.trigger);
   });
-}
+
 </script>
 </html>
