@@ -97,7 +97,7 @@
  
 //     });
 // });
-var clip = new ZeroClipboard(document.getElementByclassName('buttoncopy'));
+var clip = new ZeroClipboard($('.buttoncopy'));
 clip.on('noflash', function(client, args) {
     $(".buttoncopy").click(function() {
         var txt = $(this).attr('data-text');
