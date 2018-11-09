@@ -453,6 +453,7 @@ class GoodsController extends Controller {
         $gdata = Req::args();
         $gdata['name'] = Filter::sql($gdata['name']);
         // $gdata['category_id'] = isset($_POST['category_type'])?$_POST['category_type']:$_POST['category_id'];
+        var_dump(Req::args("category_type"));die;
         $category_id = isset($_POST['category_id'])?$_POST['category_id']:0;
         $category_ids = isset($_POST['category_ids'])?$_POST['category_ids']:0;
         $category_idss = isset($_POST['category_idss'])?$_POST['category_idss']:0;
