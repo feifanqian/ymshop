@@ -784,9 +784,14 @@ $("#category_ids").on('change',function(){
     $("input[name='category_type']").val(category_ids);
 });
 $("#category_idss").on('change',function(){
-  var category_idss = $("#category_idss").val();
+  var category_id = $("#category_id option:selected").val();
+  var category_ids = $("#category_ids option:selected").val();
+  var category_idss = $("#category_idss option:selected").val();
   var category_type = $("input[name='category_type']").val();
    $("input[name='category_type']").val(category_idss);
+  console.log(category_id);
+  console.log(category_ids);
+  console.log(category_idss); 
 });  
 var form =  new Form();
 // var category_id = {$category_id};
