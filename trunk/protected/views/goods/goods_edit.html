@@ -741,6 +741,10 @@ var category_id;
 var category_ids;
 var category_idss;
 var category_type;
+var id;
+{if:isset($id)}
+id = "{$id}";
+{/if}
 //选择分类
 $("#category_id").on('change',function(){
     category_id = $("#category_id option:selected").val();
@@ -768,6 +772,17 @@ $("#category_id").on('change',function(){
     category_type = $("input[name='category_type']").val();
     console.log(category_id);
     console.log(category_type);
+    if(id!=0) {
+      $.ajax({
+            type:'post',
+            url:'/goods/category_ajax',
+            dataType:'json',
+            data:{'id':id,'category_id':category_type},
+            success:function(data){
+                console.log('success');
+            }
+        });
+    }
 });
 
 //二级分类选择三级分类
@@ -795,16 +810,37 @@ $("#category_ids").on('change',function(){
     category_type = $("input[name='category_type']").val();
     console.log(category_ids);
     console.log(category_type);
+    if(id!=0) {
+      $.ajax({
+            type:'post',
+            url:'/goods/category_ajax',
+            dataType:'json',
+            data:{'id':id,'category_id':category_type},
+            success:function(data){
+                console.log('success');
+            }
+        });
+    }
 });
 $("#category_idss").on('change',function(){
   // var category_id = $("#category_id option:selected").val();
   // var category_ids = $("#category_ids option:selected").val();
   var category_idss = $("#category_idss option:selected").val();
   $("input[name='category_type']").val(category_idss);
-  category_type = $("input[name='category_type']").val();
-   
+  category_type = $("input[name='category_type']").val(); 
   console.log(category_idss);
   console.log(category_type);
+  if(id!=0) {
+      $.ajax({
+            type:'post',
+            url:'/goods/category_ajax',
+            dataType:'json',
+            data:{'id':id,'category_id':category_type},
+            success:function(data){
+                console.log('success');
+            }
+        });
+    }
 });  
 var form =  new Form();
 // var category_id = {$category_id};

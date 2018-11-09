@@ -890,4 +890,12 @@ class GoodsController extends Controller {
             exit(json_encode(array('status'=>'fail','msg'=>'上架审核'))) ;
         }
     }
+
+    public function category_ajax(){
+        $id = Req::args('id');
+        $category_id = Req::args('category_id');
+        $models = new Model();
+        $data = $models->table('goods')->data(array('category_id'=>$category_id))->where("id=".$id)->update();
+        exit(json_encode(array('status'=>'success','msg'=>'success')));
+    }
 }
