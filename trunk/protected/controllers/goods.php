@@ -457,6 +457,12 @@ class GoodsController extends Controller {
         $category_ids = isset($_POST['category_ids'])?$_POST['category_ids']:0;
         $category_idss = isset($_POST['category_idss'])?$_POST['category_idss']:0;
         $gdata['category_id'] = $category_idss!=0 ? $category_idss : ($category_ids!=0?$category_ids:$category_id);
+        if($id = 1616){
+            var_dump($category_id);
+            var_dump($category_ids);
+            var_dump($category_idss);
+            var_dump($gdata['category_id']);die;
+        }
         $gdata['shop_id'] = Req::args("shop_id");
         $shop_model = new Model();
         $shop = $shop_model->table('shop')->where('id='.$gdata['shop_id'])->find();
