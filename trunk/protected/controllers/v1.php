@@ -87,7 +87,7 @@ class V1Controller extends Controller {
         "dopay" => array("payment/dopay", 1,1), //发起支付
         "dopays" => array("payment/dopays", 1,1), //发起线下扫码支付
         "dinpay" => array("payment/dinpay", 1,1), //智付支付
-        "jpush_test"=> array("payment/jpushTest",1,1), //极光消息推送测试
+        "jpush_tests"=> array("payment/jpushTest",0,1), //极光消息推送测试
         "pay_qrcode" => array("payment/pay_qrcode",1,1), //收款二维码
         "seller_name" => array("payment/seller_name",1,1), //线下扫码卖家信息
         "pay_success" => array("payment/pay_success",1,1), //线下扫码支付成功页面
