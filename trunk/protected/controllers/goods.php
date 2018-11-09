@@ -899,6 +899,8 @@ class GoodsController extends Controller {
     public function goods_edits()
     {
          $id = Req::args('id');
+         $data = $models->table('goods')->where("id=$id")->find();
+         $this->assign('category_id', $data['category_id']);
          $this->redirect();
     }
 }

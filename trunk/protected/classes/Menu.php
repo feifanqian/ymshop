@@ -83,6 +83,7 @@ class Menu {
             '/goods/brand_edit' => array('name' => '品牌编辑', 'parent' => 'goods_config'),
             '/goods/goods_list' => array('name' => '商品管理', 'parent' => 'goods'),
             '/goods/goods_edit' => array('name' => '商品编辑', 'parent' => 'goods'),
+            '/goods/goods_edits' => array('name' => '分类编辑', 'parent' => 'goods'),
             // '/goods/goods_add' => array('name' => '商品添加', 'parent' => 'goods'),
             '/shop/shop_edit' => array('name' => '商家编辑', 'parent' => 'shop'),
             '/shop/shop_list' => array('name' => '商家管理', 'parent' => 'shop'),
