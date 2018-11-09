@@ -454,11 +454,11 @@ class GoodsController extends Controller {
         $gdata['name'] = Filter::sql($gdata['name']);
         // $gdata['category_id'] = isset($_POST['category_type'])?$_POST['category_type']:$_POST['category_id'];
         
-        // $category_id = isset($_POST['category_id'])?$_POST['category_id']:0;
-        // $category_ids = isset($_POST['category_ids'])?$_POST['category_ids']:0;
-        // $category_idss = isset($_POST['category_idss'])?$_POST['category_idss']:0;
-        // $category_type = isset($_POST['category_type'])?$_POST['category_type']:0;
-        // $gdata['category_id'] = $category_idss!=0 ? $category_idss : ($category_ids!=0?$category_ids:$category_id);
+        $category_id = isset($_POST['category_id'])?$_POST['category_id']:0;
+        $category_ids = isset($_POST['category_ids'])?$_POST['category_ids']:0;
+        $category_idss = isset($_POST['category_idss'])?$_POST['category_idss']:0;
+        $category_type = isset($_POST['category_type'])?$_POST['category_type']:0;
+        $gdata['category_id'] = $category_idss!=0 ? $category_idss : ($category_ids!=0?$category_ids:$category_id);
         $gdata['shop_id'] = Req::args("shop_id");
         $shop_model = new Model();
         $shop = $shop_model->table('shop')->where('id='.$gdata['shop_id'])->find();
