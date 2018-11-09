@@ -40,43 +40,7 @@
             <label></label>
           </dd>
         </dl>
-        {if:$id!=0}
-        <dl class="lineD">
-          <dt> <b class="red">*</b>
-            分类：
-          </dt>
-          <dd>
-            <select id="category_id" pattern="[1-9]\d*" alt="选择分类，若无分类请先创建。">
-              <option value="0">选择分类</option>
-              {set:$id=isset($id)?$id:0;}
-              {query:name=goods_category where = parent_id eq 0 }
-                    <option value="{$item['id']}" {if:$pids==$item['id']}selected='selected'{/if}>{$item['name']}</option>
-              {/query}
-            </select>
-            <label></label>
-            <select id="category_ids">
-                <option value="0">==二级分类==</option>
-                {if:$pid!=$pids}
-                {query:name=goods_category where = parent_id eq $pids }
-                    <option value="{$item['id']}" {if:$pid==$item['id']}selected='selected'{/if}>{$item['name']}</option>
-                {/query}
-                {else:}
-                {query:name=goods_category where = parent_id eq $pids }
-                    <option value="{$item['id']}" {if:isset($category_id) && $category_id==$item['id']}selected='selected'{/if}>{$item['name']}</option>
-                {/query}
-                {/if}
-            </select>
-              <select id="category_idss">
-                  <option value="0">==三级分类==</option>
-                  {if:$pid!=$pids}
-                  {query:name=goods_category where = parent_id eq $pid }
-                    <option value="{$item['id']}" {if:isset($category_id) && $category_id==$item['id']}selected='selected'{/if}>{$item['name']}</option>
-                  {/query}
-                  {/if}
-              </select>
-          </dd>
-        </dl>
-        {else:}
+        {if:$id==0}
         <dl class="lineD">
           <dt> <b class="red">*</b>
             分类：
