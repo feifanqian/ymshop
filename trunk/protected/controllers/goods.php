@@ -456,11 +456,13 @@ class GoodsController extends Controller {
         $category_id = isset($_POST['category_id'])?$_POST['category_id']:0;
         $category_ids = isset($_POST['category_ids'])?$_POST['category_ids']:0;
         $category_idss = isset($_POST['category_idss'])?$_POST['category_idss']:0;
+        $category_type = isset($_POST['category_type'])?$_POST['category_type']:0;
         $gdata['category_id'] = $category_idss!=0 ? $category_idss : ($category_ids!=0?$category_ids:$category_id);
         if($id = 1616){
             var_dump($category_id);
             var_dump($category_ids);
             var_dump($category_idss);
+            var_dump($category_type);
             var_dump($gdata['category_id']);die;
         }
         $gdata['shop_id'] = Req::args("shop_id");

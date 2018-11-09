@@ -741,6 +741,8 @@ function bindEvent(){
 //选择分类
 $("#category_id").on('change',function(){
     var category_id = $("#category_id option:selected").val();
+    var category_ids = $("#category_ids option:selected").val();
+    var category_idss = $("#category_idss option:selected").val();
     $("#category_ids option:not(:first)").remove();//先把二级的菜单的option清空
     $("#category_idss option:not(:first)").remove();//先把二级的菜单的option清空
     if(category_id){
@@ -759,11 +761,19 @@ $("#category_id").on('change',function(){
             }
     });
     }
+    $("input[name='category_type']").val(category_id);
+    var category_type = $("input[name='category_type']").val();
+    console.log(category_id);
+    console.log(category_ids);
+    console.log(category_idss);
+    console.log(category_type);
 });
 
 //二级分类选择三级分类
 $("#category_ids").on('change',function(){
+    var category_id = $("#category_id option:selected").val();
     var category_ids = $("#category_ids option:selected").val();
+    var category_idss = $("#category_idss option:selected").val();
     $("#category_idss option:not(:first)").remove();//先把二级的菜单的option清空
     if(category_ids){
         $.ajax({
@@ -780,18 +790,24 @@ $("#category_ids").on('change',function(){
             }
         });
     }
-    var category_type = $("input[name='category_type']").val();
     $("input[name='category_type']").val(category_ids);
+    var category_type = $("input[name='category_type']").val();
+    console.log(category_id);
+    console.log(category_ids);
+    console.log(category_idss);
+    console.log(category_type);
 });
 $("#category_idss").on('change',function(){
   var category_id = $("#category_id option:selected").val();
   var category_ids = $("#category_ids option:selected").val();
   var category_idss = $("#category_idss option:selected").val();
+  $("input[name='category_type']").val(category_idss);
   var category_type = $("input[name='category_type']").val();
-   $("input[name='category_type']").val(category_idss);
+   
   console.log(category_id);
   console.log(category_ids);
-  console.log(category_idss); 
+  console.log(category_idss);
+  console.log(category_type);
 });  
 var form =  new Form();
 // var category_id = {$category_id};
