@@ -895,4 +895,10 @@ class GoodsController extends Controller {
         $data = $models->table('goods')->data(array('category_id'=>$category_id))->where("id=".$id)->update();
         exit(json_encode(array('status'=>'success','msg'=>'success')));
     }
+
+    public goods_edits()
+    {
+         $id = Req::args('id');
+         $this->redirect();
+    }
 }
