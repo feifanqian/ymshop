@@ -896,7 +896,7 @@ class GoodsController extends Controller {
         exit(json_encode(array('status'=>'success','msg'=>'success')));
     }
 
-    public goods_edits()
+    public function goods_edits()
     {
          $id = Req::args('id');
          $this->redirect();
