@@ -752,7 +752,7 @@ $("#category_id").on('change',function(){
          dataType:'json',
          data:{'id':category_id},
          success:function(data){
-             console.log(data);
+             // console.log(data);
              var html = '';
             for(var i in data){
                 html += '<option value='+data[i].id+'>'+data[i].name+'</option>';
