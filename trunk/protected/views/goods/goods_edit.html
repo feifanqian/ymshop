@@ -737,12 +737,15 @@ function bindEvent(){
   });
 
 }
-
+var category_id;
+var category_ids;
+var category_idss;
+var category_type;
 //选择分类
 $("#category_id").on('change',function(){
-    var category_id = $("#category_id option:selected").val();
-    var category_ids = $("#category_ids option:selected").val();
-    var category_idss = $("#category_idss option:selected").val();
+    category_id = $("#category_id option:selected").val();
+    // category_ids = $("#category_ids option:selected").val();
+    // category_idss = $("#category_idss option:selected").val();
     $("#category_ids option:not(:first)").remove();//先把二级的菜单的option清空
     $("#category_idss option:not(:first)").remove();//先把二级的菜单的option清空
     if(category_id){
@@ -762,18 +765,16 @@ $("#category_id").on('change',function(){
     });
     }
     $("input[name='category_type']").val(category_id);
-    var category_type = $("input[name='category_type']").val();
+    category_type = $("input[name='category_type']").val();
     console.log(category_id);
-    console.log(category_ids);
-    console.log(category_idss);
     console.log(category_type);
 });
 
 //二级分类选择三级分类
 $("#category_ids").on('change',function(){
-    var category_id = $("#category_id option:selected").val();
-    var category_ids = $("#category_ids option:selected").val();
-    var category_idss = $("#category_idss option:selected").val();
+    category_id = $("#category_id option:selected").val();
+    category_ids = $("#category_ids option:selected").val();
+    // category_idss = $("#category_idss option:selected").val();
     $("#category_idss option:not(:first)").remove();//先把二级的菜单的option清空
     if(category_ids){
         $.ajax({
@@ -791,21 +792,17 @@ $("#category_ids").on('change',function(){
         });
     }
     $("input[name='category_type']").val(category_ids);
-    var category_type = $("input[name='category_type']").val();
-    console.log(category_id);
+    category_type = $("input[name='category_type']").val();
     console.log(category_ids);
-    console.log(category_idss);
     console.log(category_type);
 });
 $("#category_idss").on('change',function(){
-  var category_id = $("#category_id option:selected").val();
-  var category_ids = $("#category_ids option:selected").val();
+  // var category_id = $("#category_id option:selected").val();
+  // var category_ids = $("#category_ids option:selected").val();
   var category_idss = $("#category_idss option:selected").val();
   $("input[name='category_type']").val(category_idss);
-  var category_type = $("input[name='category_type']").val();
+  category_type = $("input[name='category_type']").val();
    
-  console.log(category_id);
-  console.log(category_ids);
   console.log(category_idss);
   console.log(category_type);
 });  
@@ -815,6 +812,7 @@ var form =  new Form();
 form.setValue('shop_id','{$shop_id}');
 // form.setValue('category_id','{$category_id}');
 // form.setValue('category_idss',category_idss);
+form.setValue('category_type',category_type);
 form.setValue('type_id','{$type_id}');
 form.setValue('brand_id','{$brand_id}');
 form.setValue('is_online','{$is_online}');
