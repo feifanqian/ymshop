@@ -11,7 +11,7 @@
         <dl class="lineD">
             <dt>店铺名：</dt>
             <dd>
-                <input type="text" value="{$shop_check['shop_name']}" style="width: 200px;height: 30px;">  
+                <input type="text" name="shop_name" value="{$shop_check['shop_name']}" style="width: 200px;height: 30px;">  
             </dd>
         </dl>
         {/if}
@@ -19,7 +19,7 @@
         <dl class="lineD">
             <dt>法人：</dt>
             <dd>
-                <input type="text" value="{$shop_check['legal_person']}" style="width: 200px;height: 30px;">  
+                <input type="text" name="legal_person" value="{$shop_check['legal_person']}" style="width: 200px;height: 30px;">  
             </dd>
         </dl>
         {/if}
@@ -52,11 +52,35 @@
             </dd>
         </dl>
         {/if}
+        {if:$shop_check['province']!=null}
+        <dl class="lineD">
+            <dt>省份:</dt>
+            <dd>
+                <input type="text" name="province" value="{$shop_check['province']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        {/if}
+        {if:$shop_check['city']!=null}
+        <dl class="lineD">
+            <dt>城市:</dt>
+            <dd>
+                <input type="text" name="city" value="{$shop_check['city']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        {/if}
+        {if:$shop_check['county']!=null}
+        <dl class="lineD">
+            <dt>县区:</dt>
+            <dd>
+                <input type="text" name="county" value="{$shop_check['county']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        {/if}
         {if:$shop_check['address']!=null}
         <dl class="lineD">
             <dt>地址:</dt>
             <dd>
-                <input type="text" value="{$shop_check['province']}{$shop_check['city']}{$shop_check['county']}{$shop_check['address']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="address" value="{$shop_check['address']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}
@@ -72,7 +96,7 @@
         <dl class="lineD">
             <dt>结算银行卡号:</dt>
             <dd>
-                <input type="text" value="{$shop_check['account_card']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="account_card" value="{$shop_check['account_card']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}
@@ -80,7 +104,7 @@
         <dl class="lineD">
             <dt>银行类型:</dt>
             <dd>
-                <input type="text" value="{$shop_check['bank_type']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="bank_type" value="{$shop_check['bank_type']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}
@@ -128,9 +152,21 @@
             </dd>
         </dl>
         <dl class="lineD">
+            <dt>银行卡所属省份:</dt>
+            <dd>
+                <input type="text" name="bank_province" value="{$shop_check['bank_province']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>银行卡所属城市:</dt>
+            <dd>
+                <input type="text" name="bank_city" value="{$shop_check['bank_city']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        <dl class="lineD">
             <dt>银行卡所属地:</dt>
             <dd>
-                <input type="text" value="{$shop_check['bank_province']}{$shop_check['bank_city']}{$shop_check['bank_area']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="bank_area" value="{$shop_check['bank_area']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}
@@ -163,7 +199,7 @@
         <dl class="lineD">
             <dt>营业执照登记地址：</dt>
             <dd>
-                <input type="text" value="{$shop_check['business_addr']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="business_addr" value="{$shop_check['business_addr']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}

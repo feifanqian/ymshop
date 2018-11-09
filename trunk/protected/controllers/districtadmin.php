@@ -1492,15 +1492,64 @@ class DistrictadminController extends Controller
         $status = Filter::sql(Req::args("status"));
         $model = new Model();
         $model->table("shop_check")->data(array("status" =>1,'check_date'=> date("Y-m-d H:i:s"),'reason'=>null))->where("id=" . $id)->update();
-        $choose_bank = Filter::sql(Req::args("choose_bank"));
+
+        $shop_name = Filter::str(Req::args("shop_name"));
+        $legal_person = Filter::str(Req::args("legal_person"));
+        $id_no = Filter::str(Req::args("id_no"));
+        $province = Filter::str(Req::args("province"));
+        $city = Filter::str(Req::args("city"));
+        $county = Filter::str(Req::args("county"));
+        $address = Filter::str(Req::args("address"));
+        $account_card = Filter::str(Req::args("account_card"));
+        $bank_type = Filter::str(Req::args("bank_type"));
         $bank_name = Filter::str(Req::args("bank_name"));
+        $bank_province = Filter::str(Req::args("bank_province"));
+        $bank_city = Filter::str(Req::args("bank_city"));
+        $bank_area = Filter::str(Req::args("bank_area"));
         $business_number = Filter::str(Req::args("business_number"));
         $business_expire = Filter::str(Req::args("business_expire"));
-        $id_no = Filter::str(Req::args("id_no"));
+        $business_addr = Filter::str(Req::args("business_addr"));
 
         $shop_check = $model->table("shop_check")->where("id=" . $id)->find();
+        
+        if($shop_name!=$shop_check['shop_name']) {
+            $model->table("shop_check")->data(array("shop_name"=>$shop_name))->where("id=" . $id)->update();
+        }
+        if($legal_person!=$shop_check['legal_person']) {
+            $model->table("shop_check")->data(array("legal_person"=>$legal_person))->where("id=" . $id)->update();
+        }
+        if($id_no!=$shop_check['id_no']) {
+            $model->table("shop_check")->data(array("id_no"=>$id_no))->where("id=" . $id)->update();
+        }
+        if($province!=$shop_check['province']) {
+            $model->table("shop_check")->data(array("province"=>$province))->where("id=" . $id)->update();
+        }
+        if($city!=$shop_check['city']) {
+            $model->table("shop_check")->data(array("city"=>$city))->where("id=" . $id)->update();
+        }
+        if($county!=$shop_check['county']) {
+            $model->table("shop_check")->data(array("county"=>$county))->where("id=" . $id)->update();
+        }
+        if($address!=$shop_check['address']) {
+            $model->table("shop_check")->data(array("address"=>$address))->where("id=" . $id)->update();
+        }
+        if($account_card!=$shop_check['account_card']) {
+            $model->table("shop_check")->data(array("account_card"=>$account_card))->where("id=" . $id)->update();
+        }
+        if($bank_type!=$shop_check['bank_type']) {
+            $model->table("shop_check")->data(array("bank_type"=>$bank_type))->where("id=" . $id)->update();
+        }
         if($bank_name!=$shop_check['bank_name']) {
             $model->table("shop_check")->data(array("bank_name"=>$bank_name))->where("id=" . $id)->update();
+        }
+        if($bank_province!=$shop_check['bank_province']) {
+            $model->table("shop_check")->data(array("bank_province"=>$bank_province))->where("id=" . $id)->update();
+        }
+        if($bank_city!=$shop_check['bank_city']) {
+            $model->table("shop_check")->data(array("bank_city"=>$bank_city))->where("id=" . $id)->update();
+        }
+        if($bank_area!=$shop_check['bank_area']) {
+            $model->table("shop_check")->data(array("bank_area"=>$bank_area))->where("id=" . $id)->update();
         }
         if($business_number!=$shop_check['business_number']) {
             $model->table("shop_check")->data(array("business_number"=>$business_number))->where("id=" . $id)->update();
@@ -1508,8 +1557,8 @@ class DistrictadminController extends Controller
         if($business_expire!=$shop_check['business_expire']) {
             $model->table("shop_check")->data(array("business_expire"=>$business_expire))->where("id=" . $id)->update();
         }
-        if($id_no!=$shop_check['id_no']) {
-            $model->table("shop_check")->data(array("id_no"=>$id_no))->where("id=" . $id)->update();
+        if($business_addr!=$shop_check['business_addr']) {
+            $model->table("shop_check")->data(array("business_addr"=>$business_addr))->where("id=" . $id)->update();
         }     
           
         $this->redirect('shop_check');
