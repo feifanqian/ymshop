@@ -476,7 +476,7 @@ class GoodsController extends Controller {
         } else {
             $goods_id = $id;
             unset($gdata['category_id']);
-            echo "<pre>"
+            echo "<pre>";
             print_r($gdata);
             echo "</pre>";
             die;
