@@ -476,7 +476,10 @@ class GoodsController extends Controller {
         } else {
             $goods_id = $id;
             unset($gdata['category_id']);
-            // var_dump($gdata);die;
+            echo "<pre>"
+            print_r($gdata);
+            echo "</pre>";
+            die;
             $goods->data($gdata)->where("id=" . $id)->update();
             Log::op($this->manager['id'], "修改商品", "管理员[" . $this->manager['name'] . "]:修改了商品 " . Req::args('name'));
         }
