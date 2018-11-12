@@ -450,15 +450,6 @@ class OrderAction extends Controller {
                         $start_diff = time() - strtotime($pointflash['start_date']);
                         $end_diff = time() - strtotime($pointflash['end_date']);
                         if ($pointflash['is_end'] == 0 && $start_diff >= 0 && $end_diff < 0) {
-                            $start_time1 = '2018-11-02';
-                            $end_time1 = '2018-11-12 23:59:59';
-                            if(time()>=strtotime($start_time1) && time()<=strtotime($end_time1)) {
-                                $buy_num = $model->table('order')->where("pay_time between '{$start_time1}' and '{$end_time1}' and type=6 and pay_status in (1,2) and user_id=".$this->user['id'])->count();
-                                if($buy_num>=1) {
-                                    $this->code = 1204;
-                                    return;
-                                }
-                            }
                             $ress = $this->pointflashStatus($id,$pointflash['quota_count'],$this->user['id']);
                             if($ress['code']!=0) {
                                 $this->code = $ress['code'];
@@ -747,6 +738,22 @@ class OrderAction extends Controller {
             // return;
             $info = ['status'=>'error','code'=>1217];
             return $info;    
+        }
+        $start_time1 = '2018-11-02';
+        $end_time1 = '2018-11-12 23:59:59';
+        if(time()>=strtotime($start_time1) && time()<=strtotime($end_time1)) {
+            $historys =  $model->table("order")->where("pay_time between '{$start_time1}' and '{$end_time1}' and type = 6 and pay_status=0 and status not in (5,6) and is_del != 1 and user_id =".$user_id)->count();
+            if($historys>0){
+                $info = ['status'=>'error','code'=>1217];
+                return $info;    
+            }
+            $buy_num = $model->table('order')->where("pay_time between '{$start_time1}' and '{$end_time1}' and type=6 and pay_status in (1,2) and user_id=".$user_id)->count();
+            if($buy_num>=1) {
+                // $this->code = 1204;
+                // return;
+                $info = ['status'=>'error','code'=>1204];
+                return $info;
+            }
         }
         $flash_sale = $model->table('pointflash_sale')->where('id='.$prom_id)->find();
         if($flash_sale){
