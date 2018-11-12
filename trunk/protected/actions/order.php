@@ -453,7 +453,7 @@ class OrderAction extends Controller {
                             $start_time1 = '2018-11-02';
                             $end_time1 = '2018-11-12 23:59:59';
                             if(time()>=strtotime($start_time1) && time()<=strtotime($end_time1)) {
-                                $buy_num = $model->table('order')->where("pay_time between '{$start_time1}' and '{$end_time1}' and type=6 and pay_status in (1,2) and user_id=".$user_id)->count();
+                                $buy_num = $model->table('order')->where("pay_time between '{$start_time1}' and '{$end_time1}' and type=6 and pay_status in (1,2) and user_id=".$this->user['id'])->count();
                                 if($buy_num>=1) {
                                     $this->code = 1204;
                                     return;
