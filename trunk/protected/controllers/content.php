@@ -446,6 +446,7 @@ class ContentController extends Controller {
             $height = Req::args('height');
             $x_coor = Req::args('x_coor');
             $y_coor = Req::args('y_coor');
+            $align_center = Req::args('align_center');
             $update_time = Req::args('update_time');
             $end_time = Req::args('end_time');
             $content = array();
@@ -453,7 +454,7 @@ class ContentController extends Controller {
                 $id = Req::args("id");
                 if($id==85) {
                     foreach ($path as $key => $value) {
-                        $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key],'width' => $width[$key],'height' => $height[$key],'x_coor' => $x_coor[$key],'y_coor' => $y_coor[$key],'update_time' => $update_time[$key],'end_time' => $end_time[$key]);
+                        $content[$key] = array('path' => $value, 'url' => $url[$key], 'title' => $title[$key],'width' => $width[$key],'height' => $height[$key],'x_coor' => $x_coor[$key],'y_coor' => $y_coor[$key],'align_center' => isset($align_center[$key])?1:0,'update_time' => $update_time[$key],'end_time' => $end_time[$key]);
                     }
                 } else {
                     foreach ($path as $key => $value) {
@@ -542,6 +543,7 @@ class ContentController extends Controller {
              $set[$k]['height'] = $list['height'];
              $set[$k]['x_coor'] = $list['x_coor'];
              $set[$k]['y_coor'] = $list['y_coor'];
+             $set[$k]['align_center'] = $list['align_center'];
              $set[$k]['top_distance'] = $list['top_distance'];
              $set[$k]['id'] = $list['id'];      
         }
@@ -576,6 +578,7 @@ class ContentController extends Controller {
             'height'=>Req::args("height"),
             'x_coor'=>Req::args("x_coor"),
             'y_coor'=>Req::args("y_coor"),
+            'align_center'=>Req::args("align_center"),
             'top_distance'=>Req::args("top_distance"),
             );
         $model->table('ad_preset')->data($data)->where("id=".$id)->update();
@@ -651,5 +654,43 @@ class ContentController extends Controller {
         $model = new Model();
         $model->table('business_center')->where('id='.$id)->delete();
         $this->redirect('center_list');
+    }
+
+    public function index_ad()
+    {
+        $model = new Model();
+        $ad = $model->table('index_ad')->where('id=1')->find();
+        $upyun = Config::getInstance()->get("upyun");
+        $year = date('Y');
+        $mon = date('m');
+        $day = date('d');
+        $save_key =  "/data/uploads/".$year."/".$mon."/".$day."/" .time(). ".jpg";
+        // var_dump($save_key);die;
+        $options = array(
+                'bucket' => $upyun['upyun_bucket'],
+                // 'allow-file-type' => 'jpg,gif,png,jpeg', // 文件类型限制，如：jpg,gif,png
+                'expiration' => time() + 86400,
+                // 'notify-url' => $upyun['upyun_notify-url'],
+                // 'ext-param' => "",
+                'save-key' => $save_key
+        );
+        $policy = base64_encode(json_encode($options));
+        $signature = md5($policy . '&' . $upyun['upyun_formkey']);
+        $this->assign('secret', md5('ym123456'));
+        $this->assign('policy', $policy);
+        $this->assign('signature', $signature);
+        $this->assign('save_key', $save_key);
+        $this->assign('ad',$ad);
+        $this->redirect();
+    }
+
+    public function index_ad_save()
+    {
+        $model = new Model();
+        $image_url = Filter::str(Req::args("image_url"));
+        $jump_link = Filter::str(Req::args("jump_link"));
+        $status = Filter::int(Req::args("status"));
+        $model->table('index_ad')->data(['image_url'=>$image_url,'jump_link'=>$jump_link])->where('id=1')->update();
+        $this->redirect('index_ad');
     }
 }

@@ -190,6 +190,12 @@ class Order {
                         if ($time_diff >= 0 || $max_num <= $data['goods_num'])
                             $data['is_end'] = 1;
                         $model->table("flash_sale")->where("id=" . $prom['id'])->data($data)->update();
+                        //查询是否赠送积分
+                        // $buy_num = $model->table('order')->where('prom_id='.$prom['id'].' and user_id='.$order['user_id'].' and pay_status=1 and type=2')->count();
+                        // if($flashbuy['send_point']>0 && $buy_num==1) {
+                        //     $model->table("customer")->data(array('point_coin'=>"`point_coin`+".$flashbuy['send_point']))->where('user_id='.$order['user_id'])->update();
+                        //     Log::pointcoin_log($flashbuy['send_point'], $order['user_id'], $order['order_no'], '抢购商品积分赠送', 9);
+                        // }
                     }
                 }
             }else if($order['type'] == 6){
@@ -213,12 +219,12 @@ class Order {
 //            if ($order['point'] > 0) {
 //                Pointlog::write($order['user_id'], $order['point'], '购买商品，订单：' . $order['order_no'] . ' 赠送' . $order['point'] . '积分');
 //            }
-            if($order['type']==2&&$order['point']>0){
-                $result = $model->table("customer")->data(array("point_coin"=>"`point_coin`+".$order['point']))->where("user_id=".$order['user_id'])->update();
-                if($result){
-                    Log::pointcoin_log($order['point'], $order['user_id'], $order['order_no'], "购买商品赠送", 9);
-                }
-            }
+            // if($order['type']==2&&$order['point']>0){
+            //     $result = $model->table("customer")->data(array("point_coin"=>"`point_coin`+".$order['point']))->where("user_id=".$order['user_id'])->update();
+            //     if($result){
+            //         Log::pointcoin_log($order['point'], $order['user_id'], $order['order_no'], "购买商品赠送", 9);
+            //     }
+            // }
             //记录支付日志
             // $paymentModel = new Model('payment');
             // $paymentObj = $paymentModel->where("id=$payment_id")->find();

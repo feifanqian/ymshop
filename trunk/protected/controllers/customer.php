@@ -204,6 +204,49 @@ class CustomerController extends Controller {
         }
     }
 
+    public function withdraw_querys($id){
+        $model = new Model('balance_withdraw as wd');
+        $obj = $model->where("wd.id=$id")->find();
+        if($obj){
+                // $ChinapayDf = new ChinapayDf();
+                $ChinapayDf = new AllinpayDf();
+                $params['merSeqId']=$obj['mer_seq_id'];
+                $params['merDate']= substr( $params['merSeqId'],0,8);
+                $merchantId=AppConfig::MERCHANT_ID;
+                $req_sn = $merchantId.$obj['withdraw_no'];
+
+                $third_pay = 0;
+                $payment_model = new Model();
+                $third_payment = $payment_model->table('third_payment')->where('id=1')->find();
+                if($third_payment){
+                    $third_pay = $third_payment['third_payment'];
+                }
+                if($third_pay==0 && in_array($obj['user_id'], [42608,141580,141585])) {
+                    $result = $ChinapayDf->DfYinshengQuery($obj['withdraw_no']); //使用银盛代付查询接口
+                } else {
+                    $result = $ChinapayDf->DfQuery($req_sn); //使用通联代付查询接口 
+                }
+                if($result['code']==1){
+                    if($obj['status']==4 || $obj['status']==0 || $obj['status']==2){
+                        if($obj['type']==0){
+                            $config = Config::getInstance();
+                            $other = $config->get("other");
+                            $real_amount = round($obj['amount']*(100-$other['withdraw_fee_rate'])/100,2);
+                        }else{
+                            $real_amount = $obj['amount'];
+                        }
+                        $model->data(array('status'=>1,'real_amount'=>$real_amount))->where("wd.id=$id")->update();
+                    }
+                    $return = array('status'=>'success','msg'=>$result['msg']);
+                }else{
+                    $return = array('status'=>'fail','msg'=>$result['msg']);
+                }  
+        }else{
+            $return = array('status'=>'fail','msg'=>'信息错误1');
+        }
+        return $return;
+    }
+
     public function re_withdraw_query($id){
             $model = new Model('balance_withdraw as wd');
             $obj = $model->where("wd.id=$id")->find();
@@ -275,6 +318,7 @@ class CustomerController extends Controller {
         $status = Req::args('status');
         $note = Filter::text(Req::args('note'));
         $model = new Model('balance_withdraw as wd');
+        $models = new Model();
         $obj = $model->fields("wd.*,cu.balance,cu.offline_balance")->join("left join customer as cu on wd.user_id = cu.user_id")->where("wd.id=$id")->find();
         if ($obj) {
             // $can_withdraw = Common::getCanWithdrawAmount4GoldCoin($obj['user_id']);
@@ -325,23 +369,40 @@ class CustomerController extends Controller {
                            $result = $ChinapayDf->DfYinsheng($params);
                        } 
                     }
-                    
-                    if($result['status']==1){
-                        $date = date("Y-m-d H:i:s");
-                        $real_amount = round($params['transAmt']/100,2);
-                        $update = $model->query("update tiny_balance_withdraw set status=1,note='{$note}',real_amount={$real_amount},fee_rate={$other['withdraw_fee_rate']},mer_seq_id='{$params['merSeqId']}',submit_date='{$date}' where id = $id and status= 0");
+                    $query = $this->withdraw_querys($id);
+                    $date = date("Y-m-d H:i:s");
+                    $real_amount = round($params['transAmt']/100,2);
+                    $data = array(
+                        'status'=> 1,
+                        'note'  => $note,
+                        'real_amount' => $real_amount,
+                        'fee_rate' => $other['withdraw_fee_rate'],
+                        'mer_seq_id' => $params['merSeqId'],
+                        'submit_date' => $date
+                        );
+                    if($result['status']==1 && $query['status']=='success') {
+                        $update = $models->table('balance_withdraw')->data($data)->where('id='.$id)->update();
+                        // if($update==false) {
+                        //     var_dump($data);die;
+                        // }
                         if($update){
                             Log::op($this->manager['id'], "通过提现申请", "管理员[" . $this->manager['name'] . "]:通过了提现申请 " . $obj['withdraw_no']);
                             exit(json_encode(array('status'=>'success','msg'=>'提现成功')));
                         }
-                    }elseif($result['status']==4){
+                    } elseif ($result['status']==4){
                         $model->query("update tiny_balance_withdraw set status='4' where id = $id and status= 0");
                         exit(json_encode(array('status'=>'fail','msg'=>$result['msg'])));
-                    }else{
-                        $model->query("update tiny_balance_withdraw set status='2' where id = $id and status= 0");
-                        // $model->table('customer')->data(array('offline_balance' => "`offline_balance`+" . $obj['amount']))->where('user_id=' . $obj['user_id'])->update();
-                        // Log::balance($obj['amount'], $obj['user_id'],$obj['withdraw_no'],"余额提现失败退回", 3, $this->manager['id']);
-                        exit(json_encode(array('status'=>'fail','msg'=>$result['msg'])));
+                    } else { 
+                        if($result['msg']=='处理成功') {
+                            $update = $models->table('balance_withdraw')->data($data)->where('id='.$id)->update();
+                            if($update){
+                                Log::op($this->manager['id'], "通过提现申请", "管理员[" . $this->manager['name'] . "]:通过了提现申请 " . $obj['withdraw_no']);
+                                exit(json_encode(array('status'=>'success','msg'=>'提现成功')));
+                            }
+                        } else {
+                            $model->query("update tiny_balance_withdraw set status='2' where id = $id and status= 0");
+                            exit(json_encode(array('status'=>'fail','msg'=>$result['msg'])));
+                        }
                     }
                 }else if($status=="-1"){
                     $result = $model->query("update tiny_balance_withdraw set status='-1',note='$note' where id = $id and status= 0");
@@ -360,7 +421,7 @@ class CustomerController extends Controller {
             
             //扣除账户里的余额
         }
-        exit(json_encode(array('status'=>'fail','msg'=>'信息错误')));
+        exit(json_encode(array('status'=>'fail','msg'=>'信息错误2')));
     }
 
     //再次处理提现
@@ -657,6 +718,17 @@ class CustomerController extends Controller {
         $this->redirect();
     }
 
+    function blacklist() {
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str)
+            $this->assign("where", $condition_str);
+        else
+            $this->assign("where", "1=1");
+        $this->assign("condition", $condition);
+        $this->redirect();
+    }
+
     public function customer_export(){
         $condition = Req::args("condition");
         $condition_str = Common::str2where($condition);
@@ -712,6 +784,18 @@ class CustomerController extends Controller {
             $customer = $model->join("user as u on c.user_id = u.id")->where("c.user_id=" . $id)->find();
         }
         $this->redirect('customer_edit', false, $customer);
+    }
+
+    public function blacklist_edit() {
+        $id = Req::args("id");
+
+        $customer = Req::args();
+        if ($id) {
+            $model = new Model("blacklist as b");
+            $customer = $model->join("customer as c on b.user_id = c.user_id")->where("b.id=" . $id)->find();
+            $this->assign('id',$id);
+        }
+        $this->redirect('blacklist_edit', false, $customer);
     }
 
     public function customer_del() {
@@ -775,6 +859,8 @@ class CustomerController extends Controller {
                 Req::args('user_id', $last_id);
                 Req::args('reg_time',date("Y-m-d H:i:s"));
                 Req::args('real_name', $mobile);
+                Req::args('mobile_verified', 1);
+                Req::args('checkin_time',date("Y-m-d H:i:s"));
                 if (!Validator::date(Req::post('birthday')))
                     Req::post('birthday', date('Y-m-d'));
                 $customerModel->insert();
@@ -782,6 +868,31 @@ class CustomerController extends Controller {
             }
         }
         $this->redirect("customer_list");
+    }
+
+    public function blacklist_save() {
+        $id = Req::args("id");
+        $user_id = Req::args("user_id");
+        $start_time = Req::args("start_time");
+        $end_time = Req::args("end_time");
+        
+        $blacklist = new Model("blacklist");
+
+        $customerModel = new Model("customer");
+        if ($id) {
+            $user = $blacklist->where("id=$id")->find();
+            if ($user) {
+                if ($start_time || $end_time)
+                    $blacklist->data(array('start_time' => $start_time, 'end_time' => $end_time))->where("id=$id")->update();
+                Req::args('user_id', $id);
+                Log::op($this->manager['id'], "修改黑名单", "管理员[" . $this->manager['name'] . "]:修改了会员 " . $user['user_id'] . " 的信息");
+            }
+        }else {
+                $last_id = $blacklist->data(array('user_id'=>$user_id,'start_time' => $start_time,'end_time' => $end_time))->add();
+                Log::op($this->manager['id'], "添加会员", "管理员[" . $this->manager['name'] . "]:添加了会员 " . $user_id . " 的信息");
+            
+        }
+        $this->redirect("blacklist");
     }
 
     public function customer_password() {

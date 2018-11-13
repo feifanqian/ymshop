@@ -135,7 +135,8 @@ class MapAction extends Controller
         $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
         $data = array(
             'user_id' => $this->user['id'],
-            'url3'    => $url
+            'url3'    => $url,
+            'base_rate' => $rate
             );
         if(!$contract) {
             $this->model->table('promoter_contract')->data($data)->insert();      
@@ -150,6 +151,28 @@ class MapAction extends Controller
             if($shop_check['mobile']==null) {
                 $this->model->table('shop_check')->data(['mobile'=>$mobile])->where('id='.$shop_check['id'])->update();
             }
+            if($shop_check['legal_person']==null) {
+                $this->model->table('shop_check')->data(['legal_person'=>$name])->where('id='.$shop_check['id'])->update();
+            }
+            if($shop_check['address']==null) {
+                $this->model->table('shop_check')->data(['address'=>$address])->where('id='.$shop_check['id'])->update();
+            }
+        } else {
+            $data = array(
+                'user_id'      => $this->user['id'],
+                'legal_person' => $name,
+                'mobile'       => $mobile,
+                'id_no'        => $id_no,
+                'address'      => $address,
+                'create_date'  => date('Y-m-d H:i:s'),
+                'status'       => -1
+                );
+            $this->model->table('shop_check')->data($data)->insert();
+        }
+
+        $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+        if($promoter) {
+            $this->model->table('district_promoter')->data(['base_rate'=>$rate])->where('user_id='.$this->user['id'])->update();
         }
 
         $this->code = 0;
@@ -231,6 +254,12 @@ class MapAction extends Controller
             $this->model->table('promoter_contract')->data($data)->where('id='.$contract['id'])->update();
         }
 
+        // $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+        // if($promoter) {
+        //     $this->model->table('district_promoter')->data(['base_rate'=>$rate])->where('user_id='.$this->user['id'])->update();
+        // }
+        $this->model->table('shop_check')->data(['status'=>0])->where('user_id='.$this->user['id'])->update();
+
         $this->code = 0;
         $this->content['url'] = $url;
     }
@@ -263,10 +292,12 @@ class MapAction extends Controller
         // var_dump($picture);die;
         // $url = Filter::str(Req::args('url'));
         $data = array(
-            'url4'    => $picture
+            'url4'    => $picture,
+            'status'  => 0,
             );
         $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
         $this->model->table('shop_check')->data(['status'=>0])->where('user_id='.$this->user['id'])->update();
+        // $this->model->table('shop_check')->data(['status'=>-1])->where('user_id='.$this->user['id'])->update();
         $this->code = 0;
         $this->content['picture'] = $picture;
     }
@@ -275,10 +306,16 @@ class MapAction extends Controller
     {
         $picture = Filter::str(Req::args('picture'));
         $data = array(
-            'url4'    => $picture
+            'url4'    => $picture,
+            'status'  => 0,
             );
         $this->model->table('promoter_contract')->data($data)->where('user_id='.$this->user['id'])->update();
-        $this->model->table('shop_check')->data(['status'=>0])->where('user_id='.$this->user['id'])->update();
+        $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
+        $promoter = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
+        // if($promoter) {
+        //     $this->model->table('district_promoter')->data(['base_rate'=>$contract['base_rate']])->where('user_id='.$this->user['id'])->update();
+        // }
+        // $this->model->table('shop_check')->data(['status'=>-1])->where('user_id='.$this->user['id'])->update();
         $this->code = 0;
         $this->content['picture'] = $picture;
     }
@@ -605,7 +642,7 @@ class MapAction extends Controller
     //帮助支持
     public function help_list()
     {
-        $list = $this->model->table('article')->fields('id,title,content,imgs,publish_time')->where('category_id=3')->findAll();
+        $list = $this->model->table('article')->fields('id,title,content,imgs,publish_time')->where('category_id=3')->order('id desc')->findAll();
         $this->code = 0;
         $this->content = $list;
         return;
@@ -614,9 +651,51 @@ class MapAction extends Controller
     //新闻动态
     public function news_list()
     {
-        $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where('category_id=5')->findAll();
+        $page = Filter::int(Req::args("page"));
+        $id = Filter::int(Req::args("type_id"));
+        $where = 'category_id=5';
+        if(!$id) {
+            $ids = array();
+            $str = '';
+            $category = $this->model->table('category')->fields('id')->where('parent_id=5')->findAll();
+            if($category) {
+                foreach ($category as $key => $value) {
+                    $ids[] = $value['id'];
+                }
+                array_push($ids, 5);
+                $str = implode(',', $ids);
+                $where = "category_id in ($str)";
+            } else {
+               $this->code = 0;
+               $this->content = [];
+               return;
+            }
+        } else {
+            $where = 'category_id='.$id;
+        }
+        $list = array();
+        if($page) {
+            $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where($where)->order('id desc')->findPage($page,20);
+            if($list) {
+                unset($list['html']);
+            } else {
+                $list['data'] = [];
+            }
+        } else {
+            $list['data'] = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where('category_id=5')->order('id desc')->findAll();
+        }
+        
         $this->code = 0;
-        $this->content = $list;
+        $this->content = $list['data'];
+        return;
+    }
+
+    //新闻类型
+    public function news_type()
+    {
+        $type = $this->model->table('category')->fields('id as type_id,name')->where('parent_id=5')->findAll();
+        $this->code = 0;
+        $this->content = $type;
         return;
     }
 
@@ -635,6 +714,57 @@ class MapAction extends Controller
         $id = Filter::int(Req::args("id"));
         $this->code = 0;
         $this->content['link'] = "http://www.ymlypt.com/travel/news_detail/id/".$id."/inviter_id/".$this->user['id'];
+        return;
+    }
+
+    public function shop_rights()
+    {
+        $list = $this->model->table('article')->fields('id,title,content,thumb_img,imgs,publish_time,count,summary')->where('category_id=6')->order('id desc')->findAll();
+        $this->code = 0;
+        $this->content = $list[0];
+        return;
+    }
+
+    public function jpush_test()
+    {
+        $type = Filter::str(Req::args("type"));
+        $user_id1 = Filter::int(Req::args("user_id1"));
+        $user_id2 = Filter::int(Req::args("user_id2"));
+        if(!$type) {
+            $type = 'upgrade_vip';
+        }
+        // $content = "由于国庆期间银行系统维护，9月30日至10月7日提现将在节后到账，不便之处敬请谅解。祝各位圆梦用户节日快乐！";
+        $content = "您有5位或以上粉丝成功注册圆梦用户，恭喜您成功获得VIP资格";
+        $platform = 'all';
+        
+        $NoticeService = new NoticeService();
+        $jpush = $NoticeService->getNotice('jpush');
+        
+        $user_arr = [];
+        // $where = 'mobile is not null and mobile_verified=1 and user_id>='.$user_id1.' and user_id<'.$user_id2;
+        $where = 'user_id in (42608,147325)';
+        $user = $this->model->table('customer')->fields('user_id')->where($where)->findAll();
+        foreach ($user as $key => $value) {
+            $user_arr[] = $value['user_id'];
+            // $push_data = array(
+            // 'to_id'=>$value['user_id'],
+            // 'type'=>$type,
+            // 'content'=>$content,
+            // 'create_time'=>date('Y-m-d H:i:s'),
+            // 'status'=>'unread',
+            // 'value'=>''
+            // );
+        // $this->model->table('push_message')->data($push_data)->insert();
+        }
+        $audience['alias'] = $user_arr;
+        $jpush->setPushData($platform, $audience, $content, $type, '');
+        $ret = $jpush->push();
+
+        if(!$ret) {
+            $this->code = 1242;
+            return;
+        }
+        $this->code = 0;
         return;
     }
 }

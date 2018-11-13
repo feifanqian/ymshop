@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <meta name="format-detection" content="telephone=no" />
     <title>淘口令</title>
-  <link href="http://015hsrj.com/html5/static/css/module/wxpro.bd4c34680f8f51aea6547b23d4c09a7b.css" rel="stylesheet">
+  <link href="/themes/mobile/css/tao_share.css" rel="stylesheet">
   </head>
   <style type="text/css">
   .g-loading-bg{
@@ -14,22 +14,22 @@
   </style>
   <body>
     <div class="wxpro">
-        <div class="slogn">
-            <div class="logo">
-              <img src="/themes/mobile/images/logo-new.png" alt="">
+        <div class="slogn" style="height: 60px;">
+            <div class="logo" style="height: 56px;width: 56px;">
+              <img src="/themes/mobile/images/logo-new.png" alt="" width="56" height="56">
              </div> 
             <div class="center">
-               <div class="tt">圆梦共享网</div> 
-               <div class="bot">共享无形资源，获取跨界收益，振兴传统商业的共享经济平台</div>
+               <div class="tt" style="font-size: 14px;">圆梦共享网</div> 
+               <div class="bot" style="font-size: 13px;">天天有优惠，日日能赚钱，省钱购物app 等你来下载！</div>
             </div> 
-            <div class="btn"><a href="http://sj.qq.com/myapp/detail.htm?apkName=com.yidu.yuanmeng">APP下载</a></div>
+            <div class="btn" style="margin-top: 20px;"><a href="http://sj.qq.com/myapp/detail.htm?apkName=com.yidu.yuanmeng">APP下载</a></div>
         </div> 
-        <div class="proImg">
+        <div class="proImg" style="margin-top: 20px;">
            <img alt="" src="{$info['pict_url']}">
         </div> 
         <div class="container">
             <div>
-                <div class="proname">{$info['title']}</div> 
+                <div class="proname" style="font-size: 14px;">{$info['title']}</div> 
                 <div class="price_box">
                     <div class="price">
                        <div class="price_after">券后价 ￥<span class="strongF">{echo:$info['zk_final_price']-$info['coupon_price']}</span> <span class="price_before">￥{$info['zk_final_price']}</span>
@@ -38,10 +38,10 @@
                 </div>
             </div> 
             <div class="clipboard">
-                  <div class="top">{$info['tao_str']}<p>长按复制框内文字，启动手机【<i class="icon_tao"><img src="/themes/mobile/images/tao.aed96c4.png" alt=""></i>】即可领券购买</p>
+                  <div class="top" style="font-size: 15px;">{$info['tao_str']}<p style="font-size: 15px;">长按复制框内文字，启动手机【<i class="icon_tao"><img src="/themes/mobile/images/tao.aed96c4.png" alt=""></i>】即可领券购买</p>
                   </div> 
                   <div class="bot">
-                        <button class="buttoncopy" data-text="{$info['tao_str']}">
+                        <button class="buttoncopy" data-clipboard-text="{$info['tao_str']}" style="font-size: 15px;" >
                             <i class="icon_copy">
                               <img src="/themes/mobile/images/copy.png" alt="">
                             </i> 一键复制淘口令
@@ -50,7 +50,7 @@
             </div>
         </div> 
         <div class="fixbox">
-            <button class="buttoncopy" data-text="{$info['tao_str']}">
+            <button class="buttoncopy" data-clipboard-text="{$info['tao_str']}" style="font-size: 15px;" >
                 <i class="icon_copy">
                     <img src="/themes/mobile/images/copy.png" alt="">
                 </i> 一键复制淘口令
@@ -59,14 +59,17 @@
       </div>
     <!-- built files will be auto injected -->
     
-    <div class="g-loading-bg">
-    </div>
+   <!--  <div class="g-loading-bg">
+    </div> -->
     <!-- <div class="g-loading-body">
          <div class="g-loading-str">正在加载 </div>
     </div> -->
 </body>
 <script src="/runtime/systemjs/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>  
+<script type="text/javascript" src="/themes/mobile/js/clipboard.min.js"></script>
+ <!-- <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script> -->
+<!-- <script type="text/javascript" src="/themes/mobile/js/clipboard.js"></script> -->
+<!-- <script type="text/javascript" src="/themes/mobile/js/ZeroClipboard.js"></script> -->
 <script type="text/javascript">
         //微信浏览器中，aler弹框不显示域名
         (function(){
@@ -86,14 +89,31 @@
         })();
 </script>
 <script type="text/javascript">
-$(function(){
-    var clipboard = new Clipboard('.buttoncopy',{ 
-       text: function(trigger) { 
-          alert("复制成功！");
-          return trigger.getAttribute('data-text'); 
-       }
+// $(function(){
+//     var clipboard = new Clipboard('.buttoncopy',{ 
+//        text: function(trigger) { 
+//           alert("复制成功！");
+//           return trigger.getAttribute('data-text'); 
+//        }
  
-    });
-});
+//     });
+// });
+
+  var clipboard = new ClipboardJS('.buttoncopy');
+
+  clipboard.on('success', function(e) {
+      console.info('Action:', e.action);
+      console.info('Text:', e.text);
+      console.info('Trigger:', e.trigger);
+
+      e.clearSelection();
+      alert("复制成功！");
+  });
+
+  clipboard.on('error', function(e) {
+      console.error('Action:', e.action);
+      console.error('Trigger:', e.trigger);
+  });
+
 </script>
 </html>

@@ -1,16 +1,72 @@
 {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
-{set:$status=array("1"=>'正常','0'=>'禁用');}
-<form action="" method="post">
+{set:$status=array("0"=>'审核中',"1"=>'通过','2'=>'未通过','3'=>'未签约',null=>'未签约');}
+<script type="text/javascript" src="{url:@static/js/daterangepicker/moment.min.js}"></script>
+<script type="text/javascript" src="{url:@static/js/daterangepicker/daterangepicker.js}"></script>
+<link rel="stylesheet" href="{url:@static/js/daterangepicker/daterangepicker.css}" type="text/css" />
+<script type="text/javascript">
+ $(document).ready(function() {
+    $('#datepick').daterangepicker(
+     {
+        startDate: moment().subtract('days', 29),
+        endDate: moment(),
+        minDate: '2012-01-01',
+        maxDate: moment(),
+        dateLimit: { days: 60 },
+        showDropdowns: true,
+        showWeekNumbers: true,
+        timePicker: false,
+        timePickerIncrement: 1,
+        timePicker12Hour: true,
+        ranges: {
+           '今天': [moment(), moment()],
+           '昨天': [moment().subtract('days', 1), moment().subtract('days', 1)],
+           '最近7天': [moment().subtract('days', 6), moment()],
+           '最近30天': [moment().subtract('days', 29), moment()],
+           '上一个月': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+        },
+        opens: 'right',
+        buttonClasses: ['btn btn-default'],
+        applyClass: 'btn-small btn-primary',
+        cancelClass: 'btn-small',
+        format: 'YYYY-MM-DD',
+        separator: ' -- ',
+        locale: {
+            applyLabel: '提交',
+            cancelLabel:'重置',
+            fromLabel: '起始',
+            toLabel: '结束',
+            customRangeLabel: '选择时间段',
+            daysOfWeek: ['日', '一', '二', '三', '四', '五','六'],
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            firstDay: 1
+        }
+     },
+     function(start, end) {
+      $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+     }
+    );
+    $('#reportrange span').html(moment().subtract('days', 29).format('YYYY-MM-DD') + ' - ' + moment().format('YYYY-MM-DD'));
+    });
+</script>
 <div class="tools_bar clearfix">
-    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
-   <!-- <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>!-->
-    <a class="icon-delicious" href="{url:/districtadmin/list_promoter}"> 查看全部</a>
-    <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方代理商</a>
-<!--    <a class="icon-eye-blocked" href="{url:/order/order_list/status/2}"> 未审核</a>
-    <a class="icon-cogs" href="{url:/order/order_list/status/3}"> 执行中</a>-->
+    <form action="" method="post">
+      <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+     <!-- <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/order/order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>!-->
+      <a class="icon-delicious" href="{url:/districtadmin/list_promoter}"> 查看全部</a>
+      <a class="icon-plus" href="javascript:;" onclick="addPromoters();"> 添加官方代理商</a>
+      <a class="icon-file-excel" href="{url:/districtadmin/export_contract}"> 导出合约信息</a>
+      <a class="icon-file-excel" href="{url:/districtadmin/export_test}"> 导出商家订单信息</a>
 
-    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+      <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    </form>
+</div>
+<div class="tools_bar clearfix">
+    <form action="{url:/districtadmin/list_promoter}" method="post">
+        <span class="fl">时间：<input name="s_time" type="text" value="{$s_time}" id="datepick" class="middle"></span>
+        <!-- <a href="javascript:tools_submit();" id="conditions" class="icon-search" style=""> 查询</a> -->
+        <input type="submit"  class="button action fn" value="查询">
+    </form>
 </div>
 <table class="default" >
     <tr>
@@ -21,13 +77,13 @@
         <!-- <th style="width:50px">邀请人</th> -->
         <th style="width:50px">类型</th>
         <th style="width:60px">所属专区</th>
-        <th style="width:60px">收益情况</th>
+        <!-- <th style="width:60px">收益情况</th> -->
         <th style="width:60px">加入时间</th>
-        <th style="width:40px">状态</th>
+        <th style="width:40px">签约状态</th>
         <th style="width:40px">基础分账比例</th>
     </tr>
     {set:$type=array("1"=>"经销商直推","2"=>"代理商推荐","3"=>"系统生成","4"=>"官方代理商","5"=>"自升级","6"=>"激活码生成");}
-    {query:name=district_promoter as dp fields=dp.id,dp.hirer_id,dp.type,dp.user_id,dp.status,dp.join_time,dp.base_rate,dp.unique_code,c.real_name,c.valid_income,c.frezze_income,c.settled_income,ds.name as shop_name join=left join customer as c on dp.user_id eq c.user_id left join district_shop as ds on dp.hirer_id eq ds.id where=$where id=$obj page=1 order= dp.id desc}
+    {query:name=district_promoter as dp fields=dp.id,dp.hirer_id,dp.type,dp.user_id,pc.status,dp.join_time,dp.base_rate,dp.unique_code,c.real_name,c.valid_income,c.frezze_income,c.settled_income,ds.name as shop_name join=left join customer as c on dp.user_id eq c.user_id left join district_shop as ds on dp.hirer_id eq ds.id left join promoter_contract as pc on dp.user_id eq pc.user_id where=$where id=$obj page=1 order= dp.id desc}
     <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden">
@@ -56,14 +112,13 @@
             
             <td style="width:60px">{$type[$item["type"]]}</td>
             <td style="width:140px">{$item['shop_name']}</td>
-            <td style="width:140px">待解锁：{$item['frezze_income']} 可用：{$item['valid_income']} 已结算：{$item['settled_income']}</td>
+            <!-- <td style="width:140px">待解锁：{$item['frezze_income']} 可用：{$item['valid_income']} 已结算：{$item['settled_income']}</td> -->
             <td style="width:160px">{$item['join_time']}</td>
             <td style="width:40px">{$status[$item['status']]}</td>
             <td style="width:40px">{$item['base_rate']}%</td>
         </tr>
     {/query}
 </table>
-</form>
 <div class="page_nav">
 {echo:$obj->pageBar()}
 </div>
@@ -158,7 +213,7 @@ function sendMsg(name,id){
 }
 $("#condition").on("click",function(){
     
-  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_promoter}',method:'get'});},data:{'c.real_name':{name:'代理商'},'ds.name':{'name':'所属专区'}}});
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/list_promoter}',method:'get'});},data:{'c.user_id':{name:'用户id'},'c.real_name':{name:'代理商'},'pc.status': {name: '签约状态', values: {0: '审核中', 1: '已通过', 2: '未通过'}},'ds.name':{'name':'所属专区'}}});
 })
 function addPromoters(){
      index =  layer.open({

@@ -1,0 +1,93 @@
+{echo:JS::import('form');}
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('validator');}
+<script type="text/javascript" src="/themes/mobile/js/crypto-js.js" charset="utf-8"></script>
+<div id="obj_form" class="form2">
+    <form action="{url:/content/index_ad_save}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="{$ad['id']|1}">
+    <dl class="lineD">
+      <dt><b class="red">*</b>图片地址</dt>
+      <dd>
+        <input name="image_url" id="image_url" type="text" value="{$ad['image_url']}" alt=""/><label></label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dd>
+        <img id="preview" src="{$ad['image_url']}" width="70" height="50">
+        <!-- <input type="file" name="file" value="" >   -->
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt><b class="red">*</b>跳转链接</dt>
+      <dd>
+        <input name="jump_link" type="text" value="{$ad['jump_link']}" alt=""/><label></label>
+      </dd>
+    </dl>
+    <dl class="lineD">
+      <dt>是否展示：</dt>
+      <dd>
+        <label><input type="radio" name="status" value="1" {if:$ad['status']==1}checked="checked"{/if}>是</label>
+        <label><input type="radio" name="status" value="0" {if:$ad['status']==0}checked="checked"{/if}>否</label>
+      </dd>
+    </dl>
+    <div style="text-align:center"><input type="submit" value="提交" class="button"></div>
+    </form>
+    <script type="text/javascript">
+    $('#image_url').change(function(){
+      $("#preview").attr('src',$(this).val());
+    })
+    $("input[name='file']").change(function(){
+  
+      var file = $("input[name='file']").get(0).files[0];
+      
+      upyun_upload(file);
+      
+    });
+
+    function upyun_upload(file) {
+    var config = {
+        api: 'http://v1.api.upyun.com/',
+        bucket: 'ymlypt',
+          // 空间的表单 API
+        form_api_secret: "{$secret}"
+      };
+    var form_api_secret = "REGXLUpFH4GQcVa/ehZLS6QinhI=";
+    if(!file) {
+          console.log('no file is selected');
+          return;
+      }
+      // 计算 policy 和 signature 所需的参数
+      // 详情见： http://docs.upyun.com/api/form_api/#表单API接口简介
+      // var time = new Date().getTime();
+      var save_as = "{$save_key}";
+      // var options = {
+      //     bucket: config.bucket,
+      //     expiration: Math.floor(new Date().getTime() / 1000) + 86400,
+      //     'save-key': save_as
+      //   };
+      // var policy = window.btoa(JSON.stringify(options));
+      var policy = "{$policy}"
+          
+      // var signature = CryptoJS.MD5(policy + '&' + form_api_secret);
+      var signature = "{$signature}";
+      var data = new FormData();
+          data.append('policy', policy);
+          data.append('signature', signature);
+          data.append('file', file);
+      var request = new XMLHttpRequest();
+          request.open('POST', "http://v1.api.upyun.com/ymlypt");
+      request.onload = function(e) {
+              // console.log(request.response);
+      };
+          var ret = request.send(data);
+          console.log(ret);
+      var path = "https://ymlypt.b0.upaiyun.com"+save_as;
+      console.log(save_as);
+      $("#preview").attr('src',path);
+      $("#image_url").val(path);
+      return true;
+}
+    
+    </script>
+</div>

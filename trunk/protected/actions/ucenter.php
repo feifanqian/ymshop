@@ -87,7 +87,7 @@ class UcenterAction extends Controller {
                 if($last_id){
                     $name = "u" . sprintf("%09d", $last_id);
                     $this->model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
-                    $this->model->table("customer")->data(array('mobile' => $mobile, 'real_name'=>$realname, 'mobile_verified' => 1, 'balance' => 0, 'score' => 0, 'user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time))->insert();
+                    $this->model->table("customer")->data(array('mobile' => $mobile, 'real_name'=>$realname, 'mobile_verified' => 1, 'balance' => 0, 'score' => 0, 'user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time,'checkin_time'=>$time))->insert();
                     if($inviter_id){
                         Common::buildInviteShip($inviter_id, $last_id, 'wechat');
                     }
@@ -178,12 +178,17 @@ class UcenterAction extends Controller {
         $this->content['userinfo']['is_signed'] = $sign?1:0;
         $this->content['userinfo']['is_cashier'] = $customer['is_cashier'];
         $this->content['userinfo']['pay_password_open'] = $customer['pay_password']==null?0:1;
+        $invite_num = $this->model->table('invite as i')->join('left join customer as c on i.invite_user_id=c.user_id')->where('i.user_id='.$this->user['id'].' and c.mobile_verified=1')->count();
+        // if($invite_num>=2) {
+        //     $this->model->table('user')->data(['is_vip'=>1])->where('id='.$this->user['id'])->update();
+        // }
+        $this->content['userinfo']['invite_num'] = $invite_num;
     }
 
     //设置昵称
     public function set_nickname() {
         $new_name = Filter::str(Req::args('new'));
-        if (strlen($new_name) > 20) {
+        if (strlen($new_name) > 50) {
             $this->code = 1000;
             return;
         }
@@ -319,12 +324,13 @@ class UcenterAction extends Controller {
     public function thirdlogin() {
         $platform = Filter::sql(Req::args('platform'));
         $openid = Filter::sql(Req::args('openid'));
+        $unionid = Filter::sql(Req::args('unionid'));
         $token = Filter::sql(Req::args('token'));
 
         if ($platform && $openid && $token) {
             $model = $this->model->table("oauth_user as ou");
             // $obj = $model->join("left join user as us on us.id = ou.user_id")->fields("ou.*,us.adzoneid")->where("ou.oauth_type='$platform' and ou.open_id='{$openid}'")->find();
-            $obj = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and open_id='{$openid}' or unionid = '{$openid}'")->find();
+            $obj = $this->model->table('oauth_user')->where("oauth_type='{$platform}' and unionid = '{$unionid}' or open_id='{$openid}'")->find();
             if ($obj) {
                 $token = CHash::random(32, 'char');
                 $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id=' . $obj['user_id'])->update();
@@ -395,7 +401,7 @@ class UcenterAction extends Controller {
                     $name = "u" . sprintf("%09d", $last_id);
                     //更新用户名和邮箱
                     $model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
-                    $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nickname,'mobile' => $mobile,'point_coin'=>200, 'mobile_verified' => 1, 'balance' => 0, 'reg_time' => $time, 'login_time' => $time))->insert();
+                    $model->table("customer")->data(array('user_id' => $last_id, 'real_name' => $nickname,'mobile' => $mobile,'point_coin'=>200, 'mobile_verified' => 1, 'balance' => 0, 'reg_time' => $time, 'login_time' => $time,'checkin_time'=>$time))->insert();
                     Log::pointcoin_log(200, $last_id, '', '微信授权新用户积分奖励', 10);
                     if($inviter_id){
                         Common::buildInviteShip($inviter_id, $last_id, $platform);
@@ -738,14 +744,31 @@ class UcenterAction extends Controller {
     //订单签收
     public function order_sign() {
         $id = Filter::int(Req::args("id"));
-        $flag = $this->model->table('order')->where("id=$id and user_id=" . $this->user['id'] . " and status=4 ")->find();
+        $flag = $this->model->table('order')->where("id=$id and user_id=" . $this->user['id'])->find();
         //$flag = $this->model->query("select * from tiny_order where id = $id and user_id=".$this->user['id']." and status = 4");
-        if (!empty($flag)) {
+        if(!$flag) {
+            $this->code = 1096;
+            return;
+        }
+        if ($flag['status']==4) {
             $this->code = 1043;
             return;
         } else {
             $result = $this->model->table('order')->where("id=$id and user_id=" . $this->user['id'] . " and status=3 and pay_status=1 and delivery_status=1")->data(array('delivery_status' => 2, 'status' => 4, 'completion_time' => date('Y-m-d H:i:s')))->update();
             if ($result) {
+                //查询是否赠送积分
+                // var_dump($flag);die;
+                $prom = unserialize($flag['prom']);
+                if (isset($prom['id']) && $flag['type']==2) {
+                    $flashbuy = $this->model->table("flash_sale")->where("id=" . $prom['id'])->find();
+                    if($flashbuy) {
+                        $buy_num = $this->model->table('order')->where('prom_id='.$prom['id'].' and user_id='.$flag['user_id'].' and pay_status=1 and type=2')->count();
+                        if($flashbuy['send_point']>0 && $buy_num==1) {
+                            $this->model->table("customer")->data(array('point_coin'=>"`point_coin`+".$flashbuy['send_point']))->where('user_id='.$flag['user_id'])->update();
+                            Log::pointcoin_log($flashbuy['send_point'], $flag['user_id'], $flag['order_no'], '抢购商品积分赠送', 9);
+                        }
+                    }
+                }
                 //提取购买商品信息
                 $products = $this->model->table('order as od')->join('left join order_goods as og on od.id=og.order_id')->where('od.id=' . $id)->findAll();
                 foreach ($products as $product) {
@@ -893,7 +916,7 @@ class UcenterAction extends Controller {
     }
 
     public function push_message() {
-        $list = $this->model->table("push_message as p")->fields('p.to_id,p.type,p.content,p.create_time,p.value,c.status')->join('left join cashier as c on p.value=c.id')->where("to_id=" . $this->user['id'])->findAll();
+        $list = $this->model->table("push_message as p")->fields('p.to_id,p.type,p.content,p.create_time,p.value,c.status')->join('left join cashier as c on p.value=c.id')->where("to_id=" . $this->user['id'])->order('p.id desc')->findAll();
         $this->code = 0;
         $this->content = $list;
     }
@@ -2121,7 +2144,13 @@ class UcenterAction extends Controller {
         if(!$level) {
             $level = 0;
         }
-        $where = "do.user_id=".$this->user['id'];    
+        $where = "do.user_id=".$this->user['id'];
+        if($start_time) {
+            $start_time .= " 00:00:01";
+        }
+        if($end_time) {
+            $end_time .= " 23:59:59";
+        }    
         if($start_time) {
             $start = strtotime($start_time);
             $where .= ' and createtime>'.$start;
@@ -2162,7 +2191,10 @@ class UcenterAction extends Controller {
                     break;
                 case 'H':
                     $where.=" and `from` in ('goods_qrcode')";
-                    break;                        
+                    break;
+                case 'J':
+                    $where.=" and `from` in ('news_share')";
+                    break;                            
                 default:
                     $where.=" and `from` like '%$from%'";
                     break;
@@ -2176,7 +2208,7 @@ class UcenterAction extends Controller {
         if(!$level) {
             $record = $this->model->table('invite as do')
                     ->join('left join user as u on do.invite_user_id = u.id left join customer as c on do.invite_user_id = c.user_id')
-                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from,c.mobile,c.mobile_verified')
+                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from,c.mobile,c.mobile_verified,u.is_vip')
                     ->where($where)
                     ->order($sort)
                     ->findPage($page, 10);        
@@ -2222,7 +2254,7 @@ class UcenterAction extends Controller {
         } else {
             $list = $this->model->table('invite as do')
                     ->join('left join user as u on do.invite_user_id = u.id left join customer as c on do.invite_user_id = c.user_id')
-                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from,c.mobile,c.mobile_verified')
+                    ->fields('u.id,u.avatar,u.nickname,FROM_UNIXTIME(do.createtime) as createtime,do.from,c.mobile,c.mobile_verified,u.is_vip')
                     ->where($where)
                     ->order($sort)
                     ->findAll();
@@ -2993,13 +3025,14 @@ class UcenterAction extends Controller {
        $shop_photo = Req::args('shop_photo'); //门店照
        $hand_idcard = Req::args('hand_idcard'); //手持身份证照
        $shop_name = Req::args('shop_name'); //店铺名
-       $legal_person = Req::args('legal_person'); //法人名字
+       $legal_person = Filter::str(Req::args('legal_person')); //法人名字
        $mobile = Req::args('mobile'); //手机号
        $found_date = Req::args('found_date'); //成立时间
        $province = Req::args('province'); 
        $city = Req::args('city'); 
        $county = Req::args('county'); 
        $business_number = Req::args('business_number'); //营业执照编号
+       $business_expire = Req::args('business_expire'); //营业执照有效期
        $business_addr = Req::args('business_addr'); //营业执照地址
        $bank_type = Req::args('bank_type'); //银行名称
        $bank_phone = Req::args('bank_phone'); //银行预留手机号
@@ -3059,28 +3092,24 @@ class UcenterAction extends Controller {
        // if($page==3 || $page==6) {
          $check = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
          $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
-         if($contract && $check && $check['status']!=2 && $check['reason']==null) {
-            // if($check['status']==1) {
-            //     $need_sign = 3;
-            // } else {
-            //     $need_sign = 1;
-            // }
-            $need_sign = 1;
-         } else {
-            $need_sign = 0;
-         }
-         if($need_sign==1) {
-            $status = empty($contract)?-1:$check['status'];
-        } elseif ($need_sign==3){
-            $status = 3;
-        }else {
-            if($check) {
-                $status = $check['status'];
-            } else {
-                $status = -1;
-            }
-        }
+         // if($contract && $check && $check['status']!=2 && $check['reason']==null) {
+         //    $need_sign = 1;
+         // } else {
+         //    $need_sign = 0;
+         // }
+        //  if($need_sign==1) {
+        //     $status = empty($contract)?-1:$check['status'];
+        // } elseif ($need_sign==3){
+        //     $status = 3;
+        // }else {
+        //     if($check) {
+        //         $status = $check['status'];
+        //     } else {
+        //         $status = -1;
+        //     }
+        // }
        // }
+       $status = !empty($check)?$check['status']:0;
        
        if($page==1) {
         if($check) {
@@ -3100,13 +3129,11 @@ class UcenterAction extends Controller {
 
        if($page==3) {
         if($check) {
-         if($bank_type!=$check['bank_type'] || $account_card!=$check['account_card'] || $bank_name!=$check['bank_name'] || $bank_phone!=$check['bank_phone'] || $bank_area!=$check['bank_area'] || $positive_bankcard!=$check['positive_bankcard'] || $native_bankcard!=$check['native_bankcard']) {
-            if($contract) {
+            if($check['status']!=1) {
                 $status = 0;
             } else {
-                $status = -1;
-            }  
-         } 
+                $status = $check['status'];
+            }
         }
        }
 
@@ -3128,13 +3155,11 @@ class UcenterAction extends Controller {
 
        if($page==6) {
         if($check) {
-         if($bank_type!=$check['bank_type'] || $account_card!=$check['account_card'] || $bank_name!=$check['bank_name'] || $bank_phone!=$check['bank_phone'] || $bank_area!=$check['bank_area'] || $account_picture!=$check['account_picture']) {
-            if($contract) {
+            if($check['status']!=1) {
                 $status = 0;
             } else {
-                $status = -1;
-            }  
-         } 
+                $status = $check['status'];
+            }
         }
        } 
        
@@ -3187,6 +3212,7 @@ class UcenterAction extends Controller {
         'county'           => $county,
         'business_licence' => $business_licence,
         'business_number'  => $business_number,
+        'business_expire'  => $business_expire,
         'business_addr'    => $business_addr,
         'address'          => $address,
         'status'           => $status,
@@ -3221,6 +3247,7 @@ class UcenterAction extends Controller {
         'create_date'      => date('Y-m-d H:i:s')
         );
        }
+       
        $shop_check = $this->model->table('shop_check')->fields('status')->where('user_id='.$this->user['id'])->find();
        if($shop_check){
           $result = $this->model->table('shop_check')->data($data)->where('user_id='.$this->user['id'])->update();
@@ -3250,7 +3277,7 @@ class UcenterAction extends Controller {
           $need_check = 1; //通过认证
         }elseif($shop_check['status']==0){
           $need_check = 2; //认证审核中
-        }elseif($shop_check['status']==-1 && $shop_check['reason']==null){
+        }elseif($shop_check['status']==-1){
           $need_check = 3; //需完善
         }else{
           $need_check = -1; //认证失败  
@@ -3259,32 +3286,44 @@ class UcenterAction extends Controller {
         $this->content = $need_check;
     }
 
+    public function contract_status()
+    {
+        $promoter_contract = $this->model->table('promoter_contract')->fields('status')->where('user_id='.$this->user['id'])->find();
+        $status = !empty($promoter_contract)?$promoter_contract['status']:3;
+        $this->code = 0;
+        $this->content = (string)$status;
+    }
+
     public function shop_check_info()
     {
         $info = $this->model->table('shop_check')->where('user_id='.$this->user['id'])->find();
         $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
-        if($contract || $info) {
-            if($info) {
-               if($info['status']!=2 && $info['reason']==null) {
-                    $need_sign = 1;
-                } else {
-                    $need_sign = 0;
-                } 
+        if(!$contract && !$info) {
+            $need_sign = 0;
+        } elseif($contract && $info) {
+            if($info['status']!=2 && $info['reason']==null) {
+                $need_sign = 1;
             } else {
                 $need_sign = 0;
-            }
+            }     
+        } else {
             if($contract) {
                 $need_sign = 1;
             } else {
                 $need_sign = 0;
-            }
-        } else {
-            $need_sign = 0;
-        }
+            }  
+        } 
 
         $info['need_sign'] = $need_sign;
         $this->code = 0;
         $this->content['info'] = $info;
+    }
+
+    public function contract_view()
+    {
+        $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
+        $this->code = 0;
+        $this->content['url'] = !empty($contract)?$contract['url4']:'';
     }
 
     public function shop_register(){
@@ -3646,5 +3685,25 @@ class UcenterAction extends Controller {
         $this->content['inviter_id'] = $inviter_id;
         $this->content['inviter_name'] = $inviter_name;
         return;
+    }
+
+    public function check_token()
+    {
+        $token = Req::args('token');
+        $user_id = Filter::int(Req::args('user_id'));
+        $userinfo = $this->model->table("user")->where("id=".$user_id)->find();
+        if($userinfo) {
+            if($userinfo['token']==$token) {
+                $this->model->table("user")->data(array('expire_time' => date('Y-m-d H:i:s', strtotime('+7 days'))))->where('id=' . $user_id)->update();
+                $this->code = 0;
+                return;
+            } else {
+                $this->code = 1003;
+                return;
+            }
+        } else {
+            $this->code = 1000;
+            return;
+        }
     }
 }

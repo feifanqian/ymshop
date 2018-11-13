@@ -175,11 +175,11 @@ class UcenterController extends Controller
                     $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
                 }
                 Session::set('pay_type', 'alipay');
-                if($seller_id==1) {
+                // if($seller_id==1) {
                     $this->redirect("/travel/demo?inviter_id={$seller_id}");
-                } else {
-                    $this->redirect("/ucenter/demo?inviter_id={$seller_id}");
-                }  
+                // } else {
+                //     $this->redirect("/ucenter/demo?inviter_id={$seller_id}");
+                // }  
                 exit;
             }
         } else {
@@ -267,11 +267,11 @@ class UcenterController extends Controller
         //         exit;
         //     }
         // }
-        if($user_id==1) {
+        // if($user_id==1) {
             $url = Url::fullUrlFormat("/travel/demo/inviter_id/" . $user_id);
-        } else {
-            $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/" . $user_id);
-        }
+        // } else {
+        //     $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/" . $user_id);
+        // }
         
         $qrCode = new QrCode();
         $qrCode
@@ -1037,6 +1037,7 @@ class UcenterController extends Controller
                                 'mobile' => $mobile,
                                 'real_name' => $realname,
                                 'mobile_verified' => 1,
+                                'checkin_time'=>date("Y-m-d H:i:s"),
                                 'point_coin' => 200
                             );
                             $this->model->table("customer")->data($data)->where("user_id={$this->user['id']}")->update();
@@ -1926,9 +1927,10 @@ class UcenterController extends Controller
     public function check_identity()
     {
         $verified = $this->verifiedType();
-        $customer = $this->model->table('customer')->fields('pay_password')->where("user_id=" . $this->user['id'])->find();
+        $customer = $this->model->table('customer')->fields('pay_password,mobile')->where("user_id=" . $this->user['id'])->find();
         $pay_password = $customer['pay_password'];
         $this->assign('pay_password', $pay_password);
+        $this->assign('mobile', $customer['mobile']);
         $this->redirect();
     }
 
@@ -1939,6 +1941,7 @@ class UcenterController extends Controller
         $type = Req::args('type');
         $obj = Req::args('obj');
         $pay_password = Req::args('pay_password');
+        $mobile = Req::args('mobile');
         $obj = $this->updateObj($obj); //默认是修改登陆密码
 
         if ($pay_password == '' && $recode != '') {
@@ -1956,7 +1959,8 @@ class UcenterController extends Controller
 
 
         $verifiedInfo = Session::get("verifiedInfo");
-        if (isset($verifiedInfo['code']) && $code == $verifiedInfo['code']) {
+        $checkFlag = $this->sms_verify($code, $mobile, '86');
+        if ( (isset($verifiedInfo['code']) && $code == $verifiedInfo['code']) ||  $checkFlag==true) {
             $verifiedInfo['obj'] = $obj;
             Session::set("verifiedInfo", $verifiedInfo);
             $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random']);
@@ -2044,7 +2048,8 @@ class UcenterController extends Controller
             $activateObj = Session::get('activateObj');
             $newCode = $activateObj['code'];
             $newAccount = $activateObj['obj'];
-            if ($code == $newCode && $account == $newAccount) {
+            $checkFlag = $this->sms_verify($code, $account, '86');
+            if ($checkFlag) {
                 if ($obj == 'email' && Validator::email($account)) {
                     $result = $this->model->table('user')->where("email='" . $account . "' and id != " . $this->user['id'])->find();
                     if (!$result) {
@@ -2058,7 +2063,7 @@ class UcenterController extends Controller
                         $info = array('field' => 'account', 'msg' => '此邮箱已被其它用户占用，无法修改为此邮箱。');
                     }
                 } elseif ($obj == 'mobile' && Validator::mobi($account)) {
-                    $result = $this->model->table('customer')->where("mobile ='" . $account . "'" . '  and user_id!=' . $this->user['id'])->find();
+                    $result = $this->model->table('customer')->where("mobile ='" . $account . "'" . '  and user_id!=' . $this->user['id']." and status=1")->find();
                     $password = Req::args('password');
                     $repassword = Req::args('repassword');
                     if ($password != $repassword) {
@@ -2067,7 +2072,7 @@ class UcenterController extends Controller
                     $validcode = CHash::random(8);
                     $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $this->user['id'])->update();
                     if (!$result) {
-                        $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1))->where('user_id=' . $this->user['id'])->update();
+                        $this->model->table('customer')->data(array('mobile' => $account, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s")))->where('user_id=' . $this->user['id'])->update();
                         Session::clear('verifiedInfo');
                         Session::clear('activateObj');
                         $this->redirect('/ucenter/update_obj_success/obj/' . $obj);
@@ -2093,13 +2098,13 @@ class UcenterController extends Controller
                                     if($promoter1 || $promoter2) {
                                         if($promoter1) { //分配$user_id账号
                                             $customer = $this->model->table('customer')->where('user_id=' . $weixin['user_id'])->find();
-                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s"),'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $user_id)->update();
                                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $weixin['user_id'])->update();
                                             $this->model->table('oauth_user')->data(array('other_user_id' => $weixin['user_id']))->where('user_id=' . $user_id)->update();
                                             $last_id = $user_id;    
                                         } else { //分配$weixin['user_id']账号
                                             $customer = $this->model->table('customer')->where('user_id=' . $user_id)->find();
-                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $weixin['user_id'])->update();
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s"),'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $weixin['user_id'])->update();
                                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
                                             $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
                                             $this->model->table('oauth_user')->data(array('user_id' => $weixin['user_id']))->where('other_user_id=' . $user_id)->update();
@@ -2110,12 +2115,12 @@ class UcenterController extends Controller
                                         $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
                                         //已注册时间早的为主
                                         if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
-                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s"),'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
                                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $value['user_id'])->update();   
                                             $this->model->table('oauth_user')->data(array('other_user_id' => $value['user_id']))->where('user_id=' . $user_id)->update();
                                             $last_id = $user_id;
                                         } else {
-                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer1['balance']})",'offline_balance'=>"`offline_balance`+({$customer1['offline_balance']})"))->where('user_id=' . $value['user_id'])->update();
+                                            $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s"),'balance'=>"`balance`+({$customer1['balance']})",'offline_balance'=>"`offline_balance`+({$customer1['offline_balance']})"))->where('user_id=' . $value['user_id'])->update();
                                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
                                             $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
                                             $this->model->table('oauth_user')->data(array('user_id' => $value['user_id']))->where('other_user_id=' . $user_id)->update();
@@ -2128,7 +2133,7 @@ class UcenterController extends Controller
                                     $customer1 = $this->model->table('customer')->where('user_id=' . $user_id)->find();
                                     $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
                                     //绑定手机号
-                                    $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                    $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>date("Y-m-d H:i:s"),'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
                                     //已注册时间早的为主
                                     if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
                                         $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $value['user_id'])->update();   
@@ -2151,9 +2156,50 @@ class UcenterController extends Controller
                 exit;
             } else {
                 $info = array('field' => 'account', 'msg' => '账号或验证码不正确。');
+                // $info = array('field' => 'account', 'msg' => $newCode.$newAccount);
             }
         }
         $this->redirect("/ucenter/update_obj/r/" . $verifiedInfo['random'], true, array('invalid' => $info, 'account' => $account));
+    }
+
+    private function sms_verify($code, $mobile, $zone) {
+        $url = "https://webapi.sms.mob.com/sms/verify";
+        $appkey = "1f4d2d20dd266";
+        $return = $this->postRequest($url, array('appkey' => $appkey,
+            'phone' => $mobile,
+            'zone' => $zone,
+            'code' => $code,
+        ));
+        $flag = json_decode($return, true);
+        if ($flag['status'] == 200) {
+            return true;
+        } else {
+            // var_dump($flag);die;
+            return false;
+        }
+    }
+
+    private function postRequest($api, array $params = array(), $timeout = 30) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $api);
+        // 以返回的形式接收信息
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // 设置为POST方式
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        // 不验证https证书
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/x-www-form-urlencoded;charset=UTF-8',
+            'Accept: application/json',
+        ));
+        // 发送数据
+        $response = curl_exec($ch);
+        // 不要忘记释放资源
+        curl_close($ch);
+        return $response;
     }
 
     public function update_obj_success()
@@ -3398,14 +3444,21 @@ class UcenterController extends Controller
             $cash = 1;
         } else {
             $cash = 0;
-        }
-        if(in_array($inviter_id, [101738,87455,55568,8158,25795,31751]) && date('Y-m-d H:i:s')>'2018-05-15 12:00:00' && date('Y-m-d H:i:s')<'2018-06-15 12:00:00'){
-            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
-            exit;
         }  
-        if(in_array($inviter_id, [55568,21079])) {
-            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
-            exit;
+        //黑名单
+        $blacklist = $this->model->table('blacklist')->findAll();
+        if($blacklist) {
+            $ids = array();
+            foreach($blacklist as $k =>$v) {
+                $ids[] = $v['user_id'];
+            }
+            if(in_array($inviter_id, $ids)) {
+                $black = $this->model->table('blacklist')->where('user_id='.$inviter_id)->find();
+                if(date('Y-m-d H:i:s')>$black['start_time'] && date('Y-m-d H:i:s')<$black['end_time']) {
+                    $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
+                    exit;
+                }    
+            }
         }
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false) {
             $pay_type = 'alipay';

@@ -40,6 +40,7 @@
             <label></label>
           </dd>
         </dl>
+        {if:$id==0}
         <dl class="lineD">
           <dt> <b class="red">*</b>
             分类：
@@ -47,9 +48,9 @@
           <dd>
             <select name="category_id" id="category_id" pattern="[1-9]\d*" alt="选择分类，若无分类请先创建。">
               <option value="0">选择分类</option>
-              {set:$id=isset($id)?$id:0;}
+              
               {query:name=goods_category where = parent_id eq 0 }
-                    <option value="{$item['id']}" {if:$pids==$item['id']}selected='selected'{/if}>{$item['name']}</option>
+                    <option value="{$item['id']}" >{$item['name']}</option>
               {/query}
             </select>
             <label></label>
@@ -57,11 +58,11 @@
                 <option value="0">==二级分类==</option>
                 {if:$pid!=$pids}
                 {query:name=goods_category where = parent_id eq $pids }
-                    <option value="{$item['id']}" {if:$pid==$item['id']}selected='selected'{/if}>{$item['name']}</option>
+                    <option value="{$item['id']}" >{$item['name']}</option>
                 {/query}
                 {else:}
                 {query:name=goods_category where = parent_id eq $pids }
-                    <option value="{$item['id']}" {if:isset($category_id) && $category_id==$item['id']}selected='selected'{/if}>{$item['name']}</option>
+                    <option value="{$item['id']}" >{$item['name']}</option>
                 {/query}
                 {/if}
             </select>
@@ -69,12 +70,13 @@
                   <option value="0">==三级分类==</option>
                   {if:$pid!=$pids}
                   {query:name=goods_category where = parent_id eq $pid }
-                    <option value="{$item['id']}" {if:isset($category_id) && $category_id==$item['id']}selected='selected'{/if}>{$item['name']}</option>
+                    <option value="{$item['id']}" >{$item['name']}</option>
                   {/query}
                   {/if}
               </select>
           </dd>
         </dl>
+        {/if}
         <dl class="lineD">
           <dt>
             类型：
@@ -737,10 +739,19 @@ function bindEvent(){
   });
 
 }
-
+var category_id;
+var category_ids;
+var category_idss;
+var category_type;
+var id;
+{if:isset($id)}
+id = "{$id}";
+{/if}
 //选择分类
 $("#category_id").on('change',function(){
-    var category_id = $("#category_id option:selected").val();
+    category_id = $("#category_id option:selected").val();
+    // category_ids = $("#category_ids option:selected").val();
+    // category_idss = $("#category_idss option:selected").val();
     $("#category_ids option:not(:first)").remove();//先把二级的菜单的option清空
     $("#category_idss option:not(:first)").remove();//先把二级的菜单的option清空
     if(category_id){
@@ -750,7 +761,7 @@ $("#category_id").on('change',function(){
          dataType:'json',
          data:{'id':category_id},
          success:function(data){
-             console.log(data);
+             // console.log(data);
              var html = '';
             for(var i in data){
                 html += '<option value='+data[i].id+'>'+data[i].name+'</option>';
@@ -759,11 +770,28 @@ $("#category_id").on('change',function(){
             }
     });
     }
+    $("input[name='category_type']").val(category_id);
+    category_type = $("input[name='category_type']").val();
+    console.log(category_id);
+    console.log(category_type);
+    if(id!=0) {
+      $.ajax({
+            type:'post',
+            url:'/goods/category_ajax',
+            dataType:'json',
+            data:{'id':id,'category_id':category_type},
+            success:function(data){
+                console.log('success');
+            }
+        });
+    }
 });
 
 //二级分类选择三级分类
 $("#category_ids").on('change',function(){
-    var category_ids = $("#category_ids option:selected").val();
+    category_id = $("#category_id option:selected").val();
+    category_ids = $("#category_ids option:selected").val();
+    // category_idss = $("#category_idss option:selected").val();
     $("#category_idss option:not(:first)").remove();//先把二级的菜单的option清空
     if(category_ids){
         $.ajax({
@@ -780,13 +808,41 @@ $("#category_ids").on('change',function(){
             }
         });
     }
-    var category_type = $("input[name='category_type']").val();
     $("input[name='category_type']").val(category_ids);
+    category_type = $("input[name='category_type']").val();
+    console.log(category_ids);
+    console.log(category_type);
+    if(id!=0) {
+      $.ajax({
+            type:'post',
+            url:'/goods/category_ajax',
+            dataType:'json',
+            data:{'id':id,'category_id':category_type},
+            success:function(data){
+                console.log('success');
+            }
+        });
+    }
 });
 $("#category_idss").on('change',function(){
-  var category_idss = $("#category_idss").val();
-  var category_type = $("input[name='category_type']").val();
-   $("input[name='category_type']").val(category_idss);
+  // var category_id = $("#category_id option:selected").val();
+  // var category_ids = $("#category_ids option:selected").val();
+  var category_idss = $("#category_idss option:selected").val();
+  $("input[name='category_type']").val(category_idss);
+  category_type = $("input[name='category_type']").val(); 
+  console.log(category_idss);
+  console.log(category_type);
+  if(id!=0) {
+      $.ajax({
+            type:'post',
+            url:'/goods/category_ajax',
+            dataType:'json',
+            data:{'id':id,'category_id':category_type},
+            success:function(data){
+                console.log('success');
+            }
+        });
+    }
 });  
 var form =  new Form();
 // var category_id = {$category_id};
@@ -794,6 +850,7 @@ var form =  new Form();
 form.setValue('shop_id','{$shop_id}');
 // form.setValue('category_id','{$category_id}');
 // form.setValue('category_idss',category_idss);
+// form.setValue('category_type',category_type);
 form.setValue('type_id','{$type_id}');
 form.setValue('brand_id','{$brand_id}');
 form.setValue('is_online','{$is_online}');

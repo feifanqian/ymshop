@@ -115,7 +115,7 @@ class SimpleController extends Controller {
                             $last_id = $model->data(array('email' => $email, 'name' => $name, 'password' => CHash::md5($passWord, $validcode), 'validcode' => $validcode, 'status' => $user_status))->insert();
 
                             $time = date('Y-m-d H:i:s');
-                            $model->table("customer")->data(array('user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile,'mobile_verified'=>1))->insert();
+                            $model->table("customer")->data(array('user_id' => $last_id, 'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile,'mobile_verified'=>1,'checkin_time'=>$time))->insert();
 
                             if ($mobile) {
                                 SMS::getInstance()->flushCode($mobile);
@@ -206,7 +206,7 @@ class SimpleController extends Controller {
                                             //更新用户名和邮箱
                                             $this->model->table("user")->data(array('name' => $name))->where("id = '{$last_id}'")->update();
                                             $time = date('Y-m-d H:i:s');
-                                            $this->model->table("customer")->data(array('user_id' => $last_id,'real_name'=>$realname,'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile,'mobile_verified'=>1))->insert();
+                                            $this->model->table("customer")->data(array('user_id' => $last_id,'real_name'=>$realname,'reg_time' => $time, 'login_time' => $time, 'mobile' => $mobile,'mobile_verified'=>1,'checkin_time'=>$time))->insert();
                                             //记录邀请人
                                             $inviter = Cookie::get("inviter");                                            
                                             if($inviter!==NUll){
@@ -1046,16 +1046,16 @@ class SimpleController extends Controller {
             }
             $start_time = $flash_sale['start_time'];
             $end_time = $flash_sale['end_time'];
-            $had_booght = $model->table('order')->where("type=2 and pay_status=1 and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}'")->count();
+            $had_bought = $model->table('order')->where("pay_time between '{$start_time}' and '{$end_time}' and type=2 and pay_status in (1,2) and prom_id=".$prom_id." and user_id=".$user_id)->count();
             if($flash_sale['is_limit']==1){
-                if($had_booght>=1){
+                if($had_bought>=$flash_sale['quota_num']){
                     if($isJump){
                      $this->redirect("/index/msg", true, array('msg' => '抱歉，本次活动期间您只能参与一次抢购！', 'type' => 'error'));
                      exit();
                     }
                 }
             } 
-            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6 and od.pay_time>'{$start_time}' and od.pay_time<'{$end_time}'");
+            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status in (1,2) and od.status !=6 and od.pay_time>'{$start_time}' and od.pay_time<'{$end_time}'");
             if($sum1[0]['sum']>= $flash_sale['max_num']){
                 if($isJump){
                      $this->redirect("/index/msg", true, array('msg' => '对不起，该商品已抢完了', 'type' => 'error'));
@@ -1074,7 +1074,7 @@ class SimpleController extends Controller {
         if($quota_num==0 || $quota_num =="" || $quota_num <0){
             return true;
         }else{
-            $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status = 1 and od.status !=6 and od.user_id = $user_id");
+            $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 2 and od.pay_status in (1,2) and od.status !=6 and od.user_id = $user_id");
             if($sum[0]['sum']>= $quota_num){
                 if($isJump){
                      $this->redirect("/index/msg", true, array('msg' => '对不起，您已经达到了该商品的抢购上限', 'type' => 'error'));
@@ -1107,14 +1107,14 @@ class SimpleController extends Controller {
             }
             $start_time = $flash_sale['start_date'];
             $end_time = $flash_sale['end_date'];
-            $had_booght = $model->table('order')->where("type=6 and pay_status=1 and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}'")->count();
+            $had_booght = $model->table('order')->where("type=6 and pay_status in (1,2) and user_id=".$user_id." and pay_time>'{$start_time}' and pay_time<'{$end_time}'")->count();
             if($had_booght>=$flash_sale['quota_count']){
                     if($isJump){
                      $this->redirect("/index/msg", true, array('msg' => '抱歉，您已经达到了该商品的抢购上限！', 'type' => 'error'));
                      exit();
                     }        
             } 
-            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 6 and od.pay_status = 1 and od.status !=6 and od.pay_time>'{$start_time}' and od.pay_time<'{$end_time}'");
+            $sum1 = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 6 and od.pay_status in (1,2) and od.status !=6 and od.pay_time>'{$start_time}' and od.pay_time<'{$end_time}'");
             if($sum1[0]['sum']>= $flash_sale['max_sell_count']){
                 if($isJump){
                      $this->redirect("/index/msg", true, array('msg' => '对不起，该商品已抢完了', 'type' => 'error'));
@@ -1133,7 +1133,7 @@ class SimpleController extends Controller {
         if($quota_num==0 || $quota_num =="" || $quota_num <0){
             return true;
         }else{
-            $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 6 and od.pay_status = 1 and od.status !=6 and od.user_id = $user_id");
+            $sum = $model->query("select SUM(og.goods_nums) as sum from tiny_order as od left join tiny_order_goods as og on od.id = og.order_id where od.prom_id = $prom_id and od.type = 6 and od.pay_status in (1,2) and od.status !=6 and od.user_id = $user_id");
             if($sum[0]['sum']>= $quota_num){
                 if($isJump){
                     $this->redirect("/index/msg", true, array('msg' => '对不起，您已经达到了该商品的抢购上限', 'type' => 'error'));

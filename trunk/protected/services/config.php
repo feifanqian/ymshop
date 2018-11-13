@@ -76,6 +76,7 @@ class ConfigService {
             'available_distance'=>Req::args('available_distance'),
             'access_token'=>Req::args('access_token'),
             'token_date'=>Req::args('token_date'),
+            'send_product_id'=>Req::args('send_product_id'),
         );
         $this->config->set('other', $other);
         return true;

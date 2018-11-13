@@ -57,6 +57,7 @@
                         <li><a class="icon-point-down" href="{url:/goods/set_weishang/status/0/id/$item[id]}"> 移出微商专区</a></li> -->
                         <li><a  class="icon-drawer-3" href="javascript:;" onclick="change_status({$item['id']})">上架审核</a></li>
                         <li><a class="icon-pencil" href="{url:/goods/goods_edit/id/$item[id]}"> 编辑</a></li>
+                        <li><a class="icon-pencil" href="{url:/goods/goods_edits/id/$item[id]}"> 编辑分类</a></li>
                         <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/goods/goods_del/id/$item[id]}')"> 删除</a></li>
                         {if:$item['is_commission']==0}
                         <li><a class="icon-flag" href="javascript:;" onclick="open_commission({$item['id']})"> 开启佣金</a></li>

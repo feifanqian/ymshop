@@ -16,6 +16,7 @@ class V1Controller extends Controller {
         //'接口名'=>array("对应控制器方法",是否需要用户验证,是否正常)
         'signup' => array('ucenter/app_signup', 0,1), //注册接口
         'login' => array('ucenter/login', 0,1), //登陆接口
+        'check_token'=>array('ucenter/check_token',1,1), //验证token
         'userinfo' => array('ucenter/info', 1,1), //用户信息接口
         'thirdlogin' => array('ucenter/thirdlogin', 0,1), //第三方登录
         'thirdbind' => array('ucenter/thirdbind', 0,1), //第三方登录绑定
@@ -86,7 +87,7 @@ class V1Controller extends Controller {
         "dopay" => array("payment/dopay", 1,1), //发起支付
         "dopays" => array("payment/dopays", 1,1), //发起线下扫码支付
         "dinpay" => array("payment/dinpay", 1,1), //智付支付
-        "jpush_test"=> array("payment/jpushTest",1,1), //极光消息推送测试
+        "jpush_tests"=> array("payment/jpushTest",0,1), //极光消息推送测试
         "pay_qrcode" => array("payment/pay_qrcode",1,1), //收款二维码
         "seller_name" => array("payment/seller_name",1,1), //线下扫码卖家信息
         "pay_success" => array("payment/pay_success",1,1), //线下扫码支付成功页面
@@ -203,8 +204,11 @@ class V1Controller extends Controller {
         "shop_check"=>array("ucenter/shop_check",1,1), // 商家信息认证申请
         "new_shop_check"=>array("ucenter/new_shop_check",1,1), // 新商家信息认证申请
         "shop_checked"=>array("ucenter/shop_checked",1,1), // 判断商家是否认证过
+        "contract_status"=>array("ucenter/contract_status",1,1), // 商家签约状态
         "shop_check_info"=>array("ucenter/shop_check_info",1,1), //商家认证信息
         "industry_list"=>array("goods/industry_list",0,1), //行业列表
+        "index_ad"=>array("index/index_ad",0,1),
+        "contract_view"=>array("ucenter/contract_view",1,1),
 
         "pointcoin_log"=>array("ucenter/pointcoin_log",1,1),
         //充值套餐详情
@@ -311,6 +315,7 @@ class V1Controller extends Controller {
         "feedback"=>array("map/feedback",0,1), //意见反馈
         "help_list"=>array("map/help_list",0,1), //帮助支持
         "news_list"=>array("map/news_list",0,1), //新闻动态
+        "news_type"=>array("map/news_type",0,1), //新闻类型
         "news_detail"=>array("map/news_detail",0,1), //新闻详情
         "news_share_link"=>array("map/news_share_link",1,1), //新闻动态分享链接
         "be_promoter_by_balance"=>array("payment/be_promoter_by_balance",1,1), //余额充值成为代理商
@@ -318,6 +323,9 @@ class V1Controller extends Controller {
         "article_list"=>array("index/article_list",0,1), //帮助建议文章
         "get_all_child_user_ids"=>array("district/getAllChildUserIds",0,1),
         "get_all_child_user_id"=>array("district/getAllChildUserId",0,1),
+        "shop_rights"=>array("map/shop_rights",0,1),
+        "jpush_test"=>array("map/jpush_test",0,1), //批量极光推送
+        "be_vip_by_point"=>array("payment/be_vip_by_point",1,1), //积分兑换VIP
         //通联支付接口
         "createMember"=>array('paytonglian/actionCreateMember',1,1), //创建会员接口
         "set_company_info"=>array('paytonglian/actionSetCompanyInfo',1,1),//设置企业会员信息

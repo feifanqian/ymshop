@@ -630,23 +630,25 @@ class TravelController extends Controller
                         $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
 
                         if(!$oauth_user) { //未注册
+                            $open_name = $userinfo['open_name'];
+                            $open_name = Common::replace_specialChar($open_name);
                             //插入user表
                             $passWord = CHash::random(6);
                             $validcode = CHash::random(8);
-                            $user_id = $this->model->table("user")->data(array('nickname' => $userinfo['open_name'], 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+                            $user_id = $this->model->table("user")->data(array('nickname' => $open_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
                             $name = "u" . sprintf("%09d", $user_id);
                             $email = $name . "@no.com";
                             $time = date('Y-m-d H:i:s');
                             $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
 
                             //插入customer表
-                            $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                            $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $open_name, 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
                             Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
 
                             //插入oauth_user表
                             $this->model->table('oauth_user')->data(array(
                                     'user_id' => $user_id, 
-                                    'open_name' => $userinfo['open_name'],
+                                    'open_name' => $open_name,
                                     'oauth_type' => "wechat",
                                     'posttime' => time(),
                                     'token' => $token['access_token'],
@@ -779,6 +781,7 @@ class TravelController extends Controller
 
     public function bind_mobile()
     {
+        header("Content-Type:text/html;charset=utf-8");
         $inviter = Filter::int(Req::args("inviter_id"));
         $msg = Filter::str(Req::args("msg"));
          if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
@@ -799,22 +802,29 @@ class TravelController extends Controller
 
                         if(!$oauth_user) { //未注册
                             //插入user表
+                            $open_name = $userinfo['open_name'];
+                            $open_name = Common::replace_specialChar($open_name);
+                            // if($openid=='okZq1wQxLuLVnvPOlviRzjTcx1FM') {
+                            //     $open_name = file_get_contents('./test.txt');
+                            //     $open_name = Common::replace_specialChar($open_name);
+                            //     var_dump($open_name);die;
+                            // }
                             $passWord = CHash::random(6);
                             $validcode = CHash::random(8);
-                            $user_id = $this->model->table("user")->data(array('nickname' => $userinfo['open_name'], 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+                            $user_id = $this->model->table("user")->data(array('nickname' => $open_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
                             $name = "u" . sprintf("%09d", $user_id);
                             $email = $name . "@no.com";
                             $time = date('Y-m-d H:i:s');
                             $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
 
                             //插入customer表
-                            $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                            $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $open_name, 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
                             Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
 
                             //插入oauth_user表
                             $this->model->table('oauth_user')->data(array(
                                     'user_id' => $user_id, 
-                                    'open_name' => $userinfo['open_name'],
+                                    'open_name' => $open_name,
                                     'oauth_type' => "wechat",
                                     'posttime' => time(),
                                     'token' => $token['access_token'],
@@ -878,19 +888,6 @@ class TravelController extends Controller
         } else {
             $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '请在微信中打开'));
             exit;
-                // $customer = $this->model->table('customer')->fields('mobile,mobile_verified')->where('user_id='.$this->user['id'])->find();
-                // $seo_title = $customer['mobile_verified']==0?"绑定手机号":"锁粉成功";
-                // $had_locked = $this->model->table('invite')->where('invite_user_id='.$this->user['id'])->find();
-                // if($had_locked) {
-                //     $locked = 1; //已锁
-                // } else {
-                //     $locked = 2; //未锁
-                // }
-                // $this->assign('mobile_verified',$customer['mobile_verified']);
-                // $this->assign('locked',$locked);
-                // $this->assign('seo_title',$seo_title);
-                // $this->assign('msg',$msg);
-                // $this->redirect();
         }
     }
 
@@ -918,6 +915,7 @@ class TravelController extends Controller
             //  $validcode = CHash::random(8);
             //  $this->model->table('user')->data(array('password' => CHash::md5($password, $validcode), 'validcode' => $validcode))->where('id=' . $this->user['id'])->update();
             $had_bind= $this->model->table("customer")->where("mobile='{$mobile}' and status=1")->findAll();
+            $time = date('Y-m-d H:i:s');
             if($had_bind) {
                 foreach ($had_bind as $key => $value) {
                     $wechat = $this->model->table('oauth_user')->where("user_id=".$value['user_id']." and oauth_type='wechat'")->find();
@@ -935,13 +933,13 @@ class TravelController extends Controller
                         if($promoter1 || $promoter2) {
                             if($promoter1) { //分配$user_id账号
                                 $customer = $this->model->table('customer')->where('user_id=' . $weixin['user_id'])->find();
-                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $user_id)->update();
                                 $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $weixin['user_id'])->update();
                                 $this->model->table('oauth_user')->data(array('other_user_id' => $weixin['user_id']))->where('user_id=' . $user_id)->update();
                                 $last_id = $user_id;    
                             } else { //分配$weixin['user_id']账号
                                 $customer = $this->model->table('customer')->where('user_id=' . $user_id)->find();
-                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $weixin['user_id'])->update();
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $weixin['user_id'])->update();
                                 $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
                                 $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
                                 $this->model->table('oauth_user')->data(array('user_id' => $weixin['user_id']))->where('other_user_id=' . $user_id)->update();
@@ -952,12 +950,12 @@ class TravelController extends Controller
                             $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
                             //已注册时间早的为主
                             if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
-                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
                                 $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $value['user_id'])->update();   
                                 $this->model->table('oauth_user')->data(array('other_user_id' => $value['user_id']))->where('user_id=' . $user_id)->update();
                                 $last_id = $user_id;
                             } else {
-                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer1['balance']})",'offline_balance'=>"`offline_balance`+({$customer1['offline_balance']})"))->where('user_id=' . $value['user_id'])->update();
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time,'balance'=>"`balance`+({$customer1['balance']})",'offline_balance'=>"`offline_balance`+({$customer1['offline_balance']})"))->where('user_id=' . $value['user_id'])->update();
                                 $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
                                 $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
                                 $this->model->table('oauth_user')->data(array('user_id' => $value['user_id']))->where('other_user_id=' . $user_id)->update();
@@ -970,7 +968,7 @@ class TravelController extends Controller
                         $customer1 = $this->model->table('customer')->where('user_id=' . $user_id)->find();
                         $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
                         //绑定手机号
-                        $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                        $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
                         //已注册时间早的为主
                         if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $value['user_id'])->update();   
@@ -986,7 +984,7 @@ class TravelController extends Controller
                 } 
             } else {
                 //绑定手机号
-                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1))->where('user_id=' . $user_id)->update();
+                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time))->where('user_id=' . $user_id)->update();
                 $last_id = $user_id;
             }
             $validcode = CHash::random(8);
@@ -1114,26 +1112,45 @@ class TravelController extends Controller
         if (!$inviter_id) {
             $inviter_id = Session::get('seller_id');
         }
-        $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
-        if(!$cashier_id) {
-            $cashier_id = 0;
-        }
-        $desk_id = Filter::int(Req::args('desk_id'));//收银员id
+        // $cashier_id = Filter::int(Req::args('cashier_id'));//收银员id
+        // if(!$cashier_id) {
+        //     $cashier_id = 0;
+        // }
+        $cashier_id = 0;
+        $desk_id = Filter::int(Req::args('desk_id'));//收银台id
         if(!$desk_id) {
             $desk_id = 0;
+        }
+        if($desk_id) {
+            $desk = $this->model->table('cashier_desk')->where('id='.$desk_id.' and status=1')->find();
+            if(!$desk) {
+                $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '未找到该收银台或已删除'));
+                exit;
+            }
+            $cashier = $this->model->table('cashier_attendance')->where('desk_id='.$desk_id)->order('id desc')->find();
+            if($cashier) {
+                $cashier_id = $cashier['cashier_id'];
+            }
         }
         if($cashier_id!=0 || $desk_id!=0) {
             $cash = 1;
         } else {
             $cash = 0;
-        }
-        if(in_array($inviter_id, [101738,87455,55568,8158,25795,31751]) && date('Y-m-d H:i:s')>'2018-05-15 12:00:00' && date('Y-m-d H:i:s')<'2018-06-15 12:00:00'){
-            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
-            exit;
-        }
-        if(in_array($inviter_id, [55568,21079])) {
-            $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
-            exit;
+        }   
+        //黑名单
+        $blacklist = $this->model->table('blacklist')->findAll();
+        if($blacklist) {
+            $ids = array();
+            foreach($blacklist as $k =>$v) {
+                $ids[] = $v['user_id'];
+            }
+            if(in_array($inviter_id, $ids)) {
+                $black = $this->model->table('blacklist')->where('user_id='.$inviter_id)->find();
+                if(date('Y-m-d H:i:s')>$black['start_time'] && date('Y-m-d H:i:s')<$black['end_time']) {
+                    $this->redirect("/index/msg", false, array('type' => 'fail', 'msg' => '该商户违规操作，冻结收款功能！'));
+                    exit;
+                }    
+            }
         } 
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false) {
             $pay_type = 'alipay';
@@ -1150,12 +1167,28 @@ class TravelController extends Controller
         // }
         if(!isset($this->user['id'])) {
             $redirect = "http://www.ymlypt.com/travel/demo/inviter_id/".$inviter_id;
+            if($cashier_id!=0) {
+                $redirect.='/cashier_id/'.$cashier_id;
+            }
+            if($desk_id!=0) {
+                $redirect.='/desk_id/'.$desk_id;
+            }
             // $this->user['id'] = $this->autologin($redirect,$inviter_id);
             if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
                //微信授权登录
                     $code = Filter::sql(Req::args('code'));
                     $oauth = new WechatOAuth();
-                    
+                    if(isset($_GET['cashier_id']) && $_GET['cashier_id']!=0) {
+                        $cashier_id = $_GET['cashier_id'];
+                    }
+                    if(isset($_GET['desk_id']) && $_GET['desk_id']!=0) {
+                        $desk_id = $_GET['desk_id'];
+                    }
+                    if($cashier_id!=0 || $desk_id!=0) {
+                        $cash = 1;
+                    } else {
+                        $cash = 0;
+                    }
                     $url = $oauth->getCodes($redirect);
                     if($code) {
                         $extend = null;
@@ -1166,23 +1199,25 @@ class TravelController extends Controller
                             $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
 
                             if(!$oauth_user) { //未注册
+                                $open_name = $userinfo['open_name'];
+                                $open_name = Common::replace_specialChar($open_name);
                                 //插入user表
                                 $passWord = CHash::random(6);
                                 $validcode = CHash::random(8);
-                                $user_id = $this->model->table("user")->data(array('nickname' => $userinfo['open_name'], 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+                                $user_id = $this->model->table("user")->data(array('nickname' => $open_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
                                 $name = "u" . sprintf("%09d", $user_id);
                                 $email = $name . "@no.com";
                                 $time = date('Y-m-d H:i:s');
                                 $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
 
                                 //插入customer表
-                                $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                                $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $open_name, 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
                                 Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
 
                                 //插入oauth_user表
                                 $this->model->table('oauth_user')->data(array(
                                         'user_id' => $user_id, 
-                                        'open_name' => $userinfo['open_name'],
+                                        'open_name' => $open_name,
                                         'oauth_type' => "wechat",
                                         'posttime' => time(),
                                         'token' => $token['access_token'],
@@ -1213,11 +1248,28 @@ class TravelController extends Controller
                 //支付宝授权登录
                 if (isset($_GET['inviter_id']) && !isset($_GET['auth_code'])) {
                     $act = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017080107981760&scope=auth_user&redirect_uri=http://www.ymlypt.com/travel/demo&state=test&inviter_id=" . $_GET['inviter_id'];
+                    if($cashier_id!=0) {
+                        $act.='&cashier_id='.$cashier_id;
+                    }
+                    if($desk_id!=0) {
+                        $act.='&desk_id='.$desk_id;
+                    }
                     $this->redirect($act);
                     exit;
                 } else {
                     $auth_code = $_GET['auth_code'];
                     $seller_id = $_GET['inviter_id'];
+                    if(isset($_GET['cashier_id']) && $_GET['cashier_id']!=0) {
+                        $cashier_id = $_GET['cashier_id'];
+                    }
+                    if(isset($_GET['desk_id']) && $_GET['desk_id']!=0) {
+                        $desk_id = $_GET['desk_id'];
+                    }
+                    if($cashier_id!=0 || $desk_id!=0) {
+                        $cash = 1;
+                    } else {
+                        $cash = 0;
+                    }
                     $pay_alipayapp = new pay_alipayapp();
                     $result = $pay_alipayapp->alipayLogin($auth_code);
                     if (!isset($result['code']) || $result['code'] != 10000) {
@@ -1260,10 +1312,10 @@ class TravelController extends Controller
                         $this->safebox->set('user', $obj, 31622400);
                         $this->user = $this->safebox->get('user');
                         $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
-                        $this->user['id'] = $last_id;
-                        if($inviter_id){
-                            Common::buildInviteShip($inviter_id, $this->user['id'], 'alipay');
-                        } 
+                        $this->user['id'] = $last_id; 
+                    }
+                    if($inviter_id){
+                        Common::buildInviteShip($inviter_id, $this->user['id'], 'alipay');
                     }
                 }
             }
@@ -1276,6 +1328,14 @@ class TravelController extends Controller
         $order_no = date('YmdHis') . rand(1000, 9999);
         // $jsApiParameters = Session::get('payinfo');
         // $this->assign("jsApiParameters",$jsApiParameters);
+        
+        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        if(strpos($agent, 'android')==true) {
+            $platform = 'android';
+        } else {
+            $platform = 'ios';
+        }
+        
         $this->assign("seo_title", "向商家付款");
         $this->assign('seller_id', $inviter_id);
         $this->assign('cashier_id', $cashier_id);
@@ -1283,6 +1343,7 @@ class TravelController extends Controller
         $this->assign('seller_ids', Session::get('seller_id'));
         $this->assign('order_no', $order_no);
         $this->assign('user_id', $user_id);
+        $this->assign('platform', $platform);
         $third_pay = 0;
         $third_payment = $this->model->table('third_payment')->where('id=1')->find();
         if ($third_payment) {
@@ -1319,6 +1380,7 @@ class TravelController extends Controller
         $checkFlag = $this->sms_verify($mobile_code, $mobile, '86');
         
         if($checkFlag || $mobile_code=='000000') {
+            $time = date('Y-m-d H:i:s');
             $had_bind= $this->model->table("customer")->where("mobile='{$mobile}' and status=1")->findAll();
             if($had_bind) {
                 foreach ($had_bind as $key => $value) {
@@ -1337,13 +1399,13 @@ class TravelController extends Controller
                         if($promoter1 || $promoter2) {
                             if($promoter1) { //分配$user_id账号
                                 $customer = $this->model->table('customer')->where('user_id=' . $weixin['user_id'])->find();
-                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $user_id)->update();
                                 $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $weixin['user_id'])->update();
                                 $this->model->table('oauth_user')->data(array('other_user_id' => $weixin['user_id']))->where('user_id=' . $user_id)->update();
                                 $last_id = $user_id;    
                             } else { //分配$weixin['user_id']账号
                                 $customer = $this->model->table('customer')->where('user_id=' . $user_id)->find();
-                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $weixin['user_id'])->update();
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time,'balance'=>"`balance`+({$customer['balance']})",'offline_balance'=>"`offline_balance`+({$customer['offline_balance']})"))->where('user_id=' . $weixin['user_id'])->update();
                                 $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
                                 $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
                                 $this->model->table('oauth_user')->data(array('user_id' => $weixin['user_id']))->where('other_user_id=' . $user_id)->update();
@@ -1354,12 +1416,12 @@ class TravelController extends Controller
                             $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
                             //已注册时间早的为主
                             if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
-                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
                                 $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $value['user_id'])->update();   
                                 $this->model->table('oauth_user')->data(array('other_user_id' => $value['user_id']))->where('user_id=' . $user_id)->update();
                                 $last_id = $user_id;
                             } else {
-                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer1['balance']})",'offline_balance'=>"`offline_balance`+({$customer1['offline_balance']})"))->where('user_id=' . $value['user_id'])->update();
+                                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time,'balance'=>"`balance`+({$customer1['balance']})",'offline_balance'=>"`offline_balance`+({$customer1['offline_balance']})"))->where('user_id=' . $value['user_id'])->update();
                                 $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $user_id)->update();
                                 $this->model->table('oauth_user')->data(array('other_user_id' => $user_id))->where('user_id=' . $user_id)->update();
                                 $this->model->table('oauth_user')->data(array('user_id' => $value['user_id']))->where('other_user_id=' . $user_id)->update();
@@ -1372,7 +1434,7 @@ class TravelController extends Controller
                         $customer1 = $this->model->table('customer')->where('user_id=' . $user_id)->find();
                         $customer2 = $this->model->table('customer')->where('user_id=' . $value['user_id'])->find();
                         //绑定手机号
-                        $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
+                        $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time,'balance'=>"`balance`+({$customer2['balance']})",'offline_balance'=>"`offline_balance`+({$customer2['offline_balance']})"))->where('user_id=' . $user_id)->update();
                         //已注册时间早的为主
                         if(strtotime($customer1['reg_time'])<strtotime($customer2['reg_time'])) {
                             $this->model->table('customer')->data(array('status' => 0))->where('user_id=' . $value['user_id'])->update();   
@@ -1388,7 +1450,7 @@ class TravelController extends Controller
                 } 
             } else {
                 //绑定手机号
-                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1))->where('user_id=' . $user_id)->update();
+                $this->model->table('customer')->data(array('mobile' => $mobile, 'mobile_verified' => 1,'checkin_time'=>$time))->where('user_id=' . $user_id)->update();
                 $last_id=$user_id;
             }
             $validcode = CHash::random(8);
@@ -1452,6 +1514,9 @@ class TravelController extends Controller
         $inviter_id = Filter::int(Req::args('inviter_id'));
         if(!isset($this->user['id'])) {
             $redirect = "http://www.ymlypt.com/travel/news_detail/id/".$id;
+            if($inviter_id) {
+                $redirect.='/inviter_id/'.$inviter_id;
+            }
             if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
                //微信授权登录
                     $code = Filter::sql(Req::args('code'));
@@ -1467,23 +1532,25 @@ class TravelController extends Controller
                             $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
 
                             if(!$oauth_user) { //未注册
+                                $open_name = $userinfo['open_name'];
+                                $open_name = Common::replace_specialChar($open_name);
                                 //插入user表
                                 $passWord = CHash::random(6);
                                 $validcode = CHash::random(8);
-                                $user_id = $this->model->table("user")->data(array('nickname' => $userinfo['open_name'], 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+                                $user_id = $this->model->table("user")->data(array('nickname' => $open_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
                                 $name = "u" . sprintf("%09d", $user_id);
                                 $email = $name . "@no.com";
                                 $time = date('Y-m-d H:i:s');
                                 $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
 
                                 //插入customer表
-                                $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $userinfo['open_name'], 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+                                $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $open_name, 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
                                 Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
 
                                 //插入oauth_user表
                                 $this->model->table('oauth_user')->data(array(
                                         'user_id' => $user_id, 
-                                        'open_name' => $userinfo['open_name'],
+                                        'open_name' => $open_name,
                                         'oauth_type' => "wechat",
                                         'posttime' => time(),
                                         'token' => $token['access_token'],
@@ -1504,7 +1571,7 @@ class TravelController extends Controller
                                 $this->user['id'] = $user_id;
                             }
                             if($inviter_id && $user_id){
-                                Common::buildInviteShip($inviter_id, $user_id, 'wechat');
+                                Common::buildInviteShip($inviter_id, $user_id, 'news_share');
                             }   
                         }
                     } else {
@@ -1530,6 +1597,103 @@ class TravelController extends Controller
         $this->assign("id",$id);
         $this->assign('user_id',$this->user['id']);
         $this->redirect();    
+    }
+
+    public function double11()
+    {
+        // $inviter_id = Filter::int(Req::args('inviter_id'));
+        // if(!isset($this->user['id']) || $this->user['id']==null) {
+        //     $redirect = "http://www.ymlypt.com/travel/double11";
+        //     if($inviter_id) {
+        //         $redirect.='/inviter_id/'.$inviter_id;
+        //     }
+        //     if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+        //        //微信授权登录
+        //             $code = Filter::sql(Req::args('code'));
+        //             $oauth = new WechatOAuth();
+                    
+        //             $url = $oauth->getCodes($redirect);
+        //             if($code) {
+        //                 $extend = null;
+        //                 $token = $oauth->getAccessToken($code, $extend);
+        //                 $userinfo = $oauth->getUserInfo();
+        //                 if(!empty($userinfo)) {
+        //                     $openid = $token['openid'];
+        //                     $oauth_user = $this->model->table('oauth_user')->where("oauth_type='wechat' AND open_id='{$openid}'")->find();
+
+        //                     if(!$oauth_user) { //未注册
+        //                         $open_name = $userinfo['open_name'];
+        //                         $open_name = Common::replace_specialChar($open_name);
+        //                         //插入user表
+        //                         $passWord = CHash::random(6);
+        //                         $validcode = CHash::random(8);
+        //                         $user_id = $this->model->table("user")->data(array('nickname' => $open_name, 'password' => CHash::md5($passWord, $validcode), 'avatar' => $userinfo['head'], 'validcode' => $validcode))->insert();
+        //                         $name = "u" . sprintf("%09d", $user_id);
+        //                         $email = $name . "@no.com";
+        //                         $time = date('Y-m-d H:i:s');
+        //                         $this->model->table("user")->data(array('name' => $name, 'email' => $email))->where("id = ".$user_id)->update();
+
+        //                         //插入customer表
+        //                         $this->model->table("customer")->data(array('user_id' => $user_id, 'real_name' => $open_name, 'point_coin'=>200, 'reg_time' => $time, 'login_time' => $time))->insert();
+        //                         Log::pointcoin_log(200, $user_id, '', '微信新用户积分奖励', 10);
+
+        //                         //插入oauth_user表
+        //                         $this->model->table('oauth_user')->data(array(
+        //                                 'user_id' => $user_id, 
+        //                                 'open_name' => $open_name,
+        //                                 'oauth_type' => "wechat",
+        //                                 'posttime' => time(),
+        //                                 'token' => $token['access_token'],
+        //                                 'expires' => $token['expires_in'],
+        //                                 'open_id' => $token['openid']
+        //                             ))->insert();
+
+        //                         //记录登录信息
+        //                         $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
+        //                         $obj['open_id'] = $token['openid'];
+        //                         $this->safebox->set('user', $obj, 1800);
+        //                         $this->user['id'] = $user_id;
+        //                     } else { //已注册
+        //                         $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
+        //                         $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
+        //                         $this->safebox->set('user', $obj, 31622400);
+        //                         $user_id = $oauth_user['user_id'];
+        //                         $this->user['id'] = $user_id;
+        //                     }
+        //                     if($inviter_id && $user_id){
+        //                         Common::buildInviteShip($inviter_id, $user_id, 'wechat');
+        //                     }   
+        //                 }
+        //             } else {
+        //                 header("Location: {$url}"); 
+        //             }
+        //     } else {
+        //         $this->redirect('/active/login/redirect/double11');
+        //     }
+        //  }
+        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        if(strpos($agent, 'android')==true) {
+            $platform = 'android';
+        } else {
+            $platform = 'ios';
+        }
+        $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
+        $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
+
+        $jssdk = new JSSDK($wechatcfg['app_key'], $wechatcfg['app_secret']);
+        $signPackage = $jssdk->GetSignPackage();
+        
+        $config = Config::getInstance()->get("globals");
+
+        $this->assign("config", $config);
+        $this->assign("signPackage", $signPackage);
+        $this->assign("platform",$platform);
+        $this->redirect();
+    }
+
+    public function test()
+    {
+        $this->redirect();
     }
 
 }    

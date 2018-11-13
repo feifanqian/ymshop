@@ -344,13 +344,20 @@ class PaymentAction extends Controller {
        if(!$seller_id){
         $this->code = 1158;
        }
-       if(in_array($seller_id, [101738,87455,55568,8158,25795,31751]) && date('Y-m-d H:i:s')>'2018-05-15 12:00:00' && date('Y-m-d H:i:s')<'2018-06-15 12:00:00'){
-            $this->code = 1237;
-            return;
-        }
-       if(in_array($seller_id, [55568,21079])) {
-            $this->code = 1237;
-            return;
+       //黑名单
+        $blacklist = $this->model->table('blacklist')->findAll();
+        if($blacklist) {
+            $ids = array();
+            foreach($blacklist as $k =>$v) {
+                $ids[] = $v['user_id'];
+            }
+            if(in_array($seller_id, $ids)) {
+                $black = $this->model->table('blacklist')->where('user_id='.$seller_id)->find();
+                if(date('Y-m-d H:i:s')>$black['start_time'] && date('Y-m-d H:i:s')<$black['end_time']) {
+                    $this->code = 1237;
+                    return;
+                }    
+            }
         }
        if(!$payment_id){
          $this->code = 1157;
@@ -562,11 +569,11 @@ class PaymentAction extends Controller {
 
    public function pay_qrcode(){
     $user_id = $this->user['id'];
-    if($user_id==1) {
+    // if($user_id==1) {
         $url = Url::fullUrlFormat("/travel/demo/inviter_id/".$user_id);
-    } else {
-        $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
-    }
+    // } else {
+    //     $url = Url::fullUrlFormat("/ucenter/demo/inviter_id/".$user_id);
+    // }
     $promoter = $this->model->table('district_promoter')->fields('id,user_id,qrcode_no,join_time')->where('user_id='.$user_id)->find();
     if($promoter['qrcode_no']=='') {
         $no = '0000'.$promoter['id'].rand(1000,9999);
@@ -1123,12 +1130,12 @@ class PaymentAction extends Controller {
             return;
         }
         $customer = $this->model->table('customer')->where('user_id='.$this->user['id'])->find();
-        if($customer['balance']<0.01) {
+        if($customer['balance']<3600) {
             $this->code = 1309;
             return;
         }
         $this->model->table('customer')->data(['balance'=>"`balance`-0.01"])->where('user_id='.$this->user['id'])->update();
-        Log::balance(-0.01, $this->user['id'], '','加盟商家服务费', 23);
+        Log::balance(-3600, $this->user['id'], '','加盟商家服务费', 23);
         $inviter_info = $this->model->table("invite")->where("invite_user_id=".$this->user['id'])->find();
         $promoter_data['user_id']=$this->user['id'];
         $promoter_data['shop_name'] = $customer['real_name'];
@@ -1138,6 +1145,25 @@ class PaymentAction extends Controller {
         $promoter_data['status']=1;
         $promoter_data['base_rate']='3.00';
         $this->model->table("district_promoter")->data($promoter_data)->insert();
+        $this->code = 0;
+        return;
+    }
+
+    public function be_vip_by_point()
+    {
+        $customer = $this->model->table('customer')->fields('point_coin')->where('user_id='.$this->user['id'])->find();
+        $user = $this->model->table('user')->fields('is_vip')->where('id='.$this->user['id'])->find();
+        if($user['is_vip']==1) {
+            $this->code = 1310;
+            return;
+        }
+        if($customer['point_coin']<3000) {
+            $this->code = 1149;
+            return;
+        }
+        $this->model->table("customer")->data(array('point_coin'=>"`point_coin`-3000"))->where('user_id='.$this->user['id'])->update();
+        Log::pointcoin_log(3000, $this->user['id'], '', '积分兑换VIP', 14);
+        $this->model->table('user')->data(['is_vip'=>1])->where('id='.$this->user['id'])->update();
         $this->code = 0;
         return;
     }

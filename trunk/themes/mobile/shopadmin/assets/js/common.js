@@ -8,6 +8,7 @@ $(function () {
         loading = true;
         $(".weui-infinite-scroll").show();
         if ($(".pagelist .current").next().is("a") && $(".pagelist .current").next().attr("href")) {
+            console.log(111);
             $.ajax({
                 url: $(".pagelist .current").next().attr("href"),
                 dataType: 'json',

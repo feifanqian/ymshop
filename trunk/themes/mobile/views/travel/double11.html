@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=640, user-scalable=no">
+
+<!-- add by dallon 2018.09.30 start-->
+    <meta name="MobileOptimized" content="width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+<!-- add by dallon 2018.09.30 end-->
+
+    <!-- <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/8.0.0/normalize.min.css"> -->
+    <!-- <link rel="stylesheet" href="/static/yuanmeng/three-level/css/way_detail.css"> -->
+    <style type="text/css">
+     body{
+      background-image: url(/themes/mobile/images/double11.jpg);
+      background-size: cover;
+      /*background-repeat: no-repeat;*/
+     }
+      .button{
+        display:block;
+        text-decoration: none;
+        color: #fff;
+        position: fixed;
+        bottom: 10px;
+        width: 80%;
+        height: 45px;
+        margin-left: 10%;
+        border-radius: 6px;
+        background-color:#169bd5;
+        line-height: 45px;
+        text-align: center; 
+      }
+      .button1{
+        display: block;
+        text-decoration: none;
+        color: #e83572;
+        position: fixed;
+        top: 72%;
+        width: 64%;
+        height: 45px;
+        margin-left: 18%;
+        border-radius: 20px;
+        background-color: #fff;
+        line-height: 45px;
+        text-align: center;
+        font-size: 20px;
+      }
+      .main p{
+        color:#696969;
+      }
+        .layui-m-layermain{
+            height: 15% !important;
+        }
+        .layui-m-layercont{
+         text-align: left !important;
+         padding: 20px 20px !important;
+        }
+        .layui-m-layerchild h3{
+            height: 50px;
+            line-height: 74px;
+        }
+        .layui-m-layercont p{
+        float: right;
+        }
+        .layui-m-layercont img{
+            width: 100% !important;
+        }
+        #app{
+          margin: auto;
+          width: 100%;
+          height: 100%;
+        }
+        #font-share{
+          width: 50%;
+          height: 30px;
+          top: 70%;
+          position: fixed;
+          margin-left: 25%;
+        }
+        #copy_share{
+          width: 80%;
+          height: 30px;
+          top: 77%;
+          position: fixed;
+          margin-left: 14%;
+        }
+        #share-button{
+          width: 50px;
+          margin-top: 4%;
+          margin-left: 82%;
+        }
+    </style>
+    <title>超级红包主会场</title>
+</head>
+<body>
+<div id="app">
+    <!-- <a href="taobao://" id="open">打开应用</a> -->
+    <!-- <a href="javascript:;" class="button" id="shareWechat">分享</a> -->
+    <div id="share-button"><img src="/themes/mobile/images/fenxiang@2x.png" style="width: 100%;"></div>
+    <a href="javascript:;" class="button1" id="open">领取红包</a>
+    <!-- <div id="font-share"><img src="/themes/mobile/images/double_get.png" style="width: 100%;"></div> -->
+    <!-- <div id="copy_share">
+       <div id="copy" style="width: 40%;float: left;"><img src="/themes/mobile/images/copy_taostr.png" style="width: 100%;"></div>
+       <div id="share" style="width: 40%;margin-left: 10%;float: left;"><img src="/themes/mobile/images/share_code.png" style="width: 100%;"></div>
+    </div> -->
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="/themes/mobile/js/layer_mobile/layer.js"></script>
+<script type="text/javascript" src="https://hm.baidu.com/hm.js?d69321757dcfbfbe09dbddd4dca87b28"></script>
+<script type="text/javascript" src="/themes/mobile/js/nativeShare.js"></script>
+<script type="text/javascript">
+ wx.config({
+   debug:  false,  //调式模式，设置为ture后会直接在网页上弹出调试信息，用于排查问题
+   appId: '{$signPackage["appId"]}',
+   timestamp: '{$signPackage["timestamp"]}',
+   nonceStr: '{$signPackage["nonceStr"]}',
+   signature: '{$signPackage["signature"]}',
+   jsApiList: [  //需要使用的网页服务接口
+       // 'checkJsApi',  //判断当前客户端版本是否支持指定JS接口
+       'onMenuShareTimeline', //分享给好友
+       'onMenuShareAppMessage', //分享到朋友圈
+       'onMenuShareQQ',  //分享到QQ
+       'onMenuShareWeibo' //分享到微博
+   ]
+ });
+//  wx.checkJsApi({
+//     jsApiList: [
+//         'getLocation',
+//         'onMenuShareTimeline',
+//         'onMenuShareAppMessage'
+//     ],
+//     success: function (res) {
+//       alert(JSON.stringify(res));
+//     }
+// });
+// $('#share-button').on("click",function(){
+//    layer.open({
+//             type: 3,
+//             skin: 'layui-layer-rim', //加上边框
+//             area: ['100%', '400px'], //宽高
+//             content: "<img src='/themes/mobile/images/new_share.png'>"
+//     });
+// });
+    
+    var imgUrl = "";
+    // var lineLink = 'http://www.ymlypt.com/active/login/redirect/recruit/inviter/'+user_id;
+     var lineLink = '';
+    var descContent = "超级红包主会场";
+    var shareTitle = "超级红包主会场";
+    wx.ready(function () {   //ready函数用于调用API，如果你的网页在加载后就需要自定义分享和回调功能，需要在此调用分享函数。//如果是微信游戏结束后，需要点击按钮触发得到分值后分享，这里就不需要调用API了，可以在按钮上绑定事件直接调用。因此，微信游戏由于大多需要用户先触发获取分值，此处请不要填写如下所示的分享API
+        wx.onMenuShareAppMessage({  //例如分享到朋友圈的API  
+           title: shareTitle, // 分享标题
+           desc: descContent, 
+           link: lineLink, // 分享链接
+           imgUrl: imgUrl, // 分享图标
+           success: function () {
+               alert('分享成功');
+           },
+           cancel: function () {
+               // 用户取消分享后执行的回调函数
+               alert('取消分享');
+           }
+        });
+        wx.onMenuShareTimeline({
+            title: shareTitle, // 分享标题
+            desc: descContent, 
+            link: lineLink, // 分享链接
+            imgUrl: imgUrl, // 分享图标
+            success: function () {
+                alert('分享成功');
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+                alert('取消分享');
+            }
+        });
+    });
+  
+wx.error(function (res) {
+ alert(res.errMsg);  //打印错误消息。及把 debug:false,设置为debug:ture就可以直接在网页上看到弹出的错误提示
+});
+
+var downloader, 
+    // scheme = 'taobao://item.taobao.com',  // 需要打开的 scheme 地址
+    scheme = "taobao://s.click.taobao.com/1ASHfKw",
+    // scheme = 'taobao://m.taobao.com/#index',  // 需要打开的 scheme 地址
+    download='https://a.app.qq.com/o/simple.jsp?pkgname=com.taobao.taobao&source=tripshare_taobao_click';  // 如果打开scheme失效的app下载地址
+
+// 给 id 为 open 的按钮添加点击事件处理函数
+document.getElementById('open').onclick = function () {
+        window.location.href = scheme;  // 尝试打开 scheme 
+
+        // 设置3秒的定时下载任务，3秒之后下载app
+        downloader = setTimeout(function(){
+            window.location.href = download;
+        }, 3000);
+
+        document.addEventListener('visibilitychange webkitvisibilitychange', function () {
+            // 如果页面隐藏，推测打开scheme成功，清除下载任务
+            if (document.hidden || document.webkitHidden) {
+                clearTimeout(downloader);
+            }
+        });
+
+        window.addEventListener('pagehide', function() {
+            clearTimeout(downloader);
+        });
+
+    };
+
+    var downloaders; 
+    var schemes = "yuanmeng://www.ymlypt.com/travel/double11";
+    var platform = "{$platform}";
+    var downloads;
+    if(platform=='android') {
+       downloads = "{$config['site_androidurl']}";
+    } else {
+      downloads = "{$config['site_iosurl']}";
+    }
+
+// 给 id 为 open 的按钮添加点击事件处理函数
+document.getElementById('share-button').onclick = function () {
+        window.location.href = schemes;  // 尝试打开 scheme 
+
+        // 设置3秒的定时下载任务，3秒之后下载app
+        downloaders = setTimeout(function(){
+            window.location.href = downloads;
+        }, 3000);
+
+        document.addEventListener('visibilitychange webkitvisibilitychange', function () {
+            // 如果页面隐藏，推测打开scheme成功，清除下载任务
+            if (document.hidden || document.webkitHidden) {
+                clearTimeout(downloaders);
+            }
+        });
+
+        window.addEventListener('pagehide', function() {
+            clearTimeout(downloaders);
+        });
+
+    };
+ 
+</script>
+</body>
+</html>

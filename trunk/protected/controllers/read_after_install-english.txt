@@ -1,0 +1,16 @@
+--- Launch phpMyAdmin
+When starting phpMyAdmin, you will be asked for a user name and password.
+After installing Wampserver 3, the default username is "root" (without quotes) and there is no password, which means that you must leave the form Password box empty.
+There will be a warning:
+You are connected as 'root' with no password, which corresponds to the default MySQL privileged account. Your MySQL server is running with this default, is open to intrusion, and you really should fix this security hole by setting a password for user 'root'.
+This is not a problem as long as access to Phpmyadmin remain locally.
+However, some web applications or CMS asking that the MySQL user has a password. In which case, you will create a user with password via the PhpMyAdmin Accounts Users tab.
+
+--- Using the menus and submenus of Wampmanager
+Do not use the keyboard to navigate through the menus and submenus of Wampmanager icon.
+
+--- For questions regarding Wampserver 3
+Please use the specific forum: http://forum.wampserver.com/list.php?2
+Do not use an existing discussion, but create your own thread:
+New Topic
+after having read  READ BEFORE YOU ASK A QUESTION in this forum.

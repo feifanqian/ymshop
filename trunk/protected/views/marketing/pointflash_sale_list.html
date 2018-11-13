@@ -20,7 +20,7 @@
                 <th style="width:120px">结束时间</th>
                 <th style="width:60px">状态</th>
             </tr>
-                {query:name=pointflash_sale as ps fields=ps.* , go.name as name,go.store_nums join=left join goods as go on ps.goods_id eq go.id id=$obj page=1}
+                {query:name=pointflash_sale as ps fields=ps.* , go.name as name,go.store_nums join=left join goods as go on ps.goods_id eq go.id order=ps.id desc id=$obj page=1}
                 <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
                   <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
                     <li><a class="icon-pencil" href="javascript:;" onclick="layer_open('{url:/marketing/pointflash_sale_set/type/edit/id/$item[id]}');"> 编辑</a></li>

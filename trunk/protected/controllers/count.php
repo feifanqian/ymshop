@@ -2086,9 +2086,9 @@ class CountController extends Controller
             $where3 = "pay_time between '$stime' and '$etime' and pay_status=1 and payment in (8,9,10,16,17)";
             $where4 = "pay_time between '$stime' and '$etime' and pay_status=1 and payment in (1,2,3,4,5)";
             $where5 = "submit_date between '$stime' and '$etime' and status=1 and type=0";
-            $where6 = "submit_date between '$stime' and '$etime' and status=0 and type=0";
+            $where6 = "apply_date between '$stime' and '$etime' and status=0 and type=0";
             $where7 = "submit_date between '$stime' and '$etime' and status=1 and type=1";
-            $where8 = "submit_date between '$stime' and '$etime' and status=0 and type=1";
+            $where8 = "apply_date between '$stime' and '$etime' and status=0 and type=1";
         } else {
             $where = "status=1";
             $where1 = "pay_status=1";
@@ -2100,6 +2100,7 @@ class CountController extends Controller
             $where7 = "status=1 and type=1";
             $where8 = "status=0 and type=1";
         }
+        // var_dump($where5);die;
         $model = new Model();
         $order_num = $model->table('order')->fields('count(id) as num')->where($where1)->query();
         $offline_order_num = $model->table('order_offline')->fields('count(id) as num')->where($where1)->query();

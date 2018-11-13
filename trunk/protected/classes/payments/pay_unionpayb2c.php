@@ -123,7 +123,7 @@ class pay_unionpayb2c extends PaymentPlugin {
         }else{
             $refund->data(array('bank_handle_time'=>date("Y-m-d H:i:s"),'refund_progress'=>2,'refund_no'=>'R'.$order_no))->where("id =$refund_id")->update();
             $ordermodel = new Model("order as o");
-                $order_model = $ordermodel->fields('o.user_id,o.order_amount,o.id,og.goods_id')->join('left join order_goods as og on o.id=og.order_id')->where('o.order_no='.$order_no)->find();
+                $order_model = $ordermodel->fields('o.user_id,o.order_amount,o.id,og.goods_id,o.order_no')->join('left join order_goods as og on o.id=og.order_id')->where('o.order_no='.$order_no)->find();
                 if($order_model){
                    Common::backIncomeByInviteShip($order_model); //收回收益
                 }

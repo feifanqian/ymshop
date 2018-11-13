@@ -4,14 +4,14 @@
 {echo:JS::import('dialogtools');}
 <div id="obj_form" class="form2 tab">
     {if:isset($contract) and $contract!=null}
-       <h1 class="page_title">商户合约(状态：{$status[$contract['status']]})</h1>
+       <h1 class="page_title">商户合约{if:$contract['url4']!=null}(状态：{$status[$contract['status']]}){if:$contract['status']==2}原因：{$contract['reason']}{/if}{/if}</h1>
         {if:isset($contract['url4']) and $contract['url4']!=null}
         <div class="tools_bar clearfix">
             <a class="button" href="javascript:;" onclick="downloadIamge('.img1',{$contract['id']})" style="margin-right: 50px;"> 下载图片</a>
             <a class="button" href="{url:/districtadmin/export_contract/id/$contract[id]}" style="margin-right: 50px;"> 下载合约</a> 
             {if:$contract['status']==0}
             &nbsp;&nbsp;&nbsp;<a class="button" href="javascript:;" onclick="do_act({$contract['id']},1)" style="margin-right: 50px;"> 通过审核</a>
-            &nbsp;&nbsp;&nbsp;<a class="button" href="javascript:;" onclick="do_act({$contract['id']},2)"> 拒绝审核</a>
+            &nbsp;&nbsp;&nbsp;<a class="button" href="javascript:;" onclick="cancel({$contract['id']},2)"> 拒绝审核</a>
             {/if}
         </div>
         {/if}
@@ -47,11 +47,6 @@
 <script type="text/javascript">
 function do_act(id,status){
     var reason = '';
-    if(status==-1) {
-        layer.prompt({title: '请输入作废理由', formType: 2}, function(reason, index){
-        layer.close(index);
-      });
-    };
      
      var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
      $.post("{url:/districtadmin/contract_do}",{id:id,status:status,reason:reason},function(data){
@@ -65,6 +60,22 @@ function do_act(id,status){
             layer.msg(data.msg, {icon: 5}); 
           }
         },'json');
+}
+function cancel(id){
+     layer.prompt({title: '请输入作废理由', formType: 2}, function(text, index){
+     layer.close(index);
+     var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+     $.post("{url:/districtadmin/contract_do}",{id:id,status:2,reason:text},function(data){
+            layer.close(index);
+            if(data.status=='success'){
+            layer.msg('您拒绝了认证申请，理由是：'+text, {icon: 6},function(){
+                window.location='{url:/districtadmin/list_promoter}';
+            }); 
+          }else{
+            layer.msg(data.msg, {icon: 5}); 
+          }
+        },'json');
+   });
 }
 function downloadIamge(selector, id) {
     var name = id+".png";  

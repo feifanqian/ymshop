@@ -225,6 +225,7 @@ class LinuxCliTask{
 
     #淘宝订单定时分佣
     public function autoMaidByAdzoneid() {
+        $model = new Model();
         $order = $this->model->table('taoke')->fields('id,create_time,goods_name,goods_id,goods_number,order_status,order_amount,goods_price,effect_prediction,estimated_revenue,order_sn,adv_id')->where("is_handle=0")->findAll();
         if($order) {
             foreach ($order as $k => $v) {
@@ -245,9 +246,9 @@ class LinuxCliTask{
                         break;
                 }
                 if($user) {
-                    //买家id
-                    $user_id = $user['id'];
                     //邀请人id
+                    $user_id = $user['id'];
+                    //邀请人上级id
                     // $inviter_id = Common::getInviterId($user_id);
 
                     $log = array(
@@ -270,6 +271,13 @@ class LinuxCliTask{
                         $log['amount'] = $v['effect_prediction'];
                         $this->model->table('benefit_log')->data($log)->insert();
                     } else {
+                        $base_balance = $v['effect_prediction'];
+                        $config = Config::getInstance()->get("district_set");
+                        
+                        $promoter_rate = $config['promoter_rate1']; //40%
+                        $district_rate = $config['district_rate1']; //16%
+                        $promoter2_rate = $config['promoter2_rate1']; //8%
+
                         //上级代理商
                         $promoter = $this->model->table('district_promoter')->where('user_id='.$user_id)->find();
                         if($promoter) {
@@ -277,7 +285,6 @@ class LinuxCliTask{
                         } else {
                             $promoter_id = Common::getFirstPromoter($user_id);
                         }
-                        // $promoter_id = Common::getFirstPromoter($user_id);
                         //上级经销商
                         $district = $this->model->table('district_shop')->where('owner_id='.$user_id)->find();
                         if($district) {
@@ -285,49 +292,107 @@ class LinuxCliTask{
                         } else {
                             $district_id = Common::getFirstDistrictId($user_id);
                         }
-                        // $district_id = Common::getFirstDistrictId($user_id);
                         
                         if($user_id == $promoter_id) {
                             if($district_id == $user_id) {
                                 $log['user_id'] = $user_id;
-                                $log['amount'] = $v['effect_prediction']*0.7;
+                                // $log['amount'] = $v['effect_prediction']*0.7;
+                                $log['amount'] = round($base_balance*($promoter_rate+$district_rate+$promoter2_rate)/100,2); //0.4+0.2+0.1
                                 $this->model->table('benefit_log')->data($log)->insert();
                             }else{
                                 $log['user_id'] = $user_id;
-                                $log['amount'] = $v['effect_prediction']*0.6;
+                                // $log['amount'] = $v['effect_prediction']*0.6;
+                                $log['amount'] = round($base_balance*($promoter_rate+$district_rate)/100,2); //0.4+0.2
                                 $this->model->table('benefit_log')->data($log)->insert();
 
                                 $log['user_id'] = $district_id;
-                                $log['amount'] = $v['effect_prediction']*0.1;
+                                // $log['amount'] = $v['effect_prediction']*0.1;
+                                $log['amount'] = round($base_balance*($promoter2_rate)/100,2); //0.1
                                 $this->model->table('benefit_log')->data($log)->insert();
                             }
                         } else {
                             $log['user_id'] = $user_id;
-                            $log['amount'] = $v['effect_prediction']*0.4;
+                            // $log['amount'] = $v['effect_prediction']*0.4;
+                            $log['amount'] = round($base_balance*($promoter_rate)/100,2); //0.4
                             $this->model->table('benefit_log')->data($log)->insert();
 
                             if($district_id == $promoter_id){
                                 $log['user_id'] = $promoter_id;
-                                $log['amount'] = $v['effect_prediction']*0.3;
+                                // $log['amount'] = $v['effect_prediction']*0.3;
+                                $log['amount'] = round($base_balance*($district_rate+$promoter2_rate)/100,2); //0.2+0.1
                                 $this->model->table('benefit_log')->data($log)->insert();
                             }else{
                                 $log['user_id'] = $promoter_id;
-                                $log['amount'] = $v['effect_prediction']*0.2;
+                                // $log['amount'] = $v['effect_prediction']*0.2;
+                                $log['amount'] = round($base_balance*($district_rate)/100,2); //0.2
                                 $this->model->table('benefit_log')->data($log)->insert();
 
                                 $log['user_id'] = $district_id;
-                                $log['amount'] = $v['effect_prediction']*0.1;
+                                // $log['amount'] = $v['effect_prediction']*0.1;
+                                $log['amount'] = round($base_balance*($promoter2_rate)/100,2); //0.1
+                                $this->model->table('benefit_log')->data($log)->insert();
+                            }  
+                        }
+                        $first_vip = $this->getFirstVip($user_id);
+                         $vip_rate = $config['vip_rate']; //6%超级vip池
+                         $encourage = $config['encourage'];
+                         if($first_vip) {
+                            $inviter_infos = $model->table("invite")->fields('invite_user_id')->where('user_id='.$first_vip)->findAll();
+                            $ids = array();
+                            if($inviter_infos) {
+                                foreach($inviter_infos as $k1 =>$v1) {
+                                   $ids[] = $v1['invite_user_id'];
+                                }
+                            }
+                            $user_ids = $ids!=null?implode(',', $ids):'';
+                            if($user_ids!='') {                  
+                               $last= strtotime("-1 month", time());
+                               $last_lastday = date("Y-m-t", $last);//上个月最后一天
+                               $last_firstday = date('Y-m-01', $last);//上个月第一天
+                               $order_num = $model->table('order')->where("pay_status=1 and status in (3,4) and user_id in ($user_ids) and create_time between '{$last_firstday}' and '{$last_lastday}'")->count(); 
+                           } else {
+                               $order_num = 0;
+                           }
+                           if($order_num>=100) {
+                             $balance9 = round($base_balance*($vip_rate+$encourage)/100,2); //超级vip6%+10%激励金分润
+                           } else {
+                             $balance9 = round($base_balance*($vip_rate)/100,2); //超级vip6%分润
+                           }
+                           if($balance9>0) {
+                                $log['user_id'] = $first_vip;
+                                $log['amount'] = $balance9;
                                 $this->model->table('benefit_log')->data($log)->insert();
                             }
-                            
-                        }
+                         }
                     }
-                    
                 }
             $this->model->table('taoke')->data(array('is_handle'=>1))->where('id='.$v['id'])->update();    
             }
         }
     }
+
+    public function getFirstVip($user_id){
+        $model = new Model(); 
+        $user_info = $model->table("invite")->where("invite_user_id=".$user_id)->find();
+        if($user_info) {
+            $inviter2 = $user_info['user_id']; //第二个邀请人
+                $user2 = $model->table("user")->fields('is_vip')->where("id=".$inviter2)->find();
+                if($user2['is_vip']==1) {
+                    $first_vip = $inviter2;
+                } else {
+                    $user1 = $model->table("user")->fields('is_vip')->where("id=".$user_id)->find();
+                    if($user1['is_vip']==1) {
+                        $first_vip = $user_id;
+                    } else {
+                        // $first_vip = 1; //分给平台
+                        $first_vip = false;
+                    }
+                }
+            return $first_vip;
+        } else {
+            return false;
+        }
+     }
 
     #定期结算上个月淘客订单
     public function autoSettleTaoke(){

@@ -7,38 +7,45 @@
     <form action="{url:/districtadmin/promoter_save}" method="post" >
         <input type="hidden" name="id" value="{$promoter['id']}">
         <dl class="lineD">
-            <dt>专区名称：</dt>
+            <dt>商家所有者用户名：</dt>
             <dd>
                 <input name="real_name" type="text" pattern="required" value="{$customer['real_name']}" readonly="readonly">
-                <label>专区名称</label>
+                <label>商家名称</label>
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>专区经度：</dt>
+            <dt>商家店铺名称：</dt>
+            <dd>
+                <input name="shop_name" type="text" pattern="required" value="{$promoter['shop_name']}">
+                <label>商家店铺名称</label>
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>商家经度：</dt>
             <dd>
                 <input name="lng" type="text" value="{$promoter['lng']}">
-                <label>专区经度</label>
+                <label>商家经度</label>
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>专区纬度：</dt>
+            <dt>商家纬度：</dt>
             <dd>
                 <input name="lat" type="text" value="{$promoter['lat']}">
-                <label>专区经度</label>
+                <label>商家经度</label>
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>专区位置：</dt>
+            <dt>商家位置：</dt>
             <dd>
                 <input name="location" type="text" value="{$promoter['location']}">
                 <label>地理位置</label>
             </dd>
         </dl>
         <dl class="lineD">
-            <dt>专区详情：</dt>
+            <dt>商家详情：</dt>
             <dd>
                 <input name="info" type="text" value="{$promoter['info']}">
-                <label>专区简介</label>
+                <label>商家简介</label>
             </dd>
         </dl>
         <div style="text-align:left;margin-left:13%;"><input type="submit" value="提交" class="button">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="重置" class="button"></div>

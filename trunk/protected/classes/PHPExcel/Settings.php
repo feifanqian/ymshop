@@ -376,7 +376,7 @@ class PHPExcel_Settings
      *
      * @return int Default options for libxml loader
      */
-    public static function getLibXmlLoaderOptions()
+    public static function getLibXmlLoaderOptions($options = null)
     {
         if (is_null(self::$_libXmlLoaderOptions)) {
             self::setLibXmlLoaderOptions(LIBXML_DTDLOAD | LIBXML_DTDATTR);

@@ -1171,6 +1171,17 @@ class PaymentController extends Controller {
             $sub_openid='';
            }
 
+           // $promoter = $this->model->table('district_promoter')->fields('partner_id')->where('user_id='.$seller_id)->find(); 
+
+           $shop_check = $this->model->table('shop_check')->fields('shop_name,usercode,register_status')->where('user_id='.$seller_id)->find();
+           if($shop_check && $shop_check['shop_name']!=null && $shop_check['usercode']!=null && $shop_check['register_status']==1) {
+            $seller_ids = $shop_check['usercode'];
+            $seller_name = $shop_check['shop_name'];
+           } else {
+            $seller_ids = 'yuanmeng';
+            $seller_name = '圆梦互联网科技（深圳）有限公司';
+           }
+
            $myParams = array();
            if($payment_id==6) {
             $myParams['charset'] = 'utf-8';
@@ -1184,12 +1195,13 @@ class PaymentController extends Controller {
             $myParams['version'] = '3.0';
             $myParams['notify_url'] = 'http://www.ymlypt.com/payment/yinpay_callback';
             $biz_content_arr = array(
+            "appid"=>"wx442dec4e782c99d8",
             "out_trade_no"=>$order_no,
             "subject"=>'圆梦共享网',
             "total_amount"=>$order_amount,
             "currency"=>"CNY",
-            "seller_id"=>'yuanmeng',
-            "seller_name"=>'圆梦互联网科技（深圳）有限公司',
+            "seller_id"=>$seller_ids,
+            "seller_name"=>$seller_name,
             "timeout_express"=>'24h',
             // "business_code"=>'3010001',
             "business_code" => "01000010",
@@ -1204,8 +1216,8 @@ class PaymentController extends Controller {
             $myParams['out_trade_no'] = $order_no;
             $myParams['partner_id'] = 'yuanmeng';
             $myParams['return_url'] = 'http://www.ymlypt.com/travel/order_details';
-            $myParams['seller_id'] = 'yuanmeng';
-            $myParams['seller_name'] = '圆梦互联网科技（深圳）有限公司';
+            $myParams['seller_id'] = $seller_ids;
+            $myParams['seller_name'] = $seller_name;
             $myParams['sign_type'] = 'RSA';
             $myParams['subject'] = '圆梦共享网';
             $myParams['timeout_express'] = '24h';
@@ -1235,7 +1247,10 @@ class PaymentController extends Controller {
         $url = 'https://openapi.ysepay.com/gateway.do';
         $ret = Common::httpRequest($url,'POST',$myParams);
         $ret = json_decode($ret,true);
-
+        if(!isset($ret['ysepay_online_jsapi_pay_response']['jsapi_pay_info'])) {
+            var_dump($myParams);
+            var_dump($ret['ysepay_online_jsapi_pay_response']);die;
+        }
         if($payment_id==6) {
             $result = array(
                 'status'          => 0,
@@ -1710,91 +1725,6 @@ class PaymentController extends Controller {
             exit;
         }
     }
-    
-    //线下微信支付回调
-    public function async_callbacks(){
-        $xml = @file_get_contents('php://input');
-        // $array=Common::xmlToArray($xml);
-        // file_put_contents('./wxpay.php', json_encode($xml) . PHP_EOL, FILE_APPEND);
-        $str=substr(json_encode($xml),-5);
-        $strs=substr($str,0,4);
-        $trxstatus=0;  
-        if($strs=='0000'){    
-            $trxstatus=1;
-        }
-        $payinfo=explode('&',json_encode($xml));
-        $orderarr=$payinfo[4];
-        $order_no=substr($orderarr,-18);
-        //从URL中获取支付方式
-        $payment_id = 6;
-        // var_dump($payment_id);die;
-        $payment = new Payment($payment_id);
-        $paymentPlugin = $payment->getPaymentPlugin();
-        if (!is_object($paymentPlugin)) {
-            echo "fail";
-        }
-
-        if($trxstatus==1){
-            $order=$this->model->table('order_offline')->where("order_no='{$order_no}'")->find();
-            $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('status'=>3,'pay_status'=>1,'delivery_status'=>1,'pay_time'=>date('Y-m-d H:i:s')))->update();
-            // $invite_id=Session::get('invite_id');
-            $invite_id=$order['prom_id'];
-            $seller_id=$order['shop_ids'];             
-            if($invite_id==null){
-                $invite_id=1;
-            }
-            if($seller_id==0){
-                $seller_id=$invite_id;
-            }
-            // $promoter_id=Common::getFirstPromoter($order['user_id']);
-            $exist=$this->model->table('balance_log')->where("order_no='{$order_no}'")->find();
-            if(!$exist){
-                //如果卖家是邀请人的话不参与分账
-                if($seller_id!=$invite_id){
-                    $config = Config::getInstance()->get("district_set");
-                    $promoter = $this->model->table('district_promoter')->fields('base_rate')->where('user_id='.$seller_id)->find();
-                    if($promoter){
-                        $amount = round($order['order_amount']*(100-$promoter['base_rate'])/100,2);
-                    }else{
-                        $amount = round($order['order_amount']*(100-$config['offline_base_rate'])/100,2);
-                    }     
-                    $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$amount})"))->update();//平台收益提成
-                    Log::balance($amount, $seller_id, $order_no,'线下会员消费卖家收益', 20);
-                    Common::offlineBeneficial($order_no,$invite_id,$seller_id);
-                    $this->model->table('order_offline')->where("order_no='{$order_no}'")->data(array('payable_amount'=>$amount))->update();
-                    $money = $amount;
-                }else{
-                    $this->model->table('customer')->where('user_id='.$seller_id)->data(array("offline_balance"=>"`offline_balance`+({$order['order_amount']})"))->update();//平台收益提成
-                     Log::balance($order['order_amount'], $seller_id, $order_no,'线下会员消费卖家收益(不参与分账)', 20);
-                     $money = $order['order_amount'];
-                }
-                #*****************推送消息***************
-                $wechatcfg = $this->model->table("oauth")->where("class_name='WechatOAuth'")->find();
-                $wechat = new WechatMenu($wechatcfg['app_key'], $wechatcfg['app_secret'], '');
-                $token = $wechat->getAccessToken();
-                $oauth_info = $this->model->table("oauth_user")->fields("open_id,open_name")->where("user_id=".$seller_id." and oauth_type='wechat'")->find();
-                if($oauth_info){
-                    $params = array(
-                    'touser' => $oauth_info['open_id'],
-                    'msgtype' => 'text',
-                    "text" => array(
-                            'content' => "亲爱的商家:{$oauth_info['open_name']},您获得商家消费收益{$money}元，请登录个人中心查看。"
-                            )
-                        );
-                    $result = Http::curlPost("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$token}", json_encode($params, JSON_UNESCAPED_UNICODE));
-                }        
-                #****************************************
-            }                            
-        }
-
-        if($trxstatus==1){
-            echo 'success';
-        }else{
-            echo 'fail';
-        }       
-        // echo $str;
-        // $this->returnStatus($trxstatus);
-    }
 
     // 支付回调[异步]
     public function async_callback() {
@@ -2074,6 +2004,7 @@ class PaymentController extends Controller {
             "out_batch_no" =>'S'.substr($order_no,0,15),
             "out_trade_no" => $order_no,
             'payee_usercode' => 'yuanmeng',
+            // 'payee_usercode' =>$shop['partner_id'],
             // "org_no" => "6584000000",
             // "org_no" => "",
             "division_mode" => "01",

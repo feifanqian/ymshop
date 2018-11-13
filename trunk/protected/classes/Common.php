@@ -715,6 +715,20 @@ class Common {
                 $num = $num+1;
                 $model->table('invite_active')->data(['invite_num'=>$num])->where('user_id='.$inviter_id)->update();
             }
+            $start_time = '2018-10-18 00:00:01';
+            $invite_num = $model->table('invite as i')->join('left join customer as c on i.invite_user_id=c.user_id')->where("i.user_id=".$inviter_id." and c.mobile_verified=1 and c.checkin_time>'{$start_time}'")->count();
+            $vip = $model->table('user')->fields('is_vip')->where('id='.$inviter_id)->find();
+            if($invite_num>=2 && $vip['is_vip']==0) { 
+                $type = 'upgrade_vip';
+                $content = "您有5位或以上粉丝成功注册圆梦用户，恭喜您成功获得VIP资格";
+                $platform = 'all';
+                $NoticeService = new NoticeService();
+                $jpush = $NoticeService->getNotice('jpush');
+                $audience['alias'] = array($inviter_id);
+                $jpush->setPushData($platform, $audience, $content, $type, '');
+                $ret = $jpush->push();
+                $model->table('user')->data(['is_vip'=>1])->where('id='.$inviter_id)->update();
+            }
             if($result){
                 return true;
             }else{
@@ -839,27 +853,13 @@ class Common {
 
          $inviter_info = $model->table("invite")->where("invite_user_id=".$order['user_id'])->find();
          if($inviter_info){
-                $base_balance = round($order['order_amount']*$goods['inviter_rate']/100,2);
                 $config = Config::getInstance()->get("district_set");
+                $base_balance = round($order['order_amount']*($goods['inviter_rate']-$config['handling_rate'])/100,2);
                 
-                $inviter_inviter = $model->table("invite")->where("invite_user_id=".$inviter_info['user_id'])->find(); //上级邀请人的邀请人
-                if($inviter_inviter) {
-                    // 判断是不是超级vip
-                    $user = $model->table('user')->fields('is_vip')->where('id='.$inviter_inviter['user_id'])->find();
-                    if($user['is_vip']==1) {
-                        $promoter_rate = $config['promoter_rate1'];
-                        $district_rate = $config['district_rate1'];
-                        $promoter2_rate = $config['promoter2_rate1'];    
-                    } else {
-                        $promoter_rate = $config['promoter_rate'];
-                        $district_rate = $config['district_rate'];
-                        $promoter2_rate = $config['promoter2_rate'];
-                    }
-                } else {
-                    $promoter_rate = $config['promoter_rate'];
-                    $district_rate = $config['district_rate'];
-                    $promoter2_rate = $config['promoter2_rate']; 
-                }
+                $promoter_rate = $config['promoter_rate1'];
+                $district_rate = $config['district_rate1'];
+                $promoter2_rate = $config['promoter2_rate1'];
+
                 $plat_rate = $config['plat_rate1'];
                 $encourage = $config['encourage'];
                 $reward1 = $config['reward3'];
@@ -871,7 +871,7 @@ class Common {
                 $balance3 = round($base_balance*$promoter2_rate/100,2);
                 $balance4 = round($base_balance*$plat_rate/100,2);
                 
-                $balance5 = round($base_balance*$encourage/100,2); //激励金
+                $balance5 = round($base_balance*$encourage/100,2); //10%激励金
                 $balance6 = round($base_balance*$reward1/100,2); //2%奖金池
                 $balance7 = round($base_balance*$reward2/100,2); //3%奖金池
                 $balance8 = round($base_balance*$ready_rate/100,2); //5%预备金
@@ -879,6 +879,8 @@ class Common {
                 $district = $model->table('district_shop')->fields('owner_id')->where('id='.$inviter_info['district_id'])->find();
                  if($district) {
                     $district_id = $district['owner_id'];
+                 } else {
+                    $district_id = 0;
                  }
 
              if($balance1>0) {
@@ -887,6 +889,36 @@ class Common {
                    Log::balance($balance1, $inviter_info['user_id'], $order['order_no'],'线上消费收益(上级邀请者)', 5); 
              }
              // var_dump(111);
+             // 获取上级超级vip及B级粉丝当月总订单数
+             $first_vip = self::getFirstVip($order['user_id']);
+             $vip_rate = $config['vip_rate']; //6%超级vip池
+             if($first_vip) {
+                $inviter_infos = $model->table("invite")->fields('invite_user_id')->where('user_id='.$first_vip)->findAll();
+                $ids = array();
+                if($inviter_infos) {
+                    foreach($inviter_infos as $k =>$v) {
+                       $ids[] = $v['invite_user_id'];
+                    }
+                }
+                $user_ids = $ids!=null?implode(',', $ids):'';
+                if($user_ids!='') {                  
+                   $last= strtotime("-1 month", time());
+                   $last_lastday = date("Y-m-t", $last);//上个月最后一天
+                   $last_firstday = date('Y-m-01', $last);//上个月第一天
+                   $order_num = $model->table('order')->where("pay_status=1 and status in (3,4) and user_id in ($user_ids) and create_time between '{$last_firstday}' and '{$last_lastday}'")->count(); 
+               } else {
+                   $order_num = 0;
+               }
+               if($order_num>=100) {
+                 $balance9 = round($base_balance*($vip_rate+$encourage)/100,2); //超级vip6%+10%激励金分润
+               } else {
+                 $balance9 = round($base_balance*($vip_rate)/100,2); //超级vip6%分润
+               }
+               if($balance9>0) {
+                    $model->table('customer')->where('user_id='.$first_vip)->data(array("balance"=>"`balance`+({$balance9})"))->update();
+                    Log::balance($balance9, $first_vip, $order['order_no'],'线上消费收益(上级第一个超级VIP)', 5);
+                }
+             }
              $first_promoter_user_id = self::getFirstPromoter($order['user_id']);
              // var_dump(222);die;
              if($first_promoter_user_id){   
@@ -936,29 +968,45 @@ class Common {
          $inviter_info = $model->table("invite")->where("invite_user_id=".$order['user_id'])->find();
          if($inviter_info){
              $config = Config::getInstance()->get("district_set");
-             $base_balance = round($order['order_amount']*$goods['inviter_rate']/100,2);
+             $base_balance = round($order['order_amount']*($goods['inviter_rate']-$config['handling_rate'])/100,2);
                 $income1 = round($base_balance*$config['promoter_rate1']/100,2);
                 if($income1>0) {
-                    Log::incomeLog($income1, 1, $inviter_info['user_id'], $order['id'], 15,"下级消费分成(上级邀请者)退款收回收益");
+                    // Log::incomeLog($income1, 1, $inviter_info['user_id'], $order['id'], 15,"下级消费分成(上级邀请者)退款收回收益");
+                    $model->table('customer')->where('user_id='.$inviter_info['user_id'])->data(array("balance"=>"`balance`-({$income1})"))->update();
+                    Log::balance(-$income1, $inviter_info['user_id'], $order['order_no'],'下级消费分成(上级邀请者)退款收回收益', 4);
                 }
              $first_promoter_user_id = self::getFirstPromoter($order['user_id']);
              if($first_promoter_user_id){
                 $income2 = round($base_balance*$config['district_rate1']/100,2);
                 if($income2>0) {
-                    Log::incomeLog($income2, 2, $first_promoter_user_id, $order['id'], 15,"下级消费分成(上级第一个代理商)退款收回收益");
+                    // Log::incomeLog($income2, 2, $first_promoter_user_id, $order['id'], 15,"下级消费分成(上级第一个代理商)退款收回收益");
+                    $model->table('customer')->where('user_id='.$first_promoter_user_id)->data(array("balance"=>"`balance`-({$income2})"))->update();
+                    Log::balance(-$income2, $first_promoter_user_id, $order['order_no'],'下级消费分成(上级第一个代理商)退款收回收益', 4);
                 }  
              }
              $income3 = round($base_balance*$config['promoter2_rate1']/100,2);
              if($income3>0) {
-                Log::incomeLog($income3, 3, $inviter_info['district_id'], $order['id'], 15,"下级消费分成(所属专区)退款收回收益");
+                // Log::incomeLog($income3, 3, $inviter_info['district_id'], $order['id'], 15,"下级消费分成(所属专区)退款收回收益");
+                $district = $model->table('district_shop')->fields('owner_id')->where('id='.$inviter_info['district_id'])->find();
+                 if($district) {
+                    $district_id = $district['owner_id'];
+                    $model->table('customer')->where('user_id='.$district_id)->data(array("balance"=>"`balance`-({$income3})"))->update();
+                    Log::balance(-$income3, $district_id, $order['order_no'],'下级消费分成(所属专区)退款收回收益', 4);
+                 } 
              }
-             // $district_info = $model->table("district_shop")->where("id=".$inviter_info['district_id'])->find();
-             // if($district_info&&$district_info['invite_shop_id']!=""){
-             //    $income4 = round($order['order_amount']*$config['income4']/100,2);
-             //    if($income4) {
-             //        Log::incomeLog($income4, 3, $district_info['invite_shop_id'], $order['id'], 15,"专区邀请者分成退款收回收益");
-             //    }  
-             // }
+             $income4 = round($base_balance*$config['plat_rate1']/100,2);
+             if($income4>0) {
+                $model->table('customer')->where('user_id=1')->data(array("balance"=>"`balance`-({$income4})"))->update();
+                Log::balance(-$income4, 1, $order['order_no'],'下级消费分成(平台)退款收回收益', 4);
+             }
+             $where = "note='线上消费收益(上级第一个超级VIP)' and order_no=".$order['order_no'];
+             $vip_log = $model->table('balance_log')->where($where)->find();
+             if($vip_log) {
+                $first_vip = $vip_log['user_id'];
+                $income5 = $vip_log['amount'];
+                $model->table('customer')->where('user_id='.$first_vip)->data(array("balance"=>"`balance`-({$income5})"))->update();
+                Log::balance(-$income5, $first_vip, $order['order_no'],'下级消费分成(第一个超级VIP)退款收回收益', 4);
+             }
          }else{
              return false;
          }
@@ -1002,12 +1050,13 @@ class Common {
             if(!$user_info) {
                 return $promoter_user_id;
             }
+            $is_shop = $model->table("district_shop")->where("id=".$user_info['district_id'])->find();
             while(!$is_break){
                 $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
                 if($inviter_info){
                     $is_promoter = $model->table("district_promoter")->where("user_id=".$inviter_info['user_id'])->find();
                     if(!empty($is_promoter)){       
-                            if($is_promoter['hirer_id']==$user_info['district_id']) {
+                            if($is_promoter['hirer_id']==$user_info['district_id'] || $is_shop['owner_id']==$inviter_info['user_id']) {
                                 $promoter_user_id = $inviter_info['user_id'];
                                 $is_break = true;
                             }else{
@@ -1022,6 +1071,55 @@ class Common {
             }
             return $promoter_user_id;
         
+     }
+
+     static function getFirstVip($user_id){
+        $model = new Model();
+        // $is_break = false;
+        // $now_user_id = $user_id;
+        // $first_vip = 1;
+        // $user_info = $model->table("invite")->where("invite_user_id=".$user_id)->find();
+        // if(!$user_info) {
+        //     return $first_vip;
+        // }
+        // while(!$is_break){
+        //     $inviter_info = $model->table("invite")->where("invite_user_id=".$now_user_id)->find();
+        //     if($inviter_info){
+        //         $user = $model->table("user")->where("id=".$inviter_info['user_id'])->find();
+        //         if(!empty($user) && $user['is_vip']==1) {       
+        //             $first_vip = $inviter_info['user_id'];
+        //             $is_break = true;    
+        //         }else{
+        //             $now_user_id = $inviter_info['user_id'];
+        //         }
+        //     }else{
+        //         $is_break = true;
+        //     }
+        // }
+        // return $first_vip; 
+        
+        $user_info = $model->table("invite")->where("invite_user_id=".$user_id)->find();
+        if($user_info) {
+            $inviter1 = $user_info['user_id']; //第一个邀请人
+            $user_info1 = $model->table("invite")->where("invite_user_id=".$inviter1)->find();
+            if($user_info1) {
+                $inviter2 = $user_info1['user_id']; //第二个邀请人
+                $user2 = $model->table("user")->fields('is_vip')->where("id=".$inviter2)->find();
+                if($user2['is_vip']==1) {
+                    $first_vip = $inviter2;
+                } else {
+                    $user1 = $model->table("user")->fields('is_vip')->where("id=".$inviter1)->find();
+                    if($user1['is_vip']==1) {
+                        $first_vip = $inviter1;
+                    } else {
+                        $first_vip = 1; //分给平台
+                    }
+                }
+            }
+            return $first_vip;
+        } else {
+            return false;
+        }
      }
 
      static function getFirstPromoters($user_id){
@@ -1806,18 +1904,22 @@ class Common {
         if($shop) {
             $now_user_id = $shop['id'];
             while(!$is_break){
-                $inviter_info = $model->table("district_shop")->fields('id,owner_id')->where("invite_shop_id in (".$now_user_id.")")->findAll();
+                $inviter_info = $model->table("district_shop")->fields('id,owner_id,is_oc')->where("invite_shop_id in (".$now_user_id.")")->findAll();
                 if($inviter_info){
                     $now_user_id = '';
                     foreach ($inviter_info as $k => $v) {
-                        $shop_ids_arr[] = $v['id'];
-                        $user_ids_arr[] = $v['owner_id'];
-                        $shop_ids = $shop_ids_arr!=null?implode(',', $shop_ids_arr):'';
-                        $user_ids = $user_ids_arr!=null?implode(',', $user_ids_arr):'';
-                        $num = $num+1;
-                        $now_user_id = $now_user_id==''?$v['id']:$now_user_id.','.$v['id'];
-                        $is_break = false;
+                        if($v['is_oc'] == 0){//不是运营中心
+                            $shop_ids_arr[] = $v['id'];
+                            $user_ids_arr[] = $v['owner_id'];
+                            $shop_ids = $shop_ids_arr!=null?implode(',', $shop_ids_arr):'';
+                            $user_ids = $user_ids_arr!=null?implode(',', $user_ids_arr):'';
+                            $num = $num+1;
+                            $now_user_id = $now_user_id==''?$v['id']:$now_user_id.','.$v['id'];
+                        }
                     }    
+                    if($now_user_id == ''){
+                        $is_break = true;
+                    }
                 }else{
                     $is_break = true;
                 }
@@ -1943,4 +2045,61 @@ class Common {
         $result['idstr'] = $idstr;
         return $result;
     }
+
+    static function replace_specialChar($str)
+    {
+        $str = str_replace('`', '', $str);
+        $str = str_replace('·', '', $str);
+        $str = str_replace('~', '', $str);
+        $str = str_replace('!', '', $str);
+        $str = str_replace('！','', $str);
+        $str = str_replace('@', '', $str);
+        $str = str_replace('#', '', $str);
+        $str = str_replace('$', '', $str);
+        $str = str_replace('￥', '', $str);
+        $str = str_replace('%', '', $str);
+        $str = str_replace('^', '', $str);
+        $str = str_replace('……', '', $str);
+        $str = str_replace('&', '', $str);
+        $str = str_replace('*', '', $str);
+        $str = str_replace('(', '', $str);
+        $str = str_replace(')', '', $str);
+        $str = str_replace('（', '', $str);
+        $str = str_replace('）', '', $str);
+        $str = str_replace('-', '', $str);
+        $str = str_replace('_', '', $str);
+        $str = str_replace('——', '', $str);
+        $str = str_replace('+', '', $str);
+        $str = str_replace('=', '', $str);
+        $str = str_replace('|', '', $str);
+        $str = str_replace('\\', '', $str);
+        $str = str_replace('[', '', $str);
+        $str = str_replace(']', '', $str);
+        $str = str_replace('【', '', $str);
+        $str = str_replace('】', '', $str);
+        $str = str_replace('{', '', $str);
+        $str = str_replace('}', '', $str);
+        $str = str_replace(';', '', $str);
+        $str = str_replace('；', '', $str);
+        $str = str_replace(':', '', $str);
+        $str = str_replace('：', '', $str);
+        $str = str_replace('\'', '', $str);
+        $str = str_replace('"', '', $str);
+        $str = str_replace('“', '', $str);
+        $str = str_replace('”', '', $str);
+        $str = str_replace(',', '', $str);
+        $str = str_replace('，', '', $str);
+        $str = str_replace('<', '', $str);
+        $str = str_replace('>', '', $str);
+        $str = str_replace('《', '', $str);
+        $str = str_replace('》', '', $str);
+        $str = str_replace('.', '', $str);
+        $str = str_replace('。', '', $str);
+        $str = str_replace('/', '', $str);
+        $str = str_replace('、', '', $str);
+        $str = str_replace('?', '', $str);
+        $str = str_replace('？', '', $str);
+        return trim($str);
+    }
+
 }

@@ -93,9 +93,9 @@
               <td style="width:150px;"><input pattern="required" class="middle" name="path[]" type="text" value="{$item['path']}" readonly="readonly"><button class="button select_button" value="选择">选择</button></td> 
               <td style="width:40px;">连接地址：</td> 
               <td style="width:100px;"><input name="url[]" empty type="text" value="<?php  echo isset($item['url']) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $item['url'])):""; ?>" class="middle"></td> 
-              <td style="width:40px;">名称：</td>
+              <!-- <td style="width:40px;">名称：</td>
+              <td style="width:40px;"><input name="title[]" type="text" value="{$item['title']}" class="small"></td> -->
               {if:isset($id) && $id==85} 
-              <td style="width:40px;"><input name="title[]" type="text" value="{$item['title']}" class="small"></td>
               <td style="width:40px;">宽：</td> 
               <td style="width:40px;"><input name="width[]" type="text" value="{$item['width']}" class="small"></td>
               <td style="width:40px;">高：</td> 
@@ -104,6 +104,13 @@
               <td style="width:40px;"><input name="x_coor[]" type="text" value="{$item['x_coor']}" class="small"></td>
               <td style="width:40px;">y轴：</td> 
               <td style="width:40px;"><input name="y_coor[]" type="text" value="{$item['y_coor']}" class="small"></td>
+              <td style="width:40px;">是否居中：</td>
+              {if:!isset($item['align_center'])}
+              {set:$item['align_center'] = 0}
+              {/if}
+              <td style="width:40px;">
+                <input name="align_center[]" type="checkbox" value="{$item['align_center']}" {if:$item['align_center']==1}checked="checked"{/if}>
+              </td>
               <td style="width:40px;">更新时间：</td> 
               <td style="width:60px;"><input name="update_time[]" type="text" value="{$item['update_time']}" class="small"></td>
               <td style="width:40px;">失效时间：</td> 
@@ -114,7 +121,24 @@
           {/list}
           {else:}
           <tr>
-            <td style="width:60px;">图片地址：</td> <td style="width:240px;"><input pattern="required" name="path[]" type="text" value="{$item['path']}" class="middle" readonly="readonly"><button class="button select_button" value="选择">选择</button></td> <td style="width:60px;">连接地址：</td> <td style="width:190px;"><input name="url[]" type="text" value="<?php echo isset($item['url']) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $item['url'])):""; ?>" class="middle" empty></td> <td style="width:40px;">名称：</td> <td style="width:190px;"><input name="title[]" type="text" value="{$item['title']}" class="middle"></td><td style="width:90px;"><a href="javascript:;" class="icon-arrow-up-2"> 升</a><a href="javascript:;" class="icon-arrow-down-2"> 降</a> <a href="javascript:;" class="icon-close" onclick="item_del(this)"> 删</a></td>
+            <td style="width:60px;">图片地址：</td>
+            <td style="width:240px;">
+              <input pattern="required" name="path[]" type="text" value="{$item['path']}" class="middle" readonly="readonly">
+              <button class="button select_button" value="选择">选择</button>
+            </td>
+            <td style="width:60px;">连接地址：</td>
+            <td style="width:190px;">
+              <input name="url[]" type="text" value="<?php echo isset($item['url']) ? str_replace('"', '&#34;', str_replace("'", '&#39;', $item['url'])):""; ?>" class="middle" empty>
+            </td>
+            <td style="width:40px;">名称：</td>
+            <td style="width:190px;">
+              <input name="title[]" type="text" value="{$item['title']}" class="middle">
+            </td>
+            <td style="width:90px;">
+              <a href="javascript:;" class="icon-arrow-up-2"> 升</a>
+              <a href="javascript:;" class="icon-arrow-down-2"> 降</a>
+              <a href="javascript:;" class="icon-close" onclick="item_del(this)"> 删</a>
+            </td>
           </tr>
           {/if}
         </table>
@@ -122,13 +146,20 @@
           {if:isset($type) && $type==3}
             {set:$content = unserialize($content);extract($content);}
           {/if}
-          <tr><td style="width:40px;">文字：</td><td style="width:190px;"><input pattern="required" class="middle" type="text" name="font_title" value="{$title}"></td><td style="width:40px;">连接：</td>
-          <td style="width:190px;"><input type="text" class="middle" name="font_url" value="{$url}"></td>
-          <td style="width:40px;">颜色：</td>
-          <td style="width:190px;"><input type="text" pattern="\#([0-9,A-F]{3}|[0-9,A-F]{6})" class="tiny" name="font_color" value="{$color|'#'}" empty alt="十六进制颜色(如：#019010)"><label> 如：#FF0000</label></td></tr>
+          <tr>
+            <td style="width:40px;">文字：</td>
+            <td style="width:190px;"><input pattern="required" class="middle" type="text" name="font_title" value="{$title}"></td>
+            <td style="width:40px;">连接：</td>
+            <td style="width:190px;"><input type="text" class="middle" name="font_url" value="{$url}"></td>
+            <td style="width:40px;">颜色：</td>
+            <td style="width:190px;"><input type="text" pattern="\#([0-9,A-F]{3}|[0-9,A-F]{6})" class="tiny" name="font_color" value="{$color|'#'}" empty alt="十六进制颜色(如：#019010)"><label> 如：#FF0000</label></td>
+          </tr>
         </table>
         <table id="table_code">
-          <tr><td style="width:80px;">代码内容：</td><td><textarea style="width:700px;height:240px;" name="content" pattern="required" alt="代码内容不能为空！">{if:isset($type)&& $type==5}{$content}{/if}</textarea></td></tr>
+          <tr>
+            <td style="width:80px;">代码内容：</td>
+            <td><textarea style="width:700px;height:240px;" name="content" pattern="required" alt="代码内容不能为空！">{if:isset($type)&& $type==5}{$content}{/if}</textarea></td>
+          </tr>
         </table>
         </div>
       </div>
@@ -144,8 +175,10 @@
         <option value="search">搜索</option>
         <option value="flash">抢购</option>
         <option value="goods">商品</option>
+        <option value="taobao">跳转淘宝</option>
         </select>
         <input class="__jump" type="text" style="display: none;" placeholder="请填写跳转">
+        <input class="__taobao" type="text" style="display: none;" placeholder="请填写跳转">
         <select class="__category"  style="display: none;">
               <option value="0">请选择分类</option>
               {set:$id=isset($id)?$id:0;}
@@ -335,6 +368,7 @@ FireEvent(document.getElementById("ad_type"),"change");
       $(".__flash").hide();
       $(".__goods").hide();
       $(".__jump").hide();
+      $(".__taobao").hide();
   }
   $("#type").change(function(){
       var name = $(this).children('option:selected').val(); 

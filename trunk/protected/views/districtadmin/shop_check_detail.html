@@ -11,7 +11,7 @@
         <dl class="lineD">
             <dt>店铺名：</dt>
             <dd>
-                <input type="text" value="{$shop_check['shop_name']}" style="width: 200px;height: 30px;">  
+                <input type="text" name="shop_name" value="{$shop_check['shop_name']}" style="width: 200px;height: 30px;">  
             </dd>
         </dl>
         {/if}
@@ -19,10 +19,16 @@
         <dl class="lineD">
             <dt>法人：</dt>
             <dd>
-                <input type="text" value="{$shop_check['legal_person']}" style="width: 200px;height: 30px;">  
+                <input type="text" name="legal_person" value="{$shop_check['legal_person']}" style="width: 200px;height: 30px;">  
             </dd>
         </dl>
         {/if}
+        <dl class="lineD">
+            <dt>证件号：</dt>
+            <dd>
+                <input type="text" name="id_no" value="{$shop_check['id_no']}" style="width: 200px;height: 30px;">  
+            </dd>
+        </dl>
         <dl class="lineD">
             <dt>身份证正面照：</dt>
             <dd>
@@ -46,11 +52,35 @@
             </dd>
         </dl>
         {/if}
+        {if:$shop_check['province']!=null}
+        <dl class="lineD">
+            <dt>省份:</dt>
+            <dd>
+                <input type="text" name="province" value="{$shop_check['province']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        {/if}
+        {if:$shop_check['city']!=null}
+        <dl class="lineD">
+            <dt>城市:</dt>
+            <dd>
+                <input type="text" name="city" value="{$shop_check['city']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        {/if}
+        {if:$shop_check['county']!=null}
+        <dl class="lineD">
+            <dt>县区:</dt>
+            <dd>
+                <input type="text" name="county" value="{$shop_check['county']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        {/if}
         {if:$shop_check['address']!=null}
         <dl class="lineD">
             <dt>地址:</dt>
             <dd>
-                <input type="text" value="{$shop_check['province']}{$shop_check['city']}{$shop_check['county']}{$shop_check['address']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="address" value="{$shop_check['address']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}
@@ -66,7 +96,7 @@
         <dl class="lineD">
             <dt>结算银行卡号:</dt>
             <dd>
-                <input type="text" value="{$shop_check['account_card']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="account_card" value="{$shop_check['account_card']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}
@@ -74,17 +104,37 @@
         <dl class="lineD">
             <dt>银行类型:</dt>
             <dd>
-                <input type="text" value="{$shop_check['bank_type']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="bank_type" value="{$shop_check['bank_type']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}
         <dl class="lineD">
             <dt>银行:</dt>
             <dd>
-                <input type="text" value="{$shop_check['bank_name']}" style="width: 200px;height: 30px;"> 
+                <input type="text" id="bank_name" name="bank_name" value="{$shop_check['bank_name']}" style="width: 200px;height: 30px;">
+                <a href='javascript:;' onclick="search_submit()" class="fr icon-search" style="width: 60px;height: 30px;text-align: center;line-height: 30px;background-color: #f1f1f1;border-radius: 6px;border: 1px solid #dcdcdc;margin-right: 80%;margin-top: 4px;">匹配</a>
             </dd>
         </dl>
-        {if:$shop_check['positive_bankcard']!=null}
+        <dl class="lineD" id="choose_banks" style="display: none;">
+            <dt>手动选择银行:</dt>
+            <dd>
+                <select name="choose_bank" id="choose_bank">
+                        <option value="0">选择支行</option>       
+                </select>
+            </dd>
+        </dl>
+        <!-- <dl class="lineD">
+           <dt>银行关键词匹配</dt>
+           <dd>
+               <span class="fr">
+                <input type="text" value="" name="s_content"/>
+                        <a href='javascript:;'
+                           onclick="search_submit()"
+                           class="fr icon-search" style=""></a>
+                </span>
+           </dd>
+        </dl> -->
+        {if:$shop_check['type']!=3}
         <dl class="lineD">
             <dt>银行卡正面照：</dt>
             <dd>
@@ -93,7 +143,7 @@
             </dd>
         </dl>
         {/if}
-        {if:$shop_check['native_bankcard']!=null}
+        {if:$shop_check['type']!=3}
         <dl class="lineD">
             <dt>银行卡反面照：</dt>
             <dd>
@@ -102,9 +152,21 @@
             </dd>
         </dl>
         <dl class="lineD">
+            <dt>银行卡所属省份:</dt>
+            <dd>
+                <input type="text" name="bank_province" value="{$shop_check['bank_province']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        <dl class="lineD">
+            <dt>银行卡所属城市:</dt>
+            <dd>
+                <input type="text" name="bank_city" value="{$shop_check['bank_city']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        <dl class="lineD">
             <dt>银行卡所属地:</dt>
             <dd>
-                <input type="text" value="{$shop_check['bank_province']}{$shop_check['bank_city']}{$shop_check['bank_area']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="bank_area" value="{$shop_check['bank_area']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}
@@ -121,7 +183,15 @@
         <dl class="lineD">
             <dt>营业执照登记号：</dt>
             <dd>
-                <input type="text" value="{$shop_check['business_number']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="business_number" value="{$shop_check['business_number']}" style="width: 200px;height: 30px;"> 
+            </dd>
+        </dl>
+        {/if}
+        {if:$shop_check['type']!=2}
+        <dl class="lineD">
+            <dt>营业执照有效期：</dt>
+            <dd>
+                <input type="text" name="business_expire" value="{$shop_check['business_expire']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}
@@ -129,7 +199,7 @@
         <dl class="lineD">
             <dt>营业执照登记地址：</dt>
             <dd>
-                <input type="text" value="{$shop_check['business_addr']}" style="width: 200px;height: 30px;"> 
+                <input type="text" name="business_addr" value="{$shop_check['business_addr']}" style="width: 200px;height: 30px;"> 
             </dd>
         </dl>
         {/if}
@@ -159,7 +229,7 @@
             </dd>
         </dl>
         {/if}
-        <div style="text-align:left;margin-left:13%;"><input type="submit" value="通过认证" class="button">&nbsp;&nbsp;&nbsp;<a class="button" href="javascript:;" onclick="cancel({$shop_check['id']})"> 拒绝认证</a></div>
+        <div style="text-align:left;margin-left:13%;"><input type="submit" value="通过认证/保存" class="button">&nbsp;&nbsp;&nbsp;<a class="button" href="javascript:;" onclick="cancel({$shop_check['id']})"> 拒绝认证</a></div>
     </form>
 </div>
 <script type="text/javascript">
@@ -179,4 +249,27 @@ function cancel(id){
         },'json');
    });
 }
+function search_submit()
+{
+    var name = $('#bank_name').val();
+    $.post("{url:/districtadmin/get_bank_type}",{name:name},function(res){
+            data = JSON.stringify(res);
+                var jsonarray= $.parseJSON(data);
+                var html = '';
+                // layer.close(index);
+                if (jsonarray.length) {
+                    console.log(jsonarray);
+                    $('#choose_banks').show();
+                    $.each(jsonarray, function (i, item) {
+                        html += "<option value="+item.id+">"+item.longname+"</option>";  
+                    });
+                    $('#choose_bank').html();
+                    $('#choose_bank').append(html);
+                }
+        },'json');
+}
+$("#choose_bank").change(function(){
+    var choose_bank = $("#choose_bank option:selected").html();
+    $('#bank_name').val(choose_bank);
+})    
 </script>

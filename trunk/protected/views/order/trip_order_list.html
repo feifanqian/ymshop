@@ -1,0 +1,161 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+<script type="text/javascript" src="{url:@static/js/jquery.cookie.js}"></script>
+
+    <div class="tools_bar clearfix">
+        <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)"
+           title="全选" data="true"> 全选 </a>
+        <a class="icon-remove-2" href="javascript:;"
+           onclick="tools_submit({action:'{url:/order/trip_order_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>
+        <a class="icon-delicious" href="{url:/order/trip_order_list}"> 全部订单</a>
+        <a class="icon-eye-blocked" href="{url:/order/trip_order_list/status/0}"> 已提交</a>
+        <a class="icon-cogs" href="{url:/order/trip_order_list/status/1}"> 已成交</a>
+        <a class="icon-cogs" href="{url:/order/trip_order_list/status/-1}"> 已取消</a>
+        
+        <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style=""> 筛选条件</a><input
+                id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    </div>
+    <div class="tools_bar clearfix">
+    
+       <form enctype="multipart/form-data" action="" method="post">
+          <span class="fl">
+            <a href='javascript:;' id="condition" class="icon-search" style=""> 请选择你要导入的Excel表格</a>
+            <input type="file" name="file" >
+            <input type="button" value="确定" id="fileuploader" />
+          </span>  
+        </form>
+    </div>
+    <table class="default">
+        <tr>
+            <th style="width:30px">选择</th>
+            <th style="width:50px">操作</th>
+            <th style="width:100px">订单来源</th>
+            <th style="width:100px">订单号</th>
+            <th style="width:100px">提交时间</th>
+            <th style="width:50px">业务类型</th>
+            <th style="width:50px">数量</th>
+            <th style="width:100px">订单金额</th>
+            <th style="width:50px">订单状态</th>
+            <th style="width:50px">Ouid</th>
+        </tr>
+        {query:name=trip_order as od fields=od.* where=$where id=$obj page=1 order= od.id desc }
+        <tr>
+            <td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"><i class="icon-order-{$item['type']}"></i></td>
+            <td style="width:50px" class="btn_min">
+                <div class="operat hidden"><a class="icon-cog action" href="javascript:;"> 处理</a>
+                    <div class="menu_select">
+                        <ul>
+                            <li><a class="icon-eye" href="javascript:;" onclick="view({$item['id']})"> 查看</a></li>
+                            {if:$item['status'] == 0}
+                            <li><a class="icon-switch" href="javascript:;"
+                                   onclick="change_status({$item['id']},1,null)"> 完成</a></li>
+                            {/if}
+                            {if:$item['status'] !=-1}
+                            <li><a class="icon-remove" href="javascript:;"
+                                   onclick="change_status({$item['id']},-1,null)"> 作废</a></li>
+                            {/if}
+                            {if:$item['status'] !=1}
+                            <li><a class="icon-close"
+                                   href="javascript:confirm_action('{url:/order/trip_order_del/id/$item[id]}')"> 删除</a></li>
+                            {/if}
+                            
+                        </ul>
+                    </div>
+                </div>
+            </td>
+            <td style="width:100px;">{$item['froms']}</td>
+            <td style="width:100px"><span>{$item['order_no']}</span></td>
+            <td style="width:100px;">{$item['submit_date']}</td>
+            <td style="width:50px">{$item['business_type']}</td>
+            <td style="width:50px">{$item['num']}</td>
+            <td style="width:100px">{$item['order_amount']}</td>
+            <td style="width:50px">{$item['order_status']}</td>
+            <td style="width:50px">{$item['ouid']}</td>
+        </tr>
+        {/query}
+    </table>
+
+<div class="page_nav">
+    {echo:$obj->pageBar()}
+</div>
+
+<style type='text/css'>
+    .badge {
+        background-color: rgb(255, 0, 0);
+        border-radius: 10px;
+        color: #fff;
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        min-width: 10px;
+        padding: 3px 7px;
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .shan {
+        -webkit-animation: twinkling 1.3s infinite ease-in-out;
+        -webkit-animation-direction: alternate;
+    }
+
+    @-webkit-keyframes twinkling { /*透明度由0到1*/
+        0% {
+            opacity: 0; /*透明度为0*/
+        }
+        100% {
+            opacity: 1; /*透明度为1*/
+        }
+    }
+</style>
+
+<script type="text/javascript">
+    var pendingData= new Array();
+    var noticevoice = $("#notice-voice")[0];
+    var voice_status;
+    var dialog_status;
+    var interval;
+    var count =2;
+ 
+    function edit(id){
+        art.dialog.open("{url:/order/trip_order_edit/id/}"+id,{id:'edit_dialog',title:'订单编辑',resize:false,width:900,height:450});
+    }
+    function view(id){
+        art.dialog.open("{url:/order/trip_order_view/id/}"+id,{id:'view_dialog',title:'查看订单',resize:false,width:900,height:450});
+    }
+    
+    function change_status(id,status,op){
+        $.ajax({
+          url:'{url:/order/trip_order_status}',
+          type: 'POST',
+          data: {'id':id,'status':status},
+          
+          success:function(data){
+            layer.msg("成功",{icon:6},function(){
+                    window.location.reload();
+            });
+          }
+         })
+    }
+    
+
+    $('#fileuploader').click(function(){
+        var formData = new FormData($('form')[0]);
+        formData.append('file',$(':file')[0].files[0]);
+        $.ajax({
+          url:'{url:/order/trip_order_export}',
+          type: 'POST',
+          data: formData,
+          //这两个设置项必填
+          contentType: false,
+          processData: false,
+          success:function(data){
+            layer.msg("导入成功",{icon:6},function(){
+                    window.location.reload();
+            });
+          }
+         })
+    })
+        
+</script>

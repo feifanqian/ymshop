@@ -1,13 +1,70 @@
  {echo:JS::import('dialog?skin=brief');}
 {echo:JS::import('dialogtools');}
 {set:$status=array("-1"=>"未完善","0"=>"<span class='green icon-busy'>未处理</span>","1"=>"<span class='gray icon-coin'>已审核</span>","2"=>"<span class='red icon-remove'>未通过</span>");}
+{set:$register_status=array("-1"=>"未注册","0"=>"<span class='green icon-busy'>审核中</span>","1"=>"<span class='gray icon-coin'>已通过</span>","2"=>"<span class='red icon-remove'>未通过</span>");}
 {set:$type = array("0"=>"未知","1"=>"个体商户","2"=>"小微商户","3"=>"企业商户");}
-<form action="" method="post">
+<script type="text/javascript" src="{url:@static/js/daterangepicker/moment.min.js}"></script>
+<script type="text/javascript" src="{url:@static/js/daterangepicker/daterangepicker.js}"></script>
+<link rel="stylesheet" href="{url:@static/js/daterangepicker/daterangepicker.css}" type="text/css" />
+<script type="text/javascript">
+ $(document).ready(function() {
+    $('#datepick').daterangepicker(
+     {
+        startDate: moment().subtract('days', 29),
+        endDate: moment(),
+        minDate: '2012-01-01',
+        maxDate: moment(),
+        dateLimit: { days: 60 },
+        showDropdowns: true,
+        showWeekNumbers: true,
+        timePicker: false,
+        timePickerIncrement: 1,
+        timePicker12Hour: true,
+        ranges: {
+           '今天': [moment(), moment()],
+           '昨天': [moment().subtract('days', 1), moment().subtract('days', 1)],
+           '最近7天': [moment().subtract('days', 6), moment()],
+           '最近30天': [moment().subtract('days', 29), moment()],
+           '上一个月': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+        },
+        opens: 'right',
+        buttonClasses: ['btn btn-default'],
+        applyClass: 'btn-small btn-primary',
+        cancelClass: 'btn-small',
+        format: 'YYYY-MM-DD',
+        separator: ' -- ',
+        locale: {
+            applyLabel: '提交',
+            cancelLabel:'重置',
+            fromLabel: '起始',
+            toLabel: '结束',
+            customRangeLabel: '选择时间段',
+            daysOfWeek: ['日', '一', '二', '三', '四', '五','六'],
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            firstDay: 1
+        }
+     },
+     function(start, end) {
+      $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+     }
+    );
+    $('#reportrange span').html(moment().subtract('days', 29).format('YYYY-MM-DD') + ' - ' + moment().format('YYYY-MM-DD'));
+    });
+</script>
 <div class="tools_bar clearfix">
-    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
-    <a class="icon-delicious" href="{url:/districtadmin/shop_check}"> 查看全部</a>
-    <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a>
-    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    <form action="" method="post">
+      <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+      <a class="icon-delicious" href="{url:/districtadmin/shop_check}"> 查看全部</a>
+      <a class="icon-file-excel" href="javascript:;" onclick="export_excel_dialog()"> 导出Excel</a>
+      <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+    </form>
+</div>
+<div class="tools_bar clearfix">
+    <form action="{url:/districtadmin/shop_check}" method="post">
+        <span class="fl">时间：<input name="s_time" type="text" value="{$s_time}" id="datepick" class="middle" ></span>
+        <!-- <a href="javascript:tools_submit();" id="conditions" class="icon-search" style=""> 查询</a> -->
+        <input type="submit"  class="button action fn" value="查询">
+    </form>
 </div>
 <table class="default" >
     <tr>
@@ -21,9 +78,10 @@
         <th style="width:140px">申请时间</th>
         <th style="width:140px">处理时间</th>
         
-        <th style="width:120px">状态</th>
+        <th style="width:100px">审核状态</th>
+        <th style="width:100px">银盛注册状态</th>
     </tr>
-    {query:name=shop_check as sc join=left join user as u on sc.user_id eq u.id left join district_promoter as dp on sc.user_id eq dp.user_id fields=sc.*,u.nickname,u.name,dp.shop_name where=$where id=$obj page=1 order= sc.create_date desc}
+    {query:name=shop_check as sc join=left join user as u on sc.user_id eq u.id left join district_promoter as dp on sc.user_id eq dp.user_id fields=sc.*,u.nickname,u.name,dp.shop_name where=$where id=$obj page=1 order= sc.id desc}
         <tr><td style="width:50px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
             <td style="width:65px" class="btn_min">
                 <div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a>
@@ -35,7 +93,8 @@
                             <li><a class="icon-remove" href="javascript:;" onclick="cancel({$item['id']})"> 作废该请求</a></li>
                             {/if}
                             {if:$item['status']==1}
-                            <li><a class="icon-key" href="javascript:;" onclick="register({$item['id']})">注册银盛账户</a></li>
+                            <li><a class="icon-key" href="javascript:;" onclick="upload({$item['id']},{$item['type']})">注册银盛账户</a></li>
+                            <!-- <li><a class="icon-key" href="javascript:;" onclick="register({$item['id']})">注册银盛账户</a></li> -->
                             <li><a class="icon-key" href="javascript:;" onclick="check({$item['id']})">查询银盛账户</a></li>
                             {/if}
                             <li><a class="icon-remove-2" href="javascript:;" onclick="confirm_action('{url:/districtadmin/shop_check_delete/id/$item[id]}')">删除</a></li>
@@ -52,11 +111,11 @@
             <td style="width:140px">{$item['create_date']}</td>
             <td style="width:140px">{$item['check_date']|"-------"}</td>
             
-            <td style="width:120px">{$status[$item['status']]}</td>
+            <td style="width:100px">{$status[$item['status']]}</td>
+            <td style="width:100px;">{$register_status[$item['register_status']]}</td>
         </tr>
     {/query}
 </table>
-</form>
 <div class="page_nav">
 {echo:$obj->pageBar()}
 </div>
@@ -145,6 +204,141 @@ function register(id){
           layer.msg("您取消了操作"); 
         });
 }
+function upload(id,type){
+    layer.confirm('您确定要注册吗？', {
+        btn: ['确定','取消'] //按钮
+      }, function(index){
+        layer.close(index);
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $.post("{url:/districtadmin/shop_check_upload}",{id:id},function(data){
+            if(data.status!='success') {
+              layer.msg(data.msg);
+              return false;
+            }
+             var token = data.token;
+            if(data.status=='success'){
+                $.post("{url:/districtadmin/shop_check_upload1}",{id:id},function(data){ //身份证正面
+                  if(data.isSuccess==true){
+                     $.post("{url:/districtadmin/shop_check_upload2}",{id:id},function(data){ //身份证反面
+                      if(data.isSuccess==true){
+                          if(type==1) {
+                            //个体
+                            $.post("{url:/districtadmin/shop_check_upload5}",{id:id},function(data){ //手持身份证
+                              if(data.isSuccess==true) {
+                                 $.post("{url:/districtadmin/shop_check_upload6}",{id:id},function(data){ //营业执照
+                                  if(data.isSuccess==true) {
+                                     $.post("{url:/districtadmin/shop_check_upload7}",{id:id},function(data){ //门店照
+                                      if(data.isSuccess==true) {
+                                         $.post("{url:/districtadmin/shop_check_upload3}",{id:id},function(data){ //银行卡正面
+                                          if(data.isSuccess==true) {
+                                            $.post("{url:/districtadmin/shop_check_upload4}",{id:id},function(data){ //银行卡反面
+                                              if(data.isSuccess==true) {
+                                                $.post("{url:/districtadmin/shop_check_upload8}",{id:id},function(data){ //客户协议
+                                                if(data.isSuccess==true) {
+                                                   $.post("{url:/districtadmin/shop_check_register}",{id:id},function(data){
+                                                      if(data.status=='success'){
+                                                      layer.msg("操作成功", {icon: 6},function(){
+                                                          tools_reload();
+                                                      }); 
+                                                    }else{
+                                                      layer.msg(data.msg, {icon: 8},function(){
+                                                          tools_reload();
+                                                      });
+                                                    }
+                                                  },'json');
+                                                } else {
+                                                  layer.msg(data.msg, {icon: 5});
+                                                }
+                                              },'json')
+                                              }
+                                            },'json')
+                                          }
+                                        },'json')
+                                      }
+                                    },'json')
+                                  }
+                                },'json')
+                              }
+                            },'json')  
+                          } else if(type==2) {
+                            //小微
+                            $.post("{url:/districtadmin/shop_check_upload3}",{id:id},function(data){ //银行卡正面
+                                if(data.isSuccess==true) {
+                                    $.post("{url:/districtadmin/shop_check_upload4}",{id:id},function(data){ //银行卡反面
+                                        if(data.isSuccess==true) {
+                                            $.post("{url:/districtadmin/shop_check_upload8}",{id:id},function(data){ //客户协议
+                                                if(data.isSuccess==true) {
+                                                   $.post("{url:/districtadmin/shop_check_register}",{id:id},function(data){
+                                                       // layer.close(index);
+                                                      if(data.status=='success'){
+                                                      layer.msg('操作成功', {icon: 6},function(){
+                                                          tools_reload();
+                                                      }); 
+                                                    }else{
+                                                      layer.msg(data.msg, {icon: 8},function(){
+                                                          tools_reload();
+                                                      });
+                                                    }
+                                                  },'json');
+                                                } else {
+                                                  layer.msg(data.msg, {icon: 5});
+                                                }
+                                            },'json')
+                                        }
+                                    },'json')
+                                }
+                            },'json')
+                          } else {
+                            //企业
+                            $.post("{url:/districtadmin/shop_check_upload5}",{id:id},function(data){ //手持身份证
+                              if(data.isSuccess==true) {
+                                 $.post("{url:/districtadmin/shop_check_upload6}",{id:id},function(data){ //营业执照
+                                  if(data.isSuccess==true) {
+                                     $.post("{url:/districtadmin/shop_check_upload7}",{id:id},function(data){ //门店照
+                                      if(data.isSuccess==true) {
+                                         $.post("{url:/districtadmin/shop_check_upload8}",{id:id},function(data){ //客户协议
+                                              if(data.isSuccess==true) {
+                                                   $.post("{url:/districtadmin/shop_check_upload9}",{id:id},function(data){ //开户许可证
+                                                        if(data.isSuccess==true) {
+                                                             $.post("{url:/districtadmin/shop_check_register}",{id:id},function(data){
+                                                                 // layer.close(index);
+                                                                if(data.status=='success'){
+                                                                layer.msg('操作成功', {icon: 6},function(){
+                                                                    tools_reload();
+                                                                }); 
+                                                              }else{
+                                                                layer.msg(data.msg, {icon: 8},function(){
+                                                                    tools_reload();
+                                                                });
+                                                              }
+                                                            },'json');
+                                                        }
+                                                    },'json')
+                                              } else {
+                                                  layer.msg(data.msg, {icon: 5});
+                                                }
+                                          },'json')
+                                      }
+                                    },'json')
+                                  }
+                                },'json')
+                              }
+                            },'json')
+                          }
+                      }else{
+                        layer.msg(data.msg, {icon: 5}); 
+                      }
+                    },'json');
+                  }else{
+                    layer.msg(data.msg, {icon: 5}); 
+                  }
+                },'json');
+          }
+        },'json');
+      }, function(){
+          layer.msg("您取消了操作"); 
+        });
+}
 function check(id){
     var load = layer.load();
         $.post("{url:/districtadmin/shop_check_query}",{id:id},function(result){
@@ -155,6 +349,7 @@ function check(id){
                     ,title:"注册状态查询"
                   }, function(){
                       layer.closeAll();
+                      tools_reload();
                   });
             }else{
                 layer.msg(result.msg);
@@ -173,6 +368,6 @@ function Condition(id){
 }
 $("#condition").on("click",function(){
    
-  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/shop_check}',method:'get'});},data:{'u.nickname':{name:'  申请者'},'u.name':{name:'用户名'},'dp.shop_name':{name:'店铺名'},'sc.status':{name:'状态',values:{0:'未处理',1:'已通过',2:'已作废'}}}});
+  $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/districtadmin/shop_check}',method:'get'});},data:{'u.id':{name:'用户id'},'u.nickname':{name:'  申请者'},'u.name':{name:'用户名'},'dp.shop_name':{name:'店铺名'},'sc.status':{name:'状态',values:{0:'未处理',1:'已通过',2:'已作废'}}}});
 })
 </script>

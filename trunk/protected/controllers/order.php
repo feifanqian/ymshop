@@ -241,9 +241,9 @@ class OrderController extends Controller {
         else {
             $status = Req::args("status");
             if ($status)
-                $this->assign("where", "od.type!=8 and od.status=" . $status);
+                $this->assign("where", "od.type!=8 and od.is_robot=0 and od.status=" . $status);
             else
-                $this->assign("where", "od.type!=8 and od.status !=6");
+                $this->assign("where", "od.type!=8 and od.is_robot=0 and od.status !=6");
         }
         $this->assign("condition", $condition);
         $this->assign("status", array('0' => '<span class="red">等待审核</span>', '1' => '<span class="red">等待审核</span>', '2' => '<span class="red">等待审核</span>', '3' => '已审核', '4' => '已完成', '5' => '已取消', '6' => '<span class="red"><s>已作废</s></span>'));
@@ -256,6 +256,25 @@ class OrderController extends Controller {
             $payment[$item['id']] = $item['pay_name'];
         }
         $this->assign("payment", $payment);
+        $this->redirect();
+    }
+
+    public function trip_order_list() {
+        $condition = Req::args("condition");
+        $condition_str = Common::str2where($condition);
+        if ($condition_str)
+            $this->assign("where", $condition_str);
+        else {
+            $status = Req::args("status");
+            if ($status)
+                $this->assign("where", "od.status=" . $status);
+            else
+                $this->assign("where", "1=1");
+        }
+        $this->assign("condition", $condition);
+        $this->assign("status", array('0' => '<span class="red">已提交</span>', '1' => '已成交',  '-1' => '<span class="red"><s>已取消</s></span>'));
+        
+        
         $this->redirect();
     }
 
@@ -776,7 +795,7 @@ class OrderController extends Controller {
                $result = Order::refunded($refund_id);
                if($result){
                   $ordermodel = new Model("order as o");
-                   $order_model = $ordermodel->fields('o.user_id,o.order_amount,o.id,og.goods_id')->join('left join order_goods as og on o.id=og.order_id')->where('o.order_no='.$order_no)->find();
+                   $order_model = $ordermodel->fields('o.user_id,o.order_amount,o.id,og.goods_id,o.order_no')->join('left join order_goods as og on o.id=og.order_id')->where('o.order_no='.$order_no)->find();
                     if($order_model){
                        Common::backIncomeByInviteShip($order_model); //收回收益
                     } 
@@ -893,4 +912,78 @@ class OrderController extends Controller {
                 $this->redirect("doc_receiving_list", false, Req::args());
             }
     }
+
+    public function trip_order_export()
+    {
+        $model = new Model();
+        $file = $_FILES['file']['tmp_name'];      
+        if(empty($file)){         
+            echo "<script>alert('请选择文件');</script>";      
+         }      
+         require_once './protected/classes/PHPExcel.php';
+         require_once './protected/classes/IOFactory.php';
+         require_once './protected/classes/PHPExcel/Reader/Excel5.php';
+         require_once './protected/classes/PHPExcel/Reader/Excel2007.php';     
+         $objReader = PHPExcel_IOFactory::createReader('excel2007');   
+            
+         $excelpath = $file;      
+         $PHPExcel = $objReader->load($excelpath);       
+         $sheet = $PHPExcel->getSheet(0);      
+         $highestRow = $sheet->getHighestRow();       //取得总行数      
+         $highestColumn = $sheet->getHighestColumn(); //取得总列数            
+        
+        for($j=2;$j<=$highestRow;$j++)  
+            {
+                $from = $PHPExcel->getActiveSheet()->getCell("A".$j)->getValue();//来源
+                $order_no = $PHPExcel->getActiveSheet()->getCell("B".$j)->getValue();//订单号
+                $submit_date = $PHPExcel->getActiveSheet()->getCell("C".$j)->getValue();//日期
+                $business_date = $PHPExcel->getActiveSheet()->getCell("D".$j)->getValue();//业务类型
+                $num = $PHPExcel->getActiveSheet()->getCell("E".$j)->getValue();//数量
+                $order_amount = $PHPExcel->getActiveSheet()->getCell("F".$j)->getValue();//订单金额
+                $order_status = $PHPExcel->getActiveSheet()->getCell("G".$j)->getValue();//状态
+                $ouid = $PHPExcel->getActiveSheet()->getCell("H".$j)->getValue();
+
+                $data = array(
+                    'froms' => $from,
+                    'order_no' => $order_no,
+                    'submit_date'=> $submit_date,
+                    'business_type'=> $business_date,
+                    'num' => $num,
+                    'order_amount'=> $order_amount,
+                    'order_status'=>$order_status,
+                    'ouid'=>$ouid,
+                    'add_time' => date('Y-m-d H:i:s')
+                    );
+                
+                $exist = $model->table('trip_order')->where("order_no='{$order_no}'")->find();
+                if(!$exist) {
+                    $model->table('trip_order')->data($data)->insert();
+                }
+            }
+            $info = array('status' => 'success', 'msg' => '成功');
+            echo JSON::encode($info);                    
+    }
+
+    public function trip_order_del() {
+        $id = Req::args('id');
+        //删除
+        if (is_array($id)) {
+            $ids = implode(",", $id);
+        } else {
+            $ids = $id;
+        }
+        $model = new Model("trip_order");
+        $orders = $model->where("id in ($ids)")->delete();
+        $msg = array('success', '成功删除了订单');
+        $this->redirect("trip_order_list", true, array('msg' => $msg));
+    }
+
+    public function trip_order_status()
+    {
+        $id = Req::args('id');
+        $status = Req::args('status');
+        $model->table('trip_order')->data(['status'=>$status])->where('id='.$id)->update();
+        $info = array('status' => 'success', 'msg' => '成功');
+        echo JSON::encode($info);
+    }    
 }

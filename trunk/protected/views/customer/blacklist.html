@@ -1,0 +1,52 @@
+{echo:JS::import('dialog?skin=brief');}
+{echo:JS::import('dialogtools');}
+{echo:JS::import('form');}
+<form action="" method="post">
+<div class="tools_bar clearfix">
+    <a class="icon-checkbox-checked icon-checkbox-unchecked" href="javascript:;" onclick="tools_select('id[]',this)" title="全选" data="true"> 全选 </a>
+    <a  class="icon-remove-2" href="javascript:;" onclick="tools_submit({action:'{url:/customer/blacklist_del}',msg:'删除后无法恢复，你真的删除吗？'})" title="删除"> 删除</a>
+    <a href='{url:/customer/blacklist_edit}' class="icon-plus" > 添加</a>
+    <a class="icon-delicious" href="{url:/customer/blacklist_list}"> 黑名单</a>
+    <!-- <a href="{url:/customer/customer_export}"  target="_blank" class="icon-print" id="output_excel"> 导出Excel</a> -->
+    <span class="fr"><a href='javascript:;' id="condition" class="icon-search" style="" > 筛选条件</a><input id="condition_input" type="hidden" name="condition" value="{$condition}"></span>
+</div>
+<table class="default" >
+    <tr>
+        <th style="width:30px">选择</th>
+        <th style="width:70px">操作</th>
+        <th style="width:100px">用户id</th>
+        <th style="width:100px">真实姓名</th>
+        <th style="width:100px">联系电话</th>
+        <th style="width:130px">注册时间</th>
+        <th style="width:130px">封禁开始时间</th>
+        <th style="width:130px">封禁结束时间</th>
+        <th style="width:60px">状态</th>
+    </tr>
+    {query:name=blacklist as b fields=b.*,c.real_name,c.mobile,c.reg_time,c.status join=left join customer as c on b.user_id eq c.user_id where=$where id=$obj page=1 order=b.id desc}
+        <tr><td style="width:30px"><input type="checkbox" name="id[]" value="{$item['id']}"></td>
+        <td style="width:70px" class="btn_min"><div class="operat hidden"><a  class="icon-cog action" href="javascript:;"> 处理</a><div class="menu_select"><ul>
+                <li><a class="icon-pencil" href="{url:/customer/blacklist_edit/id/$item[id]}"> 编辑</a></li>
+                <li><a class="icon-remove-2" href="javascript:confirm_action('{url:/customer/customer_del/id/$item[id]}')"> 删除</a></li>
+            </ul></div></div> </td>
+        <td style="width:100px">{$item['user_id']}</td>
+        <td style="width:100px">{$item['real_name']}</td>
+        <td style="width:130px">{$item['mobile']}</td>
+        <td style="width:100px">{$item['reg_time']}</td>
+        <td style="width:100px">{$item['start_time']}</td>
+        <td style="width:100px">{$item['end_time']}</td>   
+        <td style="width:60px">{echo:$item['status']==0?"未激活":($item['status']==1?"正常":"锁定");}</td>
+        </tr>
+    {/query}
+</table>
+</form>
+<div class="page_nav">
+{echo:$obj->pageBar()}
+</div>
+
+<script type="text/javascript">
+    var form =  new Form();
+    $("#condition").on("click",function(){
+    $("body").Condition({input:"#condition_input",okVal:'高级搜索',callback:function(data){tools_submit({action:'{url:/customer/blacklist}',method:'get'});},data:{'b.user_id':{name:'用户ID'},'c.real_name':{name:'用户名'},'c.mobile':{name:'手机号码'},'c.reg_time':{name:'注册时间'}
+    }});
+    });
+</script>

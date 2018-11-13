@@ -48,7 +48,7 @@ class DistrictAction extends Controller {
         $name = Filter::str(Req::args('name'));
         $location = Filter::sql(Req::args('location'));
         $linkman = Filter::str(Req::args('linkman'));
-        $linkmobile = Filter::str(Req::args('linkmobile'));
+        $linkmobile = Req::args('linkmobile');
         $reference = Filter::int(Req::args('reference'));
 
         if (strlen($name) > 20 || strlen($name) < 3) {
@@ -71,7 +71,7 @@ class DistrictAction extends Controller {
         $data['name'] = $name;
         $data['location'] = $location;
         $data['linkman'] = $linkman;
-        $data['linkmobile'] = $linkmobile;
+        $data['linkmobile'] = $linkmobile!=null?$linkmobile:$_POST['linkmobile'];
         $data['apply_time'] = date("Y-m-d H:i:s");
         $data['user_id'] = $this->user['id'];
         $data['pay_status'] = 0;
@@ -91,7 +91,7 @@ class DistrictAction extends Controller {
      */
     public function getDistrictList() {
         $district = $this->model->table("district_shop")->where("owner_id=" . $this->user['id'])->findAll();
-        $apply_info = $this->model->table("district_apply")->where("user_id=" . $this->user['id'] . " and status != 1")->findAll();
+        $apply_info = $this->model->table("district_apply")->where("user_id=" . $this->user['id'] . " and status != 1")->order('id desc')->limit(1)->findAll();
         if (empty($district) && empty($apply_info)) {
             $this->code = 1131;
             return;
@@ -252,10 +252,10 @@ class DistrictAction extends Controller {
             return;
         }else{
             $exist = $this->model->table('district_promoter')->where('user_id='.$this->user['id'])->find();
-            if($exist){
-                $this->code = 1174;
-                return;
-            }
+            // if($exist){
+            //     $this->code = 1174;
+            //     return;
+            // }
             $promoter_code = $this->model->table('promoter_code')->where("code ='{$code}'")->find();
             if(!$promoter_code){
                 $this->code = 1175;
@@ -274,7 +274,18 @@ class DistrictAction extends Controller {
             //     $this->code = 1285;
             //     return;
             // }
-            $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id'],'shop_type'=>$type))->insert();
+            
+            if(!$exist) {
+                $result = $this->model->table('district_promoter')->data(array('user_id'=>$this->user['id'],'type'=>1,'invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id'],'shop_type'=>$type))->insert();
+            } else {
+                $result = $this->model->table('district_promoter')->data(array('invitor_id'=>$promoter_code['user_id'],'create_time'=>date('Y-m-d H:i:s'),'join_time'=>date('Y-m-d H:i:s'),'hirer_id'=>$promoter_code['district_id'],'shop_type'=>$type))->where('user_id='.$this->user['id'])->update();
+            }
+
+            $contract = $this->model->table('promoter_contract')->where('user_id='.$this->user['id'])->find();
+            if($contract) {
+                $this->model->table('district_promoter')->data(['base_rate'=>$contract['base_rate']])->where('user_id='.$this->user['id'])->update();
+            }
+            
             $point = 3600.00;
             $this->model->table('customer')->data(array('point_coin'=>"`point_coin`+({$point})"))->where('user_id='.$this->user['id'])->update();
             Log::pointcoin_log($point,$this->user['id'], '', "激活码激活升级为代理商积分赠送", 5);
