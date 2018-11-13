@@ -565,8 +565,8 @@ class OperationController extends Controller
         $promoter = $this->model->table('district_promoter')->fields('create_time')->where('user_id='.$user_id)->find();
         $seo_title = !empty($shop)?'经销商':'商家';
         
-        $shop_num = 0;
-        $promoter_num = 0;
+        // $shop_num = 0;
+        // $promoter_num = 0;
         
         if($customer['avatar'] == '/0.png') {
            $customer['avatar'] == '0.png';

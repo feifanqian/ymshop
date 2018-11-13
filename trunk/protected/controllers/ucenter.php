@@ -3555,6 +3555,9 @@ class UcenterController extends Controller
                         $this->user['id'] = $last_id;
                         if($inviter_id){
                             Common::buildInviteShip($inviter_id, $this->user['id'], 'alipay');
+                        }
+                        if($seller_id){
+                            Common::buildInviteShip($seller_id, $this->user['id'], 'alipay');
                         } 
                     }
                 }
