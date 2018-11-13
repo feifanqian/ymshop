@@ -3291,7 +3291,7 @@ class UcenterAction extends Controller {
         $promoter_contract = $this->model->table('promoter_contract')->fields('status')->where('user_id='.$this->user['id'])->find();
         $status = !empty($promoter_contract)?$promoter_contract['status']:3;
         $this->code = 0;
-        $this->content = $status;
+        $this->content = (string)$status;
     }
 
     public function shop_check_info()
