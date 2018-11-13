@@ -3467,8 +3467,8 @@ class UcenterController extends Controller
             $pay_type = 'wechat';
             $from = 'second-wap';
         }
-        if (isset($this->user['id']) && $this->user['id']==201486) {
-            // var_dump($inviter_id);die;
+        if (isset($this->user['id'])) {
+            $user_id = $this->user['id'];
             Common::buildInviteShip($inviter_id, $this->user['id'], $from);
         } else {
             // Cookie::set("inviter", $inviter_id);
@@ -3517,16 +3517,16 @@ class UcenterController extends Controller
                                 $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.login_time,cu.mobile,cu.real_name")->where("us.id='$user_id'")->find();
                                 $obj['open_id'] = $token['openid'];
                                 $this->safebox->set('user', $obj, 1800);
-                                $this->user['id'] = $user_id;
+                                // $this->user['id'] = $user_id;
                             } else { //已注册
                                 $this->model->table("customer")->data(array('login_time' => date('Y-m-d H:i:s')))->where('user_id='.$oauth_user['user_id'])->update();
                                 $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id")->fields("us.*,cu.mobile,cu.login_time,cu.real_name")->where("us.id=".$oauth_user['user_id'])->find();
                                 $this->safebox->set('user', $obj, 31622400);
                                 $user_id = $oauth_user['user_id'];
-                                $this->user['id'] = $user_id;
+                                // $this->user['id'] = $user_id;
                             }
                             if($inviter_id){
-                                Common::buildInviteShip($inviter_id, $this->user['id'], 'second-wap');
+                                Common::buildInviteShip($inviter_id, $user_id, 'second-wap');
                             }   
                         }
                     } else {
@@ -3573,7 +3573,7 @@ class UcenterController extends Controller
                         $obj = $this->model->table("user as us")->join("left join customer as cu on us.id = cu.user_id left join oauth_user as o on us.id = o.user_id")->fields("us.*,cu.mobile,cu.group_id,cu.login_time,cu.real_name")->where("o.open_id='{$result['user_id']}'")->find();
                         $this->safebox->set('user', $obj, 31622400);
                         $this->user = $this->safebox->get('user');
-                        $this->user['id'] = $obj['id'];
+                        $user_id = $obj['id'];
                         // if($this->user['id']==140531 || $this->user['id']==190665) {
                         //     var_dump($cashier_id);die;
                         // }
@@ -3606,12 +3606,12 @@ class UcenterController extends Controller
                         $this->safebox->set('user', $obj, 31622400);
                         $this->user = $this->safebox->get('user');
                         $this->model->table('oauth_user')->where("oauth_type='alipay' and open_id='{$result['user_id']}'")->data(array('user_id' => $last_id))->update();
-                        $this->user['id'] = $last_id;
+                        $user_id = $last_id;
                         if($inviter_id){
-                            Common::buildInviteShip($inviter_id, $this->user['id'], 'alipay');
+                            Common::buildInviteShip($inviter_id, $user_id, 'alipay');
                         }
                         if($seller_id){
-                            Common::buildInviteShip($seller_id, $this->user['id'], 'alipay');
+                            Common::buildInviteShip($seller_id, $user_id, 'alipay');
                         } 
                     }
                 }
@@ -3620,10 +3620,10 @@ class UcenterController extends Controller
                 exit;
             }
         }
-        $user_id = $this->user['id'];
-        if($user_id==201486) {
-            var_dump($inviter_id);die;
-        }
+        // $user_id = $this->user['id'];
+        // if($user_id==201486) {
+        //     var_dump($inviter_id);die;
+        // }
         $shop = $this->model->table('customer as c')->fields('c.real_name,u.nickname,u.avatar')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $inviter_id)->find();
 
         if ($shop) {
