@@ -1338,8 +1338,8 @@ class TravelController extends Controller
         } else {
             $platform = 'ios';
         }
-        if($user_id==201486) {
-            var_dump($inviter_id);die;
+        if($from=='alipay') {
+            Common::buildInviteShip($inviter_id, $user_id, $from);
         }
         $this->assign("seo_title", "向商家付款");
         $this->assign('seller_id', $inviter_id);
