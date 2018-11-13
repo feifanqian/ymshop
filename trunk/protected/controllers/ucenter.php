@@ -3468,7 +3468,7 @@ class UcenterController extends Controller
             $from = 'second-wap';
         }
         if (isset($this->user['id']) && $this->user['id']==201486) {
-            var_dump($inviter_id);die;
+            // var_dump($inviter_id);die;
             Common::buildInviteShip($inviter_id, $this->user['id'], $from);
         } else {
             // Cookie::set("inviter", $inviter_id);
@@ -3621,6 +3621,9 @@ class UcenterController extends Controller
             }
         }
         $user_id = $this->user['id'];
+        if($user_id==201486) {
+            var_dump($inviter_id);die;
+        }
         $shop = $this->model->table('customer as c')->fields('c.real_name,u.nickname,u.avatar')->join('left join user as u on c.user_id=u.id')->where('c.user_id=' . $inviter_id)->find();
 
         if ($shop) {
